@@ -10,3 +10,4 @@ leptos = { version = "0.7.7", features = ["csr"] }
 reqwest = "0.12.12"
 anyhow = "1.0.97"
 serde_json = "1.0.140"
+leptos_router = "0.7.8"
