@@ -1,3 +1,3 @@
 run:
+  (cargo run --bin backend)
   (cd /frontend && trunk serve)
-  (cd /backend && cargo run)
