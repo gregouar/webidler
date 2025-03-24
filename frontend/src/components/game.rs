@@ -1,6 +1,8 @@
-use super::progress_bar::{HorizontalProgressBar, VerticalProgressBar};
+use super::progress_bar::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar};
 use leptos::html::*;
 use leptos::prelude::*;
+
+use super::buttons::MainMenuButton;
 
 #[component]
 pub fn Game() -> impl IntoView {
@@ -24,6 +26,9 @@ pub fn AdventurerPanel() -> impl IntoView {
             <img src="/assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
             <VerticalProgressBar class:w-6=true bar_color="bg-red-500" value=health_bar />
             <HorizontalProgressBar  class:h-3=true bar_color="bg-amber-700" value=action_bar />
+            <CircularProgressBar  bar_color="text-amber-700" value=action_bar />
+            <MainMenuButton on:click=move |_| set_action_bar.set(90.0)>"Attack"</MainMenuButton>
+            <MainMenuButton on:click=move |_| set_health_bar.set(100.0)>"Potion"</MainMenuButton>
         </div>
     }
 }

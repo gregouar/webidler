@@ -17,7 +17,7 @@ pub fn HorizontalProgressBar(
         >
             <div
                 class={format!(
-                    "flex flex-col {} rounded-full transition duration-500",
+                    "flex flex-col {} rounded-full transition-all ease-out duration-1000",
                     bar_color
                 )}
                 style:width=move || format!("{}%", value.get().round())
@@ -45,9 +45,35 @@ pub fn VerticalProgressBar(
             bg-stone-900 border border-neutral-950
             ">
             <div
-                class={format!("{} rounded-full overflow-hidden",bar_color)}
+                class={format!("{} rounded-full overflow-hidden  transition-all ease-out duration-1000",bar_color)}
                 style:height=move || format!("{}%", value.get().round())
             ></div>
+        </div>
+    }
+}
+
+#[component]
+pub fn CircularProgressBar(
+    // Percent value, must be between 0 and 100.
+    value: ReadSignal<f32>,
+    // Bar color, must be of format "text-XXXX-NNN"
+    bar_color: &'static str,
+) -> impl IntoView {
+    let set_value = move || 100.0 - value.get().round();
+    view! {
+        <div class="relative size-40">
+            <svg class="size-full -rotate-90" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-stone-900" stroke-width="2"></circle>
+                <circle cx="18" cy="18" r="16" fill="none"
+                    class={format!("stroke-current  transition-all ease-out duration-1000 {}",bar_color)}
+                    stroke-width="2" stroke-linecap="round"
+                    stroke-dashoffset=set_value stroke-dasharray="100"
+                ></circle>
+            </svg>
+
+            <div class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                <span class="text-center text-2xl font-bold text-blue-600 dark:text-blue-500">35%</span>
+            </div>
         </div>
     }
 }
