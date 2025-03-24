@@ -7,7 +7,9 @@ edition = "2024"
 shared = { path = "../shared" }
 
 leptos = { version = "0.7.7", features = ["csr"] }
+leptos_router = "0.7.8"
+leptos_meta = "0.7.8"
+
 reqwest = "0.12.12"
 anyhow = "1.0.97"
 serde_json = "1.0.140"
-leptos_router = "0.7.8"

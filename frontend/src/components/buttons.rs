@@ -11,7 +11,7 @@ pub fn MainMenuButton(children: Children) -> impl IntoView {
                 border border-neutral-950
                 bg-gradient-to-t from-zinc-900 to-zinc-850 
                 hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
-                active:bg-gradient-to-t active:from-zinc-950 active:to-zinc-950 
+                active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
             ">
             {children()}
         </button>

@@ -1,0 +1,3 @@
+As a game illustrator, I want to draw a portrait of a medieval fantasy adventurer human character, in a old-school hand draw style with few pastel colors.
+The character has dark long hair and a hood, and is a bit ugly.
+Generate it for me.
