@@ -24,9 +24,9 @@ pub fn AdventurerPanel() -> impl IntoView {
     view! {
         <div class="max-w-lg grid grid-cols-2 grid-rows-2">
             <img src="/assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
-            <VerticalProgressBar class:w-6=true bar_color="bg-red-500" value=health_bar />
-            <HorizontalProgressBar  class:h-3=true bar_color="bg-amber-700" value=action_bar />
-            <CircularProgressBar  bar_color="text-amber-700" value=action_bar />
+            <VerticalProgressBar class:w-6 bar_color="bg-red-500" value=health_bar />
+            <HorizontalProgressBar class:h-3 bar_color="bg-amber-700" value=action_bar />
+            <CircularProgressBar bar_color="text-amber-700" value=action_bar />
             <MainMenuButton on:click=move |_| set_action_bar.set(90.0)>"Attack"</MainMenuButton>
             <MainMenuButton on:click=move |_| set_health_bar.set(100.0)>"Potion"</MainMenuButton>
         </div>
@@ -40,8 +40,8 @@ pub fn MonsterPanel() -> impl IntoView {
     view! {
         <div  class="max-w-lg grid grid-cols-2 grid-rows-2">
             <img src="/assets/monsters/bat2.webp" alt="bat monster3"  class="border-8 border-double border-stone-500"/>
-            <VerticalProgressBar class:place-self-start=true class:w-6=true bar_color="bg-red-500" value=health_bar />
-            <HorizontalProgressBar class:h-3=true bar_color="bg-amber-700" value=action_bar />
+            <VerticalProgressBar class:w-6 bar_color="bg-red-500" value=health_bar />
+            <HorizontalProgressBar class:h-3 bar_color="bg-amber-700" value=action_bar />
         </div>
     }
 }
