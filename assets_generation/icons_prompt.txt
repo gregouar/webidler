@@ -1,0 +1,3 @@
+As a game UI designer, I want to draw an icon for an attack action, representing a sword and a bow. 
+It should be in an old-school medieval fantasy style, in black and flat.
+Generate it for me.

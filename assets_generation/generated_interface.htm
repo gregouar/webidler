@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle Scene</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-900 text-white flex h-screen">
+    <!-- Player Panel -->
+    <div class="w-1/2 flex flex-col items-center justify-center p-4 border-r border-zinc-700">
+        <div class="relative flex flex-col items-center">
+            <img src="player-portrait.jpg" alt="Player" class="w-40 h-40 rounded-full border-4 border-brown-700 shadow-lg">
+            <div class="absolute top-0 right-[-20px] h-40 w-4 bg-green-500"></div>
+        </div>
+        <div class="flex gap-4 mt-6">
+            <div class="w-16 h-16 bg-zinc-800 border-4 border-stone-600 rounded-full"></div>
+            <div class="w-16 h-16 bg-zinc-800 border-4 border-stone-600 rounded-full"></div>
+            <div class="w-16 h-16 bg-zinc-800 border-4 border-stone-600 rounded-full"></div>
+            <div class="w-16 h-16 bg-zinc-800 border-4 border-stone-600 rounded-full"></div>
+        </div>
+    </div>
+    
+    <!-- Monster Panels -->
+    <div class="w-1/2 grid grid-cols-2 gap-4 p-4">
+        <!-- Monster Template -->
+        <div class="flex flex-col items-center bg-zinc-800 p-4 rounded-lg shadow-lg">
+            <img src="monster1.jpg" alt="Monster" class="w-20 h-20 rounded-full border-2 border-red-500">
+            <div class="w-full h-3 bg-gray-700 mt-2">
+                <div class="h-full bg-red-500 w-3/4"></div>
+            </div>
+            <div class="flex gap-2 mt-3">
+                <div class="w-12 h-12 bg-zinc-700 border-2 border-stone-500 rounded-full"></div>
+                <div class="w-12 h-12 bg-zinc-700 border-2 border-stone-500 rounded-full"></div>
+                <div class="w-12 h-12 bg-zinc-700 border-2 border-stone-500 rounded-full"></div>
+            </div>
+        </div>
+        
+        <!-- Clone this div for 6 monsters -->
+        <div class="flex flex-col items-center bg-zinc-800 p-4 rounded-lg shadow-lg">
+            <img src="monster2.jpg" alt="Monster" class="w-20 h-20 rounded-full border-2 border-red-500">
+            <div class="w-full h-3 bg-gray-700 mt-2">
+                <div class="h-full bg-red-500 w-2/3"></div>
+            </div>
+            <div class="flex gap-2 mt-3">
+                <div class="w-12 h-12 bg-zinc-700 border-2 border-stone-500 rounded-full"></div>
+                <div class="w-12 h-12 bg-zinc-700 border-2 border-stone-500 rounded-full"></div>
+                <div class="w-12 h-12 bg-zinc-700 border-2 border-stone-500 rounded-full"></div>
+            </div>
+        </div>
+        
+        <!-- Add four more similar divs for the rest of the monsters -->
+    </div>
+</body>
+</html>
