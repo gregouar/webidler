@@ -24,10 +24,6 @@ pub fn HorizontalProgressBar(
             ></div>
         </div>
     }
-
-    //     <div class="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
-    //     <div class="flex flex-col justify-center rounded-full overflow-hidden bg-yellow-500 text-xs text-white text-center whitespace-nowrap transition duration-500" style="width: 50%"></div>
-    //   </div>
 }
 
 #[component]
@@ -45,8 +41,9 @@ pub fn VerticalProgressBar(
             bg-stone-900 border border-neutral-950
             ">
             <div
-                class={format!("{} rounded-lg overflow-hidden  transition-all ease-out duration-1000",bar_color)}
+                class={format!("{} rounded-lg overflow-hidden transition-all ease-out duration-1000",bar_color)}
                 style:height=move || format!("{}%", value.get().round())
+                style:-webkit-mask="linear-gradient(#fff 0 0)"
             ></div>
         </div>
     }
