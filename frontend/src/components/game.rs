@@ -48,13 +48,16 @@ pub fn AdventurerPanel() -> impl IntoView {
     let (health_bar, set_health_bar) = signal(42.0);
     let (mana_bar, set_mana_bar) = signal(100.0);
     view! {
-        <div class="max-w-lg grid grid-rows-5 gap-2 p-2 bg-zinc-800">
-            <div class="row-span-3 flex">
-                <VerticalProgressBar class:flex-none class:drop-shadow-lg class:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
-                <img class:flex-1 src="/assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
+        <div class="max-w-lg grid grid-rows-3 gap-2 p-2 bg-zinc-800">
+            <div class="flex w-full row-span-2 overflow-hidden gap-2">
+                <VerticalProgressBar class:drop-shadow-lg class:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
+                <div class="flex-1 flex items-center justify-center">
+                    <img src="/assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
+                </div>
                 <VerticalProgressBar class:flex-none class:drop-shadow-lg class:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_bar />
             </div>
-            <div class="grid grid-cols-4 gap-2">
+
+            <div class="grid grid-cols-subgrid grid-cols-4 gap-2">
                 <CircularProgressBar class:drop-shadow-lg  bar_width=4 bar_color="text-amber-700" value=action_bar>
                     <AttackIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
@@ -67,8 +70,6 @@ pub fn AdventurerPanel() -> impl IntoView {
                 <CircularProgressBar class:drop-shadow-lg  bar_width=4 bar_color="text-amber-700" value=action_bar>
                     <AttackIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
-            </div>
-            <div class="grid grid-cols-4 gap-2">
                 <MainMenuButton on:click=move |_| set_action_bar.set(90.0)>"Potion1"</MainMenuButton>
                 <MainMenuButton on:click=move |_| set_health_bar.set(100.0)>"Potion2"</MainMenuButton>
                 <MainMenuButton on:click=move |_| set_mana_bar.set(100.0)>"Potion3"</MainMenuButton>

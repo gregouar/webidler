@@ -12,7 +12,6 @@ pub fn HorizontalProgressBar(
         <div class="
             flex w-full
             rounded-lg overflow-hidden 
-            mt-2 mb-2 
             bg-stone-900 border border-neutral-950 "
         >
             <div
@@ -37,7 +36,6 @@ pub fn VerticalProgressBar(
         <div class="
             flex flex-col flex-nowrap justify-end h-full
             rounded-lg overflow-hidden
-            ml-2 mr-2
             bg-stone-900 border border-neutral-950
             ">
             <div
@@ -62,7 +60,7 @@ pub fn CircularProgressBar(
 ) -> impl IntoView {
     let set_value = move || 100.0 - value.get().round();
     view! {
-        <div class="relative">
+        <div class="relative self-center">
             <svg class="size-full -rotate-90" viewBox="0 0 36 36">
                 <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-stone-900" stroke-width=bar_width></circle>
                 <circle cx="18" cy="18" r="16" fill="none"
