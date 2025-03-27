@@ -56,27 +56,27 @@ pub fn AdventurerPanel() -> impl IntoView {
             </div>
 
             <div class="flex gap-2">
-                <VerticalProgressBar class:drop-shadow-lg class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
+                <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
                 <div class="flex-1">
                     <img src="/assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
                 </div>
-                <VerticalProgressBar class:drop-shadow-lg class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_bar />
+                <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_bar />
             </div>
 
             <div class="grid grid-cols-4 gap-2">
-                <CircularProgressBar class:drop-shadow-lg  bar_width=4 bar_color="text-amber-700" value=action_bar>
+                <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=action_bar>
+                    <AttackIcon  class:drop-shadow-lg  class:w-full class:h-full class:flex-no-shrink class:fill-current />
+                </CircularProgressBar>
+                <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=action_bar>
                     <AttackIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
-                <CircularProgressBar class:drop-shadow-lg  bar_width=4 bar_color="text-amber-700" value=action_bar>
+                <CircularProgressBar   bar_width=4 bar_color="text-amber-700" value=action_bar>
                     <AttackIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
-                <CircularProgressBar class:drop-shadow-lg  bar_width=4 bar_color="text-amber-700" value=action_bar>
+                <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=action_bar>
                     <AttackIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
-                <CircularProgressBar class:drop-shadow-lg  bar_width=4 bar_color="text-amber-700" value=action_bar>
-                    <AttackIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
-                </CircularProgressBar>
-                <MainMenuButton on:click=move |_| set_action_bar.set(90.0)>"Potion1"</MainMenuButton>
+                <MainMenuButton on:click=move |_| set_action_bar.set(10.0)>"Potion1"</MainMenuButton>
                 <MainMenuButton on:click=move |_| set_health_bar.set(100.0)>"Potion2"</MainMenuButton>
                 <MainMenuButton on:click=move |_| set_mana_bar.set(100.0)>"Potion3"</MainMenuButton>
                 <MainMenuButton on:click=move |_| set_mana_bar.set(20.0)>"Trinket"</MainMenuButton>
@@ -104,7 +104,6 @@ pub fn MonsterPanel() -> impl IntoView {
     let (action_bar, set_action_bar) = signal(42.0);
     let (health_bar, set_health_bar) = signal(69.0);
     view! {
-        // <div class="grid grid-cols-4 bg-zinc-800 gap-2 p-2">
         <div class="flex w-full bg-zinc-800 gap-2 p-2">
             <div class="flex flex-col gap-2">
                 <HorizontalProgressBar class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
@@ -113,10 +112,10 @@ pub fn MonsterPanel() -> impl IntoView {
                 </div>
             </div>
             <div class="flex flex-col justify-evenly w-full">
-                <CircularProgressBar class:drop-shadow-lg  bar_width=4 bar_color="text-amber-700" value=action_bar>
+                <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=action_bar>
                     <BiteIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
-                <CircularProgressBar class:drop-shadow-lg  bar_width=4 bar_color="text-amber-700" value=action_bar>
+                <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=action_bar>
                     <BiteIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
             </div>

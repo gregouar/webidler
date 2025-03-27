@@ -7,7 +7,7 @@ pub fn MainMenuButton(children: Children) -> impl IntoView {
         <button
             class="
                 text-white font-bold text-shadow shadow-neutral-950
-                py-2 px-4 rounded drop-shadow-lg
+                py-2 px-4 rounded shadow-md
                 border border-neutral-950
                 bg-gradient-to-t from-zinc-900 to-zinc-800 
                 overflow-hidden
