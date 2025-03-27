@@ -60,18 +60,20 @@ pub fn CircularProgressBar(
 ) -> impl IntoView {
     let set_value = move || 100.0 - value.get().round();
     view! {
-        <div class="relative self-center">
-            <svg class="size-full -rotate-90" viewBox="0 0 36 36">
-                <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-stone-900" stroke-width=bar_width></circle>
-                <circle cx="18" cy="18" r="16" fill="none"
-                    class={format!("stroke-current  transition-all ease-out duration-1000 {}",bar_color)}
-                    stroke-width=bar_width stroke-linecap="round"
-                    stroke-dashoffset=set_value stroke-dasharray="100"
-                ></circle>
-            </svg>
+        <div>
+            <div class="relative">
+                <svg class="size-full -rotate-90" viewBox="0 0 36 36">
+                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-stone-900" stroke-width=bar_width></circle>
+                    <circle cx="18" cy="18" r="16" fill="none"
+                        class={format!("stroke-current  transition-all ease-out duration-1000 {}",bar_color)}
+                        stroke-width=bar_width stroke-linecap="round"
+                        stroke-dashoffset=set_value stroke-dasharray="100"
+                    ></circle>
+                </svg>
 
-            <div class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                {children()}
+                <div class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                    {children()}
+                </div>
             </div>
         </div>
     }

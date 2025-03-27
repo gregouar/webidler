@@ -1,19 +1,21 @@
-use super::progress_bar::{CircularProgressBar, VerticalProgressBar};
+use super::progress_bar::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar};
 use leptos::html::*;
 use leptos::prelude::*;
 
 use super::buttons::MainMenuButton;
 use super::icons::attack_icon::AttackIcon;
+use super::icons::bite_icon::BiteIcon;
 
 #[component]
 pub fn Game() -> impl IntoView {
     view! {
         <main class="my-0 mx-auto text-center text-white font-serif">
             <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">"Battle Scene"</h1>
-            <div class="grid grid-cols-3 justify-items-stretch flex items-start gap-4 m-4 ">
-                <SideMenu/>
-                <AdventurerPanel class:justify-self-end/>
-                <MonstersPanel class:justify-self-start/>
+            <div class="grid grid-cols-8 justify-items-stretch flex items-start gap-4 m-4 ">
+            // <div class="grid grid-cols-[max-content_1fr_1fr] justify-items-stretch flex items-start gap-2 m-4 ">
+                <SideMenu class:col-span-2 />
+                <AdventurerPanel class:col-span-3 class:justify-self-end/>
+                <MonstersPanel class:col-span-3 class:justify-self-start/>
             </div>
         </main>
     }
@@ -25,7 +27,7 @@ pub fn SideMenu() -> impl IntoView {
     let abandon_quest = move |_| navigate("/", Default::default());
 
     view! {
-        <div class="max-w-lg flex flex-col space-y-2 p-2 bg-zinc-800">
+        <div class="flex flex-col space-y-2 p-2 bg-zinc-800">
             <MainMenuButton>
                 "Inventory"
             </MainMenuButton>
@@ -48,16 +50,20 @@ pub fn AdventurerPanel() -> impl IntoView {
     let (health_bar, set_health_bar) = signal(42.0);
     let (mana_bar, set_mana_bar) = signal(100.0);
     view! {
-        <div class="max-w-lg grid grid-rows-3 gap-2 p-2 bg-zinc-800">
-            <div class="flex w-full row-span-2 overflow-hidden gap-2">
-                <VerticalProgressBar class:drop-shadow-lg class:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
-                <div class="flex-1 flex items-center justify-center">
-                    <img src="/assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
-                </div>
-                <VerticalProgressBar class:flex-none class:drop-shadow-lg class:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_bar />
+        <div class="flex flex-col gap-2 p-2 bg-zinc-800 h-full">
+            <div>
+                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">Le Poupou</p>
             </div>
 
-            <div class="grid grid-cols-subgrid grid-cols-4 gap-2">
+            <div class="flex gap-2">
+                <VerticalProgressBar class:drop-shadow-lg class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
+                <div class="flex-1">
+                    <img src="/assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
+                </div>
+                <VerticalProgressBar class:drop-shadow-lg class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_bar />
+            </div>
+
+            <div class="grid grid-cols-4 gap-2">
                 <CircularProgressBar class:drop-shadow-lg  bar_width=4 bar_color="text-amber-700" value=action_bar>
                     <AttackIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
@@ -82,7 +88,7 @@ pub fn AdventurerPanel() -> impl IntoView {
 #[component]
 pub fn MonstersPanel() -> impl IntoView {
     view! {
-        <div class="grid grid-cols-2 gap-4 p-2">
+        <div class="grid grid-cols-2 gap-2 h-full">
             <MonsterPanel />
             <MonsterPanel />
             <MonsterPanel />
@@ -98,19 +104,22 @@ pub fn MonsterPanel() -> impl IntoView {
     let (action_bar, set_action_bar) = signal(42.0);
     let (health_bar, set_health_bar) = signal(69.0);
     view! {
-        <div  class="max-w-sm grid grid-cols-4 grid-rows-4 bg-zinc-800 gap-2  p-2">
-            <div class="col-span-3 row-span-3">
-                <img src="/assets/monsters/bat2.webp" alt="bat monster3"  class="border-8 border-double border-stone-500"/>
+        // <div class="grid grid-cols-4 bg-zinc-800 gap-2 p-2">
+        <div class="flex w-full bg-zinc-800 gap-2 p-2">
+            <div class="flex flex-col gap-2">
+                <HorizontalProgressBar class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
+                <div class="flex-1">
+                    <img src="/assets/monsters/bat2.webp" alt="bat monster3"  class="border-8 border-double border-stone-500"/>
+                </div>
             </div>
-            <div class="row-span-3">
-                <VerticalProgressBar class:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
+            <div class="flex flex-col justify-evenly w-full">
+                <CircularProgressBar class:drop-shadow-lg  bar_width=4 bar_color="text-amber-700" value=action_bar>
+                    <BiteIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
+                </CircularProgressBar>
+                <CircularProgressBar class:drop-shadow-lg  bar_width=4 bar_color="text-amber-700" value=action_bar>
+                    <BiteIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
+                </CircularProgressBar>
             </div>
-            <CircularProgressBar class:drop-shadow-lg  bar_width=4 bar_color="text-amber-700" value=action_bar>
-                <AttackIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
-            </CircularProgressBar>
-            <CircularProgressBar class:drop-shadow-lg  bar_width=4 bar_color="text-amber-700" value=action_bar>
-                <AttackIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
-            </CircularProgressBar>
         </div>
     }
 }
