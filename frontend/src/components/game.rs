@@ -24,7 +24,7 @@ pub fn Game() -> impl IntoView {
 #[component]
 pub fn SideMenu() -> impl IntoView {
     let navigate = leptos_router::hooks::use_navigate();
-    let abandon_quest = move |_| navigate("/", Default::default());
+    let abandon_quest = move |_| navigate("/webidler", Default::default());
 
     view! {
         <div class="flex flex-col space-y-2 p-2 bg-zinc-800">
