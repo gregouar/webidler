@@ -42,12 +42,6 @@ jobs:
       - name: lint
         run: cargo clippy & cargo fmt
 
-
-      # If using tailwind...
-      # - name: Download and install tailwindcss binary
-      #   run: npm install -D tailwindcss && npx tailwindcss -i <INPUT/PATH.css> -o <OUTPUT/PATH.css>  # run tailwind
-
-
       - name: Download and install Trunk binary
         working-directory: ./frontend
         run: wget -qO- https://github.com/trunk-rs/trunk/releases/download/v0.18.4/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
@@ -59,18 +53,11 @@ jobs:
         # this is necessary for github pages where the site is deployed to username.github.io/repo_name and all files must be requested
         # relatively as favicon.ico. if we skip public-url option, the href paths will instead request username.github.io/favicon.ico which
         # will obviously return error 404 not found.
-        run: ./trunk build --release --public-url "${GITHUB_REPOSITORY#*/}"
+        run: ./trunk build --release --public-url "${GITHUB_REPOSITORY#*/}/webidler"
 
-
-      # Deploy to gh-pages branch
-      # - name: Deploy 🚀
-      #   uses: JamesIves/github-pages-deploy-action@v4
-      #   with:
-      #     folder: dist
 
 
       # Deploy with Github Static Pages
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
         with:
@@ -81,9 +68,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload dist dir
-          path: |
-            './frontend/dist'
-            './frontend/assets'
+          path: './frontend/dist'
 
       - name: Deploy to GitHub Pages 🚀
         id: deployment

@@ -12,7 +12,6 @@ pub fn Game() -> impl IntoView {
         <main class="my-0 mx-auto text-center text-white font-serif">
             <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">"Battle Scene"</h1>
             <div class="grid grid-cols-8 justify-items-stretch flex items-start gap-4 m-4 ">
-            // <div class="grid grid-cols-[max-content_1fr_1fr] justify-items-stretch flex items-start gap-2 m-4 ">
                 <SideMenu class:col-span-2 />
                 <AdventurerPanel class:col-span-3 class:justify-self-end/>
                 <MonstersPanel class:col-span-3 class:justify-self-start/>
