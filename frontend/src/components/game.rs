@@ -12,7 +12,6 @@ pub fn Game() -> impl IntoView {
         <main class="my-0 mx-auto text-center text-white font-serif">
             <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">"Battle Scene"</h1>
             <div class="grid grid-cols-8 justify-items-stretch flex items-start gap-4 m-4 ">
-            // <div class="grid grid-cols-[max-content_1fr_1fr] justify-items-stretch flex items-start gap-2 m-4 ">
                 <SideMenu class:col-span-2 />
                 <AdventurerPanel class:col-span-3 class:justify-self-end/>
                 <MonstersPanel class:col-span-3 class:justify-self-start/>
@@ -24,7 +23,7 @@ pub fn Game() -> impl IntoView {
 #[component]
 pub fn SideMenu() -> impl IntoView {
     let navigate = leptos_router::hooks::use_navigate();
-    let abandon_quest = move |_| navigate("/", Default::default());
+    let abandon_quest = move |_| navigate("/webidler", Default::default());
 
     view! {
         <div class="flex flex-col space-y-2 p-2 bg-zinc-800 rounded-md">
@@ -58,7 +57,7 @@ pub fn AdventurerPanel() -> impl IntoView {
             <div class="flex gap-2">
                 <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
                 <div class="flex-1">
-                    <img src="/assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
+                    <img src="/webidler/assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
                 </div>
                 <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_bar />
             </div>
@@ -108,7 +107,7 @@ pub fn MonsterPanel() -> impl IntoView {
             <div class="flex flex-col gap-2">
                 <HorizontalProgressBar class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
                 <div class="flex-1">
-                    <img src="/assets/monsters/bat2.webp" alt="bat monster3"  class="border-8 border-double border-stone-500"/>
+                    <img src="/webidler/assets/monsters/bat2.webp" alt="bat monster3"  class="border-8 border-double border-stone-500"/>
                 </div>
             </div>
             <div class="flex flex-col justify-evenly w-full">
