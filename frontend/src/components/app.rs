@@ -11,15 +11,9 @@ use url::Url;
 pub fn App() -> impl IntoView {
     provide_meta_context();
 
-    // let base_uri: Cow<'static, str> = document()
-    //     .base_uri()
-    //     .unwrap_or(Some("/".to_string()))
-    //     .unwrap_or("/".to_string())
-    //     .into();
-
-    let base_uri: Cow<'static, str> = window()
-        .document()
-        .and_then(|doc| doc.base_uri().ok())
+    let base_uri: Cow<'static, str> = document()
+        .base_uri()
+        .ok()
         .flatten()
         .and_then(|base| Url::parse(&base).ok())
         .map(|url| url.path().to_string())
