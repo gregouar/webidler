@@ -25,7 +25,7 @@ pub fn MainMenu() -> impl IntoView {
     };
 
     let navigate = leptos_router::hooks::use_navigate();
-    let navigate_to_game = move |_| navigate("/game", Default::default());
+    let navigate_to_game = move |_| navigate("/webidler/game", Default::default());
 
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center text-white font-serif">
