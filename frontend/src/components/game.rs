@@ -10,7 +10,6 @@ use super::icons::bite_icon::BiteIcon;
 pub fn Game() -> impl IntoView {
     view! {
         <main class="my-0 mx-auto text-center text-white font-serif">
-            <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">"Battle Scene"</h1>
             <div class="grid grid-cols-8 justify-items-stretch flex items-start gap-4 m-4 ">
                 <SideMenu class:col-span-2 />
                 <AdventurerPanel class:col-span-3 class:justify-self-end/>
@@ -27,6 +26,11 @@ pub fn SideMenu() -> impl IntoView {
 
     view! {
         <div class="flex flex-col space-y-2 p-2 bg-zinc-800 rounded-md">
+            <div>
+                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-2xl">
+                    Menu
+                </p>
+            </div>
             <MainMenuButton>
                 "Inventory"
             </MainMenuButton>
@@ -51,7 +55,9 @@ pub fn AdventurerPanel() -> impl IntoView {
     view! {
         <div class="flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full">
             <div>
-                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">Le Poupou</p>
+                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
+                    Le Poupou
+                </p>
             </div>
 
             <div class="flex gap-2">
