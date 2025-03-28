@@ -63,7 +63,7 @@ pub fn AdventurerPanel() -> impl IntoView {
             <div class="flex gap-2">
                 <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
                 <div class="flex-1">
-                    <img src="/assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
+                    <img src="./assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
                 </div>
                 <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_bar />
             </div>
