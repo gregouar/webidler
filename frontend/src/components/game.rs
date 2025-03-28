@@ -22,7 +22,7 @@ pub fn Game() -> impl IntoView {
 #[component]
 pub fn SideMenu() -> impl IntoView {
     let navigate = leptos_router::hooks::use_navigate();
-    let abandon_quest = move |_| navigate("/webidler", Default::default());
+    let abandon_quest = move |_| navigate("/", Default::default());
 
     view! {
         <div class="flex flex-col space-y-2 p-2 bg-zinc-800 rounded-md">
@@ -113,7 +113,7 @@ pub fn MonsterPanel() -> impl IntoView {
             <div class="flex flex-col gap-2">
                 <HorizontalProgressBar class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
                 <div class="flex-1">
-                    <img src="/assets/monsters/bat2.webp" alt="bat monster3"  class="border-8 border-double border-stone-500"/>
+                    <img src="./assets/monsters/bat2.webp" alt="bat monster3"  class="border-8 border-double border-stone-500"/>
                 </div>
             </div>
             <div class="flex flex-col justify-evenly w-full min-w-16">
