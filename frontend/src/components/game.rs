@@ -27,7 +27,7 @@ pub fn SideMenu() -> impl IntoView {
     let abandon_quest = move |_| navigate("/", Default::default());
 
     view! {
-        <div class="flex flex-col space-y-2 p-2 bg-zinc-800">
+        <div class="flex flex-col space-y-2 p-2 bg-zinc-800 rounded-md">
             <MainMenuButton>
                 "Inventory"
             </MainMenuButton>
@@ -50,7 +50,7 @@ pub fn AdventurerPanel() -> impl IntoView {
     let (health_bar, set_health_bar) = signal(42.0);
     let (mana_bar, set_mana_bar) = signal(100.0);
     view! {
-        <div class="flex flex-col gap-2 p-2 bg-zinc-800 h-full">
+        <div class="flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full">
             <div>
                 <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">Le Poupou</p>
             </div>
@@ -104,7 +104,7 @@ pub fn MonsterPanel() -> impl IntoView {
     let (action_bar, set_action_bar) = signal(42.0);
     let (health_bar, set_health_bar) = signal(69.0);
     view! {
-        <div class="flex w-full bg-zinc-800 gap-2 p-2">
+        <div class="flex w-full bg-zinc-800 rounded-md gap-2 p-2">
             <div class="flex flex-col gap-2">
                 <HorizontalProgressBar class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
                 <div class="flex-1">
