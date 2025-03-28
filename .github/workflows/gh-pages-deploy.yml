@@ -81,7 +81,9 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload dist dir
-          path: './frontend/dist'
+          path: |
+            './frontend/dist'
+            './frontend/assets'
 
       - name: Deploy to GitHub Pages 🚀
         id: deployment
