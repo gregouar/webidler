@@ -57,7 +57,7 @@ pub fn AdventurerPanel() -> impl IntoView {
             <div class="flex gap-2">
                 <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
                 <div class="flex-1">
-                    <img src="/assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
+                    <img src="/webidler/assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
                 </div>
                 <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_bar />
             </div>
@@ -107,7 +107,7 @@ pub fn MonsterPanel() -> impl IntoView {
             <div class="flex flex-col gap-2">
                 <HorizontalProgressBar class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
                 <div class="flex-1">
-                    <img src="/assets/monsters/bat2.webp" alt="bat monster3"  class="border-8 border-double border-stone-500"/>
+                    <img src="/webidler/assets/monsters/bat2.webp" alt="bat monster3"  class="border-8 border-double border-stone-500"/>
                 </div>
             </div>
             <div class="flex flex-col justify-evenly w-full">

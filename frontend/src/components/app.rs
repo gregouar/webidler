@@ -12,7 +12,7 @@ pub fn App() -> impl IntoView {
     view! {
         <Router>
             <Routes fallback=|| "Page not found.">
-                <Route path=path!("/") view=MainMenu/>
+                <Route path=path!("/webidler") view=MainMenu/>
                 <Route path=path!("/webidler/game") view=Game/>
             </Routes>
         </Router>
