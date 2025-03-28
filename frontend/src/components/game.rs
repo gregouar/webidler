@@ -5,6 +5,7 @@ use leptos::prelude::*;
 use super::buttons::MainMenuButton;
 use super::icons::attack_icon::AttackIcon;
 use super::icons::bite_icon::BiteIcon;
+use super::icons::fireball_icon::FireballIcon;
 
 #[component]
 pub fn Game() -> impl IntoView {
@@ -76,10 +77,10 @@ pub fn AdventurerPanel() -> impl IntoView {
                     <AttackIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
                 <CircularProgressBar   bar_width=4 bar_color="text-amber-700" value=action_bar>
-                    <AttackIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
+                    <FireballIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
                 <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=action_bar>
-                    <AttackIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
+                    <FireballIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
                 <MainMenuButton on:click=move |_| set_action_bar.set(10.0)>"Potion1"</MainMenuButton>
                 <MainMenuButton on:click=move |_| set_health_bar.set(100.0)>"Potion2"</MainMenuButton>
