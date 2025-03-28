@@ -49,6 +49,7 @@ jobs:
 
 
       - name: Download and install Trunk binary
+        working-directory: ./frontend
         run: wget -qO- https://github.com/trunk-rs/trunk/releases/download/v0.18.4/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
 
       - name: Build with Trunk
