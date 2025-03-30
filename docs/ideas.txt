@@ -1,0 +1,16 @@
+Level restart at 1 every run, max is 100.
+Passive skills is a big tree, and one can preregister a path so that leveling up automatically assign.
+Passive skills can be permanently improve spending Power Essences.
+Gold is reset to zero every run.
+Items are permanent and can only be changed when restarting a run. They can have affixes and suffixes.
+Items are looted as reward when stopping run (power based on max rank reached).
+Items can be improved during run by spending gold.
+Need another kind of resource for player market?
+At start of run, can select 4 (maybe more?) Skills to uses, which are automatically used after every cooldown, or permanent buffs.
+Example is Weapon Attack where cooldown depends on player attack speed and weapon attack speed.
+Monster come by wave of 6, with warriors in front and casters/ranged in back.
+Melee weapon attack first the front row then back row, and inverse for ranged.
+Some skills can touch multiple enemies.
+Sometimes a bigger monster can appear, taking, 2, 4 or even 6 cases for bosses.
+Monsters also have multiple active skills/buffs, bigger monsters can have more of them.
+
