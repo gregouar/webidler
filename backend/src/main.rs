@@ -28,7 +28,10 @@ async fn main() {
         .init();
 
     let cors_layer = CorsLayer::new()
-        .allow_origin("http://127.0.0.1:8080".parse::<HeaderValue>().unwrap())
+        .allow_origin([
+            "http://127.0.0.1:8080".parse::<HeaderValue>().unwrap(),
+            "https://gregouar.github.io".parse::<HeaderValue>().unwrap(),
+        ])
         .allow_methods([Method::GET, Method::POST]);
 
     let app = Router::new()
