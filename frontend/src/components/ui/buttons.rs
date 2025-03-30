@@ -2,7 +2,10 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 #[component]
-pub fn MainMenuButton(children: Children) -> impl IntoView {
+pub fn MainMenuButton(
+    // #[prop(optional)] disabled: Option<bool>,
+    children: Children,
+) -> impl IntoView {
     view! {
         <button
             class="
@@ -13,7 +16,9 @@ pub fn MainMenuButton(children: Children) -> impl IntoView {
                 overflow-hidden
                 hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
                 active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
-            ">
+            "
+            // disabled=disabled
+            >
             {children()}
         </button>
     }

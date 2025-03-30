@@ -2,19 +2,11 @@ use axum::{
     body::Bytes,
     extract::ws::{Message, Utf8Bytes, WebSocket, WebSocketUpgrade},
     response::IntoResponse,
-    routing::any,
-    Router,
 };
 use axum_extra::TypedHeader;
 
+use std::net::SocketAddr;
 use std::ops::ControlFlow;
-use std::{net::SocketAddr, path::PathBuf};
-use tower_http::{
-    services::ServeDir,
-    trace::{DefaultMakeSpan, TraceLayer},
-};
-
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 //allows to extract the IP of connecting user
 use axum::extract::connect_info::ConnectInfo;

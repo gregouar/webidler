@@ -1,11 +1,11 @@
-use super::progress_bar::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar};
 use leptos::html::*;
 use leptos::prelude::*;
 
-use super::buttons::MainMenuButton;
-use super::icons::attack_icon::AttackIcon;
-use super::icons::bite_icon::BiteIcon;
-use super::icons::fireball_icon::FireballIcon;
+use crate::components::{
+    icons::{attack_icon::AttackIcon, bite_icon::BiteIcon, fireball_icon::FireballIcon},
+    ui::buttons::MainMenuButton,
+    ui::progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
+};
 
 #[component]
 pub fn Game() -> impl IntoView {
