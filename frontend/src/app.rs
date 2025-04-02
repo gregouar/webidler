@@ -2,6 +2,7 @@ use leptos::prelude::*;
 use leptos_meta::*;
 use leptos_router::components::{Route, Router, Routes};
 use leptos_router::path;
+use leptos_toaster::*;
 use url::Url;
 
 use crate::components::pages;
@@ -26,5 +27,8 @@ pub fn App() -> impl IntoView {
                 <Route path=path!("/game") view=pages::Game/>
             </Routes>
         </Router>
+        // <Toaster position=ToasterPosition::BottomCenter>
+        //     // ...
+        // </Toaster>
     }
 }
