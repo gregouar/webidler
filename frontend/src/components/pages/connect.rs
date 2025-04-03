@@ -105,5 +105,8 @@ fn process_message(message: &ServerMessage) {
         ServerMessage::Connect(m) => {
             println!("Got hello: {:?}", m)
         }
+        ServerMessage::Update(m) => {
+            println!("Got update: {:?}", m)
+        }
     }
 }

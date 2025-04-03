@@ -7,7 +7,7 @@ use std::{
 
 use shared::{
     client_messages::ClientMessage,
-    server_messages::{ServerConnectMessage, ServerMessage},
+    server_messages::{ConnectMessage, ServerMessage, UpdateMessage},
 };
 
 use crate::websocket::WebSocketConnection;
@@ -80,11 +80,8 @@ pub async fn run(conn: &mut WebSocketConnection) -> Result<()> {
     let mut i = 0;
     loop {
         i += 1;
-        conn.send(&ServerMessage::Connect(ServerConnectMessage {
-            greeting: "game update".into(),
-            value: i,
-        }))
-        .await?;
+        conn.send(&ServerMessage::Update(UpdateMessage { value: i }))
+            .await?;
 
         // match conn.receive().await? {
         //     ControlFlow::Continue(_) => todo!(),
