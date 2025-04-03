@@ -2,7 +2,8 @@ use codee::binary::MsgpackSerdeCodec;
 use leptos::html::*;
 use leptos::prelude::*;
 use leptos_use::{
-    UseWebSocketOptions, UseWebSocketReturn, core::ConnectionReadyState, use_websocket_with_options,
+    ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
+    core::ConnectionReadyState, use_websocket_with_options,
 };
 
 use shared::client_messages::ClientConnectMessage;
@@ -14,6 +15,14 @@ use crate::components::ui::buttons::MainMenuButton;
 
 #[component]
 pub fn Connect() -> impl IntoView {
+    let on_error_callback = move |e: UseWebSocketError<_, _>| {
+        match e {
+            UseWebSocketError::Event(e) => println!("[onerror]: event {:?}", e.type_()),
+            _ => println!("[onerror]: {:?}", e),
+        };
+        // TODO: Toaster
+    };
+
     let UseWebSocketReturn {
         ready_state,
         message,
@@ -23,26 +32,30 @@ pub fn Connect() -> impl IntoView {
         ..
     } = use_websocket_with_options::<ClientMessage, ServerMessage, MsgpackSerdeCodec, _, _>(
         "ws://127.0.0.1:4200/ws",
-        UseWebSocketOptions::default(),
-        // Enable heartbeats every 10 seconds. In this case we use the same codec as for the
-        // other messages. But this is not necessary.
-        // .heartbeat::<ClientMessage, MsgpackSerdeCodec>(10_000),
+        UseWebSocketOptions::default()
+            .immediate(false)
+            .reconnect_limit(ReconnectLimit::Infinite)
+            .on_error(on_error_callback), // .on_open(on_open_callback)
+                                          // .on_close(on_close_callback)
+                                          // .on_message(on_message_callback),
+                                          // .heartbeat::<ClientMessage, MsgpackSerdeCodec>(10_000),
     );
 
     let open_connection = move |_| {
         open();
     };
 
-    let send2 = send.clone();
-    Effect::new(move |_| {
-        if ready_state.get() == ConnectionReadyState::Open {
-            let m = ClientMessage::Connect(ClientConnectMessage {
-                greeting: String::from("pouhello"),
-                value: 42,
-            });
-            send2(&m);
-        }
-    });
+    {
+        let send = send.clone();
+        Effect::new(move |_| {
+            if ready_state.get() == ConnectionReadyState::Open {
+                let m = ClientMessage::Connect(ClientConnectMessage {
+                    bearer: String::from("bearer token"),
+                });
+                send(&m);
+            }
+        });
+    }
 
     let send_message = move |_| {
         let m = ClientMessage::Test(TestMessage {
@@ -59,6 +72,7 @@ pub fn Connect() -> impl IntoView {
     let close_connection = move |_| {
         close();
     };
+
     Effect::new(move |_| {
         message.with(move |message| {
             if let Some(message) = message {

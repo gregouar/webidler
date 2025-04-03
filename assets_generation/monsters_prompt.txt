@@ -3,8 +3,8 @@ The bat has dark wings and long teeth, with an angry mean face.
 The picture should be taken from sufficiently far away so that we can see the whole wings.
 Generate it for me.
 
-As a game illustrator, I want to draw a portrait of a medieval fantasy rat enemy, in a old-school hand draw style with few pastel colors.
+As a game illustrator, I want to draw a portrait of a medieval fantasy rat enemy, 
+in a old-school hand draw style with few pastel colors and inked outlines, with shading done as cross-hatching.
 The rat has big yellow teeth and a long queue, with an angry mean face.
 The picture should be taken from sufficiently far away so that we can see the whole rat.
 Generate it for me.
-

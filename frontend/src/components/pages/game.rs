@@ -2,7 +2,10 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 use crate::components::{
-    icons::{attack_icon::AttackIcon, bite_icon::BiteIcon, fireball_icon::FireballIcon},
+    icons::{
+        attack_icon::AttackIcon, bite_icon::BiteIcon, claw_icon::ClawIcon,
+        fireball_icon::FireballIcon,
+    },
     ui::buttons::MainMenuButton,
     ui::progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
 };
@@ -122,7 +125,7 @@ pub fn MonsterPanel() -> impl IntoView {
                     <BiteIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
                 <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=action_bar>
-                    <BiteIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
+                    <ClawIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
             </div>
         </div>

@@ -9,8 +9,7 @@ pub enum ClientMessage {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ClientConnectMessage {
-    pub greeting: String,
-    pub value: i32,
+    pub bearer: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

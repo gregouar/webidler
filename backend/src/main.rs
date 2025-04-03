@@ -14,7 +14,7 @@ use tower_http::{
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-use backend::websocket;
+use backend::ws_connect;
 
 #[tokio::main]
 async fn main() {
@@ -41,7 +41,7 @@ async fn main() {
         .route("/", get(|| async { "Hello, World!" }))
         .route("/hello", get(get_hello))
         .route("/other", get(get_other))
-        .route("/ws", any(websocket::ws_handler))
+        .route("/ws", any(ws_connect::ws_handler))
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(DefaultMakeSpan::default().include_headers(true)),
