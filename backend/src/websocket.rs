@@ -41,8 +41,9 @@ impl WebSocketConnection {
                         ControlFlow::Break(_) => break,
                         _ => {}
                     },
-                    Err(e) => {
-                        tracing::warn!("client disconnected due to inactivity: {}", e)
+                    Err(_) => {
+                        tracing::warn!("client disconnected due to inactivity");
+                        break;
                     }
                     _ => {}
                 }
