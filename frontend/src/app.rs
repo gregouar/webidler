@@ -7,6 +7,8 @@ use url::Url;
 
 use crate::components::pages;
 
+// TODO: localization https://crates.io/crates/fluent-templates
+
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
@@ -22,7 +24,11 @@ pub fn App() -> impl IntoView {
     provide_toaster();
 
     view! {
-        <Toaster stacked={true} />
+        <Toaster stacked={true}
+            style:--leptoaster-info-background-color="oklch(21% 0.006 285.885)"
+            style:--leptoaster-info-border-color="oklch(14.1% 0.005 285.823)"
+            style:--leptoaster-info-text-color="white"
+        />
         <Router base=base_uri>
             <Routes fallback=|| "Page not found.">
                 <Route path=path!("/") view=pages::MainMenu/>

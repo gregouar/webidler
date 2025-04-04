@@ -37,7 +37,7 @@ pub fn MainMenu() -> impl IntoView {
     let connect = move |_| navigate("./connect", Default::default());
 
     view! {
-        <main class="my-0 mx-auto max-w-3xl text-center text-white font-serif">
+        <main class="my-0 mx-auto max-w-3xl text-center">
             <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">"Welcome to Webidler!"</h1>
             <div class="flex flex-col space-y-2">
                 <MainMenuButton on:click=navigate_to_game>

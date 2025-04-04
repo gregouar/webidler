@@ -13,7 +13,7 @@ use crate::components::{
 #[component]
 pub fn Game() -> impl IntoView {
     view! {
-        <main class="my-0 mx-auto text-center text-white font-serif">
+        <main class="my-0 mx-auto text-center">
             <div class="grid grid-cols-8 justify-items-stretch flex items-start gap-4 m-4 ">
                 <SideMenu class:col-span-2 />
                 <AdventurerPanel class:col-span-3 class:justify-self-end/>
