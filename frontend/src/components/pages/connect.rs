@@ -6,6 +6,7 @@ use leptos_use::{
     ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
     core::ConnectionReadyState, use_websocket_with_options,
 };
+use web_sys::{CloseEvent, Event};
 
 use shared::client_messages::ClientConnectMessage;
 use shared::client_messages::ClientMessage;
@@ -28,7 +29,7 @@ pub fn Connect() -> impl IntoView {
         };
     };
 
-    let on_close_callback = move |e| {
+    let on_close_callback = move |e: CloseEvent| {
         let toaster = expect_toaster();
         toaster.info(format!(
             "disconnected, trying to reconnect... {}",
