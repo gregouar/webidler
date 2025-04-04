@@ -29,12 +29,11 @@ pub async fn ws_handler(
     };
     log::info!("`{user_agent}` at {addr} connected.");
 
-    // we can customize the callback by sending additional info such as address.
     ws.on_upgrade(move |socket| handle_socket(socket, addr))
 }
 
 async fn handle_socket(socket: WebSocket, who: SocketAddr) {
-    let mut conn = WebSocketConnection::new(socket, who);
+    let mut conn = WebSocketConnection::establish(socket, who);
 
     if let Err(e) = wait_for_connect(&mut conn).await {
         log::info!("Invalid connect {}", e);
@@ -51,7 +50,7 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr) {
 
 async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<()> {
     loop {
-        match conn.receive().await? {
+        match conn.poll_receive() {
             ControlFlow::Continue(Some(ClientMessage::Connect(m))) => {
                 return handle_connect(m);
             }

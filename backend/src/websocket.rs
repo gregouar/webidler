@@ -1,8 +1,14 @@
 use anyhow::Result;
 
+use tokio::sync::mpsc;
+
 use axum::{
     body::Bytes,
     extract::ws::{Message, WebSocket},
+};
+use futures::{
+    sink::SinkExt,
+    stream::{SplitSink, StreamExt},
 };
 use std::net::SocketAddr;
 use std::ops::ControlFlow;
@@ -10,59 +16,79 @@ use std::ops::ControlFlow;
 use shared::{client_messages::ClientMessage, server_messages::ServerMessage};
 
 pub struct WebSocketConnection {
-    socket: WebSocket,
-    who: SocketAddr,
+    receiver_rx: mpsc::Receiver<ClientMessage>,
+    ws_sender: SplitSink<WebSocket, Message>,
 }
 
 impl WebSocketConnection {
-    pub fn new(socket: WebSocket, who: SocketAddr) -> Self {
-        WebSocketConnection { socket, who }
-    }
+    /// Establish a connection on the socket, starting a listening job in background
+    pub fn establish(socket: WebSocket, who: SocketAddr) -> Self {
+        let (ws_sender, mut ws_receiver) = socket.split();
+        let (receiver_tx, receiver_rx) = mpsc::channel(10);
 
-    pub async fn send(&mut self, msg: &ServerMessage) -> Result<()> {
-        self.socket.send(into_ws_msg(&msg)?).await?;
-        Ok(())
-    }
+        // Start receiving task in background, posting new client messages on channel
+        tokio::spawn(async move {
+            while let Some(Ok(m)) = ws_receiver.next().await {
+                match process_message(m, who) {
+                    ControlFlow::Continue(Some(m)) => {
+                        if let Err(_) = receiver_tx.send(m).await {
+                            break;
+                        }
+                    }
+                    ControlFlow::Break(_) => break,
+                    _ => {}
+                }
+            }
+        });
 
-    pub async fn receive(&mut self) -> Result<ControlFlow<(), Option<ClientMessage>>> {
-        match self.socket.recv().await {
-            Some(m) => Ok(self.process_message(m?)),
-            None => Ok(ControlFlow::Break(())),
+        WebSocketConnection {
+            receiver_rx,
+            ws_sender,
         }
     }
 
-    fn process_message(&self, msg: Message) -> ControlFlow<(), Option<ClientMessage>> {
-        return match msg {
-            Message::Binary(b) => match from_ws_msg(&b) {
-                Ok(m) => ControlFlow::Continue(Some(m)),
-                Err(_) => {
-                    log::info!(">>> {} sent invalid message, closing", self.who);
-                    ControlFlow::Break(())
-                }
-            },
-            Message::Text(_) => {
-                log::info!(">>> {} sent str instead of bytes, closing", self.who);
-                ControlFlow::Break(())
-            }
-            Message::Close(c) => {
-                if let Some(cf) = c {
-                    log::info!(
-                        ">>> {} sent close with code {} and reason `{}`",
-                        self.who,
-                        cf.code,
-                        cf.reason
-                    );
-                } else {
-                    log::info!(
-                        ">>> {} somehow sent close message without CloseFrame",
-                        self.who
-                    );
-                }
-                ControlFlow::Break(())
-            }
-            _ => ControlFlow::Continue(None), // Ignore ping pong
-        };
+    pub async fn send(&mut self, msg: &ServerMessage) -> Result<()> {
+        self.ws_sender.send(into_ws_msg(&msg)?).await?;
+        Ok(())
     }
+
+    pub fn poll_receive(&mut self) -> ControlFlow<(), Option<ClientMessage>> {
+        match self.receiver_rx.try_recv() {
+            Ok(m) => ControlFlow::Continue(Some(m)),
+            Err(mpsc::error::TryRecvError::Empty) => ControlFlow::Continue(None),
+            Err(mpsc::error::TryRecvError::Disconnected) => ControlFlow::Break(()),
+        }
+    }
+}
+
+fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), Option<ClientMessage>> {
+    return match msg {
+        Message::Binary(b) => match from_ws_msg(&b) {
+            Ok(m) => ControlFlow::Continue(Some(m)),
+            Err(_) => {
+                log::debug!(">>> {} sent invalid message, closing", who);
+                ControlFlow::Break(())
+            }
+        },
+        Message::Text(_) => {
+            log::debug!(">>> {} sent str instead of bytes, closing", who);
+            ControlFlow::Break(())
+        }
+        Message::Close(c) => {
+            if let Some(cf) = c {
+                log::debug!(
+                    ">>> {} sent close with code {} and reason `{}`",
+                    who,
+                    cf.code,
+                    cf.reason
+                );
+            } else {
+                log::debug!(">>> {} somehow sent close message without CloseFrame", who);
+            }
+            ControlFlow::Break(())
+        }
+        _ => ControlFlow::Continue(None), // Ignore ping pong
+    };
 }
 
 fn into_ws_msg(message: &ServerMessage) -> Result<Message> {
