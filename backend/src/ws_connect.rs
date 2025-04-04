@@ -15,8 +15,10 @@ use std::{net::SocketAddr, time::Duration};
 
 use shared::client_messages::{ClientConnectMessage, ClientMessage};
 
-use crate::game;
+use crate::game::GameInstance;
 use crate::websocket::WebSocketConnection;
+
+const CLIENT_INACTIVITY_TIMEOUT: Duration = Duration::from_secs(60);
 
 pub async fn ws_handler(
     ws: WebSocketUpgrade,
@@ -34,30 +36,31 @@ pub async fn ws_handler(
 }
 
 async fn handle_socket(socket: WebSocket, who: SocketAddr) {
-    let mut conn = WebSocketConnection::establish(socket, who);
+    let mut conn = WebSocketConnection::establish(socket, who, CLIENT_INACTIVITY_TIMEOUT);
 
-    tracing::debug!("Waiting for client to connect...");
+    tracing::debug!("waiting for client to connect...");
     match timeout(Duration::from_secs(30), wait_for_connect(&mut conn)).await {
         Err(e) => {
-            tracing::error!("Connection timeout: {}", e);
+            tracing::error!("connection timeout: {}", e);
             return;
         }
         Ok(Err(e)) => {
-            tracing::error!("Unable to connect: {}", e);
+            tracing::error!("unable to connect: {}", e);
             return;
         }
         Ok(Ok(_)) => {
-            tracing::debug!("Client connected");
+            tracing::debug!("client connected");
         }
     }
 
-    tracing::debug!("Starting the game...");
-    if let Err(e) = game::run(&mut conn).await {
-        tracing::error!("Error running game: {e}");
+    tracing::debug!("starting the game...");
+    let mut game = GameInstance::new(&mut conn);
+    if let Err(e) = game.run().await {
+        tracing::error!("error running game: {e}");
     }
 
     // returning from the handler closes the websocket connection
-    tracing::info!("Websocket context {who} destroyed");
+    tracing::info!("websocket context {who} destroyed");
 }
 
 async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<()> {

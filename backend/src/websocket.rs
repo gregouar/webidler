@@ -1,6 +1,7 @@
 use anyhow::Result;
 
 use tokio::sync::mpsc;
+use tokio::time;
 
 use axum::{
     body::Bytes,
@@ -10,8 +11,8 @@ use futures::{
     sink::SinkExt,
     stream::{SplitSink, StreamExt},
 };
-use std::net::SocketAddr;
 use std::ops::ControlFlow;
+use std::{net::SocketAddr, time::Duration};
 
 use shared::{client_messages::ClientMessage, server_messages::ServerMessage};
 
@@ -22,20 +23,26 @@ pub struct WebSocketConnection {
 
 impl WebSocketConnection {
     /// Establish a connection on the socket, starting a listening job in background
-    pub fn establish(socket: WebSocket, who: SocketAddr) -> Self {
+    pub fn establish(socket: WebSocket, who: SocketAddr, timeout: Duration) -> Self {
         let (ws_sender, mut ws_receiver) = socket.split();
         let (receiver_tx, receiver_rx) = mpsc::channel(10);
 
         // Start receiving task in background, posting new client messages on channel
         tokio::spawn(async move {
-            while let Some(Ok(m)) = ws_receiver.next().await {
-                match process_message(m, who) {
-                    ControlFlow::Continue(Some(m)) => {
-                        if let Err(_) = receiver_tx.send(m).await {
-                            break;
+            loop {
+                match time::timeout(timeout, ws_receiver.next()).await {
+                    Ok(Some(Ok(m))) => match process_message(m, who) {
+                        ControlFlow::Continue(Some(m)) => {
+                            if let Err(_) = receiver_tx.send(m).await {
+                                break;
+                            }
                         }
+                        ControlFlow::Break(_) => break,
+                        _ => {}
+                    },
+                    Err(e) => {
+                        tracing::error!("client disconnected due to inactivity: {}", e)
                     }
-                    ControlFlow::Break(_) => break,
                     _ => {}
                 }
             }
@@ -52,6 +59,10 @@ impl WebSocketConnection {
         Ok(())
     }
 
+    /// Poll new messages. Return
+    /// - ControlFlow::Continue(Some(m)) if new message m received, and remove m from the queue
+    /// - ControlFlow::Continue(None) if no message available
+    /// - ControlFlow::Break on disconnection
     pub fn poll_receive(&mut self) -> ControlFlow<(), Option<ClientMessage>> {
         match self.receiver_rx.try_recv() {
             Ok(m) => ControlFlow::Continue(Some(m)),
