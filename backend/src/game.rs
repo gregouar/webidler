@@ -68,9 +68,7 @@ impl<'a> GameInstance<'a> {
 
     fn handle_client_message(&mut self, msg: ClientMessage) {
         match msg {
-            ClientMessage::Heartbeat => {
-                tracing::debug!("heartbeat");
-            }
+            ClientMessage::Heartbeat => {}
             ClientMessage::Test(m) => {
                 tracing::info!("test: {:?}", m)
             }
