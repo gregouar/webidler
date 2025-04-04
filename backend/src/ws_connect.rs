@@ -13,7 +13,10 @@ use tokio::{task::yield_now, time::timeout};
 use std::ops::ControlFlow;
 use std::{net::SocketAddr, time::Duration};
 
-use shared::messages::client::{ClientConnectMessage, ClientMessage};
+use shared::messages::{
+    client::{ClientConnectMessage, ClientMessage},
+    server::ConnectMessage,
+};
 
 use crate::game::GameInstance;
 use crate::websocket::WebSocketConnection;
@@ -67,7 +70,7 @@ async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<()> {
     loop {
         match conn.poll_receive() {
             ControlFlow::Continue(Some(ClientMessage::Connect(m))) => {
-                return handle_connect(m);
+                return handle_connect(conn, m).await;
             }
             ControlFlow::Break(_) => {
                 return Err(anyhow::format_err!("disconnected"));
@@ -78,8 +81,16 @@ async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<()> {
     }
 }
 
-fn handle_connect(msg: ClientConnectMessage) -> Result<()> {
+async fn handle_connect(conn: &mut WebSocketConnection, msg: ClientConnectMessage) -> Result<()> {
     // TODO: verify if user exist, is already playing, get basic data etc
     tracing::info!("Connect: {:?}", msg);
+    conn.send(
+        &ConnectMessage {
+            greeting: String::from("Poupou"),
+            value: 42,
+        }
+        .into(),
+    )
+    .await?;
     Ok(())
 }
