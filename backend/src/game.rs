@@ -56,7 +56,9 @@ async fn handle_client_events(conn: &mut WebSocketConnection) -> bool {
 
 fn handle_client_message(msg: ClientMessage) {
     match msg {
-        ClientMessage::Heartbeat => {}
+        ClientMessage::Heartbeat => {
+            tracing::debug!("heartbeat");
+        }
         ClientMessage::Test(m) => {
             tracing::info!("Test: {:?}", m)
         }

@@ -17,3 +17,9 @@ pub struct TestMessage {
     pub greeting: String,
     pub value: i32,
 }
+
+impl Default for ClientMessage {
+    fn default() -> Self {
+        ClientMessage::Heartbeat
+    }
+}

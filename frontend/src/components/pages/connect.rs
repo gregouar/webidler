@@ -13,6 +13,8 @@ use shared::server_messages::ServerMessage;
 
 use crate::components::ui::buttons::MainMenuButton;
 
+const HEARTBEAT_PERIOD: u64 = 10_000;
+
 #[component]
 pub fn Connect() -> impl IntoView {
     let on_error_callback = move |e: UseWebSocketError<_, _>| {
@@ -35,10 +37,11 @@ pub fn Connect() -> impl IntoView {
         UseWebSocketOptions::default()
             .immediate(false)
             .reconnect_limit(ReconnectLimit::Infinite)
-            .on_error(on_error_callback), // .on_open(on_open_callback)
-                                          // .on_close(on_close_callback)
-                                          // .on_message(on_message_callback),
-                                          // .heartbeat::<ClientMessage, MsgpackSerdeCodec>(10_000),
+            .on_error(on_error_callback)
+            // .on_open(on_open_callback)
+            // .on_close(on_close_callback)
+            // .on_message(on_message_callback),
+            .heartbeat::<ClientMessage, MsgpackSerdeCodec>(HEARTBEAT_PERIOD),
     );
 
     let open_connection = move |_| {
