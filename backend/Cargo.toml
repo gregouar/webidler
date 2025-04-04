@@ -7,7 +7,6 @@ edition = "2021"
 shared = { path = "../shared" }
 
 anyhow = "1.0.97"
-log = "0.4.27"
 
 axum = { version = "0.8.3", features = ["ws"] }
 axum-extra = { version = "0.10.1",  features = ["typed-header"] }

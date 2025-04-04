@@ -8,9 +8,10 @@ use axum::{
     response::IntoResponse,
 };
 use axum_extra::TypedHeader;
+use tokio::{task::yield_now, time::timeout};
 
-use std::net::SocketAddr;
 use std::ops::ControlFlow;
+use std::{net::SocketAddr, time::Duration};
 
 use shared::client_messages::{ClientConnectMessage, ClientMessage};
 
@@ -27,7 +28,7 @@ pub async fn ws_handler(
     } else {
         String::from("Unknown browser")
     };
-    log::info!("`{user_agent}` at {addr} connected.");
+    tracing::info!("`{user_agent}` at {addr} connected.");
 
     ws.on_upgrade(move |socket| handle_socket(socket, addr))
 }
@@ -35,17 +36,28 @@ pub async fn ws_handler(
 async fn handle_socket(socket: WebSocket, who: SocketAddr) {
     let mut conn = WebSocketConnection::establish(socket, who);
 
-    if let Err(e) = wait_for_connect(&mut conn).await {
-        log::info!("Invalid connect {}", e);
-        return;
+    tracing::debug!("Waiting for client to connect...");
+    match timeout(Duration::from_secs(30), wait_for_connect(&mut conn)).await {
+        Err(e) => {
+            tracing::error!("Connection timeout: {}", e);
+            return;
+        }
+        Ok(Err(e)) => {
+            tracing::error!("Unable to connect: {}", e);
+            return;
+        }
+        Ok(Ok(_)) => {
+            tracing::debug!("Client connected");
+        }
     }
 
+    tracing::debug!("Starting the game...");
     if let Err(e) = game::run(&mut conn).await {
-        log::error!("Error running game: {e}");
+        tracing::error!("Error running game: {e}");
     }
 
     // returning from the handler closes the websocket connection
-    log::info!("Websocket context {who} destroyed");
+    tracing::info!("Websocket context {who} destroyed");
 }
 
 async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<()> {
@@ -59,11 +71,12 @@ async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<()> {
             }
             _ => {}
         }
+        yield_now().await;
     }
 }
 
 fn handle_connect(msg: ClientConnectMessage) -> Result<()> {
     // TODO: verify if user exist, is already playing, get basic data etc
-    log::info!("Connect: {:?}", msg);
+    tracing::info!("Connect: {:?}", msg);
     Ok(())
 }

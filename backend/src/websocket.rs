@@ -66,24 +66,24 @@ fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), Option<Clie
         Message::Binary(b) => match from_ws_msg(&b) {
             Ok(m) => ControlFlow::Continue(Some(m)),
             Err(_) => {
-                log::debug!(">>> {} sent invalid message, closing", who);
+                tracing::debug!(">>> {} sent invalid message, closing", who);
                 ControlFlow::Break(())
             }
         },
         Message::Text(_) => {
-            log::debug!(">>> {} sent str instead of bytes, closing", who);
+            tracing::debug!(">>> {} sent str instead of bytes, closing", who);
             ControlFlow::Break(())
         }
         Message::Close(c) => {
             if let Some(cf) = c {
-                log::debug!(
+                tracing::debug!(
                     ">>> {} sent close with code {} and reason `{}`",
                     who,
                     cf.code,
                     cf.reason
                 );
             } else {
-                log::debug!(">>> {} somehow sent close message without CloseFrame", who);
+                tracing::debug!(">>> {} somehow sent close message without CloseFrame", who);
             }
             ControlFlow::Break(())
         }
