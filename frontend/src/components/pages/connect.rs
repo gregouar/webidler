@@ -8,10 +8,10 @@ use leptos_use::{
     core::ConnectionReadyState, use_websocket_with_options,
 };
 
-use shared::client_messages::ClientConnectMessage;
-use shared::client_messages::ClientMessage;
-use shared::client_messages::TestMessage;
-use shared::server_messages::ServerMessage;
+use shared::messages::client::ClientConnectMessage;
+use shared::messages::client::ClientMessage;
+use shared::messages::client::TestMessage;
+use shared::messages::server::ServerMessage;
 
 use crate::components::ui::buttons::MainMenuButton;
 
@@ -65,20 +65,24 @@ pub fn Connect() -> impl IntoView {
         let send = send.clone();
         Effect::new(move |_| {
             if ready_state.get() == ConnectionReadyState::Open {
-                let m = ClientMessage::Connect(ClientConnectMessage {
-                    bearer: String::from("bearer token"),
-                });
-                send(&m);
+                send(
+                    &ClientConnectMessage {
+                        bearer: String::from("bearer token"),
+                    }
+                    .into(),
+                );
             }
         });
     }
 
     let send_message = move |_| {
-        let m = ClientMessage::Test(TestMessage {
-            greeting: String::from("test"),
-            value: 3,
-        });
-        send(&m);
+        send(
+            &TestMessage {
+                greeting: String::from("test"),
+                value: 3,
+            }
+            .into(),
+        );
     };
 
     let status = move || ready_state.get().to_string();

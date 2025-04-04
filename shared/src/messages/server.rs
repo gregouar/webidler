@@ -1,9 +1,13 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum ServerMessage {
-    Connect(ConnectMessage),
-    Update(UpdateMessage),
+use super::macros::impl_into_message;
+
+impl_into_message! {
+    #[derive(Serialize, Deserialize, Debug, Clone,)]
+    pub enum ServerMessage {
+        Connect(ConnectMessage),
+        Update(UpdateMessage),
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

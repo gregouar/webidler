@@ -7,10 +7,7 @@ use std::{
     time::{Duration, Instant},
 };
 
-use shared::{
-    client_messages::ClientMessage,
-    server_messages::{ServerMessage, UpdateMessage},
-};
+use shared::messages::{client::ClientMessage, server::UpdateMessage};
 
 use crate::websocket::WebSocketConnection;
 
@@ -81,9 +78,12 @@ impl<'a> GameInstance<'a> {
     /// Send whole world state to client
     async fn sync_client(&mut self) -> Result<()> {
         self.client_conn
-            .send(&ServerMessage::Update(UpdateMessage {
-                value: self.loop_counter,
-            }))
+            .send(
+                &UpdateMessage {
+                    value: self.loop_counter,
+                }
+                .into(),
+            )
             .await
     }
 }

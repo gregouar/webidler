@@ -14,7 +14,7 @@ use futures::{
 use std::ops::ControlFlow;
 use std::{net::SocketAddr, time::Duration};
 
-use shared::{client_messages::ClientMessage, server_messages::ServerMessage};
+use shared::messages::{client::ClientMessage, server::ServerMessage};
 
 pub struct WebSocketConnection {
     receiver_rx: mpsc::Receiver<ClientMessage>,

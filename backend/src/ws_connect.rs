@@ -13,7 +13,7 @@ use tokio::{task::yield_now, time::timeout};
 use std::ops::ControlFlow;
 use std::{net::SocketAddr, time::Duration};
 
-use shared::client_messages::{ClientConnectMessage, ClientMessage};
+use shared::messages::client::{ClientConnectMessage, ClientMessage};
 
 use crate::game::GameInstance;
 use crate::websocket::WebSocketConnection;
