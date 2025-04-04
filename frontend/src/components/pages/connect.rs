@@ -1,4 +1,3 @@
-use codee::binary::MsgpackSerdeCodec;
 use leptoaster::*;
 use leptos::html::*;
 use leptos::prelude::*;
@@ -7,6 +6,8 @@ use leptos_use::{
     ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
     core::ConnectionReadyState, use_websocket_with_options,
 };
+
+use codee::binary::MsgpackSerdeCodec;
 
 use shared::messages::client::ClientConnectMessage;
 use shared::messages::client::ClientMessage;
@@ -19,23 +20,23 @@ const HEARTBEAT_PERIOD: u64 = 10_000;
 
 #[component]
 pub fn Connect() -> impl IntoView {
-    let on_error_callback = move |e: UseWebSocketError<_, _>| {
-        let toaster = expect_toaster();
-        match e {
-            UseWebSocketError::Event(e) => {
-                toaster.error(format!("{:?}", e.type_()));
-            }
-            _ => toaster.error(format!("{:?}", e)),
-        };
+    let toaster = expect_toaster();
+    let on_error_callback =
+        move |e: UseWebSocketError<_, _>| toaster.error(format!("Connection error: {:?}", e));
+
+    let toaster = expect_toaster();
+    let on_close_callback = move |e: CloseEvent| {
+        // TODO: if debug
+        if !e.was_clean() {
+            toaster.info(format!("Disconnected, trying to reconnect...",));
+        }
     };
 
-    let on_close_callback = move |e: CloseEvent| {
-        let toaster = expect_toaster();
-        toaster.info(format!(
-            "disconnected, trying to reconnect... {} {}",
-            e.type_(),
-            e.reason()
-        ));
+    let toaster = expect_toaster();
+    let on_message_callback = move |message: &ServerMessage| {
+        if let Some(toast) = process_message(message) {
+            toaster.info(toast);
+        }
     };
 
     let UseWebSocketReturn {
@@ -53,7 +54,7 @@ pub fn Connect() -> impl IntoView {
             .on_error(on_error_callback)
             // .on_open(on_open_callback)
             .on_close(on_close_callback)
-            // .on_message(on_message_callback),
+            .on_message(on_message_callback)
             .heartbeat::<ClientMessage, MsgpackSerdeCodec>(HEARTBEAT_PERIOD),
     );
 
@@ -93,13 +94,8 @@ pub fn Connect() -> impl IntoView {
         close();
     };
 
-    Effect::new(move |_| {
-        message.with(move |message| {
-            if let Some(message) = message {
-                process_message(message);
-            }
-        })
-    });
+    let navigate = leptos_router::hooks::use_navigate();
+    let quit = move |_| navigate("/", Default::default());
 
     view! {
         <main class="my-0 mx-auto text-center text-white font-serif">
@@ -114,20 +110,23 @@ pub fn Connect() -> impl IntoView {
             <MainMenuButton on:click=send_message prop:disabled=move || !connected()>
                 "Send"
             </MainMenuButton>
+            <MainMenuButton on:click=quit>
+                "Quit"
+            </MainMenuButton>
 
             <p>"Receive message: " {move || format!("{:?}", message.get())}</p>
         </main>
     }
 }
 
-fn process_message(message: &ServerMessage) {
-    let toaster = expect_toaster();
+fn process_message(message: &ServerMessage) -> Option<String> {
     match message {
         ServerMessage::Connect(m) => {
-            toaster.info(format!("Got hello: {:?}", m));
+            return Some(format!("Welcome {}!", m.greeting));
         }
-        ServerMessage::Update(m) => {
-            toaster.info(format!("Got update: {:?}", m));
+        ServerMessage::Update(_) => {
+            // return Some(format!("Got update: {:?}", m));
+            return None;
         }
     }
 }

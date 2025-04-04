@@ -1,8 +1,11 @@
 use anyhow::Result;
+
+use leptoaster::*;
 use leptos::html::*;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use leptos_router::hooks::use_navigate;
+
 use reqwest;
 use serde_json;
 
@@ -14,7 +17,9 @@ use crate::components::ui::buttons::MainMenuButton;
 pub fn MainMenu() -> impl IntoView {
     let (data, set_data) = signal(String::from(""));
 
+    let toaster = expect_toaster();
     let click_action = move |_| {
+        toaster.info("Hello there!");
         spawn_local(async move {
             set_data.set(
                 get_data()

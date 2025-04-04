@@ -19,6 +19,8 @@ pub fn App() -> impl IntoView {
         .map(|url| url.path().to_string())
         .unwrap_or_else(|| "/".to_string());
 
+    provide_toaster();
+
     view! {
         <Toaster stacked={true} />
         <Router base=base_uri>
