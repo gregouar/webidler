@@ -34,6 +34,7 @@ impl WebSocketConnection {
                     Ok(Some(Ok(m))) => match process_message(m, who) {
                         ControlFlow::Continue(Some(m)) => {
                             if let Err(_) = receiver_tx.send(m).await {
+                                // If channel is closed, we can stop
                                 break;
                             }
                         }
@@ -41,7 +42,7 @@ impl WebSocketConnection {
                         _ => {}
                     },
                     Err(e) => {
-                        tracing::error!("client disconnected due to inactivity: {}", e)
+                        tracing::warn!("client disconnected due to inactivity: {}", e)
                     }
                     _ => {}
                 }
@@ -77,12 +78,12 @@ fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), Option<Clie
         Message::Binary(b) => match from_ws_msg(&b) {
             Ok(m) => ControlFlow::Continue(Some(m)),
             Err(_) => {
-                tracing::debug!(">>> {} sent invalid message, closing", who);
+                tracing::warn!(">>> {} sent invalid message, closing", who);
                 ControlFlow::Break(())
             }
         },
         Message::Text(_) => {
-            tracing::debug!(">>> {} sent str instead of bytes, closing", who);
+            tracing::warn!(">>> {} sent str instead of bytes, closing", who);
             ControlFlow::Break(())
         }
         Message::Close(c) => {
@@ -96,6 +97,7 @@ fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), Option<Clie
             } else {
                 tracing::debug!(">>> {} somehow sent close message without CloseFrame", who);
             }
+            tracing::info!("client disconnected");
             ControlFlow::Break(())
         }
         _ => ControlFlow::Continue(None), // Ignore ping pong
