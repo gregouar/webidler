@@ -16,7 +16,7 @@ pub struct OtherSchema {
 
 // Character
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CharacterPrototype {
     pub identifier: u64,
 
@@ -26,7 +26,7 @@ pub struct CharacterPrototype {
     pub max_health: u64, // TODO: change to big numbers num_bigint
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CharacterState {
     pub identifier: u64, // useful?
     pub health: u64,     // TODO: change to big numbers num_bigint
@@ -43,12 +43,12 @@ impl CharacterState {
 
 // Monster
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct MonsterPrototype {
     pub character_prototype: CharacterPrototype,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct MonsterState {
     pub character_state: CharacterState,
 }
@@ -63,14 +63,14 @@ impl MonsterState {
 
 // Player
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerPrototype {
     pub character_prototype: CharacterPrototype,
 
     pub max_mana: u64, // TODO: change to big numbers num_bigint
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerState {
     pub character_state: CharacterState,
 

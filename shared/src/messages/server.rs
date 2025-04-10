@@ -21,7 +21,7 @@ pub struct ConnectMessage {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InitGameMessage {
-    pub player: PlayerPrototype,
+    pub player_prototype: PlayerPrototype,
     pub player_state: PlayerState,
 }
 

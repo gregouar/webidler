@@ -103,7 +103,7 @@ impl<'a> GameInstance<'a> {
         self.client_conn
             .send(
                 &InitGameMessage {
-                    player: self.player_prototype.clone(),
+                    player_prototype: self.player_prototype.clone(),
                     player_state: self.player_state.clone(),
                 }
                 .into(),

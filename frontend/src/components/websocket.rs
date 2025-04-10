@@ -10,16 +10,14 @@ use leptos_use::{
 
 use codee::binary::MsgpackSerdeCodec;
 
-use shared::messages::client::ClientConnectMessage;
 use shared::messages::client::ClientMessage;
-use shared::messages::client::TestMessage;
 use shared::messages::server::ServerMessage;
 
 const HEARTBEAT_PERIOD: u64 = 10_000;
 
 #[derive(Clone)]
 pub struct WebsocketContext {
-    pub connected: Signal<bool>,
+    pub connected: Memo<bool>,
     pub message: Signal<Option<ServerMessage>>,
     send: Arc<dyn Fn(&ClientMessage) + Send + Sync>, // use Arc to make it easily cloneable
 }
@@ -46,13 +44,6 @@ pub fn Websocket(children: Children) -> impl IntoView {
         }
     };
 
-    // let toaster = expect_toaster();
-    // let on_message_callback = move |message: &ServerMessage| {
-    //     if let Some(toast) = process_message(message) {
-    //         toaster.info(toast);
-    //     }
-    // };
-
     let UseWebSocketReturn {
         ready_state,
         message,
@@ -66,53 +57,12 @@ pub fn Websocket(children: Children) -> impl IntoView {
             // .immediate(false)
             .reconnect_limit(ReconnectLimit::Infinite)
             .on_error(on_error_callback)
-            // .on_open(on_open_callback)
             .on_close(on_close_callback)
-            // .on_message(on_message_callback)
             .heartbeat::<ClientMessage, MsgpackSerdeCodec>(HEARTBEAT_PERIOD),
     );
 
-    // let open_connection = move |_| {
-    //     open();
-    // };
-
-    // {
-    //     let send = send.clone();
-    //     Effect::new(move |_| {
-    //         if ready_state.get() == ConnectionReadyState::Open {
-    //             send(
-    //                 &ClientConnectMessage {
-    //                     bearer: String::from("Le Pou"),
-    //                 }
-    //                 .into(),
-    //             );
-    //         }
-    //     });
-    // }
-
-    // let send_message = move |_| {
-    //     send(
-    //         &TestMessage {
-    //             greeting: String::from("test"),
-    //             value: 3,
-    //         }
-    //         .into(),
-    //     );
-    // };
-
-    // let status = move || ready_state.get().to_string();
-
-    // Effect::new(move |_| set_connected.set(ready_state.get() == ConnectionReadyState::Open));
-
-    // let close_connection = move |_| {
-    //     close();
-    // };
-
-    let connected = RwSignal::new(false);
-    Effect::new(move |_| connected.set(ready_state.get() == ConnectionReadyState::Open));
-
     provide_context(WebsocketContext {
-        connected: connected.into(),
+        connected: Memo::new(move |_| ready_state.get() == ConnectionReadyState::Open),
         message,
         send: Arc::new(send.clone()),
     });

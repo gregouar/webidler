@@ -1,5 +1,7 @@
 use leptos::html::*;
 use leptos::prelude::*;
+use shared::data::PlayerPrototype;
+use shared::data::PlayerState;
 use shared::messages::client::ClientConnectMessage;
 use shared::messages::server::ServerMessage;
 
@@ -14,6 +16,23 @@ use crate::components::{
     websocket::Websocket,
 };
 
+#[derive(Clone)]
+struct GameContext {
+    started: RwSignal<bool>,
+    player_prototype: RwSignal<PlayerPrototype>,
+    player_state: RwSignal<PlayerState>,
+}
+
+impl GameContext {
+    pub fn new() -> Self {
+        GameContext {
+            started: RwSignal::new(false),
+            player_prototype: RwSignal::new(PlayerPrototype::default()),
+            player_state: RwSignal::new(PlayerState::default()),
+        }
+    }
+}
+
 #[component]
 pub fn Game() -> impl IntoView {
     view! {
@@ -25,6 +44,9 @@ pub fn Game() -> impl IntoView {
 
 #[component]
 fn GameInstance() -> impl IntoView {
+    let game_context = GameContext::new();
+    provide_context(game_context.clone());
+
     Effect::new({
         let conn = expect_context::<WebsocketContext>();
         move |_| {
@@ -40,21 +62,27 @@ fn GameInstance() -> impl IntoView {
     });
 
     Effect::new({
+        let game_context = game_context.clone();
         let conn = expect_context::<WebsocketContext>();
         move |_| {
             if let Some(m) = conn.message.get() {
-                handle_message(&m);
+                handle_message(&game_context, &m);
             }
         }
     });
 
     view! {
         <main class="my-0 mx-auto text-center">
+            <Show
+                when=move || game_context.started.get()
+                fallback=move || view! { <p>"Connecting..."</p> }
+            >
             <div class="grid grid-cols-8 justify-items-stretch flex items-start gap-4 m-4 ">
                 <SideMenu class:col-span-2 />
                 <AdventurerPanel class:col-span-3 class:justify-self-end/>
                 <MonstersPanel class:col-span-3 class:justify-self-start/>
             </div>
+            </Show>
         </main>
     }
 }
@@ -89,19 +117,71 @@ fn SideMenu() -> impl IntoView {
 
 #[component]
 fn AdventurerPanel() -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
+    // let player_name = Signal::derive(move || {
+    //     game_context
+    //         .player_prototype
+    //         .read()
+    //         .as_ref()
+    //         .map(|p| p.character_prototype.name.clone())
+    //         .unwrap_or_default()
+    // });
+
+    // let player_portrait = Signal::derive(move || {
+    //     game_context
+    //         .player_prototype
+    //         .read()
+    //         .as_ref()
+    //         .map(|p| p.character_prototype.portrait.clone())
+    //         .unwrap_or_default()
+    // });
+
+    // let health_bar = Signal::derive(move || {
+    //     if let (Some(prototype), Some(state)) = (
+    //         game_context.player_prototype.read().as_ref(),
+    //         game_context.player_state.read().as_ref(),
+    //     ) {
+    //         (state.character_state.health * 100 / prototype.character_prototype.max_health) as f32
+    //     } else {
+    //         0.0
+    //     }
+    // });
+
+    let health_percent = Signal::derive(move || {
+        let max_health = game_context
+            .player_prototype
+            .read()
+            .character_prototype
+            .max_health;
+        if max_health > 0 {
+            (game_context.player_state.read().character_state.health * 100 / max_health) as f32
+        } else {
+            0.0
+        }
+    });
+
+    let player_name = move || {
+        game_context
+            .player_prototype
+            .read()
+            .character_prototype
+            .name
+            .clone()
+    };
+
     let (action_bar, set_action_bar) = signal(69.0);
-    let (health_bar, set_health_bar) = signal(42.0);
     let (mana_bar, set_mana_bar) = signal(100.0);
     view! {
         <div class="flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full">
             <div>
                 <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
-                    Le Poupou
+                    {player_name}
                 </p>
             </div>
 
             <div class="flex gap-2">
-                <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
+                <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_percent />
                 <div class="flex-1">
                     <img src="./assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
                 </div>
@@ -122,7 +202,7 @@ fn AdventurerPanel() -> impl IntoView {
                     <FireballIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
                 <MainMenuButton on:click=move |_| set_action_bar.set(10.0)>"Potion1"</MainMenuButton>
-                <MainMenuButton on:click=move |_| set_health_bar.set(100.0)>"Potion2"</MainMenuButton>
+                <MainMenuButton >"Potion2"</MainMenuButton>
                 <MainMenuButton on:click=move |_| set_mana_bar.set(100.0)>"Potion3"</MainMenuButton>
                 <MainMenuButton on:click=move |_| set_mana_bar.set(20.0)>"Trinket"</MainMenuButton>
             </div>
@@ -168,4 +248,16 @@ fn MonsterPanel() -> impl IntoView {
     }
 }
 
-fn handle_message(message: &ServerMessage) {}
+fn handle_message(game_context: &GameContext, message: &ServerMessage) {
+    match message {
+        ServerMessage::Connect(_) => {}
+        ServerMessage::InitGame(m) => {
+            game_context.started.set(true);
+            game_context
+                .player_prototype
+                .set(m.player_prototype.clone());
+            game_context.player_state.set(m.player_state.clone());
+        }
+        ServerMessage::UpdateGame(_) => {}
+    }
+}

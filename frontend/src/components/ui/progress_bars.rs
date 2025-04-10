@@ -29,7 +29,7 @@ pub fn HorizontalProgressBar(
 #[component]
 pub fn VerticalProgressBar(
     // Percent value, must be between 0 and 100.
-    value: ReadSignal<f32>,
+    #[prop(into)] value: Signal<f32>,
     // Bar color, must be of format "bg-XXXX-NNN"
     bar_color: &'static str,
 ) -> impl IntoView {
