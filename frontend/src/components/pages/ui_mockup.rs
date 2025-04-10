@@ -1,9 +1,6 @@
 use leptos::html::*;
 use leptos::prelude::*;
-use shared::messages::client::ClientConnectMessage;
-use shared::messages::server::ServerMessage;
 
-use crate::components::websocket::WebsocketContext;
 use crate::components::{
     icons::{
         attack_icon::AttackIcon, bite_icon::BiteIcon, claw_icon::ClawIcon,
@@ -11,39 +8,10 @@ use crate::components::{
     },
     ui::buttons::MainMenuButton,
     ui::progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
-    websocket::Websocket,
 };
 
 #[component]
-pub fn Game() -> impl IntoView {
-    view! {
-        <Websocket>
-            <GameInstance/>
-        </Websocket>
-    }
-}
-
-#[component]
-fn GameInstance() -> impl IntoView {
-    let conn = expect_context::<WebsocketContext>();
-    Effect::new(move |_| {
-        if conn.connected.get() {
-            conn.send(
-                &ClientConnectMessage {
-                    bearer: String::from("Le Pou"),
-                }
-                .into(),
-            );
-        }
-    });
-
-    let conn = expect_context::<WebsocketContext>();
-    Effect::new(move |_| {
-        if let Some(m) = conn.message.get() {
-            handle_message(&m);
-        }
-    });
-
+pub fn UIMockUp() -> impl IntoView {
     view! {
         <main class="my-0 mx-auto text-center">
             <div class="grid grid-cols-8 justify-items-stretch flex items-start gap-4 m-4 ">
@@ -56,7 +24,7 @@ fn GameInstance() -> impl IntoView {
 }
 
 #[component]
-fn SideMenu() -> impl IntoView {
+pub fn SideMenu() -> impl IntoView {
     let navigate = leptos_router::hooks::use_navigate();
     let abandon_quest = move |_| navigate("/", Default::default());
 
@@ -84,7 +52,7 @@ fn SideMenu() -> impl IntoView {
 }
 
 #[component]
-fn AdventurerPanel() -> impl IntoView {
+pub fn AdventurerPanel() -> impl IntoView {
     let (action_bar, set_action_bar) = signal(69.0);
     let (health_bar, set_health_bar) = signal(42.0);
     let (mana_bar, set_mana_bar) = signal(100.0);
@@ -127,7 +95,7 @@ fn AdventurerPanel() -> impl IntoView {
 }
 
 #[component]
-fn MonstersPanel() -> impl IntoView {
+pub fn MonstersPanel() -> impl IntoView {
     view! {
         <div class="grid grid-cols-2 gap-2 h-full">
             <MonsterPanel />
@@ -141,9 +109,9 @@ fn MonstersPanel() -> impl IntoView {
 }
 
 #[component]
-fn MonsterPanel() -> impl IntoView {
-    let (action_bar, set_action_bar) = signal(42.0);
-    let (health_bar, set_health_bar) = signal(69.0);
+pub fn MonsterPanel() -> impl IntoView {
+    let (action_bar, _set_action_bar) = signal(42.0);
+    let (health_bar, _set_health_bar) = signal(69.0);
     view! {
         <div class="flex w-full bg-zinc-800 rounded-md gap-2 p-2">
             <div class="flex flex-col gap-2">
@@ -163,5 +131,3 @@ fn MonsterPanel() -> impl IntoView {
         </div>
     }
 }
-
-fn handle_message(message: &ServerMessage) {}

@@ -34,6 +34,9 @@ pub fn MainMenu() -> impl IntoView {
     let navigate_to_game = move |_| navigate("./game", Default::default());
 
     let navigate = use_navigate();
+    let navigate_to_ui_mockup = move |_| navigate("./uimockup", Default::default());
+
+    let navigate = use_navigate();
     let connect = move |_| navigate("./connect", Default::default());
 
     view! {
@@ -41,10 +44,13 @@ pub fn MainMenu() -> impl IntoView {
             <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">"Welcome to Webidler!"</h1>
             <div class="flex flex-col space-y-2">
                 <MainMenuButton on:click=navigate_to_game>
+                    "Game"
+                </MainMenuButton>
+                <MainMenuButton on:click=navigate_to_ui_mockup>
                     "UI Mock up"
                 </MainMenuButton>
                 <MainMenuButton on:click=connect>
-                    "Connect"
+                    "WS Test"
                 </MainMenuButton>
                 <MainMenuButton on:click=click_action>
                     "Get from server"

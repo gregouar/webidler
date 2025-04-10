@@ -19,7 +19,7 @@ use crate::components::ui::buttons::MainMenuButton;
 const HEARTBEAT_PERIOD: u64 = 10_000;
 
 #[component]
-pub fn Connect() -> impl IntoView {
+pub fn WsTest() -> impl IntoView {
     let toaster = expect_toaster();
     let on_error_callback =
         move |e: UseWebSocketError<_, _>| toaster.error(format!("Connection error: {:?}", e));
@@ -68,7 +68,7 @@ pub fn Connect() -> impl IntoView {
             if ready_state.get() == ConnectionReadyState::Open {
                 send(
                     &ClientConnectMessage {
-                        bearer: String::from("bearer token"),
+                        bearer: String::from("Le Pou"),
                     }
                     .into(),
                 );
@@ -120,13 +120,8 @@ pub fn Connect() -> impl IntoView {
 }
 
 fn process_message(message: &ServerMessage) -> Option<String> {
-    match message {
-        ServerMessage::Connect(m) => {
-            return Some(format!("Welcome {}!", m.greeting));
-        }
-        ServerMessage::Update(_) => {
-            // return Some(format!("Got update: {:?}", m));
-            return None;
-        }
-    }
+    return match message {
+        ServerMessage::Connect(m) => Some(format!("Welcome {}!", m.greeting)),
+        _ => None,
+    };
 }

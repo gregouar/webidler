@@ -13,9 +13,12 @@ use tokio::{task::yield_now, time::timeout};
 use std::ops::ControlFlow;
 use std::{net::SocketAddr, time::Duration};
 
-use shared::messages::{
-    client::{ClientConnectMessage, ClientMessage},
-    server::ConnectMessage,
+use shared::{
+    data::{CharacterPrototype, PlayerPrototype},
+    messages::{
+        client::{ClientConnectMessage, ClientMessage},
+        server::ConnectMessage,
+    },
 };
 
 use crate::game::GameInstance;
@@ -42,7 +45,7 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr) {
     let mut conn = WebSocketConnection::establish(socket, who, CLIENT_INACTIVITY_TIMEOUT);
 
     tracing::debug!("waiting for client to connect...");
-    match timeout(Duration::from_secs(30), wait_for_connect(&mut conn)).await {
+    let player = match timeout(Duration::from_secs(30), wait_for_connect(&mut conn)).await {
         Err(e) => {
             tracing::error!("connection timeout: {}", e);
             return;
@@ -51,13 +54,12 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr) {
             tracing::error!("unable to connect: {}", e);
             return;
         }
-        Ok(Ok(_)) => {
-            tracing::debug!("client connected");
-        }
-    }
+        Ok(Ok(p)) => p,
+    };
+    tracing::debug!("client connected");
 
     tracing::debug!("starting the game...");
-    let mut game = GameInstance::new(&mut conn);
+    let mut game = GameInstance::new(&mut conn, player);
     if let Err(e) = game.run().await {
         tracing::error!("error running game: {e}");
     }
@@ -66,7 +68,7 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr) {
     tracing::info!("websocket context {who} destroyed");
 }
 
-async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<()> {
+async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<PlayerPrototype> {
     loop {
         match conn.poll_receive() {
             ControlFlow::Continue(Some(ClientMessage::Connect(m))) => {
@@ -81,16 +83,27 @@ async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<()> {
     }
 }
 
-async fn handle_connect(conn: &mut WebSocketConnection, msg: ClientConnectMessage) -> Result<()> {
+async fn handle_connect(
+    conn: &mut WebSocketConnection,
+    msg: ClientConnectMessage,
+) -> Result<PlayerPrototype> {
     // TODO: verify if user exist, is already playing, get basic data etc
     tracing::info!("Connect: {:?}", msg);
     conn.send(
         &ConnectMessage {
-            greeting: String::from("Poupou"),
+            greeting: msg.bearer.clone(),
             value: 42,
         }
         .into(),
     )
     .await?;
-    Ok(())
+    Ok(PlayerPrototype {
+        character_prototype: CharacterPrototype {
+            identifier: 0,
+            name: msg.bearer.clone(),
+            portrait: String::from("adventurers/human_male_2.webp"),
+            max_health: 100,
+        },
+        max_mana: 100,
+    })
 }

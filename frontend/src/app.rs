@@ -32,8 +32,9 @@ pub fn App() -> impl IntoView {
         <Router base=base_uri>
             <Routes fallback=|| "Page not found.">
                 <Route path=path!("/") view=pages::MainMenu/>
-                <Route path=path!("/connect") view=pages::Connect/>
                 <Route path=path!("/game") view=pages::Game/>
+                <Route path=path!("/uimockup") view=pages::UIMockUp/>
+                <Route path=path!("/connect") view=pages::WsTest/>
             </Routes>
         </Router>
     }
