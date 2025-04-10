@@ -25,22 +25,26 @@ pub fn Game() -> impl IntoView {
 
 #[component]
 fn GameInstance() -> impl IntoView {
-    let conn = expect_context::<WebsocketContext>();
-    Effect::new(move |_| {
-        if conn.connected.get() {
-            conn.send(
-                &ClientConnectMessage {
-                    bearer: String::from("Le Pou"),
-                }
-                .into(),
-            );
+    Effect::new({
+        let conn = expect_context::<WebsocketContext>();
+        move |_| {
+            if conn.connected.get() {
+                conn.send(
+                    &ClientConnectMessage {
+                        bearer: String::from("Le Pou"),
+                    }
+                    .into(),
+                );
+            }
         }
     });
 
-    let conn = expect_context::<WebsocketContext>();
-    Effect::new(move |_| {
-        if let Some(m) = conn.message.get() {
-            handle_message(&m);
+    Effect::new({
+        let conn = expect_context::<WebsocketContext>();
+        move |_| {
+            if let Some(m) = conn.message.get() {
+                handle_message(&m);
+            }
         }
     });
 
