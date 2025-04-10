@@ -119,34 +119,26 @@ fn SideMenu() -> impl IntoView {
 fn AdventurerPanel() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    // let player_name = Signal::derive(move || {
-    //     game_context
-    //         .player_prototype
-    //         .read()
-    //         .as_ref()
-    //         .map(|p| p.character_prototype.name.clone())
-    //         .unwrap_or_default()
-    // });
+    let player_name = move || {
+        game_context
+            .player_prototype
+            .read()
+            .character_prototype
+            .name
+            .clone()
+    };
 
-    // let player_portrait = Signal::derive(move || {
-    //     game_context
-    //         .player_prototype
-    //         .read()
-    //         .as_ref()
-    //         .map(|p| p.character_prototype.portrait.clone())
-    //         .unwrap_or_default()
-    // });
-
-    // let health_bar = Signal::derive(move || {
-    //     if let (Some(prototype), Some(state)) = (
-    //         game_context.player_prototype.read().as_ref(),
-    //         game_context.player_state.read().as_ref(),
-    //     ) {
-    //         (state.character_state.health * 100 / prototype.character_prototype.max_health) as f32
-    //     } else {
-    //         0.0
-    //     }
-    // });
+    // TODO: get_asset?
+    let player_portrait = move || {
+        format!(
+            "./assets/{}",
+            game_context
+                .player_prototype
+                .read()
+                .character_prototype
+                .portrait,
+        )
+    };
 
     let health_percent = Signal::derive(move || {
         let max_health = game_context
@@ -161,17 +153,16 @@ fn AdventurerPanel() -> impl IntoView {
         }
     });
 
-    let player_name = move || {
-        game_context
-            .player_prototype
-            .read()
-            .character_prototype
-            .name
-            .clone()
-    };
+    let mana_percent = Signal::derive(move || {
+        let max_mana = game_context.player_prototype.read().max_mana;
+        if max_mana > 0 {
+            (game_context.player_state.read().mana * 100 / max_mana) as f32
+        } else {
+            0.0
+        }
+    });
 
     let (action_bar, set_action_bar) = signal(69.0);
-    let (mana_bar, set_mana_bar) = signal(100.0);
     view! {
         <div class="flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full">
             <div>
@@ -183,9 +174,9 @@ fn AdventurerPanel() -> impl IntoView {
             <div class="flex gap-2">
                 <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_percent />
                 <div class="flex-1">
-                    <img src="./assets/adventurers/human_male_2.webp" alt="adventurer" class="border-8 border-double border-stone-500" />
+                    <img src=player_portrait alt="adventurer" class="border-8 border-double border-stone-500" />
                 </div>
-                <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_bar />
+                <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_percent />
             </div>
 
             <div class="grid grid-cols-4 gap-2">
@@ -201,10 +192,6 @@ fn AdventurerPanel() -> impl IntoView {
                 <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=action_bar>
                     <FireballIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
                 </CircularProgressBar>
-                <MainMenuButton on:click=move |_| set_action_bar.set(10.0)>"Potion1"</MainMenuButton>
-                <MainMenuButton >"Potion2"</MainMenuButton>
-                <MainMenuButton on:click=move |_| set_mana_bar.set(100.0)>"Potion3"</MainMenuButton>
-                <MainMenuButton on:click=move |_| set_mana_bar.set(20.0)>"Trinket"</MainMenuButton>
             </div>
         </div>
     }
