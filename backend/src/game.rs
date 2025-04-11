@@ -20,6 +20,7 @@ use crate::websocket::WebSocketConnection;
 
 const LOOP_MIN_PERIOD: Duration = Duration::from_millis(100);
 const MAX_MONSTERS: usize = 6;
+const MONSTER_WAVE_PERIOD: Duration = Duration::from_secs(3);
 
 pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
@@ -29,6 +30,7 @@ pub struct GameInstance<'a> {
     player_state: PlayerState,
     monster_prototypes: Vec<MonsterPrototype>,
     monster_states: Vec<MonsterState>,
+    monster_wave_delay: Instant,
     need_to_sync_monster_prototypes: bool,
 }
 
@@ -46,6 +48,7 @@ impl<'a> GameInstance<'a> {
             player_prototype,
             monster_prototypes: Vec::new(),
             monster_states: Vec::new(),
+            monster_wave_delay: Instant::now(),
             need_to_sync_monster_prototypes: false,
         }
     }
@@ -158,22 +161,21 @@ impl<'a> GameInstance<'a> {
             .iter_mut()
             .filter(|x| x.character_state.health > 0)
             .collect();
-        {
+
+        if !still_alive.is_empty() {
             let mut rng = rand::rng();
             let i = rng.random_range(0..still_alive.len());
             still_alive.get_mut(i).map(|x| {
-                x.character_state.health = x.character_state.health.checked_sub(1).unwrap_or(0)
+                x.character_state.health = x.character_state.health.checked_sub(5).unwrap_or(0);
+                if x.character_state.health == 0 {
+                    x.character_state.is_alive = false;
+                }
             });
-        }
-
-        // TODO: wait for respawn
-
-        if self
-            .monster_states
-            .iter()
-            .all(|x| x.character_state.health == 0)
-        {
-            self.generate_monsters_wave().await;
+            self.monster_wave_delay = Instant::now();
+        } else {
+            if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
+                self.generate_monsters_wave().await;
+            }
         }
     }
 

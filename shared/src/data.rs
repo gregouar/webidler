@@ -29,13 +29,15 @@ pub struct CharacterPrototype {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CharacterState {
     pub identifier: u64, // useful?
-    pub health: u64,     // TODO: change to big numbers num_bigint
+    pub is_alive: bool,
+    pub health: u64, // TODO: change to big numbers num_bigint
 }
 
 impl CharacterState {
     pub fn init(prototype: &CharacterPrototype) -> Self {
         CharacterState {
             identifier: prototype.identifier,
+            is_alive: true,
             health: prototype.max_health,
         }
     }

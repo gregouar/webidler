@@ -1,5 +1,6 @@
 use leptos::html::*;
 use leptos::prelude::*;
+
 use shared::data::MonsterPrototype;
 use shared::data::MonsterState;
 use shared::data::PlayerPrototype;
@@ -82,15 +83,15 @@ fn GameInstance() -> impl IntoView {
     });
 
     view! {
-        <main class="my-0 mx-auto text-center">
+        <main class="my-0 mx-auto text-center overflow-x-hidden">
             <Show
                 when=move || game_context.started.get()
                 fallback=move || view! { <p>"Connecting..."</p> }
             >
-            <div class="grid grid-cols-8 justify-items-stretch flex items-start gap-4 m-4 ">
+            <div class="grid grid-cols-9 justify-items-stretch flex items-start gap-4 m-4 ">
                 <SideMenu class:col-span-2 />
                 <AdventurerPanel class:col-span-3 class:justify-self-end/>
-                <MonstersPanel class:col-span-3 class:justify-self-start/>
+                <MonstersPanel class:col-span-4 class:justify-self-start/>
             </div>
             </Show>
         </main>
@@ -211,20 +212,44 @@ fn AdventurerPanel() -> impl IntoView {
 fn MonstersPanel() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
+    let all_monsters_dead = Signal::derive(move || {
+        game_context
+            .monster_states
+            .read()
+            .iter()
+            .all(|x| !x.character_state.is_alive)
+    });
+
     view! {
-        <div class="grid grid-cols-2 grid-rows-3 gap-2 h-full">
+        <div class="grid grid-cols-2 grid-rows-3 gap-2 h-full overflow-hidden">
             <For
-                // a function that returns the items we're iterating over; a signal is fine
                 each=move || game_context.monster_prototypes.get() // TODO: Read?
-                // a unique key for each item
+                // We need a unique key to replace old elements
                 key=move |p| (game_context.monster_wave.get(), p.character_prototype.identifier)
-                // renders each item to a view
                 children=move |p: MonsterPrototype| {
                     // TODO: find proper way to correlate proto and state... maybe should
                     // be other way around?
                     view! {
-                        // <button>"Value: " {move || counter.count.get()}</button>
-                        <MonsterPanel prototype=p />
+                        <style>"
+                            @keyframes fade-in {
+                                0% { opacity: 0; transform: translateX(100%); }
+                                65% { transform: translateX(0%); }
+                                80% { transform: translateX(5%); }
+                                100% { opacity: 1; transform: translateX(0%); }
+                            }
+                            
+                            @keyframes fade-out {
+                                from { opacity: 1; transform: translateY(0%); }
+                                to { opacity: 0; transform: translateY(100%);  }
+                            }
+                        "</style>
+                        <div
+                            style=move|| if all_monsters_dead.get()
+                                {"animation: fade-out 1s ease-in; animation-fill-mode: forwards;"}
+                                else {"animation: fade-in 1s ease-out;"}
+                        >
+                            <MonsterPanel prototype=p />
+                        </div>
                     }
                 }
             />
