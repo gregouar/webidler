@@ -25,6 +25,7 @@ struct GameContext {
     player_prototype: RwSignal<PlayerPrototype>,
     player_state: RwSignal<PlayerState>,
 
+    monster_wave: RwSignal<usize>, // Used to generate unique key in list
     monster_prototypes: RwSignal<Vec<MonsterPrototype>>,
     monster_states: RwSignal<Vec<MonsterState>>,
 }
@@ -35,6 +36,7 @@ impl GameContext {
             started: RwSignal::new(false),
             player_prototype: RwSignal::new(PlayerPrototype::default()),
             player_state: RwSignal::new(PlayerState::default()),
+            monster_wave: RwSignal::new(0),
             monster_prototypes: RwSignal::new(Vec::new()),
             monster_states: RwSignal::new(Vec::new()),
         }
@@ -215,24 +217,17 @@ fn MonstersPanel() -> impl IntoView {
                 // a function that returns the items we're iterating over; a signal is fine
                 each=move || game_context.monster_prototypes.get() // TODO: Read?
                 // a unique key for each item
-                key=|p| p.character_prototype.identifier
+                key=move |p| (game_context.monster_wave.get(), p.character_prototype.identifier)
                 // renders each item to a view
                 children=move |p: MonsterPrototype| {
                     // TODO: find proper way to correlate proto and state... maybe should
                     // be other way around?
-                    // TODO: Get rid of the .get() and use .read()
                     view! {
                         // <button>"Value: " {move || counter.count.get()}</button>
                         <MonsterPanel prototype=p />
                     }
                 }
             />
-            // <MonsterPanel />
-            // <MonsterPanel />
-            // <MonsterPanel />
-            // <MonsterPanel />
-            // <MonsterPanel />
-            // <MonsterPanel />
         </div>
     }
 }
@@ -302,6 +297,7 @@ fn handle_message(game_context: &GameContext, message: &ServerMessage) {
         ServerMessage::UpdateGame(m) => {
             game_context.player_state.set(m.player_state.clone());
             if let Some(monster_prototypes) = m.monster_prototypes.as_ref() {
+                *game_context.monster_wave.write() += 1; // TODO: Overflow
                 game_context
                     .monster_prototypes
                     .set(monster_prototypes.clone());
