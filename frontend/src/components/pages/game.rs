@@ -259,7 +259,7 @@ fn MonsterPanel(prototype: MonsterPrototype) -> impl IntoView {
                 .map(|s| s.character_state.health)
                 .unwrap_or(0)
                 * 100
-                / max_health) as f32
+                / prototype.character_prototype.max_health) as f32
         } else {
             0.0
         }
@@ -269,14 +269,12 @@ fn MonsterPanel(prototype: MonsterPrototype) -> impl IntoView {
     view! {
         <div class="flex w-full bg-zinc-800 rounded-md gap-2 p-2">
             <div class="flex flex-col gap-2">
-                <HorizontalProgressBar class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_percent />
+                <HorizontalProgressBar
+                    class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700"
+                    value=health_percent text=prototype.character_prototype.name.clone()
+                />
                 <div class="flex-1">
-                    <img src="./assets/monsters/bat2.webp" alt="bat monster3"  class="border-8 border-double border-stone-500"/>
-                </div>
-                <div>
-                    <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
-                        {prototype.character_prototype.name}
-                    </p>
+                    <img src={format!("./assets/{}",prototype.character_prototype.portrait)} alt=prototype.character_prototype.name  class="h-full border-8 border-double border-stone-500"/>
                 </div>
             </div>
             <div class="flex flex-col justify-evenly w-full min-w-16">

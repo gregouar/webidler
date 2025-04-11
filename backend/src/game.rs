@@ -153,11 +153,28 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn update(&mut self) {
-        let mut rng = rand::rng();
-        let i = rng.random_range(0..self.monster_states.len());
-        self.monster_states
-            .get_mut(i)
-            .map(|x| x.character_state.health -= 1);
+        let mut still_alive: Vec<&mut MonsterState> = self
+            .monster_states
+            .iter_mut()
+            .filter(|x| x.character_state.health > 0)
+            .collect();
+        {
+            let mut rng = rand::rng();
+            let i = rng.random_range(0..still_alive.len());
+            still_alive.get_mut(i).map(|x| {
+                x.character_state.health = x.character_state.health.checked_sub(1).unwrap_or(0)
+            });
+        }
+
+        // TODO: wait for respawn
+
+        if self
+            .monster_states
+            .iter()
+            .all(|x| x.character_state.health == 0)
+        {
+            self.generate_monsters_wave().await;
+        }
     }
 
     /// Send whole world state to client

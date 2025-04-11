@@ -3,18 +3,26 @@ use leptos::prelude::*;
 
 #[component]
 pub fn HorizontalProgressBar(
-    // Percent value, must be between 0 and 100.
-    #[prop(into)] value: Signal<f32>,
-    // Bar color, must be of format "bg-XXXX-NNN"
+    /// Percent value, must be between 0 and 100.
+    #[prop(into)]
+    value: Signal<f32>,
+    /// Bar color, must be of format "bg-XXXX-NNN"
     bar_color: &'static str,
+    /// Text
+    #[prop(optional)]
+    text: Option<String>, // TODO: Dynamic?
 ) -> impl IntoView {
     view! {
         <div class="
-            flex w-full
-            rounded-lg overflow-hidden 
-            bg-stone-900 border border-neutral-950 
-            shadow-md
-        ">
+                relative flex w-full
+                rounded-lg overflow-hidden 
+                bg-stone-900 border border-neutral-950 
+                shadow-md
+            ">
+            <div class="absolute inset-0 flex items-center justify-center text-white text-sm pointer-events-none">
+                {text}
+            </div>
+
             <div
                 class={format!(
                     "flex flex-col {} rounded-lg transition-all ease-out duration-1000",

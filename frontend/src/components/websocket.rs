@@ -19,7 +19,9 @@ const HEARTBEAT_PERIOD: u64 = 10_000;
 pub struct WebsocketContext {
     pub connected: Memo<bool>,
     pub message: Signal<Option<ServerMessage>>,
-    send: Arc<dyn Fn(&ClientMessage) + Send + Sync>, // use Arc to make it easily cloneable
+    // open: Arc<dyn Fn() + Send + Sync>,
+    send: Arc<dyn Fn(&ClientMessage) + Send + Sync>,
+    // close: Arc<dyn Fn() + Send + Sync>,
 }
 
 impl WebsocketContext {
@@ -61,10 +63,14 @@ pub fn Websocket(children: Children) -> impl IntoView {
             .heartbeat::<ClientMessage, MsgpackSerdeCodec>(HEARTBEAT_PERIOD),
     );
 
+    let _ = open;
+    let _ = close;
     provide_context(WebsocketContext {
         connected: Memo::new(move |_| ready_state.get() == ConnectionReadyState::Open),
         message,
+        // open: Arc::new(open.clone()),
         send: Arc::new(send.clone()),
+        // close: Arc::new(close.clone()),
     });
 
     view! {{children()}}
