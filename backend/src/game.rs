@@ -61,7 +61,11 @@ impl<'a> GameInstance<'a> {
                 break;
             }
 
-            self.sync_client().await?;
+            self.update().await;
+
+            if let Err(e) = self.sync_client().await {
+                tracing::warn!("failed to sync client: {}", e);
+            }
 
             // Wait for next tick
             let duration = last_time.elapsed();
@@ -146,6 +150,14 @@ impl<'a> GameInstance<'a> {
             self.monster_prototypes.push(prototype);
         }
         self.need_to_sync_monster_prototypes = true;
+    }
+
+    async fn update(&mut self) {
+        let mut rng = rand::rng();
+        let i = rng.random_range(0..self.monster_states.len());
+        self.monster_states
+            .get_mut(i)
+            .map(|x| x.character_state.health -= 1);
     }
 
     /// Send whole world state to client

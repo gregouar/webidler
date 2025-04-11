@@ -241,19 +241,42 @@ fn MonstersPanel() -> impl IntoView {
 fn MonsterPanel(prototype: MonsterPrototype) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
+    // let monster_state = move || {
+    //     // TODO: Get rid of get and use read
+    //     game_context
+    //         .monster_states
+    //         .get()
+    //         .get(prototype.character_prototype.identifier as usize - 1)
+    // };
+
+    let health_percent = Signal::derive(move || {
+        let max_health = prototype.character_prototype.max_health;
+        if max_health > 0 {
+            (game_context
+                .monster_states
+                .read()
+                .get(prototype.character_prototype.identifier as usize - 1)
+                .map(|s| s.character_state.health)
+                .unwrap_or(0)
+                * 100
+                / max_health) as f32
+        } else {
+            0.0
+        }
+    });
+
     let (action_bar, set_action_bar) = signal(42.0);
-    let (health_bar, set_health_bar) = signal(69.0);
     view! {
         <div class="flex w-full bg-zinc-800 rounded-md gap-2 p-2">
-            <div>
-                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
-                    {prototype.character_prototype.name}
-                </p>
-            </div>
             <div class="flex flex-col gap-2">
-                <HorizontalProgressBar class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
+                <HorizontalProgressBar class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_percent />
                 <div class="flex-1">
                     <img src="./assets/monsters/bat2.webp" alt="bat monster3"  class="border-8 border-double border-stone-500"/>
+                </div>
+                <div>
+                    <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
+                        {prototype.character_prototype.name}
+                    </p>
                 </div>
             </div>
             <div class="flex flex-col justify-evenly w-full min-w-16">
