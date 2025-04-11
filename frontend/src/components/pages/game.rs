@@ -210,18 +210,21 @@ fn MonstersPanel() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     view! {
-        <div class="grid grid-cols-2 gap-2 h-full">
+        <div class="grid grid-cols-2 grid-rows-3 gap-2 h-full">
             <For
                 // a function that returns the items we're iterating over; a signal is fine
-                each=move || game_context.monster_prototypes.get()
+                each=move || game_context.monster_prototypes.get() // TODO: Read?
                 // a unique key for each item
                 key=|p| p.character_prototype.identifier
                 // renders each item to a view
                 children=move |p: MonsterPrototype| {
-                view! {
-                    // <button>"Value: " {move || counter.count.get()}</button>
-                    <MonsterPanel />
-                }
+                    // TODO: find proper way to correlate proto and state... maybe should
+                    // be other way around?
+                    // TODO: Get rid of the .get() and use .read()
+                    view! {
+                        // <button>"Value: " {move || counter.count.get()}</button>
+                        <MonsterPanel prototype=p />
+                    }
                 }
             />
             // <MonsterPanel />
@@ -235,11 +238,18 @@ fn MonstersPanel() -> impl IntoView {
 }
 
 #[component]
-fn MonsterPanel() -> impl IntoView {
+fn MonsterPanel(prototype: MonsterPrototype) -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
     let (action_bar, set_action_bar) = signal(42.0);
     let (health_bar, set_health_bar) = signal(69.0);
     view! {
         <div class="flex w-full bg-zinc-800 rounded-md gap-2 p-2">
+            <div>
+                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
+                    {prototype.character_prototype.name}
+                </p>
+            </div>
             <div class="flex flex-col gap-2">
                 <HorizontalProgressBar class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_bar />
                 <div class="flex-1">
