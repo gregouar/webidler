@@ -29,6 +29,7 @@ pub struct GameInstance<'a> {
     player_state: PlayerState,
     monster_prototypes: Vec<MonsterPrototype>,
     monster_states: Vec<MonsterState>,
+    need_to_sync_monster_prototypes: bool,
 }
 
 // TODO: split the logic in multiple systems
@@ -45,6 +46,7 @@ impl<'a> GameInstance<'a> {
             player_prototype,
             monster_prototypes: Vec::new(),
             monster_states: Vec::new(),
+            need_to_sync_monster_prototypes: false,
         }
     }
 
@@ -143,6 +145,7 @@ impl<'a> GameInstance<'a> {
             self.monster_states.push(MonsterState::init(&prototype));
             self.monster_prototypes.push(prototype);
         }
+        self.need_to_sync_monster_prototypes = true;
     }
 
     /// Send whole world state to client
@@ -153,8 +156,13 @@ impl<'a> GameInstance<'a> {
                 &SyncGameStateMessage {
                     value: self.loop_counter,
                     player_state: self.player_state.clone(),
-                    monsters: None,
-                    monsters_state: self.monster_states.clone(),
+                    monster_prototypes: if self.need_to_sync_monster_prototypes {
+                        self.need_to_sync_monster_prototypes = false;
+                        Some(self.monster_prototypes.clone())
+                    } else {
+                        None
+                    },
+                    monster_states: self.monster_states.clone(),
                 }
                 .into(),
             )

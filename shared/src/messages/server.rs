@@ -31,6 +31,6 @@ pub struct SyncGameStateMessage {
     pub value: i32,
     pub player_state: PlayerState,
     // Monsters list is only updated when monsters change
-    pub monsters: Option<Vec<MonsterPrototype>>,
-    pub monsters_state: Vec<MonsterState>,
+    pub monster_prototypes: Option<Vec<MonsterPrototype>>,
+    pub monster_states: Vec<MonsterState>,
 }

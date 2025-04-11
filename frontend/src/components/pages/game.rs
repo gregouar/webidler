@@ -1,5 +1,7 @@
 use leptos::html::*;
 use leptos::prelude::*;
+use shared::data::MonsterPrototype;
+use shared::data::MonsterState;
 use shared::data::PlayerPrototype;
 use shared::data::PlayerState;
 use shared::messages::client::ClientConnectMessage;
@@ -19,8 +21,12 @@ use crate::components::{
 #[derive(Clone)]
 struct GameContext {
     started: RwSignal<bool>,
+
     player_prototype: RwSignal<PlayerPrototype>,
     player_state: RwSignal<PlayerState>,
+
+    monster_prototypes: RwSignal<Vec<MonsterPrototype>>,
+    monster_states: RwSignal<Vec<MonsterState>>,
 }
 
 impl GameContext {
@@ -29,6 +35,8 @@ impl GameContext {
             started: RwSignal::new(false),
             player_prototype: RwSignal::new(PlayerPrototype::default()),
             player_state: RwSignal::new(PlayerState::default()),
+            monster_prototypes: RwSignal::new(Vec::new()),
+            monster_states: RwSignal::new(Vec::new()),
         }
     }
 }
@@ -199,14 +207,29 @@ fn AdventurerPanel() -> impl IntoView {
 
 #[component]
 fn MonstersPanel() -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
     view! {
         <div class="grid grid-cols-2 gap-2 h-full">
-            <MonsterPanel />
-            <MonsterPanel />
-            <MonsterPanel />
-            <MonsterPanel />
-            <MonsterPanel />
-            <MonsterPanel />
+            <For
+                // a function that returns the items we're iterating over; a signal is fine
+                each=move || game_context.monster_prototypes.get()
+                // a unique key for each item
+                key=|p| p.character_prototype.identifier
+                // renders each item to a view
+                children=move |p: MonsterPrototype| {
+                view! {
+                    // <button>"Value: " {move || counter.count.get()}</button>
+                    <MonsterPanel />
+                }
+                }
+            />
+            // <MonsterPanel />
+            // <MonsterPanel />
+            // <MonsterPanel />
+            // <MonsterPanel />
+            // <MonsterPanel />
+            // <MonsterPanel />
         </div>
     }
 }
@@ -245,6 +268,14 @@ fn handle_message(game_context: &GameContext, message: &ServerMessage) {
                 .set(m.player_prototype.clone());
             game_context.player_state.set(m.player_state.clone());
         }
-        ServerMessage::UpdateGame(_) => {}
+        ServerMessage::UpdateGame(m) => {
+            game_context.player_state.set(m.player_state.clone());
+            if let Some(monster_prototypes) = m.monster_prototypes.as_ref() {
+                game_context
+                    .monster_prototypes
+                    .set(monster_prototypes.clone());
+            }
+            game_context.monster_states.set(m.monster_states.clone());
+        }
     }
 }
