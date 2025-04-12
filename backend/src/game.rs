@@ -9,7 +9,10 @@ use std::{
 
 use rand::Rng;
 use shared::{
-    data::{CharacterPrototype, MonsterPrototype, MonsterState, PlayerPrototype, PlayerState},
+    data::{
+        CharacterPrototype, MonsterPrototype, MonsterState, PlayerPrototype, PlayerState,
+        SkillPrototype,
+    },
     messages::{
         client::ClientMessage,
         server::{InitGameMessage, SyncGameStateMessage},
@@ -20,7 +23,7 @@ use crate::websocket::WebSocketConnection;
 
 const LOOP_MIN_PERIOD: Duration = Duration::from_millis(100);
 const MAX_MONSTERS: usize = 6;
-const MONSTER_WAVE_PERIOD: Duration = Duration::from_secs(3);
+const MONSTER_WAVE_PERIOD: Duration = Duration::from_secs(2);
 
 pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
@@ -125,27 +128,53 @@ impl<'a> GameInstance<'a> {
         let n = rng.random_range(1..=MAX_MONSTERS);
         self.monster_prototypes = Vec::with_capacity(n);
         self.monster_states = Vec::with_capacity(n);
-        for i in 1..=n {
+        for _ in 1..=n {
             let monster_type = rng.random_range(0..2);
 
             let prototype = match monster_type {
                 0 => MonsterPrototype {
                     character_prototype: CharacterPrototype {
-                        identifier: i as u64,
+                        // identifier: i as u64,
                         name: String::from("batty"),
                         portrait: match rng.random_range(0..2) {
                             0 => String::from("monsters/bat.webp"),
                             _ => String::from("monsters/bat2.webp"),
                         },
                         max_health: 20,
+                        skill_prototypes: vec![SkillPrototype {
+                            name: String::from("Bite"),
+                            icon: String::from("bite"), // TODO
+                            cooldown: Duration::from_secs(3),
+                            mana_cost: 0,
+                            min_damages: 1,
+                            max_damages: 3,
+                        }],
                     },
                 },
                 _ => MonsterPrototype {
                     character_prototype: CharacterPrototype {
-                        identifier: i as u64,
+                        // identifier: i as u64,
                         name: String::from("ratty"),
                         portrait: String::from("monsters/rat.webp"),
                         max_health: 50,
+                        skill_prototypes: vec![
+                            SkillPrototype {
+                                name: String::from("Vicious Bite"),
+                                icon: String::from("bite"), // TODO
+                                cooldown: Duration::from_secs(5),
+                                mana_cost: 0,
+                                min_damages: 2,
+                                max_damages: 8,
+                            },
+                            SkillPrototype {
+                                name: String::from("Scratch"),
+                                icon: String::from("claw"), // TODO
+                                cooldown: Duration::from_secs(3),
+                                mana_cost: 0,
+                                min_damages: 1,
+                                max_damages: 3,
+                            },
+                        ],
                     },
                 },
             };

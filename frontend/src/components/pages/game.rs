@@ -239,10 +239,10 @@ fn MonstersPanel() -> impl IntoView {
                 }
             "</style>
             <For
-                each=move || game_context.monster_prototypes.get() // We can allow to clone as it happens quite rarely
+                each=move || game_context.monster_prototypes.get().into_iter().enumerate() // Do we really need get?
                 // We need a unique key to replace old elements
-                key=move |p| (game_context.monster_wave.get(), p.character_prototype.identifier)
-                children=move |p: MonsterPrototype| {
+                key=move |(index,_)| (game_context.monster_wave.get(), *index)
+                children=move |(index, prototype)| {
                     let animation_delay = format!("animation-delay: {}s;", rand::rng().random_range(0.0..=0.2f32));
                     view! {
                         <div
@@ -250,7 +250,7 @@ fn MonstersPanel() -> impl IntoView {
                                 {format!("animation: fade-out 1s ease-in; animation-fill-mode: both;")}
                                 else {format!("animation: fade-in 1s ease-out; animation-fill-mode: both; {}",animation_delay)}
                         >
-                            <MonsterPanel prototype=p />
+                            <MonsterPanel prototype=prototype.clone() index=index /> // Find way to remove clone
                         </div>
                     }
                 }
@@ -260,7 +260,7 @@ fn MonstersPanel() -> impl IntoView {
 }
 
 #[component]
-fn MonsterPanel(prototype: MonsterPrototype) -> impl IntoView {
+fn MonsterPanel(prototype: MonsterPrototype, index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let health_percent = Signal::derive(move || {
@@ -269,7 +269,7 @@ fn MonsterPanel(prototype: MonsterPrototype) -> impl IntoView {
             (game_context
                 .monster_states
                 .read()
-                .get(prototype.character_prototype.identifier as usize - 1)
+                .get(index)
                 .map(|s| s.character_state.health)
                 .unwrap_or(0)
                 * 100
@@ -283,7 +283,7 @@ fn MonsterPanel(prototype: MonsterPrototype) -> impl IntoView {
         if game_context
             .monster_states
             .read()
-            .get(prototype.character_prototype.identifier as usize - 1)
+            .get(index)
             .map(|x| !x.character_state.is_alive)
             .unwrap_or(false)
         {
