@@ -1,6 +1,8 @@
 use leptos::html::*;
 use leptos::prelude::*;
 
+use rand::Rng;
+
 use shared::data::MonsterPrototype;
 use shared::data::MonsterState;
 use shared::data::PlayerPrototype;
@@ -32,7 +34,7 @@ struct GameContext {
 }
 
 impl GameContext {
-    pub fn new() -> Self {
+    fn new() -> Self {
         GameContext {
             started: RwSignal::new(false),
             player_prototype: RwSignal::new(PlayerPrototype::default()),
@@ -220,33 +222,33 @@ fn MonstersPanel() -> impl IntoView {
             .all(|x| !x.character_state.is_alive)
     });
 
+    // TODO: double buffering to allow in and out at the same time
     view! {
         <div class="grid grid-cols-2 grid-rows-3 gap-2 h-full overflow-hidden">
+            <style>"
+                @keyframes fade-in {
+                    0% { transform: translateX(100%); opacity: 0; }
+                    65% { transform: translateX(0%); opacity: 1; }
+                    80% { transform: translateX(5%); }
+                    100% { transform: translateX(0%); }
+                }
+                
+                @keyframes fade-out {
+                    from { opacity: 1; transform: translateY(0%); }
+                    to { opacity: 0; transform: translateY(100%); }
+                }
+            "</style>
             <For
-                each=move || game_context.monster_prototypes.get() // TODO: Read?
+                each=move || game_context.monster_prototypes.get() // We can allow to clone as it happens quite rarely
                 // We need a unique key to replace old elements
                 key=move |p| (game_context.monster_wave.get(), p.character_prototype.identifier)
                 children=move |p: MonsterPrototype| {
-                    // TODO: find proper way to correlate proto and state... maybe should
-                    // be other way around?
+                    let animation_delay = format!("animation-delay: {}s;", rand::rng().random_range(0.0..=0.2f32));
                     view! {
-                        <style>"
-                            @keyframes fade-in {
-                                0% { opacity: 0; transform: translateX(100%); }
-                                65% { transform: translateX(0%); }
-                                80% { transform: translateX(5%); }
-                                100% { opacity: 1; transform: translateX(0%); }
-                            }
-                            
-                            @keyframes fade-out {
-                                from { opacity: 1; transform: translateY(0%); }
-                                to { opacity: 0; transform: translateY(100%);  }
-                            }
-                        "</style>
                         <div
                             style=move|| if all_monsters_dead.get()
-                                {"animation: fade-out 1s ease-in; animation-fill-mode: forwards;"}
-                                else {"animation: fade-in 1s ease-out;"}
+                                {format!("animation: fade-out 1s ease-in; animation-fill-mode: both;")}
+                                else {format!("animation: fade-in 1s ease-out; animation-fill-mode: both; {}",animation_delay)}
                         >
                             <MonsterPanel prototype=p />
                         </div>
@@ -260,14 +262,6 @@ fn MonstersPanel() -> impl IntoView {
 #[component]
 fn MonsterPanel(prototype: MonsterPrototype) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
-
-    // let monster_state = move || {
-    //     // TODO: Get rid of get and use read
-    //     game_context
-    //         .monster_states
-    //         .get()
-    //         .get(prototype.character_prototype.identifier as usize - 1)
-    // };
 
     let health_percent = Signal::derive(move || {
         let max_health = prototype.character_prototype.max_health;
@@ -285,6 +279,20 @@ fn MonsterPanel(prototype: MonsterPrototype) -> impl IntoView {
         }
     });
 
+    let is_dead_img_effect = move || {
+        if game_context
+            .monster_states
+            .read()
+            .get(prototype.character_prototype.identifier as usize - 1)
+            .map(|x| !x.character_state.is_alive)
+            .unwrap_or(false)
+        {
+            "saturate-0 brightness-1"
+        } else {
+            ""
+        }
+    };
+
     let (action_bar, set_action_bar) = signal(42.0);
     view! {
         <div class="flex w-full bg-zinc-800 rounded-md gap-2 p-2">
@@ -294,7 +302,10 @@ fn MonsterPanel(prototype: MonsterPrototype) -> impl IntoView {
                     value=health_percent text=prototype.character_prototype.name.clone()
                 />
                 <div class="flex-1">
-                    <img src={format!("./assets/{}",prototype.character_prototype.portrait)} alt=prototype.character_prototype.name  class="h-full border-8 border-double border-stone-500"/>
+                    <img
+                        src={format!("./assets/{}",prototype.character_prototype.portrait)} alt=prototype.character_prototype.name
+                        class=move || format!("h-full border-8 border-double border-stone-500 transition duration-1000 {}", is_dead_img_effect())
+                    />
                 </div>
             </div>
             <div class="flex flex-col justify-evenly w-full min-w-16">

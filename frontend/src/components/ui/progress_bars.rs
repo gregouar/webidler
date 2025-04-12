@@ -25,7 +25,7 @@ pub fn HorizontalProgressBar(
 
             <div
                 class={format!(
-                    "flex flex-col {} rounded-lg transition-all ease-out duration-1000",
+                    "flex flex-col {} rounded-lg transition-all ease duration-500",
                     bar_color
                 )}
                 style:width=move || format!("{}%", value.get().round())
@@ -49,7 +49,7 @@ pub fn VerticalProgressBar(
             shadow-md
             ">
             <div
-                class={format!("{} rounded-lg overflow-hidden transition-all ease-out duration-1000",bar_color)}
+                class={format!("{} rounded-lg overflow-hidden transition-all ease duration-500",bar_color)}
                 style:height=move || format!("{}%", value.get().round())
                 style:-webkit-mask="linear-gradient(#fff 0 0)"
             ></div>
@@ -92,7 +92,7 @@ pub fn CircularProgressBar(
                         <circle class="stroke-current text-stone-900" cx="0" cy="2.5" r="72" stroke-width=bar_width
                                 fill="none" filter="url(#blur)"/>
                     </g>
-                    <path class={format!("main-arc stroke-current transition-all ease-out duration-1000 {}",bar_color)}
+                    <path class={format!("main-arc stroke-current transition-all ease duration-500 {}",bar_color)}
                         stroke-dashoffset=set_value stroke-dasharray="452.389"
                         d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
                         fill="transparent" stroke-width=bar_width stroke=bar_color
