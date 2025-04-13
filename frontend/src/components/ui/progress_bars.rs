@@ -60,7 +60,7 @@ pub fn VerticalProgressBar(
 #[component]
 pub fn CircularProgressBar(
     // Percent value, must be between 0 and 100.
-    value: ReadSignal<f32>,
+    #[prop(into)] value: Signal<f32>,
     // Bar color, must be of format "text-XXXX-NNN"
     bar_color: &'static str,
     // Width of the progress bar

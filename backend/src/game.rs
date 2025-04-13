@@ -10,8 +10,8 @@ use std::{
 use rand::Rng;
 use shared::{
     data::{
-        CharacterPrototype, MonsterPrototype, MonsterState, PlayerPrototype, PlayerState,
-        SkillPrototype,
+        CharacterPrototype, CharacterState, MonsterPrototype, MonsterState, PlayerPrototype,
+        PlayerState, SkillPrototype,
     },
     messages::{
         client::ClientMessage,
@@ -60,6 +60,7 @@ impl<'a> GameInstance<'a> {
         self.init_game().await?;
 
         let mut last_time = Instant::now();
+        let mut last_update_time = Instant::now();
         loop {
             self.loop_counter += 1;
 
@@ -67,7 +68,9 @@ impl<'a> GameInstance<'a> {
                 break;
             }
 
-            self.update().await;
+            let elapsed_time = last_update_time.elapsed();
+            last_update_time = Instant::now();
+            self.update(elapsed_time).await;
 
             if let Err(e) = self.sync_client().await {
                 tracing::warn!("failed to sync client: {}", e);
@@ -143,8 +146,8 @@ impl<'a> GameInstance<'a> {
                         max_health: 20,
                         skill_prototypes: vec![SkillPrototype {
                             name: String::from("Bite"),
-                            icon: String::from("bite"), // TODO
-                            cooldown: Duration::from_secs(3),
+                            icon: String::from("icons/bite.svg"), // TODO
+                            cooldown: 3.0,
                             mana_cost: 0,
                             min_damages: 1,
                             max_damages: 3,
@@ -160,16 +163,16 @@ impl<'a> GameInstance<'a> {
                         skill_prototypes: vec![
                             SkillPrototype {
                                 name: String::from("Vicious Bite"),
-                                icon: String::from("bite"), // TODO
-                                cooldown: Duration::from_secs(5),
+                                icon: String::from("icons/bite.svg"),
+                                cooldown: 5.0,
                                 mana_cost: 0,
                                 min_damages: 2,
                                 max_damages: 8,
                             },
                             SkillPrototype {
                                 name: String::from("Scratch"),
-                                icon: String::from("claw"), // TODO
-                                cooldown: Duration::from_secs(3),
+                                icon: String::from("icons/claw.svg"),
+                                cooldown: 3.0,
                                 mana_cost: 0,
                                 min_damages: 1,
                                 max_damages: 3,
@@ -184,27 +187,44 @@ impl<'a> GameInstance<'a> {
         self.need_to_sync_monster_prototypes = true;
     }
 
-    async fn update(&mut self) {
-        let mut still_alive: Vec<&mut MonsterState> = self
+    async fn update(&mut self, elapsed_time: Duration) {
+        update_character_state(
+            elapsed_time,
+            &mut self.player_state.character_state,
+            &self.player_prototype.character_prototype,
+        );
+
+        let mut still_alive: Vec<(&mut MonsterState, &MonsterPrototype)> = self
             .monster_states
             .iter_mut()
-            .filter(|x| x.character_state.health > 0)
+            .zip(self.monster_prototypes.iter())
+            .filter(|(x, _)| x.character_state.health > 0)
             .collect();
 
-        if !still_alive.is_empty() {
+        if still_alive.is_empty() {
+            if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
+                self.generate_monsters_wave().await;
+            }
+        } else {
+            self.monster_wave_delay = Instant::now();
             let mut rng = rand::rng();
+
+            for (m, p) in still_alive.iter_mut() {
+                update_character_state(
+                    elapsed_time,
+                    &mut m.character_state,
+                    &p.character_prototype,
+                );
+            }
+
+            // Fake combat
             let i = rng.random_range(0..still_alive.len());
-            still_alive.get_mut(i).map(|x| {
+            still_alive.get_mut(i).map(|(x, _)| {
                 x.character_state.health = x.character_state.health.checked_sub(5).unwrap_or(0);
                 if x.character_state.health == 0 {
                     x.character_state.is_alive = false;
                 }
             });
-            self.monster_wave_delay = Instant::now();
-        } else {
-            if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
-                self.generate_monsters_wave().await;
-            }
         }
     }
 
@@ -227,5 +247,23 @@ impl<'a> GameInstance<'a> {
                 .into(),
             )
             .await
+    }
+}
+
+fn update_character_state(
+    elapsed_time: Duration,
+    state: &mut CharacterState,
+    prototype: &CharacterPrototype,
+) {
+    for (skill_prototype, skill_state) in prototype
+        .skill_prototypes
+        .iter()
+        .zip(state.skill_states.iter_mut())
+    {
+        skill_state.elapsed_cooldown += elapsed_time.as_secs_f32();
+        if skill_state.elapsed_cooldown >= skill_prototype.cooldown {
+            skill_state.elapsed_cooldown = skill_prototype.cooldown;
+            skill_state.is_ready = true;
+        }
     }
 }

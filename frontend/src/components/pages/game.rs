@@ -7,15 +7,12 @@ use shared::data::MonsterPrototype;
 use shared::data::MonsterState;
 use shared::data::PlayerPrototype;
 use shared::data::PlayerState;
+use shared::data::SkillPrototype;
 use shared::messages::client::ClientConnectMessage;
 use shared::messages::server::ServerMessage;
 
 use crate::components::websocket::WebsocketContext;
 use crate::components::{
-    icons::{
-        attack_icon::AttackIcon, bite_icon::BiteIcon, claw_icon::ClawIcon,
-        fireball_icon::FireballIcon,
-    },
     ui::buttons::MainMenuButton,
     ui::progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
     websocket::Websocket,
@@ -92,8 +89,8 @@ fn GameInstance() -> impl IntoView {
             >
             <div class="grid grid-cols-9 justify-items-stretch flex items-start gap-4 m-4 ">
                 <SideMenu class:col-span-2 />
-                <AdventurerPanel class:col-span-3 class:justify-self-end/>
-                <MonstersPanel class:col-span-4 class:justify-self-start/>
+                <PlayerCard class:col-span-3 class:justify-self-end/>
+                <MonstersGrid class:col-span-4 class:justify-self-start/>
             </div>
             </Show>
         </main>
@@ -129,7 +126,7 @@ fn SideMenu() -> impl IntoView {
 }
 
 #[component]
-fn AdventurerPanel() -> impl IntoView {
+fn PlayerCard() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let player_name = move || {
@@ -175,43 +172,68 @@ fn AdventurerPanel() -> impl IntoView {
         }
     });
 
-    let (action_bar, set_action_bar) = signal(69.0);
     view! {
-        <div class="flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full">
-            <div>
-                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
-                    {player_name}
-                </p>
-            </div>
-
-            <div class="flex gap-2">
-                <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_percent />
-                <div class="flex-1">
-                    <img src=player_portrait alt="adventurer" class="border-8 border-double border-stone-500" />
-                </div>
-                <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_percent />
-            </div>
-
-            <div class="grid grid-cols-4 gap-2">
-                <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=action_bar>
-                    <AttackIcon  class:drop-shadow-lg  class:w-full class:h-full class:flex-no-shrink class:fill-current />
-                </CircularProgressBar>
-                <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=action_bar>
-                    <AttackIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
-                </CircularProgressBar>
-                <CircularProgressBar   bar_width=4 bar_color="text-amber-700" value=action_bar>
-                    <FireballIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
-                </CircularProgressBar>
-                <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=action_bar>
-                    <FireballIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
-                </CircularProgressBar>
-            </div>
+    <div class="flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full">
+        <div>
+            <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
+                {player_name}
+            </p>
         </div>
+
+        <div class="flex gap-2">
+            <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_percent />
+            <div class="flex-1">
+                <img src=player_portrait alt="player" class="border-8 border-double border-stone-500" />
+            </div>
+            <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_percent />
+        </div>
+
+        <div class="grid grid-cols-4 gap-2">
+            <For
+                each=move || game_context.player_prototype.get().character_prototype.skill_prototypes.into_iter().enumerate()
+                key=|(i,_)|  *i
+                let((i,p))
+            >
+                <PlayerSkill prototype=p index=i />
+            </For>
+        </div>
+    </div>
     }
 }
 
 #[component]
-fn MonstersPanel() -> impl IntoView {
+fn PlayerSkill(prototype: SkillPrototype, index: usize) -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
+    let skill_cooldown = Signal::derive(move || {
+        if prototype.cooldown > 0.0 {
+            (game_context
+                .player_state
+                .read()
+                .character_state
+                .skill_states
+                .get(index)
+                .map(|x| x.elapsed_cooldown)
+                .unwrap_or_default()
+                * 100.0
+                / prototype.cooldown) as f32
+        } else {
+            0.0
+        }
+    });
+
+    view! {
+        <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=skill_cooldown>
+            <img
+                src={format!("./assets/{}",prototype.icon.clone())} alt=prototype.name
+                class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
+            />
+        </CircularProgressBar>
+    }
+}
+
+#[component]
+fn MonstersGrid() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let all_monsters_dead = Signal::derive(move || {
@@ -239,7 +261,7 @@ fn MonstersPanel() -> impl IntoView {
                 }
             "</style>
             <For
-                each=move || game_context.monster_prototypes.get().into_iter().enumerate() // Do we really need get?
+                each=move || game_context.monster_prototypes.get().into_iter().enumerate()
                 // We need a unique key to replace old elements
                 key=move |(index,_)| (game_context.monster_wave.get(), *index)
                 children=move |(index, prototype)| {
@@ -250,7 +272,7 @@ fn MonstersPanel() -> impl IntoView {
                                 {format!("animation: fade-out 1s ease-in; animation-fill-mode: both;")}
                                 else {format!("animation: fade-in 1s ease-out; animation-fill-mode: both; {}",animation_delay)}
                         >
-                            <MonsterPanel prototype=prototype.clone() index=index /> // Find way to remove clone
+                            <MonsterCard prototype=prototype index=index />
                         </div>
                     }
                 }
@@ -260,7 +282,7 @@ fn MonstersPanel() -> impl IntoView {
 }
 
 #[component]
-fn MonsterPanel(prototype: MonsterPrototype, index: usize) -> impl IntoView {
+fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let health_percent = Signal::derive(move || {
@@ -293,7 +315,6 @@ fn MonsterPanel(prototype: MonsterPrototype, index: usize) -> impl IntoView {
         }
     };
 
-    let (action_bar, set_action_bar) = signal(42.0);
     view! {
         <div class="flex w-full bg-zinc-800 rounded-md gap-2 p-2">
             <div class="flex flex-col gap-2">
@@ -303,20 +324,52 @@ fn MonsterPanel(prototype: MonsterPrototype, index: usize) -> impl IntoView {
                 />
                 <div class="flex-1">
                     <img
-                        src={format!("./assets/{}",prototype.character_prototype.portrait)} alt=prototype.character_prototype.name
+                        src={format!("./assets/{}",prototype.character_prototype.portrait.clone())} alt=prototype.character_prototype.name
                         class=move || format!("h-full border-8 border-double border-stone-500 transition duration-1000 {}", is_dead_img_effect())
                     />
                 </div>
             </div>
             <div class="flex flex-col justify-evenly w-full min-w-16">
-                <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=action_bar>
-                    <BiteIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
-                </CircularProgressBar>
-                <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=action_bar>
-                    <ClawIcon class:drop-shadow-lg class:w-full class:h-full class:flex-no-shrink class:fill-current />
-                </CircularProgressBar>
+                <For
+                    each=move || prototype.character_prototype.skill_prototypes.clone().into_iter().enumerate()
+                    key=|(i,_)|  *i
+                    let((i,p))
+                >
+                    <MonsterSkill prototype=p index=i monster_index=index />
+                </For>
             </div>
         </div>
+    }
+}
+
+#[component]
+fn MonsterSkill(prototype: SkillPrototype, index: usize, monster_index: usize) -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
+    let skill_cooldown = Signal::derive(move || {
+        if prototype.cooldown > 0.0 {
+            (game_context
+                .monster_states
+                .read()
+                .get(monster_index)
+                .map(|m| m.character_state.skill_states.get(index))
+                .flatten()
+                .map(|s| s.elapsed_cooldown)
+                .unwrap_or(0.0)
+                * 100.0
+                / prototype.cooldown) as f32
+        } else {
+            0.0
+        }
+    });
+
+    view! {
+        <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=skill_cooldown>
+            <img
+                src={format!("./assets/{}",prototype.icon.clone())} alt=prototype.name
+                class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
+            />
+        </CircularProgressBar>
     }
 }
 

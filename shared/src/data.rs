@@ -1,7 +1,5 @@
 // TODO: split in multiple files
 
-use std::time::Duration;
-
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -107,7 +105,7 @@ pub struct SkillPrototype {
     pub name: String,
     pub icon: String, // TODO better...
 
-    pub cooldown: Duration,
+    pub cooldown: f32,
     pub mana_cost: u64,
 
     pub min_damages: u64, // Could this be a range?
@@ -117,7 +115,7 @@ pub struct SkillPrototype {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SkillState {
-    pub elapsed_cooldown: Duration, // Pretty sure this is a dumb type choice
+    pub elapsed_cooldown: f32,
     pub is_ready: bool,
     pub just_triggered: bool,
 }
@@ -125,7 +123,7 @@ pub struct SkillState {
 impl SkillState {
     pub fn init(_prototype: &SkillPrototype) -> Self {
         Self {
-            elapsed_cooldown: Duration::default(),
+            elapsed_cooldown: 0.0,
             is_ready: false,
             just_triggered: false,
         }

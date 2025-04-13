@@ -106,16 +106,16 @@ async fn handle_connect(
             skill_prototypes: vec![
                 SkillPrototype {
                     name: String::from("Weapon Attack"),
-                    icon: String::from("attack"), //TODO
-                    cooldown: Duration::from_secs(1),
+                    icon: String::from("icons/attack.svg"),
+                    cooldown: 1.0,
                     mana_cost: 0,
                     min_damages: 3,
                     max_damages: 7,
                 },
                 SkillPrototype {
                     name: String::from("Fireball"),
-                    icon: String::from("fireball"), //TODO
-                    cooldown: Duration::from_secs(5),
+                    icon: String::from("icons/fireball.svg"),
+                    cooldown: 5.0,
                     mana_cost: 20,
                     min_damages: 10,
                     max_damages: 30,
