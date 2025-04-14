@@ -11,7 +11,7 @@ use rand::Rng;
 use shared::{
     data::{
         CharacterPrototype, CharacterState, MonsterPrototype, MonsterState, PlayerPrototype,
-        PlayerState, SkillPrototype,
+        PlayerState, SkillPrototype, SkillState,
     },
     messages::{
         client::ClientMessage,
@@ -143,7 +143,7 @@ impl<'a> GameInstance<'a> {
                             0 => String::from("monsters/bat.webp"),
                             _ => String::from("monsters/bat2.webp"),
                         },
-                        max_health: 20,
+                        max_health: 10,
                         skill_prototypes: vec![SkillPrototype {
                             name: String::from("Bite"),
                             icon: String::from("icons/bite.svg"), // TODO
@@ -159,7 +159,7 @@ impl<'a> GameInstance<'a> {
                         // identifier: i as u64,
                         name: String::from("ratty"),
                         portrait: String::from("monsters/rat.webp"),
-                        max_health: 50,
+                        max_health: 20,
                         skill_prototypes: vec![
                             SkillPrototype {
                                 name: String::from("Vicious Bite"),
@@ -188,43 +188,33 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn update(&mut self, elapsed_time: Duration) {
-        update_character_state(
-            elapsed_time,
-            &mut self.player_state.character_state,
-            &self.player_prototype.character_prototype,
-        );
-
-        let mut still_alive: Vec<(&mut MonsterState, &MonsterPrototype)> = self
+        let mut monsters_still_alive: Vec<(&mut MonsterState, &MonsterPrototype)> = self
             .monster_states
             .iter_mut()
             .zip(self.monster_prototypes.iter())
             .filter(|(x, _)| x.character_state.health > 0)
             .collect();
 
-        if still_alive.is_empty() {
+        update_player_state(
+            &self.player_prototype,
+            &mut self.player_state,
+            elapsed_time,
+            &mut monsters_still_alive,
+        );
+
+        if monsters_still_alive.is_empty() {
             if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
                 self.generate_monsters_wave().await;
             }
         } else {
             self.monster_wave_delay = Instant::now();
-            let mut rng = rand::rng();
-
-            for (m, p) in still_alive.iter_mut() {
+            for (m, p) in monsters_still_alive.iter_mut() {
                 update_character_state(
                     elapsed_time,
-                    &mut m.character_state,
                     &p.character_prototype,
+                    &mut m.character_state,
                 );
             }
-
-            // Fake combat
-            let i = rng.random_range(0..still_alive.len());
-            still_alive.get_mut(i).map(|(x, _)| {
-                x.character_state.health = x.character_state.health.checked_sub(5).unwrap_or(0);
-                if x.character_state.health == 0 {
-                    x.character_state.is_alive = false;
-                }
-            });
         }
     }
 
@@ -252,18 +242,87 @@ impl<'a> GameInstance<'a> {
 
 fn update_character_state(
     elapsed_time: Duration,
-    state: &mut CharacterState,
     prototype: &CharacterPrototype,
+    state: &mut CharacterState,
 ) {
     for (skill_prototype, skill_state) in prototype
         .skill_prototypes
         .iter()
         .zip(state.skill_states.iter_mut())
     {
+        skill_state.just_triggered = false;
         skill_state.elapsed_cooldown += elapsed_time.as_secs_f32();
         if skill_state.elapsed_cooldown >= skill_prototype.cooldown {
             skill_state.elapsed_cooldown = skill_prototype.cooldown;
             skill_state.is_ready = true;
+        } else {
+            skill_state.is_ready = false;
         }
+    }
+}
+
+fn update_player_state(
+    player_prototype: &PlayerPrototype,
+    player_state: &mut PlayerState,
+    elapsed_time: Duration,
+    monsters: &mut Vec<(&mut MonsterState, &MonsterPrototype)>,
+) {
+    let mut rng = rand::rng();
+
+    update_character_state(
+        elapsed_time,
+        &player_prototype.character_prototype,
+        &mut player_state.character_state,
+    );
+
+    if !monsters.is_empty() {
+        for (skill_prototype, skill_state) in player_prototype
+            .character_prototype
+            .skill_prototypes
+            .iter()
+            .zip(player_state.character_state.skill_states.iter_mut())
+            .filter(|(_, s)| s.is_ready)
+        {
+            let i = rng.random_range(0..monsters.len());
+            if let Some((target, target_prototype)) = monsters.get_mut(i).as_deref_mut() {
+                use_skill(
+                    skill_prototype,
+                    skill_state,
+                    &mut target.character_state,
+                    &target_prototype.character_prototype,
+                );
+            }
+        }
+    }
+}
+
+fn use_skill(
+    skill_prototype: &SkillPrototype,
+    skill_state: &mut SkillState,
+    target_state: &mut CharacterState,
+    target_prototype: &CharacterPrototype,
+) {
+    let mut rng = rand::rng();
+
+    skill_state.just_triggered = true;
+    skill_state.is_ready = false;
+    skill_state.elapsed_cooldown = 0.0;
+
+    damage_character(
+        rng.random_range(skill_prototype.min_damages..=skill_prototype.max_damages),
+        target_state,
+        target_prototype,
+    );
+}
+
+fn damage_character(
+    damages: u64,
+    target_state: &mut CharacterState,
+    target_prototype: &CharacterPrototype,
+) {
+    let _ = target_prototype;
+    target_state.health = target_state.health.checked_sub(damages).unwrap_or(0);
+    if target_state.health == 0 {
+        target_state.is_alive = false;
     }
 }

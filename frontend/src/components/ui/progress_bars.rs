@@ -65,11 +65,20 @@ pub fn CircularProgressBar(
     bar_color: &'static str,
     // Width of the progress bar
     #[prop(default = 2)] bar_width: u16,
+    // Instant reset
+    #[prop(default = Signal::derive(|| false))] reset: Signal<bool>,
     // Inside the circular bar
     children: Children,
 ) -> impl IntoView {
     let bar_width = bar_width * 5;
     let set_value = move || 452.389 - value.get().round() * 452.389 / 100.0;
+    let transition = move || {
+        if reset.get() {
+            "transition-none"
+        } else {
+            "transition-all ease-linear duration-200 "
+        }
+    };
     view! {
         <div>
             <div class="relative drop-shadow-lg">
@@ -92,7 +101,7 @@ pub fn CircularProgressBar(
                         <circle class="stroke-current text-stone-900" cx="0" cy="2.5" r="72" stroke-width=bar_width
                                 fill="none" filter="url(#blur)"/>
                     </g>
-                    <path class={format!("main-arc stroke-current transition-all ease-linear duration-500 {}",bar_color)}
+                    <path class=move || {format!("main-arc stroke-current {} {}", transition(),bar_color)}
                         stroke-dashoffset=set_value stroke-dasharray="452.389"
                         d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
                         fill="transparent" stroke-width=bar_width stroke=bar_color

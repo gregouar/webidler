@@ -222,8 +222,24 @@ fn PlayerSkill(prototype: SkillPrototype, index: usize) -> impl IntoView {
         }
     });
 
+    let just_triggered = Signal::derive(move || {
+        game_context
+            .player_state
+            .read()
+            .character_state
+            .skill_states
+            .get(index)
+            .map(|x| x.just_triggered)
+            .unwrap_or_default()
+    });
+
     view! {
-        <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=skill_cooldown>
+        <CircularProgressBar
+            bar_width=4
+            bar_color="text-amber-700"
+            value=skill_cooldown
+            reset=just_triggered
+        >
             <img
                 src={format!("./assets/{}",prototype.icon.clone())} alt=prototype.name
                 class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
