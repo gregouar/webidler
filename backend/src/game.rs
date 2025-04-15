@@ -143,14 +143,14 @@ impl<'a> GameInstance<'a> {
                             0 => String::from("monsters/bat.webp"),
                             _ => String::from("monsters/bat2.webp"),
                         },
-                        max_health: 10,
+                        max_health: 10.0,
                         skill_prototypes: vec![SkillPrototype {
                             name: String::from("Bite"),
                             icon: String::from("icons/bite.svg"), // TODO
                             cooldown: 3.0,
                             mana_cost: 0.0,
-                            min_damages: 1,
-                            max_damages: 3,
+                            min_damages: 1.0,
+                            max_damages: 3.0,
                         }],
                     },
                 },
@@ -159,23 +159,23 @@ impl<'a> GameInstance<'a> {
                         // identifier: i as u64,
                         name: String::from("ratty"),
                         portrait: String::from("monsters/rat.webp"),
-                        max_health: 20,
+                        max_health: 20.0,
                         skill_prototypes: vec![
                             SkillPrototype {
                                 name: String::from("Vicious Bite"),
                                 icon: String::from("icons/bite.svg"),
                                 cooldown: 5.0,
                                 mana_cost: 0.0,
-                                min_damages: 2,
-                                max_damages: 8,
+                                min_damages: 2.0,
+                                max_damages: 8.0,
                             },
                             SkillPrototype {
                                 name: String::from("Scratch"),
                                 icon: String::from("icons/claw.svg"),
                                 cooldown: 3.0,
                                 mana_cost: 0.0,
-                                min_damages: 1,
-                                max_damages: 3,
+                                min_damages: 1.0,
+                                max_damages: 3.0,
                             },
                         ],
                     },
@@ -192,7 +192,7 @@ impl<'a> GameInstance<'a> {
             .monster_states
             .iter_mut()
             .zip(self.monster_prototypes.iter())
-            .filter(|(x, _)| x.character_state.health > 0)
+            .filter(|(x, _)| x.character_state.is_alive)
             .collect();
 
         update_player_state(
@@ -356,13 +356,13 @@ fn use_skill(
 }
 
 fn damage_character(
-    damages: u64,
+    damages: f64,
     target_state: &mut CharacterState,
     target_prototype: &CharacterPrototype,
 ) {
     let _ = target_prototype;
-    target_state.health = target_state.health.checked_sub(damages).unwrap_or(0);
-    if target_state.health == 0 {
+    target_state.health = (target_state.health - damages).max(0.0);
+    if target_state.health == 0.0 {
         target_state.is_alive = false;
     }
 }

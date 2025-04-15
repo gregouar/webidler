@@ -156,8 +156,8 @@ fn PlayerCard() -> impl IntoView {
             .read()
             .character_prototype
             .max_health;
-        if max_health > 0 {
-            (game_context.player_state.read().character_state.health * 100 / max_health) as f32
+        if max_health > 0.0 {
+            (game_context.player_state.read().character_state.health / max_health * 100.0) as f32
         } else {
             0.0
         }
@@ -166,7 +166,7 @@ fn PlayerCard() -> impl IntoView {
     let mana_percent = Signal::derive(move || {
         let max_mana = game_context.player_prototype.read().max_mana;
         if max_mana > 0.0 {
-            (game_context.player_state.read().mana * 100.0 / max_mana) as f32
+            (game_context.player_state.read().mana / max_mana * 100.0) as f32
         } else {
             0.0
         }
@@ -303,15 +303,15 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
 
     let health_percent = Signal::derive(move || {
         let max_health = prototype.character_prototype.max_health;
-        if max_health > 0 {
+        if max_health > 0.0 {
             (game_context
                 .monster_states
                 .read()
                 .get(index)
                 .map(|s| s.character_state.health)
-                .unwrap_or(0)
-                * 100
-                / prototype.character_prototype.max_health) as f32
+                .unwrap_or_default()
+                / prototype.character_prototype.max_health
+                * 100.0) as f32
         } else {
             0.0
         }

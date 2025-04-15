@@ -22,7 +22,7 @@ pub struct CharacterPrototype {
     pub name: String,
     pub portrait: String,
 
-    pub max_health: u64, // TODO: change to big numbers num_bigint
+    pub max_health: f64,
 
     pub skill_prototypes: Vec<SkillPrototype>,
 }
@@ -31,7 +31,7 @@ pub struct CharacterPrototype {
 pub struct CharacterState {
     // pub identifier: u64, // useful?
     pub is_alive: bool,
-    pub health: u64, // TODO: change to big numbers num_bigint
+    pub health: f64,
 
     // pub initiative_cooldown: f64, // TODO
     pub skill_states: Vec<SkillState>,
@@ -108,8 +108,8 @@ pub struct SkillPrototype {
     pub cooldown: f32,
     pub mana_cost: f64,
 
-    pub min_damages: u64, // Could this be a range?
-    pub max_damages: u64,
+    pub min_damages: f64, // Could this be a range?
+    pub max_damages: f64,
     // TODO: have proper skill data structure...
 }
 
