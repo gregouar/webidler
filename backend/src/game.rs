@@ -280,6 +280,15 @@ fn update_monster_states(
     player_state: &mut PlayerState,
 ) {
     for (m, p) in monsters.iter_mut() {
+        if !m.character_state.is_alive {
+            continue;
+        }
+
+        m.initiative = (m.initiative - elapsed_time.as_secs_f32()).max(0.0);
+        if m.initiative > 0.0 {
+            continue;
+        }
+
         update_character_state(elapsed_time, &p.character_prototype, &mut m.character_state);
 
         for (skill_prototype, skill_state) in p
