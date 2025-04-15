@@ -245,6 +245,10 @@ fn update_character_state(
     prototype: &CharacterPrototype,
     state: &mut CharacterState,
 ) {
+    if !state.is_alive {
+        return;
+    }
+
     state.health = prototype
         .max_health
         .min(state.health + (elapsed_time.as_secs_f64() * prototype.health_regen));
@@ -298,6 +302,10 @@ fn update_player_state(
     monsters: &mut Vec<(&mut MonsterState, &MonsterPrototype)>,
 ) {
     let mut rng = rand::rng();
+
+    if !player_state.character_state.is_alive {
+        return;
+    }
 
     update_character_state(
         elapsed_time,
