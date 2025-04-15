@@ -78,15 +78,15 @@ impl MonsterState {
 pub struct PlayerPrototype {
     pub character_prototype: CharacterPrototype,
 
-    pub max_mana: u64,   // TODO: change to big numbers num_bigint
-    pub mana_regen: f64, // TODO: change to big numbers num_bigint
+    pub max_mana: f64,
+    pub mana_regen: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerState {
     pub character_state: CharacterState,
 
-    pub mana: u64, // TODO: change to big numbers num_bigint
+    pub mana: f64,
 }
 
 impl PlayerState {
@@ -106,7 +106,7 @@ pub struct SkillPrototype {
     pub icon: String, // TODO better...
 
     pub cooldown: f32,
-    pub mana_cost: u64,
+    pub mana_cost: f64,
 
     pub min_damages: u64, // Could this be a range?
     pub max_damages: u64,

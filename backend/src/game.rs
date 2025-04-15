@@ -148,7 +148,7 @@ impl<'a> GameInstance<'a> {
                             name: String::from("Bite"),
                             icon: String::from("icons/bite.svg"), // TODO
                             cooldown: 3.0,
-                            mana_cost: 0,
+                            mana_cost: 0.0,
                             min_damages: 1,
                             max_damages: 3,
                         }],
@@ -165,7 +165,7 @@ impl<'a> GameInstance<'a> {
                                 name: String::from("Vicious Bite"),
                                 icon: String::from("icons/bite.svg"),
                                 cooldown: 5.0,
-                                mana_cost: 0,
+                                mana_cost: 0.0,
                                 min_damages: 2,
                                 max_damages: 8,
                             },
@@ -173,7 +173,7 @@ impl<'a> GameInstance<'a> {
                                 name: String::from("Scratch"),
                                 icon: String::from("icons/claw.svg"),
                                 cooldown: 3.0,
-                                mana_cost: 0,
+                                mana_cost: 0.0,
                                 min_damages: 1,
                                 max_damages: 3,
                             },
@@ -220,7 +220,6 @@ impl<'a> GameInstance<'a> {
 
     /// Send whole world state to client
     async fn sync_client(&mut self) -> Result<()> {
-        // TODO: Verify if need to update monster prototypes
         self.client_conn
             .send(
                 &SyncGameStateMessage {
@@ -275,20 +274,36 @@ fn update_player_state(
         &mut player_state.character_state,
     );
 
+    player_state.mana = player_prototype
+        .max_mana
+        .max(player_state.mana + (elapsed_time.as_secs_f64() * player_prototype.mana_regen).ceil());
+
     if !monsters.is_empty() {
-        for (skill_prototype, skill_state) in player_prototype
+        // for (skill_prototype, skill_state) in player_prototype
+        //     .character_prototype
+        //     .skill_prototypes
+        //     .iter()
+        //     .zip(player_state.character_state.skill_states.iter_mut())
+        //     .filter(|(p, s)| s.is_ready && p.mana_cost <= player_state.mana)
+        for (i, skill_prototype) in player_prototype
             .character_prototype
             .skill_prototypes
             .iter()
-            .zip(player_state.character_state.skill_states.iter_mut())
-            .filter(|(_, s)| s.is_ready)
+            .enumerate()
         {
-            let i = rng.random_range(0..monsters.len());
-            if let Some((target, target_prototype)) = monsters.get_mut(i).as_deref_mut() {
+            if !player_state.character_state.skill_states[i].is_ready
+                || skill_prototype.mana_cost > player_state.mana
+            {
+                continue;
+            }
+
+            let j = rng.random_range(0..monsters.len());
+            if let Some((target_state, target_prototype)) = monsters.get_mut(j).as_deref_mut() {
+                player_state.mana -= skill_prototype.mana_cost;
                 use_skill(
-                    skill_prototype,
-                    skill_state,
-                    &mut target.character_state,
+                    &player_prototype.character_prototype.skill_prototypes[i],
+                    &mut player_state.character_state.skill_states[i],
+                    &mut target_state.character_state,
                     &target_prototype.character_prototype,
                 );
             }

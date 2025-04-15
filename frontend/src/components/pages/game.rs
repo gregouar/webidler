@@ -165,8 +165,8 @@ fn PlayerCard() -> impl IntoView {
 
     let mana_percent = Signal::derive(move || {
         let max_mana = game_context.player_prototype.read().max_mana;
-        if max_mana > 0 {
-            (game_context.player_state.read().mana * 100 / max_mana) as f32
+        if max_mana > 0.0 {
+            (game_context.player_state.read().mana * 100.0 / max_mana) as f32
         } else {
             0.0
         }
