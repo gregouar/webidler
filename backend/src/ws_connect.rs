@@ -103,6 +103,7 @@ async fn handle_connect(
             name: msg.bearer.clone(),
             portrait: String::from("adventurers/human_male_2.webp"),
             max_health: 100.0,
+            health_regen: 1.0,
             skill_prototypes: vec![
                 SkillPrototype {
                     name: String::from("Weapon Attack"),

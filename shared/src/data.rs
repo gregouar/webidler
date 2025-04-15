@@ -22,7 +22,9 @@ pub struct CharacterPrototype {
     pub name: String,
     pub portrait: String,
 
+    // TODO: This will not work well with temporary buffs etc... ?
     pub max_health: f64,
+    pub health_regen: f64,
 
     pub skill_prototypes: Vec<SkillPrototype>,
 }

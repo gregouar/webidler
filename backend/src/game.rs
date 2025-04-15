@@ -144,6 +144,7 @@ impl<'a> GameInstance<'a> {
                             _ => String::from("monsters/bat2.webp"),
                         },
                         max_health: 10.0,
+                        health_regen: 0.0,
                         skill_prototypes: vec![SkillPrototype {
                             name: String::from("Bite"),
                             icon: String::from("icons/bite.svg"), // TODO
@@ -160,6 +161,7 @@ impl<'a> GameInstance<'a> {
                         name: String::from("ratty"),
                         portrait: String::from("monsters/rat.webp"),
                         max_health: 20.0,
+                        health_regen: 0.0,
                         skill_prototypes: vec![
                             SkillPrototype {
                                 name: String::from("Vicious Bite"),
@@ -243,6 +245,10 @@ fn update_character_state(
     prototype: &CharacterPrototype,
     state: &mut CharacterState,
 ) {
+    state.health = prototype
+        .max_health
+        .min(state.health + (elapsed_time.as_secs_f64() * prototype.health_regen));
+
     for (skill_prototype, skill_state) in prototype
         .skill_prototypes
         .iter()
