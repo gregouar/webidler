@@ -276,7 +276,7 @@ fn update_player_state(
 
     player_state.mana = player_prototype
         .max_mana
-        .max(player_state.mana + (elapsed_time.as_secs_f64() * player_prototype.mana_regen).ceil());
+        .min(player_state.mana + (elapsed_time.as_secs_f64() * player_prototype.mana_regen).ceil());
 
     if !monsters.is_empty() {
         // for (skill_prototype, skill_state) in player_prototype
