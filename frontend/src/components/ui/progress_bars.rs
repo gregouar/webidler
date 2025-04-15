@@ -28,7 +28,7 @@ pub fn HorizontalProgressBar(
                     "flex flex-col {} rounded-lg transition-all ease duration-500",
                     bar_color
                 )}
-                style:width=move || format!("{}%", value.get().min(0.0).max(100.0).round())
+                style:width=move || format!("{}%", value.get().max(0.0).min(100.0).round())
             ></div>
         </div>
     }
@@ -50,7 +50,7 @@ pub fn VerticalProgressBar(
             ">
             <div
                 class={format!("{} rounded-lg overflow-hidden transition-all ease duration-500",bar_color)}
-                style:height=move || format!("{}%", value.get().min(0.0).max(100.0).round())
+                style:height=move || format!("{}%", value.get().max(0.0).min(100.0).round())
                 style:-webkit-mask="linear-gradient(#fff 0 0)"
             ></div>
         </div>
@@ -71,7 +71,7 @@ pub fn CircularProgressBar(
     children: Children,
 ) -> impl IntoView {
     let bar_width = bar_width * 5;
-    let set_value = move || 452.389 - value.get().min(0.0).max(100.0) * 452.389 / 100.0;
+    let set_value = move || 452.389 - value.get().max(0.0).min(100.0) * 452.389 / 100.0;
     let transition = move || {
         if reset.get() {
             "transition-none"
