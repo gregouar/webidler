@@ -317,14 +317,17 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
         }
     });
 
-    let is_dead_img_effect = move || {
-        if game_context
+    let is_dead = move || {
+        game_context
             .monster_states
             .read()
             .get(index)
             .map(|x| !x.character_state.is_alive)
             .unwrap_or(false)
-        {
+    };
+
+    let is_dead_img_effect = move || {
+        if is_dead() {
             "saturate-0 brightness-1"
         } else {
             ""
@@ -362,8 +365,17 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
 fn MonsterSkill(prototype: SkillPrototype, index: usize, monster_index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
+    let is_dead = move || {
+        game_context
+            .monster_states
+            .read()
+            .get(monster_index)
+            .map(|x| !x.character_state.is_alive)
+            .unwrap_or(false)
+    };
+
     let skill_cooldown = Signal::derive(move || {
-        if prototype.cooldown > 0.0 {
+        if !is_dead() && prototype.cooldown > 0.0 {
             (game_context
                 .monster_states
                 .read()
