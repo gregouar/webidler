@@ -39,39 +39,20 @@ pub struct CharacterState {
     pub skill_states: Vec<SkillState>,
 }
 
-impl CharacterState {
-    pub fn init(prototype: &CharacterPrototype) -> Self {
-        CharacterState {
-            // identifier: prototype.identifier,
-            is_alive: true,
-            health: prototype.max_health,
-            skill_states: prototype
-                .skill_prototypes
-                .iter()
-                .map(|p| SkillState::init(p))
-                .collect(),
-        }
-    }
-}
-
 // Monster
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct MonsterPrototype {
     pub character_prototype: CharacterPrototype,
+
+    pub max_initiative: f32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct MonsterState {
     pub character_state: CharacterState,
-}
 
-impl MonsterState {
-    pub fn init(prototype: &MonsterPrototype) -> Self {
-        MonsterState {
-            character_state: CharacterState::init(&prototype.character_prototype),
-        }
-    }
+    pub initiative: f32,
 }
 
 // Player
@@ -89,15 +70,6 @@ pub struct PlayerState {
     pub character_state: CharacterState,
 
     pub mana: f64,
-}
-
-impl PlayerState {
-    pub fn init(prototype: &PlayerPrototype) -> Self {
-        PlayerState {
-            character_state: CharacterState::init(&prototype.character_prototype),
-            mana: prototype.max_mana,
-        }
-    }
 }
 
 // Skill
@@ -120,14 +92,4 @@ pub struct SkillState {
     pub elapsed_cooldown: f32,
     pub is_ready: bool,
     pub just_triggered: bool,
-}
-
-impl SkillState {
-    pub fn init(_prototype: &SkillPrototype) -> Self {
-        Self {
-            elapsed_cooldown: 0.0,
-            is_ready: false,
-            just_triggered: false,
-        }
-    }
 }

@@ -19,6 +19,8 @@ use shared::{
     },
 };
 
+use super::data::DataInit;
+
 use crate::websocket::WebSocketConnection;
 
 const LOOP_MIN_PERIOD: Duration = Duration::from_millis(100);
@@ -154,6 +156,7 @@ impl<'a> GameInstance<'a> {
                             max_damages: 3.0,
                         }],
                     },
+                    max_initiative: 0.5,
                 },
                 _ => MonsterPrototype {
                     character_prototype: CharacterPrototype {
@@ -181,6 +184,7 @@ impl<'a> GameInstance<'a> {
                             },
                         ],
                     },
+                    max_initiative: 1.0,
                 },
             };
             self.monster_states.push(MonsterState::init(&prototype));
