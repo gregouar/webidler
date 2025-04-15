@@ -87,7 +87,7 @@ fn GameInstance() -> impl IntoView {
                 when=move || game_context.started.get()
                 fallback=move || view! { <p>"Connecting..."</p> }
             >
-                <SideMenu  />
+                <Menu  />
                 <div class="grid grid-cols-3 justify-items-stretch flex items-start gap-4 m-4 ">
                     // <SideMenu class:col-span-2 />
                     <PlayerCard class:col-span-1 class:justify-self-end/>
@@ -99,12 +99,12 @@ fn GameInstance() -> impl IntoView {
 }
 
 #[component]
-fn SideMenu() -> impl IntoView {
+fn Menu() -> impl IntoView {
     let navigate = leptos_router::hooks::use_navigate();
     let abandon_quest = move |_| navigate("/", Default::default());
 
     view! {
-        <div class="flex flex-row items-center space-x-2 p-2 bg-zinc-800 rounded-md">
+        <div class="flex flex-row items-center space-x-2 p-2 bg-zinc-800">
             <div>
                 <p class="text-shadow-md shadow-gray-950 text-amber-200 text-2xl">
                     "Menu"
@@ -263,10 +263,10 @@ fn MonstersGrid() -> impl IntoView {
 
     // TODO: double buffering to allow in and out at the same time
     view! {
-        <div class="space-y-2">
+        <div class="">
             <div class="w-full h-16 bg-[url(./assets/worlds/forest_header.webp)] bg-center bg-repeat-x ">
             </div>
-            <div class="grid grid-cols-3 grid-rows-2 gap-2 grid-flow-col items-center h-full overflow-hidden">
+            <div class="grid grid-cols-3 grid-rows-2 mt-2 mb-2 gap-2 grid-flow-col items-center h-full overflow-hidden">
                 <style>"
                     @keyframes fade-in {
                         0% { transform: translateX(100%); opacity: 0; }
