@@ -196,9 +196,9 @@ impl<'a> GameInstance<'a> {
             .collect();
 
         update_player_state(
+            elapsed_time,
             &self.player_prototype,
             &mut self.player_state,
-            elapsed_time,
             &mut monsters_still_alive,
         );
 
@@ -208,13 +208,12 @@ impl<'a> GameInstance<'a> {
             }
         } else {
             self.monster_wave_delay = Instant::now();
-            for (m, p) in monsters_still_alive.iter_mut() {
-                update_character_state(
-                    elapsed_time,
-                    &p.character_prototype,
-                    &mut m.character_state,
-                );
-            }
+            update_monster_states(
+                elapsed_time,
+                &mut monsters_still_alive,
+                &self.player_prototype,
+                &mut self.player_state,
+            );
         }
     }
 
@@ -260,10 +259,36 @@ fn update_character_state(
     }
 }
 
-fn update_player_state(
+fn update_monster_states(
+    elapsed_time: Duration,
+    monsters: &mut Vec<(&mut MonsterState, &MonsterPrototype)>,
     player_prototype: &PlayerPrototype,
     player_state: &mut PlayerState,
+) {
+    for (m, p) in monsters.iter_mut() {
+        update_character_state(elapsed_time, &p.character_prototype, &mut m.character_state);
+
+        for (skill_prototype, skill_state) in p
+            .character_prototype
+            .skill_prototypes
+            .iter()
+            .zip(m.character_state.skill_states.iter_mut())
+            .filter(|(_, s)| s.is_ready)
+        {
+            use_skill(
+                &skill_prototype,
+                skill_state,
+                &mut player_state.character_state,
+                &player_prototype.character_prototype,
+            );
+        }
+    }
+}
+
+fn update_player_state(
     elapsed_time: Duration,
+    player_prototype: &PlayerPrototype,
+    player_state: &mut PlayerState,
     monsters: &mut Vec<(&mut MonsterState, &MonsterPrototype)>,
 ) {
     let mut rng = rand::rng();
@@ -276,7 +301,7 @@ fn update_player_state(
 
     player_state.mana = player_prototype
         .max_mana
-        .min(player_state.mana + (elapsed_time.as_secs_f64() * player_prototype.mana_regen).ceil());
+        .min(player_state.mana + (elapsed_time.as_secs_f64() * player_prototype.mana_regen));
 
     if !monsters.is_empty() {
         // for (skill_prototype, skill_state) in player_prototype
@@ -301,7 +326,7 @@ fn update_player_state(
             if let Some((target_state, target_prototype)) = monsters.get_mut(j).as_deref_mut() {
                 player_state.mana -= skill_prototype.mana_cost;
                 use_skill(
-                    &player_prototype.character_prototype.skill_prototypes[i],
+                    &skill_prototype,
                     &mut player_state.character_state.skill_states[i],
                     &mut target_state.character_state,
                     &target_prototype.character_prototype,
