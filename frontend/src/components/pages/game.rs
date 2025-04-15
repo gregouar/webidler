@@ -87,11 +87,12 @@ fn GameInstance() -> impl IntoView {
                 when=move || game_context.started.get()
                 fallback=move || view! { <p>"Connecting..."</p> }
             >
-            <div class="grid grid-cols-9 justify-items-stretch flex items-start gap-4 m-4 ">
-                <SideMenu class:col-span-2 />
-                <PlayerCard class:col-span-3 class:justify-self-end/>
-                <MonstersGrid class:col-span-4 class:justify-self-start/>
-            </div>
+                <SideMenu  />
+                <div class="grid grid-cols-3 justify-items-stretch flex items-start gap-4 m-4 ">
+                    // <SideMenu class:col-span-2 />
+                    <PlayerCard class:col-span-1 class:justify-self-end/>
+                    <MonstersGrid class:col-span-2 class:justify-self-start/>
+                </div>
             </Show>
         </main>
     }
@@ -103,10 +104,10 @@ fn SideMenu() -> impl IntoView {
     let abandon_quest = move |_| navigate("/", Default::default());
 
     view! {
-        <div class="flex flex-col space-y-2 p-2 bg-zinc-800 rounded-md">
+        <div class="flex flex-row items-center space-x-2 p-2 bg-zinc-800 rounded-md">
             <div>
                 <p class="text-shadow-md shadow-gray-950 text-amber-200 text-2xl">
-                    Menu
+                    "Menu"
                 </p>
             </div>
             <MainMenuButton>
@@ -262,37 +263,43 @@ fn MonstersGrid() -> impl IntoView {
 
     // TODO: double buffering to allow in and out at the same time
     view! {
-        <div class="grid grid-cols-2 grid-rows-3 gap-2 h-full overflow-hidden">
-            <style>"
-                @keyframes fade-in {
-                    0% { transform: translateX(100%); opacity: 0; }
-                    65% { transform: translateX(0%); opacity: 1; }
-                    80% { transform: translateX(5%); }
-                    100% { transform: translateX(0%); }
-                }
-                
-                @keyframes fade-out {
-                    from { opacity: 1; transform: translateY(0%); }
-                    to { opacity: 0; transform: translateY(100%); }
-                }
-            "</style>
-            <For
-                each=move || game_context.monster_prototypes.get().into_iter().enumerate()
-                // We need a unique key to replace old elements
-                key=move |(index,_)| (game_context.monster_wave.get(), *index)
-                children=move |(index, prototype)| {
-                    let animation_delay = format!("animation-delay: {}s;", rand::rng().random_range(0.0..=0.2f32));
-                    view! {
-                        <div
-                            style=move|| if all_monsters_dead.get()
-                                {format!("animation: fade-out 1s ease-in; animation-fill-mode: both;")}
-                                else {format!("animation: fade-in 1s ease-out; animation-fill-mode: both; {}",animation_delay)}
-                        >
-                            <MonsterCard prototype=prototype index=index />
-                        </div>
+        <div class="space-y-2">
+            <div class="w-full h-16 bg-[url(./assets/worlds/forest_header.webp)] bg-center bg-repeat-x ">
+            </div>
+            <div class="grid grid-cols-3 grid-rows-2 gap-2 grid-flow-col items-center h-full overflow-hidden">
+                <style>"
+                    @keyframes fade-in {
+                        0% { transform: translateX(100%); opacity: 0; }
+                        65% { transform: translateX(0%); opacity: 1; }
+                        80% { transform: translateX(5%); }
+                        100% { transform: translateX(0%); }
                     }
-                }
-            />
+                    
+                    @keyframes fade-out {
+                        from { opacity: 1; transform: translateY(0%); }
+                        to { opacity: 0; transform: translateY(100%); }
+                    }
+                "</style>
+                <For
+                    each=move || game_context.monster_prototypes.get().into_iter().enumerate()
+                    // We need a unique key to replace old elements
+                    key=move |(index,_)| (game_context.monster_wave.get(), *index)
+                    children=move |(index, prototype)| {
+                        let animation_delay = format!("animation-delay: {}s;", rand::rng().random_range(0.0..=0.2f32));
+                        view! {
+                            <div
+                                style=move|| if all_monsters_dead.get()
+                                    {format!("animation: fade-out 1s ease-in; animation-fill-mode: both;")}
+                                    else {format!("animation: fade-in 1s ease-out; animation-fill-mode: both; {}",animation_delay)}
+                            >
+                                <MonsterCard prototype=prototype index=index />
+                            </div>
+                        }
+                    }
+                />
+            </div>
+            <div class="w-full h-16 bg-[url(./assets/worlds/forest_footer.webp)] bg-center bg-repeat-x ">
+            </div>
         </div>
     }
 }
