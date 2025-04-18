@@ -356,6 +356,7 @@ fn damage_character(
 ) {
     let _ = target_prototype;
     target_state.health = (target_state.health - damages).max(0.0);
+    target_state.just_hurt = true;
     if target_state.health == 0.0 {
         target_state.is_alive = false;
     }
