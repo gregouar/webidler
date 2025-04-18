@@ -90,9 +90,8 @@ impl<'a> GameInstance<'a> {
 
     /// Handle client events, return whether the game should stop or continue
     async fn handle_client_events(&mut self) -> ControlFlow<(), ()> {
-        // TODO: Should We limit the amount of events we handle in one loop?
-        // for _ in 1..10 {
-        loop {
+        // We limit the amount of events we handle in one loop
+        for _ in 1..100 {
             match self.client_conn.poll_receive() {
                 ControlFlow::Continue(Some(m)) => self.handle_client_message(m),
                 ControlFlow::Continue(None) => return ControlFlow::Continue(()), // No more messages
@@ -100,6 +99,7 @@ impl<'a> GameInstance<'a> {
             }
             yield_now().await;
         }
+        ControlFlow::Continue(())
     }
 
     fn handle_client_message(&mut self, msg: ClientMessage) {

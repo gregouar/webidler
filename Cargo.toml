@@ -5,3 +5,5 @@ members = [
     "frontend", 
     "shared",
 ]
+
+resolver = "3"

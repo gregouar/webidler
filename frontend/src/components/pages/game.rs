@@ -104,7 +104,7 @@ fn Menu() -> impl IntoView {
     let abandon_quest = move |_| navigate("/", Default::default());
 
     view! {
-        <div class="flex flex-row items-center space-x-2 p-2 bg-zinc-800">
+        <div class="flex flex-row items-center space-x-2 p-2 bg-zinc-800 shadow-md">
             <div>
                 <p class="text-shadow-md shadow-gray-950 text-amber-200 text-2xl">
                     "Menu"
@@ -270,14 +270,14 @@ fn MonstersGrid() -> impl IntoView {
             </div>
             <div class="grid grid-cols-3 grid-rows-2 mt-2 mb-2 gap-2 grid-flow-col items-center h-full overflow-hidden">
                 <style>"
-                    @keyframes fade-in {
+                    @keyframes monster-fade-in {
                         0% { transform: translateX(100%); opacity: 0; }
                         65% { transform: translateX(0%); opacity: 1; }
                         80% { transform: translateX(5%); }
                         100% { transform: translateX(0%); }
                     }
                     
-                    @keyframes fade-out {
+                    @keyframes monster-fade-out {
                         from { opacity: 1; transform: translateY(0%); }
                         to { opacity: 0; transform: translateY(100%); }
                     }
@@ -291,8 +291,8 @@ fn MonstersGrid() -> impl IntoView {
                         view! {
                             <div
                                 style=move|| if all_monsters_dead.get()
-                                    {format!("animation: fade-out 1s ease-in; animation-fill-mode: both;")}
-                                    else {format!("animation: fade-in 1s ease-out; animation-fill-mode: both; {}",animation_delay)}
+                                    {format!("animation: monster-fade-out 1s ease-in; animation-fill-mode: both;")}
+                                    else {format!("animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {}",animation_delay)}
                             >
                                 <MonsterCard prototype=prototype index=index />
                             </div>
@@ -400,8 +400,27 @@ fn MonsterSkill(prototype: SkillPrototype, index: usize, monster_index: usize) -
         }
     });
 
+    let just_triggered = Signal::derive(move || {
+        if !is_dead() {
+            game_context
+                .monster_states
+                .read()
+                .get(monster_index)
+                .map(|m| m.character_state.skill_states.get(index))
+                .flatten()
+                .map(|s| s.just_triggered)
+                .unwrap_or_default()
+        } else {
+            false
+        }
+    });
+
     view! {
-        <CircularProgressBar  bar_width=4 bar_color="text-amber-700" value=skill_cooldown>
+        <CircularProgressBar
+            bar_width=4 bar_color="text-amber-700"
+            value=skill_cooldown
+            reset=just_triggered
+        >
             <img
                 src={format!("./assets/{}",prototype.icon.clone())} alt=prototype.name
                 class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"

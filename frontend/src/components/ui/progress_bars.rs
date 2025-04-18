@@ -73,7 +73,7 @@ pub fn CircularProgressBar(
     let bar_width = bar_width * 5;
     let set_value = move || {
         if reset.get() {
-            0.0
+            452.389
         } else {
             452.389 - value.get().max(0.0).min(100.0) * 452.389 / 100.0
         }
@@ -85,16 +85,42 @@ pub fn CircularProgressBar(
             "transition-all ease-linear duration-200 "
         }
     };
+    // Trick to reset animation by removing it when ended
+    let reset_bar_animation = RwSignal::new("opacity: 0;");
+    let reset_icon_animation = RwSignal::new("");
+    Effect::new(move |_| {
+        if reset.get() {
+            reset_bar_animation
+                .set("animation: circular-progress-bar-fade-out 0.3s ease-out; animation-fill-mode: both;");
+            reset_icon_animation.set(
+                "animation: circular-progress-bar-glow 0.3s ease-out; animation-fill-mode: both;",
+            );
+            set_timeout(
+                move || {
+                    reset_bar_animation.set("opacity: 0;");
+                    reset_icon_animation.set("");
+                },
+                std::time::Duration::from_millis(300),
+            );
+        }
+    });
+
     view! {
-        <div>
+        <div class="circular-progress-bar">
             <style>"
-                @keyframes fade-out {
-                    from { opacity: 1; transform: translateY(0%); }
-                    to { opacity: 0; transform: translateY(100%); }
+                @keyframes circular-progress-bar-fade-out {
+                    0% { opacity: 1; filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
+                    50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746)); }
+                    100% { opacity: 0; filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
+                }
+                @keyframes circular-progress-bar-glow {
+                    0% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
+                    50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746)); }
+                    100% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
                 }
             "</style>
             <div class="relative drop-shadow-lg">
-                <svg  class="size-full" viewBox="0 0 180 180">
+                <svg  class="size-full overflow-visible" viewBox="0 0 180 180">
                     <defs>
                         <filter id="blur" filterUnits="userSpaceOnUse" x="-90" y="-90"
                                 width="180" height="180">
@@ -121,11 +147,10 @@ pub fn CircularProgressBar(
                             stroke-linecap="round"
                         />
 
+                        // For nice fade out during reset
                         <path
                             class=move || {format!("main-arc stroke-current {}",bar_color)}
-                            style=move|| if reset.get()
-                                        {format!("animation: fade-out 1s ease-in; animation-fill-mode: both;")}
-                                        else {String::from("")}
+                            style=reset_bar_animation
                             stroke-dasharray="452.389"
                             d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
                             fill="transparent" stroke-width=bar_width stroke=bar_color
@@ -133,7 +158,10 @@ pub fn CircularProgressBar(
                         />
                     </g>
                 </svg>
-                <div class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                <div
+                    class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2"
+                    style=reset_icon_animation
+                >
                     {children()}
                 </div>
             </div>
