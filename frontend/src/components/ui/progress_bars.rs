@@ -87,33 +87,52 @@ pub fn CircularProgressBar(
     };
     view! {
         <div>
+            <style>"
+                @keyframes fade-out {
+                    from { opacity: 1; transform: translateY(0%); }
+                    to { opacity: 0; transform: translateY(100%); }
+                }
+            "</style>
             <div class="relative drop-shadow-lg">
-            <svg  class="size-full" viewBox="0 0 180 180">
-                <defs>
-                    <filter id="blur" filterUnits="userSpaceOnUse" x="-90" y="-90"
-                            width="180" height="180">
-                        <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
-                    </filter>
-                    <clipPath id="ring" clip-rule="evenodd">
-                        <path d="M0-81A81 81 0 0 1 0 81A81 81 0 0 1 0-81z
-                                M0-63A63 63 0 0 1 0 63A63 63 0 0 1 0-63z" />
-                    </clipPath>
-                </defs>
+                <svg  class="size-full" viewBox="0 0 180 180">
+                    <defs>
+                        <filter id="blur" filterUnits="userSpaceOnUse" x="-90" y="-90"
+                                width="180" height="180">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
+                        </filter>
+                        <clipPath id="ring" clip-rule="evenodd">
+                            <path d="M0-81A81 81 0 0 1 0 81A81 81 0 0 1 0-81z
+                                    M0-63A63 63 0 0 1 0 63A63 63 0 0 1 0-63z" />
+                        </clipPath>
+                    </defs>
 
-                <g transform="translate(90,90)">
-                    <g clip-path="url(#ring)">
-                        <rect x="-85" y="-85" width="170" height="170" fill="stone-950"
-                                stroke="none" />
-                        <circle class="stroke-current text-stone-900" cx="0" cy="2.5" r="72" stroke-width=bar_width
-                                fill="none" filter="url(#blur)"/>
+                    <g transform="translate(90,90)">
+                        <g clip-path="url(#ring)">
+                            <rect x="-85" y="-85" width="170" height="170" fill="stone-950"
+                                    stroke="none" />
+                            <circle class="stroke-current text-stone-900" cx="0" cy="2.5" r="72" stroke-width=bar_width
+                                    fill="none" filter="url(#blur)"/>
+                        </g>
+                        <path
+                            class=move || {format!("main-arc stroke-current {} {}", transition(),bar_color)}
+                            stroke-dashoffset=set_value stroke-dasharray="452.389"
+                            d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
+                            fill="transparent" stroke-width=bar_width stroke=bar_color
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            class=move || {format!("main-arc stroke-current {}",bar_color)}
+                            style=move|| if reset.get()
+                                        {format!("animation: fade-out 1s ease-in; animation-fill-mode: both;")}
+                                        else {String::from("")}
+                            stroke-dasharray="452.389"
+                            d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
+                            fill="transparent" stroke-width=bar_width stroke=bar_color
+                            stroke-linecap="round"
+                        />
                     </g>
-                    <path class=move || {format!("main-arc stroke-current {} {}", transition(),bar_color)}
-                        stroke-dashoffset=set_value stroke-dasharray="452.389"
-                        d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
-                        fill="transparent" stroke-width=bar_width stroke=bar_color
-                        stroke-linecap="round" />
-                </g>
-            </svg>
+                </svg>
                 <div class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
                     {children()}
                 </div>
