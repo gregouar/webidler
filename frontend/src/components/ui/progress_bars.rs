@@ -71,7 +71,13 @@ pub fn CircularProgressBar(
     children: Children,
 ) -> impl IntoView {
     let bar_width = bar_width * 5;
-    let set_value = move || 452.389 - value.get().max(0.0).min(100.0) * 452.389 / 100.0;
+    let set_value = move || {
+        if reset.get() {
+            0.0
+        } else {
+            452.389 - value.get().max(0.0).min(100.0) * 452.389 / 100.0
+        }
+    };
     let transition = move || {
         if reset.get() {
             "transition-none"

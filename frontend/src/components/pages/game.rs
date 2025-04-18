@@ -223,6 +223,8 @@ fn PlayerSkill(prototype: SkillPrototype, index: usize) -> impl IntoView {
         }
     });
 
+    // TODO: Skill component
+
     let just_triggered = Signal::derive(move || {
         game_context
             .player_state

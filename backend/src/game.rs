@@ -278,21 +278,13 @@ fn control_player(
     let mut rng = rand::rng();
 
     if !monsters.is_empty() {
-        // for (skill_prototype, skill_state) in player_prototype
-        //     .character_prototype
-        //     .skill_prototypes
-        //     .iter()
-        //     .zip(player_state.character_state.skill_states.iter_mut())
-        //     .filter(|(p, s)| s.is_ready && p.mana_cost <= player_state.mana)
-        for (i, skill_prototype) in player_prototype
+        for (skill_prototype, skill_state) in player_prototype
             .character_prototype
             .skill_prototypes
             .iter()
-            .enumerate()
+            .zip(player_state.character_state.skill_states.iter_mut())
         {
-            if !player_state.character_state.skill_states[i].is_ready
-                || skill_prototype.mana_cost > player_state.mana
-            {
+            if !skill_state.is_ready || skill_prototype.mana_cost > player_state.mana {
                 continue;
             }
 
@@ -300,8 +292,8 @@ fn control_player(
             if let Some((target_state, target_prototype)) = monsters.get_mut(j).as_deref_mut() {
                 player_state.mana -= skill_prototype.mana_cost;
                 use_skill(
-                    &skill_prototype,
-                    &mut player_state.character_state.skill_states[i],
+                    skill_prototype,
+                    skill_state,
                     &mut target_state.character_state,
                     &target_prototype.character_prototype,
                 );
@@ -348,11 +340,13 @@ fn use_skill(
     skill_state.is_ready = false;
     skill_state.elapsed_cooldown = 0.0;
 
-    damage_character(
-        rng.random_range(skill_prototype.min_damages..=skill_prototype.max_damages),
-        target_state,
-        target_prototype,
-    );
+    if skill_prototype.max_damages >= skill_prototype.min_damages {
+        damage_character(
+            rng.random_range(skill_prototype.min_damages..=skill_prototype.max_damages),
+            target_state,
+            target_prototype,
+        );
+    }
 }
 
 fn damage_character(
@@ -428,7 +422,6 @@ fn update_character_state(
         .iter()
         .zip(state.skill_states.iter_mut())
     {
-        skill_state.just_triggered = false;
         skill_state.elapsed_cooldown += elapsed_time.as_secs_f32();
         if skill_state.elapsed_cooldown >= skill_prototype.cooldown {
             skill_state.elapsed_cooldown = skill_prototype.cooldown;
