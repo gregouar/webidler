@@ -66,9 +66,12 @@ impl<'a> GameInstance<'a> {
                 break;
             }
 
+            self.reset_entities().await;
+            self.control_entities().await;
+
             let elapsed_time = last_update_time.elapsed();
             last_update_time = Instant::now();
-            self.update(elapsed_time).await;
+            self.update_entities(elapsed_time).await;
 
             if let Err(e) = self.sync_client().await {
                 tracing::warn!("failed to sync client: {}", e);
@@ -189,7 +192,14 @@ impl<'a> GameInstance<'a> {
         self.need_to_sync_monster_prototypes = true;
     }
 
-    async fn update(&mut self, elapsed_time: Duration) {
+    async fn reset_entities(&mut self) {
+        reset_character(&mut self.player_state.character_state);
+        for monster_state in self.monster_states.iter_mut() {
+            reset_character(&mut monster_state.character_state);
+        }
+    }
+
+    async fn control_entities(&mut self) {
         let mut monsters_still_alive: Vec<(&mut MonsterState, &MonsterPrototype)> = self
             .monster_states
             .iter_mut()
@@ -197,8 +207,7 @@ impl<'a> GameInstance<'a> {
             .filter(|(x, _)| x.character_state.is_alive)
             .collect();
 
-        update_player_state(
-            elapsed_time,
+        control_player(
             &self.player_prototype,
             &mut self.player_state,
             &mut monsters_still_alive,
@@ -210,13 +219,21 @@ impl<'a> GameInstance<'a> {
             }
         } else {
             self.monster_wave_delay = Instant::now();
-            update_monster_states(
-                elapsed_time,
+            control_monsters(
                 &mut monsters_still_alive,
                 &self.player_prototype,
                 &mut self.player_state,
             );
         }
+    }
+
+    async fn update_entities(&mut self, elapsed_time: Duration) {
+        update_player_state(elapsed_time, &self.player_prototype, &mut self.player_state);
+        update_monster_states(
+            elapsed_time,
+            &self.monster_prototypes,
+            &mut self.monster_states,
+        );
     }
 
     /// Send whole world state to client
@@ -239,91 +256,26 @@ impl<'a> GameInstance<'a> {
     }
 }
 
-fn update_character_state(
-    elapsed_time: Duration,
-    prototype: &CharacterPrototype,
-    state: &mut CharacterState,
-) {
-    if !state.is_alive {
-        return;
-    }
-
-    state.health = prototype
-        .max_health
-        .min(state.health + (elapsed_time.as_secs_f64() * prototype.health_regen));
-
-    for (skill_prototype, skill_state) in prototype
-        .skill_prototypes
-        .iter()
-        .zip(state.skill_states.iter_mut())
-    {
-        skill_state.just_triggered = false;
-        skill_state.elapsed_cooldown += elapsed_time.as_secs_f32();
-        if skill_state.elapsed_cooldown >= skill_prototype.cooldown {
-            skill_state.elapsed_cooldown = skill_prototype.cooldown;
-            skill_state.is_ready = true;
-        } else {
-            skill_state.is_ready = false;
-        }
+fn reset_character(character_state: &mut CharacterState) {
+    character_state.just_hurt = false;
+    for skill_sate in character_state.skill_states.iter_mut() {
+        reset_skill(skill_sate)
     }
 }
 
-fn update_monster_states(
-    elapsed_time: Duration,
-    monsters: &mut Vec<(&mut MonsterState, &MonsterPrototype)>,
-    player_prototype: &PlayerPrototype,
-    player_state: &mut PlayerState,
-) {
-    for (m, p) in monsters.iter_mut() {
-        if !m.character_state.is_alive {
-            continue;
-        }
-
-        m.initiative = (m.initiative - elapsed_time.as_secs_f32()).max(0.0);
-        if m.initiative > 0.0 {
-            continue;
-        }
-
-        update_character_state(elapsed_time, &p.character_prototype, &mut m.character_state);
-
-        for (skill_prototype, skill_state) in p
-            .character_prototype
-            .skill_prototypes
-            .iter()
-            .zip(m.character_state.skill_states.iter_mut())
-            .filter(|(_, s)| s.is_ready)
-        {
-            use_skill(
-                &skill_prototype,
-                skill_state,
-                &mut player_state.character_state,
-                &player_prototype.character_prototype,
-            );
-        }
-    }
+fn reset_skill(skill_state: &mut SkillState) {
+    skill_state.just_triggered = false;
 }
 
-fn update_player_state(
-    elapsed_time: Duration,
+fn control_player(
     player_prototype: &PlayerPrototype,
     player_state: &mut PlayerState,
     monsters: &mut Vec<(&mut MonsterState, &MonsterPrototype)>,
 ) {
-    let mut rng = rand::rng();
-
     if !player_state.character_state.is_alive {
         return;
     }
-
-    update_character_state(
-        elapsed_time,
-        &player_prototype.character_prototype,
-        &mut player_state.character_state,
-    );
-
-    player_state.mana = player_prototype
-        .max_mana
-        .min(player_state.mana + (elapsed_time.as_secs_f64() * player_prototype.mana_regen));
+    let mut rng = rand::rng();
 
     if !monsters.is_empty() {
         // for (skill_prototype, skill_state) in player_prototype
@@ -358,6 +310,32 @@ fn update_player_state(
     }
 }
 
+fn control_monsters(
+    monsters: &mut Vec<(&mut MonsterState, &MonsterPrototype)>,
+    player_prototype: &PlayerPrototype,
+    player_state: &mut PlayerState,
+) {
+    for (monster_state, monster_prototype) in monsters
+        .iter_mut()
+        .filter(|(m, _)| m.character_state.is_alive && m.initiative == 0.0)
+    {
+        for (skill_prototype, skill_state) in monster_prototype
+            .character_prototype
+            .skill_prototypes
+            .iter()
+            .zip(monster_state.character_state.skill_states.iter_mut())
+            .filter(|(_, s)| s.is_ready)
+        {
+            use_skill(
+                &skill_prototype,
+                skill_state,
+                &mut player_state.character_state,
+                &player_prototype.character_prototype,
+            );
+        }
+    }
+}
+
 fn use_skill(
     skill_prototype: &SkillPrototype,
     skill_state: &mut SkillState,
@@ -386,5 +364,77 @@ fn damage_character(
     target_state.health = (target_state.health - damages).max(0.0);
     if target_state.health == 0.0 {
         target_state.is_alive = false;
+    }
+}
+
+fn update_player_state(
+    elapsed_time: Duration,
+    player_prototype: &PlayerPrototype,
+    player_state: &mut PlayerState,
+) {
+    if !player_state.character_state.is_alive {
+        return;
+    }
+
+    update_character_state(
+        elapsed_time,
+        &player_prototype.character_prototype,
+        &mut player_state.character_state,
+    );
+
+    player_state.mana = player_prototype
+        .max_mana
+        .min(player_state.mana + (elapsed_time.as_secs_f64() * player_prototype.mana_regen));
+}
+
+fn update_monster_states(
+    elapsed_time: Duration,
+    monster_prototypes: &Vec<MonsterPrototype>,
+    monster_states: &mut Vec<MonsterState>,
+) {
+    for (monster_state, monster_prototype) in monster_states
+        .iter_mut()
+        .zip(monster_prototypes.iter())
+        .filter(|(s, _)| s.character_state.is_alive)
+    {
+        monster_state.initiative = (monster_state.initiative - elapsed_time.as_secs_f32()).max(0.0);
+        if monster_state.initiative > 0.0 {
+            continue;
+        }
+
+        update_character_state(
+            elapsed_time,
+            &monster_prototype.character_prototype,
+            &mut monster_state.character_state,
+        );
+    }
+}
+
+fn update_character_state(
+    elapsed_time: Duration,
+    prototype: &CharacterPrototype,
+    state: &mut CharacterState,
+) {
+    if !state.is_alive {
+        return;
+    }
+
+    state.health = prototype
+        .max_health
+        .min(state.health + (elapsed_time.as_secs_f64() * prototype.health_regen));
+
+    for (skill_prototype, skill_state) in prototype
+        .skill_prototypes
+        .iter()
+        .zip(state.skill_states.iter_mut())
+    {
+        skill_state.just_triggered = false;
+        skill_state.elapsed_cooldown += elapsed_time.as_secs_f32();
+        if skill_state.elapsed_cooldown >= skill_prototype.cooldown {
+            skill_state.elapsed_cooldown = skill_prototype.cooldown;
+            skill_state.is_ready = true;
+        } else {
+            skill_state.is_ready = false;
+        }
     }
 }

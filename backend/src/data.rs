@@ -15,6 +15,7 @@ impl DataInit<CharacterPrototype> for CharacterState {
             // identifier: prototype.identifier,
             is_alive: true,
             health: prototype.max_health,
+            just_hurt: false,
             skill_states: prototype
                 .skill_prototypes
                 .iter()

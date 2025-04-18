@@ -34,6 +34,7 @@ pub struct CharacterState {
     // pub identifier: u64, // useful?
     pub is_alive: bool,
     pub health: f64,
+    pub just_hurt: bool,
 
     // pub initiative_cooldown: f64, // TODO
     pub skill_states: Vec<SkillState>,
