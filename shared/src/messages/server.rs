@@ -28,7 +28,6 @@ pub struct InitGameMessage {
 /// Message to be sent every tick to sync current state of the game with clients
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SyncGameStateMessage {
-    pub value: i32,
     pub player_state: PlayerState,
     // Monsters list is only updated when monsters change
     pub monster_prototypes: Option<Vec<MonsterPrototype>>,

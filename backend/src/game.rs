@@ -29,7 +29,6 @@ const MONSTER_WAVE_PERIOD: Duration = Duration::from_secs(2);
 
 pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
-    loop_counter: i32,
     // todo: map infos, player, monsters, etc
     player_prototype: PlayerPrototype,
     player_state: PlayerState,
@@ -48,7 +47,6 @@ impl<'a> GameInstance<'a> {
     ) -> Self {
         GameInstance::<'a> {
             client_conn,
-            loop_counter: 0,
             player_state: PlayerState::init(&player_prototype),
             player_prototype,
             monster_prototypes: Vec::new(),
@@ -64,8 +62,6 @@ impl<'a> GameInstance<'a> {
         let mut last_time = Instant::now();
         let mut last_update_time = Instant::now();
         loop {
-            self.loop_counter += 1;
-
             if let ControlFlow::Break(_) = self.handle_client_events().await {
                 break;
             }
@@ -228,7 +224,6 @@ impl<'a> GameInstance<'a> {
         self.client_conn
             .send(
                 &SyncGameStateMessage {
-                    value: self.loop_counter,
                     player_state: self.player_state.clone(),
                     monster_prototypes: if self.need_to_sync_monster_prototypes {
                         self.need_to_sync_monster_prototypes = false;
