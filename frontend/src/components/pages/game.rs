@@ -183,8 +183,8 @@ fn PlayerCard() -> impl IntoView {
 
         <div class="flex gap-2">
             <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_percent />
-            <div class="flex-1">
-                <img src=player_portrait alt="player" class="border-8 border-double border-stone-500" />
+            <div class="flex-1 w-full">
+                <img src=player_portrait alt="player" class="border-8 border-double border-stone-500 aspect-square" />
             </div>
             <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_percent />
         </div>
@@ -344,16 +344,16 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
     };
 
     view! {
-        <div class="flex w-full bg-zinc-800 rounded-md gap-2 p-2">
-            <div class="flex flex-col gap-2">
+        <div class="grid grid-cols-4 w-full bg-zinc-800 rounded-md gap-2 p-2">
+            <div class="flex flex-col gap-2 col-span-3">
                 <HorizontalProgressBar
                     class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700"
                     value=health_percent text=prototype.character_prototype.name.clone()
                 />
-                <div class="flex-1">
+                <div class="flex-1 h-full">
                     <img
                         src={format!("./assets/{}",prototype.character_prototype.portrait.clone())} alt=prototype.character_prototype.name
-                        class=move || format!("h-full border-8 border-double border-stone-500 transition duration-1000 {}", is_dead_img_effect())
+                        class=move || format!("border-8 border-double border-stone-500 transition  aspect-square duration-1000 {}", is_dead_img_effect())
                     />
                 </div>
             </div>
