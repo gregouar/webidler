@@ -139,18 +139,6 @@ fn PlayerCard() -> impl IntoView {
             .clone()
     };
 
-    // TODO: get_asset?
-    let player_portrait = move || {
-        format!(
-            "./assets/{}",
-            game_context
-                .player_prototype
-                .read()
-                .character_prototype
-                .portrait,
-        )
-    };
-
     let health_percent = Signal::derive(move || {
         let max_health = game_context
             .player_prototype
@@ -173,6 +161,12 @@ fn PlayerCard() -> impl IntoView {
         }
     });
 
+    let is_dead =
+        Signal::derive(move || !game_context.player_state.read().character_state.is_alive);
+
+    let just_hurt =
+        Signal::derive(move || game_context.player_state.read().character_state.just_hurt);
+
     view! {
     <div class="flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full">
         <div>
@@ -183,9 +177,12 @@ fn PlayerCard() -> impl IntoView {
 
         <div class="flex gap-2">
             <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_percent />
-            <div class="flex-1 w-full">
-                <img src=player_portrait alt="player" class="border-8 border-double border-stone-500 aspect-square" />
-            </div>
+            <CharacterPortrait
+                image_asset=game_context.player_prototype.read().character_prototype.portrait.clone()
+                character_name="player".to_string()
+                just_hurt=just_hurt
+                is_dead=is_dead
+            />
             <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_percent />
         </div>
 
@@ -237,17 +234,22 @@ fn PlayerSkill(prototype: SkillPrototype, index: usize) -> impl IntoView {
     });
 
     view! {
-        <CircularProgressBar
-            bar_width=4
-            bar_color="text-amber-700"
-            value=skill_cooldown
-            reset=just_triggered
-        >
-            <img
-                src={format!("./assets/{}",prototype.icon.clone())} alt=prototype.name
-                class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
-            />
-        </CircularProgressBar>
+        <div class="flex flex-col">
+            <CircularProgressBar
+                bar_width=4
+                bar_color="text-amber-700"
+                value=skill_cooldown
+                reset=just_triggered
+            >
+                <img
+                    src={format!("./assets/{}",prototype.icon.clone())} alt=prototype.name
+                    class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
+                />
+            </CircularProgressBar>
+            <MainMenuButton>
+                "auto"
+            </MainMenuButton>
+        </div>
     }
 }
 
@@ -326,22 +328,23 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
         }
     });
 
-    let is_dead = move || {
+    let is_dead = Signal::derive(move || {
         game_context
             .monster_states
             .read()
             .get(index)
             .map(|x| !x.character_state.is_alive)
             .unwrap_or(false)
-    };
+    });
 
-    let is_dead_img_effect = move || {
-        if is_dead() {
-            "saturate-0 brightness-1"
-        } else {
-            ""
-        }
-    };
+    let just_hurt = Signal::derive(move || {
+        game_context
+            .monster_states
+            .read()
+            .get(index)
+            .map(|x| x.character_state.just_hurt)
+            .unwrap_or(false)
+    });
 
     view! {
         <div class="grid grid-cols-4 w-full bg-zinc-800 rounded-md gap-2 p-2">
@@ -350,12 +353,23 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
                     class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700"
                     value=health_percent text=prototype.character_prototype.name.clone()
                 />
-                <div class="flex-1 h-full">
-                    <img
-                        src={format!("./assets/{}",prototype.character_prototype.portrait.clone())} alt=prototype.character_prototype.name
-                        class=move || format!("border-8 border-double border-stone-500 transition  aspect-square duration-1000 {}", is_dead_img_effect())
-                    />
-                </div>
+                // <div class="flex-1 h-full relative">
+                //     <img
+                //         src={format!("./assets/{}",prototype.character_prototype.portrait.clone())} alt=prototype.character_prototype.name
+                //         class=move || format!("border-8 border-double border-stone-500 transition object-cover aspect-square duration-1000 {}", is_dead_img_effect())
+                //     />
+                //     <div
+                //         style=just_hurt_effect
+                //         class="absolute inset-0 pointer-events-none transition-all ease-out duration-200"
+                //     >
+                //     </div>
+                // </div>
+                <CharacterPortrait
+                    image_asset=prototype.character_prototype.portrait.clone()
+                    character_name=prototype.character_prototype.name.clone()
+                    just_hurt=just_hurt
+                    is_dead=is_dead
+                />
             </div>
             <div class="flex flex-col justify-evenly w-full min-w-16">
                 <For
@@ -426,6 +440,49 @@ fn MonsterSkill(prototype: SkillPrototype, index: usize, monster_index: usize) -
                 class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
             />
         </CircularProgressBar>
+    }
+}
+
+#[component]
+fn CharacterPortrait(
+    image_asset: String,
+    character_name: String,
+    #[prop(into)] just_hurt: Signal<bool>,
+    #[prop(into)] is_dead: Signal<bool>,
+) -> impl IntoView {
+    let just_hurt_class = move || {
+        if just_hurt.get() {
+            "transition-all ease duration-100 just_hurt_effect"
+        } else {
+            "transition-all ease duration-1000"
+        }
+    };
+
+    let is_dead_img_effect = move || {
+        if is_dead.get() {
+            "saturate-0 brightness-1"
+        } else {
+            ""
+        }
+    };
+
+    view! {
+        <div class="flex-1 h-full relative">
+            <style>"
+                .just_hurt_effect {
+                    box-shadow: inset 0 0 64px rgba(192, 0, 0, 1.0);
+                }
+            "</style>
+            <img
+                src={format!("./assets/{}",image_asset)}
+                alt=character_name
+                class=move || format!("border-8 border-double border-stone-500 transition object-cover aspect-square duration-1000 {}", is_dead_img_effect())
+            />
+            <div
+                class=move || format!("absolute inset-0 pointer-events-none  {}",just_hurt_class())
+            >
+            </div>
+        </div>
     }
 }
 

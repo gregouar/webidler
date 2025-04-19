@@ -307,6 +307,10 @@ fn control_monsters(
     player_prototype: &PlayerPrototype,
     player_state: &mut PlayerState,
 ) {
+    if !player_state.character_state.is_alive {
+        return;
+    }
+
     for (monster_state, monster_prototype) in monsters
         .iter_mut()
         .filter(|(m, _)| m.character_state.is_alive && m.initiative == 0.0)

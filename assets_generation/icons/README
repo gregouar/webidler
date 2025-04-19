@@ -1,4 +1,0 @@
-Icons SVG are created first in a software like AI.
-They are then converted using https://jakearchibald.github.io/svgomg/.
-Use setting "remove xmlns" and "viewbox".
-The result is then inserted in the leptos view macro, in its own component.

@@ -8,6 +8,10 @@ module.exports = {
         rs: (content) => content.replace(/(?:^|\s)class:/g, ' '),
       },
     },
+    safelist: [
+      "duration-100",
+      "duration-1000"
+    ],
     theme: {
       extend: {
         textShadow: {
@@ -33,6 +37,3 @@ module.exports = {
       }),
     ],
   }
-
-
-  
