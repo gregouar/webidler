@@ -11,7 +11,7 @@ use serde_json;
 
 use shared::data::HelloSchema;
 
-use crate::components::ui::buttons::MainMenuButton;
+use crate::components::ui::buttons::MenuButton;
 
 #[component]
 pub fn MainMenu() -> impl IntoView {
@@ -39,8 +39,8 @@ pub fn MainMenu() -> impl IntoView {
                 "Welcome to Webidler!"
             </h1>
             <div class="flex flex-col space-y-2">
-                <MainMenuButton on:click=navigate_to_game>"Game"</MainMenuButton>
-                <MainMenuButton on:click=click_action>"Get from server"</MainMenuButton>
+                <MenuButton on:click=navigate_to_game>"Game"</MenuButton>
+                <MenuButton on:click=click_action>"Get from server"</MenuButton>
             </div>
             <p>"From server:" {data}</p>
         </main>

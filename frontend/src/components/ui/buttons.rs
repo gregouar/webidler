@@ -2,7 +2,7 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 #[component]
-pub fn MainMenuButton(
+pub fn MenuButton(
     // #[prop(optional)] disabled: Option<bool>,
     children: Children,
 ) -> impl IntoView {
@@ -19,5 +19,46 @@ pub fn MainMenuButton(
             // disabled=disabled
             {children()}
         </button>
+    }
+}
+
+#[component]
+pub fn Toggle(
+    #[prop(default = "".to_string())] label: String,
+    #[prop(default = false)] initial: bool,
+    mut toggle_callback: impl FnMut(bool) + 'static,
+) -> impl IntoView {
+    let checked: RwSignal<bool> = RwSignal::new(initial);
+    let switch_value = move |_| {
+        let new_value = !checked.get();
+        checked.set(new_value);
+        toggle_callback(new_value);
+    };
+    view! {
+        <div class="flex items-center space-x-3">
+            <span class="text-white font-semibold">{label}</span>
+            <label class="relative inline-flex items-center cursor-pointer group">
+                <input type="checkbox" class="sr-only peer" checked=initial on:input=switch_value />
+                <div class="
+                w-12 h-6 
+                bg-gradient-to-t from-zinc-900 to-zinc-800 
+                rounded-full 
+                border border-neutral-950 
+                shadow-md 
+                peer-checked:bg-gradient-to-t peer-checked:from-amber-700 peer-checked:to-amber-500 
+                transition-colors duration-300
+                "></div>
+                <div class="
+                absolute left-0.5 top-0.5 
+                w-5 h-5 
+                bg-zinc-300 
+                rounded-full 
+                shadow 
+                transition-transform duration-300 
+                peer-checked:translate-x-6 
+                peer-checked:bg-white
+                "></div>
+            </label>
+        </div>
     }
 }

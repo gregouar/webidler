@@ -2,10 +2,13 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 use shared::data::SkillPrototype;
+use shared::messages::client::SetAutoSkillMessage;
+use shared::messages::client::UseSkillMessage;
 
 use crate::assets::img_asset;
+use crate::components::websocket::WebsocketContext;
 use crate::components::{
-    ui::buttons::MainMenuButton,
+    ui::buttons::Toggle,
     ui::progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
 };
 
@@ -54,9 +57,12 @@ pub fn PlayerCard() -> impl IntoView {
         Signal::derive(move || game_context.player_state.read().character_state.just_hurt);
 
     view! {
-        <div class="flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full">
+        <div class="flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-lg">
             <div>
-                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">{player_name}</p>
+                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
+                    <span class="font-bold">{player_name}</span>
+                    " — Level: 1"
+                </p>
             </div>
 
             <div class="flex flex-col gap-2">
@@ -64,7 +70,7 @@ pub fn PlayerCard() -> impl IntoView {
                     <VerticalProgressBar
                         class:w-3
                         class:md:w-6
-                        bar_color="bg-gradient-to-b from-red-500 to-red-700"
+                        bar_color="bg-gradient-to-l from-red-500 to-red-700"
                         value=health_percent
                     />
                     <CharacterPortrait
@@ -81,14 +87,14 @@ pub fn PlayerCard() -> impl IntoView {
                     <VerticalProgressBar
                         class:w-3
                         class:md:w-6
-                        bar_color="bg-gradient-to-b from-blue-500 to-blue-700"
+                        bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
                         value=mana_percent
                     />
                 </div>
                 <HorizontalProgressBar
                     class:h-2
                     class:sm:h-4
-                    bar_color="bg-neutral-300"
+                    bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
                     // TODO: XP
                     value=health_percent
                 />
@@ -149,6 +155,29 @@ fn PlayerSkill(prototype: SkillPrototype, index: usize) -> impl IntoView {
             .unwrap_or_default()
     });
 
+    let conn = expect_context::<WebsocketContext>();
+    let use_skill = move |_| {
+        // TODO: Add constraint/limit rates?
+        conn.send(
+            &UseSkillMessage {
+                skill_index: index as u8,
+            }
+            .into(),
+        );
+    };
+
+    let conn = expect_context::<WebsocketContext>();
+    let set_auto_skill = move |value| {
+        // TODO: Add constraint/limit rates?
+        conn.send(
+            &SetAutoSkillMessage {
+                skill_index: index as u8,
+                auto_use: value,
+            }
+            .into(),
+        );
+    };
+
     view! {
         <div class="flex flex-col">
             <CircularProgressBar
@@ -157,13 +186,17 @@ fn PlayerSkill(prototype: SkillPrototype, index: usize) -> impl IntoView {
                 value=skill_cooldown
                 reset=just_triggered
             >
-                <img
-                    src=img_asset(&prototype.icon)
-                    alt=prototype.name
-                    class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
-                />
+                <button class="active:brightness-50  active:sepia" on:click=use_skill>
+                    <img
+                        src=img_asset(&prototype.icon)
+                        alt=prototype.name
+                        class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
+                    />
+                </button>
             </CircularProgressBar>
-            <MainMenuButton>"auto"</MainMenuButton>
+            <div class="flex justify-center">
+                <Toggle toggle_callback=set_auto_skill />
+            </div>
         </div>
     }
 }

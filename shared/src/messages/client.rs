@@ -7,7 +7,8 @@ impl_into_message! {
     pub enum ClientMessage {
         Heartbeat,
         Connect(ClientConnectMessage),
-        Test(TestMessage),
+        UseSkill(UseSkillMessage),
+        SetAutoSkill(SetAutoSkillMessage),
     }
 }
 
@@ -24,7 +25,12 @@ pub struct ClientConnectMessage {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct TestMessage {
-    pub greeting: String,
-    pub value: i32,
+pub struct UseSkillMessage {
+    pub skill_index: u8,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SetAutoSkillMessage {
+    pub skill_index: u8,
+    pub auto_use: bool,
 }

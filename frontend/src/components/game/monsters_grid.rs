@@ -24,11 +24,25 @@ pub fn MonstersGrid() -> impl IntoView {
             .all(|x| !x.character_state.is_alive)
     });
 
+    let header_background = "bg-[url(./assets/images/worlds/forest_header.webp)]";
+    let footer_background = "bg-[url(./assets/images/worlds/forest_footer.webp)]";
+
     // TODO: double buffering to allow in and out at the same time
     view! {
-        <div class="">
-            <div class="w-full h-16 bg-[url(./assets/images/worlds/forest_header.webp)] bg-center bg-repeat-x"></div>
-            <div class="grid grid-cols-3 grid-rows-2 pt-2 pb-2 gap-2 grid-flow-col items-center h-full overflow-hidden">
+        <div class="shadow-lg rounded-md overflow-hidden">
+            <div class=format!(
+                "{header_background} relative overflow-hidden w-full h-16 bg-center bg-repeat-x flex items-center justify-center",
+            )>
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
+                <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-2xl font-bold">
+                    <span class="[font-variant:small-caps]">"The Forest"</span>
+                    " — Area Level: 1"
+                </p>
+            </div>
+            <div class="
+            grid grid-cols-3 grid-rows-2 p-2 gap-2 grid-flow-col items-center
+            h-full overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]
+            ">
                 <style>
                     "
                     @keyframes monster-fade-in {
@@ -72,7 +86,7 @@ pub fn MonstersGrid() -> impl IntoView {
                     }
                 />
             </div>
-            <div class="w-full h-16 bg-[url(./assets/images/worlds/forest_footer.webp)] bg-center bg-repeat-x "></div>
+            <div class=format!("{footer_background} w-full h-16 bg-center bg-repeat-x")></div>
         </div>
     }
 }
@@ -116,7 +130,7 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
     });
 
     view! {
-        <div class="grid grid-cols-4 w-full bg-zinc-800 rounded-md gap-2 p-2">
+        <div class="grid grid-cols-4 w-full bg-zinc-800 shadow-md rounded-md gap-2 p-2">
             <div class="flex flex-col gap-2 col-span-3">
                 <HorizontalProgressBar
                     class:h-2

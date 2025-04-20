@@ -27,11 +27,30 @@ const LOOP_MIN_PERIOD: Duration = Duration::from_millis(100);
 const MAX_MONSTERS: usize = 6;
 const MONSTER_WAVE_PERIOD: Duration = Duration::from_secs(1);
 
+pub struct PlayerController {
+    pub auto_skills: Vec<bool>,
+    pub use_skills: Vec<usize>,
+}
+
+impl PlayerController {
+    fn init(prototype: &PlayerPrototype) -> Self {
+        PlayerController {
+            auto_skills: vec![false; prototype.character_prototype.skill_prototypes.len()],
+            use_skills: Vec::with_capacity(prototype.character_prototype.skill_prototypes.len()),
+        }
+    }
+
+    fn reset(&mut self) {
+        self.use_skills.clear();
+    }
+}
+
 pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
     // todo: map infos, player, monsters, etc
     player_prototype: PlayerPrototype,
     player_state: PlayerState,
+    player_controller: PlayerController,
     monster_prototypes: Vec<MonsterPrototype>,
     monster_states: Vec<MonsterState>,
     monster_wave_delay: Instant,
@@ -48,6 +67,7 @@ impl<'a> GameInstance<'a> {
         GameInstance::<'a> {
             client_conn,
             player_state: PlayerState::init(&player_prototype),
+            player_controller: PlayerController::init(&player_prototype),
             player_prototype,
             monster_prototypes: Vec::new(),
             monster_states: Vec::new(),
@@ -105,10 +125,19 @@ impl<'a> GameInstance<'a> {
     fn handle_client_message(&mut self, msg: ClientMessage) {
         match msg {
             ClientMessage::Heartbeat => {}
-            ClientMessage::Test(m) => {
-                tracing::info!("test: {:?}", m)
+            ClientMessage::UseSkill(m) => {
+                self.player_controller
+                    .use_skills
+                    .push(m.skill_index as usize);
             }
-            _ => {
+            ClientMessage::SetAutoSkill(m) => {
+                tracing::warn!("rduh: {:?}", m);
+                self.player_controller
+                    .auto_skills
+                    .get_mut(m.skill_index as usize)
+                    .map(|x| *x = m.auto_use);
+            }
+            ClientMessage::Connect(_) => {
                 tracing::warn!("received unexpected message: {:?}", msg)
             }
         }
@@ -209,8 +238,10 @@ impl<'a> GameInstance<'a> {
         control_player(
             &self.player_prototype,
             &mut self.player_state,
+            &self.player_controller,
             &mut monsters_still_alive,
         );
+        self.player_controller.reset();
 
         if monsters_still_alive.is_empty() {
             if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
@@ -269,34 +300,42 @@ fn reset_skill(skill_state: &mut SkillState) {
 fn control_player(
     player_prototype: &PlayerPrototype,
     player_state: &mut PlayerState,
+    player_controller: &PlayerController,
     monsters: &mut Vec<(&mut MonsterState, &MonsterPrototype)>,
 ) {
-    if !player_state.character_state.is_alive {
+    if !player_state.character_state.is_alive || monsters.is_empty() {
         return;
     }
+
     let mut rng = rand::rng();
 
-    if !monsters.is_empty() {
-        for (skill_prototype, skill_state) in player_prototype
-            .character_prototype
-            .skill_prototypes
-            .iter()
-            .zip(player_state.character_state.skill_states.iter_mut())
-        {
-            if !skill_state.is_ready || skill_prototype.mana_cost > player_state.mana {
-                continue;
-            }
+    for (i, (skill_prototype, skill_state)) in player_prototype
+        .character_prototype
+        .skill_prototypes
+        .iter()
+        .zip(player_state.character_state.skill_states.iter_mut())
+        .enumerate()
+    {
+        if !skill_state.is_ready || skill_prototype.mana_cost > player_state.mana {
+            continue;
+        }
 
-            let j = rng.random_range(0..monsters.len());
-            if let Some((target_state, target_prototype)) = monsters.get_mut(j).as_deref_mut() {
-                player_state.mana -= skill_prototype.mana_cost;
-                use_skill(
-                    skill_prototype,
-                    skill_state,
-                    &mut target_state.character_state,
-                    &target_prototype.character_prototype,
-                );
-            }
+        if !player_controller.auto_skills.get(i).unwrap_or(&false)
+            && !player_controller.use_skills.contains(&i)
+        {
+            continue;
+        }
+
+        // TODO: depending on distance, choose target
+        let j = rng.random_range(0..monsters.len());
+        if let Some((target_state, target_prototype)) = monsters.get_mut(j).as_deref_mut() {
+            player_state.mana -= skill_prototype.mana_cost;
+            use_skill(
+                skill_prototype,
+                skill_state,
+                &mut target_state.character_state,
+                &target_prototype.character_prototype,
+            );
         }
     }
 }
