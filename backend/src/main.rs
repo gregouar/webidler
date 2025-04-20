@@ -38,7 +38,7 @@ async fn main() {
         .allow_methods([Method::GET, Method::POST]);
 
     let app = Router::new()
-        .route("/", get(|| async { "Hello, World!" }))
+        .route("/", get(|| async { "OK" }))
         .route("/hello", get(get_hello))
         .route("/other", get(get_other))
         .route("/ws", any(ws_connect::ws_handler))

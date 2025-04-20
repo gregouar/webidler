@@ -3,13 +3,14 @@ use leptos::prelude::*;
 
 use shared::data::SkillPrototype;
 
-use crate::components::game::GameContext;
+use crate::assets::img_asset;
 use crate::components::{
     ui::buttons::MainMenuButton,
-    ui::progress_bars::{CircularProgressBar, VerticalProgressBar},
+    ui::progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
 };
 
 use super::character::CharacterPortrait;
+use super::GameContext;
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {
@@ -58,29 +59,38 @@ pub fn PlayerCard() -> impl IntoView {
                 <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">{player_name}</p>
             </div>
 
-            <div class="flex gap-2">
-                <VerticalProgressBar
-                    class:w-3
-                    class:md:w-6
-                    bar_color="bg-gradient-to-b from-red-500 to-red-700"
+            <div class="flex flex-col gap-2">
+                <div class="flex gap-2">
+                    <VerticalProgressBar
+                        class:w-3
+                        class:md:w-6
+                        bar_color="bg-gradient-to-b from-red-500 to-red-700"
+                        value=health_percent
+                    />
+                    <CharacterPortrait
+                        image_uri=game_context
+                            .player_prototype
+                            .read()
+                            .character_prototype
+                            .portrait
+                            .clone()
+                        character_name="player".to_string()
+                        just_hurt=just_hurt
+                        is_dead=is_dead
+                    />
+                    <VerticalProgressBar
+                        class:w-3
+                        class:md:w-6
+                        bar_color="bg-gradient-to-b from-blue-500 to-blue-700"
+                        value=mana_percent
+                    />
+                </div>
+                <HorizontalProgressBar
+                    class:h-2
+                    class:sm:h-4
+                    bar_color="bg-neutral-300"
+                    // TODO: XP
                     value=health_percent
-                />
-                <CharacterPortrait
-                    image_asset=game_context
-                        .player_prototype
-                        .read()
-                        .character_prototype
-                        .portrait
-                        .clone()
-                    character_name="player".to_string()
-                    just_hurt=just_hurt
-                    is_dead=is_dead
-                />
-                <VerticalProgressBar
-                    class:w-3
-                    class:md:w-6
-                    bar_color="bg-gradient-to-b from-blue-500 to-blue-700"
-                    value=mana_percent
                 />
             </div>
 
@@ -148,7 +158,7 @@ fn PlayerSkill(prototype: SkillPrototype, index: usize) -> impl IntoView {
                 reset=just_triggered
             >
                 <img
-                    src=format!("./assets/{}", prototype.icon.clone())
+                    src=img_asset(&prototype.icon)
                     alt=prototype.name
                     class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
                 />

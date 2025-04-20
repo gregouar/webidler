@@ -6,10 +6,11 @@ use rand::Rng;
 use shared::data::MonsterPrototype;
 use shared::data::SkillPrototype;
 
+use crate::assets::img_asset;
 use crate::components::ui::progress_bars::{CircularProgressBar, HorizontalProgressBar};
 
-use super::GameContext;
 use super::character::CharacterPortrait;
+use super::GameContext;
 
 #[component]
 pub fn MonstersGrid() -> impl IntoView {
@@ -26,8 +27,8 @@ pub fn MonstersGrid() -> impl IntoView {
     // TODO: double buffering to allow in and out at the same time
     view! {
         <div class="">
-            <div class="w-full h-16 bg-[url(./assets/worlds/forest_header.webp)] bg-center bg-repeat-x "></div>
-            <div class="grid grid-cols-3 grid-rows-2 mt-2 mb-2 gap-2 grid-flow-col items-center h-full overflow-hidden">
+            <div class="w-full h-16 bg-[url(./assets/images/worlds/forest_header.webp)] bg-center bg-repeat-x"></div>
+            <div class="grid grid-cols-3 grid-rows-2 pt-2 pb-2 gap-2 grid-flow-col items-center h-full overflow-hidden">
                 <style>
                     "
                     @keyframes monster-fade-in {
@@ -71,7 +72,7 @@ pub fn MonstersGrid() -> impl IntoView {
                     }
                 />
             </div>
-            <div class="w-full h-16 bg-[url(./assets/worlds/forest_footer.webp)] bg-center bg-repeat-x "></div>
+            <div class="w-full h-16 bg-[url(./assets/images/worlds/forest_footer.webp)] bg-center bg-repeat-x "></div>
         </div>
     }
 }
@@ -125,7 +126,7 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
                     text=prototype.character_prototype.name.clone()
                 />
                 <CharacterPortrait
-                    image_asset=prototype.character_prototype.portrait.clone()
+                    image_uri=prototype.character_prototype.portrait.clone()
                     character_name=prototype.character_prototype.name.clone()
                     just_hurt=just_hurt
                     is_dead=is_dead
@@ -204,7 +205,7 @@ fn MonsterSkill(prototype: SkillPrototype, index: usize, monster_index: usize) -
             reset=just_triggered
         >
             <img
-                src=format!("./assets/{}", prototype.icon.clone())
+                src=img_asset(&prototype.icon)
                 alt=prototype.name
                 class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
             />

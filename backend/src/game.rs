@@ -25,7 +25,7 @@ use crate::websocket::WebSocketConnection;
 
 const LOOP_MIN_PERIOD: Duration = Duration::from_millis(100);
 const MAX_MONSTERS: usize = 6;
-const MONSTER_WAVE_PERIOD: Duration = Duration::from_secs(2);
+const MONSTER_WAVE_PERIOD: Duration = Duration::from_secs(1);
 
 pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
@@ -115,7 +115,6 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn init_game(&mut self) -> Result<()> {
-        self.generate_monsters_wave().await;
         self.client_conn
             .send(
                 &InitGameMessage {
@@ -139,7 +138,7 @@ impl<'a> GameInstance<'a> {
                 0 => MonsterPrototype {
                     character_prototype: CharacterPrototype {
                         // identifier: i as u64,
-                        name: String::from("batty"),
+                        name: String::from("Batty"),
                         portrait: match rng.random_range(0..2) {
                             0 => String::from("monsters/bat.webp"),
                             _ => String::from("monsters/bat2.webp"),
@@ -160,7 +159,7 @@ impl<'a> GameInstance<'a> {
                 _ => MonsterPrototype {
                     character_prototype: CharacterPrototype {
                         // identifier: i as u64,
-                        name: String::from("ratty"),
+                        name: String::from("Ratty"),
                         portrait: String::from("monsters/rat.webp"),
                         max_health: 20.0,
                         health_regen: 0.0,
@@ -358,9 +357,13 @@ fn damage_character(
     target_state: &mut CharacterState,
     target_prototype: &CharacterPrototype,
 ) {
-    let _ = target_prototype;
-    target_state.health = (target_state.health - damages).max(0.0);
-    target_state.just_hurt = true;
+    target_state.health = (target_state.health - damages)
+        .max(0.0)
+        .min(target_prototype.max_health);
+
+    if damages > 0.0 {
+        target_state.just_hurt = true;
+    }
     if target_state.health == 0.0 {
         target_state.is_alive = false;
     }

@@ -1,9 +1,11 @@
 use leptos::html::*;
 use leptos::prelude::*;
 
+use crate::assets::img_asset;
+
 #[component]
 pub fn CharacterPortrait(
-    image_asset: String,
+    image_uri: String,
     character_name: String,
     #[prop(into)] just_hurt: Signal<bool>,
     #[prop(into)] is_dead: Signal<bool>,
@@ -18,27 +20,28 @@ pub fn CharacterPortrait(
 
     let is_dead_img_effect = move || {
         if is_dead.get() {
-            "saturate-0 brightness-1"
+            "transition-all duration-1000 saturate-0 brightness-1"
         } else {
             ""
         }
     };
 
     view! {
-        <div class="flex-1 h-full relative">
-            <style>
-                "
+        <style>
+            "
                 .just_hurt_effect {
-                 box-shadow: inset 0 0 64px rgba(192, 0, 0, 1.0);
+                    --shadow-size: calc(10%);
+                    box-shadow: inset 0 0 var(--shadow-size) rgba(192, 0, 0, 1.0);
                 }
-                "
-            </style>
+            "
+        </style>
+        <div class="flex-1 h-full relative">
             <img
-                src=format!("./assets/{}", image_asset)
+                src=img_asset(&image_uri)
                 alt=character_name
                 class=move || {
                     format!(
-                        "border-8 border-double border-stone-500 transition object-cover aspect-square duration-1000 {}",
+                        "border-8 border-double border-stone-500 object-cover aspect-square {}",
                         is_dead_img_effect(),
                     )
                 }
