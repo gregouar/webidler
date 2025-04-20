@@ -14,20 +14,20 @@ pub fn HorizontalProgressBar(
 ) -> impl IntoView {
     view! {
         <div class="
-                relative flex w-full
-                rounded-lg overflow-hidden 
-                bg-stone-900 border border-neutral-950 
-                shadow-md
-            ">
+        relative flex w-full
+        rounded-lg overflow-hidden 
+        bg-stone-900 border border-neutral-950 
+        shadow-md
+        ">
             <div class="absolute inset-0 flex items-center justify-center text-white text-sm pointer-events-none">
                 {text}
             </div>
 
             <div
-                class={format!(
+                class=format!(
                     "flex flex-col {} rounded-lg transition-all ease duration-500",
-                    bar_color
-                )}
+                    bar_color,
+                )
                 style:width=move || format!("{}%", value.get().max(0.0).min(100.0).round())
             ></div>
         </div>
@@ -107,53 +107,81 @@ pub fn CircularProgressBar(
 
     view! {
         <div class="circular-progress-bar">
-            <style>"
+            <style>
+                "
                 @keyframes circular-progress-bar-fade-out {
-                    0% { opacity: 1; filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
-                    50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746)); }
-                    100% { opacity: 0; filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
+                 0% { opacity: 1; filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
+                 50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746)); }
+                 100% { opacity: 0; filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
                 }
                 @keyframes circular-progress-bar-glow {
-                    0% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
-                    50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746)); }
-                    100% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
+                 0% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
+                 50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746)); }
+                 100% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
                 }
-            "</style>
+                "
+            </style>
             <div class="relative drop-shadow-lg">
-                <svg  class="size-full overflow-visible" viewBox="0 0 180 180">
+                <svg class="size-full overflow-visible" viewBox="0 0 180 180">
                     <defs>
-                        <filter id="blur" filterUnits="userSpaceOnUse" x="-90" y="-90"
-                                width="180" height="180">
+                        <filter
+                            id="blur"
+                            filterUnits="userSpaceOnUse"
+                            x="-90"
+                            y="-90"
+                            width="180"
+                            height="180"
+                        >
                             <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
                         </filter>
                         <clipPath id="ring" clip-rule="evenodd">
                             <path d="M0-81A81 81 0 0 1 0 81A81 81 0 0 1 0-81z
-                                    M0-63A63 63 0 0 1 0 63A63 63 0 0 1 0-63z" />
+                            M0-63A63 63 0 0 1 0 63A63 63 0 0 1 0-63z" />
                         </clipPath>
                     </defs>
 
                     <g transform="translate(90,90)">
                         <g clip-path="url(#ring)">
-                            <rect x="-85" y="-85" width="170" height="170" fill="stone-950"
-                                    stroke="none" />
-                            <circle class="stroke-current text-stone-900" cx="0" cy="2.5" r="72" stroke-width=bar_width
-                                    fill="none" filter="url(#blur)"/>
+                            <rect
+                                x="-85"
+                                y="-85"
+                                width="170"
+                                height="170"
+                                fill="stone-950"
+                                stroke="none"
+                            />
+                            <circle
+                                class="stroke-current text-stone-900"
+                                cx="0"
+                                cy="2.5"
+                                r="72"
+                                stroke-width=bar_width
+                                fill="none"
+                                filter="url(#blur)"
+                            />
                         </g>
                         <path
-                            class=move || {format!("main-arc stroke-current {} {}", transition(),bar_color)}
-                            stroke-dashoffset=set_value stroke-dasharray="452.389"
+                            class=move || {
+                                format!("main-arc stroke-current {} {}", transition(), bar_color)
+                            }
+                            stroke-dashoffset=set_value
+                            stroke-dasharray="452.389"
                             d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
-                            fill="transparent" stroke-width=bar_width stroke=bar_color
+                            fill="transparent"
+                            stroke-width=bar_width
+                            stroke=bar_color
                             stroke-linecap="round"
                         />
 
                         // For nice fade out during reset
                         <path
-                            class=move || {format!("main-arc stroke-current {}",bar_color)}
+                            class=move || { format!("main-arc stroke-current {}", bar_color) }
                             style=reset_bar_animation
                             stroke-dasharray="452.389"
                             d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
-                            fill="transparent" stroke-width=bar_width stroke=bar_color
+                            fill="transparent"
+                            stroke-width=bar_width
+                            stroke=bar_color
                             stroke-linecap="round"
                         />
                     </g>

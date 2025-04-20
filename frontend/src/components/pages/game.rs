@@ -7,7 +7,7 @@ use crate::components::websocket::Websocket;
 pub fn Game() -> impl IntoView {
     view! {
         <Websocket>
-            <GameInstance/>
+            <GameInstance />
         </Websocket>
     }
 }

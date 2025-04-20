@@ -11,22 +11,12 @@ pub fn HeaderMenu() -> impl IntoView {
     view! {
         <div class="flex flex-row items-center space-x-2 p-2 bg-zinc-800 shadow-md">
             <div>
-                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-2xl">
-                    "Menu"
-                </p>
+                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-2xl">"Menu"</p>
             </div>
-            <MainMenuButton>
-                "Inventory"
-            </MainMenuButton>
-            <MainMenuButton>
-                "Passive Skills"
-            </MainMenuButton>
-            <MainMenuButton>
-                "Statistics"
-            </MainMenuButton>
-            <MainMenuButton on:click=abandon_quest>
-                "Abandon Quest"
-            </MainMenuButton>
+            <MainMenuButton>"Inventory"</MainMenuButton>
+            <MainMenuButton>"Passive Skills"</MainMenuButton>
+            <MainMenuButton>"Statistics"</MainMenuButton>
+            <MainMenuButton on:click=abandon_quest>"Abandon Quest"</MainMenuButton>
         </div>
     }
 }

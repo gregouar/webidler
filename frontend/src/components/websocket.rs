@@ -73,5 +73,5 @@ pub fn Websocket(children: Children) -> impl IntoView {
         // close: Arc::new(close.clone()),
     });
 
-    view! {{children()}}
+    view! { {children()} }
 }

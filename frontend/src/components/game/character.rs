@@ -26,20 +26,26 @@ pub fn CharacterPortrait(
 
     view! {
         <div class="flex-1 h-full relative">
-            <style>"
+            <style>
+                "
                 .just_hurt_effect {
-                    box-shadow: inset 0 0 64px rgba(192, 0, 0, 1.0);
+                 box-shadow: inset 0 0 64px rgba(192, 0, 0, 1.0);
                 }
-            "</style>
+                "
+            </style>
             <img
-                src={format!("./assets/{}",image_asset)}
+                src=format!("./assets/{}", image_asset)
                 alt=character_name
-                class=move || format!("border-8 border-double border-stone-500 transition object-cover aspect-square duration-1000 {}", is_dead_img_effect())
+                class=move || {
+                    format!(
+                        "border-8 border-double border-stone-500 transition object-cover aspect-square duration-1000 {}",
+                        is_dead_img_effect(),
+                    )
+                }
             />
-            <div
-                class=move || format!("absolute inset-0 pointer-events-none  {}",just_hurt_class())
-            >
-            </div>
+            <div class=move || {
+                format!("absolute inset-0 pointer-events-none  {}", just_hurt_class())
+            }></div>
         </div>
     }
 }

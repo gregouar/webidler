@@ -26,42 +26,52 @@ pub fn MonstersGrid() -> impl IntoView {
     // TODO: double buffering to allow in and out at the same time
     view! {
         <div class="">
-            <div class="w-full h-16 bg-[url(./assets/worlds/forest_header.webp)] bg-center bg-repeat-x ">
-            </div>
+            <div class="w-full h-16 bg-[url(./assets/worlds/forest_header.webp)] bg-center bg-repeat-x "></div>
             <div class="grid grid-cols-3 grid-rows-2 mt-2 mb-2 gap-2 grid-flow-col items-center h-full overflow-hidden">
-                <style>"
+                <style>
+                    "
                     @keyframes monster-fade-in {
-                        0% { transform: translateX(100%); opacity: 0; }
-                        65% { transform: translateX(0%); opacity: 1; }
-                        80% { transform: translateX(5%); }
-                        100% { transform: translateX(0%); }
+                     0% { transform: translateX(100%); opacity: 0; }
+                     65% { transform: translateX(0%); opacity: 1; }
+                     80% { transform: translateX(5%); }
+                     100% { transform: translateX(0%); }
                     }
                     
                     @keyframes monster-fade-out {
-                        from { opacity: 1; transform: translateY(0%); }
-                        to { opacity: 0; transform: translateY(100%); }
+                     from { opacity: 1; transform: translateY(0%); }
+                     to { opacity: 0; transform: translateY(100%); }
                     }
-                "</style>
+                    "
+                </style>
                 <For
                     each=move || game_context.monster_prototypes.get().into_iter().enumerate()
                     // We need a unique key to replace old elements
-                    key=move |(index,_)| (game_context.monster_wave.get(), *index)
+                    key=move |(index, _)| (game_context.monster_wave.get(), *index)
                     children=move |(index, prototype)| {
-                        let animation_delay = format!("animation-delay: {}s;", rand::rng().random_range(0.0..=0.2f32));
+                        let animation_delay = format!(
+                            "animation-delay: {}s;",
+                            rand::rng().random_range(0.0..=0.2f32),
+                        );
                         view! {
-                            <div
-                                style=move|| if all_monsters_dead.get()
-                                    {format!("animation: monster-fade-out 1s ease-in; animation-fill-mode: both;")}
-                                    else {format!("animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {}",animation_delay)}
-                            >
+                            <div style=move || {
+                                if all_monsters_dead.get() {
+                                    format!(
+                                        "animation: monster-fade-out 1s ease-in; animation-fill-mode: both;",
+                                    )
+                                } else {
+                                    format!(
+                                        "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {}",
+                                        animation_delay,
+                                    )
+                                }
+                            }>
                                 <MonsterCard prototype=prototype index=index />
                             </div>
                         }
                     }
                 />
             </div>
-            <div class="w-full h-16 bg-[url(./assets/worlds/forest_footer.webp)] bg-center bg-repeat-x ">
-            </div>
+            <div class="w-full h-16 bg-[url(./assets/worlds/forest_footer.webp)] bg-center bg-repeat-x "></div>
         </div>
     }
 }
@@ -108,8 +118,11 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
         <div class="grid grid-cols-4 w-full bg-zinc-800 rounded-md gap-2 p-2">
             <div class="flex flex-col gap-2 col-span-3">
                 <HorizontalProgressBar
-                    class:h-2 class:sm:h-4 bar_color="bg-gradient-to-b from-red-500 to-red-700"
-                    value=health_percent text=prototype.character_prototype.name.clone()
+                    class:h-2
+                    class:sm:h-4
+                    bar_color="bg-gradient-to-b from-red-500 to-red-700"
+                    value=health_percent
+                    text=prototype.character_prototype.name.clone()
                 />
                 <CharacterPortrait
                     image_asset=prototype.character_prototype.portrait.clone()
@@ -120,9 +133,16 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
             </div>
             <div class="flex flex-col justify-evenly w-full min-w-16">
                 <For
-                    each=move || prototype.character_prototype.skill_prototypes.clone().into_iter().enumerate()
-                    key=|(i,_)|  *i
-                    let((i,p))
+                    each=move || {
+                        prototype
+                            .character_prototype
+                            .skill_prototypes
+                            .clone()
+                            .into_iter()
+                            .enumerate()
+                    }
+                    key=|(i, _)| *i
+                    let((i, p))
                 >
                     <MonsterSkill prototype=p index=i monster_index=index />
                 </For>
@@ -178,12 +198,14 @@ fn MonsterSkill(prototype: SkillPrototype, index: usize, monster_index: usize) -
 
     view! {
         <CircularProgressBar
-            bar_width=4 bar_color="text-amber-700"
+            bar_width=4
+            bar_color="text-amber-700"
             value=skill_cooldown
             reset=just_triggered
         >
             <img
-                src={format!("./assets/{}",prototype.icon.clone())} alt=prototype.name
+                src=format!("./assets/{}", prototype.icon.clone())
+                alt=prototype.name
                 class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
             />
         </CircularProgressBar>

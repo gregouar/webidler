@@ -53,34 +53,55 @@ pub fn PlayerCard() -> impl IntoView {
         Signal::derive(move || game_context.player_state.read().character_state.just_hurt);
 
     view! {
-    <div class="flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full">
-        <div>
-            <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
-                {player_name}
-            </p>
-        </div>
+        <div class="flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full">
+            <div>
+                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">{player_name}</p>
+            </div>
 
-        <div class="flex gap-2">
-            <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-red-500 to-red-700" value=health_percent />
-            <CharacterPortrait
-                image_asset=game_context.player_prototype.read().character_prototype.portrait.clone()
-                character_name="player".to_string()
-                just_hurt=just_hurt
-                is_dead=is_dead
-            />
-            <VerticalProgressBar class:w-3 class:md:w-6 bar_color="bg-gradient-to-b from-blue-500 to-blue-700" value=mana_percent />
-        </div>
+            <div class="flex gap-2">
+                <VerticalProgressBar
+                    class:w-3
+                    class:md:w-6
+                    bar_color="bg-gradient-to-b from-red-500 to-red-700"
+                    value=health_percent
+                />
+                <CharacterPortrait
+                    image_asset=game_context
+                        .player_prototype
+                        .read()
+                        .character_prototype
+                        .portrait
+                        .clone()
+                    character_name="player".to_string()
+                    just_hurt=just_hurt
+                    is_dead=is_dead
+                />
+                <VerticalProgressBar
+                    class:w-3
+                    class:md:w-6
+                    bar_color="bg-gradient-to-b from-blue-500 to-blue-700"
+                    value=mana_percent
+                />
+            </div>
 
-        <div class="grid grid-cols-4 gap-2">
-            <For
-                each=move || game_context.player_prototype.get().character_prototype.skill_prototypes.into_iter().enumerate()
-                key=|(i,_)|  *i
-                let((i,p))
-            >
-                <PlayerSkill prototype=p index=i />
-            </For>
+            <div class="grid grid-cols-4 gap-2">
+                <For
+                    each=move || {
+                        game_context
+                            .player_prototype
+                            .get()
+                            .character_prototype
+                            .skill_prototypes
+                            .into_iter()
+                            .enumerate()
+                    }
+                    key=|(i, _)| *i
+                    let((i, p))
+                >
+                    <PlayerSkill prototype=p index=i />
+                </For>
+            </div>
         </div>
-    </div>
     }
 }
 
@@ -127,13 +148,12 @@ fn PlayerSkill(prototype: SkillPrototype, index: usize) -> impl IntoView {
                 reset=just_triggered
             >
                 <img
-                    src={format!("./assets/{}",prototype.icon.clone())} alt=prototype.name
+                    src=format!("./assets/{}", prototype.icon.clone())
+                    alt=prototype.name
                     class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
                 />
             </CircularProgressBar>
-            <MainMenuButton>
-                "auto"
-            </MainMenuButton>
+            <MainMenuButton>"auto"</MainMenuButton>
         </div>
     }
 }
