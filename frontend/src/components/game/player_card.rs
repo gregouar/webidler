@@ -19,15 +19,6 @@ use super::GameContext;
 pub fn PlayerCard() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let player_name = move || {
-        game_context
-            .player_prototype
-            .read()
-            .character_prototype
-            .name
-            .clone()
-    };
-
     let health_percent = Signal::derive(move || {
         let max_health = game_context
             .player_prototype
@@ -59,10 +50,7 @@ pub fn PlayerCard() -> impl IntoView {
     view! {
         <div class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-md ring-1 ring-zinc-950">
             <div>
-                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
-                    <span class="font-bold">{player_name}</span>
-                    " — Level: 1"
-                </p>
+                <PlayerName />
             </div>
 
             <div class="flex flex-col gap-2">
@@ -118,6 +106,27 @@ pub fn PlayerCard() -> impl IntoView {
                 </For>
             </div>
         </div>
+    }
+}
+
+#[component]
+pub fn PlayerName() -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
+    let player_name = move || {
+        game_context
+            .player_prototype
+            .read()
+            .character_prototype
+            .name
+            .clone()
+    };
+
+    view! {
+        <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
+            <span class="font-bold">{player_name}</span>
+            " — Level: 1"
+        </p>
     }
 }
 

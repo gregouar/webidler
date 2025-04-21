@@ -43,13 +43,13 @@ pub fn GameInstance() -> impl IntoView {
     // let open_inventory = Signal::derive(move || game_context.open_inventory.get());
 
     view! {
-        <main class="my-0 mx-auto w-full text-center overflow-x-hidden">
+        <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <Show
                 when=move || game_context.started.get()
                 fallback=move || view! { <p>"Connecting..."</p> }
             >
                 <HeaderMenu />
-                <div class="relative h-full">
+                <div class="relative flex-1">
                     <BattleScene />
                     <Inventory open=game_context.open_inventory />
                 </div>

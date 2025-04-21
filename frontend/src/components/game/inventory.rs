@@ -1,94 +1,108 @@
-use std::time::Duration;
-
-use leptos::ev::KeyboardEvent;
 use leptos::html::*;
 use leptos::prelude::*;
 
-use super::player_card::PlayerCard;
+use crate::assets::img_asset;
+use crate::components::ui::tooltip::Tooltip;
+
+use super::menu_panel::MenuPanel;
+use super::player_card::PlayerName;
+
+// TODO: Move
+#[derive(Clone, Debug)]
+pub struct Item {
+    name: String,
+    description: String,
+    icon: String,
+}
+
+#[derive(Clone, Debug)]
+struct InventoryContext {
+    hovered_item: RwSignal<Option<Item>>,
+}
 
 #[component]
 pub fn Inventory(open: RwSignal<bool>) -> impl IntoView {
-    let panel_ref = NodeRef::<Div>::new();
-
-    // Focus the panel when it opens
-    Effect::new(move |_| {
-        if open.get() {
-            if let Some(el) = panel_ref.get_untracked() {
-                _ = el.focus(); // Set focus on the panel
-            }
-        }
-    });
-
-    // Handle Escape key
-    let handle_key = move |e: KeyboardEvent| {
-        if e.key() == "Escape" {
-            open.set(false);
-        }
+    let inventory_context = InventoryContext {
+        hovered_item: RwSignal::new(None),
     };
+    provide_context(inventory_context.clone());
 
-    let (is_visible, set_is_visible) = signal(false);
-    Effect::new(move |_| {
-        if open.get() {
-            set_is_visible.set(true);
-        } else {
-            set_timeout(
-                move || set_is_visible.set(open.get()),
-                Duration::from_millis(300),
-            );
-        }
+    let show_tooltip = Signal::derive({
+        let inventory_context = inventory_context.clone();
+        move || inventory_context.hovered_item.get().is_some()
     });
 
     view! {
-        <style>
-            "@keyframes dropDown {
-                from {
-                    transform: translateY(-100%);
-                }
-                to {
-                    transform: translateY(0);
-                }
-            }" "@keyframes pullUp {
-            from {
-            transform: translateY(0);
-            }
-            to {
-            transform: translateY(-100%);
-            }
-            }"
-        </style>
-        <Show when=move || is_visible.get()>
-            <div
-                class="absolute h-full inset-0 bg-black bg-opacity-50 z-40"
-                on:click=move |_| open.set(false)
-                on:keydown=handle_key
-                // allow it to receive keyboard events
-                tabindex="0"
-            >
-                <div
-                    class="w-full grid grid-cols-3 justify-items-stretch flex items-start gap-4 p-4 transition-all duration-300 transform translate-y-0"
-                    style=move || {
-                        if open.get() {
-                            "animation: dropDown 0.3s ease-out forwards;"
-                        } else {
-                            "animation: pullUp 0.3s ease-out forwards;"
-                        }
-                    }
-                    // prevent background click from closing it
-                    on:click=|e| e.stop_propagation()
-                >
-                    <PlayerCard class:col-span-1 class:justify-self-end />
-                    <ItemsGrid class:col-span-2 class:justify-self-start />
-                </div>
+        <Tooltip show=show_tooltip>
+            {move || {
+                inventory_context
+                    .hovered_item
+                    .get()
+                    .map(|item| {
+                        view! { <ItemTooltip item=item /> }
+                    })
+            }}
+        </Tooltip>
+        <MenuPanel open=open>
+            <EquippedItems class:col-span-1 class:justify-self-end />
+            <ItemsGrid class:col-span-2 class:justify-self-start />
+        </MenuPanel>
+    }
+}
+
+#[component]
+pub fn EquippedItems() -> impl IntoView {
+    view! {
+        <div class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-md ring-1 ring-zinc-950">
+            <div>
+                <PlayerName />
             </div>
-        </Show>
+            <div class="grid grid-rows-3 grid-cols-5">
+                <ItemCard item=Item {
+                    name: "Shortsword".to_string(),
+                    description: "Fasty Slicy".to_string(),
+                    icon: "items/shortsword.webp".to_string(),
+                } />
+            </div>
+        </div>
     }
 }
 
 #[component]
 fn ItemsGrid() -> impl IntoView {
     view! {
-        <div class="bg-zinc-800 rounded-md h-full w-full shadow-lg ring-1 ring-zinc-950 overflow-hidden">
-            "Some items"
+        <div class="bg-zinc-800 rounded-md h-full w-full shadow-lg ring-1 ring-zinc-950">
+            <div class="grid grid-rows-3 grid-cols-10 gap-2 p-4">
+                <ItemCard item=Item {
+                    name: "Battleaxe".to_string(),
+                    description: "A shiny thing".to_string(),
+                    icon: "items/battleaxe.webp".to_string(),
+                } />
+            </div>
+        </div>
+    }
+}
+#[component]
+fn ItemCard(item: Item) -> impl IntoView {
+    let inventory_context = expect_context::<InventoryContext>();
+    view! {
+        <div
+            class="relative group"
+            on:mouseenter=move |_| { inventory_context.hovered_item.set(Some(item.clone())) }
+            on:mouseleave=move |_| inventory_context.hovered_item.set(None)
+        >
+            <img src=img_asset(&item.icon) class="border-4 border-stone-500" />
+        </div>
+    }
+}
+
+#[component]
+fn ItemTooltip(item: Item) -> impl IntoView {
+    view! {
+        <div>
+            <strong>{item.name}</strong>
+            <br />
+            {item.description}
         </div>
     }
 }

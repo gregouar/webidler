@@ -14,7 +14,7 @@ pub fn HeaderMenu() -> impl IntoView {
 
     let audio_ref = NodeRef::<Audio>::new();
     view! {
-        <div class="relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md">
+        <div class="relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full">
                 <div>
                     <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">"Gold: 0"</p>
