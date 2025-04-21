@@ -35,7 +35,7 @@ pub fn CharacterPortrait(
                 }
             "
         </style>
-        <div class="flex-1 h-full relative">
+        <div class="flex-1 h-full w-full relative">
             <img
                 src=img_asset(&image_uri)
                 alt=character_name

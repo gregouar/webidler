@@ -57,7 +57,7 @@ pub fn PlayerCard() -> impl IntoView {
         Signal::derive(move || game_context.player_state.read().character_state.just_hurt);
 
     view! {
-        <div class="flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-lg">
+        <div class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-lg">
             <div>
                 <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
                     <span class="font-bold">{player_name}</span>

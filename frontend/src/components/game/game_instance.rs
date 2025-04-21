@@ -41,13 +41,13 @@ pub fn GameInstance() -> impl IntoView {
     });
 
     view! {
-        <main class="my-0 mx-auto text-center overflow-x-hidden">
+        <main class="my-0 mx-auto w-full text-center overflow-x-hidden">
             <Show
                 when=move || game_context.started.get()
                 fallback=move || view! { <p>"Connecting..."</p> }
             >
                 <HeaderMenu />
-                <div class="grid grid-cols-3 justify-items-stretch flex items-start gap-4 m-4 ">
+                <div class="w-full grid grid-cols-3 justify-items-stretch flex items-start gap-4 m-4 ">
                     <PlayerCard class:col-span-1 class:justify-self-end />
                     <MonstersGrid class:col-span-2 class:justify-self-start />
                 </div>

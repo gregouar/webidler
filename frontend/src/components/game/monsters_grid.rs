@@ -29,7 +29,7 @@ pub fn MonstersGrid() -> impl IntoView {
 
     // TODO: double buffering to allow in and out at the same time
     view! {
-        <div class="shadow-lg rounded-md overflow-hidden">
+        <div class="shadow-lg rounded-md overflow-hidden  w-full">
             <div class=format!(
                 "{header_background} relative overflow-hidden w-full h-16 bg-center bg-repeat-x flex items-center justify-center",
             )>
