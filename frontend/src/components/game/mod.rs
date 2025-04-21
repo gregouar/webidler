@@ -1,6 +1,8 @@
+pub mod battle_scene;
 pub mod character;
 pub mod game_instance;
 pub mod header_menu;
+pub mod inventory;
 pub mod monsters_grid;
 pub mod player_card;
 

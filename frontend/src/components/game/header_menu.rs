@@ -3,14 +3,18 @@ use leptos::prelude::*;
 
 use crate::components::ui::buttons::MenuButton;
 
+use super::GameContext;
+
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
     let navigate = leptos_router::hooks::use_navigate();
     let abandon_quest = move |_| navigate("/", Default::default());
 
     let audio_ref = NodeRef::<Audio>::new();
     view! {
-        <div class="flex justify-between items-center p-2 bg-zinc-800 shadow-md">
+        <div class="relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md">
             <div class="flex justify-around w-full">
                 <div>
                     <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">"Gold: 0"</p>
@@ -33,7 +37,9 @@ pub fn HeaderMenu() -> impl IntoView {
                     loop
                     controls
                 ></audio>
-                <MenuButton>"Inventory"</MenuButton>
+                <MenuButton on:click=move |_| {
+                    game_context.open_inventory.set(!game_context.open_inventory.get())
+                }>"Inventory"</MenuButton>
                 <MenuButton>"Passive Skills"</MenuButton>
                 <MenuButton>"Statistics"</MenuButton>
                 <MenuButton on:click=abandon_quest>"Abandon Quest"</MenuButton>

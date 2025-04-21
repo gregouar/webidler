@@ -6,9 +6,9 @@ use shared::messages::server::ServerMessage;
 
 use crate::components::websocket::WebsocketContext;
 
+use super::battle_scene::BattleScene;
 use super::header_menu::HeaderMenu;
-use super::monsters_grid::MonstersGrid;
-use super::player_card::PlayerCard;
+use super::inventory::Inventory;
 use super::GameContext;
 
 #[component]
@@ -40,6 +40,8 @@ pub fn GameInstance() -> impl IntoView {
         }
     });
 
+    // let open_inventory = Signal::derive(move || game_context.open_inventory.get());
+
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden">
             <Show
@@ -47,9 +49,9 @@ pub fn GameInstance() -> impl IntoView {
                 fallback=move || view! { <p>"Connecting..."</p> }
             >
                 <HeaderMenu />
-                <div class="w-full grid grid-cols-3 justify-items-stretch flex items-start gap-4 p-4 ">
-                    <PlayerCard class:col-span-1 class:justify-self-end />
-                    <MonstersGrid class:col-span-2 class:justify-self-start />
+                <div class="relative h-full">
+                    <BattleScene />
+                    <Inventory open=game_context.open_inventory />
                 </div>
             </Show>
         </main>

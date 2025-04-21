@@ -15,6 +15,9 @@ pub struct GameContext {
     pub monster_wave: RwSignal<usize>, // Used to generate unique key in list
     pub monster_prototypes: RwSignal<Vec<MonsterPrototype>>,
     pub monster_states: RwSignal<Vec<MonsterState>>,
+
+    // Is this really the correct place?
+    pub open_inventory: RwSignal<bool>,
 }
 
 impl GameContext {
@@ -26,6 +29,7 @@ impl GameContext {
             monster_wave: RwSignal::new(0),
             monster_prototypes: RwSignal::new(Vec::new()),
             monster_states: RwSignal::new(Vec::new()),
+            open_inventory: RwSignal::new(false),
         }
     }
 }
