@@ -16,17 +16,14 @@ pub fn HeaderMenu() -> impl IntoView {
                     <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">"Gold: 0"</p>
                 </div>
                 <div>
+                    <p class="text-shadow-md shadow-gray-950 text-xl">"Magic Essence: 0"</p>
+                </div>
+                <div>
                     <p class="text-shadow-md shadow-gray-950 text-xl">"Gems: 0"</p>
                 </div>
                 <div>
                     <p class="text-shadow-md shadow-gray-950 text-xl">"Power Shards: 0"</p>
                 </div>
-            // <div>
-            // <p class="text-shadow-md shadow-gray-950 text-xl">"Player Level: 1"</p>
-            // </div>
-            // <div>
-            // <p class="text-shadow-md shadow-gray-950 text-xl">"Area Level: 1"</p>
-            // </div>
             </div>
             <div class="flex space-x-2  w-full">
                 <audio

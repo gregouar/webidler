@@ -10,8 +10,8 @@ use axum::{
 use axum_extra::TypedHeader;
 use tokio::{task::yield_now, time::timeout};
 
-use std::ops::ControlFlow;
 use std::{net::SocketAddr, time::Duration};
+use std::{ops::ControlFlow, vec};
 
 use shared::{
     data::{CharacterPrototype, PlayerPrototype, SkillPrototype},
@@ -133,5 +133,6 @@ async fn handle_connect(
         },
         max_mana: 100.0,
         mana_regen: 3.0,
+        auto_skills: vec![true, false, false],
     })
 }

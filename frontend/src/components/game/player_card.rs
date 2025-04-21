@@ -57,7 +57,7 @@ pub fn PlayerCard() -> impl IntoView {
         Signal::derive(move || game_context.player_state.read().character_state.just_hurt);
 
     view! {
-        <div class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-lg">
+        <div class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-md ring-1 ring-zinc-950">
             <div>
                 <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
                     <span class="font-bold">{player_name}</span>
@@ -142,7 +142,12 @@ fn PlayerSkill(prototype: SkillPrototype, index: usize) -> impl IntoView {
         }
     });
 
-    // TODO: Skill component
+    let initial_auto_use = *game_context
+        .player_prototype
+        .get()
+        .auto_skills
+        .get(index)
+        .unwrap_or(&false);
 
     let just_triggered = Signal::derive(move || {
         game_context
@@ -186,16 +191,17 @@ fn PlayerSkill(prototype: SkillPrototype, index: usize) -> impl IntoView {
                 value=skill_cooldown
                 reset=just_triggered
             >
-                <button class="active:brightness-50  active:sepia" on:click=use_skill>
+                <button class="active:brightness-50 active:sepia p-1" on:click=use_skill>
                     <img
                         src=img_asset(&prototype.icon)
                         alt=prototype.name
-                        class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
+                        class="w-full h-full flex-no-shrink fill-current
+                        drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
                     />
                 </button>
             </CircularProgressBar>
             <div class="flex justify-center">
-                <Toggle toggle_callback=set_auto_skill />
+                <Toggle toggle_callback=set_auto_skill initial=initial_auto_use />
             </div>
         </div>
     }

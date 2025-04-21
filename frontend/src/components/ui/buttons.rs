@@ -45,7 +45,7 @@ pub fn Toggle(
                 rounded-full 
                 border border-neutral-950 
                 shadow-md 
-                peer-checked:bg-gradient-to-t peer-checked:from-amber-700 peer-checked:to-amber-500 
+                peer-checked:bg-gradient-to-t peer-checked:from-amber-800 peer-checked:to-amber-600 
                 transition-colors duration-300
                 "></div>
                 <div class="

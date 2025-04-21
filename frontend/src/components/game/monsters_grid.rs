@@ -130,7 +130,7 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
     });
 
     view! {
-        <div class="grid grid-cols-4 w-full bg-zinc-800 shadow-md rounded-md gap-2 p-2">
+        <div class="grid grid-cols-4 w-full bg-zinc-800 shadow-md rounded-md gap-2 p-2 ring-1 ring-zinc-950">
             <div class="flex flex-col gap-2 col-span-3">
                 <HorizontalProgressBar
                     class:h-2
@@ -221,7 +221,8 @@ fn MonsterSkill(prototype: SkillPrototype, index: usize, monster_index: usize) -
             <img
                 src=img_asset(&prototype.icon)
                 alt=prototype.name
-                class="invert drop-shadow-lg w-full h-full flex-no-shrink fill-current"
+                class="w-full h-full flex-no-shrink fill-current
+                drop-shadow-[0px_2px_oklch(13% 0.028 261.692)] invert"
             />
         </CircularProgressBar>
     }

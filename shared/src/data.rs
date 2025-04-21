@@ -64,6 +64,8 @@ pub struct PlayerPrototype {
 
     pub max_mana: f64,
     pub mana_regen: f64,
+
+    pub auto_skills: Vec<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

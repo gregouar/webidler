@@ -138,6 +138,10 @@ pub fn CircularProgressBar(
                             <path d="M0-81A81 81 0 0 1 0 81A81 81 0 0 1 0-81z
                             M0-63A63 63 0 0 1 0 63A63 63 0 0 1 0-63z" />
                         </clipPath>
+                        <radialGradient id="inner-gradient" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="oklch(44.4% 0.011 73.639)" />
+                            <stop offset="100%" stop-color="oklch(14.1% 0.005 285.823)" />
+                        </radialGradient>
                     </defs>
 
                     <g transform="translate(90,90)">
@@ -160,6 +164,7 @@ pub fn CircularProgressBar(
                                 filter="url(#blur)"
                             />
                         </g>
+                        <circle cx="0" cy="0" r="63" fill="url(#inner-gradient)" />
                         <path
                             class=move || {
                                 format!("main-arc stroke-current {} {}", transition(), bar_color)

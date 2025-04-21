@@ -47,7 +47,7 @@ pub fn GameInstance() -> impl IntoView {
                 fallback=move || view! { <p>"Connecting..."</p> }
             >
                 <HeaderMenu />
-                <div class="w-full grid grid-cols-3 justify-items-stretch flex items-start gap-4 m-4 ">
+                <div class="w-full grid grid-cols-3 justify-items-stretch flex items-start gap-4 p-4 ">
                     <PlayerCard class:col-span-1 class:justify-self-end />
                     <MonstersGrid class:col-span-2 class:justify-self-start />
                 </div>

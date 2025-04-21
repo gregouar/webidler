@@ -29,7 +29,7 @@ pub struct InitGameMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SyncGameStateMessage {
     pub player_state: PlayerState,
-    // Monsters list is only updated when monsters change
+    // monster_prototypes list is only updated when monsters change
     pub monster_prototypes: Option<Vec<MonsterPrototype>>,
     pub monster_states: Vec<MonsterState>,
 }
