@@ -10,6 +10,7 @@ RUN strip /app/target/release/backend -o /backend
 FROM debian:bullseye-slim
 # COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.5.0 /lambda-adapter /opt/extensions/lambda-adapter
 COPY --from=builder /backend /
+COPY ./data /app/data
 
 EXPOSE 4200
 

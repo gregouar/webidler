@@ -1,0 +1,15 @@
+{
+    "name": "Batty",
+    "portrait": "bat2.webp",
+    "power_factor": 1.0,
+    "max_health": 10,
+    "skill_specs": [
+        {
+            "name": "Bite",
+            "icon": "bite.svg",
+            "cooldown": 2.0,
+            "min_damages": 1.0,
+            "max_damages": 3.0
+        }
+    ]
+}

@@ -1,23 +1,30 @@
 use rand::Rng;
 
 use shared::data::{
-    CharacterPrototype, CharacterState, MonsterPrototype, MonsterState, PlayerPrototype,
-    PlayerState, SkillPrototype, SkillState,
+    CharacterSpecs, CharacterState, MonsterSpecs, MonsterState, PlayerSpecs, PlayerState,
+    SkillSpecs, SkillState, WorldSpecs, WorldState,
 };
 
-pub trait DataInit<Prototype> {
-    fn init(prototype: &Prototype) -> Self;
+pub trait DataInit<Specs> {
+    fn init(specs: &Specs) -> Self;
 }
 
-impl DataInit<CharacterPrototype> for CharacterState {
-    fn init(prototype: &CharacterPrototype) -> Self {
+impl DataInit<WorldSpecs> for WorldState {
+    fn init(specs: &WorldSpecs) -> Self {
+        WorldState {
+            area_level: specs.starting_level,
+        }
+    }
+}
+
+impl DataInit<CharacterSpecs> for CharacterState {
+    fn init(specs: &CharacterSpecs) -> Self {
         CharacterState {
-            // identifier: prototype.identifier,
             is_alive: true,
-            health: prototype.max_health,
+            health: specs.max_health,
             just_hurt: false,
-            skill_states: prototype
-                .skill_prototypes
+            skill_states: specs
+                .skill_specs
                 .iter()
                 .map(|p| SkillState::init(p))
                 .collect(),
@@ -25,28 +32,28 @@ impl DataInit<CharacterPrototype> for CharacterState {
     }
 }
 
-impl DataInit<PlayerPrototype> for PlayerState {
-    fn init(prototype: &PlayerPrototype) -> Self {
+impl DataInit<PlayerSpecs> for PlayerState {
+    fn init(specs: &PlayerSpecs) -> Self {
         PlayerState {
-            character_state: CharacterState::init(&prototype.character_prototype),
-            mana: prototype.max_mana,
+            character_state: CharacterState::init(&specs.character_specs),
+            mana: specs.max_mana,
         }
     }
 }
 
-impl DataInit<MonsterPrototype> for MonsterState {
-    fn init(prototype: &MonsterPrototype) -> Self {
+impl DataInit<MonsterSpecs> for MonsterState {
+    fn init(specs: &MonsterSpecs) -> Self {
         let mut rng = rand::rng();
         MonsterState {
-            character_state: CharacterState::init(&prototype.character_prototype),
-            initiative: rng.random_range(0.0..prototype.max_initiative),
+            character_state: CharacterState::init(&specs.character_specs),
+            initiative: rng.random_range(0.0..specs.max_initiative),
         }
     }
 }
 
-impl DataInit<SkillPrototype> for SkillState {
-    fn init(prototype: &SkillPrototype) -> Self {
-        let _ = prototype;
+impl DataInit<SkillSpecs> for SkillState {
+    fn init(specs: &SkillSpecs) -> Self {
+        let _ = specs;
         Self {
             elapsed_cooldown: 0.0,
             is_ready: false,

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::{MonsterPrototype, MonsterState, PlayerPrototype, PlayerState};
+use crate::data::{MonsterSpecs, MonsterState, PlayerSpecs, PlayerState, WorldSpecs, WorldState};
 
 use super::macros::impl_into_message;
 
@@ -21,15 +21,18 @@ pub struct ConnectMessage {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InitGameMessage {
-    pub player_prototype: PlayerPrototype,
+    pub world_specs: WorldSpecs,
+    pub world_state: WorldState,
+    pub player_specs: PlayerSpecs,
     pub player_state: PlayerState,
 }
 
 /// Message to be sent every tick to sync current state of the game with clients
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SyncGameStateMessage {
+    pub world_state: WorldState,
     pub player_state: PlayerState,
-    // monster_prototypes list is only updated when monsters change
-    pub monster_prototypes: Option<Vec<MonsterPrototype>>,
+    // monster_specs list is only updated when monsters change
+    pub monster_specs: Option<Vec<MonsterSpecs>>,
     pub monster_states: Vec<MonsterState>,
 }

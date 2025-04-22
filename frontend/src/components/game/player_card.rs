@@ -1,7 +1,7 @@
 use leptos::html::*;
 use leptos::prelude::*;
 
-use shared::data::SkillPrototype;
+use shared::data::SkillSpecs;
 use shared::messages::client::SetAutoSkillMessage;
 use shared::messages::client::UseSkillMessage;
 
@@ -21,9 +21,9 @@ pub fn PlayerCard() -> impl IntoView {
 
     let health_percent = Signal::derive(move || {
         let max_health = game_context
-            .player_prototype
+            .player_specs
             .read()
-            .character_prototype
+            .character_specs
             .max_health;
         if max_health > 0.0 {
             (game_context.player_state.read().character_state.health / max_health * 100.0) as f32
@@ -33,7 +33,7 @@ pub fn PlayerCard() -> impl IntoView {
     });
 
     let mana_percent = Signal::derive(move || {
-        let max_mana = game_context.player_prototype.read().max_mana;
+        let max_mana = game_context.player_specs.read().max_mana;
         if max_mana > 0.0 {
             (game_context.player_state.read().mana / max_mana * 100.0) as f32
         } else {
@@ -63,9 +63,9 @@ pub fn PlayerCard() -> impl IntoView {
                     />
                     <CharacterPortrait
                         image_uri=game_context
-                            .player_prototype
+                            .player_specs
                             .read()
-                            .character_prototype
+                            .character_specs
                             .portrait
                             .clone()
                         character_name="player".to_string()
@@ -92,17 +92,17 @@ pub fn PlayerCard() -> impl IntoView {
                 <For
                     each=move || {
                         game_context
-                            .player_prototype
+                            .player_specs
                             .get()
-                            .character_prototype
-                            .skill_prototypes
+                            .character_specs
+                            .skill_specs
                             .into_iter()
                             .enumerate()
                     }
                     key=|(i, _)| *i
                     let((i, p))
                 >
-                    <PlayerSkill prototype=p index=i />
+                    <PlayerSkill specs=p index=i />
                 </For>
             </div>
         </div>
@@ -115,9 +115,9 @@ pub fn PlayerName() -> impl IntoView {
 
     let player_name = move || {
         game_context
-            .player_prototype
+            .player_specs
             .read()
-            .character_prototype
+            .character_specs
             .name
             .clone()
     };
@@ -131,11 +131,11 @@ pub fn PlayerName() -> impl IntoView {
 }
 
 #[component]
-fn PlayerSkill(prototype: SkillPrototype, index: usize) -> impl IntoView {
+fn PlayerSkill(specs: SkillSpecs, index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let skill_cooldown = Signal::derive(move || {
-        if prototype.cooldown > 0.0 {
+        if specs.cooldown > 0.0 {
             (game_context
                 .player_state
                 .read()
@@ -145,14 +145,14 @@ fn PlayerSkill(prototype: SkillPrototype, index: usize) -> impl IntoView {
                 .map(|x| x.elapsed_cooldown)
                 .unwrap_or_default()
                 * 100.0
-                / prototype.cooldown) as f32
+                / specs.cooldown) as f32
         } else {
             0.0
         }
     });
 
     let initial_auto_use = *game_context
-        .player_prototype
+        .player_specs
         .get()
         .auto_skills
         .get(index)
@@ -202,8 +202,8 @@ fn PlayerSkill(prototype: SkillPrototype, index: usize) -> impl IntoView {
             >
                 <button class="active:brightness-50 active:sepia p-1" on:click=use_skill>
                     <img
-                        src=img_asset(&prototype.icon)
-                        alt=prototype.name
+                        src=img_asset(&specs.icon)
+                        alt=specs.name
                         class="w-full h-full flex-no-shrink fill-current
                         drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
                     />

@@ -1,5 +1,5 @@
 use rand::Rng;
-use shared::data::{MonsterPrototype, MonsterState, PlayerPrototype, PlayerState};
+use shared::data::{MonsterSpecs, MonsterState, PlayerSpecs, PlayerState};
 
 use super::character_controller;
 
@@ -9,10 +9,10 @@ pub struct PlayerController {
 }
 
 impl PlayerController {
-    pub fn init(prototype: &PlayerPrototype) -> Self {
+    pub fn init(specs: &PlayerSpecs) -> Self {
         PlayerController {
-            auto_skills: prototype.auto_skills.clone(),
-            use_skills: Vec::with_capacity(prototype.character_prototype.skill_prototypes.len()),
+            auto_skills: specs.auto_skills.clone(),
+            use_skills: Vec::with_capacity(specs.character_specs.skill_specs.len()),
         }
     }
 
@@ -22,9 +22,9 @@ impl PlayerController {
 
     pub fn control_player(
         &mut self,
-        player_prototype: &PlayerPrototype,
+        player_specs: &PlayerSpecs,
         player_state: &mut PlayerState,
-        monsters: &mut Vec<(&mut MonsterState, &MonsterPrototype)>,
+        monsters: &mut Vec<(&mut MonsterState, &MonsterSpecs)>,
     ) {
         if !player_state.character_state.is_alive || monsters.is_empty() {
             return;
@@ -32,14 +32,14 @@ impl PlayerController {
 
         let mut rng = rand::rng();
 
-        for (i, (skill_prototype, skill_state)) in player_prototype
-            .character_prototype
-            .skill_prototypes
+        for (i, (skill_specs, skill_state)) in player_specs
+            .character_specs
+            .skill_specs
             .iter()
             .zip(player_state.character_state.skill_states.iter_mut())
             .enumerate()
         {
-            if !skill_state.is_ready || skill_prototype.mana_cost > player_state.mana {
+            if !skill_state.is_ready || skill_specs.mana_cost > player_state.mana {
                 continue;
             }
 
@@ -49,13 +49,13 @@ impl PlayerController {
 
             // TODO: depending on distance, choose target
             let j = rng.random_range(0..monsters.len());
-            if let Some((target_state, target_prototype)) = monsters.get_mut(j).as_deref_mut() {
-                player_state.mana -= skill_prototype.mana_cost;
+            if let Some((target_state, target_specs)) = monsters.get_mut(j).as_deref_mut() {
+                player_state.mana -= skill_specs.mana_cost;
                 character_controller::use_skill(
-                    skill_prototype,
+                    skill_specs,
                     skill_state,
                     &mut target_state.character_state,
-                    &target_prototype.character_prototype,
+                    &target_specs.character_specs,
                 );
             }
         }

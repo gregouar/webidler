@@ -10,8 +10,8 @@ use std::{
 use rand::Rng;
 use shared::{
     data::{
-        CharacterPrototype, MonsterPrototype, MonsterState, PlayerPrototype, PlayerState,
-        SkillPrototype,
+        CharacterSpecs, MonsterSpecs, MonsterState, PlayerSpecs, PlayerState, SkillSpecs,
+        WorldSpecs, WorldState,
     },
     messages::{
         client::ClientMessage,
@@ -20,7 +20,7 @@ use shared::{
 };
 
 use super::systems::{character_controller, monsters_controller, monsters_updater, player_updater};
-use super::{data::DataInit, systems::player_controller::PlayerController};
+use super::{data::DataInit, systems::player_controller::PlayerController, world::WorldBlueprint};
 
 use crate::websocket::WebSocketConnection;
 
@@ -31,13 +31,16 @@ const MONSTER_WAVE_PERIOD: Duration = Duration::from_secs(1);
 pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
     // todo: map infos, player, monsters, etc
-    player_prototype: PlayerPrototype,
+    world_blueprint: WorldBlueprint,
+    world_specs: WorldSpecs,
+    world_state: WorldState,
+    player_specs: PlayerSpecs,
     player_state: PlayerState,
     player_controller: PlayerController,
-    monster_prototypes: Vec<MonsterPrototype>,
+    monster_specs: Vec<MonsterSpecs>,
     monster_states: Vec<MonsterState>,
     monster_wave_delay: Instant,
-    need_to_sync_monster_prototypes: bool,
+    need_to_sync_monster_specs: bool,
 }
 
 // TODO: split the logic in multiple systems
@@ -45,17 +48,22 @@ pub struct GameInstance<'a> {
 impl<'a> GameInstance<'a> {
     pub fn new(
         client_conn: &'a mut WebSocketConnection,
-        player_prototype: PlayerPrototype,
+        player_specs: PlayerSpecs,
+        world_blueprint: WorldBlueprint,
     ) -> Self {
+        let world_specs = world_blueprint.schema.specs.clone();
         GameInstance::<'a> {
             client_conn,
-            player_state: PlayerState::init(&player_prototype),
-            player_controller: PlayerController::init(&player_prototype),
-            player_prototype,
-            monster_prototypes: Vec::new(),
+            world_blueprint: world_blueprint,
+            world_state: WorldState::init(&world_specs),
+            world_specs: world_specs,
+            player_state: PlayerState::init(&player_specs),
+            player_controller: PlayerController::init(&player_specs),
+            player_specs,
+            monster_specs: Vec::new(),
             monster_states: Vec::new(),
             monster_wave_delay: Instant::now(),
-            need_to_sync_monster_prototypes: false,
+            need_to_sync_monster_specs: false,
         }
     }
 
@@ -129,7 +137,9 @@ impl<'a> GameInstance<'a> {
         self.client_conn
             .send(
                 &InitGameMessage {
-                    player_prototype: self.player_prototype.clone(),
+                    world_specs: self.world_specs.clone(),
+                    world_state: self.world_state.clone(),
+                    player_specs: self.player_specs.clone(),
                     player_state: self.player_state.clone(),
                 }
                 .into(),
@@ -140,14 +150,14 @@ impl<'a> GameInstance<'a> {
     async fn generate_monsters_wave(&mut self) {
         let mut rng = rand::rng();
         let n = rng.random_range(1..=MAX_MONSTERS);
-        self.monster_prototypes = Vec::with_capacity(n);
+        self.monster_specs = Vec::with_capacity(n);
         self.monster_states = Vec::with_capacity(n);
         for _ in 1..=n {
             let monster_type = rng.random_range(0..2);
 
-            let prototype = match monster_type {
-                0 => MonsterPrototype {
-                    character_prototype: CharacterPrototype {
+            let specs = match monster_type {
+                0 => MonsterSpecs {
+                    character_specs: CharacterSpecs {
                         // identifier: i as u64,
                         name: String::from("Batty"),
                         portrait: match rng.random_range(0..2) {
@@ -156,7 +166,7 @@ impl<'a> GameInstance<'a> {
                         },
                         max_health: 10.0,
                         health_regen: 0.0,
-                        skill_prototypes: vec![SkillPrototype {
+                        skill_specs: vec![SkillSpecs {
                             name: String::from("Bite"),
                             icon: String::from("icons/bite.svg"), // TODO
                             cooldown: 3.0,
@@ -167,15 +177,15 @@ impl<'a> GameInstance<'a> {
                     },
                     max_initiative: 0.5,
                 },
-                _ => MonsterPrototype {
-                    character_prototype: CharacterPrototype {
+                _ => MonsterSpecs {
+                    character_specs: CharacterSpecs {
                         // identifier: i as u64,
                         name: String::from("Ratty"),
                         portrait: String::from("monsters/rat.webp"),
                         max_health: 20.0,
                         health_regen: 0.0,
-                        skill_prototypes: vec![
-                            SkillPrototype {
+                        skill_specs: vec![
+                            SkillSpecs {
                                 name: String::from("Vicious Bite"),
                                 icon: String::from("icons/bite.svg"),
                                 cooldown: 5.0,
@@ -183,7 +193,7 @@ impl<'a> GameInstance<'a> {
                                 min_damages: 2.0,
                                 max_damages: 8.0,
                             },
-                            SkillPrototype {
+                            SkillSpecs {
                                 name: String::from("Scratch"),
                                 icon: String::from("icons/claw.svg"),
                                 cooldown: 3.0,
@@ -196,10 +206,10 @@ impl<'a> GameInstance<'a> {
                     max_initiative: 1.0,
                 },
             };
-            self.monster_states.push(MonsterState::init(&prototype));
-            self.monster_prototypes.push(prototype);
+            self.monster_states.push(MonsterState::init(&specs));
+            self.monster_specs.push(specs);
         }
-        self.need_to_sync_monster_prototypes = true;
+        self.need_to_sync_monster_specs = true;
     }
 
     async fn reset_entities(&mut self) {
@@ -210,15 +220,15 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn control_entities(&mut self) {
-        let mut monsters_still_alive: Vec<(&mut MonsterState, &MonsterPrototype)> = self
+        let mut monsters_still_alive: Vec<(&mut MonsterState, &MonsterSpecs)> = self
             .monster_states
             .iter_mut()
-            .zip(self.monster_prototypes.iter())
+            .zip(self.monster_specs.iter())
             .filter(|(x, _)| x.character_state.is_alive)
             .collect();
 
         self.player_controller.control_player(
-            &self.player_prototype,
+            &self.player_specs,
             &mut self.player_state,
             &mut monsters_still_alive,
         );
@@ -232,7 +242,7 @@ impl<'a> GameInstance<'a> {
             self.monster_wave_delay = Instant::now();
             monsters_controller::control_monsters(
                 &mut monsters_still_alive,
-                &self.player_prototype,
+                &self.player_specs,
                 &mut self.player_state,
             );
         }
@@ -241,12 +251,12 @@ impl<'a> GameInstance<'a> {
     async fn update_entities(&mut self, elapsed_time: Duration) {
         player_updater::update_player_state(
             elapsed_time,
-            &self.player_prototype,
+            &self.player_specs,
             &mut self.player_state,
         );
         monsters_updater::update_monster_states(
             elapsed_time,
-            &self.monster_prototypes,
+            &self.monster_specs,
             &mut self.monster_states,
         );
     }
@@ -256,10 +266,11 @@ impl<'a> GameInstance<'a> {
         self.client_conn
             .send(
                 &SyncGameStateMessage {
+                    world_state: self.world_state.clone(),
                     player_state: self.player_state.clone(),
-                    monster_prototypes: if self.need_to_sync_monster_prototypes {
-                        self.need_to_sync_monster_prototypes = false;
-                        Some(self.monster_prototypes.clone())
+                    monster_specs: if self.need_to_sync_monster_specs {
+                        self.need_to_sync_monster_specs = false;
+                        Some(self.monster_specs.clone())
                     } else {
                         None
                     },

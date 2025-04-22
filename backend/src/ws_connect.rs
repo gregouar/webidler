@@ -14,14 +14,14 @@ use std::{net::SocketAddr, time::Duration};
 use std::{ops::ControlFlow, vec};
 
 use shared::{
-    data::{CharacterPrototype, PlayerPrototype, SkillPrototype},
+    data::{CharacterSpecs, PlayerSpecs, SkillSpecs},
     messages::{
         client::{ClientConnectMessage, ClientMessage},
         server::ConnectMessage,
     },
 };
 
-use crate::game::GameInstance;
+use crate::game::{world::WorldBlueprint, GameInstance};
 use crate::websocket::WebSocketConnection;
 
 const CLIENT_INACTIVITY_TIMEOUT: Duration = Duration::from_secs(60);
@@ -59,16 +59,22 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr) {
     tracing::debug!("client connected");
 
     tracing::debug!("starting the game...");
-    let mut game = GameInstance::new(&mut conn, player);
-    if let Err(e) = game.run().await {
-        tracing::error!("error running game: {e}");
+
+    match WorldBlueprint::load_from_file("./data/worlds/forest.json".into()).await {
+        Ok(world_blueprint) => {
+            let mut game = GameInstance::new(&mut conn, player, world_blueprint);
+            if let Err(e) = game.run().await {
+                tracing::error!("error running game: {e}");
+            }
+        }
+        Err(e) => tracing::error!("failed to load world: {e}"),
     }
 
     // returning from the handler closes the websocket connection
     tracing::info!("websocket context {who} destroyed");
 }
 
-async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<PlayerPrototype> {
+async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<PlayerSpecs> {
     loop {
         match conn.poll_receive() {
             ControlFlow::Continue(Some(ClientMessage::Connect(m))) => {
@@ -86,7 +92,7 @@ async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<PlayerProtot
 async fn handle_connect(
     conn: &mut WebSocketConnection,
     msg: ClientConnectMessage,
-) -> Result<PlayerPrototype> {
+) -> Result<PlayerSpecs> {
     // TODO: verify if user exist, is already playing, get basic data etc
     tracing::info!("Connect: {:?}", msg);
     conn.send(
@@ -97,15 +103,15 @@ async fn handle_connect(
         .into(),
     )
     .await?;
-    Ok(PlayerPrototype {
-        character_prototype: CharacterPrototype {
+    Ok(PlayerSpecs {
+        character_specs: CharacterSpecs {
             // identifier: 0,
             name: msg.bearer.clone(),
             portrait: String::from("adventurers/human_male_2.webp"),
             max_health: 100.0,
             health_regen: 1.0,
-            skill_prototypes: vec![
-                SkillPrototype {
+            skill_specs: vec![
+                SkillSpecs {
                     name: String::from("Weapon Attack"),
                     icon: String::from("icons/attack.svg"),
                     cooldown: 1.0,
@@ -113,7 +119,7 @@ async fn handle_connect(
                     min_damages: 3.0,
                     max_damages: 7.0,
                 },
-                SkillPrototype {
+                SkillSpecs {
                     name: String::from("Fireball"),
                     icon: String::from("icons/fireball2.svg"),
                     cooldown: 5.0,
@@ -121,7 +127,7 @@ async fn handle_connect(
                     min_damages: 10.0,
                     max_damages: 30.0,
                 },
-                SkillPrototype {
+                SkillSpecs {
                     name: String::from("Heal"),
                     icon: String::from("icons/heal.svg"),
                     cooldown: 30.0,

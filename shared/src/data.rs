@@ -14,37 +14,48 @@ pub struct OtherSchema {
     pub value: i32,
 }
 
-// Character
+// World
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct CharacterPrototype {
-    // pub identifier: u64,
+pub struct WorldSpecs {
+    pub name: String,
+    pub starting_level: u16,
+    pub musics: Vec<String>,
+    pub header_background: String,
+    pub footer_background: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct WorldState {
+    pub area_level: u16,
+}
+
+// Character
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct CharacterSpecs {
     pub name: String,
     pub portrait: String,
 
-    // TODO: This will not work well with temporary buffs etc... ?
     pub max_health: f64,
     pub health_regen: f64,
 
-    pub skill_prototypes: Vec<SkillPrototype>,
+    pub skill_specs: Vec<SkillSpecs>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CharacterState {
-    // pub identifier: u64, // useful?
     pub is_alive: bool,
     pub health: f64,
     pub just_hurt: bool,
 
-    // pub initiative_cooldown: f64, // TODO
     pub skill_states: Vec<SkillState>,
 }
 
 // Monster
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct MonsterPrototype {
-    pub character_prototype: CharacterPrototype,
+pub struct MonsterSpecs {
+    pub character_specs: CharacterSpecs,
 
     pub max_initiative: f32,
 }
@@ -59,8 +70,8 @@ pub struct MonsterState {
 // Player
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct PlayerPrototype {
-    pub character_prototype: CharacterPrototype,
+pub struct PlayerSpecs {
+    pub character_specs: CharacterSpecs,
 
     pub max_mana: f64,
     pub mana_regen: f64,
@@ -78,16 +89,16 @@ pub struct PlayerState {
 // Skill
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct SkillPrototype {
+pub struct SkillSpecs {
     pub name: String,
-    pub icon: String, // TODO better...
+    pub icon: String,
 
     pub cooldown: f32,
     pub mana_cost: f64,
 
     pub min_damages: f64, // Could this be a range?
     pub max_damages: f64,
-    // TODO: have proper skill data structure...
+    // TODO: target type, target amount, range etc
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

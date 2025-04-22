@@ -63,18 +63,14 @@ fn handle_message(game_context: &GameContext, message: &ServerMessage) {
         ServerMessage::Connect(_) => {}
         ServerMessage::InitGame(m) => {
             game_context.started.set(true);
-            game_context
-                .player_prototype
-                .set(m.player_prototype.clone());
+            game_context.player_specs.set(m.player_specs.clone());
             game_context.player_state.set(m.player_state.clone());
         }
         ServerMessage::UpdateGame(m) => {
             game_context.player_state.set(m.player_state.clone());
-            if let Some(monster_prototypes) = m.monster_prototypes.as_ref() {
+            if let Some(monster_specs) = m.monster_specs.as_ref() {
                 *game_context.monster_wave.write() += 1; // TODO: Overflow
-                game_context
-                    .monster_prototypes
-                    .set(monster_prototypes.clone());
+                game_context.monster_specs.set(monster_specs.clone());
             }
             game_context.monster_states.set(m.monster_states.clone());
         }

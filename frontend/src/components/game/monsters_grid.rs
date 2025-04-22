@@ -3,8 +3,8 @@ use leptos::prelude::*;
 
 use rand::Rng;
 
-use shared::data::MonsterPrototype;
-use shared::data::SkillPrototype;
+use shared::data::MonsterSpecs;
+use shared::data::SkillSpecs;
 
 use crate::assets::img_asset;
 use crate::components::ui::progress_bars::{CircularProgressBar, HorizontalProgressBar};
@@ -59,10 +59,10 @@ pub fn MonstersGrid() -> impl IntoView {
                     "
                 </style>
                 <For
-                    each=move || game_context.monster_prototypes.get().into_iter().enumerate()
+                    each=move || game_context.monster_specs.get().into_iter().enumerate()
                     // We need a unique key to replace old elements
                     key=move |(index, _)| (game_context.monster_wave.get(), *index)
-                    children=move |(index, prototype)| {
+                    children=move |(index, specs)| {
                         let animation_delay = format!(
                             "animation-delay: {}s;",
                             rand::rng().random_range(0.0..=0.2f32),
@@ -80,7 +80,7 @@ pub fn MonstersGrid() -> impl IntoView {
                                     )
                                 }
                             }>
-                                <MonsterCard prototype=prototype index=index />
+                                <MonsterCard specs=specs index=index />
                             </div>
                         }
                     }
@@ -92,11 +92,11 @@ pub fn MonstersGrid() -> impl IntoView {
 }
 
 #[component]
-fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
+fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let health_percent = Signal::derive(move || {
-        let max_health = prototype.character_prototype.max_health;
+        let max_health = specs.character_specs.max_health;
         if max_health > 0.0 {
             (game_context
                 .monster_states
@@ -104,7 +104,7 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
                 .get(index)
                 .map(|s| s.character_state.health)
                 .unwrap_or_default()
-                / prototype.character_prototype.max_health
+                / specs.character_specs.max_health
                 * 100.0) as f32
         } else {
             0.0
@@ -137,11 +137,11 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
                     class:sm:h-4
                     bar_color="bg-gradient-to-b from-red-500 to-red-700"
                     value=health_percent
-                    text=prototype.character_prototype.name.clone()
+                    text=specs.character_specs.name.clone()
                 />
                 <CharacterPortrait
-                    image_uri=prototype.character_prototype.portrait.clone()
-                    character_name=prototype.character_prototype.name.clone()
+                    image_uri=specs.character_specs.portrait.clone()
+                    character_name=specs.character_specs.name.clone()
                     just_hurt=just_hurt
                     is_dead=is_dead
                 />
@@ -149,17 +149,12 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
             <div class="flex flex-col justify-evenly w-full min-w-16">
                 <For
                     each=move || {
-                        prototype
-                            .character_prototype
-                            .skill_prototypes
-                            .clone()
-                            .into_iter()
-                            .enumerate()
+                        specs.character_specs.skill_specs.clone().into_iter().enumerate()
                     }
                     key=|(i, _)| *i
                     let((i, p))
                 >
-                    <MonsterSkill prototype=p index=i monster_index=index />
+                    <MonsterSkill specs=p index=i monster_index=index />
                 </For>
             </div>
         </div>
@@ -167,7 +162,7 @@ fn MonsterCard(prototype: MonsterPrototype, index: usize) -> impl IntoView {
 }
 
 #[component]
-fn MonsterSkill(prototype: SkillPrototype, index: usize, monster_index: usize) -> impl IntoView {
+fn MonsterSkill(specs: SkillSpecs, index: usize, monster_index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let is_dead = move || {
@@ -180,7 +175,7 @@ fn MonsterSkill(prototype: SkillPrototype, index: usize, monster_index: usize) -
     };
 
     let skill_cooldown = Signal::derive(move || {
-        if !is_dead() && prototype.cooldown > 0.0 {
+        if !is_dead() && specs.cooldown > 0.0 {
             (game_context
                 .monster_states
                 .read()
@@ -190,7 +185,7 @@ fn MonsterSkill(prototype: SkillPrototype, index: usize, monster_index: usize) -
                 .map(|s| s.elapsed_cooldown)
                 .unwrap_or(0.0)
                 * 100.0
-                / prototype.cooldown) as f32
+                / specs.cooldown) as f32
         } else {
             0.0
         }
@@ -219,8 +214,8 @@ fn MonsterSkill(prototype: SkillPrototype, index: usize, monster_index: usize) -
             reset=just_triggered
         >
             <img
-                src=img_asset(&prototype.icon)
-                alt=prototype.name
+                src=img_asset(&specs.icon)
+                alt=specs.name
                 class="w-full h-full flex-no-shrink fill-current
                 drop-shadow-[0px_2px_oklch(13% 0.028 261.692)] invert"
             />

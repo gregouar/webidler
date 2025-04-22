@@ -1,14 +1,14 @@
 use rand::Rng;
 
-use shared::data::{CharacterPrototype, CharacterState, SkillPrototype, SkillState};
+use shared::data::{CharacterSpecs, CharacterState, SkillSpecs, SkillState};
 
 use super::characters_updater;
 
 pub fn use_skill(
-    skill_prototype: &SkillPrototype,
+    skill_specs: &SkillSpecs,
     skill_state: &mut SkillState,
     target_state: &mut CharacterState,
-    target_prototype: &CharacterPrototype,
+    target_specs: &CharacterSpecs,
 ) {
     let mut rng = rand::rng();
 
@@ -16,11 +16,11 @@ pub fn use_skill(
     skill_state.is_ready = false;
     skill_state.elapsed_cooldown = 0.0;
 
-    if skill_prototype.max_damages >= skill_prototype.min_damages {
+    if skill_specs.max_damages >= skill_specs.min_damages {
         characters_updater::damage_character(
-            rng.random_range(skill_prototype.min_damages..=skill_prototype.max_damages),
+            rng.random_range(skill_specs.min_damages..=skill_specs.max_damages),
             target_state,
-            target_prototype,
+            target_specs,
         );
     }
 }
