@@ -1,4 +1,5 @@
 use anyhow::Result;
+use rand::Rng;
 
 use tokio::task::yield_now;
 
@@ -7,11 +8,10 @@ use std::{
     time::{Duration, Instant},
 };
 
-use rand::Rng;
 use shared::{
     data::{
         CharacterSpecs, MonsterSpecs, MonsterState, PlayerSpecs, PlayerState, SkillSpecs,
-        WorldSpecs, WorldState,
+        WorldState,
     },
     messages::{
         client::ClientMessage,
@@ -25,14 +25,13 @@ use super::{data::DataInit, systems::player_controller::PlayerController, world:
 use crate::websocket::WebSocketConnection;
 
 const LOOP_MIN_PERIOD: Duration = Duration::from_millis(100);
-const MAX_MONSTERS: usize = 6;
 const MONSTER_WAVE_PERIOD: Duration = Duration::from_secs(1);
 
 pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
     // todo: map infos, player, monsters, etc
     world_blueprint: WorldBlueprint,
-    world_specs: WorldSpecs,
+    // world_specs: WorldSpecs,
     world_state: WorldState,
     player_specs: PlayerSpecs,
     player_state: PlayerState,
@@ -51,12 +50,12 @@ impl<'a> GameInstance<'a> {
         player_specs: PlayerSpecs,
         world_blueprint: WorldBlueprint,
     ) -> Self {
-        let world_specs = world_blueprint.schema.specs.clone();
+        // let world_specs = world_blueprint.schema.specs.clone();
         GameInstance::<'a> {
             client_conn,
+            world_state: WorldState::init(&world_blueprint.schema.specs),
             world_blueprint: world_blueprint,
-            world_state: WorldState::init(&world_specs),
-            world_specs: world_specs,
+            // world_specs: world_specs,
             player_state: PlayerState::init(&player_specs),
             player_controller: PlayerController::init(&player_specs),
             player_specs,
@@ -78,7 +77,7 @@ impl<'a> GameInstance<'a> {
             }
 
             self.reset_entities().await;
-            self.control_entities().await;
+            self.control_entities().await?;
 
             let elapsed_time = last_update_time.elapsed();
             last_update_time = Instant::now();
@@ -137,7 +136,7 @@ impl<'a> GameInstance<'a> {
         self.client_conn
             .send(
                 &InitGameMessage {
-                    world_specs: self.world_specs.clone(),
+                    world_specs: self.world_blueprint.schema.specs.clone(),
                     world_state: self.world_state.clone(),
                     player_specs: self.player_specs.clone(),
                     player_state: self.player_state.clone(),
@@ -147,69 +146,20 @@ impl<'a> GameInstance<'a> {
             .await
     }
 
-    async fn generate_monsters_wave(&mut self) {
-        let mut rng = rand::rng();
-        let n = rng.random_range(1..=MAX_MONSTERS);
-        self.monster_specs = Vec::with_capacity(n);
-        self.monster_states = Vec::with_capacity(n);
-        for _ in 1..=n {
-            let monster_type = rng.random_range(0..2);
+    async fn generate_monsters_wave(&mut self) -> Result<()> {
+        self.monster_specs = self
+            .world_blueprint
+            .generate_monsters_wave(&self.world_state)?;
 
-            let specs = match monster_type {
-                0 => MonsterSpecs {
-                    character_specs: CharacterSpecs {
-                        // identifier: i as u64,
-                        name: String::from("Batty"),
-                        portrait: match rng.random_range(0..2) {
-                            0 => String::from("monsters/bat.webp"),
-                            _ => String::from("monsters/bat2.webp"),
-                        },
-                        max_health: 10.0,
-                        health_regen: 0.0,
-                        skill_specs: vec![SkillSpecs {
-                            name: String::from("Bite"),
-                            icon: String::from("icons/bite.svg"), // TODO
-                            cooldown: 3.0,
-                            mana_cost: 0.0,
-                            min_damages: 1.0,
-                            max_damages: 3.0,
-                        }],
-                    },
-                    max_initiative: 0.5,
-                },
-                _ => MonsterSpecs {
-                    character_specs: CharacterSpecs {
-                        // identifier: i as u64,
-                        name: String::from("Ratty"),
-                        portrait: String::from("monsters/rat.webp"),
-                        max_health: 20.0,
-                        health_regen: 0.0,
-                        skill_specs: vec![
-                            SkillSpecs {
-                                name: String::from("Vicious Bite"),
-                                icon: String::from("icons/bite.svg"),
-                                cooldown: 5.0,
-                                mana_cost: 0.0,
-                                min_damages: 2.0,
-                                max_damages: 8.0,
-                            },
-                            SkillSpecs {
-                                name: String::from("Scratch"),
-                                icon: String::from("icons/claw.svg"),
-                                cooldown: 3.0,
-                                mana_cost: 0.0,
-                                min_damages: 1.0,
-                                max_damages: 3.0,
-                            },
-                        ],
-                    },
-                    max_initiative: 1.0,
-                },
-            };
-            self.monster_states.push(MonsterState::init(&specs));
-            self.monster_specs.push(specs);
-        }
+        self.monster_states = self
+            .monster_specs
+            .iter()
+            .map(|specs| MonsterState::init(specs))
+            .collect();
+
         self.need_to_sync_monster_specs = true;
+
+        Ok(())
     }
 
     async fn reset_entities(&mut self) {
@@ -219,7 +169,7 @@ impl<'a> GameInstance<'a> {
         }
     }
 
-    async fn control_entities(&mut self) {
+    async fn control_entities(&mut self) -> Result<()> {
         let mut monsters_still_alive: Vec<(&mut MonsterState, &MonsterSpecs)> = self
             .monster_states
             .iter_mut()
@@ -236,7 +186,7 @@ impl<'a> GameInstance<'a> {
 
         if monsters_still_alive.is_empty() {
             if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
-                self.generate_monsters_wave().await;
+                self.generate_monsters_wave().await?;
             }
         } else {
             self.monster_wave_delay = Instant::now();
@@ -246,6 +196,7 @@ impl<'a> GameInstance<'a> {
                 &mut self.player_state,
             );
         }
+        Ok(())
     }
 
     async fn update_entities(&mut self, elapsed_time: Duration) {

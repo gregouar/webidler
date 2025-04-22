@@ -3,6 +3,7 @@
     "portrait": "bat.webp",
     "power_factor": 1.0,
     "max_health": 10,
+    "max_initiative": 0.5,
     "skill_specs": [
         {
             "name": "Bite",

@@ -3,6 +3,7 @@
     "portrait": "rat.webp",
     "power_factor": 2.0,
     "max_health": 20,
+    "max_initiative": 1.0,
     "skill_specs": [
         {
             "name": "Vicious Bite",
