@@ -24,8 +24,14 @@ pub fn MonstersGrid() -> impl IntoView {
             .all(|x| !x.character_state.is_alive)
     });
 
-    let header_background = "bg-[url(./assets/images/worlds/forest_header.webp)]";
-    let footer_background = "bg-[url(./assets/images/worlds/forest_footer.webp)]";
+    let header_background = format!(
+        "bg-[url({})]",
+        img_asset(&game_context.world_specs.read().header_background)
+    );
+    let footer_background = format!(
+        "bg-[url({})]",
+        img_asset(&game_context.world_specs.read().footer_background)
+    );
 
     // TODO: double buffering to allow in and out at the same time
     view! {

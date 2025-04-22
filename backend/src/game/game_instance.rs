@@ -1,5 +1,4 @@
 use anyhow::Result;
-use rand::Rng;
 
 use tokio::task::yield_now;
 
@@ -9,10 +8,7 @@ use std::{
 };
 
 use shared::{
-    data::{
-        CharacterSpecs, MonsterSpecs, MonsterState, PlayerSpecs, PlayerState, SkillSpecs,
-        WorldState,
-    },
+    data::{MonsterSpecs, MonsterState, PlayerSpecs, PlayerState, WorldState},
     messages::{
         client::ClientMessage,
         server::{InitGameMessage, SyncGameStateMessage},
@@ -42,20 +38,16 @@ pub struct GameInstance<'a> {
     need_to_sync_monster_specs: bool,
 }
 
-// TODO: split the logic in multiple systems
-
 impl<'a> GameInstance<'a> {
     pub fn new(
         client_conn: &'a mut WebSocketConnection,
         player_specs: PlayerSpecs,
         world_blueprint: WorldBlueprint,
     ) -> Self {
-        // let world_specs = world_blueprint.schema.specs.clone();
         GameInstance::<'a> {
             client_conn,
             world_state: WorldState::init(&world_blueprint.schema.specs),
             world_blueprint: world_blueprint,
-            // world_specs: world_specs,
             player_state: PlayerState::init(&player_specs),
             player_controller: PlayerController::init(&player_specs),
             player_specs,
@@ -69,7 +61,7 @@ impl<'a> GameInstance<'a> {
     pub async fn run(&mut self) -> Result<()> {
         self.init_game().await?;
 
-        let mut last_time = Instant::now();
+        let mut last_tick_time = Instant::now();
         let mut last_update_time = Instant::now();
         loop {
             if let ControlFlow::Break(_) = self.handle_client_events().await {
@@ -88,11 +80,11 @@ impl<'a> GameInstance<'a> {
             }
 
             // Wait for next tick
-            let duration = last_time.elapsed();
+            let duration = last_tick_time.elapsed();
             if duration < LOOP_MIN_PERIOD {
                 tokio::time::sleep(LOOP_MIN_PERIOD - duration).await;
             }
-            last_time = Instant::now();
+            last_tick_time = Instant::now();
         }
 
         Ok(())

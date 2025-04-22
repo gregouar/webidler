@@ -1,13 +1,13 @@
 use leptos::prelude::*;
 
-use shared::data::MonsterSpecs;
-use shared::data::MonsterState;
-use shared::data::PlayerSpecs;
-use shared::data::PlayerState;
+use shared::data::{MonsterSpecs, MonsterState, PlayerSpecs, PlayerState, WorldSpecs, WorldState};
 
 #[derive(Clone)]
 pub struct GameContext {
     pub started: RwSignal<bool>,
+
+    pub world_specs: RwSignal<WorldSpecs>,
+    pub world_state: RwSignal<WorldState>,
 
     pub player_specs: RwSignal<PlayerSpecs>,
     pub player_state: RwSignal<PlayerState>,
@@ -16,7 +16,7 @@ pub struct GameContext {
     pub monster_specs: RwSignal<Vec<MonsterSpecs>>,
     pub monster_states: RwSignal<Vec<MonsterState>>,
 
-    // Is this really the correct place?
+    // TODO: Is this really the correct place? Should we have a UI context?
     pub open_inventory: RwSignal<bool>,
 }
 
@@ -24,6 +24,8 @@ impl GameContext {
     pub fn new() -> Self {
         GameContext {
             started: RwSignal::new(false),
+            world_specs: RwSignal::new(WorldSpecs::default()),
+            world_state: RwSignal::new(WorldState::default()),
             player_specs: RwSignal::new(PlayerSpecs::default()),
             player_state: RwSignal::new(PlayerState::default()),
             monster_wave: RwSignal::new(0),
