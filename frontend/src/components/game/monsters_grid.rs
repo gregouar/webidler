@@ -24,75 +24,54 @@ pub fn MonstersGrid() -> impl IntoView {
             .all(|x| !x.character_state.is_alive)
     });
 
-    let header_background = format!(
-        "bg-[url({})]",
-        img_asset(&game_context.world_specs.read().header_background)
-    );
-    let footer_background = format!(
-        "bg-[url({})]",
-        img_asset(&game_context.world_specs.read().footer_background)
-    );
-
     // TODO: double buffering to allow in and out at the same time
     view! {
-        <div class="shadow-lg rounded-md overflow-hidden  w-full">
-            <div class=format!(
-                "{header_background} relative overflow-hidden w-full h-16 bg-center bg-repeat-x flex items-center justify-center",
-            )>
-                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
-                <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-2xl font-bold">
-                    <span class="[font-variant:small-caps]">"The Forest"</span>
-                    " — Area Level: 1"
-                </p>
-            </div>
-            <div class="
-            grid grid-cols-3 grid-rows-2 p-2 gap-2 grid-flow-col items-center
-            h-full overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]
-            ">
-                <style>
-                    "
-                    @keyframes monster-fade-in {
-                     0% { transform: translateX(100%); opacity: 0; }
-                     65% { transform: translateX(0%); opacity: 1; }
-                     80% { transform: translateX(5%); }
-                     100% { transform: translateX(0%); }
+        <div class="
+        grid grid-cols-3 grid-rows-2 p-2 gap-2 grid-flow-col items-center
+        h-full overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]
+        ">
+            <style>
+                "
+                @keyframes monster-fade-in {
+                 0% { transform: translateX(100%); opacity: 0; }
+                 65% { transform: translateX(0%); opacity: 1; }
+                 80% { transform: translateX(5%); }
+                 100% { transform: translateX(0%); }
+                }
+                
+                @keyframes monster-fade-out {
+                 from { opacity: 1; transform: translateY(0%); }
+                 to { opacity: 0; transform: translateY(100%); }
+                }
+                "
+            </style>
+            <For
+                each=move || game_context.monster_specs.get().into_iter().enumerate()
+                // We need a unique key to replace old elements
+                key=move |(index, _)| (game_context.monster_wave.get(), *index)
+                children=move |(index, specs)| {
+                    let animation_delay = format!(
+                        "animation-delay: {}s;",
+                        rand::rng().random_range(0.0..=0.2f32),
+                    );
+                    view! {
+                        <div style=move || {
+                            if all_monsters_dead.get() {
+                                format!(
+                                    "animation: monster-fade-out 1s ease-in; animation-fill-mode: both;",
+                                )
+                            } else {
+                                format!(
+                                    "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {}",
+                                    animation_delay,
+                                )
+                            }
+                        }>
+                            <MonsterCard specs=specs index=index />
+                        </div>
                     }
-                    
-                    @keyframes monster-fade-out {
-                     from { opacity: 1; transform: translateY(0%); }
-                     to { opacity: 0; transform: translateY(100%); }
-                    }
-                    "
-                </style>
-                <For
-                    each=move || game_context.monster_specs.get().into_iter().enumerate()
-                    // We need a unique key to replace old elements
-                    key=move |(index, _)| (game_context.monster_wave.get(), *index)
-                    children=move |(index, specs)| {
-                        let animation_delay = format!(
-                            "animation-delay: {}s;",
-                            rand::rng().random_range(0.0..=0.2f32),
-                        );
-                        view! {
-                            <div style=move || {
-                                if all_monsters_dead.get() {
-                                    format!(
-                                        "animation: monster-fade-out 1s ease-in; animation-fill-mode: both;",
-                                    )
-                                } else {
-                                    format!(
-                                        "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {}",
-                                        animation_delay,
-                                    )
-                                }
-                            }>
-                                <MonsterCard specs=specs index=index />
-                            </div>
-                        }
-                    }
-                />
-            </div>
-            <div class=format!("{footer_background} w-full h-16 bg-center bg-repeat-x")></div>
+                }
+            />
         </div>
     }
 }
