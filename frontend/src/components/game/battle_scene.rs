@@ -11,14 +11,18 @@ use super::GameContext;
 pub fn BattleScene() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let header_background = format!(
-        "bg-[url({})]",
-        img_asset(&game_context.world_specs.read().header_background)
-    );
-    let footer_background = format!(
-        "bg-[url({})]",
-        img_asset(&game_context.world_specs.read().footer_background)
-    );
+    let header_background = move || {
+        format!(
+            "bg-[url({})]",
+            img_asset(&game_context.world_specs.read().header_background)
+        )
+    };
+    let footer_background = move || {
+        format!(
+            "bg-[url({})]",
+            img_asset(&game_context.world_specs.read().footer_background)
+        )
+    };
 
     view! {
         <div class="w-full grid grid-cols-3 justify-items-stretch flex items-start gap-4 p-4 ">
@@ -27,7 +31,8 @@ pub fn BattleScene() -> impl IntoView {
             <div class="shadow-lg rounded-md overflow-hidden  w-full col-span-2 justify-self-start">
                 <div class=move || {
                     format!(
-                        "{header_background} relative overflow-hidden w-full h-16 bg-center bg-repeat-x flex items-center justify-center",
+                        "{} relative overflow-hidden w-full h-16 bg-center bg-repeat-x flex items-center justify-center",
+                        header_background(),
                     )
                 }>
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
@@ -45,7 +50,7 @@ pub fn BattleScene() -> impl IntoView {
                 </div>
                 <MonstersGrid />
                 <div class=move || {
-                    format!("{footer_background} w-full h-16 bg-center bg-repeat-x")
+                    format!("{} w-full h-16 bg-center bg-repeat-x", footer_background())
                 }></div>
             </div>
 
