@@ -2,7 +2,9 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 use shared::messages::client::ClientConnectMessage;
+use shared::messages::server::InitGameMessage;
 use shared::messages::server::ServerMessage;
+use shared::messages::server::SyncGameStateMessage;
 
 use crate::components::websocket::WebsocketContext;
 
@@ -35,7 +37,7 @@ pub fn GameInstance() -> impl IntoView {
         let conn = expect_context::<WebsocketContext>();
         move |_| {
             if let Some(m) = conn.message.get() {
-                handle_message(&game_context, &m);
+                handle_message(&game_context, m);
             }
         }
     });
@@ -58,21 +60,34 @@ pub fn GameInstance() -> impl IntoView {
     }
 }
 
-fn handle_message(game_context: &GameContext, message: &ServerMessage) {
+fn handle_message(game_context: &GameContext, message: ServerMessage) {
     match message {
         ServerMessage::Connect(_) => {}
-        ServerMessage::InitGame(m) => {
+        ServerMessage::InitGame(InitGameMessage {
+            world_specs,
+            world_state,
+            player_specs,
+            player_state,
+        }) => {
             game_context.started.set(true);
-            game_context.player_specs.set(m.player_specs.clone());
-            game_context.player_state.set(m.player_state.clone());
+            game_context.world_specs.set(world_specs);
+            game_context.world_state.set(world_state);
+            game_context.player_specs.set(player_specs);
+            game_context.player_state.set(player_state);
         }
-        ServerMessage::UpdateGame(m) => {
-            game_context.player_state.set(m.player_state.clone());
-            if let Some(monster_specs) = m.monster_specs.as_ref() {
+        ServerMessage::UpdateGame(SyncGameStateMessage {
+            world_state,
+            player_state,
+            monster_specs,
+            monster_states,
+        }) => {
+            game_context.world_state.set(world_state);
+            game_context.player_state.set(player_state);
+            if let Some(monster_specs) = monster_specs {
                 *game_context.monster_wave.write() += 1; // TODO: Overflow
-                game_context.monster_specs.set(monster_specs.clone());
+                game_context.monster_specs.set(monster_specs);
             }
-            game_context.monster_states.set(m.monster_states.clone());
+            game_context.monster_states.set(monster_states);
         }
     }
 }
