@@ -1,12 +1,12 @@
 {
     "specs": {
         "name": "The Forest",
-        "starting_area_level": 1,
+        "starting_level": 1,
         "musics": [
             "ambient1.mp3"
         ],
-        "header_background": "forest_header.webp",
-        "footer_background": "forest_footer.webp"
+        "header_background": "worlds/forest_header.webp",
+        "footer_background": "worlds/forest_footer.webp"
     },
     "waves": [
         {

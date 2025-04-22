@@ -37,6 +37,7 @@ pub struct CharacterSpecs {
     pub portrait: String,
 
     pub max_health: f64,
+    #[serde(default)]
     pub health_regen: f64,
 
     pub skill_specs: Vec<SkillSpecs>,
@@ -94,6 +95,8 @@ pub struct SkillSpecs {
     pub icon: String,
 
     pub cooldown: f32,
+
+    #[serde(default)]
     pub mana_cost: f64,
 
     pub min_damages: f64, // Could this be a range?

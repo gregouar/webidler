@@ -1,16 +1,18 @@
 {
-    "name": "Batty",
-    "portrait": "bat.webp",
-    "power_factor": 1.0,
-    "max_health": 10,
-    "max_initiative": 0.5,
-    "skill_specs": [
-        {
-            "name": "Bite",
-            "icon": "bite.svg",
-            "cooldown": 2.0,
-            "min_damages": 1.0,
-            "max_damages": 3.0
-        }
-    ]
+    "character_specs": {
+        "name": "Batty",
+        "portrait": "monsters/bat.webp",
+        "power_factor": 1.0,
+        "max_health": 10,
+        "skill_specs": [
+            {
+                "name": "Bite",
+                "icon": "skills/bite.svg",
+                "cooldown": 2.0,
+                "min_damages": 1.0,
+                "max_damages": 3.0
+            }
+        ]
+    },
+    "max_initiative": 0.5
 }

@@ -1,9 +1,23 @@
+use anyhow::Result;
 use rand::Rng;
+use std::path::PathBuf;
+
+use serde::de::DeserializeOwned;
+use tokio::fs;
 
 use shared::data::{
     CharacterSpecs, CharacterState, MonsterSpecs, MonsterState, PlayerSpecs, PlayerState,
     SkillSpecs, SkillState, WorldSpecs, WorldState,
 };
+
+pub async fn load_schema<S>(filepath: &PathBuf) -> Result<S>
+where
+    S: DeserializeOwned,
+{
+    Ok(serde_json::from_slice(
+        &fs::read(&PathBuf::from("./data").join(filepath)).await?,
+    )?)
+}
 
 pub trait DataInit<Specs> {
     fn init(specs: &Specs) -> Self;

@@ -5,11 +5,10 @@ use std::path::PathBuf;
 use std::u16;
 
 use serde::{Deserialize, Serialize};
-use serde_json;
 
 use futures::future::join_all;
-use tokio::fs;
 
+use super::data::load_schema;
 use shared::data::{MonsterSpecs, WorldSpecs, WorldState};
 
 const MAX_MONSTERS: usize = 6;
@@ -43,7 +42,7 @@ pub struct MonsterWaveSpawnBlueprint {
 
 impl WorldBlueprint {
     pub async fn load_from_file(filepath: PathBuf) -> Result<Self> {
-        let schema: WorldBlueprintSchema = serde_json::from_slice(&fs::read(&filepath).await?)?;
+        let schema: WorldBlueprintSchema = load_schema(&filepath).await?;
 
         let monster_specs_to_load: HashSet<PathBuf> = schema
             .waves
@@ -52,7 +51,7 @@ impl WorldBlueprint {
             .collect();
 
         let monster_specs = join_all(monster_specs_to_load.into_iter().map(|path| async move {
-            let monster_specs = serde_json::from_slice(&fs::read(&path).await?)?;
+            let monster_specs = load_schema(&path).await?;
             Result::<(PathBuf, MonsterSpecs)>::Ok((path, monster_specs))
         }))
         .await

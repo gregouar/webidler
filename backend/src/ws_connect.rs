@@ -60,7 +60,7 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr) {
 
     tracing::debug!("starting the game...");
 
-    match WorldBlueprint::load_from_file("./data/worlds/forest.json".into()).await {
+    match WorldBlueprint::load_from_file("worlds/forest.json".into()).await {
         Ok(world_blueprint) => {
             let mut game = GameInstance::new(&mut conn, player, world_blueprint);
             if let Err(e) = game.run().await {
@@ -113,7 +113,7 @@ async fn handle_connect(
             skill_specs: vec![
                 SkillSpecs {
                     name: String::from("Weapon Attack"),
-                    icon: String::from("icons/attack.svg"),
+                    icon: String::from("skills/attack.svg"),
                     cooldown: 1.0,
                     mana_cost: 0.0,
                     min_damages: 3.0,
@@ -121,7 +121,7 @@ async fn handle_connect(
                 },
                 SkillSpecs {
                     name: String::from("Fireball"),
-                    icon: String::from("icons/fireball2.svg"),
+                    icon: String::from("skills/fireball2.svg"),
                     cooldown: 5.0,
                     mana_cost: 20.0,
                     min_damages: 10.0,
@@ -129,7 +129,7 @@ async fn handle_connect(
                 },
                 SkillSpecs {
                     name: String::from("Heal"),
-                    icon: String::from("icons/heal.svg"),
+                    icon: String::from("skills/heal.svg"),
                     cooldown: 30.0,
                     mana_cost: 20.0,
                     min_damages: -20.0,
