@@ -25,13 +25,13 @@ pub fn HeaderMenu() -> impl IntoView {
     let gold = Signal::derive(move || game_context.player_resources.read().gold);
 
     view! {
-        <div class="h-16 relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
+        <div class="relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
                 <div class="flex-1 text-shadow-md shadow-gray-950 text-amber-200 text-xl flex justify-between items-center">
                     <div>
                         <span>"Gold: "</span>
                     </div>
-                    <div class="flex-1 flex items-center space-x-1">
+                    <div class="flex-1 flex items-center space-x-1 max-h-10">
                         <Number value=gold />
                         <img src=img_asset("ui/gold.webp") alt="gold_icon" class="object-contain" />
                     </div>
