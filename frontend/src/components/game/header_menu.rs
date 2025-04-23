@@ -1,7 +1,7 @@
 use leptos::html::*;
 use leptos::prelude::*;
 
-use crate::assets::music_asset;
+use crate::assets::{img_asset, music_asset};
 use crate::components::ui::{buttons::MenuButton, number::Number};
 
 use super::GameContext;
@@ -29,7 +29,14 @@ pub fn HeaderMenu() -> impl IntoView {
             <div class="flex justify-around w-full">
                 <div class="text-shadow-md shadow-gray-950 text-amber-200 text-xl flex justify-between">
                     <p>"Gold: "</p>
-                    <Number value=gold />
+                    <div>
+                        <Number value=gold />
+                        <img
+                            src=img_asset("ui/gold.webp")
+                            alt="gold_icon"
+                            class="h-full w-auto aspect-square"
+                        />
+                    </div>
                 </div>
                 <div>
                     <p class="text-shadow-md shadow-gray-950 text-xl">"Magic Essence: 0"</p>
