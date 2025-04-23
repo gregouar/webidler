@@ -24,6 +24,9 @@ pub fn MonstersGrid() -> impl IntoView {
             .all(|x| !x.character_state.is_alive)
     });
 
+    let player_dead =
+        Signal::derive(move || !game_context.player_state.read().character_state.is_alive);
+
     // TODO: double buffering to allow in and out at the same time
     view! {
         <div class="
@@ -43,6 +46,11 @@ pub fn MonstersGrid() -> impl IntoView {
                  from { opacity: 1; transform: translateY(0%); }
                  to { opacity: 0; transform: translateY(100%); }
                 }
+                
+                @keyframes monster-flee {
+                 0% { transform: translateX(0%); opacity: 1; }
+                 100% { transform: translateX(100%); opacity: 0; }
+                }
                 "
             </style>
             <For
@@ -61,10 +69,17 @@ pub fn MonstersGrid() -> impl IntoView {
                                     "animation: monster-fade-out 1s ease-in; animation-fill-mode: both;",
                                 )
                             } else {
-                                format!(
-                                    "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {}",
-                                    animation_delay,
-                                )
+                                if player_dead.get() {
+                                    format!(
+                                        "animation: monster-flee 3s ease-out; animation-fill-mode: both; {}",
+                                        animation_delay,
+                                    )
+                                } else {
+                                    format!(
+                                        "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {}",
+                                        animation_delay,
+                                    )
+                                }
                             }
                         }>
                             <MonsterCard specs=specs index=index />

@@ -53,7 +53,31 @@ pub fn PlayerCard() -> impl IntoView {
         Signal::derive(move || game_context.player_state.read().character_state.just_hurt);
 
     view! {
-        <div class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-md ring-1 ring-zinc-950">
+        <style>
+            "
+            @keyframes player-fade-in {
+             0% { transform: translateX(-100%); opacity: 0; }
+             65% { transform: translateX(0%); opacity: 1; }
+             80% { transform: translateX(-5%); }
+             100% { transform: translateX(0%); }
+            }
+            
+            @keyframes player-fade-out {
+             from { opacity: 1; transform: translateY(0%); }
+             to { opacity: 0; transform: translateY(100%); }
+            }
+            "
+        </style>
+        <div
+            class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-md ring-1 ring-zinc-950"
+            style=move || {
+                if is_dead.get() {
+                    "animation: player-fade-out 3s ease-in; animation-fill-mode: both;"
+                } else {
+                    "animation: player-fade-in 1s ease-out; animation-fill-mode: both;"
+                }
+            }
+        >
             <div>
                 <PlayerName />
             </div>

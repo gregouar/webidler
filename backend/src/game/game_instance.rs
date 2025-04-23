@@ -23,23 +23,28 @@ use super::{data::DataInit, systems::player_controller::PlayerController, world:
 use crate::websocket::WebSocketConnection;
 
 const LOOP_MIN_PERIOD: Duration = Duration::from_millis(100);
+
+const PLAYER_RESPAWN_PERIOD: Duration = Duration::from_secs(5);
+
 const MONSTER_WAVE_PERIOD: Duration = Duration::from_secs(1);
 const WAVES_PER_AREA_LEVEL: u8 = 5;
 
 pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
-    // todo: map infos, player, monsters, etc
+
     world_blueprint: WorldBlueprint,
-    // world_specs: WorldSpecs,
     world_state: WorldState,
+
+    need_to_sync_player_specs: bool,
     player_specs: PlayerSpecs,
     player_state: PlayerState,
     player_controller: PlayerController,
-    need_to_sync_player_specs: bool,
+    player_respawn_delay: Instant,
+
+    need_to_sync_monster_specs: bool,
     monster_specs: Vec<MonsterSpecs>,
     monster_states: Vec<MonsterState>,
     monster_wave_delay: Instant,
-    need_to_sync_monster_specs: bool,
 }
 
 impl<'a> GameInstance<'a> {
@@ -50,16 +55,20 @@ impl<'a> GameInstance<'a> {
     ) -> Self {
         GameInstance::<'a> {
             client_conn,
+
             world_state: WorldState::init(&world_blueprint.schema.specs),
             world_blueprint: world_blueprint,
+
+            need_to_sync_player_specs: false,
             player_state: PlayerState::init(&player_specs),
             player_controller: PlayerController::init(&player_specs),
             player_specs,
-            need_to_sync_player_specs: false,
+            player_respawn_delay: Instant::now(),
+
+            need_to_sync_monster_specs: false,
             monster_specs: Vec::new(),
             monster_states: Vec::new(),
             monster_wave_delay: Instant::now(),
-            need_to_sync_monster_specs: false,
         }
     }
 
@@ -164,6 +173,19 @@ impl<'a> GameInstance<'a> {
         Ok(())
     }
 
+    fn respawn_player(&mut self) {
+        self.monster_specs = Vec::new();
+        self.monster_states = Vec::new();
+        self.need_to_sync_monster_specs = true;
+
+        self.player_state.character_state.is_alive = true;
+        self.player_state.character_state.health = self.player_specs.character_specs.max_health;
+        self.player_state.mana = self.player_specs.max_mana;
+
+        self.world_state.area_level = self.world_state.area_level.checked_div(1).unwrap_or(1);
+        self.world_state.waves_done = 0;
+    }
+
     async fn reset_entities(&mut self) {
         character_controller::reset_character(&mut self.player_state.character_state);
         for monster_state in self.monster_states.iter_mut() {
@@ -172,32 +194,40 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn control_entities(&mut self) -> Result<()> {
-        let mut monsters_still_alive: Vec<(&mut MonsterState, &MonsterSpecs)> = self
-            .monster_states
-            .iter_mut()
-            .zip(self.monster_specs.iter())
-            .filter(|(x, _)| x.character_state.is_alive)
-            .collect();
-
-        self.player_controller.control_player(
-            &self.player_specs,
-            &mut self.player_state,
-            &mut monsters_still_alive,
-        );
-        self.player_controller.reset();
-
-        if monsters_still_alive.is_empty() {
-            if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
-                self.generate_monsters_wave().await?;
+        if !self.player_state.character_state.is_alive {
+            if self.player_respawn_delay.elapsed() > PLAYER_RESPAWN_PERIOD {
+                self.respawn_player();
             }
         } else {
-            self.monster_wave_delay = Instant::now();
-            monsters_controller::control_monsters(
-                &mut monsters_still_alive,
+            let mut monsters_still_alive: Vec<(&mut MonsterState, &MonsterSpecs)> = self
+                .monster_states
+                .iter_mut()
+                .zip(self.monster_specs.iter())
+                .filter(|(x, _)| x.character_state.is_alive)
+                .collect();
+
+            self.player_respawn_delay = Instant::now();
+            self.player_controller.control_player(
                 &self.player_specs,
                 &mut self.player_state,
+                &mut monsters_still_alive,
             );
+            self.player_controller.reset();
+
+            if monsters_still_alive.is_empty() {
+                if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
+                    self.generate_monsters_wave().await?;
+                }
+            } else {
+                self.monster_wave_delay = Instant::now();
+                monsters_controller::control_monsters(
+                    &mut monsters_still_alive,
+                    &self.player_specs,
+                    &mut self.player_state,
+                );
+            }
         }
+
         Ok(())
     }
 
