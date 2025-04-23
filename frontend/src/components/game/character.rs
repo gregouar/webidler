@@ -28,10 +28,15 @@ pub fn CharacterPortrait(
 
     view! {
         <style>
+            // "
+            // .just_hurt_effect {
+            // --shadow-size: calc(10%);
+            // box-shadow: inset 0 0 var(--shadow-size) rgba(192, 0, 0, 1.0);
+            // }
+            // "
             "
                 .just_hurt_effect {
-                    --shadow-size: calc(10%);
-                    box-shadow: inset 0 0 var(--shadow-size) rgba(192, 0, 0, 1.0);
+                    box-shadow: inset 0 0 32px rgba(192, 0, 0, 1.0);
                 }
             "
         </style>
