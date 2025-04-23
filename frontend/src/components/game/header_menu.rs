@@ -27,19 +27,36 @@ pub fn HeaderMenu() -> impl IntoView {
     view! {
         <div class="relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full">
-                <div class="text-shadow-md shadow-gray-950 text-amber-200 text-xl flex justify-between">
-                    <p>"Gold: "</p>
-                    <div>
-                        <Number value=gold />
-                        <div class="h-full w-auto ">
+                // <div class="text-shadow-md shadow-gray-950 text-amber-200 text-xl flex justify-between">
+                // <p>"Gold: "</p>
+                // <div>
+                // <Number value=gold />
+                // <div class="h-full w-auto ">
+                // <img
+                // src=img_asset("ui/gold.webp")
+                // alt="gold_icon"
+                // class="object-cover aspect-square"
+                // />
+                // </div>
+                // </div>
+                // </div>
+
+                <div class="text-shadow-md text-amber-200 text-xl flex items-center justify-between">
+                    <div class="flex items-center">
+                        <p class="mr-2">Gold:</p>
+                        <div class="flex items-center">
                             <img
                                 src=img_asset("ui/gold.webp")
                                 alt="gold_icon"
-                                class="object-cover aspect-square"
+                                class="object-cover h-full w-auto"
                             />
                         </div>
                     </div>
+                    <div class="flex items-center ml-auto">
+                        <Number value=gold />
+                    </div>
                 </div>
+
                 <div>
                     <p class="text-shadow-md shadow-gray-950 text-xl">"Magic Essence: 0"</p>
                 </div>

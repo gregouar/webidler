@@ -2,9 +2,8 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 use crate::assets::img_asset;
-use crate::components::ui::tooltip::Tooltip;
+use crate::components::ui::{menu_panel::MenuPanel, tooltip::Tooltip};
 
-use super::menu_panel::MenuPanel;
 use super::player_card::PlayerName;
 
 // TODO: Move

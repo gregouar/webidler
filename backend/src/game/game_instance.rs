@@ -157,7 +157,7 @@ impl<'a> GameInstance<'a> {
     async fn generate_monsters_wave(&mut self) -> Result<()> {
         self.world_state.waves_done += 1;
         if self.world_state.waves_done > WAVES_PER_AREA_LEVEL {
-            self.world_state.waves_done = 0;
+            self.world_state.waves_done = 1;
             self.world_state.area_level += 1;
         }
 
