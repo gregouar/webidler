@@ -29,7 +29,7 @@ pub fn HeaderMenu() -> impl IntoView {
             <div class="flex justify-around w-full">
                 <div>
                     <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
-                        {move || format!("Gold: {:e}", gold())}
+                        {move || format!("Gold: {:.2e}", gold())}
                     </p>
                 </div>
                 <div>

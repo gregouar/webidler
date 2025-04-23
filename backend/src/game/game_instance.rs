@@ -181,6 +181,10 @@ impl<'a> GameInstance<'a> {
         self.player_state.character_state.is_alive = true;
         self.player_state.character_state.health = self.player_specs.character_specs.max_health;
         self.player_state.mana = self.player_specs.max_mana;
+        for skill_state in self.player_state.character_state.skill_states.iter_mut() {
+            skill_state.is_ready = false;
+            skill_state.elapsed_cooldown = 0.0;
+        }
 
         self.world_state.area_level = self.world_state.area_level.checked_div(1).unwrap_or(1);
         self.world_state.waves_done = 0;
