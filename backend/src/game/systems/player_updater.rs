@@ -25,6 +25,7 @@ pub fn update_player_state(
         .max_mana
         .min(player_state.mana + (elapsed_time.as_secs_f64() * player_specs.mana_regen));
 
+    // TODO: Move somewhere else, should be result of client query :o)
     while player_state.experience >= player_specs.experience_needed {
         level_up(player_specs, player_state);
         update_player_specs = true;

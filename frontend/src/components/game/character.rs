@@ -28,6 +28,7 @@ pub fn CharacterPortrait(
 
     view! {
         <style>
+            // TODO
             // "
             // .just_hurt_effect {
             // --shadow-size: calc(10%);

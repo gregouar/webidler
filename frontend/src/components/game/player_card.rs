@@ -20,11 +20,7 @@ pub fn PlayerCard() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let health_percent = Signal::derive(move || {
-        let max_health = game_context
-            .player_specs
-            .read()
-            .character_specs
-            .max_health;
+        let max_health = game_context.player_specs.read().character_specs.max_health;
         if max_health > 0.0 {
             (game_context.player_state.read().character_state.health / max_health * 100.0) as f32
         } else {
@@ -36,6 +32,15 @@ pub fn PlayerCard() -> impl IntoView {
         let max_mana = game_context.player_specs.read().max_mana;
         if max_mana > 0.0 {
             (game_context.player_state.read().mana / max_mana * 100.0) as f32
+        } else {
+            0.0
+        }
+    });
+
+    let xp_percent = Signal::derive(move || {
+        let max_xp = game_context.player_specs.read().experience_needed;
+        if max_xp > 0.0 {
+            (game_context.player_state.read().experience / max_xp * 100.0) as f32
         } else {
             0.0
         }
@@ -62,12 +67,7 @@ pub fn PlayerCard() -> impl IntoView {
                         value=health_percent
                     />
                     <CharacterPortrait
-                        image_uri=game_context
-                            .player_specs
-                            .read()
-                            .character_specs
-                            .portrait
-                            .clone()
+                        image_uri=game_context.player_specs.read().character_specs.portrait.clone()
                         character_name="player".to_string()
                         just_hurt=just_hurt
                         is_dead=is_dead
@@ -84,7 +84,7 @@ pub fn PlayerCard() -> impl IntoView {
                     class:sm:h-4
                     bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
                     // TODO: XP
-                    value=health_percent
+                    value=xp_percent
                 />
             </div>
 
@@ -125,7 +125,7 @@ pub fn PlayerName() -> impl IntoView {
     view! {
         <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
             <span class="font-bold">{player_name}</span>
-            " — Level: 1"
+            {move || format!(" — Level: {}", game_context.player_specs.read().level)}
         </p>
     }
 }
