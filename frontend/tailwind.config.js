@@ -11,9 +11,6 @@ module.exports = {
     safelist: [
       "duration-100",
       "duration-1000",
-      {
-        pattern: /bg-\[url\(.*\)\]/,
-      },
     ],
     theme: {
       extend: {

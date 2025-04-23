@@ -87,8 +87,14 @@ impl WorldBlueprint {
 
         let p = rng.random_range(0.0..total_probability);
 
-        // TODO
-        let wave = waves.first();
+        let mut cumul_probability = 0.0;
+        let mut wave = None;
+        for w in waves.iter() {
+            if p >= cumul_probability && p < cumul_probability + w.probability {
+                wave = Some(w);
+            }
+            cumul_probability += w.probability;
+        }
 
         let mut monsters_specs = Vec::with_capacity(MAX_MONSTERS);
         if let Some(wave) = wave {

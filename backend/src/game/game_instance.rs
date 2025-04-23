@@ -22,6 +22,7 @@ use crate::websocket::WebSocketConnection;
 
 const LOOP_MIN_PERIOD: Duration = Duration::from_millis(100);
 const MONSTER_WAVE_PERIOD: Duration = Duration::from_secs(1);
+const WAVES_PER_AREA_LEVEL: u8 = 5;
 
 pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
@@ -139,6 +140,12 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn generate_monsters_wave(&mut self) -> Result<()> {
+        self.world_state.waves_done += 1;
+        if self.world_state.waves_done > WAVES_PER_AREA_LEVEL {
+            self.world_state.waves_done = 0;
+            self.world_state.area_level += 1;
+        }
+
         self.monster_specs = self
             .world_blueprint
             .generate_monsters_wave(&self.world_state)?;
