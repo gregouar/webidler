@@ -1,5 +1,5 @@
 use rand::Rng;
-use shared::data::{MonsterSpecs, MonsterState, PlayerSpecs, PlayerState};
+use shared::data::{MonsterSpecs, MonsterState, PlayerResources, PlayerSpecs, PlayerState};
 
 use super::character_controller;
 
@@ -24,6 +24,7 @@ impl PlayerController {
         &mut self,
         player_specs: &PlayerSpecs,
         player_state: &mut PlayerState,
+        player_resources: &mut PlayerResources,
         monsters: &mut Vec<(&mut MonsterState, &MonsterSpecs)>,
     ) {
         if !player_state.character_state.is_alive || monsters.is_empty() {
@@ -64,12 +65,16 @@ impl PlayerController {
         }
 
         for reward in rewards {
-            reward_player(player_state, &reward);
+            reward_player(player_state, player_resources, &reward);
         }
     }
 }
 
-fn reward_player(player_state: &mut PlayerState, target_specs: &MonsterSpecs) {
-    player_state.gold += target_specs.power_factor;
+fn reward_player(
+    player_state: &mut PlayerState,
+    player_resources: &mut PlayerResources,
+    target_specs: &MonsterSpecs,
+) {
+    player_resources.gold += target_specs.power_factor;
     player_state.experience += target_specs.power_factor;
 }

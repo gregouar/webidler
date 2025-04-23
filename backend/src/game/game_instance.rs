@@ -8,7 +8,7 @@ use std::{
 };
 
 use shared::{
-    data::{MonsterSpecs, MonsterState, PlayerSpecs, PlayerState, WorldState},
+    data::{MonsterSpecs, MonsterState, PlayerResources, PlayerSpecs, PlayerState, WorldState},
     messages::{
         client::ClientMessage,
         server::{InitGameMessage, SyncGameStateMessage},
@@ -38,6 +38,7 @@ pub struct GameInstance<'a> {
     need_to_sync_player_specs: bool,
     player_specs: PlayerSpecs,
     player_state: PlayerState,
+    player_resources: PlayerResources,
     player_controller: PlayerController,
     player_respawn_delay: Instant,
 
@@ -60,6 +61,7 @@ impl<'a> GameInstance<'a> {
             world_blueprint: world_blueprint,
 
             need_to_sync_player_specs: false,
+            player_resources: PlayerResources { gold: 0.0 },
             player_state: PlayerState::init(&player_specs),
             player_controller: PlayerController::init(&player_specs),
             player_specs,
@@ -178,13 +180,7 @@ impl<'a> GameInstance<'a> {
         self.monster_states = Vec::new();
         self.need_to_sync_monster_specs = true;
 
-        self.player_state.character_state.is_alive = true;
-        self.player_state.character_state.health = self.player_specs.character_specs.max_health;
-        self.player_state.mana = self.player_specs.max_mana;
-        for skill_state in self.player_state.character_state.skill_states.iter_mut() {
-            skill_state.is_ready = false;
-            skill_state.elapsed_cooldown = 0.0;
-        }
+        self.player_state = PlayerState::init(&self.player_specs);
 
         self.world_state.area_level = self.world_state.area_level.checked_div(1).unwrap_or(1);
         self.world_state.waves_done = 0;
@@ -214,6 +210,7 @@ impl<'a> GameInstance<'a> {
             self.player_controller.control_player(
                 &self.player_specs,
                 &mut self.player_state,
+                &mut self.player_resources,
                 &mut monsters_still_alive,
             );
             self.player_controller.reset();
@@ -263,6 +260,7 @@ impl<'a> GameInstance<'a> {
                         None
                     },
                     player_state: self.player_state.clone(),
+                    player_resources: self.player_resources.clone(),
                     monster_specs: if self.need_to_sync_monster_specs {
                         self.need_to_sync_monster_specs = false;
                         Some(self.monster_specs.clone())

@@ -89,10 +89,15 @@ pub struct PlayerSpecs {
 pub struct PlayerState {
     pub character_state: CharacterState,
 
+    // TODO: Should this be in PlayerResources?
     pub experience: f64,
-    pub gold: f64, // TODO: Probably move to other data struct
 
     pub mana: f64,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct PlayerResources {
+    pub gold: f64,
 }
 
 // Skill

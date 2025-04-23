@@ -52,7 +52,6 @@ impl DataInit<PlayerSpecs> for PlayerState {
         PlayerState {
             character_state: CharacterState::init(&specs.character_specs),
             experience: 0.0,
-            gold: 0.0,
             mana: specs.max_mana,
         }
     }

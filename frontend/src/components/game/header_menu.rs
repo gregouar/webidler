@@ -22,7 +22,7 @@ pub fn HeaderMenu() -> impl IntoView {
         .map(|m| music_asset(m))
         .collect();
 
-    let gold = move || game_context.player_state.read().gold;
+    let gold = move || game_context.player_resources.read().gold;
 
     view! {
         <div class="relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">

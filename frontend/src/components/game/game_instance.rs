@@ -77,6 +77,7 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
         }
         ServerMessage::UpdateGame(SyncGameStateMessage {
             world_state,
+            player_resources,
             player_specs,
             player_state,
             monster_specs,
@@ -86,6 +87,7 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
             if let Some(player_specs) = player_specs {
                 game_context.player_specs.set(player_specs);
             }
+            game_context.player_resources.set(player_resources);
             game_context.player_state.set(player_state);
             if let Some(monster_specs) = monster_specs {
                 *game_context.monster_wave.write() += 1; // TODO: Overflow
