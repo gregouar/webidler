@@ -31,12 +31,12 @@ pub fn HeaderMenu() -> impl IntoView {
                     <div>
                         <span>"Gold: "</span>
                     </div>
-                    <div class="flex-1 flex items-center space-x-1 max-h-10">
+                    <div class="flex items-center space-x-1 max-h-10">
                         <Number value=gold />
                         <img
                             src=img_asset("ui/gold.webp")
                             alt="gold_icon"
-                            class="object-scale-down"
+                            class="h-full aspect-square"
                         />
                     </div>
                 </div>
