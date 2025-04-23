@@ -2,7 +2,7 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 use crate::assets::music_asset;
-use crate::components::ui::buttons::MenuButton;
+use crate::components::ui::{buttons::MenuButton, number::Number};
 
 use super::GameContext;
 
@@ -22,14 +22,14 @@ pub fn HeaderMenu() -> impl IntoView {
         .map(|m| music_asset(m))
         .collect();
 
-    let gold = move || game_context.player_resources.read().gold;
+    let gold = Signal::derive(move || game_context.player_resources.read().gold);
 
     view! {
         <div class="relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full">
                 <div>
                     <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
-                        {move || format!("Gold: {:.2e}", gold())}
+                        "Gold: " <Number value=gold />
                     </p>
                 </div>
                 <div>
@@ -43,7 +43,6 @@ pub fn HeaderMenu() -> impl IntoView {
                 </div>
             </div>
             <div class="flex space-x-2  w-full">
-                // <audio src=musics node_ref=audio_ref autoplay loop controls></audio>
                 <audio autoplay loop controls>
                     {musics
                         .into_iter()
