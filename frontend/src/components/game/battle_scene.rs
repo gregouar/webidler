@@ -13,13 +13,13 @@ pub fn BattleScene() -> impl IntoView {
 
     let header_background = move || {
         format!(
-            "bg-[url({})]",
+            "backgroundImage: 'url({})';",
             img_asset(&game_context.world_specs.read().header_background)
         )
     };
     let footer_background = move || {
         format!(
-            "bg-[url({})]",
+            "backgroundImage: 'url({})';",
             img_asset(&game_context.world_specs.read().footer_background)
         )
     };
@@ -29,12 +29,10 @@ pub fn BattleScene() -> impl IntoView {
             <PlayerCard class:col-span-1 class:justify-self-end />
 
             <div class="shadow-lg rounded-md overflow-hidden  w-full col-span-2 justify-self-start">
-                <div class=move || {
-                    format!(
-                        "{} relative overflow-hidden w-full h-16 bg-center bg-repeat-x flex items-center justify-center",
-                        header_background(),
-                    )
-                }>
+                <div
+                    class="relative overflow-hidden w-full h-16 bg-center bg-repeat-x flex items-center justify-center"
+                    style=header_background
+                >
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
                     <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-2xl font-bold">
                         <span class="[font-variant:small-caps]">
@@ -49,9 +47,7 @@ pub fn BattleScene() -> impl IntoView {
                     </p>
                 </div>
                 <MonstersGrid />
-                <div class=move || {
-                    format!("{} w-full h-16 bg-center bg-repeat-x", footer_background())
-                }></div>
+                <div class="w-full h-16 bg-center bg-repeat-x" style=footer_background></div>
             </div>
 
         </div>
