@@ -41,19 +41,34 @@ pub fn HeaderMenu() -> impl IntoView {
                 // </div>
                 // </div>
 
-                <div class="text-shadow-md text-amber-200 text-xl flex items-center justify-between">
-                    <div class="flex items-center">
-                        <p class="mr-2">Gold:</p>
-                        <div class="flex items-center">
-                            <img
-                                src=img_asset("ui/gold.webp")
-                                alt="gold_icon"
-                                class="object-cover h-full w-auto"
-                            />
-                        </div>
+                // <div class="text-shadow-md text-amber-200 text-xl flex items-center justify-between">
+                // <div class="flex items-center">
+                // <p class="mr-2">Gold:</p>
+                // <div class="flex items-center">
+                // <img
+                // src=img_asset("ui/gold.webp")
+                // alt="gold_icon"
+                // class="object-cover h-full w-auto"
+                // />
+                // </div>
+                // </div>
+                // <div class="flex items-center ml-auto">
+                // <Number value=gold />
+                // </div>
+                // </div>
+
+                <div class="relative h-10 text-xl text-amber-200 text-shadow-md shadow-gray-950">
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center">
+                        <span>Gold:</span>
                     </div>
-                    <div class="flex items-center ml-auto">
+
+                    <div class="absolute right-0 top-1/2 -translate-y-1/2 flex items-center space-x-1">
                         <Number value=gold />
+                        <img
+                            src=img_asset("ui/gold.webp")
+                            alt="gold_icon"
+                            class="h-full w-auto object-contain"
+                        />
                     </div>
                 </div>
 
