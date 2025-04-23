@@ -35,6 +35,7 @@ pub struct GameInstance<'a> {
     player_specs: PlayerSpecs,
     player_state: PlayerState,
     player_controller: PlayerController,
+    need_to_sync_player_specs: bool,
     monster_specs: Vec<MonsterSpecs>,
     monster_states: Vec<MonsterState>,
     monster_wave_delay: Instant,
@@ -54,6 +55,7 @@ impl<'a> GameInstance<'a> {
             player_state: PlayerState::init(&player_specs),
             player_controller: PlayerController::init(&player_specs),
             player_specs,
+            need_to_sync_player_specs: false,
             monster_specs: Vec::new(),
             monster_states: Vec::new(),
             monster_wave_delay: Instant::now(),
@@ -200,11 +202,13 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn update_entities(&mut self, elapsed_time: Duration) {
-        player_updater::update_player_state(
+        if player_updater::update_player_state(
             elapsed_time,
-            &self.player_specs,
+            &mut self.player_specs,
             &mut self.player_state,
-        );
+        ) {
+            self.need_to_sync_player_specs = true;
+        }
         monsters_updater::update_monster_states(
             elapsed_time,
             &self.monster_specs,
@@ -218,6 +222,12 @@ impl<'a> GameInstance<'a> {
             .send(
                 &SyncGameStateMessage {
                     world_state: self.world_state.clone(),
+                    player_specs: if self.need_to_sync_player_specs {
+                        self.need_to_sync_player_specs = false;
+                        Some(self.player_specs.clone())
+                    } else {
+                        None
+                    },
                     player_state: self.player_state.clone(),
                     monster_specs: if self.need_to_sync_monster_specs {
                         self.need_to_sync_monster_specs = false;

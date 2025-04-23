@@ -32,6 +32,7 @@ impl PlayerController {
 
         let mut rng = rand::rng();
 
+        let mut rewards = Vec::new();
         for (i, (skill_specs, skill_state)) in player_specs
             .character_specs
             .skill_specs
@@ -51,13 +52,24 @@ impl PlayerController {
             let j = rng.random_range(0..monsters.len());
             if let Some((target_state, target_specs)) = monsters.get_mut(j).as_deref_mut() {
                 player_state.mana -= skill_specs.mana_cost;
-                character_controller::use_skill(
+                if character_controller::use_skill(
                     skill_specs,
                     skill_state,
                     &mut target_state.character_state,
                     &target_specs.character_specs,
-                );
+                ) {
+                    rewards.push(*target_specs);
+                }
             }
         }
+
+        for reward in rewards {
+            reward_player(player_state, &reward);
+        }
     }
+}
+
+fn reward_player(player_state: &mut PlayerState, target_specs: &MonsterSpecs) {
+    player_state.gold += target_specs.power_factor;
+    player_state.experience += target_specs.power_factor;
 }

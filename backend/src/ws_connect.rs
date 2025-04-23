@@ -137,6 +137,8 @@ async fn handle_connect(
                 },
             ],
         },
+        level: 1,
+        experience_needed: 10.0,
         max_mana: 100.0,
         mana_regen: 3.0,
         auto_skills: vec![true, false, false],

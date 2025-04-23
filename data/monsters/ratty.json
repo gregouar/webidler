@@ -2,7 +2,6 @@
     "character_specs": {
         "name": "Ratty",
         "portrait": "monsters/rat.webp",
-        "power_factor": 2.0,
         "max_health": 20,
         "skill_specs": [
             {
@@ -21,5 +20,6 @@
             }
         ]
     },
+    "power_factor": 2.0,
     "max_initiative": 1.0
 }

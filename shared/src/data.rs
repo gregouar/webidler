@@ -60,6 +60,7 @@ pub struct MonsterSpecs {
     pub character_specs: CharacterSpecs,
 
     pub max_initiative: f32,
+    pub power_factor: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -75,6 +76,9 @@ pub struct MonsterState {
 pub struct PlayerSpecs {
     pub character_specs: CharacterSpecs,
 
+    pub level: u8,
+    pub experience_needed: f64,
+
     pub max_mana: f64,
     pub mana_regen: f64,
 
@@ -84,6 +88,9 @@ pub struct PlayerSpecs {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerState {
     pub character_state: CharacterState,
+
+    pub experience: f64,
+    pub gold: f64, // TODO: Probably move to other data struct
 
     pub mana: f64,
 }

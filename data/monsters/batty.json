@@ -2,7 +2,6 @@
     "character_specs": {
         "name": "Batty",
         "portrait": "monsters/bat.webp",
-        "power_factor": 1.0,
         "max_health": 10,
         "skill_specs": [
             {
@@ -14,5 +13,6 @@
             }
         ]
     },
+    "power_factor": 1.0,
     "max_initiative": 0.5
 }
