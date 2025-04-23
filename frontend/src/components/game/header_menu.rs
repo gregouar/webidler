@@ -31,11 +31,13 @@ pub fn HeaderMenu() -> impl IntoView {
                     <p>"Gold: "</p>
                     <div>
                         <Number value=gold />
-                        <img
-                            src=img_asset("ui/gold.webp")
-                            alt="gold_icon"
-                            class="h-full w-auto aspect-square"
-                        />
+                        <div class="h-full w-auto ">
+                            <img
+                                src=img_asset("ui/gold.webp")
+                                alt="gold_icon"
+                                class="object-cover aspect-square"
+                            />
+                        </div>
                     </div>
                 </div>
                 <div>
