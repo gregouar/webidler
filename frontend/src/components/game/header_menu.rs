@@ -57,20 +57,36 @@ pub fn HeaderMenu() -> impl IntoView {
                 // </div>
                 // </div>
 
-                <div class="relative h-10 text-xl text-amber-200 text-shadow-md shadow-gray-950">
-                    <div class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center">
-                        <span>Gold:</span>
+                <div class="text-shadow-md shadow-gray-950 text-amber-200 text-xl flex justify-between">
+                    <div>
+                        <span>"Gold: "</span>
                     </div>
-
-                    <div class="absolute right-0 top-1/2 -translate-y-1/2 flex items-center space-x-1">
+                    <div class="flex-1 flex items-center space-x-1">
                         <Number value=gold />
-                        <img
-                            src=img_asset("ui/gold.webp")
-                            alt="gold_icon"
-                            class="h-full w-auto object-contain"
-                        />
+                        <div class="h-full w-auto ">
+                            <img
+                                src=img_asset("ui/gold.webp")
+                                alt="gold_icon"
+                                class="object-cover aspect-square"
+                            />
+                        </div>
                     </div>
                 </div>
+
+                // <div class="relative h-10 text-xl text-amber-200 text-shadow-md shadow-gray-950">
+                // <div class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center">
+                // <span>Gold:</span>
+                // </div>
+
+                // <div class="absolute right-0 top-1/2 -translate-y-1/2 flex items-center space-x-1">
+                // <Number value=gold />
+                // <img
+                // src=img_asset("ui/gold.webp")
+                // alt="gold_icon"
+                // class="h-full w-auto object-contain"
+                // />
+                // </div>
+                // </div>
 
                 <div>
                     <p class="text-shadow-md shadow-gray-950 text-xl">"Magic Essence: 0"</p>
