@@ -68,66 +68,73 @@ pub fn PlayerCard() -> impl IntoView {
             }
             "
         </style>
-        <div
-            class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-md ring-1 ring-zinc-950"
-            style=move || {
-                if is_dead.get() {
-                    "animation: player-fade-out 3s ease-in; animation-fill-mode: both;"
-                } else {
-                    "animation: player-fade-in 1s ease-out; animation-fill-mode: both;"
+        <div class="overflow-hidden">
+            <div
+                class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-md ring-1 ring-zinc-950"
+                style=move || {
+                    if is_dead.get() {
+                        "animation: player-fade-out 3s ease-in; animation-fill-mode: both;"
+                    } else {
+                        "animation: player-fade-in 1s ease-out; animation-fill-mode: both;"
+                    }
                 }
-            }
-        >
-            <div>
-                <PlayerName />
-            </div>
+            >
+                <div>
+                    <PlayerName />
+                </div>
 
-            <div class="flex flex-col gap-2">
-                <div class="flex gap-2">
-                    <VerticalProgressBar
-                        class:w-3
-                        class:md:w-6
-                        bar_color="bg-gradient-to-l from-red-500 to-red-700"
-                        value=health_percent
-                    />
-                    <CharacterPortrait
-                        image_uri=game_context.player_specs.read().character_specs.portrait.clone()
-                        character_name="player".to_string()
-                        just_hurt=just_hurt
-                        is_dead=is_dead
-                    />
-                    <VerticalProgressBar
-                        class:w-3
-                        class:md:w-6
-                        bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
-                        value=mana_percent
+                <div class="flex flex-col gap-2">
+                    <div class="flex gap-2">
+                        <VerticalProgressBar
+                            class:w-3
+                            class:md:w-6
+                            bar_color="bg-gradient-to-l from-red-500 to-red-700"
+                            value=health_percent
+                        />
+                        <CharacterPortrait
+                            image_uri=game_context
+                                .player_specs
+                                .read()
+                                .character_specs
+                                .portrait
+                                .clone()
+                            character_name="player".to_string()
+                            just_hurt=just_hurt
+                            is_dead=is_dead
+                        />
+                        <VerticalProgressBar
+                            class:w-3
+                            class:md:w-6
+                            bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
+                            value=mana_percent
+                        />
+                    </div>
+                    <HorizontalProgressBar
+                        class:h-2
+                        class:sm:h-4
+                        bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
+                        // TODO: XP
+                        value=xp_percent
                     />
                 </div>
-                <HorizontalProgressBar
-                    class:h-2
-                    class:sm:h-4
-                    bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
-                    // TODO: XP
-                    value=xp_percent
-                />
-            </div>
 
-            <div class="grid grid-cols-4 gap-2">
-                <For
-                    each=move || {
-                        game_context
-                            .player_specs
-                            .get()
-                            .character_specs
-                            .skill_specs
-                            .into_iter()
-                            .enumerate()
-                    }
-                    key=|(i, _)| *i
-                    let((i, p))
-                >
-                    <PlayerSkill specs=p index=i />
-                </For>
+                <div class="grid grid-cols-4 gap-2">
+                    <For
+                        each=move || {
+                            game_context
+                                .player_specs
+                                .get()
+                                .character_specs
+                                .skill_specs
+                                .into_iter()
+                                .enumerate()
+                        }
+                        key=|(i, _)| *i
+                        let((i, p))
+                    >
+                        <PlayerSkill specs=p index=i />
+                    </For>
+                </div>
             </div>
         </div>
     }

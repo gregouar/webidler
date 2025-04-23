@@ -22,11 +22,15 @@ pub fn HeaderMenu() -> impl IntoView {
         .map(|m| music_asset(m))
         .collect();
 
+    let gold = move || game_context.player_state.read().gold;
+
     view! {
         <div class="relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full">
                 <div>
-                    <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">"Gold: 0"</p>
+                    <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
+                        {move || format!("Gold: {:e}", gold())}
+                    </p>
                 </div>
                 <div>
                     <p class="text-shadow-md shadow-gray-950 text-xl">"Magic Essence: 0"</p>

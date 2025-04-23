@@ -199,6 +199,7 @@ impl<'a> GameInstance<'a> {
                 self.respawn_player();
             }
         } else {
+            self.player_respawn_delay = Instant::now();
             let mut monsters_still_alive: Vec<(&mut MonsterState, &MonsterSpecs)> = self
                 .monster_states
                 .iter_mut()
@@ -206,7 +207,6 @@ impl<'a> GameInstance<'a> {
                 .filter(|(x, _)| x.character_state.is_alive)
                 .collect();
 
-            self.player_respawn_delay = Instant::now();
             self.player_controller.control_player(
                 &self.player_specs,
                 &mut self.player_state,
