@@ -15,7 +15,9 @@ use shared::{
     },
 };
 
-use super::systems::{character_controller, monsters_controller, monsters_updater, player_updater};
+use super::systems::{
+    character_controller, monsters_controller, monsters_updater, monsters_wave, player_updater,
+};
 use super::{data::DataInit, systems::player_controller::PlayerController, world::WorldBlueprint};
 
 use crate::websocket::WebSocketConnection;
@@ -146,9 +148,8 @@ impl<'a> GameInstance<'a> {
             self.world_state.area_level += 1;
         }
 
-        self.monster_specs = self
-            .world_blueprint
-            .generate_monsters_wave(&self.world_state)?;
+        self.monster_specs =
+            monsters_wave::generate_monsters_wave_specs(&self.world_blueprint, &self.world_state)?;
 
         self.monster_states = self
             .monster_specs
