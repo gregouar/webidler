@@ -13,13 +13,13 @@ pub fn BattleScene() -> impl IntoView {
 
     let header_background = move || {
         format!(
-            "backgroundImage: url('{}');",
+            "background-image: url('{}');",
             img_asset(&game_context.world_specs.read().header_background)
         )
     };
     let footer_background = move || {
         format!(
-            "backgroundImage: url('{}');",
+            "background-image: url('{}');",
             img_asset(&game_context.world_specs.read().footer_background)
         )
     };
