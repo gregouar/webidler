@@ -66,13 +66,11 @@ pub fn HeaderMenu() -> impl IntoView {
 fn ResourceCounter(icon: &'static str, tooltip: &'static str, value: Signal<f64>) -> impl IntoView {
     view! {
         <div class="flex-1 text-shadow-md shadow-gray-950 text-xl flex justify-center items-center space-x-1">
-            <Number value=value />
-            <div class="relative group">
-                <img src=img_asset(icon) alt=tooltip class="h-[2em] aspect-square" />
-                <div class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-800 text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
-                    {tooltip}
-                </div>
+            <div class="font-mono tabular-nums w-[4ch] text-right">
+                <Number value=value />
             </div>
+            <img src=img_asset(icon) alt=tooltip class="h-[2em] aspect-square" />
+        // TODO: tooltip
         </div>
     }
 }
