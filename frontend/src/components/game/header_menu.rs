@@ -25,37 +25,18 @@ pub fn HeaderMenu() -> impl IntoView {
     let gems = Signal::derive(move || 0.0);
 
     view! {
-        <div class="relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
+        <div class="relative z-50 flex justify-between items-center p-1 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
-                <div class="flex-1 text-shadow-md shadow-gray-950 text-amber-200 text-xl flex justify-center items-center space-x-1">
-                    <Number value=gold />
-                    <div class="relative group">
-                        <img
-                            src=img_asset("ui/gold.webp")
-                            alt="gold"
-                            class="h-[3em] aspect-square"
-                        />
-                        <div class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-800 text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
-                            "Gold"
-                        </div>
-                    </div>
-                </div>
+                <ResourceCounter
+                    class:text-amber-200
+                    icon="ui/gold.webp"
+                    tooltip="Gold"
+                    value=gold
+                />
                 <div class="flex-1">
                     <p class="text-shadow-md shadow-gray-950 text-xl">"Magic Essence: 0"</p>
                 </div>
-                <div class="flex-1 text-shadow-md shadow-gray-950 text-amber-200 text-xl flex justify-center items-center space-x-1">
-                    <Number value=gems />
-                    <div class="relative group">
-                        <img
-                            src=img_asset("ui/gems.webp")
-                            alt="gems"
-                            class="h-[3em] aspect-square"
-                        />
-                        <div class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-800 text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
-                            "Gems"
-                        </div>
-                    </div>
-                </div>
+                <ResourceCounter icon="ui/gems.webp" tooltip="Gems" value=gems />
                 <div class="flex-1">
                     <p class="text-shadow-md shadow-gray-950 text-xl">"Power Shards: 0"</p>
                 </div>
@@ -76,6 +57,21 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButton>"Passive Skills"</MenuButton>
                 <MenuButton>"Statistics"</MenuButton>
                 <MenuButton on:click=abandon_quest>"Abandon Quest"</MenuButton>
+            </div>
+        </div>
+    }
+}
+
+#[component]
+fn ResourceCounter(icon: &'static str, tooltip: &'static str, value: Signal<f64>) -> impl IntoView {
+    view! {
+        <div class="flex-1 text-shadow-md shadow-gray-950 text-xl flex justify-center items-center space-x-1">
+            <Number value=value />
+            <div class="relative group">
+                <img src=img_asset(icon) alt=tooltip class="h-[2em] aspect-square" />
+                <div class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-800 text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                    {tooltip}
+                </div>
             </div>
         </div>
     }
