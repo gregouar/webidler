@@ -36,7 +36,7 @@ pub fn HeaderMenu() -> impl IntoView {
                         <img
                             src=img_asset("ui/gold.webp")
                             alt="gold_icon"
-                            class="h-full aspect-square"
+                            class="h-full aspect-square object-contain"
                         />
                     </div>
                 </div>
