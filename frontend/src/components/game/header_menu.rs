@@ -26,17 +26,17 @@ pub fn HeaderMenu() -> impl IntoView {
     view! {
         <div class="relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
-                <div class="flex-1 text-shadow-md shadow-gray-950 text-amber-200 text-xl flex justify-between items-center">
-                    <div>
-                        <span>"Gold: "</span>
-                    </div>
-                    <div class="flex items-center space-x-1 max-h-10">
-                        <Number value=gold />
+                <div class="flex-1 text-shadow-md shadow-gray-950 text-amber-200 text-xl flex items-center space-x-1">
+                    <Number value=gold />
+                    <div class="relative">
                         <img
                             src=img_asset("ui/gold.webp")
-                            alt="gold_icon"
-                            class="h-[1.5em] aspect-square"
+                            alt="gold"
+                            class="h-[3em] aspect-square"
                         />
+                        <div class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-800 text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                            "Gold"
+                        </div>
                     </div>
                 </div>
                 <div class="flex-1">
