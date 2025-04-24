@@ -13,7 +13,6 @@ pub fn HeaderMenu() -> impl IntoView {
     let navigate = leptos_router::hooks::use_navigate();
     let abandon_quest = move |_| navigate("/", Default::default());
 
-    // let audio_ref = NodeRef::<Audio>::new();
     let musics: Vec<String> = game_context
         .world_specs
         .read()
@@ -36,7 +35,7 @@ pub fn HeaderMenu() -> impl IntoView {
                         <img
                             src=img_asset("ui/gold.webp")
                             alt="gold_icon"
-                            class="h-full aspect-square object-contain"
+                            class="h-[1.5em] aspect-square"
                         />
                     </div>
                 </div>
