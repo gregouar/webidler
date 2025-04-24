@@ -54,7 +54,7 @@ fn pick_wave<'a>(waves: Vec<&'a MonsterWaveBlueprint>) -> Result<Option<&'a Mons
 
 fn generate_monster_specs(
     wave: &MonsterWaveBlueprint,
-    monster_specs: &HashMap<PathBuf, MonsterSpecs>,
+    monster_specs_blueprint: &HashMap<PathBuf, MonsterSpecs>,
     world_state: &WorldState,
 ) -> Result<Vec<MonsterSpecs>> {
     let mut rng = rand::rng();
@@ -67,11 +67,12 @@ fn generate_monster_specs(
             ));
         }
         for _ in 0..rng.random_range(spawn.min_quantity..=spawn.max_quantity) {
-            if let Some(specs) = monster_specs.get(&spawn.path) {
+            if let Some(specs) = monster_specs_blueprint.get(&spawn.path) {
                 // TODO: Increase in power
-                let _ = world_state;
-                monsters_specs.push(specs.clone());
-                if monster_specs.len() >= MAX_MONSTERS {
+                let mut specs = specs.clone();
+                specs.power_factor *= world_state.area_level as f64;
+                monsters_specs.push(specs);
+                if monsters_specs.len() >= MAX_MONSTERS {
                     break 'spawnloop;
                 }
             }

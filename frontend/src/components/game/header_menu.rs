@@ -25,7 +25,7 @@ pub fn HeaderMenu() -> impl IntoView {
     let gems = Signal::derive(move || 0.0);
 
     view! {
-        <div class="relative z-50 flex justify-between items-center p-1 bg-zinc-800 shadow-md h-auto">
+        <div class="relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
                 <ResourceCounter
                     class:text-amber-200
@@ -33,13 +33,11 @@ pub fn HeaderMenu() -> impl IntoView {
                     tooltip="Gold"
                     value=gold
                 />
-                <div class="flex-1">
-                    <p class="text-shadow-md shadow-gray-950 text-xl">"Magic Essence: 0"</p>
-                </div>
+                // TODO: Magic Essence
                 <ResourceCounter icon="ui/gems.webp" tooltip="Gems" value=gems />
-                <div class="flex-1">
-                    <p class="text-shadow-md shadow-gray-950 text-xl">"Power Shards: 0"</p>
-                </div>
+                <ResourceCounter icon="ui/gems.webp" tooltip="Gems" value=gems />
+                // TODO: Power Shards
+                <ResourceCounter icon="ui/gems.webp" tooltip="Gems" value=gems />
             </div>
             <div class="flex space-x-2  w-full">
                 <audio autoplay loop controls>
@@ -66,7 +64,7 @@ pub fn HeaderMenu() -> impl IntoView {
 fn ResourceCounter(icon: &'static str, tooltip: &'static str, value: Signal<f64>) -> impl IntoView {
     view! {
         <div class="flex-1 text-shadow-md shadow-gray-950 text-xl flex justify-center items-center space-x-1">
-            <div class="font-mono tabular-nums w-[4ch] text-right">
+            <div class="font-mono tabular-nums w-[8ch] text-right">
                 <Number value=value />
             </div>
             <img src=img_asset(icon) alt=tooltip class="h-[2em] aspect-square" />
