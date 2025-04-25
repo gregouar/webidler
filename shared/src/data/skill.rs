@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct SkillSpecs {
     pub name: String,
     pub icon: String,
+    #[serde(default)]
     pub description: String,
 
     pub cooldown: f32,

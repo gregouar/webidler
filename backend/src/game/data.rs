@@ -17,9 +17,14 @@ pub async fn load_schema<S>(filepath: &PathBuf) -> Result<S>
 where
     S: DeserializeOwned,
 {
-    Ok(serde_json::from_slice(
-        &fs::read(&PathBuf::from("./data").join(filepath)).await?,
-    )?)
+    match serde_json::from_slice(&fs::read(&PathBuf::from("./data").join(filepath)).await?) {
+        Ok(s) => Ok(s),
+        Err(e) => Err(anyhow::format_err!(
+            "Failed to load {:?} because: {}",
+            filepath,
+            e
+        )),
+    }
 }
 
 pub trait DataInit<Specs> {
