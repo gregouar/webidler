@@ -3,8 +3,7 @@ use leptos::prelude::*;
 
 use rand::Rng;
 
-use shared::data::MonsterSpecs;
-use shared::data::SkillSpecs;
+use shared::data::{monster::MonsterSpecs, skill::SkillSpecs};
 
 use crate::assets::img_asset;
 use crate::components::ui::progress_bars::{CircularProgressBar, HorizontalProgressBar};

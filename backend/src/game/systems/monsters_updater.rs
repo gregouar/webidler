@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use shared::data::{MonsterSpecs, MonsterState};
+use shared::data::monster::{MonsterSpecs, MonsterState};
 
 use super::characters_updater;
 

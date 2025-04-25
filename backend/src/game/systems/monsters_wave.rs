@@ -3,9 +3,11 @@ use std::{collections::HashMap, path::PathBuf};
 use anyhow::Result;
 use rand::Rng;
 
-use shared::data::{MonsterSpecs, WorldState};
+use shared::data::{monster::MonsterSpecs, world::WorldState};
 
 use crate::game::world::{MonsterWaveBlueprint, WorldBlueprint};
+
+use super::increase_factors::exponential_factor;
 
 const MAX_MONSTERS: usize = 6; // TODO: Move
 
@@ -14,7 +16,7 @@ pub fn generate_monsters_wave_specs(
     world_state: &WorldState,
 ) -> Result<Vec<MonsterSpecs>> {
     pick_wave(filter_waves(&world_blueprint.schema.waves, world_state))?
-        .map(|wave| generate_monster_specs(wave, &world_blueprint.monster_specs, world_state))
+        .map(|wave| generate_all_monsters_specs(wave, &world_blueprint.monster_specs, world_state))
         .unwrap_or(Err(anyhow::format_err!("no monster wave available")))
 }
 
@@ -52,7 +54,7 @@ fn pick_wave<'a>(waves: Vec<&'a MonsterWaveBlueprint>) -> Result<Option<&'a Mons
         .map(|(_, w)| *w))
 }
 
-fn generate_monster_specs(
+fn generate_all_monsters_specs(
     wave: &MonsterWaveBlueprint,
     monster_specs_blueprint: &HashMap<PathBuf, MonsterSpecs>,
     world_state: &WorldState,
@@ -68,10 +70,7 @@ fn generate_monster_specs(
         }
         for _ in 0..rng.random_range(spawn.min_quantity..=spawn.max_quantity) {
             if let Some(specs) = monster_specs_blueprint.get(&spawn.path) {
-                // TODO: Increase in power
-                let mut specs = specs.clone();
-                specs.power_factor *= world_state.area_level as f64;
-                monsters_specs.push(specs);
+                monsters_specs.push(generate_monster_specs(specs, world_state));
                 if monsters_specs.len() >= MAX_MONSTERS {
                     break 'spawnloop;
                 }
@@ -79,4 +78,16 @@ fn generate_monster_specs(
         }
     }
     Ok(monsters_specs)
+}
+
+fn generate_monster_specs(bp_specs: &MonsterSpecs, world_state: &WorldState) -> MonsterSpecs {
+    let mut monster_specs = bp_specs.clone();
+    let increase_factor = exponential_factor(world_state.area_level as f64);
+    monster_specs.power_factor *= increase_factor;
+    monster_specs.character_specs.max_health *= increase_factor;
+    for skill_specs in monster_specs.character_specs.skill_specs.iter_mut() {
+        skill_specs.min_damages *= increase_factor;
+        skill_specs.max_damages *= increase_factor;
+    }
+    monster_specs
 }

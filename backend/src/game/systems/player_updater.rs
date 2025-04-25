@@ -1,8 +1,9 @@
 use std::time::Duration;
 
-use shared::data::{PlayerSpecs, PlayerState};
+use shared::data::player::{PlayerSpecs, PlayerState};
 
 use super::characters_updater;
+use super::increase_factors::exponential_factor;
 
 pub fn update_player_state(
     elapsed_time: Duration,
@@ -37,7 +38,7 @@ pub fn update_player_state(
 fn level_up(player_specs: &mut PlayerSpecs, player_state: &mut PlayerState) {
     player_specs.level += 1;
     player_state.experience -= player_specs.experience_needed;
-    player_specs.experience_needed = player_specs.experience_needed * 10.0;
+    player_specs.experience_needed = 10.0 * exponential_factor(player_specs.level as f64);
 
     player_state.character_state.health += 10.0;
     player_specs.character_specs.max_health += 10.0;

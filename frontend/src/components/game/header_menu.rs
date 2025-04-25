@@ -34,10 +34,10 @@ pub fn HeaderMenu() -> impl IntoView {
                     value=gold
                 />
                 // TODO: Magic Essence
-                <ResourceCounter icon="ui/magic_essence.webp" tooltip="Gems" value=gems />
+                <ResourceCounter icon="ui/magic_essence.webp" tooltip="Magic Essence" value=gems />
                 <ResourceCounter icon="ui/gems.webp" tooltip="Gems" value=gems />
                 // TODO: Power Shards
-                <ResourceCounter icon="ui/power_shard.webp" tooltip="Gems" value=gems />
+                <ResourceCounter icon="ui/power_shard.webp" tooltip="Power Shards" value=gems />
             </div>
             <div class="flex space-x-2  w-full">
                 <audio autoplay loop controls>

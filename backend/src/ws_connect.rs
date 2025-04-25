@@ -14,14 +14,18 @@ use std::{net::SocketAddr, time::Duration};
 use std::{ops::ControlFlow, vec};
 
 use shared::{
-    data::{CharacterSpecs, PlayerSpecs, SkillSpecs},
+    data::{
+        item::{ItemCategory, ItemSpecs, WeaponSpecs},
+        player::{CharacterSpecs, PlayerInventory, PlayerSpecs},
+        skill::{Range, Shape, SkillSpecs, TargetType},
+    },
     messages::{
         client::{ClientConnectMessage, ClientMessage},
         server::ConnectMessage,
     },
 };
 
-use crate::game::{world::WorldBlueprint, GameInstance};
+use crate::game::{systems::weapon::make_weapon_skill, world::WorldBlueprint, GameInstance};
 use crate::websocket::WebSocketConnection;
 
 const CLIENT_INACTIVITY_TIMEOUT: Duration = Duration::from_secs(60);
@@ -103,37 +107,57 @@ async fn handle_connect(
         .into(),
     )
     .await?;
+
+    let weapon = ItemSpecs {
+        name: "Shortsword".to_string(),
+        description: "Fasty Slicy".to_string(),
+        icon: "items/shortsword.webp".to_string(),
+        item_level: 1,
+        item_category: ItemCategory::Weapon(WeaponSpecs {
+            base_cooldown: 1.0,
+            cooldown: 1.0,
+            range: Range::Front,
+            shape: Shape::Single,
+            base_min_damages: 3.0,
+            min_damages: 3.0,
+            base_max_damages: 7.0,
+            max_damages: 7.0,
+            magic_prefixes: Vec::new(),
+            magic_suffixes: Vec::new(),
+        }),
+    };
+
     Ok(PlayerSpecs {
         character_specs: CharacterSpecs {
-            // identifier: 0,
             name: msg.bearer.clone(),
             portrait: String::from("adventurers/human_male_2.webp"),
             max_health: 100.0,
             health_regen: 1.0,
             skill_specs: vec![
-                SkillSpecs {
-                    name: String::from("Weapon Attack"),
-                    icon: String::from("skills/attack.svg"),
-                    cooldown: 1.0,
-                    mana_cost: 0.0,
-                    min_damages: 3.0,
-                    max_damages: 7.0,
-                },
+                make_weapon_skill(&weapon).unwrap_or_default(),
                 SkillSpecs {
                     name: String::from("Fireball"),
+                    description: "A throw of mighty fireball, burning multiple enemies".to_string(),
                     icon: String::from("skills/fireball2.svg"),
                     cooldown: 5.0,
                     mana_cost: 20.0,
                     min_damages: 10.0,
                     max_damages: 30.0,
+                    range: Range::Middle,
+                    target_type: TargetType::Enemy,
+                    shape: Shape::Square4,
                 },
                 SkillSpecs {
                     name: String::from("Heal"),
+                    description: "A minor healing spell for yourself".to_string(),
                     icon: String::from("skills/heal.svg"),
                     cooldown: 30.0,
                     mana_cost: 20.0,
                     min_damages: -20.0,
                     max_damages: -20.0,
+                    range: Range::Front,
+                    target_type: TargetType::Me,
+                    shape: Shape::Single,
                 },
             ],
         },
@@ -142,5 +166,26 @@ async fn handle_connect(
         max_mana: 100.0,
         mana_regen: 3.0,
         auto_skills: vec![true, false, false],
+        inventory: PlayerInventory {
+            weapon_specs: Some(weapon),
+            bag: vec![ItemSpecs {
+                name: "Battleaxe".to_string(),
+                description: "A shiny thing".to_string(),
+                icon: "items/battleaxe.webp".to_string(),
+                item_level: 2,
+                item_category: ItemCategory::Weapon(WeaponSpecs {
+                    base_cooldown: 1.2,
+                    cooldown: 1.2,
+                    range: Range::Front,
+                    shape: Shape::Single,
+                    base_min_damages: 4.0,
+                    min_damages: 4.0,
+                    base_max_damages: 8.0,
+                    max_damages: 8.0,
+                    magic_prefixes: Vec::new(),
+                    magic_suffixes: Vec::new(),
+                }),
+            }],
+        },
     })
 }

@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use shared::data::{CharacterSpecs, CharacterState};
+use shared::data::character::{CharacterSpecs, CharacterState};
 
 pub fn update_character_state(
     elapsed_time: Duration,

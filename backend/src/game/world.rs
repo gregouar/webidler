@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 use futures::future::join_all;
 
 use super::data::load_schema;
-use shared::data::{MonsterSpecs, WorldSpecs};
+use shared::data::{monster::MonsterSpecs, world::WorldSpecs};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct WorldBlueprint {

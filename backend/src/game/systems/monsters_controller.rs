@@ -1,4 +1,7 @@
-use shared::data::{MonsterSpecs, MonsterState, PlayerSpecs, PlayerState};
+use shared::data::{
+    monster::{MonsterSpecs, MonsterState},
+    player::{PlayerSpecs, PlayerState},
+};
 
 use super::character_controller;
 

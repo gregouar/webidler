@@ -6,8 +6,11 @@ use serde::de::DeserializeOwned;
 use tokio::fs;
 
 use shared::data::{
-    CharacterSpecs, CharacterState, MonsterSpecs, MonsterState, PlayerSpecs, PlayerState,
-    SkillSpecs, SkillState, WorldSpecs, WorldState,
+    character::{CharacterSpecs, CharacterState},
+    monster::{MonsterSpecs, MonsterState},
+    player::{PlayerSpecs, PlayerState},
+    skill::{SkillSpecs, SkillState},
+    world::{WorldSpecs, WorldState},
 };
 
 pub async fn load_schema<S>(filepath: &PathBuf) -> Result<S>

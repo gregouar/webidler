@@ -7,7 +7,7 @@ use axum::{
 };
 
 use http::{HeaderValue, Method};
-use shared::data::{HelloSchema, OtherSchema};
+use shared::data::world::{HelloSchema, OtherSchema};
 use tower_http::{
     cors::CorsLayer,
     trace::{DefaultMakeSpan, TraceLayer},

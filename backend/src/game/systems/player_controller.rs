@@ -1,5 +1,8 @@
 use rand::Rng;
-use shared::data::{MonsterSpecs, MonsterState, PlayerResources, PlayerSpecs, PlayerState};
+use shared::data::{
+    monster::{MonsterSpecs, MonsterState},
+    player::{PlayerResources, PlayerSpecs, PlayerState},
+};
 
 use super::character_controller;
 

@@ -1,7 +1,9 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    MonsterSpecs, MonsterState, PlayerResources, PlayerSpecs, PlayerState, WorldSpecs, WorldState,
+    monster::{MonsterSpecs, MonsterState},
+    player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    world::{WorldSpecs, WorldState},
 };
 
 use super::macros::impl_into_message;
@@ -36,6 +38,7 @@ pub struct SyncGameStateMessage {
     pub player_specs: Option<PlayerSpecs>,
     pub player_state: PlayerState,
     pub player_resources: PlayerResources,
+    // TODO: Optional inventory
     // monster_specs list is only updated when monsters change
     pub monster_specs: Option<Vec<MonsterSpecs>>,
     pub monster_states: Vec<MonsterState>,

@@ -8,7 +8,11 @@ use std::{
 };
 
 use shared::{
-    data::{MonsterSpecs, MonsterState, PlayerResources, PlayerSpecs, PlayerState, WorldState},
+    data::{
+        monster::{MonsterSpecs, MonsterState},
+        player::{PlayerResources, PlayerSpecs, PlayerState},
+        world::WorldState,
+    },
     messages::{
         client::ClientMessage,
         server::{InitGameMessage, SyncGameStateMessage},
@@ -182,7 +186,7 @@ impl<'a> GameInstance<'a> {
 
         self.player_state = PlayerState::init(&self.player_specs);
 
-        self.world_state.area_level = self.world_state.area_level.checked_div(1).unwrap_or(1);
+        self.world_state.area_level = self.world_state.area_level.checked_sub(1).unwrap_or(1);
         self.world_state.waves_done = 0;
     }
 

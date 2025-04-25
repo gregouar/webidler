@@ -1,7 +1,7 @@
 use leptos::html::*;
 use leptos::prelude::*;
 
-use shared::data::SkillSpecs;
+use shared::data::skill::SkillSpecs;
 use shared::messages::client::SetAutoSkillMessage;
 use shared::messages::client::UseSkillMessage;
 

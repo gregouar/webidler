@@ -9,7 +9,7 @@ use leptos_router::hooks::use_navigate;
 use reqwest;
 use serde_json;
 
-use shared::data::HelloSchema;
+use shared::data::world::HelloSchema;
 
 use crate::components::ui::buttons::MenuButton;
 

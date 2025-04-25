@@ -1,6 +1,6 @@
 use rand::Rng;
 
-use shared::data::{CharacterSpecs, CharacterState, SkillSpecs, SkillState};
+use shared::data::character::{CharacterSpecs, CharacterState, SkillSpecs, SkillState};
 
 use super::characters_updater;
 
