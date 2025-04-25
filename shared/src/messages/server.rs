@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     monster::{MonsterSpecs, MonsterState},
-    player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    player::{PlayerResources, PlayerSpecs, PlayerState},
     world::{WorldSpecs, WorldState},
 };
 

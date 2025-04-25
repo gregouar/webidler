@@ -113,27 +113,23 @@ fn ItemCard(item_specs: ItemSpecs) -> impl IntoView {
 
 #[component]
 fn ItemTooltip(item_specs: ItemSpecs) -> impl IntoView {
-    // TODO: use li etc
+    let extra_info = match &item_specs.item_category {
+        ItemCategory::Trinket => view! { <li>"Type: Trinket"</li> }.into_any(),
+        ItemCategory::Weapon(ws) => view! {
+            <li>"Type: Weapon"</li>
+            <li>{format!("Damage: {} - {}", ws.min_damages, ws.max_damages)}</li>
+            <li>{format!("Speed: {:.2}", ws.cooldown)}</li>
+        }
+        .into_any(),
+    };
+
     view! {
-        <div>
-            <strong>{item_specs.name}</strong>
+        <div class="tooltip">
+            <strong>{item_specs.name.clone()}</strong>
             <br />
-            <br />
-            {item_specs.item_level}
-            <br />
-            {match item_specs.item_category {
-                ItemCategory::Trinket => {}
-                ItemCategory::Weapon(ws) => {
-                    view! {
-                        <p>
-                            "Damages: " {ws.min_damages}- {ws.max_damages} <br /> "Speed: "
-                            {ws.cooldown} <br />
-                        </p>
-                    }
-                }
-            }}
-            <br />
-            {item_specs.description}
+            <small>"Item Level: " {item_specs.item_level}</small>
+            <ul>{extra_info}</ul>
+            <p>{item_specs.description.clone()}</p>
         </div>
     }
 }
