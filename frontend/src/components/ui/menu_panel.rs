@@ -59,14 +59,14 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
         </style>
         <Show when=move || is_visible.get()>
             <div
-                class="absolute h-full inset-0 bg-black/50 z-40"
+                class="absolute h-full inset-0 bg-black/70 z-40"
                 on:click=move |_| open.set(false)
                 on:keydown=handle_key
                 // allow it to receive keyboard events
                 tabindex="0"
             >
                 <div
-                    class="w-full grid grid-cols-3 justify-items-stretch flex items-start gap-4 p-4"
+                    class="w-full"
                     style=move || {
                         if open.get() {
                             "animation: dropDown 0.3s ease-out forwards;"

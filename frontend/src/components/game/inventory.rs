@@ -40,8 +40,10 @@ pub fn Inventory(open: RwSignal<bool>) -> impl IntoView {
             }}
         </Tooltip>
         <MenuPanel open=open>
-            <EquippedItems class:col-span-1 class:justify-self-end />
-            <ItemsGrid class:col-span-2 class:justify-self-start />
+            <div class="grid grid-cols-7 justify-items-stretch flex items-start gap-4 p-4">
+                <EquippedItems class:col-span-2 class:justify-self-end />
+                <ItemsGrid class:col-span-5 class:justify-self-start />
+            </div>
         </MenuPanel>
     }
 }
@@ -55,15 +57,19 @@ pub fn EquippedItems() -> impl IntoView {
             <div>
                 <PlayerName />
             </div>
-            <div class="grid grid-rows-3 grid-cols-5">
-                // TODO: Dynamic + handle None
-                <ItemCard item_specs=game_context
-                    .player_specs
-                    .read()
-                    .inventory
-                    .weapon_specs
-                    .clone()
-                    .unwrap_or_default() />
+            <div class="grid grid-rows-3 grid-cols-3 gap-3 p-4 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                <EmptySlot />
+                <EmptySlot />
+                <EmptySlot />
+                {move || match &game_context.player_specs.read().inventory.weapon_specs {
+                    Some(weapon) => view! { <ItemCard item_specs=weapon.clone() /> }.into_any(),
+                    None => view! { <EmptySlot /> }.into_any(),
+                }}
+                <EmptySlot />
+                <EmptySlot />
+                <EmptySlot />
+                <EmptySlot />
+                <EmptySlot />
             </div>
         </div>
     }
@@ -72,33 +78,50 @@ pub fn EquippedItems() -> impl IntoView {
 #[component]
 fn ItemsGrid() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+    let inventory = move || game_context.player_specs.read().inventory.bag.clone();
+
+    let total_slots = game_context.player_specs.read().inventory.max_bag_size as usize;
 
     view! {
-        <div class="bg-zinc-800 rounded-md h-full w-full shadow-lg ring-1 ring-zinc-950">
-            <div>
-                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">"Bag"</p>
-            </div>
-            <div class="grid grid-rows-3 grid-cols-10 gap-2 p-4">
+        <div class="bg-zinc-800 rounded-md h-full w-full shadow-lg ring-1 ring-zinc-950 overflow-hidden relative gap-2 p-2">
 
+            <div class="px-4 mb-2 relative z-10 flex items-center justify-between">
+                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
+                    "Inventory"
+                </p>
+
+                <p class="text-shadow-md shadow-gray-950 text-gray-400 text-md font-medium">
+                    {format!(
+                        "{} / {}",
+                        game_context.player_specs.read().inventory.bag.len(),
+                        game_context.player_specs.read().inventory.max_bag_size,
+                    )}
+                </p>
+            </div>
+            <div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 p-4 relative z-10 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                 <For
-                    each=move || {
-                        game_context
-                            .player_specs
-                            .read()
-                            .inventory
-                            .bag
-                            .clone()
-                            .into_iter()
-                            .enumerate()
-                    }
-                    // We need a unique key to replace old elements
-                    key=move |(index, _)| *index
-                    children=move |(_, specs)| {
-                        view! { <ItemCard item_specs=specs /> }
+                    each=move || (0..total_slots)
+                    key=|i| *i
+                    children=move |i| {
+                        let maybe_item = inventory().get(i).cloned();
+                        view! {
+                            <div class="group relative w-full aspect-[2/3]">
+                                {maybe_item
+                                    .map(|specs| view! { <ItemCard item_specs=specs /> }.into_any())
+                                    .unwrap_or_else(|| view! { <EmptySlot /> }.into_any())}
+                            </div>
+                        }
                     }
                 />
             </div>
         </div>
+    }
+}
+
+#[component]
+fn EmptySlot() -> impl IntoView {
+    view! {
+        <div class="w-full h-full rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70" />
     }
 }
 

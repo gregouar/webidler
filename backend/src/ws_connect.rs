@@ -171,6 +171,7 @@ async fn handle_connect(
         auto_skills: vec![true, false, false],
         inventory: PlayerInventory {
             weapon_specs: Some(weapon),
+            max_bag_size: 40,
             bag: vec![
                 ItemSpecs {
                     name: "Battleaxe".to_string(),

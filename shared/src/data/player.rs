@@ -37,4 +37,5 @@ pub struct PlayerResources {
 pub struct PlayerInventory {
     pub weapon_specs: Option<ItemSpecs>, // How to ensure it's a weapon?
     pub bag: Vec<ItemSpecs>,
+    pub max_bag_size: u8,
 }
