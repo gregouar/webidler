@@ -7,11 +7,26 @@ pub struct ItemSpecs {
     pub name: String,
     pub icon: String,
     pub description: String,
+    pub rarity: ItemRarity,
 
     // Area level at which the item dropped
     pub item_level: u16,
 
     pub item_category: ItemCategory,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub enum ItemRarity {
+    Normal,
+    Magic,
+    Rare,
+    Unique,
+}
+
+impl Default for ItemRarity {
+    fn default() -> Self {
+        ItemRarity::Normal
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

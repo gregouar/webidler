@@ -15,7 +15,9 @@ use std::{ops::ControlFlow, vec};
 
 use shared::{
     data::{
-        item::{ItemCategory, ItemSpecs, WeaponSpecs},
+        item::{
+            ItemCategory, ItemRarity, ItemSpecs, WeaponMagicPrefix, WeaponMagicSuffix, WeaponSpecs,
+        },
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs},
         skill::{Range, Shape, SkillSpecs, TargetType},
     },
@@ -113,6 +115,7 @@ async fn handle_connect(
         description: "Fasty Slicy".to_string(),
         icon: "items/shortsword.webp".to_string(),
         item_level: 1,
+        rarity: ItemRarity::Normal,
         item_category: ItemCategory::Weapon(WeaponSpecs {
             base_cooldown: 1.0,
             cooldown: 1.0,
@@ -168,24 +171,68 @@ async fn handle_connect(
         auto_skills: vec![true, false, false],
         inventory: PlayerInventory {
             weapon_specs: Some(weapon),
-            bag: vec![ItemSpecs {
-                name: "Battleaxe".to_string(),
-                description: "A shiny thing".to_string(),
-                icon: "items/battleaxe.webp".to_string(),
-                item_level: 2,
-                item_category: ItemCategory::Weapon(WeaponSpecs {
-                    base_cooldown: 1.2,
-                    cooldown: 1.2,
-                    range: Range::Front,
-                    shape: Shape::Single,
-                    base_min_damages: 4.0,
-                    min_damages: 4.0,
-                    base_max_damages: 8.0,
-                    max_damages: 8.0,
-                    magic_prefixes: Vec::new(),
-                    magic_suffixes: Vec::new(),
-                }),
-            }],
+            bag: vec![
+                ItemSpecs {
+                    name: "Battleaxe".to_string(),
+                    description: "A shiny thing".to_string(),
+                    icon: "items/battleaxe.webp".to_string(),
+                    item_level: 2,
+                    rarity: ItemRarity::Magic,
+                    item_category: ItemCategory::Weapon(WeaponSpecs {
+                        base_cooldown: 1.2,
+                        cooldown: 1.2,
+                        range: Range::Front,
+                        shape: Shape::Single,
+                        base_min_damages: 4.0,
+                        min_damages: 4.0,
+                        base_max_damages: 8.0,
+                        max_damages: 8.0,
+                        magic_prefixes: vec![WeaponMagicPrefix::AttackDamages(0.1)],
+                        magic_suffixes: Vec::new(),
+                    }),
+                },
+                ItemSpecs {
+                    name: "Shortsword".to_string(),
+                    description: "Fasty Slicy".to_string(),
+                    icon: "items/shortsword.webp".to_string(),
+                    item_level: 1,
+                    rarity: ItemRarity::Rare,
+                    item_category: ItemCategory::Weapon(WeaponSpecs {
+                        base_cooldown: 1.0,
+                        cooldown: 1.0,
+                        range: Range::Front,
+                        shape: Shape::Single,
+                        base_min_damages: 3.0,
+                        min_damages: 3.0,
+                        base_max_damages: 7.0,
+                        max_damages: 7.0,
+                        magic_prefixes: vec![
+                            WeaponMagicPrefix::AttackDamages(0.1),
+                            WeaponMagicPrefix::AttackSpeed(0.1),
+                        ],
+                        magic_suffixes: vec![WeaponMagicSuffix::GoldFind(0.3)],
+                    }),
+                },
+                ItemSpecs {
+                    name: "Stabby the First".to_string(),
+                    description: "Most Unique Fasty Slicy".to_string(),
+                    icon: "items/shortsword.webp".to_string(),
+                    item_level: 1,
+                    rarity: ItemRarity::Unique,
+                    item_category: ItemCategory::Weapon(WeaponSpecs {
+                        base_cooldown: 1.0,
+                        cooldown: 0.8,
+                        range: Range::Front,
+                        shape: Shape::Single,
+                        base_min_damages: 1.0,
+                        min_damages: 1.0,
+                        base_max_damages: 13.0,
+                        max_damages: 13.0,
+                        magic_prefixes: Vec::new(),
+                        magic_suffixes: Vec::new(),
+                    }),
+                },
+            ],
         },
     })
 }

@@ -1,16 +1,11 @@
-use leptos::ev;
 use leptos::html::*;
 use leptos::prelude::*;
+use leptos_use::use_mouse;
 
 // TODO: position
 #[component]
 pub fn Tooltip(#[prop(into)] show: Signal<bool>, children: ChildrenFn) -> impl IntoView {
-    let (mouse_pos, set_mouse_pos) = signal((0, 0));
-
-    // Global mouse listener
-    let _ = window_event_listener(ev::mousemove, move |ev| {
-        set_mouse_pos.set((ev.client_x(), ev.client_y()));
-    });
+    let mouse = use_mouse();
 
     // See: https://book.leptos.dev/interlude_projecting_children.html
     let children = StoredValue::new(children);
@@ -20,11 +15,14 @@ pub fn Tooltip(#[prop(into)] show: Signal<bool>, children: ChildrenFn) -> impl I
             show.get()
         }>
             {move || {
-                let (x, y) = mouse_pos.get();
                 view! {
                     <div
-                        class="fixed z-50 pointer-events-none bg-black/90 text-white text-sm p-2 rounded shadow-xl transition-opacity duration-150 ring-1"
-                        style=format!("top: {}px; left: {}px;", y + 16, x + 16)
+                        class="fixed z-50 pointer-events-none transition-opacity duration-150"
+                        style=format!(
+                            "top: {}px; left: {}px;",
+                            mouse.y.get() + 16.0,
+                            mouse.x.get() + 16.0,
+                        )
                     >
                         {children.read_value()()}
                     </div>
