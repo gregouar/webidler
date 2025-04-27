@@ -12,6 +12,11 @@ FROM debian:bookworm-slim
 COPY --from=builder /backend /
 COPY ./data ./data
 
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
+RUN chown appuser:appgroup /backend /data -R
+
 EXPOSE 4200
+
+USER appuser
 
 CMD [ "/backend" ]
