@@ -7,7 +7,7 @@ services:
     ports:
       - 80:80
       - 443:443
-    restart: alway
+    restart: always
 
   # backend:
   #   image: webidler/backend:latest
