@@ -29,14 +29,14 @@ jobs:
       #     source: "your-app.tar"
       #     target: "/tmp"
 
-      - name: Transfer Docker image to VPS
+      - name: Transfer Configuration to VPS
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
-          source: "docker-compose.yml ./nginx/"  # multiple files separated by space
+          source: "docker-compose.yml,./nginx/"  # multiple files separated by space
           target: "/webidler/"
 
       # - name: Deploy to VPS
