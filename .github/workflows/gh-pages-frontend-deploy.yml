@@ -1,4 +1,4 @@
-name: Release to Github Pages
+name: Deploy to Github Pages
 
 on:
   push:
@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  Github-Pages-Release:
+  Frontend-Build-and-deploy-to-Github-Pages:
 
     timeout-minutes: 10
 

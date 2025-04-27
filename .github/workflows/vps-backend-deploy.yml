@@ -6,28 +6,18 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  Backend-Build-and-deploy-to-VPS:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build Docker images
         run: |
           docker build -t backend:latest -f ./backend/Dockerfile .
           docker save backend:latest > backend.tar
           chmod 664 backend.tar
-
-      # - name: Transfer Docker image to VPS
-      #   uses: appleboy/scp-action@master
-      #   with:
-      #     host: ${{ secrets.VPS_HOST }}
-      #     username: ${{ secrets.VPS_USERNAME }}
-      #     password: ${{ secrets.VPS_PASSWORD }}
-      #     port: ${{ secrets.VPS_PORT }}
-      #     source: "your-app.tar"
-      #     target: "/tmp"
 
       - name: Transfer Configuration and Images to VPS
         uses: appleboy/scp-action@master
@@ -36,21 +26,8 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
-          source: "docker-compose.yml,./nginx/,backend.tar"  # multiple files separated by space
+          source: "docker-compose.yml,./nginx/,backend.tar"
           target: "/webidler/tmp"
-
-      # - name: Deploy to VPS
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.VPS_HOST }}
-      #     username: ${{ secrets.VPS_USERNAME }}
-      #     password: ${{ secrets.VPS_PASSWORD }}
-      #     port: ${{ secrets.VPS_PORT }}
-      #     script: |
-      #       docker load < /tmp/your-app.tar
-      #       docker stop your-app || true
-      #       docker rm your-app || true
-      #       docker run -d --name your-app -p 8003:8003 your-app:latest
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
