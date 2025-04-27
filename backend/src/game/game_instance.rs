@@ -9,6 +9,7 @@ use std::{
 
 use shared::{
     data::{
+        item::ItemCategory,
         monster::{MonsterSpecs, MonsterState},
         player::{PlayerResources, PlayerSpecs, PlayerState},
         world::WorldState,
@@ -21,6 +22,7 @@ use shared::{
 
 use super::systems::{
     character_controller, monsters_controller, monsters_updater, monsters_wave, player_updater,
+    weapon::update_weapon_specs,
 };
 use super::{data::DataInit, systems::player_controller::PlayerController, world::WorldBlueprint};
 
@@ -145,6 +147,29 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn init_game(&mut self) -> Result<()> {
+        // TODO: Remove, find better way to do this:
+        if let Some(ItemCategory::Weapon(w)) = self
+            .player_specs
+            .inventory
+            .weapon_specs
+            .as_mut()
+            .map(|x| &mut x.item_category)
+        {
+            update_weapon_specs(w);
+        }
+        for i in self
+            .player_specs
+            .inventory
+            .bag
+            .iter_mut()
+            .map(|x| &mut x.item_category)
+        {
+            match i {
+                ItemCategory::Trinket => {}
+                ItemCategory::Weapon(w) => update_weapon_specs(w),
+            };
+        }
+
         self.client_conn
             .send(
                 &InitGameMessage {
