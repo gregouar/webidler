@@ -9,9 +9,9 @@ services:
       - 443:443
     restart: always
 
-  # backend:
-  #   image: webidler/backend:latest
-  #   build:
-  #     context: ./
-  #     dockerfile: ./backend/Dockerfile
+  backend:
+    image: backend:latest
+    build:
+      context: ./
+      dockerfile: ./backend/Dockerfile
     

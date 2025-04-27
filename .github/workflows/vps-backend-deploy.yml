@@ -13,11 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # - name: Build Docker image
-      #   run: |
-      #     docker build -t your-app:latest .
-      #     docker save your-app:latest > your-app.tar
-      #     chmod 664 your-app.tar
+      - name: Build Docker image
+        run: |
+          docker build -t backend:latest .
+          docker save backend:latest > backend.tar
+          chmod 664 backend.tar
 
       # - name: Transfer Docker image to VPS
       #   uses: appleboy/scp-action@master
@@ -36,8 +36,8 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
-          source: "docker-compose.yml,./nginx/"  # multiple files separated by space
-          target: "/webidler/"
+          source: "docker-compose.yml,./nginx/,backend.tar"  # multiple files separated by space
+          target: "/webidler/tmp"
 
       # - name: Deploy to VPS
       #   uses: appleboy/ssh-action@master
@@ -61,5 +61,7 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             cd /webidler/
-            docker compose up -d 
+            docker load < /tmp/backend.tar
+            docker compose up -d -f /tmp/docker-compose.yml
+            
             
