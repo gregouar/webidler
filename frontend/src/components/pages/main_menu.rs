@@ -18,11 +18,24 @@ pub fn MainMenu() -> impl IntoView {
     let (data, set_data) = signal(String::from(""));
 
     let toaster = expect_toaster();
-    let click_action = move |_| {
+    let ping_local_action = move |_| {
         toaster.info("Hello there!");
         spawn_local(async move {
             set_data.set(
-                get_data()
+                get_data("http://127.0.0.1:4200")
+                    .await
+                    .map(|x| x.greeting)
+                    .unwrap_or_else(|err| format!("Error: {}", err.to_string())),
+            )
+        })
+    };
+
+    let toaster = expect_toaster();
+    let ping_online_action = move |_| {
+        toaster.info("Hello there!");
+        spawn_local(async move {
+            set_data.set(
+                get_data("http://webidler.gregoirenaisse.be")
                     .await
                     .map(|x| x.greeting)
                     .unwrap_or_else(|err| format!("Error: {}", err.to_string())),
@@ -45,16 +58,17 @@ pub fn MainMenu() -> impl IntoView {
             <div class="flex flex-col space-y-2">
                 <MenuButton on:click=navigate_to_online_game>"Play Online"</MenuButton>
                 <MenuButton on:click=navigate_to_local_game>"Play Locally"</MenuButton>
-                <MenuButton on:click=click_action>"Get from server"</MenuButton>
+                <MenuButton on:click=ping_online_action>"Ping Online server"</MenuButton>
+                <MenuButton on:click=ping_local_action>"Ping Local server"</MenuButton>
             </div>
             <p>"From server:" {data}</p>
         </main>
     }
 }
 
-async fn get_data() -> Result<HelloSchema> {
+async fn get_data(host: &str) -> Result<HelloSchema> {
     Ok(serde_json::from_str(
-        &reqwest::get("http://127.0.0.1:4200/hello")
+        &reqwest::get(format!("{}/hello", host))
             .await?
             .error_for_status()?
             .text()
