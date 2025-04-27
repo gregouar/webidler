@@ -2,8 +2,8 @@ name: Deploy to VPS
 
 on:
   push:
-    branches:
-      - main
+    branches: ['main']
+    paths: ['frontend/**', 'shared/**', 'nginx/**', 'data/**']
 
 jobs:
   Backend-Build-and-deploy-to-VPS:
