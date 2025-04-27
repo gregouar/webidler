@@ -30,7 +30,7 @@ pub fn MainMenu() -> impl IntoView {
     let ping_online_action = move |_| {
         spawn_local(async move {
             set_data.set(
-                get_data("http://webidler.gregoirenaisse.be")
+                get_data("https://webidler.gregoirenaisse.be")
                     .await
                     .map(|x| x.greeting)
                     .unwrap_or_else(|err| format!("Error: {}", err.to_string())),
