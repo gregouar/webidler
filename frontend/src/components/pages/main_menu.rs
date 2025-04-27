@@ -31,7 +31,11 @@ pub fn MainMenu() -> impl IntoView {
     };
 
     let navigate = use_navigate();
-    let navigate_to_game = move |_| navigate("./game", Default::default());
+    let navigate_to_online_game = move |_| navigate("./game", Default::default());
+
+    let navigate = use_navigate();
+    let navigate_to_local_game =
+        move |_| navigate("./game?backend=127.0.0.1:4200", Default::default());
 
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center">
@@ -39,7 +43,8 @@ pub fn MainMenu() -> impl IntoView {
                 "Welcome to Webidler!"
             </h1>
             <div class="flex flex-col space-y-2">
-                <MenuButton on:click=navigate_to_game>"Game"</MenuButton>
+                <MenuButton on:click=navigate_to_online_game>"Play Online"</MenuButton>
+                <MenuButton on:click=navigate_to_local_game>"Play Locally"</MenuButton>
                 <MenuButton on:click=click_action>"Get from server"</MenuButton>
             </div>
             <p>"From server:" {data}</p>
