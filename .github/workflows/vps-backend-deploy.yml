@@ -61,6 +61,6 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             docker load < /webidler/tmp/backend.tar
-            docker compose up -d -f /webidler/tmp/docker-compose.yml
+            docker compose -f /webidler/tmp/docker-compose.yml up -d
             
             
