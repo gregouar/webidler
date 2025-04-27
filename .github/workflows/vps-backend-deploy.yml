@@ -26,7 +26,7 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
-          source: "docker-compose.yml,./nginx/,backend.tar"
+          source: "docker-compose.yml,./nginx/,backend.tar,./data/"
           target: "/webidler/tmp"
 
       - name: Deploy to VPS

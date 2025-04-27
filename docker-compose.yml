@@ -17,5 +17,7 @@ services:
     build:
       context: ./
       dockerfile: ./backend/Dockerfile
+    volumes:
+      - ./data/:./data/
     restart: always
     
