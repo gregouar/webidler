@@ -65,7 +65,6 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr) {
     tracing::debug!("client connected");
 
     tracing::debug!("starting the game...");
-
     match WorldBlueprint::load_from_file("worlds/forest.json".into()).await {
         Ok(world_blueprint) => {
             let mut game = GameInstance::new(&mut conn, player, world_blueprint);
