@@ -12,7 +12,7 @@ FROM debian:bookworm-slim
 COPY --from=builder /backend /
 
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
-RUN chown appuser:appgroup /backend /data -R
+RUN chown appuser:appgroup /backend -R
 
 EXPOSE 4200
 
