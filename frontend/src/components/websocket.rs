@@ -4,8 +4,8 @@ use leptoaster::*;
 use leptos::prelude::*;
 use leptos::web_sys::CloseEvent;
 use leptos_use::{
-    ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
-    core::ConnectionReadyState, use_websocket_with_options,
+    core::ConnectionReadyState, use_websocket_with_options, ReconnectLimit, UseWebSocketError,
+    UseWebSocketOptions, UseWebSocketReturn,
 };
 
 use codee::binary::MsgpackSerdeCodec;
@@ -33,7 +33,7 @@ impl WebsocketContext {
 }
 
 #[component]
-pub fn Websocket(children: Children) -> impl IntoView {
+pub fn Websocket(url: &'static str, children: Children) -> impl IntoView {
     let toaster = expect_toaster();
     let on_error_callback =
         move |e: UseWebSocketError<_, _>| toaster.error(format!("Connection error: {:?}", e));
@@ -54,7 +54,7 @@ pub fn Websocket(children: Children) -> impl IntoView {
         close,
         ..
     } = use_websocket_with_options::<ClientMessage, ServerMessage, MsgpackSerdeCodec, _, _>(
-        "ws://127.0.0.1:4200/ws",
+        url,
         UseWebSocketOptions::default()
             // .immediate(false)
             .reconnect_limit(ReconnectLimit::Infinite)

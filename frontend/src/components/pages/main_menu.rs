@@ -42,8 +42,7 @@ pub fn MainMenu() -> impl IntoView {
     let navigate_to_online_game = move |_| navigate("./game", Default::default());
 
     let navigate = use_navigate();
-    let navigate_to_local_game =
-        move |_| navigate("./game?backend=127.0.0.1:4200", Default::default());
+    let navigate_to_local_game = move |_| navigate("./local_game", Default::default());
 
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center">
