@@ -13,9 +13,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Build Docker image
+      - name: Build Docker images
         run: |
-          docker build -t backend:latest .
+          docker build -t backend:latest ./backend/Dockerfile
           docker save backend:latest > backend.tar
           chmod 664 backend.tar
 
@@ -29,7 +29,7 @@ jobs:
       #     source: "your-app.tar"
       #     target: "/tmp"
 
-      - name: Transfer Configuration to VPS
+      - name: Transfer Configuration and Images to VPS
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
