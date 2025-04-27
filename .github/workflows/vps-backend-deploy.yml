@@ -3,7 +3,7 @@ name: Deploy to VPS
 on:
   push:
     branches: ['main']
-    paths: ['docker-compose.yml','frontend/**', 'shared/**', 'nginx/**', 'data/**']
+    paths: ['docker-compose.yml','backend/**', 'shared/**', 'nginx/**', 'data/**']
 
 jobs:
   Backend-Build-and-deploy-to-VPS:

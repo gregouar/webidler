@@ -203,20 +203,41 @@ fn ItemTooltip(item_specs: ItemSpecs) -> impl IntoView {
         ItemCategory::Trinket => {
             view! { <li class="text-gray-400 text-sm leading-snug">"Trinket"</li> }.into_any()
         }
-        ItemCategory::Weapon(ws) => view! {
-            <li class="text-gray-400 text-sm leading-snug">"Weapon"</li>
-            <li class="text-gray-400 text-sm leading-snug">
-                "Physical Damage: "
-                <span class="text-white font-semibold">
-                    {ws.min_damages} {" - "} {ws.max_damages}
-                </span>
-            </li>
-            <li class="text-gray-400 text-sm leading-snug">
-                "Attacks per Second: "
-                <span class="text-white font-semibold">{format!("{:.2}", ws.cooldown)}</span>
-            </li>
+        ItemCategory::Weapon(ws) => {
+            let cooldown_color = if ws.cooldown != ws.base_cooldown {
+                "text-blue-400"
+            } else {
+                "text-white"
+            };
+
+            let damage_color =
+                if ws.min_damage != ws.base_min_damage || ws.max_damage != ws.base_max_damage {
+                    "text-blue-400"
+                } else {
+                    "text-white"
+                };
+
+            view! {
+                <li class="text-gray-400 text-sm leading-snug">"Weapon"</li>
+                <li class="text-gray-400 text-sm leading-snug">
+                    "Physical Damage: "
+                    <span class=format!(
+                        "{} font-semibold",
+                        damage_color,
+                    )>
+                        {format!("{:.0}", ws.min_damage)} " - " {format!("{:.0}", ws.max_damage)}
+                    </span>
+                </li>
+                <li class="text-gray-400 text-sm leading-snug">
+                    "Attacks per Second: "
+                    <span class=format!(
+                        "{} font-semibold",
+                        cooldown_color,
+                    )>{format!("{:.2}", ws.cooldown)}</span>
+                </li>
+            }
+            .into_any()
         }
-        .into_any(),
     };
 
     let (prefixes, suffixes): (Vec<_>, Vec<_>) = match &item_specs.item_category {

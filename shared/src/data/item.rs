@@ -51,10 +51,10 @@ pub struct WeaponSpecs {
     #[serde(default)]
     pub shape: Shape,
 
-    pub base_min_damages: f64,
-    pub min_damages: f64,
-    pub base_max_damages: f64,
-    pub max_damages: f64,
+    pub base_min_damage: f64,
+    pub min_damage: f64,
+    pub base_max_damage: f64,
+    pub max_damage: f64,
 
     pub magic_prefixes: Vec<WeaponMagicPrefix>,
     pub magic_suffixes: Vec<WeaponMagicSuffix>,
@@ -62,7 +62,7 @@ pub struct WeaponSpecs {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum WeaponMagicPrefix {
-    AttackSpeed(f64),
+    AttackSpeed(f32),
     AttackDamages(f64),
 }
 
