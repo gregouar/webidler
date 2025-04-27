@@ -8,7 +8,7 @@ WORKDIR /app/backend
 RUN cargo build --release --bin backend
 RUN strip ./target/release/backend -o /backend
 
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 COPY --from=builder /backend /
 COPY ./data ./data
 
