@@ -15,7 +15,7 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker build -t backend:latest ./backend/Dockerfile
+          docker build -t backend:latest -f ./backend/Dockerfile .
           docker save backend:latest > backend.tar
           chmod 664 backend.tar
 
