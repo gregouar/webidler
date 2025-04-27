@@ -1,6 +1,5 @@
 use anyhow::Result;
 
-use leptoaster::*;
 use leptos::html::*;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
@@ -17,9 +16,7 @@ use crate::components::ui::buttons::MenuButton;
 pub fn MainMenu() -> impl IntoView {
     let (data, set_data) = signal(String::from(""));
 
-    let toaster = expect_toaster();
     let ping_local_action = move |_| {
-        toaster.info("Hello there!");
         spawn_local(async move {
             set_data.set(
                 get_data("http://127.0.0.1:4200")
@@ -30,9 +27,7 @@ pub fn MainMenu() -> impl IntoView {
         })
     };
 
-    let toaster = expect_toaster();
     let ping_online_action = move |_| {
-        toaster.info("Hello there!");
         spawn_local(async move {
             set_data.set(
                 get_data("http://webidler.gregoirenaisse.be")
