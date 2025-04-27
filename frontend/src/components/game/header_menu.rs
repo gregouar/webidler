@@ -29,7 +29,7 @@ pub fn HeaderMenu() -> impl IntoView {
             <div class="flex justify-around w-full items-center">
                 <ResourceCounter
                     class:text-amber-200
-                    icon="ui/gold.webp"
+                    icon="ui/gold2.webp"
                     tooltip="Gold"
                     value=gold
                 />

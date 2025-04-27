@@ -61,7 +61,7 @@ pub fn EquippedItems() -> impl IntoView {
                 <EmptySlot>{()}</EmptySlot>
                 <EmptySlot>
                     <img
-                        src=img_asset("ui/head.webp")
+                        src=img_asset("ui/head2.webp")
                         alt="Head"
                         class="object-contain max-w-full max-h-full"
                     />
@@ -133,9 +133,11 @@ fn ItemsGrid() -> impl IntoView {
 #[component]
 fn EmptySlot(children: Children) -> impl IntoView {
     view! {
-        <div class="flex items-center justify-center w-full h-full rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70">
-            {children()}
-        </div>
+        // "relative group rounded-md p-1 bg-gradient-to-br {} border-4 {} ring-2 {} shadow-md {}",
+        <div class="
+        relative group flex items-center justify-center w-full h-full
+        rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70
+        ">{children()}</div>
     }
 }
 
@@ -173,7 +175,8 @@ fn ItemCard(item_specs: ItemSpecs) -> impl IntoView {
     view! {
         <div
             class=format!(
-                "relative group rounded-md p-1 bg-gradient-to-br {} border-4 {} ring-2 {} shadow-md {}",
+                "relative group flex items-center justify-center w-full h-full
+                rounded-md p-1 bg-gradient-to-br {} border-4 {} ring-2 {} shadow-md {}",
                 gradient,
                 border_color,
                 ring_color,
@@ -184,7 +187,7 @@ fn ItemCard(item_specs: ItemSpecs) -> impl IntoView {
         >
             <img
                 src=img_asset(&item_specs.icon)
-                class="rounded-md object-cover transition-all duration-150 ease-in-out group-hover:scale-105 group-hover:brightness-110"
+                class="object-contain max-w-full max-h-full transition-all duration-150 ease-in-out group-hover:scale-105 group-hover:brightness-110"
             />
         </div>
     }
