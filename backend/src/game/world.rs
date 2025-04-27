@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 use futures::future::join_all;
 
-use super::data::load_schema;
+use super::data::load_json;
 use shared::data::{monster::MonsterSpecs, world::WorldSpecs};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -39,7 +39,7 @@ pub struct MonsterWaveSpawnBlueprint {
 
 impl WorldBlueprint {
     pub async fn load_from_file(filepath: PathBuf) -> Result<Self> {
-        let schema: WorldBlueprintSchema = load_schema(&filepath).await?;
+        let schema: WorldBlueprintSchema = load_json(&filepath).await?;
 
         let monster_specs_to_load: HashSet<PathBuf> = schema
             .waves
@@ -48,7 +48,7 @@ impl WorldBlueprint {
             .collect();
 
         let monster_specs = join_all(monster_specs_to_load.into_iter().map(|path| async move {
-            let monster_specs = load_schema(&path).await?;
+            let monster_specs = load_json(&path).await?;
             Result::<(PathBuf, MonsterSpecs)>::Ok((path, monster_specs))
         }))
         .await

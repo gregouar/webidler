@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use rand::Rng;
 use std::path::PathBuf;
 
@@ -13,18 +13,17 @@ use shared::data::{
     world::{WorldSpecs, WorldState},
 };
 
-pub async fn load_schema<S>(filepath: &PathBuf) -> Result<S>
+pub async fn load_json<S>(filepath: &PathBuf) -> Result<S>
 where
     S: DeserializeOwned,
 {
-    match serde_json::from_slice(&fs::read(&PathBuf::from("./data").join(filepath)).await?) {
-        Ok(s) => Ok(s),
-        Err(e) => Err(anyhow::format_err!(
-            "Failed to load {:?} because: {}",
-            filepath,
-            e
-        )),
-    }
+    let file_path = PathBuf::from("./data").join(filepath);
+    Ok(serde_json::from_slice(
+        &fs::read(&file_path)
+            .await
+            .with_context(|| format!("Failed to read file: {:?}", file_path))?,
+    )
+    .with_context(|| format!("Failed to parse json from: {:?}", file_path))?)
 }
 
 pub trait DataInit<Specs> {
