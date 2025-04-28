@@ -1,15 +1,15 @@
 use std::{collections::HashMap, path::PathBuf};
 
 use anyhow::Result;
-use rand::Rng;
 
 use shared::data::{monster::MonsterSpecs, world::WorldState};
 
 use crate::game::world::{MonsterWaveBlueprint, WorldBlueprint};
+use crate::rng;
 
 use super::increase_factors::exponential_factor;
 
-const MAX_MONSTERS: usize = 6; // TODO: Move
+const MAX_MONSTERS_PER_ROW: usize = 3; // TODO: Move
 
 pub fn generate_monsters_wave_specs(
     world_blueprint: &WorldBlueprint,
@@ -34,24 +34,19 @@ fn filter_waves<'a>(
 }
 
 fn pick_wave<'a>(waves: Vec<&'a MonsterWaveBlueprint>) -> Result<Option<&'a MonsterWaveBlueprint>> {
-    let mut rng = rand::rng();
-
-    let total_probability = waves.iter().map(|w| w.probability).sum();
-    if total_probability <= 0.0 {
-        return Err(anyhow::format_err!(
+    match rng::random_range(0.0..waves.iter().map(|w| w.probability).sum()) {
+        Some(p) => Ok(waves
+            .iter()
+            .scan(0.0, |cumul_prob, w| {
+                *cumul_prob += w.probability;
+                Some((*cumul_prob, w))
+            })
+            .find(|(max_prob, w)| p >= *max_prob - w.probability && p < *max_prob)
+            .map(|(_, w)| *w)),
+        None => Err(anyhow::format_err!(
             "no monsters wave probability available"
-        ));
+        )),
     }
-
-    let p: f64 = rng.random_range(0.0..total_probability);
-    Ok(waves
-        .iter()
-        .scan(0.0, |cumul_prob, w| {
-            *cumul_prob += w.probability;
-            Some((*cumul_prob, w))
-        })
-        .find(|(max_prob, w)| p >= *max_prob - w.probability && p < *max_prob)
-        .map(|(_, w)| *w))
 }
 
 fn generate_all_monsters_specs(
@@ -59,19 +54,66 @@ fn generate_all_monsters_specs(
     monster_specs_blueprint: &HashMap<PathBuf, MonsterSpecs>,
     world_state: &WorldState,
 ) -> Result<Vec<MonsterSpecs>> {
-    let mut rng = rand::rng();
+    let mut top_space_available = MAX_MONSTERS_PER_ROW;
+    let mut bot_space_available = MAX_MONSTERS_PER_ROW;
 
-    let mut monsters_specs = Vec::with_capacity(MAX_MONSTERS);
+    let mut monsters_specs = Vec::with_capacity(top_space_available + bot_space_available);
     'spawnloop: for spawn in wave.spawns.iter() {
         if spawn.max_quantity < spawn.min_quantity {
             return Err(anyhow::format_err!(
                 "monster wave max_quantity below min_quantity"
             ));
         }
-        for _ in 0..rng.random_range(spawn.min_quantity..=spawn.max_quantity) {
+        for _ in 0..rng::random_range(spawn.min_quantity..=spawn.max_quantity).unwrap_or_default() {
             if let Some(specs) = monster_specs_blueprint.get(&spawn.path) {
-                monsters_specs.push(generate_monster_specs(specs, world_state));
-                if monsters_specs.len() >= MAX_MONSTERS {
+                let mut use_top = top_space_available >= bot_space_available;
+                match specs.size {
+                    shared::data::monster::MonsterSize::Small => {
+                        if use_top {
+                            top_space_available -= 1;
+                        } else {
+                            bot_space_available -= 1;
+                        }
+                    }
+                    shared::data::monster::MonsterSize::Large => {
+                        if use_top && top_space_available >= 2 {
+                            top_space_available -= 2;
+                        } else if !use_top && bot_space_available >= 2 {
+                            bot_space_available -= 2;
+                        } else {
+                            continue;
+                        }
+                    }
+                    shared::data::monster::MonsterSize::Giant => {
+                        if top_space_available >= 2 && bot_space_available >= 2 {
+                            use_top = true;
+                            top_space_available -= 2;
+                            bot_space_available -= 2;
+                        } else {
+                            continue;
+                        }
+                    }
+                    shared::data::monster::MonsterSize::Gargantuan => {
+                        if top_space_available >= 3 && bot_space_available >= 3 {
+                            use_top = true;
+                            top_space_available -= 3;
+                            bot_space_available -= 3;
+                        } else {
+                            continue;
+                        }
+                    }
+                }
+                let mut specs = generate_monster_specs(specs, world_state);
+                specs.character_specs.position_y = if use_top { 0 } else { 1 };
+                specs.character_specs.position_x = (MAX_MONSTERS_PER_ROW
+                    - if use_top {
+                        top_space_available
+                    } else {
+                        bot_space_available
+                    }) as u8;
+                monsters_specs.push(specs);
+
+                if top_space_available == 0 && bot_space_available == 0 {
                     break 'spawnloop;
                 }
             }

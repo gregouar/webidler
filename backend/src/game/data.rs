@@ -1,5 +1,4 @@
 use anyhow::{Context, Result};
-use rand::Rng;
 use std::path::PathBuf;
 
 use serde::de::DeserializeOwned;
@@ -12,6 +11,8 @@ use shared::data::{
     skill::{SkillSpecs, SkillState},
     world::{WorldSpecs, WorldState},
 };
+
+use crate::rng;
 
 pub async fn load_json<S>(filepath: &PathBuf) -> Result<S>
 where
@@ -66,10 +67,9 @@ impl DataInit<PlayerSpecs> for PlayerState {
 
 impl DataInit<MonsterSpecs> for MonsterState {
     fn init(specs: &MonsterSpecs) -> Self {
-        let mut rng = rand::rng();
         MonsterState {
             character_state: CharacterState::init(&specs.character_specs),
-            initiative: rng.random_range(0.0..specs.max_initiative),
+            initiative: rng::random_range(0.0..specs.max_initiative).unwrap_or_default(),
         }
     }
 }

@@ -118,7 +118,7 @@ async fn handle_connect(
         item_category: ItemCategory::Weapon(WeaponSpecs {
             base_cooldown: 1.0,
             cooldown: 1.0,
-            range: Range::Front,
+            range: Range::Melee,
             shape: Shape::Single,
             base_min_damage: 3.0,
             min_damage: 3.0,
@@ -133,6 +133,8 @@ async fn handle_connect(
         character_specs: CharacterSpecs {
             name: msg.bearer.clone(),
             portrait: String::from("adventurers/human_male_2.webp"),
+            position_x: 0,
+            position_y: 0,
             max_health: 100.0,
             health_regen: 1.0,
             skill_specs: vec![
@@ -145,7 +147,7 @@ async fn handle_connect(
                     mana_cost: 20.0,
                     min_damages: 10.0,
                     max_damages: 30.0,
-                    range: Range::Middle,
+                    range: Range::Distance,
                     target_type: TargetType::Enemy,
                     shape: Shape::Square4,
                 },
@@ -157,7 +159,7 @@ async fn handle_connect(
                     mana_cost: 20.0,
                     min_damages: -20.0,
                     max_damages: -20.0,
-                    range: Range::Front,
+                    range: Range::Melee,
                     target_type: TargetType::Me,
                     shape: Shape::Single,
                 },
@@ -181,7 +183,7 @@ async fn handle_connect(
                     item_category: ItemCategory::Weapon(WeaponSpecs {
                         base_cooldown: 1.2,
                         cooldown: 1.2,
-                        range: Range::Front,
+                        range: Range::Melee,
                         shape: Shape::Single,
                         base_min_damage: 4.0,
                         min_damage: 4.0,
@@ -200,7 +202,7 @@ async fn handle_connect(
                     item_category: ItemCategory::Weapon(WeaponSpecs {
                         base_cooldown: 1.0,
                         cooldown: 1.0,
-                        range: Range::Front,
+                        range: Range::Melee,
                         shape: Shape::Single,
                         base_min_damage: 3.0,
                         min_damage: 3.0,
@@ -222,7 +224,7 @@ async fn handle_connect(
                     item_category: ItemCategory::Weapon(WeaponSpecs {
                         base_cooldown: 1.0,
                         cooldown: 0.8,
-                        range: Range::Front,
+                        range: Range::Melee,
                         shape: Shape::Single,
                         base_min_damage: 1.0,
                         min_damage: 1.0,

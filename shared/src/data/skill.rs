@@ -11,6 +11,7 @@ pub struct SkillSpecs {
     #[serde(default)]
     pub mana_cost: f64,
 
+    // TODO: all the following should be per SkillEffect!
     #[serde(default)]
     pub range: Range,
     #[serde(default)]
@@ -53,14 +54,13 @@ impl Default for TargetType {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub enum Range {
-    Front,
-    Middle,
-    Back,
+    Melee,
+    Distance,
 }
 
 impl Default for Range {
     fn default() -> Self {
-        Range::Front
+        Range::Melee
     }
 }
 

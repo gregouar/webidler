@@ -229,11 +229,11 @@ impl<'a> GameInstance<'a> {
             }
         } else {
             self.player_respawn_delay = Instant::now();
-            let mut monsters_still_alive: Vec<(&mut MonsterState, &MonsterSpecs)> = self
-                .monster_states
-                .iter_mut()
-                .zip(self.monster_specs.iter())
-                .filter(|(x, _)| x.character_state.is_alive)
+            let mut monsters_still_alive: Vec<(&MonsterSpecs, &mut MonsterState)> = self
+                .monster_specs
+                .iter()
+                .zip(self.monster_states.iter_mut())
+                .filter(|(_, x)| x.character_state.is_alive)
                 .collect();
 
             self.player_controller.control_player(

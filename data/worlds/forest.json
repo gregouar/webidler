@@ -32,14 +32,14 @@
             "probability": 1,
             "spawns": [
                 {
-                    "path": "monsters/batty.json",
-                    "min_quantity": 1,
-                    "max_quantity": 4
-                },
-                {
                     "path": "monsters/ratty.json",
                     "min_quantity": 1,
                     "max_quantity": 2
+                },
+                {
+                    "path": "monsters/batty.json",
+                    "min_quantity": 2,
+                    "max_quantity": 4
                 }
             ]
         }

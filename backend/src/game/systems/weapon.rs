@@ -3,6 +3,7 @@ use shared::data::{
     skill::{SkillSpecs, TargetType},
 };
 
+// TODO: Where to call that?
 pub fn update_weapon_specs(weapon_specs: &mut WeaponSpecs) {
     weapon_specs.cooldown = weapon_specs.base_cooldown;
     weapon_specs.min_damage = weapon_specs.base_min_damage;

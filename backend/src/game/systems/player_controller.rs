@@ -1,8 +1,9 @@
-use rand::Rng;
 use shared::data::{
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerResources, PlayerSpecs, PlayerState},
 };
+
+use crate::rng;
 
 use super::character_controller;
 
@@ -28,15 +29,13 @@ impl PlayerController {
         player_specs: &PlayerSpecs,
         player_state: &mut PlayerState,
         player_resources: &mut PlayerResources,
-        monsters: &mut Vec<(&mut MonsterState, &MonsterSpecs)>,
+        monsters: &mut Vec<(&MonsterSpecs, &mut MonsterState)>,
     ) {
-        if !player_state.character_state.is_alive || monsters.is_empty() {
+        if !player_state.character_state.is_alive {
             return;
         }
 
-        let mut rng = rand::rng();
-
-        let mut rewards = Vec::new();
+        // let mut rewards = Vec::new();
         for (i, (skill_specs, skill_state)) in player_specs
             .character_specs
             .skill_specs
@@ -53,23 +52,26 @@ impl PlayerController {
             }
 
             // TODO: depending on distance, choose target
-            let j = rng.random_range(0..monsters.len());
-            if let Some((target_state, target_specs)) = monsters.get_mut(j).as_deref_mut() {
+            // let j = rng::random_range(0..monsters.len()).unwrap_or_default();
+            // if let Some((target_specs, target_state)) = monsters.get_mut(j).as_deref_mut() {
+            // player_state.mana -= skill_specs.mana_cost;
+            if character_controller::use_skill(
+                skill_specs,
+                skill_state,
+                &mut monsters
+                    .iter_mut()
+                    .map(|(specs, state)| (&specs.character_specs, &mut state.character_state))
+                    .collect(),
+            ) {
                 player_state.mana -= skill_specs.mana_cost;
-                if character_controller::use_skill(
-                    skill_specs,
-                    skill_state,
-                    &mut target_state.character_state,
-                    &target_specs.character_specs,
-                ) {
-                    rewards.push(*target_specs);
-                }
+                // rewards.push(*target_specs);
             }
+            // }
         }
 
-        for reward in rewards {
-            reward_player(player_state, player_resources, &reward);
-        }
+        // for reward in rewards {
+        //     reward_player(player_state, player_resources, &reward);
+        // }
     }
 }
 
