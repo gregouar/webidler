@@ -66,43 +66,29 @@ fn generate_all_monsters_specs(
         }
         for _ in 0..rng::random_range(spawn.min_quantity..=spawn.max_quantity).unwrap_or_default() {
             if let Some(specs) = monster_specs_blueprint.get(&spawn.path) {
-                let mut use_top = top_space_available >= bot_space_available;
-                match specs.size {
-                    shared::data::monster::MonsterSize::Small => {
-                        if use_top {
-                            top_space_available -= 1;
-                        } else {
-                            bot_space_available -= 1;
-                        }
+                let (x_size, y_size) = specs.character_specs.size.get_xy_size();
+                let use_top = y_size > 1 || top_space_available >= bot_space_available;
+
+                if y_size > 1 {
+                    if top_space_available >= x_size && bot_space_available >= x_size {
+                        top_space_available -= x_size;
+                        bot_space_available -= x_size;
+                    } else {
+                        continue;
                     }
-                    shared::data::monster::MonsterSize::Large => {
-                        if use_top && top_space_available >= 2 {
-                            top_space_available -= 2;
-                        } else if !use_top && bot_space_available >= 2 {
-                            bot_space_available -= 2;
-                        } else {
-                            continue;
-                        }
-                    }
-                    shared::data::monster::MonsterSize::Giant => {
-                        if top_space_available >= 2 && bot_space_available >= 2 {
-                            use_top = true;
-                            top_space_available -= 2;
-                            bot_space_available -= 2;
-                        } else {
-                            continue;
-                        }
-                    }
-                    shared::data::monster::MonsterSize::Gargantuan => {
-                        if top_space_available >= 3 && bot_space_available >= 3 {
-                            use_top = true;
-                            top_space_available -= 3;
-                            bot_space_available -= 3;
-                        } else {
-                            continue;
-                        }
+                } else {
+                    let row_to_use = if use_top {
+                        &mut top_space_available
+                    } else {
+                        &mut bot_space_available
+                    };
+                    if *row_to_use >= x_size {
+                        *row_to_use -= x_size
+                    } else {
+                        continue;
                     }
                 }
+
                 let mut specs = generate_monster_specs(specs, world_state);
                 specs.character_specs.position_y = if use_top { 0 } else { 1 };
                 specs.character_specs.position_x = (MAX_MONSTERS_PER_ROW

@@ -1,4 +1,4 @@
-pub mod character_controller;
+pub mod characters_controller;
 pub mod characters_updater;
 pub mod increase_factors;
 pub mod monsters_controller;
@@ -6,5 +6,6 @@ pub mod monsters_updater;
 pub mod monsters_wave;
 pub mod player_controller;
 pub mod player_updater;
+pub mod skills_controller;
 pub mod skills_updater;
 pub mod weapon;

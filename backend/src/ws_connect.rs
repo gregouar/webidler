@@ -15,6 +15,7 @@ use std::{ops::ControlFlow, vec};
 
 use shared::{
     data::{
+        character::CharacterSize,
         item::{
             ItemCategory, ItemRarity, ItemSpecs, WeaponMagicPrefix, WeaponMagicSuffix, WeaponSpecs,
         },
@@ -133,6 +134,7 @@ async fn handle_connect(
         character_specs: CharacterSpecs {
             name: msg.bearer.clone(),
             portrait: String::from("adventurers/human_male_2.webp"),
+            size: CharacterSize::Small,
             position_x: 0,
             position_y: 0,
             max_health: 100.0,

@@ -3,38 +3,10 @@ use serde::{Deserialize, Serialize};
 pub use super::character::{CharacterSpecs, CharacterState};
 use super::skill::{SkillSpecs, SkillState};
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum MonsterSize {
-    Small,      // 1x1
-    Large,      // 1x2
-    Giant,      // 2x2
-    Gargantuan, // 2x3
-}
-
-impl Default for MonsterSize {
-    fn default() -> Self {
-        MonsterSize::Small
-    }
-}
-
-impl MonsterSize {
-    pub fn get_xy_size(&self) -> (usize, usize) {
-        match self {
-            MonsterSize::Small => (1, 1),
-            MonsterSize::Large => (2, 1),
-            MonsterSize::Giant => (2, 2),
-            MonsterSize::Gargantuan => (3, 2),
-        }
-    }
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct MonsterSpecs {
     pub character_specs: CharacterSpecs,
     pub skill_specs: Vec<SkillSpecs>,
-
-    #[serde(default)]
-    pub size: MonsterSize,
 
     pub max_initiative: f32,
     pub power_factor: f64,

@@ -21,8 +21,8 @@ use shared::{
 };
 
 use super::systems::{
-    character_controller, monsters_controller, monsters_updater, monsters_wave, player_updater,
-    weapon::update_weapon_specs,
+    characters_updater, monsters_controller, monsters_updater, monsters_wave, player_updater,
+    skills_updater, weapon::update_weapon_specs,
 };
 use super::{data::DataInit, systems::player_controller::PlayerController, world::WorldBlueprint};
 
@@ -217,12 +217,12 @@ impl<'a> GameInstance<'a> {
 
     async fn reset_entities(&mut self) {
         // TODO: reset Player
-        character_controller::reset_character(&mut self.player_state.character_state);
-        character_controller::reset_skills(&mut self.player_state.skill_states);
+        characters_updater::reset_character(&mut self.player_state.character_state);
+        skills_updater::reset_skills(&mut self.player_state.skill_states);
         for monster_state in self.monster_states.iter_mut() {
             // TODO: reset Monster
-            character_controller::reset_character(&mut monster_state.character_state);
-            character_controller::reset_skills(&mut monster_state.skill_states);
+            characters_updater::reset_character(&mut monster_state.character_state);
+            skills_updater::reset_skills(&mut monster_state.skill_states);
         }
     }
 

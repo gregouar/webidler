@@ -3,7 +3,7 @@ use shared::data::{
     player::{PlayerResources, PlayerSpecs, PlayerState},
 };
 
-use super::character_controller;
+use super::skills_controller;
 
 pub struct PlayerController {
     pub auto_skills: Vec<bool>,
@@ -48,11 +48,7 @@ impl PlayerController {
                 continue;
             }
 
-            // TODO: depending on distance, choose target
-            // let j = rng::random_range(0..monsters.len()).unwrap_or_default();
-            // if let Some((target_specs, target_state)) = monsters.get_mut(j).as_deref_mut() {
-            // player_state.mana -= skill_specs.mana_cost;
-            if character_controller::use_skill(
+            if skills_controller::use_skill(
                 skill_specs,
                 skill_state,
                 (

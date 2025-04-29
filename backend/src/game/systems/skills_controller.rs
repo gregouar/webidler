@@ -6,7 +6,7 @@ use shared::data::{
 
 use crate::rng;
 
-use super::characters_updater;
+use super::characters_controller;
 
 pub fn use_skill(
     skill_specs: &SkillSpecs,
@@ -15,8 +15,6 @@ pub fn use_skill(
     friends: Vec<(&CharacterSpecs, &mut CharacterState)>,
     enemies: Vec<(&CharacterSpecs, &mut CharacterState)>,
 ) -> bool {
-    let mut found_target = false;
-
     let me_position = (me.0.position_x, me.0.position_y);
 
     let mut pre_targets = match skill_specs.target_type {
@@ -33,7 +31,7 @@ pub fn use_skill(
         Range::Distance => pre_targets
             .iter()
             .map(|(specs, _)| specs)
-            .max_by_key(|x| x.position_x.abs_diff(me_position.1)),
+            .max_by_key(|x| x.position_x.abs_diff(me_position.0)),
     }
     .map(|specs| (specs.position_x as i32, specs.position_y as i32));
 
@@ -70,13 +68,19 @@ pub fn use_skill(
     };
 
     let targets = pre_targets.iter_mut().filter(|(specs, _)| {
-        is_target_in_range((specs.position_x as i32, specs.position_y as i32))
+        let (x_size, y_size) = specs.size.get_xy_size();
+        (0..x_size as i32)
+            .flat_map(|x| (0..y_size as i32).map(move |y| (x, y)))
+            .any(|(x, y)| {
+                is_target_in_range((specs.position_x as i32 + x, specs.position_y as i32 + y))
+            })
     });
 
+    let mut found_target = false;
     for (target_specs, target_state) in targets {
         found_target = true;
         if let Some(damage) = rng::random_range(skill_specs.min_damages..=skill_specs.max_damages) {
-            characters_updater::damage_character(damage, target_state, target_specs);
+            characters_controller::damage_character(damage, target_state, target_specs);
         }
     }
 
@@ -89,13 +93,3 @@ pub fn use_skill(
 }
 
 // pub fn pick_targets(character_specs: &CharacterSpecs,  monsters: &mut Vec<(&mut MonsterState, &MonsterSpecs)>, range: Range, target_type: TargetType, shape: Shape) ->
-
-pub fn reset_character(character_state: &mut CharacterState) {
-    character_state.just_hurt = false;
-}
-
-pub fn reset_skills(skill_states: &mut Vec<SkillState>) {
-    for skill_state in skill_states.iter_mut() {
-        skill_state.just_triggered = false;
-    }
-}

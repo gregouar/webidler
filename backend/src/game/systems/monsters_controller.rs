@@ -3,7 +3,7 @@ use shared::data::{
     player::{PlayerSpecs, PlayerState},
 };
 
-use super::character_controller;
+use super::skills_controller;
 
 pub fn control_monsters(
     monsters: &mut Vec<(&MonsterSpecs, &mut MonsterState)>,
@@ -24,7 +24,7 @@ pub fn control_monsters(
             .zip(monster_state.skill_states.iter_mut())
             .filter(|(_, s)| s.is_ready)
         {
-            character_controller::use_skill(
+            skills_controller::use_skill(
                 &skill_specs,
                 skill_state,
                 (

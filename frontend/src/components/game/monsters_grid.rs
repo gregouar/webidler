@@ -61,7 +61,7 @@ pub fn MonstersGrid() -> impl IntoView {
                         "animation-delay: {}s;",
                         rand::rng().random_range(0.0..=0.2f32),
                     );
-                    let (x_size, y_size) = specs.size.get_xy_size();
+                    let (x_size, y_size) = specs.character_specs.size.get_xy_size();
 
                     view! {
                         <div
@@ -134,7 +134,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     });
 
     view! {
-        <div class="grid grid-cols-4 w-full bg-zinc-800 shadow-md rounded-md gap-2 p-2 ring-1 ring-zinc-950">
+        <div class="grid grid-cols-4 h-full bg-zinc-800 shadow-md rounded-md gap-2 p-2 ring-1 ring-zinc-950">
             <div class="flex flex-col gap-2 col-span-3">
                 <HorizontalProgressBar
                     class:h-2

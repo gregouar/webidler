@@ -1,0 +1,19 @@
+{
+    "character_specs": {
+        "name": "Snek",
+        "portrait": "monsters/snake.webp",
+        "max_health": 30,
+        "size": "Large"
+    },
+    "skill_specs": [
+        {
+            "name": "Poison Bite",
+            "icon": "skills/bite.svg",
+            "cooldown": 5.0,
+            "min_damages": 5.0,
+            "max_damages": 10.0
+        }
+    ],
+    "power_factor": 2.0,
+    "max_initiative": 1.0
+}
