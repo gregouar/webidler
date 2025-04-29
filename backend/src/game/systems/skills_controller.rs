@@ -1,3 +1,5 @@
+use rand::{self, seq::IteratorRandom};
+
 use shared::data::{
     character::{CharacterSpecs, CharacterState, SkillSpecs, SkillState},
     item::{Range, Shape},
@@ -23,17 +25,24 @@ pub fn use_skill(
         TargetType::Me => vec![me],
     };
 
-    let main_target_pos = match skill_specs.range {
+    let main_target_distance = match skill_specs.range {
         Range::Melee => pre_targets
             .iter()
-            .map(|(specs, _)| specs)
-            .min_by_key(|x| x.position_x.abs_diff(me_position.0)),
+            .map(|(specs, _)| specs.position_x.abs_diff(me_position.0))
+            .min(),
         Range::Distance => pre_targets
             .iter()
-            .map(|(specs, _)| specs)
-            .max_by_key(|x| x.position_x.abs_diff(me_position.0)),
-    }
-    .map(|specs| (specs.position_x as i32, specs.position_y as i32));
+            .map(|(specs, _)| specs.position_x.abs_diff(me_position.0))
+            .max(),
+    };
+
+    let main_target_pos = main_target_distance.and_then(|distance| {
+        pre_targets
+            .iter()
+            .filter(|(specs, _)| specs.position_x.abs_diff(me_position.0) == distance)
+            .choose(&mut rand::rng())
+            .map(|(specs, _)| (specs.position_x as i32, specs.position_y as i32))
+    });
 
     let main_target_pos = match main_target_pos {
         Some(p) => p,
@@ -48,7 +57,7 @@ pub fn use_skill(
     let is_target_in_range = |pos: (i32, i32)| -> bool {
         match skill_specs.shape {
             Shape::Single => pos == main_target_pos,
-            Shape::Vertical2 => pos.0 == main_target_pos.0 && (pos.1 == 0 || pos.1 == 1),
+            Shape::Vertical2 => pos.0 == main_target_pos.0 && (pos.1 == 1 || pos.1 == 2),
             Shape::Horizontal2 => {
                 (pos.0 == main_target_pos.0 || pos.0 == main_target_pos.0 + dx)
                     && pos.1 == main_target_pos.1
@@ -61,7 +70,7 @@ pub fn use_skill(
             }
             Shape::Square4 => {
                 (pos.0 == main_target_pos.0 || pos.0 == main_target_pos.0 + dx)
-                    && (pos.1 == 0 || pos.1 == 1)
+                    && (pos.1 == 1 || pos.1 == 2)
             }
             Shape::All => true,
         }

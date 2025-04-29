@@ -29,7 +29,7 @@ pub fn MonstersGrid() -> impl IntoView {
     // TODO: double buffering to allow in and out at the same time
     view! {
         <div class="
-        grid grid-cols-3 grid-rows-2 p-2 gap-2 grid-flow-col items-center
+        grid grid-rows-2 grid-cols-3 p-2 gap-2 items-center 
         h-full overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]
         ">
             <style>
@@ -62,10 +62,20 @@ pub fn MonstersGrid() -> impl IntoView {
                         rand::rng().random_range(0.0..=0.2f32),
                     );
                     let (x_size, y_size) = specs.character_specs.size.get_xy_size();
+                    let (x_pos, y_pos) = (
+                        specs.character_specs.position_x,
+                        specs.character_specs.position_y,
+                    );
 
                     view! {
                         <div
-                            class=format!("col-span-{} row-span-{}", x_size, y_size)
+                            class=format!(
+                                "col-span-{} row-span-{} col-start-{} row-start-{} h-full",
+                                x_size,
+                                y_size,
+                                x_pos,
+                                y_pos,
+                            )
                             style=move || {
                                 if all_monsters_dead.get() {
                                     format!(

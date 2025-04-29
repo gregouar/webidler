@@ -4,10 +4,10 @@ pub use super::skill::{SkillSpecs, SkillState};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum CharacterSize {
-    Small, // 1x1
-    Large, // 1x2
-    Huge,  // 2x2
-    Giant, // 2x3
+    Small,      // 1x1
+    Large,      // 1x2
+    Huge,       // 2x2
+    Gargantuan, // 2x3
 }
 
 impl Default for CharacterSize {
@@ -22,7 +22,7 @@ impl CharacterSize {
             CharacterSize::Small => (1, 1),
             CharacterSize::Large => (2, 1),
             CharacterSize::Huge => (2, 2),
-            CharacterSize::Giant => (3, 2),
+            CharacterSize::Gargantuan => (3, 2),
         }
     }
 }

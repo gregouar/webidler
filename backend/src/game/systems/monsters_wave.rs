@@ -68,6 +68,12 @@ fn generate_all_monsters_specs(
             if let Some(specs) = monster_specs_blueprint.get(&spawn.path) {
                 let (x_size, y_size) = specs.character_specs.size.get_xy_size();
                 let use_top = y_size > 1 || top_space_available >= bot_space_available;
+                let x_pos = (MAX_MONSTERS_PER_ROW + 1
+                    - if use_top {
+                        top_space_available
+                    } else {
+                        bot_space_available
+                    }) as u8;
 
                 if y_size > 1 {
                     if top_space_available >= x_size && bot_space_available >= x_size {
@@ -90,13 +96,8 @@ fn generate_all_monsters_specs(
                 }
 
                 let mut specs = generate_monster_specs(specs, world_state);
-                specs.character_specs.position_y = if use_top { 0 } else { 1 };
-                specs.character_specs.position_x = (MAX_MONSTERS_PER_ROW
-                    - if use_top {
-                        top_space_available
-                    } else {
-                        bot_space_available
-                    }) as u8;
+                specs.character_specs.position_y = if use_top { 1 } else { 2 };
+                specs.character_specs.position_x = x_pos;
                 monsters_specs.push(specs);
 
                 if top_space_available == 0 && bot_space_available == 0 {
