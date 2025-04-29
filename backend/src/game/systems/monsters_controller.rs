@@ -3,10 +3,10 @@ use shared::data::{
     player::{PlayerSpecs, PlayerState},
 };
 
-use super::character_controller;
+use super::skills_controller;
 
 pub fn control_monsters(
-    monsters: &mut Vec<(&mut MonsterState, &MonsterSpecs)>,
+    monsters: &mut Vec<(&MonsterSpecs, &mut MonsterState)>,
     player_specs: &PlayerSpecs,
     player_state: &mut PlayerState,
 ) {
@@ -14,22 +14,28 @@ pub fn control_monsters(
         return;
     }
 
-    for (monster_state, monster_specs) in monsters
+    for (monster_specs, monster_state) in monsters
         .iter_mut()
-        .filter(|(m, _)| m.character_state.is_alive && m.initiative == 0.0)
+        .filter(|(_, m)| m.character_state.is_alive && m.initiative == 0.0)
     {
         for (skill_specs, skill_state) in monster_specs
-            .character_specs
             .skill_specs
             .iter()
-            .zip(monster_state.character_state.skill_states.iter_mut())
+            .zip(monster_state.skill_states.iter_mut())
             .filter(|(_, s)| s.is_ready)
         {
-            character_controller::use_skill(
+            skills_controller::use_skill(
                 &skill_specs,
                 skill_state,
-                &mut player_state.character_state,
-                &player_specs.character_specs,
+                (
+                    &monster_specs.character_specs,
+                    &mut monster_state.character_state,
+                ),
+                vec![], // TODO
+                vec![(
+                    &player_specs.character_specs,
+                    &mut player_state.character_state,
+                )],
             );
         }
     }

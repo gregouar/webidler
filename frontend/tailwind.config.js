@@ -11,6 +11,16 @@ module.exports = {
     safelist: [
       "duration-100",
       "duration-1000",
+      "col-span-1",
+      "col-span-2",
+      "col-span-3",
+      "row-span-1",
+      "row-span-2",
+      "col-start-1",
+      "col-start-2",
+      "col-start-3",
+      "row-start-1",
+      "row-start-2",
     ],
     theme: {
       extend: {

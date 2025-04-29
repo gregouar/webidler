@@ -6,6 +6,7 @@
         "--rustfmt"
     ],
     "cSpell.words": [
+        "cooldown",
         "RESPAWN"
     ]
 }

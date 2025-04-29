@@ -7,7 +7,7 @@ use axum::{
 };
 
 use http::{HeaderValue, Method};
-use shared::data::world::{HelloSchema, OtherSchema};
+use shared::data::world::HelloSchema;
 use tower_http::{
     cors::CorsLayer,
     trace::{DefaultMakeSpan, TraceLayer},
@@ -30,6 +30,9 @@ async fn main() {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
+    let tracer_layer =
+        TraceLayer::new_for_http().make_span_with(DefaultMakeSpan::default().include_headers(true));
+
     let cors_layer = CorsLayer::new()
         .allow_origin([
             "http://127.0.0.1:8080".parse::<HeaderValue>().unwrap(),
@@ -40,12 +43,8 @@ async fn main() {
     let app = Router::new()
         .route("/", get(|| async { "OK" }))
         .route("/hello", get(get_hello))
-        .route("/other", get(get_other))
         .route("/ws", any(ws_connect::ws_handler))
-        .layer(
-            TraceLayer::new_for_http()
-                .make_span_with(DefaultMakeSpan::default().include_headers(true)),
-        )
+        .layer(tracer_layer)
         .layer(cors_layer);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:4200").await.unwrap();
@@ -61,13 +60,6 @@ async fn main() {
 async fn get_hello() -> Json<HelloSchema> {
     Json(HelloSchema {
         greeting: String::from("hello pou"),
-        value: 42,
-    })
-}
-
-async fn get_other() -> Json<OtherSchema> {
-    Json(OtherSchema {
-        other: String::from("other pou"),
         value: 42,
     })
 }

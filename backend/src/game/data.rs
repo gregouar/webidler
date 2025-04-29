@@ -1,5 +1,4 @@
 use anyhow::{Context, Result};
-use rand::Rng;
 use std::path::PathBuf;
 
 use serde::de::DeserializeOwned;
@@ -12,6 +11,8 @@ use shared::data::{
     skill::{SkillSpecs, SkillState},
     world::{WorldSpecs, WorldState},
 };
+
+use crate::rng;
 
 pub async fn load_json<S>(filepath: &PathBuf) -> Result<S>
 where
@@ -43,13 +44,9 @@ impl DataInit<CharacterSpecs> for CharacterState {
     fn init(specs: &CharacterSpecs) -> Self {
         CharacterState {
             is_alive: true,
+            just_died: false,
             health: specs.max_health,
             just_hurt: false,
-            skill_states: specs
-                .skill_specs
-                .iter()
-                .map(|p| SkillState::init(p))
-                .collect(),
         }
     }
 }
@@ -58,6 +55,11 @@ impl DataInit<PlayerSpecs> for PlayerState {
     fn init(specs: &PlayerSpecs) -> Self {
         PlayerState {
             character_state: CharacterState::init(&specs.character_specs),
+            skill_states: specs
+                .skill_specs
+                .iter()
+                .map(|p| SkillState::init(p))
+                .collect(),
             experience: 0.0,
             mana: specs.max_mana,
         }
@@ -66,10 +68,14 @@ impl DataInit<PlayerSpecs> for PlayerState {
 
 impl DataInit<MonsterSpecs> for MonsterState {
     fn init(specs: &MonsterSpecs) -> Self {
-        let mut rng = rand::rng();
         MonsterState {
             character_state: CharacterState::init(&specs.character_specs),
-            initiative: rng.random_range(0.0..specs.max_initiative),
+            skill_states: specs
+                .skill_specs
+                .iter()
+                .map(|p| SkillState::init(p))
+                .collect(),
+            initiative: rng::random_range(0.0..specs.max_initiative).unwrap_or_default(),
         }
     }
 }

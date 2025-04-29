@@ -6,12 +6,6 @@ pub struct HelloSchema {
     pub value: i32,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct OtherSchema {
-    pub other: String,
-    pub value: i32,
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct WorldSpecs {
     pub name: String,

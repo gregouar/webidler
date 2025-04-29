@@ -21,8 +21,8 @@ use shared::{
 };
 
 use super::systems::{
-    character_controller, monsters_controller, monsters_updater, monsters_wave, player_updater,
-    weapon::update_weapon_specs,
+    characters_updater, monsters_controller, monsters_updater, monsters_wave, player_controller,
+    player_updater, skills_updater, weapon::update_weapon_specs,
 };
 use super::{data::DataInit, systems::player_controller::PlayerController, world::WorldBlueprint};
 
@@ -216,9 +216,13 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn reset_entities(&mut self) {
-        character_controller::reset_character(&mut self.player_state.character_state);
+        // TODO: reset Player
+        characters_updater::reset_character(&mut self.player_state.character_state);
+        skills_updater::reset_skills(&mut self.player_state.skill_states);
         for monster_state in self.monster_states.iter_mut() {
-            character_controller::reset_character(&mut monster_state.character_state);
+            // TODO: reset Monster
+            characters_updater::reset_character(&mut monster_state.character_state);
+            skills_updater::reset_skills(&mut monster_state.skill_states);
         }
     }
 
@@ -229,20 +233,31 @@ impl<'a> GameInstance<'a> {
             }
         } else {
             self.player_respawn_delay = Instant::now();
-            let mut monsters_still_alive: Vec<(&mut MonsterState, &MonsterSpecs)> = self
-                .monster_states
-                .iter_mut()
-                .zip(self.monster_specs.iter())
-                .filter(|(x, _)| x.character_state.is_alive)
+            let mut monsters_still_alive: Vec<(&MonsterSpecs, &mut MonsterState)> = self
+                .monster_specs
+                .iter()
+                .zip(self.monster_states.iter_mut())
+                .filter(|(_, x)| x.character_state.is_alive)
                 .collect();
 
             self.player_controller.control_player(
                 &self.player_specs,
                 &mut self.player_state,
-                &mut self.player_resources,
                 &mut monsters_still_alive,
             );
             self.player_controller.reset();
+
+            // TODO: Where should I put this?
+            for (monster_specs, _) in monsters_still_alive
+                .iter()
+                .filter(|(_, s)| s.character_state.just_died)
+            {
+                player_controller::reward_player(
+                    &mut self.player_state,
+                    &mut self.player_resources,
+                    monster_specs,
+                );
+            }
 
             if monsters_still_alive.is_empty() {
                 if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {

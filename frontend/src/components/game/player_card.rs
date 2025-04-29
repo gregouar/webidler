@@ -70,6 +70,7 @@ pub fn PlayerCard() -> impl IntoView {
         </style>
         // <div class="overflow-hidden">
         <div class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-md ring-1 ring-zinc-950">
+
             // style=move || {
             // if is_dead.get() {
             // "animation: player-fade-out 3s ease-in; animation-fill-mode: both;"
@@ -114,13 +115,7 @@ pub fn PlayerCard() -> impl IntoView {
             <div class="grid grid-cols-4 gap-2">
                 <For
                     each=move || {
-                        game_context
-                            .player_specs
-                            .get()
-                            .character_specs
-                            .skill_specs
-                            .into_iter()
-                            .enumerate()
+                        game_context.player_specs.get().skill_specs.into_iter().enumerate()
                     }
                     key=|(i, _)| *i
                     let((i, p))
@@ -162,7 +157,6 @@ fn PlayerSkill(specs: SkillSpecs, index: usize) -> impl IntoView {
             (game_context
                 .player_state
                 .read()
-                .character_state
                 .skill_states
                 .get(index)
                 .map(|x| x.elapsed_cooldown)
@@ -185,7 +179,6 @@ fn PlayerSkill(specs: SkillSpecs, index: usize) -> impl IntoView {
         game_context
             .player_state
             .read()
-            .character_state
             .skill_states
             .get(index)
             .map(|x| x.just_triggered)
