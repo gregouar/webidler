@@ -1,11 +1,15 @@
 use serde::{Deserialize, Serialize};
 
 pub use super::character::{CharacterSpecs, CharacterState};
-use super::item::ItemSpecs;
+use super::{
+    item::ItemSpecs,
+    skill::{SkillSpecs, SkillState},
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerSpecs {
     pub character_specs: CharacterSpecs,
+    pub skill_specs: Vec<SkillSpecs>,
 
     pub level: u8,
     pub experience_needed: f64,
@@ -21,6 +25,7 @@ pub struct PlayerSpecs {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerState {
     pub character_state: CharacterState,
+    pub skill_states: Vec<SkillState>,
 
     // TODO: Should this be in PlayerResources?
     pub experience: f64,

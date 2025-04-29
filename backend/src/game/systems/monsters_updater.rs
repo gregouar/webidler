@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use shared::data::monster::{MonsterSpecs, MonsterState};
 
-use super::characters_updater;
+use super::{characters_updater, skills_updater};
 
 pub fn update_monster_states(
     elapsed_time: Duration,
@@ -23,6 +23,11 @@ pub fn update_monster_states(
             elapsed_time,
             &monster_specs.character_specs,
             &mut monster_state.character_state,
+        );
+        skills_updater::update_skills_states(
+            elapsed_time,
+            &monster_specs.skill_specs,
+            &mut monster_state.skill_states,
         );
     }
 }

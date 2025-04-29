@@ -3,8 +3,6 @@ use shared::data::{
     player::{PlayerResources, PlayerSpecs, PlayerState},
 };
 
-use crate::rng;
-
 use super::character_controller;
 
 pub struct PlayerController {
@@ -16,7 +14,7 @@ impl PlayerController {
     pub fn init(specs: &PlayerSpecs) -> Self {
         PlayerController {
             auto_skills: specs.auto_skills.clone(),
-            use_skills: Vec::with_capacity(specs.character_specs.skill_specs.len()),
+            use_skills: Vec::with_capacity(specs.skill_specs.len()),
         }
     }
 
@@ -37,10 +35,9 @@ impl PlayerController {
 
         // let mut rewards = Vec::new();
         for (i, (skill_specs, skill_state)) in player_specs
-            .character_specs
             .skill_specs
             .iter()
-            .zip(player_state.character_state.skill_states.iter_mut())
+            .zip(player_state.skill_states.iter_mut())
             .enumerate()
         {
             if !skill_state.is_ready || skill_specs.mana_cost > player_state.mana {
@@ -58,7 +55,12 @@ impl PlayerController {
             if character_controller::use_skill(
                 skill_specs,
                 skill_state,
-                &mut monsters
+                (
+                    &player_specs.character_specs,
+                    &mut player_state.character_state,
+                ),
+                vec![],
+                monsters
                     .iter_mut()
                     .map(|(specs, state)| (&specs.character_specs, &mut state.character_state))
                     .collect(),

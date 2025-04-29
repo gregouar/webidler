@@ -2,24 +2,24 @@
     "character_specs": {
         "name": "Ratty",
         "portrait": "monsters/rat.webp",
-        "max_health": 20,
-        "skill_specs": [
-            {
-                "name": "Vicious Bite",
-                "icon": "skills/bite.svg",
-                "cooldown": 5.0,
-                "min_damages": 2.0,
-                "max_damages": 8.0
-            },
-            {
-                "name": "Scratch",
-                "icon": "skills/claw.svg",
-                "cooldown": 3.0,
-                "min_damages": 1.0,
-                "max_damages": 3.0
-            }
-        ]
+        "max_health": 20
     },
+    "skill_specs": [
+        {
+            "name": "Vicious Bite",
+            "icon": "skills/bite.svg",
+            "cooldown": 5.0,
+            "min_damages": 2.0,
+            "max_damages": 8.0
+        },
+        {
+            "name": "Scratch",
+            "icon": "skills/claw.svg",
+            "cooldown": 3.0,
+            "min_damages": 1.0,
+            "max_damages": 3.0
+        }
+    ],
     "power_factor": 2.0,
     "max_initiative": 1.0
 }

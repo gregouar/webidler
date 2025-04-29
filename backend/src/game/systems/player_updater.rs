@@ -2,8 +2,8 @@ use std::time::Duration;
 
 use shared::data::player::{PlayerSpecs, PlayerState};
 
-use super::characters_updater;
 use super::increase_factors::exponential_factor;
+use super::{characters_updater, skills_updater};
 
 pub fn update_player_state(
     elapsed_time: Duration,
@@ -20,6 +20,11 @@ pub fn update_player_state(
         elapsed_time,
         &player_specs.character_specs,
         &mut player_state.character_state,
+    );
+    skills_updater::update_skills_states(
+        elapsed_time,
+        &player_specs.skill_specs,
+        &mut player_state.skill_states,
     );
 
     player_state.mana = player_specs

@@ -92,11 +92,10 @@ pub fn use_skill(
 
 pub fn reset_character(character_state: &mut CharacterState) {
     character_state.just_hurt = false;
-    for skill_sate in character_state.skill_states.iter_mut() {
-        reset_skill(skill_sate)
-    }
 }
 
-pub fn reset_skill(skill_state: &mut SkillState) {
-    skill_state.just_triggered = false;
+pub fn reset_skills(skill_states: &mut Vec<SkillState>) {
+    for skill_state in skill_states.iter_mut() {
+        skill_state.just_triggered = false;
+    }
 }

@@ -216,9 +216,13 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn reset_entities(&mut self) {
+        // TODO: reset Player
         character_controller::reset_character(&mut self.player_state.character_state);
+        character_controller::reset_skills(&mut self.player_state.skill_states);
         for monster_state in self.monster_states.iter_mut() {
+            // TODO: reset Monster
             character_controller::reset_character(&mut monster_state.character_state);
+            character_controller::reset_skills(&mut monster_state.skill_states);
         }
     }
 

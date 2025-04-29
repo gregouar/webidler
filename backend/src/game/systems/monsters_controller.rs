@@ -19,10 +19,9 @@ pub fn control_monsters(
         .filter(|(_, m)| m.character_state.is_alive && m.initiative == 0.0)
     {
         for (skill_specs, skill_state) in monster_specs
-            .character_specs
             .skill_specs
             .iter()
-            .zip(monster_state.character_state.skill_states.iter_mut())
+            .zip(monster_state.skill_states.iter_mut())
             .filter(|(_, s)| s.is_ready)
         {
             character_controller::use_skill(

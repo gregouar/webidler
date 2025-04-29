@@ -61,26 +61,31 @@ pub fn MonstersGrid() -> impl IntoView {
                         "animation-delay: {}s;",
                         rand::rng().random_range(0.0..=0.2f32),
                     );
+                    let (x_size, y_size) = specs.size.get_xy_size();
+
                     view! {
-                        <div style=move || {
-                            if all_monsters_dead.get() {
-                                format!(
-                                    "animation: monster-fade-out 1s ease-in; animation-fill-mode: both;",
-                                )
-                            } else {
-                                if player_dead.get() {
+                        <div
+                            class=format!("col-span-{} row-span-{}", x_size, y_size)
+                            style=move || {
+                                if all_monsters_dead.get() {
                                     format!(
-                                        "animation: monster-flee 3s ease-out; animation-fill-mode: both; {}",
-                                        animation_delay,
+                                        "animation: monster-fade-out 1s ease-in; animation-fill-mode: both;",
                                     )
                                 } else {
-                                    format!(
-                                        "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {}",
-                                        animation_delay,
-                                    )
+                                    if player_dead.get() {
+                                        format!(
+                                            "animation: monster-flee 3s ease-out; animation-fill-mode: both; {}",
+                                            animation_delay,
+                                        )
+                                    } else {
+                                        format!(
+                                            "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {}",
+                                            animation_delay,
+                                        )
+                                    }
                                 }
                             }
-                        }>
+                        >
                             <MonsterCard specs=specs index=index />
                         </div>
                     }
@@ -147,9 +152,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             </div>
             <div class="flex flex-col justify-evenly w-full min-w-16">
                 <For
-                    each=move || {
-                        specs.character_specs.skill_specs.clone().into_iter().enumerate()
-                    }
+                    each=move || { specs.skill_specs.clone().into_iter().enumerate() }
                     key=|(i, _)| *i
                     let((i, p))
                 >
@@ -179,7 +182,7 @@ fn MonsterSkill(specs: SkillSpecs, index: usize, monster_index: usize) -> impl I
                 .monster_states
                 .read()
                 .get(monster_index)
-                .map(|m| m.character_state.skill_states.get(index))
+                .map(|m| m.skill_states.get(index))
                 .flatten()
                 .map(|s| s.elapsed_cooldown)
                 .unwrap_or(0.0)
@@ -196,7 +199,7 @@ fn MonsterSkill(specs: SkillSpecs, index: usize, monster_index: usize) -> impl I
                 .monster_states
                 .read()
                 .get(monster_index)
-                .map(|m| m.character_state.skill_states.get(index))
+                .map(|m| m.skill_states.get(index))
                 .flatten()
                 .map(|s| s.just_triggered)
                 .unwrap_or_default()

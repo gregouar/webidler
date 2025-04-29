@@ -127,7 +127,7 @@ fn generate_monster_specs(bp_specs: &MonsterSpecs, world_state: &WorldState) -> 
     let increase_factor = exponential_factor(world_state.area_level as f64);
     monster_specs.power_factor *= increase_factor;
     monster_specs.character_specs.max_health *= increase_factor;
-    for skill_specs in monster_specs.character_specs.skill_specs.iter_mut() {
+    for skill_specs in monster_specs.skill_specs.iter_mut() {
         skill_specs.min_damages *= increase_factor;
         skill_specs.max_damages *= increase_factor;
     }
