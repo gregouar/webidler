@@ -44,6 +44,7 @@ impl DataInit<CharacterSpecs> for CharacterState {
     fn init(specs: &CharacterSpecs) -> Self {
         CharacterState {
             is_alive: true,
+            just_died: false,
             health: specs.max_health,
             just_hurt: false,
         }

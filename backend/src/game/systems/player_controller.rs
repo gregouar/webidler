@@ -26,14 +26,12 @@ impl PlayerController {
         &mut self,
         player_specs: &PlayerSpecs,
         player_state: &mut PlayerState,
-        player_resources: &mut PlayerResources,
         monsters: &mut Vec<(&MonsterSpecs, &mut MonsterState)>,
     ) {
         if !player_state.character_state.is_alive {
             return;
         }
 
-        // let mut rewards = Vec::new();
         for (i, (skill_specs, skill_state)) in player_specs
             .skill_specs
             .iter()
@@ -62,22 +60,16 @@ impl PlayerController {
                     .collect(),
             ) {
                 player_state.mana -= skill_specs.mana_cost;
-                // rewards.push(*target_specs);
             }
-            // }
         }
-
-        // for reward in rewards {
-        //     reward_player(player_state, player_resources, &reward);
-        // }
     }
 }
 
-fn reward_player(
+pub fn reward_player(
     player_state: &mut PlayerState,
     player_resources: &mut PlayerResources,
-    target_specs: &MonsterSpecs,
+    monster_specs: &MonsterSpecs,
 ) {
-    player_resources.gold += target_specs.power_factor;
-    player_state.experience += target_specs.power_factor;
+    player_resources.gold += monster_specs.power_factor;
+    player_state.experience += monster_specs.power_factor;
 }

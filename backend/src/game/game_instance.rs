@@ -21,8 +21,8 @@ use shared::{
 };
 
 use super::systems::{
-    characters_updater, monsters_controller, monsters_updater, monsters_wave, player_updater,
-    skills_updater, weapon::update_weapon_specs,
+    characters_updater, monsters_controller, monsters_updater, monsters_wave, player_controller,
+    player_updater, skills_updater, weapon::update_weapon_specs,
 };
 use super::{data::DataInit, systems::player_controller::PlayerController, world::WorldBlueprint};
 
@@ -243,10 +243,21 @@ impl<'a> GameInstance<'a> {
             self.player_controller.control_player(
                 &self.player_specs,
                 &mut self.player_state,
-                &mut self.player_resources,
                 &mut monsters_still_alive,
             );
             self.player_controller.reset();
+
+            // TODO: Where should I put this?
+            for (monster_specs, _) in monsters_still_alive
+                .iter()
+                .filter(|(_, s)| s.character_state.just_died)
+            {
+                player_controller::reward_player(
+                    &mut self.player_state,
+                    &mut self.player_resources,
+                    monster_specs,
+                );
+            }
 
             if monsters_still_alive.is_empty() {
                 if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {

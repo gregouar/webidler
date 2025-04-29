@@ -48,6 +48,8 @@ pub struct CharacterSpecs {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CharacterState {
     pub is_alive: bool,
-    pub just_hurt: bool,
+    pub just_died: bool,
+
     pub health: f64,
+    pub just_hurt: bool,
 }
