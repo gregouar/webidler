@@ -2,8 +2,7 @@
     "character_specs": {
         "name": "Ratty",
         "portrait": "monsters/rat.webp",
-        "max_health": 20,
-        "size": "Huge"
+        "max_health": 20
     },
     "skill_specs": [
         {
