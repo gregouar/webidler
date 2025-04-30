@@ -5,7 +5,7 @@ pub fn Number(value: Signal<f64>) -> impl IntoView {
     view! { {move || { format_number(value.get()) }} }
 }
 
-fn format_number(value: f64) -> String {
+pub fn format_number(value: f64) -> String {
     if value >= 1_000_000.0 {
         format!("{:.2e}", value)
     } else {

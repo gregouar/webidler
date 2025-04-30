@@ -3,12 +3,13 @@ use rand::{self, seq::IteratorRandom};
 use shared::data::{
     character::{CharacterSpecs, CharacterState, SkillSpecs, SkillState},
     item::{Range, Shape},
+    player::PlayerResources,
     skill::TargetType,
 };
 
 use crate::rng;
 
-use super::characters_controller;
+use super::{characters_controller, increase_factors::exponential_factor};
 
 pub fn use_skill(
     skill_specs: &SkillSpecs,
@@ -101,4 +102,10 @@ pub fn use_skill(
     found_target
 }
 
-// pub fn pick_targets(character_specs: &CharacterSpecs,  monsters: &mut Vec<(&mut MonsterState, &MonsterSpecs)>, range: Range, target_type: TargetType, shape: Shape) ->
+pub fn level_up_skill(skill_state: &mut SkillState, player_resources: &mut PlayerResources) {
+    if player_resources.gold >= skill_state.next_upgrade_cost {
+        player_resources.gold -= skill_state.next_upgrade_cost;
+        skill_state.upgrade_level += 1;
+        skill_state.next_upgrade_cost += 10.0 * exponential_factor(skill_state.upgrade_level as f64)
+    }
+}

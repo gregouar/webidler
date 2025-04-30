@@ -6,7 +6,7 @@ use shared::data::item::{
 };
 
 use crate::assets::img_asset;
-use crate::components::ui::{menu_panel::MenuPanel, tooltip::Tooltip};
+use crate::components::ui::{menu_panel::MenuPanel, tooltip::DynamicTooltip};
 
 use super::game_context::GameContext;
 use super::player_card::PlayerName;
@@ -29,7 +29,7 @@ pub fn Inventory(open: RwSignal<bool>) -> impl IntoView {
     });
 
     view! {
-        <Tooltip show=show_tooltip>
+        <DynamicTooltip show=show_tooltip>
             {move || {
                 inventory_context
                     .hovered_item
@@ -38,7 +38,7 @@ pub fn Inventory(open: RwSignal<bool>) -> impl IntoView {
                         view! { <ItemTooltip item_specs=item /> }
                     })
             }}
-        </Tooltip>
+        </DynamicTooltip>
         <MenuPanel open=open>
             <div class="grid grid-cols-7 justify-items-stretch flex items-start gap-4 p-4">
                 <EquippedItems class:col-span-2 class:justify-self-end />

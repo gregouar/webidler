@@ -4,7 +4,7 @@ use leptos_use::use_mouse;
 
 // TODO: position
 #[component]
-pub fn Tooltip(#[prop(into)] show: Signal<bool>, children: ChildrenFn) -> impl IntoView {
+pub fn DynamicTooltip(#[prop(into)] show: Signal<bool>, children: ChildrenFn) -> impl IntoView {
     let mouse = use_mouse();
 
     // See: https://book.leptos.dev/interlude_projecting_children.html
@@ -29,5 +29,24 @@ pub fn Tooltip(#[prop(into)] show: Signal<bool>, children: ChildrenFn) -> impl I
                 }
             }}
         </Show>
+    }
+}
+
+#[component]
+pub fn StaticTooltip(tooltip: Signal<String>, children: Children) -> impl IntoView {
+    view! {
+        <div class="relative group inline-block">
+            {children()}
+            <div class="
+            absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+            hidden group-hover:block
+            px-3 py-1
+            text-sm text-white
+            bg-zinc-800 border border-neutral-900
+            rounded shadow-lg
+            whitespace-nowrap
+            z-50
+            ">{tooltip}</div>
+        </div>
     }
 }

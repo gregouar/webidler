@@ -9,6 +9,7 @@ impl_into_message! {
         Connect(ClientConnectMessage),
         UseSkill(UseSkillMessage),
         SetAutoSkill(SetAutoSkillMessage),
+        LevelUpSkill(LevelUpSkillMessage),
     }
 }
 
@@ -33,4 +34,9 @@ pub struct UseSkillMessage {
 pub struct SetAutoSkillMessage {
     pub skill_index: u8,
     pub auto_use: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct LevelUpSkillMessage {
+    pub skill_index: u8,
 }

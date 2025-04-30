@@ -2,14 +2,19 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 use shared::data::skill::SkillSpecs;
+use shared::messages::client::LevelUpSkillMessage;
 use shared::messages::client::SetAutoSkillMessage;
 use shared::messages::client::UseSkillMessage;
 
 use crate::assets::img_asset;
-use crate::components::websocket::WebsocketContext;
 use crate::components::{
-    ui::buttons::Toggle,
-    ui::progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
+    ui::{
+        buttons::{FancyButton, Toggle},
+        number::format_number,
+        progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
+        tooltip::StaticTooltip,
+    },
+    websocket::WebsocketContext,
 };
 
 use super::character::CharacterPortrait;
@@ -208,6 +213,33 @@ fn PlayerSkill(specs: SkillSpecs, index: usize) -> impl IntoView {
         );
     };
 
+    let conn = expect_context::<WebsocketContext>();
+    let level_up = move |_| {
+        // TODO: Add constraint/limit rates?
+        conn.send(
+            &LevelUpSkillMessage {
+                skill_index: index as u8,
+            }
+            .into(),
+        );
+    };
+
+    let level_up_cost = Signal::derive(move || {
+        game_context
+            .player_state
+            .read()
+            .skill_states
+            .get(index)
+            .map(|x| x.next_upgrade_cost)
+            .unwrap_or_default()
+    });
+
+    let disable_level_up =
+        Signal::derive(move || level_up_cost.get() > game_context.player_resources.read().gold);
+
+    let cost_tooltip =
+        Signal::derive(move || format!("{} Gold", format_number(level_up_cost.get())));
+
     view! {
         <div class="flex flex-col">
             <CircularProgressBar
@@ -225,8 +257,19 @@ fn PlayerSkill(specs: SkillSpecs, index: usize) -> impl IntoView {
                     />
                 </button>
             </CircularProgressBar>
-            <div class="flex justify-center">
-                <Toggle toggle_callback=set_auto_skill initial=initial_auto_use />
+
+            <div class="flex justify-around">
+                <Toggle
+                    toggle_callback=set_auto_skill
+                    initial=initial_auto_use
+                    label="auto".to_string()
+                />
+                <StaticTooltip tooltip=cost_tooltip>
+                    <FancyButton disabled=disable_level_up on:click=level_up>
+                        <span class="text-2xl">"+"</span>
+                    </FancyButton>
+                </StaticTooltip>
+
             </div>
         </div>
     }

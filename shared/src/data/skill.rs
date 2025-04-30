@@ -28,12 +28,9 @@ pub struct SkillSpecs {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SkillState {
-    // TODO: Upgrade system
-    // pub next_upgrade_cost: f64,
-    // pub upgrade_level: u16,
+    pub next_upgrade_cost: f64,
+    pub upgrade_level: u16,
 
-    // pub min_damages: f64,
-    // pub max_damages: f64,
     pub elapsed_cooldown: f32,
     pub is_ready: bool,
     pub just_triggered: bool,

@@ -22,7 +22,7 @@ use shared::{
 
 use super::systems::{
     characters_updater, monsters_controller, monsters_updater, monsters_wave, player_controller,
-    player_updater, skills_updater, weapon::update_weapon_specs,
+    player_updater, skills_controller, skills_updater, weapon::update_weapon_specs,
 };
 use super::{data::DataInit, systems::player_controller::PlayerController, world::WorldBlueprint};
 
@@ -139,6 +139,15 @@ impl<'a> GameInstance<'a> {
                     .auto_skills
                     .get_mut(m.skill_index as usize)
                     .map(|x| *x = m.auto_use);
+            }
+            ClientMessage::LevelUpSkill(m) => {
+                if let Some(skill_state) = self
+                    .player_state
+                    .skill_states
+                    .get_mut(m.skill_index as usize)
+                {
+                    skills_controller::level_up_skill(skill_state, &mut self.player_resources);
+                }
             }
             ClientMessage::Connect(_) => {
                 tracing::warn!("received unexpected message: {:?}", msg)
