@@ -64,7 +64,7 @@ pub fn Toggle(
             "shadow-md text-white"
             // "ring-2 ring-amber-600/20 shadow-md text-white "
         } else {
-            "opacity-60 shadow-none"
+            "opacity-60 shadow-none text-zinc-400"
         }
     };
 
