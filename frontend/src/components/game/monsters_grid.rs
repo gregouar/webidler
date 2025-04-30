@@ -29,8 +29,11 @@ pub fn MonstersGrid() -> impl IntoView {
     // TODO: double buffering to allow in and out at the same time
     view! {
         <div class="
-        grid grid-rows-2 grid-cols-3 p-2 gap-2 items-center 
-        h-full overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]
+        grid grid-rows-2 grid-cols-3 p-2 gap-2 
+        items-center
+        w-full aspect-[12/7]
+        bg-stone-800
+        overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]
         ">
             <style>
                 "
@@ -70,7 +73,7 @@ pub fn MonstersGrid() -> impl IntoView {
                     view! {
                         <div
                             class=format!(
-                                "col-span-{} row-span-{} col-start-{} row-start-{} h-full",
+                                "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full",
                                 x_size,
                                 y_size,
                                 x_pos,

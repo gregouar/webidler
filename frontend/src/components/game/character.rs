@@ -41,13 +41,13 @@ pub fn CharacterPortrait(
                 }
             "
         </style>
-        <div class="flex-1 h-full w-full relative">
+        <div class="flex items-center justify-center h-full relative">
             <img
                 src=img_asset(&image_uri)
                 alt=character_name
                 class=move || {
                     format!(
-                        "border-8 border-double border-stone-500 object-cover {}",
+                        "border-8 border-double border-stone-500 object-cover h-full {}",
                         is_dead_img_effect(),
                     )
                 }

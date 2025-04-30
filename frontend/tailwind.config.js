@@ -21,6 +21,10 @@ module.exports = {
       "col-start-3",
       "row-start-1",
       "row-start-2",
+      "aspect-[4/3]",
+      "aspect-[8/3]",
+      "aspect-[8/6]",
+      "aspect-[12/6]",
     ],
     theme: {
       extend: {
