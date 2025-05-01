@@ -1,31 +1,57 @@
 use shared::data::{
-    item::{ItemCategory, ItemSpecs, WeaponSpecs},
+    item::{AffixEffect, AffixEffectType, ItemCategory, ItemSpecs, ItemStat, WeaponSpecs},
     skill::{SkillSpecs, TargetType},
 };
 
 // TODO: Where to call that?
-pub fn update_weapon_specs(weapon_specs: &mut WeaponSpecs) {
+pub fn update_weapon_specs(weapon_specs: &mut WeaponSpecs, mut effects: Vec<AffixEffect>) {
     weapon_specs.cooldown = weapon_specs.base_cooldown;
     weapon_specs.min_damage = weapon_specs.base_min_damage;
     weapon_specs.max_damage = weapon_specs.base_max_damage;
 
-    for prefix in weapon_specs.magic_prefixes.iter() {
-        match prefix {
-            shared::data::item::WeaponMagicPrefix::AttackSpeed(x) => {
-                weapon_specs.cooldown *= 1.0 - x;
-            }
-            shared::data::item::WeaponMagicPrefix::AttackDamages(x) => {
-                weapon_specs.min_damage *= 1.0 + x;
-                weapon_specs.max_damage *= 1.0 + x;
-            }
+    effects.sort_by_key(|e| match e.effect_type {
+        AffixEffectType::Flat => 0,
+        AffixEffectType::Multiplier => 1,
+    });
+
+    for effect in &effects {
+        match effect.stat {
+            ItemStat::AttackSpeed => match effect.effect_type {
+                AffixEffectType::Flat => {
+                    weapon_specs.cooldown *= 1.0 - effect.value as f32;
+                }
+                AffixEffectType::Multiplier => {
+                    weapon_specs.cooldown -= effect.value as f32;
+                }
+            },
+            ItemStat::AttackDamage => match effect.effect_type {
+                AffixEffectType::Flat => {
+                    weapon_specs.min_damage += effect.value;
+                    weapon_specs.max_damage += effect.value;
+                }
+                AffixEffectType::Multiplier => {
+                    weapon_specs.min_damage *= 1.0 + effect.value;
+                    weapon_specs.max_damage *= 1.0 + effect.value;
+                }
+            },
+            ItemStat::MinAttackDamage => match effect.effect_type {
+                AffixEffectType::Flat => weapon_specs.min_damage += effect.value,
+                AffixEffectType::Multiplier => weapon_specs.min_damage *= 1.0 + effect.value,
+            },
+            ItemStat::MaxAttackDamage => match effect.effect_type {
+                AffixEffectType::Flat => weapon_specs.max_damage += effect.value,
+                AffixEffectType::Multiplier => weapon_specs.max_damage *= 1.0 + effect.value,
+            },
+            ItemStat::GoldFind => {}
         }
     }
 
-    for suffix in weapon_specs.magic_suffixes.iter() {
-        match suffix {
-            shared::data::item::WeaponMagicSuffix::GoldFind(_) => {}
-        }
-    }
+    weapon_specs.cooldown = weapon_specs.cooldown.max(0.0);
+    weapon_specs.max_damage = weapon_specs.max_damage.max(0.0);
+    weapon_specs.min_damage = weapon_specs
+        .min_damage
+        .max(0.0)
+        .min(weapon_specs.max_damage);
 }
 
 pub fn make_weapon_skill(item_specs: &ItemSpecs) -> Option<SkillSpecs> {

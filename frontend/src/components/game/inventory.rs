@@ -1,9 +1,10 @@
 use leptos::html::*;
 use leptos::prelude::*;
 
-use shared::data::item::{
-    ItemCategory, ItemRarity, ItemSpecs, WeaponMagicPrefix, WeaponMagicSuffix,
-};
+use shared::data::item::AffixEffect;
+use shared::data::item::AffixEffectType;
+use shared::data::item::ItemStat;
+use shared::data::item::{ItemCategory, ItemRarity, ItemSpecs};
 
 use crate::assets::img_asset;
 use crate::components::ui::{menu_panel::MenuPanel, tooltip::DynamicTooltip};
@@ -25,7 +26,7 @@ pub fn Inventory(open: RwSignal<bool>) -> impl IntoView {
 
     let show_tooltip = Signal::derive({
         let inventory_context = inventory_context.clone();
-        move || inventory_context.hovered_item.get().is_some()
+        move || inventory_context.hovered_item.read().is_some()
     });
 
     view! {
@@ -193,10 +194,9 @@ fn ItemCard(item_specs: ItemSpecs) -> impl IntoView {
     }
 }
 
-fn magic_affix_li(text: String) -> impl IntoView {
-    view! { <li class="text-blue-400 text-sm leading-snug">{text}</li> }
-}
-
+// TODO: There is something bad going on with the DynamicTooltip
+// => mouse move means it recomputes the whole ItemTooltip every time :(
+// Could partially solve it by precomputing some stuff (so we would store not the ItemSpecs but a computed version)
 #[component]
 fn ItemTooltip(item_specs: ItemSpecs) -> impl IntoView {
     let extra_info = match &item_specs.item_category {
@@ -240,32 +240,7 @@ fn ItemTooltip(item_specs: ItemSpecs) -> impl IntoView {
         }
     };
 
-    let (prefixes, suffixes): (Vec<_>, Vec<_>) = match &item_specs.item_category {
-        ItemCategory::Weapon(ws) => (
-            ws.magic_prefixes
-                .iter()
-                .map(|prefix| match prefix {
-                    WeaponMagicPrefix::AttackSpeed(v) => {
-                        magic_affix_li(format!("Increased Attack Speed: +{:.0}%", v * 100.0))
-                    }
-                    WeaponMagicPrefix::AttackDamages(v) => {
-                        magic_affix_li(format!("Increased Attack Damage: +{:.0}%", v * 100.0))
-                    }
-                })
-                .collect(),
-            ws.magic_suffixes
-                .iter()
-                .map(|suffix| match suffix {
-                    WeaponMagicSuffix::GoldFind(v) => {
-                        magic_affix_li(format!("Increased Gold Find: +{:.0}%", v * 100.0))
-                    }
-                })
-                .collect(),
-        ),
-        _ => (vec![], vec![]),
-    };
-
-    let has_affixes = !prefixes.is_empty() || !suffixes.is_empty();
+    let affixes = formatted_affix_list(item_specs.aggregate_effects());
 
     // Color setups
     let (name_color, border_color, ring_color, shadow_color) = match item_specs.rarity {
@@ -312,12 +287,93 @@ fn ItemTooltip(item_specs: ItemSpecs) -> impl IntoView {
             </p>
             <hr class="border-t border-gray-700" />
             <ul class="list-none space-y-1">{extra_info}</ul>
-            {has_affixes.then(|| view! { <hr class="border-t border-gray-700 my-1" /> })}
-            <ul class="list-none space-y-1">{prefixes}{suffixes}</ul>
+            {(!affixes.is_empty()).then(|| view! { <hr class="border-t border-gray-700 my-1" /> })}
+            <ul class="list-none space-y-1">{affixes}</ul>
             <hr class="border-t border-gray-700" />
             <p class="text-sm italic text-gray-300 leading-snug">
                 {item_specs.description.clone()}
             </p>
         </div>
     }
+}
+
+fn magic_affix_li(text: String) -> impl IntoView {
+    view! { <li class="text-blue-400 text-sm leading-snug">{text}</li> }
+}
+
+pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl IntoView> {
+    use AffixEffectType::*;
+    use ItemStat::*;
+
+    affix_effects.sort_by_key(|effect| {
+        (
+            -match effect.stat {
+                AttackDamage => 0,
+                MinAttackDamage => 1,
+                MaxAttackDamage => 2,
+                AttackSpeed => 3,
+                GoldFind => 4,
+            },
+            -match effect.effect_type {
+                Flat => 0,
+                Multiplier => 1,
+            },
+        )
+    });
+
+    let mut merged: Vec<String> = Vec::new();
+
+    // This will be used to merge added min and added max damage together
+    let mut min_flat: Option<f64> = None;
+    let mut max_flat: Option<f64> = None;
+
+    for effect in affix_effects {
+        match (effect.stat, effect.effect_type) {
+            (MinAttackDamage, Flat) => min_flat = Some(effect.value),
+            (MaxAttackDamage, Flat) => max_flat = Some(effect.value),
+            // If it's not part of a min/max pair, process normally
+            (AttackSpeed, Flat) => merged.push(format!("-{:.2}s Attack Speed", effect.value)),
+            (AttackSpeed, Multiplier) => merged.push(format!(
+                "{:.0}% Increased Attack Speed",
+                effect.value * 100.0
+            )),
+            (AttackDamage, Flat) => {
+                merged.push(format!("{:.0} Added Attack Damage", effect.value * 100.0))
+            }
+            (AttackDamage, Multiplier) => merged.push(format!(
+                "{:.0}% Increased Attack Damage",
+                effect.value * 100.0
+            )),
+            (MinAttackDamage, Multiplier) => merged.push(format!(
+                "{:.0}% Increased Minimum Attack Damage",
+                effect.value * 100.0
+            )),
+            (MaxAttackDamage, Multiplier) => merged.push(format!(
+                "{:.0}% Increased Maximum Attack Damage",
+                effect.value * 100.0
+            )),
+            (GoldFind, Flat) => {
+                merged.push(format!("+{:.0} Gold per Kill", effect.value));
+            }
+            (GoldFind, Multiplier) => {
+                merged.push(format!("{:.0}% Increased Gold Find", effect.value * 100.0))
+            }
+        }
+    }
+
+    match (min_flat, max_flat) {
+        (Some(min_flat), Some(max_flat)) => merged.push(format!(
+            "Adds {:.0} to {:.0} Attack Damage",
+            min_flat, max_flat
+        )),
+        (Some(min_flat), None) => {
+            merged.push(format!("Adds {:.0} to Minimum Attack Damage", min_flat))
+        }
+        (None, Some(max_flat)) => {
+            merged.push(format!("Adds {:.0} to Maximum Attack Damage", max_flat))
+        }
+        _ => {}
+    }
+
+    merged.into_iter().rev().map(magic_affix_li).collect()
 }

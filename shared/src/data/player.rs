@@ -27,7 +27,7 @@ pub struct PlayerState {
     pub character_state: CharacterState,
     pub skill_states: Vec<SkillState>,
 
-    // TODO: Should this be in PlayerResources?
+    // TODO: move to PlayerResources
     pub experience: f64,
 
     pub mana: f64,

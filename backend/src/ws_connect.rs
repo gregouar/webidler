@@ -17,7 +17,8 @@ use shared::{
     data::{
         character::CharacterSize,
         item::{
-            ItemCategory, ItemRarity, ItemSpecs, WeaponMagicPrefix, WeaponMagicSuffix, WeaponSpecs,
+            AffixEffect, AffixEffectType, AffixType, ItemAffix, ItemCategory, ItemRarity,
+            ItemSpecs, ItemStat, WeaponSpecs,
         },
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs},
         skill::{Range, Shape, SkillSpecs, TargetType},
@@ -116,6 +117,7 @@ async fn handle_connect(
         icon: "items/shortsword.webp".to_string(),
         item_level: 1,
         rarity: ItemRarity::Normal,
+        affixes: Vec::new(),
         item_category: ItemCategory::Weapon(WeaponSpecs {
             base_cooldown: 1.0,
             cooldown: 1.0,
@@ -125,8 +127,6 @@ async fn handle_connect(
             min_damage: 3.0,
             base_max_damage: 7.0,
             max_damage: 7.0,
-            magic_prefixes: Vec::new(),
-            magic_suffixes: Vec::new(),
         }),
     };
 
@@ -191,9 +191,18 @@ async fn handle_connect(
                         min_damage: 4.0,
                         base_max_damage: 8.0,
                         max_damage: 8.0,
-                        magic_prefixes: vec![WeaponMagicPrefix::AttackDamages(0.1)],
-                        magic_suffixes: Vec::new(),
                     }),
+                    affixes: vec![ItemAffix {
+                        name: "Painful".to_string(),
+                        family: "inc_damage".to_string(),
+                        affix_type: AffixType::Prefix,
+                        affix_level: 1,
+                        effects: vec![AffixEffect {
+                            stat: ItemStat::AttackDamage,
+                            effect_type: AffixEffectType::Multiplier,
+                            value: 0.1,
+                        }],
+                    }],
                 },
                 ItemSpecs {
                     name: "Shortsword".to_string(),
@@ -210,12 +219,60 @@ async fn handle_connect(
                         min_damage: 3.0,
                         base_max_damage: 7.0,
                         max_damage: 7.0,
-                        magic_prefixes: vec![
-                            WeaponMagicPrefix::AttackDamages(0.1),
-                            WeaponMagicPrefix::AttackSpeed(0.1),
-                        ],
-                        magic_suffixes: vec![WeaponMagicSuffix::GoldFind(0.3)],
                     }),
+                    affixes: vec![
+                        ItemAffix {
+                            name: "Painful".to_string(),
+                            family: "inc_damage".to_string(),
+                            affix_type: AffixType::Prefix,
+                            affix_level: 1,
+                            effects: vec![AffixEffect {
+                                stat: ItemStat::AttackDamage,
+                                effect_type: AffixEffectType::Multiplier,
+                                value: 0.1,
+                            }],
+                        },
+                        ItemAffix {
+                            name: "Merciless".to_string(),
+                            family: "inc_damage".to_string(),
+                            affix_type: AffixType::Prefix,
+                            affix_level: 1,
+                            effects: vec![
+                                AffixEffect {
+                                    stat: ItemStat::MinAttackDamage,
+                                    effect_type: AffixEffectType::Flat,
+                                    value: 1.0,
+                                },
+                                AffixEffect {
+                                    stat: ItemStat::MaxAttackDamage,
+                                    effect_type: AffixEffectType::Flat,
+                                    value: 2.0,
+                                },
+                            ],
+                        },
+                        ItemAffix {
+                            name: "Greedy".to_string(),
+                            family: "gold".to_string(),
+                            affix_type: AffixType::Suffix,
+                            affix_level: 1,
+                            effects: vec![AffixEffect {
+                                stat: ItemStat::GoldFind,
+                                effect_type: AffixEffectType::Multiplier,
+                                value: 0.3,
+                            }],
+                        },
+                        ItemAffix {
+                            name: "Fast".to_string(),
+                            family: "inc_speed".to_string(),
+                            affix_type: AffixType::Prefix,
+                            affix_level: 1,
+                            effects: vec![AffixEffect {
+                                stat: ItemStat::AttackSpeed,
+                                effect_type: AffixEffectType::Multiplier,
+                                value: 0.1,
+                            }],
+                        },
+                    ],
                 },
                 ItemSpecs {
                     name: "Stabby the First".to_string(),
@@ -232,9 +289,8 @@ async fn handle_connect(
                         min_damage: 1.0,
                         base_max_damage: 13.0,
                         max_damage: 13.0,
-                        magic_prefixes: Vec::new(),
-                        magic_suffixes: Vec::new(),
                     }),
+                    affixes: Vec::new(),
                 },
             ],
         },

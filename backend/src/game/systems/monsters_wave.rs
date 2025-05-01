@@ -7,7 +7,7 @@ use shared::data::{monster::MonsterSpecs, world::WorldState};
 use crate::game::world::{MonsterWaveBlueprint, WorldBlueprint};
 use crate::rng;
 
-use super::increase_factors::exponential_factor;
+use super::increase_factors::{exponential_factor, linear_factor};
 
 const MAX_MONSTERS_PER_ROW: usize = 3; // TODO: Move
 
@@ -111,12 +111,13 @@ fn generate_all_monsters_specs(
 
 fn generate_monster_specs(bp_specs: &MonsterSpecs, world_state: &WorldState) -> MonsterSpecs {
     let mut monster_specs = bp_specs.clone();
-    let increase_factor = exponential_factor(world_state.area_level as f64);
-    monster_specs.power_factor *= increase_factor;
-    monster_specs.character_specs.max_health *= increase_factor;
+    let exp_factor = exponential_factor(world_state.area_level as f64);
+    let lin_factor = linear_factor(world_state.area_level as f64);
+    monster_specs.power_factor *= exp_factor;
+    monster_specs.character_specs.max_health *= exp_factor;
     for skill_specs in monster_specs.skill_specs.iter_mut() {
-        skill_specs.min_damages *= increase_factor;
-        skill_specs.max_damages *= increase_factor;
+        skill_specs.min_damages *= lin_factor;
+        skill_specs.max_damages *= lin_factor;
     }
     monster_specs
 }

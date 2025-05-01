@@ -157,25 +157,17 @@ impl<'a> GameInstance<'a> {
 
     async fn init_game(&mut self) -> Result<()> {
         // TODO: Remove, find better way to do this:
-        if let Some(ItemCategory::Weapon(w)) = self
-            .player_specs
-            .inventory
-            .weapon_specs
-            .as_mut()
-            .map(|x| &mut x.item_category)
-        {
-            update_weapon_specs(w);
+        if let Some(weapon) = self.player_specs.inventory.weapon_specs.as_mut() {
+            let affix_effects = weapon.aggregate_effects();
+            if let ItemCategory::Weapon(w) = &mut weapon.item_category {
+                update_weapon_specs(w, affix_effects);
+            }
         }
-        for i in self
-            .player_specs
-            .inventory
-            .bag
-            .iter_mut()
-            .map(|x| &mut x.item_category)
-        {
-            match i {
+        for i in self.player_specs.inventory.bag.iter_mut() {
+            let affix_effects = i.aggregate_effects();
+            match &mut i.item_category {
                 ItemCategory::Trinket => {}
-                ItemCategory::Weapon(w) => update_weapon_specs(w),
+                ItemCategory::Weapon(w) => update_weapon_specs(w, affix_effects),
             };
         }
 

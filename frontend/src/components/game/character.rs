@@ -52,9 +52,7 @@ pub fn CharacterPortrait(
                     )
                 }
             />
-            <div class=move || {
-                format!("absolute inset-0 pointer-events-none  {}", just_hurt_class())
-            }></div>
+            <div class=move || { format!("absolute inset-0 -none  {}", just_hurt_class()) }></div>
         </div>
     }
 }

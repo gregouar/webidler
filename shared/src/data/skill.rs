@@ -28,6 +28,7 @@ pub struct SkillSpecs {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SkillState {
+    // TODO: move to specs...
     pub next_upgrade_cost: f64,
     pub upgrade_level: u16,
 
@@ -49,7 +50,7 @@ impl Default for TargetType {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum Range {
     Melee,
     Distance,
@@ -61,7 +62,7 @@ impl Default for Range {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum Shape {
     Single,
     Vertical2,
