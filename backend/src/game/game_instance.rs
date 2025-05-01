@@ -67,7 +67,10 @@ impl<'a> GameInstance<'a> {
             world_blueprint: world_blueprint,
 
             need_to_sync_player_specs: false,
-            player_resources: PlayerResources { gold: 0.0 },
+            player_resources: PlayerResources {
+                experience: 0.0,
+                gold: 0.0,
+            },
             player_state: PlayerState::init(&player_specs),
             player_controller: PlayerController::init(&player_specs),
             player_specs,
@@ -141,12 +144,23 @@ impl<'a> GameInstance<'a> {
                     .map(|x| *x = m.auto_use);
             }
             ClientMessage::LevelUpSkill(m) => {
-                if let Some(skill_state) = self
-                    .player_state
-                    .skill_states
+                if let Some(skill_specs) = self
+                    .player_specs
+                    .skill_specs
                     .get_mut(m.skill_index as usize)
                 {
-                    skills_controller::level_up_skill(skill_state, &mut self.player_resources);
+                    if skills_controller::level_up_skill(skill_specs, &mut self.player_resources) {
+                        self.need_to_sync_player_specs = true; // TODO: Could we find a better way to do this?
+                    }
+                }
+            }
+            ClientMessage::LevelUpPlayer => {
+                if player_controller::level_up(
+                    &mut self.player_specs,
+                    &mut self.player_state,
+                    &mut self.player_resources,
+                ) {
+                    self.need_to_sync_player_specs = true; // TODO: Could we find a better way to do this?
                 }
             }
             ClientMessage::Connect(_) => {
@@ -253,11 +267,7 @@ impl<'a> GameInstance<'a> {
                 .iter()
                 .filter(|(_, s)| s.character_state.just_died)
             {
-                player_controller::reward_player(
-                    &mut self.player_state,
-                    &mut self.player_resources,
-                    monster_specs,
-                );
+                player_controller::reward_player(&mut self.player_resources, monster_specs);
             }
 
             if monsters_still_alive.is_empty() {
@@ -278,13 +288,11 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn update_entities(&mut self, elapsed_time: Duration) {
-        if player_updater::update_player_state(
+        player_updater::update_player_state(
             elapsed_time,
-            &mut self.player_specs,
+            &self.player_specs,
             &mut self.player_state,
-        ) {
-            self.need_to_sync_player_specs = true;
-        }
+        );
         monsters_updater::update_monster_states(
             elapsed_time,
             &self.monster_specs,

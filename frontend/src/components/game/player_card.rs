@@ -2,9 +2,8 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 use shared::data::skill::SkillSpecs;
-use shared::messages::client::LevelUpSkillMessage;
-use shared::messages::client::SetAutoSkillMessage;
-use shared::messages::client::UseSkillMessage;
+use shared::messages::client::ClientMessage;
+use shared::messages::client::{LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage};
 
 use crate::assets::img_asset;
 use crate::components::{
@@ -45,7 +44,7 @@ pub fn PlayerCard() -> impl IntoView {
     let xp_percent = Signal::derive(move || {
         let max_xp = game_context.player_specs.read().experience_needed;
         if max_xp > 0.0 {
-            (game_context.player_state.read().experience / max_xp * 100.0) as f32
+            (game_context.player_resources.read().experience / max_xp * 100.0) as f32
         } else {
             0.0
         }
@@ -56,6 +55,15 @@ pub fn PlayerCard() -> impl IntoView {
 
     let just_hurt =
         Signal::derive(move || game_context.player_state.read().character_state.just_hurt);
+
+    let conn = expect_context::<WebsocketContext>();
+    let level_up = move |_| {
+        conn.send(&ClientMessage::LevelUpPlayer);
+    };
+    let disable_level_up = Signal::derive(move || {
+        game_context.player_specs.read().experience_needed
+            > game_context.player_resources.read().experience
+    });
 
     view! {
         <style>
@@ -115,6 +123,10 @@ pub fn PlayerCard() -> impl IntoView {
                     // TODO: XP
                     value=xp_percent
                 />
+
+                <FancyButton disabled=disable_level_up on:click=level_up>
+                    <span class="text-2xl">"+"</span>
+                </FancyButton>
             </div>
 
             <div class="grid grid-cols-4 gap-2">
@@ -190,6 +202,16 @@ fn PlayerSkill(specs: SkillSpecs, index: usize) -> impl IntoView {
             .unwrap_or_default()
     });
 
+    let is_ready = move || {
+        game_context
+            .player_state
+            .read()
+            .skill_states
+            .get(index)
+            .map(|x| x.is_ready)
+            .unwrap_or_default()
+    };
+
     let conn = expect_context::<WebsocketContext>();
     let use_skill = move |_| {
         // TODO: Add constraint/limit rates?
@@ -226,9 +248,9 @@ fn PlayerSkill(specs: SkillSpecs, index: usize) -> impl IntoView {
 
     let level_up_cost = Signal::derive(move || {
         game_context
-            .player_state
+            .player_specs
             .read()
-            .skill_states
+            .skill_specs
             .get(index)
             .map(|x| x.next_upgrade_cost)
             .unwrap_or_default()
@@ -240,23 +262,43 @@ fn PlayerSkill(specs: SkillSpecs, index: usize) -> impl IntoView {
     let cost_tooltip =
         Signal::derive(move || format!("{} Gold", format_number(level_up_cost.get())));
 
+    // TODO: Turn into dynamic tooltip? Or need more content than text anyway...
+    // let skill_tooltip = Signal::derive(move || {
+    //     game_context
+    //         .player_specs
+    //         .read()
+    //         .skill_specs
+    //         .get(index)
+    //         .map(|s| format!("{}", s.name))
+    //         .unwrap_or_default()
+    // });
+
     view! {
         <div class="flex flex-col">
-            <CircularProgressBar
-                bar_width=4
-                bar_color="text-amber-700"
-                value=skill_cooldown
-                reset=just_triggered
+            // <StaticTooltip tooltip=skill_tooltip>
+            <button
+                class="
+                disabled:brightness-80 disabled:sepia-0
+                active:brightness-50 active:sepia p-1
+                "
+                on:click=use_skill
+                disabled=move || !is_ready()
             >
-                <button class="active:brightness-50 active:sepia p-1" on:click=use_skill>
+                <CircularProgressBar
+                    bar_width=4
+                    bar_color="text-amber-700"
+                    value=skill_cooldown
+                    reset=just_triggered
+                >
                     <img
                         src=img_asset(&specs.icon)
                         alt=specs.name
                         class="w-full h-full flex-no-shrink fill-current
                         drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
                     />
-                </button>
-            </CircularProgressBar>
+                </CircularProgressBar>
+            </button>
+            // </StaticTooltip>
 
             <div class="flex justify-around">
                 <Toggle
@@ -269,7 +311,6 @@ fn PlayerSkill(specs: SkillSpecs, index: usize) -> impl IntoView {
                         <span class="text-2xl">"+"</span>
                     </FancyButton>
                 </StaticTooltip>
-
             </div>
         </div>
     }

@@ -60,7 +60,6 @@ impl DataInit<PlayerSpecs> for PlayerState {
                 .iter()
                 .map(|p| SkillState::init(p))
                 .collect(),
-            experience: 0.0,
             mana: specs.max_mana,
         }
     }
@@ -84,8 +83,6 @@ impl DataInit<SkillSpecs> for SkillState {
     fn init(specs: &SkillSpecs) -> Self {
         let _ = specs;
         Self {
-            next_upgrade_cost: 10.0,
-            upgrade_level: 1,
             elapsed_cooldown: 0.0,
             is_ready: false,
             just_triggered: false,

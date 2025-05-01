@@ -71,5 +71,7 @@ pub fn make_weapon_skill(item_specs: &ItemSpecs) -> Option<SkillSpecs> {
         shape: weapon_specs.shape,
         min_damages: weapon_specs.min_damage,
         max_damages: weapon_specs.max_damage,
+        upgrade_level: 1,
+        next_upgrade_cost: 10.0,
     })
 }

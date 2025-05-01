@@ -3,7 +3,7 @@ use shared::data::{
     player::{PlayerResources, PlayerSpecs, PlayerState},
 };
 
-use super::skills_controller;
+use super::{increase_factors::exponential_factor, skills_controller};
 
 pub struct PlayerController {
     pub auto_skills: Vec<bool>,
@@ -65,11 +65,26 @@ impl PlayerController {
     }
 }
 
-pub fn reward_player(
+pub fn reward_player(player_resources: &mut PlayerResources, monster_specs: &MonsterSpecs) {
+    player_resources.gold += monster_specs.power_factor;
+    player_resources.experience += monster_specs.power_factor;
+}
+
+pub fn level_up(
+    player_specs: &mut PlayerSpecs,
     player_state: &mut PlayerState,
     player_resources: &mut PlayerResources,
-    monster_specs: &MonsterSpecs,
-) {
-    player_resources.gold += monster_specs.power_factor;
-    player_state.experience += monster_specs.power_factor;
+) -> bool {
+    if player_resources.experience < player_specs.experience_needed {
+        return false;
+    }
+
+    player_specs.level += 1;
+    player_resources.experience -= player_specs.experience_needed;
+    player_specs.experience_needed = 10.0 * exponential_factor(player_specs.level as f64);
+
+    player_state.character_state.health += 10.0;
+    player_specs.character_specs.max_health += 10.0;
+
+    true
 }

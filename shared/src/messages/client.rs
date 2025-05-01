@@ -10,6 +10,7 @@ impl_into_message! {
         UseSkill(UseSkillMessage),
         SetAutoSkill(SetAutoSkillMessage),
         LevelUpSkill(LevelUpSkillMessage),
+        LevelUpPlayer,
     }
 }
 

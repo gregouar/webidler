@@ -153,6 +153,8 @@ async fn handle_connect(
                 range: Range::Distance,
                 target_type: TargetType::Enemy,
                 shape: Shape::Square4,
+                upgrade_level: 1,
+                next_upgrade_cost: 10.0,
             },
             SkillSpecs {
                 name: String::from("Heal"),
@@ -165,6 +167,8 @@ async fn handle_connect(
                 range: Range::Melee,
                 target_type: TargetType::Me,
                 shape: Shape::Single,
+                upgrade_level: 1,
+                next_upgrade_cost: 10.0,
             },
         ],
         level: 1,

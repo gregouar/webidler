@@ -27,14 +27,12 @@ pub struct PlayerState {
     pub character_state: CharacterState,
     pub skill_states: Vec<SkillState>,
 
-    // TODO: move to PlayerResources
-    pub experience: f64,
-
     pub mana: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerResources {
+    pub experience: f64,
     pub gold: f64,
 }
 

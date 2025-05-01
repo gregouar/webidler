@@ -19,19 +19,21 @@ pub struct SkillSpecs {
     #[serde(default)]
     pub shape: Shape,
 
-    pub min_damages: f64,
-    pub max_damages: f64,
     // TODO: Damage type, dot, all kind of other buffs and effects
     // -> not sure yet what is the best approach there, maybe should go for some kind
     // of vector of enum? Need way to compose effects etc probably
+    // -> maybe something similar to the magic affix would already be good
+    pub min_damages: f64,
+    pub max_damages: f64,
+
+    #[serde(default)]
+    pub upgrade_level: u16,
+    #[serde(default)]
+    pub next_upgrade_cost: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SkillState {
-    // TODO: move to specs...
-    pub next_upgrade_cost: f64,
-    pub upgrade_level: u16,
-
     pub elapsed_cooldown: f32,
     pub is_ready: bool,
     pub just_triggered: bool,

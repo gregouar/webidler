@@ -102,10 +102,21 @@ pub fn use_skill(
     found_target
 }
 
-pub fn level_up_skill(skill_state: &mut SkillState, player_resources: &mut PlayerResources) {
-    if player_resources.gold >= skill_state.next_upgrade_cost {
-        player_resources.gold -= skill_state.next_upgrade_cost;
-        skill_state.upgrade_level += 1;
-        skill_state.next_upgrade_cost += 10.0 * exponential_factor(skill_state.upgrade_level as f64)
+pub fn level_up_skill(
+    skill_specs: &mut SkillSpecs,
+    player_resources: &mut PlayerResources,
+) -> bool {
+    if player_resources.gold < skill_specs.next_upgrade_cost {
+        return false;
     }
+
+    player_resources.gold -= skill_specs.next_upgrade_cost;
+
+    skill_specs.upgrade_level += 1;
+    skill_specs.next_upgrade_cost += 10.0 * exponential_factor(skill_specs.upgrade_level as f64);
+
+    skill_specs.min_damages *= 1.1;
+    skill_specs.max_damages *= 1.1;
+
+    true
 }
