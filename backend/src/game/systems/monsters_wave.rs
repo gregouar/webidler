@@ -15,7 +15,7 @@ pub fn generate_monsters_wave_specs(
     world_blueprint: &WorldBlueprint,
     world_state: &WorldState,
 ) -> Result<Vec<MonsterSpecs>> {
-    pick_wave(filter_waves(&world_blueprint.schema.waves, world_state))?
+    pick_wave(filter_waves(&world_blueprint.schema.waves, world_state))
         .map(|wave| generate_all_monsters_specs(wave, &world_blueprint.monster_specs, world_state))
         .unwrap_or(Err(anyhow::format_err!("no monster wave available")))
 }
@@ -33,20 +33,17 @@ fn filter_waves<'a>(
         .collect()
 }
 
-fn pick_wave<'a>(waves: Vec<&'a MonsterWaveBlueprint>) -> Result<Option<&'a MonsterWaveBlueprint>> {
-    match rng::random_range(0.0..waves.iter().map(|w| w.probability).sum()) {
-        Some(p) => Ok(waves
+fn pick_wave<'a>(waves: Vec<&'a MonsterWaveBlueprint>) -> Option<&'a MonsterWaveBlueprint> {
+    rng::random_range(0.0..waves.iter().map(|w| w.probability).sum()).and_then(|p| {
+        waves
             .iter()
-            .scan(0.0, |cumul_prob, w| {
+            .scan(0.0, |cumul_prob, &w| {
                 *cumul_prob += w.probability;
                 Some((*cumul_prob, w))
             })
             .find(|(max_prob, w)| p >= *max_prob - w.probability && p < *max_prob)
-            .map(|(_, w)| *w)),
-        None => Err(anyhow::format_err!(
-            "no monsters wave probability available"
-        )),
-    }
+            .map(|(_, w)| w)
+    })
 }
 
 fn generate_all_monsters_specs(
