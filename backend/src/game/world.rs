@@ -62,3 +62,4 @@ impl WorldBlueprint {
     }
 }
 // TODO: Global MonsterPrototypesPool shared among instances ?
+// Also need some kind of DataStore that would zip all data together.

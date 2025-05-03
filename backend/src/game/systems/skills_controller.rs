@@ -4,29 +4,49 @@ use shared::data::{
     character::{CharacterSpecs, CharacterState, SkillSpecs, SkillState},
     item::{Range, Shape},
     player::PlayerResources,
-    skill::TargetType,
+    skill::{SkillEffect, SkillEffectType, TargetType},
 };
 
 use crate::rng;
 
 use super::{characters_controller, increase_factors::exponential_factor};
 
-pub fn use_skill(
+pub fn use_skill<'a>(
     skill_specs: &SkillSpecs,
     skill_state: &mut SkillState,
-    me: (&CharacterSpecs, &mut CharacterState),
-    friends: Vec<(&CharacterSpecs, &mut CharacterState)>,
-    enemies: Vec<(&CharacterSpecs, &mut CharacterState)>,
+    me: (&'a CharacterSpecs, &'a mut CharacterState),
+    mut friends: Vec<(&'a CharacterSpecs, &'a mut CharacterState)>,
+    mut enemies: Vec<(&'a CharacterSpecs, &'a mut CharacterState)>,
 ) -> bool {
     let me_position = (me.0.position_x, me.0.position_y);
+    let mut me = vec![me];
+    skill_specs.effects.iter().any(|skill_effect| {
+        apply_skill_effect(
+            skill_effect,
+            skill_state,
+            me_position,
+            &mut me,
+            &mut friends,
+            &mut enemies,
+        )
+    })
+}
 
-    let mut pre_targets = match skill_specs.target_type {
+fn apply_skill_effect<'a>(
+    skill_effect: &SkillEffect,
+    skill_state: &mut SkillState,
+    me_position: (u8, u8),
+    me: &mut Vec<(&'a CharacterSpecs, &'a mut CharacterState)>,
+    friends: &mut Vec<(&'a CharacterSpecs, &'a mut CharacterState)>,
+    enemies: &mut Vec<(&'a CharacterSpecs, &'a mut CharacterState)>,
+) -> bool {
+    let pre_targets = match skill_effect.target_type {
         TargetType::Enemy => enemies,
         TargetType::Friend => friends,
-        TargetType::Me => vec![me],
+        TargetType::Me => me,
     };
 
-    let main_target_distance = match skill_specs.range {
+    let main_target_distance = match skill_effect.range {
         Range::Melee => pre_targets
             .iter()
             .map(|(specs, _)| specs.position_x.abs_diff(me_position.0))
@@ -50,13 +70,13 @@ pub fn use_skill(
         None => return false,
     };
 
-    let dx = match skill_specs.range {
+    let dx = match skill_effect.range {
         Range::Melee => 1,
         Range::Distance => -1,
     };
 
     let is_target_in_range = |pos: (i32, i32)| -> bool {
-        match skill_specs.shape {
+        match skill_effect.shape {
             Shape::Single => pos == main_target_pos,
             Shape::Vertical2 => pos.0 == main_target_pos.0 && (pos.1 == 1 || pos.1 == 2),
             Shape::Horizontal2 => {
@@ -89,8 +109,18 @@ pub fn use_skill(
     let mut found_target = false;
     for (target_specs, target_state) in targets {
         found_target = true;
-        if let Some(damage) = rng::random_range(skill_specs.min_damages..=skill_specs.max_damages) {
-            characters_controller::damage_character(damage, target_state, target_specs);
+
+        match skill_effect.effect_type {
+            SkillEffectType::FlatDamage { min, max } => {
+                if let Some(damage) = rng::random_range(min..=max) {
+                    characters_controller::damage_character(damage, target_state, target_specs);
+                }
+            }
+            SkillEffectType::Heal { min, max } => {
+                if let Some(damage) = rng::random_range(min..=max) {
+                    characters_controller::heal_character(damage, target_state, target_specs);
+                }
+            }
         }
     }
 
@@ -115,8 +145,9 @@ pub fn level_up_skill(
     skill_specs.upgrade_level += 1;
     skill_specs.next_upgrade_cost += 10.0 * exponential_factor(skill_specs.upgrade_level as f64);
 
-    skill_specs.min_damages *= 1.1;
-    skill_specs.max_damages *= 1.1;
+    for effect in skill_specs.effects.iter_mut() {
+        effect.increase_effect(1.1);
+    }
 
     true
 }

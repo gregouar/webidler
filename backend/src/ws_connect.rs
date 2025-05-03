@@ -21,7 +21,7 @@ use shared::{
             ItemSpecs, ItemStat, WeaponSpecs,
         },
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs},
-        skill::{Range, Shape, SkillSpecs, TargetType},
+        skill::{Range, Shape, SkillEffect, SkillEffectType, SkillSpecs, TargetType},
     },
     messages::{
         client::{ClientConnectMessage, ClientMessage},
@@ -130,6 +130,47 @@ async fn handle_connect(
         }),
     };
 
+    let mut skill_specs = Vec::new();
+    if let Some(weapon_skill) = make_weapon_skill(&weapon) {
+        skill_specs.push(weapon_skill);
+    }
+    skill_specs.push(SkillSpecs {
+        name: String::from("Fireball"),
+        description: "A throw of mighty fireball, burning multiple enemies".to_string(),
+        icon: String::from("skills/fireball2.svg"),
+        cooldown: 5.0,
+        mana_cost: 20.0,
+        upgrade_level: 1,
+        next_upgrade_cost: 10.0,
+        effects: vec![SkillEffect {
+            range: Range::Distance,
+            target_type: TargetType::Enemy,
+            shape: Shape::Square4,
+            effect_type: SkillEffectType::FlatDamage {
+                min: 10.0,
+                max: 30.0,
+            },
+        }],
+    });
+    skill_specs.push(SkillSpecs {
+        name: String::from("Heal"),
+        description: "A minor healing spell for yourself".to_string(),
+        icon: String::from("skills/heal.svg"),
+        cooldown: 30.0,
+        mana_cost: 20.0,
+        upgrade_level: 1,
+        next_upgrade_cost: 10.0,
+        effects: vec![SkillEffect {
+            range: Range::Melee,
+            target_type: TargetType::Me,
+            shape: Shape::Single,
+            effect_type: SkillEffectType::Heal {
+                min: 20.0,
+                max: 20.0,
+            },
+        }],
+    });
+
     Ok(PlayerSpecs {
         character_specs: CharacterSpecs {
             name: msg.bearer.clone(),
@@ -140,37 +181,7 @@ async fn handle_connect(
             max_health: 100.0,
             health_regen: 1.0,
         },
-        skill_specs: vec![
-            make_weapon_skill(&weapon).unwrap_or_default(),
-            SkillSpecs {
-                name: String::from("Fireball"),
-                description: "A throw of mighty fireball, burning multiple enemies".to_string(),
-                icon: String::from("skills/fireball2.svg"),
-                cooldown: 5.0,
-                mana_cost: 20.0,
-                min_damages: 10.0,
-                max_damages: 30.0,
-                range: Range::Distance,
-                target_type: TargetType::Enemy,
-                shape: Shape::Square4,
-                upgrade_level: 1,
-                next_upgrade_cost: 10.0,
-            },
-            SkillSpecs {
-                name: String::from("Heal"),
-                description: "A minor healing spell for yourself".to_string(),
-                icon: String::from("skills/heal.svg"),
-                cooldown: 30.0,
-                mana_cost: 20.0,
-                min_damages: -20.0,
-                max_damages: -20.0,
-                range: Range::Melee,
-                target_type: TargetType::Me,
-                shape: Shape::Single,
-                upgrade_level: 1,
-                next_upgrade_cost: 10.0,
-            },
-        ],
+        skill_specs,
         level: 1,
         experience_needed: 10.0,
         max_mana: 100.0,

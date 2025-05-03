@@ -1,6 +1,6 @@
 use shared::data::{
     item::{AffixEffect, AffixEffectType, ItemCategory, ItemSpecs, ItemStat, WeaponSpecs},
-    skill::{SkillSpecs, TargetType},
+    skill::{SkillEffect, SkillEffectType, SkillSpecs, TargetType},
 };
 
 // TODO: Where to call that?
@@ -66,12 +66,16 @@ pub fn make_weapon_skill(item_specs: &ItemSpecs) -> Option<SkillSpecs> {
         description: "A swing of your weapon".to_string(),
         cooldown: weapon_specs.cooldown,
         mana_cost: 0.0,
-        range: weapon_specs.range,
-        target_type: TargetType::Enemy,
-        shape: weapon_specs.shape,
-        min_damages: weapon_specs.min_damage,
-        max_damages: weapon_specs.max_damage,
         upgrade_level: 1,
         next_upgrade_cost: 10.0,
+        effects: vec![SkillEffect {
+            range: weapon_specs.range,
+            target_type: TargetType::Enemy,
+            shape: weapon_specs.shape,
+            effect_type: SkillEffectType::FlatDamage {
+                min: weapon_specs.min_damage,
+                max: weapon_specs.max_damage,
+            },
+        }],
     })
 }

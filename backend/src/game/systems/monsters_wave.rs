@@ -16,7 +16,13 @@ pub fn generate_monsters_wave_specs(
     world_state: &WorldState,
 ) -> Result<Vec<MonsterSpecs>> {
     pick_wave(filter_waves(&world_blueprint.schema.waves, world_state))
-        .map(|wave| generate_all_monsters_specs(wave, &world_blueprint.monster_specs, world_state))
+        .map(|wave| {
+            Ok(generate_all_monsters_specs(
+                wave,
+                &world_blueprint.monster_specs,
+                world_state,
+            ))
+        })
         .unwrap_or(Err(anyhow::format_err!("no monster wave available")))
 }
 
@@ -50,17 +56,12 @@ fn generate_all_monsters_specs(
     wave: &MonsterWaveBlueprint,
     monster_specs_blueprint: &HashMap<PathBuf, MonsterSpecs>,
     world_state: &WorldState,
-) -> Result<Vec<MonsterSpecs>> {
+) -> Vec<MonsterSpecs> {
     let mut top_space_available = MAX_MONSTERS_PER_ROW;
     let mut bot_space_available = MAX_MONSTERS_PER_ROW;
 
     let mut monsters_specs = Vec::with_capacity(top_space_available + bot_space_available);
     'spawnloop: for spawn in wave.spawns.iter() {
-        if spawn.max_quantity < spawn.min_quantity {
-            return Err(anyhow::format_err!(
-                "monster wave max_quantity below min_quantity"
-            ));
-        }
         for _ in 0..rng::random_range(spawn.min_quantity..=spawn.max_quantity).unwrap_or_default() {
             if let Some(specs) = monster_specs_blueprint.get(&spawn.path) {
                 let (x_size, y_size) = specs.character_specs.size.get_xy_size();
@@ -103,7 +104,7 @@ fn generate_all_monsters_specs(
             }
         }
     }
-    Ok(monsters_specs)
+    monsters_specs
 }
 
 fn generate_monster_specs(bp_specs: &MonsterSpecs, world_state: &WorldState) -> MonsterSpecs {
@@ -112,9 +113,12 @@ fn generate_monster_specs(bp_specs: &MonsterSpecs, world_state: &WorldState) -> 
     let lin_factor = linear_factor(world_state.area_level as f64);
     monster_specs.power_factor *= exp_factor;
     monster_specs.character_specs.max_health *= exp_factor;
-    for skill_specs in monster_specs.skill_specs.iter_mut() {
-        skill_specs.min_damages *= lin_factor;
-        skill_specs.max_damages *= lin_factor;
+    for skill_effect in monster_specs
+        .skill_specs
+        .iter_mut()
+        .flat_map(|skill| skill.effects.iter_mut())
+    {
+        skill_effect.increase_effect(lin_factor);
     }
     monster_specs
 }

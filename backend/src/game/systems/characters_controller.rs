@@ -18,3 +18,15 @@ pub fn damage_character(
         target_state.just_died = true;
     }
 }
+
+pub fn heal_character(
+    amount: f64,
+    target_state: &mut CharacterState,
+    target_specs: &CharacterSpecs,
+) {
+    if target_state.is_alive {
+        target_state.health = (target_state.health + amount)
+            .max(0.0)
+            .min(target_specs.max_health);
+    }
+}
