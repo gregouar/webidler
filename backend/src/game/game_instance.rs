@@ -20,11 +20,15 @@ use shared::{
     },
 };
 
-use super::systems::{
-    characters_updater, monsters_controller, monsters_updater, monsters_wave, player_controller,
-    player_updater, skills_controller, skills_updater, weapon::update_weapon_specs,
-};
 use super::{data::DataInit, systems::player_controller::PlayerController, world::WorldBlueprint};
+use super::{
+    systems::{
+        characters_updater, monsters_controller, monsters_updater, monsters_wave,
+        player_controller, player_updater, skills_controller, skills_updater,
+        weapon::update_weapon_specs,
+    },
+    utils::LazySyncer,
+};
 
 use crate::websocket::WebSocketConnection;
 
@@ -41,47 +45,15 @@ pub struct GameInstance<'a> {
     world_blueprint: WorldBlueprint,
     world_state: WorldState,
 
-    player_specs: PlayerSpecsWrapper,
+    player_specs: LazySyncer<PlayerSpecs>,
     player_state: PlayerState,
     player_resources: PlayerResources,
     player_controller: PlayerController,
     player_respawn_delay: Instant,
 
-    need_to_sync_monster_specs: bool,
-    monster_specs: Vec<MonsterSpecs>,
+    monster_specs: LazySyncer<Vec<MonsterSpecs>>,
     monster_states: Vec<MonsterState>,
     monster_wave_delay: Instant,
-}
-
-struct PlayerSpecsWrapper {
-    inner: PlayerSpecs,
-    need_to_sync: bool,
-}
-
-impl PlayerSpecsWrapper {
-    pub fn new(player_specs: PlayerSpecs) -> Self {
-        Self {
-            inner: player_specs,
-            need_to_sync: true,
-        }
-    }
-
-    pub fn mutate(&mut self) -> &mut PlayerSpecs {
-        self.need_to_sync = true;
-        &mut self.inner
-    }
-
-    pub fn read(&self) -> &PlayerSpecs {
-        &self.inner
-    }
-
-    pub fn need_to_sync(&self) -> bool {
-        self.need_to_sync
-    }
-
-    pub fn reset_sync(&mut self) {
-        self.need_to_sync = false;
-    }
 }
 
 impl<'a> GameInstance<'a> {
@@ -103,11 +75,10 @@ impl<'a> GameInstance<'a> {
             },
             player_state: PlayerState::init(&player_specs),
             player_controller: PlayerController::init(&player_specs),
-            player_specs: PlayerSpecsWrapper::new(player_specs),
+            player_specs: LazySyncer::new(player_specs),
             player_respawn_delay: Instant::now(),
 
-            need_to_sync_monster_specs: false,
-            monster_specs: Vec::new(),
+            monster_specs: LazySyncer::new(Vec::new()),
             monster_states: Vec::new(),
             monster_wave_delay: Instant::now(),
         }
@@ -238,24 +209,24 @@ impl<'a> GameInstance<'a> {
             self.world_state.area_level += 1;
         }
 
-        self.monster_specs =
-            monsters_wave::generate_monsters_wave_specs(&self.world_blueprint, &self.world_state)?;
+        self.monster_specs = LazySyncer::new(monsters_wave::generate_monsters_wave_specs(
+            &self.world_blueprint,
+            &self.world_state,
+        )?);
 
         self.monster_states = self
             .monster_specs
+            .read()
             .iter()
             .map(|specs| MonsterState::init(specs))
             .collect();
-
-        self.need_to_sync_monster_specs = true;
 
         Ok(())
     }
 
     fn respawn_player(&mut self) {
-        self.monster_specs = Vec::new();
+        self.monster_specs.mutate().clear();
         self.monster_states = Vec::new();
-        self.need_to_sync_monster_specs = true;
 
         self.player_state = PlayerState::init(self.player_specs.read());
 
@@ -283,6 +254,7 @@ impl<'a> GameInstance<'a> {
             self.player_respawn_delay = Instant::now();
             let mut monsters_still_alive: Vec<(&MonsterSpecs, &mut MonsterState)> = self
                 .monster_specs
+                .read()
                 .iter()
                 .zip(self.monster_states.iter_mut())
                 .filter(|(_, x)| x.character_state.is_alive)
@@ -328,7 +300,7 @@ impl<'a> GameInstance<'a> {
         );
         monsters_updater::update_monster_states(
             elapsed_time,
-            &self.monster_specs,
+            self.monster_specs.read(),
             &mut self.monster_states,
         );
     }
@@ -347,9 +319,9 @@ impl<'a> GameInstance<'a> {
                     },
                     player_state: self.player_state.clone(),
                     player_resources: self.player_resources.clone(),
-                    monster_specs: if self.need_to_sync_monster_specs {
-                        self.need_to_sync_monster_specs = false;
-                        Some(self.monster_specs.clone())
+                    monster_specs: if self.monster_specs.need_to_sync() {
+                        self.monster_specs.reset_sync();
+                        Some(self.monster_specs.read().clone())
                     } else {
                         None
                     },

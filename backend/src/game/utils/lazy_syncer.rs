@@ -1,3 +1,5 @@
+/// A helper class to keep track of whether a data struct should be resync with the client.
+/// Based on the fact the data was accessed as mutable.
 pub struct LazySyncer<T> {
     inner: T,
     need_to_sync: bool,
@@ -11,6 +13,7 @@ impl<T> LazySyncer<T> {
         }
     }
 
+    /// Get mutable access to the data struct and tag it as dirty
     pub fn mutate(&mut self) -> &mut T {
         self.need_to_sync = true;
         &mut self.inner
