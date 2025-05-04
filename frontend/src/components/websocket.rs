@@ -28,6 +28,7 @@ impl WebsocketContext {
     // create a method to avoid having to use parantheses around the field
     #[inline(always)]
     pub fn send(&self, message: &ClientMessage) {
+        // TODO: Add constraint/limit rates?
         (self.send)(message)
     }
 }

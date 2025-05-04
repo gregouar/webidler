@@ -3,9 +3,9 @@ use std::sync::Arc;
 use leptos::html::*;
 use leptos::prelude::*;
 
-use shared::data::skill::SkillSpecs;
-use shared::messages::client::ClientMessage;
-use shared::messages::client::{LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage};
+use shared::messages::client::{
+    ClientMessage, LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage,
+};
 
 use crate::assets::img_asset;
 use crate::components::ui::tooltip::TooltipPosition;
@@ -136,12 +136,19 @@ pub fn PlayerCard() -> impl IntoView {
             <div class="grid grid-cols-4 gap-2">
                 <For
                     each=move || {
-                        game_context.player_specs.read().skill_specs.clone().into_iter().enumerate()
+                        game_context
+                            .player_specs
+                            .read()
+                            .skill_specs
+                            .iter()
+                            .enumerate()
+                            .map(|(i, _)| i)
+                            .collect::<Vec<_>>()
                     }
-                    key=|(i, _)| *i
-                    let((i, p))
+                    key=|i| *i
+                    let(i)
                 >
-                    <PlayerSkill skill_specs=p index=i />
+                    <PlayerSkill index=i />
                 </For>
             </div>
         </div>
@@ -170,11 +177,37 @@ pub fn PlayerName() -> impl IntoView {
 }
 
 #[component]
-fn PlayerSkill(skill_specs: SkillSpecs, index: usize) -> impl IntoView {
+fn PlayerSkill(index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
+    let icon_asset = move || {
+        if let Some(skill_specs) = game_context.player_specs.read().skill_specs.get(index) {
+            img_asset(&skill_specs.icon)
+        } else {
+            "".to_string()
+        }
+    };
+
+    let skill_name = move || {
+        game_context
+            .player_specs
+            .read()
+            .skill_specs
+            .get(index)
+            .map(|x| x.name.clone())
+            .unwrap_or_default()
+    };
+
     let skill_cooldown = Signal::derive(move || {
-        if skill_specs.cooldown > 0.0 {
+        let cooldown = game_context
+            .player_specs
+            .read()
+            .skill_specs
+            .get(index)
+            .map(|x| x.cooldown)
+            .unwrap_or_default();
+
+        if cooldown > 0.0 {
             (game_context
                 .player_state
                 .read()
@@ -183,7 +216,7 @@ fn PlayerSkill(skill_specs: SkillSpecs, index: usize) -> impl IntoView {
                 .map(|x| x.elapsed_cooldown)
                 .unwrap_or_default()
                 * 100.0
-                / skill_specs.cooldown) as f32
+                / cooldown) as f32
         } else {
             0.0
         }
@@ -218,7 +251,6 @@ fn PlayerSkill(skill_specs: SkillSpecs, index: usize) -> impl IntoView {
 
     let conn = expect_context::<WebsocketContext>();
     let use_skill = move |_| {
-        // TODO: Add constraint/limit rates?
         conn.send(
             &UseSkillMessage {
                 skill_index: index as u8,
@@ -229,7 +261,6 @@ fn PlayerSkill(skill_specs: SkillSpecs, index: usize) -> impl IntoView {
 
     let conn = expect_context::<WebsocketContext>();
     let set_auto_skill = move |value| {
-        // TODO: Add constraint/limit rates?
         conn.send(
             &SetAutoSkillMessage {
                 skill_index: index as u8,
@@ -241,7 +272,6 @@ fn PlayerSkill(skill_specs: SkillSpecs, index: usize) -> impl IntoView {
 
     let conn = expect_context::<WebsocketContext>();
     let level_up = move |_| {
-        // TODO: Add constraint/limit rates?
         conn.send(
             &LevelUpSkillMessage {
                 skill_index: index as u8,
@@ -267,16 +297,17 @@ fn PlayerSkill(skill_specs: SkillSpecs, index: usize) -> impl IntoView {
         Signal::derive(move || format!("{} Gold", format_number(level_up_cost.get())));
 
     let tooltip_context = expect_context::<TooltipContext>();
-    let rc_skill_specs = Arc::new(skill_specs.clone());
     let show_tooltip = move |_| {
-        let skill_specs = rc_skill_specs.clone();
-        tooltip_context.set_content(
-            move || {
-                let skill_specs = skill_specs.clone();
-                view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
-            },
-            TooltipPosition::TopRight,
-        );
+        if let Some(skill_specs) = game_context.player_specs.read().skill_specs.get(index) {
+            let skill_specs = Arc::new(skill_specs.clone());
+            tooltip_context.set_content(
+                move || {
+                    let skill_specs = skill_specs.clone();
+                    view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
+                },
+                TooltipPosition::TopRight,
+            );
+        }
     };
 
     let tooltip_context = expect_context::<TooltipContext>();
@@ -301,8 +332,8 @@ fn PlayerSkill(skill_specs: SkillSpecs, index: usize) -> impl IntoView {
                     reset=just_triggered
                 >
                     <img
-                        src=img_asset(&skill_specs.icon)
-                        alt=skill_specs.name
+                        src=icon_asset
+                        alt=skill_name
                         class="w-full h-full flex-no-shrink fill-current
                         drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
                     />

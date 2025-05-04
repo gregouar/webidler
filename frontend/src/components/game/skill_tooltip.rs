@@ -3,9 +3,9 @@ use std::sync::Arc;
 use leptos::html::*;
 use leptos::prelude::*;
 
-use shared::data::skill::{
-    DamageType, Shape, SkillEffect, SkillEffectType, SkillSpecs, TargetType,
-};
+use shared::data::skill::{DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs};
+
+use crate::components::ui::number::format_number;
 
 #[component]
 pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
@@ -30,25 +30,11 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                 {(skill_specs.mana_cost > 0.0)
                     .then(|| {
                         view! {
-                            <>
-                                ", Mana Cost: "
-                                <span class="text-white">{skill_specs.mana_cost}</span>
-                            </>
+                            " | Mana Cost: "
+                            <span class="text-white">{skill_specs.mana_cost}</span>
                         }
                     })}
             </p>
-
-            {(skill_specs.upgrade_level > 0)
-                .then(|| {
-                    view! {
-                        <p class="text-sm text-gray-400 leading-snug">
-                            "Upgrade Level: "
-                            <span class="text-white">{skill_specs.upgrade_level}</span>
-                            ", Next Upgrade: "
-                            <span class="text-white">{skill_specs.next_upgrade_cost}</span>
-                        </p>
-                    }
-                })}
 
             <hr class="border-t border-gray-700" />
 
@@ -57,12 +43,24 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
             {(!skill_specs.description.is_empty())
                 .then(|| {
                     view! {
-                        <>
-                            <hr class="border-t border-gray-700" />
-                            <p class="text-sm italic text-gray-300 leading-snug">
-                                {skill_specs.description.clone()}
-                            </p>
-                        </>
+                        <hr class="border-t border-gray-700" />
+                        <p class="text-sm italic text-gray-300 leading-snug">
+                            {skill_specs.description.clone()}
+                        </p>
+                    }
+                })}
+
+            {(skill_specs.next_upgrade_cost > 0.0)
+                .then(|| {
+                    view! {
+                        <hr class="border-t border-gray-700" />
+                        <p class="text-sm text-gray-400 leading-snug">
+                            "Level: " <span class="text-white">{skill_specs.upgrade_level}</span>
+                            " | Upgrade Cost: "
+                            <span class="text-white">
+                                {format_number(skill_specs.next_upgrade_cost)}" Gold"
+                            </span>
+                        </p>
                     }
                 })}
         </div>
@@ -70,19 +68,18 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 }
 
 fn format_effect(effect: SkillEffect) -> impl IntoView {
-    let target = match effect.target_type {
-        TargetType::Enemy => "Enemy",
-        TargetType::Friend => "Ally",
-        TargetType::Me => "Self",
+    let shape = match effect.shape {
+        Shape::Single => "",
+        Shape::Vertical2 => ", 2x1 area",
+        Shape::Horizontal2 => ", 1x2 area",
+        Shape::Horizontal3 => ", 1x3 area",
+        Shape::Square4 => ", 2x2 area",
+        Shape::All => ", all",
     };
 
-    let shape = match effect.shape {
-        Shape::Single => "single target",
-        Shape::Vertical2 => "vertical 2-tile line",
-        Shape::Horizontal2 => "horizontal 2-tile line",
-        Shape::Horizontal3 => "horizontal 3-tile line",
-        Shape::Square4 => "2x2 area",
-        Shape::All => "all targets",
+    let range = match effect.range {
+        Range::Melee => "melee",
+        Range::Distance => "distance",
     };
 
     let desc = match &effect.effect_type {
@@ -96,14 +93,25 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                 DamageType::Fire => "Fire",
             };
             format!(
-                "Deals {:.0}–{:.0} {} Damage to {} ({})",
-                min, max, dmg_type, target, shape
+                "Deals {} {} Damage ({}{})",
+                format_min_max(*min, *max),
+                dmg_type,
+                range,
+                shape
             )
         }
         SkillEffectType::Heal { min, max } => {
-            format!("Heals {:.0}–{:.0} HP to {} ({})", min, max, target, shape)
+            format!("Heals {}", format_min_max(*min, *max))
         }
     };
 
     view! { <li class="text-sm text-purple-200 leading-snug">{desc}</li> }
+}
+
+fn format_min_max(min: f64, max: f64) -> String {
+    if min != max {
+        format!("{}-{}", format_number(min), format_number(max))
+    } else {
+        format!("{}", format_number(min))
+    }
 }

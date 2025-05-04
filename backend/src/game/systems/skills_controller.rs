@@ -155,7 +155,7 @@ pub fn level_up_skill(
     skill_specs.next_upgrade_cost += 10.0 * exponential_factor(skill_specs.upgrade_level as f64);
 
     for effect in skill_specs.effects.iter_mut() {
-        effect.increase_effect(1.1);
+        effect.increase_effect(1.2);
     }
 
     true

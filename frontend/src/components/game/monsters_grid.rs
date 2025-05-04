@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use leptos::html::*;
 use leptos::prelude::*;
 
@@ -6,7 +8,13 @@ use rand::Rng;
 use shared::data::{monster::MonsterSpecs, skill::SkillSpecs};
 
 use crate::assets::img_asset;
-use crate::components::ui::progress_bars::{CircularProgressBar, HorizontalProgressBar};
+use crate::components::{
+    game::skill_tooltip::SkillTooltip,
+    ui::{
+        progress_bars::{CircularProgressBar, HorizontalProgressBar},
+        tooltip::{TooltipContext, TooltipPosition},
+    },
+};
 
 use super::character::CharacterPortrait;
 use super::GameContext;
@@ -169,7 +177,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     key=|(i, _)| *i
                     let((i, p))
                 >
-                    <MonsterSkill specs=p index=i monster_index=index />
+                    <MonsterSkill skill_specs=p index=i monster_index=index />
                 </For>
             </div>
         </div>
@@ -177,8 +185,11 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 }
 
 #[component]
-fn MonsterSkill(specs: SkillSpecs, index: usize, monster_index: usize) -> impl IntoView {
+fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+
+    let icon_asset = img_asset(&skill_specs.icon);
+    let skill_name = skill_specs.name.clone();
 
     let is_dead = move || {
         game_context
@@ -190,7 +201,7 @@ fn MonsterSkill(specs: SkillSpecs, index: usize, monster_index: usize) -> impl I
     };
 
     let skill_cooldown = Signal::derive(move || {
-        if !is_dead() && specs.cooldown > 0.0 {
+        if !is_dead() && skill_specs.cooldown > 0.0 {
             (game_context
                 .monster_states
                 .read()
@@ -200,11 +211,26 @@ fn MonsterSkill(specs: SkillSpecs, index: usize, monster_index: usize) -> impl I
                 .map(|s| s.elapsed_cooldown)
                 .unwrap_or(0.0)
                 * 100.0
-                / specs.cooldown) as f32
+                / skill_specs.cooldown) as f32
         } else {
             0.0
         }
     });
+
+    let tooltip_context = expect_context::<TooltipContext>();
+    let show_tooltip = move |_| {
+        let skill_specs = Arc::new(skill_specs.clone());
+        tooltip_context.set_content(
+            move || {
+                let skill_specs = skill_specs.clone();
+                view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
+            },
+            TooltipPosition::TopLeft,
+        );
+    };
+
+    let tooltip_context = expect_context::<TooltipContext>();
+    let hide_tooltip = move |_| tooltip_context.hide();
 
     let just_triggered = Signal::derive(move || {
         if !is_dead() {
@@ -227,10 +253,13 @@ fn MonsterSkill(specs: SkillSpecs, index: usize, monster_index: usize) -> impl I
             bar_color="text-amber-700"
             value=skill_cooldown
             reset=just_triggered
+
+            on:mouseenter=show_tooltip
+            on:mouseleave=hide_tooltip
         >
             <img
-                src=img_asset(&specs.icon)
-                alt=specs.name
+                src=icon_asset
+                alt=skill_name
                 class="w-full h-full flex-no-shrink fill-current
                 drop-shadow-[0px_2px_oklch(13% 0.028 261.692)] invert"
             />
