@@ -1,19 +1,38 @@
+use std::sync::Arc;
+
 use leptos::html::*;
 use leptos::prelude::*;
 use leptos_use::use_mouse;
 
 #[derive(Clone, Debug)]
 pub struct TooltipContext {
-    pub content: RwSignal<Option<ChildrenFn>>,
-    pub position: RwSignal<TooltipPosition>,
+    content: RwSignal<Option<ChildrenFn>>,
+    position: RwSignal<TooltipPosition>,
+}
+
+impl TooltipContext {
+    pub fn set_content(
+        &self,
+        content: impl Fn() -> AnyView + Send + Sync + 'static,
+        position: TooltipPosition,
+    ) {
+        self.content.set(Some(Arc::new(content)));
+        self.position.set(position);
+    }
+
+    pub fn hide(&self) {
+        self.content.set(None);
+    }
 }
 
 #[derive(Debug, Clone, Copy)]
 pub enum TooltipPosition {
+    BottomLeft,
     BottomRight,
+    TopLeft,
+    TopRight,
 }
 
-// TODO: position
 #[component]
 pub fn DynamicTooltip() -> impl IntoView {
     let tooltip_context = TooltipContext {
@@ -22,48 +41,43 @@ pub fn DynamicTooltip() -> impl IntoView {
     };
     provide_context(tooltip_context.clone());
 
-    let show_tooltip = Signal::derive({
+    let show_tooltip = {
         let tooltip_context = tooltip_context.clone();
         move || tooltip_context.content.read().is_some()
-    });
+    };
 
-    view! {
-        <DynamicTooltipContent show=show_tooltip>
-            {move || {
-                tooltip_context
-                    .content
-                    .get()
-                    .map(|x| {
-                        view! { {x()} }
-                    })
-            }}
-        </DynamicTooltipContent>
-    }
-}
-
-// TODO: position
-#[component]
-fn DynamicTooltipContent(#[prop(into)] show: Signal<bool>, children: ChildrenFn) -> impl IntoView {
     let mouse = use_mouse();
 
-    // See: https://book.leptos.dev/interlude_projecting_children.html
-    let children = StoredValue::new(children);
+    let origin = move || match tooltip_context.position.get() {
+        TooltipPosition::BottomLeft => "transform -translate-x-full",
+        TooltipPosition::BottomRight => "",
+        TooltipPosition::TopLeft => "transform -translate-y-full -translate-x-full",
+        TooltipPosition::TopRight => "transform -translate-y-full",
+    };
 
     view! {
-        <Show when=move || {
-            show.get()
-        }>
+        <Show when=show_tooltip>
             {move || {
                 view! {
                     <div
-                        class="fixed z-50 pointer-events-none transition-opacity duration-150"
-                        style=format!(
-                            "top: {}px; left: {}px;",
-                            mouse.y.get() + 16.0,
-                            mouse.x.get() + 16.0,
-                        )
+                        class=move || {
+                            format!(
+                                "fixed z-50 pointer-events-none transition-opacity duration-150 p-2 {}",
+                                origin(),
+                            )
+                        }
+                        style=move || {
+                            format!("top: {}px; left: {}px;", mouse.y.get(), mouse.x.get())
+                        }
                     >
-                        {children.read_value()()}
+                        {move || {
+                            tooltip_context
+                                .content
+                                .get()
+                                .map(|x| {
+                                    view! { {x()} }
+                                })
+                        }}
                     </div>
                 }
             }}

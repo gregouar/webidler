@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use leptos::html::*;
 use leptos::prelude::*;
 
@@ -6,9 +8,10 @@ use shared::data::skill::{
 };
 
 #[component]
-pub fn SkillTooltip(skill: SkillSpecs) -> impl IntoView {
-    let effect_lines = skill
+pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
+    let effect_lines = skill_specs
         .effects
+        .clone()
         .into_iter()
         .map(format_effect)
         .collect::<Vec<_>>();
@@ -18,29 +21,31 @@ pub fn SkillTooltip(skill: SkillSpecs) -> impl IntoView {
         max-w-xs p-4 rounded-xl border border-purple-700 ring-2 ring-purple-500 
         shadow-md shadow-purple-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
         ">
-            <div class="flex items-center space-x-2">
-                <img src=skill.icon.clone() alt="Skill icon" class="w-6 h-6" />
-                <strong class="text-lg font-bold text-purple-300">{skill.name.clone()}</strong>
-            </div>
+            <strong class="text-lg font-bold text-purple-300">{skill_specs.name.clone()}</strong>
             <hr class="border-t border-gray-700" />
 
             <p class="text-sm text-gray-400 leading-snug">
-                "Cooldown: " <span class="text-white">{format!("{:.2}s", skill.cooldown)}</span>
-                {(skill.mana_cost > 0.0)
+                "Cooldown: "
+                <span class="text-white">{format!("{:.2}s", skill_specs.cooldown)}</span>
+                {(skill_specs.mana_cost > 0.0)
                     .then(|| {
                         view! {
-                            <>", Mana Cost: " <span class="text-white">{skill.mana_cost}</span></>
+                            <>
+                                ", Mana Cost: "
+                                <span class="text-white">{skill_specs.mana_cost}</span>
+                            </>
                         }
                     })}
             </p>
 
-            {(skill.upgrade_level > 0)
+            {(skill_specs.upgrade_level > 0)
                 .then(|| {
                     view! {
                         <p class="text-sm text-gray-400 leading-snug">
-                            "Upgrade Level: " <span class="text-white">{skill.upgrade_level}</span>
+                            "Upgrade Level: "
+                            <span class="text-white">{skill_specs.upgrade_level}</span>
                             ", Next Upgrade: "
-                            <span class="text-white">{skill.next_upgrade_cost}</span>
+                            <span class="text-white">{skill_specs.next_upgrade_cost}</span>
                         </p>
                     }
                 })}
@@ -49,13 +54,13 @@ pub fn SkillTooltip(skill: SkillSpecs) -> impl IntoView {
 
             <ul class="list-none space-y-1">{effect_lines}</ul>
 
-            {(!skill.description.is_empty())
+            {(!skill_specs.description.is_empty())
                 .then(|| {
                     view! {
                         <>
                             <hr class="border-t border-gray-700" />
                             <p class="text-sm italic text-gray-300 leading-snug">
-                                {skill.description.clone()}
+                                {skill_specs.description.clone()}
                             </p>
                         </>
                     }

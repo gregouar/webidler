@@ -1,16 +1,17 @@
 use std::sync::Arc;
 
-use leptoaster::ToastLevel;
 use leptos::html::*;
 use leptos::prelude::*;
 
-use shared::data::item::AffixEffect;
-use shared::data::item::AffixEffectType;
-use shared::data::item::ItemStat;
-use shared::data::item::{ItemCategory, ItemRarity, ItemSpecs};
+use shared::data::item::{
+    AffixEffect, AffixEffectType, ItemCategory, ItemRarity, ItemSpecs, ItemStat,
+};
 
 use crate::assets::img_asset;
-use crate::components::ui::{menu_panel::MenuPanel, tooltip::TooltipContext};
+use crate::components::ui::{
+    menu_panel::MenuPanel,
+    tooltip::{TooltipContext, TooltipPosition},
+};
 
 use super::game_context::GameContext;
 use super::player_card::PlayerName;
@@ -122,8 +123,6 @@ fn EmptySlot(children: Children) -> impl IntoView {
 
 #[component]
 fn ItemCard(item_specs: ItemSpecs) -> impl IntoView {
-    let tooltip_context = expect_context::<TooltipContext>();
-
     let (border_color, ring_color, shadow_color, gradient) = match item_specs.rarity {
         ItemRarity::Normal => (
             "border-gray-600/70",
@@ -151,6 +150,23 @@ fn ItemCard(item_specs: ItemSpecs) -> impl IntoView {
         ),
     };
 
+    let icon_asset = img_asset(&item_specs.icon);
+
+    let tooltip_context = expect_context::<TooltipContext>();
+    let show_tooltip = move |_| {
+        let item_specs = Arc::new(item_specs.clone());
+        tooltip_context.set_content(
+            move || {
+                let item_specs = item_specs.clone();
+                view! { <ItemTooltip item_specs=item_specs /> }.into_any()
+            },
+            TooltipPosition::BottomRight,
+        );
+    };
+
+    let tooltip_context = expect_context::<TooltipContext>();
+    let hide_tooltip = move |_| tooltip_context.hide();
+
     view! {
         <div
             class=format!(
@@ -161,23 +177,11 @@ fn ItemCard(item_specs: ItemSpecs) -> impl IntoView {
                 ring_color,
                 shadow_color,
             )
-            on:mouseenter=move |_| {
-                let item_specs = item_specs.clone();
-                tooltip_context
-                    .content
-                    .set(
-                        Some(
-                            Arc::new(move || {
-                                let item_specs = item_specs.clone();
-                                view! { <ItemTooltip item_specs=item_specs /> }.into_any()
-                            }),
-                        ),
-                    )
-            }
-            on:mouseleave=move |_| tooltip_context.content.set(None)
+            on:mouseenter=show_tooltip
+            on:mouseleave=hide_tooltip
         >
             <img
-                src=img_asset(&item_specs.icon)
+                src=icon_asset
                 class="object-contain max-w-full max-h-full transition-all duration-150 ease-in-out group-hover:scale-105 group-hover:brightness-110"
             />
         </div>
@@ -188,7 +192,7 @@ fn ItemCard(item_specs: ItemSpecs) -> impl IntoView {
 // => mouse move means it recomputes the whole ItemTooltip every time :(
 // Could partially solve it by precomputing some stuff (so we would store not the ItemSpecs but a computed version)
 #[component]
-fn ItemTooltip(item_specs: ItemSpecs) -> impl IntoView {
+fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     let extra_info = match &item_specs.item_category {
         ItemCategory::Trinket => {
             view! { <li class="text-gray-400 text-sm leading-snug">"Trinket"</li> }.into_any()

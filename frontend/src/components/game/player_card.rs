@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use leptos::html::*;
 use leptos::prelude::*;
 
@@ -6,17 +8,19 @@ use shared::messages::client::ClientMessage;
 use shared::messages::client::{LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage};
 
 use crate::assets::img_asset;
+use crate::components::ui::tooltip::TooltipPosition;
 use crate::components::{
     ui::{
         buttons::{FancyButton, Toggle},
         number::format_number,
         progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
-        tooltip::StaticTooltip,
+        tooltip::{StaticTooltip, TooltipContext},
     },
     websocket::WebsocketContext,
 };
 
 use super::character::CharacterPortrait;
+use super::skill_tooltip::SkillTooltip;
 use super::GameContext;
 
 #[component]
@@ -132,12 +136,12 @@ pub fn PlayerCard() -> impl IntoView {
             <div class="grid grid-cols-4 gap-2">
                 <For
                     each=move || {
-                        game_context.player_specs.get().skill_specs.into_iter().enumerate()
+                        game_context.player_specs.read().skill_specs.clone().into_iter().enumerate()
                     }
                     key=|(i, _)| *i
                     let((i, p))
                 >
-                    <PlayerSkill specs=p index=i />
+                    <PlayerSkill skill_specs=p index=i />
                 </For>
             </div>
         </div>
@@ -166,11 +170,11 @@ pub fn PlayerName() -> impl IntoView {
 }
 
 #[component]
-fn PlayerSkill(specs: SkillSpecs, index: usize) -> impl IntoView {
+fn PlayerSkill(skill_specs: SkillSpecs, index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let skill_cooldown = Signal::derive(move || {
-        if specs.cooldown > 0.0 {
+        if skill_specs.cooldown > 0.0 {
             (game_context
                 .player_state
                 .read()
@@ -179,7 +183,7 @@ fn PlayerSkill(specs: SkillSpecs, index: usize) -> impl IntoView {
                 .map(|x| x.elapsed_cooldown)
                 .unwrap_or_default()
                 * 100.0
-                / specs.cooldown) as f32
+                / skill_specs.cooldown) as f32
         } else {
             0.0
         }
@@ -262,25 +266,31 @@ fn PlayerSkill(specs: SkillSpecs, index: usize) -> impl IntoView {
     let cost_tooltip =
         Signal::derive(move || format!("{} Gold", format_number(level_up_cost.get())));
 
-    // TODO: Turn into dynamic tooltip? Or need more content than text anyway...
-    // let skill_tooltip = Signal::derive(move || {
-    //     game_context
-    //         .player_specs
-    //         .read()
-    //         .skill_specs
-    //         .get(index)
-    //         .map(|s| format!("{}", s.name))
-    //         .unwrap_or_default()
-    // });
+    let tooltip_context = expect_context::<TooltipContext>();
+    let rc_skill_specs = Arc::new(skill_specs.clone());
+    let show_tooltip = move |_| {
+        let skill_specs = rc_skill_specs.clone();
+        tooltip_context.set_content(
+            move || {
+                let skill_specs = skill_specs.clone();
+                view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
+            },
+            TooltipPosition::TopRight,
+        );
+    };
+
+    let tooltip_context = expect_context::<TooltipContext>();
+    let hide_tooltip = move |_| tooltip_context.hide();
 
     view! {
         <div class="flex flex-col">
-            // <StaticTooltip tooltip=skill_tooltip>
             <button
                 class="
                 disabled:brightness-80 disabled:sepia-0
                 active:brightness-50 active:sepia p-1
                 "
+                on:mouseenter=show_tooltip
+                on:mouseleave=hide_tooltip
                 on:click=use_skill
                 disabled=move || !is_ready()
             >
@@ -291,14 +301,13 @@ fn PlayerSkill(specs: SkillSpecs, index: usize) -> impl IntoView {
                     reset=just_triggered
                 >
                     <img
-                        src=img_asset(&specs.icon)
-                        alt=specs.name
+                        src=img_asset(&skill_specs.icon)
+                        alt=skill_specs.name
                         class="w-full h-full flex-no-shrink fill-current
                         drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
                     />
                 </CircularProgressBar>
             </button>
-            // </StaticTooltip>
 
             <div class="flex justify-around">
                 <Toggle
