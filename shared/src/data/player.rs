@@ -33,6 +33,7 @@ pub struct PlayerState {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerResources {
     pub experience: f64,
+    pub passive_points: u16,
     pub gold: f64,
 }
 

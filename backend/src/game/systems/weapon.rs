@@ -1,6 +1,6 @@
 use shared::data::{
     item::{AffixEffect, AffixEffectType, ItemCategory, ItemSpecs, ItemStat, WeaponSpecs},
-    skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, TargetType},
+    skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillType, TargetType},
 };
 
 // TODO: Where to call that?
@@ -64,6 +64,7 @@ pub fn make_weapon_skill(item_specs: &ItemSpecs) -> Option<SkillSpecs> {
         name: "Weapon Attack".to_string(),
         icon: "skills/attack.svg".to_string(),
         description: "A swing of your weapon".to_string(),
+        skill_type: SkillType::Weapon,
         cooldown: weapon_specs.cooldown,
         mana_cost: 0.0,
         upgrade_level: 1,

@@ -6,12 +6,14 @@ use leptos::prelude::*;
 use shared::data::item::{
     AffixEffect, AffixEffectType, ItemCategory, ItemRarity, ItemSpecs, ItemStat,
 };
+use shared::messages::client::EquipItemMessage;
 
 use crate::assets::img_asset;
 use crate::components::ui::{
     menu_panel::MenuPanel,
-    tooltip::{DynamicTooltipPosition, DynamicTooltipContext},
+    tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
 };
+use crate::components::websocket::WebsocketContext;
 
 use super::game_context::GameContext;
 use super::player_card::PlayerName;
@@ -64,7 +66,6 @@ pub fn EquippedItems() -> impl IntoView {
 #[component]
 fn ItemsGrid() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
-    let inventory = move || game_context.player_specs.read().inventory.bag.clone();
 
     let total_slots = game_context.player_specs.read().inventory.max_bag_size as usize;
 
@@ -89,23 +90,46 @@ fn ItemsGrid() -> impl IntoView {
                     <For
                         each=move || (0..total_slots)
                         key=|i| *i
-                        children=move |i| {
-                            let maybe_item = inventory().get(i).cloned();
-                            view! {
-                                <div class="group relative w-full aspect-[2/3]">
-                                    {maybe_item
-                                        .map(|specs| {
-                                            view! { <ItemCard item_specs=specs /> }.into_any()
-                                        })
-                                        .unwrap_or_else(|| {
-                                            view! { <EmptySlot>{()}</EmptySlot> }.into_any()
-                                        })}
-                                </div>
-                            }
-                        }
+                        children=move |i| view! { <ItemInBag item_index=i /> }
                     />
                 </div>
             </div>
+        </div>
+    }
+}
+
+#[component]
+fn ItemInBag(item_index: usize) -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+    let maybe_item = move || {
+        game_context
+            .player_specs
+            .read()
+            .inventory
+            .bag
+            .get(item_index)
+            .cloned()
+    };
+
+    view! {
+        <div class="group relative w-full aspect-[2/3]">
+            {move || {
+                match maybe_item() {
+                    Some(item_specs) => {
+                        let conn = expect_context::<WebsocketContext>();
+                        let equip_item = move |_| {
+                            conn.send(
+                                &EquipItemMessage {
+                                    item_index: item_index as u8,
+                                }
+                                    .into(),
+                            );
+                        };
+                        view! { <ItemCard item_specs=item_specs on:click=equip_item /> }.into_any()
+                    }
+                    None => view! { <EmptySlot>{()}</EmptySlot> }.into_any(),
+                }
+            }}
         </div>
     }
 }

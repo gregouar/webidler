@@ -1,9 +1,13 @@
 use shared::data::{
+    item::{ItemCategory, ItemSpecs},
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerResources, PlayerSpecs, PlayerState},
+    skill::{SkillState, SkillType},
 };
 
-use super::{increase_factors::exponential_factor, skills_controller};
+use crate::game::data::DataInit;
+
+use super::{increase_factors::exponential_factor, skills_controller, weapon::make_weapon_skill};
 
 pub struct PlayerController {
     pub auto_skills: Vec<bool>,
@@ -80,6 +84,7 @@ pub fn level_up(
     }
 
     player_specs.level += 1;
+    player_resources.passive_points += 1;
     player_resources.experience -= player_specs.experience_needed;
     player_specs.experience_needed = 10.0 * exponential_factor(player_specs.level as f64);
 
@@ -87,4 +92,45 @@ pub fn level_up(
     player_specs.character_specs.max_health += 10.0;
 
     true
+}
+
+// TODO: InventoryController ?
+pub fn equip_item(player_specs: &mut PlayerSpecs, player_state: &mut PlayerState, item_index: u8) {
+    let item_index = item_index as usize;
+    if let Some(item_specs) = player_specs.inventory.bag.get(item_index) {
+        if let Some(old_item_specs) = match item_specs.item_category {
+            ItemCategory::Trinket => return, // Cannot equip trinket
+            ItemCategory::Weapon(_) => equip_weapon(player_specs, player_state, item_specs.clone()),
+        } {
+            player_specs.inventory.bag[item_index] = old_item_specs;
+        } else {
+            player_specs.inventory.bag.remove(item_index);
+        }
+    }
+}
+
+pub fn equip_weapon(
+    player_specs: &mut PlayerSpecs,
+    player_state: &mut PlayerState,
+    weapon_specs: ItemSpecs,
+) -> Option<ItemSpecs> {
+    let old_weapon = player_specs.inventory.weapon_specs.take();
+
+    if let Some(SkillType::Weapon) = player_specs.skill_specs.get(0).map(|x| x.skill_type) {
+        player_specs.skill_specs.remove(0);
+        player_state.skill_states.remove(0);
+        player_specs.auto_skills.remove(0);
+    }
+
+    if let Some(weapon_skill) = make_weapon_skill(&weapon_specs) {
+        player_specs.auto_skills.insert(0, true);
+        player_state
+            .skill_states
+            .insert(0, SkillState::init(&weapon_skill));
+        player_specs.skill_specs.insert(0, weapon_skill);
+    }
+
+    player_specs.inventory.weapon_specs = Some(weapon_specs);
+
+    old_weapon
 }

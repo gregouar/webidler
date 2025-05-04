@@ -13,6 +13,8 @@ pub struct SkillSpecs {
     pub icon: String,
     #[serde(default)]
     pub description: String,
+    #[serde(default)]
+    pub skill_type: SkillType,
 
     pub cooldown: f32,
     #[serde(default)]
@@ -24,6 +26,19 @@ pub struct SkillSpecs {
     pub next_upgrade_cost: f64,
 
     pub effects: Vec<SkillEffect>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub enum SkillType {
+    Attack,
+    Spell,
+    Weapon,
+}
+
+impl Default for SkillType {
+    fn default() -> Self {
+        SkillType::Attack
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

@@ -21,7 +21,10 @@ use shared::{
             ItemSpecs, ItemStat, WeaponSpecs,
         },
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs},
-        skill::{DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs, TargetType},
+        skill::{
+            DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs, SkillType,
+            TargetType,
+        },
     },
     messages::{
         client::{ClientConnectMessage, ClientMessage},
@@ -138,6 +141,7 @@ async fn handle_connect(
         name: String::from("Fireball"),
         description: "A throw of mighty fireball, burning multiple enemies".to_string(),
         icon: String::from("skills/fireball2.svg"),
+        skill_type: SkillType::Spell,
         cooldown: 5.0,
         mana_cost: 20.0,
         upgrade_level: 1,
@@ -157,6 +161,7 @@ async fn handle_connect(
         name: String::from("Heal"),
         description: "A minor healing spell for yourself".to_string(),
         icon: String::from("skills/heal.svg"),
+        skill_type: SkillType::Spell,
         cooldown: 30.0,
         mana_cost: 20.0,
         upgrade_level: 1,

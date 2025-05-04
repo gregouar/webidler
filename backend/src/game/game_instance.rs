@@ -41,8 +41,7 @@ pub struct GameInstance<'a> {
     world_blueprint: WorldBlueprint,
     world_state: WorldState,
 
-    need_to_sync_player_specs: bool,
-    player_specs: PlayerSpecs,
+    player_specs: PlayerSpecsWrapper,
     player_state: PlayerState,
     player_resources: PlayerResources,
     player_controller: PlayerController,
@@ -52,6 +51,37 @@ pub struct GameInstance<'a> {
     monster_specs: Vec<MonsterSpecs>,
     monster_states: Vec<MonsterState>,
     monster_wave_delay: Instant,
+}
+
+struct PlayerSpecsWrapper {
+    inner: PlayerSpecs,
+    need_to_sync: bool,
+}
+
+impl PlayerSpecsWrapper {
+    pub fn new(player_specs: PlayerSpecs) -> Self {
+        Self {
+            inner: player_specs,
+            need_to_sync: true,
+        }
+    }
+
+    pub fn mutate(&mut self) -> &mut PlayerSpecs {
+        self.need_to_sync = true;
+        &mut self.inner
+    }
+
+    pub fn read(&self) -> &PlayerSpecs {
+        &self.inner
+    }
+
+    pub fn need_to_sync(&self) -> bool {
+        self.need_to_sync
+    }
+
+    pub fn reset_sync(&mut self) {
+        self.need_to_sync = false;
+    }
 }
 
 impl<'a> GameInstance<'a> {
@@ -66,14 +96,14 @@ impl<'a> GameInstance<'a> {
             world_state: WorldState::init(&world_blueprint.schema.specs),
             world_blueprint: world_blueprint,
 
-            need_to_sync_player_specs: false,
             player_resources: PlayerResources {
+                passive_points: 0,
                 experience: 0.0,
                 gold: 0.0,
             },
             player_state: PlayerState::init(&player_specs),
             player_controller: PlayerController::init(&player_specs),
-            player_specs,
+            player_specs: PlayerSpecsWrapper::new(player_specs),
             player_respawn_delay: Instant::now(),
 
             need_to_sync_monster_specs: false,
@@ -146,23 +176,26 @@ impl<'a> GameInstance<'a> {
             ClientMessage::LevelUpSkill(m) => {
                 if let Some(skill_specs) = self
                     .player_specs
+                    .mutate()
                     .skill_specs
                     .get_mut(m.skill_index as usize)
                 {
-                    if skills_controller::level_up_skill(skill_specs, &mut self.player_resources) {
-                        self.need_to_sync_player_specs = true; // TODO: Could we find a better way to do this?
-                    }
+                    skills_controller::level_up_skill(skill_specs, &mut self.player_resources);
                 }
             }
             ClientMessage::LevelUpPlayer => {
-                if player_controller::level_up(
-                    &mut self.player_specs,
+                player_controller::level_up(
+                    &mut self.player_specs.mutate(),
                     &mut self.player_state,
                     &mut self.player_resources,
-                ) {
-                    self.need_to_sync_player_specs = true; // TODO: Could we find a better way to do this?
-                }
+                );
             }
+            ClientMessage::EquipItem(m) => player_controller::equip_item(
+                self.player_specs.mutate(),
+                &mut self.player_state,
+                m.item_index,
+            ),
+            // Shouldn't receive other kind of messages:
             ClientMessage::Connect(_) => {
                 tracing::warn!("received unexpected message: {:?}", msg)
             }
@@ -171,13 +204,13 @@ impl<'a> GameInstance<'a> {
 
     async fn init_game(&mut self) -> Result<()> {
         // TODO: Remove, find better way to do this:
-        if let Some(weapon) = self.player_specs.inventory.weapon_specs.as_mut() {
+        if let Some(weapon) = self.player_specs.mutate().inventory.weapon_specs.as_mut() {
             let affix_effects = weapon.aggregate_effects();
             if let ItemCategory::Weapon(w) = &mut weapon.item_category {
                 update_weapon_specs(w, affix_effects);
             }
         }
-        for i in self.player_specs.inventory.bag.iter_mut() {
+        for i in self.player_specs.mutate().inventory.bag.iter_mut() {
             let affix_effects = i.aggregate_effects();
             match &mut i.item_category {
                 ItemCategory::Trinket => {}
@@ -190,7 +223,7 @@ impl<'a> GameInstance<'a> {
                 &InitGameMessage {
                     world_specs: self.world_blueprint.schema.specs.clone(),
                     world_state: self.world_state.clone(),
-                    player_specs: self.player_specs.clone(),
+                    player_specs: self.player_specs.read().clone(),
                     player_state: self.player_state.clone(),
                 }
                 .into(),
@@ -224,7 +257,7 @@ impl<'a> GameInstance<'a> {
         self.monster_states = Vec::new();
         self.need_to_sync_monster_specs = true;
 
-        self.player_state = PlayerState::init(&self.player_specs);
+        self.player_state = PlayerState::init(self.player_specs.read());
 
         self.world_state.area_level = self.world_state.area_level.checked_sub(1).unwrap_or(1);
         self.world_state.waves_done = 0;
@@ -256,7 +289,7 @@ impl<'a> GameInstance<'a> {
                 .collect();
 
             self.player_controller.control_player(
-                &self.player_specs,
+                self.player_specs.read(),
                 &mut self.player_state,
                 &mut monsters_still_alive,
             );
@@ -278,7 +311,7 @@ impl<'a> GameInstance<'a> {
                 self.monster_wave_delay = Instant::now();
                 monsters_controller::control_monsters(
                     &mut monsters_still_alive,
-                    &self.player_specs,
+                    self.player_specs.read(),
                     &mut self.player_state,
                 );
             }
@@ -290,7 +323,7 @@ impl<'a> GameInstance<'a> {
     async fn update_entities(&mut self, elapsed_time: Duration) {
         player_updater::update_player_state(
             elapsed_time,
-            &self.player_specs,
+            self.player_specs.read(),
             &mut self.player_state,
         );
         monsters_updater::update_monster_states(
@@ -306,9 +339,9 @@ impl<'a> GameInstance<'a> {
             .send(
                 &SyncGameStateMessage {
                     world_state: self.world_state.clone(),
-                    player_specs: if self.need_to_sync_player_specs {
-                        self.need_to_sync_player_specs = false;
-                        Some(self.player_specs.clone())
+                    player_specs: if self.player_specs.need_to_sync() {
+                        self.player_specs.reset_sync();
+                        Some(self.player_specs.read().clone())
                     } else {
                         None
                     },

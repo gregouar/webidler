@@ -67,7 +67,13 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButton on:click=move |_| {
                     game_context.open_inventory.set(!game_context.open_inventory.get())
                 }>"Inventory"</MenuButton>
-                <MenuButton>"Passive Skills"</MenuButton>
+                <MenuButton>
+                    "Passive Skills"
+                    {move || {
+                        let points = game_context.player_resources.read().passive_points;
+                        if points > 0 { format!(" ({})", points) } else { "".to_string() }
+                    }}
+                </MenuButton>
                 <MenuButton>"Statistics"</MenuButton>
                 <MenuButton on:click=abandon_quest>"Abandon Quest"</MenuButton>
             </div>
