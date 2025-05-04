@@ -8,13 +8,14 @@ use shared::messages::client::{
 };
 
 use crate::assets::img_asset;
-use crate::components::ui::tooltip::TooltipPosition;
+use crate::components::ui::tooltip::DynamicTooltipPosition;
+use crate::components::ui::tooltip::StaticTooltipPosition;
 use crate::components::{
     ui::{
         buttons::{FancyButton, Toggle},
         number::format_number,
         progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
-        tooltip::{StaticTooltip, TooltipContext},
+        tooltip::{DynamicTooltipContext, StaticTooltip},
     },
     websocket::WebsocketContext,
 };
@@ -27,6 +28,15 @@ use super::GameContext;
 pub fn PlayerCard() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
+    let health_tooltip = move || {
+        view! {
+            "Health: "
+            {format_number(game_context.player_state.read().character_state.health)}
+            "/"
+            {format_number(game_context.player_specs.read().character_specs.max_health)}
+        }
+    };
+
     let health_percent = Signal::derive(move || {
         let max_health = game_context.player_specs.read().character_specs.max_health;
         if max_health > 0.0 {
@@ -36,6 +46,15 @@ pub fn PlayerCard() -> impl IntoView {
         }
     });
 
+    let mana_tooltip = move || {
+        view! {
+            "Mana: "
+            {format_number(game_context.player_state.read().mana)}
+            "/"
+            {format_number(game_context.player_specs.read().max_mana)}
+        }
+    };
+
     let mana_percent = Signal::derive(move || {
         let max_mana = game_context.player_specs.read().max_mana;
         if max_mana > 0.0 {
@@ -44,6 +63,15 @@ pub fn PlayerCard() -> impl IntoView {
             0.0
         }
     });
+
+    let xp_tooltip = move || {
+        view! {
+            "Experience: "
+            {format_number(game_context.player_resources.read().experience)}
+            "/"
+            {format_number(game_context.player_specs.read().experience_needed)}
+        }
+    };
 
     let xp_percent = Signal::derive(move || {
         let max_xp = game_context.player_specs.read().experience_needed;
@@ -101,32 +129,37 @@ pub fn PlayerCard() -> impl IntoView {
 
             <div class="flex flex-col gap-2">
                 <div class="flex gap-2">
-                    <VerticalProgressBar
-                        class:w-3
-                        class:md:w-6
-                        bar_color="bg-gradient-to-l from-red-500 to-red-700"
-                        value=health_percent
-                    />
+                    <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Right>
+                        <VerticalProgressBar
+                            class:w-3
+                            class:md:w-6
+                            bar_color="bg-gradient-to-l from-red-500 to-red-700"
+                            value=health_percent
+                        />
+                    </StaticTooltip>
                     <CharacterPortrait
                         image_uri=game_context.player_specs.read().character_specs.portrait.clone()
                         character_name="player".to_string()
                         just_hurt=just_hurt
                         is_dead=is_dead
                     />
-                    <VerticalProgressBar
-                        class:w-3
-                        class:md:w-6
-                        bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
-                        value=mana_percent
-                    />
+                    <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
+                        <VerticalProgressBar
+                            class:w-3
+                            class:md:w-6
+                            bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
+                            value=mana_percent
+                        />
+                    </StaticTooltip>
                 </div>
-                <HorizontalProgressBar
-                    class:h-2
-                    class:sm:h-4
-                    bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
-                    // TODO: XP
-                    value=xp_percent
-                />
+                <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
+                    <HorizontalProgressBar
+                        class:h-2
+                        class:sm:h-4
+                        bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
+                        value=xp_percent
+                    />
+                </StaticTooltip>
 
                 <FancyButton disabled=disable_level_up on:click=level_up>
                     <span class="text-2xl">"+"</span>
@@ -293,10 +326,24 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     let disable_level_up =
         Signal::derive(move || level_up_cost.get() > game_context.player_resources.read().gold);
 
-    let cost_tooltip =
-        Signal::derive(move || format!("{} Gold", format_number(level_up_cost.get())));
+    // let cost_tooltip = move || {
+    //     view! {
+    //         {format_number(level_up_cost.get())}
+    //         " Gold"
+    //     }
+    // };
+    let cost_tooltip = move || {
+        view! {
+            <div class="flex flex-col space-y-1 text-sm max-w-xs">
+                <span class="font-semibold text-white">{"Upgrade Cost"}</span>
+                <span class="text-zinc-300">
+                    {format!("{} Gold", format_number(level_up_cost.get()))}
+                </span>
+            </div>
+        }
+    };
 
-    let tooltip_context = expect_context::<TooltipContext>();
+    let tooltip_context = expect_context::<DynamicTooltipContext>();
     let show_tooltip = move |_| {
         if let Some(skill_specs) = game_context.player_specs.read().skill_specs.get(index) {
             let skill_specs = Arc::new(skill_specs.clone());
@@ -305,12 +352,12 @@ fn PlayerSkill(index: usize) -> impl IntoView {
                     let skill_specs = skill_specs.clone();
                     view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
                 },
-                TooltipPosition::TopRight,
+                DynamicTooltipPosition::TopRight,
             );
         }
     };
 
-    let tooltip_context = expect_context::<TooltipContext>();
+    let tooltip_context = expect_context::<DynamicTooltipContext>();
     let hide_tooltip = move |_| tooltip_context.hide();
 
     view! {
@@ -346,7 +393,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
                     initial=initial_auto_use
                     label="auto".to_string()
                 />
-                <StaticTooltip tooltip=cost_tooltip>
+                <StaticTooltip tooltip=cost_tooltip position=StaticTooltipPosition::Top>
                     <FancyButton disabled=disable_level_up on:click=level_up>
                         <span class="text-2xl">"+"</span>
                     </FancyButton>

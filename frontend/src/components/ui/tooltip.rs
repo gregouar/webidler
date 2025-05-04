@@ -5,16 +5,16 @@ use leptos::prelude::*;
 use leptos_use::use_mouse;
 
 #[derive(Clone, Debug)]
-pub struct TooltipContext {
+pub struct DynamicTooltipContext {
     content: RwSignal<Option<ChildrenFn>>,
-    position: RwSignal<TooltipPosition>,
+    position: RwSignal<DynamicTooltipPosition>,
 }
 
-impl TooltipContext {
+impl DynamicTooltipContext {
     pub fn set_content(
         &self,
         content: impl Fn() -> AnyView + Send + Sync + 'static,
-        position: TooltipPosition,
+        position: DynamicTooltipPosition,
     ) {
         self.content.set(Some(Arc::new(content)));
         self.position.set(position);
@@ -26,7 +26,7 @@ impl TooltipContext {
 }
 
 #[derive(Debug, Clone, Copy)]
-pub enum TooltipPosition {
+pub enum DynamicTooltipPosition {
     BottomLeft,
     BottomRight,
     TopLeft,
@@ -35,9 +35,9 @@ pub enum TooltipPosition {
 
 #[component]
 pub fn DynamicTooltip() -> impl IntoView {
-    let tooltip_context = TooltipContext {
+    let tooltip_context = DynamicTooltipContext {
         content: RwSignal::new(None),
-        position: RwSignal::new(TooltipPosition::BottomRight),
+        position: RwSignal::new(DynamicTooltipPosition::BottomRight),
     };
     provide_context(tooltip_context.clone());
 
@@ -49,10 +49,10 @@ pub fn DynamicTooltip() -> impl IntoView {
     let mouse = use_mouse();
 
     let origin = move || match tooltip_context.position.get() {
-        TooltipPosition::BottomLeft => "transform -translate-x-full",
-        TooltipPosition::BottomRight => "",
-        TooltipPosition::TopLeft => "transform -translate-y-full -translate-x-full",
-        TooltipPosition::TopRight => "transform -translate-y-full",
+        DynamicTooltipPosition::BottomLeft => "transform -translate-x-full",
+        DynamicTooltipPosition::BottomRight => "",
+        DynamicTooltipPosition::TopLeft => "transform -translate-y-full -translate-x-full",
+        DynamicTooltipPosition::TopRight => "transform -translate-y-full",
     };
 
     view! {
@@ -85,21 +85,68 @@ pub fn DynamicTooltip() -> impl IntoView {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
+pub enum StaticTooltipPosition {
+    Top,
+    Bottom,
+    Left,
+    Right,
+}
+
+// #[component]
+// pub fn StaticTooltip(
+//     tooltip: Signal<String>,
+//     position: StaticTooltipPosition,
+//     children: Children,
+// ) -> impl IntoView {
+//     let position_classes = match position {
+//         StaticTooltipPosition::Top => "bottom-full left-1/2 -translate-x-1/2 mb-2",
+//         StaticTooltipPosition::Bottom => "top-full left-1/2 -translate-x-1/2 mt-2",
+//         StaticTooltipPosition::Left => "right-full top-1/2 -translate-y-1/2 mr-2",
+//         StaticTooltipPosition::Right => "left-full top-1/2 -translate-y-1/2 ml-2",
+//     };
+
+//     view! {
+//         <div class="relative group inline-block">
+//             {children()}
+//             <div class=format!(
+//                 "absolute hidden group-hover:block px-3 py-1 text-sm text-white \
+//              bg-zinc-800 border border-neutral-900 rounded shadow-lg \
+//              whitespace-nowrap  whitespace-pre-line z-50 {}",
+//                 position_classes,
+//             )>{tooltip}</div>
+//         </div>
+//     }
+// }
+
 #[component]
-pub fn StaticTooltip(tooltip: Signal<String>, children: Children) -> impl IntoView {
+pub fn StaticTooltip<F, IV>(
+    children: Children,
+    position: StaticTooltipPosition,
+    tooltip: F,
+) -> impl IntoView
+where
+    F: Fn() -> IV + Send + Sync + 'static,
+    IV: IntoView + 'static,
+{
+    let position_classes = match position {
+        StaticTooltipPosition::Top => "bottom-full left-1/2 -translate-x-1/2 mb-2",
+        StaticTooltipPosition::Bottom => "top-full left-1/2 -translate-x-1/2 mt-2",
+        StaticTooltipPosition::Left => "right-full top-1/2 -translate-y-1/2 mr-2",
+        StaticTooltipPosition::Right => "left-full top-1/2 -translate-y-1/2 ml-2",
+    };
     view! {
         <div class="relative group inline-block">
             {children()}
-            <div class="
-            absolute bottom-full left-1/2 -translate-x-1/2 mb-2
-            hidden group-hover:block
-            px-3 py-1
-            text-sm text-white
-            bg-zinc-800 border border-neutral-900
-            rounded shadow-lg
-            whitespace-nowrap
-            z-50
-            ">{tooltip}</div>
+            <div class=format!(
+                "
+                absolute hidden group-hover:block
+                px-3 py-1 text-sm text-white
+                bg-zinc-800 border border-neutral-900
+                rounded shadow-lg whitespace-nowrap z-50
+                {}",
+                position_classes,
+            )>{move || tooltip()}</div>
         </div>
     }
 }

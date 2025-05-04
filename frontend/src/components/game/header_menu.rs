@@ -2,7 +2,11 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 use crate::assets::{img_asset, music_asset};
-use crate::components::ui::{buttons::MenuButton, number::Number};
+use crate::components::ui::{
+    buttons::MenuButton,
+    number::Number,
+    tooltip::{StaticTooltip, StaticTooltipPosition},
+};
 
 use super::GameContext;
 
@@ -30,14 +34,25 @@ pub fn HeaderMenu() -> impl IntoView {
                 <ResourceCounter
                     class:text-amber-200
                     icon="ui/gold2.webp"
-                    tooltip="Gold"
+                    name="Gold"
+                    description="To buy level up for skills. Reset at every quest."
                     value=gold
                 />
                 // TODO: Magic Essence
-                <ResourceCounter icon="ui/magic_essence.webp" tooltip="Magic Essence" value=gems />
-                <ResourceCounter icon="ui/gems.webp" tooltip="Gems" value=gems />
+                // <ResourceCounter icon="ui/magic_essence.webp" tooltip="Magic Essence" value=gems />
+                <ResourceCounter
+                    icon="ui/gems.webp"
+                    name="Gems"
+                    description="To buy items in the market between quests."
+                    value=gems
+                />
                 // TODO: Power Shards
-                <ResourceCounter icon="ui/power_shard.webp" tooltip="Power Shards" value=gems />
+                <ResourceCounter
+                    icon="ui/power_shard.webp"
+                    name="Power Shards"
+                    description="To permanently increase power of passive skills."
+                    value=gems
+                />
             </div>
             <div class="flex space-x-2  w-full">
                 <audio autoplay loop controls>
@@ -61,14 +76,28 @@ pub fn HeaderMenu() -> impl IntoView {
 }
 
 #[component]
-fn ResourceCounter(icon: &'static str, tooltip: &'static str, value: Signal<f64>) -> impl IntoView {
+fn ResourceCounter(
+    icon: &'static str,
+    name: &'static str,
+    description: &'static str,
+    value: Signal<f64>,
+) -> impl IntoView {
+    let tooltip = move || {
+        view! {
+            <div class="flex flex-col space-y-1">
+                <div class="font-semibold text-white">{name}</div>
+                <div class="text-sm text-zinc-300 max-w-xs">{description}</div>
+            </div>
+        }
+    };
     view! {
         <div class="flex-1 text-shadow-md shadow-gray-950 text-xl flex justify-center items-center space-x-1">
             <div class="font-mono tabular-nums w-[8ch] text-right">
                 <Number value=value />
             </div>
-            <img src=img_asset(icon) alt=tooltip class="h-[2em] aspect-square" />
-        // TODO: tooltip
+            <StaticTooltip tooltip=tooltip position=StaticTooltipPosition::Bottom>
+                <img src=img_asset(icon) alt=name class="h-[2em] aspect-square" />
+            </StaticTooltip>
         </div>
     }
 }

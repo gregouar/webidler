@@ -11,8 +11,11 @@ use crate::assets::img_asset;
 use crate::components::{
     game::skill_tooltip::SkillTooltip,
     ui::{
+        number::format_number,
         progress_bars::{CircularProgressBar, HorizontalProgressBar},
-        tooltip::{TooltipContext, TooltipPosition},
+        tooltip::{
+            DynamicTooltipContext, DynamicTooltipPosition, StaticTooltip, StaticTooltipPosition,
+        },
     },
 };
 
@@ -120,17 +123,30 @@ pub fn MonstersGrid() -> impl IntoView {
 fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
+    let monster_name = specs.character_specs.name.clone();
+
+    let health = move || {
+        game_context
+            .monster_states
+            .read()
+            .get(index)
+            .map(|s| s.character_state.health)
+            .unwrap_or_default()
+    };
+
+    let health_tooltip = move || {
+        view! {
+            "Health: "
+            {format_number(health())}
+            "/"
+            {format_number(specs.character_specs.max_health)}
+        }
+    };
+
     let health_percent = Signal::derive(move || {
         let max_health = specs.character_specs.max_health;
         if max_health > 0.0 {
-            (game_context
-                .monster_states
-                .read()
-                .get(index)
-                .map(|s| s.character_state.health)
-                .unwrap_or_default()
-                / specs.character_specs.max_health
-                * 100.0) as f32
+            (health() / specs.character_specs.max_health * 100.0) as f32
         } else {
             0.0
         }
@@ -157,13 +173,15 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     view! {
         <div class="grid grid-cols-4 h-full bg-zinc-800 shadow-md rounded-md gap-2 p-2 ring-1 ring-zinc-950">
             <div class="flex flex-col gap-2 col-span-3 h-full">
-                <HorizontalProgressBar
-                    class:h-2
-                    class:sm:h-4
-                    bar_color="bg-gradient-to-b from-red-500 to-red-700"
-                    value=health_percent
-                    text=specs.character_specs.name.clone()
-                />
+                <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Bottom>
+                    <HorizontalProgressBar
+                        class:h-2
+                        class:sm:h-4
+                        bar_color="bg-gradient-to-b from-red-500 to-red-700"
+                        value=health_percent
+                        text=monster_name.clone()
+                    />
+                </StaticTooltip>
                 <CharacterPortrait
                     image_uri=specs.character_specs.portrait.clone()
                     character_name=specs.character_specs.name.clone()
@@ -217,7 +235,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
         }
     });
 
-    let tooltip_context = expect_context::<TooltipContext>();
+    let tooltip_context = expect_context::<DynamicTooltipContext>();
     let show_tooltip = move |_| {
         let skill_specs = Arc::new(skill_specs.clone());
         tooltip_context.set_content(
@@ -225,11 +243,11 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 let skill_specs = skill_specs.clone();
                 view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
             },
-            TooltipPosition::TopLeft,
+            DynamicTooltipPosition::TopLeft,
         );
     };
 
-    let tooltip_context = expect_context::<TooltipContext>();
+    let tooltip_context = expect_context::<DynamicTooltipContext>();
     let hide_tooltip = move |_| tooltip_context.hide();
 
     let just_triggered = Signal::derive(move || {

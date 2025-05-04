@@ -10,7 +10,7 @@ use shared::data::item::{
 use crate::assets::img_asset;
 use crate::components::ui::{
     menu_panel::MenuPanel,
-    tooltip::{TooltipContext, TooltipPosition},
+    tooltip::{DynamicTooltipPosition, DynamicTooltipContext},
 };
 
 use super::game_context::GameContext;
@@ -152,7 +152,7 @@ fn ItemCard(item_specs: ItemSpecs) -> impl IntoView {
 
     let icon_asset = img_asset(&item_specs.icon);
 
-    let tooltip_context = expect_context::<TooltipContext>();
+    let tooltip_context = expect_context::<DynamicTooltipContext>();
     let show_tooltip = move |_| {
         let item_specs = Arc::new(item_specs.clone());
         tooltip_context.set_content(
@@ -160,11 +160,11 @@ fn ItemCard(item_specs: ItemSpecs) -> impl IntoView {
                 let item_specs = item_specs.clone();
                 view! { <ItemTooltip item_specs=item_specs /> }.into_any()
             },
-            TooltipPosition::BottomRight,
+            DynamicTooltipPosition::BottomRight,
         );
     };
 
-    let tooltip_context = expect_context::<TooltipContext>();
+    let tooltip_context = expect_context::<DynamicTooltipContext>();
     let hide_tooltip = move |_| tooltip_context.hide();
 
     view! {
