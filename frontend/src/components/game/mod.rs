@@ -5,6 +5,7 @@ pub mod header_menu;
 pub mod inventory;
 pub mod monsters_grid;
 pub mod player_card;
+pub mod skill_tooltip;
 
 mod game_context;
 

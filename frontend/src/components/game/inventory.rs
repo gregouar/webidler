@@ -1,3 +1,6 @@
+use std::sync::Arc;
+
+use leptoaster::ToastLevel;
 use leptos::html::*;
 use leptos::prelude::*;
 
@@ -7,39 +10,14 @@ use shared::data::item::ItemStat;
 use shared::data::item::{ItemCategory, ItemRarity, ItemSpecs};
 
 use crate::assets::img_asset;
-use crate::components::ui::{menu_panel::MenuPanel, tooltip::DynamicTooltip};
+use crate::components::ui::{menu_panel::MenuPanel, tooltip::TooltipContext};
 
 use super::game_context::GameContext;
 use super::player_card::PlayerName;
 
-#[derive(Clone, Debug)]
-struct InventoryContext {
-    hovered_item: RwSignal<Option<ItemSpecs>>,
-}
-
 #[component]
 pub fn Inventory(open: RwSignal<bool>) -> impl IntoView {
-    let inventory_context = InventoryContext {
-        hovered_item: RwSignal::new(None),
-    };
-    provide_context(inventory_context.clone());
-
-    let show_tooltip = Signal::derive({
-        let inventory_context = inventory_context.clone();
-        move || inventory_context.hovered_item.read().is_some()
-    });
-
     view! {
-        <DynamicTooltip show=show_tooltip>
-            {move || {
-                inventory_context
-                    .hovered_item
-                    .get()
-                    .map(|item| {
-                        view! { <ItemTooltip item_specs=item /> }
-                    })
-            }}
-        </DynamicTooltip>
         <MenuPanel open=open>
             <div class="grid grid-cols-7 justify-items-stretch flex items-start gap-4 p-4">
                 <EquippedItems class:col-span-2 class:justify-self-end />
@@ -144,7 +122,7 @@ fn EmptySlot(children: Children) -> impl IntoView {
 
 #[component]
 fn ItemCard(item_specs: ItemSpecs) -> impl IntoView {
-    let inventory_context = expect_context::<InventoryContext>();
+    let tooltip_context = expect_context::<TooltipContext>();
 
     let (border_color, ring_color, shadow_color, gradient) = match item_specs.rarity {
         ItemRarity::Normal => (
@@ -183,8 +161,20 @@ fn ItemCard(item_specs: ItemSpecs) -> impl IntoView {
                 ring_color,
                 shadow_color,
             )
-            on:mouseenter=move |_| { inventory_context.hovered_item.set(Some(item_specs.clone())) }
-            on:mouseleave=move |_| inventory_context.hovered_item.set(None)
+            on:mouseenter=move |_| {
+                let item_specs = item_specs.clone();
+                tooltip_context
+                    .content
+                    .set(
+                        Some(
+                            Arc::new(move || {
+                                let item_specs = item_specs.clone();
+                                view! { <ItemTooltip item_specs=item_specs /> }.into_any()
+                            }),
+                        ),
+                    )
+            }
+            on:mouseleave=move |_| tooltip_context.content.set(None)
         >
             <img
                 src=img_asset(&item_specs.icon)

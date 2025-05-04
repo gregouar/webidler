@@ -6,6 +6,7 @@ use shared::messages::server::InitGameMessage;
 use shared::messages::server::ServerMessage;
 use shared::messages::server::SyncGameStateMessage;
 
+use crate::components::ui::tooltip::DynamicTooltip;
 use crate::components::websocket::WebsocketContext;
 
 use super::battle_scene::BattleScene;
@@ -42,10 +43,9 @@ pub fn GameInstance() -> impl IntoView {
         }
     });
 
-    // let open_inventory = Signal::derive(move || game_context.open_inventory.get());
-
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
+            <DynamicTooltip />
             <Show
                 when=move || game_context.started.get()
                 fallback=move || view! { <p>"Connecting..."</p> }

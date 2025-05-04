@@ -21,7 +21,7 @@ use shared::{
             ItemSpecs, ItemStat, WeaponSpecs,
         },
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs},
-        skill::{Range, Shape, SkillEffect, SkillEffectType, SkillSpecs, TargetType},
+        skill::{DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs, TargetType},
     },
     messages::{
         client::{ClientConnectMessage, ClientMessage},
@@ -149,6 +149,7 @@ async fn handle_connect(
             effect_type: SkillEffectType::FlatDamage {
                 min: 10.0,
                 max: 30.0,
+                damage_type: DamageType::Fire,
             },
         }],
     });

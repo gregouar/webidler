@@ -111,9 +111,18 @@ fn apply_skill_effect<'a>(
         found_target = true;
 
         match skill_effect.effect_type {
-            SkillEffectType::FlatDamage { min, max } => {
+            SkillEffectType::FlatDamage {
+                min,
+                max,
+                damage_type,
+            } => {
                 if let Some(damage) = rng::random_range(min..=max) {
-                    characters_controller::damage_character(damage, target_state, target_specs);
+                    characters_controller::damage_character(
+                        damage,
+                        damage_type,
+                        target_state,
+                        target_specs,
+                    );
                 }
             }
             SkillEffectType::Heal { min, max } => {

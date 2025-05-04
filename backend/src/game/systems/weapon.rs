@@ -1,6 +1,6 @@
 use shared::data::{
     item::{AffixEffect, AffixEffectType, ItemCategory, ItemSpecs, ItemStat, WeaponSpecs},
-    skill::{SkillEffect, SkillEffectType, SkillSpecs, TargetType},
+    skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, TargetType},
 };
 
 // TODO: Where to call that?
@@ -75,6 +75,7 @@ pub fn make_weapon_skill(item_specs: &ItemSpecs) -> Option<SkillSpecs> {
             effect_type: SkillEffectType::FlatDamage {
                 min: weapon_specs.min_damage,
                 max: weapon_specs.max_damage,
+                damage_type: DamageType::Physical,
             },
         }],
     })

@@ -1,5 +1,12 @@
 use serde::{Deserialize, Serialize};
 
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SkillState {
+    pub elapsed_cooldown: f32,
+    pub is_ready: bool,
+    pub just_triggered: bool,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SkillSpecs {
     pub name: String,
@@ -19,11 +26,16 @@ pub struct SkillSpecs {
     pub effects: Vec<SkillEffect>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct SkillState {
-    pub elapsed_cooldown: f32,
-    pub is_ready: bool,
-    pub just_triggered: bool,
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SkillEffect {
+    #[serde(default)]
+    pub range: Range,
+    #[serde(default)]
+    pub target_type: TargetType,
+    #[serde(default)]
+    pub shape: Shape,
+
+    pub effect_type: SkillEffectType,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
@@ -68,27 +80,35 @@ impl Default for Shape {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct SkillEffect {
-    #[serde(default)]
-    pub range: Range,
-    #[serde(default)]
-    pub target_type: TargetType,
-    #[serde(default)]
-    pub shape: Shape,
-
-    pub effect_type: SkillEffectType,
+pub enum SkillEffectType {
+    FlatDamage {
+        min: f64,
+        max: f64,
+        #[serde(default)]
+        damage_type: DamageType,
+    },
+    Heal {
+        min: f64,
+        max: f64,
+    },
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum SkillEffectType {
-    FlatDamage { min: f64, max: f64 }, // TODO type
-    Heal { min: f64, max: f64 },
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+pub enum DamageType {
+    Physical,
+    Fire,
+}
+
+impl Default for DamageType {
+    fn default() -> Self {
+        DamageType::Physical
+    }
 }
 
 impl SkillEffect {
     pub fn increase_effect(&mut self, factor: f64) {
         match &mut self.effect_type {
-            SkillEffectType::FlatDamage { min, max } => {
+            SkillEffectType::FlatDamage { min, max, .. } => {
                 *min *= factor;
                 *max *= factor;
             }

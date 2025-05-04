@@ -2,9 +2,48 @@ use leptos::html::*;
 use leptos::prelude::*;
 use leptos_use::use_mouse;
 
+#[derive(Clone, Debug)]
+pub struct TooltipContext {
+    pub content: RwSignal<Option<ChildrenFn>>,
+    pub position: RwSignal<TooltipPosition>,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum TooltipPosition {
+    BottomRight,
+}
+
 // TODO: position
 #[component]
-pub fn DynamicTooltip(#[prop(into)] show: Signal<bool>, children: ChildrenFn) -> impl IntoView {
+pub fn DynamicTooltip() -> impl IntoView {
+    let tooltip_context = TooltipContext {
+        content: RwSignal::new(None),
+        position: RwSignal::new(TooltipPosition::BottomRight),
+    };
+    provide_context(tooltip_context.clone());
+
+    let show_tooltip = Signal::derive({
+        let tooltip_context = tooltip_context.clone();
+        move || tooltip_context.content.read().is_some()
+    });
+
+    view! {
+        <DynamicTooltipContent show=show_tooltip>
+            {move || {
+                tooltip_context
+                    .content
+                    .get()
+                    .map(|x| {
+                        view! { {x()} }
+                    })
+            }}
+        </DynamicTooltipContent>
+    }
+}
+
+// TODO: position
+#[component]
+fn DynamicTooltipContent(#[prop(into)] show: Signal<bool>, children: ChildrenFn) -> impl IntoView {
     let mouse = use_mouse();
 
     // See: https://book.leptos.dev/interlude_projecting_children.html
