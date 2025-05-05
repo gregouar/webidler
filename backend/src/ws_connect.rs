@@ -32,7 +32,7 @@ use shared::{
     },
 };
 
-use crate::game::{systems::weapon::make_weapon_skill, world::WorldBlueprint, GameInstance};
+use crate::game::{systems::player_controller, world::WorldBlueprint, GameInstance};
 use crate::websocket::WebSocketConnection;
 
 const CLIENT_INACTIVITY_TIMEOUT: Duration = Duration::from_secs(60);
@@ -114,70 +114,7 @@ async fn handle_connect(
     )
     .await?;
 
-    let weapon = ItemSpecs {
-        name: "Shortsword".to_string(),
-        description: "Fasty Slicy".to_string(),
-        icon: "items/shortsword.webp".to_string(),
-        item_level: 1,
-        rarity: ItemRarity::Normal,
-        affixes: Vec::new(),
-        item_category: ItemCategory::Weapon(WeaponSpecs {
-            base_cooldown: 1.0,
-            cooldown: 1.0,
-            range: Range::Melee,
-            shape: Shape::Single,
-            base_min_damage: 3.0,
-            min_damage: 3.0,
-            base_max_damage: 7.0,
-            max_damage: 7.0,
-        }),
-    };
-
-    let mut skill_specs = Vec::new();
-    if let Some(weapon_skill) = make_weapon_skill(&weapon) {
-        skill_specs.push(weapon_skill);
-    }
-    skill_specs.push(SkillSpecs {
-        name: String::from("Fireball"),
-        description: "A throw of mighty fireball, burning multiple enemies".to_string(),
-        icon: String::from("skills/fireball2.svg"),
-        skill_type: SkillType::Spell,
-        cooldown: 5.0,
-        mana_cost: 20.0,
-        upgrade_level: 1,
-        next_upgrade_cost: 10.0,
-        effects: vec![SkillEffect {
-            range: Range::Distance,
-            target_type: TargetType::Enemy,
-            shape: Shape::Square4,
-            effect_type: SkillEffectType::FlatDamage {
-                min: 10.0,
-                max: 30.0,
-                damage_type: DamageType::Fire,
-            },
-        }],
-    });
-    skill_specs.push(SkillSpecs {
-        name: String::from("Heal"),
-        description: "A minor healing spell for yourself".to_string(),
-        icon: String::from("skills/heal.svg"),
-        skill_type: SkillType::Spell,
-        cooldown: 30.0,
-        mana_cost: 20.0,
-        upgrade_level: 1,
-        next_upgrade_cost: 10.0,
-        effects: vec![SkillEffect {
-            range: Range::Melee,
-            target_type: TargetType::Me,
-            shape: Shape::Single,
-            effect_type: SkillEffectType::Heal {
-                min: 20.0,
-                max: 20.0,
-            },
-        }],
-    });
-
-    Ok(PlayerSpecs {
+    let mut player_specs = PlayerSpecs {
         character_specs: CharacterSpecs {
             name: msg.bearer.clone(),
             portrait: String::from("adventurers/human_male_2.webp"),
@@ -187,14 +124,54 @@ async fn handle_connect(
             max_health: 100.0,
             health_regen: 1.0,
         },
-        skill_specs,
+        skill_specs: vec![
+            SkillSpecs {
+                name: String::from("Fireball"),
+                description: "A throw of mighty fireball, burning multiple enemies".to_string(),
+                icon: String::from("skills/fireball2.svg"),
+                skill_type: SkillType::Spell,
+                cooldown: 5.0,
+                mana_cost: 20.0,
+                upgrade_level: 1,
+                next_upgrade_cost: 10.0,
+                effects: vec![SkillEffect {
+                    range: Range::Distance,
+                    target_type: TargetType::Enemy,
+                    shape: Shape::Square4,
+                    effect_type: SkillEffectType::FlatDamage {
+                        min: 10.0,
+                        max: 30.0,
+                        damage_type: DamageType::Fire,
+                    },
+                }],
+            },
+            SkillSpecs {
+                name: String::from("Heal"),
+                description: "A minor healing spell for yourself".to_string(),
+                icon: String::from("skills/heal.svg"),
+                skill_type: SkillType::Spell,
+                cooldown: 30.0,
+                mana_cost: 20.0,
+                upgrade_level: 1,
+                next_upgrade_cost: 10.0,
+                effects: vec![SkillEffect {
+                    range: Range::Melee,
+                    target_type: TargetType::Me,
+                    shape: Shape::Single,
+                    effect_type: SkillEffectType::Heal {
+                        min: 20.0,
+                        max: 20.0,
+                    },
+                }],
+            },
+        ],
         level: 1,
         experience_needed: 10.0,
         max_mana: 100.0,
         mana_regen: 3.0,
-        auto_skills: vec![true, false, false],
+        auto_skills: vec![false, false],
         inventory: PlayerInventory {
-            weapon_specs: Some(weapon),
+            weapon_specs: None,
             max_bag_size: 40,
             bag: vec![
                 ItemSpecs {
@@ -315,5 +292,30 @@ async fn handle_connect(
                 },
             ],
         },
-    })
+    };
+
+    player_controller::equip_weapon(
+        &mut player_specs,
+        None,
+        ItemSpecs {
+            name: "Shortsword".to_string(),
+            description: "Fasty Slicy".to_string(),
+            icon: "items/shortsword.webp".to_string(),
+            item_level: 1,
+            rarity: ItemRarity::Normal,
+            affixes: Vec::new(),
+            item_category: ItemCategory::Weapon(WeaponSpecs {
+                base_cooldown: 1.0,
+                cooldown: 1.0,
+                range: Range::Melee,
+                shape: Shape::Single,
+                base_min_damage: 3.0,
+                min_damage: 3.0,
+                base_max_damage: 7.0,
+                max_damage: 7.0,
+            }),
+        },
+    );
+
+    Ok(player_specs)
 }
