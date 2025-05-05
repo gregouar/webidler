@@ -1,6 +1,7 @@
 use leptos::prelude::*;
 
 use shared::data::{
+    item::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerResources, PlayerSpecs, PlayerState},
     world::{WorldSpecs, WorldState},
@@ -21,6 +22,8 @@ pub struct GameContext {
     pub monster_specs: RwSignal<Vec<MonsterSpecs>>,
     pub monster_states: RwSignal<Vec<MonsterState>>,
 
+    pub queued_loot: RwSignal<Vec<QueuedLoot>>,
+
     // TODO: Is this really the correct place? Should we have a UI context?
     pub open_inventory: RwSignal<bool>,
 }
@@ -40,6 +43,8 @@ impl GameContext {
             monster_wave: RwSignal::new(0),
             monster_specs: RwSignal::new(Vec::new()),
             monster_states: RwSignal::new(Vec::new()),
+
+            queued_loot: RwSignal::new(Vec::new()),
 
             open_inventory: RwSignal::new(false),
         }

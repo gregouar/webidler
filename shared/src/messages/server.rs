@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
+    item::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerResources, PlayerSpecs, PlayerState},
     world::{WorldSpecs, WorldState},
@@ -38,8 +39,7 @@ pub struct SyncGameStateMessage {
     pub player_specs: Option<PlayerSpecs>,
     pub player_state: PlayerState,
     pub player_resources: PlayerResources,
-    // TODO: Optional inventory
-    // monster_specs list is only updated when monsters change
     pub monster_specs: Option<Vec<MonsterSpecs>>,
     pub monster_states: Vec<MonsterState>,
+    pub queued_loot: Option<Vec<QueuedLoot>>,
 }

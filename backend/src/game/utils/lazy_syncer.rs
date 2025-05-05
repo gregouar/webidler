@@ -1,11 +1,11 @@
 /// A helper class to keep track of whether a data struct should be resync with the client.
 /// Based on the fact the data was accessed as mutable.
-pub struct LazySyncer<T> {
+pub struct LazySyncer<T: Clone> {
     inner: T,
     need_to_sync: bool,
 }
 
-impl<T> LazySyncer<T> {
+impl<T: Clone> LazySyncer<T> {
     pub fn new(inner: T) -> Self {
         Self {
             inner,
@@ -23,11 +23,13 @@ impl<T> LazySyncer<T> {
         &self.inner
     }
 
-    pub fn need_to_sync(&self) -> bool {
-        self.need_to_sync
-    }
-
-    pub fn reset_sync(&mut self) {
-        self.need_to_sync = false;
+    pub fn sync(&mut self) -> Option<T> {
+        match self.need_to_sync {
+            true => {
+                self.need_to_sync = false;
+                Some(self.inner.clone())
+            }
+            false => None,
+        }
     }
 }

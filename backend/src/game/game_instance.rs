@@ -9,7 +9,7 @@ use std::{
 
 use shared::{
     data::{
-        item::ItemCategory,
+        item::{ItemCategory, QueuedLoot},
         monster::{MonsterSpecs, MonsterState},
         player::{PlayerResources, PlayerSpecs, PlayerState},
         world::WorldState,
@@ -20,7 +20,11 @@ use shared::{
     },
 };
 
-use super::{data::DataInit, systems::player_controller::PlayerController, world::WorldBlueprint};
+use super::{
+    data::DataInit,
+    systems::{loot_controller, player_controller::PlayerController},
+    world::WorldBlueprint,
+};
 use super::{
     systems::{
         characters_updater, monsters_controller, monsters_updater, monsters_wave,
@@ -54,6 +58,8 @@ pub struct GameInstance<'a> {
     monster_specs: LazySyncer<Vec<MonsterSpecs>>,
     monster_states: Vec<MonsterState>,
     monster_wave_delay: Instant,
+
+    queued_loot: LazySyncer<Vec<QueuedLoot>>,
 }
 
 impl<'a> GameInstance<'a> {
@@ -81,6 +87,8 @@ impl<'a> GameInstance<'a> {
             monster_specs: LazySyncer::new(Vec::new()),
             monster_states: Vec::new(),
             monster_wave_delay: Instant::now(),
+
+            queued_loot: LazySyncer::new(Vec::new()),
         }
     }
 
@@ -277,6 +285,7 @@ impl<'a> GameInstance<'a> {
 
             if monsters_still_alive.is_empty() {
                 if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
+                    loot_controller::drop_loot(self.queued_loot.mutate());
                     self.generate_monsters_wave().await?;
                 }
             } else {
@@ -311,21 +320,12 @@ impl<'a> GameInstance<'a> {
             .send(
                 &SyncGameStateMessage {
                     world_state: self.world_state.clone(),
-                    player_specs: if self.player_specs.need_to_sync() {
-                        self.player_specs.reset_sync();
-                        Some(self.player_specs.read().clone())
-                    } else {
-                        None
-                    },
+                    player_specs: self.player_specs.sync(),
                     player_state: self.player_state.clone(),
                     player_resources: self.player_resources.clone(),
-                    monster_specs: if self.monster_specs.need_to_sync() {
-                        self.monster_specs.reset_sync();
-                        Some(self.monster_specs.read().clone())
-                    } else {
-                        None
-                    },
+                    monster_specs: self.monster_specs.sync(),
                     monster_states: self.monster_states.clone(),
+                    queued_loot: self.queued_loot.sync(),
                 }
                 .into(),
             )

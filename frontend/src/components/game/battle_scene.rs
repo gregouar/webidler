@@ -3,6 +3,7 @@ use leptos::prelude::*;
 
 use crate::assets::img_asset;
 
+use super::loot_queue::LootQueue;
 use super::monsters_grid::MonstersGrid;
 use super::player_card::PlayerCard;
 use super::GameContext;
@@ -16,6 +17,7 @@ pub fn BattleScene() -> impl IntoView {
             <div class="shadow-lg rounded-md overflow-hidden  w-full col-span-2 justify-self-start">
                 <BattleSceneHeader />
                 <MonstersGrid />
+                <LootQueue />
                 <BattleSceneFooter />
             </div>
 
@@ -65,7 +67,7 @@ pub fn BattleSceneFooter() -> impl IntoView {
 
     view! {
         <div
-            class="relative overflow-hidden w-full h-16 bg-center bg-repeat-x flex items-center justify-center"
+            class="relative overflow-hidden z-10 w-full h-16 bg-center bg-repeat-x flex items-center justify-center"
             style=footer_background
         >
             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>

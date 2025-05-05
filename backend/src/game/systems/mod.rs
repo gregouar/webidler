@@ -1,6 +1,7 @@
 pub mod characters_controller;
 pub mod characters_updater;
 pub mod increase_factors;
+pub mod loot_controller;
 pub mod monsters_controller;
 pub mod monsters_updater;
 pub mod monsters_wave;

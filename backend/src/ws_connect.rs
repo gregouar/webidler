@@ -16,10 +16,8 @@ use std::{ops::ControlFlow, vec};
 use shared::{
     data::{
         character::CharacterSize,
-        item::{
-            AffixEffect, AffixEffectType, AffixType, ItemAffix, ItemCategory, ItemRarity,
-            ItemSpecs, ItemStat, WeaponSpecs,
-        },
+        item::{ItemCategory, ItemRarity, ItemSpecs, WeaponSpecs},
+        item_affix::{AffixEffect, AffixEffectType, AffixType, ItemAffix, ItemStat},
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs},
         skill::{
             DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs, SkillType,

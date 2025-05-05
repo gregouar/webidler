@@ -82,6 +82,7 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
             player_state,
             monster_specs,
             monster_states,
+            queued_loot,
         }) => {
             game_context.world_state.set(world_state);
             if let Some(player_specs) = player_specs {
@@ -94,6 +95,9 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
                 game_context.monster_specs.set(monster_specs);
             }
             game_context.monster_states.set(monster_states);
+            if let Some(queued_loot) = queued_loot {
+                game_context.queued_loot.set(queued_loot);
+            }
         }
     }
 }

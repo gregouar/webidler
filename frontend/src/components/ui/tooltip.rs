@@ -46,13 +46,30 @@ pub fn DynamicTooltip() -> impl IntoView {
         move || tooltip_context.content.read().is_some()
     };
 
-    let mouse = use_mouse();
+    let tooltip_size = RwSignal::new((0.0, 0.0));
+    let tooltip_ref: NodeRef<Div> = NodeRef::new();
 
-    let origin = move || match tooltip_context.position.get() {
-        DynamicTooltipPosition::BottomLeft => "transform -translate-x-full",
-        DynamicTooltipPosition::BottomRight => "",
-        DynamicTooltipPosition::TopLeft => "transform -translate-y-full -translate-x-full",
-        DynamicTooltipPosition::TopRight => "transform -translate-y-full",
+    Effect::new(move |_| {
+        if let Some(el) = tooltip_ref.get() {
+            let rect = el.get_bounding_client_rect();
+            tooltip_size.set((rect.width(), rect.height()));
+        }
+    });
+
+    let mouse = use_mouse();
+    let style = move || {
+        let mouse_x = mouse.x.get();
+        let mouse_y = mouse.y.get();
+        let (width, height) = tooltip_size.get();
+
+        let (left, top) = match tooltip_context.position.get() {
+            DynamicTooltipPosition::BottomLeft => (mouse_x - width, mouse_y),
+            DynamicTooltipPosition::BottomRight => (mouse_x, mouse_y),
+            DynamicTooltipPosition::TopLeft => (mouse_x - width, mouse_y - height),
+            DynamicTooltipPosition::TopRight => (mouse_x, mouse_y - height),
+        };
+
+        format!("top: {}px; left: {}px;", top, left)
     };
 
     view! {
@@ -60,15 +77,10 @@ pub fn DynamicTooltip() -> impl IntoView {
             {move || {
                 view! {
                     <div
-                        class=move || {
-                            format!(
-                                "fixed z-50 pointer-events-none transition-opacity duration-150 p-2 {}",
-                                origin(),
-                            )
-                        }
-                        style=move || {
-                            format!("top: {}px; left: {}px;", mouse.y.get(), mouse.x.get())
-                        }
+                        class="fixed z-50 pointer-events-none transition-opacity duration-150 p-2 {}"
+
+                        node_ref=tooltip_ref
+                        style=style
                     >
                         {move || {
                             tooltip_context

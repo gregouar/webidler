@@ -1,5 +1,6 @@
 use shared::data::{
-    item::{AffixEffect, AffixEffectType, ItemCategory, ItemSpecs, ItemStat, WeaponSpecs},
+    item::{ItemCategory, ItemSpecs, WeaponSpecs},
+    item_affix::{AffixEffect, AffixEffectType, ItemStat},
     skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillType, TargetType},
 };
 
