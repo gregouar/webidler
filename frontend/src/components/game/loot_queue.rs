@@ -43,7 +43,7 @@ pub fn LootQueue() -> impl IntoView {
                 key=|loot| loot.identifier
                 children=move |loot| {
                     let game_context = expect_context::<GameContext>();
-                    let style = move || {
+                    let position_style = move || {
                         let index = game_context
                             .queued_loot
                             .read()
@@ -52,6 +52,10 @@ pub fn LootQueue() -> impl IntoView {
                             .rev()
                             .position(|l| l.identifier == loot.identifier)
                             .unwrap_or_default();
+                        format!("left: {}%;", 4 + index * 20)
+                    };
+                    let game_context = expect_context::<GameContext>();
+                    let animation_style = move || {
                         let state = game_context
                             .queued_loot
                             .read()
@@ -59,31 +63,27 @@ pub fn LootQueue() -> impl IntoView {
                             .find(|l| l.identifier == loot.identifier)
                             .map(|l| l.state)
                             .unwrap_or_default();
-                        format!(
-                            "left: {}%; {}",
-                            4 + index * 20,
-                            match state {
-                                LootState::Normal => {
-                                    "animation: loot-float 2.5s ease-in-out infinite"
-                                }
-                                LootState::WillDisappear => {
-                                    "animation: loot-vibrate 0.3s linear infinite"
-                                }
-                                LootState::HasDisappeared => {
-                                    "animation: loot-pickup 0.3s ease forwards; pointer-events: none;"
-                                }
-                            },
-                        )
+                        match state {
+                            LootState::Normal => "animation: loot-float 2.5s ease-in-out infinite",
+                            LootState::WillDisappear => {
+                                "animation: loot-vibrate 0.3s linear infinite"
+                            }
+                            LootState::HasDisappeared => {
+                                "animation: loot-pickup 0.3s ease forwards; pointer-events: none;"
+                            }
+                        }
                     };
+
                     view! {
                         <div style="animation: loot-drop 1.3s ease forwards;">
                             <div
                                 class="
-                                absolute bottom-0 w-[12%] shrink-0 transition-all duration-500 ease-in-out 
+                                absolute bottom-0 w-[12%] shrink-0 transition-all duration-200 ease-in-out 
+                                translate-y-1/2 hover:translate-y-1/4 
                                 "
-                                style=style
+                                style=position_style
                             >
-                                <div class="relative translate-y-1/2 hover:translate-y-1/4  transition-all duration-200 ease-in-out ">
+                                <div class="relative  " style=animation_style>
                                     <ItemCard
                                         item_specs=loot.item_specs
                                         tooltip_position=DynamicTooltipPosition::TopLeft
