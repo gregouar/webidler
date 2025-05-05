@@ -5,7 +5,7 @@ use shared::data::{
 
 use crate::rng;
 
-const MAX_QUEUE_SIZE: usize = 2;
+const MAX_QUEUE_SIZE: usize = 5;
 
 // TODO: LootPool, area level, ..?
 pub fn drop_loot(queued_loot: &mut Vec<QueuedLoot>) {

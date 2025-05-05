@@ -1,9 +1,7 @@
 use std::sync::Arc;
 
 use leptos::html::*;
-use leptos::logging;
 use leptos::prelude::*;
-use leptos_use::use_mouse;
 
 use shared::data::{
     item::{ItemCategory, ItemRarity, ItemSpecs},
@@ -46,7 +44,7 @@ pub fn ItemCard(item_specs: ItemSpecs, tooltip_position: DynamicTooltipPosition)
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let rc_item_specs = Arc::new(item_specs.clone());
-    let rc_item_specs2 = rc_item_specs.clone();
+    // let rc_item_specs2 = rc_item_specs.clone();
     let show_tooltip = move |_| {
         let item_specs = rc_item_specs.clone();
         tooltip_context.set_content(
@@ -58,56 +56,61 @@ pub fn ItemCard(item_specs: ItemSpecs, tooltip_position: DynamicTooltipPosition)
         );
     };
 
-    let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let show_tooltip2 = move |_| {
-        let item_specs = rc_item_specs2.clone();
-        tooltip_context.set_content(
-            move || {
-                let item_specs = item_specs.clone();
-                view! { <ItemTooltip item_specs=item_specs /> }.into_any()
-            },
-            tooltip_position,
-        );
+    // let tooltip_context = expect_context::<DynamicTooltipContext>();
+    // let show_tooltip2 = move |_| {
+    //     let item_specs = rc_item_specs2.clone();
+    //     tooltip_context.set_content(
+    //         move || {
+    //             let item_specs = item_specs.clone();
+    //             view! { <ItemTooltip item_specs=item_specs /> }.into_any()
+    //         },
+    //         tooltip_position,
+    //     );
+    // };
+
+    let hide_tooltip = {
+        let tooltip_context = expect_context::<DynamicTooltipContext>();
+        move |_| tooltip_context.hide()
     };
 
-    let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let hide_tooltip = move |_| tooltip_context.hide();
-    let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let hide_tooltip2 = move |_| tooltip_context.hide();
-
-    let el_ref = NodeRef::new();
-
-    let mouse = use_mouse();
-    let mouse_ref = mouse.x.get();
-
-    let mouse = use_mouse(); // TODO: How to retrieve last known position without being registered for tracking?
-    let on_mount = move |el: NodeRef<Div>| {
-        let el = el.get().unwrap();
-        let rect = el.get_bounding_client_rect();
-        let (x, y) = (mouse.x.get_untracked(), mouse.y.get_untracked());
-
-        logging::error!("{},{}", mouse_ref, mouse_ref);
-        logging::error!("{},{}", x, y);
-        logging::error!(
-            "{},{},{},{}",
-            rect.left(),
-            rect.right(),
-            rect.top(),
-            rect.bottom()
-        );
-
-        if x >= rect.left() && x <= rect.right() && y >= rect.top() && y <= rect.bottom() {
-            show_tooltip2(());
-        };
+    let hide_tooltip2 = {
+        let tooltip_context = expect_context::<DynamicTooltipContext>();
+        move |_| tooltip_context.hide()
     };
 
-    Effect::new(move || {
-        on_mount(el_ref);
-    });
+    // let el_ref = NodeRef::new();
+
+    // let mouse = use_mouse();
+    // let mouse_ref = mouse.x.get();
+
+    // let mouse = use_mouse(); // TODO: How to retrieve last known position without being registered for tracking?
+    // let on_mount = move |el: NodeRef<Div>| {
+    //     let el = el.get().unwrap();
+    //     let rect = el.get_bounding_client_rect();
+    //     let (x, y) = (mouse.x.get_untracked(), mouse.y.get_untracked());
+
+    //     logging::error!("{},{}", mouse_ref, mouse_ref);
+    //     logging::error!("{},{}", x, y);
+    //     logging::error!(
+    //         "{},{},{},{}",
+    //         rect.left(),
+    //         rect.right(),
+    //         rect.top(),
+    //         rect.bottom()
+    //     );
+
+    //     if x >= rect.left() && x <= rect.right() && y >= rect.top() && y <= rect.bottom() {
+    //         show_tooltip2(());
+    //     };
+    // };
+
+    // Effect::new(move || {
+    //     on_mount(el_ref);
+    // });
 
     view! {
         <div
-            node_ref=el_ref
+            // node_ref=el_ref
             class=format!(
                 "relative group flex items-center justify-center w-full h-full
                 rounded-md p-1 bg-gradient-to-br {} border-4 {} ring-2 {} shadow-md {}",
@@ -131,9 +134,6 @@ pub fn ItemCard(item_specs: ItemSpecs, tooltip_position: DynamicTooltipPosition)
     }
 }
 
-// TODO: There is something bad going on with the DynamicTooltip
-// => mouse move means it recomputes the whole ItemTooltip every time :(
-// Could partially solve it by precomputing some stuff (so we would store not the ItemSpecs but a computed version)
 #[component]
 fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     let extra_info = match &item_specs.item_category {
@@ -179,7 +179,6 @@ fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
     let affixes = formatted_affix_list(item_specs.aggregate_effects());
 
-    // Color setups
     let (name_color, border_color, ring_color, shadow_color) = match item_specs.rarity {
         ItemRarity::Normal => (
             "text-white",

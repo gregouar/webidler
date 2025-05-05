@@ -285,6 +285,7 @@ impl<'a> GameInstance<'a> {
 
             if monsters_still_alive.is_empty() {
                 if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
+                    // TODO: Drop on enemy death, not wave generate
                     loot_controller::drop_loot(self.queued_loot.mutate());
                     self.generate_monsters_wave().await?;
                 }

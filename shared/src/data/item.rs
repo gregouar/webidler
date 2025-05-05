@@ -96,3 +96,9 @@ pub enum LootState {
     WillDisappear,
     HasDisappeared,
 }
+
+impl Default for LootState {
+    fn default() -> Self {
+        LootState::Normal
+    }
+}
