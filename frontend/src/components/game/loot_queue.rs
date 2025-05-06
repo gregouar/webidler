@@ -40,6 +40,7 @@ pub fn LootQueue() -> impl IntoView {
                     to {
                         opacity: 0;
                         transform: scale(1.5) translateY(-200%);
+                        z-index: -10;
                     }
                 }
                 @keyframes loot-vibrate {
@@ -61,7 +62,10 @@ pub fn LootQueue() -> impl IntoView {
                             .queued_loot
                             .read()
                             .iter()
-                            .filter(|l| l.state != LootState::HasDisappeared)
+                            .filter(|l| {
+                                l.state != LootState::HasDisappeared
+                                    || l.identifier == loot.identifier
+                            })
                             .rev()
                             .position(|l| l.identifier == loot.identifier)
                             .unwrap_or_default();
@@ -77,11 +81,9 @@ pub fn LootQueue() -> impl IntoView {
                             .map(|l| l.state)
                             .unwrap_or_default();
                         match state {
-                            LootState::Normal => {
-                                "animation: loot-float 2.5s ease-in-out infinite; pointer-events: auto;"
-                            }
+                            LootState::Normal => "animation: loot-float 2.5s ease-in-out infinite;",
                             LootState::WillDisappear => {
-                                "animation: loot-vibrate 0.3s linear infinite; pointer-events: auto;"
+                                "animation: loot-vibrate 0.3s linear infinite;"
                             }
                             LootState::HasDisappeared => {
                                 "animation: loot-pickup 0.3s ease forwards; pointer-events: none;"
