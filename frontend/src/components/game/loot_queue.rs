@@ -42,6 +42,8 @@ pub fn LootQueue() -> impl IntoView {
                         transform: scale(1.5) translateY(-200%);
                     }
                     100% {
+                        opacity: 0;
+                        transform: scale(1.5) translateY(-200%);
                         visibility: hidden;
                     }
                 }
