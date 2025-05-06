@@ -42,7 +42,7 @@ pub fn LootQueue() -> impl IntoView {
                         transform: scale(1.5) translateY(-200%);
                     }
                     100% {
-                     visibility: hidden;
+                        visibility: hidden;
                     }
                 }
                 @keyframes loot-vibrate {
@@ -99,13 +99,13 @@ pub fn LootQueue() -> impl IntoView {
                                 class="
                                 absolute bottom-0 w-[12%]
                                 shrink-0 transition-all duration-200 ease-in-out 
-                                translate-y-1/2 hover:translate-y-1/4 
                                 "
-                                style=position_style
+                                // style=position_style
+                                style=move || format!("{} {}", animation_style(), position_style())
                             >
                                 <div
-                                    class="relative"
-                                    style=animation_style
+                                    class="relative
+                                    translate-y-1/2 hover:translate-y-1/4 "
                                     on:click={
                                         let pickup_loot = pickup_loot.clone();
                                         move |_| pickup_loot(loot.identifier)
