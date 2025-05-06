@@ -96,6 +96,7 @@ pub fn LootQueue() -> impl IntoView {
                         class="
                         absolute bottom-0 w-[12%]
                         transition-all duration-500 ease
+                        pointer-events-none
                         "
                         style=move || {
                             format!(
@@ -106,9 +107,12 @@ pub fn LootQueue() -> impl IntoView {
                         }
                     >
                         <div
-                            class="relative
+                            class="
+                            relative
                             transition-all duration-200 ease-in-out 
-                            translate-y-1/2 hover:translate-y-1/4"
+                            translate-y-1/2 hover:translate-y-1/4
+                            pointer-events-auto
+                            "
                             on:click={
                                 let pickup_loot = pickup_loot.clone();
                                 move |_| pickup_loot(loot.identifier)
