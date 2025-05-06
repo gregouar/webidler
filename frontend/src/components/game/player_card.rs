@@ -139,7 +139,12 @@ pub fn PlayerCard() -> impl IntoView {
                         />
                     </StaticTooltip>
                     <CharacterPortrait
-                        image_uri=game_context.player_specs.read().character_specs.portrait.clone()
+                        image_uri=game_context
+                            .player_specs
+                            .read_untracked()
+                            .character_specs
+                            .portrait
+                            .clone()
                         character_name="player".to_string()
                         just_hurt=just_hurt
                         is_dead=is_dead
@@ -257,9 +262,10 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         }
     });
 
+    // TODO: Make dynamic in case of reset?
     let initial_auto_use = *game_context
         .player_specs
-        .get()
+        .read_untracked()
         .auto_skills
         .get(index)
         .unwrap_or(&false);

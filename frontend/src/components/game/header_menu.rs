@@ -12,22 +12,29 @@ use super::GameContext;
 
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
-
     let navigate = leptos_router::hooks::use_navigate();
     let abandon_quest = move |_| navigate("/", Default::default());
 
-    let musics: Vec<String> = game_context
-        .world_specs
-        .read()
-        .musics
-        .iter()
-        .map(|m| music_asset(m))
-        .collect();
+    let musics = {
+        let game_context = expect_context::<GameContext>();
+        move || {
+            game_context
+                .world_specs
+                .read()
+                .musics
+                .iter()
+                .map(|m| music_asset(m))
+                .collect::<Vec<_>>()
+        }
+    };
 
-    let gold = Signal::derive(move || game_context.player_resources.read().gold);
+    let gold = {
+        let game_context = expect_context::<GameContext>();
+        Signal::derive(move || game_context.player_resources.read().gold)
+    };
     let gems = Signal::derive(move || 0.0);
 
+    let game_context = expect_context::<GameContext>();
     view! {
         <div class="relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
@@ -56,12 +63,14 @@ pub fn HeaderMenu() -> impl IntoView {
             </div>
             <div class="flex space-x-2  w-full">
                 <audio autoplay loop controls>
-                    {musics
-                        .into_iter()
-                        .map(|src| {
-                            view! { <source src=src /> }
-                        })
-                        .collect_view()}
+                    {move || {
+                        musics()
+                            .into_iter()
+                            .map(|src| {
+                                view! { <source src=src /> }
+                            })
+                            .collect_view()
+                    }}
                 </audio>
 
                 <MenuButton on:click=move |_| {

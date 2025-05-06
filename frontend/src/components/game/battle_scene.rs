@@ -44,7 +44,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
             <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-2xl font-bold">
                 <span class="[font-variant:small-caps]">
-                    {game_context.world_specs.read().name.clone()}
+                    {move || game_context.world_specs.read().name.clone()}
                 </span>
                 {move || {
                     format!(" — Area Level: {}", game_context.world_state.read().area_level)
