@@ -9,12 +9,12 @@ const MAX_QUEUE_SIZE: usize = 5;
 
 // TODO: LootPool, area level, ..?
 pub fn drop_loot(queued_loot: &mut Vec<QueuedLoot>) {
-    queued_loot.retain(|loot| loot.state != LootState::HasDisappeared);
-
     let last_index = queued_loot
         .last()
         .map(|x| x.identifier + 1)
         .unwrap_or_default();
+
+    queued_loot.retain(|loot| loot.state != LootState::HasDisappeared);
 
     let rarity = match rng::random_range(0..4).unwrap_or(0) {
         0 => ItemRarity::Normal,

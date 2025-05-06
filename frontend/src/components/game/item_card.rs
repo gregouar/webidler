@@ -112,8 +112,9 @@ pub fn ItemCard(item_specs: ItemSpecs, tooltip_position: DynamicTooltipPosition)
         <div
             // node_ref=el_ref
             class=format!(
-                "relative group flex items-center justify-center w-full h-full
-                rounded-md p-1 bg-gradient-to-br {} border-4 {} ring-2 {} shadow-md {}",
+                "relative group flex items-center justify-center w-full aspect-2/3
+                rounded-md p-1 bg-gradient-to-br {} border-4 {} ring-2 {} shadow-md {}
+                ",
                 gradient,
                 border_color,
                 ring_color,

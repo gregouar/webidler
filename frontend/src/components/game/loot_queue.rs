@@ -93,7 +93,8 @@ pub fn LootQueue() -> impl IntoView {
                         <div style="animation: loot-drop 1.3s ease forwards;">
                             <div
                                 class="
-                                absolute bottom-0 w-[12%] shrink-0 transition-all duration-200 ease-in-out 
+                                absolute bottom-0 w-[12%]
+                                shrink-0 transition-all duration-200 ease-in-out 
                                 translate-y-1/2 hover:translate-y-1/4 
                                 "
                                 style=position_style
