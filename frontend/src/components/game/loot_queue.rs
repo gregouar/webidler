@@ -37,10 +37,12 @@ pub fn LootQueue() -> impl IntoView {
                     50% { transform: translateY(-4%); }
                 }
                 @keyframes loot-pickup {
-                    to {
+                    99% {
                         opacity: 0;
                         transform: scale(1.5) translateY(-200%);
-                        z-index: -10;
+                    }
+                    100% {
+                     visibility: hidden;
                     }
                 }
                 @keyframes loot-vibrate {
