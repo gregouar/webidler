@@ -181,10 +181,10 @@ pub fn PlayerCard() -> impl IntoView {
                         reset=just_leveled_up
                     />
                 </StaticTooltip>
-
                 <FancyButton disabled=disable_level_up on:click=level_up>
-                    <span class="text-2xl">"+"</span>
+                    <span class="text-lg">"Level Up"</span>
                 </FancyButton>
+
             </div>
 
             <div class="grid grid-cols-4 gap-2">
@@ -370,11 +370,13 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     view! {
         <div class="flex flex-col">
             <button
-                class="
-                disabled:pointer-events-none
-                disabled:brightness-80 disabled:sepia-0
-                active:brightness-50 active:sepia p-1
-                "
+                class=move || {
+                    if is_ready() {
+                        "active:brightness-50 active:sepia p-1"
+                    } else {
+                        "brightness-80 sepia-0 p-1"
+                    }
+                }
                 on:mouseenter=show_tooltip
                 on:mouseleave=hide_tooltip
                 on:click=use_skill
