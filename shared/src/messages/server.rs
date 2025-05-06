@@ -13,6 +13,7 @@ impl_into_message! {
     #[derive(Serialize, Deserialize, Debug, Clone,)]
     pub enum ServerMessage {
         Connect(ConnectMessage),
+        Error(ErrorMessage),
         InitGame(InitGameMessage),
         UpdateGame(SyncGameStateMessage),
     }
@@ -22,6 +23,18 @@ impl_into_message! {
 pub struct ConnectMessage {
     pub greeting: String,
     pub value: i32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ErrorMessage {
+    pub error_type: ErrorType,
+    pub message: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub enum ErrorType {
+    Server,
+    Game,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

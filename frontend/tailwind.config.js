@@ -25,8 +25,6 @@ module.exports = {
       "aspect-[8/3]",
       "aspect-[8/6]",
       "aspect-[12/6]",
-      "z-50",
-      "translate-y-3/5",
     ],
     theme: {
       extend: {

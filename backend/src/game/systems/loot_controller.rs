@@ -10,8 +10,9 @@ const MAX_QUEUE_SIZE: usize = 5;
 // TODO: LootPool, area level, ..?
 pub fn drop_loot(queued_loot: &mut Vec<QueuedLoot>) {
     let last_index = queued_loot
-        .last()
+        .iter()
         .map(|x| x.identifier + 1)
+        .max()
         .unwrap_or_default();
 
     queued_loot.retain(|loot| loot.state != LootState::HasDisappeared);
@@ -44,17 +45,33 @@ pub fn pickup_loot(
     player_specs: &mut PlayerSpecs,
     queued_loot: &mut Vec<QueuedLoot>,
     loot_identifier: u32,
-) {
-    if let Some(loot) = queued_loot
-        .iter_mut()
-        .find(|x| x.identifier == loot_identifier)
-    {
-        loot.state = LootState::HasDisappeared;
-        // TODO: Bag limit
-        player_specs.inventory.bag.push(loot.item_specs.clone());
+) -> bool {
+    let mut move_item = None;
 
-        update_loot_states(queued_loot);
+    if let Some((index, loot)) = queued_loot
+        .iter_mut()
+        .enumerate()
+        .find(|(_, x)| x.identifier == loot_identifier)
+    {
+        if player_specs.inventory.bag.len() < player_specs.inventory.max_bag_size as usize {
+            loot.state = LootState::HasDisappeared;
+            player_specs.inventory.bag.push(loot.item_specs.clone());
+        } else {
+            move_item = Some(index);
+        }
     }
+
+    if let Some(index) = move_item {
+        let mut i = index;
+        while i < queued_loot.len() - 1 {
+            queued_loot.swap(i, i + 1);
+            i += 1;
+        }
+    }
+
+    update_loot_states(queued_loot);
+
+    move_item.is_none()
 }
 
 fn update_loot_states(queued_loot: &mut Vec<QueuedLoot>) {

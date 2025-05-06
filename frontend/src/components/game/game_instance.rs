@@ -1,10 +1,9 @@
+use leptoaster::expect_toaster;
 use leptos::html::*;
 use leptos::prelude::*;
 
 use shared::messages::client::ClientConnectMessage;
-use shared::messages::server::InitGameMessage;
-use shared::messages::server::ServerMessage;
-use shared::messages::server::SyncGameStateMessage;
+use shared::messages::server::{ErrorType, InitGameMessage, ServerMessage, SyncGameStateMessage};
 
 use crate::components::ui::tooltip::DynamicTooltip;
 use crate::components::websocket::WebsocketContext;
@@ -61,6 +60,7 @@ pub fn GameInstance() -> impl IntoView {
 }
 
 fn handle_message(game_context: &GameContext, message: ServerMessage) {
+    let toaster = expect_toaster();
     match message {
         ServerMessage::Connect(_) => {}
         ServerMessage::InitGame(InitGameMessage {
@@ -99,5 +99,9 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
                 game_context.queued_loot.set(queued_loot);
             }
         }
+        ServerMessage::Error(error_message) => match error_message.error_type {
+            ErrorType::Server => toaster.error(error_message.message),
+            ErrorType::Game => toaster.info(error_message.message),
+        },
     }
 }

@@ -16,7 +16,7 @@ use shared::{
     },
     messages::{
         client::ClientMessage,
-        server::{InitGameMessage, SyncGameStateMessage},
+        server::{ErrorMessage, ErrorType, InitGameMessage, SyncGameStateMessage},
     },
 };
 
@@ -109,6 +109,7 @@ impl<'a> GameInstance<'a> {
             last_update_time = Instant::now();
             self.update_entities(elapsed_time).await;
 
+            // TODO: Do as background task and join
             if let Err(e) = self.sync_client().await {
                 tracing::warn!("failed to sync client: {}", e);
             }
@@ -129,7 +130,13 @@ impl<'a> GameInstance<'a> {
         // We limit the amount of events we handle in one loop
         for _ in 1..100 {
             match self.client_conn.poll_receive() {
-                ControlFlow::Continue(Some(m)) => self.handle_client_message(m),
+                ControlFlow::Continue(Some(m)) => {
+                    if let Some(error_message) = self.handle_client_message(m) {
+                        if let Err(e) = self.client_conn.send(&error_message.into()).await {
+                            tracing::warn!("failed to send error to client: {}", e)
+                        }
+                    }
+                }
                 ControlFlow::Continue(None) => return ControlFlow::Continue(()), // No more messages
                 ControlFlow::Break(_) => return ControlFlow::Break(()), // Connection closed
             }
@@ -138,7 +145,7 @@ impl<'a> GameInstance<'a> {
         ControlFlow::Continue(())
     }
 
-    fn handle_client_message(&mut self, msg: ClientMessage) {
+    fn handle_client_message(&mut self, msg: ClientMessage) -> Option<ErrorMessage> {
         match msg {
             ClientMessage::Heartbeat => {}
             ClientMessage::UseSkill(m) => {
@@ -174,16 +181,28 @@ impl<'a> GameInstance<'a> {
                 &mut self.player_state,
                 m.item_index,
             ),
-            ClientMessage::PickupLoot(m) => loot_controller::pickup_loot(
-                self.player_specs.mutate(),
-                self.queued_loot.mutate(),
-                m.loot_identifier,
-            ),
+            ClientMessage::PickupLoot(m) => {
+                if !loot_controller::pickup_loot(
+                    self.player_specs.mutate(),
+                    self.queued_loot.mutate(),
+                    m.loot_identifier,
+                ) {
+                    return Some(ErrorMessage {
+                        error_type: ErrorType::Game,
+                        message: "Bag if full!".to_string(),
+                    });
+                }
+            }
             // Shouldn't receive other kind of messages:
             ClientMessage::Connect(_) => {
-                tracing::warn!("received unexpected message: {:?}", msg)
+                tracing::warn!("received unexpected message: {:?}", msg);
+                return Some(ErrorMessage {
+                    error_type: ErrorType::Server,
+                    message: "unexpected message received from client".to_string(),
+                });
             }
         }
+        None
     }
 
     async fn init_game(&mut self) -> Result<()> {
