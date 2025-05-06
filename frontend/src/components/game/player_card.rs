@@ -189,16 +189,7 @@ pub fn PlayerCard() -> impl IntoView {
 
             <div class="grid grid-cols-4 gap-2">
                 <For
-                    each=move || {
-                        game_context
-                            .player_specs
-                            .read()
-                            .skill_specs
-                            .iter()
-                            .enumerate()
-                            .map(|(i, _)| i)
-                            .collect::<Vec<_>>()
-                    }
+                    each=move || (0..game_context.player_specs.read().skill_specs.len())
                     key=|i| *i
                     let(i)
                 >

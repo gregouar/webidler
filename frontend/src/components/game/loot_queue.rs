@@ -89,42 +89,40 @@ pub fn LootQueue() -> impl IntoView {
             <For
                 each=move || game_context.queued_loot.get().into_iter()
                 key=|loot| loot.identifier
-                children=move |loot| {
-                    view! {
-                        <div style="animation: loot-drop 1.3s ease forwards;">
-                            <div
-                                class="
-                                absolute bottom-0 w-[12%]
-                                transition-all duration-500 ease
-                                "
-                                style=move || {
-                                    format!(
-                                        "{} {}",
-                                        animation_style(loot.identifier),
-                                        position_style(loot.identifier),
-                                    )
-                                }
-                            >
-                                <div
-                                    class="relative
-                                    transition-all duration-200 ease-in-out 
-                                    translate-y-1/2 hover:translate-y-1/4"
-                                    on:click={
-                                        let pickup_loot = pickup_loot.clone();
-                                        move |_| pickup_loot(loot.identifier)
-                                    }
-                                >
-                                    <ItemCard
-                                        item_specs=loot.item_specs
-                                        tooltip_position=DynamicTooltipPosition::TopLeft
-                                        class:shadow-lg
-                                    />
-                                </div>
-                            </div>
+                let(loot)
+            >
+                <div style="animation: loot-drop 1.3s ease forwards;">
+                    <div
+                        class="
+                        absolute bottom-0 w-[12%]
+                        transition-all duration-500 ease
+                        "
+                        style=move || {
+                            format!(
+                                "{} {}",
+                                animation_style(loot.identifier),
+                                position_style(loot.identifier),
+                            )
+                        }
+                    >
+                        <div
+                            class="relative
+                            transition-all duration-200 ease-in-out 
+                            translate-y-1/2 hover:translate-y-1/4"
+                            on:click={
+                                let pickup_loot = pickup_loot.clone();
+                                move |_| pickup_loot(loot.identifier)
+                            }
+                        >
+                            <ItemCard
+                                item_specs=loot.item_specs
+                                tooltip_position=DynamicTooltipPosition::TopLeft
+                                class:shadow-lg
+                            />
                         </div>
-                    }
-                }
-            />
+                    </div>
+                </div>
+            </For>
         </div>
     }
 }

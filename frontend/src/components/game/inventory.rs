@@ -89,11 +89,9 @@ fn ItemsGrid() -> impl IntoView {
 
             <div class="relative flex-1 overflow-y-auto max-h-[80vh]">
                 <div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 p-4 relative shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                    <For
-                        each=move || (0..total_slots)
-                        key=|i| *i
-                        children=move |i| view! { <ItemInBag item_index=i /> }
-                    />
+                    <For each=move || (0..total_slots) key=|i| *i let(i)>
+                        <ItemInBag item_index=i />
+                    </For>
                 </div>
             </div>
         </div>
