@@ -1,15 +1,28 @@
 use leptos::html::*;
 use leptos::prelude::*;
+
 use shared::data::item::LootState;
+use shared::messages::client::PickUpLootMessage;
 
 use crate::components::game::GameContext;
 use crate::components::ui::tooltip::DynamicTooltipPosition;
+use crate::components::websocket::WebsocketContext;
 
 use super::item_card::ItemCard;
 
 #[component]
 pub fn LootQueue() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+
+    let conn = expect_context::<WebsocketContext>();
+    let pickup_loot = move |loot_identifier| {
+        conn.send(
+            &PickUpLootMessage {
+                loot_identifier: loot_identifier as u32,
+            }
+            .into(),
+        );
+    };
 
     view! {
         <div class="relative w-full z-0">
@@ -83,7 +96,14 @@ pub fn LootQueue() -> impl IntoView {
                                 "
                                 style=position_style
                             >
-                                <div class="relative  " style=animation_style>
+                                <div
+                                    class="relative"
+                                    style=animation_style
+                                    on:click={
+                                        let pickup_loot = pickup_loot.clone();
+                                        move |_| pickup_loot(loot.identifier)
+                                    }
+                                >
                                     <ItemCard
                                         item_specs=loot.item_specs
                                         tooltip_position=DynamicTooltipPosition::TopLeft

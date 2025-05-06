@@ -12,6 +12,7 @@ impl_into_message! {
         LevelUpSkill(LevelUpSkillMessage),
         LevelUpPlayer,
         EquipItem(EquipItemMessage),
+        PickupLoot(PickUpLootMessage),
     }
 }
 
@@ -46,4 +47,9 @@ pub struct LevelUpSkillMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EquipItemMessage {
     pub item_index: u8,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct PickUpLootMessage {
+    pub loot_identifier: u32,
 }

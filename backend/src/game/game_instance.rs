@@ -174,6 +174,11 @@ impl<'a> GameInstance<'a> {
                 &mut self.player_state,
                 m.item_index,
             ),
+            ClientMessage::PickupLoot(m) => loot_controller::pickup_loot(
+                self.player_specs.mutate(),
+                self.queued_loot.mutate(),
+                m.loot_identifier,
+            ),
             // Shouldn't receive other kind of messages:
             ClientMessage::Connect(_) => {
                 tracing::warn!("received unexpected message: {:?}", msg)
