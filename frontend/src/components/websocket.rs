@@ -1,6 +1,5 @@
 use std::sync::Arc;
 
-use leptoaster::*;
 use leptos::prelude::*;
 use leptos::web_sys::CloseEvent;
 use leptos_use::{
@@ -12,6 +11,8 @@ use codee::binary::MsgpackSerdeCodec;
 
 use shared::messages::client::ClientMessage;
 use shared::messages::server::ServerMessage;
+
+use crate::components::ui::toast::*;
 
 const HEARTBEAT_PERIOD: u64 = 10_000;
 
@@ -35,15 +36,28 @@ impl WebsocketContext {
 
 #[component]
 pub fn Websocket(url: &'static str, children: Children) -> impl IntoView {
-    let toaster = expect_toaster();
-    let on_error_callback =
-        move |e: UseWebSocketError<_, _>| toaster.error(format!("Connection error: {:?}", e));
+    let on_error_callback = {
+        let toaster = expect_context::<Toasts>();
+        move |e: UseWebSocketError<_, _>| {
+            show_toast(
+                toaster,
+                format!("Connection error: {:?}", e),
+                ToastVariant::Error,
+            )
+        }
+    };
 
-    let toaster = expect_toaster();
-    let on_close_callback = move |e: CloseEvent| {
-        // TODO: if debug
-        if !e.was_clean() {
-            toaster.info(format!("Disconnected, trying to reconnect...",));
+    let on_close_callback = {
+        let toaster = expect_context::<Toasts>();
+        move |e: CloseEvent| {
+            // TODO: if debug
+            if !e.was_clean() {
+                show_toast(
+                    toaster,
+                    "Disconnected, trying to reconnect...",
+                    ToastVariant::Info,
+                )
+            }
         }
     };
 

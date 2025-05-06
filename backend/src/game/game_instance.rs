@@ -189,7 +189,7 @@ impl<'a> GameInstance<'a> {
                 ) {
                     return Some(ErrorMessage {
                         error_type: ErrorType::Game,
-                        message: "Bag if full!".to_string(),
+                        message: "Bag is full!".to_string(),
                     });
                 }
             }

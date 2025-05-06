@@ -11,6 +11,7 @@ use serde_json;
 use shared::data::world::HelloSchema;
 
 use crate::components::ui::buttons::MenuButton;
+use crate::components::ui::toast::*;
 
 #[component]
 pub fn MainMenu() -> impl IntoView {
@@ -44,6 +45,11 @@ pub fn MainMenu() -> impl IntoView {
     let navigate = use_navigate();
     let navigate_to_local_game = move |_| navigate("./local_game", Default::default());
 
+    let toast_context = expect_context::<Toasts>();
+    let toast = move |_| {
+        show_toast(toast_context, "Hello!", ToastVariant::Normal);
+    };
+
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center">
             <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">
@@ -54,6 +60,7 @@ pub fn MainMenu() -> impl IntoView {
                 <MenuButton on:click=navigate_to_local_game>"Play Locally"</MenuButton>
                 <MenuButton on:click=ping_online_action>"Ping Online server"</MenuButton>
                 <MenuButton on:click=ping_local_action>"Ping Local server"</MenuButton>
+                <MenuButton on:click=toast>"Toast"</MenuButton>
             </div>
             <p>"From server:" {data}</p>
         </main>

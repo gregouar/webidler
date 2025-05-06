@@ -8,14 +8,15 @@ use shared::messages::client::{
 };
 
 use crate::assets::img_asset;
-use crate::components::ui::tooltip::DynamicTooltipPosition;
-use crate::components::ui::tooltip::StaticTooltipPosition;
 use crate::components::{
     ui::{
         buttons::{FancyButton, Toggle},
         number::format_number,
         progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
-        tooltip::{DynamicTooltipContext, StaticTooltip},
+        toast::*,
+        tooltip::{
+            DynamicTooltipContext, DynamicTooltipPosition, StaticTooltip, StaticTooltipPosition,
+        },
     },
     websocket::WebsocketContext,
 };
@@ -97,6 +98,19 @@ pub fn PlayerCard() -> impl IntoView {
             > game_context.player_resources.read().experience
     });
     let just_leveled_up = Signal::derive(move || game_context.player_state.read().just_leveled_up);
+
+    Effect::new({
+        let toaster = expect_context::<Toasts>();
+        move || {
+            if is_dead.get() && just_hurt.get() {
+                show_toast(
+                    toaster,
+                    "You are dead, going back one area level...",
+                    ToastVariant::Normal,
+                );
+            }
+        }
+    });
 
     view! {
         <style>
@@ -334,12 +348,6 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     let disable_level_up =
         Signal::derive(move || level_up_cost.get() > game_context.player_resources.read().gold);
 
-    // let cost_tooltip = move || {
-    //     view! {
-    //         {format_number(level_up_cost.get())}
-    //         " Gold"
-    //     }
-    // };
     let cost_tooltip = move || {
         view! {
             <div class="flex flex-col space-y-1 text-sm max-w-xs">
