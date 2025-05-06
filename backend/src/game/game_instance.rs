@@ -181,6 +181,11 @@ impl<'a> GameInstance<'a> {
                 &mut self.player_state,
                 m.item_index,
             ),
+            ClientMessage::SellItem(m) => player_controller::sell_item(
+                self.player_specs.mutate(),
+                &mut self.player_resources,
+                m.item_index,
+            ),
             ClientMessage::PickupLoot(m) => {
                 if !loot_controller::pickup_loot(
                     self.player_specs.mutate(),

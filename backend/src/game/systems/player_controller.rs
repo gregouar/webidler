@@ -113,6 +113,18 @@ pub fn equip_item(player_specs: &mut PlayerSpecs, player_state: &mut PlayerState
     }
 }
 
+pub fn sell_item(
+    player_specs: &mut PlayerSpecs,
+    player_resources: &mut PlayerResources,
+    item_index: u8,
+) {
+    let item_index = item_index as usize;
+    if item_index < player_specs.inventory.bag.len() {
+        let item_specs = player_specs.inventory.bag.remove(item_index);
+        player_resources.gold += 10.0 * exponential_factor(item_specs.item_level as f64);
+    }
+}
+
 pub fn equip_weapon(
     player_specs: &mut PlayerSpecs,
     mut player_state: Option<&mut PlayerState>,

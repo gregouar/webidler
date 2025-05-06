@@ -73,10 +73,10 @@ pub fn ItemCard(item_specs: ItemSpecs, tooltip_position: DynamicTooltipPosition)
         move |_| tooltip_context.hide()
     };
 
-    let hide_tooltip2 = {
-        let tooltip_context = expect_context::<DynamicTooltipContext>();
-        move |_| tooltip_context.hide()
-    };
+    // let hide_tooltip2 = {
+    //     let tooltip_context = expect_context::<DynamicTooltipContext>();
+    //     move |_| tooltip_context.hide()
+    // };
 
     // let el_ref = NodeRef::new();
 
@@ -112,7 +112,7 @@ pub fn ItemCard(item_specs: ItemSpecs, tooltip_position: DynamicTooltipPosition)
         <div
             // node_ref=el_ref
             class=format!(
-                "relative group flex items-center justify-center w-full aspect-2/3
+                "relative group flex items-center justify-center w-full h-full
                 rounded-md p-1 bg-gradient-to-br {} border-4 {} ring-2 {} shadow-md {}
                 ",
                 gradient,
@@ -122,8 +122,8 @@ pub fn ItemCard(item_specs: ItemSpecs, tooltip_position: DynamicTooltipPosition)
             )
             on:mouseenter=show_tooltip
             on:mouseleave=hide_tooltip
-            on:click=hide_tooltip2
         >
+            // on:click=hide_tooltip2
             <img
                 src=icon_asset
                 class="object-contain max-w-full max-h-full transition-all duration-50 ease-in-out

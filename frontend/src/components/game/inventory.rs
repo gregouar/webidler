@@ -1,13 +1,14 @@
 use leptos::html::*;
 use leptos::prelude::*;
 
-use shared::messages::client::EquipItemMessage;
+use shared::messages::client::{EquipItemMessage, SellItemMessage};
 
 use crate::assets::img_asset;
-use crate::components::game::item_card::ItemCard;
-use crate::components::ui::menu_panel::MenuPanel;
-use crate::components::ui::tooltip::DynamicTooltipPosition;
 use crate::components::websocket::WebsocketContext;
+use crate::components::{
+    game::item_card::ItemCard,
+    ui::{menu_panel::MenuPanel, tooltip::DynamicTooltipPosition},
+};
 
 use super::game_context::GameContext;
 use super::player_card::PlayerName;
@@ -72,7 +73,7 @@ fn ItemsGrid() -> impl IntoView {
     let total_slots = game_context.player_specs.read().inventory.max_bag_size as usize;
 
     view! {
-        <div class="bg-zinc-800 rounded-md h-full w-full gap-2 p-2 shadow-lg ring-1 ring-zinc-950 overflow-hidden relative flex flex-col">
+        <div class="bg-zinc-800 rounded-md h-full w-full gap-2 p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
             <div class="px-4 relative z-10 flex items-center justify-between">
                 <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
                     "Inventory"
@@ -111,26 +112,28 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
             .cloned()
     };
 
+    let show_menu = RwSignal::new(false);
+
     view! {
-        <div class="group relative w-full aspect-[2/3]">
+        <div class="relative group w-full aspect-[2/3]">
             {move || {
                 match maybe_item() {
                     Some(item_specs) => {
-                        let conn = expect_context::<WebsocketContext>();
-                        let equip_item = move |_| {
-                            conn.send(
-                                &EquipItemMessage {
-                                    item_index: item_index as u8,
-                                }
-                                    .into(),
-                            );
-                        };
                         view! {
-                            <ItemCard
-                                item_specs=item_specs
-                                on:click=equip_item
-                                tooltip_position=DynamicTooltipPosition::BottomRight
-                            />
+                            <div class="relative w-full h-full">
+                                <ItemCard
+                                    item_specs=item_specs.clone()
+                                    on:click=move |_| show_menu.set(true)
+                                    tooltip_position=DynamicTooltipPosition::BottomRight
+                                />
+
+                                <Show when=move || show_menu.get()>
+                                    <ItemContextMenu
+                                        item_index=item_index
+                                        on_close=Callback::new(move |_| show_menu.set(false))
+                                    />
+                                </Show>
+                            </div>
                         }
                             .into_any()
                     }
@@ -142,9 +145,78 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
 }
 
 #[component]
+pub fn ItemContextMenu(item_index: usize, on_close: Callback<()>) -> impl IntoView {
+    let equip = {
+        let conn = expect_context::<WebsocketContext>();
+        move || {
+            conn.send(
+                &EquipItemMessage {
+                    item_index: item_index as u8,
+                }
+                .into(),
+            );
+            on_close.run(());
+        }
+    };
+
+    let sell = {
+        let conn = expect_context::<WebsocketContext>();
+        move || {
+            conn.send(
+                &SellItemMessage {
+                    item_index: item_index as u8,
+                }
+                .into(),
+            );
+            on_close.run(());
+        }
+    };
+
+    view! {
+        <style>
+            "
+            @keyframes fade-in {
+                from { opacity: 0; transform: scale(0.95); }
+                to { opacity: 1; transform: scale(1); }
+            }
+            "
+        </style>
+        <div
+            class="
+            absolute inset-0 z-30 flex flex-col justify-center items-center
+            p-6 rounded-md border border-gray-600 ring-2 ring-gray-700 shadow-lg shadow-gray-900
+            bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black space-y-4
+            text-center
+            "
+            style="animation: fade-in 0.2s ease-out forwards"
+        >
+            <button
+                class="text-xl font-semibold text-green-300 hover:text-green-100 px-4 py-2 rounded"
+                on:click=move |_| equip()
+            >
+                "Equip"
+            </button>
+
+            <button
+                class="text-xl font-semibold text-red-300 hover:text-red-100 px-4 py-2 rounded"
+                on:click=move |_| sell()
+            >
+                "Sell"
+            </button>
+
+            <button
+                class="text-sm text-gray-400 hover:text-white mt-4"
+                on:click=move |_| on_close.run(())
+            >
+                "Cancel"
+            </button>
+        </div>
+    }
+}
+
+#[component]
 fn EmptySlot(children: Children) -> impl IntoView {
     view! {
-        // "relative group rounded-md p-1 bg-gradient-to-br {} border-4 {} ring-2 {} shadow-md {}",
         <div class="
         relative group flex items-center justify-center w-full h-full
         rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70
