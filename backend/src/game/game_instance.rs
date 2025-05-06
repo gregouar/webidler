@@ -189,7 +189,7 @@ impl<'a> GameInstance<'a> {
                 ) {
                     return Some(ErrorMessage {
                         error_type: ErrorType::Game,
-                        message: "Bag is full!".to_string(),
+                        message: "Your bag is full!".to_string(),
                     });
                 }
             }
@@ -304,7 +304,10 @@ impl<'a> GameInstance<'a> {
             if monsters_still_alive.is_empty() {
                 if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
                     // TODO: Drop on enemy death, not wave generate
-                    loot_controller::drop_loot(self.queued_loot.mutate());
+                    loot_controller::drop_loot(
+                        self.queued_loot.mutate(),
+                        loot_controller::generate_loot(),
+                    );
                     self.generate_monsters_wave().await?;
                 }
             } else {
