@@ -77,9 +77,11 @@ pub fn LootQueue() -> impl IntoView {
                             .map(|l| l.state)
                             .unwrap_or_default();
                         match state {
-                            LootState::Normal => "animation: loot-float 2.5s ease-in-out infinite",
+                            LootState::Normal => {
+                                "animation: loot-float 2.5s ease-in-out infinite; pointer-events: auto;"
+                            }
                             LootState::WillDisappear => {
-                                "animation: loot-vibrate 0.3s linear infinite"
+                                "animation: loot-vibrate 0.3s linear infinite; pointer-events: auto;"
                             }
                             LootState::HasDisappeared => {
                                 "animation: loot-pickup 0.3s ease forwards; pointer-events: none;"
