@@ -28,3 +28,9 @@ pub fn update_player_state(
         .max_mana
         .min(player_state.mana + (elapsed_time.as_secs_f64() * player_specs.mana_regen));
 }
+
+pub fn reset_player(player_state: &mut PlayerState) {
+    player_state.just_leveled_up = false;
+    characters_updater::reset_character(&mut player_state.character_state);
+    skills_updater::reset_skills(&mut player_state.skill_states);
+}

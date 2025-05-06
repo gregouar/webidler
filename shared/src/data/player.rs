@@ -28,6 +28,8 @@ pub struct PlayerState {
     pub skill_states: Vec<SkillState>,
 
     pub mana: f64,
+
+    pub just_leveled_up: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

@@ -31,3 +31,10 @@ pub fn update_monster_states(
         );
     }
 }
+
+pub fn reset_monsters(monster_states: &mut Vec<MonsterState>) {
+    for monster_state in monster_states.iter_mut() {
+        characters_updater::reset_character(&mut monster_state.character_state);
+        skills_updater::reset_skills(&mut monster_state.skill_states);
+    }
+}

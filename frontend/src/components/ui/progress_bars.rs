@@ -11,25 +11,78 @@ pub fn HorizontalProgressBar(
     /// Text
     #[prop(optional)]
     text: Option<String>, // TODO: Dynamic?
+    // Instant reset
+    #[prop(default = Signal::derive(|| false))] reset: Signal<bool>,
 ) -> impl IntoView {
+    let set_value = move || {
+        if reset.get() {
+            0.0
+        } else {
+            value.get().max(0.0).min(100.0).round()
+        }
+    };
+
+    let transition = move || {
+        if reset.get() {
+            "transition-none"
+        } else {
+            "transition-all ease-linear duration-500 "
+        }
+    };
+
+    // Trick to reset animation by removing it when ended
+    let reset_bar_animation = RwSignal::new("opacity: 0;");
+    Effect::new(move |_| {
+        if reset.get() {
+            reset_bar_animation
+                .set("animation: horizontal-progress-bar-fade-out 0.5s ease-out; animation-fill-mode: both;");
+            set_timeout(
+                move || {
+                    reset_bar_animation.set("opacity: 0;");
+                },
+                std::time::Duration::from_millis(500),
+            );
+        }
+    });
+
     view! {
+        <style>
+            "
+            @keyframes horizontal-progress-bar-fade-out {
+                0% {
+                    opacity: 1;
+                    box-shadow: 0 0 0px rgba(59, 130, 246, 0);
+                }
+                50% {
+                    box-shadow: 0 0 25px 10px oklch(92.4% 0.12 95.746);
+                }
+                100% {
+                    opacity: 0;
+                    box-shadow: 0 0 0px rgba(59, 130, 246, 0);
+                }
+            }
+            "
+        </style>
         <div class="
         relative flex w-full
-        rounded-lg overflow-hidden 
+        rounded-lg
         bg-stone-900 border border-neutral-950 
         shadow-md
         ">
-            <div class="absolute inset-0 flex items-center justify-center text-white text-sm pointer-events-none">
+            <div
+                class=move || format!("flex flex-col {} rounded-lg {}", bar_color, transition())
+                style:width=move || format!("{}%", set_value())
+            >
+                // Fake copy for glow effect on reset
+                <div
+                    class=format!("absolute inset-0 z-1 rounded-lg {}", bar_color)
+                    style=reset_bar_animation
+                ></div>
+            </div>
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-sm pointer-events-none overflow-hidden">
                 {text}
             </div>
 
-            <div
-                class=format!(
-                    "flex flex-col {} rounded-lg transition-all ease duration-500",
-                    bar_color,
-                )
-                style:width=move || format!("{}%", value.get().max(0.0).min(100.0).round())
-            ></div>
         </div>
     }
 }
@@ -78,6 +131,7 @@ pub fn CircularProgressBar(
             452.389 - value.get().max(0.0).min(100.0) * 452.389 / 100.0
         }
     };
+
     let transition = move || {
         if reset.get() {
             "transition-none"
@@ -201,35 +255,3 @@ pub fn CircularProgressBar(
         </div>
     }
 }
-
-// #[component]
-// pub fn CircularProgressBar(
-//     // Percent value, must be between 0 and 100.
-//     value: ReadSignal<f32>,
-//     // Bar color, must be of format "text-XXXX-NNN"
-//     bar_color: &'static str,
-//     // Width of the progress bar
-//     #[prop(default = 2)] bar_width: u16,
-//     // Inside the circular bar
-//     children: Children,
-// ) -> impl IntoView {
-//     let set_value = move || 100.0 - value.get().round();
-//     view! {
-//         <div>
-//             <div class="relative drop-shadow-lg">
-//                 <svg class="size-full -rotate-90" viewBox="0 0 36 36">
-//                     <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-stone-900" stroke-width=bar_width></circle>
-//                     <circle cx="18" cy="18" r="16" fill="none"
-//                         class={format!("stroke-current  transition-all ease-out duration-1000 {}",bar_color)}
-//                         stroke-width=bar_width stroke-linecap="round"
-//                         stroke-dashoffset=set_value stroke-dasharray="100"
-//                     ></circle>
-//                 </svg>
-
-//                 <div class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
-//                     {children()}
-//                 </div>
-//             </div>
-//         </div>
-//     }
-// }

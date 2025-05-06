@@ -91,6 +91,8 @@ pub fn level_up(
     player_state.character_state.health += 10.0;
     player_specs.character_specs.max_health += 10.0;
 
+    player_state.just_leveled_up = true;
+
     true
 }
 

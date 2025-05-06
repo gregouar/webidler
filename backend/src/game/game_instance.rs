@@ -27,9 +27,8 @@ use super::{
 };
 use super::{
     systems::{
-        characters_updater, monsters_controller, monsters_updater, monsters_wave,
-        player_controller, player_updater, skills_controller, skills_updater,
-        weapon::update_weapon_specs,
+        monsters_controller, monsters_updater, monsters_wave, player_controller, player_updater,
+        skills_controller, weapon::update_weapon_specs,
     },
     utils::LazySyncer,
 };
@@ -98,11 +97,12 @@ impl<'a> GameInstance<'a> {
         let mut last_tick_time = Instant::now();
         let mut last_update_time = Instant::now();
         loop {
+            self.reset_entities().await;
+
             if let ControlFlow::Break(_) = self.handle_client_events().await {
                 break;
             }
 
-            self.reset_entities().await;
             self.control_entities().await?;
 
             let elapsed_time = last_update_time.elapsed();
@@ -248,14 +248,8 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn reset_entities(&mut self) {
-        // TODO: reset Player
-        characters_updater::reset_character(&mut self.player_state.character_state);
-        skills_updater::reset_skills(&mut self.player_state.skill_states);
-        for monster_state in self.monster_states.iter_mut() {
-            // TODO: reset Monster
-            characters_updater::reset_character(&mut monster_state.character_state);
-            skills_updater::reset_skills(&mut monster_state.skill_states);
-        }
+        player_updater::reset_player(&mut self.player_state);
+        monsters_updater::reset_monsters(&mut self.monster_states);
     }
 
     async fn control_entities(&mut self) -> Result<()> {

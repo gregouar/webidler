@@ -96,6 +96,7 @@ pub fn PlayerCard() -> impl IntoView {
         game_context.player_specs.read().experience_needed
             > game_context.player_resources.read().experience
     });
+    let just_leveled_up = Signal::derive(move || game_context.player_state.read().just_leveled_up);
 
     view! {
         <style>
@@ -158,6 +159,7 @@ pub fn PlayerCard() -> impl IntoView {
                         class:sm:h-4
                         bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
                         value=xp_percent
+                        reset=just_leveled_up
                     />
                 </StaticTooltip>
 
@@ -364,6 +366,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         <div class="flex flex-col">
             <button
                 class="
+                disabled:pointer-events-none
                 disabled:brightness-80 disabled:sepia-0
                 active:brightness-50 active:sepia p-1
                 "

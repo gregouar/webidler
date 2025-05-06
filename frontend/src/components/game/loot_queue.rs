@@ -12,8 +12,6 @@ use super::item_card::ItemCard;
 
 #[component]
 pub fn LootQueue() -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
-
     let conn = expect_context::<WebsocketContext>();
     let pickup_loot = move |loot_identifier| {
         conn.send(
@@ -24,6 +22,38 @@ pub fn LootQueue() -> impl IntoView {
         );
     };
 
+    let game_context = expect_context::<GameContext>();
+    let position_style = move |loot_identifier| {
+        let index = game_context
+            .queued_loot
+            .read()
+            .iter()
+            .filter(|l| l.state != LootState::HasDisappeared || l.identifier == loot_identifier)
+            .rev()
+            .position(|l| l.identifier == loot_identifier)
+            .unwrap_or_default();
+        format!("left: {}%;", 4 + index * 20)
+    };
+
+    let game_context = expect_context::<GameContext>();
+    let animation_style = move |loot_identifier| {
+        let state = game_context
+            .queued_loot
+            .read()
+            .iter()
+            .find(|l| l.identifier == loot_identifier)
+            .map(|l| l.state)
+            .unwrap_or_default();
+        match state {
+            LootState::Normal => "animation: loot-float 2.5s ease-in-out infinite;",
+            LootState::WillDisappear => "animation: loot-vibrate 0.3s linear infinite;",
+            LootState::HasDisappeared => {
+                "animation: loot-pickup 0.3s ease forwards; pointer-events: none;"
+            }
+        }
+    };
+
+    let game_context = expect_context::<GameContext>();
     view! {
         <div class="relative w-full z-0">
             <style>
@@ -60,41 +90,6 @@ pub fn LootQueue() -> impl IntoView {
                 each=move || game_context.queued_loot.get().into_iter()
                 key=|loot| loot.identifier
                 children=move |loot| {
-                    let game_context = expect_context::<GameContext>();
-                    let position_style = move || {
-                        let index = game_context
-                            .queued_loot
-                            .read()
-                            .iter()
-                            .filter(|l| {
-                                l.state != LootState::HasDisappeared
-                                    || l.identifier == loot.identifier
-                            })
-                            .rev()
-                            .position(|l| l.identifier == loot.identifier)
-                            .unwrap_or_default();
-                        format!("left: {}%;", 4 + index * 20)
-                    };
-                    let game_context = expect_context::<GameContext>();
-                    let animation_style = move || {
-                        let state = game_context
-                            .queued_loot
-                            .read()
-                            .iter()
-                            .find(|l| l.identifier == loot.identifier)
-                            .map(|l| l.state)
-                            .unwrap_or_default();
-                        match state {
-                            LootState::Normal => "animation: loot-float 2.5s ease-in-out infinite;",
-                            LootState::WillDisappear => {
-                                "animation: loot-vibrate 0.3s linear infinite;"
-                            }
-                            LootState::HasDisappeared => {
-                                "animation: loot-pickup 0.3s ease forwards; pointer-events: none;"
-                            }
-                        }
-                    };
-
                     view! {
                         <div style="animation: loot-drop 1.3s ease forwards;">
                             <div
@@ -102,7 +97,13 @@ pub fn LootQueue() -> impl IntoView {
                                 absolute bottom-0 w-[12%]
                                 transition-all duration-500 ease
                                 "
-                                style=move || format!("{} {}", animation_style(), position_style())
+                                style=move || {
+                                    format!(
+                                        "{} {}",
+                                        animation_style(loot.identifier),
+                                        position_style(loot.identifier),
+                                    )
+                                }
                             >
                                 <div
                                     class="relative

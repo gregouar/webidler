@@ -61,6 +61,7 @@ impl DataInit<PlayerSpecs> for PlayerState {
                 .map(|p| SkillState::init(p))
                 .collect(),
             mana: specs.max_mana,
+            just_leveled_up: false,
         }
     }
 }
