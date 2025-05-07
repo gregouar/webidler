@@ -1,5 +1,7 @@
 use leptos::html::*;
 use leptos::prelude::*;
+use leptos_use::on_click_outside;
+
 use std::collections::HashSet;
 use std::sync::Arc;
 
@@ -196,7 +198,6 @@ pub fn ItemContextMenu(item_index: usize, on_close: Callback<()>) -> impl IntoVi
                 }
                 .into(),
             );
-            on_close.run(());
         }
     };
 
@@ -211,6 +212,12 @@ pub fn ItemContextMenu(item_index: usize, on_close: Callback<()>) -> impl IntoVi
         }
     };
 
+    let node_ref = NodeRef::new();
+
+    let _ = on_click_outside(node_ref, move |_| {
+        on_close.run(());
+    });
+
     view! {
         <style>
             "
@@ -221,6 +228,7 @@ pub fn ItemContextMenu(item_index: usize, on_close: Callback<()>) -> impl IntoVi
             "
         </style>
         <div
+            node_ref=node_ref
             class="
             absolute inset-0 z-30 flex flex-col justify-center items-center
             w-full
