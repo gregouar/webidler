@@ -3,20 +3,26 @@ use leptos::prelude::*;
 
 #[component]
 pub fn MenuButton(
-    // #[prop(optional)] disabled: Option<bool>,
+    #[prop(optional)] disabled: Option<Signal<bool>>,
     children: Children,
 ) -> impl IntoView {
     view! {
-        <button class="
-        text-white font-bold text-shadow shadow-neutral-950
-        py-2 px-4 rounded shadow-md
-        border border-neutral-950
-        bg-gradient-to-t from-zinc-900 to-zinc-800 
-        overflow-hidden
-        hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
-        active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
-        ">
-            // disabled=disabled
+        <button
+            class="
+            text-white font-bold text-shadow shadow-neutral-950
+            py-2 px-4 rounded shadow-md
+            border border-neutral-950
+            bg-gradient-to-t from-zinc-900 to-zinc-800 
+            overflow-hidden
+            hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
+            active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
+            
+            disabled:from-zinc-700 disabled:to-zinc-600
+            disabled:text-zinc-400 disabled:pointer-events-none
+            disabled:opacity-60 disabled:shadow-none
+            "
+            disabled=disabled
+        >
             {children()}
         </button>
     }

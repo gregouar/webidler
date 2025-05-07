@@ -12,7 +12,7 @@ impl_into_message! {
         LevelUpSkill(LevelUpSkillMessage),
         LevelUpPlayer,
         EquipItem(EquipItemMessage),
-        SellItem(SellItemMessage),
+        SellItems(SellItemsMessage),
         PickupLoot(PickUpLootMessage),
     }
 }
@@ -51,8 +51,8 @@ pub struct EquipItemMessage {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct SellItemMessage {
-    pub item_index: u8,
+pub struct SellItemsMessage {
+    pub item_indexes: Vec<u8>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

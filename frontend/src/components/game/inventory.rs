@@ -1,20 +1,33 @@
 use leptos::html::*;
 use leptos::prelude::*;
+use std::collections::HashSet;
 
-use shared::messages::client::{EquipItemMessage, SellItemMessage};
+use shared::messages::client::{EquipItemMessage, SellItemsMessage};
 
 use crate::assets::img_asset;
-use crate::components::websocket::WebsocketContext;
 use crate::components::{
     game::item_card::ItemCard,
-    ui::{menu_panel::MenuPanel, tooltip::DynamicTooltipPosition},
+    ui::{buttons::MenuButton, menu_panel::MenuPanel, tooltip::DynamicTooltipPosition},
+    websocket::WebsocketContext,
 };
 
 use super::game_context::GameContext;
 use super::player_card::PlayerName;
 
+#[derive(Clone, Default)]
+pub struct SellQueue(RwSignal<HashSet<usize>>);
+
 #[component]
 pub fn Inventory(open: RwSignal<bool>) -> impl IntoView {
+    let sell_queue = SellQueue::default();
+    provide_context(sell_queue.clone());
+
+    Effect::new(move || {
+        if !open.get() {
+            sell_queue.0.write().drain();
+        }
+    });
+
     view! {
         <MenuPanel open=open>
             <div class="grid grid-cols-7 justify-items-stretch flex items-start gap-4 p-4">
@@ -79,6 +92,8 @@ fn ItemsGrid() -> impl IntoView {
                     "Inventory"
                 </p>
 
+                <SellAllButton />
+
                 <p class="text-shadow-md shadow-gray-950 text-gray-400 text-md font-medium">
                     {format!(
                         "{} / {}",
@@ -95,6 +110,7 @@ fn ItemsGrid() -> impl IntoView {
                     </For>
                 </div>
             </div>
+
         </div>
     }
 }
@@ -112,6 +128,9 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
             .cloned()
     };
 
+    let sell_queue = expect_context::<SellQueue>();
+    let is_queued_for_sale = move || sell_queue.0.read().contains(&item_index);
+
     let show_menu = RwSignal::new(false);
 
     view! {
@@ -126,6 +145,12 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
                                     on:click=move |_| show_menu.set(true)
                                     tooltip_position=DynamicTooltipPosition::BottomRight
                                 />
+
+                                <Show when=is_queued_for_sale>
+                                    <div class="absolute top-1 right-1 px-2 py-0.5 text-xs font-semibold bg-red-500 text-white rounded shadow">
+                                        "SELL"
+                                    </div>
+                                </Show>
 
                                 <Show when=move || show_menu.get()>
                                     <ItemContextMenu
@@ -159,18 +184,29 @@ pub fn ItemContextMenu(item_index: usize, on_close: Callback<()>) -> impl IntoVi
         }
     };
 
-    let sell = {
-        let conn = expect_context::<WebsocketContext>();
-        move || {
-            conn.send(
-                &SellItemMessage {
-                    item_index: item_index as u8,
-                }
-                .into(),
-            );
-            on_close.run(());
-        }
+    let sell_queue = expect_context::<SellQueue>();
+
+    let toggle_sell_mark = move || {
+        sell_queue.0.update(|set| {
+            if !set.remove(&item_index) {
+                set.insert(item_index);
+            }
+        });
+        on_close.run(());
     };
+
+    // let sell = {
+    //     let conn = expect_context::<WebsocketContext>();
+    //     move || {
+    //         conn.send(
+    //             &SellItemMessage {
+    //                 item_index: item_index as u8,
+    //             }
+    //             .into(),
+    //         );
+    //         on_close.run(());
+    //     }
+    // };
 
     view! {
         <style>
@@ -182,9 +218,10 @@ pub fn ItemContextMenu(item_index: usize, on_close: Callback<()>) -> impl IntoVi
             "
         </style>
         <div
+            // border border-gray-600 ring-2 ring-gray-700
             class="
             absolute inset-0 z-30 flex flex-col justify-center items-center
-            p-6 rounded-md border border-gray-600 ring-2 ring-gray-700 shadow-lg shadow-gray-900
+            p-6 rounded-md  shadow-lg shadow-gray-900
             bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black space-y-4
             text-center
             "
@@ -198,11 +235,18 @@ pub fn ItemContextMenu(item_index: usize, on_close: Callback<()>) -> impl IntoVi
             </button>
 
             <button
-                class="text-xl font-semibold text-red-300 hover:text-red-100 px-4 py-2 rounded"
-                on:click=move |_| sell()
+                class="text-xl font-semibold text-yellow-300 hover:text-yellow-100 px-4 py-2 rounded"
+                on:click=move |_| toggle_sell_mark()
             >
-                "Sell"
+                {if sell_queue.0.get().contains(&item_index) { "Unsell" } else { "Sell" }}
             </button>
+
+            // <button
+            // class="text-xl font-semibold text-red-300 hover:text-red-100 px-4 py-2 rounded"
+            // on:click=move |_| sell()
+            // >
+            // "Sell"
+            // </button>
 
             <button
                 class="text-sm text-gray-400 hover:text-white mt-4"
@@ -221,5 +265,32 @@ fn EmptySlot(children: Children) -> impl IntoView {
         relative group flex items-center justify-center w-full h-full
         rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70
         ">{children()}</div>
+    }
+}
+
+#[component]
+fn SellAllButton() -> impl IntoView {
+    let sell = {
+        let sell_queue = expect_context::<SellQueue>();
+        let conn = expect_context::<WebsocketContext>();
+        move |_| {
+            conn.send(
+                &SellItemsMessage {
+                    item_indexes: sell_queue.0.write().drain().map(|x| x as u8).collect(),
+                }
+                .into(),
+            );
+        }
+    };
+
+    let disabled = Signal::derive({
+        let sell_queue = expect_context::<SellQueue>();
+        move || sell_queue.0.read().is_empty()
+    });
+
+    view! {
+        <MenuButton on:click=sell disabled=disabled>
+            "Confirm Sell"
+        </MenuButton>
     }
 }
