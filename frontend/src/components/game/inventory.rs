@@ -1,6 +1,7 @@
 use leptos::html::*;
 use leptos::prelude::*;
 use leptos_use::on_click_outside;
+use shared::data::item::ItemSpecs;
 
 use std::collections::HashSet;
 use std::sync::Arc;
@@ -56,14 +57,20 @@ pub fn EquippedItems() -> impl IntoView {
             </div>
             <div class="grid grid-rows-3 grid-cols-3 gap-3 p-4 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                 <EmptySlot>{()}</EmptySlot>
+                <EquippedItem
+                    item_specs=move || {
+                        game_context.player_specs.read().inventory.helmet_specs.clone()
+                    }
+                    fallback_asset="ui/head.webp"
+                    fallback_alt="Head"
+                />
                 <EmptySlot>
                     <img
-                        src=img_asset("ui/head2.webp")
-                        alt="Head"
+                        src=img_asset("ui/amulet.webp")
+                        alt="Amulet"
                         class="object-contain max-w-full max-h-full"
                     />
                 </EmptySlot>
-                <EmptySlot>{()}</EmptySlot>
                 {move || match &game_context.player_specs.read().inventory.weapon_specs {
                     Some(weapon) => {
                         view! {
@@ -76,13 +83,64 @@ pub fn EquippedItems() -> impl IntoView {
                     }
                     None => view! { <EmptySlot>{()}</EmptySlot> }.into_any(),
                 }}
+                <EmptySlot>
+                    <img
+                        src=img_asset("ui/body.webp")
+                        alt="Body"
+                        class="object-contain max-w-full max-h-full"
+                    />
+                </EmptySlot>
                 <EmptySlot>{()}</EmptySlot>
-                <EmptySlot>{()}</EmptySlot>
-                <EmptySlot>{()}</EmptySlot>
-                <EmptySlot>{()}</EmptySlot>
+                <EmptySlot>
+                    <img
+                        src=img_asset("ui/hands.webp")
+                        alt="Hands"
+                        class="object-contain max-w-full max-h-full"
+                    />
+                </EmptySlot>
+                <EmptySlot>
+                    <img
+                        src=img_asset("ui/feet.webp")
+                        alt="Feet"
+                        class="object-contain max-w-full max-h-full"
+                    />
+                </EmptySlot>
                 <EmptySlot>{()}</EmptySlot>
             </div>
         </div>
+    }
+}
+
+#[component]
+fn EquippedItem(
+    item_specs: impl (Fn() -> Option<ItemSpecs>) + Send + Sync + 'static,
+    fallback_asset: &'static str,
+    fallback_alt: &'static str,
+) -> impl IntoView {
+    view! {
+        {move || match item_specs() {
+            Some(item_specs) => {
+                view! {
+                    <ItemCard
+                        item_specs=item_specs
+                        tooltip_position=DynamicTooltipPosition::BottomRight
+                    />
+                }
+                    .into_any()
+            }
+            None => {
+                view! {
+                    <EmptySlot>
+                        <img
+                            src=img_asset(fallback_asset)
+                            alt=fallback_alt
+                            class="object-contain max-w-full max-h-full"
+                        />
+                    </EmptySlot>
+                }
+                    .into_any()
+            }
+        }}
     }
 }
 

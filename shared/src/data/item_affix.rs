@@ -9,6 +9,7 @@ pub enum ItemStat {
     AttackDamage,
     MinAttackDamage,
     MaxAttackDamage,
+    Armor,
     GoldFind,
 }
 

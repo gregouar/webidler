@@ -40,7 +40,7 @@ pub fn HeaderMenu() -> impl IntoView {
             <div class="flex justify-around w-full items-center">
                 <ResourceCounter
                     class:text-amber-200
-                    icon="ui/gold2.webp"
+                    icon="ui/gold.webp"
                     name="Gold"
                     description="To buy level up for skills. Reset at every quest."
                     value=gold

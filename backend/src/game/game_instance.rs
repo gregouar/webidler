@@ -27,8 +27,8 @@ use super::{
 };
 use super::{
     systems::{
-        monsters_controller, monsters_updater, monsters_wave, player_controller, player_updater,
-        skills_controller, weapon::update_weapon_specs,
+        items_controller, monsters_controller, monsters_updater, monsters_wave, player_controller,
+        player_updater, skills_controller,
     },
     utils::LazySyncer,
 };
@@ -221,14 +221,15 @@ impl<'a> GameInstance<'a> {
         if let Some(weapon) = self.player_specs.mutate().inventory.weapon_specs.as_mut() {
             let affix_effects = weapon.aggregate_effects();
             if let ItemCategory::Weapon(w) = &mut weapon.item_category {
-                update_weapon_specs(w, affix_effects);
+                items_controller::update_weapon_specs(w, affix_effects);
             }
         }
         for i in self.player_specs.mutate().inventory.bag.iter_mut() {
             let affix_effects = i.aggregate_effects();
             match &mut i.item_category {
                 ItemCategory::Trinket => {}
-                ItemCategory::Weapon(w) => update_weapon_specs(w, affix_effects),
+                ItemCategory::Weapon(w) => items_controller::update_weapon_specs(w, affix_effects),
+                ItemCategory::Helmet(a) => items_controller::update_armor_specs(a, affix_effects),
             };
         }
 

@@ -59,6 +59,7 @@ impl Default for ItemRarity {
 pub enum ItemCategory {
     Trinket,
     Weapon(WeaponSpecs),
+    Helmet(ArmorSpecs),
 }
 
 impl Default for ItemCategory {
@@ -81,6 +82,12 @@ pub struct WeaponSpecs {
     pub min_damage: f64,
     pub base_max_damage: f64,
     pub max_damage: f64,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+pub struct ArmorSpecs {
+    pub base_armor: f64,
+    pub armor: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

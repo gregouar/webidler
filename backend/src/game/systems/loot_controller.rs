@@ -1,9 +1,11 @@
 use shared::data::{
-    item::{ItemCategory, ItemRarity, ItemSpecs, LootState, QueuedLoot},
+    item::{ArmorSpecs, ItemCategory, ItemRarity, ItemSpecs, LootState, QueuedLoot},
     player::PlayerSpecs,
 };
 
 use crate::rng;
+
+use super::items_controller;
 
 const MAX_QUEUE_SIZE: usize = 5;
 
@@ -16,15 +18,18 @@ pub fn generate_loot() -> ItemSpecs {
         _ => ItemRarity::Unique,
     };
 
-    ItemSpecs {
-        name: "Trinky".to_string(),
-        icon: "items/battleaxe.webp".to_string(),
-        description: "Some trinket".to_string(),
+    items_controller::update_item_specs(ItemSpecs {
+        name: "Helmet".to_string(),
+        icon: "items/helmet.webp".to_string(),
+        description: "Save your brain".to_string(),
         rarity: rarity,
         item_level: 1,
-        item_category: ItemCategory::Trinket,
+        item_category: ItemCategory::Helmet(ArmorSpecs {
+            base_armor: 10.0,
+            armor: 0.0,
+        }),
         affixes: vec![],
-    }
+    })
 }
 
 pub fn drop_loot(queued_loot: &mut Vec<QueuedLoot>, item_specs: ItemSpecs) {

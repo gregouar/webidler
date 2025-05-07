@@ -8,7 +8,6 @@ use leptos::prelude::*;
 pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
     let panel_ref = NodeRef::<Div>::new();
 
-    // Focus the panel when it opens
     Effect::new(move |_| {
         if open.get() {
             if let Some(el) = panel_ref.get_untracked() {
@@ -17,7 +16,6 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
         }
     });
 
-    // Handle Escape key
     let handle_key = move |e: KeyboardEvent| {
         if e.key() == "Escape" {
             open.set(false);

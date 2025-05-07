@@ -1,10 +1,20 @@
 use shared::data::{
-    item::{ItemCategory, ItemSpecs, WeaponSpecs},
+    item::{ArmorSpecs, ItemCategory, ItemSpecs, WeaponSpecs},
     item_affix::{AffixEffect, AffixEffectType, ItemStat},
     skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillType, TargetType},
 };
 
 // TODO: Where to call that?
+pub fn update_item_specs(mut item_specs: ItemSpecs) -> ItemSpecs {
+    let effects: Vec<AffixEffect> = item_specs.aggregate_effects();
+    match &mut item_specs.item_category {
+        ItemCategory::Trinket => {}
+        ItemCategory::Weapon(weapon_specs) => update_weapon_specs(weapon_specs, effects),
+        ItemCategory::Helmet(armor_specs) => update_armor_specs(armor_specs, effects),
+    }
+    item_specs
+}
+
 pub fn update_weapon_specs(weapon_specs: &mut WeaponSpecs, mut effects: Vec<AffixEffect>) {
     weapon_specs.cooldown = weapon_specs.base_cooldown;
     weapon_specs.min_damage = weapon_specs.base_min_damage;
@@ -43,7 +53,7 @@ pub fn update_weapon_specs(weapon_specs: &mut WeaponSpecs, mut effects: Vec<Affi
                 AffixEffectType::Flat => weapon_specs.max_damage += effect.value,
                 AffixEffectType::Multiplier => weapon_specs.max_damage *= 1.0 + effect.value,
             },
-            ItemStat::GoldFind => {}
+            ItemStat::Armor | ItemStat::GoldFind => {}
         }
     }
 
@@ -53,6 +63,33 @@ pub fn update_weapon_specs(weapon_specs: &mut WeaponSpecs, mut effects: Vec<Affi
         .min_damage
         .max(0.0)
         .min(weapon_specs.max_damage);
+}
+
+pub fn update_armor_specs(armor_specs: &mut ArmorSpecs, mut effects: Vec<AffixEffect>) {
+    armor_specs.armor = armor_specs.base_armor;
+
+    effects.sort_by_key(|e| match e.effect_type {
+        AffixEffectType::Flat => 0,
+        AffixEffectType::Multiplier => 1,
+    });
+
+    for effect in &effects {
+        match effect.stat {
+            ItemStat::Armor => match effect.effect_type {
+                AffixEffectType::Flat => {
+                    armor_specs.armor *= 1.0 + effect.value;
+                }
+                AffixEffectType::Multiplier => {
+                    armor_specs.armor += effect.value;
+                }
+            },
+            ItemStat::AttackSpeed
+            | ItemStat::AttackDamage
+            | ItemStat::MinAttackDamage
+            | ItemStat::MaxAttackDamage
+            | ItemStat::GoldFind => {}
+        }
+    }
 }
 
 pub fn make_weapon_skill(item_specs: &ItemSpecs) -> Option<SkillSpecs> {

@@ -170,6 +170,7 @@ async fn handle_connect(
         auto_skills: vec![false, false],
         inventory: PlayerInventory {
             weapon_specs: None,
+            helmet_specs: None,
             max_bag_size: 40,
             bag: vec![
                 ItemSpecs {

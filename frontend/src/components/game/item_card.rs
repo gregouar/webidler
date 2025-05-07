@@ -112,7 +112,7 @@ pub fn ItemCard(item_specs: ItemSpecs, tooltip_position: DynamicTooltipPosition)
         <div
             // node_ref=el_ref
             class=format!(
-                "relative group flex items-center justify-center w-full h-full
+                "relative group flex items-center justify-center w-full aspect-[2/3]
                 rounded-md p-1 bg-gradient-to-br {} border-4 {} ring-2 {} shadow-md {}
                 ",
                 gradient,
@@ -172,6 +172,25 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                         "{} font-semibold",
                         cooldown_color,
                     )>{format!("{:.2}", ws.cooldown)}</span>
+                </li>
+            }
+            .into_any()
+        }
+        ItemCategory::Helmet(specs) => {
+            let armor_color = if specs.armor != specs.base_armor {
+                "text-blue-400"
+            } else {
+                "text-white"
+            };
+
+            view! {
+                <li class="text-gray-400 text-sm leading-snug">"Helmet"</li>
+                <li class="text-gray-400 text-sm leading-snug">
+                    "Armor: "
+                    <span class=format!(
+                        "{} font-semibold",
+                        armor_color,
+                    )>{format!("{:.0}", specs.armor)}</span>
                 </li>
             }
             .into_any()
@@ -249,7 +268,8 @@ pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl Int
                 MinAttackDamage => 1,
                 MaxAttackDamage => 2,
                 AttackSpeed => 3,
-                GoldFind => 4,
+                Armor => 4,
+                GoldFind => 5,
             },
             -match effect.effect_type {
                 Flat => 0,
@@ -268,19 +288,6 @@ pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl Int
         match (effect.stat, effect.effect_type) {
             (MinAttackDamage, Flat) => min_flat = Some(effect.value),
             (MaxAttackDamage, Flat) => max_flat = Some(effect.value),
-            // If it's not part of a min/max pair, process normally
-            (AttackSpeed, Flat) => merged.push(format!("-{:.2}s Attack Speed", effect.value)),
-            (AttackSpeed, Multiplier) => merged.push(format!(
-                "{:.0}% Increased Attack Speed",
-                effect.value * 100.0
-            )),
-            (AttackDamage, Flat) => {
-                merged.push(format!("{:.0} Added Attack Damage", effect.value * 100.0))
-            }
-            (AttackDamage, Multiplier) => merged.push(format!(
-                "{:.0}% Increased Attack Damage",
-                effect.value * 100.0
-            )),
             (MinAttackDamage, Multiplier) => merged.push(format!(
                 "{:.0}% Increased Minimum Attack Damage",
                 effect.value * 100.0
@@ -289,6 +296,19 @@ pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl Int
                 "{:.0}% Increased Maximum Attack Damage",
                 effect.value * 100.0
             )),
+            // If it's not part of a min/max pair, process normally
+            (AttackSpeed, Flat) => merged.push(format!("-{:.2}s Attack Speed", effect.value)),
+            (AttackSpeed, Multiplier) => merged.push(format!(
+                "{:.0}% Increased Attack Speed",
+                effect.value * 100.0
+            )),
+            (AttackDamage, Flat) => merged.push(format!("{:.0} Added Attack Damage", effect.value)),
+            (AttackDamage, Multiplier) => merged.push(format!(
+                "{:.0}% Increased Attack Damage",
+                effect.value * 100.0
+            )),
+            (Armor, Flat) => merged.push(format!("+{:.0} Added Armor", effect.value)),
+            (Armor, Multiplier) => merged.push(format!("{:.0}% Increased Armor", effect.value)),
             (GoldFind, Flat) => {
                 merged.push(format!("+{:.0} Gold per Kill", effect.value));
             }

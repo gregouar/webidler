@@ -7,7 +7,9 @@ use shared::data::{
 
 use crate::game::data::DataInit;
 
-use super::{increase_factors::exponential_factor, skills_controller, weapon::make_weapon_skill};
+use super::{
+    increase_factors::exponential_factor, items_controller::make_weapon_skill, skills_controller,
+};
 
 pub struct PlayerController {
     pub auto_skills: Vec<bool>,
@@ -104,6 +106,11 @@ pub fn equip_item(player_specs: &mut PlayerSpecs, player_state: &mut PlayerState
             ItemCategory::Trinket => return, // Cannot equip trinket
             ItemCategory::Weapon(_) => {
                 equip_weapon(player_specs, Some(player_state), item_specs.clone())
+            }
+            ItemCategory::Helmet(_) => {
+                let old_helmet = player_specs.inventory.helmet_specs.take();
+                player_specs.inventory.helmet_specs = Some(item_specs.clone());
+                old_helmet
             }
         } {
             player_specs.inventory.bag[item_index] = old_item_specs;
