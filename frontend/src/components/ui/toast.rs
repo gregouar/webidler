@@ -2,6 +2,8 @@ use leptos::html::*;
 use leptos::prelude::*;
 use leptos_toaster::*;
 
+use super::buttons::CloseButton;
+
 pub use leptos_toaster::Toasts;
 
 #[derive(PartialEq, Clone, Copy)]
@@ -39,25 +41,7 @@ pub fn ToastView(message: String, variant: ToastVariant, toast_id: ToastId) -> i
                 "flex-1 text-sm font-medium leading-snug {}",
                 text_color,
             )>{message}</div>
-            <button
-                class="ml-2 text-white hover:text-gray-400 transition-colors"
-                on:click=move |_| dismiss_toast(&toast_id)
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-            </button>
+            <CloseButton on:click=move |_| dismiss_toast(&toast_id) />
         </div>
     }
 }

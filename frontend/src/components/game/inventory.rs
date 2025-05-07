@@ -7,7 +7,11 @@ use shared::messages::client::{EquipItemMessage, SellItemsMessage};
 use crate::assets::img_asset;
 use crate::components::{
     game::item_card::ItemCard,
-    ui::{buttons::MenuButton, menu_panel::MenuPanel, tooltip::DynamicTooltipPosition},
+    ui::{
+        buttons::{CloseButton, MenuButton},
+        menu_panel::MenuPanel,
+        tooltip::DynamicTooltipPosition,
+    },
     websocket::WebsocketContext,
 };
 
@@ -32,7 +36,7 @@ pub fn Inventory(open: RwSignal<bool>) -> impl IntoView {
         <MenuPanel open=open>
             <div class="grid grid-cols-7 justify-items-stretch flex items-start gap-4 p-4">
                 <EquippedItems class:col-span-2 class:justify-self-end />
-                <ItemsGrid class:col-span-5 class:justify-self-start />
+                <ItemsGrid open=open class:col-span-5 class:justify-self-start />
             </div>
         </MenuPanel>
     }
@@ -80,7 +84,7 @@ pub fn EquippedItems() -> impl IntoView {
 }
 
 #[component]
-fn ItemsGrid() -> impl IntoView {
+fn ItemsGrid(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let total_slots = game_context.player_specs.read().inventory.max_bag_size as usize;
@@ -88,19 +92,22 @@ fn ItemsGrid() -> impl IntoView {
     view! {
         <div class="bg-zinc-800 rounded-md h-full w-full gap-2 p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
             <div class="px-4 relative z-10 flex items-center justify-between">
-                <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
-                    "Inventory"
-                </p>
+                <div>
+                    <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
+                        "Inventory "
+                    </span>
+                    <span class="text-shadow-md shadow-gray-950 text-gray-400 text-md font-medium">
+                        {format!(
+                            " ({} / {})",
+                            game_context.player_specs.read().inventory.bag.len(),
+                            game_context.player_specs.read().inventory.max_bag_size,
+                        )}
+                    </span>
+                </div>
 
                 <SellAllButton />
 
-                <p class="text-shadow-md shadow-gray-950 text-gray-400 text-md font-medium">
-                    {format!(
-                        "{} / {}",
-                        game_context.player_specs.read().inventory.bag.len(),
-                        game_context.player_specs.read().inventory.max_bag_size,
-                    )}
-                </p>
+                <CloseButton on:click=move |_| open.set(false) />
             </div>
 
             <div class="relative flex-1 overflow-y-auto max-h-[80vh]">
@@ -171,9 +178,12 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
 
 #[component]
 pub fn ItemContextMenu(item_index: usize, on_close: Callback<()>) -> impl IntoView {
+    let sell_queue = expect_context::<SellQueue>();
+
     let equip = {
         let conn = expect_context::<WebsocketContext>();
         move || {
+            sell_queue.0.write().remove(&item_index);
             conn.send(
                 &EquipItemMessage {
                     item_index: item_index as u8,
@@ -184,29 +194,16 @@ pub fn ItemContextMenu(item_index: usize, on_close: Callback<()>) -> impl IntoVi
         }
     };
 
-    let sell_queue = expect_context::<SellQueue>();
-
-    let toggle_sell_mark = move || {
-        sell_queue.0.update(|set| {
-            if !set.remove(&item_index) {
-                set.insert(item_index);
-            }
-        });
-        on_close.run(());
+    let toggle_sell_mark = {
+        move || {
+            sell_queue.0.update(|set| {
+                if !set.remove(&item_index) {
+                    set.insert(item_index);
+                }
+            });
+            on_close.run(());
+        }
     };
-
-    // let sell = {
-    //     let conn = expect_context::<WebsocketContext>();
-    //     move || {
-    //         conn.send(
-    //             &SellItemMessage {
-    //                 item_index: item_index as u8,
-    //             }
-    //             .into(),
-    //         );
-    //         on_close.run(());
-    //     }
-    // };
 
     view! {
         <style>
@@ -218,38 +215,32 @@ pub fn ItemContextMenu(item_index: usize, on_close: Callback<()>) -> impl IntoVi
             "
         </style>
         <div
-            // border border-gray-600 ring-2 ring-gray-700
             class="
             absolute inset-0 z-30 flex flex-col justify-center items-center
-            p-6 rounded-md  shadow-lg shadow-gray-900
-            bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black space-y-4
+            w-full
+            rounded-md  shadow-lg shadow-gray-900
+            bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black
+            border border-gray-600 ring-2 ring-gray-700
             text-center
             "
             style="animation: fade-in 0.2s ease-out forwards"
         >
             <button
-                class="text-xl font-semibold text-green-300 hover:text-green-100 px-4 py-2 rounded"
+                class="w-full text-xl font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-2"
                 on:click=move |_| equip()
             >
                 "Equip"
             </button>
 
             <button
-                class="text-xl font-semibold text-yellow-300 hover:text-yellow-100 px-4 py-2 rounded"
+                class="w-full text-xl font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-2"
                 on:click=move |_| toggle_sell_mark()
             >
                 {if sell_queue.0.get().contains(&item_index) { "Unsell" } else { "Sell" }}
             </button>
 
-            // <button
-            // class="text-xl font-semibold text-red-300 hover:text-red-100 px-4 py-2 rounded"
-            // on:click=move |_| sell()
-            // >
-            // "Sell"
-            // </button>
-
             <button
-                class="text-sm text-gray-400 hover:text-white mt-4"
+                class="w-full text-lg text-gray-400 hover:text-white hover:bg-gray-400/40 py-4"
                 on:click=move |_| on_close.run(())
             >
                 "Cancel"
@@ -290,7 +281,7 @@ fn SellAllButton() -> impl IntoView {
 
     view! {
         <MenuButton on:click=sell disabled=disabled>
-            "Confirm Sell"
+            "Sell all marked items"
         </MenuButton>
     }
 }
