@@ -1,12 +1,13 @@
 use leptos::html::*;
 use leptos::prelude::*;
 use std::collections::HashSet;
+use std::sync::Arc;
 
 use shared::messages::client::{EquipItemMessage, SellItemsMessage};
 
 use crate::assets::img_asset;
 use crate::components::{
-    game::item_card::ItemCard,
+    game::item_card::{ItemCard, ItemTooltip},
     ui::{
         buttons::{CloseButton, MenuButton},
         menu_panel::MenuPanel,
@@ -110,7 +111,8 @@ fn ItemsGrid(open: RwSignal<bool>) -> impl IntoView {
                 <CloseButton on:click=move |_| open.set(false) />
             </div>
 
-            <div class="relative flex-1 overflow-y-auto max-h-[80vh]">
+            // overflow-y-auto
+            <div class="relative flex-1 overflow-x-visible max-h-[80vh]">
                 <div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 p-4 relative shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                     <For each=move || (0..total_slots) key=|i| *i let(i)>
                         <ItemInBag item_index=i />
@@ -145,8 +147,9 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
             {move || {
                 match maybe_item() {
                     Some(item_specs) => {
+                        let rc_item_specs = Arc::new(item_specs.clone());
                         view! {
-                            <div class="relative w-full h-full">
+                            <div class="relative w-full h-full overflow-visible">
                                 <ItemCard
                                     item_specs=item_specs.clone()
                                     on:click=move |_| show_menu.set(true)
@@ -164,6 +167,9 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
                                         item_index=item_index
                                         on_close=Callback::new(move |_| show_menu.set(false))
                                     />
+                                    <div class="absolute top-0 left-0 -translate-x-full pr-2 whitespace-nowrap z-20 transition-opacity duration-150">
+                                        <ItemTooltip item_specs=rc_item_specs.clone() />
+                                    </div>
                                 </Show>
                             </div>
                         }
@@ -226,21 +232,21 @@ pub fn ItemContextMenu(item_index: usize, on_close: Callback<()>) -> impl IntoVi
             style="animation: fade-in 0.2s ease-out forwards"
         >
             <button
-                class="w-full text-xl font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-2"
+                class="w-full text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-2"
                 on:click=move |_| equip()
             >
                 "Equip"
             </button>
 
             <button
-                class="w-full text-xl font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-2"
+                class="w-full text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-2"
                 on:click=move |_| toggle_sell_mark()
             >
                 {if sell_queue.0.get().contains(&item_index) { "Unsell" } else { "Sell" }}
             </button>
 
             <button
-                class="w-full text-lg text-gray-400 hover:text-white hover:bg-gray-400/40 py-4"
+                class="w-full text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-4"
                 on:click=move |_| on_close.run(())
             >
                 "Cancel"

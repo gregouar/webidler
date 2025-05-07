@@ -136,7 +136,7 @@ pub fn ItemCard(item_specs: ItemSpecs, tooltip_position: DynamicTooltipPosition)
 }
 
 #[component]
-fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     let extra_info = match &item_specs.item_category {
         ItemCategory::Trinket => {
             view! { <li class="text-gray-400 text-sm leading-snug">"Trinket"</li> }.into_any()
