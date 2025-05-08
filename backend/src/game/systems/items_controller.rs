@@ -15,7 +15,7 @@ pub fn update_item_specs(mut item_specs: ItemSpecs) -> ItemSpecs {
     item_specs
 }
 
-pub fn update_weapon_specs(weapon_specs: &mut WeaponSpecs, mut effects: Vec<AffixEffect>) {
+fn update_weapon_specs(weapon_specs: &mut WeaponSpecs, mut effects: Vec<AffixEffect>) {
     weapon_specs.cooldown = weapon_specs.base_cooldown;
     weapon_specs.min_damage = weapon_specs.base_min_damage;
     weapon_specs.max_damage = weapon_specs.base_max_damage;
@@ -65,7 +65,7 @@ pub fn update_weapon_specs(weapon_specs: &mut WeaponSpecs, mut effects: Vec<Affi
         .min(weapon_specs.max_damage);
 }
 
-pub fn update_armor_specs(armor_specs: &mut ArmorSpecs, mut effects: Vec<AffixEffect>) {
+fn update_armor_specs(armor_specs: &mut ArmorSpecs, mut effects: Vec<AffixEffect>) {
     armor_specs.armor = armor_specs.base_armor;
 
     effects.sort_by_key(|e| match e.effect_type {

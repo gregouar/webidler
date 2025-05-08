@@ -7,9 +7,7 @@ use shared::data::{
 
 use crate::game::data::DataInit;
 
-use super::{
-    increase_factors::exponential_factor, items_controller::make_weapon_skill, skills_controller,
-};
+use super::{increase_factors::exponential_factor, items_controller, skills_controller};
 
 pub struct PlayerController {
     pub auto_skills: Vec<bool>,
@@ -147,7 +145,7 @@ pub fn equip_weapon(
         player_specs.auto_skills.remove(0);
     }
 
-    if let Some(weapon_skill) = make_weapon_skill(&weapon_specs) {
+    if let Some(weapon_skill) = items_controller::make_weapon_skill(&weapon_specs) {
         player_specs.auto_skills.insert(0, true);
         if let Some(ref mut player_state) = player_state {
             player_state
