@@ -1,5 +1,5 @@
 use shared::data::{
-    item::{ItemCategory, ItemSpecs},
+    item::{ItemSlot, ItemSpecs, WeaponSpecs},
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerResources, PlayerSpecs, PlayerState},
     skill::{SkillState, SkillType},
@@ -18,7 +18,7 @@ impl PlayerController {
     pub fn init(specs: &PlayerSpecs) -> Self {
         PlayerController {
             auto_skills: specs.auto_skills.clone(),
-            use_skills: Vec::with_capacity(specs.skill_specs.len()),
+            use_skills: Vec::with_capacity(specs.skills_specs.len()),
         }
     }
 
@@ -37,9 +37,9 @@ impl PlayerController {
         }
 
         for (i, (skill_specs, skill_state)) in player_specs
-            .skill_specs
+            .skills_specs
             .iter()
-            .zip(player_state.skill_states.iter_mut())
+            .zip(player_state.skills_states.iter_mut())
             .enumerate()
         {
             if !skill_state.is_ready || skill_specs.mana_cost > player_state.mana {
@@ -97,25 +97,65 @@ pub fn level_up(
 }
 
 // TODO: InventoryController ?
-pub fn equip_item(player_specs: &mut PlayerSpecs, player_state: &mut PlayerState, item_index: u8) {
+pub fn equip_item_from_bag(
+    player_specs: &mut PlayerSpecs,
+    player_state: &mut PlayerState,
+    item_index: u8,
+) {
     let item_index = item_index as usize;
     if let Some(item_specs) = player_specs.inventory.bag.get(item_index) {
-        if let Some(old_item_specs) = match item_specs.item_category {
-            ItemCategory::Trinket => return, // Cannot equip trinket
-            ItemCategory::Weapon(_) => {
-                equip_weapon(player_specs, Some(player_state), item_specs.clone())
-            }
-            ItemCategory::Helmet(_) => {
-                let old_helmet = player_specs.inventory.helmet_specs.take();
-                player_specs.inventory.helmet_specs = Some(item_specs.clone());
-                old_helmet
-            }
-        } {
+        if let Some(old_item_specs) = equip_item(player_specs, player_state, item_specs.clone()) {
             player_specs.inventory.bag[item_index] = old_item_specs;
         } else {
             player_specs.inventory.bag.remove(item_index);
         }
     }
+}
+
+/// Equip new item and return old equipped item
+pub fn equip_item(
+    player_specs: &mut PlayerSpecs,
+    player_state: &mut PlayerState,
+    item_specs: ItemSpecs,
+) -> Option<ItemSpecs> {
+    let old_item = match item_specs.base.item_slot {
+        ItemSlot::Amulet => todo!(),
+        ItemSlot::Body => todo!(),
+        ItemSlot::Boots => todo!(),
+        ItemSlot::Gloves => todo!(),
+        ItemSlot::Helmet => player_specs.inventory.helmet_specs.take(),
+        ItemSlot::Relic => todo!(),
+        ItemSlot::Ring => todo!(),
+        ItemSlot::Shield => todo!(),
+        ItemSlot::Weapon => player_specs.inventory.weapon_specs.take(),
+    };
+
+    if let Some(_) = old_item.as_ref().map(|x| x.weapon_specs.as_ref()).flatten() {
+        unequip_weapon(player_specs, player_state, item_specs.base.item_slot);
+    }
+
+    if let Some(ref weapon_specs) = item_specs.weapon_specs {
+        equip_weapon(
+            player_specs,
+            player_state,
+            item_specs.base.item_slot,
+            weapon_specs,
+        );
+    }
+
+    match item_specs.base.item_slot {
+        ItemSlot::Amulet => todo!(),
+        ItemSlot::Body => todo!(),
+        ItemSlot::Boots => todo!(),
+        ItemSlot::Gloves => todo!(),
+        ItemSlot::Helmet => player_specs.inventory.helmet_specs = Some(item_specs),
+        ItemSlot::Relic => todo!(),
+        ItemSlot::Ring => todo!(),
+        ItemSlot::Shield => todo!(),
+        ItemSlot::Weapon => player_specs.inventory.weapon_specs = Some(item_specs),
+    }
+
+    old_item
 }
 
 pub fn sell_item(
@@ -126,36 +166,49 @@ pub fn sell_item(
     let item_index = item_index as usize;
     if item_index < player_specs.inventory.bag.len() {
         let item_specs = player_specs.inventory.bag.remove(item_index);
-        player_resources.gold += 10.0 * exponential_factor(item_specs.item_level as f64);
+        player_resources.gold += 10.0 * exponential_factor(item_specs.level as f64);
     }
 }
 
-pub fn equip_weapon(
+// TODO: Find better way to do this, could have multiple item attacks
+// -> might need to generate uuid in item specs and keep track... or slot is enough for now
+fn unequip_weapon(
     player_specs: &mut PlayerSpecs,
-    mut player_state: Option<&mut PlayerState>,
-    weapon_specs: ItemSpecs,
-) -> Option<ItemSpecs> {
-    let old_weapon = player_specs.inventory.weapon_specs.take();
+    player_state: &mut PlayerState,
+    item_slot: ItemSlot,
+) {
+    let to_remove: Vec<_> = player_specs
+        .skills_specs
+        .iter()
+        .enumerate()
+        .filter_map(|(i, skill_specs)| {
+            if let SkillType::Weapon(slot) = skill_specs.skill_type {
+                if slot == item_slot {
+                    return Some(i);
+                }
+            }
+            None
+        })
+        .collect();
 
-    if let Some(SkillType::Weapon) = player_specs.skill_specs.get(0).map(|x| x.skill_type) {
-        player_specs.skill_specs.remove(0);
-        if let Some(ref mut player_state) = player_state {
-            player_state.skill_states.remove(0);
-        }
-        player_specs.auto_skills.remove(0);
+    for i in to_remove.into_iter().rev() {
+        player_specs.skills_specs.remove(i);
+        player_state.skills_states.remove(i);
+        player_specs.auto_skills.remove(i);
     }
+}
 
-    if let Some(weapon_skill) = items_controller::make_weapon_skill(&weapon_specs) {
-        player_specs.auto_skills.insert(0, true);
-        if let Some(ref mut player_state) = player_state {
-            player_state
-                .skill_states
-                .insert(0, SkillState::init(&weapon_skill));
-        }
-        player_specs.skill_specs.insert(0, weapon_skill);
-    }
+fn equip_weapon(
+    player_specs: &mut PlayerSpecs,
+    player_state: &mut PlayerState,
+    item_slot: ItemSlot,
+    weapon_specs: &WeaponSpecs,
+) {
+    let weapon_skill = items_controller::make_weapon_skill(item_slot, &weapon_specs);
 
-    player_specs.inventory.weapon_specs = Some(weapon_specs);
-
-    old_weapon
+    player_specs.auto_skills.insert(0, true);
+    player_state
+        .skills_states
+        .insert(0, SkillState::init(&weapon_skill));
+    player_specs.skills_specs.insert(0, weapon_skill);
 }

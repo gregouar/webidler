@@ -5,19 +5,74 @@ use serde::{Deserialize, Serialize};
 use super::item_affix::{AffixEffect, ItemAffix};
 pub use super::skill::{Range, Shape};
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
-pub struct ItemSpecs {
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+pub enum ItemRarity {
+    Normal,
+    Magic,
+    Rare,
+    Unique,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+pub enum ItemSlot {
+    Amulet,
+    Body,
+    Boots,
+    Gloves,
+    Helmet,
+    Relic,
+    Ring,
+    Shield,
+    Weapon,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ItemBase {
     pub name: String,
     pub icon: String,
     pub description: String,
+
+    pub min_level: u16,
+
+    pub item_slot: ItemSlot,
+
+    pub weapon_specs: Option<WeaponSpecs>,
+    pub armor_specs: Option<ArmorSpecs>,
+    // TODO: Implicit affixes?
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ItemSpecs {
+    pub base: ItemBase,
     pub rarity: ItemRarity,
 
     // Area level at which the item dropped
-    pub item_level: u16,
+    pub level: u16,
 
-    pub item_category: ItemCategory,
+    pub weapon_specs: Option<WeaponSpecs>,
+    pub armor_specs: Option<ArmorSpecs>,
 
     pub affixes: Vec<ItemAffix>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+pub struct WeaponSpecs {
+    #[serde(default)]
+    pub range: Range,
+    #[serde(default)]
+    pub shape: Shape,
+
+    pub cooldown: f32,
+
+    pub min_damage: f64,
+    pub max_damage: f64,
+    // pub critical_chances: f32,
+    // pub critical_damage: f32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+pub struct ArmorSpecs {
+    pub armor: f64,
 }
 
 impl ItemSpecs {
@@ -38,74 +93,5 @@ impl ItemSpecs {
                 value,
             })
             .collect()
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
-pub enum ItemRarity {
-    Normal,
-    Magic,
-    Rare,
-    Unique,
-}
-
-impl Default for ItemRarity {
-    fn default() -> Self {
-        ItemRarity::Normal
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub enum ItemCategory {
-    Trinket,
-    Weapon(WeaponSpecs),
-    Helmet(ArmorSpecs),
-}
-
-impl Default for ItemCategory {
-    fn default() -> Self {
-        ItemCategory::Trinket
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
-pub struct WeaponSpecs {
-    pub base_cooldown: f32,
-    pub cooldown: f32,
-
-    #[serde(default)]
-    pub range: Range,
-    #[serde(default)]
-    pub shape: Shape,
-
-    pub base_min_damage: f64,
-    pub min_damage: f64,
-    pub base_max_damage: f64,
-    pub max_damage: f64,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
-pub struct ArmorSpecs {
-    pub base_armor: f64,
-    pub armor: f64,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct QueuedLoot {
-    pub identifier: u32,
-    pub item_specs: ItemSpecs,
-    pub state: LootState,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
-pub enum LootState {
-    Normal,
-    WillDisappear,
-    HasDisappeared,
-}
-
-impl Default for LootState {
-    fn default() -> Self {
-        LootState::Normal
     }
 }

@@ -9,7 +9,7 @@ use std::{
 
 use shared::{
     data::{
-        item::QueuedLoot,
+        loot::QueuedLoot,
         monster::{MonsterSpecs, MonsterState},
         player::{PlayerResources, PlayerSpecs, PlayerState},
         world::WorldState,
@@ -163,7 +163,7 @@ impl<'a> GameInstance<'a> {
                 if let Some(skill_specs) = self
                     .player_specs
                     .mutate()
-                    .skill_specs
+                    .skills_specs
                     .get_mut(m.skill_index as usize)
                 {
                     skills_controller::level_up_skill(skill_specs, &mut self.player_resources);
@@ -176,7 +176,7 @@ impl<'a> GameInstance<'a> {
                     &mut self.player_resources,
                 );
             }
-            ClientMessage::EquipItem(m) => player_controller::equip_item(
+            ClientMessage::EquipItem(m) => player_controller::equip_item_from_bag(
                 self.player_specs.mutate(),
                 &mut self.player_state,
                 m.item_index,

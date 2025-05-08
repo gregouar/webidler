@@ -1,7 +1,7 @@
 use leptos::prelude::*;
 
 use shared::data::{
-    item::QueuedLoot,
+    loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerResources, PlayerSpecs, PlayerState},
     world::{WorldSpecs, WorldState},

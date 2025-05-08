@@ -55,8 +55,8 @@ impl DataInit<PlayerSpecs> for PlayerState {
     fn init(specs: &PlayerSpecs) -> Self {
         PlayerState {
             character_state: CharacterState::init(&specs.character_specs),
-            skill_states: specs
-                .skill_specs
+            skills_states: specs
+                .skills_specs
                 .iter()
                 .map(|p| SkillState::init(p))
                 .collect(),

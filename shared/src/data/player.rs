@@ -9,7 +9,7 @@ use super::{
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerSpecs {
     pub character_specs: CharacterSpecs,
-    pub skill_specs: Vec<SkillSpecs>,
+    pub skills_specs: Vec<SkillSpecs>,
 
     pub level: u8,
     pub experience_needed: f64,
@@ -25,7 +25,7 @@ pub struct PlayerSpecs {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerState {
     pub character_state: CharacterState,
-    pub skill_states: Vec<SkillState>,
+    pub skills_states: Vec<SkillState>,
 
     pub mana: f64,
 

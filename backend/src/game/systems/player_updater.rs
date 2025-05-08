@@ -20,8 +20,8 @@ pub fn update_player_state(
     );
     skills_updater::update_skills_states(
         elapsed_time,
-        &player_specs.skill_specs,
-        &mut player_state.skill_states,
+        &player_specs.skills_specs,
+        &mut player_state.skills_states,
     );
 
     player_state.mana = player_specs
@@ -32,5 +32,5 @@ pub fn update_player_state(
 pub fn reset_player(player_state: &mut PlayerState) {
     player_state.just_leveled_up = false;
     characters_updater::reset_character(&mut player_state.character_state);
-    skills_updater::reset_skills(&mut player_state.skill_states);
+    skills_updater::reset_skills(&mut player_state.skills_states);
 }

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    item::QueuedLoot,
+    loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerResources, PlayerSpecs, PlayerState},
     world::{WorldSpecs, WorldState},

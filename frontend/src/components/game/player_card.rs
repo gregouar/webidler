@@ -189,7 +189,7 @@ pub fn PlayerCard() -> impl IntoView {
 
             <div class="grid grid-cols-4 gap-2">
                 <For
-                    each=move || (0..game_context.player_specs.read().skill_specs.len())
+                    each=move || (0..game_context.player_specs.read().skills_specs.len())
                     key=|i| *i
                     let(i)
                 >
@@ -226,7 +226,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let icon_asset = move || {
-        if let Some(skill_specs) = game_context.player_specs.read().skill_specs.get(index) {
+        if let Some(skill_specs) = game_context.player_specs.read().skills_specs.get(index) {
             img_asset(&skill_specs.icon)
         } else {
             "".to_string()
@@ -237,7 +237,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         game_context
             .player_specs
             .read()
-            .skill_specs
+            .skills_specs
             .get(index)
             .map(|x| x.name.clone())
             .unwrap_or_default()
@@ -247,7 +247,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         let cooldown = game_context
             .player_specs
             .read()
-            .skill_specs
+            .skills_specs
             .get(index)
             .map(|x| x.cooldown)
             .unwrap_or_default();
@@ -256,7 +256,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
             (game_context
                 .player_state
                 .read()
-                .skill_states
+                .skills_states
                 .get(index)
                 .map(|x| x.elapsed_cooldown)
                 .unwrap_or_default()
@@ -279,7 +279,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         game_context
             .player_state
             .read()
-            .skill_states
+            .skills_states
             .get(index)
             .map(|x| x.just_triggered)
             .unwrap_or_default()
@@ -289,7 +289,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         game_context
             .player_state
             .read()
-            .skill_states
+            .skills_states
             .get(index)
             .map(|x| x.is_ready)
             .unwrap_or_default()
@@ -330,7 +330,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         game_context
             .player_specs
             .read()
-            .skill_specs
+            .skills_specs
             .get(index)
             .map(|x| x.next_upgrade_cost)
             .unwrap_or_default()
@@ -352,7 +352,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let show_tooltip = move |_| {
-        if let Some(skill_specs) = game_context.player_specs.read().skill_specs.get(index) {
+        if let Some(skill_specs) = game_context.player_specs.read().skills_specs.get(index) {
             let skill_specs = Arc::new(skill_specs.clone());
             tooltip_context.set_content(
                 move || {

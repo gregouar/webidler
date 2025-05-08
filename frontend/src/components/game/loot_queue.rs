@@ -1,7 +1,7 @@
 use leptos::html::*;
 use leptos::prelude::*;
 
-use shared::data::item::LootState;
+use shared::data::loot::LootState;
 use shared::messages::client::PickUpLootMessage;
 
 use crate::components::game::GameContext;

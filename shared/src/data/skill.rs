@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use super::item::ItemSlot;
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SkillState {
     pub elapsed_cooldown: f32,
@@ -32,7 +34,7 @@ pub struct SkillSpecs {
 pub enum SkillType {
     Attack,
     Spell,
-    Weapon,
+    Weapon(ItemSlot),
 }
 
 impl Default for SkillType {

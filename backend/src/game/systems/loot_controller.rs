@@ -1,5 +1,6 @@
 use shared::data::{
-    item::{ArmorSpecs, ItemCategory, ItemRarity, ItemSpecs, LootState, QueuedLoot},
+    item::{ArmorSpecs, ItemBase, ItemRarity, ItemSlot, ItemSpecs},
+    loot::{LootState, QueuedLoot},
     player::PlayerSpecs,
 };
 
@@ -19,15 +20,19 @@ pub fn generate_loot() -> ItemSpecs {
     };
 
     items_controller::update_item_specs(ItemSpecs {
-        name: "Helmet".to_string(),
-        icon: "items/helmet.webp".to_string(),
-        description: "Save your brain".to_string(),
+        base: ItemBase {
+            name: "Helmet".to_string(),
+            icon: "items/helmet.webp".to_string(),
+            description: "Save your brain".to_string(),
+            item_slot: ItemSlot::Helmet,
+            armor_specs: Some(ArmorSpecs { armor: 10.0 }),
+            weapon_specs: None,
+            min_level: 1,
+        },
         rarity: rarity,
-        item_level: 1,
-        item_category: ItemCategory::Helmet(ArmorSpecs {
-            base_armor: 10.0,
-            armor: 0.0,
-        }),
+        level: 1,
+        armor_specs: None,
+        weapon_specs: None,
         affixes: vec![],
     })
 }

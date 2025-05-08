@@ -16,9 +16,9 @@ use std::{ops::ControlFlow, vec};
 use shared::{
     data::{
         character::CharacterSize,
-        item::{ItemCategory, ItemRarity, ItemSpecs, WeaponSpecs},
+        item::{ItemBase, ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
         item_affix::{AffixEffect, AffixEffectType, AffixType, ItemAffix, ItemStat},
-        player::{CharacterSpecs, PlayerInventory, PlayerSpecs},
+        player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
         skill::{
             DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs, SkillType,
             TargetType,
@@ -31,6 +31,7 @@ use shared::{
 };
 
 use crate::game::{
+    data::DataInit,
     systems::{items_controller, player_controller},
     world::WorldBlueprint,
     GameInstance,
@@ -126,7 +127,7 @@ async fn handle_connect(
             max_health: 100.0,
             health_regen: 1.0,
         },
-        skill_specs: vec![
+        skills_specs: vec![
             SkillSpecs {
                 name: String::from("Fireball"),
                 description: "A throw of mighty fireball, burning multiple enemies".to_string(),
@@ -177,146 +178,151 @@ async fn handle_connect(
             helmet_specs: None,
             max_bag_size: 40,
             bag: vec![
-                items_controller::update_item_specs(ItemSpecs {
-                    name: "Battleaxe".to_string(),
-                    description: "A shiny thing".to_string(),
-                    icon: "items/battleaxe.webp".to_string(),
-                    item_level: 2,
-                    rarity: ItemRarity::Magic,
-                    item_category: ItemCategory::Weapon(WeaponSpecs {
-                        base_cooldown: 1.2,
-                        cooldown: 1.2,
-                        range: Range::Melee,
-                        shape: Shape::Single,
-                        base_min_damage: 4.0,
-                        min_damage: 4.0,
-                        base_max_damage: 8.0,
-                        max_damage: 8.0,
-                    }),
-                    affixes: vec![ItemAffix {
-                        name: "Painful".to_string(),
-                        family: "inc_damage".to_string(),
-                        affix_type: AffixType::Prefix,
-                        affix_level: 1,
-                        effects: vec![AffixEffect {
-                            stat: ItemStat::AttackDamage,
-                            effect_type: AffixEffectType::Multiplier,
-                            value: 0.1,
-                        }],
-                    }],
-                }),
-                items_controller::update_item_specs(ItemSpecs {
-                    name: "Shortsword".to_string(),
-                    description: "Fasty Slicy".to_string(),
-                    icon: "items/shortsword.webp".to_string(),
-                    item_level: 1,
-                    rarity: ItemRarity::Rare,
-                    item_category: ItemCategory::Weapon(WeaponSpecs {
-                        base_cooldown: 1.0,
-                        cooldown: 1.0,
-                        range: Range::Melee,
-                        shape: Shape::Single,
-                        base_min_damage: 3.0,
-                        min_damage: 3.0,
-                        base_max_damage: 7.0,
-                        max_damage: 7.0,
-                    }),
-                    affixes: vec![
-                        ItemAffix {
-                            name: "Painful".to_string(),
-                            family: "inc_damage".to_string(),
-                            affix_type: AffixType::Prefix,
-                            affix_level: 1,
-                            effects: vec![AffixEffect {
-                                stat: ItemStat::AttackDamage,
-                                effect_type: AffixEffectType::Multiplier,
-                                value: 0.1,
-                            }],
-                        },
-                        ItemAffix {
-                            name: "Merciless".to_string(),
-                            family: "inc_damage".to_string(),
-                            affix_type: AffixType::Prefix,
-                            affix_level: 1,
-                            effects: vec![
-                                AffixEffect {
-                                    stat: ItemStat::MinAttackDamage,
-                                    effect_type: AffixEffectType::Flat,
-                                    value: 1.0,
-                                },
-                                AffixEffect {
-                                    stat: ItemStat::MaxAttackDamage,
-                                    effect_type: AffixEffectType::Flat,
-                                    value: 2.0,
-                                },
-                            ],
-                        },
-                        ItemAffix {
-                            name: "Greedy".to_string(),
-                            family: "gold".to_string(),
-                            affix_type: AffixType::Suffix,
-                            affix_level: 1,
-                            effects: vec![AffixEffect {
-                                stat: ItemStat::GoldFind,
-                                effect_type: AffixEffectType::Multiplier,
-                                value: 0.3,
-                            }],
-                        },
-                        ItemAffix {
-                            name: "Fast".to_string(),
-                            family: "inc_speed".to_string(),
-                            affix_type: AffixType::Prefix,
-                            affix_level: 1,
-                            effects: vec![AffixEffect {
-                                stat: ItemStat::AttackSpeed,
-                                effect_type: AffixEffectType::Multiplier,
-                                value: 0.1,
-                            }],
-                        },
-                    ],
-                }),
-                items_controller::update_item_specs(ItemSpecs {
-                    name: "Stabby the First".to_string(),
-                    description: "Most Unique Fasty Slicy".to_string(),
-                    icon: "items/shortsword.webp".to_string(),
-                    item_level: 1,
-                    rarity: ItemRarity::Unique,
-                    item_category: ItemCategory::Weapon(WeaponSpecs {
-                        base_cooldown: 1.0,
-                        cooldown: 0.8,
-                        range: Range::Melee,
-                        shape: Shape::Single,
-                        base_min_damage: 1.0,
-                        min_damage: 1.0,
-                        base_max_damage: 13.0,
-                        max_damage: 13.0,
-                    }),
-                    affixes: Vec::new(),
-                }),
+                // items_controller::update_item_specs(ItemSpecs {
+                //     name: "Battleaxe".to_string(),
+                //     description: "A shiny thing".to_string(),
+                //     icon: "items/battleaxe.webp".to_string(),
+                //     level: 2,
+                //     rarity: ItemRarity::Magic,
+                //     item_slot: ItemSlot::Weapon(WeaponSpecs {
+                //         base_cooldown: 1.2,
+                //         cooldown: 1.2,
+                //         range: Range::Melee,
+                //         shape: Shape::Single,
+                //         base_min_damage: 4.0,
+                //         min_damage: 4.0,
+                //         base_max_damage: 8.0,
+                //         max_damage: 8.0,
+                //     }),
+                //     affixes: vec![ItemAffix {
+                //         name: "Painful".to_string(),
+                //         family: "inc_damage".to_string(),
+                //         affix_type: AffixType::Prefix,
+                //         affix_level: 1,
+                //         effects: vec![AffixEffect {
+                //             stat: ItemStat::AttackDamage,
+                //             effect_type: AffixEffectType::Multiplier,
+                //             value: 0.1,
+                //         }],
+                //     }],
+                // }),
+                // items_controller::update_item_specs(ItemSpecs {
+                //     name: "Shortsword".to_string(),
+                //     description: "Fasty Slicy".to_string(),
+                //     icon: "items/shortsword.webp".to_string(),
+                //     level: 1,
+                //     rarity: ItemRarity::Rare,
+                //     item_slot: ItemSlot::Weapon(WeaponSpecs {
+                //         base_cooldown: 1.0,
+                //         cooldown: 1.0,
+                //         range: Range::Melee,
+                //         shape: Shape::Single,
+                //         base_min_damage: 3.0,
+                //         min_damage: 3.0,
+                //         base_max_damage: 7.0,
+                //         max_damage: 7.0,
+                //     }),
+                //     affixes: vec![
+                //         ItemAffix {
+                //             name: "Painful".to_string(),
+                //             family: "inc_damage".to_string(),
+                //             affix_type: AffixType::Prefix,
+                //             affix_level: 1,
+                //             effects: vec![AffixEffect {
+                //                 stat: ItemStat::AttackDamage,
+                //                 effect_type: AffixEffectType::Multiplier,
+                //                 value: 0.1,
+                //             }],
+                //         },
+                //         ItemAffix {
+                //             name: "Merciless".to_string(),
+                //             family: "inc_damage".to_string(),
+                //             affix_type: AffixType::Prefix,
+                //             affix_level: 1,
+                //             effects: vec![
+                //                 AffixEffect {
+                //                     stat: ItemStat::MinAttackDamage,
+                //                     effect_type: AffixEffectType::Flat,
+                //                     value: 1.0,
+                //                 },
+                //                 AffixEffect {
+                //                     stat: ItemStat::MaxAttackDamage,
+                //                     effect_type: AffixEffectType::Flat,
+                //                     value: 2.0,
+                //                 },
+                //             ],
+                //         },
+                //         ItemAffix {
+                //             name: "Greedy".to_string(),
+                //             family: "gold".to_string(),
+                //             affix_type: AffixType::Suffix,
+                //             affix_level: 1,
+                //             effects: vec![AffixEffect {
+                //                 stat: ItemStat::GoldFind,
+                //                 effect_type: AffixEffectType::Multiplier,
+                //                 value: 0.3,
+                //             }],
+                //         },
+                //         ItemAffix {
+                //             name: "Fast".to_string(),
+                //             family: "inc_speed".to_string(),
+                //             affix_type: AffixType::Prefix,
+                //             affix_level: 1,
+                //             effects: vec![AffixEffect {
+                //                 stat: ItemStat::AttackSpeed,
+                //                 effect_type: AffixEffectType::Multiplier,
+                //                 value: 0.1,
+                //             }],
+                //         },
+                //     ],
+                // }),
+                // items_controller::update_item_specs(ItemSpecs {
+                //     name: "Stabby the First".to_string(),
+                //     description: "Most Unique Fasty Slicy".to_string(),
+                //     icon: "items/shortsword.webp".to_string(),
+                //     level: 1,
+                //     rarity: ItemRarity::Unique,
+                //     item_slot: ItemSlot::Weapon(WeaponSpecs {
+                //         base_cooldown: 1.0,
+                //         cooldown: 0.8,
+                //         range: Range::Melee,
+                //         shape: Shape::Single,
+                //         base_min_damage: 1.0,
+                //         min_damage: 1.0,
+                //         base_max_damage: 13.0,
+                //         max_damage: 13.0,
+                //     }),
+                //     affixes: Vec::new(),
+                // }),
             ],
         },
     };
 
-    player_controller::equip_weapon(
+    let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
+    player_controller::equip_item(
         &mut player_specs,
-        None,
+        &mut player_state,
         items_controller::update_item_specs(ItemSpecs {
-            name: "Shortsword".to_string(),
-            description: "Fasty Slicy".to_string(),
-            icon: "items/shortsword.webp".to_string(),
-            item_level: 1,
+            base: ItemBase {
+                name: "Shortsword".to_string(),
+                description: "Fasty Slicy".to_string(),
+                icon: "items/shortsword.webp".to_string(),
+                item_slot: ItemSlot::Weapon,
+                min_level: 1,
+                weapon_specs: Some(WeaponSpecs {
+                    cooldown: 1.0,
+                    range: Range::Melee,
+                    shape: Shape::Single,
+                    min_damage: 3.0,
+                    max_damage: 7.0,
+                }),
+                armor_specs: None,
+            },
+            level: 1,
             rarity: ItemRarity::Normal,
             affixes: Vec::new(),
-            item_category: ItemCategory::Weapon(WeaponSpecs {
-                base_cooldown: 1.0,
-                cooldown: 1.0,
-                range: Range::Melee,
-                shape: Shape::Single,
-                base_min_damage: 3.0,
-                min_damage: 3.0,
-                base_max_damage: 7.0,
-                max_damage: 7.0,
-            }),
+            weapon_specs: None,
+            armor_specs: None,
         }),
     );
 

@@ -1,38 +1,38 @@
 use shared::data::{
-    item::{ArmorSpecs, ItemCategory, ItemSpecs, WeaponSpecs},
+    item::{ArmorSpecs, ItemSlot, ItemSpecs, WeaponSpecs},
     item_affix::{AffixEffect, AffixEffectType, ItemStat},
     skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillType, TargetType},
 };
 
 // TODO: Where to call that?
 pub fn update_item_specs(mut item_specs: ItemSpecs) -> ItemSpecs {
-    let effects: Vec<AffixEffect> = item_specs.aggregate_effects();
-    match &mut item_specs.item_category {
-        ItemCategory::Trinket => {}
-        ItemCategory::Weapon(weapon_specs) => update_weapon_specs(weapon_specs, effects),
-        ItemCategory::Helmet(armor_specs) => update_armor_specs(armor_specs, effects),
-    }
-    item_specs
-}
-
-fn update_weapon_specs(weapon_specs: &mut WeaponSpecs, mut effects: Vec<AffixEffect>) {
-    weapon_specs.cooldown = weapon_specs.base_cooldown;
-    weapon_specs.min_damage = weapon_specs.base_min_damage;
-    weapon_specs.max_damage = weapon_specs.base_max_damage;
+    let mut effects: Vec<AffixEffect> = item_specs.aggregate_effects();
 
     effects.sort_by_key(|e| match e.effect_type {
         AffixEffectType::Flat => 0,
         AffixEffectType::Multiplier => 1,
     });
 
-    for effect in &effects {
+    if let Some(ref armor_specs) = item_specs.base.armor_specs {
+        item_specs.armor_specs = Some(compute_armor_specs(armor_specs.clone(), &effects));
+    }
+
+    if let Some(ref weapon_specs) = item_specs.base.weapon_specs {
+        item_specs.weapon_specs = Some(compute_weapon_specs(weapon_specs.clone(), &effects));
+    }
+
+    item_specs
+}
+
+fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &Vec<AffixEffect>) -> WeaponSpecs {
+    for effect in effects {
         match effect.stat {
             ItemStat::AttackSpeed => match effect.effect_type {
                 AffixEffectType::Flat => {
-                    weapon_specs.cooldown *= 1.0 - effect.value as f32;
+                    weapon_specs.cooldown -= effect.value as f32;
                 }
                 AffixEffectType::Multiplier => {
-                    weapon_specs.cooldown -= effect.value as f32;
+                    weapon_specs.cooldown *= 1.0 - effect.value as f32;
                 }
             },
             ItemStat::AttackDamage => match effect.effect_type {
@@ -63,24 +63,19 @@ fn update_weapon_specs(weapon_specs: &mut WeaponSpecs, mut effects: Vec<AffixEff
         .min_damage
         .max(0.0)
         .min(weapon_specs.max_damage);
+
+    weapon_specs
 }
 
-fn update_armor_specs(armor_specs: &mut ArmorSpecs, mut effects: Vec<AffixEffect>) {
-    armor_specs.armor = armor_specs.base_armor;
-
-    effects.sort_by_key(|e| match e.effect_type {
-        AffixEffectType::Flat => 0,
-        AffixEffectType::Multiplier => 1,
-    });
-
-    for effect in &effects {
+fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &Vec<AffixEffect>) -> ArmorSpecs {
+    for effect in effects {
         match effect.stat {
             ItemStat::Armor => match effect.effect_type {
                 AffixEffectType::Flat => {
-                    armor_specs.armor *= 1.0 + effect.value;
+                    armor_specs.armor += effect.value;
                 }
                 AffixEffectType::Multiplier => {
-                    armor_specs.armor += effect.value;
+                    armor_specs.armor *= 1.0 + effect.value;
                 }
             },
             ItemStat::AttackSpeed
@@ -90,19 +85,15 @@ fn update_armor_specs(armor_specs: &mut ArmorSpecs, mut effects: Vec<AffixEffect
             | ItemStat::GoldFind => {}
         }
     }
+    armor_specs
 }
 
-pub fn make_weapon_skill(item_specs: &ItemSpecs) -> Option<SkillSpecs> {
-    let weapon_specs = match &item_specs.item_category {
-        ItemCategory::Weapon(w) => w,
-        _ => return None,
-    };
-
-    Some(SkillSpecs {
+pub fn make_weapon_skill(item_slot: ItemSlot, weapon_specs: &WeaponSpecs) -> SkillSpecs {
+    SkillSpecs {
         name: "Weapon Attack".to_string(),
         icon: "skills/attack.svg".to_string(),
         description: "A swing of your weapon".to_string(),
-        skill_type: SkillType::Weapon,
+        skill_type: SkillType::Weapon(item_slot),
         cooldown: weapon_specs.cooldown,
         mana_cost: 0.0,
         upgrade_level: 1,
@@ -117,5 +108,5 @@ pub fn make_weapon_skill(item_specs: &ItemSpecs) -> Option<SkillSpecs> {
                 damage_type: DamageType::Physical,
             },
         }],
-    })
+    }
 }
