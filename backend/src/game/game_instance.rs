@@ -9,7 +9,7 @@ use std::{
 
 use shared::{
     data::{
-        item::{ItemCategory, QueuedLoot},
+        item::QueuedLoot,
         monster::{MonsterSpecs, MonsterState},
         player::{PlayerResources, PlayerSpecs, PlayerState},
         world::WorldState,
@@ -27,8 +27,8 @@ use super::{
 };
 use super::{
     systems::{
-        items_controller, monsters_controller, monsters_updater, monsters_wave, player_controller,
-        player_updater, skills_controller,
+        monsters_controller, monsters_updater, monsters_wave, player_controller, player_updater,
+        skills_controller,
     },
     utils::LazySyncer,
 };
@@ -217,22 +217,6 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn init_game(&mut self) -> Result<()> {
-        // TODO: Remove, find better way to do this:
-        if let Some(weapon) = self.player_specs.mutate().inventory.weapon_specs.as_mut() {
-            let affix_effects = weapon.aggregate_effects();
-            if let ItemCategory::Weapon(w) = &mut weapon.item_category {
-                items_controller::update_weapon_specs(w, affix_effects);
-            }
-        }
-        for i in self.player_specs.mutate().inventory.bag.iter_mut() {
-            let affix_effects = i.aggregate_effects();
-            match &mut i.item_category {
-                ItemCategory::Trinket => {}
-                ItemCategory::Weapon(w) => items_controller::update_weapon_specs(w, affix_effects),
-                ItemCategory::Helmet(a) => items_controller::update_armor_specs(a, affix_effects),
-            };
-        }
-
         self.client_conn
             .send(
                 &InitGameMessage {

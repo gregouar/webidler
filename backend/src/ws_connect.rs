@@ -30,7 +30,11 @@ use shared::{
     },
 };
 
-use crate::game::{systems::player_controller, world::WorldBlueprint, GameInstance};
+use crate::game::{
+    systems::{items_controller, player_controller},
+    world::WorldBlueprint,
+    GameInstance,
+};
 use crate::websocket::WebSocketConnection;
 
 const CLIENT_INACTIVITY_TIMEOUT: Duration = Duration::from_secs(60);
@@ -173,7 +177,7 @@ async fn handle_connect(
             helmet_specs: None,
             max_bag_size: 40,
             bag: vec![
-                ItemSpecs {
+                items_controller::update_item_specs(ItemSpecs {
                     name: "Battleaxe".to_string(),
                     description: "A shiny thing".to_string(),
                     icon: "items/battleaxe.webp".to_string(),
@@ -200,8 +204,8 @@ async fn handle_connect(
                             value: 0.1,
                         }],
                     }],
-                },
-                ItemSpecs {
+                }),
+                items_controller::update_item_specs(ItemSpecs {
                     name: "Shortsword".to_string(),
                     description: "Fasty Slicy".to_string(),
                     icon: "items/shortsword.webp".to_string(),
@@ -270,8 +274,8 @@ async fn handle_connect(
                             }],
                         },
                     ],
-                },
-                ItemSpecs {
+                }),
+                items_controller::update_item_specs(ItemSpecs {
                     name: "Stabby the First".to_string(),
                     description: "Most Unique Fasty Slicy".to_string(),
                     icon: "items/shortsword.webp".to_string(),
@@ -288,7 +292,7 @@ async fn handle_connect(
                         max_damage: 13.0,
                     }),
                     affixes: Vec::new(),
-                },
+                }),
             ],
         },
     };
@@ -296,7 +300,7 @@ async fn handle_connect(
     player_controller::equip_weapon(
         &mut player_specs,
         None,
-        ItemSpecs {
+        items_controller::update_item_specs(ItemSpecs {
             name: "Shortsword".to_string(),
             description: "Fasty Slicy".to_string(),
             icon: "items/shortsword.webp".to_string(),
@@ -313,7 +317,7 @@ async fn handle_connect(
                 base_max_damage: 7.0,
                 max_damage: 7.0,
             }),
-        },
+        }),
     );
 
     Ok(player_specs)
