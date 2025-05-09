@@ -8,6 +8,7 @@
         "header_background": "worlds/forest_header.webp",
         "footer_background": "worlds/forest_footer.webp"
     },
+    "loot_tables": ["loot/default_loot_table.json"],
     "waves": [
         {
             "min_level": 1,

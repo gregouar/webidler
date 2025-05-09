@@ -22,7 +22,10 @@ use shared::{
 
 use super::{
     data::DataInit,
-    systems::{loot_controller, player_controller::PlayerController},
+    systems::{
+        items_table::ItemsTable, loot_controller, loot_generator,
+        player_controller::PlayerController,
+    },
     world::WorldBlueprint,
 };
 use super::{
@@ -48,6 +51,8 @@ pub struct GameInstance<'a> {
     world_blueprint: WorldBlueprint,
     world_state: WorldState,
 
+    items_table: ItemsTable,
+
     player_specs: LazySyncer<PlayerSpecs>,
     player_state: PlayerState,
     player_resources: PlayerResources,
@@ -66,9 +71,12 @@ impl<'a> GameInstance<'a> {
         client_conn: &'a mut WebSocketConnection,
         player_specs: PlayerSpecs,
         world_blueprint: WorldBlueprint,
+        items_table: ItemsTable, // TODO: Find way to share this among all instances
     ) -> Self {
         GameInstance::<'a> {
             client_conn,
+
+            items_table,
 
             world_state: WorldState::init(&world_blueprint.schema.specs),
             world_blueprint: world_blueprint,
@@ -300,10 +308,14 @@ impl<'a> GameInstance<'a> {
             if monsters_still_alive.is_empty() {
                 if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
                     // TODO: Drop on enemy death, not wave generate
-                    loot_controller::drop_loot(
-                        self.queued_loot.mutate(),
-                        loot_controller::generate_loot(),
-                    );
+                    if let Some(item_specs) = loot_generator::generate_loot(
+                        &self.world_blueprint.loot_table,
+                        &self.items_table,
+                        self.world_state.area_level,
+                    ) {
+                        loot_controller::drop_loot(self.queued_loot.mutate(), item_specs);
+                    }
+
                     self.generate_monsters_wave().await?;
                 }
             } else {

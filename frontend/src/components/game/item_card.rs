@@ -137,7 +137,7 @@ pub fn ItemCard(item_specs: ItemSpecs, tooltip_position: DynamicTooltipPosition)
 
 #[component]
 pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
-    let item_slot = match &item_specs.base.item_slot {
+    let item_slot = match &item_specs.base.slot {
         ItemSlot::Amulet => "Amulet",
         ItemSlot::Body => "Body Armor",
         ItemSlot::Boots => "Boots",
@@ -259,10 +259,16 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             <ul class="list-none space-y-1">{item_slot} {armor_info} {weapon_info}</ul>
             {(!affixes.is_empty()).then(|| view! { <hr class="border-t border-gray-700 my-1" /> })}
             <ul class="list-none space-y-1">{affixes}</ul>
-            <hr class="border-t border-gray-700" />
-            <p class="text-sm italic text-gray-300 leading-snug">
-                {item_specs.base.description.clone()}
-            </p>
+            {item_specs
+                .base
+                .description
+                .clone()
+                .map(|description| {
+                    view! {
+                        <hr class="border-t border-gray-700" />
+                        <p class="text-sm italic text-gray-300 leading-snug">{description}</p>
+                    }
+                })}
         </div>
     }
 }

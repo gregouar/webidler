@@ -120,7 +120,7 @@ pub fn equip_item(
     player_state: &mut PlayerState,
     item_specs: ItemSpecs,
 ) -> Option<ItemSpecs> {
-    let old_item = match item_specs.base.item_slot {
+    let old_item = match item_specs.base.slot {
         ItemSlot::Amulet => todo!(),
         ItemSlot::Body => todo!(),
         ItemSlot::Boots => todo!(),
@@ -133,19 +133,19 @@ pub fn equip_item(
     };
 
     if let Some(_) = old_item.as_ref().map(|x| x.weapon_specs.as_ref()).flatten() {
-        unequip_weapon(player_specs, player_state, item_specs.base.item_slot);
+        unequip_weapon(player_specs, player_state, item_specs.base.slot);
     }
 
     if let Some(ref weapon_specs) = item_specs.weapon_specs {
         equip_weapon(
             player_specs,
             player_state,
-            item_specs.base.item_slot,
+            item_specs.base.slot,
             weapon_specs,
         );
     }
 
-    match item_specs.base.item_slot {
+    match item_specs.base.slot {
         ItemSlot::Amulet => todo!(),
         ItemSlot::Body => todo!(),
         ItemSlot::Boots => todo!(),

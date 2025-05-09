@@ -1,0 +1,34 @@
+{
+  "entries": {
+    "shortsword": {
+      "name": "Shortsword",
+      "icon": "items/shortsword.webp",
+      "slot": "Weapon",
+      "weapon_specs": {
+        "range": "Melee",
+        "cooldown": 2.0,
+        "min_damage": 2.0,
+        "max_damage": 4.0
+      }
+    },
+    "battleaxe": {
+      "name": "Battleaxe",
+      "icon": "items/battleaxe.webp",
+      "slot": "Weapon",
+      "weapon_specs": {
+        "range": "Melee",
+        "cooldown": 4.0,
+        "min_damage": 4.0,
+        "max_damage": 10.0
+      }
+    },
+    "helmet": {
+      "name": "Helmet",
+      "icon": "items/helmet.webp",
+      "slot": "Helmet",
+      "armor_specs": {
+        "armor": 10.0
+      }
+    }
+  }
+}

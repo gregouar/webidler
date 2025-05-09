@@ -2,6 +2,7 @@ use std::{collections::HashMap, path::PathBuf};
 
 use anyhow::Result;
 
+use shared::data::world::AreaLevel;
 use shared::data::{monster::MonsterSpecs, world::WorldState};
 
 use crate::game::utils::{increase_factors, rng};
@@ -31,8 +32,8 @@ fn filter_waves<'a>(
     waves
         .iter()
         .filter(|wave| {
-            world_state.area_level >= wave.min_level.unwrap_or(u16::MIN)
-                && world_state.area_level <= wave.max_level.unwrap_or(u16::MAX)
+            world_state.area_level >= wave.min_level.unwrap_or(AreaLevel::MIN)
+                && world_state.area_level <= wave.max_level.unwrap_or(AreaLevel::MAX)
         })
         .collect()
 }

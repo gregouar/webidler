@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use super::item::ItemSpecs;
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct QueuedLoot {
     pub identifier: u32,
     pub item_specs: ItemSpecs,

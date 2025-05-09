@@ -1,0 +1,69 @@
+{
+    "entries": []
+}
+
+
+//     affixes: vec![ItemAffix {
+//         name: "Painful".to_string(),
+//         family: "inc_damage".to_string(),
+//         affix_type: AffixType::Prefix,
+//         affix_level: 1,
+//         effects: vec![AffixEffect {
+//             stat: ItemStat::AttackDamage,
+//             effect_type: AffixEffectType::Multiplier,
+//             value: 0.1,
+//         }],
+//     }],
+//     affixes: vec![
+//         ItemAffix {
+//             name: "Painful".to_string(),
+//             family: "inc_damage".to_string(),
+//             affix_type: AffixType::Prefix,
+//             affix_level: 1,
+//             effects: vec![AffixEffect {
+//                 stat: ItemStat::AttackDamage,
+//                 effect_type: AffixEffectType::Multiplier,
+//                 value: 0.1,
+//             }],
+//         },
+//         ItemAffix {
+//             name: "Merciless".to_string(),
+//             family: "inc_damage".to_string(),
+//             affix_type: AffixType::Prefix,
+//             affix_level: 1,
+//             effects: vec![
+//                 AffixEffect {
+//                     stat: ItemStat::MinAttackDamage,
+//                     effect_type: AffixEffectType::Flat,
+//                     value: 1.0,
+//                 },
+//                 AffixEffect {
+//                     stat: ItemStat::MaxAttackDamage,
+//                     effect_type: AffixEffectType::Flat,
+//                     value: 2.0,
+//                 },
+//             ],
+//         },
+//         ItemAffix {
+//             name: "Greedy".to_string(),
+//             family: "gold".to_string(),
+//             affix_type: AffixType::Suffix,
+//             affix_level: 1,
+//             effects: vec![AffixEffect {
+//                 stat: ItemStat::GoldFind,
+//                 effect_type: AffixEffectType::Multiplier,
+//                 value: 0.3,
+//             }],
+//         },
+//         ItemAffix {
+//             name: "Fast".to_string(),
+//             family: "inc_speed".to_string(),
+//             affix_type: AffixType::Prefix,
+//             affix_level: 1,
+//             effects: vec![AffixEffect {
+//                 stat: ItemStat::AttackSpeed,
+//                 effect_type: AffixEffectType::Multiplier,
+//                 value: 0.1,
+//             }],
+//         },
+//     ],

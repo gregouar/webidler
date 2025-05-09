@@ -16,8 +16,7 @@ use std::{ops::ControlFlow, vec};
 use shared::{
     data::{
         character::CharacterSize,
-        item::{ItemBase, ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
-        item_affix::{AffixEffect, AffixEffectType, AffixType, ItemAffix, ItemStat},
+        item::{ItemRarity, ItemSpecs},
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
         skill::{
             DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs, SkillType,
@@ -32,7 +31,7 @@ use shared::{
 
 use crate::game::{
     data::DataInit,
-    systems::{items_controller, player_controller},
+    systems::{items_controller, items_table::ItemsTable, player_controller},
     world::WorldBlueprint,
     GameInstance,
 };
@@ -59,7 +58,8 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr) {
     let mut conn = WebSocketConnection::establish(socket, who, CLIENT_INACTIVITY_TIMEOUT);
 
     tracing::debug!("waiting for client to connect...");
-    let player = match timeout(Duration::from_secs(30), wait_for_connect(&mut conn)).await {
+    let mut player_specs = match timeout(Duration::from_secs(30), wait_for_connect(&mut conn)).await
+    {
         Err(e) => {
             tracing::error!("connection timeout: {}", e);
             return;
@@ -72,15 +72,45 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr) {
     };
     tracing::debug!("client connected");
 
-    tracing::debug!("starting the game...");
-    match WorldBlueprint::load_from_file("worlds/forest.json".into()).await {
-        Ok(world_blueprint) => {
-            let mut game = GameInstance::new(&mut conn, player, world_blueprint);
-            if let Err(e) = game.run().await {
-                tracing::error!("error running game: {e}");
-            }
+    tracing::debug!("loading the game...");
+    let world_blueprint = match WorldBlueprint::load_from_file(&"worlds/forest.json".into()).await {
+        Ok(world_blueprint) => world_blueprint,
+        Err(e) => {
+            tracing::error!("failed to load world: {e}");
+            return;
         }
-        Err(e) => tracing::error!("failed to load world: {e}"),
+    };
+
+    let items_table = match ItemsTable::load_from_file(&"items/items_table.json".into()).await {
+        Ok(items_table) => items_table,
+        Err(e) => {
+            tracing::error!("failed to load items table: {e}");
+            return;
+        }
+    };
+
+    let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
+
+    if let Some(base_weapon) = items_table.entries.get("shortsword").cloned() {
+        player_controller::equip_item(
+            &mut player_specs,
+            &mut player_state,
+            items_controller::update_item_specs(ItemSpecs {
+                base: base_weapon,
+                level: 1,
+                rarity: ItemRarity::Normal,
+                affixes: Vec::new(),
+                weapon_specs: None,
+                armor_specs: None,
+            }),
+        );
+    }
+
+    tracing::debug!("starting the game...");
+
+    let mut game = GameInstance::new(&mut conn, player_specs, world_blueprint, items_table);
+    if let Err(e) = game.run().await {
+        tracing::error!("error running game: {e}");
     }
 
     // returning from the handler closes the websocket connection
@@ -117,7 +147,7 @@ async fn handle_connect(
     )
     .await?;
 
-    let mut player_specs = PlayerSpecs {
+    let player_specs = PlayerSpecs {
         character_specs: CharacterSpecs {
             name: msg.bearer.clone(),
             portrait: String::from("adventurers/human_male_2.webp"),
@@ -142,8 +172,8 @@ async fn handle_connect(
                     target_type: TargetType::Enemy,
                     shape: Shape::Square4,
                     effect_type: SkillEffectType::FlatDamage {
-                        min: 10.0,
-                        max: 30.0,
+                        min: 4.0,
+                        max: 12.0,
                         damage_type: DamageType::Fire,
                     },
                 }],
@@ -177,154 +207,9 @@ async fn handle_connect(
             weapon_specs: None,
             helmet_specs: None,
             max_bag_size: 40,
-            bag: vec![
-                // items_controller::update_item_specs(ItemSpecs {
-                //     name: "Battleaxe".to_string(),
-                //     description: "A shiny thing".to_string(),
-                //     icon: "items/battleaxe.webp".to_string(),
-                //     level: 2,
-                //     rarity: ItemRarity::Magic,
-                //     item_slot: ItemSlot::Weapon(WeaponSpecs {
-                //         base_cooldown: 1.2,
-                //         cooldown: 1.2,
-                //         range: Range::Melee,
-                //         shape: Shape::Single,
-                //         base_min_damage: 4.0,
-                //         min_damage: 4.0,
-                //         base_max_damage: 8.0,
-                //         max_damage: 8.0,
-                //     }),
-                //     affixes: vec![ItemAffix {
-                //         name: "Painful".to_string(),
-                //         family: "inc_damage".to_string(),
-                //         affix_type: AffixType::Prefix,
-                //         affix_level: 1,
-                //         effects: vec![AffixEffect {
-                //             stat: ItemStat::AttackDamage,
-                //             effect_type: AffixEffectType::Multiplier,
-                //             value: 0.1,
-                //         }],
-                //     }],
-                // }),
-                // items_controller::update_item_specs(ItemSpecs {
-                //     name: "Shortsword".to_string(),
-                //     description: "Fasty Slicy".to_string(),
-                //     icon: "items/shortsword.webp".to_string(),
-                //     level: 1,
-                //     rarity: ItemRarity::Rare,
-                //     item_slot: ItemSlot::Weapon(WeaponSpecs {
-                //         base_cooldown: 1.0,
-                //         cooldown: 1.0,
-                //         range: Range::Melee,
-                //         shape: Shape::Single,
-                //         base_min_damage: 3.0,
-                //         min_damage: 3.0,
-                //         base_max_damage: 7.0,
-                //         max_damage: 7.0,
-                //     }),
-                //     affixes: vec![
-                //         ItemAffix {
-                //             name: "Painful".to_string(),
-                //             family: "inc_damage".to_string(),
-                //             affix_type: AffixType::Prefix,
-                //             affix_level: 1,
-                //             effects: vec![AffixEffect {
-                //                 stat: ItemStat::AttackDamage,
-                //                 effect_type: AffixEffectType::Multiplier,
-                //                 value: 0.1,
-                //             }],
-                //         },
-                //         ItemAffix {
-                //             name: "Merciless".to_string(),
-                //             family: "inc_damage".to_string(),
-                //             affix_type: AffixType::Prefix,
-                //             affix_level: 1,
-                //             effects: vec![
-                //                 AffixEffect {
-                //                     stat: ItemStat::MinAttackDamage,
-                //                     effect_type: AffixEffectType::Flat,
-                //                     value: 1.0,
-                //                 },
-                //                 AffixEffect {
-                //                     stat: ItemStat::MaxAttackDamage,
-                //                     effect_type: AffixEffectType::Flat,
-                //                     value: 2.0,
-                //                 },
-                //             ],
-                //         },
-                //         ItemAffix {
-                //             name: "Greedy".to_string(),
-                //             family: "gold".to_string(),
-                //             affix_type: AffixType::Suffix,
-                //             affix_level: 1,
-                //             effects: vec![AffixEffect {
-                //                 stat: ItemStat::GoldFind,
-                //                 effect_type: AffixEffectType::Multiplier,
-                //                 value: 0.3,
-                //             }],
-                //         },
-                //         ItemAffix {
-                //             name: "Fast".to_string(),
-                //             family: "inc_speed".to_string(),
-                //             affix_type: AffixType::Prefix,
-                //             affix_level: 1,
-                //             effects: vec![AffixEffect {
-                //                 stat: ItemStat::AttackSpeed,
-                //                 effect_type: AffixEffectType::Multiplier,
-                //                 value: 0.1,
-                //             }],
-                //         },
-                //     ],
-                // }),
-                // items_controller::update_item_specs(ItemSpecs {
-                //     name: "Stabby the First".to_string(),
-                //     description: "Most Unique Fasty Slicy".to_string(),
-                //     icon: "items/shortsword.webp".to_string(),
-                //     level: 1,
-                //     rarity: ItemRarity::Unique,
-                //     item_slot: ItemSlot::Weapon(WeaponSpecs {
-                //         base_cooldown: 1.0,
-                //         cooldown: 0.8,
-                //         range: Range::Melee,
-                //         shape: Shape::Single,
-                //         base_min_damage: 1.0,
-                //         min_damage: 1.0,
-                //         base_max_damage: 13.0,
-                //         max_damage: 13.0,
-                //     }),
-                //     affixes: Vec::new(),
-                // }),
-            ],
+            bag: vec![],
         },
     };
-
-    let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
-    player_controller::equip_item(
-        &mut player_specs,
-        &mut player_state,
-        items_controller::update_item_specs(ItemSpecs {
-            base: ItemBase {
-                name: "Shortsword".to_string(),
-                description: "Fasty Slicy".to_string(),
-                icon: "items/shortsword.webp".to_string(),
-                item_slot: ItemSlot::Weapon,
-                min_level: 1,
-                weapon_specs: Some(WeaponSpecs {
-                    cooldown: 1.0,
-                    range: Range::Melee,
-                    shape: Shape::Single,
-                    min_damage: 3.0,
-                    max_damage: 7.0,
-                }),
-                armor_specs: None,
-            },
-            level: 1,
-            rarity: ItemRarity::Normal,
-            affixes: Vec::new(),
-            weapon_specs: None,
-            armor_specs: None,
-        }),
-    );
 
     Ok(player_specs)
 }

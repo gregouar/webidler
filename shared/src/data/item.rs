@@ -2,15 +2,21 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use super::item_affix::{AffixEffect, ItemAffix};
+use super::item_affix::{AffixEffect, ItemAffix, ItemAffixBlueprint};
 pub use super::skill::{Range, Shape};
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Ord)]
 pub enum ItemRarity {
     Normal,
     Magic,
     Rare,
     Unique,
+}
+
+impl Default for ItemRarity {
+    fn default() -> Self {
+        ItemRarity::Normal
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
@@ -26,22 +32,30 @@ pub enum ItemSlot {
     Weapon,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ItemBase {
     pub name: String,
     pub icon: String,
-    pub description: String,
+    #[serde(default)]
+    pub description: Option<String>,
 
-    pub min_level: u16,
+    pub slot: ItemSlot,
 
-    pub item_slot: ItemSlot,
+    #[serde(default)]
+    pub min_area_level: Option<u16>,
+    #[serde(default)]
+    pub rarity: ItemRarity,
+    #[serde(default)]
+    pub affixes: Vec<ItemAffixBlueprint>,
 
+    #[serde(default)]
     pub weapon_specs: Option<WeaponSpecs>,
+    #[serde(default)]
     pub armor_specs: Option<ArmorSpecs>,
     // TODO: Implicit affixes?
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ItemSpecs {
     pub base: ItemBase,
     pub rarity: ItemRarity,

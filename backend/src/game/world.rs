@@ -1,25 +1,27 @@
 use anyhow::Result;
 use std::collections::{HashMap, HashSet};
 use std::path::PathBuf;
-use std::u16;
 
 use serde::{Deserialize, Serialize};
 
 use futures::future::join_all;
 
-use super::data::load_json;
+use super::systems::loot_table::LootTable;
+use super::utils::json::load_json;
 use shared::data::{monster::MonsterSpecs, world::WorldSpecs};
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct WorldBlueprint {
     pub schema: WorldBlueprintSchema,
     pub monster_specs: HashMap<PathBuf, MonsterSpecs>,
+    pub loot_table: LootTable,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct WorldBlueprintSchema {
     pub specs: WorldSpecs,
     pub waves: Vec<MonsterWaveBlueprint>,
+    pub loot_tables: Vec<PathBuf>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -38,8 +40,8 @@ pub struct MonsterWaveSpawnBlueprint {
 }
 
 impl WorldBlueprint {
-    pub async fn load_from_file(filepath: PathBuf) -> Result<Self> {
-        let schema: WorldBlueprintSchema = load_json(&filepath).await?;
+    pub async fn load_from_file(filepath: impl Into<&PathBuf>) -> Result<Self> {
+        let schema: WorldBlueprintSchema = load_json(filepath).await?;
 
         let monster_specs_to_load: HashSet<PathBuf> = schema
             .waves
@@ -55,9 +57,25 @@ impl WorldBlueprint {
         .into_iter()
         .collect::<Result<_>>()?;
 
+        let loot_tables: Vec<_> = join_all(schema.loot_tables.iter().map(|filepath| async move {
+            Result::<_>::Ok(LootTable::load_from_file(filepath).await?)
+        }))
+        .await
+        .into_iter()
+        .collect::<Result<_>>()?;
+
+        let loot_table = LootTable {
+            entries: loot_tables
+                .into_iter()
+                .map(|x| x.entries)
+                .flatten()
+                .collect(),
+        };
+
         Ok(WorldBlueprint {
             schema,
             monster_specs,
+            loot_table,
         })
     }
 }

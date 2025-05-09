@@ -1,41 +1,10 @@
 use shared::data::{
-    item::{ArmorSpecs, ItemBase, ItemRarity, ItemSlot, ItemSpecs},
+    item::ItemSpecs,
     loot::{LootState, QueuedLoot},
     player::PlayerSpecs,
 };
 
-use crate::game::utils::rng;
-
-use super::items_controller;
-
 const MAX_QUEUE_SIZE: usize = 5;
-
-// TODO: LootPool, area level, ..?
-pub fn generate_loot() -> ItemSpecs {
-    let rarity = match rng::random_range(0..4).unwrap_or(0) {
-        0 => ItemRarity::Normal,
-        1 => ItemRarity::Magic,
-        2 => ItemRarity::Rare,
-        _ => ItemRarity::Unique,
-    };
-
-    items_controller::update_item_specs(ItemSpecs {
-        base: ItemBase {
-            name: "Helmet".to_string(),
-            icon: "items/helmet.webp".to_string(),
-            description: "Save your brain".to_string(),
-            item_slot: ItemSlot::Helmet,
-            armor_specs: Some(ArmorSpecs { armor: 10.0 }),
-            weapon_specs: None,
-            min_level: 1,
-        },
-        rarity: rarity,
-        level: 1,
-        armor_specs: None,
-        weapon_specs: None,
-        affixes: vec![],
-    })
-}
 
 pub fn drop_loot(queued_loot: &mut Vec<QueuedLoot>, item_specs: ItemSpecs) {
     drop_loot_impl(queued_loot, item_specs, true);
