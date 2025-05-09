@@ -7,9 +7,9 @@ use shared::data::{
     skill::{SkillEffect, SkillEffectType, TargetType},
 };
 
-use crate::rng;
+use crate::game::utils::{increase_factors, rng};
 
-use super::{characters_controller, increase_factors::exponential_factor};
+use super::characters_controller;
 
 pub fn use_skill<'a>(
     skill_specs: &SkillSpecs,
@@ -152,7 +152,8 @@ pub fn level_up_skill(
     player_resources.gold -= skill_specs.next_upgrade_cost;
 
     skill_specs.upgrade_level += 1;
-    skill_specs.next_upgrade_cost += 10.0 * exponential_factor(skill_specs.upgrade_level as f64);
+    skill_specs.next_upgrade_cost +=
+        10.0 * increase_factors::exponential(skill_specs.upgrade_level as f64);
 
     for effect in skill_specs.effects.iter_mut() {
         effect.increase_effect(1.2);

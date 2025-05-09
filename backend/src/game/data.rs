@@ -12,7 +12,7 @@ use shared::data::{
     world::{WorldSpecs, WorldState},
 };
 
-use crate::rng;
+use crate::game::utils::rng;
 
 pub async fn load_json<S>(filepath: &PathBuf) -> Result<S>
 where

@@ -5,11 +5,11 @@ pub use super::skill::{Range, Shape};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ItemStat {
-    AttackSpeed,
-    AttackDamage,
-    MinAttackDamage,
-    MaxAttackDamage,
-    Armor,
+    LocalAttackSpeed,
+    LocalAttackDamage,
+    LocalMinAttackDamage,
+    LocalMaxAttackDamage,
+    LocalArmor,
     GoldFind,
 }
 

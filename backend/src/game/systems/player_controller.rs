@@ -6,8 +6,9 @@ use shared::data::{
 };
 
 use crate::game::data::DataInit;
+use crate::game::utils::increase_factors;
 
-use super::{increase_factors::exponential_factor, items_controller, skills_controller};
+use super::{items_controller, skills_controller};
 
 pub struct PlayerController {
     pub auto_skills: Vec<bool>,
@@ -86,7 +87,8 @@ pub fn level_up(
     player_specs.level += 1;
     player_resources.passive_points += 1;
     player_resources.experience -= player_specs.experience_needed;
-    player_specs.experience_needed = 10.0 * exponential_factor(player_specs.level as f64);
+    player_specs.experience_needed =
+        10.0 * increase_factors::exponential(player_specs.level as f64);
 
     player_state.character_state.health += 10.0;
     player_specs.character_specs.max_health += 10.0;
@@ -166,7 +168,7 @@ pub fn sell_item(
     let item_index = item_index as usize;
     if item_index < player_specs.inventory.bag.len() {
         let item_specs = player_specs.inventory.bag.remove(item_index);
-        player_resources.gold += 10.0 * exponential_factor(item_specs.level as f64);
+        player_resources.gold += 10.0 * increase_factors::exponential(item_specs.level as f64);
     }
 }
 

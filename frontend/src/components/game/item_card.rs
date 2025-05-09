@@ -278,11 +278,11 @@ pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl Int
     affix_effects.sort_by_key(|effect| {
         (
             -match effect.stat {
-                AttackDamage => 0,
-                MinAttackDamage => 1,
-                MaxAttackDamage => 2,
-                AttackSpeed => 3,
-                Armor => 4,
+                LocalAttackDamage => 0,
+                LocalMinAttackDamage => 1,
+                LocalMaxAttackDamage => 2,
+                LocalAttackSpeed => 3,
+                LocalArmor => 4,
                 GoldFind => 5,
             },
             -match effect.effect_type {
@@ -300,29 +300,33 @@ pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl Int
 
     for effect in affix_effects {
         match (effect.stat, effect.effect_type) {
-            (MinAttackDamage, Flat) => min_flat = Some(effect.value),
-            (MaxAttackDamage, Flat) => max_flat = Some(effect.value),
-            (MinAttackDamage, Multiplier) => merged.push(format!(
+            (LocalMinAttackDamage, Flat) => min_flat = Some(effect.value),
+            (LocalMaxAttackDamage, Flat) => max_flat = Some(effect.value),
+            (LocalMinAttackDamage, Multiplier) => merged.push(format!(
                 "{:.0}% Increased Minimum Attack Damage",
                 effect.value * 100.0
             )),
-            (MaxAttackDamage, Multiplier) => merged.push(format!(
+            (LocalMaxAttackDamage, Multiplier) => merged.push(format!(
                 "{:.0}% Increased Maximum Attack Damage",
                 effect.value * 100.0
             )),
             // If it's not part of a min/max pair, process normally
-            (AttackSpeed, Flat) => merged.push(format!("-{:.2}s Attack Speed", effect.value)),
-            (AttackSpeed, Multiplier) => merged.push(format!(
+            (LocalAttackSpeed, Flat) => merged.push(format!("-{:.2}s Attack Speed", effect.value)),
+            (LocalAttackSpeed, Multiplier) => merged.push(format!(
                 "{:.0}% Increased Attack Speed",
                 effect.value * 100.0
             )),
-            (AttackDamage, Flat) => merged.push(format!("{:.0} Added Attack Damage", effect.value)),
-            (AttackDamage, Multiplier) => merged.push(format!(
+            (LocalAttackDamage, Flat) => {
+                merged.push(format!("{:.0} Added Attack Damage", effect.value))
+            }
+            (LocalAttackDamage, Multiplier) => merged.push(format!(
                 "{:.0}% Increased Attack Damage",
                 effect.value * 100.0
             )),
-            (Armor, Flat) => merged.push(format!("+{:.0} Added Armor", effect.value)),
-            (Armor, Multiplier) => merged.push(format!("{:.0}% Increased Armor", effect.value)),
+            (LocalArmor, Flat) => merged.push(format!("+{:.0} Added Armor", effect.value)),
+            (LocalArmor, Multiplier) => {
+                merged.push(format!("{:.0}% Increased Armor", effect.value))
+            }
             (GoldFind, Flat) => {
                 merged.push(format!("+{:.0} Gold per Kill", effect.value));
             }

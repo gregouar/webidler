@@ -4,7 +4,7 @@ use shared::data::{
     player::PlayerSpecs,
 };
 
-use crate::rng;
+use crate::game::utils::rng;
 
 use super::items_controller;
 
