@@ -3,13 +3,13 @@ use shared::data::{
     world::AreaLevel,
 };
 
-use crate::game::utils::rng;
-
-use super::{
-    items_controller,
+use crate::game::data::{
     items_table::ItemsTable,
     loot_table::{LootTable, RarityWeights},
 };
+use crate::game::utils::rng;
+
+use super::items_controller;
 
 // TODO: inc magic find (accumulated enemy rarity? player stats? area level?)
 pub fn generate_loot(

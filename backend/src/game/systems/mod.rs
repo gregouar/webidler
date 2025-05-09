@@ -1,10 +1,8 @@
 pub mod characters_controller;
 pub mod characters_updater;
 pub mod items_controller;
-pub mod items_table;
 pub mod loot_controller;
 pub mod loot_generator;
-pub mod loot_table;
 pub mod monsters_controller;
 pub mod monsters_updater;
 pub mod monsters_wave;

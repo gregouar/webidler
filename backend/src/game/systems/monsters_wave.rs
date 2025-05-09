@@ -5,8 +5,8 @@ use anyhow::Result;
 use shared::data::world::AreaLevel;
 use shared::data::{monster::MonsterSpecs, world::WorldState};
 
+use crate::game::data::world::{MonsterWaveBlueprint, WorldBlueprint};
 use crate::game::utils::{increase_factors, rng};
-use crate::game::world::{MonsterWaveBlueprint, WorldBlueprint};
 
 const MAX_MONSTERS_PER_ROW: usize = 3; // TODO: Move
 

@@ -30,9 +30,8 @@ use shared::{
 };
 
 use crate::game::{
-    data::DataInit,
-    systems::{items_controller, items_table::ItemsTable, player_controller},
-    world::WorldBlueprint,
+    data::{items_table::ItemsTable, world::WorldBlueprint, DataInit},
+    systems::{items_controller, player_controller},
     GameInstance,
 };
 use crate::websocket::WebSocketConnection;

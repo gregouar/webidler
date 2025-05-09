@@ -1,14 +1,14 @@
 use anyhow::Result;
+use futures::future::join_all;
+use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
 use std::path::PathBuf;
 
-use serde::{Deserialize, Serialize};
-
-use futures::future::join_all;
-
-use super::systems::loot_table::LootTable;
-use super::utils::json::load_json;
 use shared::data::{monster::MonsterSpecs, world::WorldSpecs};
+
+use crate::game::utils::json::load_json;
+
+use super::loot_table::LootTable;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct WorldBlueprint {

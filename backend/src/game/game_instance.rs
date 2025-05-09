@@ -21,12 +21,8 @@ use shared::{
 };
 
 use super::{
-    data::DataInit,
-    systems::{
-        items_table::ItemsTable, loot_controller, loot_generator,
-        player_controller::PlayerController,
-    },
-    world::WorldBlueprint,
+    data::{items_table::ItemsTable, world::WorldBlueprint, DataInit},
+    systems::{loot_controller, loot_generator, player_controller::PlayerController},
 };
 use super::{
     systems::{
