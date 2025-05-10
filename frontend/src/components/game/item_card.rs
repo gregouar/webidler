@@ -190,7 +190,6 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             };
 
             view! {
-                <li class="text-gray-400 text-sm leading-snug">"Weapon"</li>
                 <li class="text-gray-400 text-sm leading-snug">
                     "Physical Damage: "
                     <span class=format!(
@@ -256,7 +255,11 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 "Item Level: " <span class="text-white">{item_specs.level}</span>
             </p>
             <hr class="border-t border-gray-700" />
-            <ul class="list-none space-y-1">{item_slot} {armor_info} {weapon_info}</ul>
+            <ul class="list-none space-y-1">
+                <li class="text-gray-400 text-sm leading-snug">{item_slot}</li>
+                {armor_info}
+                {weapon_info}
+            </ul>
             {(!affixes.is_empty()).then(|| view! { <hr class="border-t border-gray-700 my-1" /> })}
             <ul class="list-none space-y-1">{affixes}</ul>
             {item_specs
