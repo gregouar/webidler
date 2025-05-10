@@ -1,10 +1,9 @@
-use std::{collections::HashMap, path::PathBuf};
-
 use anyhow::Result;
 
 use shared::data::world::AreaLevel;
 use shared::data::{monster::MonsterSpecs, world::WorldState};
 
+use crate::game::data::master_store::MonstersSpecsStore;
 use crate::game::data::world::{MonsterWaveBlueprint, WorldBlueprint};
 use crate::game::utils::{increase_factors, rng};
 
@@ -13,13 +12,14 @@ const MAX_MONSTERS_PER_ROW: usize = 3; // TODO: Move
 pub fn generate_monsters_wave_specs(
     world_blueprint: &WorldBlueprint,
     world_state: &WorldState,
+    monsters_specs_store: &MonstersSpecsStore,
 ) -> Result<Vec<MonsterSpecs>> {
-    pick_wave(filter_waves(&world_blueprint.schema.waves, world_state))
+    pick_wave(filter_waves(&world_blueprint.waves, world_state))
         .map(|wave| {
             Ok(generate_all_monsters_specs(
                 wave,
-                &world_blueprint.monster_specs,
                 world_state,
+                monsters_specs_store,
             ))
         })
         .unwrap_or(Err(anyhow::format_err!("no monster wave available")))
@@ -53,8 +53,8 @@ fn pick_wave<'a>(waves: Vec<&'a MonsterWaveBlueprint>) -> Option<&'a MonsterWave
 
 fn generate_all_monsters_specs(
     wave: &MonsterWaveBlueprint,
-    monster_specs_blueprint: &HashMap<PathBuf, MonsterSpecs>,
     world_state: &WorldState,
+    monsters_specs_store: &MonstersSpecsStore,
 ) -> Vec<MonsterSpecs> {
     let mut top_space_available = MAX_MONSTERS_PER_ROW;
     let mut bot_space_available = MAX_MONSTERS_PER_ROW;
@@ -62,7 +62,7 @@ fn generate_all_monsters_specs(
     let mut monsters_specs = Vec::with_capacity(top_space_available + bot_space_available);
     'spawnloop: for spawn in wave.spawns.iter() {
         for _ in 0..rng::random_range(spawn.min_quantity..=spawn.max_quantity).unwrap_or_default() {
-            if let Some(specs) = monster_specs_blueprint.get(&spawn.path) {
+            if let Some(specs) = monsters_specs_store.get(&spawn.path) {
                 let (x_size, y_size) = specs.character_specs.size.get_xy_size();
                 let use_top = y_size > 1 || top_space_available >= bot_space_available;
                 let x_pos = (MAX_MONSTERS_PER_ROW + 1

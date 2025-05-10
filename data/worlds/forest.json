@@ -8,7 +8,7 @@
         "header_background": "worlds/forest_header.webp",
         "footer_background": "worlds/forest_footer.webp"
     },
-    "loot_tables": ["loot/default_loot_table.json"],
+    "loot_tables": ["default_loot_table.json"],
     "waves": [
         {
             "min_level": 1,
@@ -16,12 +16,12 @@
             "probability": 1,
             "spawns": [
                 {
-                    "path": "monsters/batty.json",
+                    "path": "batty.json",
                     "min_quantity": 1,
                     "max_quantity": 3
                 },
                 {
-                    "path": "monsters/batty2.json",
+                    "path": "batty2.json",
                     "min_quantity": 1,
                     "max_quantity": 3
                 }
@@ -33,12 +33,12 @@
             "probability": 1,
             "spawns": [
                 {
-                    "path": "monsters/ratty.json",
+                    "path": "ratty.json",
                     "min_quantity": 1,
                     "max_quantity": 2
                 },
                 {
-                    "path": "monsters/batty.json",
+                    "path": "batty.json",
                     "min_quantity": 2,
                     "max_quantity": 4
                 }
@@ -50,22 +50,22 @@
             "probability": 1,
             "spawns": [
                 {
-                    "path": "monsters/snek.json",
+                    "path": "snek.json",
                     "min_quantity": 1,
                     "max_quantity": 2
                 },
                 {
-                    "path": "monsters/batty.json",
+                    "path": "batty.json",
                     "min_quantity": 1,
                     "max_quantity": 2
                 },
                 {
-                    "path": "monsters/snek.json",
+                    "path": "snek.json",
                     "min_quantity": 1,
                     "max_quantity": 2
                 },
                 {
-                    "path": "monsters/batty2.json",
+                    "path": "batty2.json",
                     "min_quantity": 1,
                     "max_quantity": 2
                 }

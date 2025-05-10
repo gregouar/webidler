@@ -1,14 +1,12 @@
-use anyhow::Result;
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
 
 use shared::data::world::AreaLevel;
 
-use crate::game::utils::json::load_json;
+use crate::game::utils::json::LoadJsonFromFile;
 
 use super::items_table::ItemId;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct LootTable {
     pub entries: Vec<LootTableEntry>,
 }
@@ -39,8 +37,4 @@ impl Default for RarityWeights {
     }
 }
 
-impl LootTable {
-    pub async fn load_from_file(filepath: &PathBuf) -> Result<Self> {
-        Ok(load_json(filepath).await?)
-    }
-}
+impl LoadJsonFromFile for LootTable {}

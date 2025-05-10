@@ -21,7 +21,7 @@ use shared::{
 };
 
 use super::{
-    data::{items_table::ItemsTable, world::WorldBlueprint, DataInit},
+    data::{master_store::MasterStore, world::WorldBlueprint, DataInit},
     systems::{loot_controller, loot_generator, player_controller::PlayerController},
 };
 use super::{
@@ -47,7 +47,7 @@ pub struct GameInstance<'a> {
     world_blueprint: WorldBlueprint,
     world_state: WorldState,
 
-    items_table: ItemsTable,
+    master_store: MasterStore,
 
     player_specs: LazySyncer<PlayerSpecs>,
     player_state: PlayerState,
@@ -67,14 +67,14 @@ impl<'a> GameInstance<'a> {
         client_conn: &'a mut WebSocketConnection,
         player_specs: PlayerSpecs,
         world_blueprint: WorldBlueprint,
-        items_table: ItemsTable, // TODO: Find way to share this among all instances
+        master_store: MasterStore,
     ) -> Self {
         GameInstance::<'a> {
             client_conn,
 
-            items_table,
+            master_store,
 
-            world_state: WorldState::init(&world_blueprint.schema.specs),
+            world_state: WorldState::init(&world_blueprint.specs),
             world_blueprint: world_blueprint,
 
             player_resources: PlayerResources {
@@ -224,7 +224,7 @@ impl<'a> GameInstance<'a> {
         self.client_conn
             .send(
                 &InitGameMessage {
-                    world_specs: self.world_blueprint.schema.specs.clone(),
+                    world_specs: self.world_blueprint.specs.clone(),
                     world_state: self.world_state.clone(),
                     player_specs: self.player_specs.read().clone(),
                     player_state: self.player_state.clone(),
@@ -244,6 +244,7 @@ impl<'a> GameInstance<'a> {
         self.monster_specs = LazySyncer::new(monsters_wave::generate_monsters_wave_specs(
             &self.world_blueprint,
             &self.world_state,
+            &self.master_store.monster_specs_store,
         )?);
 
         self.monster_states = self
@@ -306,7 +307,7 @@ impl<'a> GameInstance<'a> {
                     // TODO: Drop on enemy death, not wave generate
                     if let Some(item_specs) = loot_generator::generate_loot(
                         &self.world_blueprint.loot_table,
-                        &self.items_table,
+                        &self.master_store.items_table,
                         self.world_state.area_level,
                     ) {
                         loot_controller::drop_loot(self.queued_loot.mutate(), item_specs);

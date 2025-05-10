@@ -1,18 +1,29 @@
 use anyhow::{Context, Result};
-use std::path::PathBuf;
+use std::path::Path;
 
 use serde::de::DeserializeOwned;
 use tokio::fs;
 
-pub async fn load_json<S>(filepath: impl Into<&PathBuf>) -> Result<S>
+pub async fn load_json<S>(filepath: impl AsRef<Path>) -> Result<S>
 where
     S: DeserializeOwned,
 {
-    let file_path = PathBuf::from("./data").join(filepath.into());
     Ok(serde_json::from_slice(
-        &fs::read(&file_path)
+        &fs::read(&filepath)
             .await
-            .with_context(|| format!("Failed to read file: {:?}", file_path))?,
+            .with_context(|| format!("Failed to read file: {:?}", filepath.as_ref()))?,
     )
-    .with_context(|| format!("Failed to parse json from: {:?}", file_path))?)
+    .with_context(|| format!("Failed to parse json from: {:?}", filepath.as_ref()))?)
+}
+
+pub trait LoadJsonFromFile
+where
+    Self: Sized + DeserializeOwned + Send + Sync + 'static,
+{
+    fn load_from_file<P>(filepath: P) -> impl std::future::Future<Output = Result<Self>> + Send
+    where
+        P: AsRef<Path> + Send + Sync + 'static,
+    {
+        async { Ok(load_json(filepath).await?) }
+    }
 }

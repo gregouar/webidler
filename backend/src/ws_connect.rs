@@ -4,13 +4,14 @@ use axum::{
     extract::{
         connect_info::ConnectInfo,
         ws::{WebSocket, WebSocketUpgrade},
+        State,
     },
     response::IntoResponse,
 };
 use axum_extra::TypedHeader;
 use tokio::{task::yield_now, time::timeout};
 
-use std::{net::SocketAddr, time::Duration};
+use std::{net::SocketAddr, path::Path, time::Duration};
 use std::{ops::ControlFlow, vec};
 
 use shared::{
@@ -30,7 +31,7 @@ use shared::{
 };
 
 use crate::game::{
-    data::{items_table::ItemsTable, world::WorldBlueprint, DataInit},
+    data::{master_store::MasterStore, DataInit},
     systems::{items_controller, player_controller},
     GameInstance,
 };
@@ -42,6 +43,7 @@ pub async fn ws_handler(
     ws: WebSocketUpgrade,
     user_agent: Option<TypedHeader<headers::UserAgent>>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    State(master_store): State<MasterStore>,
 ) -> impl IntoResponse {
     let user_agent = if let Some(TypedHeader(user_agent)) = user_agent {
         user_agent.to_string()
@@ -50,10 +52,10 @@ pub async fn ws_handler(
     };
     tracing::info!("`{user_agent}` at {addr} connected.");
 
-    ws.on_upgrade(move |socket| handle_socket(socket, addr))
+    ws.on_upgrade(move |socket| handle_socket(socket, addr, master_store))
 }
 
-async fn handle_socket(socket: WebSocket, who: SocketAddr) {
+async fn handle_socket(socket: WebSocket, who: SocketAddr, master_store: MasterStore) {
     let mut conn = WebSocketConnection::establish(socket, who, CLIENT_INACTIVITY_TIMEOUT);
 
     tracing::debug!("waiting for client to connect...");
@@ -72,25 +74,21 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr) {
     tracing::debug!("client connected");
 
     tracing::debug!("loading the game...");
-    let world_blueprint = match WorldBlueprint::load_from_file(&"worlds/forest.json".into()).await {
-        Ok(world_blueprint) => world_blueprint,
-        Err(e) => {
-            tracing::error!("failed to load world: {e}");
-            return;
-        }
-    };
-
-    let items_table = match ItemsTable::load_from_file(&"items/items_table.json".into()).await {
-        Ok(items_table) => items_table,
-        Err(e) => {
-            tracing::error!("failed to load items table: {e}");
+    let world_blueprint = match master_store
+        .world_blueprints_store
+        .get(Path::new("forest.json"))
+        .cloned() // TODO: Avoid clone?
+    {
+        Some(world_blueprint) => world_blueprint,
+        None => {
+            tracing::error!("couldn't load world: forest.json");
             return;
         }
     };
 
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
-    if let Some(base_weapon) = items_table.entries.get("shortsword").cloned() {
+    if let Some(base_weapon) = master_store.items_table.entries.get("shortsword").cloned() {
         player_controller::equip_item(
             &mut player_specs,
             &mut player_state,
@@ -107,7 +105,7 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr) {
 
     tracing::debug!("starting the game...");
 
-    let mut game = GameInstance::new(&mut conn, player_specs, world_blueprint, items_table);
+    let mut game = GameInstance::new(&mut conn, player_specs, world_blueprint, master_store);
     if let Err(e) = game.run().await {
         tracing::error!("error running game: {e}");
     }
