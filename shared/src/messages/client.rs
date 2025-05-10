@@ -10,7 +10,7 @@ impl_into_message! {
         UseSkill(UseSkillMessage),
         SetAutoSkill(SetAutoSkillMessage),
         LevelUpSkill(LevelUpSkillMessage),
-        LevelUpPlayer,
+        LevelUpPlayer(LevelUpPlayerMessage),
         EquipItem(EquipItemMessage),
         SellItems(SellItemsMessage),
         PickupLoot(PickUpLootMessage),
@@ -43,6 +43,12 @@ pub struct SetAutoSkillMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct LevelUpSkillMessage {
     pub skill_index: u8,
+    pub amount: u8,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct LevelUpPlayerMessage {
+    pub amount: u8,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

@@ -10,7 +10,7 @@
       "min_area_level": 3
     },
     {
-      "item_id": "helmet",
+      "item_id": "helm",
       "weight": 10.0,
       "min_area_level": 2
     }

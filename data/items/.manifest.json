@@ -1,5 +1,6 @@
 {
     "entries": [
-        "items_table.json"
+        "helmets_table.json",
+        "weapons_table.json"
     ]
 }

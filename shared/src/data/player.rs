@@ -41,8 +41,15 @@ pub struct PlayerResources {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerInventory {
-    pub weapon_specs: Option<ItemSpecs>,
+    pub relic_specs: Option<ItemSpecs>,
     pub helmet_specs: Option<ItemSpecs>,
+    pub amulet_specs: Option<ItemSpecs>,
+    pub weapon_specs: Option<ItemSpecs>,
+    pub body_specs: Option<ItemSpecs>,
+    pub shield_specs: Option<ItemSpecs>,
+    pub gloves_specs: Option<ItemSpecs>,
+    pub boots_specs: Option<ItemSpecs>,
+    pub ring_specs: Option<ItemSpecs>,
 
     pub bag: Vec<ItemSpecs>,
     pub max_bag_size: u8,

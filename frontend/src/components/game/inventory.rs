@@ -61,51 +61,58 @@ pub fn EquippedItems() -> impl IntoView {
                     item_specs=move || {
                         game_context.player_specs.read().inventory.helmet_specs.clone()
                     }
-                    fallback_asset="ui/head.webp"
-                    fallback_alt="Head"
+                    fallback_asset="ui/helmet.webp"
+                    fallback_alt="Helmet"
                 />
-                <EmptySlot>
-                    <img
-                        src=img_asset("ui/amulet.webp")
-                        alt="Amulet"
-                        class="object-contain max-w-full max-h-full"
-                    />
-                </EmptySlot>
-                {move || match &game_context.player_specs.read().inventory.weapon_specs {
-                    Some(weapon) => {
-                        view! {
-                            <ItemCard
-                                item_specs=weapon.clone()
-                                tooltip_position=DynamicTooltipPosition::BottomRight
-                            />
-                        }
-                            .into_any()
+                <EquippedItem
+                    item_specs=move || {
+                        game_context.player_specs.read().inventory.amulet_specs.clone()
                     }
-                    None => view! { <EmptySlot>{()}</EmptySlot> }.into_any(),
-                }}
-                <EmptySlot>
-                    <img
-                        src=img_asset("ui/body.webp")
-                        alt="Body"
-                        class="object-contain max-w-full max-h-full"
-                    />
-                </EmptySlot>
-                <EmptySlot>{()}</EmptySlot>
-                <EmptySlot>
-                    <img
-                        src=img_asset("ui/hands.webp")
-                        alt="Hands"
-                        class="object-contain max-w-full max-h-full"
-                    />
-                </EmptySlot>
-                <EmptySlot>
-                    <img
-                        src=img_asset("ui/feet.webp")
-                        alt="Feet"
-                        class="object-contain max-w-full max-h-full"
-                    />
-                </EmptySlot>
-                <EmptySlot>{()}</EmptySlot>
+                    fallback_asset="ui/amulet.webp"
+                    fallback_alt="Amulet"
+                />
+                <EquippedItem
+                    item_specs=move || {
+                        game_context.player_specs.read().inventory.weapon_specs.clone()
+                    }
+                    fallback_asset="ui/weapon.webp"
+                    fallback_alt="Weapon"
+                />
+                <EquippedItem
+                    item_specs=move || {
+                        game_context.player_specs.read().inventory.body_specs.clone()
+                    }
+                    fallback_asset="ui/shirt.webp"
+                    fallback_alt="Body Armor"
+                />
+                <EquippedItem
+                    item_specs=move || {
+                        game_context.player_specs.read().inventory.shield_specs.clone()
+                    }
+                    fallback_asset="ui/shield.webp"
+                    fallback_alt="Shield"
+                />
+                <EquippedItem
+                    item_specs=move || {
+                        game_context.player_specs.read().inventory.gloves_specs.clone()
+                    }
+                    fallback_asset="ui/gloves.webp"
+                    fallback_alt="Gloves"
+                />
+                <EquippedItem
+                    item_specs=move || {
+                        game_context.player_specs.read().inventory.boots_specs.clone()
+                    }
+                    fallback_asset="ui/boots.webp"
+                    fallback_alt="Boots"
+                />
+                <EquippedItem
+                    item_specs=move || {
+                        game_context.player_specs.read().inventory.ring_specs.clone()
+                    }
+                    fallback_asset="ui/ring.webp"
+                    fallback_alt="Ring"
+                />
             </div>
         </div>
     }
@@ -134,7 +141,7 @@ fn EquippedItem(
                         <img
                             src=img_asset(fallback_asset)
                             alt=fallback_alt
-                            class="object-contain max-w-full max-h-full"
+                            class="object-contain max-w-full max-h-full opacity-20"
                         />
                     </EmptySlot>
                 }

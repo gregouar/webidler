@@ -4,7 +4,7 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 use shared::messages::client::{
-    ClientMessage, LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage,
+    LevelUpPlayerMessage, LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage,
 };
 
 use crate::assets::img_asset;
@@ -91,7 +91,7 @@ pub fn PlayerCard() -> impl IntoView {
 
     let conn = expect_context::<WebsocketContext>();
     let level_up = move |_| {
-        conn.send(&ClientMessage::LevelUpPlayer);
+        conn.send(&LevelUpPlayerMessage { amount: 1 }.into());
     };
     let disable_level_up = Signal::derive(move || {
         game_context.player_specs.read().experience_needed
@@ -321,6 +321,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         conn.send(
             &LevelUpSkillMessage {
                 skill_index: index as u8,
+                amount: 1,
             }
             .into(),
         );

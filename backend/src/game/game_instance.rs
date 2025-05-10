@@ -164,21 +164,25 @@ impl<'a> GameInstance<'a> {
                     .map(|x| *x = m.auto_use);
             }
             ClientMessage::LevelUpSkill(m) => {
-                if let Some(skill_specs) = self
-                    .player_specs
-                    .mutate()
-                    .skills_specs
-                    .get_mut(m.skill_index as usize)
-                {
-                    skills_controller::level_up_skill(skill_specs, &mut self.player_resources);
+                for _ in 0..m.amount {
+                    if let Some(skill_specs) = self
+                        .player_specs
+                        .mutate()
+                        .skills_specs
+                        .get_mut(m.skill_index as usize)
+                    {
+                        skills_controller::level_up_skill(skill_specs, &mut self.player_resources);
+                    }
                 }
             }
-            ClientMessage::LevelUpPlayer => {
-                player_controller::level_up(
-                    &mut self.player_specs.mutate(),
-                    &mut self.player_state,
-                    &mut self.player_resources,
-                );
+            ClientMessage::LevelUpPlayer(m) => {
+                for _ in 0..m.amount {
+                    player_controller::level_up(
+                        &mut self.player_specs.mutate(),
+                        &mut self.player_state,
+                        &mut self.player_resources,
+                    );
+                }
             }
             ClientMessage::EquipItem(m) => player_controller::equip_item_from_bag(
                 self.player_specs.mutate(),

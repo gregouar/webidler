@@ -144,6 +144,9 @@ async fn handle_connect(
     )
     .await?;
 
+    let mut inventory = PlayerInventory::default();
+    inventory.max_bag_size = 40;
+
     let player_specs = PlayerSpecs {
         character_specs: CharacterSpecs {
             name: msg.bearer.clone(),
@@ -200,12 +203,7 @@ async fn handle_connect(
         max_mana: 100.0,
         mana_regen: 3.0,
         auto_skills: vec![false, false],
-        inventory: PlayerInventory {
-            weapon_specs: None,
-            helmet_specs: None,
-            max_bag_size: 40,
-            bag: vec![],
-        },
+        inventory,
     };
 
     Ok(player_specs)
