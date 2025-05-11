@@ -10,7 +10,6 @@ use shared::messages::client::{EquipItemMessage, SellItemsMessage};
 
 use crate::assets::img_asset;
 use crate::components::{
-    game::item_card::{ItemCard, ItemTooltip},
     ui::{
         buttons::{CloseButton, MenuButton},
         menu_panel::MenuPanel,
@@ -19,8 +18,10 @@ use crate::components::{
     websocket::WebsocketContext,
 };
 
-use super::game_context::GameContext;
-use super::player_card::PlayerName;
+use super::{
+    game_context::GameContext, item_card::ItemCard, item_tooltip::ItemTooltip,
+    player_card::PlayerName,
+};
 
 #[derive(Clone, Default)]
 pub struct SellQueue(RwSignal<HashSet<usize>>);
@@ -58,64 +59,48 @@ pub fn EquippedItems() -> impl IntoView {
             <div class="grid grid-rows-3 grid-cols-3 gap-3 p-4 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                 <EquippedItem
                     item_specs=move || {
-                        game_context.player_specs.read().inventory.trinket_specs.clone()
+                        game_context.player_inventory.read().trinket_specs.clone()
                     }
                     fallback_asset="ui/trinket.webp"
                     fallback_alt="Trinket"
                 />
                 <EquippedItem
-                    item_specs=move || {
-                        game_context.player_specs.read().inventory.helmet_specs.clone()
-                    }
+                    item_specs=move || { game_context.player_inventory.read().helmet_specs.clone() }
                     fallback_asset="ui/helmet.webp"
                     fallback_alt="Helmet"
                 />
                 <EquippedItem
-                    item_specs=move || {
-                        game_context.player_specs.read().inventory.amulet_specs.clone()
-                    }
+                    item_specs=move || { game_context.player_inventory.read().amulet_specs.clone() }
                     fallback_asset="ui/amulet.webp"
                     fallback_alt="Amulet"
                 />
                 <EquippedItem
-                    item_specs=move || {
-                        game_context.player_specs.read().inventory.weapon_specs.clone()
-                    }
+                    item_specs=move || { game_context.player_inventory.read().weapon_specs.clone() }
                     fallback_asset="ui/weapon.webp"
                     fallback_alt="Weapon"
                 />
                 <EquippedItem
-                    item_specs=move || {
-                        game_context.player_specs.read().inventory.body_specs.clone()
-                    }
+                    item_specs=move || { game_context.player_inventory.read().body_specs.clone() }
                     fallback_asset="ui/shirt.webp"
                     fallback_alt="Body Armor"
                 />
                 <EquippedItem
-                    item_specs=move || {
-                        game_context.player_specs.read().inventory.shield_specs.clone()
-                    }
+                    item_specs=move || { game_context.player_inventory.read().shield_specs.clone() }
                     fallback_asset="ui/shield.webp"
                     fallback_alt="Shield"
                 />
                 <EquippedItem
-                    item_specs=move || {
-                        game_context.player_specs.read().inventory.gloves_specs.clone()
-                    }
+                    item_specs=move || { game_context.player_inventory.read().gloves_specs.clone() }
                     fallback_asset="ui/gloves.webp"
                     fallback_alt="Gloves"
                 />
                 <EquippedItem
-                    item_specs=move || {
-                        game_context.player_specs.read().inventory.boots_specs.clone()
-                    }
+                    item_specs=move || { game_context.player_inventory.read().boots_specs.clone() }
                     fallback_asset="ui/boots.webp"
                     fallback_alt="Boots"
                 />
                 <EquippedItem
-                    item_specs=move || {
-                        game_context.player_specs.read().inventory.ring_specs.clone()
-                    }
+                    item_specs=move || { game_context.player_inventory.read().ring_specs.clone() }
                     fallback_asset="ui/ring.webp"
                     fallback_alt="Ring"
                 />
@@ -161,7 +146,7 @@ fn EquippedItem(
 fn ItemsGrid(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let total_slots = game_context.player_specs.read().inventory.max_bag_size as usize;
+    let total_slots = game_context.player_inventory.read().max_bag_size as usize;
 
     view! {
         <div class="bg-zinc-800 rounded-md h-full w-full gap-2 p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
@@ -173,8 +158,8 @@ fn ItemsGrid(open: RwSignal<bool>) -> impl IntoView {
                     <span class="text-shadow-md shadow-gray-950 text-gray-400 text-md font-medium">
                         {format!(
                             " ({} / {})",
-                            game_context.player_specs.read().inventory.bag.len(),
-                            game_context.player_specs.read().inventory.max_bag_size,
+                            game_context.player_inventory.read().bag.len(),
+                            game_context.player_inventory.read().max_bag_size,
                         )}
                     </span>
                 </div>
@@ -202,9 +187,8 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
     let maybe_item = move || {
         game_context
-            .player_specs
+            .player_inventory
             .read()
-            .inventory
             .bag
             .get(item_index)
             .cloned()

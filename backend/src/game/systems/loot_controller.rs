@@ -1,7 +1,7 @@
 use shared::data::{
     item::ItemSpecs,
     loot::{LootState, QueuedLoot},
-    player::PlayerSpecs,
+    player::PlayerInventory,
 };
 
 const MAX_QUEUE_SIZE: usize = 5;
@@ -13,7 +13,7 @@ pub fn drop_loot(queued_loot: &mut Vec<QueuedLoot>, item_specs: ItemSpecs) {
 }
 
 pub fn pickup_loot(
-    player_specs: &mut PlayerSpecs,
+    player_inventory: &mut PlayerInventory,
     queued_loot: &mut Vec<QueuedLoot>,
     loot_identifier: u32,
 ) -> bool {
@@ -24,8 +24,8 @@ pub fn pickup_loot(
         .find(|x| x.identifier == loot_identifier)
     {
         loot.state = LootState::HasDisappeared;
-        if player_specs.inventory.bag.len() < player_specs.inventory.max_bag_size as usize {
-            player_specs.inventory.bag.push(loot.item_specs.clone());
+        if player_inventory.bag.len() < player_inventory.max_bag_size as usize {
+            player_inventory.bag.push(loot.item_specs.clone());
         } else {
             move_item = Some(loot.item_specs.clone());
         }

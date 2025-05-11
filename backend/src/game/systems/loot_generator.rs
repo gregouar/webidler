@@ -48,8 +48,6 @@ pub fn roll_item(
     level: AreaLevel,
     affixes_table: &ItemAffixesTable,
 ) -> ItemSpecs {
-    let mut name = base.name.clone();
-
     let mut affixes: Vec<ItemAffix> = roll_unique_affixes(&base);
 
     let (min_affixes, max_affixes) = match rarity {
@@ -74,9 +72,6 @@ pub fn roll_item(
             )
         })
         .collect();
-    if rarity == ItemRarity::Magic && prefixes.len() == 1 {
-        name = format!("{} {}", prefixes[0].name, name);
-    }
     affixes.extend(prefixes);
 
     let suffixes: Vec<_> = (0..suffixes_amount)
@@ -90,13 +85,10 @@ pub fn roll_item(
             )
         })
         .collect();
-    if rarity == ItemRarity::Magic && suffixes.len() == 1 {
-        name = format!("{} {}", name, suffixes[0].name);
-    }
     affixes.extend(suffixes);
 
     items_controller::update_item_specs(ItemSpecs {
-        name,
+        name: base.name.clone(),
         base,
         rarity,
         level,
@@ -156,7 +148,10 @@ fn roll_affix(
     let available_affixes: Vec<_> = affixes_table
         .iter()
         .filter(|a| {
-            a.slots.contains(&base_item.slot)
+            a.restrictions
+                .as_ref()
+                .map(|r| !r.is_disjoint(&base_item.affix_restrictions))
+                .unwrap_or(true)
                 && area_level >= a.item_level
                 && a.affix_type == affix_type
                 && !families_in_use.contains(&a.family)

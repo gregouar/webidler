@@ -1,7 +1,9 @@
+use std::collections::HashSet;
+
 use serde::{Deserialize, Serialize};
 
 pub use super::skill::{Range, Shape};
-use super::{item::ItemSlot, world::AreaLevel};
+use super::world::AreaLevel;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ItemStat {
@@ -26,6 +28,17 @@ pub enum AffixEffectModifier {
     Multiplier,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum AffixRestriction {
+    AttackWeapon,
+    SpellWeapon,
+    Armor,
+    Cloak,
+    Relic,
+    Helmet,
+    // TODO: add others
+}
+
 // #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 // pub enum AffixEffectScope {
 //     Local,
@@ -41,25 +54,11 @@ pub struct ItemAffixBlueprint {
     pub tier: u8,
     pub weight: u64, // Bigger weight means more chances to have affix
 
-    #[serde(default = "default_slots")]
-    pub slots: Vec<ItemSlot>,
+    #[serde(default)]
+    pub restrictions: Option<HashSet<AffixRestriction>>,
     pub item_level: AreaLevel,
 
     pub effects: Vec<AffixEffectBlueprint>,
-}
-
-fn default_slots() -> Vec<ItemSlot> {
-    vec![
-        ItemSlot::Amulet,
-        ItemSlot::Body,
-        ItemSlot::Boots,
-        ItemSlot::Gloves,
-        ItemSlot::Helmet,
-        ItemSlot::Ring,
-        ItemSlot::Shield,
-        ItemSlot::Trinket,
-        ItemSlot::Weapon,
-    ]
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]

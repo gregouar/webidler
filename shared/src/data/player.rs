@@ -18,8 +18,6 @@ pub struct PlayerSpecs {
     pub mana_regen: f64,
 
     pub auto_skills: Vec<bool>,
-
-    pub inventory: PlayerInventory,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

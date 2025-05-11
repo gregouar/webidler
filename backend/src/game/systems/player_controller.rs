@@ -1,7 +1,7 @@
 use shared::data::{
     item::{ItemSlot, ItemSpecs, WeaponSpecs},
     monster::{MonsterSpecs, MonsterState},
-    player::{PlayerResources, PlayerSpecs, PlayerState},
+    player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{SkillState, SkillType},
 };
 
@@ -101,15 +101,21 @@ pub fn level_up(
 // TODO: InventoryController ?
 pub fn equip_item_from_bag(
     player_specs: &mut PlayerSpecs,
+    player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
     item_index: u8,
 ) {
     let item_index = item_index as usize;
-    if let Some(item_specs) = player_specs.inventory.bag.get(item_index) {
-        if let Some(old_item_specs) = equip_item(player_specs, player_state, item_specs.clone()) {
-            player_specs.inventory.bag[item_index] = old_item_specs;
+    if let Some(item_specs) = player_inventory.bag.get(item_index) {
+        if let Some(old_item_specs) = equip_item(
+            player_specs,
+            player_inventory,
+            player_state,
+            item_specs.clone(),
+        ) {
+            player_inventory.bag[item_index] = old_item_specs;
         } else {
-            player_specs.inventory.bag.remove(item_index);
+            player_inventory.bag.remove(item_index);
         }
     }
 }
@@ -117,19 +123,20 @@ pub fn equip_item_from_bag(
 /// Equip new item and return old equipped item
 pub fn equip_item(
     player_specs: &mut PlayerSpecs,
+    player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
     item_specs: ItemSpecs,
 ) -> Option<ItemSpecs> {
     let old_item = match item_specs.base.slot {
-        ItemSlot::Amulet => todo!(),
-        ItemSlot::Body => todo!(),
-        ItemSlot::Boots => todo!(),
-        ItemSlot::Gloves => todo!(),
-        ItemSlot::Helmet => player_specs.inventory.helmet_specs.take(),
-        ItemSlot::Trinket => todo!(),
-        ItemSlot::Ring => todo!(),
-        ItemSlot::Shield => todo!(),
-        ItemSlot::Weapon => player_specs.inventory.weapon_specs.take(),
+        ItemSlot::Amulet => player_inventory.amulet_specs.take(),
+        ItemSlot::Body => player_inventory.body_specs.take(),
+        ItemSlot::Boots => player_inventory.boots_specs.take(),
+        ItemSlot::Gloves => player_inventory.gloves_specs.take(),
+        ItemSlot::Helmet => player_inventory.helmet_specs.take(),
+        ItemSlot::Trinket => player_inventory.trinket_specs.take(),
+        ItemSlot::Ring => player_inventory.ring_specs.take(),
+        ItemSlot::Shield => player_inventory.shield_specs.take(),
+        ItemSlot::Weapon => player_inventory.weapon_specs.take(),
     };
 
     if let Some(_) = old_item.as_ref().map(|x| x.weapon_specs.as_ref()).flatten() {
@@ -146,34 +153,32 @@ pub fn equip_item(
     }
 
     match item_specs.base.slot {
-        ItemSlot::Amulet => todo!(),
-        ItemSlot::Body => todo!(),
-        ItemSlot::Boots => todo!(),
-        ItemSlot::Gloves => todo!(),
-        ItemSlot::Helmet => player_specs.inventory.helmet_specs = Some(item_specs),
-        ItemSlot::Trinket => todo!(),
-        ItemSlot::Ring => todo!(),
-        ItemSlot::Shield => todo!(),
-        ItemSlot::Weapon => player_specs.inventory.weapon_specs = Some(item_specs),
+        ItemSlot::Amulet => player_inventory.amulet_specs = Some(item_specs),
+        ItemSlot::Body => player_inventory.body_specs = Some(item_specs),
+        ItemSlot::Boots => player_inventory.boots_specs = Some(item_specs),
+        ItemSlot::Gloves => player_inventory.gloves_specs = Some(item_specs),
+        ItemSlot::Helmet => player_inventory.helmet_specs = Some(item_specs),
+        ItemSlot::Trinket => player_inventory.trinket_specs = Some(item_specs),
+        ItemSlot::Ring => player_inventory.ring_specs = Some(item_specs),
+        ItemSlot::Shield => player_inventory.shield_specs = Some(item_specs),
+        ItemSlot::Weapon => player_inventory.weapon_specs = Some(item_specs),
     }
 
     old_item
 }
 
 pub fn sell_item(
-    player_specs: &mut PlayerSpecs,
+    player_inventory: &mut PlayerInventory,
     player_resources: &mut PlayerResources,
     item_index: u8,
 ) {
     let item_index = item_index as usize;
-    if item_index < player_specs.inventory.bag.len() {
-        let item_specs = player_specs.inventory.bag.remove(item_index);
+    if item_index < player_inventory.bag.len() {
+        let item_specs = player_inventory.bag.remove(item_index);
         player_resources.gold += 10.0 * increase_factors::exponential(item_specs.level as f64);
     }
 }
 
-// TODO: Find better way to do this, could have multiple item attacks
-// -> might need to generate uuid in item specs and keep track... or slot is enough for now
 fn unequip_weapon(
     player_specs: &mut PlayerSpecs,
     player_state: &mut PlayerState,

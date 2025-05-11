@@ -100,9 +100,10 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
 fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     let SyncGameStateMessage {
         world_state,
-        player_resources,
         player_specs,
+        player_inventory,
         player_state,
+        player_resources,
         monster_specs,
         monster_states,
         queued_loot,
@@ -111,6 +112,9 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     game_context.world_state.set(world_state);
     if let Some(player_specs) = player_specs {
         game_context.player_specs.set(player_specs);
+    }
+    if let Some(player_inventory) = player_inventory {
+        game_context.player_inventory.set(player_inventory);
     }
     game_context.player_resources.set(player_resources);
     game_context.player_state.set(player_state);

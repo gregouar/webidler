@@ -1,10 +1,10 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
 
 pub use super::skill::{Range, Shape};
 use super::{
-    item_affix::{AffixEffect, AffixEffectBlueprint, ItemAffix},
+    item_affix::{AffixEffect, AffixEffectBlueprint, AffixRestriction, ItemAffix},
     world::AreaLevel,
 };
 
@@ -43,6 +43,7 @@ pub struct ItemBase {
     pub description: Option<String>,
 
     pub slot: ItemSlot,
+    pub affix_restrictions: HashSet<AffixRestriction>,
 
     #[serde(default)]
     pub min_area_level: Option<AreaLevel>,

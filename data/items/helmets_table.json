@@ -3,6 +3,7 @@
     "name": "Great Helm",
     "icon": "items/helmet.webp",
     "slot": "Helmet",
+    "affix_restrictions": ["Armor"],
     "armor_specs": {
       "armor": 10.0
     }

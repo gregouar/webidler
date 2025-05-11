@@ -3,7 +3,7 @@ use leptos::prelude::*;
 use shared::data::{
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
-    player::{PlayerResources, PlayerSpecs, PlayerState},
+    player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     world::{WorldSpecs, WorldState},
 };
 
@@ -15,6 +15,7 @@ pub struct GameContext {
     pub world_state: RwSignal<WorldState>,
 
     pub player_specs: RwSignal<PlayerSpecs>,
+    pub player_inventory: RwSignal<PlayerInventory>,
     pub player_state: RwSignal<PlayerState>,
     pub player_resources: RwSignal<PlayerResources>,
 
@@ -37,6 +38,7 @@ impl GameContext {
             world_state: RwSignal::new(WorldState::default()),
 
             player_specs: RwSignal::new(PlayerSpecs::default()),
+            player_inventory: RwSignal::new(PlayerInventory::default()),
             player_state: RwSignal::new(PlayerState::default()),
             player_resources: RwSignal::new(PlayerResources::default()),
 

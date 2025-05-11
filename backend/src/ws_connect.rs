@@ -18,7 +18,7 @@ use shared::{
     data::{
         character::CharacterSize,
         item::ItemRarity,
-        player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
+        player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
         skill::{
             DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs, SkillType,
             TargetType,
@@ -59,18 +59,18 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, master_store: MasterS
     let mut conn = WebSocketConnection::establish(socket, who, CLIENT_INACTIVITY_TIMEOUT);
 
     tracing::debug!("waiting for client to connect...");
-    let mut player_specs = match timeout(Duration::from_secs(30), wait_for_connect(&mut conn)).await
-    {
-        Err(e) => {
-            tracing::error!("connection timeout: {}", e);
-            return;
-        }
-        Ok(Err(e)) => {
-            tracing::error!("unable to connect: {}", e);
-            return;
-        }
-        Ok(Ok(p)) => p,
-    };
+    let (mut player_specs, mut player_inventory, player_resources) =
+        match timeout(Duration::from_secs(30), wait_for_connect(&mut conn)).await {
+            Err(e) => {
+                tracing::error!("connection timeout: {}", e);
+                return;
+            }
+            Ok(Err(e)) => {
+                tracing::error!("unable to connect: {}", e);
+                return;
+            }
+            Ok(Ok(p)) => p,
+        };
     tracing::debug!("client connected");
 
     tracing::debug!("loading the game...");
@@ -91,6 +91,7 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, master_store: MasterS
     if let Some(base_weapon) = master_store.items_table.get("shortsword").cloned() {
         player_controller::equip_item(
             &mut player_specs,
+            &mut player_inventory,
             &mut player_state,
             loot_generator::roll_item(
                 base_weapon,
@@ -103,7 +104,14 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, master_store: MasterS
 
     tracing::debug!("starting the game...");
 
-    let mut game = GameInstance::new(&mut conn, player_specs, world_blueprint, master_store);
+    let mut game = GameInstance::new(
+        &mut conn,
+        player_specs,
+        player_inventory,
+        player_resources,
+        world_blueprint,
+        master_store,
+    );
     if let Err(e) = game.run().await {
         tracing::error!("error running game: {e}");
     }
@@ -112,7 +120,9 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, master_store: MasterS
     tracing::info!("websocket context {who} destroyed");
 }
 
-async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<PlayerSpecs> {
+async fn wait_for_connect(
+    conn: &mut WebSocketConnection,
+) -> Result<(PlayerSpecs, PlayerInventory, PlayerResources)> {
     loop {
         match conn.poll_receive() {
             ControlFlow::Continue(Some(ClientMessage::Connect(m))) => {
@@ -130,7 +140,7 @@ async fn wait_for_connect(conn: &mut WebSocketConnection) -> Result<PlayerSpecs>
 async fn handle_connect(
     conn: &mut WebSocketConnection,
     msg: ClientConnectMessage,
-) -> Result<PlayerSpecs> {
+) -> Result<(PlayerSpecs, PlayerInventory, PlayerResources)> {
     // TODO: verify if user exist, is already playing, get basic data etc
     tracing::info!("Connect: {:?}", msg);
     conn.send(
@@ -141,9 +151,6 @@ async fn handle_connect(
         .into(),
     )
     .await?;
-
-    let mut inventory = PlayerInventory::default();
-    inventory.max_bag_size = 40;
 
     let player_specs = PlayerSpecs {
         character_specs: CharacterSpecs {
@@ -201,8 +208,12 @@ async fn handle_connect(
         max_mana: 100.0,
         mana_regen: 3.0,
         auto_skills: vec![false, false],
-        inventory,
     };
 
-    Ok(player_specs)
+    let mut player_inventory = PlayerInventory::default();
+    player_inventory.max_bag_size = 40;
+
+    let player_resources = PlayerResources::default();
+
+    Ok((player_specs, player_inventory, player_resources))
 }

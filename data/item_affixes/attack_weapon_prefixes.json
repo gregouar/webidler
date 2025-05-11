@@ -5,7 +5,7 @@
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "slots": ["Weapon"],
+    "restrictions": ["AttackWeapon"],
     "item_level": 1,
     "effects": [
       {
@@ -22,7 +22,7 @@
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "slots": ["Weapon"],
+    "restrictions": ["AttackWeapon"],
     "item_level": 1,
     "effects": [
       {
@@ -45,7 +45,7 @@
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "slots": ["Weapon"],
+    "restrictions": ["AttackWeapon"],
     "item_level": 1,
     "effects": [
       {

@@ -24,14 +24,14 @@ pub fn random_weighted_pick<I>(items: Vec<&I>) -> Option<&I>
 where
     I: RandomWeighted,
 {
-    random_range(0..items.iter().map(|w| w.random_weight()).sum()).and_then(|p| {
+    random_range(0..items.iter().map(|item| item.random_weight()).sum()).and_then(|p| {
         items
             .iter()
-            .scan(0, |cumul_prob, &w| {
-                *cumul_prob += w.random_weight();
-                Some((*cumul_prob, w))
+            .scan(0, |cumul_prob, &item| {
+                *cumul_prob += item.random_weight();
+                Some((*cumul_prob, item))
             })
-            .find(|(max_prob, w)| p >= *max_prob - w.random_weight() && p < *max_prob)
-            .map(|(_, w)| w)
+            .find(|(max_prob, item)| p >= *max_prob - item.random_weight() && p < *max_prob)
+            .map(|(_, item)| item)
     })
 }

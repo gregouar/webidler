@@ -11,7 +11,7 @@ use shared::{
     data::{
         loot::QueuedLoot,
         monster::{MonsterSpecs, MonsterState},
-        player::{PlayerResources, PlayerSpecs, PlayerState},
+        player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
         world::WorldState,
     },
     messages::{
@@ -50,6 +50,7 @@ pub struct GameInstance<'a> {
     master_store: MasterStore,
 
     player_specs: LazySyncer<PlayerSpecs>,
+    player_inventory: LazySyncer<PlayerInventory>,
     player_state: PlayerState,
     player_resources: PlayerResources,
     player_controller: PlayerController,
@@ -67,6 +68,8 @@ impl<'a> GameInstance<'a> {
     pub fn new(
         client_conn: &'a mut WebSocketConnection,
         player_specs: PlayerSpecs,
+        player_inventory: PlayerInventory,
+        player_resources: PlayerResources,
         world_blueprint: WorldBlueprint,
         master_store: MasterStore,
     ) -> Self {
@@ -78,14 +81,11 @@ impl<'a> GameInstance<'a> {
             world_state: WorldState::init(&world_blueprint.specs),
             world_blueprint: world_blueprint,
 
-            player_resources: PlayerResources {
-                passive_points: 0,
-                experience: 0.0,
-                gold: 0.0,
-            },
+            player_resources,
             player_state: PlayerState::init(&player_specs),
             player_controller: PlayerController::init(&player_specs),
             player_specs: LazySyncer::new(player_specs),
+            player_inventory: LazySyncer::new(player_inventory),
             player_respawn_delay: Instant::now(),
 
             monster_specs: LazySyncer::new(Vec::new()),
@@ -188,6 +188,7 @@ impl<'a> GameInstance<'a> {
             }
             ClientMessage::EquipItem(m) => player_controller::equip_item_from_bag(
                 self.player_specs.mutate(),
+                self.player_inventory.mutate(),
                 &mut self.player_state,
                 m.item_index,
             ),
@@ -196,7 +197,7 @@ impl<'a> GameInstance<'a> {
                 item_indexes.sort_by_key(|&i| i);
                 for &item_index in item_indexes.iter().rev() {
                     player_controller::sell_item(
-                        self.player_specs.mutate(),
+                        self.player_inventory.mutate(),
                         &mut self.player_resources,
                         item_index,
                     )
@@ -204,7 +205,7 @@ impl<'a> GameInstance<'a> {
             }
             ClientMessage::PickupLoot(m) => {
                 if !loot_controller::pickup_loot(
-                    self.player_specs.mutate(),
+                    self.player_inventory.mutate(),
                     self.queued_loot.mutate(),
                     m.loot_identifier,
                 ) {
@@ -358,6 +359,7 @@ impl<'a> GameInstance<'a> {
                 &SyncGameStateMessage {
                     world_state: self.world_state.clone(),
                     player_specs: self.player_specs.sync(),
+                    player_inventory: self.player_inventory.sync(),
                     player_state: self.player_state.clone(),
                     player_resources: self.player_resources.clone(),
                     monster_specs: self.monster_specs.sync(),

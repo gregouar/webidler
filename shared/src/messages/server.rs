@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
-    player::{PlayerResources, PlayerSpecs, PlayerState},
+    player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     world::{WorldSpecs, WorldState},
 };
 
@@ -50,6 +50,7 @@ pub struct InitGameMessage {
 pub struct SyncGameStateMessage {
     pub world_state: WorldState,
     pub player_specs: Option<PlayerSpecs>,
+    pub player_inventory: Option<PlayerInventory>,
     pub player_state: PlayerState,
     pub player_resources: PlayerResources,
     pub monster_specs: Option<Vec<MonsterSpecs>>,

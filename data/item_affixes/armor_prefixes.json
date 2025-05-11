@@ -5,7 +5,7 @@
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "slots": ["Helmet", "Body", "Shield", "Gloves", "Boots"],
+    "restrictions": ["Armor"],
     "item_level": 1,
     "effects": [
       {
