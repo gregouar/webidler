@@ -6,6 +6,8 @@ use shared::data::{
 
 const MAX_QUEUE_SIZE: usize = 5;
 
+// TODO: Give priority depending on rarity?
+// TODO: Return removed item for auto sell
 pub fn drop_loot(queued_loot: &mut Vec<QueuedLoot>, item_specs: ItemSpecs) {
     drop_loot_impl(queued_loot, item_specs, true);
 }

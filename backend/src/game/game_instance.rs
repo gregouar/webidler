@@ -59,6 +59,7 @@ pub struct GameInstance<'a> {
     monster_states: Vec<MonsterState>,
     monster_wave_delay: Instant,
 
+    looted: bool,
     queued_loot: LazySyncer<Vec<QueuedLoot>>,
 }
 
@@ -91,6 +92,7 @@ impl<'a> GameInstance<'a> {
             monster_states: Vec::new(),
             monster_wave_delay: Instant::now(),
 
+            looted: false,
             queued_loot: LazySyncer::new(Vec::new()),
         }
     }
@@ -307,8 +309,7 @@ impl<'a> GameInstance<'a> {
             }
 
             if monsters_still_alive.is_empty() {
-                if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
-                    // TODO: Drop on enemy death, not wave generate
+                if !self.looted && self.world_state.waves_done == WAVES_PER_AREA_LEVEL {
                     if let Some(item_specs) = loot_generator::generate_loot(
                         &self.world_blueprint.loot_table,
                         &self.master_store.items_table,
@@ -317,8 +318,12 @@ impl<'a> GameInstance<'a> {
                     ) {
                         loot_controller::drop_loot(self.queued_loot.mutate(), item_specs);
                     }
+                    self.looted = true;
+                }
 
+                if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
                     self.generate_monsters_wave().await?;
+                    self.looted = false;
                 }
             } else {
                 self.monster_wave_delay = Instant::now();
