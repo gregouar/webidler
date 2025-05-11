@@ -60,9 +60,10 @@ pub struct ItemBase {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ItemSpecs {
+    pub name: String,
+
     pub base: ItemBase,
     pub rarity: ItemRarity,
-
     pub level: AreaLevel,
 
     pub weapon_specs: Option<WeaponSpecs>,

@@ -4,7 +4,7 @@
     "family": "inc_damage",
     "affix_type": "Prefix",
     "tier": 1,
-    "weight": 100,
+    "weight": 1000,
     "slots": ["Weapon"],
     "item_level": 1,
     "effects": [
@@ -21,7 +21,7 @@
     "family": "add_damage",
     "affix_type": "Prefix",
     "tier": 1,
-    "weight": 100,
+    "weight": 1000,
     "slots": ["Weapon"],
     "item_level": 1,
     "effects": [
@@ -44,7 +44,7 @@
     "family": "inc_speed",
     "affix_type": "Prefix",
     "tier": 1,
-    "weight": 100,
+    "weight": 1000,
     "slots": ["Weapon"],
     "item_level": 1,
     "effects": [

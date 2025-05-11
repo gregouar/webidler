@@ -4,7 +4,7 @@
     "family": "inc_damage",
     "affix_type": "Prefix",
     "tier": 1,
-    "weight": 100,
+    "weight": 1000,
     "slots": ["Helmet", "Body", "Shield", "Gloves", "Boots"],
     "item_level": 1,
     "effects": [

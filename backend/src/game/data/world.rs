@@ -25,7 +25,7 @@ pub struct WorldBlueprint {
 pub struct MonsterWaveBlueprint {
     pub min_level: Option<u16>,
     pub max_level: Option<u16>,
-    pub weight: f64,
+    pub weight: u64,
     pub spawns: Vec<MonsterWaveSpawnBlueprint>,
 }
 

@@ -311,10 +311,10 @@ impl<'a> GameInstance<'a> {
             if monsters_still_alive.is_empty() {
                 if !self.looted && self.world_state.waves_done == WAVES_PER_AREA_LEVEL {
                     if let Some(item_specs) = loot_generator::generate_loot(
+                        self.world_state.area_level,
                         &self.world_blueprint.loot_table,
                         &self.master_store.items_table,
                         &self.master_store.item_affixes_table,
-                        self.world_state.area_level,
                     ) {
                         loot_controller::drop_loot(self.queued_loot.mutate(), item_specs);
                     }

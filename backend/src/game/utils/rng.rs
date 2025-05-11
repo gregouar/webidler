@@ -17,17 +17,17 @@ where
 }
 
 pub trait RandomWeighted {
-    fn random_weight(&self) -> f64;
+    fn random_weight(&self) -> u64;
 }
 
 pub fn random_weighted_pick<I>(items: Vec<&I>) -> Option<&I>
 where
     I: RandomWeighted,
 {
-    random_range(0.0..items.iter().map(|w| w.random_weight()).sum()).and_then(|p| {
+    random_range(0..items.iter().map(|w| w.random_weight()).sum()).and_then(|p| {
         items
             .iter()
-            .scan(0.0, |cumul_prob, &w| {
+            .scan(0, |cumul_prob, &w| {
                 *cumul_prob += w.random_weight();
                 Some((*cumul_prob, w))
             })

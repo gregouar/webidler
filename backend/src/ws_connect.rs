@@ -17,7 +17,7 @@ use std::{ops::ControlFlow, vec};
 use shared::{
     data::{
         character::CharacterSize,
-        item::{ItemRarity, ItemSpecs},
+        item::ItemRarity,
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
         skill::{
             DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs, SkillType,
@@ -32,7 +32,7 @@ use shared::{
 
 use crate::game::{
     data::{master_store::MasterStore, DataInit},
-    systems::{items_controller, player_controller},
+    systems::{loot_generator, player_controller},
     GameInstance,
 };
 use crate::websocket::WebSocketConnection;
@@ -92,14 +92,12 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, master_store: MasterS
         player_controller::equip_item(
             &mut player_specs,
             &mut player_state,
-            items_controller::update_item_specs(ItemSpecs {
-                base: base_weapon,
-                level: 1,
-                rarity: ItemRarity::Normal,
-                affixes: Vec::new(),
-                weapon_specs: None,
-                armor_specs: None,
-            }),
+            loot_generator::roll_item(
+                base_weapon,
+                ItemRarity::Normal,
+                1,
+                &master_store.item_affixes_table,
+            ),
         );
     }
 

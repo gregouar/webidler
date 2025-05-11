@@ -249,7 +249,7 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             <strong class=format!(
                 "text-lg font-bold {}",
                 name_color,
-            )>{item_specs.base.name.clone()}</strong>
+            )>{item_specs.name.clone()}</strong>
             <hr class="border-t border-gray-700" />
             <ul class="list-none space-y-1">
                 <li class="text-gray-400 text-sm leading-snug">{item_slot}</li>

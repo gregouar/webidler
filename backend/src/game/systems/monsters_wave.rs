@@ -11,7 +11,7 @@ use crate::game::utils::{increase_factors, rng};
 const MAX_MONSTERS_PER_ROW: usize = 3; // TODO: Move
 
 impl RandomWeighted for MonsterWaveBlueprint {
-    fn random_weight(&self) -> f64 {
+    fn random_weight(&self) -> u64 {
         self.weight
     }
 }

@@ -2,5 +2,9 @@
   "meta": {
     "enabled": true
   },
-  "item_affixes": ["weapon_prefixes.json","other_affixes.json"]
+  "item_affixes": [
+    "armor_prefixes.json",
+    "other_affixes.json",
+    "weapon_prefixes.json"
+  ]
 }

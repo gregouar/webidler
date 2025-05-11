@@ -15,7 +15,7 @@ pub struct LootTable {
 pub struct LootTableEntry {
     pub item_id: ItemId,
 
-    pub weight: f32,
+    pub weight: u64,
     pub min_area_level: Option<AreaLevel>,
     pub max_area_level: Option<AreaLevel>,
 }

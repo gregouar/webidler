@@ -39,12 +39,27 @@ pub struct ItemAffixBlueprint {
 
     pub affix_type: AffixType,
     pub tier: u8,
-    pub weight: f32, // Bigger weight means more chances to have affix
+    pub weight: u64, // Bigger weight means more chances to have affix
 
+    #[serde(default = "default_slots")]
     pub slots: Vec<ItemSlot>,
     pub item_level: AreaLevel,
 
     pub effects: Vec<AffixEffectBlueprint>,
+}
+
+fn default_slots() -> Vec<ItemSlot> {
+    vec![
+        ItemSlot::Amulet,
+        ItemSlot::Body,
+        ItemSlot::Boots,
+        ItemSlot::Gloves,
+        ItemSlot::Helmet,
+        ItemSlot::Ring,
+        ItemSlot::Shield,
+        ItemSlot::Trinket,
+        ItemSlot::Weapon,
+    ]
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]

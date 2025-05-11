@@ -2,20 +2,20 @@
   "entries": [
     {
       "item_id": "shortsword",
-      "weight": 100
+      "weight": 1000
     },
     {
       "item_id": "shortsword_unique",
-      "weight": 1
+      "weight": 10
     },
     {
       "item_id": "battleaxe",
-      "weight": 100,
+      "weight": 1000,
       "min_area_level": 3
     },
     {
       "item_id": "great_helm",
-      "weight": 100,
+      "weight": 1000,
       "min_area_level": 2
     }
   ]
