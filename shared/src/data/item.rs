@@ -2,8 +2,11 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use super::item_affix::{AffixEffect, ItemAffix, ItemAffixBlueprint};
 pub use super::skill::{Range, Shape};
+use super::{
+    item_affix::{AffixEffect, AffixEffectBlueprint, ItemAffix},
+    world::AreaLevel,
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Ord)]
 pub enum ItemRarity {
@@ -26,9 +29,9 @@ pub enum ItemSlot {
     Boots,
     Gloves,
     Helmet,
-    Relic,
     Ring,
     Shield,
+    Trinket,
     Weapon,
 }
 
@@ -42,11 +45,11 @@ pub struct ItemBase {
     pub slot: ItemSlot,
 
     #[serde(default)]
-    pub min_area_level: Option<u16>,
+    pub min_area_level: Option<AreaLevel>,
     #[serde(default)]
     pub rarity: ItemRarity,
     #[serde(default)]
-    pub affixes: Vec<ItemAffixBlueprint>,
+    pub affixes: Vec<AffixEffectBlueprint>,
 
     #[serde(default)]
     pub weapon_specs: Option<WeaponSpecs>,
@@ -60,8 +63,7 @@ pub struct ItemSpecs {
     pub base: ItemBase,
     pub rarity: ItemRarity,
 
-    // Area level at which the item dropped
-    pub level: u16,
+    pub level: AreaLevel,
 
     pub weapon_specs: Option<WeaponSpecs>,
     pub armor_specs: Option<ArmorSpecs>,
@@ -96,14 +98,14 @@ impl ItemSpecs {
             .flat_map(|affix| affix.effects.iter())
             .fold(HashMap::new(), |mut effects_map, effect| {
                 *effects_map
-                    .entry((effect.stat, effect.effect_type))
+                    .entry((effect.stat, effect.modifier))
                     .or_default() += effect.value;
                 effects_map
             })
             .into_iter()
             .map(|((stat, effect_type), value)| AffixEffect {
                 stat,
-                effect_type,
+                modifier: effect_type,
                 value,
             })
             .collect()

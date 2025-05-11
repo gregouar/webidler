@@ -56,7 +56,13 @@ pub fn EquippedItems() -> impl IntoView {
                 <PlayerName />
             </div>
             <div class="grid grid-rows-3 grid-cols-3 gap-3 p-4 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                <EmptySlot>{()}</EmptySlot>
+                <EquippedItem
+                    item_specs=move || {
+                        game_context.player_specs.read().inventory.trinket_specs.clone()
+                    }
+                    fallback_asset="ui/trinket.webp"
+                    fallback_alt="Trinket"
+                />
                 <EquippedItem
                     item_specs=move || {
                         game_context.player_specs.read().inventory.helmet_specs.clone()

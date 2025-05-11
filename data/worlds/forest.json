@@ -11,7 +11,7 @@
     {
       "min_level": 1,
       "max_level": null,
-      "probability": 1,
+      "weight": 100,
       "spawns": [
         {
           "monster": "batty.json",
@@ -28,7 +28,7 @@
     {
       "min_level": 3,
       "max_level": null,
-      "probability": 1,
+      "weight": 100,
       "spawns": [
         {
           "monster": "ratty.json",
@@ -45,7 +45,7 @@
     {
       "min_level": 5,
       "max_level": null,
-      "probability": 1,
+      "weight": 100,
       "spawns": [
         {
           "monster": "snek.json",

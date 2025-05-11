@@ -41,7 +41,7 @@ pub struct PlayerResources {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerInventory {
-    pub relic_specs: Option<ItemSpecs>,
+    pub trinket_specs: Option<ItemSpecs>,
     pub helmet_specs: Option<ItemSpecs>,
     pub amulet_specs: Option<ItemSpecs>,
     pub weapon_specs: Option<ItemSpecs>,

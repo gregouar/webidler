@@ -88,7 +88,7 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, master_store: MasterS
 
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
-    if let Some(base_weapon) = master_store.items_table.entries.get("shortsword").cloned() {
+    if let Some(base_weapon) = master_store.items_table.get("shortsword").cloned() {
         player_controller::equip_item(
             &mut player_specs,
             &mut player_state,

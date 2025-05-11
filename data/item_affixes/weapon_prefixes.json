@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Painful",
+    "family": "inc_damage",
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 100,
+    "slots": ["Weapon"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "LocalAttackDamage",
+        "modifier": "Multiplier",
+        "min": 0.05,
+        "max": 0.15
+      }
+    ]
+  },
+  {
+    "name": "Merciless",
+    "family": "add_damage",
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 100,
+    "slots": ["Weapon"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "LocalMinAttackDamage",
+        "modifier": "Flat",
+        "min": 1,
+        "max": 2
+      },
+      {
+        "stat": "LocalMaxAttackDamage",
+        "modifier": "Flat",
+        "min": 3,
+        "max": 4
+      }
+    ]
+  },
+  {
+    "name": "Fast",
+    "family": "inc_speed",
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 100,
+    "slots": ["Weapon"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "LocalAttackSpeed",
+        "modifier": "Multiplier",
+        "min": 0.05,
+        "max": 0.15
+      }
+    ]
+  }
+]

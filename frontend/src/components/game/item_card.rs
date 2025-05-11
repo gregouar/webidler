@@ -5,7 +5,7 @@ use leptos::prelude::*;
 
 use shared::data::{
     item::{ItemRarity, ItemSlot, ItemSpecs},
-    item_affix::{AffixEffect, AffixEffectType, ItemStat},
+    item_affix::{AffixEffect, AffixEffectModifier, ItemStat},
 };
 
 use crate::assets::img_asset;
@@ -143,9 +143,9 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         ItemSlot::Boots => "Boots",
         ItemSlot::Gloves => "Gloves",
         ItemSlot::Helmet => "Helmet",
-        ItemSlot::Relic => "Relic",
         ItemSlot::Ring => "Ring",
         ItemSlot::Shield => "Shield",
+        ItemSlot::Trinket => "Trinket",
         ItemSlot::Weapon => "Weapon",
     };
     let armor_info = item_specs
@@ -286,7 +286,7 @@ fn magic_affix_li(text: String) -> impl IntoView {
 }
 
 pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl IntoView> {
-    use AffixEffectType::*;
+    use AffixEffectModifier::*;
     use ItemStat::*;
 
     affix_effects.sort_by_key(|effect| {
@@ -297,9 +297,9 @@ pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl Int
                 LocalMaxAttackDamage => 2,
                 LocalAttackSpeed => 3,
                 LocalArmor => 4,
-                GoldFind => 5,
+                GlobalGoldFind => 5,
             },
-            -match effect.effect_type {
+            -match effect.modifier {
                 Flat => 0,
                 Multiplier => 1,
             },
@@ -313,7 +313,7 @@ pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl Int
     let mut max_flat: Option<f64> = None;
 
     for effect in affix_effects {
-        match (effect.stat, effect.effect_type) {
+        match (effect.stat, effect.modifier) {
             (LocalMinAttackDamage, Flat) => min_flat = Some(effect.value),
             (LocalMaxAttackDamage, Flat) => max_flat = Some(effect.value),
             (LocalMinAttackDamage, Multiplier) => merged.push(format!(
@@ -341,10 +341,10 @@ pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl Int
             (LocalArmor, Multiplier) => {
                 merged.push(format!("{:.0}% Increased Armor", effect.value))
             }
-            (GoldFind, Flat) => {
+            (GlobalGoldFind, Flat) => {
                 merged.push(format!("+{:.0} Gold per Kill", effect.value));
             }
-            (GoldFind, Multiplier) => {
+            (GlobalGoldFind, Multiplier) => {
                 merged.push(format!("{:.0}% Increased Gold Find", effect.value * 100.0))
             }
         }

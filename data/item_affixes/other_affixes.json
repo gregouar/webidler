@@ -1,0 +1,29 @@
+[
+  {
+    "name": "of Greed",
+    "family": "inc_gold",
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 100,
+    "slots": [
+      "Relic",
+      "Helmet",
+      "Amulet",
+      "Weapon",
+      "Body",
+      "Shield",
+      "Gloves",
+      "Boots",
+      "Ring"
+    ],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "GlobalGoldFind",
+        "modifier": "Multiplier",
+        "min": 0.1,
+        "max": 0.3
+      }
+    ]
+  }
+]

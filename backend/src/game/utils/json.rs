@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use std::path::Path;
+use std::{collections::HashMap, path::Path};
 
 use serde::de::DeserializeOwned;
 use tokio::fs;
@@ -27,3 +27,6 @@ where
         async { Ok(load_json(filepath).await?) }
     }
 }
+
+impl<T: LoadJsonFromFile> LoadJsonFromFile for HashMap<String, T> {}
+impl<T: LoadJsonFromFile> LoadJsonFromFile for Vec<T> {}

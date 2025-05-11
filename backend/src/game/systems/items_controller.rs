@@ -1,6 +1,6 @@
 use shared::data::{
     item::{ArmorSpecs, ItemSlot, ItemSpecs, WeaponSpecs},
-    item_affix::{AffixEffect, AffixEffectType, ItemStat},
+    item_affix::{AffixEffect, AffixEffectModifier, ItemStat},
     skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillType, TargetType},
 };
 
@@ -8,9 +8,9 @@ use shared::data::{
 pub fn update_item_specs(mut item_specs: ItemSpecs) -> ItemSpecs {
     let mut effects: Vec<AffixEffect> = item_specs.aggregate_effects();
 
-    effects.sort_by_key(|e| match e.effect_type {
-        AffixEffectType::Flat => 0,
-        AffixEffectType::Multiplier => 1,
+    effects.sort_by_key(|e| match e.modifier {
+        AffixEffectModifier::Flat => 0,
+        AffixEffectModifier::Multiplier => 1,
     });
 
     if let Some(ref armor_specs) = item_specs.base.armor_specs {
@@ -27,33 +27,33 @@ pub fn update_item_specs(mut item_specs: ItemSpecs) -> ItemSpecs {
 fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &Vec<AffixEffect>) -> WeaponSpecs {
     for effect in effects {
         match effect.stat {
-            ItemStat::LocalAttackSpeed => match effect.effect_type {
-                AffixEffectType::Flat => {
+            ItemStat::LocalAttackSpeed => match effect.modifier {
+                AffixEffectModifier::Flat => {
                     weapon_specs.cooldown -= effect.value as f32;
                 }
-                AffixEffectType::Multiplier => {
+                AffixEffectModifier::Multiplier => {
                     weapon_specs.cooldown *= 1.0 - effect.value as f32;
                 }
             },
-            ItemStat::LocalAttackDamage => match effect.effect_type {
-                AffixEffectType::Flat => {
+            ItemStat::LocalAttackDamage => match effect.modifier {
+                AffixEffectModifier::Flat => {
                     weapon_specs.min_damage += effect.value;
                     weapon_specs.max_damage += effect.value;
                 }
-                AffixEffectType::Multiplier => {
+                AffixEffectModifier::Multiplier => {
                     weapon_specs.min_damage *= 1.0 + effect.value;
                     weapon_specs.max_damage *= 1.0 + effect.value;
                 }
             },
-            ItemStat::LocalMinAttackDamage => match effect.effect_type {
-                AffixEffectType::Flat => weapon_specs.min_damage += effect.value,
-                AffixEffectType::Multiplier => weapon_specs.min_damage *= 1.0 + effect.value,
+            ItemStat::LocalMinAttackDamage => match effect.modifier {
+                AffixEffectModifier::Flat => weapon_specs.min_damage += effect.value,
+                AffixEffectModifier::Multiplier => weapon_specs.min_damage *= 1.0 + effect.value,
             },
-            ItemStat::LocalMaxAttackDamage => match effect.effect_type {
-                AffixEffectType::Flat => weapon_specs.max_damage += effect.value,
-                AffixEffectType::Multiplier => weapon_specs.max_damage *= 1.0 + effect.value,
+            ItemStat::LocalMaxAttackDamage => match effect.modifier {
+                AffixEffectModifier::Flat => weapon_specs.max_damage += effect.value,
+                AffixEffectModifier::Multiplier => weapon_specs.max_damage *= 1.0 + effect.value,
             },
-            ItemStat::LocalArmor | ItemStat::GoldFind => {}
+            ItemStat::LocalArmor | ItemStat::GlobalGoldFind => {}
         }
     }
 
@@ -70,11 +70,11 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &Vec<AffixEffect
 fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &Vec<AffixEffect>) -> ArmorSpecs {
     for effect in effects {
         match effect.stat {
-            ItemStat::LocalArmor => match effect.effect_type {
-                AffixEffectType::Flat => {
+            ItemStat::LocalArmor => match effect.modifier {
+                AffixEffectModifier::Flat => {
                     armor_specs.armor += effect.value;
                 }
-                AffixEffectType::Multiplier => {
+                AffixEffectModifier::Multiplier => {
                     armor_specs.armor *= 1.0 + effect.value;
                 }
             },
@@ -82,7 +82,7 @@ fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &Vec<AffixEffect>) 
             | ItemStat::LocalAttackDamage
             | ItemStat::LocalMinAttackDamage
             | ItemStat::LocalMaxAttackDamage
-            | ItemStat::GoldFind => {}
+            | ItemStat::GlobalGoldFind => {}
         }
     }
     armor_specs

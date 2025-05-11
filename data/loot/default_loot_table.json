@@ -5,12 +5,16 @@
       "weight": 10.0
     },
     {
+      "item_id": "shortsword_unique",
+      "weight": 10.0
+    },
+    {
       "item_id": "battleaxe",
       "weight": 10.0,
       "min_area_level": 3
     },
     {
-      "item_id": "helm",
+      "item_id": "great_helm",
       "weight": 10.0,
       "min_area_level": 2
     }

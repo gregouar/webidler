@@ -5,16 +5,32 @@ use shared::data::{monster::MonsterSpecs, world::WorldState};
 
 use crate::game::data::master_store::MonstersSpecsStore;
 use crate::game::data::world::{MonsterWaveBlueprint, WorldBlueprint};
+use crate::game::utils::rng::RandomWeighted;
 use crate::game::utils::{increase_factors, rng};
 
 const MAX_MONSTERS_PER_ROW: usize = 3; // TODO: Move
+
+impl RandomWeighted for MonsterWaveBlueprint {
+    fn random_weight(&self) -> f64 {
+        self.weight
+    }
+}
 
 pub fn generate_monsters_wave_specs(
     world_blueprint: &WorldBlueprint,
     world_state: &WorldState,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Result<Vec<MonsterSpecs>> {
-    pick_wave(filter_waves(&world_blueprint.waves, world_state))
+    let available_waves = world_blueprint
+        .waves
+        .iter()
+        .filter(|wave| {
+            world_state.area_level >= wave.min_level.unwrap_or(AreaLevel::MIN)
+                && world_state.area_level <= wave.max_level.unwrap_or(AreaLevel::MAX)
+        })
+        .collect();
+
+    rng::random_weighted_pick(available_waves)
         .map(|wave| {
             Ok(generate_all_monsters_specs(
                 wave,
@@ -23,32 +39,6 @@ pub fn generate_monsters_wave_specs(
             ))
         })
         .unwrap_or(Err(anyhow::format_err!("no monster wave available")))
-}
-
-fn filter_waves<'a>(
-    waves: &'a Vec<MonsterWaveBlueprint>,
-    world_state: &WorldState,
-) -> Vec<&'a MonsterWaveBlueprint> {
-    waves
-        .iter()
-        .filter(|wave| {
-            world_state.area_level >= wave.min_level.unwrap_or(AreaLevel::MIN)
-                && world_state.area_level <= wave.max_level.unwrap_or(AreaLevel::MAX)
-        })
-        .collect()
-}
-
-fn pick_wave<'a>(waves: Vec<&'a MonsterWaveBlueprint>) -> Option<&'a MonsterWaveBlueprint> {
-    rng::random_range(0.0..waves.iter().map(|w| w.probability).sum()).and_then(|p| {
-        waves
-            .iter()
-            .scan(0.0, |cumul_prob, &w| {
-                *cumul_prob += w.probability;
-                Some((*cumul_prob, w))
-            })
-            .find(|(max_prob, w)| p >= *max_prob - w.probability && p < *max_prob)
-            .map(|(_, w)| w)
-    })
 }
 
 fn generate_all_monsters_specs(

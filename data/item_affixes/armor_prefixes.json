@@ -1,0 +1,19 @@
+[
+  {
+    "name": "Hard",
+    "family": "inc_damage",
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 100,
+    "slots": ["Helmet", "Body", "Shield", "Gloves", "Boots"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "LocalArmor",
+        "modifier": "Multiplier",
+        "min": 0.05,
+        "max": 0.15
+      }
+    ]
+  }
+]
