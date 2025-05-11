@@ -1,6 +1,6 @@
 {
-    "entries": [
-        "helmets_table.json",
-        "weapons_table.json"
-    ]
+  "meta": {
+    "enabled": true
+  },
+  "items": ["helmets_table.json", "weapons_table.json"]
 }

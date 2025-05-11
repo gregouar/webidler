@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "enabled": true
+  },
+  "folders": ["item_affixes", "items", "loot", "monsters", "worlds"]
+}

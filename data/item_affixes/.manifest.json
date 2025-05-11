@@ -1,5 +1,6 @@
 {
-    "entries": [
-        "affixes_table.json"
-    ]
+  "meta": {
+    "enabled": true
+  },
+  "item_affixes": ["affixes_table.json"]
 }

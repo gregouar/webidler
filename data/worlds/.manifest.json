@@ -1,5 +1,6 @@
 {
-    "entries": [
-        "forest.json"
-    ]
+  "meta": {
+    "enabled": true
+  },
+  "worlds": ["forest.json"]
 }

@@ -201,11 +201,11 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     </span>
                 </li>
                 <li class="text-gray-400 text-sm leading-snug">
-                    "Attacks per Second: "
+                    "Cooldown: "
                     <span class=format!(
                         "{} font-semibold",
                         cooldown_color,
-                    )>{format!("{:.2}", specs.cooldown)}</span>
+                    )>{format!("{:.2}s", specs.cooldown)}</span>
                 </li>
             }
         });
@@ -251,17 +251,22 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 name_color,
             )>{item_specs.base.name.clone()}</strong>
             <hr class="border-t border-gray-700" />
-            <p class="text-sm text-gray-400 leading-snug">
-                "Item Level: " <span class="text-white">{item_specs.level}</span>
-            </p>
-            <hr class="border-t border-gray-700" />
             <ul class="list-none space-y-1">
                 <li class="text-gray-400 text-sm leading-snug">{item_slot}</li>
                 {armor_info}
                 {weapon_info}
             </ul>
-            {(!affixes.is_empty()).then(|| view! { <hr class="border-t border-gray-700 my-1" /> })}
-            <ul class="list-none space-y-1">{affixes}</ul>
+            {(!affixes.is_empty())
+                .then(|| {
+                    view! {
+                        <hr class="border-t border-gray-700 my-1" />
+                        <ul class="list-none space-y-1">{affixes}</ul>
+                    }
+                })}
+            <hr class="border-t border-gray-700" />
+            <p class="text-sm text-gray-400 leading-snug">
+                "Item Level: " <span class="text-white">{item_specs.level}</span>
+            </p>
             {item_specs
                 .base
                 .description

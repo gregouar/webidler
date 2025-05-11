@@ -11,7 +11,7 @@ use axum::{
 use axum_extra::TypedHeader;
 use tokio::{task::yield_now, time::timeout};
 
-use std::{net::SocketAddr, path::Path, time::Duration};
+use std::{net::SocketAddr, time::Duration};
 use std::{ops::ControlFlow, vec};
 
 use shared::{
@@ -76,7 +76,7 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, master_store: MasterS
     tracing::debug!("loading the game...");
     let world_blueprint = match master_store
         .world_blueprints_store
-        .get(Path::new("forest.json"))
+        .get("forest.json")
         .cloned() // TODO: Avoid clone?
     {
         Some(world_blueprint) => world_blueprint,

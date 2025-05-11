@@ -1,5 +1,6 @@
 {
-    "entries": [
-        "default_loot_table.json"
-    ]
+  "meta": {
+    "enabled": true
+  },
+  "loot": ["default_loot_table.json"]
 }

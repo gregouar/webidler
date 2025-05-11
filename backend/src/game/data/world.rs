@@ -1,6 +1,5 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
 
 use shared::data::world::WorldSpecs;
 
@@ -12,7 +11,7 @@ use super::{loot_table::LootTable, master_store::LootTablesStore};
 pub struct WorldBlueprintSchema {
     pub specs: WorldSpecs,
     pub waves: Vec<MonsterWaveBlueprint>,
-    pub loot_tables: Vec<PathBuf>,
+    pub loot_tables: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -32,7 +31,7 @@ pub struct MonsterWaveBlueprint {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MonsterWaveSpawnBlueprint {
-    pub path: PathBuf,
+    pub monster: String,
     pub min_quantity: u8,
     pub max_quantity: u8,
 }

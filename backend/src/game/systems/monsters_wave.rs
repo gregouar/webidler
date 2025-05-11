@@ -62,7 +62,7 @@ fn generate_all_monsters_specs(
     let mut monsters_specs = Vec::with_capacity(top_space_available + bot_space_available);
     'spawnloop: for spawn in wave.spawns.iter() {
         for _ in 0..rng::random_range(spawn.min_quantity..=spawn.max_quantity).unwrap_or_default() {
-            if let Some(specs) = monsters_specs_store.get(&spawn.path) {
+            if let Some(specs) = monsters_specs_store.get(&spawn.monster) {
                 let (x_size, y_size) = specs.character_specs.size.get_xy_size();
                 let use_top = y_size > 1 || top_space_available >= bot_space_available;
                 let x_pos = (MAX_MONSTERS_PER_ROW + 1
@@ -100,6 +100,8 @@ fn generate_all_monsters_specs(
                 if top_space_available == 0 && bot_space_available == 0 {
                     break 'spawnloop;
                 }
+            } else {
+                tracing::error!("missing monster specs '{:?}'", spawn.monster);
             }
         }
     }

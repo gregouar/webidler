@@ -1,6 +1,5 @@
-use anyhow::{Context, Result};
+use anyhow::Result;
 use futures::future::join_all;
-use serde::{Deserialize, Serialize};
 use shared::data::monster::MonsterSpecs;
 use std::{
     collections::HashMap,
@@ -10,13 +9,13 @@ use std::{
 
 use crate::game::utils::json::LoadJsonFromFile;
 
-use super::{items_table::ItemsTable, loot_table::LootTable, world::WorldBlueprint};
+use super::{items_table::ItemsTable, loot_table::LootTable, manifest, world::WorldBlueprint};
 
 // TODO: Load from zip/dat file and compress at build time for prod release
 
-pub type MonstersSpecsStore = HashMap<PathBuf, MonsterSpecs>;
-pub type LootTablesStore = HashMap<PathBuf, LootTable>;
-pub type WorldBlueprintStore = HashMap<PathBuf, WorldBlueprint>;
+pub type MonstersSpecsStore = HashMap<String, MonsterSpecs>;
+pub type LootTablesStore = HashMap<String, LootTable>;
+pub type WorldBlueprintStore = HashMap<String, WorldBlueprint>;
 
 #[derive(Debug, Clone)]
 pub struct MasterStore {
@@ -27,29 +26,22 @@ pub struct MasterStore {
     pub world_blueprints_store: Arc<WorldBlueprintStore>,
 }
 
-// TODO: Have manifest more flexible, with instead of entries the different resources: folders, items, loot, monsters, worlds
-// and then let it auto-explore
-#[derive(Serialize, Deserialize, Debug, Clone)]
-struct FolderManifest {
-    entries: Vec<PathBuf>,
-}
-
-impl LoadJsonFromFile for FolderManifest {}
 impl LoadJsonFromFile for MonsterSpecs {}
 
 impl MasterStore {
-    pub async fn load_from_folder(folder_path: impl Into<PathBuf>) -> Result<Self> {
-        let folder_path: PathBuf = folder_path.into();
+    pub async fn load_from_folder(folder_path: impl AsRef<Path>) -> Result<Self> {
+        let manifest = manifest::load_manifest(folder_path).await?;
 
-        let items_table = load_items_tables(&folder_path.join("items")).await?;
-        let loot_tables_store = join_load_and_map(&folder_path.join("loot")).await?;
-        let monster_specs_store = join_load_and_map(&folder_path.join("monsters")).await?;
-        let world_blueprints_store = join_load_and_map(&folder_path.join("worlds"))
+        // TODO join
+        let items_table = load_items_tables(manifest.items).await?;
+        let loot_tables_store = join_load_and_map(manifest.loot).await?;
+        let monster_specs_store = join_load_and_map(manifest.monsters).await?;
+        let world_blueprints_store = join_load_and_map(manifest.worlds)
             .await?
             .into_iter()
-            .map(|(path, schema)| {
+            .map(|(f, schema)| {
                 Ok((
-                    path,
+                    f,
                     WorldBlueprint::populate_from_schema(schema, &loot_tables_store)?,
                 ))
             })
@@ -64,28 +56,15 @@ impl MasterStore {
     }
 }
 
-async fn load_manifest(folder_path: impl AsRef<Path>) -> Result<FolderManifest> {
-    Ok(
-        FolderManifest::load_from_file(folder_path.as_ref().join(".manifest.json"))
-            .await
-            .context(format!(
-                "Failed to load folder manifest from {:?}",
-                folder_path.as_ref()
-            ))?,
-    )
-}
-
 /// Load several files in parallel and store the results in a hash map
-async fn join_load_and_map<T: LoadJsonFromFile>(
-    folder_path: impl AsRef<Path>,
-) -> Result<HashMap<PathBuf, T>> {
-    let manifest = load_manifest(&folder_path).await?;
-
-    let folder_path = folder_path.as_ref();
-    Ok(join_all(manifest.entries.iter().map(|filename| async move {
+async fn join_load_and_map<T: LoadJsonFromFile>(paths: Vec<PathBuf>) -> Result<HashMap<String, T>> {
+    Ok(join_all(paths.into_iter().map(|f| async move {
         Result::<_>::Ok((
-            filename.into(),
-            T::load_from_file(folder_path.join(filename)).await?,
+            f.file_name()
+                .unwrap_or_default()
+                .to_string_lossy()
+                .to_string(),
+            T::load_from_file(f).await?,
         ))
     }))
     .await
@@ -93,13 +72,12 @@ async fn join_load_and_map<T: LoadJsonFromFile>(
     .collect::<Result<_>>()?)
 }
 
-async fn load_items_tables(folder_path: impl AsRef<Path>) -> Result<ItemsTable> {
-    let manifest = load_manifest(&folder_path).await?;
-
-    let folder_path = folder_path.as_ref();
-    let items_tables: Vec<_> = join_all(manifest.entries.iter().map(|filename| async move {
-        Result::<_>::Ok(ItemsTable::load_from_file(folder_path.join(filename)).await?)
-    }))
+async fn load_items_tables(paths: Vec<PathBuf>) -> Result<ItemsTable> {
+    let items_tables: Vec<_> = join_all(
+        paths
+            .into_iter()
+            .map(|f| async move { Result::<_>::Ok(ItemsTable::load_from_file(f).await?) }),
+    )
     .await
     .into_iter()
     .collect::<Result<_>>()?;
