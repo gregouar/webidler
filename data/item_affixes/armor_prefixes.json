@@ -12,8 +12,8 @@
       {
         "stat": "LocalArmor",
         "modifier": "Multiplier",
-        "min": 0.05,
-        "max": 0.15
+        "min": 0.20,
+        "max": 0.39
       }
     ]
   }
