@@ -129,7 +129,12 @@ pub fn PlayerCard() -> impl IntoView {
             "
         </style>
         // <div class="overflow-hidden">
-        <div class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-md ring-1 ring-zinc-950">
+        <div class="
+        w-full h-full flex flex-col gap-2 p-2 
+        bg-zinc-800 
+        ring-1 ring-zinc-950
+        rounded-md shadow-md 
+        ">
 
             // style=move || {
             // if is_dead.get() {

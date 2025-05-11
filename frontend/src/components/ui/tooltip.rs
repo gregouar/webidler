@@ -156,7 +156,7 @@ where
                 px-3 py-1 text-sm text-white
                 bg-zinc-800 border border-neutral-900
                 rounded shadow-lg whitespace-nowrap z-50
-                pointer-events-none
+                select-none
                 {}",
                 position_classes,
             )>{move || tooltip()}</div>
