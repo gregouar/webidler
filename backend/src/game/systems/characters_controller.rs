@@ -13,10 +13,13 @@ pub fn damage_character(
     target_state: &mut CharacterState,
     target_specs: &CharacterSpecs,
 ) {
-    let damage = match damage_type {
-        DamageType::Physical => increase_factors::diminishing(target_specs.armor, ARMOR_FACTOR),
-        DamageType::Fire => damage, // TODO
-    };
+    let damage = damage
+        * match damage_type {
+            DamageType::Physical => {
+                1.0 - increase_factors::diminishing(target_specs.armor, ARMOR_FACTOR)
+            }
+            DamageType::Fire => 1.0, // TODO
+        };
 
     if damage <= 0.0 {
         return;
