@@ -2,5 +2,12 @@
   "meta": {
     "enabled": true
   },
-  "folders": ["item_affixes", "items", "loot", "monsters", "worlds"]
+  "folders": [
+    "item_affixes",
+    "item_names",
+    "items",
+    "loot",
+    "monsters",
+    "worlds"
+  ]
 }

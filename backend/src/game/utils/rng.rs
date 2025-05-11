@@ -3,6 +3,11 @@ use rand::{
     Rng,
 };
 
+pub fn flip_coin() -> bool {
+    let mut rng = rand::rng();
+    rng.random_bool(0.5)
+}
+
 pub fn random_range<T, R>(range: R) -> Option<T>
 where
     T: SampleUniform,

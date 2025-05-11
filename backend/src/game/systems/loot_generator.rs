@@ -54,6 +54,14 @@ pub fn generate_loot(
     })
 }
 
+fn roll_rarity(weights: &RarityWeights) -> ItemRarity {
+    match rng::random_range(0..(weights.normal + weights.magic + weights.rare)).unwrap_or(0) {
+        r if r < weights.normal => ItemRarity::Normal,
+        r if r < weights.normal + weights.magic => ItemRarity::Magic,
+        _ => ItemRarity::Rare,
+    }
+}
+
 pub fn roll_item(
     base: ItemBase,
     rarity: ItemRarity,
@@ -64,14 +72,11 @@ pub fn roll_item(
 ) -> ItemSpecs {
     let mut affixes: Vec<ItemAffix> = roll_unique_affixes(&base);
 
-    let (min_affixes, max_affixes) = match rarity {
-        ItemRarity::Magic => (0, 1),
-        ItemRarity::Rare => (1, 2),
+    let (prefixes_amount, suffixes_amount) = match rarity {
+        ItemRarity::Magic => roll_affixes_amount(1, 2, 0, 1),
+        ItemRarity::Rare => roll_affixes_amount(3, 4, 1, 2),
         _ => (0, 0),
     };
-
-    let prefixes_amount = rng::random_range(min_affixes..=max_affixes).unwrap_or_default();
-    let suffixes_amount = rng::random_range(min_affixes..=max_affixes).unwrap_or_default();
 
     let mut families_in_use: HashSet<String> = HashSet::new();
 
@@ -116,14 +121,6 @@ pub fn roll_item(
     )
 }
 
-fn roll_rarity(weights: &RarityWeights) -> ItemRarity {
-    match rng::random_range(0..(weights.normal + weights.magic + weights.rare)).unwrap_or(0) {
-        r if r < weights.normal => ItemRarity::Normal,
-        r if r < weights.normal + weights.magic => ItemRarity::Magic,
-        _ => ItemRarity::Rare,
-    }
-}
-
 fn roll_base_item(
     loot_table: &LootTable,
     items_store: &ItemsStore,
@@ -155,6 +152,17 @@ fn roll_unique_affixes(base_item: &ItemBase) -> Vec<ItemAffix> {
             effects: vec![roll_affix_effect(e)],
         })
         .collect()
+}
+
+fn roll_affixes_amount(
+    min_amount: usize,
+    max_amount: usize,
+    min_prefixes: usize,
+    max_prefixes: usize,
+) -> (usize, usize) {
+    let amount = rng::random_range(min_amount..=max_amount).unwrap_or(min_amount);
+    let prefix_count = rng::random_range(min_prefixes..=max_prefixes).unwrap_or(min_prefixes);
+    (prefix_count, amount.checked_sub(prefix_count).unwrap_or(0))
 }
 
 fn roll_affix(
