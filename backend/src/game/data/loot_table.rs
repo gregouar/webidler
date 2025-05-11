@@ -4,7 +4,7 @@ use shared::data::world::AreaLevel;
 
 use crate::game::utils::json::LoadJsonFromFile;
 
-use super::items_table::ItemId;
+use super::items_store::ItemId;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct LootTable {

@@ -62,5 +62,12 @@
       "min_damage": 3.0,
       "max_damage": 8.0
     }
+  },
+  "wand": {
+    "name": "Wand",
+    "icon": "items/wand.webp",
+    "slot": "Weapon",
+    "affix_restrictions": ["SpellWeapon"],
+    "rarity": "Magic"
   }
 }

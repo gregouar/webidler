@@ -1,8 +1,10 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 
 pub use super::character::{CharacterSpecs, CharacterState};
 use super::{
-    item::ItemSpecs,
+    item::{ItemSlot, ItemSpecs},
     skill::{SkillSpecs, SkillState},
 };
 
@@ -16,6 +18,8 @@ pub struct PlayerSpecs {
 
     pub max_mana: f64,
     pub mana_regen: f64,
+
+    pub gold_find: f64,
 
     pub auto_skills: Vec<bool>,
 }
@@ -39,15 +43,16 @@ pub struct PlayerResources {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerInventory {
-    pub trinket_specs: Option<ItemSpecs>,
-    pub helmet_specs: Option<ItemSpecs>,
-    pub amulet_specs: Option<ItemSpecs>,
-    pub weapon_specs: Option<ItemSpecs>,
-    pub body_specs: Option<ItemSpecs>,
-    pub shield_specs: Option<ItemSpecs>,
-    pub gloves_specs: Option<ItemSpecs>,
-    pub boots_specs: Option<ItemSpecs>,
-    pub ring_specs: Option<ItemSpecs>,
+    // pub trinket_specs: Option<ItemSpecs>,
+    // pub helmet_specs: Option<ItemSpecs>,
+    // pub amulet_specs: Option<ItemSpecs>,
+    // pub weapon_specs: Option<ItemSpecs>,
+    // pub body_specs: Option<ItemSpecs>,
+    // pub shield_specs: Option<ItemSpecs>,
+    // pub gloves_specs: Option<ItemSpecs>,
+    // pub boots_specs: Option<ItemSpecs>,
+    // pub ring_specs: Option<ItemSpecs>,
+    pub equipped: HashMap<ItemSlot, ItemSpecs>,
 
     pub bag: Vec<ItemSpecs>,
     pub max_bag_size: u8,

@@ -2,6 +2,7 @@
   {
     "name": "Hard",
     "family": "inc_damage",
+    "tags": ["Physical", "Armor"],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,

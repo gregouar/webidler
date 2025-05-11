@@ -1,0 +1,10 @@
+[
+  {
+    "text": "Ward",
+    "restrictions": ["Armor"]
+  },
+  {
+    "text": "Barrier",
+    "restrictions": ["Armor"]
+  }
+]

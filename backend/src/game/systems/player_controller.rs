@@ -1,12 +1,12 @@
 use shared::data::{
     item::{ItemSlot, ItemSpecs, WeaponSpecs},
+    item_affix::{AffixEffectModifier, ItemStat},
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{SkillState, SkillType},
 };
 
-use crate::game::data::DataInit;
-use crate::game::utils::increase_factors;
+use crate::game::{data::DataInit, utils::increase_factors};
 
 use super::{items_controller, skills_controller};
 
@@ -37,6 +37,13 @@ impl PlayerController {
             return;
         }
 
+        let min_mana_needed = player_specs
+            .skills_specs
+            .iter()
+            .map(|s| s.mana_cost)
+            .max_by(|a, b| a.total_cmp(&b))
+            .unwrap_or_default();
+
         for (i, (skill_specs, skill_state)) in player_specs
             .skills_specs
             .iter()
@@ -47,7 +54,11 @@ impl PlayerController {
                 continue;
             }
 
-            if !self.auto_skills.get(i).unwrap_or(&false) && !self.use_skills.contains(&i) {
+            if (!self.auto_skills.get(i).unwrap_or(&false)
+                && !self.use_skills.contains(&i) )
+                // Always keep enough mana for a manual trigger, could be optional
+                || player_state.mana < min_mana_needed + skill_specs.mana_cost
+            {
                 continue;
             }
 
@@ -70,8 +81,12 @@ impl PlayerController {
     }
 }
 
-pub fn reward_player(player_resources: &mut PlayerResources, monster_specs: &MonsterSpecs) {
-    player_resources.gold += monster_specs.power_factor;
+pub fn reward_player(
+    player_resources: &mut PlayerResources,
+    player_specs: &PlayerSpecs,
+    monster_specs: &MonsterSpecs,
+) {
+    player_resources.gold += monster_specs.power_factor * player_specs.gold_find;
     player_resources.experience += monster_specs.power_factor;
 }
 
@@ -127,17 +142,7 @@ pub fn equip_item(
     player_state: &mut PlayerState,
     item_specs: ItemSpecs,
 ) -> Option<ItemSpecs> {
-    let old_item = match item_specs.base.slot {
-        ItemSlot::Amulet => player_inventory.amulet_specs.take(),
-        ItemSlot::Body => player_inventory.body_specs.take(),
-        ItemSlot::Boots => player_inventory.boots_specs.take(),
-        ItemSlot::Gloves => player_inventory.gloves_specs.take(),
-        ItemSlot::Helmet => player_inventory.helmet_specs.take(),
-        ItemSlot::Trinket => player_inventory.trinket_specs.take(),
-        ItemSlot::Ring => player_inventory.ring_specs.take(),
-        ItemSlot::Shield => player_inventory.shield_specs.take(),
-        ItemSlot::Weapon => player_inventory.weapon_specs.take(),
-    };
+    let old_item = player_inventory.equipped.remove(&item_specs.base.slot);
 
     if let Some(_) = old_item.as_ref().map(|x| x.weapon_specs.as_ref()).flatten() {
         unequip_weapon(player_specs, player_state, item_specs.base.slot);
@@ -152,17 +157,11 @@ pub fn equip_item(
         );
     }
 
-    match item_specs.base.slot {
-        ItemSlot::Amulet => player_inventory.amulet_specs = Some(item_specs),
-        ItemSlot::Body => player_inventory.body_specs = Some(item_specs),
-        ItemSlot::Boots => player_inventory.boots_specs = Some(item_specs),
-        ItemSlot::Gloves => player_inventory.gloves_specs = Some(item_specs),
-        ItemSlot::Helmet => player_inventory.helmet_specs = Some(item_specs),
-        ItemSlot::Trinket => player_inventory.trinket_specs = Some(item_specs),
-        ItemSlot::Ring => player_inventory.ring_specs = Some(item_specs),
-        ItemSlot::Shield => player_inventory.shield_specs = Some(item_specs),
-        ItemSlot::Weapon => player_inventory.weapon_specs = Some(item_specs),
-    }
+    player_inventory
+        .equipped
+        .insert(item_specs.base.slot, item_specs);
+
+    update_player_stats(player_specs, &player_inventory);
 
     old_item
 }
@@ -218,4 +217,35 @@ fn equip_weapon(
         .skills_states
         .insert(0, SkillState::init(&weapon_skill));
     player_specs.skills_specs.insert(0, weapon_skill);
+}
+
+fn update_player_stats(player_specs: &mut PlayerSpecs, player_inventory: &PlayerInventory) {
+    player_specs.character_specs.armor = 0.0;
+    player_specs.gold_find = 1.0;
+
+    for item in player_inventory.equipped.values() {
+        if let Some(armor_specs) = &item.armor_specs {
+            player_specs.character_specs.armor += armor_specs.armor;
+        }
+    }
+
+    // TODO: All flats then all multiplier
+
+    for effect in player_inventory
+        .equipped
+        .values()
+        .flat_map(|i| i.aggregate_effects())
+    {
+        match effect.stat {
+            ItemStat::GlobalGoldFind => match effect.modifier {
+                AffixEffectModifier::Flat => todo!(),
+                AffixEffectModifier::Multiplier => player_specs.gold_find *= 1.0 + effect.value,
+            },
+            ItemStat::LocalAttackSpeed
+            | ItemStat::LocalAttackDamage
+            | ItemStat::LocalMinAttackDamage
+            | ItemStat::LocalMaxAttackDamage
+            | ItemStat::LocalArmor => {}
+        }
+    }
 }

@@ -2,6 +2,7 @@
   {
     "name": "Painful",
     "family": "inc_damage",
+    "tags": ["Physical", "Attack"],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
@@ -19,6 +20,7 @@
   {
     "name": "Merciless",
     "family": "add_damage",
+    "tags": ["Physical", "Attack"],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
@@ -42,6 +44,7 @@
   {
     "name": "Fast",
     "family": "inc_speed",
+    "tags": ["Attack", "Speed"],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,

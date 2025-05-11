@@ -22,7 +22,7 @@ impl Default for ItemRarity {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ItemSlot {
     Amulet,
     Body,

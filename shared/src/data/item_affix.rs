@@ -39,6 +39,17 @@ pub enum AffixRestriction {
     // TODO: add others
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq, Hash)]
+pub enum AffixTag {
+    Fire,
+    Physical,
+    Attack,
+    Speed,
+    Armor,
+    Gold,
+    // TODO: add others
+}
+
 // #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 // pub enum AffixEffectScope {
 //     Local,
@@ -49,6 +60,7 @@ pub enum AffixRestriction {
 pub struct ItemAffixBlueprint {
     pub name: String,
     pub family: String, // Cannot generate multiple affixes of same category on item
+    pub tags: HashSet<AffixTag>,
 
     pub affix_type: AffixType,
     pub tier: u8,
@@ -81,6 +93,7 @@ pub struct AffixEffect {
 pub struct ItemAffix {
     pub name: String,
     pub family: String,
+    pub tags: HashSet<AffixTag>,
 
     pub affix_type: AffixType,
     pub tier: u8,

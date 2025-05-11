@@ -10,7 +10,7 @@ use std::{
 use crate::game::utils::json::LoadJsonFromFile;
 
 use super::{
-    items_table::{ItemAffixesTable, ItemsTable},
+    items_store::{ItemAdjectivesTable, ItemAffixesTable, ItemNounsTable, ItemsStore},
     loot_table::LootTable,
     manifest,
     world::WorldBlueprint,
@@ -24,8 +24,10 @@ pub type WorldBlueprintStore = HashMap<String, WorldBlueprint>;
 
 #[derive(Debug, Clone)]
 pub struct MasterStore {
-    pub items_table: Arc<ItemsTable>,
+    pub items_store: Arc<ItemsStore>,
     pub item_affixes_table: Arc<ItemAffixesTable>,
+    pub item_adjectives_table: Arc<ItemAdjectivesTable>,
+    pub item_nouns_table: Arc<ItemNounsTable>,
     pub loot_tables_store: Arc<LootTablesStore>,
     pub monster_specs_store: Arc<MonstersSpecsStore>,
     pub world_blueprints_store: Arc<WorldBlueprintStore>,
@@ -38,8 +40,10 @@ impl MasterStore {
         let manifest = manifest::load_manifest(folder_path).await?;
 
         // TODO join
-        let items_table = join_load_and_merge_tables(manifest.items).await?;
+        let items_store = join_load_and_merge_tables(manifest.items).await?;
         let item_affixes_table = join_load_and_merge_tables(manifest.item_affixes).await?;
+        let item_adjectives_table = join_load_and_merge_tables(manifest.item_adjectives).await?;
+        let item_nouns_table = join_load_and_merge_tables(manifest.item_nouns).await?;
         let loot_tables_store = join_load_and_map(manifest.loot).await?;
         let monster_specs_store = join_load_and_map(manifest.monsters).await?;
         let world_blueprints_store = join_load_and_map(manifest.worlds)
@@ -54,8 +58,10 @@ impl MasterStore {
             .collect::<Result<_>>()?;
 
         Ok(MasterStore {
-            items_table: Arc::new(items_table),
+            items_store: Arc::new(items_store),
             item_affixes_table: Arc::new(item_affixes_table),
+            item_adjectives_table: Arc::new(item_adjectives_table),
+            item_nouns_table: Arc::new(item_nouns_table),
             loot_tables_store: Arc::new(loot_tables_store),
             monster_specs_store: Arc::new(monster_specs_store),
             world_blueprints_store: Arc::new(world_blueprints_store),

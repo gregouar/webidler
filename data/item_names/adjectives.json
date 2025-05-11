@@ -1,0 +1,30 @@
+[
+  {
+    "text": "Fiery",
+    "tags": ["Fire"]
+  },
+  {
+    "text": "Infernal",
+    "tags": ["Fire"]
+  },
+  {
+    "text": "Avaricious",
+    "tags": ["Gold"]
+  },
+  {
+    "text": "Midas's",
+    "tags": ["Gold"]
+  },
+  {
+    "text": "Bulky",
+    "tags": ["Armor"]
+  },
+  {
+    "text": "Stone",
+    "tags": ["Armor"]
+  },
+  {
+    "text": "Edgy",
+    "tags": ["Speed", "Physical"]
+  }
+]

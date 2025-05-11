@@ -306,7 +306,11 @@ impl<'a> GameInstance<'a> {
                 .iter()
                 .filter(|(_, s)| s.character_state.just_died)
             {
-                player_controller::reward_player(&mut self.player_resources, monster_specs);
+                player_controller::reward_player(
+                    &mut self.player_resources,
+                    self.player_specs.read(),
+                    monster_specs,
+                );
             }
 
             if monsters_still_alive.is_empty() {
@@ -314,8 +318,10 @@ impl<'a> GameInstance<'a> {
                     if let Some(item_specs) = loot_generator::generate_loot(
                         self.world_state.area_level,
                         &self.world_blueprint.loot_table,
-                        &self.master_store.items_table,
+                        &self.master_store.items_store,
                         &self.master_store.item_affixes_table,
+                        &self.master_store.item_adjectives_table,
+                        &self.master_store.item_nouns_table,
                     ) {
                         loot_controller::drop_loot(self.queued_loot.mutate(), item_specs);
                     }

@@ -3,13 +3,20 @@ use shared::data::{
     skill::DamageType,
 };
 
+use crate::game::utils::increase_factors;
+
+const ARMOR_FACTOR: f64 = 100.0;
+
 pub fn damage_character(
     damage: f64,
     damage_type: DamageType,
     target_state: &mut CharacterState,
     target_specs: &CharacterSpecs,
 ) {
-    let _ = damage_type; // TODO
+    let damage = match damage_type {
+        DamageType::Physical => increase_factors::diminishing(target_specs.armor, ARMOR_FACTOR),
+        DamageType::Fire => damage, // TODO
+    };
 
     if damage <= 0.0 {
         return;

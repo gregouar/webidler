@@ -1,12 +1,20 @@
 use shared::data::{
-    item::{ArmorSpecs, ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
-    item_affix::{AffixEffect, AffixEffectModifier, AffixType, ItemStat},
+    item::{ArmorSpecs, ItemSlot, ItemSpecs, WeaponSpecs},
+    item_affix::{AffixEffect, AffixEffectModifier, ItemStat},
     skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillType, TargetType},
 };
 
+use crate::game::data::items_store::{ItemAdjectivesTable, ItemNounsTable};
+
+use super::loot_generator::generate_name;
+
 // TODO: Where to call that?
-pub fn update_item_specs(mut item_specs: ItemSpecs) -> ItemSpecs {
-    let name = generate_name(&item_specs);
+pub fn update_item_specs(
+    mut item_specs: ItemSpecs,
+    adjectives: &ItemAdjectivesTable,
+    nouns: &ItemNounsTable,
+) -> ItemSpecs {
+    let name = generate_name(&item_specs, adjectives, nouns);
     item_specs.name = name;
 
     let mut effects: Vec<AffixEffect> = item_specs.aggregate_effects();
@@ -25,32 +33,6 @@ pub fn update_item_specs(mut item_specs: ItemSpecs) -> ItemSpecs {
     }
 
     item_specs
-}
-
-fn generate_name(item_specs: &ItemSpecs) -> String {
-    let mut name = item_specs.base.name.clone();
-
-    let prefixes: Vec<_> = item_specs
-        .affixes
-        .iter()
-        .filter(|a| a.affix_type == AffixType::Prefix)
-        .collect();
-
-    if item_specs.rarity == ItemRarity::Magic && prefixes.len() == 1 {
-        name = format!("{} {}", prefixes[0].name, name);
-    }
-
-    let suffixes: Vec<_> = item_specs
-        .affixes
-        .iter()
-        .filter(|a| a.affix_type == AffixType::Suffix)
-        .collect();
-
-    if item_specs.rarity == ItemRarity::Magic && suffixes.len() == 1 {
-        name = format!("{} {}", name, suffixes[0].name);
-    }
-
-    name
 }
 
 fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &Vec<AffixEffect>) -> WeaponSpecs {

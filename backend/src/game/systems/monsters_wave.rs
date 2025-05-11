@@ -10,7 +10,7 @@ use crate::game::utils::{increase_factors, rng};
 
 const MAX_MONSTERS_PER_ROW: usize = 3; // TODO: Move
 
-impl RandomWeighted for MonsterWaveBlueprint {
+impl RandomWeighted for &MonsterWaveBlueprint {
     fn random_weight(&self) -> u64 {
         self.weight
     }
@@ -30,7 +30,7 @@ pub fn generate_monsters_wave_specs(
         })
         .collect();
 
-    rng::random_weighted_pick(available_waves)
+    rng::random_weighted_pick(&available_waves)
         .map(|wave| {
             Ok(generate_all_monsters_specs(
                 wave,

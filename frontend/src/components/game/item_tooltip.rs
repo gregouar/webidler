@@ -119,10 +119,22 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             ring_color,
             shadow_color,
         )>
-            <strong class=format!(
-                "text-lg font-bold {}",
-                name_color,
-            )>{item_specs.name.clone()}</strong>
+            <strong class=format!("text-lg font-bold {}", name_color)>
+                <ul class="list-none space-y-1">
+                    <li class="leading-snug">{item_specs.name.clone()}</li>
+                    {match item_specs.rarity {
+                        ItemRarity::Rare => {
+                            Some(
+                                view! {
+                                    <li class="leading-snug">{item_specs.base.name.clone()}</li>
+                                },
+                            )
+                        }
+                        _ => None,
+                    }}
+
+                </ul>
+            </strong>
             <hr class="border-t border-gray-700" />
             <ul class="list-none space-y-1">
                 <li class="text-gray-400 text-sm leading-snug">{item_slot}</li>

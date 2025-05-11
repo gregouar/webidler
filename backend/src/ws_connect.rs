@@ -88,7 +88,7 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, master_store: MasterS
 
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
-    if let Some(base_weapon) = master_store.items_table.get("shortsword").cloned() {
+    if let Some(base_weapon) = master_store.items_store.get("shortsword").cloned() {
         player_controller::equip_item(
             &mut player_specs,
             &mut player_inventory,
@@ -98,6 +98,8 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, master_store: MasterS
                 ItemRarity::Normal,
                 1,
                 &master_store.item_affixes_table,
+                &master_store.item_adjectives_table,
+                &master_store.item_nouns_table,
             ),
         );
     }
@@ -161,6 +163,7 @@ async fn handle_connect(
             position_y: 0,
             max_health: 100.0,
             health_regen: 1.0,
+            armor: 0.0,
         },
         skills_specs: vec![
             SkillSpecs {
@@ -207,6 +210,7 @@ async fn handle_connect(
         experience_needed: 10.0,
         max_mana: 100.0,
         mana_regen: 3.0,
+        gold_find: 1.0,
         auto_skills: vec![false, false],
     };
 

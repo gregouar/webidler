@@ -1,0 +1,10 @@
+[
+  {
+    "text": "Fang",
+    "restrictions": ["AttackWeapon"]
+  },
+  {
+    "text": "Blade",
+    "restrictions": ["AttackWeapon"]
+  }
+]

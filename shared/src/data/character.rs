@@ -43,6 +43,9 @@ pub struct CharacterSpecs {
     pub max_health: f64,
     #[serde(default)]
     pub health_regen: f64,
+
+    #[serde(default)]
+    pub armor: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

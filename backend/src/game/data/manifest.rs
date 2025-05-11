@@ -5,6 +5,17 @@ use std::path::{Path, PathBuf};
 
 use crate::game::utils::json::LoadJsonFromFile;
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum ManifestCategory {
+    Items,
+    ItemAffixes,
+    ItemAdjectives,
+    ItemNouns,
+    Loot,
+    Monsters,
+    Worlds,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct Manifest {
     pub meta: ManifestMeta,
@@ -12,10 +23,15 @@ pub struct Manifest {
     #[serde(default)]
     pub folders: Vec<PathBuf>,
 
+    // TODO: Switch to enum and hashmap?
+    #[serde(default)]
+    pub items: Vec<PathBuf>,
     #[serde(default)]
     pub item_affixes: Vec<PathBuf>,
     #[serde(default)]
-    pub items: Vec<PathBuf>,
+    pub item_adjectives: Vec<PathBuf>,
+    #[serde(default)]
+    pub item_nouns: Vec<PathBuf>,
     #[serde(default)]
     pub loot: Vec<PathBuf>,
     #[serde(default)]
@@ -51,6 +67,8 @@ pub async fn load_manifest(folder_path: impl AsRef<Path>) -> Result<Manifest> {
         meta: local_manifest.meta,
         folders: join_paths(local_manifest.folders),
         item_affixes: join_paths(local_manifest.item_affixes),
+        item_adjectives: join_paths(local_manifest.item_adjectives),
+        item_nouns: join_paths(local_manifest.item_nouns),
         items: join_paths(local_manifest.items),
         loot: join_paths(local_manifest.loot),
         monsters: join_paths(local_manifest.monsters),
@@ -78,6 +96,8 @@ impl Manifest {
     fn merge(mut self, other: Manifest) -> Self {
         self.folders.extend(other.folders);
         self.item_affixes.extend(other.item_affixes);
+        self.item_adjectives.extend(other.item_adjectives);
+        self.item_nouns.extend(other.item_nouns);
         self.items.extend(other.items);
         self.loot.extend(other.loot);
         self.monsters.extend(other.monsters);

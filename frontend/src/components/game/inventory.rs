@@ -1,6 +1,7 @@
 use leptos::html::*;
 use leptos::prelude::*;
 use leptos_use::on_click_outside;
+use shared::data::item::ItemSlot;
 use shared::data::item::ItemSpecs;
 
 use std::collections::HashSet;
@@ -51,59 +52,56 @@ pub fn Inventory(open: RwSignal<bool>) -> impl IntoView {
 pub fn EquippedItems() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
+    const EQUIPPED_SLOTS: &[(ItemSlot, &str, &str)] = &[
+        (ItemSlot::Trinket, "ui/trinket.webp", "Trinket"),
+        (ItemSlot::Helmet, "ui/helmet.webp", "Helmet"),
+        (ItemSlot::Amulet, "ui/amulet.webp", "Amulet"),
+        (ItemSlot::Weapon, "ui/weapon.webp", "Weapon"),
+        (ItemSlot::Body, "ui/shirt.webp", "Body Armor"),
+        (ItemSlot::Shield, "ui/shield.webp", "Shield"),
+        (ItemSlot::Gloves, "ui/gloves.webp", "Gloves"),
+        (ItemSlot::Boots, "ui/boots.webp", "Boots"),
+        (ItemSlot::Ring, "ui/ring.webp", "Ring"),
+    ];
+
     view! {
         <div class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-md ring-1 ring-zinc-950">
             <div>
                 <PlayerName />
             </div>
             <div class="grid grid-rows-3 grid-cols-3 gap-3 p-4 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                <EquippedItem
-                    item_specs=move || {
-                        game_context.player_inventory.read().trinket_specs.clone()
-                    }
-                    fallback_asset="ui/trinket.webp"
-                    fallback_alt="Trinket"
-                />
-                <EquippedItem
-                    item_specs=move || { game_context.player_inventory.read().helmet_specs.clone() }
-                    fallback_asset="ui/helmet.webp"
-                    fallback_alt="Helmet"
-                />
-                <EquippedItem
-                    item_specs=move || { game_context.player_inventory.read().amulet_specs.clone() }
-                    fallback_asset="ui/amulet.webp"
-                    fallback_alt="Amulet"
-                />
-                <EquippedItem
-                    item_specs=move || { game_context.player_inventory.read().weapon_specs.clone() }
-                    fallback_asset="ui/weapon.webp"
-                    fallback_alt="Weapon"
-                />
-                <EquippedItem
-                    item_specs=move || { game_context.player_inventory.read().body_specs.clone() }
-                    fallback_asset="ui/shirt.webp"
-                    fallback_alt="Body Armor"
-                />
-                <EquippedItem
-                    item_specs=move || { game_context.player_inventory.read().shield_specs.clone() }
-                    fallback_asset="ui/shield.webp"
-                    fallback_alt="Shield"
-                />
-                <EquippedItem
-                    item_specs=move || { game_context.player_inventory.read().gloves_specs.clone() }
-                    fallback_asset="ui/gloves.webp"
-                    fallback_alt="Gloves"
-                />
-                <EquippedItem
-                    item_specs=move || { game_context.player_inventory.read().boots_specs.clone() }
-                    fallback_asset="ui/boots.webp"
-                    fallback_alt="Boots"
-                />
-                <EquippedItem
-                    item_specs=move || { game_context.player_inventory.read().ring_specs.clone() }
-                    fallback_asset="ui/ring.webp"
-                    fallback_alt="Ring"
-                />
+                {EQUIPPED_SLOTS
+                    .iter()
+                    .map(|(slot, asset, alt)| {
+                        let game_context = game_context.clone();
+                        view! {
+                            <EquippedItem
+                                item_specs=move || {
+                                    game_context.player_inventory.read().equipped.get(slot).cloned()
+                                }
+                                fallback_asset=*asset
+                                fallback_alt=*alt
+                            />
+                        }
+                    })
+                    .collect::<Vec<_>>()}
+            </div>
+            // TODO: Move elsewhere and design better
+            <div class="w-full p-2  text-sm text-zinc-200 ">
+                <div class="flex justify-around  items-center gap-4">
+                    <div>
+                        <span class="font-semibold">"Armor: "</span>
+                        {move || {
+                            format!("{:.0}", game_context.player_specs.read().character_specs.armor)
+                        }}
+                    </div>
+                    <div>
+                        <span class="font-semibold">"Gold Find: "</span>
+                        {move || {
+                            format!("{:.0}%", game_context.player_specs.read().gold_find * 100.0)
+                        }}
+                    </div>
+                </div>
             </div>
         </div>
     }
