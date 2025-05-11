@@ -270,7 +270,12 @@ impl<'a> GameInstance<'a> {
 
         self.player_state = PlayerState::init(self.player_specs.read());
 
-        self.world_state.area_level = self.world_state.area_level.checked_sub(1).unwrap_or(1);
+        self.world_state.area_level = self
+            .world_state
+            .area_level
+            .checked_sub(1)
+            .unwrap_or(1)
+            .max(1);
         self.world_state.waves_done = 0;
     }
 
