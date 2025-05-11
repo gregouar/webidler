@@ -5,6 +5,7 @@
   "item_affixes": [
     "armor_prefixes.json",
     "other_affixes.json",
-    "attack_weapon_prefixes.json"
+    "attack_weapon_prefixes.json",
+    "attack_weapon_suffixes.json"
   ]
 }

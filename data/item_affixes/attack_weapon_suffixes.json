@@ -1,0 +1,20 @@
+[
+  {
+    "name": "of Speed",
+    "family": "inc_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "LocalAttackSpeed",
+        "modifier": "Multiplier",
+        "min": 0.05,
+        "max": 0.15
+      }
+    ]
+  }
+]
