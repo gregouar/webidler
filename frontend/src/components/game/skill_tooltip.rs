@@ -99,14 +99,24 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                     "Deals "<span class="font-semibold">{format_min_max(*min, *max)}</span>" "
                     {dmg_type}" ("{range}{shape}")"
                 </li>
-                <li class="text-sm text-purple-200 leading-snug">
-                    "Critical chances: "
-                    <span class="font-semibold">{format!("{:.2}%", crit_chances)}</span>
-                </li>
-                <li class="text-sm text-purple-200 leading-snug">
-                    "Critical damage: "
-                    <span class="font-semibold">{format!("+{:.0}%", crit_damage * 100.0)}</span>
-                </li>
+                {if *crit_chances > 0.0 {
+                    Some(
+                        view! {
+                            <li class="text-sm text-purple-200 leading-snug">
+                                "Critical chances: "
+                                <span class="font-semibold">{format!("{:.2}%", crit_chances)}</span>
+                            </li>
+                            <li class="text-sm text-purple-200 leading-snug">
+                                "Critical damage: "
+                                <span class="font-semibold">
+                                    {format!("+{:.0}%", crit_damage * 100.0)}
+                                </span>
+                            </li>
+                        },
+                    )
+                } else {
+                    None
+                }}
             }
             .into_any()
         }
