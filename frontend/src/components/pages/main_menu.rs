@@ -52,16 +52,18 @@ pub fn MainMenu() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
-            <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">
-                "Welcome to Webidler!"
-            </h1>
-            <div class="flex flex-col space-y-2">
-                <MenuButton on:click=navigate_to_online_game>"Play Online"</MenuButton>
-                <MenuButton on:click=navigate_to_local_game>"Play Locally"</MenuButton>
-                <MenuButton on:click=ping_online_action>"Ping Online server"</MenuButton>
-                <MenuButton on:click=ping_local_action>"Ping Local server"</MenuButton>
-                <MenuButton on:click=toast>"Toast"</MenuButton>
-                <p>"From server:" {data}</p>
+            <div>
+                <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">
+                    "Welcome to Webidler!"
+                </h1>
+                <div class="flex flex-col space-y-2">
+                    <MenuButton on:click=navigate_to_online_game>"Play Online"</MenuButton>
+                    <MenuButton on:click=navigate_to_local_game>"Play Locally"</MenuButton>
+                    <MenuButton on:click=ping_online_action>"Ping Online server"</MenuButton>
+                    <MenuButton on:click=ping_local_action>"Ping Local server"</MenuButton>
+                    <MenuButton on:click=toast>"Toast"</MenuButton>
+                    <p>"From server:" {data}</p>
+                </div>
             </div>
 
             <div class="bg-gray-800 text-gray-200 text-sm p-4 rounded-xl border border-gray-700 shadow-inner">
