@@ -20,5 +20,10 @@ services:
     volumes:
       - ./data:/data
     restart: always
+    healthcheck:
+      test: curl --fail http://backend:4200 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
     
   

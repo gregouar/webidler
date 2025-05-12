@@ -63,6 +63,38 @@ pub fn MainMenu() -> impl IntoView {
                 <MenuButton on:click=toast>"Toast"</MenuButton>
             </div>
             <p>"From server:" {data}</p>
+
+            <div class="bg-gray-800 text-gray-200 text-sm p-4 rounded-xl border border-gray-700 shadow-inner">
+                <h2 class="text-lg font-semibold mb-2">Disclaimer</h2>
+                <p>
+                    "
+                     Most 2D artwork featured in this app is generated using AI tools, primarily with DALL·E 3 
+                     (free version via "
+                    <a
+                        href="https://chatgpt.com"
+                        class="text-amber-300 underline hover:text-amber-200"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        "chatgpt.com"
+                    </a>").
+                    "
+                </p>
+                <p class="mt-2">
+                    "
+                    Music is created with the help of Suno's generative AI tools 
+                    (free version via "
+                    <a
+                        href="https://suno.com"
+                        class="text-amber-300 underline hover:text-amber-200"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        "suno.com"
+                    </a>").
+                    "
+                </p>
+            </div>
         </main>
     }
 }
