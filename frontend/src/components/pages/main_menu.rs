@@ -51,7 +51,7 @@ pub fn MainMenu() -> impl IntoView {
     };
 
     view! {
-        <main class="my-0 mx-auto max-w-3xl text-center">
+        <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-between">
             <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">
                 "Welcome to Webidler!"
             </h1>
@@ -61,13 +61,13 @@ pub fn MainMenu() -> impl IntoView {
                 <MenuButton on:click=ping_online_action>"Ping Online server"</MenuButton>
                 <MenuButton on:click=ping_local_action>"Ping Local server"</MenuButton>
                 <MenuButton on:click=toast>"Toast"</MenuButton>
+                <p>"From server:" {data}</p>
             </div>
-            <p>"From server:" {data}</p>
 
             <div class="bg-gray-800 text-gray-200 text-sm p-4 rounded-xl border border-gray-700 shadow-inner">
                 <h2 class="text-lg font-semibold mb-2">Disclaimer</h2>
                 <p>
-                    "Most 2D artwork featured in this app is generated using AI tools, primarily with DALL·E 3 (free version via "
+                    "2D artworks featured in this app are generated using AI tools, primarily with DALL·E 3 (free version via "
                     <a
                         href="https://chatgpt.com"
                         class="text-amber-300 underline hover:text-amber-200"
@@ -78,7 +78,7 @@ pub fn MainMenu() -> impl IntoView {
                     </a>")."
                 </p>
                 <p class="mt-2">
-                    "Music is created with the help of Suno's generative AI tools (free version via "
+                    "Musics are created with the help of Suno's generative AI tools (free version via "
                     <a
                         href="https://suno.com"
                         class="text-amber-300 underline hover:text-amber-200"

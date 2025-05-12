@@ -48,15 +48,27 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         .as_ref()
         .zip(item_specs.base.weapon_specs.as_ref())
         .map(|(specs, base_specs)| {
+            let damage_color = if specs.min_damage != base_specs.min_damage
+                || specs.max_damage != base_specs.max_damage
+            {
+                "text-blue-400"
+            } else {
+                "text-white"
+            };
+
             let cooldown_color = if specs.cooldown != base_specs.cooldown {
                 "text-blue-400"
             } else {
                 "text-white"
             };
 
-            let damage_color = if specs.min_damage != base_specs.min_damage
-                || specs.max_damage != base_specs.max_damage
-            {
+            let crit_chances_color = if specs.crit_chances != base_specs.crit_chances {
+                "text-blue-400"
+            } else {
+                "text-white"
+            };
+
+            let crit_damage_color = if specs.crit_damage != base_specs.crit_damage {
                 "text-blue-400"
             } else {
                 "text-white"
@@ -79,6 +91,20 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                         "{} font-semibold",
                         cooldown_color,
                     )>{format!("{:.2}s", specs.cooldown)}</span>
+                </li>
+                <li class="text-gray-400 text-sm leading-snug">
+                    "Critical chances: "
+                    <span class=format!(
+                        "{} font-semibold",
+                        crit_chances_color,
+                    )>{format!("{:.2}%", specs.crit_chances)}</span>
+                </li>
+                <li class="text-gray-400 text-sm leading-snug">
+                    "Critical damage: "
+                    <span class=format!(
+                        "{} font-semibold",
+                        crit_damage_color,
+                    )>{format!("+{:.0}%", specs.crit_damage * 100.0)}</span>
                 </li>
             }
         });

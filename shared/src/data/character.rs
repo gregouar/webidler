@@ -55,4 +55,5 @@ pub struct CharacterState {
 
     pub health: f64,
     pub just_hurt: bool,
+    pub just_hurt_crit: bool,
 }

@@ -115,13 +115,25 @@ fn apply_skill_effect<'a>(
                 min,
                 max,
                 damage_type,
+                crit_chances,
+                crit_damage,
             } => {
-                if let Some(damage) = rng::random_range(min..=max) {
+                // TODO: How to influence skill effects based on character_specs?
+                let is_crit = rng::random_range(0.0..=1.0).unwrap_or(1.0) <= crit_chances;
+                if let Some(damage) = rng::random_range(min..=max).map(|d| {
+                    if is_crit {
+                        d * (1.0 + crit_damage)
+                    } else {
+                        d
+                    }
+                }) {
                     characters_controller::damage_character(
                         damage,
                         damage_type,
                         target_state,
                         target_specs,
+                        is_crit,
+                        // TODO: Share crit infos for crit damage reduc
                     );
                 }
             }

@@ -82,30 +82,46 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
         Range::Distance => "distance",
     };
 
-    let desc = match &effect.effect_type {
+    match &effect.effect_type {
         SkillEffectType::FlatDamage {
             min,
             max,
             damage_type,
+            crit_chances,
+            crit_damage,
         } => {
             let dmg_type = match damage_type {
                 DamageType::Physical => "Physical",
                 DamageType::Fire => "Fire",
             };
-            format!(
-                "Deals {} {} Damage ({}{})",
-                format_min_max(*min, *max),
-                dmg_type,
-                range,
-                shape
-            )
+            view! {
+                <li class="text-sm text-purple-200 leading-snug">
+                    {format!(
+                        "Deals {} {} Damage ({}{})",
+                        format_min_max(*min, *max),
+                        dmg_type,
+                        range,
+                        shape,
+                    )}
+                </li>
+                <li class="text-gray-400 text-sm leading-snug">
+                    "Critical chances: "
+                    <span class="font-semibold">{format!("{:.2}%", crit_chances)}</span>
+                </li>
+                <li class="text-gray-400 text-sm leading-snug">
+                    "Critical damage: "
+                    <span class="font-semibold">{format!("+{:.0}%", crit_damage * 100.0)}</span>
+                </li>
+            }
+            .into_any()
         }
-        SkillEffectType::Heal { min, max } => {
-            format!("Heals {}", format_min_max(*min, *max))
+        SkillEffectType::Heal { min, max } => view! {
+            <li class="text-sm text-purple-200 leading-snug">
+                {format!("Heals {}", format_min_max(*min, *max))}
+            </li>
         }
+        .into_any(),
     };
-
-    view! { <li class="text-sm text-purple-200 leading-snug">{desc}</li> }
 }
 
 fn format_min_max(min: f64, max: f64) -> String {

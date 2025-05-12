@@ -25,8 +25,6 @@ pub trait RandomWeighted {
     fn random_weight(&self) -> u64;
 }
 
-// impl<'a, T> RandomWeighted for T where &'a T: RandomWeighted {}
-
 pub fn random_weighted_pick<I>(items: &Vec<I>) -> Option<&I>
 where
     I: RandomWeighted,

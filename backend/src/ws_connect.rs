@@ -183,6 +183,8 @@ async fn handle_connect(
                         min: 4.0,
                         max: 12.0,
                         damage_type: DamageType::Fire,
+                        crit_chances: 0.0,
+                        crit_damage: 0.0,
                     },
                 }],
             },

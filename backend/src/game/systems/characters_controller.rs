@@ -12,6 +12,7 @@ pub fn damage_character(
     damage_type: DamageType,
     target_state: &mut CharacterState,
     target_specs: &CharacterSpecs,
+    is_crit: bool,
 ) {
     let damage = damage
         * match damage_type {
@@ -31,6 +32,10 @@ pub fn damage_character(
 
     if damage > 0.0 {
         target_state.just_hurt = true;
+        if is_crit {
+            target_state.just_hurt_crit = true;
+        }
+        // TODO: just critically hurt
     }
 
     if target_state.is_alive && target_state.health == 0.0 {

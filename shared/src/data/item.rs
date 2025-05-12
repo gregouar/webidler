@@ -84,8 +84,9 @@ pub struct WeaponSpecs {
 
     pub min_damage: f64,
     pub max_damage: f64,
-    // pub critical_chances: f32,
-    // pub critical_damage: f32,
+
+    pub crit_chances: f32,
+    pub crit_damage: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]

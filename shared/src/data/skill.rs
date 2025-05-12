@@ -103,6 +103,10 @@ pub enum SkillEffectType {
         max: f64,
         #[serde(default)]
         damage_type: DamageType,
+        #[serde(default)]
+        crit_chances: f32,
+        #[serde(default)]
+        crit_damage: f64,
     },
     Heal {
         min: f64,

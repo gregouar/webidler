@@ -8,7 +8,6 @@ use crate::game::data::items_store::{ItemAdjectivesTable, ItemNounsTable};
 
 use super::loot_generator::generate_name;
 
-// TODO: Where to call that?
 pub fn update_item_specs(
     mut item_specs: ItemSpecs,
     adjectives: &ItemAdjectivesTable,
@@ -117,6 +116,8 @@ pub fn make_weapon_skill(item_slot: ItemSlot, weapon_specs: &WeaponSpecs) -> Ski
                 min: weapon_specs.min_damage,
                 max: weapon_specs.max_damage,
                 damage_type: DamageType::Physical,
+                crit_chances: weapon_specs.crit_chances,
+                crit_damage: weapon_specs.crit_damage,
             },
         }],
     }

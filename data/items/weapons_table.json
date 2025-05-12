@@ -8,7 +8,9 @@
       "range": "Melee",
       "cooldown": 2.0,
       "min_damage": 2.0,
-      "max_damage": 4.0
+      "max_damage": 4.0,
+      "crit_chances": 5.0,
+      "crit_damage": 0.5
     }
   },
   "shortsword_unique": {
@@ -21,7 +23,9 @@
       "range": "Melee",
       "cooldown": 2.0,
       "min_damage": 2.0,
-      "max_damage": 4.0
+      "max_damage": 4.0,
+      "crit_chances": 5.0,
+      "crit_damage": 0.5
     },
     "rarity": "Unique",
     "affixes": [
@@ -48,7 +52,9 @@
       "range": "Melee",
       "cooldown": 4.0,
       "min_damage": 4.0,
-      "max_damage": 10.0
+      "max_damage": 10.0,
+      "crit_chances": 5.0,
+      "crit_damage": 1.0
     }
   },
   "shortbow": {
@@ -60,7 +66,9 @@
       "range": "Distance",
       "cooldown": 3.0,
       "min_damage": 3.0,
-      "max_damage": 8.0
+      "max_damage": 8.0,
+      "crit_chances": 5.0,
+      "crit_damage": 0.5
     }
   },
   "wand": {
