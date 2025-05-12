@@ -96,19 +96,14 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
             };
             view! {
                 <li class="text-sm text-purple-200 leading-snug">
-                    {format!(
-                        "Deals {} {} Damage ({}{})",
-                        format_min_max(*min, *max),
-                        dmg_type,
-                        range,
-                        shape,
-                    )}
+                    "Deals "<span class="font-semibold">{format_min_max(*min, *max)}</span>" "
+                    {dmg_type}" ("{range}{shape}")"
                 </li>
-                <li class="text-gray-400 text-sm leading-snug">
+                <li class="text-sm text-purple-200 leading-snug">
                     "Critical chances: "
                     <span class="font-semibold">{format!("{:.2}%", crit_chances)}</span>
                 </li>
-                <li class="text-gray-400 text-sm leading-snug">
+                <li class="text-sm text-purple-200 leading-snug">
                     "Critical damage: "
                     <span class="font-semibold">{format!("+{:.0}%", crit_damage * 100.0)}</span>
                 </li>
@@ -117,11 +112,11 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
         }
         SkillEffectType::Heal { min, max } => view! {
             <li class="text-sm text-purple-200 leading-snug">
-                {format!("Heals {}", format_min_max(*min, *max))}
+                "Heals "<span class="font-semibold">{format_min_max(*min, *max)}</span>
             </li>
         }
         .into_any(),
-    };
+    }
 }
 
 fn format_min_max(min: f64, max: f64) -> String {
