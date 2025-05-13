@@ -2,5 +2,7 @@
   "meta": {
     "enabled": true
   },
-  "worlds": ["forest.json"]
+  "resources": {
+    "worlds": ["forest.json"]
+  }
 }

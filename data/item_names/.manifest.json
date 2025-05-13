@@ -2,6 +2,13 @@
   "meta": {
     "enabled": true
   },
-  "item_nouns": ["armor_nouns.json", "weapon_nouns.json"],
-  "item_adjectives": ["adjectives.json"]
+  "resources": {
+    "item_nouns": [
+      "armor_nouns.json",
+      "weapon_nouns.json"
+    ],
+    "item_adjectives": [
+      "adjectives.json"
+    ]
+  }
 }

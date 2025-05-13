@@ -2,5 +2,10 @@
   "meta": {
     "enabled": true
   },
-  "items": ["helmets_table.json", "weapons_table.json"]
+  "resources": {
+    "items": [
+      "helmets_table.json",
+      "weapons_table.json"
+    ]
+  }
 }

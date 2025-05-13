@@ -7,7 +7,7 @@ use std::{
     sync::Arc,
 };
 
-use crate::game::utils::json::LoadJsonFromFile;
+use crate::game::{data::manifest::ManifestCategory, utils::json::LoadJsonFromFile};
 
 use super::{
     items_store::{ItemAdjectivesTable, ItemAffixesTable, ItemNounsTable, ItemsStore},
@@ -47,26 +47,27 @@ impl MasterStore {
             loot_tables_store,
             monster_specs_store,
         ) = tokio::join!(
-            join_load_and_merge_tables(manifest.items),
-            join_load_and_merge_tables(manifest.item_affixes),
-            join_load_and_merge_tables(manifest.item_adjectives),
-            join_load_and_merge_tables(manifest.item_nouns),
-            join_load_and_map(manifest.loot),
-            join_load_and_map(manifest.monsters),
+            join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Items)),
+            join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemAffixes)),
+            join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemAdjectives)),
+            join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemNouns)),
+            join_load_and_map(manifest.get_resources(ManifestCategory::Loot)),
+            join_load_and_map(manifest.get_resources(ManifestCategory::Monsters)),
         );
 
         let loot_tables_store = loot_tables_store?;
 
-        let world_blueprints_store = join_load_and_map(manifest.worlds)
-            .await?
-            .into_iter()
-            .map(|(f, schema)| {
-                Ok((
-                    f,
-                    WorldBlueprint::populate_from_schema(schema, &loot_tables_store)?,
-                ))
-            })
-            .collect::<Result<_>>()?;
+        let world_blueprints_store =
+            join_load_and_map(manifest.get_resources(ManifestCategory::Worlds))
+                .await?
+                .into_iter()
+                .map(|(f, schema)| {
+                    Ok((
+                        f,
+                        WorldBlueprint::populate_from_schema(schema, &loot_tables_store)?,
+                    ))
+                })
+                .collect::<Result<_>>()?;
 
         Ok(MasterStore {
             items_store: Arc::new(items_store?),

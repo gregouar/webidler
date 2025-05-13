@@ -2,5 +2,12 @@
   "meta": {
     "enabled": true
   },
-  "monsters": ["batty.json", "batty2.json", "ratty.json", "snek.json"]
+  "resources": {
+    "monsters": [
+      "batty.json",
+      "batty2.json",
+      "ratty.json",
+      "snek.json"
+    ]
+  }
 }

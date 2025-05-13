@@ -1,11 +1,15 @@
 use anyhow::{Context, Result};
 use futures::future::join_all;
 use serde::{Deserialize, Serialize};
-use std::path::{Path, PathBuf};
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+};
 
 use crate::game::utils::json::LoadJsonFromFile;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[serde(rename_all = "snake_case")]
 pub enum ManifestCategory {
     Items,
     ItemAffixes,
@@ -23,21 +27,8 @@ pub struct Manifest {
     #[serde(default)]
     pub folders: Vec<PathBuf>,
 
-    // TODO: Switch to enum and hashmap?
     #[serde(default)]
-    pub items: Vec<PathBuf>,
-    #[serde(default)]
-    pub item_affixes: Vec<PathBuf>,
-    #[serde(default)]
-    pub item_adjectives: Vec<PathBuf>,
-    #[serde(default)]
-    pub item_nouns: Vec<PathBuf>,
-    #[serde(default)]
-    pub loot: Vec<PathBuf>,
-    #[serde(default)]
-    pub monsters: Vec<PathBuf>,
-    #[serde(default)]
-    pub worlds: Vec<PathBuf>,
+    pub resources: HashMap<ManifestCategory, Vec<PathBuf>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -66,13 +57,11 @@ pub async fn load_manifest(folder_path: impl AsRef<Path>) -> Result<Manifest> {
     let manifest = Manifest {
         meta: local_manifest.meta,
         folders: join_paths(local_manifest.folders),
-        item_affixes: join_paths(local_manifest.item_affixes),
-        item_adjectives: join_paths(local_manifest.item_adjectives),
-        item_nouns: join_paths(local_manifest.item_nouns),
-        items: join_paths(local_manifest.items),
-        loot: join_paths(local_manifest.loot),
-        monsters: join_paths(local_manifest.monsters),
-        worlds: join_paths(local_manifest.worlds),
+        resources: local_manifest
+            .resources
+            .into_iter()
+            .map(|(k, v)| (k, join_paths(v)))
+            .collect(),
     };
 
     // Load sub-folders
@@ -93,15 +82,15 @@ pub async fn load_manifest(folder_path: impl AsRef<Path>) -> Result<Manifest> {
 }
 
 impl Manifest {
+    pub fn get_resources(&self, category: ManifestCategory) -> Vec<PathBuf> {
+        self.resources.get(&category).cloned().unwrap_or_default()
+    }
+
     fn merge(mut self, other: Manifest) -> Self {
         self.folders.extend(other.folders);
-        self.item_affixes.extend(other.item_affixes);
-        self.item_adjectives.extend(other.item_adjectives);
-        self.item_nouns.extend(other.item_nouns);
-        self.items.extend(other.items);
-        self.loot.extend(other.loot);
-        self.monsters.extend(other.monsters);
-        self.worlds.extend(other.worlds);
+        for (k, v) in other.resources.into_iter() {
+            self.resources.entry(k).or_default().extend(v);
+        }
         self
     }
 }
