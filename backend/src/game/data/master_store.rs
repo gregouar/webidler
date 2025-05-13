@@ -39,13 +39,24 @@ impl MasterStore {
     pub async fn load_from_folder(folder_path: impl AsRef<Path>) -> Result<Self> {
         let manifest = manifest::load_manifest(folder_path).await?;
 
-        // TODO join
-        let items_store = join_load_and_merge_tables(manifest.items).await?;
-        let item_affixes_table = join_load_and_merge_tables(manifest.item_affixes).await?;
-        let item_adjectives_table = join_load_and_merge_tables(manifest.item_adjectives).await?;
-        let item_nouns_table = join_load_and_merge_tables(manifest.item_nouns).await?;
-        let loot_tables_store = join_load_and_map(manifest.loot).await?;
-        let monster_specs_store = join_load_and_map(manifest.monsters).await?;
+        let (
+            items_store,
+            item_affixes_table,
+            item_adjectives_table,
+            item_nouns_table,
+            loot_tables_store,
+            monster_specs_store,
+        ) = tokio::join!(
+            join_load_and_merge_tables(manifest.items),
+            join_load_and_merge_tables(manifest.item_affixes),
+            join_load_and_merge_tables(manifest.item_adjectives),
+            join_load_and_merge_tables(manifest.item_nouns),
+            join_load_and_map(manifest.loot),
+            join_load_and_map(manifest.monsters),
+        );
+
+        let loot_tables_store = loot_tables_store?;
+
         let world_blueprints_store = join_load_and_map(manifest.worlds)
             .await?
             .into_iter()
@@ -58,12 +69,12 @@ impl MasterStore {
             .collect::<Result<_>>()?;
 
         Ok(MasterStore {
-            items_store: Arc::new(items_store),
-            item_affixes_table: Arc::new(item_affixes_table),
-            item_adjectives_table: Arc::new(item_adjectives_table),
-            item_nouns_table: Arc::new(item_nouns_table),
+            items_store: Arc::new(items_store?),
+            item_affixes_table: Arc::new(item_affixes_table?),
+            item_adjectives_table: Arc::new(item_adjectives_table?),
+            item_nouns_table: Arc::new(item_nouns_table?),
             loot_tables_store: Arc::new(loot_tables_store),
-            monster_specs_store: Arc::new(monster_specs_store),
+            monster_specs_store: Arc::new(monster_specs_store?),
             world_blueprints_store: Arc::new(world_blueprints_store),
         })
     }

@@ -69,7 +69,7 @@ pub fn MainMenu() -> impl IntoView {
             <div class="bg-gray-800 text-gray-200 text-sm p-4 rounded-xl border border-gray-700 shadow-inner">
                 <h2 class="text-lg font-semibold mb-2">Disclaimer</h2>
                 <p>
-                    "2D artworks featured in this app are generated using AI tools, primarily with DALL·E 3 (free version via "
+                    "2D artworks featured in this app are generated using AI tools, with DALL·E 3 (free version via "
                     <a
                         href="https://chatgpt.com"
                         class="text-amber-300 underline hover:text-amber-200"
