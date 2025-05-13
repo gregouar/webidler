@@ -97,7 +97,7 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     <span class=format!(
                         "{} font-semibold",
                         crit_chances_color,
-                    )>{format!("{:.2}%", specs.crit_chances)}</span>
+                    )>{format!("{:.2}%", specs.crit_chances * 100.0)}</span>
                 </li>
                 <li class="text-gray-400 text-sm leading-snug">
                     "Critical damage: "
