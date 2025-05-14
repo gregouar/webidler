@@ -1,5 +1,7 @@
 /// A helper class to keep track of whether a data struct should be resync with the client.
 /// Based on the fact the data was accessed as mutable.
+
+#[derive(Debug, Clone)]
 pub struct LazySyncer<T: Clone> {
     inner: T,
     need_to_sync: bool,

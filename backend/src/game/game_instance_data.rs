@@ -1,0 +1,60 @@
+use std::time::Instant;
+
+use super::data::DataInit;
+use super::systems::player_controller::PlayerController;
+use super::{data::world::WorldBlueprint, utils::LazySyncer};
+
+use shared::data::{
+    loot::QueuedLoot,
+    monster::{MonsterSpecs, MonsterState},
+    player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    world::WorldState,
+};
+
+#[derive(Debug, Clone)]
+pub struct GameInstanceData {
+    pub world_blueprint: WorldBlueprint,
+    pub world_state: WorldState,
+
+    pub player_specs: LazySyncer<PlayerSpecs>,
+    pub player_inventory: LazySyncer<PlayerInventory>,
+    pub player_state: PlayerState,
+    pub player_resources: PlayerResources,
+    pub player_controller: PlayerController,
+    pub player_respawn_delay: Instant,
+
+    pub monster_specs: LazySyncer<Vec<MonsterSpecs>>,
+    pub monster_states: Vec<MonsterState>,
+    pub monster_wave_delay: Instant,
+
+    pub looted: bool,
+    pub queued_loot: LazySyncer<Vec<QueuedLoot>>,
+}
+
+impl GameInstanceData {
+    pub fn init(
+        world_blueprint: WorldBlueprint,
+        player_resources: PlayerResources,
+        player_specs: PlayerSpecs,
+        player_inventory: PlayerInventory,
+    ) -> Self {
+        Self {
+            world_state: WorldState::init(&world_blueprint.specs),
+            world_blueprint: world_blueprint,
+
+            player_resources,
+            player_state: PlayerState::init(&player_specs),
+            player_controller: PlayerController::init(&player_specs),
+            player_specs: LazySyncer::new(player_specs),
+            player_inventory: LazySyncer::new(player_inventory),
+            player_respawn_delay: Instant::now(),
+
+            monster_specs: LazySyncer::new(Vec::new()),
+            monster_states: Vec::new(),
+            monster_wave_delay: Instant::now(),
+
+            looted: false,
+            queued_loot: LazySyncer::new(Vec::new()),
+        }
+    }
+}

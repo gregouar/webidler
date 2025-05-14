@@ -1,8 +1,11 @@
+use codee::string::JsonSerdeCodec;
 use leptos::html::*;
 use leptos::prelude::*;
+use leptos_use::storage::use_session_storage;
 
 use shared::messages::client::ClientConnectMessage;
 use shared::messages::server::{ErrorType, InitGameMessage, ServerMessage, SyncGameStateMessage};
+use shared::messages::SessionKey;
 
 use crate::components::ui::toast::*;
 use crate::components::ui::tooltip::DynamicTooltip;
@@ -18,13 +21,18 @@ pub fn GameInstance() -> impl IntoView {
     let game_context = GameContext::new();
     provide_context(game_context.clone());
 
+    // TODO: CHECK LOCAL STORE FOR SESSION_KEY
+    let (session_key, set_session_key, _) =
+        use_session_storage::<Option<SessionKey>, JsonSerdeCodec>("session_key");
+
     Effect::new({
         let conn = expect_context::<WebsocketContext>();
         move |_| {
             if conn.connected.get() {
                 conn.send(
                     &ClientConnectMessage {
-                        bearer: String::from("Le Pou"),
+                        user_id: String::from("Le Pou"),
+                        session_key: session_key.get(),
                     }
                     .into(),
                 );
@@ -36,8 +44,8 @@ pub fn GameInstance() -> impl IntoView {
         let game_context = game_context.clone();
         let conn = expect_context::<WebsocketContext>();
         move |_| {
-            if let Some(m) = conn.message.get() {
-                handle_message(&game_context, m);
+            if let Some(message) = conn.message.get() {
+                handle_message(&game_context, set_session_key, message);
             }
         }
     });
@@ -59,9 +67,15 @@ pub fn GameInstance() -> impl IntoView {
     }
 }
 
-fn handle_message(game_context: &GameContext, message: ServerMessage) {
+fn handle_message(
+    game_context: &GameContext,
+    set_session_key: WriteSignal<Option<SessionKey>>,
+    message: ServerMessage,
+) {
     match message {
-        ServerMessage::Connect(_) => {}
+        ServerMessage::Connect(m) => {
+            set_session_key.set(Some(m.session_key));
+        }
         ServerMessage::InitGame(m) => {
             init_game(game_context, m);
         }

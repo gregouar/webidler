@@ -9,10 +9,8 @@ use std::{
 
 use shared::{
     data::{
-        loot::QueuedLoot,
         monster::{MonsterSpecs, MonsterState},
-        player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-        world::WorldState,
+        player::PlayerState,
     },
     messages::{
         client::ClientMessage,
@@ -21,8 +19,9 @@ use shared::{
 };
 
 use super::{
-    data::{master_store::MasterStore, world::WorldBlueprint, DataInit},
-    systems::{loot_controller, loot_generator, player_controller::PlayerController},
+    data::{master_store::MasterStore, DataInit},
+    game_instance_data::GameInstanceData,
+    systems::{loot_controller, loot_generator},
 };
 use super::{
     systems::{
@@ -43,61 +42,24 @@ const WAVES_PER_AREA_LEVEL: u8 = 5;
 
 pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
-
-    world_blueprint: WorldBlueprint,
-    world_state: WorldState,
-
     master_store: MasterStore,
-
-    player_specs: LazySyncer<PlayerSpecs>,
-    player_inventory: LazySyncer<PlayerInventory>,
-    player_state: PlayerState,
-    player_resources: PlayerResources,
-    player_controller: PlayerController,
-    player_respawn_delay: Instant,
-
-    monster_specs: LazySyncer<Vec<MonsterSpecs>>,
-    monster_states: Vec<MonsterState>,
-    monster_wave_delay: Instant,
-
-    looted: bool,
-    queued_loot: LazySyncer<Vec<QueuedLoot>>,
+    data: Box<GameInstanceData>,
 }
 
 impl<'a> GameInstance<'a> {
     pub fn new(
         client_conn: &'a mut WebSocketConnection,
-        player_specs: PlayerSpecs,
-        player_inventory: PlayerInventory,
-        player_resources: PlayerResources,
-        world_blueprint: WorldBlueprint,
+        data: Box<GameInstanceData>,
         master_store: MasterStore,
     ) -> Self {
         GameInstance::<'a> {
             client_conn,
-
             master_store,
-
-            world_state: WorldState::init(&world_blueprint.specs),
-            world_blueprint: world_blueprint,
-
-            player_resources,
-            player_state: PlayerState::init(&player_specs),
-            player_controller: PlayerController::init(&player_specs),
-            player_specs: LazySyncer::new(player_specs),
-            player_inventory: LazySyncer::new(player_inventory),
-            player_respawn_delay: Instant::now(),
-
-            monster_specs: LazySyncer::new(Vec::new()),
-            monster_states: Vec::new(),
-            monster_wave_delay: Instant::now(),
-
-            looted: false,
-            queued_loot: LazySyncer::new(Vec::new()),
+            data,
         }
     }
 
-    pub async fn run(&mut self) -> Result<()> {
+    pub async fn run(mut self) -> Result<Box<GameInstanceData>> {
         self.init_game().await?;
 
         let mut last_tick_time = Instant::now();
@@ -128,7 +90,7 @@ impl<'a> GameInstance<'a> {
             last_tick_time = Instant::now();
         }
 
-        Ok(())
+        Ok(self.data)
     }
 
     /// Handle client events, return whether the game should stop or continue
@@ -155,12 +117,14 @@ impl<'a> GameInstance<'a> {
         match msg {
             ClientMessage::Heartbeat => {}
             ClientMessage::UseSkill(m) => {
-                self.player_controller
+                self.data
+                    .player_controller
                     .use_skills
                     .push(m.skill_index as usize);
             }
             ClientMessage::SetAutoSkill(m) => {
-                self.player_controller
+                self.data
+                    .player_controller
                     .auto_skills
                     .get_mut(m.skill_index as usize)
                     .map(|x| *x = m.auto_use);
@@ -168,28 +132,32 @@ impl<'a> GameInstance<'a> {
             ClientMessage::LevelUpSkill(m) => {
                 for _ in 0..m.amount {
                     if let Some(skill_specs) = self
+                        .data
                         .player_specs
                         .mutate()
                         .skills_specs
                         .get_mut(m.skill_index as usize)
                     {
-                        skills_controller::level_up_skill(skill_specs, &mut self.player_resources);
+                        skills_controller::level_up_skill(
+                            skill_specs,
+                            &mut self.data.player_resources,
+                        );
                     }
                 }
             }
             ClientMessage::LevelUpPlayer(m) => {
                 for _ in 0..m.amount {
                     player_controller::level_up(
-                        &mut self.player_specs.mutate(),
-                        &mut self.player_state,
-                        &mut self.player_resources,
+                        &mut self.data.player_specs.mutate(),
+                        &mut self.data.player_state,
+                        &mut self.data.player_resources,
                     );
                 }
             }
             ClientMessage::EquipItem(m) => player_controller::equip_item_from_bag(
-                self.player_specs.mutate(),
-                self.player_inventory.mutate(),
-                &mut self.player_state,
+                self.data.player_specs.mutate(),
+                self.data.player_inventory.mutate(),
+                &mut self.data.player_state,
                 m.item_index,
             ),
             ClientMessage::SellItems(m) => {
@@ -197,16 +165,16 @@ impl<'a> GameInstance<'a> {
                 item_indexes.sort_by_key(|&i| i);
                 for &item_index in item_indexes.iter().rev() {
                     player_controller::sell_item(
-                        self.player_inventory.mutate(),
-                        &mut self.player_resources,
+                        self.data.player_inventory.mutate(),
+                        &mut self.data.player_resources,
                         item_index,
                     )
                 }
             }
             ClientMessage::PickupLoot(m) => {
                 if !loot_controller::pickup_loot(
-                    self.player_inventory.mutate(),
-                    self.queued_loot.mutate(),
+                    self.data.player_inventory.mutate(),
+                    self.data.queued_loot.mutate(),
                     m.loot_identifier,
                 ) {
                     return Some(ErrorMessage {
@@ -231,10 +199,10 @@ impl<'a> GameInstance<'a> {
         self.client_conn
             .send(
                 &InitGameMessage {
-                    world_specs: self.world_blueprint.specs.clone(),
-                    world_state: self.world_state.clone(),
-                    player_specs: self.player_specs.read().clone(),
-                    player_state: self.player_state.clone(),
+                    world_specs: self.data.world_blueprint.specs.clone(),
+                    world_state: self.data.world_state.clone(),
+                    player_specs: self.data.player_specs.read().clone(),
+                    player_state: self.data.player_state.clone(),
                 }
                 .into(),
             )
@@ -242,19 +210,20 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn generate_monsters_wave(&mut self) -> Result<()> {
-        self.world_state.waves_done += 1;
-        if self.world_state.waves_done > WAVES_PER_AREA_LEVEL {
-            self.world_state.waves_done = 1;
-            self.world_state.area_level += 1;
+        self.data.world_state.waves_done += 1;
+        if self.data.world_state.waves_done > WAVES_PER_AREA_LEVEL {
+            self.data.world_state.waves_done = 1;
+            self.data.world_state.area_level += 1;
         }
 
-        self.monster_specs = LazySyncer::new(monsters_wave::generate_monsters_wave_specs(
-            &self.world_blueprint,
-            &self.world_state,
+        self.data.monster_specs = LazySyncer::new(monsters_wave::generate_monsters_wave_specs(
+            &self.data.world_blueprint,
+            &self.data.world_state,
             &self.master_store.monster_specs_store,
         )?);
 
-        self.monster_states = self
+        self.data.monster_states = self
+            .data
             .monster_specs
             .read()
             .iter()
@@ -265,46 +234,48 @@ impl<'a> GameInstance<'a> {
     }
 
     fn respawn_player(&mut self) {
-        self.monster_specs.mutate().clear();
-        self.monster_states = Vec::new();
+        self.data.monster_specs.mutate().clear();
+        self.data.monster_states = Vec::new();
 
-        self.player_state = PlayerState::init(self.player_specs.read());
+        self.data.player_state = PlayerState::init(self.data.player_specs.read());
 
-        self.world_state.area_level = self
+        self.data.world_state.area_level = self
+            .data
             .world_state
             .area_level
             .checked_sub(1)
             .unwrap_or(1)
             .max(1);
-        self.world_state.waves_done = 0;
+        self.data.world_state.waves_done = 0;
     }
 
     async fn reset_entities(&mut self) {
-        player_updater::reset_player(&mut self.player_state);
-        monsters_updater::reset_monsters(&mut self.monster_states);
+        player_updater::reset_player(&mut self.data.player_state);
+        monsters_updater::reset_monsters(&mut self.data.monster_states);
     }
 
     async fn control_entities(&mut self) -> Result<()> {
-        if !self.player_state.character_state.is_alive {
-            if self.player_respawn_delay.elapsed() > PLAYER_RESPAWN_PERIOD {
+        if !self.data.player_state.character_state.is_alive {
+            if self.data.player_respawn_delay.elapsed() > PLAYER_RESPAWN_PERIOD {
                 self.respawn_player();
             }
         } else {
-            self.player_respawn_delay = Instant::now();
+            self.data.player_respawn_delay = Instant::now();
             let mut monsters_still_alive: Vec<(&MonsterSpecs, &mut MonsterState)> = self
+                .data
                 .monster_specs
                 .read()
                 .iter()
-                .zip(self.monster_states.iter_mut())
+                .zip(self.data.monster_states.iter_mut())
                 .filter(|(_, x)| x.character_state.is_alive)
                 .collect();
 
-            self.player_controller.control_player(
-                self.player_specs.read(),
-                &mut self.player_state,
+            self.data.player_controller.control_player(
+                self.data.player_specs.read(),
+                &mut self.data.player_state,
                 &mut monsters_still_alive,
             );
-            self.player_controller.reset();
+            self.data.player_controller.reset();
 
             // TODO: Where should I put this?
             for (monster_specs, _) in monsters_still_alive
@@ -312,37 +283,37 @@ impl<'a> GameInstance<'a> {
                 .filter(|(_, s)| s.character_state.just_died)
             {
                 player_controller::reward_player(
-                    &mut self.player_resources,
-                    self.player_specs.read(),
+                    &mut self.data.player_resources,
+                    self.data.player_specs.read(),
                     monster_specs,
                 );
             }
 
             if monsters_still_alive.is_empty() {
-                if !self.looted && self.world_state.waves_done == WAVES_PER_AREA_LEVEL {
+                if !self.data.looted && self.data.world_state.waves_done == WAVES_PER_AREA_LEVEL {
                     if let Some(item_specs) = loot_generator::generate_loot(
-                        self.world_state.area_level,
-                        &self.world_blueprint.loot_table,
+                        self.data.world_state.area_level,
+                        &self.data.world_blueprint.loot_table,
                         &self.master_store.items_store,
                         &self.master_store.item_affixes_table,
                         &self.master_store.item_adjectives_table,
                         &self.master_store.item_nouns_table,
                     ) {
-                        loot_controller::drop_loot(self.queued_loot.mutate(), item_specs);
+                        loot_controller::drop_loot(self.data.queued_loot.mutate(), item_specs);
                     }
-                    self.looted = true;
+                    self.data.looted = true;
                 }
 
-                if self.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
+                if self.data.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
                     self.generate_monsters_wave().await?;
-                    self.looted = false;
+                    self.data.looted = false;
                 }
             } else {
-                self.monster_wave_delay = Instant::now();
+                self.data.monster_wave_delay = Instant::now();
                 monsters_controller::control_monsters(
                     &mut monsters_still_alive,
-                    self.player_specs.read(),
-                    &mut self.player_state,
+                    self.data.player_specs.read(),
+                    &mut self.data.player_state,
                 );
             }
         }
@@ -353,13 +324,13 @@ impl<'a> GameInstance<'a> {
     async fn update_entities(&mut self, elapsed_time: Duration) {
         player_updater::update_player_state(
             elapsed_time,
-            self.player_specs.read(),
-            &mut self.player_state,
+            self.data.player_specs.read(),
+            &mut self.data.player_state,
         );
         monsters_updater::update_monster_states(
             elapsed_time,
-            self.monster_specs.read(),
-            &mut self.monster_states,
+            self.data.monster_specs.read(),
+            &mut self.data.monster_states,
         );
     }
 
@@ -368,14 +339,14 @@ impl<'a> GameInstance<'a> {
         self.client_conn
             .send(
                 &SyncGameStateMessage {
-                    world_state: self.world_state.clone(),
-                    player_specs: self.player_specs.sync(),
-                    player_inventory: self.player_inventory.sync(),
-                    player_state: self.player_state.clone(),
-                    player_resources: self.player_resources.clone(),
-                    monster_specs: self.monster_specs.sync(),
-                    monster_states: self.monster_states.clone(),
-                    queued_loot: self.queued_loot.sync(),
+                    world_state: self.data.world_state.clone(),
+                    player_specs: self.data.player_specs.sync(),
+                    player_inventory: self.data.player_inventory.sync(),
+                    player_state: self.data.player_state.clone(),
+                    player_resources: self.data.player_resources.clone(),
+                    monster_specs: self.data.monster_specs.sync(),
+                    monster_states: self.data.monster_states.clone(),
+                    queued_loot: self.data.queued_loot.sync(),
                 }
                 .into(),
             )

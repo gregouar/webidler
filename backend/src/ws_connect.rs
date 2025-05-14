@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 
 use axum::{
     extract::{
@@ -9,9 +9,13 @@ use axum::{
     response::IntoResponse,
 };
 use axum_extra::TypedHeader;
+use rand::TryRngCore;
 use tokio::{task::yield_now, time::timeout};
 
-use std::{net::SocketAddr, time::Duration};
+use std::{
+    net::SocketAddr,
+    time::{Duration, Instant},
+};
 use std::{ops::ControlFlow, vec};
 
 use shared::{
@@ -27,11 +31,14 @@ use shared::{
     messages::{
         client::{ClientConnectMessage, ClientMessage},
         server::ConnectMessage,
+        SessionKey, UserId,
     },
 };
 
 use crate::game::{
     data::{master_store::MasterStore, DataInit},
+    game_instance_data::GameInstanceData,
+    session::{Session, SessionsStore},
     systems::{loot_generator, player_controller},
     GameInstance,
 };
@@ -43,6 +50,7 @@ pub async fn ws_handler(
     ws: WebSocketUpgrade,
     user_agent: Option<TypedHeader<headers::UserAgent>>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    State(sessions_store): State<SessionsStore>,
     State(master_store): State<MasterStore>,
 ) -> impl IntoResponse {
     let user_agent = if let Some(TypedHeader(user_agent)) = user_agent {
@@ -52,70 +60,51 @@ pub async fn ws_handler(
     };
     tracing::info!("`{user_agent}` at {addr} connected.");
 
-    ws.on_upgrade(move |socket| handle_socket(socket, addr, master_store))
+    ws.on_upgrade(move |socket| handle_socket(socket, addr, sessions_store, master_store))
 }
 
-async fn handle_socket(socket: WebSocket, who: SocketAddr, master_store: MasterStore) {
+async fn handle_socket(
+    socket: WebSocket,
+    who: SocketAddr,
+    sessions_store: SessionsStore,
+    master_store: MasterStore,
+) {
     let mut conn = WebSocketConnection::establish(socket, who, CLIENT_INACTIVITY_TIMEOUT);
 
     tracing::debug!("waiting for client to connect...");
-    let (mut player_specs, mut player_inventory, player_resources) =
-        match timeout(Duration::from_secs(30), wait_for_connect(&mut conn)).await {
-            Err(e) => {
-                tracing::error!("connection timeout: {}", e);
-                return;
-            }
-            Ok(Err(e)) => {
-                tracing::error!("unable to connect: {}", e);
-                return;
-            }
-            Ok(Ok(p)) => p,
-        };
-    tracing::debug!("client connected");
-
-    tracing::debug!("loading the game...");
-    let world_blueprint = match master_store
-        .world_blueprints_store
-        .get("forest.json")
-        .cloned() // TODO: Avoid clone?
+    let (user_id, session) = match timeout(
+        Duration::from_secs(30),
+        wait_for_connect(&master_store, &sessions_store, &mut conn),
+    )
+    .await
     {
-        Some(world_blueprint) => world_blueprint,
-        None => {
-            tracing::error!("couldn't load world: forest.json");
+        Err(e) => {
+            tracing::error!("connection timeout: {}", e);
             return;
         }
+        Ok(Err(e)) => {
+            tracing::error!("unable to connect: {}", e);
+            return;
+        }
+        Ok(Ok(p)) => p,
     };
-
-    let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
-
-    if let Some(base_weapon) = master_store.items_store.get("shortsword").cloned() {
-        player_controller::equip_item(
-            &mut player_specs,
-            &mut player_inventory,
-            &mut player_state,
-            loot_generator::roll_item(
-                base_weapon,
-                ItemRarity::Normal,
-                1,
-                &master_store.item_affixes_table,
-                &master_store.item_adjectives_table,
-                &master_store.item_nouns_table,
-            ),
-        );
-    }
+    tracing::debug!("client connected");
 
     tracing::debug!("starting the game...");
 
-    let mut game = GameInstance::new(
-        &mut conn,
-        player_specs,
-        player_inventory,
-        player_resources,
-        world_blueprint,
-        master_store,
-    );
-    if let Err(e) = game.run().await {
-        tracing::error!("error running game: {e}");
+    let game = GameInstance::new(&mut conn, session.data, master_store);
+    match game.run().await {
+        Ok(game_data) => {
+            sessions_store.sessions.lock().unwrap().insert(
+                user_id,
+                Session {
+                    session_key: session.session_key,
+                    last_active: Instant::now(),
+                    data: game_data,
+                },
+            );
+        }
+        Err(e) => tracing::error!("error running game: {e}"),
     }
 
     // returning from the handler closes the websocket connection
@@ -123,12 +112,14 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, master_store: MasterS
 }
 
 async fn wait_for_connect(
+    master_store: &MasterStore,
+    sessions_store: &SessionsStore,
     conn: &mut WebSocketConnection,
-) -> Result<(PlayerSpecs, PlayerInventory, PlayerResources)> {
+) -> Result<(UserId, Session)> {
     loop {
         match conn.poll_receive() {
-            ControlFlow::Continue(Some(ClientMessage::Connect(m))) => {
-                return handle_connect(conn, m).await;
+            ControlFlow::Continue(Some(ClientMessage::Connect(msg))) => {
+                return handle_connect(sessions_store, master_store, conn, msg).await;
             }
             ControlFlow::Break(_) => {
                 return Err(anyhow::format_err!("disconnected"));
@@ -140,23 +131,54 @@ async fn wait_for_connect(
 }
 
 async fn handle_connect(
+    sessions_store: &SessionsStore,
+    master_store: &MasterStore,
     conn: &mut WebSocketConnection,
     msg: ClientConnectMessage,
-) -> Result<(PlayerSpecs, PlayerInventory, PlayerResources)> {
+) -> Result<(UserId, Session)> {
     // TODO: verify if user exist, is already playing, get basic data etc
     tracing::info!("Connect: {:?}", msg);
+
+    let session = match msg.session_key {
+        Some(session_key) => {
+            handle_resume_session(&msg.user_id, sessions_store, session_key).await?
+        }
+        None => handle_new_session(&msg.user_id, master_store).await?,
+    };
+
     conn.send(
         &ConnectMessage {
-            greeting: msg.bearer.clone(),
-            value: 42,
+            greeting: msg.user_id.clone(),
+            session_key: session.session_key.clone(),
         }
         .into(),
     )
     .await?;
 
-    let player_specs = PlayerSpecs {
+    Ok((msg.user_id, session))
+}
+
+async fn handle_resume_session(
+    user_id: &str,
+    sessions_store: &SessionsStore,
+    session_key: SessionKey,
+) -> Result<Session> {
+    if let Some(session) = sessions_store.sessions.lock().unwrap().get(user_id) {
+        if session_key == session.session_key {
+            return Ok(session.clone());
+        }
+    }
+    Err(anyhow!("couldn't load player session"))
+}
+
+async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result<Session> {
+    let mut rng = rand::rng();
+    let mut session_key: SessionKey = [0u8; 32];
+    rng.try_fill_bytes(&mut session_key)?;
+
+    let mut player_specs = PlayerSpecs {
         character_specs: CharacterSpecs {
-            name: msg.bearer.clone(),
+            name: user_id.to_string(), // TODO: LOL
             portrait: String::from("adventurers/human_male_2.webp"),
             size: CharacterSize::Small,
             position_x: 0,
@@ -221,5 +243,44 @@ async fn handle_connect(
 
     let player_resources = PlayerResources::default();
 
-    Ok((player_specs, player_inventory, player_resources))
+    tracing::debug!("loading the game...");
+    let world_blueprint = match master_store
+        .world_blueprints_store
+        .get("forest.json")
+        .cloned() // TODO: Avoid clone?
+    {
+        Some(world_blueprint) => world_blueprint,
+        None => {
+            return Err(anyhow!("couldn't load world: forest.json"));
+        }
+    };
+
+    let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
+
+    if let Some(base_weapon) = master_store.items_store.get("shortsword").cloned() {
+        player_controller::equip_item(
+            &mut player_specs,
+            &mut player_inventory,
+            &mut player_state,
+            loot_generator::roll_item(
+                base_weapon,
+                ItemRarity::Normal,
+                1,
+                &master_store.item_affixes_table,
+                &master_store.item_adjectives_table,
+                &master_store.item_nouns_table,
+            ),
+        );
+    }
+
+    Ok(Session {
+        session_key,
+        last_active: Instant::now(),
+        data: Box::new(GameInstanceData::init(
+            world_blueprint,
+            player_resources,
+            player_specs,
+            player_inventory,
+        )),
+    })
 }

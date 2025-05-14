@@ -1,6 +1,7 @@
 use std::net::SocketAddr;
 
 use axum::{
+    extract::FromRef,
     response::Json,
     routing::{any, get},
     Router,
@@ -14,7 +15,26 @@ use tower_http::{
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-use backend::{game::data::master_store::MasterStore, ws_connect};
+use backend::{
+    game::{data::master_store::MasterStore, session::SessionsStore},
+    ws_connect,
+};
+
+#[derive(Debug, Clone)]
+struct AppState {
+    master_store: MasterStore,
+    sessions_store: SessionsStore,
+}
+impl FromRef<AppState> for MasterStore {
+    fn from_ref(app_state: &AppState) -> MasterStore {
+        app_state.master_store.clone()
+    }
+}
+impl FromRef<AppState> for SessionsStore {
+    fn from_ref(app_state: &AppState) -> SessionsStore {
+        app_state.sessions_store.clone()
+    }
+}
 
 #[tokio::main]
 async fn main() {
@@ -40,15 +60,20 @@ async fn main() {
         ])
         .allow_methods([Method::GET, Method::POST]);
 
-    let master_data = MasterStore::load_from_folder("data")
+    let master_store = MasterStore::load_from_folder("data")
         .await
         .expect("couldn't load master game data");
+
+    let sessions_store = SessionsStore::new();
 
     let app = Router::new()
         .route("/", get(|| async { "OK" }))
         .route("/hello", get(get_hello))
         .route("/ws", any(ws_connect::ws_handler))
-        .with_state(master_data)
+        .with_state(AppState {
+            master_store,
+            sessions_store,
+        })
         .layer(tracer_layer)
         .layer(cors_layer);
 

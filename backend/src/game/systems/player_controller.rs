@@ -10,6 +10,7 @@ use crate::game::{data::DataInit, utils::increase_factors};
 
 use super::{items_controller, skills_controller};
 
+#[derive(Debug, Clone)]
 pub struct PlayerController {
     pub auto_skills: Vec<bool>,
     pub use_skills: Vec<usize>,

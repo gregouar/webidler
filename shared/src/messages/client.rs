@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use super::macros::impl_into_message;
+use super::{macros::impl_into_message, SessionKey};
 
 impl_into_message! {
     #[derive(Serialize, Deserialize, Debug, Clone,)]
@@ -26,7 +26,8 @@ impl Default for ClientMessage {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ClientConnectMessage {
-    pub bearer: String,
+    pub user_id: String,
+    pub session_key: Option<SessionKey>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
