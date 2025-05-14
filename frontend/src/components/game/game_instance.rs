@@ -32,7 +32,7 @@ pub fn GameInstance() -> impl IntoView {
                 conn.send(
                     &ClientConnectMessage {
                         user_id: String::from("Le Pou"),
-                        session_key: session_key.get(),
+                        session_key: session_key.get_untracked(),
                     }
                     .into(),
                 );
