@@ -1,6 +1,7 @@
 use codee::string::JsonSerdeCodec;
 use leptos::html::*;
 use leptos::prelude::*;
+use leptos_use::storage::use_local_storage;
 use leptos_use::storage::use_session_storage;
 
 use shared::messages::client::ClientConnectMessage;
@@ -21,9 +22,10 @@ pub fn GameInstance() -> impl IntoView {
     let game_context = GameContext::new();
     provide_context(game_context.clone());
 
-    // TODO: CHECK LOCAL STORE FOR SESSION_KEY
     let (session_key, set_session_key, _) =
         use_session_storage::<Option<SessionKey>, JsonSerdeCodec>("session_key");
+
+    let (user_id, _, _) = use_local_storage::<String, JsonSerdeCodec>("user_id");
 
     Effect::new({
         let conn = expect_context::<WebsocketContext>();
@@ -31,7 +33,7 @@ pub fn GameInstance() -> impl IntoView {
             if conn.connected.get() {
                 conn.send(
                     &ClientConnectMessage {
-                        user_id: String::from("Le Pou"),
+                        user_id: String::from(user_id.get_untracked()),
                         session_key: session_key.get_untracked(),
                     }
                     .into(),

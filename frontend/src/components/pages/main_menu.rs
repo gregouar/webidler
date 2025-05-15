@@ -1,10 +1,12 @@
 use anyhow::Result;
 
+use codee::string::JsonSerdeCodec;
 use leptos::html::*;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use leptos_router::hooks::use_navigate;
 
+use leptos_use::storage::use_local_storage;
 use reqwest;
 use serde_json;
 
@@ -39,20 +41,26 @@ pub fn MainMenu() -> impl IntoView {
         })
     };
 
-    let navigate = use_navigate();
-    let navigate_to_online_game = move |_| navigate("./game", Default::default());
+    let user_id = RwSignal::new("Le Pou".to_string());
 
     let navigate = use_navigate();
-    let navigate_to_local_game = move |_| navigate("./local_game", Default::default());
+    let navigate_to_online_game = move |_| {
+        let (_, set_user_id_storage, _) = use_local_storage::<String, JsonSerdeCodec>("user_id");
+        set_user_id_storage.set(user_id.get_untracked());
+        navigate("./game", Default::default());
+    };
+
+    let navigate = use_navigate();
+    let navigate_to_local_game = move |_| {
+        let (_, set_user_id_storage, _) = use_local_storage::<String, JsonSerdeCodec>("user_id");
+        set_user_id_storage.set(user_id.get_untracked());
+        navigate("./local_game", Default::default());
+    };
 
     let toast_context = expect_context::<Toasts>();
     let toast = move |_| {
         show_toast(toast_context, "Hello!", ToastVariant::Normal);
     };
-
-    // TODO: How to pass user_id to game page? Use store?
-
-    let user_id = RwSignal::new("Le Pou".to_string());
 
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
@@ -61,14 +69,19 @@ pub fn MainMenu() -> impl IntoView {
                     "Welcome to Webidler!"
                 </h1>
                 <div class="flex flex-col space-y-2">
-                    <input
-                        type="text"
-                        bind:value=user_id
-                        class="
-                        w-full max-w-md px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400 
-                        focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md
-                        "
-                    />
+                    <div class="w-full mx-auto mb-6 text-left">
+                        <label for="username" class="block mb-2 text-sm font-medium text-gray-300">
+                            Username:
+                        </label>
+                        <input
+                            id="username"
+                            type="text"
+                            bind:value=user_id
+                            placeholder="Enter your username"
+                            class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400
+                            focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
+                        />
+                    </div>
                     <MenuButton on:click=navigate_to_online_game>"Play Online"</MenuButton>
                     <MenuButton on:click=navigate_to_local_game>"Play Locally"</MenuButton>
                     <MenuButton on:click=ping_online_action>"Ping Online server"</MenuButton>
