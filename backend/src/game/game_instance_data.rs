@@ -57,4 +57,11 @@ impl GameInstanceData {
             queued_loot: LazySyncer::new(Vec::new()),
         }
     }
+
+    pub fn reset_syncers(&mut self) {
+        self.player_specs.mutate();
+        self.player_inventory.mutate();
+        self.monster_specs.mutate();
+        self.queued_loot.mutate();
+    }
 }

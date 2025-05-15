@@ -196,6 +196,7 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn init_game(&mut self) -> Result<()> {
+        self.data.reset_syncers();
         self.client_conn
             .send(
                 &InitGameMessage {
