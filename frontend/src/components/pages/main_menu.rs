@@ -41,18 +41,18 @@ pub fn MainMenu() -> impl IntoView {
         })
     };
 
-    let user_id = RwSignal::new("Le Pou".to_string());
+    let (get_user_id, set_user_id_storage, _) =
+        use_local_storage::<String, JsonSerdeCodec>("user_id");
+    let user_id = RwSignal::new(get_user_id.get_untracked());
 
     let navigate = use_navigate();
     let navigate_to_online_game = move |_| {
-        let (_, set_user_id_storage, _) = use_local_storage::<String, JsonSerdeCodec>("user_id");
         set_user_id_storage.set(user_id.get_untracked());
         navigate("./game", Default::default());
     };
 
     let navigate = use_navigate();
     let navigate_to_local_game = move |_| {
-        let (_, set_user_id_storage, _) = use_local_storage::<String, JsonSerdeCodec>("user_id");
         set_user_id_storage.set(user_id.get_untracked());
         navigate("./local_game", Default::default());
     };

@@ -9,6 +9,7 @@ use axum::{
 
 use http::{HeaderValue, Method};
 use shared::data::world::HelloSchema;
+use tokio::signal;
 use tower_http::{
     cors::CorsLayer,
     trace::{DefaultMakeSpan, TraceLayer},
@@ -17,7 +18,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use backend::{
     game::{data::master_store::MasterStore, session::SessionsStore},
-    ws_connect,
+    tasks, ws_connect,
 };
 
 #[derive(Debug, Clone)]
@@ -66,6 +67,8 @@ async fn main() {
 
     let sessions_store = SessionsStore::new();
 
+    let purge_sessions_handle = tokio::spawn(tasks::purge_sessions(sessions_store.clone()));
+
     let app = Router::new()
         .route("/", get(|| async { "OK" }))
         .route("/hello", get(get_hello))
@@ -79,12 +82,19 @@ async fn main() {
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:4200").await.unwrap();
     tracing::debug!("listening on {}", listener.local_addr().unwrap());
-    axum::serve(
+    let server = axum::serve(
         listener,
         app.into_make_service_with_connect_info::<SocketAddr>(),
-    )
-    .await
-    .unwrap();
+    );
+
+    tokio::select! {
+        _ = server => {},
+        _ = signal::ctrl_c() => {
+            println!("Received shutdown signal");
+        }
+    }
+
+    purge_sessions_handle.abort();
 }
 
 async fn get_hello() -> Json<HelloSchema> {
