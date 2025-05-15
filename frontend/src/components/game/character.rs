@@ -47,7 +47,7 @@ pub fn CharacterPortrait(
                 alt=character_name
                 class=move || {
                     format!(
-                        "border-8 border-double border-stone-500 object-cover h-full {}",
+                        "border-8 border-double border-stone-500 object-cover h-full w-full {}",
                         is_dead_img_effect(),
                     )
                 }

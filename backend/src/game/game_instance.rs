@@ -77,7 +77,6 @@ impl<'a> GameInstance<'a> {
             last_update_time = Instant::now();
             self.update_entities(elapsed_time).await;
 
-            // TODO: Do as background task and join
             if let Err(e) = self.sync_client().await {
                 tracing::warn!("failed to sync client: {}", e);
             }

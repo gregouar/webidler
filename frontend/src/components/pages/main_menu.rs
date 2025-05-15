@@ -50,6 +50,10 @@ pub fn MainMenu() -> impl IntoView {
         show_toast(toast_context, "Hello!", ToastVariant::Normal);
     };
 
+    // TODO: How to pass user_id to game page? Use store?
+
+    let user_id = RwSignal::new("Le Pou".to_string());
+
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
             <div>
@@ -57,6 +61,14 @@ pub fn MainMenu() -> impl IntoView {
                     "Welcome to Webidler!"
                 </h1>
                 <div class="flex flex-col space-y-2">
+                    <input
+                        type="text"
+                        bind:value=user_id
+                        class="
+                        w-full max-w-md px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400 
+                        focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md
+                        "
+                    />
                     <MenuButton on:click=navigate_to_online_game>"Play Online"</MenuButton>
                     <MenuButton on:click=navigate_to_local_game>"Play Locally"</MenuButton>
                     <MenuButton on:click=ping_online_action>"Ping Online server"</MenuButton>
