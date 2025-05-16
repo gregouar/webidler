@@ -64,7 +64,7 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
                 tabindex="0"
             >
                 <div
-                    class="w-full"
+                    class="w-full z-41"
                     style=move || {
                         if open.get() {
                             "animation: dropDown 0.3s ease-out forwards;"

@@ -147,6 +147,7 @@ impl<'a> GameInstance<'a> {
                 for _ in 0..m.amount {
                     player_controller::level_up(
                         &mut self.data.player_specs.mutate(),
+                        self.data.player_inventory.read(),
                         &mut self.data.player_state,
                         &mut self.data.player_resources,
                     );

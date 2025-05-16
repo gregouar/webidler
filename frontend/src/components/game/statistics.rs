@@ -75,41 +75,6 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 value=move || game_context.player_specs.read().level.to_string()
                             />
                             <Stat
-                                label="Experience"
-                                value=move || {
-                                    format_number(game_context.player_resources.read().experience)
-                                }
-                            />
-                            <Stat
-                                label="Experience Needed"
-                                value=move || {
-                                    format_number(
-                                        game_context.player_specs.read().experience_needed,
-                                    )
-                                }
-                            />
-                            <Stat
-                                label="Gold Find"
-                                value=move || {
-                                    format!(
-                                        "{:.0}%",
-                                        game_context.player_specs.read().gold_find * 100.0,
-                                    )
-                                }
-                            />
-                            <Stat
-                                label="Movement Cooldown"
-                                value=move || {
-                                    format!(
-                                        "{:.2}s",
-                                        game_context.player_specs.read().movement_cooldown,
-                                    )
-                                }
-                            />
-                        </StatCategory>
-
-                        <StatCategory title="Vitals">
-                            <Stat
                                 label="Maximum Life"
                                 value=move || {
                                     game_context
@@ -141,6 +106,101 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     format!(
                                         "{:.1} per second",
                                         game_context.player_specs.read().mana_regen,
+                                    )
+                                }
+                            />
+                            <Stat
+                                label="Gold Find"
+                                value=move || {
+                                    format!(
+                                        "{}%",
+                                        format_number(
+                                            game_context.player_specs.read().gold_find * 100.0,
+                                        ),
+                                    )
+                                }
+                            />
+                            <Stat
+                                label="Movement Cooldown"
+                                value=move || {
+                                    format!(
+                                        "{:.2}s",
+                                        game_context.player_specs.read().movement_cooldown,
+                                    )
+                                }
+                            />
+                        </StatCategory>
+
+                        <StatCategory title="Damage">
+                            <Stat
+                                label="Increased Speed"
+                                value=move || {
+                                    format!(
+                                        "+{:.0}%",
+                                        effect(
+                                            EffectTarget::GlobalSpeed,
+                                            EffectModifier::Multiplier,
+                                        ) * 100.0,
+                                    )
+                                }
+                            />
+                            <Stat
+                                label="Increased Physical Damage"
+                                value=move || {
+                                    format!(
+                                        "+{:.0}%",
+                                        effect(
+                                            EffectTarget::GlobalDamage(DamageType::Physical),
+                                            EffectModifier::Multiplier,
+                                        ) * 100.0,
+                                    )
+                                }
+                            />
+                            <Stat
+                                label="Increased Fire Damage"
+                                value=move || {
+                                    format!(
+                                        "+{:.0}%",
+                                        effect(
+                                            EffectTarget::GlobalDamage(DamageType::Fire),
+                                            EffectModifier::Multiplier,
+                                        ) * 100.0,
+                                    )
+                                }
+                            />
+                            <Stat
+                                label="Increased Poison Damage"
+                                value=move || {
+                                    format!(
+                                        "+{:.0}%",
+                                        effect(
+                                            EffectTarget::GlobalDamage(DamageType::Poison),
+                                            EffectModifier::Multiplier,
+                                        ) * 100.0,
+                                    )
+                                }
+                            />
+                            <Stat
+                                label="Increased Critical Chances"
+                                value=move || {
+                                    format!(
+                                        "+{:.0}%",
+                                        effect(
+                                            EffectTarget::GlobalCritChances,
+                                            EffectModifier::Multiplier,
+                                        ) * 100.0,
+                                    )
+                                }
+                            />
+                            <Stat
+                                label="Increased Critical Damage"
+                                value=move || {
+                                    format!(
+                                        "+{:.0}%",
+                                        effect(
+                                            EffectTarget::GlobalCritDamage,
+                                            EffectModifier::Multiplier,
+                                        ) * 100.0,
                                     )
                                 }
                             />
@@ -180,7 +240,19 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             />
                         </StatCategory>
 
-                        <StatCategory title="Combat Bonuses">
+                        <StatCategory title="Attacks">
+                            <Stat
+                                label="Increased Attack Damage"
+                                value=move || {
+                                    format!(
+                                        "+{:.0}%",
+                                        effect(
+                                            EffectTarget::GlobalAttackDamage,
+                                            EffectModifier::Multiplier,
+                                        ) * 100.0,
+                                    )
+                                }
+                            />
                             <Stat
                                 label="Increased Attack Speed"
                                 value=move || {
@@ -193,84 +265,9 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     )
                                 }
                             />
-                            <Stat
-                                label="Increased Critical Chances"
-                                value=move || {
-                                    format!(
-                                        "+{:.2}%",
-                                        effect(
-                                            EffectTarget::GlobalCritChances,
-                                            EffectModifier::Multiplier,
-                                        ) * 100.0,
-                                    )
-                                }
-                            />
-                            <Stat
-                                label="Increased Critical Damage"
-                                value=move || {
-                                    format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            EffectTarget::GlobalCritDamage,
-                                            EffectModifier::Multiplier,
-                                        ) * 100.0,
-                                    )
-                                }
-                            />
                         </StatCategory>
 
-                        <StatCategory title="Damage">
-                            <Stat
-                                label="Increased Physical Damage"
-                                value=move || {
-                                    format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            EffectTarget::GlobalDamage(DamageType::Physical),
-                                            EffectModifier::Multiplier,
-                                        ) * 100.0,
-                                    )
-                                }
-                            />
-                            <Stat
-                                label="Increased Fire Damage"
-                                value=move || {
-                                    format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            EffectTarget::GlobalDamage(DamageType::Fire),
-                                            EffectModifier::Multiplier,
-                                        ) * 100.0,
-                                    )
-                                }
-                            />
-                            <Stat
-                                label="Increased Poison Damage"
-                                value=move || {
-                                    format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            EffectTarget::GlobalDamage(DamageType::Poison),
-                                            EffectModifier::Multiplier,
-                                        ) * 100.0,
-                                    )
-                                }
-                            />
-                        </StatCategory>
-
-                        <StatCategory title="Spell Bonuses">
-                            <Stat
-                                label="Increased Spell Damage"
-                                value=move || {
-                                    format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            EffectTarget::GlobalSpellDamage,
-                                            EffectModifier::Multiplier,
-                                        ) * 100.0,
-                                    )
-                                }
-                            />
+                        <StatCategory title="Spells">
                             <Stat
                                 label="Increased Spell Power"
                                 value=move || {
@@ -278,6 +275,18 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         "+{:.0}%",
                                         effect(
                                             EffectTarget::GlobalSpellPower,
+                                            EffectModifier::Multiplier,
+                                        ) * 100.0,
+                                    )
+                                }
+                            />
+                            <Stat
+                                label="Increased Spell Damage"
+                                value=move || {
+                                    format!(
+                                        "+{:.0}%",
+                                        effect(
+                                            EffectTarget::GlobalSpellDamage,
                                             EffectModifier::Multiplier,
                                         ) * 100.0,
                                     )

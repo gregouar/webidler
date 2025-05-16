@@ -98,6 +98,7 @@ pub fn reward_player(
 
 pub fn level_up(
     player_specs: &mut PlayerSpecs,
+    player_inventory: &PlayerInventory,
     player_state: &mut PlayerState,
     player_resources: &mut PlayerResources,
 ) -> bool {
@@ -112,7 +113,8 @@ pub fn level_up(
         10.0 * increase_factors::exponential(player_specs.level as f64);
 
     player_state.character_state.health += 10.0;
-    player_specs.character_specs.max_life += 10.0;
+
+    update_player_specs(player_specs, player_inventory);
 
     player_state.just_leveled_up = true;
 
@@ -270,9 +272,16 @@ fn equip_weapon(
 }
 
 fn update_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &PlayerInventory) {
+    // TODO: Reset player_specs
+    player_specs.character_specs.armor = 0.0;
+    player_specs.character_specs.fire_armor = 0.0;
+    player_specs.character_specs.poison_armor = 0.0;
+    player_specs.character_specs.max_life = 100.0 + 10.0 * player_specs.level as f64;
+    player_specs.character_specs.life_regen = 1.0;
+    player_specs.max_mana = 100.0;
+    player_specs.mana_regen = 1.0;
     player_specs.gold_find = 1.0;
     player_specs.movement_cooldown = 2.0;
-    player_specs.character_specs.armor = 0.0;
 
     let equipped_items = player_inventory
         .equipped
