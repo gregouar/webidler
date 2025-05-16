@@ -40,9 +40,9 @@ pub struct CharacterSpecs {
     #[serde(default)]
     pub position_y: u8,
 
-    pub max_health: f64,
+    pub max_life: f64,
     #[serde(default)]
-    pub health_regen: f64,
+    pub life_regen: f64,
 
     #[serde(default)]
     pub armor: f64,

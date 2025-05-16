@@ -103,7 +103,7 @@ fn generate_monster_specs(bp_specs: &MonsterSpecs, world_state: &WorldState) -> 
     let exp_factor = increase_factors::exponential(world_state.area_level as f64);
     let lin_factor = increase_factors::linear(world_state.area_level as f64);
     monster_specs.power_factor *= exp_factor;
-    monster_specs.character_specs.max_health *= exp_factor;
+    monster_specs.character_specs.max_life *= exp_factor;
     for skill_effect in monster_specs
         .skill_specs
         .iter_mut()

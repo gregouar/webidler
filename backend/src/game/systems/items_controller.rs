@@ -1,7 +1,7 @@
 use shared::data::{
     item::{ArmorSpecs, ItemSlot, ItemSpecs, WeaponSpecs},
-    item_affix::{AffixEffect, AffixEffectModifier, ItemStat},
-    skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillType, TargetType},
+    item_affix::{AffixEffect, EffectModifier, EffectStat},
+    skill::{SkillEffect, SkillEffectType, SkillSpecs, SkillType, TargetType},
 };
 
 use crate::game::data::items_store::{ItemAdjectivesTable, ItemNounsTable};
@@ -19,8 +19,8 @@ pub fn update_item_specs(
     let mut effects: Vec<AffixEffect> = item_specs.aggregate_effects();
 
     effects.sort_by_key(|e| match e.modifier {
-        AffixEffectModifier::Flat => 0,
-        AffixEffectModifier::Multiplier => 1,
+        EffectModifier::Flat => 0,
+        EffectModifier::Multiplier => 1,
     });
 
     if let Some(ref armor_specs) = item_specs.base.armor_specs {
@@ -37,42 +37,64 @@ pub fn update_item_specs(
 fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &Vec<AffixEffect>) -> WeaponSpecs {
     for effect in effects {
         match effect.stat {
-            ItemStat::LocalAttackSpeed => match effect.modifier {
-                AffixEffectModifier::Flat => {
+            EffectStat::LocalAttackSpeed => match effect.modifier {
+                EffectModifier::Flat => {
                     weapon_specs.cooldown -= effect.value as f32;
                 }
-                AffixEffectModifier::Multiplier => {
+                EffectModifier::Multiplier => {
                     weapon_specs.cooldown *= 1.0 - effect.value as f32;
                 }
             },
-            ItemStat::LocalAttackDamage => match effect.modifier {
-                AffixEffectModifier::Flat => {
-                    weapon_specs.min_damage += effect.value;
-                    weapon_specs.max_damage += effect.value;
+            EffectStat::LocalAttackDamage => match effect.modifier {
+                EffectModifier::Flat => {
+                    for (min, max) in weapon_specs.damage.values_mut() {
+                        *min += effect.value;
+                        *max += effect.value;
+                    }
                 }
-                AffixEffectModifier::Multiplier => {
-                    weapon_specs.min_damage *= 1.0 + effect.value;
-                    weapon_specs.max_damage *= 1.0 + effect.value;
+                EffectModifier::Multiplier => {
+                    for (min, max) in weapon_specs.damage.values_mut() {
+                        *min *= 1.0 + effect.value;
+                        *max *= 1.0 + effect.value;
+                    }
                 }
             },
-            ItemStat::LocalMinAttackDamage => match effect.modifier {
-                AffixEffectModifier::Flat => weapon_specs.min_damage += effect.value,
-                AffixEffectModifier::Multiplier => weapon_specs.min_damage *= 1.0 + effect.value,
+            EffectStat::LocalMinDamage(damage_type) => {
+                if let Some((min, _)) = weapon_specs.damage.get_mut(&damage_type) {
+                    match effect.modifier {
+                        EffectModifier::Flat => *min += effect.value,
+                        EffectModifier::Multiplier => *min *= 1.0 + effect.value,
+                    }
+                }
+            }
+            EffectStat::LocalMaxDamage(damage_type) => {
+                if let Some((_, max)) = weapon_specs.damage.get_mut(&damage_type) {
+                    match effect.modifier {
+                        EffectModifier::Flat => *max += effect.value,
+                        EffectModifier::Multiplier => *max *= 1.0 + effect.value,
+                    }
+                }
+            }
+            EffectStat::LocalCritChances => match effect.modifier {
+                EffectModifier::Flat => weapon_specs.crit_chances += effect.value as f32,
+                EffectModifier::Multiplier => {
+                    weapon_specs.crit_chances *= 1.0 + effect.value as f32
+                }
             },
-            ItemStat::LocalMaxAttackDamage => match effect.modifier {
-                AffixEffectModifier::Flat => weapon_specs.max_damage += effect.value,
-                AffixEffectModifier::Multiplier => weapon_specs.max_damage *= 1.0 + effect.value,
+            EffectStat::LocalCritDamage => match effect.modifier {
+                EffectModifier::Flat => weapon_specs.crit_damage += effect.value,
+                EffectModifier::Multiplier => weapon_specs.crit_damage *= 1.0 + effect.value,
             },
-            ItemStat::LocalArmor | ItemStat::GlobalGoldFind => {}
+            _ => {}
         }
     }
 
     weapon_specs.cooldown = weapon_specs.cooldown.max(0.0);
-    weapon_specs.max_damage = weapon_specs.max_damage.max(0.0);
-    weapon_specs.min_damage = weapon_specs
-        .min_damage
-        .max(0.0)
-        .min(weapon_specs.max_damage);
+    weapon_specs.crit_chances = weapon_specs.crit_chances.min(1.0);
+    for (min_damage, max_damage) in weapon_specs.damage.values_mut() {
+        *max_damage = max_damage.max(0.0);
+        *min_damage = min_damage.max(0.0).min(*max_damage);
+    }
 
     weapon_specs
 }
@@ -80,25 +102,38 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &Vec<AffixEffect
 fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &Vec<AffixEffect>) -> ArmorSpecs {
     for effect in effects {
         match effect.stat {
-            ItemStat::LocalArmor => match effect.modifier {
-                AffixEffectModifier::Flat => {
+            EffectStat::LocalArmor => match effect.modifier {
+                EffectModifier::Flat => {
                     armor_specs.armor += effect.value;
                 }
-                AffixEffectModifier::Multiplier => {
+                EffectModifier::Multiplier => {
                     armor_specs.armor *= 1.0 + effect.value;
                 }
             },
-            ItemStat::LocalAttackSpeed
-            | ItemStat::LocalAttackDamage
-            | ItemStat::LocalMinAttackDamage
-            | ItemStat::LocalMaxAttackDamage
-            | ItemStat::GlobalGoldFind => {}
+            _ => {}
         }
     }
     armor_specs
 }
 
 pub fn make_weapon_skill(item_slot: ItemSlot, weapon_specs: &WeaponSpecs) -> SkillSpecs {
+    let effects = weapon_specs
+        .damage
+        .iter()
+        .map(|(damage_type, (min, max))| SkillEffect {
+            range: weapon_specs.range,
+            target_type: TargetType::Enemy,
+            shape: weapon_specs.shape,
+            effect_type: SkillEffectType::FlatDamage {
+                min: *min,
+                max: *max,
+                damage_type: *damage_type,
+                crit_chances: weapon_specs.crit_chances,
+                crit_damage: weapon_specs.crit_damage,
+            },
+        })
+        .collect();
+
     SkillSpecs {
         name: "Weapon Attack".to_string(),
         icon: "skills/attack.svg".to_string(),
@@ -108,17 +143,6 @@ pub fn make_weapon_skill(item_slot: ItemSlot, weapon_specs: &WeaponSpecs) -> Ski
         mana_cost: 0.0,
         upgrade_level: 1,
         next_upgrade_cost: 10.0,
-        effects: vec![SkillEffect {
-            range: weapon_specs.range,
-            target_type: TargetType::Enemy,
-            shape: weapon_specs.shape,
-            effect_type: SkillEffectType::FlatDamage {
-                min: weapon_specs.min_damage,
-                max: weapon_specs.max_damage,
-                damage_type: DamageType::Physical,
-                crit_chances: weapon_specs.crit_chances,
-                crit_damage: weapon_specs.crit_damage,
-            },
-        }],
+        effects,
     }
 }

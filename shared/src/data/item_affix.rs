@@ -1,19 +1,10 @@
+use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 
-use serde::{Deserialize, Serialize};
-
-pub use super::skill::{Range, Shape};
 use super::world::AreaLevel;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum ItemStat {
-    LocalAttackSpeed,
-    LocalAttackDamage,
-    LocalMinAttackDamage,
-    LocalMaxAttackDamage,
-    LocalArmor,
-    GlobalGoldFind,
-}
+pub use super::effect::{DamageType, EffectModifier, EffectStat};
+pub use super::skill::{Range, Shape};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum AffixType {
@@ -23,30 +14,34 @@ pub enum AffixType {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum AffixEffectModifier {
-    Flat,
-    Multiplier,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum AffixRestriction {
+    // Major type:
+    Armor,
     AttackWeapon,
     SpellWeapon,
-    Armor,
+    Shield,
+    Jewellery,
+    Trinket,
+    // Sub type:
     Cloak,
     Relic,
     Helmet,
+    Gloves,
+    Boots,
     // TODO: add others
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq, Hash)]
 pub enum AffixTag {
-    Fire,
-    Physical,
     Attack,
-    Speed,
     Armor,
+    Fire,
     Gold,
+    Life,
+    Mana,
+    Physical,
+    Speed,
+    Spell,
     // TODO: add others
 }
 
@@ -75,8 +70,8 @@ pub struct ItemAffixBlueprint {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub struct AffixEffectBlueprint {
-    pub stat: ItemStat,
-    pub modifier: AffixEffectModifier,
+    pub stat: EffectStat,
+    pub modifier: EffectModifier,
     // pub scope: AffixEffectScope,
     pub min: f64,
     pub max: f64,
@@ -84,8 +79,8 @@ pub struct AffixEffectBlueprint {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct AffixEffect {
-    pub stat: ItemStat,
-    pub modifier: AffixEffectModifier,
+    pub stat: EffectStat,
+    pub modifier: EffectModifier,
     pub value: f64,
 }
 

@@ -25,7 +25,7 @@ impl DataInit<CharacterSpecs> for CharacterState {
         CharacterState {
             is_alive: true,
             just_died: false,
-            health: specs.max_health,
+            health: specs.max_life,
             just_hurt: false,
             just_hurt_crit: false,
         }

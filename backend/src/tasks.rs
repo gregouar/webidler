@@ -2,7 +2,6 @@ use std::time::{Duration, Instant};
 
 use crate::game::session::SessionsStore;
 
-// TODO: Clean close
 pub async fn purge_sessions(sessions_store: SessionsStore) {
     loop {
         tokio::time::sleep(Duration::from_secs(60)).await;

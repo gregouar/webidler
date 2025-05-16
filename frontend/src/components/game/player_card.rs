@@ -34,12 +34,12 @@ pub fn PlayerCard() -> impl IntoView {
             "Health: "
             {format_number(game_context.player_state.read().character_state.health)}
             "/"
-            {format_number(game_context.player_specs.read().character_specs.max_health)}
+            {format_number(game_context.player_specs.read().character_specs.max_life)}
         }
     };
 
     let health_percent = Signal::derive(move || {
-        let max_health = game_context.player_specs.read().character_specs.max_health;
+        let max_health = game_context.player_specs.read().character_specs.max_life;
         if max_health > 0.0 {
             (game_context.player_state.read().character_state.health / max_health * 100.0) as f32
         } else {

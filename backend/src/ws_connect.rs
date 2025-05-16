@@ -183,8 +183,8 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
             size: CharacterSize::Small,
             position_x: 0,
             position_y: 0,
-            max_health: 100.0,
-            health_regen: 1.0,
+            max_life: 100.0,
+            life_regen: 1.0,
             armor: 0.0,
         },
         skills_specs: vec![

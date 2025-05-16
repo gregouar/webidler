@@ -1,4 +1,5 @@
 pub mod character;
+pub mod effect;
 pub mod item;
 pub mod item_affix;
 pub mod loot;

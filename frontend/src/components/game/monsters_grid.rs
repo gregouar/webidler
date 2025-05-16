@@ -139,14 +139,14 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             "Health: "
             {format_number(health())}
             "/"
-            {format_number(specs.character_specs.max_health)}
+            {format_number(specs.character_specs.max_life)}
         }
     };
 
     let health_percent = Signal::derive(move || {
-        let max_health = specs.character_specs.max_health;
+        let max_health = specs.character_specs.max_life;
         if max_health > 0.0 {
-            (health() / specs.character_specs.max_health * 100.0) as f32
+            (health() / specs.character_specs.max_life * 100.0) as f32
         } else {
             0.0
         }

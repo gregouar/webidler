@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 
+pub use super::effect::DamageType;
 use super::item::ItemSlot;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -112,18 +113,6 @@ pub enum SkillEffectType {
         min: f64,
         max: f64,
     },
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
-pub enum DamageType {
-    Physical,
-    Fire,
-}
-
-impl Default for DamageType {
-    fn default() -> Self {
-        DamageType::Physical
-    }
 }
 
 impl SkillEffect {

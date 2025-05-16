@@ -28,7 +28,7 @@ pub fn damage_character(
 
     target_state.health = (target_state.health - damage)
         .max(0.0)
-        .min(target_specs.max_health);
+        .min(target_specs.max_life);
 
     if damage > 0.0 {
         target_state.just_hurt = true;
@@ -56,6 +56,6 @@ pub fn heal_character(
     if target_state.is_alive {
         target_state.health = (target_state.health + amount)
             .max(0.0)
-            .min(target_specs.max_health);
+            .min(target_specs.max_life);
     }
 }

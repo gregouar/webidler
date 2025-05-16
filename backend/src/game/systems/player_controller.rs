@@ -1,6 +1,6 @@
 use shared::data::{
     item::{ItemSlot, ItemSpecs, WeaponSpecs},
-    item_affix::{AffixEffectModifier, ItemStat},
+    item_affix::{AffixEffect, EffectModifier, EffectStat},
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{SkillState, SkillType},
@@ -107,7 +107,7 @@ pub fn level_up(
         10.0 * increase_factors::exponential(player_specs.level as f64);
 
     player_state.character_state.health += 10.0;
-    player_specs.character_specs.max_health += 10.0;
+    player_specs.character_specs.max_life += 10.0;
 
     player_state.just_leveled_up = true;
 
@@ -230,23 +230,69 @@ fn update_player_stats(player_specs: &mut PlayerSpecs, player_inventory: &Player
         }
     }
 
-    // TODO: All flats then all multiplier
-
-    for effect in player_inventory
+    let mut effects: Vec<_> = player_inventory
         .equipped
         .values()
         .flat_map(|i| i.aggregate_effects())
-    {
+        .collect();
+
+    effects.sort_by_key(|e| match e.modifier {
+        EffectModifier::Flat => 0,
+        EffectModifier::Multiplier => 1,
+    });
+
+    compute_player_specs(player_specs, &effects);
+}
+
+fn compute_player_specs(player_specs: &mut PlayerSpecs, effects: &Vec<AffixEffect>) {
+    for effect in effects.iter() {
         match effect.stat {
-            ItemStat::GlobalGoldFind => match effect.modifier {
-                AffixEffectModifier::Flat => todo!(),
-                AffixEffectModifier::Multiplier => player_specs.gold_find *= 1.0 + effect.value,
+            EffectStat::GlobalLife => match effect.modifier {
+                EffectModifier::Flat => player_specs.character_specs.max_life += effect.value,
+                EffectModifier::Multiplier => {
+                    player_specs.character_specs.max_life *= 1.0 + effect.value
+                }
             },
-            ItemStat::LocalAttackSpeed
-            | ItemStat::LocalAttackDamage
-            | ItemStat::LocalMinAttackDamage
-            | ItemStat::LocalMaxAttackDamage
-            | ItemStat::LocalArmor => {}
+            EffectStat::GlobalLifeRegen => match effect.modifier {
+                EffectModifier::Flat => player_specs.character_specs.life_regen += effect.value,
+                EffectModifier::Multiplier => {
+                    player_specs.character_specs.life_regen *= 1.0 + effect.value
+                }
+            },
+            EffectStat::GlobalMana => match effect.modifier {
+                EffectModifier::Flat => player_specs.max_mana += effect.value,
+                EffectModifier::Multiplier => player_specs.max_mana *= 1.0 + effect.value,
+            },
+            EffectStat::GlobalManaRegen => match effect.modifier {
+                EffectModifier::Flat => player_specs.mana_regen += effect.value,
+                EffectModifier::Multiplier => player_specs.mana_regen *= 1.0 + effect.value,
+            },
+            EffectStat::GlobalArmor => match effect.modifier {
+                EffectModifier::Flat => player_specs.character_specs.armor += effect.value,
+                EffectModifier::Multiplier => {
+                    player_specs.character_specs.armor *= 1.0 + effect.value
+                }
+            },
+            EffectStat::GlobalDamage(damage_type) => todo!(),
+            EffectStat::GlobalAttackDamage => todo!(),
+            EffectStat::GlobalSpellDamage => todo!(),
+            EffectStat::GlobalCritChances => todo!(),
+            EffectStat::GlobalCritDamage => todo!(),
+            EffectStat::GlobalAttackSpeed => todo!(),
+            EffectStat::GlobalSpellSpeed => todo!(),
+            EffectStat::GlobalSpeed => todo!(),
+            EffectStat::GlobalMovementSpeed => todo!(),
+            EffectStat::GlobalGoldFind => match effect.modifier {
+                EffectModifier::Flat => todo!(),
+                EffectModifier::Multiplier => player_specs.gold_find *= 1.0 + effect.value,
+            },
+            EffectStat::LocalAttackSpeed
+            | EffectStat::LocalAttackDamage
+            | EffectStat::LocalMinDamage(_)
+            | EffectStat::LocalMaxDamage(_)
+            | EffectStat::LocalArmor
+            | EffectStat::LocalCritChances
+            | EffectStat::LocalCritDamage => {}
         }
     }
 }
