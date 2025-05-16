@@ -2,7 +2,7 @@
   {
     "name": "Vicious",
     "family": "inc_damage",
-    "tags": ["Physical", "Attack"],
+    "tags": ["Attack"],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,

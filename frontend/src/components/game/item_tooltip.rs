@@ -425,18 +425,24 @@ pub fn formatted_affix_list(mut affix_effects: Vec<StatEffect>) -> Vec<impl Into
         }
     }
 
-    for damage_type in [DamageType::Physical, DamageType::Fire] {
+    for damage_type in DamageType::iter() {
         match (min_damage.get(&damage_type), max_damage.get(&damage_type)) {
             (Some(min_flat), Some(max_flat)) => merged.push(format!(
-                "Adds {:.0} to {:.0} Attack Damage",
-                min_flat, max_flat
+                "Adds {:.0} to {:.0} {} Damage",
+                min_flat,
+                max_flat,
+                damage_type_str(damage_type)
             )),
-            (Some(min_flat), None) => {
-                merged.push(format!("Adds {:.0} to Minimum Attack Damage", min_flat))
-            }
-            (None, Some(max_flat)) => {
-                merged.push(format!("Adds {:.0} to Maximum Attack Damage", max_flat))
-            }
+            (Some(min_flat), None) => merged.push(format!(
+                "Adds {:.0} to Minimum {} Damage",
+                min_flat,
+                damage_type_str(damage_type)
+            )),
+            (None, Some(max_flat)) => merged.push(format!(
+                "Adds {:.0} to Maximum {} Damage",
+                max_flat,
+                damage_type_str(damage_type)
+            )),
             _ => {}
         }
     }

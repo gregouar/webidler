@@ -47,14 +47,12 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -
                 }
             }
             EffectTarget::LocalMinDamage(damage_type) => {
-                if let Some((min, _)) = weapon_specs.damage.get_mut(&damage_type) {
-                    min.apply_effect(effect)
-                }
+                let (min, _) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
+                min.apply_effect(effect);
             }
             EffectTarget::LocalMaxDamage(damage_type) => {
-                if let Some((_, max)) = weapon_specs.damage.get_mut(&damage_type) {
-                    max.apply_effect(effect)
-                }
+                let (_, max) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
+                max.apply_effect(effect);
             }
             EffectTarget::LocalCritChances => weapon_specs.crit_chances.apply_effect(effect),
             EffectTarget::LocalCritDamage => weapon_specs.crit_damage.apply_effect(effect),
@@ -97,6 +95,7 @@ pub fn make_weapon_skill(
     let effects = weapon_specs
         .damage
         .iter()
+        .filter(|(_, (min, max))| *min > 0.0 || *max > 0.0)
         .map(|(damage_type, (min, max))| SkillEffect {
             range: weapon_specs.range,
             target_type: TargetType::Enemy,
