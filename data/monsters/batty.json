@@ -4,7 +4,7 @@
     "portrait": "monsters/bat.webp",
     "max_life": 5
   },
-  "skill_specs": [
+  "skills": [
     {
       "name": "Bite",
       "icon": "skills/bite.svg",

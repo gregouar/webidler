@@ -181,17 +181,18 @@ fn increase_skill_effect(skill_specs: &mut SkillSpecs) {
 }
 
 pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[AffixEffect]) {
-    skill_specs.effects = skill_specs.base_effects.clone();
-    skill_specs.cooldown = skill_specs.base_cooldown.clone();
+    skill_specs.effects = skill_specs.base.effects.clone();
+    skill_specs.cooldown = skill_specs.base.cooldown.clone();
+    skill_specs.mana_cost = skill_specs.base.mana_cost.clone();
 
     for effect in effects.iter() {
         match effect.stat {
-            EffectStat::GlobalAttackSpeed if skill_specs.skill_type == SkillType::Attack => {
+            EffectStat::GlobalAttackSpeed if skill_specs.base.skill_type == SkillType::Attack => {
                 skill_specs
                     .cooldown
                     .apply_modifier(effect.modifier, -effect.value)
             }
-            EffectStat::GlobalSpellSpeed if skill_specs.skill_type == SkillType::Spell => {
+            EffectStat::GlobalSpellSpeed if skill_specs.base.skill_type == SkillType::Spell => {
                 skill_specs
                     .cooldown
                     .apply_modifier(effect.modifier, -effect.value)
@@ -204,10 +205,10 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[AffixEffect])
     }
 
     for skill_effect in skill_specs.effects.iter_mut() {
-        compute_skill_specs_effect(skill_specs.skill_type, skill_effect, effects)
+        compute_skill_specs_effect(skill_specs.base.skill_type, skill_effect, effects)
     }
 
-    for _ in 0..skill_specs.upgrade_level {
+    for _ in 1..skill_specs.upgrade_level {
         increase_skill_effect(skill_specs)
     }
 }

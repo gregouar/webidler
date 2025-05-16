@@ -21,7 +21,9 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         max-w-xs p-4 rounded-xl border border-purple-700 ring-2 ring-purple-500 
         shadow-md shadow-purple-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
         ">
-            <strong class="text-lg font-bold text-purple-300">{skill_specs.name.clone()}</strong>
+            <strong class="text-lg font-bold text-purple-300">
+                {skill_specs.base.name.clone()}
+            </strong>
             <hr class="border-t border-gray-700" />
 
             <p class="text-sm text-gray-400 leading-snug">
@@ -40,12 +42,12 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
             <ul class="list-none space-y-1">{effect_lines}</ul>
 
-            {(!skill_specs.description.is_empty())
+            {(!skill_specs.base.description.is_empty())
                 .then(|| {
                     view! {
                         <hr class="border-t border-gray-700" />
                         <p class="text-sm italic text-gray-300 leading-snug">
-                            {skill_specs.description.clone()}
+                            {skill_specs.base.description.clone()}
                         </p>
                     }
                 })}

@@ -53,3 +53,4 @@ pub enum EffectStat {
     GlobalMovementSpeed,
     GlobalGoldFind,
 }
+// TODO: ReducedManaCost

@@ -206,8 +206,8 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let icon_asset = img_asset(&skill_specs.icon);
-    let skill_name = skill_specs.name.clone();
+    let icon_asset = img_asset(&skill_specs.base.icon);
+    let skill_name = skill_specs.base.name.clone();
 
     let is_dead = move || {
         game_context

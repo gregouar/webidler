@@ -13,12 +13,13 @@ use super::{
     items_store::{ItemAdjectivesTable, ItemAffixesTable, ItemNounsTable, ItemsStore},
     loot_table::LootTable,
     manifest,
+    monster::BaseMonsterSpecs,
     world::WorldBlueprint,
 };
 
 // TODO: Load from zip/dat file and compress at build time for prod release
 
-pub type MonstersSpecsStore = HashMap<String, MonsterSpecs>;
+pub type MonstersSpecsStore = HashMap<String, BaseMonsterSpecs>;
 pub type LootTablesStore = HashMap<String, LootTable>;
 pub type WorldBlueprintStore = HashMap<String, WorldBlueprint>;
 

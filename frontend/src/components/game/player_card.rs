@@ -232,7 +232,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
 
     let icon_asset = move || {
         if let Some(skill_specs) = game_context.player_specs.read().skills_specs.get(index) {
-            img_asset(&skill_specs.icon)
+            img_asset(&skill_specs.base.icon)
         } else {
             "".to_string()
         }
@@ -244,7 +244,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
             .read()
             .skills_specs
             .get(index)
-            .map(|x| x.name.clone())
+            .map(|x| x.base.name.clone())
             .unwrap_or_default()
     };
 

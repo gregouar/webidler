@@ -1,7 +1,7 @@
 use shared::data::{
     item::{ArmorSpecs, ItemSlot, ItemSpecs, WeaponSpecs},
     item_affix::{AffixEffect, EffectModifier, EffectStat},
-    skill::{SkillEffect, SkillEffectType, SkillSpecs, SkillType, TargetType},
+    skill::{BaseSkillSpecs, SkillEffect, SkillEffectType, SkillType, TargetType},
 };
 
 use crate::game::data::items_store::{ItemAdjectivesTable, ItemNounsTable};
@@ -89,7 +89,11 @@ fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &[AffixEffect]) -> 
     armor_specs
 }
 
-pub fn make_weapon_skill(item_slot: ItemSlot, weapon_specs: &WeaponSpecs) -> SkillSpecs {
+pub fn make_weapon_skill(
+    item_slot: ItemSlot,
+    item_level: u16,
+    weapon_specs: &WeaponSpecs,
+) -> BaseSkillSpecs {
     let effects = weapon_specs
         .damage
         .iter()
@@ -107,17 +111,14 @@ pub fn make_weapon_skill(item_slot: ItemSlot, weapon_specs: &WeaponSpecs) -> Ski
         })
         .collect();
 
-    SkillSpecs {
+    BaseSkillSpecs {
         name: "Weapon Attack".to_string(),
         icon: "skills/attack.svg".to_string(),
         description: "A swing of your weapon".to_string(),
         skill_type: SkillType::Weapon(item_slot),
-        base_cooldown: weapon_specs.cooldown,
-        cooldown: 0.0,
+        cooldown: weapon_specs.cooldown,
         mana_cost: 0.0,
-        upgrade_level: 1,
-        next_upgrade_cost: 10.0,
-        base_effects: effects,
-        effects: vec![],
+        upgrade_cost: item_level as f64 * 10.0, // TODO: More aggressive increase?
+        effects,
     }
 }

@@ -3,8 +3,12 @@ use anyhow::Result;
 use shared::data::world::AreaLevel;
 use shared::data::{monster::MonsterSpecs, world::WorldState};
 
-use crate::game::data::master_store::MonstersSpecsStore;
-use crate::game::data::world::{MonsterWaveBlueprint, WorldBlueprint};
+use crate::game::data::{
+    master_store::MonstersSpecsStore,
+    monster::BaseMonsterSpecs,
+    world::{MonsterWaveBlueprint, WorldBlueprint},
+    DataInit,
+};
 use crate::game::utils::rng::RandomWeighted;
 use crate::game::utils::{increase_factors, rng};
 
@@ -98,8 +102,8 @@ fn generate_all_monsters_specs(
     monsters_specs
 }
 
-fn generate_monster_specs(bp_specs: &MonsterSpecs, world_state: &WorldState) -> MonsterSpecs {
-    let mut monster_specs = bp_specs.clone();
+fn generate_monster_specs(bp_specs: &BaseMonsterSpecs, world_state: &WorldState) -> MonsterSpecs {
+    let mut monster_specs = MonsterSpecs::init(bp_specs);
     let exp_factor = increase_factors::exponential(world_state.area_level as f64);
     let lin_factor = increase_factors::linear(world_state.area_level as f64);
     monster_specs.power_factor *= exp_factor;

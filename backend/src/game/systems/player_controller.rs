@@ -3,7 +3,7 @@ use shared::data::{
     item_affix::{AffixEffect, EffectModifier, EffectStat},
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-    skill::{SkillState, SkillType},
+    skill::{SkillSpecs, SkillState, SkillType},
 };
 
 use crate::game::{data::DataInit, utils::increase_factors};
@@ -158,6 +158,7 @@ pub fn equip_item(
             player_specs,
             player_state,
             item_specs.base.slot,
+            item_specs.level,
             weapon_specs,
         );
     }
@@ -193,7 +194,7 @@ fn unequip_weapon(
         .iter()
         .enumerate()
         .filter_map(|(i, skill_specs)| {
-            if let SkillType::Weapon(slot) = skill_specs.skill_type {
+            if let SkillType::Weapon(slot) = skill_specs.base.skill_type {
                 if slot == item_slot {
                     return Some(i);
                 }
@@ -213,9 +214,15 @@ fn equip_weapon(
     player_specs: &mut PlayerSpecs,
     player_state: &mut PlayerState,
     item_slot: ItemSlot,
+    item_level: u16,
     weapon_specs: &WeaponSpecs,
 ) {
-    let weapon_skill = items_controller::make_weapon_skill(item_slot, &weapon_specs);
+    // TODO: helper function
+    let weapon_skill = SkillSpecs::init(&items_controller::make_weapon_skill(
+        item_slot,
+        item_level,
+        &weapon_specs,
+    ));
 
     player_specs.auto_skills.insert(0, true);
     player_state

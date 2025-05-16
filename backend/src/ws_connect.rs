@@ -24,8 +24,8 @@ use shared::{
         item::ItemRarity,
         player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
         skill::{
-            DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs, SkillType,
-            TargetType,
+            BaseSkillSpecs, DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs,
+            SkillType, TargetType,
         },
     },
     messages::{
@@ -188,17 +188,15 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
             armor: 0.0,
         },
         skills_specs: vec![
-            SkillSpecs {
+            SkillSpecs::init(&BaseSkillSpecs {
                 name: String::from("Fireball"),
                 description: "A throw of mighty fireball, burning multiple enemies".to_string(),
                 icon: String::from("skills/fireball2.svg"),
                 skill_type: SkillType::Spell,
-                base_cooldown: 5.0,
-                cooldown: 0.0,
+                cooldown: 5.0,
                 mana_cost: 20.0,
-                upgrade_level: 1,
-                next_upgrade_cost: 10.0,
-                base_effects: vec![SkillEffect {
+                upgrade_cost: 50.0,
+                effects: vec![SkillEffect {
                     range: Range::Distance,
                     target_type: TargetType::Enemy,
                     shape: Shape::Square4,
@@ -210,19 +208,16 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
                         crit_damage: 0.0,
                     },
                 }],
-                effects: vec![],
-            },
-            SkillSpecs {
+            }),
+            SkillSpecs::init(&BaseSkillSpecs {
                 name: String::from("Heal"),
                 description: "A minor healing spell for yourself".to_string(),
                 icon: String::from("skills/heal.svg"),
                 skill_type: SkillType::Spell,
-                base_cooldown: 30.0,
-                cooldown: 0.0,
+                cooldown: 30.0,
                 mana_cost: 20.0,
-                upgrade_level: 1,
-                next_upgrade_cost: 10.0,
-                base_effects: vec![SkillEffect {
+                upgrade_cost: 50.0,
+                effects: vec![SkillEffect {
                     range: Range::Melee,
                     target_type: TargetType::Me,
                     shape: Shape::Single,
@@ -231,8 +226,7 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
                         max: 20.0,
                     },
                 }],
-                effects: vec![],
-            },
+            }),
         ],
         level: 1,
         experience_needed: 20.0,

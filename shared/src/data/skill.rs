@@ -11,7 +11,7 @@ pub struct SkillState {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct SkillSpecs {
+pub struct BaseSkillSpecs {
     pub name: String,
     pub icon: String,
     #[serde(default)]
@@ -19,21 +19,26 @@ pub struct SkillSpecs {
     #[serde(default)]
     pub skill_type: SkillType,
 
-    #[serde(rename = "cooldown")]
-    pub base_cooldown: f32,
-    #[serde(rename = "current_cooldown", default)]
     pub cooldown: f32,
     #[serde(default)]
     pub mana_cost: f64,
 
     #[serde(default)]
+    pub upgrade_cost: f64,
+
+    pub effects: Vec<SkillEffect>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SkillSpecs {
+    pub base: BaseSkillSpecs,
+
+    pub cooldown: f32,
+    pub mana_cost: f64,
+
     pub upgrade_level: u16,
-    #[serde(default)]
     pub next_upgrade_cost: f64,
 
-    #[serde(rename = "effects")]
-    pub base_effects: Vec<SkillEffect>,
-    #[serde(rename = "current_effects", default)]
     pub effects: Vec<SkillEffect>,
 }
 

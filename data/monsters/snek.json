@@ -5,7 +5,7 @@
         "max_life": 15,
         "size": "Large"
     },
-    "skill_specs": [
+    "skills": [
         {
             "name": "Poison Bite",
             "icon": "skills/bite.svg",

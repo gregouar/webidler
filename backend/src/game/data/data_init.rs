@@ -2,7 +2,7 @@ use shared::data::{
     character::{CharacterSpecs, CharacterState},
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerSpecs, PlayerState},
-    skill::{SkillSpecs, SkillState},
+    skill::{BaseSkillSpecs, SkillSpecs, SkillState},
     world::{WorldSpecs, WorldState},
 };
 
@@ -57,6 +57,19 @@ impl DataInit<MonsterSpecs> for MonsterState {
                 .map(|p| SkillState::init(p))
                 .collect(),
             initiative: rng::random_range(0.0..specs.max_initiative).unwrap_or_default(),
+        }
+    }
+}
+
+impl DataInit<BaseSkillSpecs> for SkillSpecs {
+    fn init(specs: &BaseSkillSpecs) -> Self {
+        Self {
+            base: specs.clone(),
+            cooldown: specs.cooldown.clone(),
+            mana_cost: specs.mana_cost.clone(),
+            upgrade_level: 1,
+            next_upgrade_cost: specs.upgrade_cost,
+            effects: specs.effects.clone(),
         }
     }
 }
