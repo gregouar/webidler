@@ -4,6 +4,8 @@ use std::sync::Arc;
 use leptos::html::*;
 use leptos::prelude::*;
 
+use shared::data::item::Range;
+use shared::data::item::Shape;
 use shared::data::skill::DamageType;
 use shared::data::{
     item::{ItemRarity, ItemSlot, ItemSpecs},
@@ -29,7 +31,13 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         ItemSlot::Ring => "Ring",
         ItemSlot::Shield => "Shield",
         ItemSlot::Trinket => "Trinket",
-        ItemSlot::Weapon => "Weapon",
+        ItemSlot::Weapon => {
+            if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
+                "Two-Handed Weapon"
+            } else {
+                "One-Handed Weapon"
+            }
+        }
     };
     let armor_info = item_specs
         .armor_specs
@@ -92,6 +100,20 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 }
             }
 
+            let shape = match specs.shape {
+                Shape::Single => "",
+                Shape::Vertical2 => ", 2x1 area",
+                Shape::Horizontal2 => ", 1x2 area",
+                Shape::Horizontal3 => ", 1x3 area",
+                Shape::Square4 => ", 2x2 area",
+                Shape::All => ", all",
+            };
+
+            let range = match specs.range {
+                Range::Melee => "Melee",
+                Range::Distance => "Distance",
+            };
+
             let cooldown_color = if specs.cooldown != base_specs.cooldown {
                 "text-blue-400"
             } else {
@@ -111,14 +133,8 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             };
 
             view! {
+                <li class="text-gray-400 text-sm leading-snug">{range} {shape}</li>
                 {damage_lines}
-                <li class="text-gray-400 text-sm leading-snug">
-                    "Cooldown: "
-                    <span class=format!(
-                        "{} font-semibold",
-                        cooldown_color,
-                    )>{format!("{:.2}s", specs.cooldown)}</span>
-                </li>
                 <li class="text-gray-400 text-sm leading-snug">
                     "Critical chances: "
                     <span class=format!(
@@ -132,6 +148,13 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                         "{} font-semibold",
                         crit_damage_color,
                     )>{format!("+{:.0}%", specs.crit_damage * 100.0)}</span>
+                </li>
+                <li class="text-gray-400 text-sm leading-snug">
+                    "Cooldown: "
+                    <span class=format!(
+                        "{} font-semibold",
+                        cooldown_color,
+                    )>{format!("{:.2}s", specs.cooldown)}</span>
                 </li>
             }
         });
@@ -231,54 +254,13 @@ pub fn formatted_affix_list(mut affix_effects: Vec<StatEffect>) -> Vec<impl Into
 
     affix_effects.sort_by_key(|effect| (effect.stat, effect.modifier));
 
-    // affix_effects.sort_by_key(|effect| {
-    //     (
-    //         // TODO: Macro? crate?
-    //         -match effect.stat {
-    //             LocalAttackDamage => 0,
-    //             LocalMinDamage(DamageType::Physical) => 10,
-    //             LocalMaxDamage(DamageType::Physical) => 20,
-    //             LocalMinDamage(DamageType::Fire) => 30,
-    //             LocalMaxDamage(DamageType::Fire) => 40,
-    //             LocalMinDamage(DamageType::Poison) => 45,
-    //             LocalMaxDamage(DamageType::Poison) => 46,
-    //             LocalCritChances => 50,
-    //             LocalCritDamage => 60,
-    //             LocalAttackSpeed => 70,
-    //             LocalArmor => 80,
-    //             GlobalLife => 90,
-    //             GlobalLifeRegen => 100,
-    //             GlobalMana => 110,
-    //             GlobalManaRegen => 120,
-    //             GlobalArmor => 130,
-    //             GlobalAttackDamage => 140,
-    //             GlobalDamage(DamageType::Physical) => 150,
-    //             GlobalDamage(DamageType::Fire) => 160,
-    //             GlobalDamage(DamageType::Poison) => 165,
-    //             GlobalSpellPower => 165,
-    //             GlobalSpellDamage => 170,
-    //             GlobalCritChances => 180,
-    //             GlobalCritDamage => 190,
-    //             GlobalAttackSpeed => 200,
-    //             GlobalSpellSpeed => 210,
-    //             GlobalSpeed => 220,
-    //             GlobalMovementSpeed => 230,
-    //             GlobalGoldFind => 240,
-    //         },
-    //         -match effect.modifier {
-    //             Flat => 0,
-    //             Multiplier => 1,
-    //         },
-    //     )
-    // });
-
     let mut merged: Vec<String> = Vec::new();
 
     // This will be used to merge added min and added max damage together
     let mut min_damage: HashMap<DamageType, f64> = HashMap::new();
     let mut max_damage: HashMap<DamageType, f64> = HashMap::new();
 
-    for effect in affix_effects {
+    for effect in affix_effects.iter().rev() {
         match (effect.stat, effect.modifier) {
             (LocalMinDamage(damage_type), Flat) => {
                 min_damage.insert(damage_type, effect.value);
@@ -304,13 +286,13 @@ pub fn formatted_affix_list(mut affix_effects: Vec<StatEffect>) -> Vec<impl Into
                 effect.value * 100.0
             )),
             (LocalAttackDamage, Flat) => {
-                merged.push(format!("{:.0} Added Attack Damage", effect.value))
+                merged.push(format!("Adds {:.0} Attack Damage", effect.value))
             }
             (LocalAttackDamage, Multiplier) => merged.push(format!(
                 "{:.0}% Increased Attack Damage",
                 effect.value * 100.0
             )),
-            (LocalArmor, Flat) => merged.push(format!("+{:.0} Added Armor", effect.value)),
+            (LocalArmor, Flat) => merged.push(format!("Adds {:.0} Armor", effect.value)),
             (LocalArmor, Multiplier) => {
                 merged.push(format!("{:.0}% Increased Armor", effect.value * 100.0))
             }

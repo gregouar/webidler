@@ -121,7 +121,6 @@ pub fn level_up(
     true
 }
 
-// TODO: InventoryController ?
 pub fn equip_item_from_bag(
     player_specs: &mut PlayerSpecs,
     player_inventory: &mut PlayerInventory,
@@ -147,6 +146,7 @@ pub fn equip_item_from_bag(
     }
 }
 
+// TODO: Change back to only switch with main item, Return Error if trying to equip busy hand
 /// Equip new item and return old equipped item
 pub fn equip_item(
     player_specs: &mut PlayerSpecs,

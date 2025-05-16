@@ -48,6 +48,7 @@ pub fn InventoryPanel(open: RwSignal<bool>) -> impl IntoView {
     }
 }
 
+// TODO: Unequip menu
 #[component]
 pub fn EquippedItems() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
@@ -217,7 +218,7 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
                                 <ItemCard
                                     item_specs=item_specs.clone()
                                     on:click=move |_| show_menu.set(true)
-                                    tooltip_position=DynamicTooltipPosition::BottomRight
+                                    tooltip_position=DynamicTooltipPosition::BottomLeft
                                 />
 
                                 <Show when=is_queued_for_sale>
