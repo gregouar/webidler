@@ -37,7 +37,7 @@
   {
     "name": "Healthy",
     "family": "add_life",
-    "tags": ["Life", "Armor"],
+    "tags": ["Life"],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
@@ -55,7 +55,7 @@
   {
     "name": "Robust",
     "family": "inc_life",
-    "tags": ["Life", "Armor"],
+    "tags": ["Life"],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,

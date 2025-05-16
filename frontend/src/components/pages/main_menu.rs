@@ -47,6 +47,7 @@ pub fn MainMenu() -> impl IntoView {
     let (get_user_id, set_user_id_storage, _) =
         use_local_storage::<String, JsonSerdeCodec>("user_id");
     let user_id = RwSignal::new(get_user_id.get_untracked());
+    let disable_connect = Signal::derive(move || user_id.read().is_empty());
 
     let navigate_to_online_game = {
         let navigate = use_navigate();
@@ -82,7 +83,7 @@ pub fn MainMenu() -> impl IntoView {
                 <div class="flex flex-col space-y-2">
                     <div class="w-full mx-auto mb-6 text-left">
                         <label for="username" class="block mb-2 text-sm font-medium text-gray-300">
-                            Username:
+                            "Username:"
                         </label>
                         <input
                             id="username"
@@ -93,8 +94,12 @@ pub fn MainMenu() -> impl IntoView {
                             focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
                         />
                     </div>
-                    <MenuButton on:click=navigate_to_online_game>"Play Online"</MenuButton>
-                    <MenuButton on:click=navigate_to_local_game>"Play Locally"</MenuButton>
+                    <MenuButton on:click=navigate_to_online_game disabled=disable_connect>
+                        "Play Online"
+                    </MenuButton>
+                    <MenuButton on:click=navigate_to_local_game disabled=disable_connect>
+                        "Play Locally"
+                    </MenuButton>
                     <MenuButton on:click=ping_online_action>"Ping Online server"</MenuButton>
                     <MenuButton on:click=ping_local_action>"Ping Local server"</MenuButton>
                     <MenuButton on:click=toast>"Toast"</MenuButton>

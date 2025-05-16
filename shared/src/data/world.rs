@@ -21,4 +21,6 @@ pub struct WorldSpecs {
 pub struct WorldState {
     pub area_level: AreaLevel,
     pub waves_done: u8,
+    pub auto_progress: bool,
+    pub going_back: u16,
 }

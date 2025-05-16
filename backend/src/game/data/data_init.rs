@@ -16,6 +16,8 @@ impl DataInit<WorldSpecs> for WorldState {
         WorldState {
             area_level: specs.starting_level,
             waves_done: 0,
+            auto_progress: true,
+            going_back: 0,
         }
     }
 }

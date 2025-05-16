@@ -21,7 +21,7 @@ use shared::{
 use super::{
     data::{master_store::MasterStore, DataInit},
     game_instance_data::GameInstanceData,
-    systems::{loot_controller, loot_generator},
+    systems::{loot_controller, loot_generator, world_controller},
 };
 use super::{
     systems::{
@@ -181,7 +181,11 @@ impl<'a> GameInstance<'a> {
                     });
                 }
             }
-            // Shouldn't receive other kind of messages:
+            ClientMessage::SetAutoProgress(m) => self.data.world_state.auto_progress = m.value,
+            ClientMessage::GoBack(m) => {
+                self.data.world_state.going_back += m.amount;
+                self.data.world_state.auto_progress = false;
+            }
             ClientMessage::Connect(_) => {
                 tracing::warn!("received unexpected message: {:?}", msg);
                 return Some(ErrorMessage {
@@ -209,10 +213,19 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn generate_monsters_wave(&mut self) -> Result<()> {
+        if self.data.world_state.going_back > 0 {
+            let amount = self.data.world_state.going_back;
+            world_controller::decrease_area_level(&mut self.data.world_state, amount);
+        }
+
+        self.data.world_state.going_back = 0;
         self.data.world_state.waves_done += 1;
+
         if self.data.world_state.waves_done > WAVES_PER_AREA_LEVEL {
             self.data.world_state.waves_done = 1;
-            self.data.world_state.area_level += 1;
+            if self.data.world_state.auto_progress {
+                self.data.world_state.area_level += 1;
+            }
         }
 
         self.data.monster_specs = LazySyncer::new(monsters_wave::generate_monsters_wave_specs(
@@ -238,14 +251,7 @@ impl<'a> GameInstance<'a> {
 
         self.data.player_state = PlayerState::init(self.data.player_specs.read());
 
-        self.data.world_state.area_level = self
-            .data
-            .world_state
-            .area_level
-            .checked_sub(1)
-            .unwrap_or(1)
-            .max(1);
-        self.data.world_state.waves_done = 0;
+        world_controller::decrease_area_level(&mut self.data.world_state, 1);
     }
 
     async fn reset_entities(&mut self) {
@@ -288,8 +294,11 @@ impl<'a> GameInstance<'a> {
                 );
             }
 
-            if monsters_still_alive.is_empty() {
-                if !self.data.looted && self.data.world_state.waves_done == WAVES_PER_AREA_LEVEL {
+            if monsters_still_alive.is_empty() || self.data.world_state.going_back > 0 {
+                if self.data.world_state.going_back == 0
+                    && !self.data.looted
+                    && self.data.world_state.waves_done == WAVES_PER_AREA_LEVEL
+                {
                     if let Some(item_specs) = loot_generator::generate_loot(
                         self.data.world_state.area_level,
                         &self.data.world_blueprint.loot_table,
@@ -335,7 +344,7 @@ impl<'a> GameInstance<'a> {
         );
     }
 
-    /// Send whole world state to client
+    /// Send whole game state to client
     async fn sync_client(&mut self) -> Result<()> {
         self.client_conn
             .send(

@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::data::world::AreaLevel;
+
 use super::{macros::impl_into_message, SessionKey};
 
 impl_into_message! {
@@ -14,6 +16,8 @@ impl_into_message! {
         EquipItem(EquipItemMessage),
         SellItems(SellItemsMessage),
         PickupLoot(PickUpLootMessage),
+        SetAutoProgress(SetAutoProgressMessage),
+        GoBack(GoBackLevelMessage),
     }
 }
 
@@ -65,4 +69,14 @@ pub struct SellItemsMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PickUpLootMessage {
     pub loot_identifier: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct GoBackLevelMessage {
+    pub amount: AreaLevel,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SetAutoProgressMessage {
+    pub value: bool,
 }

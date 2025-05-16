@@ -11,3 +11,4 @@ pub mod player_updater;
 pub mod skills_controller;
 pub mod skills_updater;
 pub mod stats_controller;
+pub mod world_controller;

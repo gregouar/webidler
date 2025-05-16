@@ -3,7 +3,7 @@ pub fn exponential(level: f64) -> f64 {
 }
 
 pub fn linear(level: f64) -> f64 {
-    1.0 + (level - 1.0) / 4.0
+    1.0 + (level - 1.0) / 2.0
 }
 
 // for armor physical damage decrease

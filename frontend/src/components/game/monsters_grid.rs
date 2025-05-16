@@ -34,8 +34,10 @@ pub fn MonstersGrid() -> impl IntoView {
             .all(|x| !x.character_state.is_alive)
     });
 
-    let player_dead =
-        Signal::derive(move || !game_context.player_state.read().character_state.is_alive);
+    let flee = Signal::derive(move || {
+        !game_context.player_state.read().character_state.is_alive
+            || game_context.world_state.read().going_back > 0
+    });
 
     // TODO: double buffering to allow in and out at the same time
     view! {
@@ -96,9 +98,9 @@ pub fn MonstersGrid() -> impl IntoView {
                                         "animation: monster-fade-out 1s ease-in; animation-fill-mode: both;",
                                     )
                                 } else {
-                                    if player_dead.get() {
+                                    if flee.get() {
                                         format!(
-                                            "animation: monster-flee 3s ease-out; animation-fill-mode: both; {}",
+                                            "animation: monster-flee 1s ease-out; animation-fill-mode: both; {}",
                                             animation_delay,
                                         )
                                     } else {

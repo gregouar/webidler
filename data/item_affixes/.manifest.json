@@ -24,6 +24,8 @@
       "helmet_prefixes.json",
       "helmet_suffixes.json",
 
+      "mana_suffixes.json",
+
       "spell_weapon_prefixes.json",
       "spell_weapon_suffixes.json"
     ]
