@@ -22,6 +22,7 @@ use shared::{
     data::{
         character::CharacterSize,
         item::ItemRarity,
+        item_affix::EffectsMap,
         player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
         skill::{
             BaseSkillSpecs, DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs,
@@ -186,6 +187,8 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
             max_life: 100.0,
             life_regen: 1.0,
             armor: 0.0,
+            fire_armor: 0.0,
+            poison_armor: 0.0,
         },
         skills_specs: vec![
             SkillSpecs::init(&BaseSkillSpecs {
@@ -234,6 +237,7 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
         mana_regen: 1.0,
         movement_cooldown: 2.0,
         gold_find: 1.0,
+        effects: EffectsMap::default(),
         auto_skills: vec![false, false],
     };
 

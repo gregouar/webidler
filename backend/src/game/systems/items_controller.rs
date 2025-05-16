@@ -1,6 +1,6 @@
 use shared::data::{
     item::{ArmorSpecs, ItemSlot, ItemSpecs, WeaponSpecs},
-    item_affix::{AffixEffect, EffectModifier, EffectStat},
+    item_affix::{EffectModifier, EffectTarget, StatEffect},
     skill::{BaseSkillSpecs, SkillEffect, SkillEffectType, SkillType, TargetType},
 };
 
@@ -16,7 +16,7 @@ pub fn update_item_specs(
     let name = generate_name(&item_specs, adjectives, nouns);
     item_specs.name = name;
 
-    let mut effects: Vec<AffixEffect> = item_specs.aggregate_effects();
+    let mut effects: Vec<StatEffect> = (&item_specs.aggregate_effects()).into();
 
     effects.sort_by_key(|e| match e.modifier {
         EffectModifier::Flat => 0,
@@ -34,30 +34,30 @@ pub fn update_item_specs(
     item_specs
 }
 
-fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[AffixEffect]) -> WeaponSpecs {
+fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -> WeaponSpecs {
     for effect in effects {
         match effect.stat {
-            EffectStat::LocalAttackSpeed => weapon_specs
+            EffectTarget::LocalAttackSpeed => weapon_specs
                 .cooldown
                 .apply_modifier(effect.modifier, -effect.value),
-            EffectStat::LocalAttackDamage => {
+            EffectTarget::LocalAttackDamage => {
                 for (min, max) in weapon_specs.damage.values_mut() {
                     min.apply_effect(effect);
                     max.apply_effect(effect);
                 }
             }
-            EffectStat::LocalMinDamage(damage_type) => {
+            EffectTarget::LocalMinDamage(damage_type) => {
                 if let Some((min, _)) = weapon_specs.damage.get_mut(&damage_type) {
                     min.apply_effect(effect)
                 }
             }
-            EffectStat::LocalMaxDamage(damage_type) => {
+            EffectTarget::LocalMaxDamage(damage_type) => {
                 if let Some((_, max)) = weapon_specs.damage.get_mut(&damage_type) {
                     max.apply_effect(effect)
                 }
             }
-            EffectStat::LocalCritChances => weapon_specs.crit_chances.apply_effect(effect),
-            EffectStat::LocalCritDamage => weapon_specs.crit_damage.apply_effect(effect),
+            EffectTarget::LocalCritChances => weapon_specs.crit_chances.apply_effect(effect),
+            EffectTarget::LocalCritDamage => weapon_specs.crit_damage.apply_effect(effect),
             _ => {}
         }
     }
@@ -72,10 +72,10 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[AffixEffect]) 
     weapon_specs
 }
 
-fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &[AffixEffect]) -> ArmorSpecs {
+fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &[StatEffect]) -> ArmorSpecs {
     for effect in effects {
         match effect.stat {
-            EffectStat::LocalArmor => match effect.modifier {
+            EffectTarget::LocalArmor => match effect.modifier {
                 EffectModifier::Flat => {
                     armor_specs.armor += effect.value;
                 }

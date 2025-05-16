@@ -2,9 +2,9 @@ use rand::{self, seq::IteratorRandom};
 
 use shared::data::{
     character::{CharacterSpecs, CharacterState, SkillSpecs, SkillState},
-    effect::EffectStat,
+    effect::EffectTarget,
     item::{Range, Shape},
-    item_affix::AffixEffect,
+    item_affix::StatEffect,
     player::PlayerResources,
     skill::{SkillEffect, SkillEffectType, SkillType, TargetType},
 };
@@ -180,24 +180,24 @@ fn increase_skill_effect(skill_specs: &mut SkillSpecs) {
     }
 }
 
-pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[AffixEffect]) {
+pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) {
     skill_specs.effects = skill_specs.base.effects.clone();
     skill_specs.cooldown = skill_specs.base.cooldown.clone();
     skill_specs.mana_cost = skill_specs.base.mana_cost.clone();
 
     for effect in effects.iter() {
         match effect.stat {
-            EffectStat::GlobalAttackSpeed if skill_specs.base.skill_type == SkillType::Attack => {
+            EffectTarget::GlobalAttackSpeed if skill_specs.base.skill_type == SkillType::Attack => {
                 skill_specs
                     .cooldown
                     .apply_modifier(effect.modifier, -effect.value)
             }
-            EffectStat::GlobalSpellSpeed if skill_specs.base.skill_type == SkillType::Spell => {
+            EffectTarget::GlobalSpellSpeed if skill_specs.base.skill_type == SkillType::Spell => {
                 skill_specs
                     .cooldown
                     .apply_modifier(effect.modifier, -effect.value)
             }
-            EffectStat::GlobalSpeed => skill_specs
+            EffectTarget::GlobalSpeed => skill_specs
                 .cooldown
                 .apply_modifier(effect.modifier, -effect.value),
             _ => {}
@@ -216,7 +216,7 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[AffixEffect])
 pub fn compute_skill_specs_effect(
     skill_type: SkillType,
     skill_effect: &mut SkillEffect,
-    effects: &[AffixEffect],
+    effects: &[StatEffect],
 ) {
     for effect in effects.iter() {
         match &mut skill_effect.effect_type {
@@ -227,32 +227,32 @@ pub fn compute_skill_specs_effect(
                 crit_chances,
                 crit_damage,
             } => match effect.stat {
-                EffectStat::GlobalSpellPower => {
+                EffectTarget::GlobalSpellPower => {
                     min.apply_effect(effect);
                     max.apply_effect(effect);
                 }
-                EffectStat::GlobalDamage(damage_type2) if damage_type2 == *damage_type => {
+                EffectTarget::GlobalDamage(damage_type2) if damage_type2 == *damage_type => {
                     min.apply_effect(effect);
                     max.apply_effect(effect);
                 }
-                EffectStat::GlobalAttackDamage if skill_type == SkillType::Attack => {
+                EffectTarget::GlobalAttackDamage if skill_type == SkillType::Attack => {
                     min.apply_effect(effect);
                     max.apply_effect(effect);
                 }
-                EffectStat::GlobalSpellDamage if skill_type == SkillType::Spell => {
+                EffectTarget::GlobalSpellDamage if skill_type == SkillType::Spell => {
                     min.apply_effect(effect);
                     max.apply_effect(effect);
                 }
-                EffectStat::GlobalCritChances => {
+                EffectTarget::GlobalCritChances => {
                     crit_chances.apply_effect(effect);
                 }
-                EffectStat::GlobalCritDamage => {
+                EffectTarget::GlobalCritDamage => {
                     crit_damage.apply_effect(effect);
                 }
                 _ => {}
             },
             SkillEffectType::Heal { min, max } => match effect.stat {
-                EffectStat::GlobalSpellPower => {
+                EffectTarget::GlobalSpellPower => {
                     min.apply_effect(effect);
                     max.apply_effect(effect);
                 }

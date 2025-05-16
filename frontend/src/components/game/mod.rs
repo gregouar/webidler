@@ -9,6 +9,7 @@ pub mod loot_queue;
 pub mod monsters_grid;
 pub mod player_card;
 pub mod skill_tooltip;
+pub mod statistics;
 
 mod game_context;
 

@@ -46,6 +46,10 @@ pub struct CharacterSpecs {
 
     #[serde(default)]
     pub armor: f64,
+    #[serde(default)]
+    pub fire_armor: f64,
+    #[serde(default)]
+    pub poison_armor: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

@@ -19,7 +19,12 @@ pub fn damage_character(
             DamageType::Physical => {
                 1.0 - increase_factors::diminishing(target_specs.armor, ARMOR_FACTOR)
             }
-            DamageType::Fire => 1.0, // TODO
+            DamageType::Fire => {
+                1.0 - increase_factors::diminishing(target_specs.fire_armor, ARMOR_FACTOR)
+            }
+            DamageType::Poison => {
+                1.0 - increase_factors::diminishing(target_specs.poison_armor, ARMOR_FACTOR)
+            }
         };
 
     if damage <= 0.0 {
@@ -35,7 +40,6 @@ pub fn damage_character(
         if is_crit {
             target_state.just_hurt_crit = true;
         }
-        // TODO: just critically hurt
     }
 
     if target_state.is_alive && target_state.health == 0.0 {

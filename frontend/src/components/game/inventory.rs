@@ -28,7 +28,7 @@ use super::{
 pub struct SellQueue(RwSignal<HashSet<usize>>);
 
 #[component]
-pub fn Inventory(open: RwSignal<bool>) -> impl IntoView {
+pub fn InventoryPanel(open: RwSignal<bool>) -> impl IntoView {
     let sell_queue = SellQueue::default();
     provide_context(sell_queue.clone());
 
@@ -65,7 +65,7 @@ pub fn EquippedItems() -> impl IntoView {
     ];
 
     view! {
-        <div class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-md ring-1 ring-zinc-950">
+        <div class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-xl ring-1 ring-zinc-950">
             <div>
                 <PlayerName />
             </div>
@@ -85,23 +85,6 @@ pub fn EquippedItems() -> impl IntoView {
                         }
                     })
                     .collect::<Vec<_>>()}
-            </div>
-            // TODO: Move elsewhere and design better
-            <div class="w-full p-2  text-sm text-zinc-200 ">
-                <div class="flex justify-around  items-center gap-4">
-                    <div>
-                        <span class="font-semibold">"Armor: "</span>
-                        {move || {
-                            format!("{:.0}", game_context.player_specs.read().character_specs.armor)
-                        }}
-                    </div>
-                    <div>
-                        <span class="font-semibold">"Gold Find: "</span>
-                        {move || {
-                            format!("{:.0}%", game_context.player_specs.read().gold_find * 100.0)
-                        }}
-                    </div>
-                </div>
             </div>
         </div>
     }

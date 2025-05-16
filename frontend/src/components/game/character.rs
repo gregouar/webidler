@@ -18,6 +18,8 @@ pub fn CharacterPortrait(
         }
     };
 
+    // TODO: just critically hurt
+
     let is_dead_img_effect = move || {
         if is_dead.get() {
             "transition-all duration-1000 saturate-0 brightness-1"

@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use shared::data::{
     item::{ItemBase, ItemRarity, ItemSpecs},
-    item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
+    item_affix::{StatEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
     world::AreaLevel,
 };
 
@@ -198,8 +198,8 @@ fn roll_affix(
     })
 }
 
-fn roll_affix_effect(effect_blueprint: &AffixEffectBlueprint) -> AffixEffect {
-    AffixEffect {
+fn roll_affix_effect(effect_blueprint: &AffixEffectBlueprint) -> StatEffect {
+    StatEffect {
         stat: effect_blueprint.stat,
         modifier: effect_blueprint.modifier,
         value: rng::random_range(effect_blueprint.min..=effect_blueprint.max).unwrap_or_default(),

@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 pub use super::character::{CharacterSpecs, CharacterState};
 use super::{
     item::{ItemSlot, ItemSpecs},
+    item_affix::EffectsMap,
     skill::{SkillSpecs, SkillState},
 };
 
@@ -21,6 +22,7 @@ pub struct PlayerSpecs {
     pub movement_cooldown: f32,
 
     pub gold_find: f64,
+    pub effects: EffectsMap,
 
     pub auto_skills: Vec<bool>,
 }

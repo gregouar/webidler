@@ -4,6 +4,7 @@ use super::data::DataInit;
 use super::systems::player_controller::PlayerController;
 use super::{data::world::WorldBlueprint, utils::LazySyncer};
 
+use shared::data::game_stats::GameStats;
 use shared::data::{
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
@@ -29,6 +30,8 @@ pub struct GameInstanceData {
 
     pub looted: bool,
     pub queued_loot: LazySyncer<Vec<QueuedLoot>>,
+
+    pub game_stats: GameStats,
 }
 
 impl GameInstanceData {
@@ -55,6 +58,8 @@ impl GameInstanceData {
 
             looted: false,
             queued_loot: LazySyncer::new(Vec::new()),
+
+            game_stats: GameStats::default(),
         }
     }
 

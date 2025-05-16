@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
+    game_stats::GameStats,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
@@ -56,4 +57,5 @@ pub struct SyncGameStateMessage {
     pub monster_specs: Option<Vec<MonsterSpecs>>,
     pub monster_states: Vec<MonsterState>,
     pub queued_loot: Option<Vec<QueuedLoot>>,
+    pub game_stats: GameStats,
 }

@@ -95,6 +95,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
             let dmg_type = match damage_type {
                 DamageType::Physical => "Physical",
                 DamageType::Fire => "Fire",
+                DamageType::Poison => "Poison",
             };
             view! {
                 <li class="text-sm text-purple-200 leading-snug">

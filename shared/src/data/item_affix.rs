@@ -1,10 +1,13 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use super::world::AreaLevel;
 
-pub use super::effect::{DamageType, EffectModifier, EffectStat};
+pub use super::effect::{DamageType, EffectModifier, EffectTarget};
 pub use super::skill::{Range, Shape};
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct EffectsMap(pub HashMap<(EffectTarget, EffectModifier), f64>);
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum AffixType {
@@ -74,7 +77,7 @@ pub struct ItemAffixBlueprint {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub struct AffixEffectBlueprint {
-    pub stat: EffectStat,
+    pub stat: EffectTarget,
     pub modifier: EffectModifier,
     // pub scope: AffixEffectScope,
     pub min: f64,
@@ -82,8 +85,8 @@ pub struct AffixEffectBlueprint {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct AffixEffect {
-    pub stat: EffectStat,
+pub struct StatEffect {
+    pub stat: EffectTarget,
     pub modifier: EffectModifier,
     pub value: f64,
 }
@@ -97,5 +100,46 @@ pub struct ItemAffix {
     pub affix_type: AffixType,
     pub tier: u8,
 
-    pub effects: Vec<AffixEffect>,
+    pub effects: Vec<StatEffect>,
+}
+
+impl Into<Vec<StatEffect>> for &EffectsMap {
+    fn into(self) -> Vec<StatEffect> {
+        self.0
+            .iter()
+            .map(|((stat, effect_type), value)| StatEffect {
+                stat: *stat,
+                modifier: *effect_type,
+                value: *value,
+            })
+            .collect()
+    }
+}
+
+impl EffectsMap {
+    pub fn combine_all(maps: impl Iterator<Item = EffectsMap>) -> Self {
+        let mut result: HashMap<(EffectTarget, EffectModifier), f64> = HashMap::new();
+
+        for map in maps {
+            for ((target, modifier), value) in map.0 {
+                let entry = result.entry((target, modifier)).or_insert(match modifier {
+                    EffectModifier::Flat => 0.0,
+                    EffectModifier::Multiplier => 1.0,
+                });
+
+                match modifier {
+                    EffectModifier::Flat => *entry += value,
+                    EffectModifier::Multiplier => *entry *= 1.0 + value,
+                }
+            }
+        }
+
+        for ((_, modifier), val) in result.iter_mut() {
+            if *modifier == EffectModifier::Multiplier {
+                *val -= 1.0;
+            }
+        }
+
+        EffectsMap(result)
+    }
 }

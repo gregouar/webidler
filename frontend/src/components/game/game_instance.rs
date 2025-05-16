@@ -14,7 +14,8 @@ use crate::components::websocket::WebsocketContext;
 
 use super::battle_scene::BattleScene;
 use super::header_menu::HeaderMenu;
-use super::inventory::Inventory;
+use super::inventory::InventoryPanel;
+use super::statistics::StatisticsPanel;
 use super::GameContext;
 
 #[component]
@@ -62,7 +63,8 @@ pub fn GameInstance() -> impl IntoView {
                 <HeaderMenu />
                 <div class="relative flex-1">
                     <BattleScene />
-                    <Inventory open=game_context.open_inventory />
+                    <InventoryPanel open=game_context.open_inventory />
+                    <StatisticsPanel open=game_context.open_statistics />
                 </div>
             </Show>
         </main>
@@ -123,6 +125,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         monster_specs,
         monster_states,
         queued_loot,
+        game_stats,
     } = sync_message;
 
     game_context.world_state.set(world_state);
@@ -142,4 +145,5 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     if let Some(queued_loot) = queued_loot {
         game_context.queued_loot.set(queued_loot);
     }
+    game_context.game_stats.set(game_stats);
 }

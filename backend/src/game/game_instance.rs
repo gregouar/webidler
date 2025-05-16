@@ -223,8 +223,14 @@ impl<'a> GameInstance<'a> {
 
         if self.data.world_state.waves_done > WAVES_PER_AREA_LEVEL {
             self.data.world_state.waves_done = 1;
+            self.data.game_stats.areas_completed += 1;
             if self.data.world_state.auto_progress {
                 self.data.world_state.area_level += 1;
+                self.data.game_stats.highest_area_level = self
+                    .data
+                    .game_stats
+                    .highest_area_level
+                    .max(self.data.world_state.area_level);
             }
         }
 
@@ -262,6 +268,7 @@ impl<'a> GameInstance<'a> {
     async fn control_entities(&mut self) -> Result<()> {
         if !self.data.player_state.character_state.is_alive {
             if self.data.player_respawn_delay.elapsed() > PLAYER_RESPAWN_PERIOD {
+                self.data.game_stats.player_deaths += 1;
                 self.respawn_player();
             }
         } else {
@@ -287,6 +294,7 @@ impl<'a> GameInstance<'a> {
                 .iter()
                 .filter(|(_, s)| s.character_state.just_died)
             {
+                self.data.game_stats.monsters_killed += 1;
                 player_controller::reward_player(
                     &mut self.data.player_resources,
                     self.data.player_specs.read(),
@@ -332,6 +340,7 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn update_entities(&mut self, elapsed_time: Duration) {
+        self.data.game_stats.elapsed_time += elapsed_time;
         player_updater::update_player_state(
             elapsed_time,
             self.data.player_specs.read(),
@@ -357,6 +366,7 @@ impl<'a> GameInstance<'a> {
                     monster_specs: self.data.monster_specs.sync(),
                     monster_states: self.data.monster_states.clone(),
                     queued_loot: self.data.queued_loot.sync(),
+                    game_stats: self.data.game_stats.clone(),
                 }
                 .into(),
             )

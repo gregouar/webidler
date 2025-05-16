@@ -74,6 +74,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 </audio>
 
                 <MenuButton on:click=move |_| {
+                    game_context.open_statistics.set(false);
                     game_context.open_inventory.set(!game_context.open_inventory.get())
                 }>"Inventory"</MenuButton>
                 <MenuButton>
@@ -83,7 +84,10 @@ pub fn HeaderMenu() -> impl IntoView {
                         if points > 0 { format!(" ({})", points) } else { "".to_string() }
                     }}
                 </MenuButton>
-                <MenuButton>"Statistics"</MenuButton>
+                <MenuButton on:click=move |_| {
+                    game_context.open_inventory.set(false);
+                    game_context.open_statistics.set(!game_context.open_statistics.get())
+                }>"Statistics"</MenuButton>
                 <MenuButton on:click=abandon_quest>"Abandon Quest"</MenuButton>
             </div>
         </div>

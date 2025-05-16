@@ -7,13 +7,14 @@ use leptos::prelude::*;
 use shared::data::skill::DamageType;
 use shared::data::{
     item::{ItemRarity, ItemSlot, ItemSpecs},
-    item_affix::{AffixEffect, EffectModifier, EffectStat},
+    item_affix::{EffectModifier, EffectTarget, StatEffect},
 };
 
 pub fn damage_type_str(damage_type: DamageType) -> &'static str {
     match damage_type {
         DamageType::Physical => "Physical",
         DamageType::Fire => "Fire",
+        DamageType::Poison => "Poison",
     }
 }
 
@@ -74,6 +75,7 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     match damage_type {
                         DamageType::Physical => "text-white",
                         DamageType::Fire => "text-red-400",
+                        DamageType::Poison => "text-lime-400",
                     }
                 };
 
@@ -134,7 +136,7 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             }
         });
 
-    let affixes = formatted_affix_list(item_specs.aggregate_effects());
+    let affixes = formatted_affix_list((&item_specs.aggregate_effects()).into());
 
     let (name_color, border_color, ring_color, shadow_color) = match item_specs.rarity {
         ItemRarity::Normal => (
@@ -223,47 +225,52 @@ fn magic_affix_li(text: String) -> impl IntoView {
     view! { <li class="text-blue-400 text-sm leading-snug">{text}</li> }
 }
 
-pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl IntoView> {
+pub fn formatted_affix_list(mut affix_effects: Vec<StatEffect>) -> Vec<impl IntoView> {
     use EffectModifier::*;
-    use EffectStat::*;
+    use EffectTarget::*;
 
-    affix_effects.sort_by_key(|effect| {
-        (
-            // TODO: Macro? crate?
-            -match effect.stat {
-                LocalAttackDamage => 0,
-                LocalMinDamage(DamageType::Physical) => 10,
-                LocalMaxDamage(DamageType::Physical) => 20,
-                LocalMinDamage(DamageType::Fire) => 30,
-                LocalMaxDamage(DamageType::Fire) => 40,
-                LocalCritChances => 50,
-                LocalCritDamage => 60,
-                LocalAttackSpeed => 70,
-                LocalArmor => 80,
-                GlobalLife => 90,
-                GlobalLifeRegen => 100,
-                GlobalMana => 110,
-                GlobalManaRegen => 120,
-                GlobalArmor => 130,
-                GlobalAttackDamage => 140,
-                GlobalDamage(DamageType::Physical) => 150,
-                GlobalDamage(DamageType::Fire) => 160,
-                GlobalSpellPower => 165,
-                GlobalSpellDamage => 170,
-                GlobalCritChances => 180,
-                GlobalCritDamage => 190,
-                GlobalAttackSpeed => 200,
-                GlobalSpellSpeed => 210,
-                GlobalSpeed => 220,
-                GlobalMovementSpeed => 230,
-                GlobalGoldFind => 240,
-            },
-            -match effect.modifier {
-                Flat => 0,
-                Multiplier => 1,
-            },
-        )
-    });
+    affix_effects.sort_by_key(|effect| (effect.stat, effect.modifier));
+
+    // affix_effects.sort_by_key(|effect| {
+    //     (
+    //         // TODO: Macro? crate?
+    //         -match effect.stat {
+    //             LocalAttackDamage => 0,
+    //             LocalMinDamage(DamageType::Physical) => 10,
+    //             LocalMaxDamage(DamageType::Physical) => 20,
+    //             LocalMinDamage(DamageType::Fire) => 30,
+    //             LocalMaxDamage(DamageType::Fire) => 40,
+    //             LocalMinDamage(DamageType::Poison) => 45,
+    //             LocalMaxDamage(DamageType::Poison) => 46,
+    //             LocalCritChances => 50,
+    //             LocalCritDamage => 60,
+    //             LocalAttackSpeed => 70,
+    //             LocalArmor => 80,
+    //             GlobalLife => 90,
+    //             GlobalLifeRegen => 100,
+    //             GlobalMana => 110,
+    //             GlobalManaRegen => 120,
+    //             GlobalArmor => 130,
+    //             GlobalAttackDamage => 140,
+    //             GlobalDamage(DamageType::Physical) => 150,
+    //             GlobalDamage(DamageType::Fire) => 160,
+    //             GlobalDamage(DamageType::Poison) => 165,
+    //             GlobalSpellPower => 165,
+    //             GlobalSpellDamage => 170,
+    //             GlobalCritChances => 180,
+    //             GlobalCritDamage => 190,
+    //             GlobalAttackSpeed => 200,
+    //             GlobalSpellSpeed => 210,
+    //             GlobalSpeed => 220,
+    //             GlobalMovementSpeed => 230,
+    //             GlobalGoldFind => 240,
+    //         },
+    //         -match effect.modifier {
+    //             Flat => 0,
+    //             Multiplier => 1,
+    //         },
+    //     )
+    // });
 
     let mut merged: Vec<String> = Vec::new();
 
@@ -348,7 +355,7 @@ pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl Int
                 effect.value * 100.0
             )),
             (GlobalManaRegen, Flat) => merged.push(format!(
-                "Adds {:.0} Mana Regeneration per second",
+                "Adds {:.2} Mana Regeneration per second",
                 effect.value
             )),
             (GlobalManaRegen, Multiplier) => merged.push(format!(

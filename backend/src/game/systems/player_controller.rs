@@ -1,6 +1,6 @@
 use shared::data::{
     item::{ItemSlot, ItemSpecs, WeaponSpecs},
-    item_affix::{AffixEffect, EffectModifier, EffectStat},
+    item_affix::{EffectModifier, EffectTarget, EffectsMap},
     monster::{MonsterSpecs, MonsterState},
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{SkillSpecs, SkillState, SkillType},
@@ -288,55 +288,57 @@ fn update_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Player
         .map(|armor_specs| armor_specs.armor)
         .sum::<f64>();
 
-    let mut effects: Vec<_> = equipped_items.flat_map(|i| i.aggregate_effects()).collect();
+    player_specs.effects = EffectsMap::combine_all(equipped_items.map(|i| i.aggregate_effects()));
+
+    compute_player_specs(player_specs);
+}
+
+fn compute_player_specs(player_specs: &mut PlayerSpecs) {
+    let mut effects: Vec<_> = (&player_specs.effects).into();
 
     effects.sort_by_key(|e| match e.modifier {
         EffectModifier::Flat => 0,
         EffectModifier::Multiplier => 1,
     });
 
-    compute_player_specs(player_specs, &effects);
-}
-
-fn compute_player_specs(player_specs: &mut PlayerSpecs, effects: &[AffixEffect]) {
     for effect in effects.iter() {
         match effect.stat {
-            EffectStat::GlobalLife => player_specs.character_specs.max_life.apply_effect(effect),
-            EffectStat::GlobalLifeRegen => {
+            EffectTarget::GlobalLife => player_specs.character_specs.max_life.apply_effect(effect),
+            EffectTarget::GlobalLifeRegen => {
                 player_specs.character_specs.life_regen.apply_effect(effect)
             }
-            EffectStat::GlobalMana => player_specs.max_mana.apply_effect(effect),
-            EffectStat::GlobalManaRegen => player_specs.mana_regen.apply_effect(effect),
-            EffectStat::GlobalArmor => player_specs.character_specs.armor.apply_effect(effect),
-            EffectStat::GlobalMovementSpeed => player_specs
+            EffectTarget::GlobalMana => player_specs.max_mana.apply_effect(effect),
+            EffectTarget::GlobalManaRegen => player_specs.mana_regen.apply_effect(effect),
+            EffectTarget::GlobalArmor => player_specs.character_specs.armor.apply_effect(effect),
+            EffectTarget::GlobalMovementSpeed => player_specs
                 .movement_cooldown
                 .apply_modifier(effect.modifier, -effect.value),
-            EffectStat::GlobalGoldFind => match effect.modifier {
+            EffectTarget::GlobalGoldFind => match effect.modifier {
                 EffectModifier::Flat => todo!(),
                 EffectModifier::Multiplier => player_specs.gold_find *= 1.0 + effect.value,
             },
             // Delegate to skills
-            EffectStat::GlobalDamage(_)
-            | EffectStat::GlobalAttackDamage
-            | EffectStat::GlobalSpellDamage
-            | EffectStat::GlobalSpellPower
-            | EffectStat::GlobalCritChances
-            | EffectStat::GlobalCritDamage
-            | EffectStat::GlobalAttackSpeed
-            | EffectStat::GlobalSpellSpeed
-            | EffectStat::GlobalSpeed => {}
+            EffectTarget::GlobalDamage(_)
+            | EffectTarget::GlobalAttackDamage
+            | EffectTarget::GlobalSpellDamage
+            | EffectTarget::GlobalSpellPower
+            | EffectTarget::GlobalCritChances
+            | EffectTarget::GlobalCritDamage
+            | EffectTarget::GlobalAttackSpeed
+            | EffectTarget::GlobalSpellSpeed
+            | EffectTarget::GlobalSpeed => {}
             // Discard local
-            EffectStat::LocalAttackSpeed
-            | EffectStat::LocalAttackDamage
-            | EffectStat::LocalMinDamage(_)
-            | EffectStat::LocalMaxDamage(_)
-            | EffectStat::LocalArmor
-            | EffectStat::LocalCritChances
-            | EffectStat::LocalCritDamage => {}
+            EffectTarget::LocalAttackSpeed
+            | EffectTarget::LocalAttackDamage
+            | EffectTarget::LocalMinDamage(_)
+            | EffectTarget::LocalMaxDamage(_)
+            | EffectTarget::LocalArmor
+            | EffectTarget::LocalCritChances
+            | EffectTarget::LocalCritDamage => {}
         }
     }
 
     for skill_specs in player_specs.skills_specs.iter_mut() {
-        update_skill_specs(skill_specs, effects);
+        update_skill_specs(skill_specs, &effects);
     }
 }
