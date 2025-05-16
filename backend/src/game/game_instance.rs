@@ -37,7 +37,6 @@ const LOOP_MIN_PERIOD: Duration = Duration::from_millis(100);
 
 const PLAYER_RESPAWN_PERIOD: Duration = Duration::from_secs(5);
 
-const MONSTER_WAVE_PERIOD: Duration = Duration::from_secs(1);
 const WAVES_PER_AREA_LEVEL: u8 = 5;
 
 pub struct GameInstance<'a> {
@@ -304,7 +303,9 @@ impl<'a> GameInstance<'a> {
                     self.data.looted = true;
                 }
 
-                if self.data.monster_wave_delay.elapsed() > MONSTER_WAVE_PERIOD {
+                if self.data.monster_wave_delay.elapsed()
+                    > Duration::from_secs_f32(self.data.player_specs.read().movement_cooldown)
+                {
                     self.generate_monsters_wave().await?;
                     self.data.looted = false;
                 }

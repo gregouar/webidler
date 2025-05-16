@@ -229,33 +229,34 @@ pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl Int
 
     affix_effects.sort_by_key(|effect| {
         (
-            // TODO: Macro?
+            // TODO: Macro? crate?
             -match effect.stat {
                 LocalAttackDamage => 0,
-                LocalMinDamage(DamageType::Physical) => 1,
-                LocalMaxDamage(DamageType::Physical) => 2,
-                LocalMinDamage(DamageType::Fire) => 3,
-                LocalMaxDamage(DamageType::Fire) => 4,
-                LocalCritChances => 5,
-                LocalCritDamage => 6,
-                LocalAttackSpeed => 7,
-                LocalArmor => 8,
-                GlobalLife => 9,
-                GlobalLifeRegen => 10,
-                GlobalMana => 11,
-                GlobalManaRegen => 12,
-                GlobalArmor => 13,
-                GlobalAttackDamage => 14,
-                GlobalDamage(DamageType::Physical) => 15,
-                GlobalDamage(DamageType::Fire) => 16,
-                GlobalSpellDamage => 17,
-                GlobalCritChances => 18,
-                GlobalCritDamage => 19,
-                GlobalAttackSpeed => 20,
-                GlobalSpellSpeed => 21,
-                GlobalSpeed => 22,
-                GlobalMovementSpeed => 23,
-                GlobalGoldFind => 24,
+                LocalMinDamage(DamageType::Physical) => 10,
+                LocalMaxDamage(DamageType::Physical) => 20,
+                LocalMinDamage(DamageType::Fire) => 30,
+                LocalMaxDamage(DamageType::Fire) => 40,
+                LocalCritChances => 50,
+                LocalCritDamage => 60,
+                LocalAttackSpeed => 70,
+                LocalArmor => 80,
+                GlobalLife => 90,
+                GlobalLifeRegen => 100,
+                GlobalMana => 110,
+                GlobalManaRegen => 120,
+                GlobalArmor => 130,
+                GlobalAttackDamage => 140,
+                GlobalDamage(DamageType::Physical) => 150,
+                GlobalDamage(DamageType::Fire) => 160,
+                GlobalSpellPower => 165,
+                GlobalSpellDamage => 170,
+                GlobalCritChances => 180,
+                GlobalCritDamage => 190,
+                GlobalAttackSpeed => 200,
+                GlobalSpellSpeed => 210,
+                GlobalSpeed => 220,
+                GlobalMovementSpeed => 230,
+                GlobalGoldFind => 240,
             },
             -match effect.modifier {
                 Flat => 0,
@@ -423,6 +424,13 @@ pub fn formatted_affix_list(mut affix_effects: Vec<AffixEffect>) -> Vec<impl Int
             }
             (GlobalMovementSpeed, Multiplier) => merged.push(format!(
                 "{:.0}% Increased Movement Speed",
+                effect.value * 100.0
+            )),
+            (GlobalSpellPower, Flat) => {
+                merged.push(format!("Adds {:.0} Spell Power", effect.value))
+            }
+            (GlobalSpellPower, Multiplier) => merged.push(format!(
+                "{:.0}% Increased Spell Power",
                 effect.value * 100.0
             )),
         }

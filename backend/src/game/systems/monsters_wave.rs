@@ -21,7 +21,7 @@ pub fn generate_monsters_wave_specs(
     world_state: &WorldState,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Result<Vec<MonsterSpecs>> {
-    let available_waves = world_blueprint
+    let available_waves: Vec<_> = world_blueprint
         .waves
         .iter()
         .filter(|wave| {

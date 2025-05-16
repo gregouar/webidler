@@ -4,8 +4,8 @@ use shared::data::skill::{SkillSpecs, SkillState};
 
 pub fn update_skills_states(
     elapsed_time: Duration,
-    skill_specs: &Vec<SkillSpecs>,
-    skill_states: &mut Vec<SkillState>,
+    skill_specs: &[SkillSpecs],
+    skill_states: &mut [SkillState],
 ) {
     for (skill_specs, skill_state) in skill_specs.iter().zip(skill_states.iter_mut()) {
         skill_state.elapsed_cooldown += elapsed_time.as_secs_f32();

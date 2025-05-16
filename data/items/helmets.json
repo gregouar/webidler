@@ -5,7 +5,7 @@
     "slot": "Helmet",
     "affix_restrictions": ["Armor", "Helmet"],
     "armor_specs": {
-      "armor": 15.0
+      "armor": 15
     }
   }
 }

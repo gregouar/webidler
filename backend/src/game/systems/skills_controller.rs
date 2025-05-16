@@ -2,14 +2,16 @@ use rand::{self, seq::IteratorRandom};
 
 use shared::data::{
     character::{CharacterSpecs, CharacterState, SkillSpecs, SkillState},
+    effect::EffectStat,
     item::{Range, Shape},
+    item_affix::AffixEffect,
     player::PlayerResources,
-    skill::{SkillEffect, SkillEffectType, TargetType},
+    skill::{SkillEffect, SkillEffectType, SkillType, TargetType},
 };
 
 use crate::game::utils::{increase_factors, rng};
 
-use super::characters_controller;
+use super::{characters_controller, stats_controller::ApplyStatModifier};
 
 pub fn use_skill<'a>(
     skill_specs: &SkillSpecs,
@@ -167,9 +169,94 @@ pub fn level_up_skill(
     skill_specs.next_upgrade_cost +=
         10.0 * increase_factors::exponential(skill_specs.upgrade_level as f64);
 
+    increase_skill_effect(skill_specs);
+
+    true
+}
+
+fn increase_skill_effect(skill_specs: &mut SkillSpecs) {
     for effect in skill_specs.effects.iter_mut() {
         effect.increase_effect(1.2);
     }
+}
 
-    true
+pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[AffixEffect]) {
+    skill_specs.effects = skill_specs.base_effects.clone();
+    skill_specs.cooldown = skill_specs.base_cooldown.clone();
+
+    for effect in effects.iter() {
+        match effect.stat {
+            EffectStat::GlobalAttackSpeed if skill_specs.skill_type == SkillType::Attack => {
+                skill_specs
+                    .cooldown
+                    .apply_modifier(effect.modifier, -effect.value)
+            }
+            EffectStat::GlobalSpellSpeed if skill_specs.skill_type == SkillType::Spell => {
+                skill_specs
+                    .cooldown
+                    .apply_modifier(effect.modifier, -effect.value)
+            }
+            EffectStat::GlobalSpeed => skill_specs
+                .cooldown
+                .apply_modifier(effect.modifier, -effect.value),
+            _ => {}
+        }
+    }
+
+    for skill_effect in skill_specs.effects.iter_mut() {
+        compute_skill_specs_effect(skill_specs.skill_type, skill_effect, effects)
+    }
+
+    for _ in 0..skill_specs.upgrade_level {
+        increase_skill_effect(skill_specs)
+    }
+}
+
+pub fn compute_skill_specs_effect(
+    skill_type: SkillType,
+    skill_effect: &mut SkillEffect,
+    effects: &[AffixEffect],
+) {
+    for effect in effects.iter() {
+        match &mut skill_effect.effect_type {
+            SkillEffectType::FlatDamage {
+                min,
+                max,
+                damage_type,
+                crit_chances,
+                crit_damage,
+            } => match effect.stat {
+                EffectStat::GlobalSpellPower => {
+                    min.apply_effect(effect);
+                    max.apply_effect(effect);
+                }
+                EffectStat::GlobalDamage(damage_type2) if damage_type2 == *damage_type => {
+                    min.apply_effect(effect);
+                    max.apply_effect(effect);
+                }
+                EffectStat::GlobalAttackDamage if skill_type == SkillType::Attack => {
+                    min.apply_effect(effect);
+                    max.apply_effect(effect);
+                }
+                EffectStat::GlobalSpellDamage if skill_type == SkillType::Spell => {
+                    min.apply_effect(effect);
+                    max.apply_effect(effect);
+                }
+                EffectStat::GlobalCritChances => {
+                    crit_chances.apply_effect(effect);
+                }
+                EffectStat::GlobalCritDamage => {
+                    crit_damage.apply_effect(effect);
+                }
+                _ => {}
+            },
+            SkillEffectType::Heal { min, max } => match effect.stat {
+                EffectStat::GlobalSpellPower => {
+                    min.apply_effect(effect);
+                    max.apply_effect(effect);
+                }
+                _ => {}
+            },
+        }
+    }
 }

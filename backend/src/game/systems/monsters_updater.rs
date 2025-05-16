@@ -6,7 +6,7 @@ use super::{characters_updater, skills_updater};
 
 pub fn update_monster_states(
     elapsed_time: Duration,
-    monster_specs: &Vec<MonsterSpecs>,
+    monster_specs: &[MonsterSpecs],
     monster_states: &mut Vec<MonsterState>,
 ) {
     for (monster_state, monster_specs) in monster_states

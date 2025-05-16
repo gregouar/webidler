@@ -8,7 +8,11 @@ use shared::data::{
 
 use crate::game::{data::DataInit, utils::increase_factors};
 
-use super::{items_controller, skills_controller, stats_controller::ApplyStatModifier};
+use super::{
+    items_controller,
+    skills_controller::{self, update_skill_specs},
+    stats_controller::ApplyStatModifier,
+};
 
 #[derive(Debug, Clone)]
 pub struct PlayerController {
@@ -162,7 +166,7 @@ pub fn equip_item(
         .equipped
         .insert(item_specs.base.slot, item_specs);
 
-    update_player_stats(player_specs, &player_inventory);
+    update_player_specs(player_specs, &player_inventory);
 
     old_item
 }
@@ -220,9 +224,10 @@ fn equip_weapon(
     player_specs.skills_specs.insert(0, weapon_skill);
 }
 
-fn update_player_stats(player_specs: &mut PlayerSpecs, player_inventory: &PlayerInventory) {
-    player_specs.character_specs.armor = 0.0;
+fn update_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &PlayerInventory) {
     player_specs.gold_find = 1.0;
+    player_specs.movement_cooldown = 2.0;
+    player_specs.character_specs.armor = 0.0;
 
     for item in player_inventory.equipped.values() {
         if let Some(armor_specs) = &item.armor_specs {
@@ -244,40 +249,34 @@ fn update_player_stats(player_specs: &mut PlayerSpecs, player_inventory: &Player
     compute_player_specs(player_specs, &effects);
 }
 
-fn compute_player_specs(player_specs: &mut PlayerSpecs, effects: &Vec<AffixEffect>) {
+fn compute_player_specs(player_specs: &mut PlayerSpecs, effects: &[AffixEffect]) {
     for effect in effects.iter() {
         match effect.stat {
-            EffectStat::GlobalLife => player_specs
-                .character_specs
-                .max_life
-                .apply_modifier(effect.modifier, effect.value),
-            EffectStat::GlobalLifeRegen => player_specs
-                .character_specs
-                .life_regen
-                .apply_modifier(effect.modifier, effect.value),
-            EffectStat::GlobalMana => player_specs
-                .max_mana
-                .apply_modifier(effect.modifier, effect.value),
-            EffectStat::GlobalManaRegen => player_specs
-                .mana_regen
-                .apply_modifier(effect.modifier, effect.value),
-            EffectStat::GlobalArmor => player_specs
-                .character_specs
-                .armor
-                .apply_modifier(effect.modifier, effect.value),
-            EffectStat::GlobalDamage(damage_type) => todo!(),
-            EffectStat::GlobalAttackDamage => todo!(),
-            EffectStat::GlobalSpellDamage => todo!(),
-            EffectStat::GlobalCritChances => todo!(),
-            EffectStat::GlobalCritDamage => todo!(),
-            EffectStat::GlobalAttackSpeed => todo!(),
-            EffectStat::GlobalSpellSpeed => todo!(),
-            EffectStat::GlobalSpeed => todo!(),
-            EffectStat::GlobalMovementSpeed => todo!(),
+            EffectStat::GlobalLife => player_specs.character_specs.max_life.apply_effect(effect),
+            EffectStat::GlobalLifeRegen => {
+                player_specs.character_specs.life_regen.apply_effect(effect)
+            }
+            EffectStat::GlobalMana => player_specs.max_mana.apply_effect(effect),
+            EffectStat::GlobalManaRegen => player_specs.mana_regen.apply_effect(effect),
+            EffectStat::GlobalArmor => player_specs.character_specs.armor.apply_effect(effect),
+            EffectStat::GlobalMovementSpeed => player_specs
+                .movement_cooldown
+                .apply_modifier(effect.modifier, -effect.value),
             EffectStat::GlobalGoldFind => match effect.modifier {
                 EffectModifier::Flat => todo!(),
                 EffectModifier::Multiplier => player_specs.gold_find *= 1.0 + effect.value,
             },
+            // Delegate to skills
+            EffectStat::GlobalDamage(_)
+            | EffectStat::GlobalAttackDamage
+            | EffectStat::GlobalSpellDamage
+            | EffectStat::GlobalSpellPower
+            | EffectStat::GlobalCritChances
+            | EffectStat::GlobalCritDamage
+            | EffectStat::GlobalAttackSpeed
+            | EffectStat::GlobalSpellSpeed
+            | EffectStat::GlobalSpeed => {}
+            // Discard local
             EffectStat::LocalAttackSpeed
             | EffectStat::LocalAttackDamage
             | EffectStat::LocalMinDamage(_)
@@ -286,5 +285,9 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, effects: &Vec<AffixEffec
             | EffectStat::LocalCritChances
             | EffectStat::LocalCritDamage => {}
         }
+    }
+
+    for skill_specs in player_specs.skills_specs.iter_mut() {
+        update_skill_specs(skill_specs, effects);
     }
 }

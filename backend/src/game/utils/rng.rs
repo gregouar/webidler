@@ -25,7 +25,7 @@ pub trait RandomWeighted {
     fn random_weight(&self) -> u64;
 }
 
-pub fn random_weighted_pick<I>(items: &Vec<I>) -> Option<&I>
+pub fn random_weighted_pick<I>(items: &[I]) -> Option<&I>
 where
     I: RandomWeighted,
 {

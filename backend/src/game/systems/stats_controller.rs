@@ -1,7 +1,10 @@
-use shared::data::effect::EffectModifier;
+use shared::data::{effect::EffectModifier, item_affix::AffixEffect};
 
 pub trait ApplyStatModifier {
     fn apply_modifier(&mut self, modifier: EffectModifier, value: f64);
+    fn apply_effect(&mut self, effect: &AffixEffect) {
+        self.apply_modifier(effect.modifier, effect.value);
+    }
 }
 
 impl ApplyStatModifier for f32 {

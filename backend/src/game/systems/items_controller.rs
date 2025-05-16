@@ -34,7 +34,7 @@ pub fn update_item_specs(
     item_specs
 }
 
-fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &Vec<AffixEffect>) -> WeaponSpecs {
+fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[AffixEffect]) -> WeaponSpecs {
     for effect in effects {
         match effect.stat {
             EffectStat::LocalAttackSpeed => weapon_specs
@@ -42,26 +42,22 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &Vec<AffixEffect
                 .apply_modifier(effect.modifier, -effect.value),
             EffectStat::LocalAttackDamage => {
                 for (min, max) in weapon_specs.damage.values_mut() {
-                    min.apply_modifier(effect.modifier, effect.value);
-                    max.apply_modifier(effect.modifier, effect.value);
+                    min.apply_effect(effect);
+                    max.apply_effect(effect);
                 }
             }
             EffectStat::LocalMinDamage(damage_type) => {
                 if let Some((min, _)) = weapon_specs.damage.get_mut(&damage_type) {
-                    min.apply_modifier(effect.modifier, effect.value)
+                    min.apply_effect(effect)
                 }
             }
             EffectStat::LocalMaxDamage(damage_type) => {
                 if let Some((_, max)) = weapon_specs.damage.get_mut(&damage_type) {
-                    max.apply_modifier(effect.modifier, effect.value)
+                    max.apply_effect(effect)
                 }
             }
-            EffectStat::LocalCritChances => weapon_specs
-                .crit_chances
-                .apply_modifier(effect.modifier, effect.value),
-            EffectStat::LocalCritDamage => weapon_specs
-                .crit_damage
-                .apply_modifier(effect.modifier, effect.value),
+            EffectStat::LocalCritChances => weapon_specs.crit_chances.apply_effect(effect),
+            EffectStat::LocalCritDamage => weapon_specs.crit_damage.apply_effect(effect),
             _ => {}
         }
     }
@@ -76,7 +72,7 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &Vec<AffixEffect
     weapon_specs
 }
 
-fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &Vec<AffixEffect>) -> ArmorSpecs {
+fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &[AffixEffect]) -> ArmorSpecs {
     for effect in effects {
         match effect.stat {
             EffectStat::LocalArmor => match effect.modifier {
@@ -116,10 +112,12 @@ pub fn make_weapon_skill(item_slot: ItemSlot, weapon_specs: &WeaponSpecs) -> Ski
         icon: "skills/attack.svg".to_string(),
         description: "A swing of your weapon".to_string(),
         skill_type: SkillType::Weapon(item_slot),
-        cooldown: weapon_specs.cooldown,
+        base_cooldown: weapon_specs.cooldown,
+        cooldown: 0.0,
         mana_cost: 0.0,
         upgrade_level: 1,
         next_upgrade_cost: 10.0,
-        effects,
+        base_effects: effects,
+        effects: vec![],
     }
 }

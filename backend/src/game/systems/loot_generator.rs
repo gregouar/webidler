@@ -266,7 +266,7 @@ fn generate_rare_name(
         .flat_map(|a| a.tags.iter())
         .collect();
 
-    let available_adjectives = adjectives_table
+    let available_adjectives: Vec<_> = adjectives_table
         .iter()
         .map(|part| WeightedNamePart {
             text: &part.text,
@@ -274,7 +274,7 @@ fn generate_rare_name(
         })
         .collect();
 
-    let available_nouns = nouns_table
+    let available_nouns: Vec<_> = nouns_table
         .iter()
         .map(|part| WeightedNamePart {
             text: &part.text,

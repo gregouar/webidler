@@ -19,6 +19,9 @@ pub struct SkillSpecs {
     #[serde(default)]
     pub skill_type: SkillType,
 
+    #[serde(rename = "cooldown")]
+    pub base_cooldown: f32,
+    #[serde(rename = "current_cooldown", default)]
     pub cooldown: f32,
     #[serde(default)]
     pub mana_cost: f64,
@@ -28,10 +31,13 @@ pub struct SkillSpecs {
     #[serde(default)]
     pub next_upgrade_cost: f64,
 
+    #[serde(rename = "effects")]
+    pub base_effects: Vec<SkillEffect>,
+    #[serde(rename = "current_effects", default)]
     pub effects: Vec<SkillEffect>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum SkillType {
     Attack,
     Spell,

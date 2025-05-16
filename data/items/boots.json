@@ -5,7 +5,7 @@
     "slot": "Boots",
     "affix_restrictions": ["Armor", "Boots"],
     "armor_specs": {
-      "armor": 10.0
+      "armor": 10
     }
   }
 }

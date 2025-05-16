@@ -18,6 +18,7 @@ pub struct PlayerSpecs {
 
     pub max_mana: f64,
     pub mana_regen: f64,
+    pub movement_cooldown: f32,
 
     pub gold_find: f64,
 

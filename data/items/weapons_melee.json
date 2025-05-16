@@ -3,7 +3,7 @@
     "name": "Shortsword",
     "icon": "items/shortsword.webp",
     "slot": "Weapon",
-    "affix_restrictions": ["AttackWeapon","MeleeWeapon"],
+    "affix_restrictions": ["AttackWeapon", "MeleeWeapon"],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
@@ -19,7 +19,7 @@
     "description": "Forged in myth and honed in the kitchens of legend, this short sword once sliced onions so fast it brought tears to gods and mortals alike.",
     "icon": "items/shortsword.webp",
     "slot": "Weapon",
-    "affix_restrictions": ["AttackWeapon","MeleeWeapon"],
+    "affix_restrictions": ["AttackWeapon", "MeleeWeapon"],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
@@ -49,12 +49,13 @@
     "name": "Battleaxe",
     "icon": "items/battleaxe.webp",
     "slot": "Weapon",
-    "affix_restrictions": ["AttackWeapon","MeleeWeapon"],
+    "affix_restrictions": ["AttackWeapon", "MeleeWeapon"],
     "weapon_specs": {
       "range": "Melee",
+      "shape": "Vertical2",
       "cooldown": 4.0,
       "damage": {
-        "Physical": [4, 10]
+        "Physical": [3, 5]
       },
       "crit_chances": 0.05,
       "crit_damage": 1.0
