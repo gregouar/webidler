@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use shared::data::{
     item::{ItemBase, ItemRarity, ItemSpecs},
-    item_affix::{StatEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
+    item_affix::{AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint, StatEffect},
     world::AreaLevel,
 };
 
@@ -73,8 +73,8 @@ pub fn roll_item(
     let mut affixes: Vec<ItemAffix> = roll_unique_affixes(&base);
 
     let (prefixes_amount, suffixes_amount) = match rarity {
-        ItemRarity::Magic => roll_affixes_amount(1, 2, 0, 1),
-        ItemRarity::Rare => roll_affixes_amount(3, 4, 1, 2),
+        ItemRarity::Magic => roll_affixes_amount(1, 2, 0, 1, 0, 1),
+        ItemRarity::Rare => roll_affixes_amount(3, 4, 1, 2, 1, 2),
         _ => (0, 0),
     };
 
@@ -159,10 +159,30 @@ fn roll_affixes_amount(
     max_amount: usize,
     min_prefixes: usize,
     max_prefixes: usize,
+    min_suffixes: usize,
+    max_suffixes: usize,
 ) -> (usize, usize) {
     let amount = rng::random_range(min_amount..=max_amount).unwrap_or(min_amount);
     let prefix_count = rng::random_range(min_prefixes..=max_prefixes).unwrap_or(min_prefixes);
-    (prefix_count, amount.checked_sub(prefix_count).unwrap_or(0))
+
+    let suffix_count = amount
+        .checked_sub(prefix_count)
+        .unwrap_or(0)
+        .min(max_suffixes)
+        .max(min_suffixes);
+    let prefix_count = amount
+        .checked_sub(suffix_count)
+        .unwrap_or(0)
+        .min(min_prefixes)
+        .max(max_prefixes);
+
+    (
+        prefix_count,
+        amount
+            .checked_sub(prefix_count)
+            .unwrap_or(0)
+            .min(max_suffixes),
+    )
 }
 
 fn roll_affix(
