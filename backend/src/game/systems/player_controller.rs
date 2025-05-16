@@ -61,7 +61,8 @@ impl PlayerController {
 
             // Always keep enough mana for a manual trigger, could be optional
             if (!self.auto_skills.get(i).unwrap_or(&false)
-                || player_state.mana < min_mana_needed + skill_specs.mana_cost)
+                || (skill_specs.mana_cost > 0.0
+                    && player_state.mana < min_mana_needed + skill_specs.mana_cost))
                 && !self.use_skills.contains(&i)
             {
                 continue;
