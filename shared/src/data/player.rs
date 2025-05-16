@@ -42,18 +42,15 @@ pub struct PlayerResources {
     pub gold: f64,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum EquippedSlot {
+    MainSlot(ItemSpecs),
+    ExtraSlot(ItemSlot), // Link to main slot taking the extra slot
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerInventory {
-    // pub trinket_specs: Option<ItemSpecs>,
-    // pub helmet_specs: Option<ItemSpecs>,
-    // pub amulet_specs: Option<ItemSpecs>,
-    // pub weapon_specs: Option<ItemSpecs>,
-    // pub body_specs: Option<ItemSpecs>,
-    // pub shield_specs: Option<ItemSpecs>,
-    // pub gloves_specs: Option<ItemSpecs>,
-    // pub boots_specs: Option<ItemSpecs>,
-    // pub ring_specs: Option<ItemSpecs>,
-    pub equipped: HashMap<ItemSlot, ItemSpecs>,
+    pub equipped: HashMap<ItemSlot, EquippedSlot>,
 
     pub bag: Vec<ItemSpecs>,
     pub max_bag_size: u8,

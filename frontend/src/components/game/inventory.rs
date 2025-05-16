@@ -2,7 +2,7 @@ use leptos::html::*;
 use leptos::prelude::*;
 use leptos_use::on_click_outside;
 use shared::data::item::ItemSlot;
-use shared::data::item::ItemSpecs;
+use shared::data::player::EquippedSlot;
 
 use std::collections::HashSet;
 use std::sync::Arc;
@@ -76,7 +76,7 @@ pub fn EquippedItems() -> impl IntoView {
                         let game_context = game_context.clone();
                         view! {
                             <EquippedItem
-                                item_specs=move || {
+                                equipped_item=move || {
                                     game_context.player_inventory.read().equipped.get(slot).cloned()
                                 }
                                 fallback_asset=*asset
@@ -109,13 +109,28 @@ pub fn EquippedItems() -> impl IntoView {
 
 #[component]
 fn EquippedItem(
-    item_specs: impl (Fn() -> Option<ItemSpecs>) + Send + Sync + 'static,
+    equipped_item: impl (Fn() -> Option<EquippedSlot>) + Send + Sync + 'static,
     fallback_asset: &'static str,
     fallback_alt: &'static str,
 ) -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
+    let render_fallback = move || {
+        view! {
+            <EmptySlot>
+                <img
+                    src=img_asset(fallback_asset)
+                    alt=fallback_alt
+                    class="object-contain max-w-full max-h-full opacity-20"
+                />
+            </EmptySlot>
+        }
+        .into_any()
+    };
+
     view! {
-        {move || match item_specs() {
-            Some(item_specs) => {
+        {move || match equipped_item() {
+            Some(EquippedSlot::MainSlot(item_specs)) => {
                 view! {
                     <ItemCard
                         item_specs=item_specs
@@ -124,18 +139,29 @@ fn EquippedItem(
                 }
                     .into_any()
             }
-            None => {
-                view! {
-                    <EmptySlot>
-                        <img
-                            src=img_asset(fallback_asset)
-                            alt=fallback_alt
-                            class="object-contain max-w-full max-h-full opacity-20"
-                        />
-                    </EmptySlot>
+            Some(EquippedSlot::ExtraSlot(main_slot)) => {
+                if let Some(EquippedSlot::MainSlot(item_specs)) = game_context
+                    .player_inventory
+                    .read()
+                    .equipped
+                    .get(&main_slot)
+                    .cloned()
+                {
+                    view! {
+                        <EmptySlot>
+                            <img
+                                src=img_asset(&item_specs.base.icon)
+                                alt=fallback_alt
+                                class="object-contain max-w-full max-h-full opacity-50"
+                            />
+                        </EmptySlot>
+                    }
+                        .into_any()
+                } else {
+                    render_fallback()
                 }
-                    .into_any()
             }
+            None => render_fallback(),
         }}
     }
 }

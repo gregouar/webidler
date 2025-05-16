@@ -2,7 +2,7 @@ use shared::data::{
     item::{ItemSlot, ItemSpecs, WeaponSpecs},
     item_affix::{AffixEffect, EffectModifier, EffectStat},
     monster::{MonsterSpecs, MonsterState},
-    player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{SkillSpecs, SkillState, SkillType},
 };
 
@@ -127,16 +127,20 @@ pub fn equip_item_from_bag(
 ) {
     let item_index = item_index as usize;
     if let Some(item_specs) = player_inventory.bag.get(item_index) {
-        if let Some(old_item_specs) = equip_item(
+        let mut old_items = equip_item(
             player_specs,
             player_inventory,
             player_state,
             item_specs.clone(),
-        ) {
+        );
+
+        if let Some(old_item_specs) = old_items.pop() {
             player_inventory.bag[item_index] = old_item_specs;
         } else {
             player_inventory.bag.remove(item_index);
         }
+
+        player_inventory.bag.extend(old_items);
     }
 }
 
@@ -146,12 +150,16 @@ pub fn equip_item(
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
     item_specs: ItemSpecs,
-) -> Option<ItemSpecs> {
-    let old_item = player_inventory.equipped.remove(&item_specs.base.slot);
-
-    if let Some(_) = old_item.as_ref().map(|x| x.weapon_specs.as_ref()).flatten() {
-        unequip_weapon(player_specs, player_state, item_specs.base.slot);
-    }
+) -> Vec<ItemSpecs> {
+    let old_items = item_specs
+        .base
+        .extra_slots
+        .iter()
+        .chain([item_specs.base.slot].iter())
+        .flat_map(|item_slot| {
+            unequip_item(player_specs, player_inventory, player_state, *item_slot)
+        })
+        .collect();
 
     if let Some(ref weapon_specs) = item_specs.weapon_specs {
         equip_weapon(
@@ -163,13 +171,39 @@ pub fn equip_item(
         );
     }
 
+    for item_slot in item_specs.base.extra_slots.iter() {
+        player_inventory
+            .equipped
+            .insert(*item_slot, EquippedSlot::ExtraSlot(item_specs.base.slot));
+    }
+
     player_inventory
         .equipped
-        .insert(item_specs.base.slot, item_specs);
+        .insert(item_specs.base.slot, EquippedSlot::MainSlot(item_specs));
 
     update_player_specs(player_specs, &player_inventory);
 
-    old_item
+    old_items
+}
+
+pub fn unequip_item(
+    player_specs: &mut PlayerSpecs,
+    player_inventory: &mut PlayerInventory,
+    player_state: &mut PlayerState,
+    item_slot: ItemSlot,
+) -> Option<ItemSpecs> {
+    match player_inventory.equipped.remove(&item_slot) {
+        Some(EquippedSlot::MainSlot(old_item)) => {
+            if let Some(_) = old_item.weapon_specs {
+                unequip_weapon(player_specs, player_state, item_slot);
+            }
+            Some(old_item)
+        }
+        Some(EquippedSlot::ExtraSlot(item_slot)) => {
+            unequip_item(player_specs, player_inventory, player_state, item_slot)
+        }
+        None => None,
+    }
 }
 
 pub fn sell_item(
@@ -236,17 +270,21 @@ fn update_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Player
     player_specs.movement_cooldown = 2.0;
     player_specs.character_specs.armor = 0.0;
 
-    for item in player_inventory.equipped.values() {
-        if let Some(armor_specs) = &item.armor_specs {
-            player_specs.character_specs.armor += armor_specs.armor;
-        }
-    }
-
-    let mut effects: Vec<_> = player_inventory
+    let equipped_items = player_inventory
         .equipped
         .values()
-        .flat_map(|i| i.aggregate_effects())
-        .collect();
+        .filter_map(|slot| match slot {
+            EquippedSlot::MainSlot(item) => Some(item),
+            _ => None,
+        });
+
+    player_specs.character_specs.armor += equipped_items
+        .clone()
+        .filter_map(|item| item.armor_specs.as_ref())
+        .map(|armor_specs| armor_specs.armor)
+        .sum::<f64>();
+
+    let mut effects: Vec<_> = equipped_items.flat_map(|i| i.aggregate_effects()).collect();
 
     effects.sort_by_key(|e| match e.modifier {
         EffectModifier::Flat => 0,

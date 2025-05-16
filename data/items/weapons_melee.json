@@ -49,6 +49,7 @@
     "name": "Battleaxe",
     "icon": "items/battleaxe.webp",
     "slot": "Weapon",
+    "extra_slots": ["Shield"],
     "affix_restrictions": ["AttackWeapon", "MeleeWeapon"],
     "weapon_specs": {
       "range": "Melee",

@@ -44,6 +44,8 @@ pub struct ItemBase {
     pub description: Option<String>,
 
     pub slot: ItemSlot,
+    #[serde(default)]
+    pub extra_slots: HashSet<ItemSlot>,
     pub affix_restrictions: HashSet<AffixRestriction>,
 
     #[serde(default)]
@@ -57,7 +59,6 @@ pub struct ItemBase {
     pub weapon_specs: Option<WeaponSpecs>,
     #[serde(default)]
     pub armor_specs: Option<ArmorSpecs>,
-    // TODO: Implicit affixes?
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
