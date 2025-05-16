@@ -1,0 +1,11 @@
+{
+  "buckler": {
+    "name": "Buckler",
+    "icon": "items/buckler.webp",
+    "slot": "Shield",
+    "affix_restrictions": ["Armor","Shield"],
+    "armor_specs": {
+      "armor": 30.0
+    }
+  }
+}

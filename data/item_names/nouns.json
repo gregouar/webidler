@@ -1,0 +1,86 @@
+[
+  { "text": "Ward", "restrictions": ["Armor"] },
+  { "text": "Barrier", "restrictions": ["Armor"] },
+  { "text": "Plate", "restrictions": ["Armor"] },
+  { "text": "Aegis", "restrictions": ["Armor", "Shield"] },
+  { "text": "Bulwark", "restrictions": ["Armor", "Shield"] },
+  { "text": "Mail", "restrictions": ["Armor"] },
+  { "text": "Guard", "restrictions": ["Armor", "Shield"] },
+  { "text": "Bulge", "restrictions": ["Armor"] },
+  { "text": "Shell", "restrictions": ["Armor"] },
+  { "text": "Coil", "restrictions": ["Armor"] },
+
+  { "text": "Wall", "restrictions": ["Shield"] },
+  { "text": "Protector", "restrictions": ["Shield"] },
+  { "text": "Crest", "restrictions": ["Shield"] },
+  { "text": "Spine", "restrictions": ["Shield"] },
+
+  { "text": "Fang", "restrictions": ["AttackWeapon"] },
+  { "text": "Edge", "restrictions": ["AttackWeapon"] },
+  { "text": "Strike", "restrictions": ["AttackWeapon"] },
+  { "text": "Rend", "restrictions": ["AttackWeapon"] },
+  { "text": "Claw", "restrictions": ["AttackWeapon"] },
+  { "text": "Talon", "restrictions": ["AttackWeapon"] },
+  { "text": "Sunder", "restrictions": ["AttackWeapon"] },
+  { "text": "Spike", "restrictions": ["AttackWeapon"] },
+  { "text": "Cleave", "restrictions": ["AttackWeapon"] },
+  { "text": "Scar", "restrictions": ["AttackWeapon"] },
+
+  { "text": "Blade", "restrictions": ["MeleeWeapon"] },
+  { "text": "Shard", "restrictions": ["MeleeWeapon"] },
+  { "text": "Sever", "restrictions": ["MeleeWeapon"] },
+  { "text": "Snap", "restrictions": ["MeleeWeapon"] },
+
+  { "text": "Longshot", "restrictions": ["RangedWeapon"] },
+  { "text": "Bow", "restrictions": ["RangedWeapon"] },
+  { "text": "Fletch", "restrictions": ["RangedWeapon"] },
+  { "text": "Arc", "restrictions": ["RangedWeapon"] },
+
+  { "text": "Focus", "restrictions": ["SpellWeapon"] },
+  { "text": "Whisper", "restrictions": ["SpellWeapon"] },
+  { "text": "Glimpse", "restrictions": ["SpellWeapon"] },
+  { "text": "Scripture", "restrictions": ["SpellWeapon"] },
+  { "text": "Sigil", "restrictions": ["SpellWeapon"] },
+  { "text": "Conduit", "restrictions": ["SpellWeapon"] },
+
+  { "text": "Band", "restrictions": ["Jewelry"] },
+  { "text": "Signet", "restrictions": ["Jewelry"] },
+  { "text": "Charm", "restrictions": ["Jewelry"] },
+  { "text": "Pendant", "restrictions": ["Jewelry"] },
+  { "text": "Circlet", "restrictions": ["Jewelry", "Helmet"] },
+  { "text": "Loop", "restrictions": ["Jewelry"] },
+  { "text": "Wisp", "restrictions": ["Jewelry"] },
+
+  { "text": "Token", "restrictions": ["Trinket"] },
+  { "text": "Charm", "restrictions": ["Trinket"] },
+  { "text": "Talisman", "restrictions": ["Trinket"] },
+  { "text": "Whim", "restrictions": ["Trinket"] },
+  { "text": "Gleam", "restrictions": ["Trinket"] },
+
+  { "text": "Skin", "restrictions": ["Body"] },
+  { "text": "Husk", "restrictions": ["Body"] },
+  { "text": "Form", "restrictions": ["Body"] },
+
+  { "text": "Paw", "restrictions": ["Boots"] },
+  { "text": "Feet", "restrictions": ["Boots"] },
+  { "text": "Toes", "restrictions": ["Boots"] },
+  { "text": "Stride", "restrictions": ["Boots"] },
+
+  { "text": "Mantle", "restrictions": ["Cloak"] },
+  { "text": "Shroud", "restrictions": ["Cloak"] },
+  { "text": "Veil", "restrictions": ["Cloak"] },
+
+  { "text": "Grips", "restrictions": ["Gloves"] },
+  { "text": "Touch", "restrictions": ["Gloves"] },
+  { "text": "Fingers", "restrictions": ["Gloves"] },
+
+  { "text": "Crown", "restrictions": ["Helmet"] },
+  { "text": "Skull", "restrictions": ["Helmet"] },
+  { "text": "Mind", "restrictions": ["Helmet"] },
+
+  { "text": "Icon", "restrictions": ["Relic"] },
+  { "text": "Artifact", "restrictions": ["Relic"] },
+  { "text": "Remnant", "restrictions": ["Relic"] },
+  { "text": "Echo", "restrictions": ["Relic"] },
+  { "text": "Memory", "restrictions": ["Relic"] }
+]

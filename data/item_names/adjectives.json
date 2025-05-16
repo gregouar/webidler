@@ -1,30 +1,68 @@
 [
-  {
-    "text": "Fiery",
-    "tags": ["Fire"]
-  },
-  {
-    "text": "Infernal",
-    "tags": ["Fire"]
-  },
-  {
-    "text": "Avaricious",
-    "tags": ["Gold"]
-  },
-  {
-    "text": "Midas's",
-    "tags": ["Gold"]
-  },
-  {
-    "text": "Bulky",
-    "tags": ["Armor"]
-  },
-  {
-    "text": "Stone",
-    "tags": ["Armor"]
-  },
-  {
-    "text": "Edgy",
-    "tags": ["Speed", "Physical"]
-  }
+  { "text": "Fiery", "tags": ["Fire"] },
+  { "text": "Infernal", "tags": ["Fire"] },
+  { "text": "Blazing", "tags": ["Fire"] },
+  { "text": "Scorching", "tags": ["Fire"] },
+  { "text": "Emberforged", "tags": ["Fire"] },
+  { "text": "Smoldering", "tags": ["Fire"] },
+  
+  { "text": "Avaricious", "tags": ["Gold"] },
+  { "text": "Midas's", "tags": ["Gold"] },
+  { "text": "Golden", "tags": ["Gold"] },
+  { "text": "Wealthy", "tags": ["Gold"] },
+  { "text": "Opulent", "tags": ["Gold"] },
+  { "text": "Gilded", "tags": ["Gold"] },
+  
+  { "text": "Bulky", "tags": ["Armor"] },
+  { "text": "Stony", "tags": ["Armor"] },
+  { "text": "Ironclad", "tags": ["Armor"] },
+  { "text": "Fortified", "tags": ["Armor"] },
+  { "text": "Resilient", "tags": ["Life", "Armor"] },
+  { "text": "Robust", "tags": ["Life", "Armor"] },
+  { "text": "Steelbound", "tags": ["Armor"] },
+  { "text": "Adamantine", "tags": ["Armor"] },
+  
+  { "text": "Edgy", "tags": ["Speed", "Physical"] },
+  { "text": "Swift", "tags": ["Speed"] },
+  { "text": "Fleetfooted", "tags": ["Speed"] },
+  { "text": "Brisk", "tags": ["Speed"] },
+  { "text": "Lightning", "tags": ["Speed", "Attack"] },
+  { "text": "Rapid", "tags": ["Speed"] },
+  
+  { "text": "Brutal", "tags": ["Physical", "Attack"] },
+  { "text": "Savage", "tags": ["Physical", "Attack"] },
+  { "text": "Piercing", "tags": ["Physical", "Attack"] },
+  { "text": "Vicious", "tags": ["Physical", "Attack"] },
+  { "text": "Feral", "tags": ["Physical", "Attack"] },
+  { "text": "Relentless", "tags": ["Physical", "Attack"] },
+  
+  { "text": "Arcane", "tags": ["Spell"] },
+  { "text": "Mystic", "tags": ["Spell"] },
+  { "text": "Enchanted", "tags": ["Spell"] },
+  { "text": "Ethereal", "tags": ["Spell"] },
+  { "text": "Sage's", "tags": ["Mana", "Spell"] },
+  { "text": "Runic", "tags": ["Spell"] },
+  { "text": "Celestial", "tags": ["Spell"] },
+  
+  { "text": "Vital", "tags": ["Life"] },
+  { "text": "Resilient", "tags": ["Life", "Armor"] },
+  { "text": "Robust", "tags": ["Life", "Armor"] },
+  { "text": "Tenacious", "tags": ["Life"] },
+  { "text": "Enduring", "tags": ["Life"] },
+  
+  { "text": "Mana-infused", "tags": ["Mana"] },
+  { "text": "Mystical", "tags": ["Mana", "Spell"] },
+  { "text": "Enlightened", "tags": ["Mana"] },
+  { "text": "Arcane-touched", "tags": ["Mana", "Spell"] },
+  
+  { "text": "Flaming", "tags": ["Fire", "Attack"] },
+  { "text": "Blazing Fury", "tags": ["Fire", "Attack"] },
+  { "text": "Molten", "tags": ["Fire", "Armor"] },
+  { "text": "Golden Fury", "tags": ["Gold", "Attack"] },
+  { "text": "Swiftstrike", "tags": ["Speed", "Attack"] },
+  { "text": "Shadowed", "tags": ["Physical", "Spell"] },
+  { "text": "Arcane Steel", "tags": ["Spell", "Armor"] },
+  { "text": "Lightning-fast", "tags": ["Speed", "Attack"] },
+  { "text": "Frostfire", "tags": ["Fire", "Spell"] }, 
+  { "text": "Soulbound", "tags": ["Life", "Mana"] }
 ]

@@ -2,7 +2,7 @@
     "character_specs": {
         "name": "Snek",
         "portrait": "monsters/snake.webp",
-        "max_health": 15,
+        "max_life": 15,
         "size": "Large"
     },
     "skill_specs": [

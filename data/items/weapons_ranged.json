@@ -1,0 +1,17 @@
+{
+  "shortbow": {
+    "name": "Shortbow",
+    "icon": "items/shortbow.webp",
+    "slot": "Weapon",
+    "affix_restrictions": ["AttackWeapon","RangedWeapon"],
+    "weapon_specs": {
+      "range": "Distance",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [3, 8]
+      },
+      "crit_chances": 0.05,
+      "crit_damage": 0.5
+    }
+  }
+}

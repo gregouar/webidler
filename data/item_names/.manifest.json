@@ -3,12 +3,11 @@
     "enabled": true
   },
   "resources": {
-    "item_nouns": [
-      "armor_nouns.json",
-      "weapon_nouns.json"
-    ],
     "item_adjectives": [
       "adjectives.json"
+    ],
+    "item_nouns": [
+      "nouns.json"
     ]
   }
 }

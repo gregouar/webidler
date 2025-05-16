@@ -6,7 +6,7 @@ use shared::data::{
 
 use crate::game::data::items_store::{ItemAdjectivesTable, ItemNounsTable};
 
-use super::loot_generator::generate_name;
+use super::{loot_generator::generate_name, stats_controller::ApplyStatModifier};
 
 pub fn update_item_specs(
     mut item_specs: ItemSpecs,
@@ -37,54 +37,31 @@ pub fn update_item_specs(
 fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &Vec<AffixEffect>) -> WeaponSpecs {
     for effect in effects {
         match effect.stat {
-            EffectStat::LocalAttackSpeed => match effect.modifier {
-                EffectModifier::Flat => {
-                    weapon_specs.cooldown -= effect.value as f32;
+            EffectStat::LocalAttackSpeed => weapon_specs
+                .cooldown
+                .apply_modifier(effect.modifier, -effect.value),
+            EffectStat::LocalAttackDamage => {
+                for (min, max) in weapon_specs.damage.values_mut() {
+                    min.apply_modifier(effect.modifier, effect.value);
+                    max.apply_modifier(effect.modifier, effect.value);
                 }
-                EffectModifier::Multiplier => {
-                    weapon_specs.cooldown *= 1.0 - effect.value as f32;
-                }
-            },
-            EffectStat::LocalAttackDamage => match effect.modifier {
-                EffectModifier::Flat => {
-                    for (min, max) in weapon_specs.damage.values_mut() {
-                        *min += effect.value;
-                        *max += effect.value;
-                    }
-                }
-                EffectModifier::Multiplier => {
-                    for (min, max) in weapon_specs.damage.values_mut() {
-                        *min *= 1.0 + effect.value;
-                        *max *= 1.0 + effect.value;
-                    }
-                }
-            },
+            }
             EffectStat::LocalMinDamage(damage_type) => {
                 if let Some((min, _)) = weapon_specs.damage.get_mut(&damage_type) {
-                    match effect.modifier {
-                        EffectModifier::Flat => *min += effect.value,
-                        EffectModifier::Multiplier => *min *= 1.0 + effect.value,
-                    }
+                    min.apply_modifier(effect.modifier, effect.value)
                 }
             }
             EffectStat::LocalMaxDamage(damage_type) => {
                 if let Some((_, max)) = weapon_specs.damage.get_mut(&damage_type) {
-                    match effect.modifier {
-                        EffectModifier::Flat => *max += effect.value,
-                        EffectModifier::Multiplier => *max *= 1.0 + effect.value,
-                    }
+                    max.apply_modifier(effect.modifier, effect.value)
                 }
             }
-            EffectStat::LocalCritChances => match effect.modifier {
-                EffectModifier::Flat => weapon_specs.crit_chances += effect.value as f32,
-                EffectModifier::Multiplier => {
-                    weapon_specs.crit_chances *= 1.0 + effect.value as f32
-                }
-            },
-            EffectStat::LocalCritDamage => match effect.modifier {
-                EffectModifier::Flat => weapon_specs.crit_damage += effect.value,
-                EffectModifier::Multiplier => weapon_specs.crit_damage *= 1.0 + effect.value,
-            },
+            EffectStat::LocalCritChances => weapon_specs
+                .crit_chances
+                .apply_modifier(effect.modifier, effect.value),
+            EffectStat::LocalCritDamage => weapon_specs
+                .crit_damage
+                .apply_modifier(effect.modifier, effect.value),
             _ => {}
         }
     }

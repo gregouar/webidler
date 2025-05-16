@@ -14,24 +14,28 @@ pub enum AffixType {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+// TODO: add others
 pub enum AffixRestriction {
     // Major type:
     Armor,
     AttackWeapon,
     SpellWeapon,
+    MeleeWeapon,
+    RangedWeapon,
     Shield,
-    Jewellery,
+    Jewelry,
     Trinket,
     // Sub type:
-    Cloak,
-    Relic,
-    Helmet,
-    Gloves,
+    Body,
     Boots,
-    // TODO: add others
+    Cloak,
+    Gloves,
+    Helmet,
+    Relic,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq, Hash)]
+// TODO: add others
 pub enum AffixTag {
     Attack,
     Armor,
@@ -42,7 +46,6 @@ pub enum AffixTag {
     Physical,
     Speed,
     Spell,
-    // TODO: add others
 }
 
 // #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]

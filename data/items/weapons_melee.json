@@ -3,17 +3,15 @@
     "name": "Shortsword",
     "icon": "items/shortsword.webp",
     "slot": "Weapon",
-    "affix_restrictions": [
-      "AttackWeapon"
-    ],
+    "affix_restrictions": ["AttackWeapon","MeleeWeapon"],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [2,4]
+        "Physical": [2, 4]
       },
       "crit_chances": 0.05,
-      "crit_damage": 0.50
+      "crit_damage": 0.5
     }
   },
   "shortsword_unique": {
@@ -21,17 +19,15 @@
     "description": "Forged in myth and honed in the kitchens of legend, this short sword once sliced onions so fast it brought tears to gods and mortals alike.",
     "icon": "items/shortsword.webp",
     "slot": "Weapon",
-    "affix_restrictions": [
-      "AttackWeapon"
-    ],
+    "affix_restrictions": ["AttackWeapon","MeleeWeapon"],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [2,4]
+        "Physical": [2, 4]
       },
       "crit_chances": 0.05,
-      "crit_damage": 0.50
+      "crit_damage": 0.5
     },
     "rarity": "Unique",
     "affixes": [
@@ -42,7 +38,7 @@
         "max": 0.5
       },
       {
-        "stat": "LocalMaxAttackDamage",
+        "stat": { "LocalMaxDamage": "Physical" },
         "modifier": "Flat",
         "min": 8,
         "max": 10
@@ -53,43 +49,15 @@
     "name": "Battleaxe",
     "icon": "items/battleaxe.webp",
     "slot": "Weapon",
-    "affix_restrictions": [
-      "AttackWeapon"
-    ],
+    "affix_restrictions": ["AttackWeapon","MeleeWeapon"],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 4.0,
       "damage": {
-        "Physical": [4,10]
+        "Physical": [4, 10]
       },
       "crit_chances": 0.05,
-      "crit_damage": 1.00
+      "crit_damage": 1.0
     }
-  },
-  "shortbow": {
-    "name": "Shortbow",
-    "icon": "items/shortbow.webp",
-    "slot": "Weapon",
-    "affix_restrictions": [
-      "AttackWeapon"
-    ],
-    "weapon_specs": {
-      "range": "Distance",
-      "cooldown": 3.0,
-      "damage": {
-        "Physical": [3,8]
-      },
-      "crit_chances": 0.05,
-      "crit_damage": 0.50
-    }
-  },
-  "wand": {
-    "name": "Wand",
-    "icon": "items/wand.webp",
-    "slot": "Weapon",
-    "affix_restrictions": [
-      "SpellWeapon"
-    ],
-    "rarity": "Magic"
   }
 }

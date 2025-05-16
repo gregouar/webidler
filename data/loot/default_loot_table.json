@@ -5,8 +5,21 @@
       "weight": 1000
     },
     {
+      "item_id": "leather_armor",
+      "weight": 1000
+    },
+    {
+      "item_id": "leather_gloves",
+      "weight": 1000
+    },
+    {
+      "item_id": "leather_boots",
+      "weight": 1000
+    },
+    {
       "item_id": "shortsword_unique",
-      "weight": 10
+      "weight": 10,
+      "min_area_level": 3
     },
     {
       "item_id": "battleaxe",
@@ -20,13 +33,18 @@
     },
     {
       "item_id": "wand",
-      "weight": 100,
+      "weight": 200,
+      "min_area_level": 3
+    },
+    {
+      "item_id": "buckler",
+      "weight": 1000,
       "min_area_level": 3
     },
     {
       "item_id": "great_helm",
       "weight": 1000,
-      "min_area_level": 2
+      "min_area_level": 5
     }
   ]
 }

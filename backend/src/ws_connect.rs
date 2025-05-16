@@ -231,9 +231,9 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
             },
         ],
         level: 1,
-        experience_needed: 10.0,
+        experience_needed: 20.0,
         max_mana: 100.0,
-        mana_regen: 3.0,
+        mana_regen: 1.0,
         gold_find: 1.0,
         auto_skills: vec![false, false],
     };

@@ -93,6 +93,7 @@ pub struct WeaponSpecs {
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct ArmorSpecs {
     pub armor: f64,
+    // TODO: Block chances
 }
 
 impl ItemSpecs {

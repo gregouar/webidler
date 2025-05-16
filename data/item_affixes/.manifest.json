@@ -4,10 +4,28 @@
   },
   "resources": {
     "item_affixes": [
+      "all_affixes.json",
+      
       "armor_prefixes.json",
-      "other_affixes.json",
+      "armor_suffixes.json",
+
       "attack_weapon_prefixes.json",
-      "attack_weapon_suffixes.json"
+      "attack_weapon_suffixes.json",
+
+      "body_prefixes.json",
+      "body_suffixes.json",
+
+      "boots_prefixes.json",
+      "boots_suffixes.json",
+
+      "gloves_prefixes.json",
+      "gloves_suffixes.json",
+
+      "helmet_prefixes.json",
+      "helmet_suffixes.json",
+
+      "spell_weapon_prefixes.json",
+      "spell_weapon_suffixes.json"
     ]
   }
 }

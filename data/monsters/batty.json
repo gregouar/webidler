@@ -2,7 +2,7 @@
   "character_specs": {
     "name": "Batty",
     "portrait": "monsters/bat.webp",
-    "max_health": 5
+    "max_life": 5
   },
   "skill_specs": [
     {

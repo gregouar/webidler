@@ -8,7 +8,7 @@ use shared::data::{
 
 use crate::game::{data::DataInit, utils::increase_factors};
 
-use super::{items_controller, skills_controller};
+use super::{items_controller, skills_controller, stats_controller::ApplyStatModifier};
 
 #[derive(Debug, Clone)]
 pub struct PlayerController {
@@ -247,32 +247,24 @@ fn update_player_stats(player_specs: &mut PlayerSpecs, player_inventory: &Player
 fn compute_player_specs(player_specs: &mut PlayerSpecs, effects: &Vec<AffixEffect>) {
     for effect in effects.iter() {
         match effect.stat {
-            EffectStat::GlobalLife => match effect.modifier {
-                EffectModifier::Flat => player_specs.character_specs.max_life += effect.value,
-                EffectModifier::Multiplier => {
-                    player_specs.character_specs.max_life *= 1.0 + effect.value
-                }
-            },
-            EffectStat::GlobalLifeRegen => match effect.modifier {
-                EffectModifier::Flat => player_specs.character_specs.life_regen += effect.value,
-                EffectModifier::Multiplier => {
-                    player_specs.character_specs.life_regen *= 1.0 + effect.value
-                }
-            },
-            EffectStat::GlobalMana => match effect.modifier {
-                EffectModifier::Flat => player_specs.max_mana += effect.value,
-                EffectModifier::Multiplier => player_specs.max_mana *= 1.0 + effect.value,
-            },
-            EffectStat::GlobalManaRegen => match effect.modifier {
-                EffectModifier::Flat => player_specs.mana_regen += effect.value,
-                EffectModifier::Multiplier => player_specs.mana_regen *= 1.0 + effect.value,
-            },
-            EffectStat::GlobalArmor => match effect.modifier {
-                EffectModifier::Flat => player_specs.character_specs.armor += effect.value,
-                EffectModifier::Multiplier => {
-                    player_specs.character_specs.armor *= 1.0 + effect.value
-                }
-            },
+            EffectStat::GlobalLife => player_specs
+                .character_specs
+                .max_life
+                .apply_modifier(effect.modifier, effect.value),
+            EffectStat::GlobalLifeRegen => player_specs
+                .character_specs
+                .life_regen
+                .apply_modifier(effect.modifier, effect.value),
+            EffectStat::GlobalMana => player_specs
+                .max_mana
+                .apply_modifier(effect.modifier, effect.value),
+            EffectStat::GlobalManaRegen => player_specs
+                .mana_regen
+                .apply_modifier(effect.modifier, effect.value),
+            EffectStat::GlobalArmor => player_specs
+                .character_specs
+                .armor
+                .apply_modifier(effect.modifier, effect.value),
             EffectStat::GlobalDamage(damage_type) => todo!(),
             EffectStat::GlobalAttackDamage => todo!(),
             EffectStat::GlobalSpellDamage => todo!(),
