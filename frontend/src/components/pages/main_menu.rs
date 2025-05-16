@@ -6,11 +6,12 @@ use leptos::prelude::*;
 use leptos::task::spawn_local;
 use leptos_router::hooks::use_navigate;
 
-use leptos_use::storage::use_local_storage;
+use leptos_use::storage::{use_local_storage, use_session_storage};
 use reqwest;
 use serde_json;
 
 use shared::data::world::HelloSchema;
+use shared::messages::SessionKey;
 
 use crate::components::ui::buttons::MenuButton;
 use crate::components::ui::toast::*;
@@ -41,20 +42,30 @@ pub fn MainMenu() -> impl IntoView {
         })
     };
 
+    let (_, _, delete_session_key) =
+        use_session_storage::<Option<SessionKey>, JsonSerdeCodec>("session_key");
     let (get_user_id, set_user_id_storage, _) =
         use_local_storage::<String, JsonSerdeCodec>("user_id");
     let user_id = RwSignal::new(get_user_id.get_untracked());
 
-    let navigate = use_navigate();
-    let navigate_to_online_game = move |_| {
-        set_user_id_storage.set(user_id.get_untracked());
-        navigate("./game", Default::default());
+    let navigate_to_online_game = {
+        let navigate = use_navigate();
+        let delete_session_key = delete_session_key.clone();
+        move |_| {
+            delete_session_key();
+            set_user_id_storage.set(user_id.get_untracked());
+            navigate("./game", Default::default());
+        }
     };
 
-    let navigate = use_navigate();
-    let navigate_to_local_game = move |_| {
-        set_user_id_storage.set(user_id.get_untracked());
-        navigate("./local_game", Default::default());
+    let navigate_to_local_game = {
+        let navigate = use_navigate();
+        let delete_session_key = delete_session_key.clone();
+        move |_| {
+            delete_session_key();
+            set_user_id_storage.set(user_id.get_untracked());
+            navigate("./local_game", Default::default());
+        }
     };
 
     let toast_context = expect_context::<Toasts>();
