@@ -133,7 +133,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
 
                         <StatCategory title="Damage">
                             <Stat
-                                label="Increased Speed"
+                                label="Increased Action Speed"
                                 value=move || {
                                     format!(
                                         "+{:.0}%",
@@ -242,18 +242,6 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
 
                         <StatCategory title="Attacks">
                             <Stat
-                                label="Increased Attack Damage"
-                                value=move || {
-                                    format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            EffectTarget::GlobalAttackDamage,
-                                            EffectModifier::Multiplier,
-                                        ) * 100.0,
-                                    )
-                                }
-                            />
-                            <Stat
                                 label="Increased Attack Speed"
                                 value=move || {
                                     format!(
@@ -265,18 +253,30 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     )
                                 }
                             />
-                        </StatCategory>
-
-                        <StatCategory title="Spells">
                             <Stat
-                                label="Increased Spell Power"
+                                label="Increased Attack Damage"
                                 value=move || {
                                     format!(
                                         "+{:.0}%",
                                         effect(
-                                            EffectTarget::GlobalSpellPower,
+                                            EffectTarget::GlobalAttackDamage,
                                             EffectModifier::Multiplier,
                                         ) * 100.0,
+                                    )
+                                }
+                            />
+                        </StatCategory>
+
+                        <StatCategory title="Spells">
+                            <Stat
+                                label="Increased Casting Speed"
+                                value=move || {
+                                    format!(
+                                        "+{:.0}%",
+                                        effect(
+                                            EffectTarget::GlobalSpellSpeed,
+                                            EffectModifier::Multiplier,
+                                        ),
                                     )
                                 }
                             />
@@ -293,14 +293,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Increased Casting Speed"
+                                label="Increased Spell Power"
                                 value=move || {
                                     format!(
                                         "+{:.0}%",
                                         effect(
-                                            EffectTarget::GlobalSpellSpeed,
+                                            EffectTarget::GlobalSpellPower,
                                             EffectModifier::Multiplier,
-                                        ),
+                                        ) * 100.0,
                                     )
                                 }
                             />
