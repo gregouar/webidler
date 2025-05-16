@@ -11,7 +11,7 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
     Effect::new(move |_| {
         if open.get() {
             if let Some(el) = panel_ref.get_untracked() {
-                _ = el.focus(); // Set focus on the panel
+                _ = el.focus();
             }
         }
     });
@@ -28,39 +28,47 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
             set_is_visible.set(true);
         } else {
             set_timeout(
-                move || set_is_visible.set(open.get()),
+                move || set_is_visible.set(open.get_untracked()),
                 Duration::from_millis(300),
             );
         }
     });
 
-    // See: https://book.leptos.dev/interlude_projecting_children.html
     let children = StoredValue::new(children);
 
     view! {
         <style>
             "@keyframes dropDown {
-                from {
-                    transform: translateY(-100%);
-                }
-                to {
-                    transform: translateY(0);
-                }
-            }" "@keyframes pullUp {
-            from {
-            transform: translateY(0);
+                from { transform: translateY(-100%); }
+                to { transform: translateY(0); }
             }
-            to {
-            transform: translateY(-100%);
+            @keyframes pullUp {
+                from { transform: translateY(0); }
+                to { transform: translateY(-100%); }
             }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
             }"
         </style>
+
         <Show when=move || is_visible.get()>
             <div
                 class="absolute h-full inset-0 bg-black/70 z-40"
+                class:animate-fade-in=open
+                style=move || {
+                    if open.get() {
+                        "animation: fadeIn 0.3s ease-out forwards;"
+                    } else {
+                        "animation: fadeOut 0.3s ease-out forwards;"
+                    }
+                }
                 on:click=move |_| open.set(false)
                 on:keydown=handle_key
-                // allow it to receive keyboard events
                 tabindex="0"
             >
                 <div
@@ -72,7 +80,6 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
                             "animation: pullUp 0.3s ease-out forwards;"
                         }
                     }
-                    // prevent background click from closing it
                     on:click=|e| e.stop_propagation()
                 >
                     {children.read_value()()}

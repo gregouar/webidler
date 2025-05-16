@@ -29,8 +29,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <div class="w-full p-4">
-                <div class="bg-zinc-800 rounded-md p-6 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-4">
+            <div class="w-full p-2">
+                <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-2">
                     <div class="px-4 relative z-10 flex items-center justify-between">
                         <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
                             "Statistics "
@@ -38,7 +38,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         <CloseButton on:click=move |_| open.set(false) />
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
                         <StatCategory title="Game Statistics">
                             <Stat
@@ -77,12 +77,9 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             <Stat
                                 label="Maximum Life"
                                 value=move || {
-                                    game_context
-                                        .player_specs
-                                        .read()
-                                        .character_specs
-                                        .max_life
-                                        .to_string()
+                                    format_number(
+                                        game_context.player_specs.read().character_specs.max_life,
+                                    )
                                 }
                             />
                             <Stat
@@ -97,7 +94,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             <Stat
                                 label="Maximum Mana"
                                 value=move || {
-                                    game_context.player_specs.read().max_mana.to_string()
+                                    format_number(game_context.player_specs.read().max_mana)
                                 }
                             />
                             <Stat
@@ -148,11 +145,13 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 label="Increased Physical Damage"
                                 value=move || {
                                     format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            EffectTarget::GlobalDamage(DamageType::Physical),
-                                            EffectModifier::Multiplier,
-                                        ) * 100.0,
+                                        "+{}%",
+                                        format_number(
+                                            effect(
+                                                EffectTarget::GlobalDamage(DamageType::Physical),
+                                                EffectModifier::Multiplier,
+                                            ) * 100.0,
+                                        ),
                                     )
                                 }
                             />
@@ -160,11 +159,13 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 label="Increased Fire Damage"
                                 value=move || {
                                     format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            EffectTarget::GlobalDamage(DamageType::Fire),
-                                            EffectModifier::Multiplier,
-                                        ) * 100.0,
+                                        "+{}%",
+                                        format_number(
+                                            effect(
+                                                EffectTarget::GlobalDamage(DamageType::Fire),
+                                                EffectModifier::Multiplier,
+                                            ) * 100.0,
+                                        ),
                                     )
                                 }
                             />
@@ -172,11 +173,13 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 label="Increased Poison Damage"
                                 value=move || {
                                     format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            EffectTarget::GlobalDamage(DamageType::Poison),
-                                            EffectModifier::Multiplier,
-                                        ) * 100.0,
+                                        "+{}%",
+                                        format_number(
+                                            effect(
+                                                EffectTarget::GlobalDamage(DamageType::Poison),
+                                                EffectModifier::Multiplier,
+                                            ) * 100.0,
+                                        ),
                                     )
                                 }
                             />
@@ -196,11 +199,13 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 label="Increased Critical Damage"
                                 value=move || {
                                     format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            EffectTarget::GlobalCritDamage,
-                                            EffectModifier::Multiplier,
-                                        ) * 100.0,
+                                        "+{}%",
+                                        format_number(
+                                            effect(
+                                                EffectTarget::GlobalCritDamage,
+                                                EffectModifier::Multiplier,
+                                            ) * 100.0,
+                                        ),
                                     )
                                 }
                             />
@@ -257,11 +262,13 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 label="Increased Attack Damage"
                                 value=move || {
                                     format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            EffectTarget::GlobalAttackDamage,
-                                            EffectModifier::Multiplier,
-                                        ) * 100.0,
+                                        "+{}%",
+                                        format_number(
+                                            effect(
+                                                EffectTarget::GlobalAttackDamage,
+                                                EffectModifier::Multiplier,
+                                            ) * 100.0,
+                                        ),
                                     )
                                 }
                             />
@@ -284,11 +291,13 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 label="Increased Spell Damage"
                                 value=move || {
                                     format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            EffectTarget::GlobalSpellDamage,
-                                            EffectModifier::Multiplier,
-                                        ) * 100.0,
+                                        "+{}%",
+                                        format_number(
+                                            effect(
+                                                EffectTarget::GlobalSpellDamage,
+                                                EffectModifier::Multiplier,
+                                            ) * 100.0,
+                                        ),
                                     )
                                 }
                             />
