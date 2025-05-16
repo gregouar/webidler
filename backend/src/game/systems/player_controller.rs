@@ -195,6 +195,9 @@ pub fn unequip_item(
 ) -> Option<ItemSpecs> {
     match player_inventory.equipped.remove(&item_slot) {
         Some(EquippedSlot::MainSlot(old_item)) => {
+            for item_slot in old_item.base.extra_slots.iter() {
+                player_inventory.equipped.remove(&item_slot);
+            }
             if let Some(_) = old_item.weapon_specs {
                 unequip_weapon(player_specs, player_state, item_slot);
             }

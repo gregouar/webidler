@@ -12,8 +12,62 @@
       {
         "stat": "LocalArmor",
         "modifier": "Multiplier",
-        "min": 0.20,
+        "min": 0.2,
         "max": 0.39
+      }
+    ]
+  },
+  {
+    "name": "Healthy",
+    "family": "add_life",
+    "tags": ["Life", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Armor"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "GlobalLife",
+        "modifier": "Flat",
+        "min": 10,
+        "max": 20
+      }
+    ]
+  },
+  {
+    "name": "Robust",
+    "family": "inc_life",
+    "tags": ["Life", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Armor"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "GlobalLife",
+        "modifier": "Multiplier",
+        "min": 0.02,
+        "max": 0.04
+      }
+    ]
+  },
+  {
+    "name": "Vigorous",
+    "family": "inc_life",
+    "tags": ["Life", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Armor"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "GlobalLifeRegen",
+        "modifier": "Flat",
+        "min": 0.2,
+        "max": 0.4
       }
     ]
   }
