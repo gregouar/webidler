@@ -64,5 +64,22 @@
   { "text": "Arcane Steel", "tags": ["Spell", "Armor"] },
   { "text": "Lightning-fast", "tags": ["Speed", "Attack"] },
   { "text": "Frostfire", "tags": ["Fire", "Spell"] }, 
-  { "text": "Soulbound", "tags": ["Life", "Mana"] }
+  { "text": "Soulbound", "tags": ["Life", "Mana"] },
+
+  
+  { "text": "Deadly", "tags": ["Critical", "Attack"] },
+  { "text": "Precise", "tags": ["Critical"] },
+  { "text": "Sharpened", "tags": ["Critical", "Physical"] },
+  { "text": "Keen", "tags": ["Critical"] },
+  { "text": "Assassin's", "tags": ["Critical", "Physical"] },
+  { "text": "Ruthless", "tags": ["Critical", "Attack"] },
+  { "text": "Heartpiercing", "tags": ["Critical", "Physical"] },
+  { "text": "Lucktouched", "tags": ["Critical", "Gold"] },
+  { "text": "Ominous", "tags": ["Critical", "Spell"] },
+  { "text": "Nightpiercer", "tags": ["Critical", "Spell", "Physical"] },
+  { "text": "Lethal", "tags": ["Critical"] },
+  { "text": "Exacting", "tags": ["Critical"] },
+  { "text": "Executioner's", "tags": ["Critical", "Physical"] },
+  { "text": "Blinkstrike", "tags": ["Critical", "Speed", "Attack"] },
+  { "text": "Glassfang", "tags": ["Critical", "Spell", "Attack"] }
 ]

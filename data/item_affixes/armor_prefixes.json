@@ -1,5 +1,22 @@
 [
   {
+    "name": "Fortified",
+    "family": "add_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Armor"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "LocalArmor",
+        "modifier": "Flat",
+        "min": 5,
+        "max": 10
+      }
+    ]
+  },{
     "name": "Hard",
     "family": "inc_armor",
     "tags": ["Physical", "Armor"],
@@ -50,24 +67,6 @@
         "modifier": "Multiplier",
         "min": 0.02,
         "max": 0.04
-      }
-    ]
-  },
-  {
-    "name": "Vigorous",
-    "family": "inc_life",
-    "tags": ["Life", "Armor"],
-    "affix_type": "Prefix",
-    "tier": 1,
-    "weight": 1000,
-    "restrictions": ["Armor"],
-    "item_level": 1,
-    "effects": [
-      {
-        "stat": "GlobalLifeRegen",
-        "modifier": "Flat",
-        "min": 0.2,
-        "max": 0.4
       }
     ]
   }

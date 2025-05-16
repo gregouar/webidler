@@ -1,11 +1,20 @@
 {
-  "great_helm": {
-    "name": "Great Helm",
-    "icon": "items/helmet.webp",
+  "leather_cap": {
+    "name": "Leather Cap",
+    "icon": "items/leather_cap.webp",
     "slot": "Helmet",
     "affix_restrictions": ["Armor", "Helmet"],
     "armor_specs": {
       "armor": 15
+    }
+  },
+  "great_helm": {
+    "name": "Great Helm",
+    "icon": "items/great_helm.webp",
+    "slot": "Helmet",
+    "affix_restrictions": ["Armor", "Helmet"],
+    "armor_specs": {
+      "armor": 35
     }
   }
 }

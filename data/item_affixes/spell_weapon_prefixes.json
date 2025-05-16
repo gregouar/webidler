@@ -1,1 +1,74 @@
-[]
+[
+  {
+    "name": "Thoughtful",
+    "family": "add_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "GlobalMana",
+        "modifier": "Flat",
+        "min": 10,
+        "max": 20
+      }
+    ]
+  },
+  {
+    "name": "Enlightened",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "GlobalMana",
+        "modifier": "Multiplier",
+        "min": 0.1,
+        "max": 0.29
+      }
+    ]
+  },
+  {
+    "name": "Charged",
+    "family": "inc_spell_damage",
+    "tags": ["Spell"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "GlobalSpellDamage",
+        "modifier": "Multiplier",
+        "min": 0.2,
+        "max": 0.39
+      }
+    ]
+  },
+  {
+    "name": "Fused",
+    "family": "inc_spell_power",
+    "tags": ["Spell"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "GlobalSpellPower",
+        "modifier": "Multiplier",
+        "min": 0.1,
+        "max": 0.19
+      }
+    ]
+  }
+]

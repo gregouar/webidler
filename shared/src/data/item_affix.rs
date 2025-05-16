@@ -39,6 +39,7 @@ pub enum AffixRestriction {
 pub enum AffixTag {
     Attack,
     Armor,
+    Critical,
     Fire,
     Gold,
     Life,

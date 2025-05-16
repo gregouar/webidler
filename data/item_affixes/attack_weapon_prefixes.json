@@ -1,6 +1,6 @@
 [
   {
-    "name": "Painful",
+    "name": "Vicious",
     "family": "inc_damage",
     "tags": ["Physical", "Attack"],
     "affix_type": "Prefix",
@@ -18,8 +18,8 @@
     ]
   },
   {
-    "name": "Merciless",
-    "family": "add_damage",
+    "name": "Sharp",
+    "family": "add_physical_damage",
     "tags": ["Physical", "Attack"],
     "affix_type": "Prefix",
     "tier": 1,
@@ -38,6 +38,30 @@
         "modifier": "Flat",
         "min": 3,
         "max": 4
+      }
+    ]
+  },
+  {
+    "name": "Burning",
+    "family": "add_fire_damage",
+    "tags": ["Fire", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": {"LocalMinDamage": "Fire"},
+        "modifier": "Flat",
+        "min": 2,
+        "max": 4
+      },
+      {
+        "stat": {"LocalMaxDamage": "Fire"},
+        "modifier": "Flat",
+        "min": 4,
+        "max": 6
       }
     ]
   }
