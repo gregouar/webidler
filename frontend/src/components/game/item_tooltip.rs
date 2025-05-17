@@ -77,14 +77,16 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     .copied()
                     .unwrap_or_default();
 
-                let damage_color = if spec_min != base_min || spec_max != base_max {
-                    "text-blue-400"
-                } else {
-                    match damage_type {
-                        DamageType::Physical => "text-white",
-                        DamageType::Fire => "text-red-400",
-                        DamageType::Poison => "text-lime-400",
+                let damage_color = match damage_type {
+                    DamageType::Physical => {
+                        if spec_min != base_min || spec_max != base_max {
+                            "text-blue-400"
+                        } else {
+                            "text-white"
+                        }
                     }
+                    DamageType::Fire => "text-red-400",
+                    DamageType::Poison => "text-lime-400",
                 };
 
                 if spec_min > 0.0 || spec_max > 0.0 {

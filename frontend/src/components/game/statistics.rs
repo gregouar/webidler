@@ -29,7 +29,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <div class="w-full p-2">
+            <div class="w-full p-4">
                 <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-2">
                     <div class="px-4 relative z-10 flex items-center justify-between">
                         <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
@@ -40,7 +40,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-                        <StatCategory title="Game Statistics">
+                        <StatCategory title="Game">
                             <Stat
                                 label="Elapsed Time"
                                 value=move || format_duration(stats().elapsed_time)
@@ -321,13 +321,19 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
         </MenuPanel>
     }
 }
-
 #[component]
 fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
     view! {
-        <div class="bg-zinc-800 rounded-lg p-4 shadow-[inset_0_0_24px_rgba(0,0,0,0.6)] ring-1 ring-zinc-900">
-            <h2 class="text-amber-300 text-lg font-bold mb-2 tracking-wide">{title}</h2>
-            <div class="flex flex-col gap-1">{children()}</div>
+        <style>
+            "
+            .stat-list > div:nth-child(odd) {
+            background-color: rgba(63, 63, 70, 0.2);
+            }
+            "
+        </style>
+        <div class="bg-zinc-800 rounded-lg shadow-[inset_0_0_24px_rgba(0,0,0,0.6)]  py-4 ring-1 ring-zinc-900">
+            <h2 class="text-amber-300 text-md font-bold mb-2 tracking-wide">{title}</h2>
+            <div class="flex flex-col gap-1 stat-list">{children()}</div>
         </div>
     }
 }
@@ -335,7 +341,7 @@ fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
 #[component]
 fn Stat(label: &'static str, value: impl Fn() -> String + 'static) -> impl IntoView {
     view! {
-        <div class="flex justify-between">
+        <div class="flex justify-between px-6">
             <span class="text-gray-300">{label}</span>
             <span class="text-amber-100 font-medium">{value()}</span>
         </div>

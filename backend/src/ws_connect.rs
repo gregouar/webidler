@@ -232,7 +232,7 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
             }),
         ],
         level: 1,
-        experience_needed: 20.0,
+        experience_needed: 50.0,
         max_mana: 100.0,
         mana_regen: 1.0,
         movement_cooldown: 2.0,
