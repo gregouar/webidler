@@ -128,7 +128,9 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         game_stats,
     } = sync_message;
 
-    game_context.world_state.set(world_state);
+    if let Some(world_state) = world_state {
+        game_context.world_state.set(world_state);
+    }
     if let Some(player_specs) = player_specs {
         game_context.player_specs.set(player_specs);
     }
