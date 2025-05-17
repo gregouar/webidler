@@ -187,20 +187,29 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) 
 
     for effect in effects.iter() {
         match effect.stat {
-            EffectTarget::GlobalAttackSpeed => match skill_specs.base.skill_type {
-                SkillType::Attack | SkillType::Weapon(_) => skill_specs
+            EffectTarget::GlobalAttackSpeed
+                if matches!(
+                    skill_specs.base.skill_type,
+                    SkillType::Attack | SkillType::Weapon(_)
+                ) =>
+            {
+                skill_specs
                     .cooldown
-                    .apply_modifier(effect.modifier, -effect.value),
-                _ => {}
-            },
+                    .apply_modifier(effect.modifier, -effect.value);
+            }
+
             EffectTarget::GlobalSpellSpeed if skill_specs.base.skill_type == SkillType::Spell => {
                 skill_specs
                     .cooldown
-                    .apply_modifier(effect.modifier, -effect.value)
+                    .apply_modifier(effect.modifier, -effect.value);
             }
-            EffectTarget::GlobalSpeed => skill_specs
-                .cooldown
-                .apply_modifier(effect.modifier, -effect.value),
+
+            EffectTarget::GlobalSpeed => {
+                skill_specs
+                    .cooldown
+                    .apply_modifier(effect.modifier, -effect.value);
+            }
+
             _ => {}
         }
     }
@@ -236,13 +245,12 @@ pub fn compute_skill_specs_effect(
                     min.apply_effect(effect);
                     max.apply_effect(effect);
                 }
-                EffectTarget::GlobalAttackDamage => match skill_type {
-                    SkillType::Attack | SkillType::Weapon(_) => {
-                        min.apply_effect(effect);
-                        max.apply_effect(effect);
-                    }
-                    _ => {}
-                },
+                EffectTarget::GlobalAttackDamage
+                    if matches!(skill_type, SkillType::Attack | SkillType::Weapon(_)) =>
+                {
+                    min.apply_effect(effect);
+                    max.apply_effect(effect);
+                }
                 EffectTarget::GlobalSpellDamage if skill_type == SkillType::Spell => {
                     min.apply_effect(effect);
                     max.apply_effect(effect);

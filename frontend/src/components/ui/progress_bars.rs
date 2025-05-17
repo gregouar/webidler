@@ -145,16 +145,16 @@ pub fn CircularProgressBar(
     Effect::new(move |_| {
         if reset.get() {
             reset_bar_animation
-                .set("animation: circular-progress-bar-fade-out 0.2s ease-out; animation-fill-mode: both;");
+                .set("animation: circular-progress-bar-fade-out 0.3s ease-out; animation-fill-mode: both;");
             reset_icon_animation.set(
-                "animation: circular-progress-bar-glow 0.2s ease-out; animation-fill-mode: both;",
+                "animation: circular-progress-bar-glow 0.3s ease-out; animation-fill-mode: both;",
             );
             set_timeout(
                 move || {
                     reset_bar_animation.set("opacity: 0;");
                     reset_icon_animation.set("");
                 },
-                std::time::Duration::from_millis(200),
+                std::time::Duration::from_millis(300),
             );
         }
     });

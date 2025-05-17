@@ -247,7 +247,7 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
                     shape: Shape::Single,
                     effect_type: SkillEffectType::Heal {
                         min: 20.0,
-                        max: 20.0,
+                        max: 40.0,
                     },
                 }],
             }),
