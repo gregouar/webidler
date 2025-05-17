@@ -6,6 +6,7 @@
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
+    "restrictions": ["Jewelry"],
     "item_level": 1,
     "effects": [
       {
@@ -23,6 +24,7 @@
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
+    "restrictions": ["Jewelry"],
     "item_level": 1,
     "effects": [
       {
