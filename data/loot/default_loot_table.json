@@ -52,17 +52,17 @@
     },
     {
       "item_id": "gold_ring",
-      "weight": 300,
+      "weight": 400,
       "min_area_level": 5
     },
     {
       "item_id": "medallion",
-      "weight": 300,
+      "weight": 400,
       "min_area_level": 5
     },
     {
       "item_id": "cloak",
-      "weight": 300,
+      "weight": 400,
       "min_area_level": 5
     }
   ]
