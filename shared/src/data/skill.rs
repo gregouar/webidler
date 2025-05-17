@@ -110,6 +110,7 @@ impl Default for Shape {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum SkillEffectType {
+    // TODO: merge multiple damage types à la weapon style
     FlatDamage {
         min: f64,
         max: f64,
