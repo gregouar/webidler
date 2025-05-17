@@ -259,7 +259,7 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
         movement_cooldown: 2.0,
         gold_find: 1.0,
         effects: EffectsMap::default(),
-        auto_skills: vec![false, false],
+        auto_skills: vec![false, false, false],
     };
 
     let mut player_inventory = PlayerInventory::default();
