@@ -276,7 +276,7 @@ fn update_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Player
     player_specs.character_specs.armor = 0.0;
     player_specs.character_specs.fire_armor = 0.0;
     player_specs.character_specs.poison_armor = 0.0;
-    player_specs.character_specs.max_life = 100.0 + 10.0 * player_specs.level as f64;
+    player_specs.character_specs.max_life = 90.0 + 10.0 * player_specs.level as f64;
     player_specs.character_specs.life_regen = 1.0;
     player_specs.max_mana = 100.0;
     player_specs.mana_regen = 1.0;
