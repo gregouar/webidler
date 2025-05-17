@@ -232,13 +232,14 @@ impl<'a> GameInstance<'a> {
             self.data.game_stats.areas_completed += 1;
             if world_state.auto_progress {
                 world_state.area_level += 1;
-                self.data.game_stats.highest_area_level = self
-                    .data
-                    .game_stats
-                    .highest_area_level
-                    .max(world_state.area_level);
             }
         }
+
+        self.data.game_stats.highest_area_level = self
+            .data
+            .game_stats
+            .highest_area_level
+            .max(world_state.area_level);
 
         self.data.monster_specs = LazySyncer::new(monsters_wave::generate_monsters_wave_specs(
             &self.data.world_blueprint,

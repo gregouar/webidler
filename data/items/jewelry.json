@@ -3,12 +3,14 @@
     "name": "Gold Ring",
     "icon": "items/gold_ring.webp",
     "slot": "Ring",
-    "affix_restrictions": ["Jewelry", "Ring"]
+    "affix_restrictions": ["Jewelry", "Ring"],
+    "rarity": "Magic"
   },
   "medallion": {
     "name": "Medallion",
     "icon": "items/medallion.webp",
     "slot": "Amulet",
-    "affix_restrictions": ["Jewelry", "Amulet"]
+    "affix_restrictions": ["Jewelry", "Amulet"],
+    "rarity": "Magic"
   }
 }
