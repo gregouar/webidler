@@ -197,7 +197,7 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
                 icon: String::from("skills/fireball.svg"),
                 skill_type: SkillType::Spell,
                 cooldown: 2.0,
-                mana_cost: 3.0,
+                mana_cost: 5.0,
                 upgrade_cost: 20.0,
                 effects: vec![SkillEffect {
                     range: Range::Distance,
