@@ -21,7 +21,7 @@ pub fn pickup_loot(
 
     if let Some(loot) = queued_loot
         .iter_mut()
-        .find(|x| x.identifier == loot_identifier)
+        .find(|x| x.identifier == loot_identifier && x.state != LootState::HasDisappeared)
     {
         loot.state = LootState::HasDisappeared;
         if player_inventory.bag.len() < player_inventory.max_bag_size as usize {

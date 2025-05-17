@@ -34,6 +34,8 @@ pub enum AffixRestriction {
     Cloak,
     Gloves,
     Helmet,
+    Ring,
+    Amulet,
     Relic,
 }
 

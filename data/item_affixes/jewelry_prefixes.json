@@ -1,9 +1,9 @@
 [
   {
-    "name": "of Greed",
-    "family": "inc_gold",
+    "name": "Glistening",
+    "family": "inc_gold_2",
     "tags": ["Gold"],
-    "affix_type": "Suffix",
+    "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
     "item_level": 1,

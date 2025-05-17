@@ -37,7 +37,7 @@
     },
     {
       "item_id": "wand",
-      "weight": 200,
+      "weight": 500,
       "min_area_level": 3
     },
     {
@@ -48,6 +48,21 @@
     {
       "item_id": "great_helm",
       "weight": 1000,
+      "min_area_level": 5
+    },
+    {
+      "item_id": "gold_ring",
+      "weight": 300,
+      "min_area_level": 5
+    },
+    {
+      "item_id": "medallion",
+      "weight": 300,
+      "min_area_level": 5
+    },
+    {
+      "item_id": "cloak",
+      "weight": 300,
       "min_area_level": 5
     }
   ]

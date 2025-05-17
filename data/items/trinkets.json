@@ -1,0 +1,8 @@
+{
+  "cloak": {
+    "name": "Cloak",
+    "icon": "items/cloak.webp",
+    "slot": "Trinket",
+    "affix_restrictions": ["Trinket", "Cloak"]
+  }
+}

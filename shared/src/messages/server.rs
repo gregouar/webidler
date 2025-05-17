@@ -49,7 +49,7 @@ pub struct InitGameMessage {
 /// Message to be sent every tick to sync current state of the game with clients
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SyncGameStateMessage {
-    pub world_state: WorldState,
+    pub world_state: Option<WorldState>,
     pub player_specs: Option<PlayerSpecs>,
     pub player_inventory: Option<PlayerInventory>,
     pub player_state: PlayerState,

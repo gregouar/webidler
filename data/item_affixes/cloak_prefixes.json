@@ -1,0 +1,38 @@
+[
+    {
+    "name": "Nimble",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Cloak"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "GlobalAttackSpeed",
+        "modifier": "Multiplier",
+        "min": 0.05,
+        "max": 0.1
+      }
+    ]
+  },
+  {
+    "name": "Surging",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Cloak"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "GlobalSpellSpeed",
+        "modifier": "Multiplier",
+        "min": 0.05,
+        "max": 0.1
+      }
+    ]
+  }
+]

@@ -30,7 +30,7 @@
       {
         "stat": { "GlobalDamage": "Fire" },
         "modifier": "Multiplier",
-        "min": 0.2,
+        "min": 0.25,
         "max": 0.49
       }
     ]

@@ -18,11 +18,18 @@
       "boots_prefixes.json",
       "boots_suffixes.json",
 
+      "cloak_prefixes.json",
+      
+      "crit_prefixes.json",
+
       "gloves_prefixes.json",
       "gloves_suffixes.json",
 
       "helmet_prefixes.json",
       "helmet_suffixes.json",
+
+      "jewelry_prefixes.json",
+      "jewelry_suffixes.json",
 
       "mana_suffixes.json",
 

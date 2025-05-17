@@ -182,10 +182,13 @@ impl<'a> GameInstance<'a> {
                     });
                 }
             }
-            ClientMessage::SetAutoProgress(m) => self.data.world_state.auto_progress = m.value,
+            ClientMessage::SetAutoProgress(m) => {
+                self.data.world_state.mutate().auto_progress = m.value
+            }
             ClientMessage::GoBack(m) => {
-                self.data.world_state.going_back += m.amount;
-                self.data.world_state.auto_progress = false;
+                let world_state = self.data.world_state.mutate();
+                world_state.going_back += m.amount;
+                world_state.auto_progress = false;
             }
             ClientMessage::Connect(_) => {
                 tracing::warn!("received unexpected message: {:?}", msg);
@@ -204,7 +207,7 @@ impl<'a> GameInstance<'a> {
             .send(
                 &InitGameMessage {
                     world_specs: self.data.world_blueprint.specs.clone(),
-                    world_state: self.data.world_state.clone(),
+                    world_state: self.data.world_state.read().clone(),
                     player_specs: self.data.player_specs.read().clone(),
                     player_state: self.data.player_state.clone(),
                 }
@@ -214,30 +217,32 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn generate_monsters_wave(&mut self) -> Result<()> {
-        if self.data.world_state.going_back > 0 {
-            let amount = self.data.world_state.going_back;
-            world_controller::decrease_area_level(&mut self.data.world_state, amount);
+        let world_state = self.data.world_state.mutate();
+
+        if world_state.going_back > 0 {
+            let amount = world_state.going_back;
+            world_controller::decrease_area_level(world_state, amount);
         }
 
-        self.data.world_state.going_back = 0;
-        self.data.world_state.waves_done += 1;
+        world_state.going_back = 0;
+        world_state.waves_done += 1;
 
-        if self.data.world_state.waves_done > WAVES_PER_AREA_LEVEL {
-            self.data.world_state.waves_done = 1;
+        if world_state.waves_done > WAVES_PER_AREA_LEVEL {
+            world_state.waves_done = 1;
             self.data.game_stats.areas_completed += 1;
-            if self.data.world_state.auto_progress {
-                self.data.world_state.area_level += 1;
+            if world_state.auto_progress {
+                world_state.area_level += 1;
                 self.data.game_stats.highest_area_level = self
                     .data
                     .game_stats
                     .highest_area_level
-                    .max(self.data.world_state.area_level);
+                    .max(world_state.area_level);
             }
         }
 
         self.data.monster_specs = LazySyncer::new(monsters_wave::generate_monsters_wave_specs(
             &self.data.world_blueprint,
-            &self.data.world_state,
+            world_state,
             &self.master_store.monster_specs_store,
         )?);
 
@@ -258,7 +263,7 @@ impl<'a> GameInstance<'a> {
 
         self.data.player_state = PlayerState::init(self.data.player_specs.read());
 
-        world_controller::decrease_area_level(&mut self.data.world_state, 1);
+        world_controller::decrease_area_level(self.data.world_state.mutate(), 1);
     }
 
     async fn reset_entities(&mut self) {
@@ -303,13 +308,13 @@ impl<'a> GameInstance<'a> {
                 );
             }
 
-            if monsters_still_alive.is_empty() || self.data.world_state.going_back > 0 {
-                if self.data.world_state.going_back == 0
+            if monsters_still_alive.is_empty() || self.data.world_state.read().going_back > 0 {
+                if self.data.world_state.read().going_back == 0
                     && !self.data.looted
-                    && self.data.world_state.waves_done == WAVES_PER_AREA_LEVEL
+                    && self.data.world_state.read().waves_done == WAVES_PER_AREA_LEVEL
                 {
                     if let Some(item_specs) = loot_generator::generate_loot(
-                        self.data.world_state.area_level,
+                        self.data.world_state.read().area_level,
                         &self.data.world_blueprint.loot_table,
                         &self.master_store.items_store,
                         &self.master_store.item_affixes_table,
@@ -359,7 +364,7 @@ impl<'a> GameInstance<'a> {
         self.client_conn
             .send(
                 &SyncGameStateMessage {
-                    world_state: self.data.world_state.clone(),
+                    world_state: self.data.world_state.sync(),
                     player_specs: self.data.player_specs.sync(),
                     player_inventory: self.data.player_inventory.sync(),
                     player_state: self.data.player_state.clone(),

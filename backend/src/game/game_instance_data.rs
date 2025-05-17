@@ -15,7 +15,7 @@ use shared::data::{
 #[derive(Debug, Clone)]
 pub struct GameInstanceData {
     pub world_blueprint: WorldBlueprint,
-    pub world_state: WorldState,
+    pub world_state: LazySyncer<WorldState>,
 
     pub player_specs: LazySyncer<PlayerSpecs>,
     pub player_inventory: LazySyncer<PlayerInventory>,
@@ -42,7 +42,7 @@ impl GameInstanceData {
         player_inventory: PlayerInventory,
     ) -> Self {
         Self {
-            world_state: WorldState::init(&world_blueprint.specs),
+            world_state: LazySyncer::new(WorldState::init(&world_blueprint.specs)),
             world_blueprint: world_blueprint,
 
             player_resources,

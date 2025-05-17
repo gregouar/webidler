@@ -56,7 +56,7 @@
       "shape": "Vertical2",
       "cooldown": 4.0,
       "damage": {
-        "Physical": [3, 5]
+        "Physical": [4, 10]
       },
       "crit_chances": 0.05,
       "crit_damage": 1.0

@@ -1,0 +1,38 @@
+[
+    {
+    "name": "Keen",
+    "family": "inc_crit_chances",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Jewelry"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "GlobalCritChances",
+        "modifier": "Multiplier",
+        "min": 0.2,
+        "max": 0.39
+      }
+    ]
+  },
+  {
+    "name": "Fatal",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Jewelry"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "GlobalCritDamage",
+        "modifier": "Multiplier",
+        "min": 0.25,
+        "max": 0.49
+      }
+    ]
+  }
+]
