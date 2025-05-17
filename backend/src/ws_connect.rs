@@ -192,8 +192,29 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
         },
         skills_specs: vec![
             SkillSpecs::init(&BaseSkillSpecs {
+                name: String::from("Magic Missile"),
+                description: "A fast spell to cast".to_string(),
+                icon: String::from("skills/fireball.svg"),
+                skill_type: SkillType::Spell,
+                cooldown: 2.0,
+                mana_cost: 3.0,
+                upgrade_cost: 20.0,
+                effects: vec![SkillEffect {
+                    range: Range::Distance,
+                    target_type: TargetType::Enemy,
+                    shape: Shape::Single,
+                    effect_type: SkillEffectType::FlatDamage {
+                        min: 3.0,
+                        max: 6.0,
+                        damage_type: DamageType::Physical,
+                        crit_chances: 0.0,
+                        crit_damage: 0.0,
+                    },
+                }],
+            }),
+            SkillSpecs::init(&BaseSkillSpecs {
                 name: String::from("Fireball"),
-                description: "A throw of mighty fireball, burning multiple enemies".to_string(),
+                description: "Throw a mighty fireball, burning multiple enemies".to_string(),
                 icon: String::from("skills/fireball2.svg"),
                 skill_type: SkillType::Spell,
                 cooldown: 5.0,
