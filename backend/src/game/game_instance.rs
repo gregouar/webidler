@@ -162,7 +162,8 @@ impl<'a> GameInstance<'a> {
                 ) {
                     return Some(ErrorMessage {
                         error_type: ErrorType::Game,
-                        message: "Not enough space!".to_string(),
+                        message: "Not enough item slots available, please unequip first!"
+                            .to_string(),
                     });
                 }
             }

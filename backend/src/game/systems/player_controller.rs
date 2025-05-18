@@ -178,7 +178,11 @@ pub fn equip_item(
         .base
         .extra_slots
         .iter()
-        .any(|x| player_inventory.equipped.get(x).is_some())
+        .any(|x| match player_inventory.equipped.get(x) {
+            Some(EquippedSlot::MainSlot(_)) => true,
+            Some(EquippedSlot::ExtraSlot(main_slot)) => *main_slot != item_specs.base.slot,
+            None => false,
+        })
     {
         return Err(anyhow!("slot unavailable"));
     }
