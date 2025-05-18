@@ -8,8 +8,11 @@ use shared::messages::client::ClientConnectMessage;
 use shared::messages::server::{ErrorType, InitGameMessage, ServerMessage, SyncGameStateMessage};
 use shared::messages::SessionKey;
 
-use crate::components::ui::toast::*;
-use crate::components::ui::tooltip::DynamicTooltip;
+use crate::components::ui::{
+    confirm::{provide_confirm_context, ConfirmationModal},
+    toast::*,
+    tooltip::DynamicTooltip,
+};
 use crate::components::websocket::WebsocketContext;
 
 use super::battle_scene::BattleScene;
@@ -22,6 +25,8 @@ use super::GameContext;
 pub fn GameInstance() -> impl IntoView {
     let game_context = GameContext::new();
     provide_context(game_context.clone());
+
+    let confirm_state = provide_confirm_context();
 
     let (session_key, set_session_key, _) =
         use_session_storage::<Option<SessionKey>, JsonSerdeCodec>("session_key");
@@ -56,6 +61,7 @@ pub fn GameInstance() -> impl IntoView {
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <DynamicTooltip />
+            <ConfirmationModal state=confirm_state />
             <Show
                 when=move || game_context.started.get()
                 fallback=move || view! { <p>"Connecting..."</p> }

@@ -282,7 +282,7 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
     if let Some(base_weapon) = master_store.items_store.get("shortsword").cloned() {
-        player_controller::equip_item(
+        let _ = player_controller::equip_item(
             &mut player_specs,
             &mut player_inventory,
             &mut player_state,

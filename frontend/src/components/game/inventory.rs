@@ -1,19 +1,19 @@
-use leptos::html::*;
-use leptos::prelude::*;
-use leptos_use::on_click_outside;
-use shared::data::item::ItemSlot;
-use shared::data::player::EquippedSlot;
-
 use std::collections::HashSet;
 use std::sync::Arc;
 use std::time::Duration;
 
-use shared::messages::client::{EquipItemMessage, SellItemsMessage};
+use leptos::html::*;
+use leptos::prelude::*;
+use leptos_use::on_click_outside;
+
+use shared::data::{item::ItemSlot, player::EquippedSlot};
+use shared::messages::client::{EquipItemMessage, SellItemsMessage, UnequipItemMessage};
 
 use crate::assets::img_asset;
 use crate::components::{
     ui::{
         buttons::{CloseButton, MenuButton},
+        confirm::ConfirmContext,
         menu_panel::MenuPanel,
         tooltip::DynamicTooltipPosition,
     },
@@ -42,18 +42,15 @@ pub fn InventoryPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open=open>
             <div class="grid grid-cols-7 justify-items-stretch flex items-start gap-4 p-4">
-                <EquippedItems class:col-span-2 class:justify-self-end />
-                <ItemsGrid open=open class:col-span-5 class:justify-self-start />
+                <EquippedItemsCard class:col-span-2 class:justify-self-end />
+                <BagCard open=open class:col-span-5 class:justify-self-start />
             </div>
         </MenuPanel>
     }
 }
 
-// TODO: Unequip menu
 #[component]
-pub fn EquippedItems() -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
-
+pub fn EquippedItemsCard() -> impl IntoView {
     const EQUIPPED_SLOTS: &[(ItemSlot, &str, &str)] = &[
         (ItemSlot::Trinket, "ui/trinket.webp", "Trinket"),
         (ItemSlot::Helmet, "ui/helmet.webp", "Helmet"),
@@ -75,15 +72,8 @@ pub fn EquippedItems() -> impl IntoView {
                 {EQUIPPED_SLOTS
                     .iter()
                     .map(|(slot, asset, alt)| {
-                        let game_context = game_context.clone();
                         view! {
-                            <EquippedItem
-                                equipped_item=move || {
-                                    game_context.player_inventory.read().equipped.get(slot).cloned()
-                                }
-                                fallback_asset=*asset
-                                fallback_alt=*alt
-                            />
+                            <EquippedItem item_slot=*slot fallback_asset=*asset fallback_alt=*alt />
                         }
                     })
                     .collect::<Vec<_>>()}
@@ -94,11 +84,13 @@ pub fn EquippedItems() -> impl IntoView {
 
 #[component]
 fn EquippedItem(
-    equipped_item: impl (Fn() -> Option<EquippedSlot>) + Send + Sync + 'static,
+    item_slot: ItemSlot,
     fallback_asset: &'static str,
     fallback_alt: &'static str,
 ) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+
+    let show_menu = RwSignal::new(false);
 
     let render_fallback = move || {
         view! {
@@ -113,49 +105,149 @@ fn EquippedItem(
         .into_any()
     };
 
+    let equipped_item = move || {
+        game_context
+            .player_inventory
+            .read()
+            .equipped
+            .get(&item_slot)
+            .cloned()
+    };
+
     view! {
-        {move || match equipped_item() {
-            Some(EquippedSlot::MainSlot(item_specs)) => {
-                view! {
-                    <ItemCard
-                        item_specs=item_specs
-                        tooltip_position=DynamicTooltipPosition::BottomRight
-                    />
-                }
-                    .into_any()
-            }
-            Some(EquippedSlot::ExtraSlot(main_slot)) => {
-                if let Some(EquippedSlot::MainSlot(item_specs)) = game_context
-                    .player_inventory
-                    .read()
-                    .equipped
-                    .get(&main_slot)
-                    .cloned()
-                {
+        <div class="relative group w-full aspect-[2/3]">
+            {move || match equipped_item() {
+                Some(EquippedSlot::MainSlot(item_specs)) => {
+                    let rc_item_specs = Arc::new(item_specs.clone());
+                    let is_being_unequipped = RwSignal::new(false);
                     view! {
-                        <EmptySlot>
-                            <img
-                                src=img_asset(&item_specs.base.icon)
-                                alt=fallback_alt
-                                class="object-contain max-w-full max-h-full opacity-50"
+                        <div class="relative w-full h-full overflow-visible">
+                            <ItemCard
+                                item_specs=item_specs
+                                on:click=move |_| show_menu.set(true)
+                                tooltip_position=DynamicTooltipPosition::Auto
                             />
-                        </EmptySlot>
+
+                            <Show when=move || is_being_unequipped.get()>
+                                <div class="absolute inset-0 z-30 w-full rounded-md
+                                bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black"></div>
+                            </Show>
+
+                            <Show when=move || show_menu.get()>
+                                <EquippedItemContextMenu
+                                    item_slot=item_slot
+                                    is_being_unequipped=is_being_unequipped
+                                    on_close=Callback::new(move |_| show_menu.set(false))
+                                />
+                                <div class="absolute top-0 right-0 translate-x-full pl-2 whitespace-nowrap z-20 transition-opacity duration-150">
+                                    <ItemTooltip item_specs=rc_item_specs.clone() />
+                                </div>
+                            </Show>
+                        </div>
                     }
                         .into_any()
-                } else {
-                    render_fallback()
                 }
-            }
-            None => render_fallback(),
-        }}
+                Some(EquippedSlot::ExtraSlot(main_slot)) => {
+                    if let Some(EquippedSlot::MainSlot(item_specs)) = game_context
+                        .player_inventory
+                        .read()
+                        .equipped
+                        .get(&main_slot)
+                        .cloned()
+                    {
+                        view! {
+                            <EmptySlot>
+                                <img
+                                    src=img_asset(&item_specs.base.icon)
+                                    alt=fallback_alt
+                                    class="object-contain max-w-full max-h-full opacity-50"
+                                />
+                            </EmptySlot>
+                        }
+                            .into_any()
+                    } else {
+                        render_fallback()
+                    }
+                }
+                None => render_fallback(),
+            }}
+        </div>
     }
 }
 
 #[component]
-fn ItemsGrid(open: RwSignal<bool>) -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
+pub fn EquippedItemContextMenu(
+    item_slot: ItemSlot,
+    on_close: Callback<()>,
+    is_being_unequipped: RwSignal<bool>,
+) -> impl IntoView {
+    let confirm_context = expect_context::<ConfirmContext>();
 
-    let total_slots = game_context.player_inventory.read().max_bag_size as usize;
+    let unequip = Arc::new({
+        let conn = expect_context::<WebsocketContext>();
+
+        move || {
+            conn.send(&UnequipItemMessage { item_slot }.into());
+            is_being_unequipped.set(true);
+            set_timeout(
+                move || is_being_unequipped.set(false),
+                Duration::from_millis(1000),
+            );
+        }
+    });
+
+    let try_unequip = {
+        let game_context = expect_context::<GameContext>();
+        move |_| {
+            let inventory = game_context.player_inventory.read();
+            let need_confirm = inventory
+                .equipped
+                .get(&item_slot)
+                .map(|x| {
+                    if let EquippedSlot::MainSlot(x) = x {
+                        x.weapon_specs.is_some()
+                    } else {
+                        false
+                    }
+                })
+                .unwrap_or_default();
+
+            if need_confirm {
+                (confirm_context
+                        .confirm)(
+                        "Unequipping your weapon will reset the weapon attack skill upgrade level to 1, are you sure?"
+                            .to_string(),
+                        unequip.clone(),
+                    );
+            } else {
+                unequip();
+            }
+            on_close.run(());
+        }
+    };
+
+    view! {
+        <ContextMenu on_close=on_close>
+            <button
+                class="w-full text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-2"
+                on:click=try_unequip
+            >
+                "Unequip"
+            </button>
+
+            <button
+                class="w-full text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-4"
+                on:click=move |_| on_close.run(())
+            >
+                "Cancel"
+            </button>
+        </ContextMenu>
+    }
+}
+
+#[component]
+fn BagCard(open: RwSignal<bool>) -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
 
     view! {
         <div class="bg-zinc-800 rounded-md h-full w-full gap-2 p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
@@ -165,11 +257,13 @@ fn ItemsGrid(open: RwSignal<bool>) -> impl IntoView {
                         "Inventory "
                     </span>
                     <span class="text-shadow-md shadow-gray-950 text-gray-400 text-md font-medium">
-                        {format!(
-                            " ({} / {})",
-                            game_context.player_inventory.read().bag.len(),
-                            game_context.player_inventory.read().max_bag_size,
-                        )}
+                        {move || {
+                            format!(
+                                " ({} / {})",
+                                game_context.player_inventory.read().bag.len(),
+                                game_context.player_inventory.read().max_bag_size,
+                            )
+                        }}
                     </span>
                 </div>
 
@@ -181,9 +275,12 @@ fn ItemsGrid(open: RwSignal<bool>) -> impl IntoView {
             // overflow-y-auto
             <div class="relative flex-1 overflow-x-visible max-h-[80vh]">
                 <div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 p-4 relative shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                    <For each=move || (0..total_slots) key=|i| *i let(i)>
-                        // TODO: Generate unique identifier and remove is_being_equipped
-                        <ItemInBag item_index=i />
+                    <For
+                        each=move || (0..game_context.player_inventory.read().max_bag_size as usize)
+                        key=|i| *i
+                        let(i)
+                    >
+                        <BagItem item_index=i />
                     </For>
                 </div>
             </div>
@@ -193,7 +290,7 @@ fn ItemsGrid(open: RwSignal<bool>) -> impl IntoView {
 }
 
 #[component]
-fn ItemInBag(item_index: usize) -> impl IntoView {
+fn BagItem(item_index: usize) -> impl IntoView {
     let is_being_equipped = RwSignal::new(false);
 
     let game_context = expect_context::<GameContext>();
@@ -222,7 +319,7 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
                                 <ItemCard
                                     item_specs=item_specs.clone()
                                     on:click=move |_| show_menu.set(true)
-                                    tooltip_position=DynamicTooltipPosition::BottomLeft
+                                    tooltip_position=DynamicTooltipPosition::Auto
                                 />
 
                                 <Show when=is_queued_for_sale>
@@ -237,7 +334,7 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
                                 </Show>
 
                                 <Show when=move || show_menu.get()>
-                                    <ItemContextMenu
+                                    <BagItemContextMenu
                                         item_index=item_index
                                         on_close=Callback::new(move |_| show_menu.set(false))
                                         is_being_equipped=is_being_equipped
@@ -258,14 +355,15 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
 }
 
 #[component]
-pub fn ItemContextMenu(
+pub fn BagItemContextMenu(
     item_index: usize,
     on_close: Callback<()>,
     is_being_equipped: RwSignal<bool>,
 ) -> impl IntoView {
     let sell_queue = expect_context::<SellQueue>();
+    let confirm_context = expect_context::<ConfirmContext>();
 
-    let equip = {
+    let equip = Arc::new({
         let conn = expect_context::<WebsocketContext>();
         move || {
             sell_queue.0.write().remove(&item_index);
@@ -275,12 +373,47 @@ pub fn ItemContextMenu(
                 }
                 .into(),
             );
-            on_close.run(());
             is_being_equipped.set(true);
             set_timeout(
                 move || is_being_equipped.set(false),
                 Duration::from_millis(1000),
             );
+        }
+    });
+
+    let try_equip = {
+        let game_context = expect_context::<GameContext>();
+        move |_| {
+            let inventory = game_context.player_inventory.read();
+            let need_confirm = inventory
+                .bag
+                .get(item_index)
+                .and_then(|x| inventory.equipped.get(&x.base.slot))
+                .and_then(|x| match x {
+                    EquippedSlot::ExtraSlot(item_slot) => inventory.equipped.get(&item_slot),
+                    x => Some(x),
+                })
+                .map(|x| {
+                    if let EquippedSlot::MainSlot(x) = x {
+                        x.weapon_specs.is_some()
+                    } else {
+                        false
+                    }
+                })
+                .unwrap_or_default();
+
+            if need_confirm {
+                (confirm_context
+                        .confirm)(
+                        "Equipping a new weapon will reset the weapon attack skill upgrade level to 1, are you sure?"
+                            .to_string(),
+                        equip.clone(),
+                    );
+            } else {
+                equip();
+            }
+
+            on_close.run(());
         }
     };
 
@@ -295,6 +428,44 @@ pub fn ItemContextMenu(
         }
     };
 
+    view! {
+        <ContextMenu on_close=on_close>
+            <button
+                class="w-full text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-2"
+                on:click=try_equip
+            >
+                "Equip"
+            </button>
+
+            <button
+                class="w-full text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-2"
+                on:click=move |_| toggle_sell_mark()
+            >
+                {move || if sell_queue.0.get().contains(&item_index) { "Unsell" } else { "Sell" }}
+            </button>
+
+            <button
+                class="w-full text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-4"
+                on:click=move |_| on_close.run(())
+            >
+                "Cancel"
+            </button>
+        </ContextMenu>
+    }
+}
+
+#[component]
+fn EmptySlot(children: Children) -> impl IntoView {
+    view! {
+        <div class="
+        relative group flex items-center justify-center w-full h-full
+        rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70
+        ">{children()}</div>
+    }
+}
+
+#[component]
+pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView {
     let node_ref = NodeRef::new();
 
     let _ = on_click_outside(node_ref, move |_| {
@@ -322,37 +493,8 @@ pub fn ItemContextMenu(
             "
             style="animation: fade-in 0.2s ease-out forwards"
         >
-            <button
-                class="w-full text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-2"
-                on:click=move |_| equip()
-            >
-                "Equip"
-            </button>
-
-            <button
-                class="w-full text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-2"
-                on:click=move |_| toggle_sell_mark()
-            >
-                {if sell_queue.0.get().contains(&item_index) { "Unsell" } else { "Sell" }}
-            </button>
-
-            <button
-                class="w-full text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-4"
-                on:click=move |_| on_close.run(())
-            >
-                "Cancel"
-            </button>
+            {children()}
         </div>
-    }
-}
-
-#[component]
-fn EmptySlot(children: Children) -> impl IntoView {
-    view! {
-        <div class="
-        relative group flex items-center justify-center w-full h-full
-        rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70
-        ">{children()}</div>
     }
 }
 

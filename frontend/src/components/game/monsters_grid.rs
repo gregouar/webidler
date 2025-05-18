@@ -245,7 +245,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 let skill_specs = skill_specs.clone();
                 view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
             },
-            DynamicTooltipPosition::TopLeft,
+            DynamicTooltipPosition::Auto,
         );
     };
 

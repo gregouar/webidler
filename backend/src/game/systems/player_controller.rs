@@ -1,3 +1,5 @@
+use anyhow::{anyhow, Result};
+
 use shared::data::{
     item::{ItemSlot, ItemSpecs, WeaponSpecs},
     item_affix::{EffectModifier, EffectTarget, EffectsMap},
@@ -126,43 +128,67 @@ pub fn equip_item_from_bag(
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
     item_index: u8,
-) {
+) -> bool {
     let item_index = item_index as usize;
     if let Some(item_specs) = player_inventory.bag.get(item_index) {
-        let mut old_items = equip_item(
+        let old_item = match equip_item(
             player_specs,
             player_inventory,
             player_state,
             item_specs.clone(),
-        );
+        ) {
+            Ok(x) => x,
+            Err(_) => return false,
+        };
 
-        if let Some(old_item_specs) = old_items.pop() {
+        if let Some(old_item_specs) = old_item {
             player_inventory.bag[item_index] = old_item_specs;
         } else {
             player_inventory.bag.remove(item_index);
         }
-
-        player_inventory.bag.extend(old_items);
     }
+    true
 }
 
-// TODO: Change back to only switch with main item, Return Error if trying to equip busy hand
+pub fn unequip_item_to_bag(
+    player_specs: &mut PlayerSpecs,
+    player_inventory: &mut PlayerInventory,
+    player_state: &mut PlayerState,
+    item_slot: ItemSlot,
+) -> bool {
+    if player_inventory.bag.len() >= player_inventory.max_bag_size as usize {
+        return false;
+    }
+
+    if let Some(item) = unequip_item(player_specs, player_inventory, player_state, item_slot) {
+        player_inventory.bag.push(item);
+    }
+
+    true
+}
+
 /// Equip new item and return old equipped item
 pub fn equip_item(
     player_specs: &mut PlayerSpecs,
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
     item_specs: ItemSpecs,
-) -> Vec<ItemSpecs> {
-    let old_items = item_specs
+) -> Result<Option<ItemSpecs>> {
+    if item_specs
         .base
         .extra_slots
         .iter()
-        .chain([item_specs.base.slot].iter())
-        .flat_map(|item_slot| {
-            unequip_item(player_specs, player_inventory, player_state, *item_slot)
-        })
-        .collect();
+        .any(|x| player_inventory.equipped.get(x).is_some())
+    {
+        return Err(anyhow!("slot unavailable"));
+    }
+
+    let old_item = unequip_item(
+        player_specs,
+        player_inventory,
+        player_state,
+        item_specs.base.slot,
+    );
 
     if let Some(ref weapon_specs) = item_specs.weapon_specs {
         equip_weapon(
@@ -186,7 +212,7 @@ pub fn equip_item(
 
     update_player_specs(player_specs, &player_inventory);
 
-    old_items
+    Ok(old_item)
 }
 
 pub fn unequip_item(

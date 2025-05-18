@@ -9,16 +9,18 @@
       "weight": 1000
     },
     {
-      "item_id": "leather_armor",
-      "weight": 1000
-    },
-    {
       "item_id": "leather_gloves",
       "weight": 1000
     },
     {
       "item_id": "leather_boots",
-      "weight": 1000
+      "weight": 1000,
+      "min_area_level": 2
+    },
+    {
+      "item_id": "leather_armor",
+      "weight": 1000,
+      "min_area_level": 2
     },
     {
       "item_id": "shortsword_unique",
@@ -46,6 +48,11 @@
       "min_area_level": 3
     },
     {
+      "item_id": "cloak",
+      "weight": 400,
+      "min_area_level": 4
+    },
+    {
       "item_id": "great_helm",
       "weight": 1000,
       "min_area_level": 5
@@ -57,11 +64,6 @@
     },
     {
       "item_id": "medallion",
-      "weight": 400,
-      "min_area_level": 5
-    },
-    {
-      "item_id": "cloak",
       "weight": 400,
       "min_area_level": 5
     }

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::world::AreaLevel;
+use crate::data::{item::ItemSlot, world::AreaLevel};
 
 use super::{macros::impl_into_message, SessionKey};
 
@@ -14,6 +14,7 @@ impl_into_message! {
         LevelUpSkill(LevelUpSkillMessage),
         LevelUpPlayer(LevelUpPlayerMessage),
         EquipItem(EquipItemMessage),
+        UnequipItem(UnequipItemMessage),
         SellItems(SellItemsMessage),
         PickupLoot(PickUpLootMessage),
         SetAutoProgress(SetAutoProgressMessage),
@@ -59,6 +60,11 @@ pub struct LevelUpPlayerMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EquipItemMessage {
     pub item_index: u8,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct UnequipItemMessage {
+    pub item_slot: ItemSlot,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

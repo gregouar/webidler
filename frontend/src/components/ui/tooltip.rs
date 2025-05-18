@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use leptos::html::*;
 use leptos::prelude::*;
-use leptos_use::use_mouse;
+use leptos_use::{use_mouse, use_window_size};
 
 #[derive(Clone, Debug)]
 pub struct DynamicTooltipContext {
@@ -27,6 +27,7 @@ impl DynamicTooltipContext {
 
 #[derive(Debug, Clone, Copy)]
 pub enum DynamicTooltipPosition {
+    Auto,
     BottomLeft,
     BottomRight,
     TopLeft,
@@ -57,16 +58,34 @@ pub fn DynamicTooltip() -> impl IntoView {
     });
 
     let mouse = use_mouse();
+    let window = use_window_size();
+
     let style = move || {
         let mouse_x = mouse.x.get();
         let mouse_y = mouse.y.get();
         let (width, height) = tooltip_size.get();
 
-        let (left, top) = match tooltip_context.position.get() {
+        let position = match tooltip_context.position.get() {
+            DynamicTooltipPosition::Auto => {
+                match (
+                    mouse_x < window.width.get() / 2.0,
+                    mouse_y < window.height.get() / 2.0,
+                ) {
+                    (true, true) => DynamicTooltipPosition::BottomRight,
+                    (false, true) => DynamicTooltipPosition::BottomLeft,
+                    (true, false) => DynamicTooltipPosition::TopRight,
+                    (false, false) => DynamicTooltipPosition::TopLeft,
+                }
+            }
+            x => x,
+        };
+
+        let (left, top) = match position {
             DynamicTooltipPosition::BottomLeft => (mouse_x - width, mouse_y),
             DynamicTooltipPosition::BottomRight => (mouse_x, mouse_y),
             DynamicTooltipPosition::TopLeft => (mouse_x - width, mouse_y - height),
             DynamicTooltipPosition::TopRight => (mouse_x, mouse_y - height),
+            _ => (0.0, 0.0),
         };
 
         format!("top: {}px; left: {}px;", top, left)

@@ -153,12 +153,32 @@ impl<'a> GameInstance<'a> {
                     );
                 }
             }
-            ClientMessage::EquipItem(m) => player_controller::equip_item_from_bag(
-                self.data.player_specs.mutate(),
-                self.data.player_inventory.mutate(),
-                &mut self.data.player_state,
-                m.item_index,
-            ),
+            ClientMessage::EquipItem(m) => {
+                if !player_controller::equip_item_from_bag(
+                    self.data.player_specs.mutate(),
+                    self.data.player_inventory.mutate(),
+                    &mut self.data.player_state,
+                    m.item_index,
+                ) {
+                    return Some(ErrorMessage {
+                        error_type: ErrorType::Game,
+                        message: "Not enough space!".to_string(),
+                    });
+                }
+            }
+            ClientMessage::UnequipItem(m) => {
+                if !player_controller::unequip_item_to_bag(
+                    self.data.player_specs.mutate(),
+                    self.data.player_inventory.mutate(),
+                    &mut self.data.player_state,
+                    m.item_slot,
+                ) {
+                    return Some(ErrorMessage {
+                        error_type: ErrorType::Game,
+                        message: "Your bag is full!".to_string(),
+                    });
+                }
+            }
             ClientMessage::SellItems(m) => {
                 let mut item_indexes = m.item_indexes;
                 item_indexes.sort_by_key(|&i| i);

@@ -11,7 +11,7 @@ anyhow = "1.0.97"
 leptos = { version = "0.7.7", features = ["csr"] }
 leptos_router = "0.7.8"
 leptos_meta = "0.7.8"
-leptos-use = { version = "0.15.7", features = ["use_mouse","on_click_outside","storage"] }
+leptos-use = { version = "0.15.7", features = ["use_mouse","use_window_size","on_click_outside","storage"] }
 leptos_toaster = "0.2.0"
 
 console_error_panic_hook = "0.1.7"
