@@ -265,7 +265,7 @@ fn Node(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl IntoView {
             </filter>
         </defs>
         <g
-            transform=format!("translate({}, {})", node_specs.x, node_specs.y)
+            transform=format!("translate({}, {})", node_specs.x * 10.0, -node_specs.y * 10.0)
             on:mouseenter=show_tooltip
             on:mouseleave=hide_tooltip
             on:click=move |_| {
@@ -352,10 +352,10 @@ fn Connection(connection: PassiveConnection) -> impl IntoView {
 
                 view! {
                     <line
-                        x1=from.x
-                        y1=from.y
-                        x2=to.x
-                        y2=to.y
+                        x1=from.x * 10.0
+                        y1=-from.y * 10.0
+                        x2=to.x * 10.0
+                        y2=-to.y * 10.0
                         filer=move || {
                             if amount_connections() == 2 { "drop-shadow(0 0 2px gold)" } else { "" }
                         }

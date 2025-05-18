@@ -17,25 +17,418 @@
           }
         ]
       },
-      "life_1": {
-        "name": "Life",
-        "icon": "passives/life.svg",
+
+      "gold_l_1": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -10,
+        "y": 0,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GlobalGoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "gold_r_1": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 10,
+        "y": 0,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GlobalGoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "gold_u_1": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
         "x": 0,
-        "y": 100,
+        "y": 10,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GlobalGoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "gold_d_1": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 0,
+        "y": -10,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GlobalGoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+
+      "gold_dl_1": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -28.5,
+        "y": -14.5,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GlobalGoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "gold_dr_1": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 28.5,
+        "y": -14.5,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GlobalGoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "gold_ul_1": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -28.5,
+        "y": 14.5,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GlobalGoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "gold_ur_1": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 28.5,
+        "y": 14.5,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GlobalGoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+
+      "life_max_1": {
+        "name": "Maximum Life",
+        "icon": "passives/life.svg",
+        "x": 20,
+        "y": 5,
         "node_type": "Life",
         "effects": [
           {
             "stat": "GlobalLife",
             "modifier": "Multiplier",
+            "value": 0.05
+          }
+        ]
+      },
+      "life_max_2": {
+        "name": "Maximum Life",
+        "icon": "passives/life.svg",
+        "x": 30,
+        "y": 5,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "GlobalLife",
+            "modifier": "Multiplier",
+            "value": 0.05
+          }
+        ]
+      },
+      "life_regen_1": {
+        "name": "Life Regeneration",
+        "icon": "passives/life.svg",
+        "x": 20,
+        "y": -5,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "GlobalLifeRegen",
+            "modifier": "Flat",
+            "value": 0.5
+          }
+        ]
+      },
+      "life_regen_2": {
+        "name": "Life Regeneration",
+        "icon": "passives/life.svg",
+        "x": 30,
+        "y": -5,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "GlobalLifeRegen",
+            "modifier": "Flat",
+            "value": 0.5
+          }
+        ]
+      },
+      "life_max_and_regen_1": {
+        "name": "Fortitude",
+        "icon": "passives/life.svg",
+        "x": 40,
+        "y": 0,
+        "size": 1,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "GlobalLife",
+            "modifier": "Multiplier",
+            "value": 0.01
+          },
+          {
+            "stat": "GlobalLifeRegen",
+            "modifier": "Flat",
+            "value": 0.5
+          }
+        ]
+      },
+
+      "armor_1": {
+        "name": "Armor",
+        "icon": "passives/armor.svg",
+        "x": -20,
+        "y": 5,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": "GlobalArmor",
+            "modifier": "Multiplier",
             "value": 0.1
           }
         ]
       },
-      "attack_1": {
-        "name": "Attack",
+      "armor_2": {
+        "name": "Armor",
+        "icon": "passives/armor.svg",
+        "x": -30,
+        "y": 5,
+
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": "GlobalArmor",
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ]
+      },
+      "block_1": {
+        "name": "Block",
+        "icon": "passives/armor.svg",
+        "x": -20,
+        "y": -5,
+        "node_type": "Armor",
+        "effects": []
+      },
+      "block_2": {
+        "name": "Block",
+        "icon": "passives/armor.svg",
+        "x": -30,
+        "y": -5,
+        "node_type": "Armor",
+        "effects": []
+      },
+      "armor_and_block_1": {
+        "name": "Myrmidon",
+        "icon": "passives/armor.svg",
+        "x": -40,
+        "y": 0,
+        "size": 1,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": "GlobalArmor",
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ]
+      },
+
+      "spell_damage_1": {
+        "name": "Spell Damage",
+        "icon": "passives/spell.svg",
+        "x": -10,
+        "y": -12.5,
+        "node_type": "Spell",
+        "effects": [
+          {
+            "stat": "GlobalSpellDamage",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "spell_damage_2": {
+        "name": "Spell Damage",
+        "icon": "passives/spell.svg",
+        "x": -20,
+        "y": -20,
+        "node_type": "Spell",
+        "effects": [
+          {
+            "stat": "GlobalSpellDamage",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "spell_speed_1": {
+        "name": "Casting Speed",
+        "icon": "passives/spell.svg",
+        "x": -5,
+        "y": -20,
+        "node_type": "Spell",
+        "effects": [
+          {
+            "stat": "GlobalSpellSpeed",
+            "modifier": "Multiplier",
+            "value": 0.04
+          }
+        ]
+      },
+      "spell_speed_2": {
+        "name": "Casting Speed",
+        "icon": "passives/spell.svg",
+        "x": -15,
+        "y": -27.5,
+        "node_type": "Spell",
+        "effects": [
+          {
+            "stat": "GlobalSpellSpeed",
+            "modifier": "Multiplier",
+            "value": 0.04
+          }
+        ]
+      },
+      "spell_damage_and_speed_1": {
+        "name": "Sorcery",
+        "icon": "passives/spell.svg",
+        "x": -25,
+        "y": -30,
+        "size": 1,
+        "node_type": "Spell",
+        "effects": [
+          {
+            "stat": "GlobalSpellDamage",
+            "modifier": "Multiplier",
+            "value": 0.25
+          },
+          {
+            "stat": "GlobalSpellSpeed",
+            "modifier": "Multiplier",
+            "value": 0.04
+          }
+        ]
+      },
+
+      "mana_max_1": {
+        "name": "Maximum Mana",
+        "icon": "passives/mana.svg",
+        "x": 10,
+        "y": -12.5,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "GlobalMana",
+            "modifier": "Flat",
+            "value": 10
+          }
+        ]
+      },
+      "mana_max_2": {
+        "name": "Maximum Mana",
+        "icon": "passives/mana.svg",
+        "x": 20,
+        "y": -20,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "GlobalMana",
+            "modifier": "Flat",
+            "value": 10
+          }
+        ]
+      },
+      "mana_regen_1": {
+        "name": "Mana Regeneration",
+        "icon": "passives/mana.svg",
+        "x": 5,
+        "y": -20,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "GlobalManaRegen",
+            "modifier": "Flat",
+            "value": 0.2
+          }
+        ]
+      },
+      "mana_regen_2": {
+        "name": "Mana Regeneration",
+        "icon": "passives/mana.svg",
+        "x": 15,
+        "y": -27.5,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "GlobalManaRegen",
+            "modifier": "Flat",
+            "value": 0.2
+          }
+        ]
+      },
+      "mana_max_and_regen_1": {
+        "name": "Wisdom",
+        "icon": "passives/mana.svg",
+        "x": 25,
+        "y": -30,
+        "size": 1,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "GlobalMana",
+            "modifier": "Flat",
+            "value": 10
+          },
+          {
+            "stat": "GlobalManaRegen",
+            "modifier": "Flat",
+            "value": 0.2
+          }
+        ]
+      },
+
+      "attack_damage_1": {
+        "name": "Attack Damage",
         "icon": "passives/attack.svg",
-        "x": 100,
-        "y": 150,
+        "x": -10,
+        "y": 12.5,
         "node_type": "Attack",
         "effects": [
           {
@@ -45,26 +438,205 @@
           }
         ]
       },
-      "mana_1": {
-        "name": "Mana",
-        "icon": "passives/mana.svg",
-        "x": -100,
-        "y": 150,
-        "node_type": "Mana",
+      "attack_damage_2": {
+        "name": "Attack Damage",
+        "icon": "passives/attack.svg",
+        "x": -20,
+        "y": 20,
+        "node_type": "Attack",
         "effects": [
           {
-            "stat": "GlobalMana",
+            "stat": "GlobalAttackDamage",
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.25
+          }
+        ]
+      },
+      "attack_speed_1": {
+        "name": "Attack Speed",
+        "icon": "passives/attack.svg",
+        "x": -5,
+        "y": 20,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": "GlobalAttackSpeed",
+            "modifier": "Multiplier",
+            "value": 0.04
+          }
+        ]
+      },
+      "attack_speed_2": {
+        "name": "Attack Speed",
+        "icon": "passives/attack.svg",
+        "x": -15,
+        "y": 27.5,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": "GlobalAttackSpeed",
+            "modifier": "Multiplier",
+            "value": 0.04
+          }
+        ]
+      },
+      "attack_damage_and_speed_1": {
+        "name": "Frenzy",
+        "icon": "passives/attack.svg",
+        "x": -25,
+        "y": 30,
+        "size": 1,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": "GlobalAttackDamage",
+            "modifier": "Multiplier",
+            "value": 0.25
+          },
+          {
+            "stat": "GlobalAttackSpeed",
+            "modifier": "Multiplier",
+            "value": 0.04
+          }
+        ]
+      },
+
+      "crit_damage_1": {
+        "name": "Critical Strike Damage",
+        "icon": "passives/critical.svg",
+        "x": 10,
+        "y": 12.5,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": "GlobalCritDamage",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ]
+      },
+      "crit_damage_2": {
+        "name": "Critical Strike Damage",
+        "icon": "passives/critical.svg",
+        "x": 20,
+        "y": 20,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": "GlobalCritDamage",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ]
+      },
+      "crit_chances_1": {
+        "name": "Critical Strike Chances",
+        "icon": "passives/critical.svg",
+        "x": 5,
+        "y": 20,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": "GlobalCritChances",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "crit_chances_2": {
+        "name": "Critical Strike Chances",
+        "icon": "passives/critical.svg",
+        "x": 15,
+        "y": 27.5,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": "GlobalCritChances",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "crit_damage_and_chances_1": {
+        "name": "Sadistic",
+        "icon": "passives/critical.svg",
+        "x": 25,
+        "y": 30,
+        "size": 1,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": "GlobalCritChances",
+            "modifier": "Multiplier",
+            "value": 0.25
+          },
+          {
+            "stat": "GlobalCritDamage",
+            "modifier": "Multiplier",
+            "value": 0.5
           }
         ]
       }
     },
     "connections": [
-      { "from": "gold_init", "to": "life_1" },
-      { "from": "life_1", "to": "attack_1" },
-      { "from": "life_1", "to": "mana_1" },
-      { "from": "attack_1", "to": "mana_1" }
+      { "from": "gold_init", "to": "gold_l_1" },
+      { "from": "gold_init", "to": "gold_r_1" },
+      { "from": "gold_init", "to": "gold_u_1" },
+      { "from": "gold_init", "to": "gold_d_1" },
+
+      { "from": "gold_r_1", "to": "life_max_1" },
+      { "from": "gold_r_1", "to": "life_regen_1" },
+      { "from": "life_max_1", "to": "life_max_2" },
+      { "from": "life_regen_1", "to": "life_regen_2" },
+      { "from": "life_regen_2", "to": "life_max_and_regen_1" },
+      { "from": "life_max_2", "to": "life_max_and_regen_1" },
+
+      { "from": "gold_l_1", "to": "armor_1" },
+      { "from": "gold_l_1", "to": "block_1" },
+      { "from": "armor_1", "to": "armor_2" },
+      { "from": "block_1", "to": "block_2" },
+      { "from": "armor_2", "to": "armor_and_block_1" },
+      { "from": "block_2", "to": "armor_and_block_1" },
+
+      { "from": "gold_u_1", "to": "attack_damage_1" },
+      { "from": "gold_u_1", "to": "attack_speed_1" },
+      { "from": "attack_damage_1", "to": "attack_damage_2" },
+      { "from": "attack_speed_1", "to": "attack_speed_2" },
+      { "from": "attack_damage_2", "to": "attack_damage_and_speed_1" },
+      { "from": "attack_speed_2", "to": "attack_damage_and_speed_1" },
+
+      { "from": "gold_u_1", "to": "crit_damage_1" },
+      { "from": "gold_u_1", "to": "crit_chances_1" },
+      { "from": "crit_damage_1", "to": "crit_damage_2" },
+      { "from": "crit_chances_1", "to": "crit_chances_2" },
+      { "from": "crit_damage_2", "to": "crit_damage_and_chances_1" },
+      { "from": "crit_chances_2", "to": "crit_damage_and_chances_1" },
+
+      { "from": "gold_d_1", "to": "spell_damage_1" },
+      { "from": "gold_d_1", "to": "spell_speed_1" },
+      { "from": "spell_damage_1", "to": "spell_damage_2" },
+      { "from": "spell_speed_1", "to": "spell_speed_2" },
+      { "from": "spell_damage_2", "to": "spell_damage_and_speed_1" },
+      { "from": "spell_speed_2", "to": "spell_damage_and_speed_1" },
+
+      { "from": "gold_d_1", "to": "mana_max_1" },
+      { "from": "gold_d_1", "to": "mana_regen_1" },
+      { "from": "mana_max_1", "to": "mana_max_2" },
+      { "from": "mana_regen_1", "to": "mana_regen_2" },
+      { "from": "mana_max_2", "to": "mana_max_and_regen_1" },
+      { "from": "mana_regen_2", "to": "mana_max_and_regen_1" },
+
+      { "from": "gold_ul_1", "to": "armor_2" },
+      { "from": "gold_ul_1", "to": "attack_damage_2" },
+
+      { "from": "gold_ur_1", "to": "crit_damage_2" },
+      { "from": "gold_ur_1", "to": "life_max_2" },
+
+      { "from": "gold_dl_1", "to": "block_2" },
+      { "from": "gold_dl_1", "to": "spell_damage_2" },
+
+      { "from": "gold_dr_1", "to": "life_regen_2" },
+      { "from": "gold_dr_1", "to": "mana_max_2" }
     ]
   }
 }
