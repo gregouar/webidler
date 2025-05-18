@@ -112,7 +112,7 @@ pub fn level_up(
     player_resources.passive_points += 1;
     player_resources.experience -= player_specs.experience_needed;
     player_specs.experience_needed =
-        10.0 * increase_factors::exponential(player_specs.level as f64);
+        20.0 * increase_factors::exponential(player_specs.level as f64);
 
     player_state.character_state.health += 10.0;
 
