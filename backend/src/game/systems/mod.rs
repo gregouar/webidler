@@ -6,6 +6,7 @@ pub mod loot_generator;
 pub mod monsters_controller;
 pub mod monsters_updater;
 pub mod monsters_wave;
+pub mod passives_controller;
 pub mod player_controller;
 pub mod player_updater;
 pub mod skills_controller;

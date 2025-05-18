@@ -24,10 +24,7 @@ use shared::{
         item::ItemRarity,
         item_affix::EffectsMap,
         player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-        skill::{
-            BaseSkillSpecs, DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs,
-            SkillType, TargetType,
-        },
+        skill::SkillSpecs,
     },
     messages::{
         client::{ClientConnectMessage, ClientMessage},
@@ -177,6 +174,8 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
     let mut session_key: SessionKey = [0u8; 32];
     rng.try_fill_bytes(&mut session_key)?;
 
+    let passives_tree_specs = master_store.passives_store.get("default").unwrap().clone();
+
     let mut player_specs = PlayerSpecs {
         character_specs: CharacterSpecs {
             name: user_id.to_string(), // TODO: LOL
@@ -191,66 +190,9 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
             poison_armor: 0.0,
         },
         skills_specs: vec![
-            SkillSpecs::init(&BaseSkillSpecs {
-                name: String::from("Magic Missile"),
-                description: "A fast spell to cast".to_string(),
-                icon: String::from("skills/fireball.svg"),
-                skill_type: SkillType::Spell,
-                cooldown: 2.0,
-                mana_cost: 4.0,
-                upgrade_cost: 20.0,
-                effects: vec![SkillEffect {
-                    range: Range::Distance,
-                    target_type: TargetType::Enemy,
-                    shape: Shape::Single,
-                    effect_type: SkillEffectType::FlatDamage {
-                        min: 3.0,
-                        max: 6.0,
-                        damage_type: DamageType::Physical,
-                        crit_chances: 0.0,
-                        crit_damage: 0.0,
-                    },
-                }],
-            }),
-            SkillSpecs::init(&BaseSkillSpecs {
-                name: String::from("Fireball"),
-                description: "Throw a mighty fireball, burning multiple enemies".to_string(),
-                icon: String::from("skills/fireball2.svg"),
-                skill_type: SkillType::Spell,
-                cooldown: 5.0,
-                mana_cost: 20.0,
-                upgrade_cost: 50.0,
-                effects: vec![SkillEffect {
-                    range: Range::Distance,
-                    target_type: TargetType::Enemy,
-                    shape: Shape::Square4,
-                    effect_type: SkillEffectType::FlatDamage {
-                        min: 4.0,
-                        max: 12.0,
-                        damage_type: DamageType::Fire,
-                        crit_chances: 0.0,
-                        crit_damage: 0.0,
-                    },
-                }],
-            }),
-            SkillSpecs::init(&BaseSkillSpecs {
-                name: String::from("Heal"),
-                description: "A minor healing spell for yourself".to_string(),
-                icon: String::from("skills/heal.svg"),
-                skill_type: SkillType::Spell,
-                cooldown: 30.0,
-                mana_cost: 20.0,
-                upgrade_cost: 50.0,
-                effects: vec![SkillEffect {
-                    range: Range::Melee,
-                    target_type: TargetType::Me,
-                    shape: Shape::Single,
-                    effect_type: SkillEffectType::Heal {
-                        min: 20.0,
-                        max: 40.0,
-                    },
-                }],
-            }),
+            SkillSpecs::init(master_store.skills_store.get("magic_missile").unwrap()),
+            SkillSpecs::init(master_store.skills_store.get("fireball").unwrap()),
+            SkillSpecs::init(master_store.skills_store.get("heal").unwrap()),
         ],
         level: 1,
         experience_needed: 50.0,
@@ -302,6 +244,7 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
         last_active: Instant::now(),
         data: Box::new(GameInstanceData::init(
             world_blueprint,
+            passives_tree_specs,
             player_resources,
             player_specs,
             player_inventory,

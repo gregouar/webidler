@@ -56,3 +56,10 @@ pub enum EffectTarget {
 }
 // TODO: ReducedManaCost
 // TODO: Fire and Poison armor
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct StatEffect {
+    pub stat: EffectTarget,
+    pub modifier: EffectModifier,
+    pub value: f64,
+}

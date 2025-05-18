@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::{item::ItemSlot, world::AreaLevel};
+use crate::data::{item::ItemSlot, passive::PassiveNodeId, world::AreaLevel};
 
 use super::{macros::impl_into_message, SessionKey};
 
@@ -19,6 +19,7 @@ impl_into_message! {
         PickupLoot(PickUpLootMessage),
         SetAutoProgress(SetAutoProgressMessage),
         GoBack(GoBackLevelMessage),
+        PurchasePassive(PurchasePassiveMessage),
     }
 }
 
@@ -85,4 +86,9 @@ pub struct GoBackLevelMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetAutoProgressMessage {
     pub value: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct PurchasePassiveMessage {
+    pub node_id: PassiveNodeId,
 }

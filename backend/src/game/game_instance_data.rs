@@ -5,6 +5,7 @@ use super::systems::player_controller::PlayerController;
 use super::{data::world::WorldBlueprint, utils::LazySyncer};
 
 use shared::data::game_stats::GameStats;
+use shared::data::passive::{PassivesTreeSpecs, PassivesTreeState};
 use shared::data::{
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
@@ -16,6 +17,9 @@ use shared::data::{
 pub struct GameInstanceData {
     pub world_blueprint: WorldBlueprint,
     pub world_state: LazySyncer<WorldState>,
+
+    pub passives_tree_specs: PassivesTreeSpecs,
+    pub passives_tree_state: LazySyncer<PassivesTreeState>,
 
     pub player_specs: LazySyncer<PlayerSpecs>,
     pub player_inventory: LazySyncer<PlayerInventory>,
@@ -37,6 +41,7 @@ pub struct GameInstanceData {
 impl GameInstanceData {
     pub fn init(
         world_blueprint: WorldBlueprint,
+        passives_tree_specs: PassivesTreeSpecs,
         player_resources: PlayerResources,
         player_specs: PlayerSpecs,
         player_inventory: PlayerInventory,
@@ -44,6 +49,9 @@ impl GameInstanceData {
         Self {
             world_state: LazySyncer::new(WorldState::init(&world_blueprint.specs)),
             world_blueprint: world_blueprint,
+
+            passives_tree_state: LazySyncer::new(PassivesTreeState::default()),
+            passives_tree_specs,
 
             player_resources,
             player_state: PlayerState::init(&player_specs),

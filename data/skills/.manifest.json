@@ -1,0 +1,8 @@
+{
+  "meta": {
+    "enabled": true
+  },
+  "resources": {
+    "skills": ["skills.json"]
+  }
+}

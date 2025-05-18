@@ -21,7 +21,7 @@ use shared::{
 use super::{
     data::{master_store::MasterStore, DataInit},
     game_instance_data::GameInstanceData,
-    systems::{loot_controller, loot_generator, world_controller},
+    systems::{loot_controller, loot_generator, passives_controller, world_controller},
 };
 use super::{
     systems::{
@@ -68,6 +68,18 @@ impl<'a> GameInstance<'a> {
 
             if let ControlFlow::Break(_) = self.handle_client_events().await {
                 break;
+            }
+
+            if self.data.player_specs.need_to_sync()
+                || self.data.player_inventory.need_to_sync()
+                || self.data.passives_tree_state.need_to_sync()
+            {
+                player_controller::update_player_specs(
+                    self.data.player_specs.mutate(),
+                    self.data.player_inventory.read(),
+                    &self.data.passives_tree_specs,
+                    self.data.passives_tree_state.read(),
+                );
             }
 
             self.control_entities().await?;
@@ -147,7 +159,6 @@ impl<'a> GameInstance<'a> {
                 for _ in 0..m.amount {
                     player_controller::level_up(
                         &mut self.data.player_specs.mutate(),
-                        self.data.player_inventory.read(),
                         &mut self.data.player_state,
                         &mut self.data.player_resources,
                     );
@@ -211,6 +222,12 @@ impl<'a> GameInstance<'a> {
                 world_state.going_back += m.amount;
                 world_state.auto_progress = false;
             }
+            ClientMessage::PurchasePassive(m) => passives_controller::purchase_node(
+                &mut self.data.player_resources,
+                &self.data.passives_tree_specs,
+                self.data.passives_tree_state.mutate(),
+                m.node_id,
+            ),
             ClientMessage::Connect(_) => {
                 tracing::warn!("received unexpected message: {:?}", msg);
                 return Some(ErrorMessage {
@@ -229,6 +246,8 @@ impl<'a> GameInstance<'a> {
                 &InitGameMessage {
                     world_specs: self.data.world_blueprint.specs.clone(),
                     world_state: self.data.world_state.read().clone(),
+                    passives_tree_specs: self.data.passives_tree_specs.clone(),
+                    passives_tree_state: self.data.passives_tree_state.read().clone(),
                     player_specs: self.data.player_specs.read().clone(),
                     player_state: self.data.player_state.clone(),
                 }
@@ -387,6 +406,7 @@ impl<'a> GameInstance<'a> {
             .send(
                 &SyncGameStateMessage {
                     world_state: self.data.world_state.sync(),
+                    passives_tree_state: self.data.passives_tree_state.sync(),
                     player_specs: self.data.player_specs.sync(),
                     player_inventory: self.data.player_inventory.sync(),
                     player_state: self.data.player_state.clone(),

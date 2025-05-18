@@ -11,6 +11,8 @@ use crate::game::utils::json::LoadJsonFromFile;
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[serde(rename_all = "snake_case")]
 pub enum ManifestCategory {
+    Passives,
+    Skills,
     Items,
     ItemAffixes,
     ItemAdjectives,

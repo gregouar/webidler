@@ -74,10 +74,15 @@ pub fn HeaderMenu() -> impl IntoView {
                 </audio>
 
                 <MenuButton on:click=move |_| {
+                    game_context.open_inventory.set(!game_context.open_inventory.get());
                     game_context.open_statistics.set(false);
-                    game_context.open_inventory.set(!game_context.open_inventory.get())
+                    game_context.open_passives.set(false);
                 }>"Inventory"</MenuButton>
-                <MenuButton>
+                <MenuButton on:click=move |_| {
+                    game_context.open_inventory.set(false);
+                    game_context.open_passives.set(!game_context.open_passives.get());
+                    game_context.open_statistics.set(false);
+                }>
                     "Passive Skills"
                     {move || {
                         let points = game_context.player_resources.read().passive_points;
@@ -86,7 +91,8 @@ pub fn HeaderMenu() -> impl IntoView {
                 </MenuButton>
                 <MenuButton on:click=move |_| {
                     game_context.open_inventory.set(false);
-                    game_context.open_statistics.set(!game_context.open_statistics.get())
+                    game_context.open_passives.set(false);
+                    game_context.open_statistics.set(!game_context.open_statistics.get());
                 }>"Statistics"</MenuButton>
                 <MenuButton on:click=abandon_quest>"Abandon Quest"</MenuButton>
             </div>

@@ -4,6 +4,7 @@ use shared::data::{
     item::{ItemSlot, ItemSpecs, WeaponSpecs},
     item_affix::{EffectModifier, EffectTarget, EffectsMap},
     monster::{MonsterSpecs, MonsterState},
+    passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{SkillSpecs, SkillState, SkillType},
 };
@@ -100,7 +101,6 @@ pub fn reward_player(
 
 pub fn level_up(
     player_specs: &mut PlayerSpecs,
-    player_inventory: &PlayerInventory,
     player_state: &mut PlayerState,
     player_resources: &mut PlayerResources,
 ) -> bool {
@@ -115,8 +115,6 @@ pub fn level_up(
         10.0 * increase_factors::exponential(player_specs.level as f64);
 
     player_state.character_state.health += 10.0;
-
-    update_player_specs(player_specs, player_inventory);
 
     player_state.just_leveled_up = true;
 
@@ -214,8 +212,6 @@ pub fn equip_item(
         .equipped
         .insert(item_specs.base.slot, EquippedSlot::MainSlot(item_specs));
 
-    update_player_specs(player_specs, &player_inventory);
-
     Ok(old_item)
 }
 
@@ -301,7 +297,12 @@ fn equip_weapon(
     player_specs.skills_specs.insert(0, weapon_skill);
 }
 
-fn update_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &PlayerInventory) {
+pub fn update_player_specs(
+    player_specs: &mut PlayerSpecs,
+    player_inventory: &PlayerInventory,
+    passives_tree_specs: &PassivesTreeSpecs,
+    passive_tree_state: &PassivesTreeState,
+) {
     // TODO: Reset player_specs
     player_specs.character_specs.armor = 0.0;
     player_specs.character_specs.fire_armor = 0.0;
@@ -327,7 +328,23 @@ fn update_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Player
         .map(|armor_specs| armor_specs.armor)
         .sum::<f64>();
 
-    player_specs.effects = EffectsMap::combine_all(equipped_items.map(|i| i.aggregate_effects()));
+    player_specs.effects = EffectsMap::combine_all(
+        equipped_items.map(|i| i.aggregate_effects()).chain(
+            passive_tree_state
+                .purchased_nodes
+                .iter()
+                .filter_map(|node_id| {
+                    passives_tree_specs.nodes.get(node_id).map(|node| {
+                        EffectsMap(
+                            node.effects
+                                .iter()
+                                .map(|effect| ((effect.stat, effect.modifier), effect.value))
+                                .collect(),
+                        )
+                    })
+                }),
+        ),
+    );
 
     compute_player_specs(player_specs);
 }

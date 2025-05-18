@@ -4,6 +4,7 @@ use shared::data::{
     game_stats::GameStats,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
+    passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     world::{WorldSpecs, WorldState},
 };
@@ -14,6 +15,9 @@ pub struct GameContext {
 
     pub world_specs: RwSignal<WorldSpecs>,
     pub world_state: RwSignal<WorldState>,
+
+    pub passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    pub passives_tree_state: RwSignal<PassivesTreeState>,
 
     pub player_specs: RwSignal<PlayerSpecs>,
     pub player_inventory: RwSignal<PlayerInventory>,
@@ -29,7 +33,9 @@ pub struct GameContext {
     pub game_stats: RwSignal<GameStats>,
 
     // TODO: Is this really the correct place? Should we have a UI context?
+    // TODO: enum ?
     pub open_inventory: RwSignal<bool>,
+    pub open_passives: RwSignal<bool>,
     pub open_statistics: RwSignal<bool>,
 }
 
@@ -40,6 +46,9 @@ impl GameContext {
 
             world_specs: RwSignal::new(WorldSpecs::default()),
             world_state: RwSignal::new(WorldState::default()),
+
+            passives_tree_specs: RwSignal::new(PassivesTreeSpecs::default()),
+            passives_tree_state: RwSignal::new(PassivesTreeState::default()),
 
             player_specs: RwSignal::new(PlayerSpecs::default()),
             player_inventory: RwSignal::new(PlayerInventory::default()),
@@ -55,6 +64,7 @@ impl GameContext {
             game_stats: RwSignal::new(GameStats::default()),
 
             open_inventory: RwSignal::new(false),
+            open_passives: RwSignal::new(false),
             open_statistics: RwSignal::new(false),
         }
     }

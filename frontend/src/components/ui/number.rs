@@ -6,7 +6,7 @@ pub fn Number(value: Signal<f64>) -> impl IntoView {
 }
 
 pub fn format_number(value: f64) -> String {
-    let value = value.ceil();
+    let value = value.round();
     if value >= 1_000_000.0 {
         format!("{:.2e}", value)
     } else {

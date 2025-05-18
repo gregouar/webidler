@@ -4,6 +4,7 @@ use crate::data::{
     game_stats::GameStats,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
+    passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     world::{WorldSpecs, WorldState},
 };
@@ -42,6 +43,8 @@ pub enum ErrorType {
 pub struct InitGameMessage {
     pub world_specs: WorldSpecs,
     pub world_state: WorldState,
+    pub passives_tree_specs: PassivesTreeSpecs,
+    pub passives_tree_state: PassivesTreeState,
     pub player_specs: PlayerSpecs,
     pub player_state: PlayerState,
 }
@@ -50,6 +53,7 @@ pub struct InitGameMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SyncGameStateMessage {
     pub world_state: Option<WorldState>,
+    pub passives_tree_state: Option<PassivesTreeState>,
     pub player_specs: Option<PlayerSpecs>,
     pub player_inventory: Option<PlayerInventory>,
     pub player_state: PlayerState,

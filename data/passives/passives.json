@@ -1,0 +1,70 @@
+{
+  "default": {
+    "nodes": {
+      "gold_init": {
+        "name": "Lucky Start",
+        "icon": "passives/gold.svg",
+        "initial_node": true,
+        "x": 0,
+        "y": 0,
+        "size": 1,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GlobalGoldFind",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ]
+      },
+      "life_1": {
+        "name": "Life",
+        "icon": "passives/life.svg",
+        "x": 0,
+        "y": 100,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "GlobalLife",
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ]
+      },
+      "attack_1": {
+        "name": "Attack",
+        "icon": "passives/attack.svg",
+        "x": 100,
+        "y": 150,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": "GlobalAttackDamage",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "mana_1": {
+        "name": "Mana",
+        "icon": "passives/mana.svg",
+        "x": -100,
+        "y": 150,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "GlobalMana",
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ]
+      }
+    },
+    "connections": [
+      { "from": "gold_init", "to": "life_1" },
+      { "from": "life_1", "to": "attack_1" },
+      { "from": "life_1", "to": "mana_1" },
+      { "from": "attack_1", "to": "mana_1" }
+    ]
+  }
+}

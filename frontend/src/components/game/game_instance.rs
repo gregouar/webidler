@@ -18,6 +18,7 @@ use crate::components::websocket::WebsocketContext;
 use super::battle_scene::BattleScene;
 use super::header_menu::HeaderMenu;
 use super::inventory::InventoryPanel;
+use super::passives::PassivesPanel;
 use super::statistics::StatisticsPanel;
 use super::GameContext;
 
@@ -70,6 +71,7 @@ pub fn GameInstance() -> impl IntoView {
                 <div class="relative flex-1">
                     <BattleScene />
                     <InventoryPanel open=game_context.open_inventory />
+                    <PassivesPanel open=game_context.open_passives />
                     <StatisticsPanel open=game_context.open_statistics />
                 </div>
             </Show>
@@ -110,6 +112,8 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     let InitGameMessage {
         world_specs,
         world_state,
+        passives_tree_specs,
+        passives_tree_state,
         player_specs,
         player_state,
     } = init_message;
@@ -117,6 +121,8 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     game_context.started.set(true);
     game_context.world_specs.set(world_specs);
     game_context.world_state.set(world_state);
+    game_context.passives_tree_specs.set(passives_tree_specs);
+    game_context.passives_tree_state.set(passives_tree_state);
     game_context.player_specs.set(player_specs);
     game_context.player_state.set(player_state);
 }
@@ -124,6 +130,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
 fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     let SyncGameStateMessage {
         world_state,
+        passives_tree_state,
         player_specs,
         player_inventory,
         player_state,
@@ -136,6 +143,9 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
 
     if let Some(world_state) = world_state {
         game_context.world_state.set(world_state);
+    }
+    if let Some(passives_tree_state) = passives_tree_state {
+        game_context.passives_tree_state.set(passives_tree_state);
     }
     if let Some(player_specs) = player_specs {
         game_context.player_specs.set(player_specs);

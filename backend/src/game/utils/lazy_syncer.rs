@@ -34,4 +34,8 @@ impl<T: Clone> LazySyncer<T> {
             false => None,
         }
     }
+
+    pub fn need_to_sync(&self) -> bool {
+        self.need_to_sync
+    }
 }

@@ -1,0 +1,52 @@
+{
+  "magic_missile": {
+    "name": "Magic Missile",
+    "description": "A fast spell to spam",
+    "icon": "skills/fireball.svg",
+    "skill_type": "Spell",
+    "cooldown": 2,
+    "mana_cost": 4,
+    "upgrade_cost": 20,
+    "effects": [
+      {
+        "range": "Distance",
+        "effect_type": {
+          "FlatDamage": { "min": 3, "max": 6, "damage_type": "Physical" }
+        }
+      }
+    ]
+  },
+  "fireball": {
+    "name": "Fireball",
+    "description": "Throw a mighty fireball, burning multiple enemies",
+    "icon": "skills/fireball2.svg",
+    "skill_type": "Spell",
+    "cooldown": 5,
+    "mana_cost": 20,
+    "upgrade_cost": 50,
+    "effects": [
+      {
+        "range": "Distance",
+        "shape": "Square4",
+        "effect_type": {
+          "FlatDamage": { "min": 4, "max": 12, "damage_type": "Fire" }
+        }
+      }
+    ]},
+  "heal": {
+    "name": "Heal",
+    "description": "A minor healing spell for yourself",
+    "icon": "skills/heal.svg",
+    "skill_type": "Spell",
+    "cooldown": 30,
+    "mana_cost": 20,
+    "upgrade_cost": 50,
+    "effects": [
+      {
+        "target_type": "Me",
+        "effect_type": {
+          "Heal": { "min": 20, "max": 40}
+        }
+      }
+    ]}
+}

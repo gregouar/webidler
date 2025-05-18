@@ -5,6 +5,7 @@ pub mod item;
 pub mod item_affix;
 pub mod loot;
 pub mod monster;
+pub mod passive;
 pub mod player;
 pub mod skill;
 pub mod world;

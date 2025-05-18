@@ -42,7 +42,8 @@ pub fn damage_character(
         }
     }
 
-    if target_state.is_alive && target_state.health == 0.0 {
+    if target_state.is_alive && target_state.health < 0.5 {
+        target_state.health = 0.0;
         target_state.is_alive = false;
         target_state.just_died = true;
     }

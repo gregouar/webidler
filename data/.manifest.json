@@ -8,6 +8,8 @@
     "items",
     "loot",
     "monsters",
+    "passives",
+    "skills",
     "worlds"
   ]
 }

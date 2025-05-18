@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 
 use super::world::AreaLevel;
 
-pub use super::effect::{DamageType, EffectModifier, EffectTarget};
+pub use super::effect::{DamageType, EffectModifier, EffectTarget, StatEffect};
 pub use super::skill::{Range, Shape};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -84,13 +84,6 @@ pub struct AffixEffectBlueprint {
     // pub scope: AffixEffectScope,
     pub min: f64,
     pub max: f64,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct StatEffect {
-    pub stat: EffectTarget,
-    pub modifier: EffectModifier,
-    pub value: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
