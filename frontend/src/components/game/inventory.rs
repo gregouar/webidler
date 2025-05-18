@@ -6,6 +6,7 @@ use shared::data::player::EquippedSlot;
 
 use std::collections::HashSet;
 use std::sync::Arc;
+use std::time::Duration;
 
 use shared::messages::client::{EquipItemMessage, SellItemsMessage};
 
@@ -181,6 +182,7 @@ fn ItemsGrid(open: RwSignal<bool>) -> impl IntoView {
             <div class="relative flex-1 overflow-x-visible max-h-[80vh]">
                 <div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 p-4 relative shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                     <For each=move || (0..total_slots) key=|i| *i let(i)>
+                        // TODO: Generate unique identifier and remove is_being_equipped
                         <ItemInBag item_index=i />
                     </For>
                 </div>
@@ -206,6 +208,7 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
     let is_queued_for_sale = move || sell_queue.0.read().contains(&item_index);
 
     let show_menu = RwSignal::new(false);
+    let is_being_equipped = RwSignal::new(false);
 
     view! {
         <div class="relative group w-full aspect-[2/3]">
@@ -227,10 +230,16 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
                                     </div>
                                 </Show>
 
+                                <Show when=move || is_being_equipped.get()>
+                                    <div class="absolute inset-0 z-30 w-full rounded-md
+                                    bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black"></div>
+                                </Show>
+
                                 <Show when=move || show_menu.get()>
                                     <ItemContextMenu
                                         item_index=item_index
                                         on_close=Callback::new(move |_| show_menu.set(false))
+                                        is_being_equipped=is_being_equipped
                                     />
                                     <div class="absolute top-0 left-0 -translate-x-full pr-2 whitespace-nowrap z-20 transition-opacity duration-150">
                                         <ItemTooltip item_specs=rc_item_specs.clone() />
@@ -248,7 +257,11 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
 }
 
 #[component]
-pub fn ItemContextMenu(item_index: usize, on_close: Callback<()>) -> impl IntoView {
+pub fn ItemContextMenu(
+    item_index: usize,
+    on_close: Callback<()>,
+    is_being_equipped: RwSignal<bool>,
+) -> impl IntoView {
     let sell_queue = expect_context::<SellQueue>();
 
     let equip = {
@@ -260,6 +273,12 @@ pub fn ItemContextMenu(item_index: usize, on_close: Callback<()>) -> impl IntoVi
                     item_index: item_index as u8,
                 }
                 .into(),
+            );
+            on_close.run(());
+            is_being_equipped.set(true);
+            set_timeout(
+                move || is_being_equipped.set(false),
+                Duration::from_millis(500),
             );
         }
     };

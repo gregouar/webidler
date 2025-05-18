@@ -78,7 +78,7 @@ pub fn MainMenu() -> impl IntoView {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
             <div>
                 <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">
-                    "Welcome to Webidler!"
+                    "Grind to Rust!"
                 </h1>
                 <div class="flex flex-col space-y-2">
                     <div class="w-full mx-auto mb-6 text-left">
