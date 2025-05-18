@@ -194,8 +194,11 @@ fn ItemsGrid(open: RwSignal<bool>) -> impl IntoView {
 
 #[component]
 fn ItemInBag(item_index: usize) -> impl IntoView {
+    let is_being_equipped = RwSignal::new(false);
+
     let game_context = expect_context::<GameContext>();
     let maybe_item = move || {
+        is_being_equipped.set(false);
         game_context
             .player_inventory
             .read()
@@ -208,8 +211,6 @@ fn ItemInBag(item_index: usize) -> impl IntoView {
     let is_queued_for_sale = move || sell_queue.0.read().contains(&item_index);
 
     let show_menu = RwSignal::new(false);
-    let is_being_equipped = RwSignal::new(false);
-
     view! {
         <div class="relative group w-full aspect-[2/3]">
             {move || {
@@ -278,7 +279,7 @@ pub fn ItemContextMenu(
             is_being_equipped.set(true);
             set_timeout(
                 move || is_being_equipped.set(false),
-                Duration::from_millis(500),
+                Duration::from_millis(1000),
             );
         }
     };
