@@ -1,4 +1,5 @@
 use leptos::html::*;
+use leptos::leptos_dom::logging::console_log;
 use leptos::prelude::*;
 use leptos::web_sys;
 
@@ -19,6 +20,13 @@ use crate::components::{
 };
 
 use super::game_context::GameContext;
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+enum NodeStatus {
+    Inactive,
+    Purchaseable,
+    Purchased,
+}
 
 #[component]
 pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
@@ -74,6 +82,9 @@ pub fn PassiveSkillTree() -> impl IntoView {
         zoom.set((zoom.get() * if ev.delta_y() < 0.0 { 1.1 } else { 0.9 }).clamp(0.5, 3.0));
     };
 
+    let points_available =
+        Memo::new(move |_| game_context.player_resources.read().passive_points > 0);
+
     view! {
         <div
             on:wheel=on_wheel
@@ -82,16 +93,27 @@ pub fn PassiveSkillTree() -> impl IntoView {
             on:mousemove=on_mouse_move
             class="w-full aspect-[5/2] overflow-hidden bg-neutral-900"
         >
+            // style="filter: drop-shadow(0 2px 4px black);"
             <svg
                 width="100%"
                 height="100%"
                 viewBox="-500 -500 1000 1000"
                 preserveAspectRatio="xMidYMid meet"
             >
-                <g transform=move || {
-                    let (x, y) = offset.get();
-                    format!("translate({x},{y}),scale({})", zoom.get())
-                }>
+                <defs>
+                    <radialGradient id="node-inner-gradient" cx="50%" cy="50%" r="50%">
+                        <stop offset="20%" stop-color="black" stop-opacity=0 />
+                        <stop offset="70%" stop-color="black" stop-opacity=0.5 />
+                        <stop offset="100%" stop-color="black" stop-opacity=0.8 />
+                    </radialGradient>
+                </defs>
+                <g
+                    transform=move || {
+                        let (x, y) = offset.get();
+                        format!("translate({x},{y}),scale({})", zoom.get())
+                    }
+                    filter="drop-shadow(0 2px 4px black)"
+                >
                     <For
                         each=move || {
                             game_context.passives_tree_specs.read().connections.clone().into_iter()
@@ -108,7 +130,7 @@ pub fn PassiveSkillTree() -> impl IntoView {
                         key=|(id, _)| id.clone()
                         let((id, node))
                     >
-                        <Node node_id=id node_specs=node />
+                        <Node node_id=id node_specs=node points_available=points_available />
                     </For>
                 </g>
             </svg>
@@ -117,36 +139,36 @@ pub fn PassiveSkillTree() -> impl IntoView {
 }
 
 #[component]
-fn Node(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl IntoView {
+fn Node(
+    node_id: PassiveNodeId,
+    node_specs: PassiveNodeSpecs,
+    points_available: Memo<bool>,
+) -> impl IntoView {
     let fill = match node_specs.node_type {
         PassiveNodeType::Attack => "#8b1e1e",
         PassiveNodeType::Life => "#386641",
-        PassiveNodeType::Spell => "#3e5ba9",
+        PassiveNodeType::Spell => "#533ea9",
         PassiveNodeType::Armor => "#5e5e5e",
-        PassiveNodeType::Critical => "#cba135",
-        PassiveNodeType::Mana => "#256d85",
+        PassiveNodeType::Critical => "#ea6110",
+        PassiveNodeType::Mana => "#3e5ba9",
         PassiveNodeType::Gold => "goldenrod",
     };
 
-    let purchased = Memo::new({
+    let node_status = Memo::new({
         let game_context = expect_context::<GameContext>();
         let node_id = node_id.clone();
+
         move |_| {
-            game_context
+            console_log("douh");
+            if game_context
                 .passives_tree_state
                 .read()
                 .purchased_nodes
                 .get(&node_id)
                 .is_some()
-        }
-    });
-
-    let purchaseable = Memo::new({
-        let game_context = expect_context::<GameContext>();
-        let node_id = node_id.clone();
-        // TODO: points > 0
-        move |_| {
-            game_context.player_resources.read().passive_points > 0
+            {
+                NodeStatus::Purchased
+            } else if points_available.get()
                 && (node_specs.initial_node
                     || game_context
                         .passives_tree_specs
@@ -168,20 +190,13 @@ fn Node(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl IntoView {
                                     .is_some()
                         })
                         .any(|connection| connection.from == node_id || connection.to == node_id))
-        }
-    });
-
-    let stroke = {
-        move || {
-            if purchased.get() {
-                "gold"
-            } else if purchaseable.get() {
-                "darkgoldenrod"
+            {
+                NodeStatus::Purchaseable
             } else {
-                "gray"
+                NodeStatus::Inactive
             }
         }
-    };
+    });
 
     let node_specs = Arc::new(node_specs);
 
@@ -218,62 +233,43 @@ fn Node(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl IntoView {
     };
 
     let icon_asset = img_asset(&node_specs.icon);
-    let filter = {
-        move || {
-            if purchased.get() {
-                "drop-shadow(0 0 4px gold)"
-            } else if purchaseable.get() {
-                "drop-shadow(0 0 2px darkgoldenrod)"
-            } else {
-                "url(#darken-desaturate)"
-            }
-        }
+
+    let stroke = move || match node_status.get() {
+        NodeStatus::Inactive => "gray",
+        NodeStatus::Purchaseable => "darkgoldenrod",
+        NodeStatus::Purchased => "gold",
+    };
+
+    let filter = move || match node_status.get() {
+        NodeStatus::Inactive => "",
+        NodeStatus::Purchaseable => "",
+        NodeStatus::Purchased => "drop-shadow(0 0 4px gold)",
     };
 
     view! {
-        <defs>
-            <filter id="desaturate">
-                <feColorMatrix
-                    type="matrix"
-                    values="
-                    0.75 0.25 0.25 0 0
-                    0.25 0.75 0.25 0 0
-                    0.25 0.25 0.75 0 0
-                    0    0    0    1 0
-                    "
-                />
-            </filter>
-            <filter id="darken-desaturate">
-                <feColorMatrix
-                    type="matrix"
-                    values="
-                    0.3 0.15 0.15 0 0
-                    0.15 0.3 0.15 0 0
-                    0.15 0.15 0.3 0 0
-                    0    0    0    1 0
-                    "
-                />
-            </filter>
-            <filter id="icon-shadow" x="-50%" y="-50%" width="200%" height="200%">
-                <feDropShadow
-                    dx="1"
-                    dy="2"
-                    stdDeviation="2"
-                    flood-color="black"
-                    flood-opacity="0.8"
-                />
-            </filter>
-        </defs>
         <g
             transform=format!("translate({}, {})", node_specs.x * 10.0, -node_specs.y * 10.0)
             on:mouseenter=show_tooltip
             on:mouseleave=hide_tooltip
             on:click=move |_| {
-                if purchaseable.get() {
+                if let NodeStatus::Purchaseable = node_status.get() {
                     purchase();
                 }
             }
-            style=move || if purchaseable.get() { "cursor: pointer;" } else { "" }
+            style=move || {
+                match node_status.get() {
+                    NodeStatus::Inactive => "",
+                    NodeStatus::Purchaseable => "cursor: pointer; ",
+                    NodeStatus::Purchased => "",
+                }
+            }
+            class=move || {
+                match node_status.get() {
+                    NodeStatus::Inactive => "saturate-50 brightness-50",
+                    NodeStatus::Purchaseable => "saturate-50",
+                    NodeStatus::Purchased => "",
+                }
+            }
         >
             <circle
                 r=20 + node_specs.size * 10
@@ -283,8 +279,10 @@ fn Node(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl IntoView {
                 filter=filter.clone()
             />
 
+            <circle r=20 + node_specs.size * 10 fill="url(#node-inner-gradient)" />
+
             <image
-                filter="icon-shadow"
+                filter="drop-shadow(2px 2px 2px black)"
                 href=icon_asset
                 x=-(24 + node_specs.size as i32 * 20) / 2
                 y=-(24 + node_specs.size as i32 * 20) / 2
@@ -302,13 +300,13 @@ fn Connection(connection: PassiveConnection) -> impl IntoView {
 
     let from_node = game_context
         .passives_tree_specs
-        .read()
+        .read_untracked()
         .nodes
         .get(&connection.from)
         .cloned();
     let to_node = game_context
         .passives_tree_specs
-        .read()
+        .read_untracked()
         .nodes
         .get(&connection.to)
         .cloned();
@@ -342,7 +340,7 @@ fn Connection(connection: PassiveConnection) -> impl IntoView {
             };
             let dasharray = {
                 let amount_connections = amount_connections.clone();
-                move || if amount_connections() == 2 { "none" } else { "4 2" }
+                move || if amount_connections() == 2 { "none" } else { "4 3" }
             };
             let width = {
                 let amount_connections = amount_connections.clone();
@@ -356,7 +354,7 @@ fn Connection(connection: PassiveConnection) -> impl IntoView {
                         y1=-from.y * 10.0
                         x2=to.x * 10.0
                         y2=-to.y * 10.0
-                        filer=move || {
+                        filter=move || {
                             if amount_connections() == 2 { "drop-shadow(0 0 2px gold)" } else { "" }
                         }
                         stroke=stroke_color

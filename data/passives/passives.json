@@ -280,7 +280,7 @@
           {
             "stat": "GlobalSpellDamage",
             "modifier": "Multiplier",
-            "value": 0.20
+            "value": 0.25
           }
         ]
       },
@@ -294,7 +294,7 @@
           {
             "stat": "GlobalSpellDamage",
             "modifier": "Multiplier",
-            "value": 0.20
+            "value": 0.25
           }
         ]
       },
@@ -337,7 +337,7 @@
           {
             "stat": "GlobalSpellDamage",
             "modifier": "Multiplier",
-            "value": 0.20
+            "value": 0.25
           },
           {
             "stat": "GlobalSpellSpeed",
@@ -434,7 +434,7 @@
           {
             "stat": "GlobalAttackDamage",
             "modifier": "Multiplier",
-            "value": 0.20
+            "value": 0.25
           }
         ]
       },
@@ -448,7 +448,7 @@
           {
             "stat": "GlobalAttackDamage",
             "modifier": "Multiplier",
-            "value": 0.20
+            "value": 0.25
           }
         ]
       },
@@ -491,7 +491,7 @@
           {
             "stat": "GlobalAttackDamage",
             "modifier": "Multiplier",
-            "value": 0.20
+            "value": 0.25
           },
           {
             "stat": "GlobalAttackSpeed",
