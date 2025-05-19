@@ -10,7 +10,7 @@ use axum::{
 };
 use axum_extra::TypedHeader;
 use rand::TryRngCore;
-use tokio::{task::yield_now, time::timeout};
+use tokio::time::timeout;
 
 use std::{
     net::SocketAddr,
