@@ -3,7 +3,7 @@ name: Deploy to Github Pages
 on:
   push:
     branches: ['main']
-    paths: ['frontend/**', 'shared/**', 'assets/**', '.github\workflows\gh-pages-frontend-deploy.yml']
+    paths: ['frontend/**', 'shared/**', 'assets/**', '.github/workflows/gh-pages-frontend-deploy.yml']
   workflow_dispatch:
 
 permissions:
