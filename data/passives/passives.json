@@ -85,7 +85,7 @@
           {
             "stat": "GlobalGoldFind",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.5
           }
         ]
       },
@@ -99,7 +99,7 @@
           {
             "stat": "GlobalGoldFind",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.5
           }
         ]
       },
@@ -113,7 +113,7 @@
           {
             "stat": "GlobalGoldFind",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.5
           }
         ]
       },
@@ -127,7 +127,7 @@
           {
             "stat": "GlobalGoldFind",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.5
           }
         ]
       },
@@ -199,7 +199,7 @@
           {
             "stat": "GlobalLife",
             "modifier": "Multiplier",
-            "value": 0.01
+            "value": 0.05
           },
           {
             "stat": "GlobalLifeRegen",
@@ -219,7 +219,7 @@
           {
             "stat": "GlobalArmor",
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.25
           }
         ]
       },
@@ -234,7 +234,7 @@
           {
             "stat": "GlobalArmor",
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.25
           }
         ]
       },
@@ -265,7 +265,7 @@
           {
             "stat": "GlobalArmor",
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.25
           }
         ]
       },
