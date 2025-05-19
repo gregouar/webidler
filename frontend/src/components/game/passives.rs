@@ -1,5 +1,4 @@
 use leptos::html::*;
-use leptos::leptos_dom::logging::console_log;
 use leptos::prelude::*;
 use leptos::web_sys;
 
@@ -159,7 +158,6 @@ fn Node(
         let node_id = node_id.clone();
 
         move |_| {
-            console_log("douh");
             if game_context
                 .passives_tree_state
                 .read()

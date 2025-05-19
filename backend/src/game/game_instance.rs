@@ -196,6 +196,7 @@ impl<'a> GameInstance<'a> {
                 item_indexes.sort_by_key(|&i| i);
                 for &item_index in item_indexes.iter().rev() {
                     player_controller::sell_item(
+                        self.data.player_specs.read(),
                         self.data.player_inventory.mutate(),
                         &mut self.data.player_resources,
                         item_index,

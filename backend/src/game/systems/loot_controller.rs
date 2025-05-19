@@ -80,6 +80,7 @@ fn update_loot_states(queued_loot: &mut Vec<QueuedLoot>) {
         .checked_sub(MAX_QUEUE_SIZE)
         .unwrap_or_default()
     {
+        // TODO: return somehow
         queued_loot[i].state = LootState::HasDisappeared;
     }
 
