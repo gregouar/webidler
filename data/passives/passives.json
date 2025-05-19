@@ -280,7 +280,7 @@
           {
             "stat": "GlobalSpellDamage",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.20
           }
         ]
       },
@@ -294,7 +294,7 @@
           {
             "stat": "GlobalSpellDamage",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.20
           }
         ]
       },
@@ -337,7 +337,7 @@
           {
             "stat": "GlobalSpellDamage",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.20
           },
           {
             "stat": "GlobalSpellSpeed",
@@ -357,7 +357,7 @@
           {
             "stat": "GlobalMana",
             "modifier": "Flat",
-            "value": 10
+            "value": 15
           }
         ]
       },
@@ -371,7 +371,7 @@
           {
             "stat": "GlobalMana",
             "modifier": "Flat",
-            "value": 10
+            "value": 15
           }
         ]
       },
@@ -414,7 +414,7 @@
           {
             "stat": "GlobalMana",
             "modifier": "Flat",
-            "value": 10
+            "value": 15
           },
           {
             "stat": "GlobalManaRegen",
@@ -434,7 +434,7 @@
           {
             "stat": "GlobalAttackDamage",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.20
           }
         ]
       },
@@ -448,7 +448,7 @@
           {
             "stat": "GlobalAttackDamage",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.20
           }
         ]
       },
@@ -491,7 +491,7 @@
           {
             "stat": "GlobalAttackDamage",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.20
           },
           {
             "stat": "GlobalAttackSpeed",
@@ -558,7 +558,7 @@
         ]
       },
       "crit_damage_and_chances_1": {
-        "name": "Sadistic",
+        "name": "Sadism",
         "icon": "passives/critical.svg",
         "x": 25,
         "y": 30,

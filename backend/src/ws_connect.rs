@@ -124,7 +124,7 @@ async fn wait_for_connect(
             }
             _ => {}
         }
-        yield_now().await;
+        tokio::time::sleep(Duration::from_millis(100)).await;
     }
 }
 
