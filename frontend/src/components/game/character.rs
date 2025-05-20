@@ -11,6 +11,7 @@ pub fn CharacterPortrait(
     character_name: String,
     #[prop(into)] just_hurt: Signal<bool>,
     #[prop(into)] just_hurt_crit: Signal<bool>,
+    #[prop(into)] just_blocked: Signal<bool>,
     #[prop(into)] is_dead: Signal<bool>,
 ) -> impl IntoView {
     let just_hurt_class = move || {
@@ -20,8 +21,6 @@ pub fn CharacterPortrait(
             "transition-all ease duration-1000"
         }
     };
-
-    // TODO: just critically hurt
 
     let is_dead_img_effect = move || {
         if is_dead.get() {
@@ -49,6 +48,14 @@ pub fn CharacterPortrait(
         }
     };
 
+    let show_block_effect = RwSignal::new(false);
+
+    Effect::new(move |_| {
+        if just_blocked.get() {
+            show_block_effect.set(true);
+        }
+    });
+
     view! {
         <style>
             "
@@ -62,12 +69,18 @@ pub fn CharacterPortrait(
                 50% { transform: translate(4px, -2px) rotate(2deg); }
                 75% { transform: translate(-3px, 1px) rotate(-1deg); }
             }
+            
+            @keyframes shield_flash {
+                0% { opacity: 0; transform: scale(0.35) translateY(60%); }
+                50% { opacity: 0.8; transform: scale(.55) translateY(40%); }
+                100% { opacity: 0; transform: scale(.65) translateY(60%); }
+            }
             "
         </style>
         <div
             class=move || {
                 format!(
-                    "flex items-center justify-center h-full w-full relative {}",
+                    "flex items-center justify-center h-full w-full relative overflow-hidden {}",
                     is_dead_img_effect(),
                 )
             }
@@ -81,6 +94,23 @@ pub fn CharacterPortrait(
                 }
             />
             <div class=move || { format!("absolute inset-0 -none  {}", just_hurt_class()) }></div>
+
+            {move || {
+                if show_block_effect.get() {
+                    Some(
+                        view! {
+                            <img
+                                src=img_asset("effects/block.svg")
+                                class="absolute inset-0 w-object-contain pointer-events-none"
+                                on:animationend=move |_| show_block_effect.set(false)
+                                style="animation: shield_flash 0.5s ease-out"
+                            />
+                        },
+                    )
+                } else {
+                    None
+                }
+            }}
         </div>
     }
 }

@@ -102,6 +102,13 @@ pub fn PlayerCard() -> impl IntoView {
             .character_state
             .just_hurt_crit
     });
+    let just_blocked = Memo::new(move |_| {
+        game_context
+            .player_state
+            .read()
+            .character_state
+            .just_blocked
+    });
 
     let conn = expect_context::<WebsocketContext>();
     let level_up = move |_| {
@@ -181,6 +188,7 @@ pub fn PlayerCard() -> impl IntoView {
                         character_name="player".to_string()
                         just_hurt=just_hurt
                         just_hurt_crit=just_hurt_crit
+                        just_blocked=just_blocked
                         is_dead=is_dead
                     />
                     <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
