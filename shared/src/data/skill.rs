@@ -41,6 +41,8 @@ pub struct SkillSpecs {
     pub next_upgrade_cost: f64,
 
     pub effects: Vec<SkillEffect>,
+
+    pub item_slot: Option<ItemSlot>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
@@ -48,7 +50,6 @@ pub enum SkillType {
     #[default]
     Attack,
     Spell,
-    Weapon(ItemSlot),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

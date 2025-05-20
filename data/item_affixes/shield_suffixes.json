@@ -1,0 +1,38 @@
+[ 
+  {
+    "name": "of Deflection",
+    "family": "add_block",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Shield"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "LocalBlock",
+        "modifier": "Flat",
+        "min": 2,
+        "max": 5
+      }
+    ]
+  },
+  {
+    "name": "of Reinforcement",
+    "family": "inc_block",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Shield"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": "LocalBlock",
+        "modifier": "Multiplier",
+        "min": 0.2,
+        "max": 0.39
+      }
+    ]
+  }
+]

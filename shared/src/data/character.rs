@@ -2,16 +2,14 @@ use serde::{Deserialize, Serialize};
 
 pub use super::skill::{SkillSpecs, SkillState};
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-#[derive(Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub enum CharacterSize {
     #[default]
-    Small,      // 1x1
+    Small, // 1x1
     Large,      // 1x2
     Huge,       // 2x2
     Gargantuan, // 2x3
 }
-
 
 impl CharacterSize {
     pub fn get_xy_size(&self) -> (usize, usize) {
@@ -47,6 +45,8 @@ pub struct CharacterSpecs {
     pub fire_armor: f64,
     #[serde(default)]
     pub poison_armor: f64,
+    #[serde(default)]
+    pub block: f32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -57,4 +57,5 @@ pub struct CharacterState {
     pub health: f64,
     pub just_hurt: bool,
     pub just_hurt_crit: bool,
+    pub just_blocked: bool,
 }

@@ -29,75 +29,82 @@ use super::GameContext;
 pub fn PlayerCard() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
+    let max_health = Memo::new(move |_| game_context.player_specs.read().character_specs.max_life);
+    let health = Memo::new(move |_| game_context.player_state.read().character_state.health);
+
     let health_tooltip = move || {
         view! {
             "Health: "
-            {format_number(game_context.player_state.read().character_state.health)}
+            {format_number(health.get())}
             "/"
             {format_number(game_context.player_specs.read().character_specs.max_life)}
         }
     };
 
     let health_percent = Signal::derive(move || {
-        let max_health = game_context.player_specs.read().character_specs.max_life;
+        let max_health = max_health.get();
         if max_health > 0.0 {
-            (game_context.player_state.read().character_state.health / max_health * 100.0) as f32
+            (health.get() / max_health * 100.0) as f32
         } else {
             0.0
         }
     });
+
+    let max_mana = Memo::new(move |_| game_context.player_specs.read().max_mana);
+    let mana = Memo::new(move |_| game_context.player_state.read().mana);
 
     let mana_tooltip = move || {
         view! {
             "Mana: "
-            {format_number(game_context.player_state.read().mana)}
+            {format_number(mana.get())}
             "/"
-            {format_number(game_context.player_specs.read().max_mana)}
+            {format_number(max_mana.get())}
         }
     };
 
     let mana_percent = Signal::derive(move || {
-        let max_mana = game_context.player_specs.read().max_mana;
+        let max_mana = max_mana.get();
         if max_mana > 0.0 {
-            (game_context.player_state.read().mana / max_mana * 100.0) as f32
+            (mana.get() / max_mana * 100.0) as f32
         } else {
             0.0
         }
     });
+
+    let max_xp = Memo::new(move |_| game_context.player_specs.read().experience_needed);
+    let xp = Memo::new(move |_| game_context.player_resources.read().experience);
 
     let xp_tooltip = move || {
         view! {
             "Experience: "
-            {format_number(game_context.player_resources.read().experience)}
+            {format_number(xp.get())}
             "/"
-            {format_number(game_context.player_specs.read().experience_needed)}
+            {format_number(max_xp.get())}
         }
     };
 
     let xp_percent = Signal::derive(move || {
-        let max_xp = game_context.player_specs.read().experience_needed;
+        let max_xp = max_xp.get();
         if max_xp > 0.0 {
-            (game_context.player_resources.read().experience / max_xp * 100.0) as f32
+            (xp.get() / max_xp * 100.0) as f32
         } else {
             0.0
         }
     });
 
-    let is_dead =
-        Signal::derive(move || !game_context.player_state.read().character_state.is_alive);
+    let is_dead = Memo::new(move |_| !game_context.player_state.read().character_state.is_alive);
 
-    let just_hurt =
-        Signal::derive(move || game_context.player_state.read().character_state.just_hurt);
+    let just_hurt = Memo::new(move |_| game_context.player_state.read().character_state.just_hurt);
 
     let conn = expect_context::<WebsocketContext>();
     let level_up = move |_| {
         conn.send(&LevelUpPlayerMessage { amount: 1 }.into());
     };
-    let disable_level_up = Signal::derive(move || {
+    let disable_level_up = Memo::new(move |_| {
         game_context.player_specs.read().experience_needed
             > game_context.player_resources.read().experience
     });
-    let just_leveled_up = Signal::derive(move || game_context.player_state.read().just_leveled_up);
+    let just_leveled_up = Memo::new(move |_| game_context.player_state.read().just_leveled_up);
 
     Effect::new({
         let toaster = expect_context::<Toasts>();
@@ -209,14 +216,14 @@ pub fn PlayerCard() -> impl IntoView {
 pub fn PlayerName() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let player_name = move || {
+    let player_name = Memo::new(move |_| {
         game_context
             .player_specs
             .read()
             .character_specs
             .name
             .clone()
-    };
+    });
 
     view! {
         <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
@@ -230,15 +237,15 @@ pub fn PlayerName() -> impl IntoView {
 fn PlayerSkill(index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let icon_asset = move || {
+    let icon_asset = Memo::new(move |_| {
         if let Some(skill_specs) = game_context.player_specs.read().skills_specs.get(index) {
             img_asset(&skill_specs.base.icon)
         } else {
             "".to_string()
         }
-    };
+    });
 
-    let skill_name = move || {
+    let skill_name = Memo::new(move |_| {
         game_context
             .player_specs
             .read()
@@ -246,7 +253,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
             .get(index)
             .map(|x| x.base.name.clone())
             .unwrap_or_default()
-    };
+    });
 
     let skill_cooldown = Signal::derive(move || {
         let cooldown = game_context
@@ -280,7 +287,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         .get(index)
         .unwrap_or(&false);
 
-    let just_triggered = Signal::derive(move || {
+    let just_triggered = Memo::new(move |_| {
         game_context
             .player_state
             .read()
@@ -290,7 +297,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
             .unwrap_or_default()
     });
 
-    let is_ready = move || {
+    let is_ready = Memo::new(move |_| {
         game_context
             .player_state
             .read()
@@ -298,7 +305,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
             .get(index)
             .map(|x| x.is_ready)
             .unwrap_or_default()
-    };
+    });
 
     let conn = expect_context::<WebsocketContext>();
     let use_skill = move |_| {
@@ -332,7 +339,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         );
     };
 
-    let level_up_cost = Signal::derive(move || {
+    let level_up_cost = Memo::new(move |_| {
         game_context
             .player_specs
             .read()
@@ -343,7 +350,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     });
 
     let disable_level_up =
-        Signal::derive(move || level_up_cost.get() > game_context.player_resources.read().gold);
+        Memo::new(move |_| level_up_cost.get() > game_context.player_resources.read().gold);
 
     let cost_tooltip = move || {
         view! {
@@ -377,7 +384,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         <div class="flex flex-col">
             <button
                 class=move || {
-                    if is_ready() {
+                    if is_ready.get() {
                         "active:brightness-50 active:sepia p-1"
                     } else {
                         "brightness-80 sepia-0 p-1"
@@ -386,7 +393,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
                 on:mouseenter=show_tooltip
                 on:mouseleave=hide_tooltip
                 on:click=use_skill
-                disabled=move || !is_ready()
+                disabled=move || !is_ready.get()
             >
                 <CircularProgressBar
                     bar_width=4

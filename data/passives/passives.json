@@ -244,7 +244,13 @@
         "x": -20,
         "y": -5,
         "node_type": "Armor",
-        "effects": []
+        "effects": [
+          {
+            "stat": "GlobalBlock",
+            "modifier": "Flat",
+            "value": 0.02
+          }
+        ]
       },
       "block_2": {
         "name": "Block",
@@ -252,7 +258,13 @@
         "x": -30,
         "y": -5,
         "node_type": "Armor",
-        "effects": []
+        "effects": [
+          {
+            "stat": "GlobalBlock",
+            "modifier": "Flat",
+            "value": 0.02
+          }
+        ]
       },
       "armor_and_block_1": {
         "name": "Myrmidon",
@@ -266,6 +278,11 @@
             "stat": "GlobalArmor",
             "modifier": "Multiplier",
             "value": 0.25
+          },
+          {
+            "stat": "GlobalBlock",
+            "modifier": "Flat",
+            "value": 0.02
           }
         ]
       },

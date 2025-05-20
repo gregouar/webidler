@@ -5,7 +5,8 @@
     "slot": "Shield",
     "affix_restrictions": ["Armor", "Shield"],
     "armor_specs": {
-      "armor": 30
+      "armor": 30,
+      "block": 0.2
     }
   }
 }

@@ -6,7 +6,7 @@ use shared::data::{
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-    skill::{SkillSpecs, SkillState, SkillType},
+    skill::SkillState,
 };
 
 use crate::game::{data::DataInit, utils::increase_factors};
@@ -268,14 +268,7 @@ fn unequip_weapon(
         .skills_specs
         .iter()
         .enumerate()
-        .filter_map(|(i, skill_specs)| {
-            if let SkillType::Weapon(slot) = skill_specs.base.skill_type {
-                if slot == item_slot {
-                    return Some(i);
-                }
-            }
-            None
-        })
+        .filter_map(|(i, skill_specs)| (skill_specs.item_slot? == item_slot).then(|| i))
         .collect();
 
     for i in to_remove.into_iter().rev() {
@@ -293,11 +286,7 @@ fn equip_weapon(
     weapon_specs: &WeaponSpecs,
 ) {
     // TODO: helper function
-    let weapon_skill = SkillSpecs::init(&items_controller::make_weapon_skill(
-        item_slot,
-        item_level,
-        weapon_specs,
-    ));
+    let weapon_skill = items_controller::make_weapon_skill(item_slot, item_level, weapon_specs);
 
     player_specs.auto_skills.insert(0, true);
     player_state
@@ -316,6 +305,7 @@ pub fn update_player_specs(
     player_specs.character_specs.armor = 0.0;
     player_specs.character_specs.fire_armor = 0.0;
     player_specs.character_specs.poison_armor = 0.0;
+    player_specs.character_specs.block = 0.0;
     player_specs.character_specs.max_life = 90.0 + 10.0 * player_specs.level as f64;
     player_specs.character_specs.life_regen = 1.0;
     player_specs.max_mana = 100.0;
@@ -331,11 +321,14 @@ pub fn update_player_specs(
             _ => None,
         });
 
-    player_specs.character_specs.armor += equipped_items
+    let (total_armor, total_block) = equipped_items
         .clone()
         .filter_map(|item| item.armor_specs.as_ref())
-        .map(|armor_specs| armor_specs.armor)
-        .sum::<f64>();
+        .map(|spec| (spec.armor, spec.block))
+        .fold((0.0, 0.0), |(a_sum, b_sum), (a, b)| (a_sum + a, b_sum + b));
+
+    player_specs.character_specs.armor += total_armor;
+    player_specs.character_specs.block += total_block;
 
     player_specs.effects = EffectsMap::combine_all(
         equipped_items.map(|i| i.aggregate_effects()).chain(
@@ -375,6 +368,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
             EffectTarget::GlobalMana => player_specs.max_mana.apply_effect(effect),
             EffectTarget::GlobalManaRegen => player_specs.mana_regen.apply_effect(effect),
             EffectTarget::GlobalArmor => player_specs.character_specs.armor.apply_effect(effect),
+            EffectTarget::GlobalBlock => player_specs.character_specs.block.apply_effect(effect),
             EffectTarget::GlobalMovementSpeed => {
                 player_specs.movement_cooldown.apply_inverse_effect(effect)
             }
@@ -398,6 +392,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
             | EffectTarget::LocalMinDamage(_)
             | EffectTarget::LocalMaxDamage(_)
             | EffectTarget::LocalArmor
+            | EffectTarget::LocalBlock
             | EffectTarget::LocalCritChances
             | EffectTarget::LocalCritDamage => {}
         }

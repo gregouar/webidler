@@ -29,7 +29,7 @@ pub fn MenuButton(
 }
 
 #[component]
-pub fn FancyButton(disabled: Signal<bool>, children: Children) -> impl IntoView {
+pub fn FancyButton(#[prop(into)] disabled: Signal<bool>, children: Children) -> impl IntoView {
     view! {
         <button
             class="

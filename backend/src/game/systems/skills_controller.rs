@@ -27,6 +27,7 @@ pub fn use_skill<'a>(
     let mut me = vec![me];
     skill_specs.effects.iter().any(|skill_effect| {
         apply_skill_effect(
+            skill_specs.base.skill_type,
             skill_effect,
             skill_state,
             me_position,
@@ -38,6 +39,7 @@ pub fn use_skill<'a>(
 }
 
 fn apply_skill_effect<'a>(
+    skill_type: SkillType,
     skill_effect: &SkillEffect,
     skill_state: &mut SkillState,
     me_position: (u8, u8),
@@ -144,6 +146,7 @@ fn apply_skill_effect<'a>(
                         characters_controller::damage_character(
                             amount,
                             *damage_type,
+                            skill_type,
                             target_state,
                             target_specs,
                             is_crit,
@@ -199,12 +202,7 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) 
 
     for effect in effects.iter() {
         match effect.stat {
-            EffectTarget::GlobalAttackSpeed
-                if matches!(
-                    skill_specs.base.skill_type,
-                    SkillType::Attack | SkillType::Weapon(_)
-                ) =>
-            {
+            EffectTarget::GlobalAttackSpeed if skill_specs.base.skill_type == SkillType::Attack => {
                 skill_specs.cooldown.apply_inverse_effect(effect);
             }
 
@@ -253,9 +251,7 @@ pub fn compute_skill_specs_effect(
                             min.apply_effect(effect);
                             max.apply_effect(effect);
                         }
-                        EffectTarget::GlobalAttackDamage
-                            if matches!(skill_type, SkillType::Attack | SkillType::Weapon(_)) =>
-                        {
+                        EffectTarget::GlobalAttackDamage if skill_type == SkillType::Attack => {
                             min.apply_effect(effect);
                             max.apply_effect(effect);
                         }

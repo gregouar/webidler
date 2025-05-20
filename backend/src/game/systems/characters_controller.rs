@@ -1,19 +1,28 @@
 use shared::data::{
     character::{CharacterSpecs, CharacterState},
-    skill::DamageType,
+    skill::{DamageType, SkillType},
 };
 
-use crate::game::utils::increase_factors;
+use crate::game::utils::{increase_factors, rng};
 
 const ARMOR_FACTOR: f64 = 100.0;
 
 pub fn damage_character(
     amount: f64,
     damage_type: DamageType,
+    skill_type: SkillType,
     target_state: &mut CharacterState,
     target_specs: &CharacterSpecs,
     is_crit: bool,
 ) {
+    let is_blocked = skill_type == SkillType::Attack
+        && rng::random_range(0.0..=1.0).unwrap_or(1.0) <= target_specs.block;
+
+    if is_blocked {
+        target_state.just_blocked = true;
+        return;
+    }
+
     let amount = amount
         * match damage_type {
             DamageType::Physical => {

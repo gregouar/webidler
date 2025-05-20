@@ -1,15 +1,15 @@
 use serde::{Deserialize, Serialize};
 
 // TODO: use strum_macros::EnumIter;
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[derive(Default)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,
+)]
 pub enum DamageType {
     #[default]
     Physical,
     Fire,
     Poison,
 }
-
 
 impl DamageType {
     pub fn iter() -> impl Iterator<Item = DamageType> {
@@ -33,12 +33,14 @@ pub enum EffectTarget {
     LocalCritDamage,
     LocalAttackSpeed,
     LocalArmor,
+    LocalBlock,
     // Global
     GlobalLife,
     GlobalLifeRegen,
     GlobalMana,
     GlobalManaRegen,
     GlobalArmor,
+    GlobalBlock,
     GlobalSpellDamage,
     GlobalSpellPower,
     GlobalDamage(DamageType),

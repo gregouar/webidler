@@ -68,6 +68,13 @@ pub fn formatted_effects_list(mut affix_effects: Vec<StatEffect>) -> Vec<impl In
             (LocalArmor, Multiplier) => {
                 merged.push(format!("{:.0}% Increased Armor", effect.value * 100.0))
             }
+            (LocalBlock, Flat) => {
+                merged.push(format!("Adds {:.0}% Block Chances", effect.value * 100.0))
+            }
+            (LocalBlock, Multiplier) => merged.push(format!(
+                "{:.0}% Increased Block Chances",
+                effect.value * 100.0
+            )),
             (GlobalGoldFind, Flat) => {
                 merged.push(format!("Adds {:.0} Gold per Kill", effect.value));
             }
@@ -119,6 +126,13 @@ pub fn formatted_effects_list(mut affix_effects: Vec<StatEffect>) -> Vec<impl In
             (GlobalArmor, Flat) => merged.push(format!("Adds {:.0} Armor", effect.value)),
             (GlobalArmor, Multiplier) => merged.push(format!(
                 "{:.0}% Increased Global Armor",
+                effect.value * 100.0
+            )),
+            (GlobalBlock, Flat) => {
+                merged.push(format!("Adds {:.0}% Block Chances", effect.value * 100.0))
+            }
+            (GlobalBlock, Multiplier) => merged.push(format!(
+                "{:.0}% Increased Global Block Chances",
                 effect.value * 100.0
             )),
             (GlobalDamage(damage_type), Flat) => merged.push(format!(

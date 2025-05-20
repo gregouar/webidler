@@ -12,7 +12,7 @@ pub fn HorizontalProgressBar(
     #[prop(optional)]
     text: Option<String>, // TODO: Dynamic?
     // Instant reset
-    #[prop(default = Signal::derive(|| false))] reset: Signal<bool>,
+    #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
 ) -> impl IntoView {
     let set_value = move || {
         if reset.get() {
@@ -119,7 +119,7 @@ pub fn CircularProgressBar(
     // Width of the progress bar
     #[prop(default = 2)] bar_width: u16,
     // Instant reset
-    #[prop(default = Signal::derive(|| false))] reset: Signal<bool>,
+    #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
     // Inside the circular bar
     children: Children,
 ) -> impl IntoView {

@@ -16,7 +16,8 @@
         "max": 10
       }
     ]
-  },{
+  },
+  {
     "name": "Hard",
     "family": "inc_armor",
     "tags": ["Physical", "Armor"],

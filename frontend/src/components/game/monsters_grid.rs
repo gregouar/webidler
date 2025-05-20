@@ -26,7 +26,7 @@ use super::GameContext;
 pub fn MonstersGrid() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let all_monsters_dead = Signal::derive(move || {
+    let all_monsters_dead = Memo::new(move |_| {
         game_context
             .monster_states
             .read()
@@ -34,7 +34,7 @@ pub fn MonstersGrid() -> impl IntoView {
             .all(|x| !x.character_state.is_alive)
     });
 
-    let flee = Signal::derive(move || {
+    let flee = Memo::new(move |_| {
         !game_context.player_state.read().character_state.is_alive
             || game_context.world_state.read().going_back > 0
     });
@@ -94,7 +94,8 @@ pub fn MonstersGrid() -> impl IntoView {
                             )
                             style=move || {
                                 if all_monsters_dead.get() {
-                                    "animation: monster-fade-out 1s ease-in; animation-fill-mode: both; pointer-events: none;".to_string()
+                                    "animation: monster-fade-out 1s ease-in; animation-fill-mode: both; pointer-events: none;"
+                                        .to_string()
                                 } else if flee.get() {
                                     format!(
                                         "animation: monster-flee 1s ease-out; animation-fill-mode: both; {} pointer-events: none;",
@@ -123,34 +124,34 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
     let monster_name = specs.character_specs.name.clone();
 
-    let health = move || {
+    let health = Memo::new(move |_| {
         game_context
             .monster_states
             .read()
             .get(index)
             .map(|s| s.character_state.health)
             .unwrap_or_default()
-    };
+    });
 
     let health_tooltip = move || {
         view! {
             "Health: "
-            {format_number(health())}
+            {format_number(health.get())}
             "/"
             {format_number(specs.character_specs.max_life)}
         }
     };
 
-    let health_percent = Signal::derive(move || {
+    let health_percent = Memo::new(move |_| {
         let max_health = specs.character_specs.max_life;
         if max_health > 0.0 {
-            (health() / specs.character_specs.max_life * 100.0) as f32
+            (health.get() / specs.character_specs.max_life * 100.0) as f32
         } else {
             0.0
         }
     });
 
-    let is_dead = Signal::derive(move || {
+    let is_dead = Memo::new(move |_| {
         game_context
             .monster_states
             .read()
@@ -159,7 +160,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .unwrap_or(false)
     });
 
-    let just_hurt = Signal::derive(move || {
+    let just_hurt = Memo::new(move |_| {
         game_context
             .monster_states
             .read()
@@ -207,17 +208,17 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
     let icon_asset = img_asset(&skill_specs.base.icon);
     let skill_name = skill_specs.base.name.clone();
 
-    let is_dead = move || {
+    let is_dead = Memo::new(move |_| {
         game_context
             .monster_states
             .read()
             .get(monster_index)
             .map(|x| !x.character_state.is_alive)
             .unwrap_or(false)
-    };
+    });
 
     let skill_cooldown = Signal::derive(move || {
-        if !is_dead() && skill_specs.cooldown > 0.0 {
+        if !is_dead.get() && skill_specs.cooldown > 0.0 {
             (game_context
                 .monster_states
                 .read()
@@ -248,7 +249,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
     let hide_tooltip = move |_| tooltip_context.hide();
 
     let just_triggered = Signal::derive(move || {
-        if !is_dead() {
+        if !is_dead.get() {
             game_context
                 .monster_states
                 .read()

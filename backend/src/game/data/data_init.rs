@@ -30,6 +30,7 @@ impl DataInit<CharacterSpecs> for CharacterState {
             health: specs.max_life,
             just_hurt: false,
             just_hurt_crit: false,
+            just_blocked: false,
         }
     }
 }
@@ -38,11 +39,7 @@ impl DataInit<PlayerSpecs> for PlayerState {
     fn init(specs: &PlayerSpecs) -> Self {
         PlayerState {
             character_state: CharacterState::init(&specs.character_specs),
-            skills_states: specs
-                .skills_specs
-                .iter()
-                .map(SkillState::init)
-                .collect(),
+            skills_states: specs.skills_specs.iter().map(SkillState::init).collect(),
             mana: specs.max_mana,
             just_leveled_up: false,
         }
@@ -53,11 +50,7 @@ impl DataInit<MonsterSpecs> for MonsterState {
     fn init(specs: &MonsterSpecs) -> Self {
         MonsterState {
             character_state: CharacterState::init(&specs.character_specs),
-            skill_states: specs
-                .skill_specs
-                .iter()
-                .map(SkillState::init)
-                .collect(),
+            skill_states: specs.skill_specs.iter().map(SkillState::init).collect(),
             initiative: rng::random_range(0.0..specs.max_initiative).unwrap_or_default(),
         }
     }
@@ -72,6 +65,7 @@ impl DataInit<BaseSkillSpecs> for SkillSpecs {
             upgrade_level: 1,
             next_upgrade_cost: specs.upgrade_cost,
             effects: specs.effects.clone(),
+            item_slot: None,
         }
     }
 }

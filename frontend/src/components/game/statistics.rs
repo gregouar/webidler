@@ -243,6 +243,16 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     )
                                 }
                             />
+                            <Stat
+                                label="Block Chances"
+                                value=move || {
+                                    format!(
+                                        "{:.0}%",
+                                        game_context.player_specs.read().character_specs.block
+                                            * 100.0,
+                                    )
+                                }
+                            />
                         </StatCategory>
 
                         <StatCategory title="Attacks">

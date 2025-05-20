@@ -3,10 +3,13 @@ use std::vec;
 use shared::data::{
     item::{ArmorSpecs, ItemSlot, ItemSpecs, WeaponSpecs},
     item_affix::{EffectModifier, EffectTarget, StatEffect},
-    skill::{BaseSkillSpecs, SkillEffect, SkillEffectType, SkillType, TargetType},
+    skill::{BaseSkillSpecs, SkillEffect, SkillEffectType, SkillSpecs, SkillType, TargetType},
 };
 
-use crate::game::data::items_store::{ItemAdjectivesTable, ItemNounsTable};
+use crate::game::data::{
+    items_store::{ItemAdjectivesTable, ItemNounsTable},
+    DataInit,
+};
 
 use super::{loot_generator::generate_name, stats_controller::ApplyStatModifier};
 
@@ -73,14 +76,10 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -
 fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &[StatEffect]) -> ArmorSpecs {
     for effect in effects {
         if effect.stat == EffectTarget::LocalArmor {
-            match effect.modifier {
-                EffectModifier::Flat => {
-                    armor_specs.armor += effect.value;
-                }
-                EffectModifier::Multiplier => {
-                    armor_specs.armor *= 1.0 + effect.value;
-                }
-            }
+            armor_specs.armor.apply_effect(effect);
+        }
+        if effect.stat == EffectTarget::LocalBlock {
+            armor_specs.block.apply_effect(effect);
         }
     }
     armor_specs
@@ -90,12 +89,12 @@ pub fn make_weapon_skill(
     item_slot: ItemSlot,
     item_level: u16,
     weapon_specs: &WeaponSpecs,
-) -> BaseSkillSpecs {
-    BaseSkillSpecs {
+) -> SkillSpecs {
+    let mut skill_specs = SkillSpecs::init(&BaseSkillSpecs {
         name: "Weapon Attack".to_string(),
         icon: "skills/attack.svg".to_string(),
         description: "A swing of your weapon".to_string(),
-        skill_type: SkillType::Weapon(item_slot),
+        skill_type: SkillType::Attack,
         cooldown: weapon_specs.cooldown,
         mana_cost: 0.0,
         upgrade_cost: item_level as f64 * 10.0, // TODO: More aggressive increase?
@@ -109,5 +108,7 @@ pub fn make_weapon_skill(
                 crit_damage: weapon_specs.crit_damage,
             },
         }],
-    }
+    });
+    skill_specs.item_slot = Some(item_slot);
+    skill_specs
 }

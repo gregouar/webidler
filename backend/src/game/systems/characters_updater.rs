@@ -20,4 +20,5 @@ pub fn reset_character(character_state: &mut CharacterState) {
     character_state.just_died = false;
     character_state.just_hurt = false;
     character_state.just_hurt_crit = false;
+    character_state.just_blocked = false;
 }

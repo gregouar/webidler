@@ -33,6 +33,8 @@
 
       "mana_suffixes.json",
 
+      "shield_suffixes.json",
+
       "spell_prefixes.json",
       "spell_suffixes.json"
     ]
