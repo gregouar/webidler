@@ -10,10 +10,10 @@
       "shape": "Horizontal2",
       "cooldown": 3.0,
       "damage": {
-        "Physical": [3, 8]
+        "Physical": [3, 7]
       },
       "crit_chances": 0.05,
-      "crit_damage": 0.5
+      "crit_damage": 2
     }
   }
 }

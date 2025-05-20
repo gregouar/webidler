@@ -11,7 +11,7 @@
         "Physical": [2, 4]
       },
       "crit_chances": 0.05,
-      "crit_damage": 0.5
+      "crit_damage": 1
     }
   },
   "shortsword_unique": {
@@ -27,7 +27,7 @@
         "Physical": [2, 4]
       },
       "crit_chances": 0.05,
-      "crit_damage": 0.5
+      "crit_damage": 1
     },
     "rarity": "Unique",
     "affixes": [
@@ -54,12 +54,12 @@
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 4.0,
+      "cooldown": 3.5,
       "damage": {
         "Physical": [4, 10]
       },
       "crit_chances": 0.05,
-      "crit_damage": 1.0
+      "crit_damage": 1
     }
   }
 }
