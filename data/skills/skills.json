@@ -10,11 +10,9 @@
     "effects": [
       {
         "range": "Any",
-        "effect_type": {
-          "FlatDamage": {
-            "damage": {
-              "Physical": [3, 6]
-            }
+        "FlatDamage": {
+          "damage": {
+            "Physical": [3, 6]
           }
         }
       }
@@ -32,11 +30,9 @@
       {
         "range": "Distance",
         "shape": "Square4",
-        "effect_type": {
-          "FlatDamage": {
-            "damage": {
-              "Fire": [4, 12]
-            }
+        "FlatDamage": {
+          "damage": {
+            "Fire": [4, 12]
           }
         }
       }
@@ -53,9 +49,7 @@
     "effects": [
       {
         "target_type": "Me",
-        "effect_type": {
-          "Heal": { "min": 20, "max": 40 }
-        }
+        "Heal": { "min": 20, "max": 40 }
       }
     ]
   }

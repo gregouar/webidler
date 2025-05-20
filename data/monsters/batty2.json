@@ -1,9 +1,9 @@
 {
-  "character_specs": {
-    "name": "Batty",
-    "portrait": "monsters/bat2.webp",
-    "max_life": 5
-  },
+  "name": "Batty",
+  "portrait": "monsters/bat2.webp",
+  "max_life": 5,
+  "power_factor": 1.0,
+  "max_initiative": 0.5,
   "skills": [
     {
       "name": "Bite",
@@ -11,17 +11,13 @@
       "cooldown": 2.0,
       "effects": [
         {
-          "effect_type": {
-            "FlatDamage": {
-              "damage": {
-                "Physical": [1, 3]
-              }
+          "FlatDamage": {
+            "damage": {
+              "Physical": [1, 3]
             }
           }
         }
       ]
     }
-  ],
-  "power_factor": 1.0,
-  "max_initiative": 0.5
+  ]
 }

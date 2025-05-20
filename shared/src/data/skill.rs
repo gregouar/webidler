@@ -60,6 +60,7 @@ pub struct SkillEffect {
     #[serde(default)]
     pub shape: Shape,
 
+    #[serde(flatten)]
     pub effect_type: SkillEffectType,
 }
 
@@ -92,7 +93,6 @@ pub enum Shape {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum SkillEffectType {
-    // TODO: merge multiple damage types à la weapon style
     FlatDamage {
         damage: HashMap<DamageType, (f64, f64)>,
         #[serde(default)]
