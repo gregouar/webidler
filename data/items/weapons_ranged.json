@@ -12,7 +12,7 @@
       "damage": {
         "Physical": [3, 7]
       },
-      "crit_chances": 0.05,
+      "crit_chances": 0.08,
       "crit_damage": 2
     }
   }

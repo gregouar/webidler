@@ -49,7 +49,7 @@
     "effects": [
       {
         "target_type": "Me",
-        "Heal": { "min": 20, "max": 40 }
+        "Heal": { "min": 25, "max": 25 }
       }
     ]
   }
