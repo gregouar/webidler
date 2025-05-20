@@ -30,8 +30,8 @@
       {
         "stat": "GlobalCritDamage",
         "modifier": "Multiplier",
-        "min": 0.25,
-        "max": 0.49
+        "min": 0.40,
+        "max": 0.59
       }
     ]
   }
