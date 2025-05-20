@@ -12,8 +12,8 @@
       {
         "stat": "LocalBlock",
         "modifier": "Flat",
-        "min": 2,
-        "max": 5
+        "min": 0.02,
+        "max": 0.05
       }
     ]
   },

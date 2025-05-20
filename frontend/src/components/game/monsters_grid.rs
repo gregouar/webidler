@@ -94,7 +94,7 @@ pub fn MonstersGrid() -> impl IntoView {
                             )
                             style=move || {
                                 if all_monsters_dead.get() {
-                                    "animation: monster-fade-out 1s ease-in; animation-fill-mode: both; pointer-events: none;"
+                                    "animation-delay: 0.2s; animation: monster-fade-out 1s ease-in; animation-fill-mode: both; pointer-events: none;"
                                         .to_string()
                                 } else if flee.get() {
                                     format!(
