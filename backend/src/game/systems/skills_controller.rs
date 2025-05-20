@@ -120,7 +120,6 @@ fn apply_skill_effect<'a>(
                 crit_chances,
                 crit_damage,
             } => {
-                // TODO: How to influence skill effects based on character_specs?
                 let is_crit = rng::random_range(0.0..=1.0).unwrap_or(1.0) <= crit_chances;
                 if let Some(damage) = rng::random_range(min..=max).map(|d| {
                     if is_crit {
@@ -135,7 +134,6 @@ fn apply_skill_effect<'a>(
                         target_state,
                         target_specs,
                         is_crit,
-                        // TODO: Share crit infos for crit damage reduc
                     );
                 }
             }
@@ -193,21 +191,15 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) 
                     SkillType::Attack | SkillType::Weapon(_)
                 ) =>
             {
-                skill_specs
-                    .cooldown
-                    .apply_modifier(effect.modifier, -effect.value);
+                skill_specs.cooldown.apply_inverse_effect(effect);
             }
 
             EffectTarget::GlobalSpellSpeed if skill_specs.base.skill_type == SkillType::Spell => {
-                skill_specs
-                    .cooldown
-                    .apply_modifier(effect.modifier, -effect.value);
+                skill_specs.cooldown.apply_inverse_effect(effect);
             }
 
             EffectTarget::GlobalSpeed => {
-                skill_specs
-                    .cooldown
-                    .apply_modifier(effect.modifier, -effect.value);
+                skill_specs.cooldown.apply_inverse_effect(effect);
             }
 
             _ => {}

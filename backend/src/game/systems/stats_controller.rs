@@ -2,8 +2,27 @@ use shared::data::{effect::EffectModifier, item_affix::StatEffect};
 
 pub trait ApplyStatModifier {
     fn apply_modifier(&mut self, modifier: EffectModifier, value: f64);
+    /// Use for applying decreased cooldown from increased speed
+    fn apply_inverse_modifier(&mut self, modifier: EffectModifier, value: f64) {
+        self.apply_modifier(
+            modifier,
+            match modifier {
+                EffectModifier::Flat => -value,
+                EffectModifier::Multiplier => {
+                    if value != -1.0 {
+                        -(value / (1.0 + value))
+                    } else {
+                        0.0
+                    }
+                }
+            },
+        )
+    }
     fn apply_effect(&mut self, effect: &StatEffect) {
         self.apply_modifier(effect.modifier, effect.value);
+    }
+    fn apply_inverse_effect(&mut self, effect: &StatEffect) {
+        self.apply_inverse_modifier(effect.modifier, effect.value);
     }
 }
 

@@ -37,9 +37,7 @@ pub fn update_item_specs(
 fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -> WeaponSpecs {
     for effect in effects {
         match effect.stat {
-            EffectTarget::LocalAttackSpeed => weapon_specs
-                .cooldown
-                .apply_modifier(effect.modifier, -effect.value),
+            EffectTarget::LocalAttackSpeed => weapon_specs.cooldown.apply_inverse_effect(effect),
             EffectTarget::LocalAttackDamage => {
                 for (min, max) in weapon_specs.damage.values_mut() {
                     min.apply_effect(effect);

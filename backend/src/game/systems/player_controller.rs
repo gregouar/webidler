@@ -374,9 +374,9 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
             EffectTarget::GlobalMana => player_specs.max_mana.apply_effect(effect),
             EffectTarget::GlobalManaRegen => player_specs.mana_regen.apply_effect(effect),
             EffectTarget::GlobalArmor => player_specs.character_specs.armor.apply_effect(effect),
-            EffectTarget::GlobalMovementSpeed => player_specs
-                .movement_cooldown
-                .apply_modifier(effect.modifier, -effect.value),
+            EffectTarget::GlobalMovementSpeed => {
+                player_specs.movement_cooldown.apply_inverse_effect(effect)
+            }
             EffectTarget::GlobalGoldFind => match effect.modifier {
                 EffectModifier::Flat => todo!(),
                 EffectModifier::Multiplier => player_specs.gold_find *= 1.0 + effect.value,
