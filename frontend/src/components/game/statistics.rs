@@ -290,7 +290,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         effect(
                                             EffectTarget::GlobalSpellSpeed,
                                             EffectModifier::Multiplier,
-                                        ),
+                                        ) * 100.0,
                                     )
                                 }
                             />
