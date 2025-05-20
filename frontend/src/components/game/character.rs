@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use leptos::html::*;
 use leptos::prelude::*;
 
@@ -8,6 +10,7 @@ pub fn CharacterPortrait(
     image_uri: String,
     character_name: String,
     #[prop(into)] just_hurt: Signal<bool>,
+    #[prop(into)] just_hurt_crit: Signal<bool>,
     #[prop(into)] is_dead: Signal<bool>,
 ) -> impl IntoView {
     let just_hurt_class = move || {
@@ -22,7 +25,25 @@ pub fn CharacterPortrait(
 
     let is_dead_img_effect = move || {
         if is_dead.get() {
-            "transition-all duration-1000 saturate-0 brightness-1"
+            "transition-all duration-1000 saturate-0 brightness-1
+            [transform:rotateX(180deg)]"
+        } else {
+            "transition-all duration-1000"
+        }
+    };
+
+    let crit_hit = RwSignal::new(false);
+
+    Effect::new(move |_| {
+        if just_hurt_crit.get() {
+            crit_hit.set(true);
+            set_timeout(move || crit_hit.set(false), Duration::from_millis(500));
+        }
+    });
+
+    let crit_animation_style = move || {
+        if crit_hit.get() {
+            "animation: shake 0.5s linear infinite;"
         } else {
             ""
         }
@@ -30,28 +51,33 @@ pub fn CharacterPortrait(
 
     view! {
         <style>
-            // TODO
-            // "
-            // .just_hurt_effect {
-            // --shadow-size: calc(10%);
-            // box-shadow: inset 0 0 var(--shadow-size) rgba(192, 0, 0, 1.0);
-            // }
-            // "
             "
-                .just_hurt_effect {
-                    box-shadow: inset 0 0 32px rgba(192, 0, 0, 1.0);
-                }
+            .just_hurt_effect {
+                box-shadow: inset 0 0 32px rgba(192, 0, 0, 1.0);
+            }
+            
+            @keyframes shake {
+                0%, 100% { transform: translate(0, 0) rotate(0); }
+                25% { transform: translate(-4px, 2px) rotate(-2deg); }
+                50% { transform: translate(4px, -2px) rotate(2deg); }
+                75% { transform: translate(-3px, 1px) rotate(-1deg); }
+            }
             "
         </style>
-        <div class="flex items-center justify-center h-full w-full relative">
+        <div
+            class=move || {
+                format!(
+                    "flex items-center justify-center h-full w-full relative {}",
+                    is_dead_img_effect(),
+                )
+            }
+            style=crit_animation_style
+        >
             <img
                 src=img_asset(&image_uri)
                 alt=character_name
                 class=move || {
-                    format!(
-                        "border-8 border-double border-stone-500 object-cover h-full w-full {}",
-                        is_dead_img_effect(),
-                    )
+                    format!("border-8 border-double border-stone-500 object-cover h-full w-full")
                 }
             />
             <div class=move || { format!("absolute inset-0 -none  {}", just_hurt_class()) }></div>

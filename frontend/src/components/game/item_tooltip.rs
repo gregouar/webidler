@@ -40,14 +40,43 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 "text-white"
             };
 
+            let block_color = if specs.block != base_specs.block {
+                "text-blue-400"
+            } else {
+                "text-white"
+            };
+
             view! {
-                <li class="text-gray-400 text-sm leading-snug">
-                    "Armor: "
-                    <span class=format!(
-                        "{} font-semibold",
-                        armor_color,
-                    )>{format!("{:.0}", specs.armor)}</span>
-                </li>
+                {if specs.armor > 0.0 {
+                    Some(
+                        view! {
+                            <li class="text-gray-400 text-sm leading-snug">
+                                "Armor: "
+                                <span class=format!(
+                                    "{} font-semibold",
+                                    armor_color,
+                                )>{format!("{:.0}", specs.armor)}</span>
+                            </li>
+                        },
+                    )
+                } else {
+                    None
+                }}
+                {if specs.block > 0.0 {
+                    Some(
+                        view! {
+                            <li class="text-gray-400 text-sm leading-snug">
+                                "Block chances: "
+                                <span class=format!(
+                                    "{} font-semibold",
+                                    block_color,
+                                )>{format!("{:.0}%", specs.block * 100.0)}</span>
+                            </li>
+                        },
+                    )
+                } else {
+                    None
+                }}
             }
         });
 

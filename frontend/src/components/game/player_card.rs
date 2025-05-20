@@ -95,6 +95,13 @@ pub fn PlayerCard() -> impl IntoView {
     let is_dead = Memo::new(move |_| !game_context.player_state.read().character_state.is_alive);
 
     let just_hurt = Memo::new(move |_| game_context.player_state.read().character_state.just_hurt);
+    let just_hurt_crit = Memo::new(move |_| {
+        game_context
+            .player_state
+            .read()
+            .character_state
+            .just_hurt_crit
+    });
 
     let conn = expect_context::<WebsocketContext>();
     let level_up = move |_| {
@@ -173,6 +180,7 @@ pub fn PlayerCard() -> impl IntoView {
                             .clone()
                         character_name="player".to_string()
                         just_hurt=just_hurt
+                        just_hurt_crit=just_hurt_crit
                         is_dead=is_dead
                     />
                     <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>

@@ -169,6 +169,15 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .unwrap_or(false)
     });
 
+    let just_hurt_crit = Memo::new(move |_| {
+        game_context
+            .monster_states
+            .read()
+            .get(index)
+            .map(|x| x.character_state.just_hurt_crit)
+            .unwrap_or(false)
+    });
+
     view! {
         <div class="grid grid-cols-4 h-full bg-zinc-800 shadow-md rounded-md gap-2 p-2 ring-1 ring-zinc-950">
             <div class="flex flex-col gap-2 col-span-3 h-full">
@@ -185,6 +194,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     image_uri=specs.character_specs.portrait.clone()
                     character_name=specs.character_specs.name.clone()
                     just_hurt=just_hurt
+                    just_hurt_crit=just_hurt_crit
                     is_dead=is_dead
                 />
             </div>
