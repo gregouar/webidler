@@ -26,7 +26,7 @@ pub fn HorizontalProgressBar(
         if reset.get() {
             "transition-none"
         } else {
-            "transition-all ease-linear duration-500 "
+            "transition-all ease-linear duration-300 "
         }
     };
 
@@ -102,7 +102,7 @@ pub fn VerticalProgressBar(
             shadow-md
             ">
             <div
-                class={format!("{} rounded-lg overflow-hidden transition-all ease duration-500",bar_color)}
+                class={format!("{} rounded-lg overflow-hidden transition-all ease duration-300",bar_color)}
                 style:height=move || format!("{}%", value.get().clamp(0.0,100.0).round())
                 style:-webkit-mask="linear-gradient(#fff 0 0)"
             ></div>

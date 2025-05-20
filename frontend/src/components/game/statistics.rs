@@ -83,10 +83,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Life Regeneration"
+                                label="Life Regeneration per second"
                                 value=move || {
                                     format!(
-                                        "{:.2}% per second",
+                                        "{:.2}%",
                                         game_context.player_specs.read().character_specs.life_regen,
                                     )
                                 }
@@ -98,12 +98,9 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Mana Regeneration"
+                                label="Mana Regeneration per second"
                                 value=move || {
-                                    format!(
-                                        "{:.2}% per second",
-                                        game_context.player_specs.read().mana_regen,
-                                    )
+                                    format!("{:.2}%", game_context.player_specs.read().mana_regen)
                                 }
                             />
                             <Stat
