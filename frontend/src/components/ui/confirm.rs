@@ -2,16 +2,18 @@ use leptos::prelude::*;
 use leptos_use::on_click_outside;
 use std::sync::Arc;
 
+type ArcFn = Arc<dyn Fn() + Send + Sync>;
+
 #[derive(Clone)]
 pub struct ConfirmContext {
-    pub confirm: Arc<dyn Fn(String, Arc<dyn Fn() + Send + Sync>) + Send + Sync>,
+    pub confirm: Arc<dyn Fn(String, ArcFn) + Send + Sync>,
 }
 
-pub fn provide_confirm_context() -> RwSignal<Option<(String, Arc<dyn Fn() + Send + Sync>)>> {
+pub fn provide_confirm_context() -> RwSignal<Option<(String, ArcFn)>> {
     let state = RwSignal::new(None);
     let context = ConfirmContext {
         confirm: Arc::new({
-            move |message: String, on_confirm: Arc<dyn Fn() + Send + Sync>| {
+            move |message: String, on_confirm: ArcFn| {
                 state.set(Some((message, on_confirm)));
             }
         }),
@@ -21,9 +23,7 @@ pub fn provide_confirm_context() -> RwSignal<Option<(String, Arc<dyn Fn() + Send
 }
 
 #[component]
-pub fn ConfirmationModal(
-    state: RwSignal<Option<(String, Arc<dyn Fn() + Send + Sync>)>>,
-) -> impl IntoView {
+pub fn ConfirmationModal(state: RwSignal<Option<(String, ArcFn)>>) -> impl IntoView {
     let node_ref = NodeRef::new();
 
     let _ = on_click_outside(node_ref, move |_| {

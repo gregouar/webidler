@@ -1,27 +1,43 @@
 {
-    "character_specs": {
-        "name": "Ratty",
-        "portrait": "monsters/rat.webp",
-        "max_life": 8
-    },
-    "skills": [
+  "character_specs": {
+    "name": "Ratty",
+    "portrait": "monsters/rat.webp",
+    "max_life": 8
+  },
+  "skills": [
+    {
+      "name": "Vicious Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 5.0,
+      "effects": [
         {
-            "name": "Vicious Bite",
-            "icon": "skills/bite.svg",
-            "cooldown": 5.0,
-            "effects": [
-              { "effect_type": { "FlatDamage": { "min": 2.0, "max": 8.0 } } }
-            ]
-        },
-        {
-            "name": "Scratch",
-            "icon": "skills/claw.svg",
-            "cooldown": 3.0,
-            "effects": [
-              { "effect_type": { "FlatDamage": { "min": 1.0, "max": 3.0 } } }
-            ]
+          "effect_type": {
+            "FlatDamage": {
+              "damage": {
+                "Physical": [2, 8]
+              }
+            }
+          }
         }
-    ],
-    "power_factor": 2.0,
-    "max_initiative": 1.0
+      ]
+    },
+    {
+      "name": "Scratch",
+      "icon": "skills/claw.svg",
+      "cooldown": 3.0,
+      "effects": [
+        {
+          "effect_type": {
+            "FlatDamage": {
+              "damage": {
+                "Physical": [1, 3]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "power_factor": 2.0,
+  "max_initiative": 1.0
 }

@@ -18,7 +18,7 @@ pub fn update_skills_states(
     }
 }
 
-pub fn reset_skills(skill_states: &mut Vec<SkillState>) {
+pub fn reset_skills(skill_states: &mut [SkillState]) {
     for skill_state in skill_states.iter_mut() {
         skill_state.just_triggered = false;
     }

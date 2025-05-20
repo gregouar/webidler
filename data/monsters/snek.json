@@ -1,20 +1,28 @@
 {
-    "character_specs": {
-        "name": "Snek",
-        "portrait": "monsters/snake.webp",
-        "max_life": 15,
-        "size": "Large"
-    },
-    "skills": [
+  "character_specs": {
+    "name": "Snek",
+    "portrait": "monsters/snake.webp",
+    "max_life": 15,
+    "size": "Large"
+  },
+  "skills": [
+    {
+      "name": "Poison Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 5.0,
+      "effects": [
         {
-            "name": "Poison Bite",
-            "icon": "skills/bite.svg",
-            "cooldown": 5.0,
-            "effects": [
-              { "effect_type": { "FlatDamage": { "min": 5.0, "max": 10.0 } } }
-            ]
+          "effect_type": {
+            "FlatDamage": {
+              "damage": {
+                "Physical": [5, 10]
+              }
+            }
+          }
         }
-    ],
-    "power_factor": 2.0,
-    "max_initiative": 1.0
+      ]
+    }
+  ],
+  "power_factor": 4.0,
+  "max_initiative": 2.0
 }

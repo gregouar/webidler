@@ -33,7 +33,7 @@ impl WebSocketConnection {
                 match time::timeout(timeout, ws_receiver.next()).await {
                     Ok(Some(Ok(m))) => match process_message(m, who) {
                         ControlFlow::Continue(Some(m)) => {
-                            if let Err(_) = receiver_tx.send(m).await {
+                            if receiver_tx.send(m).await.is_err() {
                                 // If channel is closed, we can stop
                                 break;
                             }

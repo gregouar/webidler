@@ -65,7 +65,7 @@ fn drop_loot_impl(
     update_loot_states(queued_loot);
 }
 
-fn update_loot_states(queued_loot: &mut Vec<QueuedLoot>) {
+fn update_loot_states(queued_loot: &mut [QueuedLoot]) {
     let mut queued_loot: Vec<_> = queued_loot
         .iter_mut()
         .filter(|x| x.state != LootState::HasDisappeared)

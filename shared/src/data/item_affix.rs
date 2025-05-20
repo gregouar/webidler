@@ -26,6 +26,7 @@ pub enum AffixRestriction {
     MeleeWeapon,
     RangedWeapon,
     Shield,
+    Focus,
     Jewelry,
     Trinket,
     // Sub type:

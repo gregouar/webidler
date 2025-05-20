@@ -10,7 +10,15 @@
       "icon": "skills/bite.svg",
       "cooldown": 2.0,
       "effects": [
-        { "effect_type": { "FlatDamage": { "min": 1.0, "max": 3.0 } } }
+        {
+          "effect_type": {
+            "FlatDamage": {
+              "damage": {
+                "Physical": [1, 3]
+              }
+            }
+          }
+        }
       ]
     }
   ],

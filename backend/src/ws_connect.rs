@@ -208,8 +208,10 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
         auto_skills: vec![false, false, false],
     };
 
-    let mut player_inventory = PlayerInventory::default();
-    player_inventory.max_bag_size = 40;
+    let mut player_inventory = PlayerInventory {
+        max_bag_size: 40,
+        ..Default::default()
+    };
 
     let player_resources = PlayerResources::default();
 

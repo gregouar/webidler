@@ -1,0 +1,9 @@
+{
+  "grigri": {
+    "name": "Gri-Gri",
+    "icon": "items/grigri.webp",
+    "slot": "Shield",
+    "affix_restrictions": ["Focus"],
+    "rariyty": "Magic"
+  }
+}

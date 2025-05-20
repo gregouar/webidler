@@ -208,9 +208,10 @@ pub fn equip_item(
             .insert(*item_slot, EquippedSlot::ExtraSlot(item_specs.base.slot));
     }
 
-    player_inventory
-        .equipped
-        .insert(item_specs.base.slot, EquippedSlot::MainSlot(item_specs));
+    player_inventory.equipped.insert(
+        item_specs.base.slot,
+        EquippedSlot::MainSlot(Box::new(item_specs)),
+    );
 
     Ok(old_item)
 }
@@ -229,7 +230,7 @@ pub fn unequip_item(
             if old_item.weapon_specs.is_some() {
                 unequip_weapon(player_specs, player_state, item_slot);
             }
-            Some(old_item)
+            Some(*old_item)
         }
         Some(EquippedSlot::ExtraSlot(item_slot)) => {
             unequip_item(player_specs, player_inventory, player_state, item_slot)

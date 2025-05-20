@@ -6,14 +6,14 @@
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["SpellWeapon"],
+    "restrictions": ["SpellWeapon", "Focus"],
     "item_level": 1,
     "effects": [
       {
         "stat": "GlobalSpellSpeed",
         "modifier": "Multiplier",
         "min": 0.05,
-        "max": 0.10
+        "max": 0.1
       }
     ]
   },
@@ -24,7 +24,7 @@
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["SpellWeapon"],
+    "restrictions": ["SpellWeapon", "Focus"],
     "item_level": 1,
     "effects": [
       {

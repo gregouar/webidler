@@ -48,6 +48,11 @@
       "min_area_level": 3
     },
     {
+      "item_id": "grigri",
+      "weight": 500,
+      "min_area_level": 3
+    },
+    {
       "item_id": "cloak",
       "weight": 400,
       "min_area_level": 4

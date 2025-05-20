@@ -36,12 +36,11 @@
   { "text": "Fletch", "restrictions": ["RangedWeapon"] },
   { "text": "Arc", "restrictions": ["RangedWeapon"] },
 
-  { "text": "Focus", "restrictions": ["SpellWeapon"] },
-  { "text": "Whisper", "restrictions": ["SpellWeapon"] },
-  { "text": "Glimpse", "restrictions": ["SpellWeapon"] },
-  { "text": "Scripture", "restrictions": ["SpellWeapon"] },
-  { "text": "Sigil", "restrictions": ["SpellWeapon"] },
-  { "text": "Conduit", "restrictions": ["SpellWeapon"] },
+  { "text": "Whisper", "restrictions": ["SpellWeapon", "Focus"] },
+  { "text": "Glimpse", "restrictions": ["SpellWeapon", "Focus"] },
+  { "text": "Scripture", "restrictions": ["SpellWeapon", "Focus"] },
+  { "text": "Sigil", "restrictions": ["SpellWeapon", "Focus"] },
+  { "text": "Conduit", "restrictions": ["SpellWeapon", "Focus"] },
 
   { "text": "Band", "restrictions": ["Jewelry"] },
   { "text": "Signet", "restrictions": ["Jewelry"] },
@@ -51,11 +50,11 @@
   { "text": "Loop", "restrictions": ["Jewelry"] },
   { "text": "Wisp", "restrictions": ["Jewelry"] },
 
-  { "text": "Token", "restrictions": ["Trinket"] },
-  { "text": "Charm", "restrictions": ["Trinket"] },
-  { "text": "Talisman", "restrictions": ["Trinket"] },
-  { "text": "Whim", "restrictions": ["Trinket"] },
-  { "text": "Gleam", "restrictions": ["Trinket"] },
+  { "text": "Token", "restrictions": ["Trinket", "Focus"] },
+  { "text": "Charm", "restrictions": ["Trinket", "Focus"] },
+  { "text": "Talisman", "restrictions": ["Trinket", "Focus"] },
+  { "text": "Whim", "restrictions": ["Trinket", "Focus"] },
+  { "text": "Gleam", "restrictions": ["Trinket", "Focus"] },
 
   { "text": "Skin", "restrictions": ["Body"] },
   { "text": "Husk", "restrictions": ["Body"] },
@@ -78,9 +77,9 @@
   { "text": "Skull", "restrictions": ["Helmet"] },
   { "text": "Mind", "restrictions": ["Helmet"] },
 
-  { "text": "Icon", "restrictions": ["Relic"] },
-  { "text": "Artifact", "restrictions": ["Relic"] },
-  { "text": "Remnant", "restrictions": ["Relic"] },
-  { "text": "Echo", "restrictions": ["Relic"] },
-  { "text": "Memory", "restrictions": ["Relic"] }
+  { "text": "Icon", "restrictions": ["Relic", "Focus"] },
+  { "text": "Artifact", "restrictions": ["Relic", "Focus"] },
+  { "text": "Remnant", "restrictions": ["Relic", "Focus"] },
+  { "text": "Echo", "restrictions": ["Relic", "Focus"] },
+  { "text": "Memory", "restrictions": ["Relic", "Focus"] }
 ]

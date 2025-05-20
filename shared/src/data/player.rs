@@ -46,7 +46,7 @@ pub struct PlayerResources {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum EquippedSlot {
-    MainSlot(ItemSpecs),
+    MainSlot(Box<ItemSpecs>),
     ExtraSlot(ItemSlot), // Link to main slot taking the extra slot
 }
 

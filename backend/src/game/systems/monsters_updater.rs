@@ -7,7 +7,7 @@ use super::{characters_updater, skills_updater};
 pub fn update_monster_states(
     elapsed_time: Duration,
     monster_specs: &[MonsterSpecs],
-    monster_states: &mut Vec<MonsterState>,
+    monster_states: &mut [MonsterState],
 ) {
     for (monster_state, monster_specs) in monster_states
         .iter_mut()
@@ -32,7 +32,7 @@ pub fn update_monster_states(
     }
 }
 
-pub fn reset_monsters(monster_states: &mut Vec<MonsterState>) {
+pub fn reset_monsters(monster_states: &mut [MonsterState]) {
     for monster_state in monster_states.iter_mut() {
         characters_updater::reset_character(&mut monster_state.character_state);
         skills_updater::reset_skills(&mut monster_state.skill_states);

@@ -110,7 +110,7 @@ impl SkillEffect {
     pub fn increase_effect(&mut self, factor: f64) {
         match &mut self.effect_type {
             SkillEffectType::FlatDamage { damage, .. } => {
-                for (_, (min, max)) in damage {
+                for (min, max) in damage.values_mut() {
                     *min *= factor;
                     *max *= factor;
                 }

@@ -161,8 +161,7 @@ fn Node(
                 .passives_tree_state
                 .read()
                 .purchased_nodes
-                .get(&node_id)
-                .is_some()
+                .contains(&node_id)
             {
                 NodeStatus::Purchased
             } else if points_available.get()
@@ -177,14 +176,12 @@ fn Node(
                                 .passives_tree_state
                                 .read()
                                 .purchased_nodes
-                                .get(&connection.from)
-                                .is_some()
+                                .contains(&connection.from)
                                 || game_context
                                     .passives_tree_state
                                     .read()
                                     .purchased_nodes
-                                    .get(&connection.to)
-                                    .is_some()
+                                    .contains(&connection.to)
                         })
                         .any(|connection| connection.from == node_id || connection.to == node_id))
             {

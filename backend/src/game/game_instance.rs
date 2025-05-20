@@ -134,11 +134,14 @@ impl<'a> GameInstance<'a> {
                     .push(m.skill_index as usize);
             }
             ClientMessage::SetAutoSkill(m) => {
-                self.data
+                if let Some(x) = self
+                    .data
                     .player_controller
                     .auto_skills
                     .get_mut(m.skill_index as usize)
-                    .map(|x| *x = m.auto_use);
+                {
+                    *x = m.auto_use;
+                }
             }
             ClientMessage::LevelUpSkill(m) => {
                 for _ in 0..m.amount {

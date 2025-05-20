@@ -118,12 +118,12 @@ fn EquippedItem(
         <div class="relative group w-full aspect-[2/3]">
             {move || match equipped_item() {
                 Some(EquippedSlot::MainSlot(item_specs)) => {
-                    let rc_item_specs = Arc::new(item_specs.clone());
+                    let rc_item_specs = Arc::new(*item_specs.clone());
                     let is_being_unequipped = RwSignal::new(false);
                     view! {
                         <div class="relative w-full h-full overflow-visible">
                             <ItemCard
-                                item_specs=item_specs
+                                item_specs=*item_specs
                                 on:click=move |_| show_menu.set(true)
                                 tooltip_position=DynamicTooltipPosition::Auto
                             />
