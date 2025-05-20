@@ -42,7 +42,7 @@ pub fn CharacterPortrait(
 
     let crit_animation_style = move || {
         if crit_hit.get() {
-            "animation: shake 0.5s linear ease-out;"
+            "animation: shake 0.5s linear infinite;"
         } else {
             ""
         }
@@ -63,7 +63,7 @@ pub fn CharacterPortrait(
                 box-shadow: inset 0 0 32px rgba(192, 0, 0, 1.0);
             }
             
-            @keyframes shake {
+             @keyframes shake {
                 0%, 100% { transform: translate(0, 0) rotate(0); }
                 25% { transform: translate(-4px, 2px) rotate(-2deg); }
                 50% { transform: translate(4px, -2px) rotate(2deg); }
@@ -77,23 +77,26 @@ pub fn CharacterPortrait(
             }
             "
         </style>
-        <div
-            class=move || {
-                format!(
-                    "flex items-center justify-center h-full w-full relative overflow-hidden {}",
-                    is_dead_img_effect(),
-                )
-            }
-            style=crit_animation_style
-        >
-            <img
-                src=img_asset(&image_uri)
-                alt=character_name
-                class=move || {
-                    format!("border-8 border-double border-stone-500 object-cover h-full w-full")
-                }
-            />
-            <div class=move || { format!("absolute inset-0 -none  {}", just_hurt_class()) }></div>
+        <div class=move || {
+            format!(
+                "flex items-center justify-center h-full w-full relative overflow-hidden {}",
+                is_dead_img_effect(),
+            )
+        }>
+            <div class="h-full w-full" style=crit_animation_style>
+                <img
+                    src=img_asset(&image_uri)
+                    alt=character_name
+                    class=move || {
+                        format!(
+                            "border-8 border-double border-stone-500 object-cover h-full w-full",
+                        )
+                    }
+                />
+                <div class=move || {
+                    format!("absolute inset-0 -none  {}", just_hurt_class())
+                }></div>
+            </div>
 
             {move || {
                 if show_block_effect.get() {
