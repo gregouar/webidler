@@ -67,6 +67,7 @@ impl<'a> GameInstance<'a> {
             self.reset_entities().await;
 
             if let ControlFlow::Break(_) = self.handle_client_events().await {
+                tracing::debug!("client disconnected...");
                 break;
             }
 
@@ -150,7 +151,7 @@ impl<'a> GameInstance<'a> {
                     {
                         skills_controller::level_up_skill(
                             skill_specs,
-                            &mut self.data.player_resources,
+                            self.data.player_resources.mutate(),
                         );
                     }
                 }
@@ -158,9 +159,9 @@ impl<'a> GameInstance<'a> {
             ClientMessage::LevelUpPlayer(m) => {
                 for _ in 0..m.amount {
                     player_controller::level_up(
-                        &mut self.data.player_specs.mutate(),
+                        self.data.player_specs.mutate(),
                         &mut self.data.player_state,
-                        &mut self.data.player_resources,
+                        self.data.player_resources.mutate(),
                     );
                 }
             }
@@ -198,7 +199,7 @@ impl<'a> GameInstance<'a> {
                     player_controller::sell_item(
                         self.data.player_specs.read(),
                         self.data.player_inventory.mutate(),
-                        &mut self.data.player_resources,
+                        self.data.player_resources.mutate(),
                         item_index,
                     )
                 }
@@ -224,7 +225,7 @@ impl<'a> GameInstance<'a> {
                 world_state.auto_progress = false;
             }
             ClientMessage::PurchasePassive(m) => passives_controller::purchase_node(
-                &mut self.data.player_resources,
+                self.data.player_resources.mutate(),
                 &self.data.passives_tree_specs,
                 self.data.passives_tree_state.mutate(),
                 m.node_id,
@@ -337,14 +338,13 @@ impl<'a> GameInstance<'a> {
             );
             self.data.player_controller.reset();
 
-            // TODO: Where should I put this?
             for (monster_specs, _) in monsters_still_alive
                 .iter()
                 .filter(|(_, s)| s.character_state.just_died)
             {
                 self.data.game_stats.monsters_killed += 1;
                 player_controller::reward_player(
-                    &mut self.data.player_resources,
+                    self.data.player_resources.mutate(),
                     self.data.player_specs.read(),
                     monster_specs,
                 );
@@ -411,7 +411,7 @@ impl<'a> GameInstance<'a> {
                     player_specs: self.data.player_specs.sync(),
                     player_inventory: self.data.player_inventory.sync(),
                     player_state: self.data.player_state.clone(),
-                    player_resources: self.data.player_resources.clone(),
+                    player_resources: self.data.player_resources.sync(),
                     monster_specs: self.data.monster_specs.sync(),
                     monster_states: self.data.monster_states.clone(),
                     queued_loot: self.data.queued_loot.sync(),

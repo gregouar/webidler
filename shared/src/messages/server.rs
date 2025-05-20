@@ -57,7 +57,7 @@ pub struct SyncGameStateMessage {
     pub player_specs: Option<PlayerSpecs>,
     pub player_inventory: Option<PlayerInventory>,
     pub player_state: PlayerState,
-    pub player_resources: PlayerResources,
+    pub player_resources: Option<PlayerResources>,
     pub monster_specs: Option<Vec<MonsterSpecs>>,
     pub monster_states: Vec<MonsterState>,
     pub queued_loot: Option<Vec<QueuedLoot>>,

@@ -24,7 +24,8 @@ pub struct GameInstanceData {
     pub player_specs: LazySyncer<PlayerSpecs>,
     pub player_inventory: LazySyncer<PlayerInventory>,
     pub player_state: PlayerState,
-    pub player_resources: PlayerResources,
+    pub player_resources: LazySyncer<PlayerResources>,
+
     pub player_controller: PlayerController,
     pub player_respawn_delay: Instant,
 
@@ -53,7 +54,7 @@ impl GameInstanceData {
             passives_tree_state: LazySyncer::new(PassivesTreeState::default()),
             passives_tree_specs,
 
-            player_resources,
+            player_resources: LazySyncer::new(player_resources),
             player_state: PlayerState::init(&player_specs),
             player_controller: PlayerController::init(&player_specs),
             player_specs: LazySyncer::new(player_specs),
@@ -72,6 +73,9 @@ impl GameInstanceData {
     }
 
     pub fn reset_syncers(&mut self) {
+        self.world_state.mutate();
+        self.passives_tree_state.mutate();
+        self.player_resources.mutate();
         self.player_specs.mutate();
         self.player_inventory.mutate();
         self.monster_specs.mutate();

@@ -1,4 +1,3 @@
-use console_error_panic_hook;
 use leptos::mount::mount_to_body;
 
 use frontend::app::App;

@@ -89,10 +89,10 @@ async fn handle_socket(
     tracing::debug!("client connected");
 
     tracing::debug!("starting the game...");
-
     let game = GameInstance::new(&mut conn, session.data, master_store);
     match game.run().await {
         Ok(game_data) => {
+            tracing::debug!("storing client session '{who}'...");
             sessions_store.sessions.lock().unwrap().insert(
                 user_id,
                 Session {
@@ -101,12 +101,13 @@ async fn handle_socket(
                     data: game_data,
                 },
             );
+            tracing::debug!("stored client session!");
         }
         Err(e) => tracing::error!("error running game: {e}"),
     }
 
     // returning from the handler closes the websocket connection
-    tracing::info!("websocket context {who} destroyed");
+    tracing::info!("websocket context '{who}' destroyed");
 }
 
 async fn wait_for_connect(
@@ -135,7 +136,7 @@ async fn handle_connect(
     msg: ClientConnectMessage,
 ) -> Result<(UserId, Session)> {
     // TODO: verify if user exist, is already playing, get basic data etc
-    tracing::info!("Connect: {:?}", msg);
+    tracing::info!("connect: {:?}", msg);
 
     let session = match msg.session_key {
         Some(session_key) => {
@@ -161,6 +162,7 @@ async fn handle_resume_session(
     sessions_store: &SessionsStore,
     session_key: SessionKey,
 ) -> Result<Session> {
+    tracing::debug!("loading player '{user_id}' session...");
     if let Some(session) = sessions_store.sessions.lock().unwrap().get(user_id) {
         if session_key == session.session_key {
             return Ok(session.clone());
@@ -170,6 +172,8 @@ async fn handle_resume_session(
 }
 
 async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result<Session> {
+    tracing::debug!("create new session for player '{user_id}'...");
+
     let mut rng = rand::rng();
     let mut session_key: SessionKey = [0u8; 32];
     rng.try_fill_bytes(&mut session_key)?;
@@ -209,7 +213,6 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
 
     let player_resources = PlayerResources::default();
 
-    tracing::debug!("loading the game...");
     let world_blueprint = match master_store
         .world_blueprints_store
         .get("forest.json")

@@ -153,7 +153,9 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     if let Some(player_inventory) = player_inventory {
         game_context.player_inventory.set(player_inventory);
     }
-    game_context.player_resources.set(player_resources);
+    if let Some(player_resources) = player_resources {
+        game_context.player_resources.set(player_resources);
+    }
     game_context.player_state.set(player_state);
     if let Some(monster_specs) = monster_specs {
         *game_context.monster_wave.write() += 1; // TODO: Overflow
