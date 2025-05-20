@@ -259,14 +259,18 @@ pub fn compute_skill_specs_effect(
                             min.apply_effect(effect);
                             max.apply_effect(effect);
                         }
-                        EffectTarget::GlobalCritChances => {
-                            crit_chances.apply_effect(effect);
-                        }
-                        EffectTarget::GlobalCritDamage => {
-                            crit_damage.apply_effect(effect);
-                        }
                         _ => {}
                     }
+                }
+
+                match effect.stat {
+                    EffectTarget::GlobalCritChances => {
+                        crit_chances.apply_effect(effect);
+                    }
+                    EffectTarget::GlobalCritDamage => {
+                        crit_damage.apply_effect(effect);
+                    }
+                    _ => {}
                 }
             }
             SkillEffectType::Heal { min, max } => {
