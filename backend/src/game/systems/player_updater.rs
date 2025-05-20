@@ -26,7 +26,8 @@ pub fn update_player_state(
 
     player_state.mana = player_specs.max_mana.min(
         player_state.mana
-            + (elapsed_time.as_secs_f64() * player_specs.mana_regen * player_specs.max_mana),
+            + (elapsed_time.as_secs_f64() * player_specs.mana_regen * player_specs.max_mana
+                / 100.0),
     );
 }
 

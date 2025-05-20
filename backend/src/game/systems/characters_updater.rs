@@ -11,9 +11,9 @@ pub fn update_character_state(
         return;
     }
 
-    state.health = specs
-        .max_life
-        .min(state.health + (elapsed_time.as_secs_f64() * specs.life_regen * specs.max_life));
+    state.health = specs.max_life.min(
+        state.health + (elapsed_time.as_secs_f64() * specs.life_regen * specs.max_life / 100.0),
+    );
 }
 
 pub fn reset_character(character_state: &mut CharacterState) {
