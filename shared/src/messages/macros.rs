@@ -12,9 +12,9 @@ macro_rules! impl_into_message{
         }
 
         $($(
-            impl Into<$name> for $variant_type {
-                fn into(self) -> $name {
-                    $name::$variant(self)
+            impl From<$variant_type> for $name {
+                fn from(value: $variant_type) -> $name {
+                    $name::$variant(value)
                 }
             }
         )*)*

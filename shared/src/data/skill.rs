@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 pub use super::effect::DamageType;
 use super::item::ItemSlot;
@@ -42,15 +43,13 @@ pub struct SkillSpecs {
     pub effects: Vec<SkillEffect>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
-#[derive(Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
 pub enum SkillType {
     #[default]
     Attack,
     Spell,
     Weapon(ItemSlot),
 }
-
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SkillEffect {
@@ -64,8 +63,7 @@ pub struct SkillEffect {
     pub effect_type: SkillEffectType,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
-#[derive(Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default)]
 pub enum TargetType {
     #[default]
     Enemy,
@@ -73,18 +71,15 @@ pub enum TargetType {
     Me,
 }
 
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
-#[derive(Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
 pub enum Range {
     #[default]
     Melee,
     Distance,
+    Any,
 }
 
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
-#[derive(Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
 pub enum Shape {
     #[default]
     Single,
@@ -95,15 +90,11 @@ pub enum Shape {
     All,
 }
 
-
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum SkillEffectType {
     // TODO: merge multiple damage types à la weapon style
     FlatDamage {
-        min: f64,
-        max: f64,
-        #[serde(default)]
-        damage_type: DamageType,
+        damage: HashMap<DamageType, (f64, f64)>,
         #[serde(default)]
         crit_chances: f32,
         #[serde(default)]
@@ -118,9 +109,11 @@ pub enum SkillEffectType {
 impl SkillEffect {
     pub fn increase_effect(&mut self, factor: f64) {
         match &mut self.effect_type {
-            SkillEffectType::FlatDamage { min, max, .. } => {
-                *min *= factor;
-                *max *= factor;
+            SkillEffectType::FlatDamage { damage, .. } => {
+                for (_, (min, max)) in damage {
+                    *min *= factor;
+                    *max *= factor;
+                }
             }
             SkillEffectType::Heal { min, max } => {
                 *min *= factor;

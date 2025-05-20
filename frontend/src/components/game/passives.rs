@@ -318,14 +318,12 @@ fn Connection(connection: PassiveConnection) -> impl IntoView {
                         .passives_tree_state
                         .read()
                         .purchased_nodes
-                        .get(&connection.from)
-                        .is_some() as usize
+                        .contains(&connection.from) as usize
                         + game_context
                             .passives_tree_state
                             .read()
                             .purchased_nodes
-                            .get(&connection.to)
-                            .is_some() as usize
+                            .contains(&connection.to) as usize
                 }
             };
             let stroke_color = {

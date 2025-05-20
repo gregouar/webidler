@@ -9,8 +9,7 @@ use super::{
     world::AreaLevel,
 };
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Ord)]
-#[derive(Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Default)]
 pub enum ItemRarity {
     #[default]
     Normal,
@@ -18,7 +17,6 @@ pub enum ItemRarity {
     Rare,
     Unique,
 }
-
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ItemSlot {
@@ -52,6 +50,9 @@ pub struct ItemBase {
     #[serde(default)]
     pub affixes: Vec<AffixEffectBlueprint>,
 
+    // TODO:
+    // #[serde(default)]
+    // pub skills: Vec<BaseSkillSpecs>,s
     #[serde(default)]
     pub weapon_specs: Option<WeaponSpecs>,
     #[serde(default)]
@@ -66,6 +67,8 @@ pub struct ItemSpecs {
     pub rarity: ItemRarity,
     pub level: AreaLevel,
 
+    // TODO
+    // pub skills: Vec<BaseSkillSpecs>,
     pub weapon_specs: Option<WeaponSpecs>,
     pub armor_specs: Option<ArmorSpecs>,
 
@@ -106,12 +109,5 @@ impl ItemSpecs {
                     .or_default() += effect.value;
                 effects_map
             })
-        // .into_iter()
-        // .map(|((stat, effect_type), value)| StatEffect {
-        //     stat,
-        //     modifier: effect_type,
-        //     value,
-        // })
-        // .collect()
     }
 }

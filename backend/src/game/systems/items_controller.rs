@@ -1,3 +1,5 @@
+use std::vec;
+
 use shared::data::{
     item::{ArmorSpecs, ItemSlot, ItemSpecs, WeaponSpecs},
     item_affix::{EffectModifier, EffectTarget, StatEffect},
@@ -70,14 +72,16 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -
 
 fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &[StatEffect]) -> ArmorSpecs {
     for effect in effects {
-        if effect.stat == EffectTarget::LocalArmor { match effect.modifier {
-            EffectModifier::Flat => {
-                armor_specs.armor += effect.value;
+        if effect.stat == EffectTarget::LocalArmor {
+            match effect.modifier {
+                EffectModifier::Flat => {
+                    armor_specs.armor += effect.value;
+                }
+                EffectModifier::Multiplier => {
+                    armor_specs.armor *= 1.0 + effect.value;
+                }
             }
-            EffectModifier::Multiplier => {
-                armor_specs.armor *= 1.0 + effect.value;
-            }
-        } }
+        }
     }
     armor_specs
 }
@@ -87,24 +91,6 @@ pub fn make_weapon_skill(
     item_level: u16,
     weapon_specs: &WeaponSpecs,
 ) -> BaseSkillSpecs {
-    let effects = weapon_specs
-        .damage
-        .iter()
-        .filter(|(_, (min, max))| *min > 0.0 || *max > 0.0)
-        .map(|(damage_type, (min, max))| SkillEffect {
-            range: weapon_specs.range,
-            target_type: TargetType::Enemy,
-            shape: weapon_specs.shape,
-            effect_type: SkillEffectType::FlatDamage {
-                min: *min,
-                max: *max,
-                damage_type: *damage_type,
-                crit_chances: weapon_specs.crit_chances,
-                crit_damage: weapon_specs.crit_damage,
-            },
-        })
-        .collect();
-
     BaseSkillSpecs {
         name: "Weapon Attack".to_string(),
         icon: "skills/attack.svg".to_string(),
@@ -113,6 +99,15 @@ pub fn make_weapon_skill(
         cooldown: weapon_specs.cooldown,
         mana_cost: 0.0,
         upgrade_cost: item_level as f64 * 10.0, // TODO: More aggressive increase?
-        effects,
+        effects: vec![SkillEffect {
+            range: weapon_specs.range,
+            target_type: TargetType::Enemy,
+            shape: weapon_specs.shape,
+            effect_type: SkillEffectType::FlatDamage {
+                damage: weapon_specs.damage.clone(),
+                crit_chances: weapon_specs.crit_chances,
+                crit_damage: weapon_specs.crit_damage,
+            },
+        }],
     }
 }

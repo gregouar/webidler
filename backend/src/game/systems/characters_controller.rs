@@ -8,13 +8,13 @@ use crate::game::utils::increase_factors;
 const ARMOR_FACTOR: f64 = 100.0;
 
 pub fn damage_character(
-    damage: f64,
+    amount: f64,
     damage_type: DamageType,
     target_state: &mut CharacterState,
     target_specs: &CharacterSpecs,
     is_crit: bool,
 ) {
-    let damage = damage
+    let amount = amount
         * match damage_type {
             DamageType::Physical => {
                 1.0 - increase_factors::diminishing(target_specs.armor, ARMOR_FACTOR)
@@ -27,15 +27,15 @@ pub fn damage_character(
             }
         };
 
-    if damage <= 0.0 {
+    if amount <= 0.0 {
         return;
     }
 
-    target_state.health = (target_state.health - damage)
+    target_state.health = (target_state.health - amount)
         .max(0.0)
         .min(target_specs.max_life);
 
-    if damage > 0.0 {
+    if amount > 0.0 {
         target_state.just_hurt = true;
         if is_crit {
             target_state.just_hurt_crit = true;

@@ -3,9 +3,9 @@ use std::sync::Arc;
 use leptos::html::*;
 use leptos::prelude::*;
 
-use shared::data::skill::{DamageType, Range, Shape, SkillEffect, SkillEffectType, SkillSpecs};
+use shared::data::skill::{Range, Shape, SkillEffect, SkillEffectType, SkillSpecs};
 
-use crate::components::ui::number::format_number;
+use crate::components::{game::effects_tooltip::damage_type_str, ui::number::format_number};
 
 #[component]
 pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
@@ -82,52 +82,51 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
     let range = match effect.range {
         Range::Melee => "melee",
         Range::Distance => "distance",
+        Range::Any => "any",
     };
 
-    match &effect.effect_type {
+    match effect.effect_type {
         SkillEffectType::FlatDamage {
-            min,
-            max,
-            damage_type,
+            damage,
             crit_chances,
             crit_damage,
-        } => {
-            let dmg_type = match damage_type {
-                DamageType::Physical => "Physical",
-                DamageType::Fire => "Fire",
-                DamageType::Poison => "Poison",
-            };
-            view! {
-                <li class="text-sm text-purple-200 leading-snug">
-                    "Deals "<span class="font-semibold">{format_min_max(*min, *max)}</span>" "
-                    {dmg_type}" ("{range}{shape}")"
-                </li>
-                {if *crit_chances > 0.0 {
-                    Some(
-                        view! {
-                            <li class="text-sm text-purple-200 leading-snug">
-                                "Critical chances: "
-                                <span class="font-semibold">
-                                    {format!("{:.2}%", crit_chances * 100.0)}
-                                </span>
-                            </li>
-                            <li class="text-sm text-purple-200 leading-snug">
-                                "Critical damage: "
-                                <span class="font-semibold">
-                                    {format!("+{:.0}%", crit_damage * 100.0)}
-                                </span>
-                            </li>
-                        },
-                    )
-                } else {
-                    None
-                }}
-            }
-            .into_any()
+        } => view! {
+            {damage
+                .into_iter()
+                .map(|(damage_type, (min, max))| {
+                    view! {
+                        <li class="text-sm text-purple-200 leading-snug">
+                            "Deals "<span class="font-semibold">{format_min_max(min, max)}</span>
+                            " " {damage_type_str(damage_type)}" ("{range}{shape}")"
+                        </li>
+                    }
+                })
+                .collect::<Vec<_>>()}
+            {if crit_chances > 0.0 {
+                Some(
+                    view! {
+                        <li class="text-sm text-purple-200 leading-snug">
+                            "Critical chances: "
+                            <span class="font-semibold">
+                                {format!("{:.2}%", crit_chances * 100.0)}
+                            </span>
+                        </li>
+                        <li class="text-sm text-purple-200 leading-snug">
+                            "Critical damage: "
+                            <span class="font-semibold">
+                                {format!("+{:.0}%", crit_damage * 100.0)}
+                            </span>
+                        </li>
+                    },
+                )
+            } else {
+                None
+            }}
         }
+        .into_any(),
         SkillEffectType::Heal { min, max } => view! {
             <li class="text-sm text-purple-200 leading-snug">
-                "Heals "<span class="font-semibold">{format_min_max(*min, *max)}</span>
+                "Heals "<span class="font-semibold">{format_min_max(min, max)}</span>
             </li>
         }
         .into_any(),

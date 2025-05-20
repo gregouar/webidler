@@ -18,7 +18,7 @@ pub fn HorizontalProgressBar(
         if reset.get() {
             0.0
         } else {
-            value.get().max(0.0).min(100.0).round()
+            value.get().clamp(0.0, 100.0).round()
         }
     };
 
@@ -103,7 +103,7 @@ pub fn VerticalProgressBar(
             ">
             <div
                 class={format!("{} rounded-lg overflow-hidden transition-all ease duration-500",bar_color)}
-                style:height=move || format!("{}%", value.get().max(0.0).min(100.0).round())
+                style:height=move || format!("{}%", value.get().clamp(0.0,100.0).round())
                 style:-webkit-mask="linear-gradient(#fff 0 0)"
             ></div>
         </div>
@@ -128,7 +128,7 @@ pub fn CircularProgressBar(
         if reset.get() {
             452.389
         } else {
-            452.389 - value.get().max(0.0).min(100.0) * 452.389 / 100.0
+            452.389 - value.get().clamp(0.0, 100.0) * 452.389 / 100.0
         }
     };
 

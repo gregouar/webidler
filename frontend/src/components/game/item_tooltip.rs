@@ -104,6 +104,7 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             let range = match specs.range {
                 Range::Melee => "Melee",
                 Range::Distance => "Distance",
+                Range::Any => "Any",
             };
 
             let cooldown_color = if specs.cooldown != base_specs.cooldown {

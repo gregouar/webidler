@@ -11,7 +11,6 @@ pub fn provide_confirm_context() -> RwSignal<Option<(String, Arc<dyn Fn() + Send
     let state = RwSignal::new(None);
     let context = ConfirmContext {
         confirm: Arc::new({
-            let state = state;
             move |message: String, on_confirm: Arc<dyn Fn() + Send + Sync>| {
                 state.set(Some((message, on_confirm)));
             }

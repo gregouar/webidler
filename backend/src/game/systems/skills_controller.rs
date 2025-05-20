@@ -9,7 +9,10 @@ use shared::data::{
     skill::{SkillEffect, SkillEffectType, SkillType, TargetType},
 };
 
-use crate::game::utils::{increase_factors, rng};
+use crate::game::utils::{
+    increase_factors,
+    rng::{self, flip_coin},
+};
 
 use super::{characters_controller, stats_controller::ApplyStatModifier};
 
@@ -48,15 +51,14 @@ fn apply_skill_effect<'a>(
         TargetType::Me => me,
     };
 
+    let available_positions = pre_targets
+        .iter()
+        .map(|(specs, _)| specs.position_x.abs_diff(me_position.0));
+
     let main_target_distance = match skill_effect.range {
-        Range::Melee => pre_targets
-            .iter()
-            .map(|(specs, _)| specs.position_x.abs_diff(me_position.0))
-            .min(),
-        Range::Distance => pre_targets
-            .iter()
-            .map(|(specs, _)| specs.position_x.abs_diff(me_position.0))
-            .max(),
+        Range::Melee => available_positions.min(),
+        Range::Distance => available_positions.max(),
+        Range::Any => available_positions.choose(&mut rand::rng()),
     };
 
     let main_target_pos = main_target_distance.and_then(|distance| {
@@ -75,6 +77,13 @@ fn apply_skill_effect<'a>(
     let dx = match skill_effect.range {
         Range::Melee => 1,
         Range::Distance => -1,
+        Range::Any => {
+            if flip_coin() {
+                1
+            } else {
+                -1
+            }
+        }
     };
 
     let is_target_in_range = |pos: (i32, i32)| -> bool {
@@ -99,58 +108,63 @@ fn apply_skill_effect<'a>(
         }
     };
 
-    let targets = pre_targets.iter_mut().filter(|(specs, _)| {
-        let (x_size, y_size) = specs.size.get_xy_size();
-        (0..x_size as i32)
-            .flat_map(|x| (0..y_size as i32).map(move |y| (x, y)))
-            .any(|(x, y)| {
-                is_target_in_range((specs.position_x as i32 + x, specs.position_y as i32 + y))
-            })
-    });
+    let mut targets: Vec<_> = pre_targets
+        .iter_mut()
+        .filter(|(specs, _)| {
+            let (x_size, y_size) = specs.size.get_xy_size();
+            (0..x_size as i32)
+                .flat_map(|x| (0..y_size as i32).map(move |y| (x, y)))
+                .any(|(x, y)| {
+                    is_target_in_range((specs.position_x as i32 + x, specs.position_y as i32 + y))
+                })
+        })
+        .collect();
 
-    let mut found_target = false;
-    for (target_specs, target_state) in targets {
-        found_target = true;
+    if targets.is_empty() {
+        return false;
+    }
 
-        match skill_effect.effect_type {
-            SkillEffectType::FlatDamage {
-                min,
-                max,
-                damage_type,
-                crit_chances,
-                crit_damage,
-            } => {
-                let is_crit = rng::random_range(0.0..=1.0).unwrap_or(1.0) <= crit_chances;
-                if let Some(damage) = rng::random_range(min..=max).map(|d| {
+    match &skill_effect.effect_type {
+        SkillEffectType::FlatDamage {
+            damage,
+            crit_chances,
+            crit_damage,
+        } => {
+            let is_crit = rng::random_range(0.0..=1.0).unwrap_or(1.0) <= *crit_chances;
+
+            for (damage_type, (min, max)) in damage {
+                if let Some(amount) = rng::random_range(*min..=*max).map(|d| {
                     if is_crit {
                         d * (1.0 + crit_damage)
                     } else {
                         d
                     }
                 }) {
-                    characters_controller::damage_character(
-                        damage,
-                        damage_type,
-                        target_state,
-                        target_specs,
-                        is_crit,
-                    );
+                    for (target_specs, target_state) in targets.iter_mut() {
+                        characters_controller::damage_character(
+                            amount,
+                            *damage_type,
+                            target_state,
+                            target_specs,
+                            is_crit,
+                        );
+                    }
                 }
             }
-            SkillEffectType::Heal { min, max } => {
-                if let Some(damage) = rng::random_range(min..=max) {
-                    characters_controller::heal_character(damage, target_state, target_specs);
+        }
+        SkillEffectType::Heal { min, max } => {
+            if let Some(amount) = rng::random_range(*min..=*max) {
+                for (target_specs, target_state) in targets.iter_mut() {
+                    characters_controller::heal_character(amount, target_state, target_specs);
                 }
             }
         }
     }
 
-    if found_target {
-        skill_state.just_triggered = true;
-        skill_state.is_ready = false;
-        skill_state.elapsed_cooldown = 0.0;
-    }
-    found_target
+    skill_state.just_triggered = true;
+    skill_state.is_ready = false;
+    skill_state.elapsed_cooldown = 0.0;
+    true
 }
 
 pub fn level_up_skill(
@@ -223,42 +237,48 @@ pub fn compute_skill_specs_effect(
     for effect in effects.iter() {
         match &mut skill_effect.effect_type {
             SkillEffectType::FlatDamage {
-                min,
-                max,
-                damage_type,
+                damage,
                 crit_chances,
                 crit_damage,
-            } => match effect.stat {
-                EffectTarget::GlobalSpellPower => {
+            } => {
+                for (damage_type, (min, max)) in damage {
+                    match effect.stat {
+                        EffectTarget::GlobalSpellPower => {
+                            min.apply_effect(effect);
+                            max.apply_effect(effect);
+                        }
+                        EffectTarget::GlobalDamage(damage_type2)
+                            if damage_type2 == *damage_type =>
+                        {
+                            min.apply_effect(effect);
+                            max.apply_effect(effect);
+                        }
+                        EffectTarget::GlobalAttackDamage
+                            if matches!(skill_type, SkillType::Attack | SkillType::Weapon(_)) =>
+                        {
+                            min.apply_effect(effect);
+                            max.apply_effect(effect);
+                        }
+                        EffectTarget::GlobalSpellDamage if skill_type == SkillType::Spell => {
+                            min.apply_effect(effect);
+                            max.apply_effect(effect);
+                        }
+                        EffectTarget::GlobalCritChances => {
+                            crit_chances.apply_effect(effect);
+                        }
+                        EffectTarget::GlobalCritDamage => {
+                            crit_damage.apply_effect(effect);
+                        }
+                        _ => {}
+                    }
+                }
+            }
+            SkillEffectType::Heal { min, max } => {
+                if effect.stat == EffectTarget::GlobalSpellPower {
                     min.apply_effect(effect);
                     max.apply_effect(effect);
                 }
-                EffectTarget::GlobalDamage(damage_type2) if damage_type2 == *damage_type => {
-                    min.apply_effect(effect);
-                    max.apply_effect(effect);
-                }
-                EffectTarget::GlobalAttackDamage
-                    if matches!(skill_type, SkillType::Attack | SkillType::Weapon(_)) =>
-                {
-                    min.apply_effect(effect);
-                    max.apply_effect(effect);
-                }
-                EffectTarget::GlobalSpellDamage if skill_type == SkillType::Spell => {
-                    min.apply_effect(effect);
-                    max.apply_effect(effect);
-                }
-                EffectTarget::GlobalCritChances => {
-                    crit_chances.apply_effect(effect);
-                }
-                EffectTarget::GlobalCritDamage => {
-                    crit_damage.apply_effect(effect);
-                }
-                _ => {}
-            },
-            SkillEffectType::Heal { min, max } => if effect.stat == EffectTarget::GlobalSpellPower {
-                min.apply_effect(effect);
-                max.apply_effect(effect);
-            },
+            }
         }
     }
 }
