@@ -170,7 +170,7 @@
           {
             "stat": "GlobalLifeRegen",
             "modifier": "Flat",
-            "value": 0.5
+            "value": 0.2
           }
         ]
       },
@@ -184,7 +184,7 @@
           {
             "stat": "GlobalLifeRegen",
             "modifier": "Flat",
-            "value": 0.5
+            "value": 0.2
           }
         ]
       },
@@ -204,7 +204,7 @@
           {
             "stat": "GlobalLifeRegen",
             "modifier": "Flat",
-            "value": 0.5
+            "value": 0.2
           }
         ]
       },

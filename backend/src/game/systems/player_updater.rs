@@ -24,9 +24,10 @@ pub fn update_player_state(
         &mut player_state.skills_states,
     );
 
-    player_state.mana = player_specs
-        .max_mana
-        .min(player_state.mana + (elapsed_time.as_secs_f64() * player_specs.mana_regen));
+    player_state.mana = player_specs.max_mana.min(
+        player_state.mana
+            + (elapsed_time.as_secs_f64() * player_specs.mana_regen * player_specs.max_mana),
+    );
 }
 
 pub fn reset_player(player_state: &mut PlayerState) {

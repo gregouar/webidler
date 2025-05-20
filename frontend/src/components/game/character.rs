@@ -43,7 +43,7 @@ pub fn CharacterPortrait(
 
     let crit_animation_style = move || {
         if crit_hit.get() {
-            "animation: shake 0.5s linear infinite;"
+            "animation: shake 0.5s linear ease-out;"
         } else {
             ""
         }

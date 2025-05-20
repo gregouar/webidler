@@ -103,7 +103,7 @@ pub fn formatted_effects_list(mut affix_effects: Vec<StatEffect>) -> Vec<impl In
                 effect.value * 100.0
             )),
             (GlobalLifeRegen, Flat) => merged.push(format!(
-                "Adds {:.2} Life Regeneration per second",
+                "Adds {:.2}% Life Regeneration per second",
                 effect.value
             )),
             (GlobalLifeRegen, Multiplier) => merged.push(format!(
@@ -116,7 +116,7 @@ pub fn formatted_effects_list(mut affix_effects: Vec<StatEffect>) -> Vec<impl In
                 effect.value * 100.0
             )),
             (GlobalManaRegen, Flat) => merged.push(format!(
-                "Adds {:.2} Mana Regeneration per second",
+                "Adds {:.2}% Mana Regeneration per second",
                 effect.value
             )),
             (GlobalManaRegen, Multiplier) => merged.push(format!(
