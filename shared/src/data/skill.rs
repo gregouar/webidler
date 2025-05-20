@@ -43,17 +43,14 @@ pub struct SkillSpecs {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Default)]
 pub enum SkillType {
+    #[default]
     Attack,
     Spell,
     Weapon(ItemSlot),
 }
 
-impl Default for SkillType {
-    fn default() -> Self {
-        SkillType::Attack
-    }
-}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SkillEffect {
@@ -68,32 +65,28 @@ pub struct SkillEffect {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Default)]
 pub enum TargetType {
+    #[default]
     Enemy,
     Friend,
     Me,
 }
 
-impl Default for TargetType {
-    fn default() -> Self {
-        TargetType::Enemy
-    }
-}
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Default)]
 pub enum Range {
+    #[default]
     Melee,
     Distance,
 }
 
-impl Default for Range {
-    fn default() -> Self {
-        Range::Melee
-    }
-}
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Default)]
 pub enum Shape {
+    #[default]
     Single,
     Vertical2,
     Horizontal2,
@@ -102,11 +95,6 @@ pub enum Shape {
     All,
 }
 
-impl Default for Shape {
-    fn default() -> Self {
-        Shape::Single
-    }
-}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum SkillEffectType {

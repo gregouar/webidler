@@ -8,12 +8,12 @@ pub async fn load_json<S>(filepath: impl AsRef<Path>) -> Result<S>
 where
     S: DeserializeOwned,
 {
-    Ok(serde_json::from_slice(
+    serde_json::from_slice(
         &fs::read(&filepath)
             .await
             .with_context(|| format!("Failed to read file: {:?}", filepath.as_ref()))?,
     )
-    .with_context(|| format!("Failed to parse json from: {:?}", filepath.as_ref()))?)
+    .with_context(|| format!("Failed to parse json from: {:?}", filepath.as_ref()))
 }
 
 pub trait LoadJsonFromFile
@@ -24,7 +24,7 @@ where
     where
         P: AsRef<Path> + Send + Sync + 'static,
     {
-        async { Ok(load_json(filepath).await?) }
+        async { load_json(filepath).await }
     }
 }
 

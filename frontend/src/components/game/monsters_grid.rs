@@ -94,21 +94,17 @@ pub fn MonstersGrid() -> impl IntoView {
                             )
                             style=move || {
                                 if all_monsters_dead.get() {
+                                    "animation: monster-fade-out 1s ease-in; animation-fill-mode: both; pointer-events: none;".to_string()
+                                } else if flee.get() {
                                     format!(
-                                        "animation: monster-fade-out 1s ease-in; animation-fill-mode: both; pointer-events: none;",
+                                        "animation: monster-flee 1s ease-out; animation-fill-mode: both; {} pointer-events: none;",
+                                        animation_delay,
                                     )
                                 } else {
-                                    if flee.get() {
-                                        format!(
-                                            "animation: monster-flee 1s ease-out; animation-fill-mode: both; {} pointer-events: none;",
-                                            animation_delay,
-                                        )
-                                    } else {
-                                        format!(
-                                            "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {}",
-                                            animation_delay,
-                                        )
-                                    }
+                                    format!(
+                                        "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {}",
+                                        animation_delay,
+                                    )
                                 }
                             }
                         >
@@ -226,8 +222,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 .monster_states
                 .read()
                 .get(monster_index)
-                .map(|m| m.skill_states.get(index))
-                .flatten()
+                .and_then(|m| m.skill_states.get(index))
                 .map(|s| s.elapsed_cooldown)
                 .unwrap_or(0.0)
                 * 100.0
@@ -258,8 +253,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 .monster_states
                 .read()
                 .get(monster_index)
-                .map(|m| m.skill_states.get(index))
-                .flatten()
+                .and_then(|m| m.skill_states.get(index))
                 .map(|s| s.just_triggered)
                 .unwrap_or_default()
         } else {

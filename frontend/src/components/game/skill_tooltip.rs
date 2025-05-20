@@ -138,6 +138,6 @@ fn format_min_max(min: f64, max: f64) -> String {
     if min != max {
         format!("{}-{}", format_number(min), format_number(max))
     } else {
-        format!("{}", format_number(min))
+        format_number(min).to_string()
     }
 }

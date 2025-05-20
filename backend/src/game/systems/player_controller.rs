@@ -49,7 +49,7 @@ impl PlayerController {
             .skills_specs
             .iter()
             .map(|s| s.mana_cost)
-            .max_by(|a, b| a.total_cmp(&b))
+            .max_by(|a, b| a.total_cmp(b))
             .unwrap_or_default();
 
         for (i, (skill_specs, skill_state)) in player_specs
@@ -224,9 +224,9 @@ pub fn unequip_item(
     match player_inventory.equipped.remove(&item_slot) {
         Some(EquippedSlot::MainSlot(old_item)) => {
             for item_slot in old_item.base.extra_slots.iter() {
-                player_inventory.equipped.remove(&item_slot);
+                player_inventory.equipped.remove(item_slot);
             }
-            if let Some(_) = old_item.weapon_specs {
+            if old_item.weapon_specs.is_some() {
                 unequip_weapon(player_specs, player_state, item_slot);
             }
             Some(old_item)
@@ -295,7 +295,7 @@ fn equip_weapon(
     let weapon_skill = SkillSpecs::init(&items_controller::make_weapon_skill(
         item_slot,
         item_level,
-        &weapon_specs,
+        weapon_specs,
     ));
 
     player_specs.auto_skills.insert(0, true);

@@ -16,7 +16,7 @@ pub fn LootQueue() -> impl IntoView {
     let pickup_loot = move |loot_identifier| {
         conn.send(
             &PickUpLootMessage {
-                loot_identifier: loot_identifier as u32,
+                loot_identifier,
             }
             .into(),
         );

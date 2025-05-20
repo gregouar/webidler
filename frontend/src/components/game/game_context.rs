@@ -39,6 +39,12 @@ pub struct GameContext {
     pub open_statistics: RwSignal<bool>,
 }
 
+impl Default for GameContext {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl GameContext {
     pub fn new() -> Self {
         GameContext {

@@ -25,7 +25,7 @@ pub fn control_monsters(
             .filter(|(_, s)| s.is_ready)
         {
             skills_controller::use_skill(
-                &skill_specs,
+                skill_specs,
                 skill_state,
                 (
                     &monster_specs.character_specs,

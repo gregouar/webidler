@@ -40,7 +40,7 @@ pub fn GameInstance() -> impl IntoView {
             if conn.connected.get() {
                 conn.send(
                     &ClientConnectMessage {
-                        user_id: String::from(user_id.get_untracked()),
+                        user_id: user_id.get_untracked(),
                         session_key: session_key.get_untracked(),
                     }
                     .into(),

@@ -70,17 +70,14 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -
 
 fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &[StatEffect]) -> ArmorSpecs {
     for effect in effects {
-        match effect.stat {
-            EffectTarget::LocalArmor => match effect.modifier {
-                EffectModifier::Flat => {
-                    armor_specs.armor += effect.value;
-                }
-                EffectModifier::Multiplier => {
-                    armor_specs.armor *= 1.0 + effect.value;
-                }
-            },
-            _ => {}
-        }
+        if effect.stat == EffectTarget::LocalArmor { match effect.modifier {
+            EffectModifier::Flat => {
+                armor_specs.armor += effect.value;
+            }
+            EffectModifier::Multiplier => {
+                armor_specs.armor *= 1.0 + effect.value;
+            }
+        } }
     }
     armor_specs
 }

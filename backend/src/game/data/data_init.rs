@@ -41,7 +41,7 @@ impl DataInit<PlayerSpecs> for PlayerState {
             skills_states: specs
                 .skills_specs
                 .iter()
-                .map(|p| SkillState::init(p))
+                .map(SkillState::init)
                 .collect(),
             mana: specs.max_mana,
             just_leveled_up: false,
@@ -56,7 +56,7 @@ impl DataInit<MonsterSpecs> for MonsterState {
             skill_states: specs
                 .skill_specs
                 .iter()
-                .map(|p| SkillState::init(p))
+                .map(SkillState::init)
                 .collect(),
             initiative: rng::random_range(0.0..specs.max_initiative).unwrap_or_default(),
         }
@@ -67,8 +67,8 @@ impl DataInit<BaseSkillSpecs> for SkillSpecs {
     fn init(specs: &BaseSkillSpecs) -> Self {
         Self {
             base: specs.clone(),
-            cooldown: specs.cooldown.clone(),
-            mana_cost: specs.mana_cost.clone(),
+            cooldown: specs.cooldown,
+            mana_cost: specs.mana_cost,
             upgrade_level: 1,
             next_upgrade_cost: specs.upgrade_cost,
             effects: specs.effects.clone(),

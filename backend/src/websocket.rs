@@ -57,7 +57,7 @@ impl WebSocketConnection {
     }
 
     pub async fn send(&mut self, msg: &ServerMessage) -> Result<()> {
-        self.ws_sender.send(into_ws_msg(&msg)?).await?;
+        self.ws_sender.send(into_ws_msg(msg)?).await?;
         Ok(())
     }
 
@@ -75,7 +75,7 @@ impl WebSocketConnection {
 }
 
 fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), Option<ClientMessage>> {
-    return match msg {
+    match msg {
         Message::Binary(b) => match from_ws_msg(&b) {
             Ok(m) => ControlFlow::Continue(Some(m)),
             Err(_) => {
@@ -103,7 +103,7 @@ fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), Option<Clie
             ControlFlow::Break(())
         }
         _ => ControlFlow::Continue(None), // Ignore ping pong
-    };
+    }
 }
 
 fn into_ws_msg(message: &ServerMessage) -> Result<Message> {

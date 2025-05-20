@@ -10,18 +10,15 @@ use super::{
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Ord)]
+#[derive(Default)]
 pub enum ItemRarity {
+    #[default]
     Normal,
     Magic,
     Rare,
     Unique,
 }
 
-impl Default for ItemRarity {
-    fn default() -> Self {
-        ItemRarity::Normal
-    }
-}
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ItemSlot {

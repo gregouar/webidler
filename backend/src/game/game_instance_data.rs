@@ -49,7 +49,7 @@ impl GameInstanceData {
     ) -> Self {
         Self {
             world_state: LazySyncer::new(WorldState::init(&world_blueprint.specs)),
-            world_blueprint: world_blueprint,
+            world_blueprint,
 
             passives_tree_state: LazySyncer::new(PassivesTreeState::default()),
             passives_tree_specs,

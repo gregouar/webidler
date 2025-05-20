@@ -165,22 +165,16 @@ fn roll_affixes_amount(
     let amount = rng::random_range(min_amount..=max_amount).unwrap_or(min_amount);
     let prefix_count = rng::random_range(min_prefixes..=max_prefixes).unwrap_or(min_prefixes);
 
-    let suffix_count = amount
-        .checked_sub(prefix_count)
-        .unwrap_or(0)
+    let suffix_count = amount.saturating_sub(prefix_count)
         .min(max_suffixes)
         .max(min_suffixes);
-    let prefix_count = amount
-        .checked_sub(suffix_count)
-        .unwrap_or(0)
+    let prefix_count = amount.saturating_sub(suffix_count)
         .min(min_prefixes)
         .max(max_prefixes);
 
     (
         prefix_count,
-        amount
-            .checked_sub(prefix_count)
-            .unwrap_or(0)
+        amount.saturating_sub(prefix_count)
             .min(max_suffixes),
     )
 }
@@ -213,7 +207,7 @@ fn roll_affix(
             tags: a.tags.clone(),
             affix_type,
             tier: a.tier,
-            effects: a.effects.iter().map(|e| roll_affix_effect(e)).collect(),
+            effects: a.effects.iter().map(roll_affix_effect).collect(),
         }
     })
 }
@@ -269,7 +263,7 @@ struct WeightedNamePart<'a> {
     weight: u64,
 }
 
-impl<'a> rng::RandomWeighted for WeightedNamePart<'a> {
+impl rng::RandomWeighted for WeightedNamePart<'_> {
     fn random_weight(&self) -> u64 {
         self.weight
     }

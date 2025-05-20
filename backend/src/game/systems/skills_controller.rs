@@ -180,8 +180,8 @@ fn increase_skill_effect(skill_specs: &mut SkillSpecs) {
 
 pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) {
     skill_specs.effects = skill_specs.base.effects.clone();
-    skill_specs.cooldown = skill_specs.base.cooldown.clone();
-    skill_specs.mana_cost = skill_specs.base.mana_cost.clone();
+    skill_specs.cooldown = skill_specs.base.cooldown;
+    skill_specs.mana_cost = skill_specs.base.mana_cost;
 
     for effect in effects.iter() {
         match effect.stat {
@@ -255,12 +255,9 @@ pub fn compute_skill_specs_effect(
                 }
                 _ => {}
             },
-            SkillEffectType::Heal { min, max } => match effect.stat {
-                EffectTarget::GlobalSpellPower => {
-                    min.apply_effect(effect);
-                    max.apply_effect(effect);
-                }
-                _ => {}
+            SkillEffectType::Heal { min, max } => if effect.stat == EffectTarget::GlobalSpellPower {
+                min.apply_effect(effect);
+                max.apply_effect(effect);
             },
         }
     }

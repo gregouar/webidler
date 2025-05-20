@@ -2,17 +2,14 @@ use serde::{Deserialize, Serialize};
 
 // TODO: use strum_macros::EnumIter;
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Default)]
 pub enum DamageType {
+    #[default]
     Physical,
     Fire,
     Poison,
 }
 
-impl Default for DamageType {
-    fn default() -> Self {
-        DamageType::Physical
-    }
-}
 
 impl DamageType {
     pub fn iter() -> impl Iterator<Item = DamageType> {

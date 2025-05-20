@@ -26,7 +26,7 @@ pub fn MainMenu() -> impl IntoView {
                 get_data("http://127.0.0.1:4200")
                     .await
                     .map(|x| x.greeting)
-                    .unwrap_or_else(|err| format!("Error: {}", err.to_string())),
+                    .unwrap_or_else(|err| format!("Error: {}", err)),
             )
         })
     };
@@ -37,7 +37,7 @@ pub fn MainMenu() -> impl IntoView {
                 get_data("https://webidler.gregoirenaisse.be")
                     .await
                     .map(|x| x.greeting)
-                    .unwrap_or_else(|err| format!("Error: {}", err.to_string())),
+                    .unwrap_or_else(|err| format!("Error: {}", err)),
             )
         })
     };

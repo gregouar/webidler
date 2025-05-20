@@ -3,18 +3,15 @@ use serde::{Deserialize, Serialize};
 pub use super::skill::{SkillSpecs, SkillState};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Default)]
 pub enum CharacterSize {
+    #[default]
     Small,      // 1x1
     Large,      // 1x2
     Huge,       // 2x2
     Gargantuan, // 2x3
 }
 
-impl Default for CharacterSize {
-    fn default() -> Self {
-        CharacterSize::Small
-    }
-}
 
 impl CharacterSize {
     pub fn get_xy_size(&self) -> (usize, usize) {

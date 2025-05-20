@@ -97,7 +97,7 @@ impl MasterStore {
 
 /// Load several files in parallel and store the results in a hash map
 async fn join_load_and_map<T: LoadJsonFromFile>(paths: Vec<PathBuf>) -> Result<HashMap<String, T>> {
-    Ok(join_all(paths.into_iter().map(|f| async move {
+    join_all(paths.into_iter().map(|f| async move {
         Result::<_>::Ok((
             f.file_name()
                 .unwrap_or_default()
@@ -108,7 +108,7 @@ async fn join_load_and_map<T: LoadJsonFromFile>(paths: Vec<PathBuf>) -> Result<H
     }))
     .await
     .into_iter()
-    .collect::<Result<_>>()?)
+    .collect::<Result<_>>()
 }
 
 async fn join_load_and_merge_tables<T>(paths: Vec<PathBuf>) -> Result<T>
@@ -120,11 +120,11 @@ where
     let table: Vec<_> = join_all(
         paths
             .into_iter()
-            .map(|f| async move { Result::<_>::Ok(T::load_from_file(f).await?) }),
+            .map(|f| async move { T::load_from_file(f).await }),
     )
     .await
     .into_iter()
     .collect::<Result<_>>()?;
 
-    Ok(table.into_iter().flat_map(|x| x).collect())
+    Ok(table.into_iter().flatten().collect())
 }

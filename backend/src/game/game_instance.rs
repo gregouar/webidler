@@ -294,7 +294,7 @@ impl<'a> GameInstance<'a> {
             .monster_specs
             .read()
             .iter()
-            .map(|specs| MonsterState::init(specs))
+            .map(MonsterState::init)
             .collect();
 
         Ok(())

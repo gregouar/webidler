@@ -98,9 +98,9 @@ pub struct ItemAffix {
     pub effects: Vec<StatEffect>,
 }
 
-impl Into<Vec<StatEffect>> for &EffectsMap {
-    fn into(self) -> Vec<StatEffect> {
-        self.0
+impl From<&EffectsMap> for Vec<StatEffect> {
+    fn from(val: &EffectsMap) -> Self {
+        val.0
             .iter()
             .map(|((stat, effect_type), value)| StatEffect {
                 stat: *stat,

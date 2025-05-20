@@ -347,7 +347,7 @@ fn BagItem(item_index: usize) -> impl IntoView {
                         }
                             .into_any()
                     }
-                    None => view! { <EmptySlot>{()}</EmptySlot> }.into_any(),
+                    None => view! { <EmptySlot>{}</EmptySlot> }.into_any(),
                 }
             }}
         </div>
@@ -390,7 +390,7 @@ pub fn BagItemContextMenu(
                 .get(item_index)
                 .and_then(|x| inventory.equipped.get(&x.base.slot))
                 .and_then(|x| match x {
-                    EquippedSlot::ExtraSlot(item_slot) => inventory.equipped.get(&item_slot),
+                    EquippedSlot::ExtraSlot(item_slot) => inventory.equipped.get(item_slot),
                     x => Some(x),
                 })
                 .map(|x| {

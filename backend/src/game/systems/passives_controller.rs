@@ -14,8 +14,7 @@ pub fn purchase_node(
     }
 
     if let Some(node_specs) = passives_tree_specs.nodes.get(&node_id) {
-        if node_specs.initial_node
-            || passives_tree_specs
+        if (node_specs.initial_node || passives_tree_specs
                 .connections
                 .iter()
                 .filter(|connection| {
@@ -28,11 +27,8 @@ pub fn purchase_node(
                             .get(&connection.to)
                             .is_some()
                 })
-                .any(|connection| connection.from == node_id || connection.to == node_id)
-        {
-            if passives_tree_state.purchased_nodes.insert(node_id) {
-                player_resources.passive_points -= 1;
-            }
+                .any(|connection| connection.from == node_id || connection.to == node_id)) && passives_tree_state.purchased_nodes.insert(node_id) {
+            player_resources.passive_points -= 1;
         }
     }
 }

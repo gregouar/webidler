@@ -10,14 +10,11 @@ pub struct QueuedLoot {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Default)]
 pub enum LootState {
+    #[default]
     Normal,
     WillDisappear,
     HasDisappeared,
 }
 
-impl Default for LootState {
-    fn default() -> Self {
-        LootState::Normal
-    }
-}

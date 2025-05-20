@@ -71,7 +71,7 @@ pub async fn load_manifest(folder_path: impl AsRef<Path>) -> Result<Manifest> {
         manifest
             .folders
             .iter()
-            .map(|f| async move { Result::<_>::Ok(load_manifest(f).await?) }),
+            .map(|f| async move { load_manifest(f).await }),
     )
     .await
     .into_iter()

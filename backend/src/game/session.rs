@@ -21,6 +21,12 @@ pub struct Session {
     pub data: Box<GameInstanceData>,
 }
 
+impl Default for SessionsStore {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl SessionsStore {
     pub fn new() -> Self {
         Self {

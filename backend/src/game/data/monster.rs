@@ -26,7 +26,7 @@ impl DataInit<BaseMonsterSpecs> for MonsterSpecs {
             skill_specs: specs
                 .skills
                 .iter()
-                .map(|base| SkillSpecs::init(base))
+                .map(SkillSpecs::init)
                 .collect(),
             max_initiative: specs.max_initiative,
             power_factor: specs.power_factor,

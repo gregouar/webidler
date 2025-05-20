@@ -148,7 +148,7 @@ async fn handle_connect(
     conn.send(
         &ConnectMessage {
             greeting: msg.user_id.clone(),
-            session_key: session.session_key.clone(),
+            session_key: session.session_key,
         }
         .into(),
     )
