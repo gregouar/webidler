@@ -28,7 +28,7 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "GlobalAttackDamage",
+        "stat": "GlobalSpellDamage",
         "modifier": "Multiplier",
         "min": 0.25,
         "max": 0.49
