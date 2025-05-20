@@ -75,11 +75,7 @@ fn update_loot_states(queued_loot: &mut Vec<QueuedLoot>) {
         loot.state = LootState::Normal;
     }
 
-    for i in 0..queued_loot
-        .len()
-        .checked_sub(MAX_QUEUE_SIZE)
-        .unwrap_or_default()
-    {
+    for i in 0..queued_loot.len().saturating_sub(MAX_QUEUE_SIZE) {
         // TODO: return somehow
         queued_loot[i].state = LootState::HasDisappeared;
     }
@@ -89,11 +85,7 @@ fn update_loot_states(queued_loot: &mut Vec<QueuedLoot>) {
         .filter(|x| x.state != LootState::HasDisappeared)
         .collect();
 
-    for i in 0..queued_loot
-        .len()
-        .checked_sub(MAX_QUEUE_SIZE - 1)
-        .unwrap_or_default()
-    {
+    for i in 0..queued_loot.len().saturating_sub(MAX_QUEUE_SIZE - 1) {
         queued_loot[i].state = LootState::WillDisappear;
     }
 }

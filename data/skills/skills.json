@@ -9,9 +9,13 @@
     "upgrade_cost": 20,
     "effects": [
       {
-        "range": "Distance",
+        "range": "Any",
         "effect_type": {
-          "FlatDamage": { "min": 3, "max": 6, "damage_type": "Physical" }
+          "FlatDamage": {
+            "damage": {
+              "Physical": [3, 6]
+            }
+          }
         }
       }
     ]
@@ -29,10 +33,15 @@
         "range": "Distance",
         "shape": "Square4",
         "effect_type": {
-          "FlatDamage": { "min": 4, "max": 12, "damage_type": "Fire" }
+          "FlatDamage": {
+            "damage": {
+              "Fire": [4, 12]
+            }
+          }
         }
       }
-    ]},
+    ]
+  },
   "heal": {
     "name": "Heal",
     "description": "A minor healing spell for yourself",
@@ -45,8 +54,9 @@
       {
         "target_type": "Me",
         "effect_type": {
-          "Heal": { "min": 20, "max": 40}
+          "Heal": { "min": 20, "max": 40 }
         }
       }
-    ]}
+    ]
+  }
 }

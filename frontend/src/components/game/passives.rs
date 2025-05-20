@@ -62,7 +62,6 @@ pub fn PassiveSkillTree() -> impl IntoView {
     let on_mouse_up = move |_| dragging.set(None);
 
     let on_mouse_move = {
-        let offset = offset;
         move |ev: web_sys::MouseEvent| {
             if let Some((last_x, last_y)) = dragging.get() {
                 let dx = ev.client_x() as f64 - last_x;
