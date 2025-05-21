@@ -96,7 +96,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                                 <EffectLi>
                                     "Deals "
                                     <span class="font-semibold">{format_min_max(min, max)}</span>
-                                    " " {damage_type_str(damage_type)}
+                                    " " {damage_type_str(damage_type)} " Damage"
                                 </EffectLi>
                             }
                         })
@@ -154,7 +154,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                                 "Deals "
                                 <span class="font-semibold">
                                     {format_min_max(min_value, max_value)}
-                                </span> " per second " {damage_type_str(damage_type)}" over "
+                                </span>"  "{damage_type_str(damage_type)}" Damage per second over "
                                 {format_min_max(min_duration, max_duration)}" seconds"
                             </EffectLi>
                         }
