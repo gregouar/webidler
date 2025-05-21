@@ -12,6 +12,8 @@ use crate::game::data::{
 use crate::game::utils::rng::RandomWeighted;
 use crate::game::utils::{increase_factors, rng};
 
+use super::skills_controller;
+
 const MAX_MONSTERS_PER_ROW: usize = 3; // TODO: Move
 
 impl RandomWeighted for &MonsterWaveBlueprint {
@@ -111,12 +113,8 @@ fn generate_monster_specs(bp_specs: &BaseMonsterSpecs, world_state: &WorldState)
     let lin_factor = increase_factors::linear(world_state.area_level as f64);
     monster_specs.power_factor *= exp_factor;
     monster_specs.character_specs.max_life *= exp_factor;
-    for skill_effect in monster_specs
-        .skill_specs
-        .iter_mut()
-        .flat_map(|skill| skill.effects.iter_mut())
-    {
-        skill_effect.increase_effect(lin_factor);
+    for skill_effect in monster_specs.skill_specs.iter_mut() {
+        skills_controller::increase_skill_effects(skill_effect, lin_factor)
     }
     monster_specs
 }

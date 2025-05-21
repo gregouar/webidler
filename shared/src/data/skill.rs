@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 pub use super::effect::DamageType;
-use super::item::ItemSlot;
+use super::{item::ItemSlot, status::StatusType};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SkillState {
@@ -61,6 +61,10 @@ pub struct SkillEffect {
     #[serde(default)]
     pub shape: Shape,
 
+    // TODO
+    #[serde(default)]
+    pub failure_chances: f32,
+
     #[serde(flatten)]
     pub effect_type: SkillEffectType,
 }
@@ -105,21 +109,11 @@ pub enum SkillEffectType {
         min: f64,
         max: f64,
     },
-}
-
-impl SkillEffect {
-    pub fn increase_effect(&mut self, factor: f64) {
-        match &mut self.effect_type {
-            SkillEffectType::FlatDamage { damage, .. } => {
-                for (min, max) in damage.values_mut() {
-                    *min *= factor;
-                    *max *= factor;
-                }
-            }
-            SkillEffectType::Heal { min, max } => {
-                *min *= factor;
-                *max *= factor;
-            }
-        }
-    }
+    ApplyStatus {
+        status_type: StatusType,
+        min_value: f64,
+        max_value: f64,
+        min_duration: f64,
+        max_duration: f64,
+    },
 }

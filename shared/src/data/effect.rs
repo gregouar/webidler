@@ -52,9 +52,9 @@ pub enum EffectTarget {
     GlobalSpeed,
     GlobalMovementSpeed,
     GlobalGoldFind,
+    // TODO: ReducedManaCost?
+    // TODO: TriggerSkill (effect trigger + Box Skill)
 }
-// TODO: ReducedManaCost
-// TODO: Fire and Poison armor
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct StatEffect {

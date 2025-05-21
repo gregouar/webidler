@@ -107,6 +107,7 @@ pub fn make_weapon_skill(
                 crit_chances: weapon_specs.crit_chances,
                 crit_damage: weapon_specs.crit_damage,
             },
+            failure_chances: 0.0,
         }],
     });
     skill_specs.item_slot = Some(item_slot);

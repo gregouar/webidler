@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use shared::data::{
     character::{CharacterSpecs, CharacterState},
     monster::{MonsterSpecs, MonsterState},
@@ -26,8 +28,10 @@ impl DataInit<CharacterSpecs> for CharacterState {
     fn init(specs: &CharacterSpecs) -> Self {
         CharacterState {
             is_alive: true,
-            just_died: false,
             health: specs.max_life,
+            statuses: HashMap::new(),
+
+            just_died: false,
             just_hurt: false,
             just_hurt_crit: false,
             just_blocked: false,

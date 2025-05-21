@@ -64,5 +64,29 @@
         "max": 5
       }
     ]
+  },
+  {
+    "name": "Noxious",
+    "family": "add_poison_damage",
+    "tags": ["Poison", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": {"LocalMinDamage": "Poison"},
+        "modifier": "Flat",
+        "min": 3,
+        "max": 3
+      },
+      {
+        "stat": {"LocalMaxDamage": "Poison"},
+        "modifier": "Flat",
+        "min": 3,
+        "max": 3
+      }
+    ]
   }
 ]

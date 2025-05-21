@@ -7,6 +7,7 @@ use shared::data::{
     item_affix::StatEffect,
     player::PlayerResources,
     skill::{SkillEffect, SkillEffectType, SkillType, TargetType},
+    status::StatusType,
 };
 
 use crate::game::utils::{
@@ -15,6 +16,8 @@ use crate::game::utils::{
 };
 
 use super::{characters_controller, stats_controller::ApplyStatModifier};
+
+type Target<'a> = (&'a CharacterSpecs, &'a mut CharacterState);
 
 pub fn use_skill<'a>(
     skill_specs: &SkillSpecs,
@@ -26,7 +29,7 @@ pub fn use_skill<'a>(
     let me_position = (me.0.position_x, me.0.position_y);
     let mut me = vec![me];
     skill_specs.effects.iter().any(|skill_effect| {
-        apply_skill_effect(
+        use_skill_effect(
             skill_specs.base.skill_type,
             skill_effect,
             skill_state,
@@ -38,14 +41,14 @@ pub fn use_skill<'a>(
     })
 }
 
-fn apply_skill_effect<'a>(
+fn use_skill_effect<'a>(
     skill_type: SkillType,
     skill_effect: &SkillEffect,
     skill_state: &mut SkillState,
     me_position: (u8, u8),
-    me: &mut Vec<(&'a CharacterSpecs, &'a mut CharacterState)>,
-    friends: &mut Vec<(&'a CharacterSpecs, &'a mut CharacterState)>,
-    enemies: &mut Vec<(&'a CharacterSpecs, &'a mut CharacterState)>,
+    me: &mut Vec<Target<'a>>,
+    friends: &mut Vec<Target<'a>>,
+    enemies: &mut Vec<Target<'a>>,
 ) -> bool {
     let pre_targets = match skill_effect.target_type {
         TargetType::Enemy => enemies,
@@ -53,6 +56,30 @@ fn apply_skill_effect<'a>(
         TargetType::Me => me,
     };
 
+    let mut targets = find_targets(skill_effect, me_position, pre_targets);
+
+    if targets.is_empty() {
+        return false;
+    }
+
+    skill_state.just_triggered = true;
+    skill_state.is_ready = false;
+    skill_state.elapsed_cooldown = 0.0;
+
+    if rng::random_range(0.0..=1.0).unwrap_or(1.0) <= skill_effect.failure_chances {
+        return true;
+    }
+
+    apply_skill_effect(skill_type, skill_effect, &mut targets);
+
+    true
+}
+
+fn find_targets<'a, 'b>(
+    skill_effect: &SkillEffect,
+    me_position: (u8, u8),
+    pre_targets: &'b mut [Target<'a>],
+) -> Vec<&'b mut Target<'a>> {
     let available_positions = pre_targets
         .iter()
         .map(|(specs, _)| specs.position_x.abs_diff(me_position.0));
@@ -73,7 +100,7 @@ fn apply_skill_effect<'a>(
 
     let main_target_pos = match main_target_pos {
         Some(p) => p,
-        None => return false,
+        None => return vec![],
     };
 
     let dx = match skill_effect.range {
@@ -110,7 +137,7 @@ fn apply_skill_effect<'a>(
         }
     };
 
-    let mut targets: Vec<_> = pre_targets
+    pre_targets
         .iter_mut()
         .filter(|(specs, _)| {
             let (x_size, y_size) = specs.size.get_xy_size();
@@ -120,12 +147,14 @@ fn apply_skill_effect<'a>(
                     is_target_in_range((specs.position_x as i32 + x, specs.position_y as i32 + y))
                 })
         })
-        .collect();
+        .collect()
+}
 
-    if targets.is_empty() {
-        return false;
-    }
-
+fn apply_skill_effect(
+    skill_type: SkillType,
+    skill_effect: &SkillEffect,
+    targets: &mut [&mut Target],
+) {
     match &skill_effect.effect_type {
         SkillEffectType::FlatDamage {
             damage,
@@ -162,12 +191,29 @@ fn apply_skill_effect<'a>(
                 }
             }
         }
+        SkillEffectType::ApplyStatus {
+            status_type,
+            min_value,
+            max_value,
+            min_duration,
+            max_duration,
+        } => {
+            if let (Some(value), Some(duration)) = (
+                rng::random_range(*min_value..=*max_value),
+                rng::random_range(*min_duration..=*max_duration),
+            ) {
+                for (target_specs, target_state) in targets.iter_mut() {
+                    characters_controller::apply_status(
+                        *status_type,
+                        value,
+                        duration,
+                        target_state,
+                        target_specs,
+                    )
+                }
+            }
+        }
     }
-
-    skill_state.just_triggered = true;
-    skill_state.is_ready = false;
-    skill_state.elapsed_cooldown = 0.0;
-    true
 }
 
 pub fn level_up_skill(
@@ -187,14 +233,39 @@ pub fn level_up_skill(
             increase_factors::MONSTER_INCREASE_FACTOR,
         );
 
-    increase_skill_effect(skill_specs);
+    // TODO: recall update_skill_specs
+    increase_skill_effects(skill_specs, 1.2);
 
     true
 }
 
-fn increase_skill_effect(skill_specs: &mut SkillSpecs) {
+pub fn increase_skill_effects(skill_specs: &mut SkillSpecs, factor: f64) {
     for effect in skill_specs.effects.iter_mut() {
-        effect.increase_effect(1.2);
+        increase_effect(effect, factor);
+    }
+}
+
+// TODO: figure out linear increase for Heal
+fn increase_effect(effect: &mut SkillEffect, factor: f64) {
+    match &mut effect.effect_type {
+        SkillEffectType::FlatDamage { damage, .. } => {
+            for (min, max) in damage.values_mut() {
+                *min *= factor;
+                *max *= factor;
+            }
+        }
+        SkillEffectType::Heal { min, max } => {
+            *min *= factor;
+            *max *= factor;
+        }
+        SkillEffectType::ApplyStatus {
+            min_value,
+            max_value,
+            ..
+        } => {
+            *min_value *= factor;
+            *max_value *= factor;
+        }
     }
 }
 
@@ -226,7 +297,7 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) 
     }
 
     for _ in 1..skill_specs.upgrade_level {
-        increase_skill_effect(skill_specs)
+        increase_skill_effects(skill_specs, 1.2);
     }
 }
 
@@ -235,6 +306,7 @@ pub fn compute_skill_specs_effect(
     skill_effect: &mut SkillEffect,
     effects: &[StatEffect],
 ) {
+    // TODO: Different increase options?
     for effect in effects.iter() {
         match &mut skill_effect.effect_type {
             SkillEffectType::FlatDamage {
@@ -244,10 +316,6 @@ pub fn compute_skill_specs_effect(
             } => {
                 for (damage_type, (min, max)) in damage {
                     match effect.stat {
-                        EffectTarget::GlobalSpellPower => {
-                            min.apply_effect(effect);
-                            max.apply_effect(effect);
-                        }
                         EffectTarget::GlobalDamage(damage_type2)
                             if damage_type2 == *damage_type =>
                         {
@@ -258,7 +326,9 @@ pub fn compute_skill_specs_effect(
                             min.apply_effect(effect);
                             max.apply_effect(effect);
                         }
-                        EffectTarget::GlobalSpellDamage if skill_type == SkillType::Spell => {
+                        EffectTarget::GlobalSpellDamage | EffectTarget::GlobalSpellPower
+                            if skill_type == SkillType::Spell =>
+                        {
                             min.apply_effect(effect);
                             max.apply_effect(effect);
                         }
@@ -282,6 +352,33 @@ pub fn compute_skill_specs_effect(
                     max.apply_effect(effect);
                 }
             }
+            SkillEffectType::ApplyStatus {
+                status_type,
+                min_value,
+                max_value,
+                ..
+            } => match status_type {
+                StatusType::Stunned => {
+                    // Something?
+                }
+                StatusType::DamageOverTime(damage_type) => match effect.stat {
+                    EffectTarget::GlobalSpellDamage | EffectTarget::GlobalSpellPower
+                        if skill_type == SkillType::Spell =>
+                    {
+                        min_value.apply_effect(effect);
+                        max_value.apply_effect(effect);
+                    }
+                    EffectTarget::GlobalAttackDamage if skill_type == SkillType::Attack => {
+                        min_value.apply_effect(effect);
+                        max_value.apply_effect(effect);
+                    }
+                    EffectTarget::GlobalDamage(damage_type2) if damage_type2 == *damage_type => {
+                        min_value.apply_effect(effect);
+                        max_value.apply_effect(effect);
+                    }
+                    _ => {}
+                },
+            },
         }
     }
 }

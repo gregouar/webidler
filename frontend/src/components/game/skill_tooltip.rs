@@ -38,8 +38,6 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                     })}
             </p>
 
-            <hr class="border-t border-gray-700" />
-
             <ul class="list-none space-y-1">{effect_lines}</ul>
 
             {(!skill_specs.base.description.is_empty())
@@ -80,56 +78,91 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
     };
 
     let range = match effect.range {
-        Range::Melee => "melee",
-        Range::Distance => "distance",
-        Range::Any => "any",
+        Range::Melee => "Melee",
+        Range::Distance => "Distance",
+        Range::Any => "Any",
     };
 
-    match effect.effect_type {
-        SkillEffectType::FlatDamage {
-            damage,
-            crit_chances,
-            crit_damage,
-        } => view! {
-            {damage
-                .into_iter()
-                .map(|(damage_type, (min, max))| {
-                    view! {
-                        <li class="text-sm text-purple-200 leading-snug">
-                            "Deals "<span class="font-semibold">{format_min_max(min, max)}</span>
-                            " " {damage_type_str(damage_type)}" ("{range}{shape}")"
-                        </li>
+    view! {
+        <hr class="border-t border-gray-700" />
+        <EffectLi>{range}{shape}</EffectLi>
+        {match effect.effect_type {
+            SkillEffectType::FlatDamage { damage, crit_chances, crit_damage } => {
+                view! {
+                    {damage
+                        .into_iter()
+                        .map(|(damage_type, (min, max))| {
+                            view! {
+                                <EffectLi>
+                                    "Deals "
+                                    <span class="font-semibold">{format_min_max(min, max)}</span>
+                                    " " {damage_type_str(damage_type)}
+                                </EffectLi>
+                            }
+                        })
+                        .collect::<Vec<_>>()}
+                    {if crit_chances > 0.0 {
+                        Some(
+                            view! {
+                                <EffectLi>
+                                    "Critical chances: "
+                                    <span class="font-semibold">
+                                        {format!("{:.2}%", crit_chances * 100.0)}
+                                    </span>
+                                </EffectLi>
+                                <EffectLi>
+                                    "Critical damage: "
+                                    <span class="font-semibold">
+                                        {format!("+{:.0}%", crit_damage * 100.0)}
+                                    </span>
+                                </EffectLi>
+                            },
+                        )
+                    } else {
+                        None
+                    }}
+                }
+                    .into_any()
+            }
+            SkillEffectType::Heal { min, max } => {
+                view! {
+                    <EffectLi>
+                        "Heals "<span class="font-semibold">{format_min_max(min, max)}</span>
+                    </EffectLi>
+                }
+                    .into_any()
+            }
+            SkillEffectType::ApplyStatus {
+                status_type,
+                min_value,
+                max_value,
+                min_duration,
+                max_duration,
+            } => {
+                match status_type {
+                    shared::data::status::StatusType::Stunned => {
+                        view! {
+                            <EffectLi>
+                                "Stun for "{format_min_max(min_duration, max_duration)}" seconds"
+                            </EffectLi>
+                        }
+                            .into_any()
                     }
-                })
-                .collect::<Vec<_>>()}
-            {if crit_chances > 0.0 {
-                Some(
-                    view! {
-                        <li class="text-sm text-purple-200 leading-snug">
-                            "Critical chances: "
-                            <span class="font-semibold">
-                                {format!("{:.2}%", crit_chances * 100.0)}
-                            </span>
-                        </li>
-                        <li class="text-sm text-purple-200 leading-snug">
-                            "Critical damage: "
-                            <span class="font-semibold">
-                                {format!("+{:.0}%", crit_damage * 100.0)}
-                            </span>
-                        </li>
-                    },
-                )
-            } else {
-                None
-            }}
-        }
-        .into_any(),
-        SkillEffectType::Heal { min, max } => view! {
-            <li class="text-sm text-purple-200 leading-snug">
-                "Heals "<span class="font-semibold">{format_min_max(min, max)}</span>
-            </li>
-        }
-        .into_any(),
+                    shared::data::status::StatusType::DamageOverTime(damage_type) => {
+                        view! {
+                            <EffectLi>
+                                "Deals "
+                                <span class="font-semibold">
+                                    {format_min_max(min_value, max_value)}
+                                </span> " per second " {damage_type_str(damage_type)}" over "
+                                {format_min_max(min_duration, max_duration)}" seconds"
+                            </EffectLi>
+                        }
+                            .into_any()
+                    }
+                }
+            }
+        }}
     }
 }
 
@@ -139,4 +172,9 @@ fn format_min_max(min: f64, max: f64) -> String {
     } else {
         format_number(min).to_string()
     }
+}
+
+#[component]
+fn EffectLi(children: Children) -> impl IntoView {
+    view! { <li class="text-sm text-purple-200 leading-snug">{children()}</li> }
 }

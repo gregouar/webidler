@@ -17,6 +17,15 @@
               "Physical": [5, 10]
             }
           }
+        },
+        {
+          "ApplyStatus": {
+            "status_type": {"DamageOverTime": "Poison"},
+            "min_value": 2,
+            "max_value": 2,
+            "min_duration": 5,
+            "max_duration": 5
+          }
         }
       ]
     }

@@ -6,7 +6,7 @@
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor","Trinket","Jewelry"],
+    "restrictions": ["Armor","Trinket","Jewelry","Focus"],
     "item_level": 1,
     "effects": [
       {
@@ -24,7 +24,7 @@
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor","Trinket","Jewelry"],
+    "restrictions": ["Armor","Trinket","Jewelry","Focus"],
     "item_level": 1,
     "effects": [
       {

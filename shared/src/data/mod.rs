@@ -8,4 +8,5 @@ pub mod monster;
 pub mod passive;
 pub mod player;
 pub mod skill;
+pub mod status;
 pub mod world;
