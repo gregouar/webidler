@@ -6,10 +6,13 @@ pub async fn purge_sessions(sessions_store: SessionsStore) {
     loop {
         tokio::time::sleep(Duration::from_secs(60)).await;
         let purge_before = Instant::now() - Duration::from_secs(300);
+
+        tracing::debug!("purging sessions...");
         sessions_store
             .sessions
             .lock()
             .unwrap()
             .retain(|_, session| session.last_active >= purge_before);
+        tracing::debug!("sessions purged");
     }
 }

@@ -87,7 +87,6 @@ fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), Option<Clie
             tracing::warn!(">>> {} sent str instead of bytes, closing", who);
             ControlFlow::Break(())
         }
-        // TODO: Have a wait delay before closing, to allow reconnect ?
         Message::Close(c) => {
             if let Some(cf) = c {
                 tracing::debug!(
