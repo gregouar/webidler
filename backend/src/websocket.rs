@@ -41,11 +41,15 @@ impl WebSocketConnection {
                         ControlFlow::Break(_) => break,
                         _ => {}
                     },
+                    Ok(Some(Err(e))) => {
+                        tracing::error!("connection error: {}", e);
+                        break;
+                    }
+                    Ok(None) => break, // Connection dropped
                     Err(_) => {
                         tracing::warn!("client disconnected due to inactivity");
                         break;
                     }
-                    _ => {}
                 }
             }
         });
