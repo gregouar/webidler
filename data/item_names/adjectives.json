@@ -81,5 +81,16 @@
   { "text": "Exacting", "tags": ["Critical"] },
   { "text": "Executioner's", "tags": ["Critical", "Physical"] },
   { "text": "Blinkstrike", "tags": ["Critical", "Speed", "Attack"] },
-  { "text": "Glassfang", "tags": ["Critical", "Spell", "Attack"] }
+  { "text": "Glassfang", "tags": ["Critical", "Spell", "Attack"] },
+  
+  { "text": "Putrid", "tags": ["Poison"] },
+  { "text": "Bile-soaked", "tags": ["Poison"] },
+  { "text": "Rotvenom", "tags": ["Poison"] },
+  { "text": "Vile", "tags": ["Poison"] },
+  { "text": "Contaminated", "tags": ["Poison"] },
+  { "text": "Wyrmfang", "tags": ["Poison", "Attack"] },
+  { "text": "Fangtouched", "tags": ["Poison", "Attack"] },
+  { "text": "Slimebound", "tags": ["Poison", "Armor"] },
+  { "text": "Sporeclouded", "tags": ["Poison", "Spell"] },
+  { "text": "Taintwoven", "tags": ["Poison", "Spell"] }
 ]

@@ -9,68 +9,68 @@
       "weight": 1000
     },
     {
-      "item_id": "leather_gloves",
+      "item_id": "leather_armor",
       "weight": 1000
+    },
+    {
+      "item_id": "leather_gloves",
+      "weight": 1000,
+      "min_area_level": 3
     },
     {
       "item_id": "leather_boots",
       "weight": 1000,
-      "min_area_level": 2
-    },
-    {
-      "item_id": "leather_armor",
-      "weight": 1000,
-      "min_area_level": 2
+      "min_area_level": 3
     },
     {
       "item_id": "shortsword_unique",
       "weight": 10,
-      "min_area_level": 3
+      "min_area_level": 5
     },
     {
       "item_id": "battleaxe",
       "weight": 1000,
-      "min_area_level": 3
+      "min_area_level": 5
     },
     {
       "item_id": "shortbow",
       "weight": 1000,
-      "min_area_level": 3
+      "min_area_level": 5
     },
     {
       "item_id": "wand",
       "weight": 500,
-      "min_area_level": 3
+      "min_area_level": 5
     },
     {
       "item_id": "buckler",
       "weight": 1000,
-      "min_area_level": 3
+      "min_area_level": 5
     },
     {
       "item_id": "grigri",
       "weight": 500,
-      "min_area_level": 3
+      "min_area_level": 5
     },
     {
       "item_id": "cloak",
       "weight": 400,
-      "min_area_level": 4
+      "min_area_level": 10
     },
     {
       "item_id": "great_helm",
       "weight": 1000,
-      "min_area_level": 5
+      "min_area_level": 10
     },
     {
       "item_id": "gold_ring",
       "weight": 400,
-      "min_area_level": 5
+      "min_area_level": 10
     },
     {
       "item_id": "medallion",
       "weight": 400,
-      "min_area_level": 5
+      "min_area_level": 10
     }
   ]
 }

@@ -219,7 +219,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Fire Armor"
+                                label="Fire Resistance"
                                 value=move || {
                                     format!(
                                         "{:.0}",
@@ -228,7 +228,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Poison Armor"
+                                label="Poison Resistance"
                                 value=move || {
                                     format!(
                                         "{:.0}",

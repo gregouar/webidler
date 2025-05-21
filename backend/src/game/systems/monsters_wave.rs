@@ -104,7 +104,10 @@ fn generate_all_monsters_specs(
 
 fn generate_monster_specs(bp_specs: &BaseMonsterSpecs, world_state: &WorldState) -> MonsterSpecs {
     let mut monster_specs = MonsterSpecs::init(bp_specs);
-    let exp_factor = increase_factors::exponential(world_state.area_level as f64);
+    let exp_factor = increase_factors::exponential(
+        world_state.area_level as f64,
+        increase_factors::MONSTER_INCREASE_FACTOR,
+    );
     let lin_factor = increase_factors::linear(world_state.area_level as f64);
     monster_specs.power_factor *= exp_factor;
     monster_specs.character_specs.max_life *= exp_factor;

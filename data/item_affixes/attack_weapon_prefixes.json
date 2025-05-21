@@ -54,14 +54,14 @@
       {
         "stat": {"LocalMinDamage": "Fire"},
         "modifier": "Flat",
-        "min": 2,
-        "max": 4
+        "min": 1,
+        "max": 3
       },
       {
         "stat": {"LocalMaxDamage": "Fire"},
         "modifier": "Flat",
-        "min": 4,
-        "max": 6
+        "min": 3,
+        "max": 5
       }
     ]
   }

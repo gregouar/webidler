@@ -4,6 +4,7 @@
   },
   "resources": {
     "monsters": [
+      "batty_fire.json",
       "batty.json",
       "batty2.json",
       "ratty.json",

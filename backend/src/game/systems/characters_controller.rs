@@ -5,8 +5,6 @@ use shared::data::{
 
 use crate::game::utils::{increase_factors, rng};
 
-const ARMOR_FACTOR: f64 = 100.0;
-
 pub fn damage_character(
     amount: f64,
     damage_type: DamageType,
@@ -26,13 +24,22 @@ pub fn damage_character(
     let amount = amount
         * match damage_type {
             DamageType::Physical => {
-                1.0 - increase_factors::diminishing(target_specs.armor, ARMOR_FACTOR)
+                1.0 - increase_factors::diminishing(
+                    target_specs.armor,
+                    increase_factors::ARMOR_FACTOR,
+                )
             }
             DamageType::Fire => {
-                1.0 - increase_factors::diminishing(target_specs.fire_armor, ARMOR_FACTOR)
+                1.0 - increase_factors::diminishing(
+                    target_specs.fire_armor,
+                    increase_factors::ARMOR_FACTOR,
+                )
             }
             DamageType::Poison => {
-                1.0 - increase_factors::diminishing(target_specs.poison_armor, ARMOR_FACTOR)
+                1.0 - increase_factors::diminishing(
+                    target_specs.poison_armor,
+                    increase_factors::ARMOR_FACTOR,
+                )
             }
         };
 

@@ -1,0 +1,24 @@
+{
+  "name": "Fiery Batty",
+  "portrait": "monsters/bat_fire.webp",
+  "max_life": 5,
+  "power_factor": 1.5,
+  "max_initiative": 0.5,
+  "skills": [
+    {
+      "name": "Burning Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 2.0,
+      "effects": [
+        {
+          "FlatDamage": {
+            "damage": {
+              "Physical": [1, 3],
+              "Fire": [3, 7]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

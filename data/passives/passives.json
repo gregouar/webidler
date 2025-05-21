@@ -217,7 +217,7 @@
         "node_type": "Armor",
         "effects": [
           {
-            "stat": "GlobalArmor",
+            "stat": { "GlobalArmor": "Physical" },
             "modifier": "Multiplier",
             "value": 0.25
           }
@@ -232,7 +232,7 @@
         "node_type": "Armor",
         "effects": [
           {
-            "stat": "GlobalArmor",
+            "stat": { "GlobalArmor": "Physical" },
             "modifier": "Multiplier",
             "value": 0.25
           }
@@ -275,7 +275,7 @@
         "node_type": "Armor",
         "effects": [
           {
-            "stat": "GlobalArmor",
+            "stat": { "GlobalArmor": "Physical" },
             "modifier": "Multiplier",
             "value": 0.25
           },

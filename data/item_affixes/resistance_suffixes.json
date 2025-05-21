@@ -1,0 +1,38 @@
+[
+    {
+    "name": "of Emberguard",
+    "family": "add_fire_res",
+    "tags": ["Fire", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Armor","Trinket","Jewelry"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": {"GlobalArmor": "Fire"},
+        "modifier": "Flat",
+        "min": 20,
+        "max": 49
+      }
+    ]
+  },
+    {
+    "name": "of Venomguard",
+    "family": "add_poison_res",
+    "tags": ["Poison", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Armor","Trinket","Jewelry"],
+    "item_level": 1,
+    "effects": [
+      {
+        "stat": {"GlobalArmor": "Poison"},
+        "modifier": "Flat",
+        "min": 20,
+        "max": 49
+      }
+    ]
+  }
+]

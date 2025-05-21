@@ -51,6 +51,7 @@ pub enum AffixTag {
     Life,
     Mana,
     Physical,
+    Poison,
     Speed,
     Spell,
 }

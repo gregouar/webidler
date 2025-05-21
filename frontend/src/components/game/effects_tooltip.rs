@@ -123,10 +123,23 @@ pub fn formatted_effects_list(mut affix_effects: Vec<StatEffect>) -> Vec<impl In
                 "{:.0}% Increased Mana Regeneration",
                 effect.value * 100.0
             )),
-            (GlobalArmor, Flat) => merged.push(format!("Adds {:.0} Armor", effect.value)),
-            (GlobalArmor, Multiplier) => merged.push(format!(
-                "{:.0}% Increased Global Armor",
-                effect.value * 100.0
+            (GlobalArmor(armor_type), Flat) => merged.push(format!(
+                "Adds {:.0} {} {}",
+                effect.value,
+                damage_type_str(armor_type),
+                match armor_type {
+                    DamageType::Physical => "Armor",
+                    _ => "Resistance",
+                }
+            )),
+            (GlobalArmor(armor_type), Multiplier) => merged.push(format!(
+                "{:.0}% Increased {} {}",
+                effect.value * 100.0,
+                damage_type_str(armor_type),
+                match armor_type {
+                    DamageType::Physical => "Armor",
+                    _ => "Resistance",
+                }
             )),
             (GlobalBlock, Flat) => {
                 merged.push(format!("Adds {:.0}% Block Chances", effect.value * 100.0))

@@ -39,7 +39,7 @@ pub enum EffectTarget {
     GlobalLifeRegen,
     GlobalMana,
     GlobalManaRegen,
-    GlobalArmor,
+    GlobalArmor(DamageType),
     GlobalBlock,
     GlobalSpellDamage,
     GlobalSpellPower,
