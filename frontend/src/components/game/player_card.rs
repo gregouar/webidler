@@ -110,6 +110,15 @@ pub fn PlayerCard() -> impl IntoView {
             .just_blocked
     });
 
+    let statuses = Signal::derive(move || {
+        game_context
+            .player_state
+            .read()
+            .character_state
+            .statuses
+            .clone()
+    });
+
     let conn = expect_context::<WebsocketContext>();
     let level_up = move |_| {
         conn.send(&LevelUpPlayerMessage { amount: 1 }.into());
@@ -190,6 +199,7 @@ pub fn PlayerCard() -> impl IntoView {
                         just_hurt_crit=just_hurt_crit
                         just_blocked=just_blocked
                         is_dead=is_dead
+                        statuses=statuses
                     />
                     <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
                         <VerticalProgressBar

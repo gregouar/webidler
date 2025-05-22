@@ -3,6 +3,8 @@ use std::time::Duration;
 use leptos::html::*;
 use leptos::prelude::*;
 
+use shared::data::status::{StatusMap, StatusType};
+
 use crate::assets::img_asset;
 
 #[component]
@@ -13,6 +15,7 @@ pub fn CharacterPortrait(
     #[prop(into)] just_hurt_crit: Signal<bool>,
     #[prop(into)] just_blocked: Signal<bool>,
     #[prop(into)] is_dead: Signal<bool>,
+    #[prop(into)] statuses: Signal<StatusMap>,
 ) -> impl IntoView {
     let just_hurt_class = move || {
         if just_hurt.get() {
@@ -93,9 +96,12 @@ pub fn CharacterPortrait(
                         )
                     }
                 />
-                <div class=move || {
-                    format!("absolute inset-0 -none  {}", just_hurt_class())
-                }></div>
+                <div class="absolute inset-0 flex place-items-start p-2">
+                    <For each=move || statuses.get().into_keys() key=|k| *k let(k)>
+                        <StatusIcon status_type=k />
+                    </For>
+                </div>
+                <div class=move || { format!("absolute inset-0  {}", just_hurt_class()) }></div>
             </div>
 
             {move || {
@@ -114,6 +120,23 @@ pub fn CharacterPortrait(
                     None
                 }
             }}
+        </div>
+    }
+}
+
+#[component]
+fn StatusIcon(status_type: StatusType) -> impl IntoView {
+    let (icon_uri, alt) = match status_type {
+        StatusType::Stunned => ("statuses/stunned.svg", "Stunned"),
+        StatusType::DamageOverTime(damage_type) => match damage_type {
+            shared::data::skill::DamageType::Physical => ("statuses/bleed.svg", "Bleeding"),
+            shared::data::skill::DamageType::Fire => ("statuses/burning.svg", "Burning"),
+            shared::data::skill::DamageType::Poison => ("statuses/poison.svg", "Poisoned"),
+        },
+    };
+    view! {
+        <div class="w-[15%] aspect-square p-1">
+            <img src=img_asset(icon_uri) alt=alt class="w-full h-full drop-shadow-md bg-black/40" />
         </div>
     }
 }

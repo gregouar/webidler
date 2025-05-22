@@ -187,6 +187,15 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .unwrap_or(false)
     });
 
+    let statuses = Signal::derive(move || {
+        game_context
+            .monster_states
+            .read()
+            .get(index)
+            .map(|x| x.character_state.statuses.clone())
+            .unwrap_or_default()
+    });
+
     view! {
         <div class="grid grid-cols-4 h-full bg-zinc-800 shadow-md rounded-md gap-2 p-2 ring-1 ring-zinc-950">
             <div class="flex flex-col gap-2 col-span-3 h-full">
@@ -206,6 +215,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     just_hurt_crit=just_hurt_crit
                     just_blocked=just_blocked
                     is_dead=is_dead
+                    statuses=statuses
                 />
             </div>
             <div class="flex flex-col justify-evenly w-full min-w-16">

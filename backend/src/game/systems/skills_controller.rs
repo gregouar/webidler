@@ -28,17 +28,21 @@ pub fn use_skill<'a>(
 ) -> bool {
     let me_position = (me.0.position_x, me.0.position_y);
     let mut me = vec![me];
-    skill_specs.effects.iter().any(|skill_effect| {
-        use_skill_effect(
-            skill_specs.base.skill_type,
-            skill_effect,
-            skill_state,
-            me_position,
-            &mut me,
-            &mut friends,
-            &mut enemies,
-        )
-    })
+    skill_specs
+        .effects
+        .iter()
+        .fold(false, |applied, skill_effect| {
+            applied
+                | use_skill_effect(
+                    skill_specs.base.skill_type,
+                    skill_effect,
+                    skill_state,
+                    me_position,
+                    &mut me,
+                    &mut friends,
+                    &mut enemies,
+                )
+        })
 }
 
 fn use_skill_effect<'a>(
