@@ -90,12 +90,9 @@ pub fn CharacterPortrait(
                 <img
                     src=img_asset(&image_uri)
                     alt=character_name
-                    class=move || {
-                        format!(
-                            "border-8 border-double border-stone-500 object-cover h-full w-full",
-                        )
-                    }
+                    class="border-8 border-double border-stone-500 object-cover h-full w-full"
                 />
+
                 <div class="absolute inset-0 flex place-items-start p-2">
                     <For each=move || statuses.get().into_keys() key=|k| *k let(k)>
                         <StatusIcon status_type=k />
