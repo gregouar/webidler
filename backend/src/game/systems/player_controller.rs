@@ -2,7 +2,7 @@ use anyhow::{anyhow, Result};
 
 use shared::data::{
     item::{ItemSlot, ItemSpecs, WeaponSpecs},
-    item_affix::{EffectModifier, EffectTarget, EffectsMap},
+    item_affix::{EffectModifier, StatType, EffectsMap},
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
@@ -368,13 +368,13 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
 
     for effect in effects.iter() {
         match effect.stat {
-            EffectTarget::GlobalLife => player_specs.character_specs.max_life.apply_effect(effect),
-            EffectTarget::GlobalLifeRegen => {
+            StatType::GlobalLife => player_specs.character_specs.max_life.apply_effect(effect),
+            StatType::GlobalLifeRegen => {
                 player_specs.character_specs.life_regen.apply_effect(effect)
             }
-            EffectTarget::GlobalMana => player_specs.max_mana.apply_effect(effect),
-            EffectTarget::GlobalManaRegen => player_specs.mana_regen.apply_effect(effect),
-            EffectTarget::GlobalArmor(armor_type) => match armor_type {
+            StatType::GlobalMana => player_specs.max_mana.apply_effect(effect),
+            StatType::GlobalManaRegen => player_specs.mana_regen.apply_effect(effect),
+            StatType::GlobalArmor(armor_type) => match armor_type {
                 DamageType::Physical => player_specs.character_specs.armor.apply_effect(effect),
                 DamageType::Fire => player_specs.character_specs.fire_armor.apply_effect(effect),
                 DamageType::Poison => player_specs
@@ -382,33 +382,33 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
                     .poison_armor
                     .apply_effect(effect),
             },
-            EffectTarget::GlobalBlock => player_specs.character_specs.block.apply_effect(effect),
-            EffectTarget::GlobalMovementSpeed => {
+            StatType::GlobalBlock => player_specs.character_specs.block.apply_effect(effect),
+            StatType::GlobalMovementSpeed => {
                 player_specs.movement_cooldown.apply_inverse_effect(effect)
             }
-            EffectTarget::GlobalGoldFind => match effect.modifier {
+            StatType::GlobalGoldFind => match effect.modifier {
                 EffectModifier::Flat => todo!(),
                 EffectModifier::Multiplier => player_specs.gold_find *= 1.0 + effect.value,
             },
             // Delegate to skills
-            EffectTarget::GlobalDamage(_)
-            | EffectTarget::GlobalAttackDamage
-            | EffectTarget::GlobalSpellDamage
-            | EffectTarget::GlobalSpellPower
-            | EffectTarget::GlobalCritChances
-            | EffectTarget::GlobalCritDamage
-            | EffectTarget::GlobalAttackSpeed
-            | EffectTarget::GlobalSpellSpeed
-            | EffectTarget::GlobalSpeed => {}
+            StatType::GlobalDamage(_)
+            | StatType::GlobalAttackDamage
+            | StatType::GlobalSpellDamage
+            | StatType::GlobalSpellPower
+            | StatType::GlobalCritChances
+            | StatType::GlobalCritDamage
+            | StatType::GlobalAttackSpeed
+            | StatType::GlobalSpellSpeed
+            | StatType::GlobalSpeed => {}
             // Discard local
-            EffectTarget::LocalAttackSpeed
-            | EffectTarget::LocalAttackDamage
-            | EffectTarget::LocalMinDamage(_)
-            | EffectTarget::LocalMaxDamage(_)
-            | EffectTarget::LocalArmor
-            | EffectTarget::LocalBlock
-            | EffectTarget::LocalCritChances
-            | EffectTarget::LocalCritDamage => {}
+            StatType::LocalAttackSpeed
+            | StatType::LocalAttackDamage
+            | StatType::LocalMinDamage(_)
+            | StatType::LocalMaxDamage(_)
+            | StatType::LocalArmor
+            | StatType::LocalBlock
+            | StatType::LocalCritChances
+            | StatType::LocalCritDamage => {}
         }
     }
 

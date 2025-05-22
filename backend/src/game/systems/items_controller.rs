@@ -2,7 +2,7 @@ use std::vec;
 
 use shared::data::{
     item::{ArmorSpecs, ItemSlot, ItemSpecs, WeaponSpecs},
-    item_affix::{EffectModifier, EffectTarget, StatEffect},
+    item_affix::{EffectModifier, StatEffect, StatType},
     skill::{BaseSkillSpecs, SkillEffect, SkillEffectType, SkillSpecs, SkillType, TargetType},
 };
 
@@ -42,23 +42,23 @@ pub fn update_item_specs(
 fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -> WeaponSpecs {
     for effect in effects {
         match effect.stat {
-            EffectTarget::LocalAttackSpeed => weapon_specs.cooldown.apply_inverse_effect(effect),
-            EffectTarget::LocalAttackDamage => {
+            StatType::LocalAttackSpeed => weapon_specs.cooldown.apply_inverse_effect(effect),
+            StatType::LocalAttackDamage => {
                 for (min, max) in weapon_specs.damage.values_mut() {
                     min.apply_effect(effect);
                     max.apply_effect(effect);
                 }
             }
-            EffectTarget::LocalMinDamage(damage_type) => {
+            StatType::LocalMinDamage(damage_type) => {
                 let (min, _) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
                 min.apply_effect(effect);
             }
-            EffectTarget::LocalMaxDamage(damage_type) => {
+            StatType::LocalMaxDamage(damage_type) => {
                 let (_, max) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
                 max.apply_effect(effect);
             }
-            EffectTarget::LocalCritChances => weapon_specs.crit_chances.apply_effect(effect),
-            EffectTarget::LocalCritDamage => weapon_specs.crit_damage.apply_effect(effect),
+            StatType::LocalCritChances => weapon_specs.crit_chances.apply_effect(effect),
+            StatType::LocalCritDamage => weapon_specs.crit_damage.apply_effect(effect),
             _ => {}
         }
     }
@@ -75,10 +75,10 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -
 
 fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &[StatEffect]) -> ArmorSpecs {
     for effect in effects {
-        if effect.stat == EffectTarget::LocalArmor {
+        if effect.stat == StatType::LocalArmor {
             armor_specs.armor.apply_effect(effect);
         }
-        if effect.stat == EffectTarget::LocalBlock {
+        if effect.stat == StatType::LocalBlock {
             armor_specs.block.apply_effect(effect);
         }
     }

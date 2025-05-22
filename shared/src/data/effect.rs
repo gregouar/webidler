@@ -24,7 +24,7 @@ pub enum EffectModifier {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum EffectTarget {
+pub enum StatType {
     // Local
     LocalAttackDamage,
     LocalMinDamage(DamageType),
@@ -53,12 +53,12 @@ pub enum EffectTarget {
     GlobalMovementSpeed,
     GlobalGoldFind,
     // TODO: ReducedManaCost?
-    // TODO: TriggerSkill (effect trigger + Box Skill)
+    // TODO: TriggerSkill (effect trigger + Box Skill) => separate because cannot be hashed/copy etc
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct StatEffect {
-    pub stat: EffectTarget,
+    pub stat: StatType,
     pub modifier: EffectModifier,
     pub value: f64,
 }

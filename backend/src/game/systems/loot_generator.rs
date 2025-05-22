@@ -165,17 +165,18 @@ fn roll_affixes_amount(
     let amount = rng::random_range(min_amount..=max_amount).unwrap_or(min_amount);
     let prefix_count = rng::random_range(min_prefixes..=max_prefixes).unwrap_or(min_prefixes);
 
-    let suffix_count = amount.saturating_sub(prefix_count)
+    let suffix_count = amount
+        .saturating_sub(prefix_count)
         .min(max_suffixes)
         .max(min_suffixes);
-    let prefix_count = amount.saturating_sub(suffix_count)
+    let prefix_count = amount
+        .saturating_sub(suffix_count)
         .min(min_prefixes)
         .max(max_prefixes);
 
     (
         prefix_count,
-        amount.saturating_sub(prefix_count)
-            .min(max_suffixes),
+        amount.saturating_sub(prefix_count).min(max_suffixes),
     )
 }
 

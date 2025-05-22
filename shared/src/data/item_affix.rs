@@ -3,11 +3,11 @@ use std::collections::{HashMap, HashSet};
 
 use super::world::AreaLevel;
 
-pub use super::effect::{DamageType, EffectModifier, EffectTarget, StatEffect};
+pub use super::effect::{DamageType, EffectModifier, StatEffect, StatType};
 pub use super::skill::{Range, Shape};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct EffectsMap(pub HashMap<(EffectTarget, EffectModifier), f64>);
+pub struct EffectsMap(pub HashMap<(StatType, EffectModifier), f64>);
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum AffixType {
@@ -81,7 +81,7 @@ pub struct ItemAffixBlueprint {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub struct AffixEffectBlueprint {
-    pub stat: EffectTarget,
+    pub stat: StatType,
     pub modifier: EffectModifier,
     // pub scope: AffixEffectScope,
     pub min: f64,
@@ -115,7 +115,7 @@ impl From<&EffectsMap> for Vec<StatEffect> {
 
 impl EffectsMap {
     pub fn combine_all(maps: impl Iterator<Item = EffectsMap>) -> Self {
-        let mut result: HashMap<(EffectTarget, EffectModifier), f64> = HashMap::new();
+        let mut result: HashMap<(StatType, EffectModifier), f64> = HashMap::new();
 
         for map in maps {
             for ((target, modifier), value) in map.0 {

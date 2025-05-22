@@ -3,7 +3,7 @@ use leptos::prelude::*;
 use std::time::Duration;
 
 use shared::data::{
-    effect::{EffectModifier, EffectTarget},
+    effect::{EffectModifier, StatType},
     skill::DamageType,
 };
 
@@ -16,7 +16,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let stats = move || game_context.game_stats.read();
-    let effect = move |stat: EffectTarget, modifier: EffectModifier| {
+    let effect = move |stat: StatType, modifier: EffectModifier| {
         game_context
             .player_specs
             .read()
@@ -132,7 +132,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     format!(
                                         "+{:.0}%",
                                         effect(
-                                            EffectTarget::GlobalSpeed,
+                                            StatType::GlobalSpeed,
                                             EffectModifier::Multiplier,
                                         ) * 100.0,
                                     )
@@ -145,7 +145,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         "+{}%",
                                         format_number(
                                             effect(
-                                                EffectTarget::GlobalDamage(DamageType::Physical),
+                                                StatType::GlobalDamage(DamageType::Physical),
                                                 EffectModifier::Multiplier,
                                             ) * 100.0,
                                         ),
@@ -159,7 +159,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         "+{}%",
                                         format_number(
                                             effect(
-                                                EffectTarget::GlobalDamage(DamageType::Fire),
+                                                StatType::GlobalDamage(DamageType::Fire),
                                                 EffectModifier::Multiplier,
                                             ) * 100.0,
                                         ),
@@ -173,7 +173,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         "+{}%",
                                         format_number(
                                             effect(
-                                                EffectTarget::GlobalDamage(DamageType::Poison),
+                                                StatType::GlobalDamage(DamageType::Poison),
                                                 EffectModifier::Multiplier,
                                             ) * 100.0,
                                         ),
@@ -186,7 +186,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     format!(
                                         "+{:.0}%",
                                         effect(
-                                            EffectTarget::GlobalCritChances,
+                                            StatType::GlobalCritChances,
                                             EffectModifier::Multiplier,
                                         ) * 100.0,
                                     )
@@ -199,7 +199,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         "+{}%",
                                         format_number(
                                             effect(
-                                                EffectTarget::GlobalCritDamage,
+                                                StatType::GlobalCritDamage,
                                                 EffectModifier::Multiplier,
                                             ) * 100.0,
                                         ),
@@ -259,7 +259,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     format!(
                                         "+{:.0}%",
                                         effect(
-                                            EffectTarget::GlobalAttackSpeed,
+                                            StatType::GlobalAttackSpeed,
                                             EffectModifier::Multiplier,
                                         ) * 100.0,
                                     )
@@ -272,7 +272,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         "+{}%",
                                         format_number(
                                             effect(
-                                                EffectTarget::GlobalAttackDamage,
+                                                StatType::GlobalAttackDamage,
                                                 EffectModifier::Multiplier,
                                             ) * 100.0,
                                         ),
@@ -288,7 +288,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     format!(
                                         "+{:.0}%",
                                         effect(
-                                            EffectTarget::GlobalSpellSpeed,
+                                            StatType::GlobalSpellSpeed,
                                             EffectModifier::Multiplier,
                                         ) * 100.0,
                                     )
@@ -301,7 +301,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         "+{}%",
                                         format_number(
                                             effect(
-                                                EffectTarget::GlobalSpellDamage,
+                                                StatType::GlobalSpellDamage,
                                                 EffectModifier::Multiplier,
                                             ) * 100.0,
                                         ),
@@ -314,7 +314,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     format!(
                                         "+{:.0}%",
                                         effect(
-                                            EffectTarget::GlobalSpellPower,
+                                            StatType::GlobalSpellPower,
                                             EffectModifier::Multiplier,
                                         ) * 100.0,
                                     )

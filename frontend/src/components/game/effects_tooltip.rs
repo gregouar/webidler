@@ -4,7 +4,7 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 use shared::data::{
-    item_affix::{EffectModifier, EffectTarget, StatEffect},
+    item_affix::{EffectModifier, StatType, StatEffect},
     skill::DamageType,
 };
 
@@ -22,7 +22,7 @@ fn effect_li(text: String) -> impl IntoView {
 
 pub fn formatted_effects_list(mut affix_effects: Vec<StatEffect>) -> Vec<impl IntoView> {
     use EffectModifier::*;
-    use EffectTarget::*;
+    use StatType::*;
 
     affix_effects.sort_by_key(|effect| (effect.stat, effect.modifier));
 

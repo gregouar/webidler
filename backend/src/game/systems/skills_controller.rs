@@ -2,7 +2,7 @@ use rand::{self, seq::IteratorRandom};
 
 use shared::data::{
     character::{CharacterSpecs, CharacterState, SkillSpecs, SkillState},
-    effect::EffectTarget,
+    effect::StatType,
     item::{Range, Shape},
     item_affix::StatEffect,
     player::PlayerResources,
@@ -280,15 +280,15 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) 
 
     for effect in effects.iter() {
         match effect.stat {
-            EffectTarget::GlobalAttackSpeed if skill_specs.base.skill_type == SkillType::Attack => {
+            StatType::GlobalAttackSpeed if skill_specs.base.skill_type == SkillType::Attack => {
                 skill_specs.cooldown.apply_inverse_effect(effect);
             }
 
-            EffectTarget::GlobalSpellSpeed if skill_specs.base.skill_type == SkillType::Spell => {
+            StatType::GlobalSpellSpeed if skill_specs.base.skill_type == SkillType::Spell => {
                 skill_specs.cooldown.apply_inverse_effect(effect);
             }
 
-            EffectTarget::GlobalSpeed => {
+            StatType::GlobalSpeed => {
                 skill_specs.cooldown.apply_inverse_effect(effect);
             }
 
@@ -320,17 +320,15 @@ pub fn compute_skill_specs_effect(
             } => {
                 for (damage_type, (min, max)) in damage {
                     match effect.stat {
-                        EffectTarget::GlobalDamage(damage_type2)
-                            if damage_type2 == *damage_type =>
-                        {
+                        StatType::GlobalDamage(damage_type2) if damage_type2 == *damage_type => {
                             min.apply_effect(effect);
                             max.apply_effect(effect);
                         }
-                        EffectTarget::GlobalAttackDamage if skill_type == SkillType::Attack => {
+                        StatType::GlobalAttackDamage if skill_type == SkillType::Attack => {
                             min.apply_effect(effect);
                             max.apply_effect(effect);
                         }
-                        EffectTarget::GlobalSpellDamage | EffectTarget::GlobalSpellPower
+                        StatType::GlobalSpellDamage | StatType::GlobalSpellPower
                             if skill_type == SkillType::Spell =>
                         {
                             min.apply_effect(effect);
@@ -341,17 +339,17 @@ pub fn compute_skill_specs_effect(
                 }
 
                 match effect.stat {
-                    EffectTarget::GlobalCritChances => {
+                    StatType::GlobalCritChances => {
                         crit_chances.apply_effect(effect);
                     }
-                    EffectTarget::GlobalCritDamage => {
+                    StatType::GlobalCritDamage => {
                         crit_damage.apply_effect(effect);
                     }
                     _ => {}
                 }
             }
             SkillEffectType::Heal { min, max } => {
-                if effect.stat == EffectTarget::GlobalSpellPower {
+                if effect.stat == StatType::GlobalSpellPower {
                     min.apply_effect(effect);
                     max.apply_effect(effect);
                 }
@@ -366,17 +364,17 @@ pub fn compute_skill_specs_effect(
                     // Something?
                 }
                 StatusType::DamageOverTime(damage_type) => match effect.stat {
-                    EffectTarget::GlobalSpellDamage | EffectTarget::GlobalSpellPower
+                    StatType::GlobalSpellDamage | StatType::GlobalSpellPower
                         if skill_type == SkillType::Spell =>
                     {
                         min_value.apply_effect(effect);
                         max_value.apply_effect(effect);
                     }
-                    EffectTarget::GlobalAttackDamage if skill_type == SkillType::Attack => {
+                    StatType::GlobalAttackDamage if skill_type == SkillType::Attack => {
                         min_value.apply_effect(effect);
                         max_value.apply_effect(effect);
                     }
-                    EffectTarget::GlobalDamage(damage_type2) if damage_type2 == *damage_type => {
+                    StatType::GlobalDamage(damage_type2) if damage_type2 == *damage_type => {
                         min_value.apply_effect(effect);
                         max_value.apply_effect(effect);
                     }
