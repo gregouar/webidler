@@ -268,7 +268,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let hide_tooltip = move |_| tooltip_context.hide();
 
-    let just_triggered = Signal::derive(move || {
+    let just_triggered = Memo::new(move |_| {
         if !is_dead.get() {
             game_context
                 .monster_states
