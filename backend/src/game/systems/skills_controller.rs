@@ -229,7 +229,7 @@ pub fn level_up_skill(
     skill_specs.upgrade_level += 1;
     skill_specs.next_upgrade_cost += 10.0
         * increase_factors::exponential(
-            skill_specs.upgrade_level as f64,
+            skill_specs.upgrade_level,
             increase_factors::MONSTER_INCREASE_FACTOR,
         );
 

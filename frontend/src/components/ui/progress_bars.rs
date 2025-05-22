@@ -200,21 +200,15 @@ pub fn CircularProgressBar(
 
                     <g transform="translate(90,90)">
                         <g clip-path="url(#ring)">
-                            <rect
-                                x="-85"
-                                y="-85"
-                                width="170"
-                                height="170"
-                                fill="stone-950"
-                                stroke="none"
-                            />
+                            <rect x="-85" y="-85" width="170" height="170" fill="stone-950" />
+                            // stroke="none"
                             <circle
                                 class="stroke-current text-stone-900"
                                 cx="0"
                                 cy="2.5"
                                 r="72"
                                 stroke-width=bar_width
-                                fill="none"
+                                // fill="none"
                                 filter="url(#blur)"
                             />
                         </g>

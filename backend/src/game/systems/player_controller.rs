@@ -7,6 +7,7 @@ use shared::data::{
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{DamageType, SkillState},
+    world::AreaLevel,
 };
 
 use crate::game::{data::DataInit, utils::increase_factors};
@@ -113,7 +114,7 @@ pub fn level_up(
     player_resources.experience -= player_specs.experience_needed;
     player_specs.experience_needed = 20.0
         * increase_factors::exponential(
-            player_specs.level as f64,
+            player_specs.level as AreaLevel,
             increase_factors::XP_INCREASE_FACTOR,
         );
 
@@ -259,7 +260,7 @@ pub fn sell_item(
                 shared::data::item::ItemRarity::Unique => 8.0,
             } * player_specs.gold_find
                 * increase_factors::exponential(
-                    item_specs.level as f64,
+                    item_specs.level,
                     increase_factors::MONSTER_INCREASE_FACTOR,
                 );
     }
