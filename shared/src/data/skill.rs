@@ -1,8 +1,7 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 pub use super::stat_effect::DamageType;
-use super::{character_status::StatusType, item::ItemSlot};
+use super::{character_status::StatusType, item::ItemSlot, stat_effect::DamageMap};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SkillState {
@@ -101,7 +100,7 @@ pub enum Shape {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum SkillEffectType {
     FlatDamage {
-        damage: HashMap<DamageType, (f64, f64)>,
+        damage: DamageMap,
         #[serde(default)]
         crit_chances: f32,
         #[serde(default)]

@@ -5,8 +5,7 @@ use serde::{Deserialize, Serialize};
 pub use super::skill::{Range, Shape};
 use super::{
     item_affix::{AffixEffectBlueprint, AffixEffectScope, AffixRestriction, ItemAffix},
-    skill::DamageType,
-    stat_effect::EffectsMap,
+    stat_effect::{DamageMap, EffectsMap},
     world::AreaLevel,
 };
 
@@ -86,7 +85,7 @@ pub struct WeaponSpecs {
     pub cooldown: f32,
 
     // #[serde(rename_all = "snake_case")]
-    pub damage: HashMap<DamageType, (f64, f64)>,
+    pub damage: DamageMap,
 
     pub crit_chances: f32,
     pub crit_damage: f64,

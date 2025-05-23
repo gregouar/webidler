@@ -6,8 +6,8 @@ use shared::data::{
     item::{Range, Shape},
     item_affix::StatEffect,
     player::PlayerResources,
-    skill::{SkillEffect, SkillEffectType, SkillType, TargetType},
-    stat_effect::StatType,
+    skill::{DamageType, SkillEffect, SkillEffectType, SkillType, TargetType},
+    stat_effect::{DamageMap, StatType},
 };
 
 use crate::game::utils::{
@@ -321,56 +321,17 @@ pub fn compute_skill_specs_effect(
                     StatType::Damage((skill_type2, damage_type))
                         if skill_type == skill_type2.unwrap_or(skill_type) =>
                     {
-                        //TODO: Make a function for that and use in item
-                        match damage_type {
-                            Some(damage_type) => {
-                                let (min, max) = damage.entry(damage_type).or_insert((0.0, 0.0));
-                                min.apply_effect(effect);
-                                max.apply_effect(effect);
-                            }
-                            None => {
-                                for (min, max) in damage.values_mut() {
-                                    min.apply_effect(effect);
-                                    max.apply_effect(effect);
-                                }
-                            }
-                        }
+                        apply_effect_on_damage(damage, damage_type, Some(effect), Some(effect))
                     }
                     StatType::MinDamage((skill_type2, damage_type))
                         if skill_type == skill_type2.unwrap_or(skill_type) =>
                     {
-                        //TODO: Make a function for that and use in item
-                        match damage_type {
-                            Some(damage_type) => {
-                                let (min, max) = damage.entry(damage_type).or_insert((0.0, 0.0));
-                                min.apply_effect(effect);
-                                max.apply_effect(effect);
-                            }
-                            None => {
-                                for (min, max) in damage.values_mut() {
-                                    min.apply_effect(effect);
-                                    max.apply_effect(effect);
-                                }
-                            }
-                        }
+                        apply_effect_on_damage(damage, damage_type, Some(effect), None)
                     }
                     StatType::MaxDamage((skill_type2, damage_type))
                         if skill_type == skill_type2.unwrap_or(skill_type) =>
                     {
-                        //TODO: Make a function for that and use in item
-                        match damage_type {
-                            Some(damage_type) => {
-                                let (min, max) = damage.entry(damage_type).or_insert((0.0, 0.0));
-                                min.apply_effect(effect);
-                                max.apply_effect(effect);
-                            }
-                            None => {
-                                for (min, max) in damage.values_mut() {
-                                    min.apply_effect(effect);
-                                    max.apply_effect(effect);
-                                }
-                            }
-                        }
+                        apply_effect_on_damage(damage, damage_type, None, Some(effect))
                     }
                     _ => {}
                 }
@@ -424,6 +385,27 @@ pub fn compute_skill_specs_effect(
                     _ => {}
                 },
             },
+        }
+    }
+}
+
+fn apply_effect_on_damage(
+    damage: &mut DamageMap,
+    damage_type: Option<DamageType>,
+    min_effect: Option<&StatEffect>,
+    max_effect: Option<&StatEffect>,
+) {
+    match damage_type {
+        Some(damage_type) => {
+            let (min, max) = damage.entry(damage_type).or_insert((0.0, 0.0));
+            min_effect.map(|e| min.apply_effect(e));
+            max_effect.map(|e| max.apply_effect(e));
+        }
+        None => {
+            for (min, max) in damage.values_mut() {
+                min_effect.map(|e| min.apply_effect(e));
+                max_effect.map(|e| max.apply_effect(e));
+            }
         }
     }
 }

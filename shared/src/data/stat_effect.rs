@@ -20,6 +20,8 @@ impl DamageType {
     }
 }
 
+pub type DamageMap = HashMap<DamageType, (f64, f64)>;
+
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum EffectModifier {
     Flat,

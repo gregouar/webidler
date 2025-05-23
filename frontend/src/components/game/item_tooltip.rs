@@ -6,6 +6,7 @@ use leptos::prelude::*;
 use shared::data::item::Range;
 use shared::data::item::Shape;
 use shared::data::item::{ItemRarity, ItemSlot, ItemSpecs};
+use shared::data::item_affix::AffixEffectScope;
 use shared::data::skill::DamageType;
 
 use crate::components::game::effects_tooltip;
@@ -181,7 +182,14 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             }
         });
 
-    let affixes = effects_tooltip::formatted_effects_list((&item_specs.aggregate_effects()).into());
+    let local_affixes = effects_tooltip::formatted_effects_list(
+        (&item_specs.aggregate_effects(AffixEffectScope::Local)).into(),
+        AffixEffectScope::Local,
+    );
+    let global_affixes = effects_tooltip::formatted_effects_list(
+        (&item_specs.aggregate_effects(AffixEffectScope::Global)).into(),
+        AffixEffectScope::Global,
+    );
 
     let (name_color, border_color, ring_color, shadow_color) = match item_specs.rarity {
         ItemRarity::Normal => (
@@ -239,11 +247,11 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 {armor_info}
                 {weapon_info}
             </ul>
-            {(!affixes.is_empty())
+            {(!local_affixes.is_empty() || !global_affixes.is_empty())
                 .then(|| {
                     view! {
                         <hr class="border-t border-gray-700 my-1" />
-                        <ul class="list-none space-y-1">{affixes}</ul>
+                        <ul class="list-none space-y-1">{local_affixes}{global_affixes}</ul>
                     }
                 })}
             <hr class="border-t border-gray-700" />
