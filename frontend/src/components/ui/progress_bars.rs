@@ -200,7 +200,6 @@ pub fn CircularProgressBar(
 
                     <g transform="translate(90,90)">
                         <g clip-path="url(#ring)">
-                            <rect x="-85" y="-85" width="170" height="170" fill="stone-950" />
                             // stroke="none"
                             <circle
                                 class="stroke-current text-stone-900"
@@ -220,7 +219,7 @@ pub fn CircularProgressBar(
                             stroke-dashoffset=set_value
                             stroke-dasharray="452.389"
                             d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
-                            // fill="transparent"
+                            fill="transparent"
                             stroke-width=bar_width
                             stroke-linecap="round"
                         />
@@ -231,7 +230,7 @@ pub fn CircularProgressBar(
                             style=reset_bar_animation
                             stroke-dasharray="452.389"
                             d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
-                            // fill="transparent"
+                            fill="transparent"
                             stroke-width=bar_width
                             stroke-linecap="round"
                         />
