@@ -5,7 +5,7 @@
     "icon": "skills/fireball.svg",
     "skill_type": "Spell",
     "cooldown": 2,
-    "mana_cost": 4,
+    "mana_cost": 2,
     "upgrade_cost": 20,
     "effects": [
       {
