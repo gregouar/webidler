@@ -222,7 +222,6 @@ pub fn CircularProgressBar(
                             d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
                             fill="transparent"
                             stroke-width=bar_width
-                            stroke=bar_color
                             stroke-linecap="round"
                         />
 
@@ -234,7 +233,6 @@ pub fn CircularProgressBar(
                             d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
                             fill="transparent"
                             stroke-width=bar_width
-                            stroke=bar_color
                             stroke-linecap="round"
                         />
                     </g>
