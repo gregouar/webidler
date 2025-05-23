@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-pub use super::effect::DamageType;
-use super::{item::ItemSlot, status::StatusType};
+pub use super::stat_effect::DamageType;
+use super::{character_status::StatusType, item::ItemSlot};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SkillState {
@@ -45,7 +45,9 @@ pub struct SkillSpecs {
     pub item_slot: Option<ItemSlot>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 pub enum SkillType {
     #[default]
     Attack,

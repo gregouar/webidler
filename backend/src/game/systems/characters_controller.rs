@@ -1,7 +1,7 @@
 use shared::data::{
     character::{CharacterSpecs, CharacterState},
     skill::{DamageType, SkillType},
-    status::{StatusState, StatusType},
+    character_status::{StatusState, StatusType},
 };
 
 use crate::game::utils::{increase_factors, rng};

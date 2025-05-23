@@ -1,13 +1,10 @@
 use serde::{Deserialize, Serialize};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 use super::world::AreaLevel;
 
-pub use super::effect::{DamageType, EffectModifier, StatEffect, StatType};
 pub use super::skill::{Range, Shape};
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct EffectsMap(pub HashMap<(StatType, EffectModifier), f64>);
+pub use super::stat_effect::{DamageType, EffectModifier, StatEffect, StatType};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum AffixType {
@@ -41,7 +38,6 @@ pub enum AffixRestriction {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq, Hash)]
-// TODO: add others
 pub enum AffixTag {
     Attack,
     Armor,
@@ -54,13 +50,14 @@ pub enum AffixTag {
     Poison,
     Speed,
     Spell,
+    // TODO: add others
 }
 
-// #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
-// pub enum AffixEffectScope {
-//     Local,
-//     Global,
-// }
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum AffixEffectScope {
+    Local,
+    Global,
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ItemAffixBlueprint {
@@ -83,7 +80,7 @@ pub struct ItemAffixBlueprint {
 pub struct AffixEffectBlueprint {
     pub stat: StatType,
     pub modifier: EffectModifier,
-    // pub scope: AffixEffectScope,
+    pub scope: AffixEffectScope,
     pub min: f64,
     pub max: f64,
 }
@@ -97,46 +94,11 @@ pub struct ItemAffix {
     pub affix_type: AffixType,
     pub tier: u8,
 
-    pub effects: Vec<StatEffect>,
+    pub effects: Vec<AffixEffect>,
 }
 
-impl From<&EffectsMap> for Vec<StatEffect> {
-    fn from(val: &EffectsMap) -> Self {
-        val.0
-            .iter()
-            .map(|((stat, effect_type), value)| StatEffect {
-                stat: *stat,
-                modifier: *effect_type,
-                value: *value,
-            })
-            .collect()
-    }
-}
-
-impl EffectsMap {
-    pub fn combine_all(maps: impl Iterator<Item = EffectsMap>) -> Self {
-        let mut result: HashMap<(StatType, EffectModifier), f64> = HashMap::new();
-
-        for map in maps {
-            for ((target, modifier), value) in map.0 {
-                let entry = result.entry((target, modifier)).or_insert(match modifier {
-                    EffectModifier::Flat => 0.0,
-                    EffectModifier::Multiplier => 1.0,
-                });
-
-                match modifier {
-                    EffectModifier::Flat => *entry += value,
-                    EffectModifier::Multiplier => *entry *= 1.0 + value,
-                }
-            }
-        }
-
-        for ((_, modifier), val) in result.iter_mut() {
-            if *modifier == EffectModifier::Multiplier {
-                *val -= 1.0;
-            }
-        }
-
-        EffectsMap(result)
-    }
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct AffixEffect {
+    pub scope: AffixEffectScope,
+    pub stat_effect: StatEffect,
 }

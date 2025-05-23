@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 pub use super::character::{CharacterSpecs, CharacterState};
 use super::{
     item::{ItemSlot, ItemSpecs},
-    item_affix::EffectsMap,
     skill::{SkillSpecs, SkillState},
+    stat_effect::EffectsMap,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

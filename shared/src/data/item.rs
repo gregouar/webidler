@@ -4,8 +4,9 @@ use serde::{Deserialize, Serialize};
 
 pub use super::skill::{Range, Shape};
 use super::{
-    item_affix::{AffixEffectBlueprint, AffixRestriction, EffectsMap, ItemAffix},
+    item_affix::{AffixEffectBlueprint, AffixEffectScope, AffixRestriction, ItemAffix},
     skill::DamageType,
+    stat_effect::EffectsMap,
     world::AreaLevel,
 };
 
@@ -100,15 +101,16 @@ pub struct ArmorSpecs {
 }
 
 impl ItemSpecs {
-    pub fn aggregate_effects(&self) -> EffectsMap {
+    pub fn aggregate_effects(&self, scope: AffixEffectScope) -> EffectsMap {
         self.affixes
             .iter()
             .flat_map(|affix| affix.effects.iter())
+            .filter(|e| e.scope == scope)
             .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
                 *effects_map
                     .0
-                    .entry((effect.stat, effect.modifier))
-                    .or_default() += effect.value;
+                    .entry((effect.stat_effect.stat, effect.stat_effect.modifier))
+                    .or_default() += effect.stat_effect.value;
                 effects_map
             })
     }

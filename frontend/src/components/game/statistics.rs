@@ -3,7 +3,7 @@ use leptos::prelude::*;
 use std::time::Duration;
 
 use shared::data::{
-    effect::{EffectModifier, StatType},
+    stat_effect::{EffectModifier, StatType},
     skill::DamageType,
 };
 

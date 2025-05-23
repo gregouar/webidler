@@ -2,11 +2,12 @@ use anyhow::{anyhow, Result};
 
 use shared::data::{
     item::{ItemSlot, ItemSpecs, WeaponSpecs},
-    item_affix::{EffectModifier, StatType, EffectsMap},
+    item_affix::{AffixEffectScope, EffectModifier, StatType},
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{DamageType, SkillState},
+    stat_effect::EffectsMap,
     world::AreaLevel,
 };
 
@@ -338,21 +339,23 @@ pub fn update_player_specs(
     player_specs.character_specs.block += total_block;
 
     player_specs.effects = EffectsMap::combine_all(
-        equipped_items.map(|i| i.aggregate_effects()).chain(
-            passive_tree_state
-                .purchased_nodes
-                .iter()
-                .filter_map(|node_id| {
-                    passives_tree_specs.nodes.get(node_id).map(|node| {
-                        EffectsMap(
-                            node.effects
-                                .iter()
-                                .map(|effect| ((effect.stat, effect.modifier), effect.value))
-                                .collect(),
-                        )
-                    })
-                }),
-        ),
+        equipped_items
+            .map(|i| i.aggregate_effects(AffixEffectScope::Global))
+            .chain(
+                passive_tree_state
+                    .purchased_nodes
+                    .iter()
+                    .filter_map(|node_id| {
+                        passives_tree_specs.nodes.get(node_id).map(|node| {
+                            EffectsMap(
+                                node.effects
+                                    .iter()
+                                    .map(|effect| ((effect.stat, effect.modifier), effect.value))
+                                    .collect(),
+                            )
+                        })
+                    }),
+            ),
     );
 
     compute_player_specs(player_specs);
@@ -368,13 +371,11 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
 
     for effect in effects.iter() {
         match effect.stat {
-            StatType::GlobalLife => player_specs.character_specs.max_life.apply_effect(effect),
-            StatType::GlobalLifeRegen => {
-                player_specs.character_specs.life_regen.apply_effect(effect)
-            }
-            StatType::GlobalMana => player_specs.max_mana.apply_effect(effect),
-            StatType::GlobalManaRegen => player_specs.mana_regen.apply_effect(effect),
-            StatType::GlobalArmor(armor_type) => match armor_type {
+            StatType::Life => player_specs.character_specs.max_life.apply_effect(effect),
+            StatType::LifeRegen => player_specs.character_specs.life_regen.apply_effect(effect),
+            StatType::Mana => player_specs.max_mana.apply_effect(effect),
+            StatType::ManaRegen => player_specs.mana_regen.apply_effect(effect),
+            StatType::Armor(armor_type) => match armor_type {
                 DamageType::Physical => player_specs.character_specs.armor.apply_effect(effect),
                 DamageType::Fire => player_specs.character_specs.fire_armor.apply_effect(effect),
                 DamageType::Poison => player_specs
@@ -382,33 +383,17 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
                     .poison_armor
                     .apply_effect(effect),
             },
-            StatType::GlobalBlock => player_specs.character_specs.block.apply_effect(effect),
-            StatType::GlobalMovementSpeed => {
-                player_specs.movement_cooldown.apply_inverse_effect(effect)
-            }
-            StatType::GlobalGoldFind => match effect.modifier {
-                EffectModifier::Flat => todo!(),
-                EffectModifier::Multiplier => player_specs.gold_find *= 1.0 + effect.value,
-            },
+            StatType::Block => player_specs.character_specs.block.apply_effect(effect),
+            StatType::MovementSpeed => player_specs.movement_cooldown.apply_inverse_effect(effect),
+            StatType::GoldFind => player_specs.gold_find.apply_effect(effect),
             // Delegate to skills
-            StatType::GlobalDamage(_)
-            | StatType::GlobalAttackDamage
-            | StatType::GlobalSpellDamage
-            | StatType::GlobalSpellPower
-            | StatType::GlobalCritChances
-            | StatType::GlobalCritDamage
-            | StatType::GlobalAttackSpeed
-            | StatType::GlobalSpellSpeed
-            | StatType::GlobalSpeed => {}
-            // Discard local
-            StatType::LocalAttackSpeed
-            | StatType::LocalAttackDamage
-            | StatType::LocalMinDamage(_)
-            | StatType::LocalMaxDamage(_)
-            | StatType::LocalArmor
-            | StatType::LocalBlock
-            | StatType::LocalCritChances
-            | StatType::LocalCritDamage => {}
+            StatType::Damage(_)
+            | StatType::MinDamage(_)
+            | StatType::MaxDamage(_)
+            | StatType::SpellPower
+            | StatType::CritChances(_)
+            | StatType::CritDamage(_)
+            | StatType::Speed(_) => {}
         }
     }
 

@@ -2,8 +2,10 @@ use std::vec;
 
 use shared::data::{
     item::{ArmorSpecs, ItemSlot, ItemSpecs, WeaponSpecs},
-    item_affix::{EffectModifier, StatEffect, StatType},
-    skill::{BaseSkillSpecs, SkillEffect, SkillEffectType, SkillSpecs, SkillType, TargetType},
+    item_affix::{AffixEffectScope, EffectModifier, StatEffect, StatType},
+    skill::{
+        BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillType, TargetType,
+    },
 };
 
 use crate::game::data::{
@@ -21,7 +23,8 @@ pub fn update_item_specs(
     let name = generate_name(&item_specs, adjectives, nouns);
     item_specs.name = name;
 
-    let mut effects: Vec<StatEffect> = (&item_specs.aggregate_effects()).into();
+    let mut effects: Vec<StatEffect> =
+        (&item_specs.aggregate_effects(AffixEffectScope::Local)).into();
 
     effects.sort_by_key(|e| match e.modifier {
         EffectModifier::Flat => 0,
@@ -42,44 +45,76 @@ pub fn update_item_specs(
 fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -> WeaponSpecs {
     for effect in effects {
         match effect.stat {
-            StatType::LocalAttackSpeed => weapon_specs.cooldown.apply_inverse_effect(effect),
-            StatType::LocalAttackDamage => {
-                for (min, max) in weapon_specs.damage.values_mut() {
+            StatType::Speed(Some(SkillType::Attack) | None) => {
+                weapon_specs.cooldown.apply_inverse_effect(effect)
+            }
+            StatType::Damage((Some(SkillType::Attack) | None, damage_type)) => match damage_type {
+                Some(damage_type) => {
+                    let (min, max) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
                     min.apply_effect(effect);
                     max.apply_effect(effect);
                 }
+                None => {
+                    for (min, max) in weapon_specs.damage.values_mut() {
+                        min.apply_effect(effect);
+                        max.apply_effect(effect);
+                    }
+                }
+            },
+            StatType::MinDamage((Some(SkillType::Attack) | None, damage_type)) => {
+                match damage_type {
+                    Some(damage_type) => {
+                        let (min, _) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
+                        min.apply_effect(effect);
+                    }
+                    None => {
+                        for (min, _) in weapon_specs.damage.values_mut() {
+                            min.apply_effect(effect);
+                        }
+                    }
+                };
             }
-            StatType::LocalMinDamage(damage_type) => {
-                let (min, _) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
-                min.apply_effect(effect);
+            StatType::MaxDamage((Some(SkillType::Attack) | None, damage_type)) => {
+                match damage_type {
+                    Some(damage_type) => {
+                        let (_, max) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
+                        max.apply_effect(effect);
+                    }
+                    None => {
+                        for (_, max) in weapon_specs.damage.values_mut() {
+                            max.apply_effect(effect);
+                        }
+                    }
+                };
             }
-            StatType::LocalMaxDamage(damage_type) => {
-                let (_, max) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
-                max.apply_effect(effect);
+            StatType::CritChances(Some(SkillType::Attack) | None) => {
+                weapon_specs.crit_chances.apply_effect(effect)
             }
-            StatType::LocalCritChances => weapon_specs.crit_chances.apply_effect(effect),
-            StatType::LocalCritDamage => weapon_specs.crit_damage.apply_effect(effect),
+            StatType::CritDamage(Some(SkillType::Attack) | None) => {
+                weapon_specs.crit_damage.apply_effect(effect)
+            }
             _ => {}
         }
     }
 
     weapon_specs.cooldown = weapon_specs.cooldown.max(0.0);
-    weapon_specs.crit_chances = weapon_specs.crit_chances.min(1.0);
-    for (min_damage, max_damage) in weapon_specs.damage.values_mut() {
-        *max_damage = max_damage.max(0.0);
-        *min_damage = min_damage.max(0.0).min(*max_damage);
-    }
+    weapon_specs.crit_chances = weapon_specs.crit_chances.clamp(0.0, 1.0);
+    weapon_specs.damage.retain(|_, (min, max)| {
+        *min = min.clamp(0.0, *max);
+        *max > 0.0
+    });
 
     weapon_specs
 }
 
 fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &[StatEffect]) -> ArmorSpecs {
     for effect in effects {
-        if effect.stat == StatType::LocalArmor {
-            armor_specs.armor.apply_effect(effect);
-        }
-        if effect.stat == StatType::LocalBlock {
-            armor_specs.block.apply_effect(effect);
+        match effect.stat {
+            StatType::Armor(DamageType::Physical) => armor_specs.armor.apply_effect(effect),
+            StatType::Block => {
+                armor_specs.block.apply_effect(effect);
+            }
+            _ => {}
         }
     }
     armor_specs

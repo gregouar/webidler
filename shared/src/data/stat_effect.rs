@@ -1,0 +1,89 @@
+use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
+
+use super::skill::SkillType;
+
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,
+)]
+pub enum DamageType {
+    #[default]
+    Physical,
+    Fire,
+    Poison,
+}
+
+impl DamageType {
+    pub fn iter() -> impl Iterator<Item = DamageType> {
+        [DamageType::Physical, DamageType::Fire, DamageType::Poison].into_iter()
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum EffectModifier {
+    Flat,
+    Multiplier,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum StatType {
+    Life,
+    LifeRegen,
+    Mana,
+    ManaRegen,
+    Armor(DamageType),
+    Block,
+    Damage((Option<SkillType>, Option<DamageType>)), // TODO: Merge Damage, MinDamage & MaxDamage?
+    MinDamage((Option<SkillType>, Option<DamageType>)),
+    MaxDamage((Option<SkillType>, Option<DamageType>)),
+    SpellPower,
+    CritChances(Option<SkillType>),
+    CritDamage(Option<SkillType>),
+    Speed(Option<SkillType>),
+    MovementSpeed,
+    GoldFind,
+    // TODO: ReducedManaCost?
+    // TODO: TriggerSkill (effect trigger + Box Skill) => separate because cannot be hashed/copy etc
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct StatEffect {
+    pub stat: StatType,
+    pub modifier: EffectModifier,
+    pub value: f64,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct EffectsMap(pub HashMap<(StatType, EffectModifier), f64>);
+
+impl From<&EffectsMap> for Vec<StatEffect> {
+    fn from(val: &EffectsMap) -> Self {
+        val.0
+            .iter()
+            .map(|((stat, effect_type), value)| StatEffect {
+                stat: *stat,
+                modifier: *effect_type,
+                value: *value,
+            })
+            .collect()
+    }
+}
+
+impl EffectsMap {
+    pub fn combine_all(maps: impl Iterator<Item = EffectsMap>) -> Self {
+        EffectsMap(maps.flat_map(|m| m.0.into_iter()).fold(
+            HashMap::new(),
+            |mut result, ((target, modifier), value)| {
+                result
+                    .entry((target, modifier))
+                    .and_modify(|entry| match modifier {
+                        EffectModifier::Flat => *entry += value,
+                        EffectModifier::Multiplier => *entry = (*entry + 1.0) * (1.0 + value) - 1.0,
+                    })
+                    .or_insert(value);
+                result
+            },
+        ))
+    }
+}

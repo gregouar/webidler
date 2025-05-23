@@ -1,5 +1,5 @@
 pub mod character;
-pub mod effect;
+pub mod character_status;
 pub mod game_stats;
 pub mod item;
 pub mod item_affix;
@@ -8,5 +8,5 @@ pub mod monster;
 pub mod passive;
 pub mod player;
 pub mod skill;
-pub mod status;
+pub mod stat_effect;
 pub mod world;

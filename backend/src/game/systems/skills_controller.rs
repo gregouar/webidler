@@ -2,12 +2,12 @@ use rand::{self, seq::IteratorRandom};
 
 use shared::data::{
     character::{CharacterSpecs, CharacterState, SkillSpecs, SkillState},
-    effect::StatType,
+    character_status::StatusType,
     item::{Range, Shape},
     item_affix::StatEffect,
     player::PlayerResources,
     skill::{SkillEffect, SkillEffectType, SkillType, TargetType},
-    status::StatusType,
+    stat_effect::StatType,
 };
 
 use crate::game::utils::{
@@ -280,18 +280,12 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) 
 
     for effect in effects.iter() {
         match effect.stat {
-            StatType::GlobalAttackSpeed if skill_specs.base.skill_type == SkillType::Attack => {
+            StatType::Speed(skill_type)
+                if skill_specs.base.skill_type
+                    == skill_type.unwrap_or(skill_specs.base.skill_type) =>
+            {
                 skill_specs.cooldown.apply_inverse_effect(effect);
             }
-
-            StatType::GlobalSpellSpeed if skill_specs.base.skill_type == SkillType::Spell => {
-                skill_specs.cooldown.apply_inverse_effect(effect);
-            }
-
-            StatType::GlobalSpeed => {
-                skill_specs.cooldown.apply_inverse_effect(effect);
-            }
-
             _ => {}
         }
     }
@@ -310,7 +304,6 @@ pub fn compute_skill_specs_effect(
     skill_effect: &mut SkillEffect,
     effects: &[StatEffect],
 ) {
-    // TODO: Different increase options?
     for effect in effects.iter() {
         match &mut skill_effect.effect_type {
             SkillEffectType::FlatDamage {
@@ -318,38 +311,91 @@ pub fn compute_skill_specs_effect(
                 crit_chances,
                 crit_damage,
             } => {
-                for (damage_type, (min, max)) in damage {
-                    match effect.stat {
-                        StatType::GlobalDamage(damage_type2) if damage_type2 == *damage_type => {
-                            min.apply_effect(effect);
-                            max.apply_effect(effect);
-                        }
-                        StatType::GlobalAttackDamage if skill_type == SkillType::Attack => {
-                            min.apply_effect(effect);
-                            max.apply_effect(effect);
-                        }
-                        StatType::GlobalSpellDamage | StatType::GlobalSpellPower
-                            if skill_type == SkillType::Spell =>
-                        {
-                            min.apply_effect(effect);
-                            max.apply_effect(effect);
-                        }
-                        _ => {}
-                    }
-                }
-
                 match effect.stat {
-                    StatType::GlobalCritChances => {
+                    StatType::SpellPower if skill_type == SkillType::Spell => {
+                        for (min, max) in damage.values_mut() {
+                            min.apply_effect(effect);
+                            max.apply_effect(effect);
+                        }
+                    }
+                    StatType::Damage((skill_type2, damage_type))
+                        if skill_type == skill_type2.unwrap_or(skill_type) =>
+                    {
+                        //TODO: Make a function for that and use in item
+                        match damage_type {
+                            Some(damage_type) => {
+                                let (min, max) = damage.entry(damage_type).or_insert((0.0, 0.0));
+                                min.apply_effect(effect);
+                                max.apply_effect(effect);
+                            }
+                            None => {
+                                for (min, max) in damage.values_mut() {
+                                    min.apply_effect(effect);
+                                    max.apply_effect(effect);
+                                }
+                            }
+                        }
+                    }
+                    StatType::MinDamage((skill_type2, damage_type))
+                        if skill_type == skill_type2.unwrap_or(skill_type) =>
+                    {
+                        //TODO: Make a function for that and use in item
+                        match damage_type {
+                            Some(damage_type) => {
+                                let (min, max) = damage.entry(damage_type).or_insert((0.0, 0.0));
+                                min.apply_effect(effect);
+                                max.apply_effect(effect);
+                            }
+                            None => {
+                                for (min, max) in damage.values_mut() {
+                                    min.apply_effect(effect);
+                                    max.apply_effect(effect);
+                                }
+                            }
+                        }
+                    }
+                    StatType::MaxDamage((skill_type2, damage_type))
+                        if skill_type == skill_type2.unwrap_or(skill_type) =>
+                    {
+                        //TODO: Make a function for that and use in item
+                        match damage_type {
+                            Some(damage_type) => {
+                                let (min, max) = damage.entry(damage_type).or_insert((0.0, 0.0));
+                                min.apply_effect(effect);
+                                max.apply_effect(effect);
+                            }
+                            None => {
+                                for (min, max) in damage.values_mut() {
+                                    min.apply_effect(effect);
+                                    max.apply_effect(effect);
+                                }
+                            }
+                        }
+                    }
+                    _ => {}
+                }
+                match effect.stat {
+                    StatType::CritChances(skill_type2)
+                        if skill_type == skill_type2.unwrap_or(skill_type) =>
+                    {
                         crit_chances.apply_effect(effect);
                     }
-                    StatType::GlobalCritDamage => {
+                    StatType::CritDamage(skill_type2)
+                        if skill_type == skill_type2.unwrap_or(skill_type) =>
+                    {
                         crit_damage.apply_effect(effect);
                     }
                     _ => {}
                 }
+
+                *crit_chances = crit_chances.clamp(0.0, 1.0);
+                damage.retain(|_, (min, max)| {
+                    *min = min.clamp(0.0, *max);
+                    *max > 0.0
+                });
             }
             SkillEffectType::Heal { min, max } => {
-                if effect.stat == StatType::GlobalSpellPower {
+                if effect.stat == StatType::SpellPower {
                     min.apply_effect(effect);
                     max.apply_effect(effect);
                 }
@@ -364,17 +410,14 @@ pub fn compute_skill_specs_effect(
                     // Something?
                 }
                 StatusType::DamageOverTime(damage_type) => match effect.stat {
-                    StatType::GlobalSpellDamage | StatType::GlobalSpellPower
-                        if skill_type == SkillType::Spell =>
+                    StatType::SpellPower if skill_type == SkillType::Spell => {
+                        min_value.apply_effect(effect);
+                        max_value.apply_effect(effect);
+                    }
+                    StatType::Damage((skill_type2, damage_type2))
+                        if skill_type == skill_type2.unwrap_or(skill_type)
+                            && *damage_type == damage_type2.unwrap_or(*damage_type) =>
                     {
-                        min_value.apply_effect(effect);
-                        max_value.apply_effect(effect);
-                    }
-                    StatType::GlobalAttackDamage if skill_type == SkillType::Attack => {
-                        min_value.apply_effect(effect);
-                        max_value.apply_effect(effect);
-                    }
-                    StatType::GlobalDamage(damage_type2) if damage_type2 == *damage_type => {
                         min_value.apply_effect(effect);
                         max_value.apply_effect(effect);
                     }

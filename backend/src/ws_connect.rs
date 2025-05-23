@@ -22,9 +22,9 @@ use shared::{
     data::{
         character::CharacterSize,
         item::ItemRarity,
-        item_affix::EffectsMap,
         player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
         skill::SkillSpecs,
+        stat_effect::EffectsMap,
     },
     messages::{
         client::{ClientConnectMessage, ClientMessage},
