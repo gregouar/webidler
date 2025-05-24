@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
 
-pub use super::effect::StatEffect;
+pub use super::stat_effect::StatEffect;
 
 pub type PassiveNodeId = String;
 

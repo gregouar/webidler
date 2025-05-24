@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use shared::data::{
     character::{CharacterSpecs, CharacterState},
-    status::StatusType,
+    character_status::StatusType,
 };
 
 pub fn update_character_state(

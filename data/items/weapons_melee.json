@@ -32,13 +32,15 @@
     "rarity": "Unique",
     "affixes": [
       {
-        "stat": "LocalAttackSpeed",
+        "scope": "Local",
+        "stat": { "Speed": "Attack" },
         "modifier": "Multiplier",
         "min": 0.5,
         "max": 0.5
       },
       {
-        "stat": { "LocalMaxDamage": "Physical" },
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
         "min": 8,
         "max": 10

@@ -10,7 +10,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "GlobalCritChances",
+        "scope": "Global",
+        "stat": {"CritChances": null},
         "modifier": "Multiplier",
         "min": 0.2,
         "max": 0.39
@@ -28,7 +29,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "GlobalCritDamage",
+        "scope": "Global",
+        "stat": {"CritDamage": null},
         "modifier": "Multiplier",
         "min": 0.40,
         "max": 0.59

@@ -10,7 +10,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "GlobalGoldFind",
+        "scope": "Global",
+        "stat": "GoldFind",
         "modifier": "Multiplier",
         "min": 0.25,
         "max": 0.49

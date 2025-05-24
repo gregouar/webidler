@@ -10,7 +10,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "GlobalAttackDamage",
+        "scope": "Global",
+        "stat": {"Damage": {"skill_type": "Attack"}},
         "modifier": "Multiplier",
         "min": 0.25,
         "max": 0.49
@@ -28,7 +29,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "GlobalSpellDamage",
+        "scope": "Global",
+        "stat": {"Damage": {"skill_type": "Spell"}},
         "modifier": "Multiplier",
         "min": 0.25,
         "max": 0.49

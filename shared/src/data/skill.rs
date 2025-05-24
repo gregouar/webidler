@@ -1,8 +1,7 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
-pub use super::effect::DamageType;
-use super::{item::ItemSlot, status::StatusType};
+pub use super::stat_effect::DamageType;
+use super::{character_status::StatusType, item::ItemSlot, stat_effect::DamageMap};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SkillState {
@@ -45,11 +44,19 @@ pub struct SkillSpecs {
     pub item_slot: Option<ItemSlot>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 pub enum SkillType {
     #[default]
     Attack,
     Spell,
+}
+
+impl SkillType {
+    pub fn iter() -> impl Iterator<Item = SkillType> {
+        [SkillType::Attack, SkillType::Spell].into_iter()
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -99,7 +106,7 @@ pub enum Shape {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum SkillEffectType {
     FlatDamage {
-        damage: HashMap<DamageType, (f64, f64)>,
+        damage: DamageMap,
         #[serde(default)]
         crit_chances: f32,
         #[serde(default)]

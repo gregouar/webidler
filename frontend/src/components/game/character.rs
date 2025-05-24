@@ -3,7 +3,7 @@ use std::time::Duration;
 use leptos::html::*;
 use leptos::prelude::*;
 
-use shared::data::status::{StatusMap, StatusType};
+use shared::data::character_status::{StatusMap, StatusType};
 
 use crate::assets::img_asset;
 

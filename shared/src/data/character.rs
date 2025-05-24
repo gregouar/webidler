@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 pub use super::skill::{SkillSpecs, SkillState};
-use super::status::StatusMap;
+use super::character_status::StatusMap;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub enum CharacterSize {

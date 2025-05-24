@@ -10,7 +10,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": {"GlobalArmor": "Fire"},
+        "scope": "Global",
+        "stat": {"Armor": "Fire"},
         "modifier": "Flat",
         "min": 20,
         "max": 49
@@ -28,7 +29,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": {"GlobalArmor": "Poison"},
+        "scope": "Global",
+        "stat": {"Armor": "Poison"},
         "modifier": "Flat",
         "min": 20,
         "max": 49

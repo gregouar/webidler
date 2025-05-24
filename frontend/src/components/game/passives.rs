@@ -1,6 +1,7 @@
 use leptos::html::*;
 use leptos::prelude::*;
 use leptos::web_sys;
+use shared::data::item_affix::AffixEffectScope;
 
 use std::sync::Arc;
 
@@ -364,7 +365,7 @@ fn Connection(connection: PassiveConnection) -> impl IntoView {
 
 #[component]
 pub fn NodeTooltip(node_specs: Arc<PassiveNodeSpecs>) -> impl IntoView {
-    let effects = formatted_effects_list(node_specs.effects.clone());
+    let effects = formatted_effects_list(node_specs.effects.clone(), AffixEffectScope::Global);
 
     view! {
         <div class="

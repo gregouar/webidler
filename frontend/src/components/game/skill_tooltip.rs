@@ -140,7 +140,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                 max_duration,
             } => {
                 match status_type {
-                    shared::data::status::StatusType::Stunned => {
+                    shared::data::character_status::StatusType::Stunned => {
                         view! {
                             <EffectLi>
                                 "Stun for "{format_min_max(min_duration, max_duration)}" seconds"
@@ -148,7 +148,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                         }
                             .into_any()
                     }
-                    shared::data::status::StatusType::DamageOverTime(damage_type) => {
+                    shared::data::character_status::StatusType::DamageOverTime(damage_type) => {
                         view! {
                             <EffectLi>
                                 "Deals "

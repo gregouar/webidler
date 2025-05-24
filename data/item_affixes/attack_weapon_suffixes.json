@@ -10,7 +10,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "LocalAttackSpeed",
+        "scope": "Local",
+        "stat": {"Speed": "Attack"},
         "modifier": "Multiplier",
         "min": 0.05,
         "max": 0.15
@@ -28,7 +29,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "LocalCritChances",
+        "scope": "Local",
+        "stat": {"CritChances":null},
         "modifier": "Flat",
         "min": 0.02,
         "max": 0.04
@@ -46,7 +48,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "LocalCritChances",
+        "scope": "Local",
+        "stat": {"CritChances":null},
         "modifier": "Multiplier",
         "min": 0.2,
         "max": 0.39
@@ -64,7 +67,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "LocalCritDamage",
+        "scope": "Local",
+        "stat": {"CritDamage":null},
         "modifier": "Flat",
         "min": 0.25,
         "max": 0.49
@@ -82,7 +86,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "LocalCritDamage",
+        "scope": "Local",
+        "stat": {"CritDamage":null},
         "modifier": "Multiplier",
         "min": 0.25,
         "max": 0.49

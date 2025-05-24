@@ -1,4 +1,4 @@
-use shared::data::{effect::EffectModifier, item_affix::StatEffect};
+use shared::data::{item_affix::StatEffect, stat_effect::EffectModifier};
 
 pub trait ApplyStatModifier {
     fn apply_modifier(&mut self, modifier: EffectModifier, value: f64);
