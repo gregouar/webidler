@@ -53,6 +53,12 @@ pub enum SkillType {
     Spell,
 }
 
+impl SkillType {
+    pub fn iter() -> impl Iterator<Item = SkillType> {
+        [SkillType::Attack, SkillType::Spell].into_iter()
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SkillEffect {
     #[serde(default)]

@@ -43,6 +43,13 @@ fn to_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     }
 }
 
+fn scope_str(scope: AffixEffectScope) -> &'static str {
+    match scope {
+        AffixEffectScope::Local => "",
+        AffixEffectScope::Global => " Global",
+    }
+}
+
 fn effect_li(text: String) -> impl IntoView {
     view! { <li class="text-blue-400 text-sm leading-snug">{text}</li> }
 }
@@ -54,36 +61,45 @@ pub fn formatted_effects_list(
     use EffectModifier::*;
     use StatType::*;
 
-    // TODO: scope
-
     affix_effects.sort_by_key(|effect| (effect.stat, effect.modifier));
 
-    let mut merged: Vec<String> = Vec::new();
+    let mut merged: Vec<String> = Vec::with_capacity(affix_effects.len());
 
     // This will be used to merge added min and added max damage together
-    let mut min_damage: HashMap<Option<DamageType>, f64> = HashMap::new();
-    let mut max_damage: HashMap<Option<DamageType>, f64> = HashMap::new();
+    let mut min_damage: HashMap<(Option<SkillType>, Option<DamageType>), f64> = HashMap::new();
+    let mut max_damage: HashMap<(Option<SkillType>, Option<DamageType>), f64> = HashMap::new();
 
     for effect in affix_effects.iter().rev() {
         match (effect.stat, effect.modifier) {
-            // TODO skill_type
-            (MinDamage((skill_type, damage_type)), Flat) => {
-                min_damage.insert(damage_type, effect.value);
+            (MinDamage(k), Flat) => {
+                min_damage.insert(k, effect.value);
             }
-            (MaxDamage((skill_type, damage_type)), Flat) => {
-                max_damage.insert(damage_type, effect.value);
+            (MaxDamage(k), Flat) => {
+                max_damage.insert(k, effect.value);
             }
             (MinDamage((skill_type, damage_type)), Multiplier) => merged.push(format!(
-                "{:.0}% Increased{} Minimum{} Damage",
+                "{:.0}% Increased Minimum{}{} Damage",
                 effect.value * 100.0,
+                optional_damage_type_str(damage_type),
                 skill_type_str(skill_type),
-                optional_damage_type_str(damage_type)
             )),
             (MaxDamage((skill_type, damage_type)), Multiplier) => merged.push(format!(
-                "{:.0}% Increased{} Maximum{} Damage",
+                "{:.0}% Increased Maximum{}{} Damage",
                 effect.value * 100.0,
+                optional_damage_type_str(damage_type),
                 skill_type_str(skill_type),
-                optional_damage_type_str(damage_type)
+            )),
+            (Damage((skill_type, damage_type)), Flat) => merged.push(format!(
+                "Adds {:.0}{} Damage{}",
+                effect.value,
+                optional_damage_type_str(damage_type),
+                to_skill_type_str(skill_type)
+            )),
+            (Damage((skill_type, damage_type)), Multiplier) => merged.push(format!(
+                "{:.0}% Increased{}{} Damage",
+                effect.value * 100.0,
+                optional_damage_type_str(damage_type),
+                skill_type_str(skill_type),
             )),
             (GoldFind, Flat) => {
                 merged.push(format!("Adds {:.0} Gold per Kill", effect.value));
@@ -127,8 +143,9 @@ pub fn formatted_effects_list(
                 }
             )),
             (Armor(armor_type), Multiplier) => merged.push(format!(
-                "{:.0}% Increased {} {}",
+                "{:.0}% Increased{} {} {}",
                 effect.value * 100.0,
+                scope_str(scope),
                 damage_type_str(armor_type),
                 match armor_type {
                     DamageType::Physical => "Armor",
@@ -141,18 +158,6 @@ pub fn formatted_effects_list(
             (Block, Multiplier) => merged.push(format!(
                 "{:.0}% Increased Block Chances",
                 effect.value * 100.0
-            )),
-            (Damage((skill_type, damage_type)), Flat) => merged.push(format!(
-                "Adds {:.0}{} Damage{}",
-                effect.value,
-                optional_damage_type_str(damage_type),
-                to_skill_type_str(skill_type)
-            )),
-            (Damage((skill_type, damage_type)), Multiplier) => merged.push(format!(
-                "{:.0}% Increased{}{} Damage",
-                effect.value * 100.0,
-                optional_damage_type_str(damage_type),
-                skill_type_str(skill_type)
             )),
             (CritChances(skill_type), Flat) => merged.push(format!(
                 "Adds {:.2}% Critical Strike Chances{}",
@@ -191,7 +196,7 @@ pub fn formatted_effects_list(
                 "{:.0}% Increased Movement Speed",
                 effect.value * 100.0
             )),
-            (SpellPower, Flat) => merged.push(format!("Adds {:.0} Spell Power", effect.value)),
+            (SpellPower, Flat) => merged.push(format!("Adds {:.0} Power to Spells", effect.value)),
             (SpellPower, Multiplier) => merged.push(format!(
                 "{:.0}% Increased Spell Power",
                 effect.value * 100.0
@@ -199,29 +204,33 @@ pub fn formatted_effects_list(
         }
     }
 
-    for damage_type in DamageType::iter() {
-        // TODO: get None
-        match (
-            min_damage.get(&Some(damage_type)),
-            max_damage.get(&Some(damage_type)),
-        ) {
-            (Some(min_flat), Some(max_flat)) => merged.push(format!(
-                "Adds {:.0} to {:.0} {} Damage",
-                min_flat,
-                max_flat,
-                damage_type_str(damage_type)
-            )),
-            (Some(min_flat), None) => merged.push(format!(
-                "Adds {:.0} to Minimum {} Damage",
-                min_flat,
-                damage_type_str(damage_type)
-            )),
-            (None, Some(max_flat)) => merged.push(format!(
-                "Adds {:.0} to Maximum {} Damage",
-                max_flat,
-                damage_type_str(damage_type)
-            )),
-            _ => {}
+    for skill_type in SkillType::iter().map(|x| Some(x)).chain([None]) {
+        for damage_type in DamageType::iter().map(|x| Some(x)).chain([None]) {
+            match (
+                min_damage.get(&(skill_type, damage_type)),
+                max_damage.get(&(skill_type, damage_type)),
+            ) {
+                (Some(min_flat), Some(max_flat)) => merged.push(format!(
+                    "Adds {:.0} - {:.0}{} Damage{}",
+                    min_flat,
+                    max_flat,
+                    optional_damage_type_str(damage_type),
+                    to_skill_type_str(skill_type)
+                )),
+                (Some(min_flat), None) => merged.push(format!(
+                    "Adds {:.0} Minimum{} Damage{}",
+                    min_flat,
+                    optional_damage_type_str(damage_type),
+                    to_skill_type_str(skill_type)
+                )),
+                (None, Some(max_flat)) => merged.push(format!(
+                    "Adds {:.0} Maximum{} Damage{}",
+                    max_flat,
+                    optional_damage_type_str(damage_type),
+                    to_skill_type_str(skill_type)
+                )),
+                _ => {}
+            }
         }
     }
 
