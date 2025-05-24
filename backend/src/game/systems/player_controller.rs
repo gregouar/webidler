@@ -387,9 +387,9 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
             StatType::MovementSpeed => player_specs.movement_cooldown.apply_inverse_effect(effect),
             StatType::GoldFind => player_specs.gold_find.apply_effect(effect),
             // Delegate to skills
-            StatType::Damage(_)
-            | StatType::MinDamage(_)
-            | StatType::MaxDamage(_)
+            StatType::Damage { .. }
+            | StatType::MinDamage { .. }
+            | StatType::MaxDamage { .. }
             | StatType::SpellPower
             | StatType::CritChances(_)
             | StatType::CritDamage(_)

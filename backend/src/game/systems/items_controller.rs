@@ -48,7 +48,10 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -
             StatType::Speed(Some(SkillType::Attack) | None) => {
                 weapon_specs.cooldown.apply_inverse_effect(effect)
             }
-            StatType::Damage((Some(SkillType::Attack) | None, damage_type)) => match damage_type {
+            StatType::Damage {
+                skill_type: Some(SkillType::Attack),
+                damage_type,
+            } => match damage_type {
                 Some(damage_type) => {
                     let (min, max) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
                     min.apply_effect(effect);
@@ -61,7 +64,10 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -
                     }
                 }
             },
-            StatType::MinDamage((Some(SkillType::Attack) | None, damage_type)) => {
+            StatType::MinDamage {
+                skill_type: Some(SkillType::Attack),
+                damage_type,
+            } => {
                 match damage_type {
                     Some(damage_type) => {
                         let (min, _) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
@@ -74,7 +80,10 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -
                     }
                 };
             }
-            StatType::MaxDamage((Some(SkillType::Attack) | None, damage_type)) => {
+            StatType::MaxDamage {
+                skill_type: Some(SkillType::Attack),
+                damage_type,
+            } => {
                 match damage_type {
                     Some(damage_type) => {
                         let (_, max) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));

@@ -10,7 +10,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "LocalBlock",
+        "scope": "Local",
+        "stat": "Block",
         "modifier": "Flat",
         "min": 0.02,
         "max": 0.05
@@ -28,7 +29,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "LocalBlock",
+        "scope": "Local",
+        "stat": "Block",
         "modifier": "Multiplier",
         "min": 0.2,
         "max": 0.39

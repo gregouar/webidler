@@ -318,19 +318,22 @@ pub fn compute_skill_specs_effect(
                             max.apply_effect(effect);
                         }
                     }
-                    StatType::Damage((skill_type2, damage_type))
-                        if skill_type == skill_type2.unwrap_or(skill_type) =>
-                    {
+                    StatType::Damage {
+                        skill_type: skill_type2,
+                        damage_type,
+                    } if skill_type == skill_type2.unwrap_or(skill_type) => {
                         apply_effect_on_damage(damage, damage_type, Some(effect), Some(effect))
                     }
-                    StatType::MinDamage((skill_type2, damage_type))
-                        if skill_type == skill_type2.unwrap_or(skill_type) =>
-                    {
+                    StatType::MinDamage {
+                        skill_type: skill_type2,
+                        damage_type,
+                    } if skill_type == skill_type2.unwrap_or(skill_type) => {
                         apply_effect_on_damage(damage, damage_type, Some(effect), None)
                     }
-                    StatType::MaxDamage((skill_type2, damage_type))
-                        if skill_type == skill_type2.unwrap_or(skill_type) =>
-                    {
+                    StatType::MaxDamage {
+                        skill_type: skill_type2,
+                        damage_type,
+                    } if skill_type == skill_type2.unwrap_or(skill_type) => {
                         apply_effect_on_damage(damage, damage_type, None, Some(effect))
                     }
                     _ => {}
@@ -375,9 +378,11 @@ pub fn compute_skill_specs_effect(
                         min_value.apply_effect(effect);
                         max_value.apply_effect(effect);
                     }
-                    StatType::Damage((skill_type2, damage_type2))
-                        if skill_type == skill_type2.unwrap_or(skill_type)
-                            && *damage_type == damage_type2.unwrap_or(*damage_type) =>
+                    StatType::Damage {
+                        skill_type: skill_type2,
+                        damage_type: damage_type2,
+                    } if skill_type == skill_type2.unwrap_or(skill_type)
+                        && *damage_type == damage_type2.unwrap_or(*damage_type) =>
                     {
                         min_value.apply_effect(effect);
                         max_value.apply_effect(effect);

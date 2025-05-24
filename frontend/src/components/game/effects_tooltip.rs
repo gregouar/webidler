@@ -71,31 +71,67 @@ pub fn formatted_effects_list(
 
     for effect in affix_effects.iter().rev() {
         match (effect.stat, effect.modifier) {
-            (MinDamage(k), Flat) => {
-                min_damage.insert(k, effect.value);
+            (
+                MinDamage {
+                    skill_type,
+                    damage_type,
+                },
+                Flat,
+            ) => {
+                min_damage.insert((skill_type, damage_type), effect.value);
             }
-            (MaxDamage(k), Flat) => {
-                max_damage.insert(k, effect.value);
+            (
+                MaxDamage {
+                    skill_type,
+                    damage_type,
+                },
+                Flat,
+            ) => {
+                max_damage.insert((skill_type, damage_type), effect.value);
             }
-            (MinDamage((skill_type, damage_type)), Multiplier) => merged.push(format!(
+            (
+                MinDamage {
+                    skill_type,
+                    damage_type,
+                },
+                Multiplier,
+            ) => merged.push(format!(
                 "{:.0}% Increased Minimum{}{} Damage",
                 effect.value * 100.0,
                 optional_damage_type_str(damage_type),
                 skill_type_str(skill_type),
             )),
-            (MaxDamage((skill_type, damage_type)), Multiplier) => merged.push(format!(
+            (
+                MaxDamage {
+                    skill_type,
+                    damage_type,
+                },
+                Multiplier,
+            ) => merged.push(format!(
                 "{:.0}% Increased Maximum{}{} Damage",
                 effect.value * 100.0,
                 optional_damage_type_str(damage_type),
                 skill_type_str(skill_type),
             )),
-            (Damage((skill_type, damage_type)), Flat) => merged.push(format!(
+            (
+                Damage {
+                    skill_type,
+                    damage_type,
+                },
+                Flat,
+            ) => merged.push(format!(
                 "Adds {:.0}{} Damage{}",
                 effect.value,
                 optional_damage_type_str(damage_type),
                 to_skill_type_str(skill_type)
             )),
-            (Damage((skill_type, damage_type)), Multiplier) => merged.push(format!(
+            (
+                Damage {
+                    skill_type,
+                    damage_type,
+                },
+                Multiplier,
+            ) => merged.push(format!(
                 "{:.0}% Increased{}{} Damage",
                 effect.value * 100.0,
                 optional_damage_type_str(damage_type),

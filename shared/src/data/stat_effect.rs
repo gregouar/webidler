@@ -36,13 +36,28 @@ pub enum StatType {
     ManaRegen,
     Armor(DamageType),
     Block,
-    Damage((Option<SkillType>, Option<DamageType>)), // TODO: Merge Damage, MinDamage & MaxDamage?
-    MinDamage((Option<SkillType>, Option<DamageType>)),
-    MaxDamage((Option<SkillType>, Option<DamageType>)),
+    Damage {
+        #[serde(default, flatten)]
+        skill_type: Option<SkillType>,
+        #[serde(default, flatten)]
+        damage_type: Option<DamageType>,
+    },
+    MinDamage {
+        #[serde(default, flatten)]
+        skill_type: Option<SkillType>,
+        #[serde(default, flatten)]
+        damage_type: Option<DamageType>,
+    },
+    MaxDamage {
+        #[serde(default, flatten)]
+        skill_type: Option<SkillType>,
+        #[serde(default, flatten)]
+        damage_type: Option<DamageType>,
+    },
     SpellPower,
-    CritChances(Option<SkillType>),
-    CritDamage(Option<SkillType>),
-    Speed(Option<SkillType>),
+    CritChances(#[serde(default)] Option<SkillType>),
+    CritDamage(#[serde(default)] Option<SkillType>),
+    Speed(#[serde(default)] Option<SkillType>),
     MovementSpeed,
     GoldFind,
     // TODO: ReducedManaCost?

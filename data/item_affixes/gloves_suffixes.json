@@ -1,7 +1,7 @@
 [
   {
     "name": "of Action",
-    "family": "inc_global_speed",
+    "family": "inc_action_speed",
     "tags": ["Speed"],
     "affix_type": "Suffix",
     "tier": 1,
@@ -10,7 +10,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "GlobalSpeed",
+        "scope": "Global",
+        "stat": {"Speed": null},
         "modifier": "Multiplier",
         "min": 0.05,
         "max": 0.1

@@ -10,7 +10,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "GlobalLifeRegen",
+        "scope": "Global",
+        "stat": "LifeRegen",
         "modifier": "Flat",
         "min": 0.1,
         "max": 0.3
@@ -28,7 +29,8 @@
     "item_level": 1,
     "effects": [
       {
-        "stat": "GlobalLifeRegen",
+        "scope": "Global",
+        "stat": "LifeRegen",
         "modifier": "Multiplier",
         "min": 0.1,
         "max": 0.19

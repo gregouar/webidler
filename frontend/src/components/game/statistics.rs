@@ -144,7 +144,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         "+{}%",
                                         format_number(
                                             effect(
-                                                StatType::Damage((None, Some(DamageType::Physical))),
+                                                StatType::Damage {
+                                                    skill_type: None,
+                                                    damage_type: Some(DamageType::Physical),
+                                                },
                                                 EffectModifier::Multiplier,
                                             ) * 100.0,
                                         ),
@@ -158,7 +161,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         "+{}%",
                                         format_number(
                                             effect(
-                                                StatType::Damage((None, Some(DamageType::Fire))),
+                                                StatType::Damage {
+                                                    skill_type: None,
+                                                    damage_type: Some(DamageType::Fire),
+                                                },
                                                 EffectModifier::Multiplier,
                                             ) * 100.0,
                                         ),
@@ -172,7 +178,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         "+{}%",
                                         format_number(
                                             effect(
-                                                StatType::Damage((None, Some(DamageType::Poison))),
+                                                StatType::Damage {
+                                                    skill_type: None,
+                                                    damage_type: Some(DamageType::Poison),
+                                                },
                                                 EffectModifier::Multiplier,
                                             ) * 100.0,
                                         ),
@@ -271,7 +280,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         "+{}%",
                                         format_number(
                                             effect(
-                                                StatType::Damage((Some(SkillType::Attack), None)),
+                                                StatType::Damage {
+                                                    skill_type: Some(SkillType::Attack),
+                                                    damage_type: None,
+                                                },
                                                 EffectModifier::Multiplier,
                                             ) * 100.0,
                                         ),
@@ -300,7 +312,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         "+{}%",
                                         format_number(
                                             effect(
-                                                StatType::Damage((Some(SkillType::Spell), None)),
+                                                StatType::Damage {
+                                                    skill_type: Some(SkillType::Spell),
+                                                    damage_type: None,
+                                                },
                                                 EffectModifier::Multiplier,
                                             ) * 100.0,
                                         ),
