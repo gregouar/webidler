@@ -37,21 +37,21 @@ pub enum StatType {
     Armor(DamageType),
     Block,
     Damage {
-        #[serde(default, flatten)]
+        #[serde(default)]
         skill_type: Option<SkillType>,
-        #[serde(default, flatten)]
+        #[serde(default)]
         damage_type: Option<DamageType>,
     },
     MinDamage {
-        #[serde(default, flatten)]
+        #[serde(default)]
         skill_type: Option<SkillType>,
-        #[serde(default, flatten)]
+        #[serde(default)]
         damage_type: Option<DamageType>,
     },
     MaxDamage {
-        #[serde(default, flatten)]
+        #[serde(default)]
         skill_type: Option<SkillType>,
-        #[serde(default, flatten)]
+        #[serde(default)]
         damage_type: Option<DamageType>,
     },
     SpellPower,
