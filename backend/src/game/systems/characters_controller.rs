@@ -38,8 +38,6 @@ pub fn attack_character(
     }
 }
 
-pub fn damage_character() {}
-
 pub fn heal_character(
     amount: f64,
     target_state: &mut CharacterState,
