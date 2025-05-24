@@ -3,17 +3,18 @@ use std::sync::Arc;
 use leptos::html::*;
 use leptos::prelude::*;
 
+use shared::data::skill::SkillTargetsGroup;
 use shared::data::skill::{Range, Shape, SkillEffect, SkillEffectType, SkillSpecs};
 
 use crate::components::{game::effects_tooltip::damage_type_str, ui::number::format_number};
 
 #[component]
 pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
-    let effect_lines = skill_specs
-        .effects
+    let targets_lines = skill_specs
+        .targets
         .clone()
         .into_iter()
-        .map(format_effect)
+        .map(format_target)
         .collect::<Vec<_>>();
 
     view! {
@@ -38,7 +39,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                     })}
             </p>
 
-            <ul class="list-none space-y-1">{effect_lines}</ul>
+            <ul class="list-none space-y-1">{targets_lines}</ul>
 
             {(!skill_specs.base.description.is_empty())
                 .then(|| {
@@ -67,8 +68,8 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
     }
 }
 
-fn format_effect(effect: SkillEffect) -> impl IntoView {
-    let shape = match effect.shape {
+fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
+    let shape = match targets_group.shape {
         Shape::Single => "",
         Shape::Vertical2 => ", 2x1 area",
         Shape::Horizontal2 => ", 1x2 area",
@@ -77,16 +78,27 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
         Shape::All => ", all",
     };
 
-    let range = match effect.range {
+    let range = match targets_group.range {
         Range::Melee => "Melee",
         Range::Distance => "Distance",
         Range::Any => "Any",
     };
 
+    let effects = targets_group
+        .effects
+        .into_iter()
+        .map(format_effect)
+        .collect::<Vec<_>>();
+
     view! {
         <hr class="border-t border-gray-700" />
         <EffectLi>{range}{shape}</EffectLi>
-        {match effect.effect_type {
+        {effects}
+    }
+}
+
+fn format_effect(effect: SkillEffect) -> impl IntoView {
+    match effect.effect_type {
             SkillEffectType::FlatDamage { damage, crit_chances, crit_damage } => {
                 view! {
                     {damage
@@ -125,11 +137,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                     .into_any()
             }
             SkillEffectType::Heal { min, max } => {
-                view! {
-                    <EffectLi>
-                        "Heals "<span class="font-semibold">{format_min_max(min, max)}</span>
-                    </EffectLi>
-                }
+                view! { <EffectLi>"Heals "<span class="font-semibold">{format_min_max(min, max)}</span></EffectLi> }
                     .into_any()
             }
             SkillEffectType::ApplyStatus {
@@ -141,11 +149,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
             } => {
                 match status_type {
                     shared::data::character_status::StatusType::Stunned => {
-                        view! {
-                            <EffectLi>
-                                "Stun for "{format_min_max(min_duration, max_duration)}" seconds"
-                            </EffectLi>
-                        }
+                        view! { <EffectLi>"Stun for "{format_min_max(min_duration, max_duration)}" seconds"</EffectLi> }
                             .into_any()
                     }
                     shared::data::character_status::StatusType::DamageOverTime(damage_type) => {
@@ -162,8 +166,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                     }
                 }
             }
-        }}
-    }
+        }
 }
 
 fn format_min_max(min: f64, max: f64) -> String {

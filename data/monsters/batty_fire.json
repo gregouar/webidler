@@ -10,14 +10,18 @@
       "name": "Burning Bite",
       "icon": "skills/bite.svg",
       "cooldown": 2.0,
-      "effects": [
+      "targets": [
         {
-          "FlatDamage": {
-            "damage": {
-              "Physical": [1, 3],
-              "Fire": [2, 4]
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [1, 3],
+                  "Fire": [2, 4]
+                }
+              }
             }
-          }
+          ]
         }
       ]
     }

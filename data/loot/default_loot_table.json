@@ -6,23 +6,19 @@
     },
     {
       "item_id": "leather_cap",
-      "weight": 1000,
-      "min_area_level": 2
+      "weight": 1000
     },
     {
       "item_id": "leather_armor",
-      "weight": 1000,
-      "min_area_level": 2
+      "weight": 1000
     },
     {
       "item_id": "leather_gloves",
-      "weight": 1000,
-      "min_area_level": 2
+      "weight": 1000
     },
     {
       "item_id": "leather_boots",
-      "weight": 1000,
-      "min_area_level": 2
+      "weight": 1000
     },
     {
       "item_id": "shortsword_unique",

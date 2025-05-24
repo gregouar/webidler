@@ -26,7 +26,9 @@ pub struct BaseSkillSpecs {
     #[serde(default)]
     pub upgrade_cost: f64,
 
-    pub effects: Vec<SkillEffect>,
+    pub targets: Vec<SkillTargetsGroup>,
+    // TODO: Increase Cost
+    // TODO: special upgrades at some levels?
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -39,7 +41,7 @@ pub struct SkillSpecs {
     pub upgrade_level: u16,
     pub next_upgrade_cost: f64,
 
-    pub effects: Vec<SkillEffect>,
+    pub targets: Vec<SkillTargetsGroup>,
 
     pub item_slot: Option<ItemSlot>,
 }
@@ -60,7 +62,7 @@ impl SkillType {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct SkillEffect {
+pub struct SkillTargetsGroup {
     #[serde(default)]
     pub range: Range,
     #[serde(default)]
@@ -68,12 +70,38 @@ pub struct SkillEffect {
     #[serde(default)]
     pub shape: Shape,
 
-    // TODO
+    pub effects: Vec<SkillEffect>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SkillEffect {
     #[serde(default)]
     pub failure_chances: f32,
 
     #[serde(flatten)]
     pub effect_type: SkillEffectType,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum SkillEffectType {
+    FlatDamage {
+        damage: DamageMap,
+        #[serde(default)]
+        crit_chances: f32,
+        #[serde(default)]
+        crit_damage: f64,
+    },
+    Heal {
+        min: f64,
+        max: f64,
+    },
+    ApplyStatus {
+        status_type: StatusType,
+        min_value: f64,
+        max_value: f64,
+        min_duration: f64,
+        max_duration: f64,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default)]
@@ -101,26 +129,4 @@ pub enum Shape {
     Horizontal3,
     Square4,
     All,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum SkillEffectType {
-    FlatDamage {
-        damage: DamageMap,
-        #[serde(default)]
-        crit_chances: f32,
-        #[serde(default)]
-        crit_damage: f64,
-    },
-    Heal {
-        min: f64,
-        max: f64,
-    },
-    ApplyStatus {
-        status_type: StatusType,
-        min_value: f64,
-        max_value: f64,
-        min_duration: f64,
-        max_duration: f64,
-    },
 }

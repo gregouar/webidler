@@ -341,18 +341,6 @@ impl<'a> GameInstance<'a> {
             );
             self.data.player_controller.reset();
 
-            for (monster_specs, _) in monsters_still_alive
-                .iter()
-                .filter(|(_, s)| s.character_state.just_died)
-            {
-                self.data.game_stats.monsters_killed += 1;
-                player_controller::reward_player(
-                    self.data.player_resources.mutate(),
-                    self.data.player_specs.read(),
-                    monster_specs,
-                );
-            }
-
             if monsters_still_alive.is_empty() || self.data.world_state.read().going_back > 0 {
                 if self.data.world_state.read().going_back == 0
                     && !self.data.looted
@@ -402,6 +390,22 @@ impl<'a> GameInstance<'a> {
             self.data.monster_specs.read(),
             &mut self.data.monster_states,
         );
+
+        for (monster_specs, _) in self
+            .data
+            .monster_specs
+            .read()
+            .iter()
+            .zip(self.data.monster_states.iter())
+            .filter(|(_, s)| s.character_state.just_died)
+        {
+            self.data.game_stats.monsters_killed += 1;
+            player_controller::reward_player(
+                self.data.player_resources.mutate(),
+                self.data.player_specs.read(),
+                monster_specs,
+            );
+        }
     }
 
     /// Send whole game state to client

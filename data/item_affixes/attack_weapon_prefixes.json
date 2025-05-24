@@ -76,7 +76,7 @@
     "tags": ["Poison", "Attack"],
     "affix_type": "Prefix",
     "tier": 1,
-    "weight": 50000,
+    "weight": 500,
     "restrictions": ["AttackWeapon"],
     "item_level": 1,
     "effects": [
@@ -84,15 +84,15 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Poison" } },
         "modifier": "Flat",
-        "min": 2,
-        "max": 4
+        "min": 1,
+        "max": 2
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Poison" } },
         "modifier": "Flat",
-        "min": 6,
-        "max": 9
+        "min": 3,
+        "max": 4
       }
     ]
   }

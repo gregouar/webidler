@@ -68,7 +68,7 @@ impl DataInit<BaseSkillSpecs> for SkillSpecs {
             mana_cost: specs.mana_cost,
             upgrade_level: 1,
             next_upgrade_cost: specs.upgrade_cost,
-            effects: specs.effects.clone(),
+            targets: specs.targets.clone(),
             item_slot: None,
         }
     }

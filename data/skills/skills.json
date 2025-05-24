@@ -7,14 +7,18 @@
     "cooldown": 2,
     "mana_cost": 2,
     "upgrade_cost": 20,
-    "effects": [
+    "targets": [
       {
         "range": "Any",
-        "FlatDamage": {
-          "damage": {
-            "Physical": [3, 6]
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Physical": [3, 6]
+              }
+            }
           }
-        }
+        ]
       }
     ]
   },
@@ -26,15 +30,19 @@
     "cooldown": 5,
     "mana_cost": 20,
     "upgrade_cost": 50,
-    "effects": [
+    "targets": [
       {
         "range": "Distance",
         "shape": "Square4",
-        "FlatDamage": {
-          "damage": {
-            "Fire": [4, 12]
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Fire": [4, 12]
+              }
+            }
           }
-        }
+        ]
       }
     ]
   },
@@ -46,10 +54,10 @@
     "cooldown": 30,
     "mana_cost": 20,
     "upgrade_cost": 50,
-    "effects": [
+    "targets": [
       {
         "target_type": "Me",
-        "Heal": { "min": 25, "max": 25 }
+        "effects": [{ "Heal": { "min": 25, "max": 25 } }]
       }
     ]
   }

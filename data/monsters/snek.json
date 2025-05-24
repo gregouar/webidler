@@ -10,22 +10,26 @@
       "name": "Poison Bite",
       "icon": "skills/bite.svg",
       "cooldown": 5.0,
-      "effects": [
+      "targets": [
         {
-          "FlatDamage": {
-            "damage": {
-              "Physical": [2, 5]
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [2, 5]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "status_type": { "DamageOverTime": "Poison" },
+                "min_value": 5,
+                "max_value": 5,
+                "min_duration": 5,
+                "max_duration": 5
+              }
             }
-          }
-        },
-        {
-          "ApplyStatus": {
-            "status_type": {"DamageOverTime": "Poison"},
-            "min_value": 2,
-            "max_value": 2,
-            "min_duration": 5,
-            "max_duration": 5
-          }
+          ]
         }
       ]
     }

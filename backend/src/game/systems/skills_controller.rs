@@ -6,7 +6,7 @@ use shared::data::{
     item::{Range, Shape},
     item_affix::StatEffect,
     player::PlayerResources,
-    skill::{DamageType, SkillEffect, SkillEffectType, SkillType, TargetType},
+    skill::{DamageType, SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType, TargetType},
     stat_effect::{DamageMap, StatType},
 };
 
@@ -28,59 +28,60 @@ pub fn use_skill<'a>(
 ) -> bool {
     let me_position = (me.0.position_x, me.0.position_y);
     let mut me = vec![me];
-    skill_specs
-        .effects
-        .iter()
-        .fold(false, |applied, skill_effect| {
-            applied
-                | use_skill_effect(
-                    skill_specs.base.skill_type,
-                    skill_effect,
-                    skill_state,
-                    me_position,
-                    &mut me,
-                    &mut friends,
-                    &mut enemies,
-                )
-        })
+
+    let mut applied = false;
+
+    for targets_group in skill_specs.targets.iter() {
+        applied = applied
+            | apply_skill_on_targets(
+                skill_specs.base.skill_type,
+                targets_group,
+                me_position,
+                &mut me,
+                &mut friends,
+                &mut enemies,
+            );
+    }
+
+    if applied {
+        skill_state.just_triggered = true;
+        skill_state.is_ready = false;
+        skill_state.elapsed_cooldown = 0.0;
+    }
+    applied
 }
 
-fn use_skill_effect<'a>(
+fn apply_skill_on_targets<'a>(
     skill_type: SkillType,
-    skill_effect: &SkillEffect,
-    skill_state: &mut SkillState,
+    targets_group: &SkillTargetsGroup,
     me_position: (u8, u8),
     me: &mut Vec<Target<'a>>,
     friends: &mut Vec<Target<'a>>,
     enemies: &mut Vec<Target<'a>>,
 ) -> bool {
-    let pre_targets = match skill_effect.target_type {
+    let pre_targets = match targets_group.target_type {
         TargetType::Enemy => enemies,
         TargetType::Friend => friends,
         TargetType::Me => me,
     };
 
-    let mut targets = find_targets(skill_effect, me_position, pre_targets);
+    let mut targets = find_targets(targets_group, me_position, pre_targets);
 
     if targets.is_empty() {
         return false;
     }
 
-    skill_state.just_triggered = true;
-    skill_state.is_ready = false;
-    skill_state.elapsed_cooldown = 0.0;
-
-    if rng::random_range(0.0..=1.0).unwrap_or(1.0) <= skill_effect.failure_chances {
-        return true;
+    for skill_effect in targets_group.effects.iter() {
+        if rng::random_range(0.0..=1.0).unwrap_or(1.0) >= skill_effect.failure_chances {
+            apply_skill_effect(skill_type, skill_effect, &mut targets);
+        }
     }
-
-    apply_skill_effect(skill_type, skill_effect, &mut targets);
 
     true
 }
 
 fn find_targets<'a, 'b>(
-    skill_effect: &SkillEffect,
+    targets_group: &SkillTargetsGroup,
     me_position: (u8, u8),
     pre_targets: &'b mut [Target<'a>],
 ) -> Vec<&'b mut Target<'a>> {
@@ -88,7 +89,7 @@ fn find_targets<'a, 'b>(
         .iter()
         .map(|(specs, _)| specs.position_x.abs_diff(me_position.0));
 
-    let main_target_distance = match skill_effect.range {
+    let main_target_distance = match targets_group.range {
         Range::Melee => available_positions.min(),
         Range::Distance => available_positions.max(),
         Range::Any => available_positions.choose(&mut rand::rng()),
@@ -107,7 +108,7 @@ fn find_targets<'a, 'b>(
         None => return vec![],
     };
 
-    let dx = match skill_effect.range {
+    let dx = match targets_group.range {
         Range::Melee => 1,
         Range::Distance => -1,
         Range::Any => {
@@ -120,7 +121,7 @@ fn find_targets<'a, 'b>(
     };
 
     let is_target_in_range = |pos: (i32, i32)| -> bool {
-        match skill_effect.shape {
+        match targets_group.shape {
             Shape::Single => pos == main_target_pos,
             Shape::Vertical2 => pos.0 == main_target_pos.0 && (pos.1 == 1 || pos.1 == 2),
             Shape::Horizontal2 => {
@@ -244,7 +245,11 @@ pub fn level_up_skill(
 }
 
 pub fn increase_skill_effects(skill_specs: &mut SkillSpecs, factor: f64) {
-    for effect in skill_specs.effects.iter_mut() {
+    for effect in skill_specs
+        .targets
+        .iter_mut()
+        .flat_map(|t| t.effects.iter_mut())
+    {
         increase_effect(effect, factor);
     }
 }
@@ -274,7 +279,7 @@ fn increase_effect(effect: &mut SkillEffect, factor: f64) {
 }
 
 pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) {
-    skill_specs.effects = skill_specs.base.effects.clone();
+    skill_specs.targets = skill_specs.base.targets.clone();
     skill_specs.cooldown = skill_specs.base.cooldown;
     skill_specs.mana_cost = skill_specs.base.mana_cost;
 
@@ -290,7 +295,11 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) 
         }
     }
 
-    for skill_effect in skill_specs.effects.iter_mut() {
+    for skill_effect in skill_specs
+        .targets
+        .iter_mut()
+        .flat_map(|t| t.effects.iter_mut())
+    {
         compute_skill_specs_effect(skill_specs.base.skill_type, skill_effect, effects)
     }
 
