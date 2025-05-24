@@ -11,9 +11,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {"Damage": {}},
+        "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "min": 0.20,
+        "min": 0.2,
         "max": 0.39
       }
     ]
@@ -30,14 +30,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {"MinDamage": {"damage_type":"Physical"}},
+        "stat": { "MinDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
         "min": 1,
         "max": 2
       },
       {
         "scope": "Local",
-        "stat": {"MaxDamage": {"damage_type":"Physical"}},
+        "stat": { "MaxDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
         "min": 3,
         "max": 4
@@ -56,14 +56,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {"MinDamage": {"damage_type":"Fire"}},
+        "stat": { "MinDamage": { "damage_type": "Fire" } },
         "modifier": "Flat",
         "min": 1,
         "max": 3
       },
       {
         "scope": "Local",
-        "stat": {"MaxDamage": {"damage_type":"Fire"}},
+        "stat": { "MaxDamage": { "damage_type": "Fire" } },
         "modifier": "Flat",
         "min": 3,
         "max": 5
@@ -82,14 +82,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {"MinDamage": {"damage_type":"Poison"}},
+        "stat": { "MinDamage": { "damage_type": "Poison" } },
         "modifier": "Flat",
         "min": 3,
         "max": 3
       },
       {
         "scope": "Local",
-        "stat": {"MaxDamage": {"damage_type":"Poison"}},
+        "stat": { "MaxDamage": { "damage_type": "Poison" } },
         "modifier": "Flat",
         "min": 3,
         "max": 3

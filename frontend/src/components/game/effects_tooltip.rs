@@ -170,22 +170,20 @@ pub fn formatted_effects_list(
                 effect.value * 100.0
             )),
             (Armor(armor_type), Flat) => merged.push(format!(
-                "Adds {:.0} {} {}",
+                "Adds {:.0} {}",
                 effect.value,
-                damage_type_str(armor_type),
                 match armor_type {
-                    DamageType::Physical => "Armor",
-                    _ => "Resistance",
+                    DamageType::Physical => "Armor".to_string(),
+                    _ => format!("{} Resistance", damage_type_str(armor_type)),
                 }
             )),
             (Armor(armor_type), Multiplier) => merged.push(format!(
-                "{:.0}% Increased{} {} {}",
+                "{:.0}% Increased{} {}",
                 effect.value * 100.0,
                 scope_str(scope),
-                damage_type_str(armor_type),
                 match armor_type {
-                    DamageType::Physical => "Armor",
-                    _ => "Resistance",
+                    DamageType::Physical => "Armor".to_string(),
+                    _ => format!("{} Resistance", damage_type_str(armor_type)),
                 }
             )),
             (Block, Flat) => {

@@ -137,7 +137,7 @@ pub fn make_weapon_skill(
     let mut skill_specs = SkillSpecs::init(&BaseSkillSpecs {
         name: "Weapon Attack".to_string(),
         icon: "skills/attack.svg".to_string(),
-        description: "A swing of your weapon".to_string(),
+        description: "A simple attack with your weapon".to_string(),
         skill_type: SkillType::Attack,
         cooldown: weapon_specs.cooldown,
         mana_cost: 0.0,
