@@ -176,7 +176,7 @@ fn apply_skill_effect(
                     }
                 }) {
                     for (target_specs, target_state) in targets.iter_mut() {
-                        characters_controller::damage_character(
+                        characters_controller::attack_character(
                             amount,
                             *damage_type,
                             skill_type,

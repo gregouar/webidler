@@ -1,6 +1,7 @@
 use std::vec;
 
 use shared::data::{
+    character_status::StatusType,
     item::{ArmorSpecs, ItemSlot, ItemSpecs, WeaponSpecs},
     item_affix::{AffixEffectScope, EffectModifier, StatEffect, StatType},
     skill::{
@@ -14,6 +15,8 @@ use crate::game::data::{
 };
 
 use super::{loot_generator::generate_name, stats_controller::ApplyStatModifier};
+
+const WEAPON_POISON_DAMAGE_DURATION: f64 = 3.0;
 
 pub fn update_item_specs(
     mut item_specs: ItemSpecs,
@@ -134,6 +137,39 @@ pub fn make_weapon_skill(
     item_level: u16,
     weapon_specs: &WeaponSpecs,
 ) -> SkillSpecs {
+    let mut effects = vec![SkillEffect {
+        range: weapon_specs.range,
+        target_type: TargetType::Enemy,
+        shape: weapon_specs.shape,
+        effect_type: SkillEffectType::FlatDamage {
+            damage: weapon_specs
+                .damage
+                .iter()
+                .filter(|(k, _)| **k != DamageType::Poison)
+                .map(|(k, v)| (*k, *v))
+                .collect(),
+            crit_chances: weapon_specs.crit_chances,
+            crit_damage: weapon_specs.crit_damage,
+        },
+        failure_chances: 0.0,
+    }];
+
+    if let Some((min, max)) = weapon_specs.damage.get(&DamageType::Poison) {
+        effects.push(SkillEffect {
+            range: weapon_specs.range,
+            target_type: TargetType::Enemy,
+            shape: weapon_specs.shape,
+            effect_type: SkillEffectType::ApplyStatus {
+                status_type: StatusType::DamageOverTime(DamageType::Poison),
+                min_value: *min,
+                max_value: *max,
+                min_duration: WEAPON_POISON_DAMAGE_DURATION,
+                max_duration: WEAPON_POISON_DAMAGE_DURATION,
+            },
+            failure_chances: 0.0,
+        });
+    }
+
     let mut skill_specs = SkillSpecs::init(&BaseSkillSpecs {
         name: "Weapon Attack".to_string(),
         icon: "skills/attack.svg".to_string(),
@@ -142,17 +178,7 @@ pub fn make_weapon_skill(
         cooldown: weapon_specs.cooldown,
         mana_cost: 0.0,
         upgrade_cost: item_level as f64 * 10.0, // TODO: More aggressive increase?
-        effects: vec![SkillEffect {
-            range: weapon_specs.range,
-            target_type: TargetType::Enemy,
-            shape: weapon_specs.shape,
-            effect_type: SkillEffectType::FlatDamage {
-                damage: weapon_specs.damage.clone(),
-                crit_chances: weapon_specs.crit_chances,
-                crit_damage: weapon_specs.crit_damage,
-            },
-            failure_chances: 0.0,
-        }],
+        effects,
     });
     skill_specs.item_slot = Some(item_slot);
     skill_specs

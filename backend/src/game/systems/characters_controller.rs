@@ -1,12 +1,12 @@
 use shared::data::{
     character::{CharacterSpecs, CharacterState},
-    skill::{DamageType, SkillType},
     character_status::{StatusState, StatusType},
+    skill::{DamageType, SkillType},
 };
 
 use crate::game::utils::{increase_factors, rng};
 
-pub fn damage_character(
+pub fn attack_character(
     amount: f64,
     damage_type: DamageType,
     skill_type: SkillType,
@@ -32,19 +32,13 @@ pub fn damage_character(
         .max(0.0)
         .min(target_specs.max_life);
 
-    if amount > 0.0 {
-        target_state.just_hurt = true;
-        if is_crit {
-            target_state.just_hurt_crit = true;
-        }
-    }
-
-    if target_state.is_alive && target_state.health < 0.5 {
-        target_state.health = 0.0;
-        target_state.is_alive = false;
-        target_state.just_died = true;
+    target_state.just_hurt = true;
+    if is_crit {
+        target_state.just_hurt_crit = true;
     }
 }
+
+pub fn damage_character() {}
 
 pub fn heal_character(
     amount: f64,

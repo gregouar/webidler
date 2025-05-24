@@ -14,6 +14,13 @@ pub fn update_character_state(
         return;
     }
 
+    if character_state.health < 0.5 {
+        character_state.health = 0.0;
+        character_state.is_alive = false;
+        character_state.just_died = true;
+        return;
+    }
+
     character_state.health = character_specs.max_life.min(
         character_state.health
             + (elapsed_time.as_secs_f64() * character_specs.life_regen * character_specs.max_life
