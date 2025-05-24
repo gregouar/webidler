@@ -398,13 +398,21 @@ fn apply_effect_on_damage(
     match damage_type {
         Some(damage_type) => {
             let (min, max) = damage.entry(damage_type).or_insert((0.0, 0.0));
-            min_effect.map(|e| min.apply_effect(e));
-            max_effect.map(|e| max.apply_effect(e));
+            if let Some(e) = min_effect {
+                min.apply_effect(e);
+            }
+            if let Some(e) = max_effect {
+                max.apply_effect(e);
+            }
         }
         None => {
             for (min, max) in damage.values_mut() {
-                min_effect.map(|e| min.apply_effect(e));
-                max_effect.map(|e| max.apply_effect(e));
+                if let Some(e) = min_effect {
+                    min.apply_effect(e);
+                }
+                if let Some(e) = max_effect {
+                    max.apply_effect(e);
+                }
             }
         }
     }

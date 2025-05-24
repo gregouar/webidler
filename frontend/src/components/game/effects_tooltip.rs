@@ -204,8 +204,8 @@ pub fn formatted_effects_list(
         }
     }
 
-    for skill_type in SkillType::iter().map(|x| Some(x)).chain([None]) {
-        for damage_type in DamageType::iter().map(|x| Some(x)).chain([None]) {
+    for skill_type in SkillType::iter().map(Some).chain([None]) {
+        for damage_type in DamageType::iter().map(Some).chain([None]) {
             match (
                 min_damage.get(&(skill_type, damage_type)),
                 max_damage.get(&(skill_type, damage_type)),

@@ -276,7 +276,7 @@ fn unequip_weapon(
         .skills_specs
         .iter()
         .enumerate()
-        .filter_map(|(i, skill_specs)| (skill_specs.item_slot? == item_slot).then(|| i))
+        .filter_map(|(i, skill_specs)| (skill_specs.item_slot? == item_slot).then_some(i))
         .collect();
 
     for i in to_remove.into_iter().rev() {
