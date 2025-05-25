@@ -148,7 +148,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                 max_duration,
             } => {
                 match status_type {
-                    shared::data::character_status::StatusType::Stunned => {
+                    shared::data::character_status::StatusType::Stun => {
                         view! { <EffectLi>"Stun for "{format_min_max(min_duration, max_duration)}" seconds"</EffectLi> }
                             .into_any()
                     }

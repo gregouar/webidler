@@ -71,6 +71,6 @@ pub struct CharacterState {
 
 impl CharacterState {
     pub fn is_stunned(&self) -> bool {
-        self.statuses.contains_key(&StatusType::Stunned)
+        self.statuses.contains_key(&StatusType::Stun)
     }
 }

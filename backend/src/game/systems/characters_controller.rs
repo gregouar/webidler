@@ -90,7 +90,7 @@ pub fn apply_status(target: &mut Target, status_type: StatusType, value: f64, du
     let mut value = value;
 
     match status_type {
-        StatusType::Stunned => {}
+        StatusType::Stun => {}
         StatusType::DamageOverTime(damage_type) => {
             value = decrease_damage_from_armor(value, damage_type, target_specs);
         }

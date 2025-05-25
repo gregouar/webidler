@@ -133,7 +133,7 @@ pub fn compute_skill_specs_effect(
                 max_value,
                 ..
             } => match status_type {
-                StatusType::Stunned => {
+                StatusType::Stun => {
                     // Something?
                 }
                 StatusType::DamageOverTime(damage_type) => match effect.stat {

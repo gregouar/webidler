@@ -625,8 +625,8 @@
 
       "stunning_crit": {
         "initial_node": true,
-        "name": "Crippling Strikes",
-        "icon": "passives/surprised_skull.svg",
+        "name": "Lobotomy without Anesthesia",
+        "icon": "passives/broken_skull.svg",
         "x": 40,
         "y": 20,
         "node_type": "Critical",
@@ -641,9 +641,40 @@
               "effects": [
                 {
                   "ApplyStatus": {
-                    "status_type": "Stunned",
+                    "status_type": "Stun",
                     "min_value": 0,
                     "max_value": 0,
+                    "min_duration": 2,
+                    "max_duration": 2
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+
+      "bleeding_crit": {
+        "initial_node": true,
+        "name": "The Ripper",
+        "icon": "passives/bleeding_heart.svg",
+        "x": 0,
+        "y": 40,
+        "node_type": "Critical",
+        "size": 1,
+        "triggers": [
+          {
+            "trigger": {
+              "OnCriticalHit": { "skill_type": "Attack" }
+            },
+            "description": "Critical Hit with Attacks inflict Bleed for 2 seconds",
+            "ApplySkillEffects": {
+              "effects": [
+                {
+                  "ApplyStatus": {
+                    "status_type": {"DamageOverTime": "Physical"},
+                    "min_value": 1,
+                    "max_value": 1,
                     "min_duration": 2,
                     "max_duration": 2
                   }

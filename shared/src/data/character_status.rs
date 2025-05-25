@@ -7,7 +7,7 @@ pub type StatusMap = HashMap<StatusType, StatusState>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatusType {
-    Stunned,
+    Stun,
     DamageOverTime(DamageType),
 }
 

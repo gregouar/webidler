@@ -47,7 +47,7 @@ pub fn update_character_state(
                     character_state.health -=
                         status_state.value * elapsed_time.as_secs_f64().min(status_state.duration)
                 }
-                StatusType::Stunned => {}
+                StatusType::Stun => {}
             }
             status_state.duration -= elapsed_time.as_secs_f64();
             status_state.duration > 0.0

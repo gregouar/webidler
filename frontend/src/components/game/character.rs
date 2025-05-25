@@ -59,6 +59,12 @@ pub fn CharacterPortrait(
         }
     });
 
+    let active_statuses = Memo::new(move |_| {
+        let mut active_statuses = statuses.get().into_keys().collect::<Vec<_>>();
+        active_statuses.sort();
+        active_statuses
+    });
+
     view! {
         <style>
             "
@@ -94,7 +100,7 @@ pub fn CharacterPortrait(
                 />
 
                 <div class="absolute inset-0 flex place-items-start p-2">
-                    <For each=move || statuses.get().into_keys() key=|k| *k let(k)>
+                    <For each=move || active_statuses.get() key=|k| *k let(k)>
                         <StatusIcon status_type=k />
                     </For>
                 </div>
@@ -124,7 +130,7 @@ pub fn CharacterPortrait(
 #[component]
 fn StatusIcon(status_type: StatusType) -> impl IntoView {
     let (icon_uri, alt) = match status_type {
-        StatusType::Stunned => ("statuses/stunned.svg", "Stunned"),
+        StatusType::Stun => ("statuses/stunned.svg", "Stunned"),
         StatusType::DamageOverTime(damage_type) => match damage_type {
             shared::data::skill::DamageType::Physical => ("statuses/bleed.svg", "Bleeding"),
             shared::data::skill::DamageType::Fire => ("statuses/burning.svg", "Burning"),
