@@ -1,9 +1,10 @@
 use anyhow::{anyhow, Result};
 
 use shared::data::{
+    character::CharacterId,
     item::{ItemSlot, ItemSpecs, WeaponSpecs},
     item_affix::{AffixEffectScope, EffectModifier, StatType},
-    monster::{MonsterSpecs, MonsterState},
+    monster::MonsterSpecs,
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{DamageType, SkillState},
@@ -11,9 +12,13 @@ use shared::data::{
     world::AreaLevel,
 };
 
-use crate::game::{data::DataInit, utils::increase_factors};
+use crate::game::{
+    data::{event::EventsQueue, DataInit},
+    utils::increase_factors,
+};
 
 use super::{
+    characters_controller::Target,
     items_controller,
     skills_controller::{self, update_skill_specs},
     stats_controller::ApplyStatModifier,
@@ -37,15 +42,26 @@ impl PlayerController {
         self.use_skills.clear();
     }
 
-    pub fn control_player(
+    pub fn control_player<'a>(
         &mut self,
-        player_specs: &PlayerSpecs,
-        player_state: &mut PlayerState,
-        monsters: &mut Vec<(&MonsterSpecs, &mut MonsterState)>,
+        events_queue: &mut EventsQueue,
+        player_specs: &'a PlayerSpecs,
+        player_state: &'a mut PlayerState,
+        monsters: &mut [Target<'a>],
     ) {
         if !player_state.character_state.is_alive {
             return;
         }
+
+        let mut player = (
+            CharacterId::Player,
+            (
+                &player_specs.character_specs,
+                &mut player_state.character_state,
+            ),
+        );
+
+        let mut friends = vec![];
 
         let min_mana_needed = player_specs
             .skills_specs
@@ -74,17 +90,12 @@ impl PlayerController {
             }
 
             if skills_controller::use_skill(
+                events_queue,
                 skill_specs,
                 skill_state,
-                (
-                    &player_specs.character_specs,
-                    &mut player_state.character_state,
-                ),
-                vec![],
-                monsters
-                    .iter_mut()
-                    .map(|(specs, state)| (&specs.character_specs, &mut state.character_state))
-                    .collect(),
+                &mut player,
+                &mut friends,
+                monsters,
             ) {
                 player_state.mana -= skill_specs.mana_cost;
             }

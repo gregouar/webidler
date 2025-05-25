@@ -1,7 +1,9 @@
+use std::collections::HashMap;
+
 use rand::{self, seq::IteratorRandom};
 
 use shared::data::{
-    character::{CharacterSpecs, CharacterState, SkillSpecs, SkillState},
+    character::{CharacterId, SkillSpecs, SkillState},
     character_status::StatusType,
     item::{Range, Shape},
     item_affix::StatEffect,
@@ -10,34 +12,35 @@ use shared::data::{
     stat_effect::{DamageMap, StatType},
 };
 
-use crate::game::utils::{
-    increase_factors,
-    rng::{self, flip_coin},
+use crate::game::{
+    data::event::EventsQueue,
+    utils::{
+        increase_factors,
+        rng::{self, flip_coin},
+    },
 };
 
-use super::{characters_controller, stats_controller::ApplyStatModifier};
-
-type Target<'a> = (&'a CharacterSpecs, &'a mut CharacterState);
+use super::{
+    characters_controller, characters_controller::Target, stats_controller::ApplyStatModifier,
+};
 
 pub fn use_skill<'a>(
+    events_queue: &mut EventsQueue,
     skill_specs: &SkillSpecs,
     skill_state: &mut SkillState,
-    me: (&'a CharacterSpecs, &'a mut CharacterState),
-    mut friends: Vec<(&'a CharacterSpecs, &'a mut CharacterState)>,
-    mut enemies: Vec<(&'a CharacterSpecs, &'a mut CharacterState)>,
+    me: &mut Target<'a>,
+    mut friends: &mut [Target<'a>],
+    mut enemies: &mut [Target<'a>],
 ) -> bool {
-    let me_position = (me.0.position_x, me.0.position_y);
-    let mut me = vec![me];
-
     let mut applied = false;
 
     for targets_group in skill_specs.targets.iter() {
         applied = applied
             | apply_skill_on_targets(
+                events_queue,
                 skill_specs.base.skill_type,
                 targets_group,
-                me_position,
-                &mut me,
+                me,
                 &mut friends,
                 &mut enemies,
             );
@@ -48,24 +51,35 @@ pub fn use_skill<'a>(
         skill_state.is_ready = false;
         skill_state.elapsed_cooldown = 0.0;
     }
+
     applied
 }
 
 fn apply_skill_on_targets<'a>(
+    events_queue: &mut EventsQueue,
     skill_type: SkillType,
     targets_group: &SkillTargetsGroup,
-    me_position: (u8, u8),
-    me: &mut Vec<Target<'a>>,
-    friends: &mut Vec<Target<'a>>,
-    enemies: &mut Vec<Target<'a>>,
+    me: &mut Target<'a>,
+    friends: &mut [Target<'a>],
+    enemies: &mut [Target<'a>],
 ) -> bool {
-    let pre_targets = match targets_group.target_type {
-        TargetType::Enemy => enemies,
-        TargetType::Friend => friends,
-        TargetType::Me => me,
-    };
+    let attacker = me.0;
 
-    let mut targets = find_targets(targets_group, me_position, pre_targets);
+    let mut targets = {
+        match targets_group.target_type {
+            TargetType::Enemy => find_targets(
+                targets_group,
+                (me.1 .0.position_x, me.1 .0.position_y),
+                enemies,
+            ),
+            TargetType::Friend => find_targets(
+                targets_group,
+                (me.1 .0.position_x, me.1 .0.position_y),
+                friends,
+            ),
+            TargetType::Me => vec![me],
+        }
+    };
 
     if targets.is_empty() {
         return false;
@@ -73,7 +87,13 @@ fn apply_skill_on_targets<'a>(
 
     for skill_effect in targets_group.effects.iter() {
         if rng::random_range(0.0..=1.0).unwrap_or(1.0) >= skill_effect.failure_chances {
-            apply_skill_effect(skill_type, skill_effect, &mut targets);
+            apply_skill_effect(
+                events_queue,
+                attacker,
+                skill_type,
+                skill_effect,
+                &mut targets,
+            );
         }
     }
 
@@ -85,9 +105,11 @@ fn find_targets<'a, 'b>(
     me_position: (u8, u8),
     pre_targets: &'b mut [Target<'a>],
 ) -> Vec<&'b mut Target<'a>> {
-    let available_positions = pre_targets
-        .iter()
-        .map(|(specs, _)| specs.position_x.abs_diff(me_position.0));
+    let target_specs = pre_targets.iter().map(|(_, (specs, _))| specs);
+
+    let available_positions = target_specs
+        .clone()
+        .map(|specs| specs.position_x.abs_diff(me_position.0));
 
     let main_target_distance = match targets_group.range {
         Range::Melee => available_positions.min(),
@@ -96,11 +118,11 @@ fn find_targets<'a, 'b>(
     };
 
     let main_target_pos = main_target_distance.and_then(|distance| {
-        pre_targets
-            .iter()
-            .filter(|(specs, _)| specs.position_x.abs_diff(me_position.0) == distance)
+        target_specs
+            .clone()
+            .filter(|specs| specs.position_x.abs_diff(me_position.0) == distance)
             .choose(&mut rand::rng())
-            .map(|(specs, _)| (specs.position_x as i32, specs.position_y as i32))
+            .map(|specs| (specs.position_x as i32, specs.position_y as i32))
     });
 
     let main_target_pos = match main_target_pos {
@@ -144,7 +166,7 @@ fn find_targets<'a, 'b>(
 
     pre_targets
         .iter_mut()
-        .filter(|(specs, _)| {
+        .filter(|(_, (specs, _))| {
             let (x_size, y_size) = specs.size.get_xy_size();
             (0..x_size as i32)
                 .flat_map(|x| (0..y_size as i32).map(move |y| (x, y)))
@@ -156,6 +178,8 @@ fn find_targets<'a, 'b>(
 }
 
 fn apply_skill_effect(
+    events_queue: &mut EventsQueue,
+    attacker: CharacterId,
     skill_type: SkillType,
     skill_effect: &SkillEffect,
     targets: &mut [&mut Target],
@@ -168,31 +192,33 @@ fn apply_skill_effect(
         } => {
             let is_crit = rng::random_range(0.0..=1.0).unwrap_or(1.0) <= *crit_chances;
 
-            for (damage_type, (min, max)) in damage {
-                if let Some(amount) = rng::random_range(*min..=*max).map(|d| {
-                    if is_crit {
-                        d * (1.0 + crit_damage)
-                    } else {
-                        d
-                    }
-                }) {
-                    for (target_specs, target_state) in targets.iter_mut() {
-                        characters_controller::attack_character(
-                            amount,
-                            *damage_type,
-                            skill_type,
-                            target_state,
-                            target_specs,
-                            is_crit,
-                        );
-                    }
-                }
+            let damage: HashMap<_, _> = damage
+                .iter()
+                .map(|(damage_type, (min, max))| {
+                    (
+                        *damage_type,
+                        rng::random_range(*min..=*max)
+                            .map(|d| if is_crit { d * (1.0 + crit_damage) } else { d })
+                            .unwrap_or(0.0),
+                    )
+                })
+                .collect();
+
+            for target in targets {
+                characters_controller::attack_character(
+                    events_queue,
+                    target,
+                    attacker,
+                    damage.clone(),
+                    skill_type,
+                    is_crit,
+                );
             }
         }
         SkillEffectType::Heal { min, max } => {
             if let Some(amount) = rng::random_range(*min..=*max) {
-                for (target_specs, target_state) in targets.iter_mut() {
-                    characters_controller::heal_character(amount, target_state, target_specs);
+                for target in targets {
+                    characters_controller::heal_character(target, amount);
                 }
             }
         }
@@ -207,14 +233,8 @@ fn apply_skill_effect(
                 rng::random_range(*min_value..=*max_value),
                 rng::random_range(*min_duration..=*max_duration),
             ) {
-                for (target_specs, target_state) in targets.iter_mut() {
-                    characters_controller::apply_status(
-                        *status_type,
-                        value,
-                        duration,
-                        target_state,
-                        target_specs,
-                    )
+                for target in targets {
+                    characters_controller::apply_status(target, *status_type, value, duration)
                 }
             }
         }

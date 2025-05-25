@@ -1,6 +1,9 @@
 use std::collections::HashMap;
 
-use shared::data::{character::CharacterId, skill::DamageType};
+use shared::data::{
+    character::CharacterId,
+    skill::{DamageType, SkillType},
+};
 
 pub enum GameEvent {
     Hit(DamageEvent),
@@ -9,11 +12,12 @@ pub enum GameEvent {
     Kill { target: CharacterId },
 }
 
+#[derive(Debug, Clone)]
 pub struct DamageEvent {
-    attacker: CharacterId,
-    target: CharacterId,
-    skill: usize,
-    damage: HashMap<DamageType, f64>,
+    pub attacker: CharacterId,
+    pub target: CharacterId,
+    pub skill_type: SkillType,
+    pub damage: HashMap<DamageType, f64>,
 }
 
 pub struct EventsQueue {

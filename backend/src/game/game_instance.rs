@@ -8,11 +8,7 @@ use std::{
 };
 
 use shared::{
-    data::{
-        character::CharacterId,
-        monster::{MonsterSpecs, MonsterState},
-        player::PlayerState,
-    },
+    data::{character::CharacterId, monster::MonsterState, player::PlayerState},
     messages::{
         client::ClientMessage,
         server::{ErrorMessage, ErrorType, InitGameMessage, SyncGameStateMessage},
@@ -332,16 +328,33 @@ impl<'a> GameInstance<'a> {
             }
         } else {
             self.data.player_respawn_delay = Instant::now();
-            let mut monsters_still_alive: Vec<(&MonsterSpecs, &mut MonsterState)> = self
+            // let mut monsters_still_alive: Vec<(&MonsterSpecs, &mut MonsterState)> = self
+            //     .data
+            //     .monster_specs
+            //     .read()
+            //     .iter()
+            //     .zip(self.data.monster_states.iter_mut())
+            //     .filter(|(_, x)| x.character_state.is_alive)
+            //     .collect();
+
+            let mut monsters_still_alive: Vec<_> = self
                 .data
                 .monster_specs
                 .read()
                 .iter()
                 .zip(self.data.monster_states.iter_mut())
-                .filter(|(_, x)| x.character_state.is_alive)
+                .enumerate()
+                .filter(|(_, (_, m))| m.character_state.is_alive)
+                .map(|(i, (x, y))| {
+                    (
+                        CharacterId::Monster(i),
+                        (&x.character_specs, &mut y.character_state),
+                    )
+                })
                 .collect();
 
             self.data.player_controller.control_player(
+                &mut self.events_queue,
                 self.data.player_specs.read(),
                 &mut self.data.player_state,
                 &mut monsters_still_alive,
@@ -375,7 +388,9 @@ impl<'a> GameInstance<'a> {
             } else {
                 self.data.monster_wave_delay = Instant::now();
                 monsters_controller::control_monsters(
-                    &mut monsters_still_alive,
+                    &mut self.events_queue,
+                    self.data.monster_specs.read(),
+                    &mut self.data.monster_states,
                     self.data.player_specs.read(),
                     &mut self.data.player_state,
                 );
