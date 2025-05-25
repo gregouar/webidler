@@ -28,7 +28,7 @@ pub fn CharacterPortrait(
     let is_dead_img_effect = move || {
         if is_dead.get() {
             "transition-all duration-1000 saturate-0 brightness-1
-            [transform:rotateX(180deg)]"
+            [transform:rotateY(180deg)]"
         } else {
             "transition-all duration-1000"
         }

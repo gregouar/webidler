@@ -10,7 +10,7 @@ use crate::game::utils::json::LoadJsonFromFile;
 
 use super::DataInit;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BaseMonsterSpecs {
     #[serde(flatten)]
     pub character_specs: CharacterSpecs,

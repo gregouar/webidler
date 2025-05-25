@@ -1,10 +1,16 @@
 use std::time::Duration;
 
-use shared::data::player::{PlayerSpecs, PlayerState};
+use shared::data::{
+    character::CharacterId,
+    player::{PlayerSpecs, PlayerState},
+};
+
+use crate::game::data::event::EventsQueue;
 
 use super::{characters_updater, skills_updater};
 
 pub fn update_player_state(
+    events_queue: &mut EventsQueue,
     elapsed_time: Duration,
     player_specs: &PlayerSpecs,
     player_state: &mut PlayerState,
@@ -14,7 +20,9 @@ pub fn update_player_state(
     }
 
     characters_updater::update_character_state(
+        events_queue,
         elapsed_time,
+        CharacterId::Player,
         &player_specs.character_specs,
         &mut player_state.character_state,
     );

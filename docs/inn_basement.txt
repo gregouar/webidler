@@ -1,0 +1,47 @@
+🐀 Classic Infestation / Vermin
+
+    Giant Centipede – Fast, poisonous, creepy
+
+    Cockroach Swarm – Resistant, low damage but hard to kill
+
+    Fungus Crawler – A moldy insect-like creature that applies poison or disease
+
+    Leech – Drains health, sticks to the player
+
+    Maggot Swarm – Slow but disgusting and multiplies if not killed fast
+
+💀 Undead or Supernatural Twists
+
+    Restless Spirit – The ghost of a patron who died in the inn
+
+    Bone Rat – A skeletal rat animated by dark magic
+
+    Bone Cat
+
+    Possessed Cask – A haunted barrel that slams into intruders
+
+    Whispering Shadow – Flickering shadow creature that chills or confuses
+
+🍄 Fungal / Rot-themed
+
+    Sporeling – Mushroom-like creature, explodes on death
+
+    Rot Beast – A decaying hound or corrupted creature drawn to refuse
+
+    Slime Mold – Spreads or duplicates, resists physical damage
+
+🧪 Accidental Mutants or Magical Leftovers
+
+    Alchemical Ooze – Created by discarded potions or magical waste
+
+    Animated Broom – A bit of whimsy, like a failed cleaning enchantment
+
+    Booze Elemental – Born from spilled magical alcohol, causes drunken debuffs
+
+🧺 Tavern-Themed Oddities
+
+    Drunken Rat King – A bundle of rats fused and maddened by alcohol fumes
+
+    Barrel Mimic – Classic trap disguised as loot or scenery
+
+    Grease Slime – Created from years of spilled kitchen grease

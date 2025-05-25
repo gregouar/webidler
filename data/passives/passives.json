@@ -131,6 +131,34 @@
           }
         ]
       },
+      "gold_u_2": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 0,
+        "y": 35,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ]
+      },
+      "gold_d_2": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 0,
+        "y": -35,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ]
+      },
 
       "life_max_1": {
         "name": "Maximum Life",
@@ -521,8 +549,8 @@
       "crit_damage_1": {
         "name": "Critical Strike Damage",
         "icon": "passives/critical.svg",
-        "x": 10,
-        "y": 12.5,
+        "x": 5,
+        "y": 20,
         "node_type": "Critical",
         "effects": [
           {
@@ -535,8 +563,8 @@
       "crit_damage_2": {
         "name": "Critical Strike Damage",
         "icon": "passives/critical.svg",
-        "x": 20,
-        "y": 20,
+        "x": 15,
+        "y": 27.5,
         "node_type": "Critical",
         "effects": [
           {
@@ -549,8 +577,8 @@
       "crit_chances_1": {
         "name": "Critical Strike Chances",
         "icon": "passives/critical.svg",
-        "x": 5,
-        "y": 20,
+        "x": 10,
+        "y": 12.5,
         "node_type": "Critical",
         "effects": [
           {
@@ -563,8 +591,8 @@
       "crit_chances_2": {
         "name": "Critical Strike Chances",
         "icon": "passives/critical.svg",
-        "x": 15,
-        "y": 27.5,
+        "x": 20,
+        "y": 20,
         "node_type": "Critical",
         "effects": [
           {
@@ -593,7 +621,26 @@
             "value": 0.5
           }
         ]
+      },
+
+      
+      "stunning_crit": {
+        "initial_node": true,
+        "name": "Crippling Strikes",
+        "icon": "passives/surprised_skull.svg",
+        "x": 40,
+        "y": 20,
+        "node_type": "Critical",
+        "size": 1,
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ]
       }
+
     },
     "connections": [
       { "from": "gold_init", "to": "gold_l_1" },
@@ -653,7 +700,13 @@
       { "from": "gold_dl_1", "to": "spell_damage_2" },
 
       { "from": "gold_dr_1", "to": "life_regen_2" },
-      { "from": "gold_dr_1", "to": "mana_max_2" }
+      { "from": "gold_dr_1", "to": "mana_max_2" },
+
+      { "from": "gold_u_2", "to": "attack_speed_2" },
+      { "from": "gold_u_2", "to": "crit_chances_2" },
+
+      { "from": "gold_d_2", "to": "spell_speed_2" },
+      { "from": "gold_d_2", "to": "mana_regen_2" }
     ]
   }
 }

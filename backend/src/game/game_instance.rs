@@ -9,6 +9,7 @@ use std::{
 
 use shared::{
     data::{
+        character::CharacterId,
         monster::{MonsterSpecs, MonsterState},
         player::PlayerState,
     },
@@ -19,14 +20,16 @@ use shared::{
 };
 
 use super::{
-    data::{master_store::MasterStore, DataInit},
+    data::{
+        event::{EventsQueue, GameEvent},
+        master_store::MasterStore,
+        DataInit,
+    },
     game_instance_data::GameInstanceData,
-    systems::{loot_controller, loot_generator, passives_controller, world_controller},
-};
-use super::{
     systems::{
-        monsters_controller, monsters_updater, monsters_wave, player_controller, player_updater,
-        skills_controller,
+        loot_controller, loot_generator, monsters_controller, monsters_updater, monsters_wave,
+        passives_controller, player_controller, player_updater, skills_controller,
+        world_controller,
     },
     utils::LazySyncer,
 };
@@ -43,6 +46,7 @@ pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
     master_store: MasterStore,
     data: Box<GameInstanceData>,
+    events_queue: EventsQueue,
 }
 
 impl<'a> GameInstance<'a> {
@@ -55,6 +59,7 @@ impl<'a> GameInstance<'a> {
             client_conn,
             master_store,
             data,
+            events_queue: EventsQueue::new(),
         }
     }
 
@@ -84,6 +89,8 @@ impl<'a> GameInstance<'a> {
             }
 
             self.control_entities().await?;
+
+            self.resolve_events().await;
 
             let elapsed_time = last_update_time.elapsed();
             last_update_time = Instant::now();
@@ -378,34 +385,45 @@ impl<'a> GameInstance<'a> {
         Ok(())
     }
 
+    async fn resolve_events(&mut self) {
+        for event in self.events_queue.consume_events() {
+            // TODO
+            match event {
+                GameEvent::Hit(damage_event) => todo!(),
+                GameEvent::CriticalStrike(damage_event) => todo!(),
+                GameEvent::Block(damage_event) => todo!(),
+                GameEvent::Kill { target } => {
+                    if let CharacterId::Monster(monster_index) = target {
+                        self.data.game_stats.monsters_killed += 1;
+                        if let Some(monster_specs) =
+                            self.data.monster_specs.read().get(monster_index as usize)
+                        {
+                            player_controller::reward_player(
+                                self.data.player_resources.mutate(),
+                                self.data.player_specs.read(),
+                                monster_specs,
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     async fn update_entities(&mut self, elapsed_time: Duration) {
         self.data.game_stats.elapsed_time += elapsed_time;
         player_updater::update_player_state(
+            &mut self.events_queue,
             elapsed_time,
             self.data.player_specs.read(),
             &mut self.data.player_state,
         );
         monsters_updater::update_monster_states(
+            &mut self.events_queue,
             elapsed_time,
             self.data.monster_specs.read(),
             &mut self.data.monster_states,
         );
-
-        for (monster_specs, _) in self
-            .data
-            .monster_specs
-            .read()
-            .iter()
-            .zip(self.data.monster_states.iter())
-            .filter(|(_, s)| s.character_state.just_died)
-        {
-            self.data.game_stats.monsters_killed += 1;
-            player_controller::reward_player(
-                self.data.player_resources.mutate(),
-                self.data.player_specs.read(),
-                monster_specs,
-            );
-        }
     }
 
     /// Send whole game state to client

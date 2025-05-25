@@ -1,18 +1,25 @@
 use std::time::Duration;
 
-use shared::data::monster::{MonsterSpecs, MonsterState};
+use shared::data::{
+    character::CharacterId,
+    monster::{MonsterSpecs, MonsterState},
+};
+
+use crate::game::data::event::EventsQueue;
 
 use super::{characters_updater, skills_updater};
 
 pub fn update_monster_states(
+    events_queue: &mut EventsQueue,
     elapsed_time: Duration,
     monster_specs: &[MonsterSpecs],
     monster_states: &mut [MonsterState],
 ) {
-    for (monster_state, monster_specs) in monster_states
+    for (monster_id, (monster_state, monster_specs)) in monster_states
         .iter_mut()
         .zip(monster_specs.iter())
-        .filter(|(s, _)| s.character_state.is_alive)
+        .enumerate()
+        .filter(|(_, (s, _))| s.character_state.is_alive)
     {
         monster_state.initiative = (monster_state.initiative - elapsed_time.as_secs_f32()).max(0.0);
         if monster_state.initiative > 0.0 {
@@ -20,7 +27,9 @@ pub fn update_monster_states(
         }
 
         characters_updater::update_character_state(
+            events_queue,
             elapsed_time,
+            CharacterId::Monster(monster_id),
             &monster_specs.character_specs,
             &mut monster_state.character_state,
         );

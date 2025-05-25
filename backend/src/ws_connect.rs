@@ -20,7 +20,7 @@ use std::{ops::ControlFlow, vec};
 
 use shared::{
     data::{
-        character::CharacterSize,
+        character::{CharacterId, CharacterSize},
         item::ItemRarity,
         player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
         skill::SkillSpecs,

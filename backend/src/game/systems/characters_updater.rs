@@ -1,12 +1,16 @@
 use std::time::Duration;
 
 use shared::data::{
-    character::{CharacterSpecs, CharacterState},
+    character::{CharacterId, CharacterSpecs, CharacterState},
     character_status::StatusType,
 };
 
+use crate::game::data::event::{EventsQueue, GameEvent};
+
 pub fn update_character_state(
+    events_queue: &mut EventsQueue,
     elapsed_time: Duration,
+    character_id: CharacterId,
     character_specs: &CharacterSpecs,
     character_state: &mut CharacterState,
 ) {
@@ -23,6 +27,9 @@ pub fn update_character_state(
         character_state.health = 0.0;
         character_state.is_alive = false;
         character_state.just_died = true;
+        events_queue.register_event(GameEvent::Kill {
+            target: character_id,
+        });
         return;
     }
 

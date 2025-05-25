@@ -44,7 +44,10 @@ pub struct PassiveNodeSpecs {
     // TODO: Replace by Asset uri?
     pub node_type: PassiveNodeType,
 
+    #[serde(default)]
     pub effects: Vec<StatEffect>,
+    // #[serde(default)]
+    // pub triggers: Vec<>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
