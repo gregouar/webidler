@@ -35,7 +35,7 @@ use shared::{
 
 use crate::game::{
     data::{master_store::MasterStore, DataInit},
-    game_instance_data::GameInstanceData,
+    game_data::GameInstanceData,
     session::{Session, SessionsStore},
     systems::{loot_generator, player_controller},
     GameInstance,
