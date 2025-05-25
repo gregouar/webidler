@@ -135,7 +135,7 @@
         "name": "Gold",
         "icon": "passives/gold.svg",
         "x": 0,
-        "y": 35,
+        "y": 30,
         "node_type": "Gold",
         "effects": [
           {
@@ -149,7 +149,7 @@
         "name": "Gold",
         "icon": "passives/gold.svg",
         "x": 0,
-        "y": -35,
+        "y": -30,
         "node_type": "Gold",
         "effects": [
           {
@@ -693,7 +693,7 @@
       { "from": "gold_ul_1", "to": "armor_2" },
       { "from": "gold_ul_1", "to": "attack_damage_2" },
 
-      { "from": "gold_ur_1", "to": "crit_damage_2" },
+      { "from": "gold_ur_1", "to": "crit_chances_2" },
       { "from": "gold_ur_1", "to": "life_max_2" },
 
       { "from": "gold_dl_1", "to": "block_2" },
@@ -703,7 +703,7 @@
       { "from": "gold_dr_1", "to": "mana_max_2" },
 
       { "from": "gold_u_2", "to": "attack_speed_2" },
-      { "from": "gold_u_2", "to": "crit_chances_2" },
+      { "from": "gold_u_2", "to": "crit_damage_2" },
 
       { "from": "gold_d_2", "to": "spell_speed_2" },
       { "from": "gold_d_2", "to": "mana_regen_2" }

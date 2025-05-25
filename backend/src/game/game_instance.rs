@@ -404,9 +404,9 @@ impl<'a> GameInstance<'a> {
         for event in self.events_queue.consume_events() {
             // TODO
             match event {
-                GameEvent::Hit(damage_event) => todo!(),
-                GameEvent::CriticalStrike(damage_event) => todo!(),
-                GameEvent::Block(damage_event) => todo!(),
+                GameEvent::Hit(_) => {}
+                GameEvent::CriticalStrike(_) => {}
+                GameEvent::Block(_) => {}
                 GameEvent::Kill { target } => {
                     if let CharacterId::Monster(monster_index) = target {
                         self.data.game_stats.monsters_killed += 1;
