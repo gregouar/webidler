@@ -7,7 +7,7 @@ use shared::data::{
     monster::MonsterSpecs,
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-    skill::{DamageType, SkillState},
+    skill::{BaseSkillSpecs, DamageType, SkillSpecs, SkillState},
     stat_effect::EffectsMap,
     world::AreaLevel,
 };
@@ -306,14 +306,30 @@ fn equip_weapon(
     item_level: u16,
     weapon_specs: &WeaponSpecs,
 ) {
-    // TODO: helper function
-    let weapon_skill = items_controller::make_weapon_skill(item_slot, item_level, weapon_specs);
+    equip_skill(
+        player_specs,
+        player_state,
+        items_controller::make_weapon_skill(item_level, weapon_specs),
+        true,
+        Some(item_slot),
+    );
+}
 
-    player_specs.auto_skills.insert(0, true);
+pub fn equip_skill(
+    player_specs: &mut PlayerSpecs,
+    player_state: &mut PlayerState,
+    base_skill_specs: BaseSkillSpecs,
+    auto_use: bool,
+    item_slot: Option<ItemSlot>,
+) {
+    let mut skill_specs = SkillSpecs::init(base_skill_specs);
+    skill_specs.item_slot = item_slot;
+
     player_state
         .skills_states
-        .insert(0, SkillState::init(&weapon_skill));
-    player_specs.skills_specs.insert(0, weapon_skill);
+        .insert(0, SkillState::init(&skill_specs));
+    player_specs.skills_specs.insert(0, skill_specs);
+    player_specs.auto_skills.insert(0, auto_use);
 }
 
 pub fn update_player_specs(

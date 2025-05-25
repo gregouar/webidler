@@ -2,18 +2,15 @@ use std::vec;
 
 use shared::data::{
     character_status::StatusType,
-    item::{ArmorSpecs, ItemSlot, ItemSpecs, WeaponSpecs},
+    item::{ArmorSpecs, ItemSpecs, WeaponSpecs},
     item_affix::{AffixEffectScope, EffectModifier, StatEffect, StatType},
     skill::{
-        BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillTargetsGroup,
-        SkillType, TargetType,
+        BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType,
+        TargetType,
     },
 };
 
-use crate::game::data::{
-    items_store::{ItemAdjectivesTable, ItemNounsTable},
-    DataInit,
-};
+use crate::game::data::items_store::{ItemAdjectivesTable, ItemNounsTable};
 
 use super::{loot_generator::generate_name, stats_controller::ApplyStatModifier};
 
@@ -133,11 +130,7 @@ fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &[StatEffect]) -> A
     armor_specs
 }
 
-pub fn make_weapon_skill(
-    item_slot: ItemSlot,
-    item_level: u16,
-    weapon_specs: &WeaponSpecs,
-) -> SkillSpecs {
+pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSkillSpecs {
     let mut effects = vec![SkillEffect {
         effect_type: SkillEffectType::FlatDamage {
             damage: weapon_specs
@@ -165,7 +158,7 @@ pub fn make_weapon_skill(
         });
     }
 
-    let mut skill_specs = SkillSpecs::init(&BaseSkillSpecs {
+    BaseSkillSpecs {
         name: "Weapon Attack".to_string(),
         icon: "skills/attack.svg".to_string(),
         description: "A simple attack with your weapon".to_string(),
@@ -179,7 +172,5 @@ pub fn make_weapon_skill(
             shape: weapon_specs.shape,
             effects,
         }],
-    });
-    skill_specs.item_slot = Some(item_slot);
-    skill_specs
+    }
 }

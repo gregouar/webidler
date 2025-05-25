@@ -21,12 +21,12 @@ pub struct BaseMonsterSpecs {
 }
 
 impl DataInit<BaseMonsterSpecs> for MonsterSpecs {
-    fn init(specs: &BaseMonsterSpecs) -> Self {
+    fn init(specs: BaseMonsterSpecs) -> Self {
         Self {
-            character_specs: specs.character_specs.clone(),
-            skill_specs: specs.skills.iter().map(SkillSpecs::init).collect(),
+            skill_specs: specs.skills.iter().cloned().map(SkillSpecs::init).collect(),
             max_initiative: specs.max_initiative,
             power_factor: specs.power_factor,
+            character_specs: specs.character_specs,
         }
     }
 }

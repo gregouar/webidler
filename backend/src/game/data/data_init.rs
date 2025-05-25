@@ -5,15 +5,16 @@ use shared::data::{
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerSpecs, PlayerState},
     skill::{BaseSkillSpecs, SkillSpecs, SkillState},
+    stat_effect::EffectsMap,
     world::{WorldSpecs, WorldState},
 };
 
 use crate::game::utils::rng;
 pub trait DataInit<Specs> {
-    fn init(specs: &Specs) -> Self;
+    fn init(specs: Specs) -> Self;
 }
 
-impl DataInit<WorldSpecs> for WorldState {
+impl DataInit<&WorldSpecs> for WorldState {
     fn init(specs: &WorldSpecs) -> Self {
         WorldState {
             area_level: specs.starting_level,
@@ -24,7 +25,7 @@ impl DataInit<WorldSpecs> for WorldState {
     }
 }
 
-impl DataInit<CharacterSpecs> for CharacterState {
+impl DataInit<&CharacterSpecs> for CharacterState {
     fn init(specs: &CharacterSpecs) -> Self {
         CharacterState {
             is_alive: true,
@@ -39,7 +40,24 @@ impl DataInit<CharacterSpecs> for CharacterState {
     }
 }
 
-impl DataInit<PlayerSpecs> for PlayerState {
+impl DataInit<CharacterSpecs> for PlayerSpecs {
+    fn init(specs: CharacterSpecs) -> Self {
+        PlayerSpecs {
+            character_specs: specs.clone(),
+            skills_specs: vec![],
+            level: 1,
+            experience_needed: 20.0,
+            max_mana: 100.0,
+            mana_regen: 1.0,
+            movement_cooldown: 2.0,
+            gold_find: 1.0,
+            effects: EffectsMap::default(),
+            auto_skills: vec![],
+        }
+    }
+}
+
+impl DataInit<&PlayerSpecs> for PlayerState {
     fn init(specs: &PlayerSpecs) -> Self {
         PlayerState {
             character_state: CharacterState::init(&specs.character_specs),
@@ -50,7 +68,7 @@ impl DataInit<PlayerSpecs> for PlayerState {
     }
 }
 
-impl DataInit<MonsterSpecs> for MonsterState {
+impl DataInit<&MonsterSpecs> for MonsterState {
     fn init(specs: &MonsterSpecs) -> Self {
         MonsterState {
             character_state: CharacterState::init(&specs.character_specs),
@@ -61,20 +79,20 @@ impl DataInit<MonsterSpecs> for MonsterState {
 }
 
 impl DataInit<BaseSkillSpecs> for SkillSpecs {
-    fn init(specs: &BaseSkillSpecs) -> Self {
+    fn init(specs: BaseSkillSpecs) -> Self {
         Self {
-            base: specs.clone(),
             cooldown: specs.cooldown,
             mana_cost: specs.mana_cost,
             upgrade_level: 1,
             next_upgrade_cost: specs.upgrade_cost,
             targets: specs.targets.clone(),
             item_slot: None,
+            base: specs,
         }
     }
 }
 
-impl DataInit<SkillSpecs> for SkillState {
+impl DataInit<&SkillSpecs> for SkillState {
     fn init(specs: &SkillSpecs) -> Self {
         let _ = specs;
         Self {
