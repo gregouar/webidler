@@ -31,7 +31,9 @@ pub fn control_monsters(
         .iter()
         .zip(monster_states.iter_mut())
         .enumerate()
-        .filter(|(_, (_, m))| m.character_state.is_alive && m.initiative == 0.0)
+        .filter(|(_, (_, m))| {
+            m.character_state.is_alive && m.initiative == 0.0 && !m.character_state.is_stunned()
+        })
     {
         let mut monster = (
             CharacterId::Monster(monster_id),

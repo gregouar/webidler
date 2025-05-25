@@ -3,8 +3,8 @@ use std::sync::Arc;
 use leptos::html::*;
 use leptos::prelude::*;
 
-use shared::data::item::Range;
-use shared::data::item::Shape;
+use shared::data::item::SkillRange;
+use shared::data::item::SkillShape;
 use shared::data::item::{ItemRarity, ItemSlot, ItemSpecs};
 use shared::data::item_affix::AffixEffectScope;
 use shared::data::skill::DamageType;
@@ -123,18 +123,18 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             }
 
             let shape = match specs.shape {
-                Shape::Single => "",
-                Shape::Vertical2 => ", 2x1 area",
-                Shape::Horizontal2 => ", 1x2 area",
-                Shape::Horizontal3 => ", 1x3 area",
-                Shape::Square4 => ", 2x2 area",
-                Shape::All => ", all",
+                SkillShape::Single => "",
+                SkillShape::Vertical2 => ", 2x1 area",
+                SkillShape::Horizontal2 => ", 1x2 area",
+                SkillShape::Horizontal3 => ", 1x3 area",
+                SkillShape::Square4 => ", 2x2 area",
+                SkillShape::All => ", all",
             };
 
             let range = match specs.range {
-                Range::Melee => "Melee",
-                Range::Distance => "Distance",
-                Range::Any => "Any",
+                SkillRange::Melee => "Melee",
+                SkillRange::Distance => "Distance",
+                SkillRange::Any => "Any",
             };
 
             let cooldown_color = if specs.cooldown != base_specs.cooldown {

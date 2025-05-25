@@ -547,56 +547,56 @@
       },
 
       "crit_damage_1": {
-        "name": "Critical Strike Damage",
+        "name": "Critical Hit Damage",
         "icon": "passives/critical.svg",
         "x": 5,
         "y": 20,
         "node_type": "Critical",
         "effects": [
           {
-            "stat": {"CritDamage": null},
+            "stat": { "CritDamage": null },
             "modifier": "Multiplier",
             "value": 0.5
           }
         ]
       },
       "crit_damage_2": {
-        "name": "Critical Strike Damage",
+        "name": "Critical Hit Damage",
         "icon": "passives/critical.svg",
         "x": 15,
         "y": 27.5,
         "node_type": "Critical",
         "effects": [
           {
-            "stat": {"CritDamage": null},
+            "stat": { "CritDamage": null },
             "modifier": "Multiplier",
             "value": 0.5
           }
         ]
       },
       "crit_chances_1": {
-        "name": "Critical Strike Chances",
+        "name": "Critical Hit Chances",
         "icon": "passives/critical.svg",
         "x": 10,
         "y": 12.5,
         "node_type": "Critical",
         "effects": [
           {
-            "stat": {"CritChances": null},
+            "stat": { "CritChances": null },
             "modifier": "Multiplier",
             "value": 0.25
           }
         ]
       },
       "crit_chances_2": {
-        "name": "Critical Strike Chances",
+        "name": "Critical Hit Chances",
         "icon": "passives/critical.svg",
         "x": 20,
         "y": 20,
         "node_type": "Critical",
         "effects": [
           {
-            "stat": {"CritChances": null},
+            "stat": { "CritChances": null },
             "modifier": "Multiplier",
             "value": 0.25
           }
@@ -611,19 +611,18 @@
         "node_type": "Critical",
         "effects": [
           {
-            "stat": {"CritChances": null},
+            "stat": { "CritChances": null },
             "modifier": "Multiplier",
             "value": 0.25
           },
           {
-            "stat": {"CritDamage": null},
+            "stat": { "CritDamage": null },
             "modifier": "Multiplier",
             "value": 0.5
           }
         ]
       },
 
-      
       "stunning_crit": {
         "initial_node": true,
         "name": "Crippling Strikes",
@@ -632,15 +631,28 @@
         "y": 20,
         "node_type": "Critical",
         "size": 1,
-        "effects": [
+        "triggers": [
           {
-            "stat": "GoldFind",
-            "modifier": "Multiplier",
-            "value": 0.5
+            "trigger": {
+              "OnCriticalHit": { "skill_type": "Attack" }
+            },
+            "description": "Critical Hit with Attacks inflict Stun for 2 seconds",
+            "ApplySkillEffects": {
+              "effects": [
+                {
+                  "ApplyStatus": {
+                    "status_type": "Stunned",
+                    "min_value": 0,
+                    "max_value": 0,
+                    "min_duration": 2,
+                    "max_duration": 2
+                  }
+                }
+              ]
+            }
           }
         ]
       }
-
     },
     "connections": [
       { "from": "gold_init", "to": "gold_l_1" },

@@ -4,12 +4,9 @@ use rand::{self, seq::IteratorRandom};
 
 use shared::data::{
     character::{CharacterId, SkillSpecs, SkillState},
-    character_status::StatusType,
-    item::{Range, Shape},
-    item_affix::StatEffect,
+    item::{SkillRange, SkillShape},
     player::PlayerResources,
-    skill::{DamageType, SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType, TargetType},
-    stat_effect::{DamageMap, StatType},
+    skill::{SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType, TargetType},
 };
 
 use crate::game::{
@@ -20,9 +17,7 @@ use crate::game::{
     },
 };
 
-use super::{
-    characters_controller, characters_controller::Target, stats_controller::ApplyStatModifier,
-};
+use super::{characters_controller, characters_controller::Target};
 
 pub fn use_skill<'a>(
     events_queue: &mut EventsQueue,
@@ -91,6 +86,7 @@ fn apply_skill_on_targets<'a>(
                 events_queue,
                 attacker,
                 skill_type,
+                targets_group.range,
                 skill_effect,
                 &mut targets,
             );
@@ -112,9 +108,9 @@ fn find_targets<'a, 'b>(
         .map(|specs| specs.position_x.abs_diff(me_position.0));
 
     let main_target_distance = match targets_group.range {
-        Range::Melee => available_positions.min(),
-        Range::Distance => available_positions.max(),
-        Range::Any => available_positions.choose(&mut rand::rng()),
+        SkillRange::Melee => available_positions.min(),
+        SkillRange::Distance => available_positions.max(),
+        SkillRange::Any => available_positions.choose(&mut rand::rng()),
     };
 
     let main_target_pos = main_target_distance.and_then(|distance| {
@@ -131,9 +127,9 @@ fn find_targets<'a, 'b>(
     };
 
     let dx = match targets_group.range {
-        Range::Melee => 1,
-        Range::Distance => -1,
-        Range::Any => {
+        SkillRange::Melee => 1,
+        SkillRange::Distance => -1,
+        SkillRange::Any => {
             if flip_coin() {
                 1
             } else {
@@ -144,23 +140,23 @@ fn find_targets<'a, 'b>(
 
     let is_target_in_range = |pos: (i32, i32)| -> bool {
         match targets_group.shape {
-            Shape::Single => pos == main_target_pos,
-            Shape::Vertical2 => pos.0 == main_target_pos.0 && (pos.1 == 1 || pos.1 == 2),
-            Shape::Horizontal2 => {
+            SkillShape::Single => pos == main_target_pos,
+            SkillShape::Vertical2 => pos.0 == main_target_pos.0 && (pos.1 == 1 || pos.1 == 2),
+            SkillShape::Horizontal2 => {
                 (pos.0 == main_target_pos.0 || pos.0 == main_target_pos.0 + dx)
                     && pos.1 == main_target_pos.1
             }
-            Shape::Horizontal3 => {
+            SkillShape::Horizontal3 => {
                 (pos.0 == main_target_pos.0
                     || pos.0 == main_target_pos.0 + dx
                     || pos.0 == main_target_pos.0 + 2 * dx)
                     && pos.1 == main_target_pos.1
             }
-            Shape::Square4 => {
+            SkillShape::Square4 => {
                 (pos.0 == main_target_pos.0 || pos.0 == main_target_pos.0 + dx)
                     && (pos.1 == 1 || pos.1 == 2)
             }
-            Shape::All => true,
+            SkillShape::All => true,
         }
     };
 
@@ -177,10 +173,11 @@ fn find_targets<'a, 'b>(
         .collect()
 }
 
-fn apply_skill_effect(
+pub fn apply_skill_effect(
     events_queue: &mut EventsQueue,
     attacker: CharacterId,
     skill_type: SkillType,
+    range: SkillRange,
     skill_effect: &SkillEffect,
     targets: &mut [&mut Target],
 ) {
@@ -211,6 +208,7 @@ fn apply_skill_effect(
                     attacker,
                     damage.clone(),
                     skill_type,
+                    range,
                     is_crit,
                 );
             }
@@ -294,160 +292,6 @@ fn increase_effect(effect: &mut SkillEffect, factor: f64) {
         } => {
             *min_value *= factor;
             *max_value *= factor;
-        }
-    }
-}
-
-pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) {
-    skill_specs.targets = skill_specs.base.targets.clone();
-    skill_specs.cooldown = skill_specs.base.cooldown;
-    skill_specs.mana_cost = skill_specs.base.mana_cost;
-
-    for effect in effects.iter() {
-        match effect.stat {
-            StatType::Speed(skill_type)
-                if skill_specs.base.skill_type
-                    == skill_type.unwrap_or(skill_specs.base.skill_type) =>
-            {
-                skill_specs.cooldown.apply_inverse_effect(effect);
-            }
-            _ => {}
-        }
-    }
-
-    for skill_effect in skill_specs
-        .targets
-        .iter_mut()
-        .flat_map(|t| t.effects.iter_mut())
-    {
-        compute_skill_specs_effect(skill_specs.base.skill_type, skill_effect, effects)
-    }
-
-    for _ in 1..skill_specs.upgrade_level {
-        increase_skill_effects(skill_specs, 1.2);
-    }
-}
-
-pub fn compute_skill_specs_effect(
-    skill_type: SkillType,
-    skill_effect: &mut SkillEffect,
-    effects: &[StatEffect],
-) {
-    for effect in effects.iter() {
-        match &mut skill_effect.effect_type {
-            SkillEffectType::FlatDamage {
-                damage,
-                crit_chances,
-                crit_damage,
-            } => {
-                match effect.stat {
-                    StatType::SpellPower if skill_type == SkillType::Spell => {
-                        for (min, max) in damage.values_mut() {
-                            min.apply_effect(effect);
-                            max.apply_effect(effect);
-                        }
-                    }
-                    StatType::Damage {
-                        skill_type: skill_type2,
-                        damage_type,
-                    } if skill_type == skill_type2.unwrap_or(skill_type) => {
-                        apply_effect_on_damage(damage, damage_type, Some(effect), Some(effect))
-                    }
-                    StatType::MinDamage {
-                        skill_type: skill_type2,
-                        damage_type,
-                    } if skill_type == skill_type2.unwrap_or(skill_type) => {
-                        apply_effect_on_damage(damage, damage_type, Some(effect), None)
-                    }
-                    StatType::MaxDamage {
-                        skill_type: skill_type2,
-                        damage_type,
-                    } if skill_type == skill_type2.unwrap_or(skill_type) => {
-                        apply_effect_on_damage(damage, damage_type, None, Some(effect))
-                    }
-                    _ => {}
-                }
-                match effect.stat {
-                    StatType::CritChances(skill_type2)
-                        if skill_type == skill_type2.unwrap_or(skill_type) =>
-                    {
-                        crit_chances.apply_effect(effect);
-                    }
-                    StatType::CritDamage(skill_type2)
-                        if skill_type == skill_type2.unwrap_or(skill_type) =>
-                    {
-                        crit_damage.apply_effect(effect);
-                    }
-                    _ => {}
-                }
-
-                *crit_chances = crit_chances.clamp(0.0, 1.0);
-                damage.retain(|_, (min, max)| {
-                    *min = min.clamp(0.0, *max);
-                    *max > 0.0
-                });
-            }
-            SkillEffectType::Heal { min, max } => {
-                if effect.stat == StatType::SpellPower {
-                    min.apply_effect(effect);
-                    max.apply_effect(effect);
-                }
-            }
-            SkillEffectType::ApplyStatus {
-                status_type,
-                min_value,
-                max_value,
-                ..
-            } => match status_type {
-                StatusType::Stunned => {
-                    // Something?
-                }
-                StatusType::DamageOverTime(damage_type) => match effect.stat {
-                    StatType::SpellPower if skill_type == SkillType::Spell => {
-                        min_value.apply_effect(effect);
-                        max_value.apply_effect(effect);
-                    }
-                    StatType::Damage {
-                        skill_type: skill_type2,
-                        damage_type: damage_type2,
-                    } if skill_type == skill_type2.unwrap_or(skill_type)
-                        && *damage_type == damage_type2.unwrap_or(*damage_type) =>
-                    {
-                        min_value.apply_effect(effect);
-                        max_value.apply_effect(effect);
-                    }
-                    _ => {}
-                },
-            },
-        }
-    }
-}
-
-fn apply_effect_on_damage(
-    damage: &mut DamageMap,
-    damage_type: Option<DamageType>,
-    min_effect: Option<&StatEffect>,
-    max_effect: Option<&StatEffect>,
-) {
-    match damage_type {
-        Some(damage_type) => {
-            let (min, max) = damage.entry(damage_type).or_insert((0.0, 0.0));
-            if let Some(e) = min_effect {
-                min.apply_effect(e);
-            }
-            if let Some(e) = max_effect {
-                max.apply_effect(e);
-            }
-        }
-        None => {
-            for (min, max) in damage.values_mut() {
-                if let Some(e) = min_effect {
-                    min.apply_effect(e);
-                }
-                if let Some(e) = max_effect {
-                    max.apply_effect(e);
-                }
-            }
         }
     }
 }

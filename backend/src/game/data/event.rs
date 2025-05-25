@@ -2,13 +2,13 @@ use std::collections::HashMap;
 
 use shared::data::{
     character::CharacterId,
-    skill::{DamageType, SkillType},
+    skill::{DamageType, SkillRange, SkillType},
     world::AreaLevel,
 };
 
 pub enum GameEvent {
     Hit(DamageEvent),
-    CriticalStrike(DamageEvent),
+    CriticalHit(DamageEvent),
     Block(DamageEvent),
     Kill { target: CharacterId },
     AreaCompleted(AreaLevel),
@@ -17,9 +17,10 @@ pub enum GameEvent {
 
 #[derive(Debug, Clone)]
 pub struct DamageEvent {
-    pub attacker: CharacterId,
+    pub source: CharacterId,
     pub target: CharacterId,
     pub skill_type: SkillType,
+    pub range: SkillRange,
     pub damage: HashMap<DamageType, f64>,
 }
 

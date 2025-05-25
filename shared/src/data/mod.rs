@@ -9,4 +9,5 @@ pub mod passive;
 pub mod player;
 pub mod skill;
 pub mod stat_effect;
+pub mod trigger;
 pub mod world;

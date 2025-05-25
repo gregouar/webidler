@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use super::character_status::StatusMap;
+use super::character_status::{StatusMap, StatusType};
 pub use super::skill::{SkillSpecs, SkillState};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
@@ -67,4 +67,10 @@ pub struct CharacterState {
     pub just_hurt: bool,
     pub just_hurt_crit: bool,
     pub just_blocked: bool,
+}
+
+impl CharacterState {
+    pub fn is_stunned(&self) -> bool {
+        self.statuses.contains_key(&StatusType::Stunned)
+    }
 }

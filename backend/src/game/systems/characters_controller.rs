@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use shared::data::{
     character::{CharacterId, CharacterSpecs, CharacterState},
     character_status::{StatusState, StatusType},
+    item::SkillRange,
     skill::{DamageType, SkillType},
 };
 
@@ -19,6 +20,7 @@ pub fn attack_character(
     attacker: CharacterId,
     damage: HashMap<DamageType, f64>,
     skill_type: SkillType,
+    range: SkillRange,
     is_crit: bool,
 ) {
     let (target_id, (target_specs, target_state)) = target;
@@ -31,9 +33,10 @@ pub fn attack_character(
         .sum();
 
     let damage_event = DamageEvent {
-        attacker,
+        source: attacker,
         target: *target_id,
         skill_type,
+        range,
         damage,
     };
 
@@ -52,7 +55,7 @@ pub fn attack_character(
 
     if is_crit {
         target_state.just_hurt_crit = true;
-        events_queue.register_event(GameEvent::CriticalStrike(damage_event.clone()));
+        events_queue.register_event(GameEvent::CriticalHit(damage_event.clone()));
     }
 
     target_state.health = (target_state.health - amount)

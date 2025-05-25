@@ -53,6 +53,7 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             gold_find: 1.0,
             effects: EffectsMap::default(),
             auto_skills: vec![],
+            triggers: Vec::new(),
         }
     }
 }

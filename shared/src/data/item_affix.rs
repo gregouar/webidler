@@ -3,7 +3,7 @@ use std::collections::HashSet;
 
 use super::world::AreaLevel;
 
-pub use super::skill::{Range, Shape};
+pub use super::skill::{SkillRange, SkillShape};
 pub use super::stat_effect::{DamageType, EffectModifier, StatEffect, StatType};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]

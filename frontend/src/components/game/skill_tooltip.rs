@@ -4,7 +4,7 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 use shared::data::skill::SkillTargetsGroup;
-use shared::data::skill::{Range, Shape, SkillEffect, SkillEffectType, SkillSpecs};
+use shared::data::skill::{SkillEffect, SkillEffectType, SkillRange, SkillShape, SkillSpecs};
 
 use crate::components::{game::effects_tooltip::damage_type_str, ui::number::format_number};
 
@@ -70,18 +70,18 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
 fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
     let shape = match targets_group.shape {
-        Shape::Single => "",
-        Shape::Vertical2 => ", 2x1 area",
-        Shape::Horizontal2 => ", 1x2 area",
-        Shape::Horizontal3 => ", 1x3 area",
-        Shape::Square4 => ", 2x2 area",
-        Shape::All => ", all",
+        SkillShape::Single => "",
+        SkillShape::Vertical2 => ", 2x1 area",
+        SkillShape::Horizontal2 => ", 1x2 area",
+        SkillShape::Horizontal3 => ", 1x3 area",
+        SkillShape::Square4 => ", 2x2 area",
+        SkillShape::All => ", all",
     };
 
     let range = match targets_group.range {
-        Range::Melee => "Melee",
-        Range::Distance => "Distance",
-        Range::Any => "Any",
+        SkillRange::Melee => "Melee",
+        SkillRange::Distance => "Distance",
+        SkillRange::Any => "Any",
     };
 
     let effects = targets_group

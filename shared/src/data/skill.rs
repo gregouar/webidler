@@ -64,11 +64,11 @@ impl SkillType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SkillTargetsGroup {
     #[serde(default)]
-    pub range: Range,
+    pub range: SkillRange,
     #[serde(default)]
     pub target_type: TargetType,
     #[serde(default)]
-    pub shape: Shape,
+    pub shape: SkillShape,
 
     pub effects: Vec<SkillEffect>,
 }
@@ -112,8 +112,8 @@ pub enum TargetType {
     Me,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
-pub enum Range {
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default, Eq, Hash)]
+pub enum SkillRange {
     #[default]
     Melee,
     Distance,
@@ -121,7 +121,7 @@ pub enum Range {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
-pub enum Shape {
+pub enum SkillShape {
     #[default]
     Single,
     Vertical2,

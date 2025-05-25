@@ -194,17 +194,17 @@ pub fn formatted_effects_list(
                 effect.value * 100.0
             )),
             (CritChances(skill_type), Flat) => merged.push(format!(
-                "Adds {:.2}% Critical Strike Chances{}",
+                "Adds {:.2}% Critical Hit Chances{}",
                 effect.value * 100.0,
                 to_skill_type_str(skill_type)
             )),
             (CritChances(skill_type), Multiplier) => merged.push(format!(
-                "{:.0}% Increased{} Critical Strike Chances",
+                "{:.0}% Increased{} Critical Hit Chances",
                 effect.value * 100.0,
                 skill_type_str(skill_type)
             )),
             (CritDamage(skill_type), Flat) => merged.push(format!(
-                "Adds {:.0}% Critical Strike Damage{}",
+                "Adds {:.0}% Critical Hit Damage{}",
                 effect.value * 100.0,
                 to_skill_type_str(skill_type)
             )),

@@ -33,11 +33,14 @@ pub fn update_monster_states(
             &monster_specs.character_specs,
             &mut monster_state.character_state,
         );
-        skills_updater::update_skills_states(
-            elapsed_time,
-            &monster_specs.skill_specs,
-            &mut monster_state.skill_states,
-        );
+
+        if !monster_state.character_state.is_stunned() {
+            skills_updater::update_skills_states(
+                elapsed_time,
+                &monster_specs.skill_specs,
+                &mut monster_state.skill_states,
+            );
+        }
     }
 }
 
