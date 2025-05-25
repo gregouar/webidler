@@ -100,6 +100,8 @@ impl PlayerController {
                 player_state.mana -= skill_specs.mana_cost;
             }
         }
+
+        self.reset();
     }
 }
 

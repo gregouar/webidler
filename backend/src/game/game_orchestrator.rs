@@ -46,7 +46,7 @@ pub async fn tick(
     }
 
     control_entities(events_queue, game_data, master_store).await?;
-    resolve_events(events_queue, game_data).await;
+    resolve_events(events_queue, game_data, master_store).await;
     update_entities(events_queue, game_data, elapsed_time).await;
 
     Ok(())
@@ -86,31 +86,28 @@ async fn control_entities(
             &mut game_data.player_state,
             &mut monsters_still_alive,
         );
-        game_data.player_controller.reset();
 
-        if monsters_still_alive.is_empty() || game_data.world_state.read().going_back > 0 {
-            if game_data.world_state.read().going_back == 0
-                && !game_data.looted
-                && game_data.world_state.read().waves_done == WAVES_PER_AREA_LEVEL
-            {
-                if let Some(item_specs) = loot_generator::generate_loot(
+        let wave_completed = monsters_still_alive.is_empty();
+        if wave_completed || game_data.world_state.read().going_back > 0 {
+            if wave_completed && !game_data.wave_completed {
+                game_data.wave_completed = true;
+                events_queue.register_event(GameEvent::WaveCompleted(
                     game_data.world_state.read().area_level,
-                    &game_data.world_blueprint.loot_table,
-                    &master_store.items_store,
-                    &master_store.item_affixes_table,
-                    &master_store.item_adjectives_table,
-                    &master_store.item_nouns_table,
-                ) {
-                    loot_controller::drop_loot(game_data.queued_loot.mutate(), item_specs);
-                }
-                game_data.looted = true;
+                ));
             }
 
             if game_data.monster_wave_delay.elapsed()
                 > Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown)
             {
+                if game_data.world_state.read().going_back > 0 {
+                    let world_state: &mut shared::data::world::WorldState =
+                        game_data.world_state.mutate();
+                    let amount = world_state.going_back;
+                    world_controller::decrease_area_level(world_state, amount);
+                    world_state.going_back = 0;
+                }
                 generate_monsters_wave(game_data, master_store).await?;
-                game_data.looted = false;
+                game_data.wave_completed = false;
             }
         } else {
             game_data.monster_wave_delay = Instant::now();
@@ -147,7 +144,11 @@ async fn update_entities(
     );
 }
 
-async fn resolve_events(events_queue: &mut EventsQueue, game_data: &mut GameInstanceData) {
+async fn resolve_events(
+    events_queue: &mut EventsQueue,
+    game_data: &mut GameInstanceData,
+    master_store: &MasterStore,
+) {
     for event in events_queue.consume_events() {
         // TODO
         match event {
@@ -168,6 +169,37 @@ async fn resolve_events(events_queue: &mut EventsQueue, game_data: &mut GameInst
                     }
                 }
             }
+            GameEvent::AreaCompleted(area_level) => {
+                if let Some(item_specs) = loot_generator::generate_loot(
+                    area_level,
+                    &game_data.world_blueprint.loot_table,
+                    &master_store.items_store,
+                    &master_store.item_affixes_table,
+                    &master_store.item_adjectives_table,
+                    &master_store.item_nouns_table,
+                ) {
+                    loot_controller::drop_loot(game_data.queued_loot.mutate(), item_specs);
+                }
+
+                let world_state = game_data.world_state.mutate();
+                world_state.waves_done = 1;
+                if world_state.auto_progress {
+                    world_state.area_level += 1;
+                }
+
+                game_data.game_stats.areas_completed += 1;
+                game_data.game_stats.highest_area_level =
+                    game_data.game_stats.highest_area_level.max(area_level);
+            }
+            GameEvent::WaveCompleted(area_level) => {
+                let world_state = game_data.world_state.mutate();
+
+                world_state.waves_done += 1;
+
+                if game_data.world_state.read().waves_done > WAVES_PER_AREA_LEVEL {
+                    events_queue.register_event(GameEvent::AreaCompleted(area_level));
+                }
+            }
         }
     }
 }
@@ -176,32 +208,9 @@ async fn generate_monsters_wave(
     game_data: &mut GameInstanceData,
     master_store: &MasterStore,
 ) -> Result<()> {
-    let world_state = game_data.world_state.mutate();
-
-    if world_state.going_back > 0 {
-        let amount = world_state.going_back;
-        world_controller::decrease_area_level(world_state, amount);
-    }
-
-    world_state.going_back = 0;
-    world_state.waves_done += 1;
-
-    if world_state.waves_done > WAVES_PER_AREA_LEVEL {
-        world_state.waves_done = 1;
-        game_data.game_stats.areas_completed += 1;
-        if world_state.auto_progress {
-            world_state.area_level += 1;
-        }
-    }
-
-    game_data.game_stats.highest_area_level = game_data
-        .game_stats
-        .highest_area_level
-        .max(world_state.area_level);
-
     game_data.monster_specs = LazySyncer::new(monsters_wave::generate_monsters_wave_specs(
         &game_data.world_blueprint,
-        world_state,
+        &game_data.world_state.read(),
         &master_store.monster_specs_store,
     )?);
 
@@ -217,7 +226,7 @@ async fn generate_monsters_wave(
 
 fn respawn_player(game_data: &mut GameInstanceData) {
     game_data.monster_specs.mutate().clear();
-    game_data.monster_states = Vec::new();
+    game_data.monster_states.clear();
 
     game_data.player_state = PlayerState::init(game_data.player_specs.read());
 

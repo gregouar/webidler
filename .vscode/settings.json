@@ -9,6 +9,9 @@
         "Armor",
         "cooldown",
         "Crit",
-        "RESPAWN"
+        "RESPAWN",
+        "Syncer",
+        "syncers",
+        "Unequip"
     ]
 }

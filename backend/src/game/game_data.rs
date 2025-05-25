@@ -33,7 +33,7 @@ pub struct GameInstanceData {
     pub monster_states: Vec<MonsterState>,
     pub monster_wave_delay: Instant,
 
-    pub looted: bool,
+    pub wave_completed: bool,
     pub queued_loot: LazySyncer<Vec<QueuedLoot>>,
 
     pub game_stats: GameStats,
@@ -65,7 +65,7 @@ impl GameInstanceData {
             monster_states: Vec::new(),
             monster_wave_delay: Instant::now(),
 
-            looted: false,
+            wave_completed: false,
             queued_loot: LazySyncer::new(Vec::new()),
 
             game_stats: GameStats::default(),
