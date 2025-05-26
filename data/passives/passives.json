@@ -666,14 +666,14 @@
         "triggers": [
           {
             "trigger":"OnWaveCompleted",
-            "description": "Restore Area Level x 20 Health at the end of each wave.",
+            "description": "Restore Area Level x 10 Health at the end of each wave.",
             "ApplySkillEffects": {
               "target": "Source",
               "effects": [
                 {
                   "Heal": {
-                    "min": 20,
-                    "max": 20
+                    "min": 10,
+                    "max": 10
                   }
                 }
               ],
@@ -740,7 +740,7 @@
         "icon": "passives/burning_book.svg",
         "x": 0,
         "y": -40,
-        "node_type": "Spell",
+        "node_type": "Mana",
         "size": 1,
         "effects": [
           {
