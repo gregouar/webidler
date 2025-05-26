@@ -350,7 +350,7 @@ fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
             }
             "
         </style>
-        <div class="bg-zinc-800 rounded-lg shadow-[inset_0_0_24px_rgba(0,0,0,0.6)]  py-4 ring-1 ring-zinc-900">
+        <div class="bg-neutral-900 rounded-lg shadow-[inset_0_0_24px_rgba(0,0,0,0.6)]  py-4 ring-1 ring-zinc-900">
             <h2 class="text-amber-300 text-md font-bold mb-2 tracking-wide">{title}</h2>
             <div class="flex flex-col gap-1 stat-list">{children()}</div>
         </div>

@@ -5,21 +5,24 @@ use shared::data::{
     character::CharacterId,
     item::SkillRange,
     monster::MonsterState,
+    passive::StatEffect,
     player::PlayerState,
     skill::SkillType,
-    trigger::{EventTrigger, HitTrigger, TriggerEffectType, TriggerTarget},
+    trigger::{
+        EventTrigger, HitTrigger, TriggerEffectModifierSource, TriggerEffectType, TriggerTarget,
+    },
 };
 
 use super::{
     data::{
-        event::{EventsQueue, GameEvent},
+        event::{DamageEvent, EventsQueue, GameEvent},
         master_store::MasterStore,
         DataInit,
     },
     game_data::GameInstanceData,
     systems::{
         loot_controller, loot_generator, monsters_controller, monsters_updater, monsters_wave,
-        player_controller, player_updater, skills_controller, world_controller,
+        player_controller, player_updater, skills_controller, skills_updater, world_controller,
     },
     utils::LazySyncer,
 };
@@ -151,10 +154,11 @@ async fn update_entities(
     );
 }
 
-struct TriggerContext {
+struct TriggerContext<'a> {
     effect: TriggerEffectType,
     source: CharacterId,
     target: CharacterId,
+    hit_context: Option<&'a DamageEvent>,
 }
 
 async fn resolve_events(
@@ -164,7 +168,8 @@ async fn resolve_events(
 ) {
     let mut trigger_effects = Vec::new();
 
-    for event in events_queue.consume_events() {
+    let events = events_queue.consume_events();
+    for event in events.iter() {
         match event {
             GameEvent::Hit(damage_event) => {
                 if let CharacterId::Player = damage_event.source {
@@ -180,6 +185,7 @@ async fn resolve_events(
                                     effect: triggered_effects.effect.clone(),
                                     source: damage_event.source,
                                     target: damage_event.target,
+                                    hit_context: Some(&damage_event),
                                 });
                             }
                         }
@@ -199,6 +205,7 @@ async fn resolve_events(
                                     effect: triggered_effects.effect.clone(),
                                     source: damage_event.source,
                                     target: damage_event.target,
+                                    hit_context: Some(&damage_event),
                                 });
                             }
                         }
@@ -219,6 +226,7 @@ async fn resolve_events(
                                     effect: triggered_effects.effect.clone(),
                                     source: damage_event.source,
                                     target: damage_event.target,
+                                    hit_context: Some(&damage_event),
                                 });
                             }
                         }
@@ -239,6 +247,7 @@ async fn resolve_events(
                                     effect: triggered_effects.effect.clone(),
                                     source: damage_event.source,
                                     target: damage_event.target,
+                                    hit_context: Some(&damage_event),
                                 });
                             }
                         }
@@ -249,7 +258,7 @@ async fn resolve_events(
                 if let CharacterId::Monster(monster_index) = target {
                     game_data.game_stats.monsters_killed += 1;
                     if let Some(monster_specs) =
-                        game_data.monster_specs.read().get(monster_index as usize)
+                        game_data.monster_specs.read().get(*monster_index as usize)
                     {
                         player_controller::reward_player(
                             game_data.player_resources.mutate(),
@@ -264,7 +273,8 @@ async fn resolve_events(
                                 trigger_effects.push(TriggerContext {
                                     effect: triggered_effects.effect.clone(),
                                     source: CharacterId::Player,
-                                    target,
+                                    target: *target,
+                                    hit_context: None,
                                 });
                             }
                         }
@@ -273,7 +283,7 @@ async fn resolve_events(
             }
             GameEvent::AreaCompleted(area_level) => {
                 if let Some(item_specs) = loot_generator::generate_loot(
-                    area_level,
+                    *area_level,
                     &game_data.world_blueprint.loot_table,
                     &master_store.items_store,
                     &master_store.item_affixes_table,
@@ -291,7 +301,7 @@ async fn resolve_events(
 
                 game_data.game_stats.areas_completed += 1;
                 game_data.game_stats.highest_area_level =
-                    game_data.game_stats.highest_area_level.max(area_level);
+                    game_data.game_stats.highest_area_level.max(*area_level);
             }
             GameEvent::WaveCompleted(area_level) => {
                 let world_state = game_data.world_state.mutate();
@@ -299,7 +309,18 @@ async fn resolve_events(
                 world_state.waves_done += 1;
 
                 if game_data.world_state.read().waves_done > WAVES_PER_AREA_LEVEL {
-                    events_queue.register_event(GameEvent::AreaCompleted(area_level));
+                    events_queue.register_event(GameEvent::AreaCompleted(*area_level));
+                }
+
+                for triggered_effects in game_data.player_specs.read().triggers.iter() {
+                    if let EventTrigger::OnWaveCompleted(_) = triggered_effects.trigger {
+                        trigger_effects.push(TriggerContext {
+                            effect: triggered_effects.effect.clone(),
+                            source: CharacterId::Player,
+                            target: CharacterId::Player,
+                            hit_context: None,
+                        });
+                    }
                 }
             }
         }
@@ -318,7 +339,11 @@ fn resolve_trigger_effects(
     for trigger_effect in trigger_effects {
         match trigger_effect.effect {
             TriggerEffectType::UseSkill => todo!(),
-            TriggerEffectType::ApplySkillEffects { target, effects } => {
+            TriggerEffectType::ApplySkillEffects {
+                target,
+                effects,
+                modifiers,
+            } => {
                 let target_id = match target {
                     TriggerTarget::SameTarget => trigger_effect.target,
                     TriggerTarget::Source => trigger_effect.source,
@@ -342,16 +367,46 @@ fn resolve_trigger_effects(
                     ),
                 };
 
+                let effects_modifiers: Vec<_> = modifiers
+                    .iter()
+                    .map(|modifier| StatEffect {
+                        stat: modifier.stat,
+                        modifier: modifier.modifier,
+                        value: modifier.factor
+                            * match modifier.source {
+                                TriggerEffectModifierSource::HitDamage(Some(damage_type)) => {
+                                    trigger_effect
+                                        .hit_context
+                                        .as_ref()
+                                        .and_then(|hit| hit.damage.get(&damage_type))
+                                        .map(|x| *x)
+                                        .unwrap_or_default()
+                                }
+                                TriggerEffectModifierSource::HitDamage(None) => trigger_effect
+                                    .hit_context
+                                    .as_ref()
+                                    .map(|hit| hit.damage.values().sum())
+                                    .unwrap_or_default(),
+                            },
+                    })
+                    .collect();
+
+                let skill_type = SkillType::Spell; // TODO
                 if let (Some(specs), Some(state)) = target {
                     let mut target = (target_id, (specs, state));
                     let mut targets = vec![&mut target];
-                    for effect in effects.iter() {
+                    for mut effect in effects.iter().cloned() {
+                        skills_updater::compute_skill_specs_effect(
+                            skill_type,
+                            &mut effect,
+                            &effects_modifiers,
+                        );
                         skills_controller::apply_skill_effect(
                             events_queue,
                             trigger_effect.source,
-                            SkillType::Spell, // TODO
-                            SkillRange::Any,  // TODO
-                            effect,
+                            skill_type,
+                            SkillRange::Any, // TODO
+                            &effect,
                             &mut targets,
                         );
                     }

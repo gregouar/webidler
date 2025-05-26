@@ -89,6 +89,7 @@ pub fn apply_status(target: &mut Target, status_type: StatusType, value: f64, du
 
     let mut value = value;
 
+    // TODO: How to avoid double dip if from Trigger?
     match status_type {
         StatusType::Stun => {}
         StatusType::DamageOverTime(damage_type) => {

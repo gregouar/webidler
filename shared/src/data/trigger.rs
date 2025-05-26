@@ -1,6 +1,10 @@
 use serde::{Deserialize, Serialize};
 
-use super::skill::{SkillEffect, SkillRange, SkillType};
+use super::{
+    item_affix::{EffectModifier, StatType},
+    skill::{DamageType, SkillEffect, SkillRange, SkillType},
+    world::AreaLevel,
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum EventTrigger {
@@ -9,8 +13,10 @@ pub enum EventTrigger {
     OnTakeHit(HitTrigger),
     OnBlock(HitTrigger),
     OnKill,
+    OnWaveCompleted(AreaLevel),
 }
 
+// TODO: replace by simple tag system?
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct HitTrigger {
     #[serde(default)]
@@ -34,8 +40,23 @@ pub enum TriggerEffectType {
     ApplySkillEffects {
         #[serde(default)]
         target: TriggerTarget,
+        #[serde(default)]
+        modifiers: Vec<TriggerEffectModifier>,
         effects: Vec<SkillEffect>,
     },
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct TriggerEffectModifier {
+    pub stat: StatType,
+    pub modifier: EffectModifier,
+    pub factor: f64,
+    pub source: TriggerEffectModifierSource,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+pub enum TriggerEffectModifierSource {
+    HitDamage(Option<DamageType>),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]

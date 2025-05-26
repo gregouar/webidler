@@ -679,6 +679,14 @@
                     "max_duration": 2
                   }
                 }
+              ],
+              "modifiers": [
+                {
+                  "stat": {"Damage": {}},
+                  "modifier": "Multiplier",
+                  "factor": 1,
+                  "source": {"HitDamage": "Physical"}
+                }
               ]
             }
           }
