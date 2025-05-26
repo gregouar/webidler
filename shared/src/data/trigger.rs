@@ -9,9 +9,7 @@ use super::{
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum EventTrigger {
     OnHit(HitTrigger),
-    OnCriticalHit(HitTrigger),
     OnTakeHit(HitTrigger),
-    OnBlock(HitTrigger),
     OnKill,
     OnWaveCompleted(AreaLevel),
 }
@@ -23,6 +21,12 @@ pub struct HitTrigger {
     pub skill_type: Option<SkillType>,
     #[serde(default)]
     pub range: Option<SkillRange>,
+    #[serde(default)]
+    pub is_crit: Option<bool>,
+    #[serde(default)]
+    pub is_blocked: Option<bool>,
+    #[serde(default)]
+    pub is_hurt: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

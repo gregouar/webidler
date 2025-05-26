@@ -1,5 +1,6 @@
 use anyhow::Result;
 
+use shared::data::monster::MonsterState;
 use shared::data::world::AreaLevel;
 use shared::data::{monster::MonsterSpecs, world::WorldState};
 
@@ -22,7 +23,18 @@ impl RandomWeighted for &MonsterWaveBlueprint {
     }
 }
 
-pub fn generate_monsters_wave_specs(
+pub fn generate_monsters_wave(
+    world_blueprint: &WorldBlueprint,
+    world_state: &WorldState,
+    monsters_specs_store: &MonstersSpecsStore,
+) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>)> {
+    let monster_specs =
+        generate_monsters_wave_specs(world_blueprint, world_state, monsters_specs_store)?;
+    let monster_states = monster_specs.iter().map(MonsterState::init).collect();
+    Ok((monster_specs, monster_states))
+}
+
+fn generate_monsters_wave_specs(
     world_blueprint: &WorldBlueprint,
     world_state: &WorldState,
     monsters_specs_store: &MonstersSpecsStore,

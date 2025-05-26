@@ -1,35 +1,23 @@
 use anyhow::Result;
 use std::time::{Duration, Instant};
 
-use shared::data::{
-    character::CharacterId,
-    item::SkillRange,
-    monster::MonsterState,
-    passive::StatEffect,
-    player::PlayerState,
-    skill::SkillType,
-    trigger::{
-        EventTrigger, HitTrigger, TriggerEffectModifierSource, TriggerEffectType, TriggerTarget,
-    },
-};
+use shared::data::{character::CharacterId, player::PlayerState};
 
 use super::{
     data::{
-        event::{DamageEvent, EventsQueue, GameEvent},
+        event::{EventsQueue, GameEvent},
         master_store::MasterStore,
         DataInit,
     },
     game_data::GameInstanceData,
     systems::{
-        loot_controller, loot_generator, monsters_controller, monsters_updater, monsters_wave,
-        player_controller, player_updater, skills_controller, skills_updater, world_controller,
+        events_resolver, monsters_controller, monsters_updater, monsters_wave, player_updater,
+        world_controller,
     },
     utils::LazySyncer,
 };
 
 const PLAYER_RESPAWN_PERIOD: Duration = Duration::from_secs(5);
-
-const WAVES_PER_AREA_LEVEL: u8 = 5;
 
 pub async fn reset_entities(game_data: &mut GameInstanceData) {
     player_updater::reset_player(&mut game_data.player_state);
@@ -56,7 +44,7 @@ pub async fn tick(
     }
 
     control_entities(events_queue, game_data, master_store).await?;
-    resolve_events(events_queue, game_data, master_store).await;
+    events_resolver::resolve_events(events_queue, game_data, master_store).await;
     update_entities(events_queue, game_data, elapsed_time).await;
 
     Ok(())
@@ -69,7 +57,6 @@ async fn control_entities(
 ) -> Result<()> {
     if !game_data.player_state.character_state.is_alive {
         if game_data.player_respawn_delay.elapsed() > PLAYER_RESPAWN_PERIOD {
-            game_data.game_stats.player_deaths += 1;
             respawn_player(game_data);
         }
     } else {
@@ -116,7 +103,14 @@ async fn control_entities(
                     world_controller::decrease_area_level(world_state, amount);
                     world_state.going_back = 0;
                 }
-                generate_monsters_wave(game_data, master_store).await?;
+                let (monster_specs, monster_states) = monsters_wave::generate_monsters_wave(
+                    &game_data.world_blueprint,
+                    game_data.world_state.read(),
+                    &master_store.monster_specs_store,
+                )?;
+                game_data.monster_specs = LazySyncer::new(monster_specs);
+                game_data.monster_states = monster_states;
+
                 game_data.wave_completed = false;
             }
         } else {
@@ -152,288 +146,6 @@ async fn update_entities(
         game_data.monster_specs.read(),
         &mut game_data.monster_states,
     );
-}
-
-struct TriggerContext<'a> {
-    effect: TriggerEffectType,
-    source: CharacterId,
-    target: CharacterId,
-    hit_context: Option<&'a DamageEvent>,
-}
-
-async fn resolve_events(
-    events_queue: &mut EventsQueue,
-    game_data: &mut GameInstanceData,
-    master_store: &MasterStore,
-) {
-    let mut trigger_effects = Vec::new();
-
-    let events = events_queue.consume_events();
-    for event in events.iter() {
-        match event {
-            GameEvent::Hit(damage_event) => {
-                if let CharacterId::Player = damage_event.source {
-                    for triggered_effects in game_data.player_specs.read().triggers.iter() {
-                        if let EventTrigger::OnHit(HitTrigger { skill_type, range }) =
-                            triggered_effects.trigger
-                        {
-                            if skill_type.unwrap_or(damage_event.skill_type)
-                                == damage_event.skill_type
-                                && range.unwrap_or(damage_event.range) == damage_event.range
-                            {
-                                trigger_effects.push(TriggerContext {
-                                    effect: triggered_effects.effect.clone(),
-                                    source: damage_event.source,
-                                    target: damage_event.target,
-                                    hit_context: Some(&damage_event),
-                                });
-                            }
-                        }
-                    }
-                }
-
-                if let CharacterId::Player = damage_event.target {
-                    for triggered_effects in game_data.player_specs.read().triggers.iter() {
-                        if let EventTrigger::OnTakeHit(HitTrigger { skill_type, range }) =
-                            triggered_effects.trigger
-                        {
-                            if skill_type.unwrap_or(damage_event.skill_type)
-                                == damage_event.skill_type
-                                && range.unwrap_or(damage_event.range) == damage_event.range
-                            {
-                                trigger_effects.push(TriggerContext {
-                                    effect: triggered_effects.effect.clone(),
-                                    source: damage_event.source,
-                                    target: damage_event.target,
-                                    hit_context: Some(&damage_event),
-                                });
-                            }
-                        }
-                    }
-                }
-            }
-            GameEvent::CriticalHit(damage_event) => {
-                if let CharacterId::Player = damage_event.source {
-                    for triggered_effects in game_data.player_specs.read().triggers.iter() {
-                        if let EventTrigger::OnCriticalHit(HitTrigger { skill_type, range }) =
-                            triggered_effects.trigger
-                        {
-                            if skill_type.unwrap_or(damage_event.skill_type)
-                                == damage_event.skill_type
-                                && range.unwrap_or(damage_event.range) == damage_event.range
-                            {
-                                trigger_effects.push(TriggerContext {
-                                    effect: triggered_effects.effect.clone(),
-                                    source: damage_event.source,
-                                    target: damage_event.target,
-                                    hit_context: Some(&damage_event),
-                                });
-                            }
-                        }
-                    }
-                }
-            }
-            GameEvent::Block(damage_event) => {
-                if let CharacterId::Player = damage_event.source {
-                    for triggered_effects in game_data.player_specs.read().triggers.iter() {
-                        if let EventTrigger::OnBlock(HitTrigger { skill_type, range }) =
-                            triggered_effects.trigger
-                        {
-                            if skill_type.unwrap_or(damage_event.skill_type)
-                                == damage_event.skill_type
-                                && range.unwrap_or(damage_event.range) == damage_event.range
-                            {
-                                trigger_effects.push(TriggerContext {
-                                    effect: triggered_effects.effect.clone(),
-                                    source: damage_event.source,
-                                    target: damage_event.target,
-                                    hit_context: Some(&damage_event),
-                                });
-                            }
-                        }
-                    }
-                }
-            }
-            GameEvent::Kill { target } => {
-                if let CharacterId::Monster(monster_index) = target {
-                    game_data.game_stats.monsters_killed += 1;
-                    if let Some(monster_specs) =
-                        game_data.monster_specs.read().get(*monster_index as usize)
-                    {
-                        player_controller::reward_player(
-                            game_data.player_resources.mutate(),
-                            game_data.player_specs.read(),
-                            monster_specs,
-                        );
-                    }
-
-                    for triggered_effects in game_data.player_specs.read().triggers.iter() {
-                        if let EventTrigger::OnKill = triggered_effects.trigger {
-                            if let CharacterId::Monster(_) = target {
-                                trigger_effects.push(TriggerContext {
-                                    effect: triggered_effects.effect.clone(),
-                                    source: CharacterId::Player,
-                                    target: *target,
-                                    hit_context: None,
-                                });
-                            }
-                        }
-                    }
-                }
-            }
-            GameEvent::AreaCompleted(area_level) => {
-                if let Some(item_specs) = loot_generator::generate_loot(
-                    *area_level,
-                    &game_data.world_blueprint.loot_table,
-                    &master_store.items_store,
-                    &master_store.item_affixes_table,
-                    &master_store.item_adjectives_table,
-                    &master_store.item_nouns_table,
-                ) {
-                    loot_controller::drop_loot(game_data.queued_loot.mutate(), item_specs);
-                }
-
-                let world_state = game_data.world_state.mutate();
-                world_state.waves_done = 1;
-                if world_state.auto_progress {
-                    world_state.area_level += 1;
-                }
-
-                game_data.game_stats.areas_completed += 1;
-                game_data.game_stats.highest_area_level =
-                    game_data.game_stats.highest_area_level.max(*area_level);
-            }
-            GameEvent::WaveCompleted(area_level) => {
-                let world_state = game_data.world_state.mutate();
-
-                world_state.waves_done += 1;
-
-                if game_data.world_state.read().waves_done > WAVES_PER_AREA_LEVEL {
-                    events_queue.register_event(GameEvent::AreaCompleted(*area_level));
-                }
-
-                for triggered_effects in game_data.player_specs.read().triggers.iter() {
-                    if let EventTrigger::OnWaveCompleted(_) = triggered_effects.trigger {
-                        trigger_effects.push(TriggerContext {
-                            effect: triggered_effects.effect.clone(),
-                            source: CharacterId::Player,
-                            target: CharacterId::Player,
-                            hit_context: None,
-                        });
-                    }
-                }
-            }
-        }
-    }
-
-    resolve_trigger_effects(events_queue, game_data, master_store, trigger_effects);
-}
-
-fn resolve_trigger_effects(
-    events_queue: &mut EventsQueue,
-    game_data: &mut GameInstanceData,
-    master_store: &MasterStore,
-    trigger_effects: Vec<TriggerContext>,
-) {
-    let _ = master_store; // TODO: Remove
-    for trigger_effect in trigger_effects {
-        match trigger_effect.effect {
-            TriggerEffectType::UseSkill => todo!(),
-            TriggerEffectType::ApplySkillEffects {
-                target,
-                effects,
-                modifiers,
-            } => {
-                let target_id = match target {
-                    TriggerTarget::SameTarget => trigger_effect.target,
-                    TriggerTarget::Source => trigger_effect.source,
-                };
-                // TODO: Multi targets
-                let target = match target_id {
-                    CharacterId::Player => (
-                        Some(&game_data.player_specs.read().character_specs),
-                        Some(&mut game_data.player_state.character_state),
-                    ),
-                    CharacterId::Monster(i) => (
-                        game_data
-                            .monster_specs
-                            .read()
-                            .get(i)
-                            .map(|m| &m.character_specs),
-                        game_data
-                            .monster_states
-                            .get_mut(i)
-                            .map(|m| &mut m.character_state),
-                    ),
-                };
-
-                let effects_modifiers: Vec<_> = modifiers
-                    .iter()
-                    .map(|modifier| StatEffect {
-                        stat: modifier.stat,
-                        modifier: modifier.modifier,
-                        value: modifier.factor
-                            * match modifier.source {
-                                TriggerEffectModifierSource::HitDamage(Some(damage_type)) => {
-                                    trigger_effect
-                                        .hit_context
-                                        .as_ref()
-                                        .and_then(|hit| hit.damage.get(&damage_type))
-                                        .map(|x| *x)
-                                        .unwrap_or_default()
-                                }
-                                TriggerEffectModifierSource::HitDamage(None) => trigger_effect
-                                    .hit_context
-                                    .as_ref()
-                                    .map(|hit| hit.damage.values().sum())
-                                    .unwrap_or_default(),
-                            },
-                    })
-                    .collect();
-
-                let skill_type = SkillType::Spell; // TODO
-                if let (Some(specs), Some(state)) = target {
-                    let mut target = (target_id, (specs, state));
-                    let mut targets = vec![&mut target];
-                    for mut effect in effects.iter().cloned() {
-                        skills_updater::compute_skill_specs_effect(
-                            skill_type,
-                            &mut effect,
-                            &effects_modifiers,
-                        );
-                        skills_controller::apply_skill_effect(
-                            events_queue,
-                            trigger_effect.source,
-                            skill_type,
-                            SkillRange::Any, // TODO
-                            &effect,
-                            &mut targets,
-                        );
-                    }
-                }
-            }
-        }
-    }
-}
-
-async fn generate_monsters_wave(
-    game_data: &mut GameInstanceData,
-    master_store: &MasterStore,
-) -> Result<()> {
-    game_data.monster_specs = LazySyncer::new(monsters_wave::generate_monsters_wave_specs(
-        &game_data.world_blueprint,
-        &game_data.world_state.read(),
-        &master_store.monster_specs_store,
-    )?);
-
-    game_data.monster_states = game_data
-        .monster_specs
-        .read()
-        .iter()
-        .map(MonsterState::init)
-        .collect();
-
-    Ok(())
 }
 
 fn respawn_player(game_data: &mut GameInstanceData) {

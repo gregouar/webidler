@@ -7,20 +7,23 @@ use shared::data::{
 };
 
 pub enum GameEvent {
-    Hit(DamageEvent),
-    CriticalHit(DamageEvent),
-    Block(DamageEvent),
+    Hit(HitEvent),
     Kill { target: CharacterId },
     AreaCompleted(AreaLevel),
     WaveCompleted(AreaLevel),
 }
 
 #[derive(Debug, Clone)]
-pub struct DamageEvent {
+pub struct HitEvent {
     pub source: CharacterId,
     pub target: CharacterId,
+
     pub skill_type: SkillType,
     pub range: SkillRange,
+    pub is_crit: bool,
+    pub is_blocked: bool,
+    pub is_hurt: bool,
+
     pub damage: HashMap<DamageType, f64>,
 }
 

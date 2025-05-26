@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use super::character_status::{StatusMap, StatusType};
 pub use super::skill::{SkillSpecs, SkillState};
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum CharacterId {
     Player,
     Monster(usize),

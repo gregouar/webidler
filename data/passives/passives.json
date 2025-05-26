@@ -634,9 +634,9 @@
         "triggers": [
           {
             "trigger": {
-              "OnCriticalHit": { "skill_type": "Attack" }
+              "OnHit": { "skill_type": "Attack", "is_crit": true }
             },
-            "description": "Critical Hit with Attacks inflict Stun for 2 seconds",
+            "description": "Critical Hit with Attacks inflict Stun for 4 seconds",
             "ApplySkillEffects": {
               "effects": [
                 {
@@ -644,8 +644,8 @@
                     "status_type": "Stun",
                     "min_value": 0,
                     "max_value": 0,
-                    "min_duration": 2,
-                    "max_duration": 2
+                    "min_duration": 4,
+                    "max_duration": 4
                   }
                 }
               ]
@@ -665,9 +665,9 @@
         "triggers": [
           {
             "trigger": {
-              "OnCriticalHit": { "skill_type": "Attack" }
+              "OnHit": { "skill_type": "Attack", "is_crit": true }
             },
-            "description": "Critical Hit with Attacks inflict Bleed for 2 seconds",
+            "description": "Critical Hit with Attacks inflict Bleed for 2 seconds. Bleed damage is 50% of Physical Damage dealt by initial Hit per second.",
             "ApplySkillEffects": {
               "effects": [
                 {
@@ -684,7 +684,7 @@
                 {
                   "stat": {"Damage": {}},
                   "modifier": "Multiplier",
-                  "factor": 1,
+                  "factor": 0.5,
                   "source": {"HitDamage": "Physical"}
                 }
               ]

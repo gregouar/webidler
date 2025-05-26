@@ -8,7 +8,7 @@ use shared::data::{
 };
 
 use crate::game::{
-    data::event::{DamageEvent, EventsQueue, GameEvent},
+    data::event::{EventsQueue, GameEvent, HitEvent},
     utils::{increase_factors, rng},
 };
 
@@ -32,38 +32,37 @@ pub fn attack_character(
         })
         .sum();
 
-    let damage_event = DamageEvent {
+    let is_blocked = skill_type == SkillType::Attack
+        && rng::random_range(0.0..=1.0).unwrap_or(1.0) <= target_specs.block;
+
+    let is_hurt = amount > 0.0 && !is_blocked;
+
+    if is_blocked {
+        target_state.just_blocked = true;
+    }
+
+    if is_hurt && is_crit {
+        target_state.just_hurt_crit = true;
+    }
+
+    if is_hurt {
+        target_state.health = (target_state.health - amount)
+            .max(0.0)
+            .min(target_specs.max_life);
+
+        target_state.just_hurt = true;
+    }
+
+    events_queue.register_event(GameEvent::Hit(HitEvent {
         source: attacker,
         target: *target_id,
         skill_type,
         range,
         damage,
-    };
-
-    let is_blocked = skill_type == SkillType::Attack
-        && rng::random_range(0.0..=1.0).unwrap_or(1.0) <= target_specs.block;
-
-    if is_blocked {
-        target_state.just_blocked = true;
-        events_queue.register_event(GameEvent::Block(damage_event.clone()));
-        return;
-    }
-
-    if amount <= 0.0 {
-        return;
-    }
-
-    if is_crit {
-        target_state.just_hurt_crit = true;
-        events_queue.register_event(GameEvent::CriticalHit(damage_event.clone()));
-    }
-
-    target_state.health = (target_state.health - amount)
-        .max(0.0)
-        .min(target_specs.max_life);
-
-    target_state.just_hurt = true;
-    events_queue.register_event(GameEvent::Hit(damage_event));
+        is_crit,
+        is_blocked,
+        is_hurt,
+    }));
 }
 
 pub fn heal_character(target: &mut Target, amount: f64) {
