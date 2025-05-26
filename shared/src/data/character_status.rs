@@ -8,7 +8,11 @@ pub type StatusMap = HashMap<StatusType, StatusState>;
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatusType {
     Stun,
-    DamageOverTime(DamageType), // TODO: Armor penetration factor
+    DamageOverTime {
+        damage_type: DamageType,
+        #[serde(default)]
+        ignore_armor: bool,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

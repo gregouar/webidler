@@ -86,15 +86,13 @@ pub fn apply_status(target: &mut Target, status_type: StatusType, value: f64, du
         return;
     }
 
-    let mut value = value;
-
-    // TODO: How to avoid double dip if from Trigger?
-    match status_type {
-        StatusType::Stun => {}
-        StatusType::DamageOverTime(damage_type) => {
-            value = decrease_damage_from_armor(value, damage_type, target_specs);
-        }
-    }
+    let value = match status_type {
+        StatusType::DamageOverTime {
+            damage_type,
+            ignore_armor: false,
+        } => decrease_damage_from_armor(value, damage_type, target_specs),
+        _ => value,
+    };
 
     target_state
         .statuses

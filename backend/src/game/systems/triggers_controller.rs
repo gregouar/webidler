@@ -4,6 +4,7 @@ use shared::data::{
     passive::StatEffect,
     skill::SkillType,
     trigger::{TriggerEffectModifierSource, TriggerEffectType, TriggerTarget},
+    world::AreaLevel,
 };
 
 use crate::game::{
@@ -21,6 +22,7 @@ pub struct TriggerContext<'a> {
     pub source: CharacterId,
     pub target: CharacterId,
     pub hit_context: Option<&'a HitEvent>,
+    pub area_level: AreaLevel,
 }
 
 pub fn apply_trigger_effects(
@@ -81,6 +83,9 @@ pub fn apply_trigger_effects(
                                     .as_ref()
                                     .map(|hit| hit.damage.values().sum())
                                     .unwrap_or_default(),
+                                TriggerEffectModifierSource::AreaLevel => {
+                                    trigger_effect.area_level as f64
+                                }
                             },
                     })
                     .collect();

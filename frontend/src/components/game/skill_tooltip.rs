@@ -3,6 +3,7 @@ use std::sync::Arc;
 use leptos::html::*;
 use leptos::prelude::*;
 
+use shared::data::character_status::StatusType;
 use shared::data::skill::SkillTargetsGroup;
 use shared::data::skill::TargetType;
 use shared::data::skill::{SkillEffect, SkillEffectType, SkillRange, SkillShape, SkillSpecs};
@@ -155,11 +156,11 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                 max_duration,
             } => {
                 match status_type {
-                    shared::data::character_status::StatusType::Stun => {
+                    StatusType::Stun => {
                         view! { <EffectLi>"Stun for "{format_min_max(min_duration, max_duration)}" seconds"</EffectLi> }
                             .into_any()
                     }
-                    shared::data::character_status::StatusType::DamageOverTime(damage_type) => {
+                    StatusType::DamageOverTime { damage_type, .. } => {
                         view! {
                             <EffectLi>
                                 "Deals "

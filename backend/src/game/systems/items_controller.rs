@@ -148,7 +148,10 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
     if let Some(&(min_value, max_value)) = weapon_specs.damage.get(&DamageType::Poison) {
         effects.push(SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
-                status_type: StatusType::DamageOverTime(DamageType::Poison),
+                status_type: StatusType::DamageOverTime {
+                    damage_type: DamageType::Poison,
+                    ignore_armor: false,
+                },
                 min_value,
                 max_value,
                 min_duration: WEAPON_POISON_DAMAGE_DURATION,

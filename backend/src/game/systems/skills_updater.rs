@@ -136,7 +136,7 @@ pub fn compute_skill_specs_effect(
                 StatusType::Stun => {
                     // Something?
                 }
-                StatusType::DamageOverTime(damage_type) => match effect.stat {
+                StatusType::DamageOverTime { damage_type, .. } => match effect.stat {
                     StatType::SpellPower if skill_type == SkillType::Spell => {
                         min_value.apply_effect(effect);
                         max_value.apply_effect(effect);

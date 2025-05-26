@@ -3,7 +3,6 @@ use serde::{Deserialize, Serialize};
 use super::{
     item_affix::{EffectModifier, StatType},
     skill::{DamageType, SkillEffect, SkillRange, SkillType},
-    world::AreaLevel,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -11,7 +10,7 @@ pub enum EventTrigger {
     OnHit(HitTrigger),
     OnTakeHit(HitTrigger),
     OnKill,
-    OnWaveCompleted(AreaLevel),
+    OnWaveCompleted,
 }
 
 // TODO: replace by simple tag system?
@@ -61,6 +60,7 @@ pub struct TriggerEffectModifier {
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
+    AreaLevel,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]

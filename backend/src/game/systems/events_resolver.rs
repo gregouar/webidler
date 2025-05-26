@@ -57,6 +57,7 @@ fn handle_hit_event<'a>(
     game_data: &mut GameInstanceData,
     hit_event: &'a HitEvent,
 ) {
+    // TODO: Have the same for monsters... might need to go for an actual ECS for that
     for triggered_effects in game_data.player_specs.read().triggers.iter() {
         match triggered_effects.trigger {
             EventTrigger::OnHit(_) if hit_event.source == CharacterId::Player => {}
@@ -80,6 +81,7 @@ fn handle_hit_event<'a>(
                 source: hit_event.source,
                 target: hit_event.target,
                 hit_context: Some(&hit_event),
+                area_level: game_data.world_state.read().area_level,
             });
         }
     }
@@ -109,6 +111,7 @@ fn handle_kill_event(
                         source: CharacterId::Player,
                         target,
                         hit_context: None,
+                        area_level: game_data.world_state.read().area_level,
                     });
                 }
             }
@@ -161,12 +164,13 @@ fn handle_wave_completed_event(
     }
 
     for triggered_effects in game_data.player_specs.read().triggers.iter() {
-        if let EventTrigger::OnWaveCompleted(_) = triggered_effects.trigger {
+        if let EventTrigger::OnWaveCompleted = triggered_effects.trigger {
             trigger_effects.push(TriggerContext {
                 effect: triggered_effects.effect.clone(),
                 source: CharacterId::Player,
                 target: CharacterId::Player,
                 hit_context: None,
+                area_level: game_data.world_state.read().area_level,
             });
         }
     }

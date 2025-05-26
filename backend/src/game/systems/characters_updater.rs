@@ -43,7 +43,7 @@ pub fn update_character_state(
         .statuses
         .retain(|status_type, status_state| {
             match status_type {
-                StatusType::DamageOverTime(_) => {
+                StatusType::DamageOverTime { .. } => {
                     character_state.health -=
                         status_state.value * elapsed_time.as_secs_f64().min(status_state.duration)
                 }

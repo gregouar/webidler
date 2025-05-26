@@ -131,7 +131,7 @@ pub fn CharacterPortrait(
 fn StatusIcon(status_type: StatusType) -> impl IntoView {
     let (icon_uri, alt) = match status_type {
         StatusType::Stun => ("statuses/stunned.svg", "Stunned"),
-        StatusType::DamageOverTime(damage_type) => match damage_type {
+        StatusType::DamageOverTime { damage_type, .. } => match damage_type {
             shared::data::skill::DamageType::Physical => ("statuses/bleed.svg", "Bleeding"),
             shared::data::skill::DamageType::Fire => ("statuses/burning.svg", "Burning"),
             shared::data::skill::DamageType::Poison => ("statuses/poison.svg", "Poisoned"),

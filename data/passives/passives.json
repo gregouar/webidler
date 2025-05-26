@@ -654,13 +654,49 @@
         ]
       },
 
+      
+      "healing_aura": {
+        "initial_node": true,
+        "name": "Healing Aura",
+        "icon": "passives/healing_aura.svg",
+        "x": 40,
+        "y": -20,
+        "node_type": "Life",
+        "size": 1,
+        "triggers": [
+          {
+            "trigger":"OnWaveCompleted",
+            "description": "Restore Area Level x 20 Health at the end of each wave.",
+            "ApplySkillEffects": {
+              "target": "Source",
+              "effects": [
+                {
+                  "Heal": {
+                    "min": 20,
+                    "max": 20
+                  }
+                }
+              ],
+              "modifiers": [
+                {
+                  "stat":  "SpellPower" ,
+                  "modifier": "Multiplier",
+                  "factor": 1,
+                  "source": "AreaLevel"
+                }
+              ]
+            }
+          }
+        ]
+      },
+
       "bleeding_crit": {
         "initial_node": true,
         "name": "The Ripper",
         "icon": "passives/bleeding_heart.svg",
         "x": 0,
         "y": 40,
-        "node_type": "Critical",
+        "node_type": "Attack",
         "size": 1,
         "triggers": [
           {
@@ -672,7 +708,12 @@
               "effects": [
                 {
                   "ApplyStatus": {
-                    "status_type": {"DamageOverTime": "Physical"},
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Physical",
+                        "ignore_armor": true
+                      }
+                    },
                     "min_value": 1,
                     "max_value": 1,
                     "min_duration": 2,
@@ -682,16 +723,40 @@
               ],
               "modifiers": [
                 {
-                  "stat": {"Damage": {}},
+                  "stat": { "Damage": {} },
                   "modifier": "Multiplier",
                   "factor": 0.5,
-                  "source": {"HitDamage": "Physical"}
+                  "source": { "HitDamage": "Physical" }
                 }
               ]
             }
           }
         ]
+      },
+
+      "spell_crit": {
+        "initial_node": true,
+        "name": "Unstable Power",
+        "icon": "passives/burning_book.svg",
+        "x": 0,
+        "y": -40,
+        "node_type": "Spell",
+        "size": 1,
+        "effects": [
+          {
+            "stat": { "CritChances": "Spell" },
+            "modifier": "Flat",
+            "value": 0.05
+          },
+          {
+            "stat": { "CritDamage": "Spell" },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ]
       }
+
+
     },
     "connections": [
       { "from": "gold_init", "to": "gold_l_1" },
