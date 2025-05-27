@@ -1,14 +1,14 @@
-use shared::data::{item_affix::StatEffect, stat_effect::EffectModifier};
+use shared::data::{item_affix::StatEffect, stat_effect::Modifier};
 
 pub trait ApplyStatModifier {
-    fn apply_modifier(&mut self, modifier: EffectModifier, value: f64);
+    fn apply_modifier(&mut self, modifier: Modifier, value: f64);
     /// Use for applying decreased cooldown from increased speed
-    fn apply_inverse_modifier(&mut self, modifier: EffectModifier, value: f64) {
+    fn apply_inverse_modifier(&mut self, modifier: Modifier, value: f64) {
         self.apply_modifier(
             modifier,
             match modifier {
-                EffectModifier::Flat => -value,
-                EffectModifier::Multiplier => {
+                Modifier::Flat => -value,
+                Modifier::Multiplier => {
                     if value != -1.0 {
                         -(value / (1.0 + value))
                     } else {
@@ -27,19 +27,19 @@ pub trait ApplyStatModifier {
 }
 
 impl ApplyStatModifier for f32 {
-    fn apply_modifier(&mut self, modifier: EffectModifier, value: f64) {
+    fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
         match modifier {
-            EffectModifier::Flat => *self += value as f32,
-            EffectModifier::Multiplier => *self *= 1.0 + value as f32,
+            Modifier::Flat => *self += value as f32,
+            Modifier::Multiplier => *self *= 1.0 + value as f32,
         }
     }
 }
 
 impl ApplyStatModifier for f64 {
-    fn apply_modifier(&mut self, modifier: EffectModifier, value: f64) {
+    fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
         match modifier {
-            EffectModifier::Flat => *self += value,
-            EffectModifier::Multiplier => *self *= 1.0 + value,
+            Modifier::Flat => *self += value,
+            Modifier::Multiplier => *self *= 1.0 + value,
         }
     }
 }

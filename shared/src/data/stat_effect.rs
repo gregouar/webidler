@@ -22,10 +22,13 @@ impl DamageType {
 
 pub type DamageMap = HashMap<DamageType, (f64, f64)>;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum EffectModifier {
-    Flat,
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,
+)]
+pub enum Modifier {
+    #[default]
     Multiplier,
+    Flat,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -67,12 +70,12 @@ pub enum StatType {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct StatEffect {
     pub stat: StatType,
-    pub modifier: EffectModifier,
+    pub modifier: Modifier,
     pub value: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct EffectsMap(pub HashMap<(StatType, EffectModifier), f64>);
+pub struct EffectsMap(pub HashMap<(StatType, Modifier), f64>);
 
 impl From<&EffectsMap> for Vec<StatEffect> {
     fn from(val: &EffectsMap) -> Self {
@@ -95,8 +98,8 @@ impl EffectsMap {
                 result
                     .entry((target, modifier))
                     .and_modify(|entry| match modifier {
-                        EffectModifier::Flat => *entry += value,
-                        EffectModifier::Multiplier => *entry = (*entry + 1.0) * (1.0 + value) - 1.0,
+                        Modifier::Flat => *entry += value,
+                        Modifier::Multiplier => *entry = (*entry + 1.0) * (1.0 + value) - 1.0,
                     })
                     .or_insert(value);
                 result

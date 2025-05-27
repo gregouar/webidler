@@ -3,7 +3,7 @@ use std::vec;
 use shared::data::{
     character_status::StatusType,
     item::{ArmorSpecs, ItemSpecs, WeaponSpecs},
-    item_affix::{AffixEffectScope, EffectModifier, StatEffect, StatType},
+    item_affix::{AffixEffectScope, Modifier, StatEffect, StatType},
     skill::{
         BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType,
         TargetType,
@@ -28,8 +28,8 @@ pub fn update_item_specs(
         (&item_specs.aggregate_effects(AffixEffectScope::Local)).into();
 
     effects.sort_by_key(|e| match e.modifier {
-        EffectModifier::Flat => 0,
-        EffectModifier::Multiplier => 1,
+        Modifier::Flat => 0,
+        Modifier::Multiplier => 1,
     });
 
     if let Some(ref armor_specs) = item_specs.base.armor_specs {

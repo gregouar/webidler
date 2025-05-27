@@ -79,7 +79,13 @@ pub fn heal_character(target: &mut Target, amount: f64) {
     }
 }
 
-pub fn apply_status(target: &mut Target, status_type: StatusType, value: f64, duration: f64) {
+pub fn apply_status(
+    target: &mut Target,
+    status_type: StatusType,
+    value: f64,
+    duration: f64,
+    cumulate: bool,
+) {
     let (_, (target_specs, target_state)) = target;
 
     if duration <= 0.0 || !target_state.is_alive {
@@ -94,16 +100,31 @@ pub fn apply_status(target: &mut Target, status_type: StatusType, value: f64, du
         _ => value,
     };
 
-    target_state
+    let statuses = target_state
         .statuses
         .entry(status_type)
-        .and_modify(|cur_status| {
+        .or_insert_with(Vec::new);
+
+    if cumulate {
+        statuses.push(StatusState {
+            value,
+            duration,
+            cumulate,
+        });
+    } else {
+        if let Some(cur_status) = statuses.iter_mut().find(|s| !s.cumulate) {
             if value * duration > cur_status.value * cur_status.duration {
                 cur_status.value = value;
                 cur_status.duration = duration;
             }
-        })
-        .or_insert(StatusState { value, duration });
+        } else {
+            statuses.push(StatusState {
+                value,
+                duration,
+                cumulate,
+            })
+        }
+    }
 }
 
 fn decrease_damage_from_armor(

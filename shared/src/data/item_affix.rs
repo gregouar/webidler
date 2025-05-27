@@ -4,7 +4,7 @@ use std::collections::HashSet;
 use super::world::AreaLevel;
 
 pub use super::skill::{SkillRange, SkillShape};
-pub use super::stat_effect::{DamageType, EffectModifier, StatEffect, StatType};
+pub use super::stat_effect::{DamageType, Modifier, StatEffect, StatType};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum AffixType {
@@ -79,7 +79,7 @@ pub struct ItemAffixBlueprint {
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub struct AffixEffectBlueprint {
     pub stat: StatType,
-    pub modifier: EffectModifier,
+    pub modifier: Modifier,
     pub scope: AffixEffectScope,
     pub min: f64,
     pub max: f64,

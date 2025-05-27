@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use shared::data::{
     character::CharacterId,
-    item_affix::{AffixEffectScope, EffectModifier, StatType},
+    item_affix::{AffixEffectScope, Modifier, StatType},
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerSpecs, PlayerState},
     skill::DamageType,
@@ -126,8 +126,8 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
     let mut effects: Vec<_> = (&player_specs.effects).into();
 
     effects.sort_by_key(|e| match e.modifier {
-        EffectModifier::Flat => 0,
-        EffectModifier::Multiplier => 1,
+        Modifier::Flat => 0,
+        Modifier::Multiplier => 1,
     });
 
     for effect in effects.iter() {

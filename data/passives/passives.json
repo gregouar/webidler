@@ -654,7 +654,6 @@
         ]
       },
 
-      
       "healing_aura": {
         "initial_node": true,
         "name": "Healing Aura",
@@ -665,7 +664,7 @@
         "size": 1,
         "triggers": [
           {
-            "trigger":"OnWaveCompleted",
+            "trigger": "OnWaveCompleted",
             "description": "Restore Area Level x 10 Health at the end of each wave.",
             "ApplySkillEffects": {
               "target": "Source",
@@ -679,7 +678,7 @@
               ],
               "modifiers": [
                 {
-                  "stat":  "SpellPower" ,
+                  "stat": "SpellPower",
                   "modifier": "Multiplier",
                   "factor": 1,
                   "source": "AreaLevel"
@@ -754,9 +753,45 @@
             "value": 1
           }
         ]
+      },
+
+      "enrage": {
+        "initial_node": true,
+        "name": "Berserker",
+        "icon": "passives/enrage.svg",
+        "x": -40,
+        "y": 20,
+        "node_type": "Armor",
+        "size": 1,
+        "triggers": [
+          {
+            "trigger": {
+              "OnHitTaken": { "is_hurt": true }
+            },
+            "description": "Taking a Hit increase Damage by 20% for 2 seconds.",
+            "ApplySkillEffects": {
+              "effects": [
+                {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "Damage": {} },
+                        "modifier": "Multiplier",
+                        "value": 0.2
+                      }
+                    },
+                    "cumulate": 10,
+                    "min_value": 0,
+                    "max_value": 0,
+                    "min_duration": 2,
+                    "max_duration": 2
+                  }
+                }
+              ]
+            }
+          }
+        ]
       }
-
-
     },
     "connections": [
       { "from": "gold_init", "to": "gold_l_1" },

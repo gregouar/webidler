@@ -3,13 +3,6 @@ use serde::{Deserialize, Serialize};
 pub use super::stat_effect::DamageType;
 use super::{character_status::StatusType, item::ItemSlot, stat_effect::DamageMap};
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct SkillState {
-    pub elapsed_cooldown: f32,
-    pub is_ready: bool,
-    pub just_triggered: bool,
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BaseSkillSpecs {
     pub name: String,
@@ -25,9 +18,9 @@ pub struct BaseSkillSpecs {
 
     #[serde(default)]
     pub upgrade_cost: f64,
-
+    // #[serde(default)]
+    // pub upgrade_increase: Modifier,
     pub targets: Vec<SkillTargetsGroup>,
-    // TODO: Increase Cost
     // TODO: special upgrades at some levels?
 }
 
@@ -44,6 +37,14 @@ pub struct SkillSpecs {
     pub targets: Vec<SkillTargetsGroup>,
 
     pub item_slot: Option<ItemSlot>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SkillState {
+    pub elapsed_cooldown: f32,
+
+    pub is_ready: bool,
+    pub just_triggered: bool,
 }
 
 #[derive(
@@ -97,6 +98,8 @@ pub enum SkillEffectType {
     },
     ApplyStatus {
         status_type: StatusType,
+        #[serde(default)]
+        cumulate: bool,
         min_value: f64,
         max_value: f64,
         min_duration: f64,

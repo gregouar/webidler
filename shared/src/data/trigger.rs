@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use super::{
-    item_affix::{EffectModifier, StatType},
+    item_affix::{Modifier, StatType},
     skill::{DamageType, SkillEffect, SkillRange, SkillType},
 };
 
@@ -52,7 +52,7 @@ pub enum TriggerEffectType {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggerEffectModifier {
     pub stat: StatType,
-    pub modifier: EffectModifier,
+    pub modifier: Modifier,
     pub factor: f64,
     pub source: TriggerEffectModifierSource,
 }

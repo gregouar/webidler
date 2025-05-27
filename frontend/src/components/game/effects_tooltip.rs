@@ -6,7 +6,7 @@ use leptos::prelude::*;
 use shared::data::item_affix::AffixEffectScope;
 use shared::data::skill::SkillType;
 use shared::data::{
-    item_affix::{EffectModifier, StatEffect, StatType},
+    item_affix::{Modifier, StatEffect, StatType},
     skill::DamageType,
 };
 
@@ -58,7 +58,7 @@ pub fn formatted_effects_list(
     mut affix_effects: Vec<StatEffect>,
     scope: AffixEffectScope,
 ) -> Vec<impl IntoView> {
-    use EffectModifier::*;
+    use Modifier::*;
     use StatType::*;
 
     affix_effects.sort_by_key(|effect| (effect.stat, effect.modifier));

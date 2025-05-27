@@ -1,5 +1,6 @@
 use std::time::Duration;
 
+use http::status;
 use shared::data::{
     character::{CharacterId, CharacterSpecs, CharacterState},
     character_status::StatusType,
@@ -26,7 +27,6 @@ pub fn update_character_state(
     if character_state.health < 0.5 {
         character_state.health = 0.0;
         character_state.is_alive = false;
-        character_state.just_died = true;
         events_queue.register_event(GameEvent::Kill {
             target: character_id,
         });
@@ -41,21 +41,26 @@ pub fn update_character_state(
 
     character_state
         .statuses
-        .retain(|status_type, status_state| {
+        .retain(|status_type, status_states| {
             match status_type {
                 StatusType::DamageOverTime { .. } => {
-                    character_state.health -=
-                        status_state.value * elapsed_time.as_secs_f64().min(status_state.duration)
+                    for status in status_states {
+                        character_state.health -=
+                            status.value * elapsed_time.as_secs_f64().min(status.duration)
+                    }
                 }
                 StatusType::Stun => {}
+                StatusType::StatModifier(_) => {} // TODO: How to update stats like max life?
             }
-            status_state.duration -= elapsed_time.as_secs_f64();
-            status_state.duration > 0.0
+            status_states.retain(|status| {
+                status.duration -= elapsed_time.as_secs_f64();
+                status.duration > 0.0
+            });
+            !status_states.is_empty()
         });
 }
 
 pub fn reset_character(character_state: &mut CharacterState) {
-    character_state.just_died = false;
     character_state.just_hurt = false;
     character_state.just_hurt_crit = false;
     character_state.just_blocked = false;
