@@ -1,6 +1,5 @@
 use std::time::Duration;
 
-use http::status;
 use shared::data::{
     character::{CharacterId, CharacterSpecs, CharacterState},
     character_status::StatusType,
@@ -44,18 +43,21 @@ pub fn update_character_state(
         .retain(|status_type, status_states| {
             match status_type {
                 StatusType::DamageOverTime { .. } => {
-                    for status in status_states {
+                    for status in status_states.iter() {
                         character_state.health -=
                             status.value * elapsed_time.as_secs_f64().min(status.duration)
                     }
                 }
                 StatusType::Stun => {}
-                StatusType::StatModifier(_) => {} // TODO: How to update stats like max life?
+                StatusType::StatModifier(_) => {} // TODO: How to update stats like max life? -> IDEA: Trigger Events and update Specs when needed
             }
-            status_states.retain(|status| {
+            // let old_len = status_states.len();
+            status_states.retain_mut(|status| {
                 status.duration -= elapsed_time.as_secs_f64();
                 status.duration > 0.0
             });
+            // if old_len != status_states.len():
+            // events_queue.register_event(event);
             !status_states.is_empty()
         });
 }

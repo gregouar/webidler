@@ -101,6 +101,7 @@ pub fn CharacterPortrait(
 
                 <div class="absolute inset-0 flex place-items-start p-2">
                     <For each=move || active_statuses.get() key=|k| *k let(k)>
+                        // TODO: Stack amount
                         <StatusIcon status_type=k />
                     </For>
                 </div>
@@ -136,6 +137,8 @@ fn StatusIcon(status_type: StatusType) -> impl IntoView {
             shared::data::skill::DamageType::Fire => ("statuses/burning.svg", "Burning"),
             shared::data::skill::DamageType::Poison => ("statuses/poison.svg", "Poisoned"),
         },
+        // TODO: Different buff types
+        StatusType::StatModifier(_) => ("statuses/buff.svg", "Buffed"),
     };
     view! {
         <div class="w-[15%] aspect-square p-1">

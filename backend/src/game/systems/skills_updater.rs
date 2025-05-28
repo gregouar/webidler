@@ -152,6 +152,12 @@ pub fn compute_skill_specs_effect(
                     }
                     _ => {}
                 },
+                StatusType::StatModifier(_) => {
+                    if StatType::SpellPower == effect.stat && skill_type == SkillType::Spell {
+                        min_value.apply_effect(effect);
+                        max_value.apply_effect(effect);
+                    }
+                }
             },
         }
     }

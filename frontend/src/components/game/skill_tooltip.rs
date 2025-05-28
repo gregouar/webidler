@@ -154,6 +154,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                 max_value,
                 min_duration,
                 max_duration,
+                ..
             } => {
                 match status_type {
                     StatusType::Stun => {
@@ -171,6 +172,10 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                             </EffectLi>
                         }
                             .into_any()
+                    }
+                    // TODO: Give different description, maybe get that frome somewhere else/share with effect tooltip
+                    StatusType::StatModifier(_) => {
+                       view! { <EffectLi>{if min_value > 0.0 { "Buff" } else { "Debuff" }}</EffectLi> } .into_any()
                     }
                 }
             }

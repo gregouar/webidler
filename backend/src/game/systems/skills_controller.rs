@@ -226,13 +226,20 @@ pub fn apply_skill_effect(
             max_value,
             min_duration,
             max_duration,
+            cumulate,
         } => {
             if let (Some(value), Some(duration)) = (
                 rng::random_range(*min_value..=*max_value),
                 rng::random_range(*min_duration..=*max_duration),
             ) {
                 for target in targets {
-                    characters_controller::apply_status(target, *status_type, value, duration)
+                    characters_controller::apply_status(
+                        target,
+                        *status_type,
+                        value,
+                        duration,
+                        *cumulate,
+                    )
                 }
             }
         }

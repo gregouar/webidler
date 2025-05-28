@@ -29,6 +29,7 @@ impl CharacterSize {
     }
 }
 
+// TODO: Split more for network usage? -> might become an hassle to handle in code...
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CharacterSpecs {
     pub name: String,

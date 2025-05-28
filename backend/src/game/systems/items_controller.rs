@@ -156,6 +156,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                 max_value,
                 min_duration: WEAPON_POISON_DAMAGE_DURATION,
                 max_duration: WEAPON_POISON_DAMAGE_DURATION,
+                cumulate: false,
             },
             failure_chances: 0.0,
         });
