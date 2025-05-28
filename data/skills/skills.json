@@ -2,7 +2,7 @@
   "magic_missile": {
     "name": "Magic Missile",
     "description": "A fast spell to spam",
-    "icon": "skills/fireball.svg",
+    "icon": "skills/magic_missile.svg",
     "skill_type": "Spell",
     "cooldown": 2,
     "mana_cost": 2,
@@ -32,7 +32,7 @@
   "fireball": {
     "name": "Fireball",
     "description": "Throw a mighty fireball, burning multiple enemies",
-    "icon": "skills/fireball2.svg",
+    "icon": "skills/fireball.svg",
     "skill_type": "Spell",
     "cooldown": 5,
     "mana_cost": 20,

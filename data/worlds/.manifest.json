@@ -3,6 +3,6 @@
     "enabled": true
   },
   "resources": {
-    "worlds": ["forest.json"]
+    "worlds": ["inn_basement.json"]
   }
 }

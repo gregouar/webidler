@@ -4,11 +4,19 @@
   },
   "resources": {
     "monsters": [
-      "batty_fire.json",
-      "batty.json",
-      "batty2.json",
-      "ratty.json",
-      "snek.json"
+      "barrel_mimic.json",
+      "bat_fire.json",
+      "bat.json",
+      "booze_elemental.json",
+      "cat_skeleton.json",
+      "centipede.json",
+      "haunted_pot.json",
+      "haunted_lantern.json",
+      "patron_ghost.json",
+      "rat.json",
+      "snake.json",
+      "soot_imp.json",
+      "soot_imp_2.json"
     ]
   }
 }

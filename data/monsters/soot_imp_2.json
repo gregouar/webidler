@@ -1,0 +1,30 @@
+{
+  "name": "Soot Imp",
+  "portrait": "monsters/soot_imp_2.webp",
+  "max_life": 5,
+  "power_factor": 1.5,
+  "max_initiative": 0.5,
+  "fire_armor": 100,
+  "skills": [
+    {
+      "name": "Burning Throw",
+      "icon": "skills/Scratch.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [1, 3],
+                  "Fire": [2, 4]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

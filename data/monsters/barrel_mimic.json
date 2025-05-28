@@ -1,21 +1,23 @@
 {
-  "name": "Ratty",
-  "portrait": "monsters/rat.webp",
-  "max_life": 8,
-  "power_factor": 2.0,
-  "max_initiative": 1.0,
+  "name": "Barrel Mimic",
+  "portrait": "monsters/barrel_mimic.webp",
+  "max_life": 20,
+  "power_factor": 3.0,
+  "min_initiative": 3.0,
+  "max_initiative": 5.0,
+  "armor": 50,
   "skills": [
     {
-      "name": "Vicious Bite",
+      "name": "Hungry Kiss",
       "icon": "skills/bite.svg",
-      "cooldown": 5.0,
+      "cooldown": 3.0,
       "targets": [
         {
           "effects": [
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [2, 8]
+                  "Physical": [4, 6]
                 }
               }
             }
@@ -24,16 +26,16 @@
       ]
     },
     {
-      "name": "Scratch",
+      "name": "Splintered Caress",
       "icon": "skills/claw.svg",
-      "cooldown": 3.0,
+      "cooldown": 2.0,
       "targets": [
         {
           "effects": [
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [1, 3]
+                  "Physical": [3, 5]
                 }
               }
             }

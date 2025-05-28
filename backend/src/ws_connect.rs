@@ -202,14 +202,15 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
 
     let player_resources = PlayerResources::default();
 
+    let world_id = "inn_basement.json";
     let world_blueprint = match master_store
         .world_blueprints_store
-        .get("forest.json")
+        .get(world_id)
         .cloned() // TODO: Avoid clone?
     {
         Some(world_blueprint) => world_blueprint,
         None => {
-            return Err(anyhow!("couldn't load world: forest.json"));
+            return Err(anyhow!("couldn't load world: {}",world_id));
         }
     };
 

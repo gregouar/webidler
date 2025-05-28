@@ -1,0 +1,27 @@
+{
+  "name": "Angry Bat",
+  "portrait": "monsters/bat.webp",
+  "max_life": 5,
+  "power_factor": 1.0,
+  "max_initiative": 0.5,
+  "skills": [
+    {
+      "name": "Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [1, 3]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

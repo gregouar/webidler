@@ -8,6 +8,7 @@ pub struct MonsterSpecs {
     pub character_specs: CharacterSpecs,
     pub skill_specs: Vec<SkillSpecs>,
 
+    pub min_initiative: f32,
     pub max_initiative: f32,
     pub power_factor: f64,
 }

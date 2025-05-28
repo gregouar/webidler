@@ -1,12 +1,13 @@
 {
-  "name": "Batty",
-  "portrait": "monsters/bat2.webp",
+  "name": "Soot Imp",
+  "portrait": "monsters/soot_imp.webp",
   "max_life": 5,
-  "power_factor": 1.0,
+  "power_factor": 1.5,
   "max_initiative": 0.5,
+  "fire_armor": 100,
   "skills": [
     {
-      "name": "Bite",
+      "name": "Burning Bite",
       "icon": "skills/bite.svg",
       "cooldown": 2.0,
       "targets": [
@@ -15,7 +16,8 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [1, 3]
+                  "Physical": [1, 3],
+                  "Fire": [2, 4]
                 }
               }
             }
