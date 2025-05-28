@@ -1,5 +1,5 @@
 {
-  "name": "Snek",
+  "name": "Venomous Snake",
   "portrait": "monsters/snake.webp",
   "max_life": 15,
   "size": "Large",
@@ -16,15 +16,17 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [2, 5]
+                  "Physical": [1, 3]
                 }
               }
             },
             {
               "ApplyStatus": {
-                "status_type": { "DamageOverTime": "Poison" },
-                "min_value": 5,
-                "max_value": 5,
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Poison" }
+                },
+                "min_value": 10,
+                "max_value": 10,
                 "min_duration": 5,
                 "max_duration": 5
               }

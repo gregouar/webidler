@@ -1,0 +1,40 @@
+{
+  "name": "Restless Patron",
+  "portrait": "monsters/inn_ghost.webp",
+  "max_life": 7,
+  "power_factor": 2.0,
+  "max_initiative": 0.5,
+  "skills": [
+    {
+      "name": "Drunken Cheers",
+      "icon": "skills/attack.svg",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [4, 8]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "status_type": {
+                      "StatModifier": {
+                        "Armor": {}
+                      }
+                    },
+                "min_value": -0.2,
+                "max_value": -0.2,
+                "min_duration": 3,
+                "max_duration": 3
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

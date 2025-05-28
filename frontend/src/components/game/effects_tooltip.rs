@@ -6,7 +6,7 @@ use leptos::prelude::*;
 use shared::data::item_affix::AffixEffectScope;
 use shared::data::skill::SkillType;
 use shared::data::{
-    item_affix::{EffectModifier, StatEffect, StatType},
+    item_affix::{Modifier, StatEffect, StatType},
     skill::DamageType,
 };
 
@@ -58,7 +58,7 @@ pub fn formatted_effects_list(
     mut affix_effects: Vec<StatEffect>,
     scope: AffixEffectScope,
 ) -> Vec<impl IntoView> {
-    use EffectModifier::*;
+    use Modifier::*;
     use StatType::*;
 
     affix_effects.sort_by_key(|effect| (effect.stat, effect.modifier));
@@ -194,17 +194,17 @@ pub fn formatted_effects_list(
                 effect.value * 100.0
             )),
             (CritChances(skill_type), Flat) => merged.push(format!(
-                "Adds {:.2}% Critical Strike Chances{}",
+                "Adds {:.2}% Critical Hit Chances{}",
                 effect.value * 100.0,
                 to_skill_type_str(skill_type)
             )),
             (CritChances(skill_type), Multiplier) => merged.push(format!(
-                "{:.0}% Increased{} Critical Strike Chances",
+                "{:.0}% Increased{} Critical Hit Chances",
                 effect.value * 100.0,
                 skill_type_str(skill_type)
             )),
             (CritDamage(skill_type), Flat) => merged.push(format!(
-                "Adds {:.0}% Critical Strike Damage{}",
+                "Adds {:.0}% Critical Hit Damage{}",
                 effect.value * 100.0,
                 to_skill_type_str(skill_type)
             )),
@@ -233,6 +233,14 @@ pub fn formatted_effects_list(
             (SpellPower, Flat) => merged.push(format!("Adds {:.0} Power to Spells", effect.value)),
             (SpellPower, Multiplier) => merged.push(format!(
                 "{:.0}% Increased Spell Power",
+                effect.value * 100.0
+            )),
+            (TakeFromManaBeforeLife, Multiplier) => merged.push(format!(
+                "{:.0}% Increased Mana taken before Life",
+                effect.value * 100.0
+            )),
+            (TakeFromManaBeforeLife, Flat) => merged.push(format!(
+                "{:.0}% of Mana taken before Life",
                 effect.value * 100.0
             )),
         }

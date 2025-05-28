@@ -30,7 +30,7 @@ pub fn PlayerCard() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let max_health = Memo::new(move |_| game_context.player_specs.read().character_specs.max_life);
-    let health = Memo::new(move |_| game_context.player_state.read().character_state.health);
+    let health = Signal::derive(move || game_context.player_state.read().character_state.life);
 
     let health_tooltip = move || {
         view! {
@@ -50,8 +50,8 @@ pub fn PlayerCard() -> impl IntoView {
         }
     });
 
-    let max_mana = Memo::new(move |_| game_context.player_specs.read().max_mana);
-    let mana = Memo::new(move |_| game_context.player_state.read().mana);
+    let max_mana = Memo::new(move |_| game_context.player_specs.read().character_specs.max_mana);
+    let mana = Signal::derive(move || game_context.player_state.read().character_state.mana);
 
     let mana_tooltip = move || {
         view! {

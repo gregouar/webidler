@@ -1,0 +1,380 @@
+⚔️ Refined One-Handed Weapons (Melee)
+
+Clearer progression from improvised to military-quality.
+
+    Rusty Dagger
+
+    Dagger
+
+    Shortsword
+
+    Hand Axe
+
+    Club
+
+    Militia Sword
+
+    Spiked Mace
+
+    Arming Sword
+
+    War Axe
+
+    Knight’s Sword
+
+🏹 Ranged Weapons (Bows & Crossbows Only)
+
+    Short Bow
+
+    Hunting Bow
+
+    Recurve Bow
+
+    Longbow
+
+    Fine Bow
+
+    Composite Bow
+
+    Light Crossbow
+
+    Reinforced Crossbow
+
+    Arbalest
+
+    Siege Crossbow
+
+
+⚔️ Weapons
+One-Handed Melee
+
+    Knife
+
+    Dagger
+
+    Hatchet
+
+    Handaxe
+
+    Club
+
+    Shortsword
+
+    Mace
+
+    Arming Sword
+
+    War Pick
+
+    Spiked Mace
+
+Two-Handed Melee
+
+    Quarterstaff
+
+    Woodcutter’s Axe
+
+    Greatclub
+
+    Glaive
+
+    Halberd
+
+    Billhook
+
+    Bardiche
+
+    Greatsword
+
+    Warhammer
+
+    Poleaxe
+
+Ranged
+
+    Sling
+
+    Short Bow
+
+    Hunting Bow
+
+    Longbow
+
+    Recurve Bow
+
+    Crossbow
+
+    Light Crossbow
+
+    Arbalest
+
+    Throwing Spear
+
+    Javelin
+
+Magical (Main-Hand Weapon)
+
+    Switch (wooden rod)
+
+    Wand
+
+    Birch Wand
+
+    Oak Wand
+
+    Carved Wand
+
+    Bone Wand
+
+    Iron Wand
+
+    Horn Wand
+
+    Mage’s Wand
+
+    Ritual Wand
+
+🛡️ Offhand (Shields & Foci)
+Shields
+
+    Wooden Buckler
+
+    Reinforced Buckler
+
+    Small Round Shield
+
+    Hide Shield
+
+    Iron Buckler
+
+    Heater Shield
+
+    Round Shield
+
+    Kite Shield
+
+    Tower Shield
+
+    Reinforced Pavise
+
+Foci (Magical Offhand)
+
+    Spellbook
+
+    Talisman
+
+    Orb
+
+    Focus Stone
+
+    Seer’s Lens
+
+    Engraved Tablet
+
+    Mage’s Codex
+
+    Etched Crystal
+
+    Ritual Orb
+
+    Grimoire
+
+🪖 Helmets
+
+    Cloth Hood
+
+    Leather Cap
+
+    Quilted Coif
+
+    Iron Cap
+
+    Mail Coif
+
+    Padded Helm
+
+    Nasal Helm
+
+    Bascinet
+
+    Kettle Helm
+
+    Barbute
+
+👕 Body Armor
+
+    Padded Tunic
+
+    Quilted Jacket
+
+    Leather Jerkin
+
+    Studded Vest
+
+    Chain Shirt
+
+    Scale Vest
+
+    Mail Hauberk
+
+    Brigandine
+
+    Breastplate
+
+    Plate Cuirass
+
+🧤 Gloves
+
+    Cloth Wraps
+
+    Leather Gloves
+
+    Work Gloves
+
+    Padded Mitts
+
+    Riding Gloves
+
+    Studded Gloves
+
+    Chain Gloves
+
+    Leather Gauntlets
+
+    Steel Gauntlets
+
+    Plated Gauntlets
+
+👢 Boots
+
+    Cloth Shoes
+
+    Leather Sandals
+
+    Soft Boots
+
+    Stitched Boots
+
+    Traveler’s Boots
+
+    Reinforced Boots
+
+    Mail Boots
+
+    Riding Boots
+
+    Iron-shod Boots
+
+    Sabatons
+
+💍 Rings
+
+    Copper Ring
+
+    Bronze Band
+
+    Iron Ring
+
+    Pewter Ring
+
+    Silver Ring
+
+    Signet Ring
+
+    Gold Ring
+
+    Inlaid Ring
+
+    Steel Signet
+
+    Inscribed Ring
+
+📿 Necklaces
+
+    Leather Cord
+
+    Wooden Beads
+
+    Simple Pendant
+
+    Carved Talisman
+
+    Stone Amulet
+
+    Bronze Chain
+
+    Tooth Pendant
+
+    Iron Pendant
+
+    Silver Chain
+
+    Crest Pendant
+
+🧿 Trinkets
+Cloaks
+
+    Wool Cloak
+
+    Canvas Cloak
+
+    Hooded Wrap
+
+    Traveler’s Cloak
+
+    Heavy Cloak
+
+    Leather Mantle
+
+    Fur-lined Cloak
+
+    Reinforced Cloak
+
+    Scout’s Drape
+
+    Greatcloak
+
+Relics (Sacred/Folk Items)
+
+    Wooden Icon
+
+    Bone Relic
+
+    Pebble Talisman
+
+    Crude Fetish
+
+    Ember Token
+
+    Wax Seal
+
+    Saint’s Tooth
+
+    Knotted Cord
+
+    Ashen Token
+
+    Votive Charm
+
+Charms (Pagan/Talismanic)
+
+    String of Teeth
+
+    Feathered Fetish
+
+    Coin Charm
+
+    Herb Pouch
+
+    Fingerbone Charm
+
+    Woven Bracelet
+
+    Tusk Amulet
+
+    Scrimshaw Token
+
+    Fetish Bundle
+
+    Rune-Stone
+

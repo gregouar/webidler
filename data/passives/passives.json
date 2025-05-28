@@ -131,6 +131,34 @@
           }
         ]
       },
+      "gold_u_2": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 0,
+        "y": 30,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ]
+      },
+      "gold_d_2": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 0,
+        "y": -30,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ]
+      },
 
       "life_max_1": {
         "name": "Maximum Life",
@@ -290,7 +318,7 @@
       "spell_damage_1": {
         "name": "Spell Damage",
         "icon": "passives/spell.svg",
-        "x": -10,
+        "x": 10,
         "y": -12.5,
         "node_type": "Spell",
         "effects": [
@@ -304,7 +332,7 @@
       "spell_damage_2": {
         "name": "Spell Damage",
         "icon": "passives/spell.svg",
-        "x": -20,
+        "x": 20,
         "y": -20,
         "node_type": "Spell",
         "effects": [
@@ -318,7 +346,7 @@
       "spell_speed_1": {
         "name": "Casting Speed",
         "icon": "passives/spell.svg",
-        "x": -5,
+        "x": 5,
         "y": -20,
         "node_type": "Spell",
         "effects": [
@@ -332,7 +360,7 @@
       "spell_speed_2": {
         "name": "Casting Speed",
         "icon": "passives/spell.svg",
-        "x": -15,
+        "x": 15,
         "y": -27.5,
         "node_type": "Spell",
         "effects": [
@@ -346,7 +374,7 @@
       "spell_damage_and_speed_1": {
         "name": "Sorcery",
         "icon": "passives/spell.svg",
-        "x": -25,
+        "x": 25,
         "y": -30,
         "size": 1,
         "node_type": "Spell",
@@ -367,7 +395,7 @@
       "mana_max_1": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
-        "x": 10,
+        "x": -10,
         "y": -12.5,
         "node_type": "Mana",
         "effects": [
@@ -381,7 +409,7 @@
       "mana_max_2": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
-        "x": 20,
+        "x": -20,
         "y": -20,
         "node_type": "Mana",
         "effects": [
@@ -395,7 +423,7 @@
       "mana_regen_1": {
         "name": "Mana Regeneration",
         "icon": "passives/mana.svg",
-        "x": 5,
+        "x": -5,
         "y": -20,
         "node_type": "Mana",
         "effects": [
@@ -409,7 +437,7 @@
       "mana_regen_2": {
         "name": "Mana Regeneration",
         "icon": "passives/mana.svg",
-        "x": 15,
+        "x": -15,
         "y": -27.5,
         "node_type": "Mana",
         "effects": [
@@ -423,7 +451,7 @@
       "mana_max_and_regen_1": {
         "name": "Wisdom",
         "icon": "passives/mana.svg",
-        "x": 25,
+        "x": -25,
         "y": -30,
         "size": 1,
         "node_type": "Mana",
@@ -519,56 +547,56 @@
       },
 
       "crit_damage_1": {
-        "name": "Critical Strike Damage",
-        "icon": "passives/critical.svg",
-        "x": 10,
-        "y": 12.5,
-        "node_type": "Critical",
-        "effects": [
-          {
-            "stat": {"CritDamage": null},
-            "modifier": "Multiplier",
-            "value": 0.5
-          }
-        ]
-      },
-      "crit_damage_2": {
-        "name": "Critical Strike Damage",
-        "icon": "passives/critical.svg",
-        "x": 20,
-        "y": 20,
-        "node_type": "Critical",
-        "effects": [
-          {
-            "stat": {"CritDamage": null},
-            "modifier": "Multiplier",
-            "value": 0.5
-          }
-        ]
-      },
-      "crit_chances_1": {
-        "name": "Critical Strike Chances",
+        "name": "Critical Hit Damage",
         "icon": "passives/critical.svg",
         "x": 5,
         "y": 20,
         "node_type": "Critical",
         "effects": [
           {
-            "stat": {"CritChances": null},
+            "stat": { "CritDamage": null },
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.5
           }
         ]
       },
-      "crit_chances_2": {
-        "name": "Critical Strike Chances",
+      "crit_damage_2": {
+        "name": "Critical Hit Damage",
         "icon": "passives/critical.svg",
         "x": 15,
         "y": 27.5,
         "node_type": "Critical",
         "effects": [
           {
-            "stat": {"CritChances": null},
+            "stat": { "CritDamage": null },
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ]
+      },
+      "crit_chances_1": {
+        "name": "Critical Hit Chances",
+        "icon": "passives/critical.svg",
+        "x": 10,
+        "y": 12.5,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": { "CritChances": null },
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "crit_chances_2": {
+        "name": "Critical Hit Chances",
+        "icon": "passives/critical.svg",
+        "x": 20,
+        "y": 20,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": { "CritChances": null },
             "modifier": "Multiplier",
             "value": 0.25
           }
@@ -583,14 +611,193 @@
         "node_type": "Critical",
         "effects": [
           {
-            "stat": {"CritChances": null},
+            "stat": { "CritChances": null },
             "modifier": "Multiplier",
             "value": 0.25
           },
           {
-            "stat": {"CritDamage": null},
+            "stat": { "CritDamage": null },
             "modifier": "Multiplier",
             "value": 0.5
+          }
+        ]
+      },
+
+      "stunning_crit": {
+        "name": "Lobotomy without Anesthesia",
+        "icon": "passives/broken_skull.svg",
+        "x": 40,
+        "y": 20,
+        "node_type": "Critical",
+        "size": 1,
+        "triggers": [
+          {
+            "trigger": {
+              "OnHit": { "skill_type": "Attack", "is_crit": true }
+            },
+            "description": "Critical Hit with Attacks inflict Stun for 4 seconds",
+            "ApplySkillEffects": {
+              "effects": [
+                {
+                  "ApplyStatus": {
+                    "status_type": "Stun",
+                    "min_value": 0,
+                    "max_value": 0,
+                    "min_duration": 4,
+                    "max_duration": 4
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+
+      "healing_aura": {
+        "name": "Healing Aura",
+        "icon": "passives/healing_aura.svg",
+        "x": 40,
+        "y": -20,
+        "node_type": "Life",
+        "size": 1,
+        "triggers": [
+          {
+            "trigger": "OnWaveCompleted",
+            "description": "Restore Area Level x 10 Health at the end of each wave.",
+            "ApplySkillEffects": {
+              "target": "Source",
+              "effects": [
+                {
+                  "Heal": {
+                    "min": 10,
+                    "max": 10
+                  }
+                }
+              ],
+              "modifiers": [
+                {
+                  "stat": "SpellPower",
+                  "modifier": "Multiplier",
+                  "factor": 1,
+                  "source": "AreaLevel"
+                }
+              ]
+            }
+          }
+        ]
+      },
+
+      "bleeding_crit": {
+        "name": "The Ripper",
+        "icon": "passives/bleeding_heart.svg",
+        "x": 0,
+        "y": 40,
+        "node_type": "Attack",
+        "size": 1,
+        "triggers": [
+          {
+            "trigger": {
+              "OnHit": { "skill_type": "Attack", "is_crit": true }
+            },
+            "description": "Critical Hit with Attacks inflict Bleed for 2 seconds. Bleed damage is 50% of Physical Damage dealt by initial Hit per second.",
+            "ApplySkillEffects": {
+              "effects": [
+                {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Physical",
+                        "ignore_armor": true
+                      }
+                    },
+                    "min_value": 1,
+                    "max_value": 1,
+                    "min_duration": 2,
+                    "max_duration": 2
+                  }
+                }
+              ],
+              "modifiers": [
+                {
+                  "stat": { "Damage": {} },
+                  "modifier": "Multiplier",
+                  "factor": 0.5,
+                  "source": { "HitDamage": "Physical" }
+                }
+              ]
+            }
+          }
+        ]
+      },
+
+      "spell_crit": {
+        "name": "Unstable Power",
+        "icon": "passives/burning_book.svg",
+        "x": 0,
+        "y": -40,
+        "node_type": "Spell",
+        "size": 1,
+        "effects": [
+          {
+            "stat": { "CritChances": "Spell" },
+            "modifier": "Flat",
+            "value": 0.05
+          },
+          {
+            "stat": { "CritDamage": "Spell" },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ]
+      },
+
+      "mana_shield": {
+        "name": "Mana Shield",
+        "icon": "passives/mana_shield.svg",
+        "x": -40,
+        "y": -20,
+        "node_type": "Mana",
+        "size": 1,
+        "effects": [
+          {
+            "stat": "TakeFromManaBeforeLife",
+            "modifier": "Flat",
+            "value": 1
+          }
+        ]
+      },
+
+      "enrage": {
+        "name": "Berserker",
+        "icon": "passives/enrage.svg",
+        "x": -40,
+        "y": 20,
+        "node_type": "Armor",
+        "size": 1,
+        "triggers": [
+          {
+            "trigger": {
+              "OnTakeHit": { "is_hurt": true }
+            },
+            "description": "Taking a Hit increase Damage by 20% for 2 seconds.",
+            "ApplySkillEffects": {
+              "effects": [
+                {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "StatModifier": {
+                        "Damage": {}
+                      }
+                    },
+                    "cumulate": true,
+                    "min_value": 0.2,
+                    "max_value": 0.2,
+                    "min_duration": 2,
+                    "max_duration": 2
+                  }
+                }
+              ]
+            }
           }
         ]
       }
@@ -644,16 +851,28 @@
       { "from": "mana_regen_2", "to": "mana_max_and_regen_1" },
 
       { "from": "gold_ul_1", "to": "armor_2" },
+      { "from": "gold_ul_1", "to": "enrage" },
       { "from": "gold_ul_1", "to": "attack_damage_2" },
 
-      { "from": "gold_ur_1", "to": "crit_damage_2" },
+      { "from": "gold_ur_1", "to": "crit_chances_2" },
+      { "from": "gold_ur_1", "to": "stunning_crit" },
       { "from": "gold_ur_1", "to": "life_max_2" },
 
       { "from": "gold_dl_1", "to": "block_2" },
-      { "from": "gold_dl_1", "to": "spell_damage_2" },
+      { "from": "gold_dl_1", "to": "mana_shield" },
+      { "from": "gold_dl_1", "to": "mana_max_2" },
 
       { "from": "gold_dr_1", "to": "life_regen_2" },
-      { "from": "gold_dr_1", "to": "mana_max_2" }
+      { "from": "gold_dr_1", "to": "healing_aura" },
+      { "from": "gold_dr_1", "to": "spell_damage_2" },
+
+      { "from": "gold_u_2", "to": "attack_speed_2" },
+      { "from": "gold_u_2", "to": "bleeding_crit" },
+      { "from": "gold_u_2", "to": "crit_damage_2" },
+
+      { "from": "gold_d_2", "to": "spell_speed_2" },
+      { "from": "gold_d_2", "to": "spell_crit" },
+      { "from": "gold_d_2", "to": "mana_regen_2" }
     ]
   }
 }

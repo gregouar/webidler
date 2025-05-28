@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
 
-pub use super::skill::{Range, Shape};
+pub use super::skill::{SkillRange, SkillShape};
 use super::{
     item_affix::{AffixEffectBlueprint, AffixEffectScope, AffixRestriction, ItemAffix},
     stat_effect::{DamageMap, EffectsMap},
@@ -78,9 +78,9 @@ pub struct ItemSpecs {
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct WeaponSpecs {
     #[serde(default)]
-    pub range: Range,
+    pub range: SkillRange,
     #[serde(default)]
-    pub shape: Shape,
+    pub shape: SkillShape,
 
     pub cooldown: f32,
 

@@ -2,18 +2,15 @@ use std::vec;
 
 use shared::data::{
     character_status::StatusType,
-    item::{ArmorSpecs, ItemSlot, ItemSpecs, WeaponSpecs},
-    item_affix::{AffixEffectScope, EffectModifier, StatEffect, StatType},
+    item::{ArmorSpecs, ItemSpecs, WeaponSpecs},
+    item_affix::{AffixEffectScope, Modifier, StatEffect, StatType},
     skill::{
-        BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillTargetsGroup,
-        SkillType, TargetType,
+        BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType,
+        TargetType,
     },
 };
 
-use crate::game::data::{
-    items_store::{ItemAdjectivesTable, ItemNounsTable},
-    DataInit,
-};
+use crate::game::data::items_store::{ItemAdjectivesTable, ItemNounsTable};
 
 use super::{loot_generator::generate_name, stats_controller::ApplyStatModifier};
 
@@ -31,8 +28,8 @@ pub fn update_item_specs(
         (&item_specs.aggregate_effects(AffixEffectScope::Local)).into();
 
     effects.sort_by_key(|e| match e.modifier {
-        EffectModifier::Flat => 0,
-        EffectModifier::Multiplier => 1,
+        Modifier::Flat => 0,
+        Modifier::Multiplier => 1,
     });
 
     if let Some(ref armor_specs) = item_specs.base.armor_specs {
@@ -133,11 +130,7 @@ fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &[StatEffect]) -> A
     armor_specs
 }
 
-pub fn make_weapon_skill(
-    item_slot: ItemSlot,
-    item_level: u16,
-    weapon_specs: &WeaponSpecs,
-) -> SkillSpecs {
+pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSkillSpecs {
     let mut effects = vec![SkillEffect {
         effect_type: SkillEffectType::FlatDamage {
             damage: weapon_specs
@@ -155,17 +148,21 @@ pub fn make_weapon_skill(
     if let Some(&(min_value, max_value)) = weapon_specs.damage.get(&DamageType::Poison) {
         effects.push(SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
-                status_type: StatusType::DamageOverTime(DamageType::Poison),
+                status_type: StatusType::DamageOverTime {
+                    damage_type: DamageType::Poison,
+                    ignore_armor: false,
+                },
                 min_value,
                 max_value,
                 min_duration: WEAPON_POISON_DAMAGE_DURATION,
                 max_duration: WEAPON_POISON_DAMAGE_DURATION,
+                cumulate: false,
             },
             failure_chances: 0.0,
         });
     }
 
-    let mut skill_specs = SkillSpecs::init(&BaseSkillSpecs {
+    BaseSkillSpecs {
         name: "Weapon Attack".to_string(),
         icon: "skills/attack.svg".to_string(),
         description: "A simple attack with your weapon".to_string(),
@@ -173,13 +170,19 @@ pub fn make_weapon_skill(
         cooldown: weapon_specs.cooldown,
         mana_cost: 0.0,
         upgrade_cost: item_level as f64 * 10.0, // TODO: More aggressive increase?
+        upgrade_effects: vec![StatEffect {
+            stat: StatType::Damage {
+                skill_type: None,
+                damage_type: None,
+            },
+            modifier: Modifier::Multiplier,
+            value: 0.2,
+        }],
         targets: vec![SkillTargetsGroup {
             range: weapon_specs.range,
             target_type: TargetType::Enemy,
             shape: weapon_specs.shape,
             effects,
         }],
-    });
-    skill_specs.item_slot = Some(item_slot);
-    skill_specs
+    }
 }

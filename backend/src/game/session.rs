@@ -6,7 +6,7 @@ use std::{
 
 use shared::messages::SessionKey;
 
-use super::game_instance_data::GameInstanceData;
+use super::game_data::GameInstanceData;
 
 #[derive(Debug, Clone)]
 pub struct SessionsStore {

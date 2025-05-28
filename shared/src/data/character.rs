@@ -1,9 +1,15 @@
 use serde::{Deserialize, Serialize};
 
+use super::character_status::{StatusMap, StatusType};
 pub use super::skill::{SkillSpecs, SkillState};
-use super::character_status::StatusMap;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+pub enum CharacterId {
+    Player,
+    Monster(usize),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub enum CharacterSize {
     #[default]
     Small, // 1x1
@@ -23,6 +29,9 @@ impl CharacterSize {
     }
 }
 
+// TODO: Split more for network usage? -> might become an hassle to handle in code...
+// But I think I want it. We would have the "base specs (still updated by passives and skills)"
+// and an "computed stats".
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CharacterSpecs {
     pub name: String,
@@ -41,6 +50,14 @@ pub struct CharacterSpecs {
     pub life_regen: f64,
 
     #[serde(default)]
+    pub max_mana: f64,
+    #[serde(default)]
+    pub mana_regen: f64,
+
+    #[serde(default)]
+    pub take_from_mana_before_life: f32,
+
+    #[serde(default)]
     pub armor: f64,
     #[serde(default)]
     pub fire_armor: f64,
@@ -52,13 +69,22 @@ pub struct CharacterSpecs {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CharacterState {
-    pub is_alive: bool,
-    pub health: f64,
+    pub life: f64,
+    pub mana: f64,
 
     pub statuses: StatusMap,
+    // This feels dirty
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub buff_status_change: bool,
 
-    pub just_died: bool,
+    pub is_alive: bool,
     pub just_hurt: bool,
     pub just_hurt_crit: bool,
     pub just_blocked: bool,
+}
+
+impl CharacterState {
+    pub fn is_stunned(&self) -> bool {
+        self.statuses.contains_key(&StatusType::Stun)
+    }
 }

@@ -1,14 +1,9 @@
 use serde::{Deserialize, Serialize};
 
 pub use super::stat_effect::DamageType;
-use super::{character_status::StatusType, item::ItemSlot, stat_effect::DamageMap};
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct SkillState {
-    pub elapsed_cooldown: f32,
-    pub is_ready: bool,
-    pub just_triggered: bool,
-}
+use super::{
+    character_status::StatusType, item::ItemSlot, passive::StatEffect, stat_effect::DamageMap,
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BaseSkillSpecs {
@@ -25,9 +20,10 @@ pub struct BaseSkillSpecs {
 
     #[serde(default)]
     pub upgrade_cost: f64,
+    #[serde(default)]
+    pub upgrade_effects: Vec<StatEffect>,
 
     pub targets: Vec<SkillTargetsGroup>,
-    // TODO: Increase Cost
     // TODO: special upgrades at some levels?
 }
 
@@ -44,6 +40,14 @@ pub struct SkillSpecs {
     pub targets: Vec<SkillTargetsGroup>,
 
     pub item_slot: Option<ItemSlot>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SkillState {
+    pub elapsed_cooldown: f32,
+
+    pub is_ready: bool,
+    pub just_triggered: bool,
 }
 
 #[derive(
@@ -64,11 +68,11 @@ impl SkillType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SkillTargetsGroup {
     #[serde(default)]
-    pub range: Range,
+    pub range: SkillRange,
     #[serde(default)]
     pub target_type: TargetType,
     #[serde(default)]
-    pub shape: Shape,
+    pub shape: SkillShape,
 
     pub effects: Vec<SkillEffect>,
 }
@@ -97,6 +101,8 @@ pub enum SkillEffectType {
     },
     ApplyStatus {
         status_type: StatusType,
+        #[serde(default)]
+        cumulate: bool,
         min_value: f64,
         max_value: f64,
         min_duration: f64,
@@ -104,7 +110,7 @@ pub enum SkillEffectType {
     },
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq)]
 pub enum TargetType {
     #[default]
     Enemy,
@@ -112,8 +118,8 @@ pub enum TargetType {
     Me,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
-pub enum Range {
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default, Eq, Hash)]
+pub enum SkillRange {
     #[default]
     Melee,
     Distance,
@@ -121,7 +127,7 @@ pub enum Range {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
-pub enum Shape {
+pub enum SkillShape {
     #[default]
     Single,
     Vertical2,

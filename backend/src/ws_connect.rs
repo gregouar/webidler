@@ -12,19 +12,17 @@ use axum_extra::TypedHeader;
 use rand::TryRngCore;
 use tokio::time::timeout;
 
+use std::ops::ControlFlow;
 use std::{
     net::SocketAddr,
     time::{Duration, Instant},
 };
-use std::{ops::ControlFlow, vec};
 
 use shared::{
     data::{
         character::CharacterSize,
         item::ItemRarity,
         player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-        skill::SkillSpecs,
-        stat_effect::EffectsMap,
     },
     messages::{
         client::{ClientConnectMessage, ClientMessage},
@@ -35,7 +33,7 @@ use shared::{
 
 use crate::game::{
     data::{master_store::MasterStore, DataInit},
-    game_instance_data::GameInstanceData,
+    game_data::GameInstanceData,
     session::{Session, SessionsStore},
     systems::{loot_generator, player_controller},
     GameInstance,
@@ -180,34 +178,22 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
 
     let passives_tree_specs = master_store.passives_store.get("default").unwrap().clone();
 
-    let mut player_specs = PlayerSpecs {
-        character_specs: CharacterSpecs {
-            name: user_id.to_string(), // TODO: LOL
-            portrait: String::from("adventurers/human_male_2.webp"),
-            size: CharacterSize::Small,
-            position_x: 0,
-            position_y: 0,
-            max_life: 100.0,
-            life_regen: 1.0,
-            armor: 0.0,
-            fire_armor: 0.0,
-            poison_armor: 0.0,
-            block: 0.0,
-        },
-        skills_specs: vec![
-            SkillSpecs::init(master_store.skills_store.get("heal").unwrap()),
-            SkillSpecs::init(master_store.skills_store.get("fireball").unwrap()),
-            SkillSpecs::init(master_store.skills_store.get("magic_missile").unwrap()),
-        ],
-        level: 1,
-        experience_needed: 20.0,
+    let mut player_specs = PlayerSpecs::init(CharacterSpecs {
+        name: user_id.to_string(), // TODO: LOL
+        portrait: String::from("adventurers/human_male_2.webp"),
+        size: CharacterSize::Small,
+        position_x: 0,
+        position_y: 0,
+        max_life: 100.0,
+        life_regen: 1.0,
         max_mana: 100.0,
         mana_regen: 1.0,
-        movement_cooldown: 2.0,
-        gold_find: 1.0,
-        effects: EffectsMap::default(),
-        auto_skills: vec![false, false, false],
-    };
+        armor: 0.0,
+        fire_armor: 0.0,
+        poison_armor: 0.0,
+        block: 0.0,
+        take_from_mana_before_life: 0.0,
+    });
 
     let mut player_inventory = PlayerInventory {
         max_bag_size: 40,
@@ -216,18 +202,45 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
 
     let player_resources = PlayerResources::default();
 
+    let world_id = "inn_basement.json";
     let world_blueprint = match master_store
         .world_blueprints_store
-        .get("forest.json")
+        .get(world_id)
         .cloned() // TODO: Avoid clone?
     {
         Some(world_blueprint) => world_blueprint,
         None => {
-            return Err(anyhow!("couldn't load world: forest.json"));
+            return Err(anyhow!("couldn't load world: {}",world_id));
         }
     };
 
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
+
+    player_controller::equip_skill(
+        &mut player_specs,
+        &mut player_state,
+        master_store
+            .skills_store
+            .get("magic_missile")
+            .unwrap()
+            .clone(),
+        false,
+        None,
+    );
+    player_controller::equip_skill(
+        &mut player_specs,
+        &mut player_state,
+        master_store.skills_store.get("fireball").unwrap().clone(),
+        false,
+        None,
+    );
+    player_controller::equip_skill(
+        &mut player_specs,
+        &mut player_state,
+        master_store.skills_store.get("heal").unwrap().clone(),
+        false,
+        None,
+    );
 
     if let Some(base_weapon) = master_store.items_store.get("shortsword").cloned() {
         let _ = player_controller::equip_item(

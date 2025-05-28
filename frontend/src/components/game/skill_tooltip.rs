@@ -3,8 +3,10 @@ use std::sync::Arc;
 use leptos::html::*;
 use leptos::prelude::*;
 
+use shared::data::character_status::StatusType;
 use shared::data::skill::SkillTargetsGroup;
-use shared::data::skill::{Range, Shape, SkillEffect, SkillEffectType, SkillSpecs};
+use shared::data::skill::TargetType;
+use shared::data::skill::{SkillEffect, SkillEffectType, SkillRange, SkillShape, SkillSpecs};
 
 use crate::components::{game::effects_tooltip::damage_type_str, ui::number::format_number};
 
@@ -70,18 +72,24 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
 fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
     let shape = match targets_group.shape {
-        Shape::Single => "",
-        Shape::Vertical2 => ", 2x1 area",
-        Shape::Horizontal2 => ", 1x2 area",
-        Shape::Horizontal3 => ", 1x3 area",
-        Shape::Square4 => ", 2x2 area",
-        Shape::All => ", all",
+        SkillShape::Single => "",
+        SkillShape::Vertical2 => ", 2x1 area",
+        SkillShape::Horizontal2 => ", 1x2 area",
+        SkillShape::Horizontal3 => ", 1x3 area",
+        SkillShape::Square4 => ", 2x2 area",
+        SkillShape::All => ", all",
     };
 
     let range = match targets_group.range {
-        Range::Melee => "Melee",
-        Range::Distance => "Distance",
-        Range::Any => "Any",
+        SkillRange::Melee => {
+            if targets_group.target_type == TargetType::Me {
+                "Self"
+            } else {
+                "Melee"
+            }
+        }
+        SkillRange::Distance => "Distance",
+        SkillRange::Any => "Any",
     };
 
     let effects = targets_group
@@ -146,13 +154,14 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                 max_value,
                 min_duration,
                 max_duration,
+                ..
             } => {
                 match status_type {
-                    shared::data::character_status::StatusType::Stunned => {
+                    StatusType::Stun => {
                         view! { <EffectLi>"Stun for "{format_min_max(min_duration, max_duration)}" seconds"</EffectLi> }
                             .into_any()
                     }
-                    shared::data::character_status::StatusType::DamageOverTime(damage_type) => {
+                    StatusType::DamageOverTime { damage_type, .. } => {
                         view! {
                             <EffectLi>
                                 "Deals "
@@ -163,6 +172,10 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                             </EffectLi>
                         }
                             .into_any()
+                    }
+                    // TODO: Give different description, maybe get that frome somewhere else/share with effect tooltip
+                    StatusType::StatModifier(_) => {
+                       view! { <EffectLi>{if min_value > 0.0 { "Buff" } else { "Debuff" }}</EffectLi> } .into_any()
                     }
                 }
             }

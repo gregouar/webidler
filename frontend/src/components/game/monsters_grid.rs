@@ -129,7 +129,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .monster_states
             .read()
             .get(index)
-            .map(|s| s.character_state.health)
+            .map(|s| s.character_state.life)
             .unwrap_or_default()
     });
 

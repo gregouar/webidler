@@ -366,6 +366,7 @@ fn Connection(connection: PassiveConnection) -> impl IntoView {
 #[component]
 pub fn NodeTooltip(node_specs: Arc<PassiveNodeSpecs>) -> impl IntoView {
     let effects = formatted_effects_list(node_specs.effects.clone(), AffixEffectScope::Global);
+    let triggers: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
 
     view! {
         <div class="
@@ -374,7 +375,7 @@ pub fn NodeTooltip(node_specs: Arc<PassiveNodeSpecs>) -> impl IntoView {
         ">
             <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
             <hr class="border-t border-gray-700" />
-            <ul class="list-none space-y-1">{effects}</ul>
+            <ul class="list-none space-y-1">{triggers}{effects}</ul>
         </div>
     }
 }

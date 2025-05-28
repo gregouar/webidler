@@ -1,5 +1,6 @@
 pub mod characters_controller;
 pub mod characters_updater;
+pub mod events_resolver;
 pub mod items_controller;
 pub mod loot_controller;
 pub mod loot_generator;
@@ -12,4 +13,5 @@ pub mod player_updater;
 pub mod skills_controller;
 pub mod skills_updater;
 pub mod stats_controller;
+pub mod triggers_controller;
 pub mod world_controller;

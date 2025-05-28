@@ -1,0 +1,45 @@
+{
+  "name": "Giant Rat",
+  "portrait": "monsters/rat.webp",
+  "max_life": 8,
+  "power_factor": 2.0,
+  "max_initiative": 1.0,
+  "skills": [
+    {
+      "name": "Vicious Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 5.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [2, 8]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Scratch",
+      "icon": "skills/claw.svg",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [1, 3]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -28,7 +28,7 @@ pub fn CharacterPortrait(
     let is_dead_img_effect = move || {
         if is_dead.get() {
             "transition-all duration-1000 saturate-0 brightness-1
-            [transform:rotateX(180deg)]"
+            [transform:rotateY(180deg)]"
         } else {
             "transition-all duration-1000"
         }
@@ -58,6 +58,20 @@ pub fn CharacterPortrait(
             show_block_effect.set(true);
         }
     });
+
+    let active_statuses = Memo::new(move |_| {
+        let mut active_statuses = statuses.get().into_keys().collect::<Vec<_>>();
+        active_statuses.sort();
+        active_statuses
+    });
+
+    let status_stack = move |status_type| {
+        statuses
+            .read()
+            .get(&status_type)
+            .map(|v| v.len())
+            .unwrap_or_default()
+    };
 
     view! {
         <style>
@@ -94,8 +108,9 @@ pub fn CharacterPortrait(
                 />
 
                 <div class="absolute inset-0 flex place-items-start p-2">
-                    <For each=move || statuses.get().into_keys() key=|k| *k let(k)>
-                        <StatusIcon status_type=k />
+                    <For each=move || active_statuses.get() key=|k| *k let(k)>
+                        // TODO: Stack amount
+                        <StatusIcon status_type=k stack=Signal::derive(move || status_stack(k)) />
                     </For>
                 </div>
                 <div class=move || { format!("absolute inset-0  {}", just_hurt_class()) }></div>
@@ -122,18 +137,25 @@ pub fn CharacterPortrait(
 }
 
 #[component]
-fn StatusIcon(status_type: StatusType) -> impl IntoView {
+fn StatusIcon(status_type: StatusType, stack: Signal<usize>) -> impl IntoView {
     let (icon_uri, alt) = match status_type {
-        StatusType::Stunned => ("statuses/stunned.svg", "Stunned"),
-        StatusType::DamageOverTime(damage_type) => match damage_type {
+        StatusType::Stun => ("statuses/stunned.svg", "Stunned"),
+        StatusType::DamageOverTime { damage_type, .. } => match damage_type {
             shared::data::skill::DamageType::Physical => ("statuses/bleed.svg", "Bleeding"),
             shared::data::skill::DamageType::Fire => ("statuses/burning.svg", "Burning"),
             shared::data::skill::DamageType::Poison => ("statuses/poison.svg", "Poisoned"),
         },
+        // TODO: Different buff types
+        StatusType::StatModifier(_) => ("statuses/buff.svg", "Buffed"),
     };
     view! {
-        <div class="w-[15%] aspect-square p-1">
+        <div class="relative w-[15%] h-max-[15%] aspect-square p-1">
             <img src=img_asset(icon_uri) alt=alt class="w-full h-full drop-shadow-md bg-black/40" />
+            <Show when=move || { stack.get() > 1 }>
+                <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/20 rounded leading-tight px-1 m-2">
+                    {move || stack.get().to_string()}
+                </div>
+            </Show>
         </div>
     }
 }

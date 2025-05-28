@@ -1,0 +1,491 @@
+⚔️ Weapon
+One-Handed Sword (e.g. slash/fast melee)
+
+    Rusty Shortsword
+    Rusted Iron Dagger
+
+    Worn Ironblade
+    Worn Shortsword
+
+    Militia Sword
+    Blacksmith’s Blade
+
+    Sharpened Edge
+    Guard-Issue Sword
+
+    Forged Longblade
+    Folded Steel Sword
+
+    Knight’s Cutter
+    Balanced Longsword
+
+    Steel Sabre
+    Sellsword’s Edge
+
+    Tempered Blade
+    Hardened Bastard Sword
+
+    Polished Warbrand
+    Sword of the Watch
+
+    Hero’s Blade
+    Sword of the First Legion
+
+Two-Handed Axe (e.g. heavy/hit hard)
+
+    Splintered Greataxe
+    Chopping Maul
+
+    Chipped Lumberaxe
+    Cleaver’s Axe
+
+    Bonecleaver
+    Ironhead Axe
+
+    Heavy Woodsplitter
+    Bloodoak Beheader
+
+    Brutal Iron Axe
+    Hewing Axe
+
+    Twinhead Axe
+    Soldier’s Greataxe
+
+    Blacksteel Beheader
+    Warcutter
+
+    Engraved Waraxe
+    Steel Greataxe
+
+    Bloodforged Cleaver
+    Executioner’s Axe
+
+    Champion’s Cleaver
+    Legionnaire’s Splitter
+
+Ranged Bow
+
+    Bent Shortbow
+    Bent Yew Bow
+
+    Old Hunting Bow
+    Hunter’s Bow
+
+    Long Branch Bow
+    Pine Longbow
+
+    Huntsman’s Bow
+    Guild-Fletched Bow
+
+    Reinforced Bow
+    Elmbark Bow
+
+    Fletched Warbow
+    Reinforced Bow
+
+    Fine Elmbow
+    Scout’s Bow
+
+    Composite Longbow
+    Warbow
+
+    Oakstrung Bow
+    Ranger’s Oakbow
+
+    Ranger’s Draw
+    Marksman’s Draw
+
+🛡️ Shield / Focus
+Shield
+
+    Splintered Shield
+    Cracked Buckler
+
+    Cracked Roundshield
+    Hide-Wrapped Shield
+
+    Iron-Banded Shield
+    Iron-Rimmed Shield
+
+    Guard’s Buckler
+    Tower Guard’s Shield
+
+    Steel Kite
+    Steel Roundshield
+
+    Reinforced Tower Shield
+    Engraved Kite Shield
+
+    Heater Shield
+    Pavise of the Wall
+
+    Heavy Guardplate
+    Oathsworn Shield
+
+    Runed Shield
+    Watchman’s Bastion
+
+    Bastion Crest
+    Shield of the Crest
+
+Magic Focus (Wand not focus)
+
+    Charred Wand
+    Apprentice’s Wand
+
+    Carved Bone Wand
+    Charcoal-Carved Wand
+
+    Apprentice’s Focus
+    Bone Wand
+
+    Runestone Wand
+    Wand of Scorched Ash
+
+    Mystic Rod
+    Channeler’s Rod
+
+    Spellweaver’s Baton
+    Wand of Binding
+
+    Focused Emberstaff
+    Carved Oak Focus
+
+    Spirit Channel
+    Scepter of Coals
+
+    Wand of Will
+    Sage’s Rod
+
+    Highmage’s Focus
+    Embersteel Focus
+
+🪖 Helmet
+
+    Ragged Hood
+    Quilted Coif
+
+    Cloth Cap
+    Leather Hood
+
+    Padded Helm
+    Ironcap
+
+    Leather Cowl
+    Guard’s Helm
+
+    Studded Headwrap
+    Chain Hood
+
+    Ironcap
+    Steel Sallet
+
+    Chain Hood
+    Soldier’s Barbute
+
+    Guard Helm
+    Mercenary’s Helm
+
+    Horned Helm
+    Visored Bascinet
+
+    Hero’s Helm
+    Greathelm of Valor
+
+👕 Body Armor
+
+    Threadbare Shirt
+    Worn Gambeson
+
+    Worn Tunic
+    Quilted Jerkin
+
+    Quilted Vest
+    Leather Brigandine
+
+    Leather Jerkin
+    Mail Hauberk
+
+    Studded Vest
+    Chainmail Shirt
+
+    Ironmail Hauberk
+    Guard’s Cuirass
+
+    Chaincoat
+    Soldier’s Harness
+
+    Guardplate
+    Steel Lamellar
+
+    Battleplate
+    Field Plate
+
+    Valor Chestguard
+    Knight’s Breastplate
+
+🧤 Gloves
+
+    Frayed Gloves
+    Fingerless Mitts
+
+    Wrapped Hands
+    Leather Gloves
+
+    Leather Gloves
+    Padded Grips
+
+    Gripping Gloves
+    Soldier’s Gloves
+
+    Reinforced Gloves
+    Reinforced Gauntlets
+
+    Iron Grips
+    Studded Handguards
+
+    Fistguards
+    Chain Gloves
+
+    Steelbinders
+    Blacksteel Gauntlets
+
+    Runed Gauntlets
+    Field Gauntlets
+
+    Warrior’s Gauntlets
+    Oathsworn Grips
+
+👢 Boots
+
+    Worn Sandals
+    Worn Leather Boots
+
+    Traveler’s Shoes
+    Soft-Sole Shoes
+
+    Cloth Boots
+    Stitched Marchers
+
+    Leather Boots
+    Iron-Buckled Boots
+
+    Strapped Boots
+    Scout’s Treads
+
+    Ironshod Boots
+    Riveted Sabatons
+
+    Steelstep Boots
+    Steel-toed Boots
+
+    Heavy Marchers
+    Marching Boots
+
+    Plated Walkers
+    Sentry’s Sabatons
+
+    Swiftguard Boots
+    Greaves of Duty
+
+💍 Ring
+
+    Copper Band
+
+    Etched Ring
+
+    Iron Loop
+
+    Bronze Ring
+
+    Silver Knot
+
+    Gilded Ring
+
+    Bloodstone Band
+
+    Runed Ring
+
+    Moonsteel Loop
+
+    Signet of Grace
+
+    Tarnished Copper Ring
+
+    Silver Loop
+
+    Brass Signet
+
+    Cut Garnet Ring
+
+    Inlaid Band
+
+    Ring of the Watch
+
+    Etched Silver Ring
+
+    Gold Filigree Ring
+
+    Knight’s Seal
+
+    Heirloom Signet
+
+
+📿 Necklace
+
+    Frayed Pendant
+
+    Bone Talisman
+
+    Iron Pendant
+
+    Twine Amulet
+
+    Herbal Charm
+
+    Silver Chain
+
+    Charm of Protection
+
+    Pendant of Fireglass
+
+    Runed Medallion
+
+    Knight’s Chain
+    
+    Leather Thong Necklace
+
+    Wooden Bead String
+
+    Worn Amulet
+
+    Braided Cord Charm
+
+    Chain of Ash
+
+    Ironbound Pendant
+
+    Bronze Sun Disk
+
+    Ancestral Token
+
+    Chain of the Just
+
+    Oathkeeper’s Emblem
+
+🧿 Trinket Types
+Cloaks
+
+    Patchy Cloak
+    Roughspun Cloak
+
+    Travel Wrap
+    Padded Mantle
+
+    Threaded Cloak
+    Hooded Wrap
+
+    Woolen Shroud
+    Cloak of Smoke
+
+    Lined Cape
+    Guard’s Drape
+
+    Shadow Cloak
+    Nightwatch Cloak
+
+    Reinforced Mantle
+    Scout’s Mantle
+
+    Nightcloak
+    Stormcloak
+
+    Flamewoven Cloak
+    Oiled Leather Drape
+
+    Hero’s Drape
+    Mantle of Resolve
+
+Relics
+
+    Cracked Totem
+
+    Worn Idol
+
+    Bone Fragment
+
+    Carved Relic
+
+    Spirit Token
+
+    Enruned Relic
+
+    Idol of Sparks
+
+    Warding Idol
+
+    Mystic Totem
+
+    Ancestral Stone
+
+    Fingerbone Talisman
+
+    Traveler’s Icon
+
+    Ember Token
+
+    Shard of Faith
+
+    Polished Relic
+
+    Hermit’s Sigil
+
+    Votive Stone
+
+    Saint’s Shard
+
+    Spirit Engraving
+
+    Relic of Old Flame
+
+Charms
+
+    Rabbit’s Foot
+
+    Lucky Coin
+
+    Pebble Charm
+
+    Charm of Whispers
+
+    Woven Knot
+
+    Twined Fang
+
+    Ember Charm
+
+    Bloodroot Knot
+
+    Spirit Shell
+
+    Charm of Echoes
+    
+    Copper Coin Charm
+
+    Carved Twig Charm
+
+    Boar Tusk Fetish
+
+    Waxed Cord Charm
+
+    Fang Talisman
+
+    Knot of Bone
+
+    Trader’s Luck
+
+    Warding Twine
+
+    Ashroot Charm
+
+    Soldier’s Keepsake

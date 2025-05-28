@@ -1,3 +1,4 @@
+pub mod event;
 pub mod items_store;
 pub mod loot_table;
 pub mod manifest;

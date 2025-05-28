@@ -1,23 +1,20 @@
 use anyhow::{anyhow, Result};
 
 use shared::data::{
+    character::CharacterId,
     item::{ItemSlot, ItemSpecs, WeaponSpecs},
-    item_affix::{AffixEffectScope, EffectModifier, StatType},
-    monster::{MonsterSpecs, MonsterState},
-    passive::{PassivesTreeSpecs, PassivesTreeState},
+    monster::MonsterSpecs,
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-    skill::{DamageType, SkillState},
-    stat_effect::EffectsMap,
+    skill::{BaseSkillSpecs, SkillSpecs, SkillState},
     world::AreaLevel,
 };
 
-use crate::game::{data::DataInit, utils::increase_factors};
-
-use super::{
-    items_controller,
-    skills_controller::{self, update_skill_specs},
-    stats_controller::ApplyStatModifier,
+use crate::game::{
+    data::{event::EventsQueue, DataInit},
+    utils::increase_factors,
 };
+
+use super::{characters_controller::Target, items_controller, skills_controller};
 
 #[derive(Debug, Clone)]
 pub struct PlayerController {
@@ -37,15 +34,28 @@ impl PlayerController {
         self.use_skills.clear();
     }
 
-    pub fn control_player(
+    pub fn control_player<'a>(
         &mut self,
-        player_specs: &PlayerSpecs,
-        player_state: &mut PlayerState,
-        monsters: &mut Vec<(&MonsterSpecs, &mut MonsterState)>,
+        events_queue: &mut EventsQueue,
+        player_specs: &'a PlayerSpecs,
+        player_state: &'a mut PlayerState,
+        monsters: &mut [Target<'a>],
     ) {
-        if !player_state.character_state.is_alive {
+        if !player_state.character_state.is_alive || player_state.character_state.is_stunned() {
             return;
         }
+
+        let mut mana_available = player_state.character_state.mana;
+
+        let mut player = (
+            CharacterId::Player,
+            (
+                &player_specs.character_specs,
+                &mut player_state.character_state,
+            ),
+        );
+
+        let mut friends = vec![];
 
         let min_mana_needed = player_specs
             .skills_specs
@@ -60,35 +70,26 @@ impl PlayerController {
             .zip(player_state.skills_states.iter_mut())
             .enumerate()
         {
-            if !skill_state.is_ready || skill_specs.mana_cost > player_state.mana {
-                continue;
-            }
-
             // Always keep enough mana for a manual trigger, could be optional
             if (!self.auto_skills.get(i).unwrap_or(&false)
                 || (skill_specs.mana_cost > 0.0
-                    && player_state.mana < min_mana_needed + skill_specs.mana_cost))
+                    && mana_available < min_mana_needed + skill_specs.mana_cost))
                 && !self.use_skills.contains(&i)
             {
                 continue;
             }
 
-            if skills_controller::use_skill(
+            mana_available = skills_controller::use_skill(
+                events_queue,
                 skill_specs,
                 skill_state,
-                (
-                    &player_specs.character_specs,
-                    &mut player_state.character_state,
-                ),
-                vec![],
-                monsters
-                    .iter_mut()
-                    .map(|(specs, state)| (&specs.character_specs, &mut state.character_state))
-                    .collect(),
-            ) {
-                player_state.mana -= skill_specs.mana_cost;
-            }
+                &mut player,
+                &mut friends,
+                monsters,
+            );
         }
+
+        self.reset();
     }
 }
 
@@ -119,7 +120,7 @@ pub fn level_up(
             increase_factors::XP_INCREASE_FACTOR,
         );
 
-    player_state.character_state.health += 10.0;
+    player_state.character_state.life += 10.0;
 
     player_state.just_leveled_up = true;
 
@@ -293,111 +294,28 @@ fn equip_weapon(
     item_level: u16,
     weapon_specs: &WeaponSpecs,
 ) {
-    // TODO: helper function
-    let weapon_skill = items_controller::make_weapon_skill(item_slot, item_level, weapon_specs);
+    equip_skill(
+        player_specs,
+        player_state,
+        items_controller::make_weapon_skill(item_level, weapon_specs),
+        true,
+        Some(item_slot),
+    );
+}
 
-    player_specs.auto_skills.insert(0, true);
+pub fn equip_skill(
+    player_specs: &mut PlayerSpecs,
+    player_state: &mut PlayerState,
+    base_skill_specs: BaseSkillSpecs,
+    auto_use: bool,
+    item_slot: Option<ItemSlot>,
+) {
+    let mut skill_specs = SkillSpecs::init(base_skill_specs);
+    skill_specs.item_slot = item_slot;
+
     player_state
         .skills_states
-        .insert(0, SkillState::init(&weapon_skill));
-    player_specs.skills_specs.insert(0, weapon_skill);
-}
-
-pub fn update_player_specs(
-    player_specs: &mut PlayerSpecs,
-    player_inventory: &PlayerInventory,
-    passives_tree_specs: &PassivesTreeSpecs,
-    passive_tree_state: &PassivesTreeState,
-) {
-    // TODO: Reset player_specs
-    player_specs.character_specs.armor = 0.0;
-    player_specs.character_specs.fire_armor = 0.0;
-    player_specs.character_specs.poison_armor = 0.0;
-    player_specs.character_specs.block = 0.0;
-    player_specs.character_specs.max_life = 90.0 + 10.0 * player_specs.level as f64;
-    player_specs.character_specs.life_regen = 1.0;
-    player_specs.max_mana = 100.0;
-    player_specs.mana_regen = 1.0;
-    player_specs.gold_find = 1.0;
-    player_specs.movement_cooldown = 2.0;
-
-    let equipped_items = player_inventory
-        .equipped
-        .values()
-        .filter_map(|slot| match slot {
-            EquippedSlot::MainSlot(item) => Some(item),
-            _ => None,
-        });
-
-    let (total_armor, total_block) = equipped_items
-        .clone()
-        .filter_map(|item| item.armor_specs.as_ref())
-        .map(|spec| (spec.armor, spec.block))
-        .fold((0.0, 0.0), |(a_sum, b_sum), (a, b)| (a_sum + a, b_sum + b));
-
-    player_specs.character_specs.armor += total_armor;
-    player_specs.character_specs.block += total_block;
-
-    player_specs.effects = EffectsMap::combine_all(
-        equipped_items
-            .map(|i| i.aggregate_effects(AffixEffectScope::Global))
-            .chain(
-                passive_tree_state
-                    .purchased_nodes
-                    .iter()
-                    .filter_map(|node_id| {
-                        passives_tree_specs.nodes.get(node_id).map(|node| {
-                            EffectsMap(
-                                node.effects
-                                    .iter()
-                                    .map(|effect| ((effect.stat, effect.modifier), effect.value))
-                                    .collect(),
-                            )
-                        })
-                    }),
-            ),
-    );
-
-    compute_player_specs(player_specs);
-}
-
-fn compute_player_specs(player_specs: &mut PlayerSpecs) {
-    let mut effects: Vec<_> = (&player_specs.effects).into();
-
-    effects.sort_by_key(|e| match e.modifier {
-        EffectModifier::Flat => 0,
-        EffectModifier::Multiplier => 1,
-    });
-
-    for effect in effects.iter() {
-        match effect.stat {
-            StatType::Life => player_specs.character_specs.max_life.apply_effect(effect),
-            StatType::LifeRegen => player_specs.character_specs.life_regen.apply_effect(effect),
-            StatType::Mana => player_specs.max_mana.apply_effect(effect),
-            StatType::ManaRegen => player_specs.mana_regen.apply_effect(effect),
-            StatType::Armor(armor_type) => match armor_type {
-                DamageType::Physical => player_specs.character_specs.armor.apply_effect(effect),
-                DamageType::Fire => player_specs.character_specs.fire_armor.apply_effect(effect),
-                DamageType::Poison => player_specs
-                    .character_specs
-                    .poison_armor
-                    .apply_effect(effect),
-            },
-            StatType::Block => player_specs.character_specs.block.apply_effect(effect),
-            StatType::MovementSpeed => player_specs.movement_cooldown.apply_inverse_effect(effect),
-            StatType::GoldFind => player_specs.gold_find.apply_effect(effect),
-            // Delegate to skills
-            StatType::Damage { .. }
-            | StatType::MinDamage { .. }
-            | StatType::MaxDamage { .. }
-            | StatType::SpellPower
-            | StatType::CritChances(_)
-            | StatType::CritDamage(_)
-            | StatType::Speed(_) => {}
-        }
-    }
-
-    for skill_specs in player_specs.skills_specs.iter_mut() {
-        update_skill_specs(skill_specs, &effects);
-    }
+        .insert(0, SkillState::init(&skill_specs));
+    player_specs.skills_specs.insert(0, skill_specs);
+    player_specs.auto_skills.insert(0, auto_use);
 }
