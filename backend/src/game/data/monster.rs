@@ -16,6 +16,7 @@ pub struct BaseMonsterSpecs {
     pub character_specs: CharacterSpecs,
     pub skills: Vec<BaseSkillSpecs>,
 
+    #[serde(default)]
     pub min_initiative: f32,
     pub max_initiative: f32,
     pub power_factor: f64,

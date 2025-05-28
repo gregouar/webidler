@@ -23,7 +23,7 @@
               "ApplyStatus": {
                 "status_type": {
                       "StatModifier": {
-                        "Armor": {}
+                        "Armor": "Physical"
                       }
                     },
                 "min_value": -0.2,

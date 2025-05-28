@@ -15,8 +15,8 @@
       "spawns": [
         {
           "monster": "bat.json",
-          "min_quantity": 3,
-          "max_quantity": 6
+          "min_quantity": 2,
+          "max_quantity": 4
         }
       ]
     },
