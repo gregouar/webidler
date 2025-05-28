@@ -624,7 +624,6 @@
       },
 
       "stunning_crit": {
-        "initial_node": true,
         "name": "Lobotomy without Anesthesia",
         "icon": "passives/broken_skull.svg",
         "x": 40,
@@ -655,7 +654,6 @@
       },
 
       "healing_aura": {
-        "initial_node": true,
         "name": "Healing Aura",
         "icon": "passives/healing_aura.svg",
         "x": 40,
@@ -690,7 +688,6 @@
       },
 
       "bleeding_crit": {
-        "initial_node": true,
         "name": "The Ripper",
         "icon": "passives/bleeding_heart.svg",
         "x": 0,
@@ -734,7 +731,6 @@
       },
 
       "spell_crit": {
-        "initial_node": true,
         "name": "Unstable Power",
         "icon": "passives/burning_book.svg",
         "x": 0,
@@ -756,7 +752,6 @@
       },
 
       "mana_shield": {
-        "initial_node": true,
         "name": "Mana Shield",
         "icon": "passives/mana_shield.svg",
         "x": -40,
@@ -773,7 +768,6 @@
       },
 
       "enrage": {
-        "initial_node": true,
         "name": "Berserker",
         "icon": "passives/enrage.svg",
         "x": -40,
@@ -857,21 +851,27 @@
       { "from": "mana_regen_2", "to": "mana_max_and_regen_1" },
 
       { "from": "gold_ul_1", "to": "armor_2" },
+      { "from": "gold_ul_1", "to": "enrage" },
       { "from": "gold_ul_1", "to": "attack_damage_2" },
 
       { "from": "gold_ur_1", "to": "crit_chances_2" },
+      { "from": "gold_ur_1", "to": "stunning_crit" },
       { "from": "gold_ur_1", "to": "life_max_2" },
 
       { "from": "gold_dl_1", "to": "block_2" },
+      { "from": "gold_dl_1", "to": "mana_shield" },
       { "from": "gold_dl_1", "to": "mana_max_2" },
 
       { "from": "gold_dr_1", "to": "life_regen_2" },
+      { "from": "gold_dr_1", "to": "healing_aura" },
       { "from": "gold_dr_1", "to": "spell_damage_2" },
 
       { "from": "gold_u_2", "to": "attack_speed_2" },
+      { "from": "gold_u_2", "to": "bleeding_crit" },
       { "from": "gold_u_2", "to": "crit_damage_2" },
 
       { "from": "gold_d_2", "to": "spell_speed_2" },
+      { "from": "gold_d_2", "to": "spell_crit" },
       { "from": "gold_d_2", "to": "mana_regen_2" }
     ]
   }
