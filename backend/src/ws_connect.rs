@@ -186,10 +186,13 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
         position_y: 0,
         max_life: 100.0,
         life_regen: 1.0,
+        max_mana: 100.0,
+        mana_regen: 1.0,
         armor: 0.0,
         fire_armor: 0.0,
         poison_armor: 0.0,
         block: 0.0,
+        take_from_mana_before_life: 0.0,
     });
 
     let mut player_inventory = PlayerInventory {

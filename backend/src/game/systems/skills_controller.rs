@@ -19,6 +19,7 @@ use crate::game::{
 
 use super::{characters_controller, characters_controller::Target};
 
+/// Return remaining mana available
 pub fn use_skill<'a>(
     events_queue: &mut EventsQueue,
     skill_specs: &SkillSpecs,
@@ -26,9 +27,12 @@ pub fn use_skill<'a>(
     me: &mut Target<'a>,
     mut friends: &mut [Target<'a>],
     mut enemies: &mut [Target<'a>],
-) -> bool {
-    let mut applied = false;
+) -> f64 {
+    if !skill_state.is_ready || me.1 .1.mana < skill_specs.mana_cost {
+        return me.1 .1.mana;
+    }
 
+    let mut applied = false;
     for targets_group in skill_specs.targets.iter() {
         applied = applied
             | apply_skill_on_targets(
@@ -42,12 +46,13 @@ pub fn use_skill<'a>(
     }
 
     if applied {
+        me.1 .1.mana -= skill_specs.mana_cost;
         skill_state.just_triggered = true;
         skill_state.is_ready = false;
         skill_state.elapsed_cooldown = 0.0;
     }
 
-    applied
+    return me.1 .1.mana;
 }
 
 fn apply_skill_on_targets<'a>(

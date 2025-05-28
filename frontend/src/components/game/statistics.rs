@@ -95,13 +95,18 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             <Stat
                                 label="Maximum Mana"
                                 value=move || {
-                                    format_number(game_context.player_specs.read().max_mana)
+                                    format_number(
+                                        game_context.player_specs.read().character_specs.max_mana,
+                                    )
                                 }
                             />
                             <Stat
                                 label="Mana Regeneration per second"
                                 value=move || {
-                                    format!("{:.2}%", game_context.player_specs.read().mana_regen)
+                                    format!(
+                                        "{:.2}%",
+                                        game_context.player_specs.read().character_specs.mana_regen,
+                                    )
                                 }
                             />
                             <Stat
@@ -132,8 +137,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 value=move || {
                                     format!(
                                         "+{:.0}%",
-                                        effect(StatType::Speed(None), Modifier::Multiplier)
-                                            * 100.0,
+                                        effect(StatType::Speed(None), Modifier::Multiplier) * 100.0,
                                     )
                                 }
                             />
@@ -193,10 +197,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 value=move || {
                                     format!(
                                         "+{:.0}%",
-                                        effect(
-                                            StatType::CritChances(None),
-                                            Modifier::Multiplier,
-                                        ) * 100.0,
+                                        effect(StatType::CritChances(None), Modifier::Multiplier)
+                                            * 100.0,
                                     )
                                 }
                             />
@@ -206,10 +208,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     format!(
                                         "+{}%",
                                         format_number(
-                                            effect(
-                                                StatType::CritDamage(None),
-                                                Modifier::Multiplier,
-                                            ) * 100.0,
+                                            effect(StatType::CritDamage(None), Modifier::Multiplier)
+                                                * 100.0,
                                         ),
                                     )
                                 }
@@ -327,8 +327,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 value=move || {
                                     format!(
                                         "+{:.0}%",
-                                        effect(StatType::SpellPower, Modifier::Multiplier)
-                                            * 100.0,
+                                        effect(StatType::SpellPower, Modifier::Multiplier) * 100.0,
                                     )
                                 }
                             />

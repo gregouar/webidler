@@ -50,6 +50,14 @@ pub struct CharacterSpecs {
     pub life_regen: f64,
 
     #[serde(default)]
+    pub max_mana: f64,
+    #[serde(default)]
+    pub mana_regen: f64,
+
+    #[serde(default)]
+    pub take_from_mana_before_life: f32,
+
+    #[serde(default)]
     pub armor: f64,
     #[serde(default)]
     pub fire_armor: f64,
@@ -61,7 +69,8 @@ pub struct CharacterSpecs {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CharacterState {
-    pub health: f64,
+    pub life: f64,
+    pub mana: f64,
 
     pub statuses: StatusMap,
     // This feels dirty

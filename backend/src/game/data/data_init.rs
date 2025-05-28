@@ -28,12 +28,13 @@ impl DataInit<&WorldSpecs> for WorldState {
 impl DataInit<&CharacterSpecs> for CharacterState {
     fn init(specs: &CharacterSpecs) -> Self {
         CharacterState {
-            is_alive: true,
-            health: specs.max_life,
+            life: specs.max_life,
+            mana: specs.max_mana,
 
             statuses: HashMap::new(),
             buff_status_change: false,
 
+            is_alive: true,
             just_hurt: false,
             just_hurt_crit: false,
             just_blocked: false,
@@ -46,14 +47,12 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
         PlayerSpecs {
             character_specs: specs.clone(),
             skills_specs: vec![],
+            auto_skills: vec![],
             level: 1,
             experience_needed: 20.0,
-            max_mana: 100.0,
-            mana_regen: 1.0,
             movement_cooldown: 2.0,
             gold_find: 1.0,
             effects: EffectsMap::default(),
-            auto_skills: vec![],
             triggers: Vec::new(),
         }
     }
@@ -64,7 +63,6 @@ impl DataInit<&PlayerSpecs> for PlayerState {
         PlayerState {
             character_state: CharacterState::init(&specs.character_specs),
             skills_states: specs.skills_specs.iter().map(SkillState::init).collect(),
-            mana: specs.max_mana,
             just_leveled_up: false,
         }
     }

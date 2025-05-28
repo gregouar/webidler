@@ -15,17 +15,14 @@ pub struct PlayerSpecs {
     pub character_specs: CharacterSpecs,
     pub skills_specs: Vec<SkillSpecs>,
 
+    pub auto_skills: Vec<bool>,
+
     pub level: u8,
     pub experience_needed: f64,
 
-    pub max_mana: f64,
-    pub mana_regen: f64,
     pub movement_cooldown: f32,
-
     pub gold_find: f64,
     pub effects: EffectsMap,
-
-    pub auto_skills: Vec<bool>,
 
     pub triggers: Vec<TriggeredEffect>,
 }
@@ -34,8 +31,6 @@ pub struct PlayerSpecs {
 pub struct PlayerState {
     pub character_state: CharacterState,
     pub skills_states: Vec<SkillState>,
-
-    pub mana: f64,
 
     pub just_leveled_up: bool,
 }

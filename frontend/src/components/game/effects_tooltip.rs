@@ -235,6 +235,14 @@ pub fn formatted_effects_list(
                 "{:.0}% Increased Spell Power",
                 effect.value * 100.0
             )),
+            (TakeFromManaBeforeLife, Multiplier) => merged.push(format!(
+                "{:.0}% Increased Mana taken before Life",
+                effect.value * 100.0
+            )),
+            (TakeFromManaBeforeLife, Flat) => merged.push(format!(
+                "{:.0}% of Mana taken before Life",
+                effect.value * 100.0
+            )),
         }
     }
 

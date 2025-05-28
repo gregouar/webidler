@@ -45,6 +45,8 @@ impl PlayerController {
             return;
         }
 
+        let mut mana_available = player_state.character_state.mana;
+
         let mut player = (
             CharacterId::Player,
             (
@@ -68,29 +70,23 @@ impl PlayerController {
             .zip(player_state.skills_states.iter_mut())
             .enumerate()
         {
-            if !skill_state.is_ready || skill_specs.mana_cost > player_state.mana {
-                continue;
-            }
-
             // Always keep enough mana for a manual trigger, could be optional
             if (!self.auto_skills.get(i).unwrap_or(&false)
                 || (skill_specs.mana_cost > 0.0
-                    && player_state.mana < min_mana_needed + skill_specs.mana_cost))
+                    && mana_available < min_mana_needed + skill_specs.mana_cost))
                 && !self.use_skills.contains(&i)
             {
                 continue;
             }
 
-            if skills_controller::use_skill(
+            mana_available = skills_controller::use_skill(
                 events_queue,
                 skill_specs,
                 skill_state,
                 &mut player,
                 &mut friends,
                 monsters,
-            ) {
-                player_state.mana -= skill_specs.mana_cost;
-            }
+            );
         }
 
         self.reset();
@@ -124,7 +120,7 @@ pub fn level_up(
             increase_factors::XP_INCREASE_FACTOR,
         );
 
-    player_state.character_state.health += 10.0;
+    player_state.character_state.life += 10.0;
 
     player_state.just_leveled_up = true;
 

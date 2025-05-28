@@ -39,11 +39,6 @@ pub fn update_player_state(
             &mut player_state.skills_states,
         );
     }
-    player_state.mana = player_specs.max_mana.min(
-        player_state.mana
-            + (elapsed_time.as_secs_f64() * player_specs.mana_regen * player_specs.max_mana
-                / 100.0),
-    );
 }
 
 pub fn reset_player(player_state: &mut PlayerState) {
@@ -68,8 +63,8 @@ pub fn update_player_specs(
     player_specs.character_specs.block = 0.0;
     player_specs.character_specs.max_life = 90.0 + 10.0 * player_specs.level as f64;
     player_specs.character_specs.life_regen = 1.0;
-    player_specs.max_mana = 100.0;
-    player_specs.mana_regen = 1.0;
+    player_specs.character_specs.max_mana = 100.0;
+    player_specs.character_specs.mana_regen = 1.0;
     player_specs.gold_find = 1.0;
     player_specs.movement_cooldown = 2.0;
     player_specs.triggers.clear();
@@ -152,8 +147,8 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
         match effect.stat {
             StatType::Life => player_specs.character_specs.max_life.apply_effect(effect),
             StatType::LifeRegen => player_specs.character_specs.life_regen.apply_effect(effect),
-            StatType::Mana => player_specs.max_mana.apply_effect(effect),
-            StatType::ManaRegen => player_specs.mana_regen.apply_effect(effect),
+            StatType::Mana => player_specs.character_specs.max_mana.apply_effect(effect),
+            StatType::ManaRegen => player_specs.character_specs.mana_regen.apply_effect(effect),
             StatType::Armor(armor_type) => match armor_type {
                 DamageType::Physical => player_specs.character_specs.armor.apply_effect(effect),
                 DamageType::Fire => player_specs.character_specs.fire_armor.apply_effect(effect),
@@ -162,6 +157,10 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
                     .poison_armor
                     .apply_effect(effect),
             },
+            StatType::TakeFromManaBeforeLife => player_specs
+                .character_specs
+                .take_from_mana_before_life
+                .apply_effect(effect),
             StatType::Block => player_specs.character_specs.block.apply_effect(effect),
             StatType::MovementSpeed => player_specs.movement_cooldown.apply_inverse_effect(effect),
             StatType::GoldFind => player_specs.gold_find.apply_effect(effect),

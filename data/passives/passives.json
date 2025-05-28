@@ -318,7 +318,7 @@
       "spell_damage_1": {
         "name": "Spell Damage",
         "icon": "passives/spell.svg",
-        "x": -10,
+        "x": 10,
         "y": -12.5,
         "node_type": "Spell",
         "effects": [
@@ -332,7 +332,7 @@
       "spell_damage_2": {
         "name": "Spell Damage",
         "icon": "passives/spell.svg",
-        "x": -20,
+        "x": 20,
         "y": -20,
         "node_type": "Spell",
         "effects": [
@@ -346,7 +346,7 @@
       "spell_speed_1": {
         "name": "Casting Speed",
         "icon": "passives/spell.svg",
-        "x": -5,
+        "x": 5,
         "y": -20,
         "node_type": "Spell",
         "effects": [
@@ -360,7 +360,7 @@
       "spell_speed_2": {
         "name": "Casting Speed",
         "icon": "passives/spell.svg",
-        "x": -15,
+        "x": 15,
         "y": -27.5,
         "node_type": "Spell",
         "effects": [
@@ -374,7 +374,7 @@
       "spell_damage_and_speed_1": {
         "name": "Sorcery",
         "icon": "passives/spell.svg",
-        "x": -25,
+        "x": 25,
         "y": -30,
         "size": 1,
         "node_type": "Spell",
@@ -395,7 +395,7 @@
       "mana_max_1": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
-        "x": 10,
+        "x": -10,
         "y": -12.5,
         "node_type": "Mana",
         "effects": [
@@ -409,7 +409,7 @@
       "mana_max_2": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
-        "x": 20,
+        "x": -20,
         "y": -20,
         "node_type": "Mana",
         "effects": [
@@ -423,7 +423,7 @@
       "mana_regen_1": {
         "name": "Mana Regeneration",
         "icon": "passives/mana.svg",
-        "x": 5,
+        "x": -5,
         "y": -20,
         "node_type": "Mana",
         "effects": [
@@ -437,7 +437,7 @@
       "mana_regen_2": {
         "name": "Mana Regeneration",
         "icon": "passives/mana.svg",
-        "x": 15,
+        "x": -15,
         "y": -27.5,
         "node_type": "Mana",
         "effects": [
@@ -451,7 +451,7 @@
       "mana_max_and_regen_1": {
         "name": "Wisdom",
         "icon": "passives/mana.svg",
-        "x": 25,
+        "x": -25,
         "y": -30,
         "size": 1,
         "node_type": "Mana",
@@ -739,7 +739,7 @@
         "icon": "passives/burning_book.svg",
         "x": 0,
         "y": -40,
-        "node_type": "Mana",
+        "node_type": "Spell",
         "size": 1,
         "effects": [
           {
@@ -749,6 +749,23 @@
           },
           {
             "stat": { "CritDamage": "Spell" },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ]
+      },
+
+      "mana_shield": {
+        "initial_node": true,
+        "name": "Mana Shield",
+        "icon": "passives/mana_shield.svg",
+        "x": -40,
+        "y": -20,
+        "node_type": "Mana",
+        "size": 1,
+        "effects": [
+          {
+            "stat": "TakeFromManaBeforeLife",
             "modifier": "Flat",
             "value": 1
           }
@@ -846,10 +863,10 @@
       { "from": "gold_ur_1", "to": "life_max_2" },
 
       { "from": "gold_dl_1", "to": "block_2" },
-      { "from": "gold_dl_1", "to": "spell_damage_2" },
+      { "from": "gold_dl_1", "to": "mana_max_2" },
 
       { "from": "gold_dr_1", "to": "life_regen_2" },
-      { "from": "gold_dr_1", "to": "mana_max_2" },
+      { "from": "gold_dr_1", "to": "spell_damage_2" },
 
       { "from": "gold_u_2", "to": "attack_speed_2" },
       { "from": "gold_u_2", "to": "crit_damage_2" },

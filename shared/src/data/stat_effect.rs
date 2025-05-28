@@ -38,6 +38,7 @@ pub enum StatType {
     Mana,
     ManaRegen,
     Armor(DamageType),
+    TakeFromManaBeforeLife,
     Block,
     Damage {
         #[serde(default)]

@@ -46,10 +46,12 @@ pub fn attack_character(
     }
 
     if is_hurt {
-        target_state.health = (target_state.health - amount)
-            .max(0.0)
-            .min(target_specs.max_life);
-
+        damage_character(
+            &target_specs,
+            &mut target_state.life,
+            &mut target_state.mana,
+            amount,
+        );
         target_state.just_hurt = true;
     }
 
@@ -65,17 +67,33 @@ pub fn attack_character(
     }));
 }
 
+pub fn damage_character(
+    character_specs: &CharacterSpecs,
+    life: &mut f64,
+    mana: &mut f64,
+    amount: f64,
+) {
+    if amount <= 0.0 {
+        return;
+    }
+
+    let take_from_mana =
+        mana.min(amount * (character_specs.take_from_mana_before_life as f64).clamp(0.0, 1.0));
+    let take_from_life = amount - take_from_mana;
+
+    *mana -= take_from_mana;
+    *life -= take_from_life;
+}
+
 pub fn heal_character(target: &mut Target, amount: f64) {
-    let (_, (target_specs, target_state)) = target;
+    let (_, (_, target_state)) = target;
 
     if amount <= 0.0 {
         return;
     }
 
     if target_state.is_alive {
-        target_state.health = (target_state.health + amount)
-            .max(0.0)
-            .min(target_specs.max_life);
+        target_state.life += amount;
     }
 }
 
