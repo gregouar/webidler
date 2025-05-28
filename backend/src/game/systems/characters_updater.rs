@@ -49,15 +49,19 @@ pub fn update_character_state(
                     }
                 }
                 StatusType::Stun => {}
-                StatusType::StatModifier(_) => {} // TODO: How to update stats like max life? -> IDEA: Trigger Events and update Specs when needed
+                StatusType::StatModifier(_) => {}
             }
-            // let old_len = status_states.len();
+            let old_len = status_states.len();
             status_states.retain_mut(|status| {
                 status.duration -= elapsed_time.as_secs_f64();
                 status.duration > 0.0
             });
-            // if old_len != status_states.len():
-            // events_queue.register_event(event);
+            if let StatusType::StatModifier(_) = status_type {
+                if old_len != status_states.len() {
+                    character_state.buff_status_change = true;
+                }
+            }
+
             !status_states.is_empty()
         });
 }

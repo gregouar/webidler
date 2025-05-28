@@ -30,7 +30,9 @@ impl DataInit<&CharacterSpecs> for CharacterState {
         CharacterState {
             is_alive: true,
             health: specs.max_life,
+
             statuses: HashMap::new(),
+            buff_status_change: false,
 
             just_hurt: false,
             just_hurt_crit: false,

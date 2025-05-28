@@ -34,7 +34,10 @@ pub async fn tick(
     if game_data.player_specs.need_to_sync()
         || game_data.player_inventory.need_to_sync()
         || game_data.passives_tree_state.need_to_sync()
+        || game_data.player_state.character_state.buff_status_change
     {
+        // This feels so dirty =(
+        game_data.player_state.character_state.buff_status_change = false;
         player_updater::update_player_specs(
             game_data.player_specs.mutate(),
             game_data.player_inventory.read(),

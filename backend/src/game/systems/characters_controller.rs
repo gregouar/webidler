@@ -125,6 +125,10 @@ pub fn apply_status(
             })
         }
     }
+
+    if let StatusType::StatModifier(_) = status_type {
+        target_state.buff_status_change = true;
+    }
 }
 
 fn decrease_damage_from_armor(
