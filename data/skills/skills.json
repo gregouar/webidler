@@ -7,6 +7,13 @@
     "cooldown": 2,
     "mana_cost": 2,
     "upgrade_cost": 20,
+    "upgrade_effects": [
+      {
+        "stat": "SpellPower",
+        "modifier": "Multiplier",
+        "value": 0.2
+      }
+    ],
     "targets": [
       {
         "range": "Any",
@@ -30,6 +37,13 @@
     "cooldown": 5,
     "mana_cost": 20,
     "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": "SpellPower",
+        "modifier": "Multiplier",
+        "value": 0.2
+      }
+    ],
     "targets": [
       {
         "range": "Distance",
@@ -54,6 +68,13 @@
     "cooldown": 30,
     "mana_cost": 20,
     "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": "SpellPower",
+        "modifier": "Flat",
+        "value": 5
+      }
+    ],
     "targets": [
       {
         "target_type": "Me",

@@ -1,6 +1,8 @@
 use anyhow::Result;
 
+use shared::data::item_affix::{Modifier, StatType};
 use shared::data::monster::MonsterState;
+use shared::data::passive::StatEffect;
 use shared::data::world::AreaLevel;
 use shared::data::{monster::MonsterSpecs, world::WorldState};
 
@@ -13,7 +15,7 @@ use crate::game::data::{
 use crate::game::utils::rng::RandomWeighted;
 use crate::game::utils::{increase_factors, rng};
 
-use super::skills_controller;
+use super::skills_updater;
 
 const MAX_MONSTERS_PER_ROW: usize = 3; // TODO: Move
 
@@ -125,8 +127,24 @@ fn generate_monster_specs(bp_specs: &BaseMonsterSpecs, world_state: &WorldState)
     let lin_factor = increase_factors::linear(world_state.area_level as f64);
     monster_specs.power_factor *= exp_factor;
     monster_specs.character_specs.max_life *= exp_factor;
-    for skill_effect in monster_specs.skill_specs.iter_mut() {
-        skills_controller::increase_skill_effects(skill_effect, lin_factor)
+
+    let effects = vec![StatEffect {
+        stat: StatType::Damage {
+            skill_type: None,
+            damage_type: None,
+        },
+        modifier: Modifier::Multiplier,
+        value: lin_factor - 1.0,
+    }];
+    for skill_specs in monster_specs.skill_specs.iter_mut() {
+        if skill_specs.base.upgrade_effects.is_empty() {
+            skills_updater::update_skill_specs(skill_specs, &effects);
+        } else {
+            skills_updater::update_skill_specs(
+                skill_specs,
+                &skills_updater::compute_skill_upgrade_effects(skill_specs, world_state.area_level),
+            );
+        }
     }
     monster_specs
 }

@@ -1,7 +1,9 @@
 use serde::{Deserialize, Serialize};
 
 pub use super::stat_effect::DamageType;
-use super::{character_status::StatusType, item::ItemSlot, stat_effect::DamageMap};
+use super::{
+    character_status::StatusType, item::ItemSlot, passive::StatEffect, stat_effect::DamageMap,
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BaseSkillSpecs {
@@ -18,8 +20,9 @@ pub struct BaseSkillSpecs {
 
     #[serde(default)]
     pub upgrade_cost: f64,
-    // #[serde(default)]
-    // pub upgrade_increase: Modifier,
+    #[serde(default)]
+    pub upgrade_effects: Vec<StatEffect>,
+
     pub targets: Vec<SkillTargetsGroup>,
     // TODO: special upgrades at some levels?
 }

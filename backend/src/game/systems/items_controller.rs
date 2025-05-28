@@ -170,6 +170,14 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         cooldown: weapon_specs.cooldown,
         mana_cost: 0.0,
         upgrade_cost: item_level as f64 * 10.0, // TODO: More aggressive increase?
+        upgrade_effects: vec![StatEffect {
+            stat: StatType::Damage {
+                skill_type: None,
+                damage_type: None,
+            },
+            modifier: Modifier::Multiplier,
+            value: 0.2,
+        }],
         targets: vec![SkillTargetsGroup {
             range: weapon_specs.range,
             target_type: TargetType::Enemy,

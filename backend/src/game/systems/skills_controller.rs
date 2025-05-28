@@ -251,12 +251,9 @@ pub fn apply_skill_effect(
     }
 }
 
-pub fn level_up_skill(
-    skill_specs: &mut SkillSpecs,
-    player_resources: &mut PlayerResources,
-) -> bool {
+pub fn level_up_skill(skill_specs: &mut SkillSpecs, player_resources: &mut PlayerResources) {
     if player_resources.gold < skill_specs.next_upgrade_cost {
-        return false;
+        return;
     }
 
     player_resources.gold -= skill_specs.next_upgrade_cost;
@@ -267,43 +264,4 @@ pub fn level_up_skill(
             skill_specs.upgrade_level,
             increase_factors::MONSTER_INCREASE_FACTOR,
         );
-
-    // TODO: recall update_skill_specs
-    increase_skill_effects(skill_specs, 1.2);
-
-    true
-}
-
-pub fn increase_skill_effects(skill_specs: &mut SkillSpecs, factor: f64) {
-    for effect in skill_specs
-        .targets
-        .iter_mut()
-        .flat_map(|t| t.effects.iter_mut())
-    {
-        increase_effect(effect, factor);
-    }
-}
-
-// TODO: figure out linear increase for Heal
-fn increase_effect(effect: &mut SkillEffect, factor: f64) {
-    match &mut effect.effect_type {
-        SkillEffectType::FlatDamage { damage, .. } => {
-            for (min, max) in damage.values_mut() {
-                *min *= factor;
-                *max *= factor;
-            }
-        }
-        SkillEffectType::Heal { min, max } => {
-            *min *= factor;
-            *max *= factor;
-        }
-        SkillEffectType::ApplyStatus {
-            min_value,
-            max_value,
-            ..
-        } => {
-            *min_value *= factor;
-            *max_value *= factor;
-        }
-    }
 }

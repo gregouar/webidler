@@ -2,13 +2,13 @@ use std::time::Duration;
 
 use shared::data::{
     character_status::StatusType,
-    item_affix::StatType,
+    item_affix::{Modifier, StatType},
     passive::StatEffect,
     skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType},
     stat_effect::DamageMap,
 };
 
-use super::{skills_controller, stats_controller::ApplyStatModifier};
+use super::stats_controller::ApplyStatModifier;
 
 pub fn update_skills_states(
     elapsed_time: Duration,
@@ -37,7 +37,11 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) 
     skill_specs.cooldown = skill_specs.base.cooldown;
     skill_specs.mana_cost = skill_specs.base.mana_cost;
 
-    for effect in effects.iter() {
+    let base_effects = compute_skill_upgrade_effects(&skill_specs, skill_specs.upgrade_level);
+
+    let effects = effects.iter().chain(base_effects.iter());
+
+    for effect in effects.clone() {
         match effect.stat {
             StatType::Speed(skill_type)
                 if skill_specs.base.skill_type
@@ -54,20 +58,35 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) 
         .iter_mut()
         .flat_map(|t| t.effects.iter_mut())
     {
-        compute_skill_specs_effect(skill_specs.base.skill_type, skill_effect, effects)
-    }
-
-    for _ in 1..skill_specs.upgrade_level {
-        skills_controller::increase_skill_effects(skill_specs, 1.2);
+        compute_skill_specs_effect(skill_specs.base.skill_type, skill_effect, effects.clone())
     }
 }
 
-pub fn compute_skill_specs_effect(
+pub fn compute_skill_upgrade_effects(skill_specs: &SkillSpecs, level: u16) -> Vec<StatEffect> {
+    let level = level as f64 - 1.0;
+    skill_specs
+        .base
+        .upgrade_effects
+        .iter()
+        .map(|effect| StatEffect {
+            stat: effect.stat,
+            modifier: effect.modifier,
+            value: match effect.modifier {
+                Modifier::Multiplier => (1.0 + effect.value).powf(level) - 1.0,
+                Modifier::Flat => effect.value * level,
+            },
+        })
+        .collect::<Vec<_>>()
+}
+
+pub fn compute_skill_specs_effect<'a, I>(
     skill_type: SkillType,
     skill_effect: &mut SkillEffect,
-    effects: &[StatEffect],
-) {
-    for effect in effects.iter() {
+    effects: I,
+) where
+    I: IntoIterator<Item = &'a StatEffect>,
+{
+    for effect in effects {
         match &mut skill_effect.effect_type {
             SkillEffectType::FlatDamage {
                 damage,
