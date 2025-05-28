@@ -3,8 +3,6 @@ use serde::{Deserialize, Serialize};
 use super::character_status::{StatusMap, StatusType};
 pub use super::skill::{SkillSpecs, SkillState};
 
-use crate::serde_utils::is_default;
-
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum CharacterId {
     Player,
@@ -32,30 +30,32 @@ impl CharacterSize {
 }
 
 // TODO: Split more for network usage? -> might become an hassle to handle in code...
+// But I think I want it. We would have the "base specs (still updated by passives and skills)"
+// and an "computed stats".
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CharacterSpecs {
     pub name: String,
     pub portrait: String,
 
-    #[serde(default, skip_serializing_if = "is_default")]
+    #[serde(default)]
     pub size: CharacterSize,
 
-    #[serde(default, skip_serializing_if = "is_default")]
+    #[serde(default)]
     pub position_x: u8,
-    #[serde(default, skip_serializing_if = "is_default")]
+    #[serde(default)]
     pub position_y: u8,
 
     pub max_life: f64,
-    #[serde(default, skip_serializing_if = "is_default")]
+    #[serde(default)]
     pub life_regen: f64,
 
-    #[serde(default, skip_serializing_if = "is_default")]
+    #[serde(default)]
     pub armor: f64,
-    #[serde(default, skip_serializing_if = "is_default")]
+    #[serde(default)]
     pub fire_armor: f64,
-    #[serde(default, skip_serializing_if = "is_default")]
+    #[serde(default)]
     pub poison_armor: f64,
-    #[serde(default, skip_serializing_if = "is_default")]
+    #[serde(default)]
     pub block: f32,
 }
 
@@ -64,7 +64,8 @@ pub struct CharacterState {
     pub health: f64,
 
     pub statuses: StatusMap,
-    #[serde(skip_serializing, skip_deserializing)]
+    // This feels dirty
+    #[serde(default, skip_serializing, skip_deserializing)]
     pub buff_status_change: bool,
 
     pub is_alive: bool,

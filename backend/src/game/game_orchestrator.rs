@@ -38,8 +38,10 @@ pub async fn tick(
     {
         // This feels so dirty =(
         game_data.player_state.character_state.buff_status_change = false;
+
         player_updater::update_player_specs(
             game_data.player_specs.mutate(),
+            &game_data.player_state,
             game_data.player_inventory.read(),
             &game_data.passives_tree_specs,
             game_data.passives_tree_state.read(),

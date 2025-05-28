@@ -18,10 +18,7 @@ pub fn update_character_state(
         return;
     }
 
-    character_state.health = character_state
-        .health
-        .max(0.0)
-        .min(character_specs.max_life);
+    character_state.health = character_state.health.clamp(0.0, character_specs.max_life);
 
     if character_state.health < 0.5 {
         character_state.health = 0.0;
@@ -48,14 +45,15 @@ pub fn update_character_state(
                             status.value * elapsed_time.as_secs_f64().min(status.duration)
                     }
                 }
-                StatusType::Stun => {}
-                StatusType::StatModifier(_) => {}
+                _ => {}
             }
+
             let old_len = status_states.len();
             status_states.retain_mut(|status| {
                 status.duration -= elapsed_time.as_secs_f64();
                 status.duration > 0.0
             });
+
             if let StatusType::StatModifier(_) = status_type {
                 if old_len != status_states.len() {
                     character_state.buff_status_change = true;

@@ -766,7 +766,7 @@
         "triggers": [
           {
             "trigger": {
-              "OnHitTaken": { "is_hurt": true }
+              "OnTakeHit": { "is_hurt": true }
             },
             "description": "Taking a Hit increase Damage by 20% for 2 seconds.",
             "ApplySkillEffects": {
@@ -775,14 +775,12 @@
                   "ApplyStatus": {
                     "status_type": {
                       "StatModifier": {
-                        "stat": { "Damage": {} },
-                        "modifier": "Multiplier",
-                        "value": 0.2
+                        "Damage": {}
                       }
                     },
-                    "cumulate": 10,
-                    "min_value": 0,
-                    "max_value": 0,
+                    "cumulate": true,
+                    "min_value": 0.2,
+                    "max_value": 0.2,
                     "min_duration": 2,
                     "max_duration": 2
                   }

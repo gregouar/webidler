@@ -1,7 +1,8 @@
-use std::time::Duration;
+use std::{iter, time::Duration};
 
 use shared::data::{
     character::CharacterId,
+    character_status::StatusType,
     item_affix::{AffixEffectScope, Modifier, StatType},
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerSpecs, PlayerState},
@@ -51,8 +52,11 @@ pub fn reset_player(player_state: &mut PlayerState) {
     skills_updater::reset_skills(&mut player_state.skills_states);
 }
 
+// I hate the fact player state influences player specs... But I couldn't figure out a way
+// to have it working with the dynamic statuses.
 pub fn update_player_specs(
     player_specs: &mut PlayerSpecs,
+    player_state: &PlayerState,
     player_inventory: &PlayerInventory,
     passives_tree_specs: &PassivesTreeSpecs,
     passive_tree_state: &PassivesTreeState,
@@ -109,7 +113,21 @@ pub fn update_player_specs(
                                 )
                             })
                     }),
-            ),
+            )
+            .chain(iter::once(EffectsMap(
+                player_state
+                    .character_state
+                    .statuses
+                    .iter()
+                    .filter_map(|(s, v)| match s {
+                        StatusType::StatModifier(stat) => Some((
+                            (*stat, Modifier::Multiplier),
+                            v.iter().map(|s| s.value).sum(),
+                        )),
+                        _ => None,
+                    })
+                    .collect(),
+            ))),
     );
 
     player_specs.triggers = passive_tree_state
