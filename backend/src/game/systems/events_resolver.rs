@@ -30,26 +30,6 @@ pub async fn resolve_events(
                 handle_hit_event(&mut trigger_effects, game_data, hit_event)
             }
             GameEvent::Kill { target } => {
-                if let Some(item_specs) = loot_generator::generate_loot(
-                    1,
-                    &game_data.world_blueprint.loot_table,
-                    &master_store.items_store,
-                    &master_store.item_affixes_table,
-                    &master_store.item_adjectives_table,
-                    &master_store.item_nouns_table,
-                ) {
-                    for item_specs in loot_controller::drop_loot(
-                        &game_data.player_controller,
-                        game_data.queued_loot.mutate(),
-                        item_specs,
-                    ) {
-                        player_controller::sell_item(
-                            game_data.player_specs.read(),
-                            game_data.player_resources.mutate(),
-                            &item_specs,
-                        );
-                    }
-                }
                 handle_kill_event(&mut trigger_effects, game_data, *target)
             }
             GameEvent::AreaCompleted(area_level) => {
