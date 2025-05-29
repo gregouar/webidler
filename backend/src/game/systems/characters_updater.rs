@@ -55,7 +55,7 @@ pub fn update_character_state(
                 status.duration > 0.0
             });
 
-            if let StatusType::StatModifier(_) = status_type {
+            if let StatusType::StatModifier { .. } = status_type {
                 if old_len != status_states.len() {
                     character_state.buff_status_change = true;
                 }

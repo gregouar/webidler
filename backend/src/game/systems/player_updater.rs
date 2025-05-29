@@ -115,9 +115,15 @@ pub fn update_player_specs(
                     .statuses
                     .iter()
                     .filter_map(|(s, v)| match s {
-                        StatusType::StatModifier(stat) => Some((
-                            (*stat, Modifier::Multiplier),
-                            v.iter().map(|s| s.value).sum(),
+                        StatusType::StatModifier {
+                            stat,
+                            modifier,
+                            debuff,
+                        } => Some((
+                            (*stat, *modifier),
+                            v.iter()
+                                .map(|s| if *debuff { -s.value } else { s.value })
+                                .sum(),
                         )),
                         _ => None,
                     })

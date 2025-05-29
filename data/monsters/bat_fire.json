@@ -2,7 +2,7 @@
   "name": "Fiery Bat",
   "portrait": "monsters/bat_fire.webp",
   "max_life": 5,
-  "power_factor": 1.5,
+  "power_factor": 2,
   "max_initiative": 0.5,
   "fire_armor": 100,
   "skills": [

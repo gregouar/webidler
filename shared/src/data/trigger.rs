@@ -30,6 +30,7 @@ pub struct HitTrigger {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TriggeredEffect {
+    #[serde(flatten)]
     pub trigger: EventTrigger,
     pub description: String,
 

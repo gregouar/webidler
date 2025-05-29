@@ -8,7 +8,7 @@
   "skills": [
     {
       "name": "Burning Throw",
-      "icon": "skills/Scratch.svg",
+      "icon": "skills/fireball.svg",
       "cooldown": 2.0,
       "targets": [
         {

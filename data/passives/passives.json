@@ -632,10 +632,8 @@
         "size": 1,
         "triggers": [
           {
-            "trigger": {
-              "OnHit": { "skill_type": "Attack", "is_crit": true }
-            },
             "description": "Critical Hit with Attacks inflict Stun for 4 seconds",
+            "OnHit": { "skill_type": "Attack", "is_crit": true },
             "ApplySkillEffects": {
               "effects": [
                 {
@@ -662,15 +660,15 @@
         "size": 1,
         "triggers": [
           {
-            "trigger": "OnWaveCompleted",
-            "description": "Restore Area Level x 10 Health at the end of each wave.",
+            "description": "Restore Area Level x 5 Health at the end of each wave.",
+            "OnWaveCompleted": {},
             "ApplySkillEffects": {
               "target": "Source",
               "effects": [
                 {
                   "Heal": {
-                    "min": 10,
-                    "max": 10
+                    "min": 5,
+                    "max": 5
                   }
                 }
               ],
@@ -696,10 +694,8 @@
         "size": 1,
         "triggers": [
           {
-            "trigger": {
-              "OnHit": { "skill_type": "Attack", "is_crit": true }
-            },
             "description": "Critical Hit with Attacks inflict Bleed for 2 seconds. Bleed damage is 50% of Physical Damage dealt by initial Hit per second.",
+            "OnHit": { "skill_type": "Attack", "is_crit": true },
             "ApplySkillEffects": {
               "effects": [
                 {
@@ -776,17 +772,15 @@
         "size": 1,
         "triggers": [
           {
-            "trigger": {
-              "OnTakeHit": { "is_hurt": true }
-            },
             "description": "Taking a Hit increase Damage by 20% for 2 seconds.",
+            "OnTakeHit": { "is_hurt": true },
             "ApplySkillEffects": {
               "effects": [
                 {
                   "ApplyStatus": {
                     "status_type": {
                       "StatModifier": {
-                        "Damage": {}
+                        "stat": { "Damage": {} }
                       }
                     },
                     "cumulate": true,

@@ -167,15 +167,15 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                                 "Deals "
                                 <span class="font-semibold">
                                     {format_min_max(min_value, max_value)}
-                                </span>"  "{damage_type_str(damage_type)}" Damage per second over "
+                                </span>"  "{damage_type_str(damage_type)}" Damage per second for "
                                 {format_min_max(min_duration, max_duration)}" seconds"
                             </EffectLi>
                         }
                             .into_any()
                     }
                     // TODO: Give different description, maybe get that frome somewhere else/share with effect tooltip
-                    StatusType::StatModifier(_) => {
-                       view! { <EffectLi>{if min_value > 0.0 { "Buff" } else { "Debuff" }}</EffectLi> } .into_any()
+                    StatusType::StatModifier{ debuff, .. } => {
+                       view! { <EffectLi>{if debuff { "Debuff" } else { "Buff" }}</EffectLi> } .into_any()
                     }
                 }
             }

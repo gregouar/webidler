@@ -22,12 +22,13 @@
             {
               "ApplyStatus": {
                 "status_type": {
-                      "StatModifier": {
-                        "Armor": "Physical"
-                      }
-                    },
-                "min_value": -0.2,
-                "max_value": -0.2,
+                  "StatModifier": {
+                    "stat": { "Armor": "Physical" },
+                    "debuff": true
+                  }
+                },
+                "min_value": 0.5,
+                "max_value": 0.5,
                 "min_duration": 3,
                 "max_duration": 3
               }

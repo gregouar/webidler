@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use super::{skill::DamageType, stat_effect::StatType};
+use super::{item_affix::Modifier, skill::DamageType, stat_effect::StatType};
 
 pub type StatusMap = HashMap<StatusType, Vec<StatusState>>;
 
@@ -13,7 +13,19 @@ pub enum StatusType {
         #[serde(default)]
         ignore_armor: bool,
     },
-    StatModifier(StatType),
+    StatModifier {
+        stat: StatType,
+        #[serde(default)]
+        modifier: Modifier,
+        #[serde(default)]
+        debuff: bool,
+    },
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum StatModifierType {
+    Buff,
+    Debuff,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

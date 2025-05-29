@@ -4,6 +4,9 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 use shared::data::character_status::{StatusMap, StatusType};
+use shared::data::item_affix::StatType;
+use shared::data::skill::DamageType;
+use shared::data::skill::SkillType;
 
 use crate::assets::img_asset;
 
@@ -145,8 +148,24 @@ fn StatusIcon(status_type: StatusType, stack: Signal<usize>) -> impl IntoView {
             shared::data::skill::DamageType::Fire => ("statuses/burning.svg", "Burning"),
             shared::data::skill::DamageType::Poison => ("statuses/poison.svg", "Poisoned"),
         },
-        // TODO: Different buff types
-        StatusType::StatModifier(_) => ("statuses/buff.svg", "Buffed"),
+        // TODO: More buff types
+        StatusType::StatModifier {
+            stat,
+            debuff: false,
+            ..
+        } => match stat {
+            StatType::Damage {
+                skill_type: Some(SkillType::Attack),
+                ..
+            } => ("statuses/buff_attack_damage.svg", "Increased Attack Damage"),
+            _ => ("statuses/buff.svg", "Buffed"),
+        },
+        StatusType::StatModifier {
+            stat, debuff: true, ..
+        } => match stat {
+            StatType::Armor(DamageType::Physical) => ("statuses/debuff_armor.svg", "Broken Armor"),
+            _ => ("statuses/debuff.svg", "Debuffed"),
+        },
     };
     view! {
         <div class="relative w-[15%] h-max-[15%] aspect-square p-1">

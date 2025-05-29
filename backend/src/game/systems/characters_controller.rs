@@ -144,7 +144,7 @@ pub fn apply_status(
         }
     }
 
-    if let StatusType::StatModifier(_) = status_type {
+    if let StatusType::StatModifier { .. } = status_type {
         target_state.buff_status_change = true;
     }
 }

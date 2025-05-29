@@ -4,6 +4,7 @@
   "max_life": 5,
   "power_factor": 2.0,
   "max_initiative": 0.5,
+  "fire_armor": 100,
   "skills": [
     {
       "name": "Flame Throw",
@@ -17,8 +18,8 @@
                 "status_type": {
                   "DamageOverTime": { "damage_type": "Fire" }
                 },
-                "min_value": 15,
-                "max_value": 15,
+                "min_value": 5,
+                "max_value": 5,
                 "min_duration": 3,
                 "max_duration": 3
               }

@@ -171,7 +171,7 @@ pub fn compute_skill_specs_effect<'a, I>(
                     }
                     _ => {}
                 },
-                StatusType::StatModifier(_) => {
+                StatusType::StatModifier { .. } => {
                     if StatType::SpellPower == effect.stat && skill_type == SkillType::Spell {
                         min_value.apply_effect(effect);
                         max_value.apply_effect(effect);

@@ -1,7 +1,7 @@
 {
   "name": "Demonic Cauldron",
   "portrait": "monsters/haunted_pot.webp",
-  "max_life": 20,
+  "max_life": 30,
   "power_factor": 4,
   "max_initiative": 2,
   "armor": 100,

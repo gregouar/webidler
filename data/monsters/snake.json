@@ -25,8 +25,8 @@
                 "status_type": {
                   "DamageOverTime": { "damage_type": "Poison" }
                 },
-                "min_value": 10,
-                "max_value": 10,
+                "min_value": 5,
+                "max_value": 5,
                 "min_duration": 5,
                 "max_duration": 5
               }
