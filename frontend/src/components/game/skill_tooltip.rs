@@ -184,7 +184,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
 
 fn format_min_max(min: f64, max: f64) -> String {
     if min != max {
-        format!("{}-{}", format_number(min), format_number(max))
+        format!("{} - {}", format_number(min), format_number(max))
     } else {
         format_number(min).to_string()
     }
