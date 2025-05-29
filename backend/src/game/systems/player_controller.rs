@@ -245,7 +245,7 @@ pub fn unequip_item(
     }
 }
 
-pub fn sell_item(
+pub fn sell_item_from_bag(
     player_specs: &PlayerSpecs,
     player_inventory: &mut PlayerInventory,
     player_resources: &mut PlayerResources,
@@ -253,19 +253,30 @@ pub fn sell_item(
 ) {
     let item_index = item_index as usize;
     if item_index < player_inventory.bag.len() {
-        let item_specs = player_inventory.bag.remove(item_index);
-        player_resources.gold +=
-            10.0 * match item_specs.rarity {
-                shared::data::item::ItemRarity::Normal => 1.0,
-                shared::data::item::ItemRarity::Magic => 2.0,
-                shared::data::item::ItemRarity::Rare => 4.0,
-                shared::data::item::ItemRarity::Unique => 8.0,
-            } * player_specs.gold_find
-                * increase_factors::exponential(
-                    item_specs.level,
-                    increase_factors::MONSTER_INCREASE_FACTOR,
-                );
+        sell_item(
+            player_specs,
+            player_resources,
+            &player_inventory.bag.remove(item_index),
+        );
     }
+}
+
+pub fn sell_item(
+    player_specs: &PlayerSpecs,
+    player_resources: &mut PlayerResources,
+    item_specs: &ItemSpecs,
+) {
+    player_resources.gold +=
+        10.0 * match item_specs.rarity {
+            shared::data::item::ItemRarity::Normal => 1.0,
+            shared::data::item::ItemRarity::Magic => 2.0,
+            shared::data::item::ItemRarity::Rare => 4.0,
+            shared::data::item::ItemRarity::Unique => 8.0,
+        } * player_specs.gold_find
+            * increase_factors::exponential(
+                item_specs.level,
+                increase_factors::MONSTER_INCREASE_FACTOR,
+            );
 }
 
 fn unequip_weapon(

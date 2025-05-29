@@ -111,7 +111,7 @@ fn handle_client_message(
             let mut item_indexes = m.item_indexes;
             item_indexes.sort_by_key(|&i| i);
             for &item_index in item_indexes.iter().rev() {
-                player_controller::sell_item(
+                player_controller::sell_item_from_bag(
                     game_data.player_specs.read(),
                     game_data.player_inventory.mutate(),
                     game_data.player_resources.mutate(),

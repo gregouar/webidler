@@ -251,15 +251,15 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <div class="bg-zinc-800 rounded-md h-full w-full gap-2 p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
-            <div class="px-4 relative z-10 flex items-center justify-between">
-                <div>
+            <div class="px-4 relative z-10 flex items-center justify-between gap-2 flex-wrap">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                     <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
-                        "Inventory "
+                        "Inventory"
                     </span>
                     <span class="text-shadow-md shadow-gray-950 text-gray-400 text-md font-medium">
                         {move || {
                             format!(
-                                " ({} / {})",
+                                "({} / {})",
                                 game_context.player_inventory.read().bag.len(),
                                 game_context.player_inventory.read().max_bag_size,
                             )
@@ -267,12 +267,16 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
                     </span>
                 </div>
 
-                <SellAllButton />
-                <LootFilterDropdown />
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-300 text-sm">"Loot Preference:"</span>
+                    <LootFilterDropdown />
+                </div>
 
-                <CloseButton on:click=move |_| open.set(false) />
+                <div class="flex items-center gap-2">
+                    <SellAllButton />
+                    <CloseButton on:click=move |_| open.set(false) />
+                </div>
             </div>
-
             // overflow-y-auto
             <div class="relative flex-1 overflow-x-visible max-h-[80vh]">
                 <div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 p-4 relative
@@ -529,7 +533,7 @@ fn SellAllButton() -> impl IntoView {
 
 #[component]
 pub fn LootFilterDropdown() -> impl IntoView {
-    let filter = RwSignal::new("Preferred loot".to_string());
+    let filter = RwSignal::new("All".to_string());
     let options = vec!["dou", "bidou"];
 
     let is_open = RwSignal::new(false);

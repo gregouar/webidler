@@ -8,8 +8,8 @@ const MAX_QUEUE_SIZE: usize = 5;
 
 // TODO: Give priority depending on rarity?
 // TODO: Return removed item for auto sell
-pub fn drop_loot(queued_loot: &mut Vec<QueuedLoot>, item_specs: ItemSpecs) {
-    drop_loot_impl(queued_loot, item_specs, true);
+pub fn drop_loot(queued_loot: &mut Vec<QueuedLoot>, item_specs: ItemSpecs) -> Vec<ItemSpecs> {
+    drop_loot_impl(queued_loot, item_specs, true)
 }
 
 pub fn pickup_loot(
@@ -17,6 +17,7 @@ pub fn pickup_loot(
     queued_loot: &mut Vec<QueuedLoot>,
     loot_identifier: u32,
 ) -> bool {
+    // Will contain back the item if inventory is full
     let mut move_item = None;
 
     if let Some(loot) = queued_loot
@@ -31,6 +32,7 @@ pub fn pickup_loot(
         }
     }
 
+    // Put back item at front of queue if couldn't pickup
     if let Some(item_specs) = move_item {
         drop_loot_impl(queued_loot, item_specs, false);
         return false;
@@ -40,11 +42,12 @@ pub fn pickup_loot(
     true
 }
 
+// Return discarded loot
 fn drop_loot_impl(
     queued_loot: &mut Vec<QueuedLoot>,
     item_specs: ItemSpecs,
     purge_disappeared: bool,
-) {
+) -> Vec<ItemSpecs> {
     let last_index = queued_loot
         .iter()
         .map(|x| x.identifier + 1)
@@ -62,10 +65,14 @@ fn drop_loot_impl(
         state: LootState::Normal,
     });
 
-    update_loot_states(queued_loot);
+    update_loot_states(queued_loot)
 }
 
-fn update_loot_states(queued_loot: &mut [QueuedLoot]) {
+// Return discarded loot
+fn update_loot_states(queued_loot: &mut [QueuedLoot]) -> Vec<ItemSpecs> {
+    // TODO: replace by reference
+    let mut discarded_loot = Vec::new();
+
     let mut queued_loot: Vec<_> = queued_loot
         .iter_mut()
         .filter(|x| x.state != LootState::HasDisappeared)
@@ -75,9 +82,25 @@ fn update_loot_states(queued_loot: &mut [QueuedLoot]) {
         loot.state = LootState::Normal;
     }
 
-    for i in 0..queued_loot.len().saturating_sub(MAX_QUEUE_SIZE) {
-        // TODO: return somehow
+    let amount_to_discard = queued_loot.len().saturating_sub(MAX_QUEUE_SIZE);
+    for i in 0..amount_to_discard {
+        // If new loot is worst than the one we want to discard, we discard the new one instead
+        // and put back old loot in front
+        if i == amount_to_discard - 1
+            && is_better_loot(
+                &queued_loot[i].item_specs,
+                &queued_loot[queued_loot.len() - 1].item_specs,
+            )
+        {
+            let last_index = queued_loot.len() - 1;
+            if i != last_index {
+                let (left, right) = queued_loot.split_at_mut(last_index);
+                std::mem::swap(&mut left[i].item_specs, &mut right[0].item_specs);
+            }
+        }
+
         queued_loot[i].state = LootState::HasDisappeared;
+        discarded_loot.push(queued_loot[i].item_specs.clone());
     }
 
     let mut queued_loot: Vec<_> = queued_loot
@@ -88,4 +111,10 @@ fn update_loot_states(queued_loot: &mut [QueuedLoot]) {
     for i in 0..queued_loot.len().saturating_sub(MAX_QUEUE_SIZE - 1) {
         queued_loot[i].state = LootState::WillDisappear;
     }
+
+    discarded_loot
+}
+
+fn is_better_loot(item_1: &ItemSpecs, item_2: &ItemSpecs) -> bool {
+    item_1.rarity > item_2.rarity
 }
