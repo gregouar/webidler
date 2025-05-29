@@ -168,7 +168,7 @@ fn StatusIcon(status_type: StatusType, stack: Signal<usize>) -> impl IntoView {
         },
     };
     view! {
-        <div class="relative w-[15%] h-max-[15%] aspect-square p-1">
+        <div class="relative h-[15%] aspect-square p-1">
             <img src=img_asset(icon_uri) alt=alt class="w-full h-full drop-shadow-md bg-black/40" />
             <Show when=move || { stack.get() > 1 }>
                 <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/20 rounded leading-tight px-1 m-2">
