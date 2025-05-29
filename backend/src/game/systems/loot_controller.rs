@@ -83,16 +83,14 @@ fn update_loot_states(queued_loot: &mut [QueuedLoot]) -> Vec<ItemSpecs> {
     }
 
     let amount_to_discard = queued_loot.len().saturating_sub(MAX_QUEUE_SIZE);
+    let last_index = queued_loot.len() - 1;
     for i in 0..amount_to_discard {
         // If new loot is worst than the one we want to discard, we discard the new one instead
         // and put back old loot in front
-        if i == amount_to_discard - 1
-            && is_better_loot(
-                &queued_loot[i].item_specs,
-                &queued_loot[queued_loot.len() - 1].item_specs,
-            )
-        {
-            let last_index = queued_loot.len() - 1;
+        if is_better_loot(
+            &queued_loot[i].item_specs,
+            &queued_loot[queued_loot.len() - 1].item_specs,
+        ) {
             if i != last_index {
                 let (left, right) = queued_loot.split_at_mut(last_index);
                 std::mem::swap(&mut left[i].item_specs, &mut right[0].item_specs);
