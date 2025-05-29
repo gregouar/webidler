@@ -1,7 +1,7 @@
 use shared::data::world::AreaLevel;
 
-pub const MONSTER_INCREASE_FACTOR: f64 = 0.1;
-pub const XP_INCREASE_FACTOR: f64 = 0.3;
+pub const MONSTER_INCREASE_FACTOR: f64 = 0.2;
+pub const XP_INCREASE_FACTOR: f64 = 0.4;
 pub const ARMOR_FACTOR: f64 = 100.0;
 
 pub fn exponential(level: AreaLevel, factor: f64) -> f64 {
