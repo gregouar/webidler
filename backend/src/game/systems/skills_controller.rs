@@ -34,15 +34,14 @@ pub fn use_skill<'a>(
 
     let mut applied = false;
     for targets_group in skill_specs.targets.iter() {
-        applied = applied
-            | apply_skill_on_targets(
-                events_queue,
-                skill_specs.base.skill_type,
-                targets_group,
-                me,
-                friends,
-                enemies,
-            );
+        applied |= apply_skill_on_targets(
+            events_queue,
+            skill_specs.base.skill_type,
+            targets_group,
+            me,
+            friends,
+            enemies,
+        );
     }
 
     if applied {
@@ -52,7 +51,7 @@ pub fn use_skill<'a>(
         skill_state.elapsed_cooldown = 0.0;
     }
 
-    return me.1 .1.mana;
+    me.1 .1.mana
 }
 
 fn apply_skill_on_targets<'a>(

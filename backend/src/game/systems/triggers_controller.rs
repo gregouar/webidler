@@ -75,7 +75,7 @@ pub fn apply_trigger_effects(
                                         .hit_context
                                         .as_ref()
                                         .and_then(|hit| hit.damage.get(&damage_type))
-                                        .map(|x| *x)
+                                        .copied()
                                         .unwrap_or_default()
                                 }
                                 TriggerEffectModifierSource::HitDamage(None) => trigger_effect

@@ -47,7 +47,7 @@ pub fn attack_character(
 
     if is_hurt {
         damage_character(
-            &target_specs,
+            target_specs,
             &mut target_state.life,
             &mut target_state.mana,
             amount,
@@ -129,19 +129,17 @@ pub fn apply_status(
             duration,
             cumulate,
         });
-    } else {
-        if let Some(cur_status) = statuses.iter_mut().find(|s| !s.cumulate) {
-            if value * duration > cur_status.value * cur_status.duration {
-                cur_status.value = value;
-                cur_status.duration = duration;
-            }
-        } else {
-            statuses.push(StatusState {
-                value,
-                duration,
-                cumulate,
-            })
+    } else if let Some(cur_status) = statuses.iter_mut().find(|s| !s.cumulate) {
+        if value * duration > cur_status.value * cur_status.duration {
+            cur_status.value = value;
+            cur_status.duration = duration;
         }
+    } else {
+        statuses.push(StatusState {
+            value,
+            duration,
+            cumulate,
+        })
     }
 
     if let StatusType::StatModifier { .. } = status_type {

@@ -80,7 +80,7 @@ fn handle_hit_event<'a>(
                 effect: triggered_effects.effect.clone(),
                 source: hit_event.source,
                 target: hit_event.target,
-                hit_context: Some(&hit_event),
+                hit_context: Some(hit_event),
                 area_level: game_data.world_state.read().area_level,
             });
         }
@@ -95,8 +95,7 @@ fn handle_kill_event(
     match target {
         CharacterId::Monster(monster_index) => {
             game_data.game_stats.monsters_killed += 1;
-            if let Some(monster_specs) = game_data.monster_specs.read().get(monster_index as usize)
-            {
+            if let Some(monster_specs) = game_data.monster_specs.read().get(monster_index) {
                 player_controller::reward_player(
                     game_data.player_resources.mutate(),
                     game_data.player_specs.read(),

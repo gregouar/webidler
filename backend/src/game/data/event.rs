@@ -6,6 +6,7 @@ use shared::data::{
     world::AreaLevel,
 };
 
+#[derive(Debug, Clone)]
 pub enum GameEvent {
     Hit(HitEvent),
     Kill { target: CharacterId },
@@ -27,6 +28,7 @@ pub struct HitEvent {
     pub damage: HashMap<DamageType, f64>,
 }
 
+#[derive(Debug, Default)]
 pub struct EventsQueue {
     events: Vec<GameEvent>,
 }

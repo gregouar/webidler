@@ -2,6 +2,7 @@ use std::time::{Duration, Instant};
 
 const LOOP_MIN_PERIOD: Duration = Duration::from_millis(100);
 
+#[derive(Debug, Clone)]
 pub struct GameTimer {
     last_tick: Instant,
     last_update: Instant,

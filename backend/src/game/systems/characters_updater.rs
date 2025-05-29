@@ -35,18 +35,15 @@ pub fn update_character_state(
     character_state
         .statuses
         .retain(|status_type, status_states| {
-            match status_type {
-                StatusType::DamageOverTime { .. } => {
-                    for status in status_states.iter() {
-                        characters_controller::damage_character(
-                            character_specs,
-                            &mut character_state.life,
-                            &mut character_state.mana,
-                            status.value * elapsed_time_f64.min(status.duration),
-                        );
-                    }
+            if let StatusType::DamageOverTime { .. } = status_type {
+                for status in status_states.iter() {
+                    characters_controller::damage_character(
+                        character_specs,
+                        &mut character_state.life,
+                        &mut character_state.mana,
+                        status.value * elapsed_time_f64.min(status.duration),
+                    );
                 }
-                _ => {}
             }
 
             let old_len = status_states.len();
@@ -73,7 +70,6 @@ pub fn update_character_state(
         events_queue.register_event(GameEvent::Kill {
             target: character_id,
         });
-        return;
     }
 }
 

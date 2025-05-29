@@ -37,7 +37,7 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) 
     skill_specs.cooldown = skill_specs.base.cooldown;
     skill_specs.mana_cost = skill_specs.base.mana_cost;
 
-    let base_effects = compute_skill_upgrade_effects(&skill_specs, skill_specs.upgrade_level);
+    let base_effects = compute_skill_upgrade_effects(skill_specs, skill_specs.upgrade_level);
 
     let effects = effects.iter().chain(base_effects.iter());
 

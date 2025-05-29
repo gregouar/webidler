@@ -100,11 +100,10 @@ fn update_loot_states(
             player_controller,
             &queued_loot[i].item_specs,
             &queued_loot[queued_loot.len() - 1].item_specs,
-        ) {
-            if i != last_index {
-                let (left, right) = queued_loot.split_at_mut(last_index);
-                std::mem::swap(&mut left[i].item_specs, &mut right[0].item_specs);
-            }
+        ) && i != last_index
+        {
+            let (left, right) = queued_loot.split_at_mut(last_index);
+            std::mem::swap(&mut left[i].item_specs, &mut right[0].item_specs);
         }
 
         queued_loot[i].state = LootState::HasDisappeared;
