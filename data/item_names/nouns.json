@@ -50,11 +50,11 @@
   { "text": "Loop", "restrictions": ["Jewelry"] },
   { "text": "Wisp", "restrictions": ["Jewelry"] },
 
-  { "text": "Token", "restrictions": ["Trinket", "Focus"] },
-  { "text": "Charm", "restrictions": ["Trinket", "Focus"] },
-  { "text": "Talisman", "restrictions": ["Trinket", "Focus"] },
-  { "text": "Whim", "restrictions": ["Trinket", "Focus"] },
-  { "text": "Gleam", "restrictions": ["Trinket", "Focus"] },
+  { "text": "Token", "restrictions": ["Accessory", "Focus"] },
+  { "text": "Charm", "restrictions": ["Accessory", "Focus"] },
+  { "text": "Talisman", "restrictions": ["Accessory", "Focus"] },
+  { "text": "Whim", "restrictions": ["Accessory", "Focus"] },
+  { "text": "Gleam", "restrictions": ["Accessory", "Focus"] },
 
   { "text": "Skin", "restrictions": ["Body"] },
   { "text": "Husk", "restrictions": ["Body"] },

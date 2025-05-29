@@ -2,8 +2,8 @@
   "cloak": {
     "name": "Cloak",
     "icon": "items/cloak.webp",
-    "slot": "Trinket",
-    "categories": ["Trinket", "Cloak"],
+    "slot": "Accessory",
+    "categories": ["Accessory", "Cloak"],
     "rarity": "Magic"
   }
 }

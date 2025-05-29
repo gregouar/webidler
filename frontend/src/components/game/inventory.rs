@@ -1,13 +1,19 @@
 use std::collections::HashSet;
 use std::sync::Arc;
 use std::time::Duration;
+use strum::IntoEnumIterator;
 
 use leptos::html::*;
 use leptos::prelude::*;
 use leptos_use::on_click_outside;
 
-use shared::data::{item::ItemSlot, player::EquippedSlot};
-use shared::messages::client::{EquipItemMessage, SellItemsMessage, UnequipItemMessage};
+use shared::data::{
+    item::{ItemCategory, ItemSlot},
+    player::EquippedSlot,
+};
+use shared::messages::client::{
+    EquipItemMessage, FilterLootMessage, SellItemsMessage, UnequipItemMessage,
+};
 
 use crate::assets::img_asset;
 use crate::components::{
@@ -52,7 +58,7 @@ pub fn InventoryPanel(open: RwSignal<bool>) -> impl IntoView {
 #[component]
 pub fn EquippedItemsCard() -> impl IntoView {
     const EQUIPPED_SLOTS: &[(ItemSlot, &str, &str)] = &[
-        (ItemSlot::Trinket, "ui/trinket.webp", "Trinket"),
+        (ItemSlot::Accessory, "ui/accessory.webp", "Accessory"),
         (ItemSlot::Helmet, "ui/helmet.webp", "Helmet"),
         (ItemSlot::Amulet, "ui/amulet.webp", "Amulet"),
         (ItemSlot::Weapon, "ui/weapon.webp", "Weapon"),
@@ -533,8 +539,12 @@ fn SellAllButton() -> impl IntoView {
 
 #[component]
 pub fn LootFilterDropdown() -> impl IntoView {
-    let filter = RwSignal::new("All".to_string());
-    let options = vec!["dou", "bidou"];
+    let node_ref = NodeRef::new();
+
+    let selected_value = RwSignal::new(None);
+    let options = std::iter::once(None)
+        .chain(ItemCategory::iter().map(Some))
+        .collect::<Vec<_>>();
 
     let is_open = RwSignal::new(false);
 
@@ -542,11 +552,24 @@ pub fn LootFilterDropdown() -> impl IntoView {
         is_open.update(|open| *open = !*open);
     };
 
-    let node_ref = NodeRef::new();
-
     let _ = on_click_outside(node_ref, move |_| {
         is_open.set(false);
     });
+
+    let select_option = {
+        let conn = expect_context::<WebsocketContext>();
+
+        move |opt| {
+            selected_value.set(opt);
+            is_open.set(false);
+            conn.send(
+                &FilterLootMessage {
+                    preferred_loot: opt,
+                }
+                .into(),
+            );
+        }
+    };
 
     view! {
         <style>
@@ -556,30 +579,52 @@ pub fn LootFilterDropdown() -> impl IntoView {
             transform-origin: top;
             transition: all 150ms ease-out;
             pointer-events: none;
-            max-height: 0;
-            overflow: hidden;
             }
             
             .dropdown-transition.open {
             opacity: 1;
             transform: scaleY(1);
             pointer-events: auto;
-            max-height: 15rem;
-            }"
+            }
+            
+            ul::-webkit-scrollbar {
+            width: 8px;
+            }
+            
+            ul::-webkit-scrollbar-track {
+            background: #1f1f1f;
+            border-radius: 4px;
+            }
+            
+            ul::-webkit-scrollbar-thumb {
+            background-color: #525252;
+            border-radius: 4px;
+            border: 2px solid #1f1f1f;
+            }
+            
+            ul {
+            scrollbar-width: thin;
+            scrollbar-color: #525252 #1f1f1f;
+            }
+            
+            ul::-webkit-scrollbar-thumb:hover {
+            background-color: #737373;
+            }
+            "
         </style>
-        <div class="relative w-full max-w-xs z-20">
+        <div class="relative w-60 z-20">
             <button
                 on:click=toggle
                 class="w-full text-left px-4 py-2 rounded-md text-white bg-gradient-to-t from-zinc-900 to-zinc-800 shadow-md border border-zinc-950 hover:from-zinc-800 hover:to-zinc-700 focus:outline-none"
             >
-                {move || filter.get()}
+                {move || loot_filter_category_to_str(selected_value.get())}
                 <span class="float-right">"▼"</span>
             </button>
 
             <ul
                 class=move || {
                     format!(
-                        "dropdown-transition absolute mt-1 w-full rounded-md bg-zinc-800 border border-zinc-950 shadow-lg max-h-60 overflow-auto {}",
+                        "dropdown-transition absolute mt-1 w-full rounded-md bg-zinc-800 border border-zinc-950 shadow-lg max-h-80 overflow-auto {}",
                         if is_open.get() { "open" } else { "" },
                     )
                 }
@@ -589,22 +634,45 @@ pub fn LootFilterDropdown() -> impl IntoView {
                     .iter()
                     .cloned()
                     .map(|opt| {
-                        let filter = filter.clone();
-                        let is_open = is_open.clone();
                         view! {
                             <li
-                                on:click=move |_| {
-                                    filter.set(opt.to_string());
-                                    is_open.set(false);
+                                on:click={
+                                    let select_option = select_option.clone();
+                                    move |_| select_option(opt)
                                 }
                                 class="cursor-pointer px-4 py-2 hover:bg-zinc-700 text-white"
                             >
-                                {opt}
+                                {loot_filter_category_to_str(opt)}
                             </li>
                         }
                     })
                     .collect::<Vec<_>>()}
             </ul>
         </div>
+    }
+}
+
+fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
+    match opt {
+        Some(item_category) => match item_category {
+            ItemCategory::Armor => "Any Armor",
+            ItemCategory::AttackWeapon => "Any Attack Weapon",
+            ItemCategory::SpellWeapon => "Any Spell Weapon",
+            ItemCategory::MeleeWeapon => "Any Melee Weapon",
+            ItemCategory::RangedWeapon => "Any Ranged Weapon",
+            ItemCategory::Shield => "Shield",
+            ItemCategory::Focus => "Magical Focus",
+            ItemCategory::Jewelry => "Any Jewelry",
+            ItemCategory::Accessory => "Any Accessory",
+            ItemCategory::Body => "Body Armor",
+            ItemCategory::Boots => "Boots",
+            ItemCategory::Cloak => "Cloak",
+            ItemCategory::Gloves => "Gloves",
+            ItemCategory::Helmet => "Helmet",
+            ItemCategory::Ring => "Ring",
+            ItemCategory::Amulet => "Amulet",
+            ItemCategory::Relic => "Relic",
+        },
+        None => "Any Item",
     }
 }

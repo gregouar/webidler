@@ -4,6 +4,7 @@
   },
   "resources": {
     "items": [
+      "accessories.json",
       "body_armors.json",
       "boots.json",
       "focuses.json",
@@ -11,7 +12,6 @@
       "helmets.json",
       "jewelry.json",
       "shields.json",
-      "trinkets.json",
       "weapons_melee.json",
       "weapons_ranged.json",
       "weapons_spell.json"

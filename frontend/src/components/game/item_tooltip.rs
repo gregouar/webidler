@@ -21,7 +21,7 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         ItemSlot::Helmet => "Helmet",
         ItemSlot::Ring => "Ring",
         ItemSlot::Shield => "Shield",
-        ItemSlot::Trinket => "Trinket",
+        ItemSlot::Accessory => "Accessory",
         ItemSlot::Weapon => {
             if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
                 "Two-Handed Weapon"

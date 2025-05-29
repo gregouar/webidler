@@ -2,7 +2,7 @@ use anyhow::{anyhow, Result};
 
 use shared::data::{
     character::CharacterId,
-    item::{ItemSlot, ItemSpecs, WeaponSpecs},
+    item::{ItemCategory, ItemSlot, ItemSpecs, WeaponSpecs},
     monster::MonsterSpecs,
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{BaseSkillSpecs, SkillSpecs, SkillState},
@@ -20,6 +20,7 @@ use super::{characters_controller::Target, items_controller, skills_controller};
 pub struct PlayerController {
     pub auto_skills: Vec<bool>,
     pub use_skills: Vec<usize>,
+    pub preferred_loot: Option<ItemCategory>,
 }
 
 impl PlayerController {
@@ -27,6 +28,7 @@ impl PlayerController {
         PlayerController {
             auto_skills: specs.auto_skills.clone(),
             use_skills: Vec::with_capacity(specs.skills_specs.len()),
+            preferred_loot: None,
         }
     }
 

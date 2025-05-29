@@ -1,6 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
+use strum_macros::EnumIter;
 
 pub use super::skill::{SkillRange, SkillShape};
 use super::{
@@ -20,6 +21,7 @@ pub enum ItemRarity {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ItemSlot {
+    Accessory,
     Amulet,
     Body,
     Boots,
@@ -27,11 +29,10 @@ pub enum ItemSlot {
     Helmet,
     Ring,
     Shield,
-    Trinket,
     Weapon,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter)]
 // TODO: add others
 pub enum ItemCategory {
     // Major categories:
@@ -40,10 +41,10 @@ pub enum ItemCategory {
     SpellWeapon,
     MeleeWeapon,
     RangedWeapon,
+    Jewelry,
+    Accessory,
     Shield,
     Focus,
-    Jewelry,
-    Trinket,
     // Minor categories:
     Body,
     Boots,

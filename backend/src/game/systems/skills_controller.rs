@@ -25,8 +25,8 @@ pub fn use_skill<'a>(
     skill_specs: &SkillSpecs,
     skill_state: &mut SkillState,
     me: &mut Target<'a>,
-    mut friends: &mut [Target<'a>],
-    mut enemies: &mut [Target<'a>],
+    friends: &mut [Target<'a>],
+    enemies: &mut [Target<'a>],
 ) -> f64 {
     if !skill_state.is_ready || me.1 .1.mana < skill_specs.mana_cost {
         return me.1 .1.mana;
@@ -40,8 +40,8 @@ pub fn use_skill<'a>(
                 skill_specs.base.skill_type,
                 targets_group,
                 me,
-                &mut friends,
-                &mut enemies,
+                friends,
+                enemies,
             );
     }
 

@@ -1,6 +1,10 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::{item::ItemSlot, passive::PassiveNodeId, world::AreaLevel};
+use crate::data::{
+    item::{ItemCategory, ItemSlot},
+    passive::PassiveNodeId,
+    world::AreaLevel,
+};
 
 use super::{macros::impl_into_message, SessionKey};
 
@@ -16,6 +20,7 @@ impl_into_message! {
         EquipItem(EquipItemMessage),
         UnequipItem(UnequipItemMessage),
         SellItems(SellItemsMessage),
+        FilterLoot(FilterLootMessage),
         PickupLoot(PickUpLootMessage),
         SetAutoProgress(SetAutoProgressMessage),
         GoBack(GoBackLevelMessage),
@@ -71,6 +76,11 @@ pub struct UnequipItemMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SellItemsMessage {
     pub item_indexes: Vec<u8>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct FilterLootMessage {
+    pub preferred_loot: Option<ItemCategory>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

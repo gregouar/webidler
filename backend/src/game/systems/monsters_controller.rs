@@ -53,7 +53,7 @@ pub fn control_monsters(
                 skill_specs,
                 skill_state,
                 &mut monster,
-                &mut vec![], // TODO
+                &mut Vec::new(), // TODO
                 &mut player,
             );
         }
