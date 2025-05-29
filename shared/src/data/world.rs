@@ -2,12 +2,6 @@ use serde::{Deserialize, Serialize};
 
 pub type AreaLevel = u16;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct HelloSchema {
-    pub greeting: String,
-    pub value: i32,
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct WorldSpecs {
     pub name: String,

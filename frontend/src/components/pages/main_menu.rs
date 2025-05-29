@@ -10,20 +10,27 @@ use leptos_use::storage::{use_local_storage, use_session_storage};
 use reqwest;
 use serde_json;
 
-use shared::data::world::HelloSchema;
+use shared::http::server::HelloResponse;
+use shared::http::server::PlayersCountResponse;
 use shared::messages::SessionKey;
 
 use crate::components::ui::buttons::MenuButton;
-use crate::components::ui::toast::*;
 
 #[component]
 pub fn MainMenu() -> impl IntoView {
     let (data, set_data) = signal(String::from(""));
 
+    let players_count = LocalResource::new(|| async {
+        get_players_count("https://webidler.gregoirenaisse.be")
+            .await
+            .map(|r| r.value)
+            .unwrap_or_default()
+    });
+
     let ping_local_action = move |_| {
         spawn_local(async move {
             set_data.set(
-                get_data("http://127.0.0.1:4200")
+                get_hello("http://127.0.0.1:4200")
                     .await
                     .map(|x| x.greeting)
                     .unwrap_or_else(|err| format!("Error: {}", err)),
@@ -34,7 +41,7 @@ pub fn MainMenu() -> impl IntoView {
     let ping_online_action = move |_| {
         spawn_local(async move {
             set_data.set(
-                get_data("https://webidler.gregoirenaisse.be")
+                get_hello("https://webidler.gregoirenaisse.be")
                     .await
                     .map(|x| x.greeting)
                     .unwrap_or_else(|err| format!("Error: {}", err)),
@@ -69,13 +76,12 @@ pub fn MainMenu() -> impl IntoView {
         }
     };
 
-    let toast_context = expect_context::<Toasts>();
-    let toast = move |_| {
-        show_toast(toast_context, "Hello!", ToastVariant::Normal);
-    };
-
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
+            <div class="fixed bottom-2 right-2 bg-black/70 text-amber-300 px-3 py-1 rounded-lg text-sm shadow-lg font-semibold backdrop-blur-sm border border-gray-700 z-50">
+                "Players online: "
+                {move || players_count.get().map(|x| x.take()).unwrap_or_default()}
+            </div>
             <div>
                 <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">
                     "Grind to Rust!"
@@ -102,7 +108,6 @@ pub fn MainMenu() -> impl IntoView {
                     </MenuButton>
                     <MenuButton on:click=ping_online_action>"Ping Online server"</MenuButton>
                     <MenuButton on:click=ping_local_action>"Ping Local server"</MenuButton>
-                    <MenuButton on:click=toast>"Toast"</MenuButton>
                     <p>"From server:" {data}</p>
                 </div>
             </div>
@@ -136,9 +141,19 @@ pub fn MainMenu() -> impl IntoView {
     }
 }
 
-async fn get_data(host: &str) -> Result<HelloSchema> {
+async fn get_hello(host: &str) -> Result<HelloResponse> {
     Ok(serde_json::from_str(
         &reqwest::get(format!("{}/hello", host))
+            .await?
+            .error_for_status()?
+            .text()
+            .await?,
+    )?)
+}
+
+async fn get_players_count(host: &str) -> Result<PlayersCountResponse> {
+    Ok(serde_json::from_str(
+        &reqwest::get(format!("{}/players", host))
             .await?
             .error_for_status()?
             .text()

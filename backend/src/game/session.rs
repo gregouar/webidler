@@ -11,6 +11,7 @@ use super::game_data::GameInstanceData;
 #[derive(Debug, Clone)]
 pub struct SessionsStore {
     pub sessions: Arc<Mutex<HashMap<String, Session>>>,
+    pub players: Arc<Mutex<usize>>,
 }
 
 #[derive(Debug, Clone)]
@@ -31,6 +32,7 @@ impl SessionsStore {
     pub fn new() -> Self {
         Self {
             sessions: Arc::new(Mutex::new(HashMap::new())),
+            players: Arc::new(Mutex::new(0)),
         }
     }
 }

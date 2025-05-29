@@ -85,6 +85,7 @@ async fn handle_socket(
         Ok(Ok(p)) => p,
     };
     tracing::debug!("client connected");
+    *sessions_store.players.lock().unwrap() += 1;
 
     tracing::debug!("starting the game...");
     let game = GameInstance::new(&mut conn, session.data, master_store);
@@ -106,6 +107,7 @@ async fn handle_socket(
 
     // returning from the handler closes the websocket connection
     tracing::info!("websocket context '{who}' destroyed");
+    *sessions_store.players.lock().unwrap() -= 1;
 }
 
 async fn wait_for_connect(
@@ -161,7 +163,7 @@ async fn handle_resume_session(
     session_key: SessionKey,
 ) -> Result<Session> {
     tracing::debug!("loading player '{user_id}' session...");
-    if let Some(session) = sessions_store.sessions.lock().unwrap().get(user_id) {
+    if let Some(session) = sessions_store.sessions.lock().unwrap().remove(user_id) {
         if session_key == session.session_key {
             return Ok(session.clone());
         }

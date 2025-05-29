@@ -1,14 +1,14 @@
 use std::net::SocketAddr;
 
 use axum::{
-    extract::FromRef,
+    extract::{FromRef, State},
     response::Json,
     routing::{any, get},
     Router,
 };
 
 use http::{HeaderValue, Method};
-use shared::data::world::HelloSchema;
+use shared::http::server::{HelloResponse, PlayersCountResponse};
 use tokio::signal;
 use tower_http::{
     cors::CorsLayer,
@@ -72,6 +72,7 @@ async fn main() {
     let app = Router::new()
         .route("/", get(|| async { "OK" }))
         .route("/hello", get(get_hello))
+        .route("/players", get(get_players_count))
         .route("/ws", any(ws_connect::ws_handler))
         .with_state(AppState {
             master_store,
@@ -97,9 +98,17 @@ async fn main() {
     purge_sessions_handle.abort();
 }
 
-async fn get_hello() -> Json<HelloSchema> {
-    Json(HelloSchema {
+async fn get_hello() -> Json<HelloResponse> {
+    Json(HelloResponse {
         greeting: String::from("hello pou"),
         value: 42,
+    })
+}
+
+async fn get_players_count(
+    State(sessions_store): State<SessionsStore>,
+) -> Json<PlayersCountResponse> {
+    Json(PlayersCountResponse {
+        value: *sessions_store.players.lock().unwrap(),
     })
 }
