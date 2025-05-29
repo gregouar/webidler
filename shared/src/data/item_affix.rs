@@ -1,40 +1,17 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 
-use super::world::AreaLevel;
-
-pub use super::skill::{SkillRange, SkillShape};
-pub use super::stat_effect::{DamageType, Modifier, StatEffect, StatType};
+use super::{
+    item::ItemCategory,
+    stat_effect::{Modifier, StatEffect, StatType},
+    world::AreaLevel,
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum AffixType {
     Prefix,
     Suffix,
     Unique,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
-// TODO: add others
-pub enum AffixRestriction {
-    // Major type:
-    Armor,
-    AttackWeapon,
-    SpellWeapon,
-    MeleeWeapon,
-    RangedWeapon,
-    Shield,
-    Focus,
-    Jewelry,
-    Trinket,
-    // Sub type:
-    Body,
-    Boots,
-    Cloak,
-    Gloves,
-    Helmet,
-    Ring,
-    Amulet,
-    Relic,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq, Hash)]
@@ -70,7 +47,7 @@ pub struct ItemAffixBlueprint {
     pub weight: u64, // Bigger weight means more chances to have affix
 
     #[serde(default)]
-    pub restrictions: Option<HashSet<AffixRestriction>>,
+    pub restrictions: Option<HashSet<ItemCategory>>,
     pub item_level: AreaLevel,
 
     pub effects: Vec<AffixEffectBlueprint>,

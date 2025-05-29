@@ -2,8 +2,8 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use shared::data::{
-    item::ItemBase,
-    item_affix::{AffixRestriction, AffixTag, ItemAffixBlueprint},
+    item::{ItemBase, ItemCategory},
+    item_affix::{AffixTag, ItemAffixBlueprint},
 };
 
 use crate::game::utils::json::LoadJsonFromFile;
@@ -25,7 +25,7 @@ pub struct Adjective {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Noun {
     pub text: String,
-    pub restrictions: Vec<AffixRestriction>,
+    pub restrictions: Vec<ItemCategory>,
 }
 
 pub type ItemAdjectivesTable = Vec<Adjective>;

@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 use super::{
-    item_affix::{Modifier, StatType},
     skill::{DamageType, SkillEffect, SkillRange, SkillType},
+    stat_effect::{Modifier, StatType},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]

@@ -1,7 +1,10 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use super::{item_affix::Modifier, skill::DamageType, stat_effect::StatType};
+use super::{
+    skill::DamageType,
+    stat_effect::{Modifier, StatType},
+};
 
 pub type StatusMap = HashMap<StatusType, Vec<StatusState>>;
 

@@ -1,19 +1,23 @@
 use anyhow::Result;
 
-use shared::data::item_affix::{Modifier, StatType};
-use shared::data::monster::MonsterState;
-use shared::data::passive::StatEffect;
-use shared::data::world::AreaLevel;
-use shared::data::{monster::MonsterSpecs, world::WorldState};
-
-use crate::game::data::{
-    master_store::MonstersSpecsStore,
-    monster::BaseMonsterSpecs,
-    world::{MonsterWaveBlueprint, WorldBlueprint},
-    DataInit,
+use shared::data::{
+    monster::MonsterSpecs,
+    monster::MonsterState,
+    passive::StatEffect,
+    stat_effect::{Modifier, StatType},
+    world::AreaLevel,
+    world::WorldState,
 };
-use crate::game::utils::rng::RandomWeighted;
-use crate::game::utils::{increase_factors, rng};
+
+use crate::game::{
+    data::{
+        master_store::MonstersSpecsStore,
+        monster::BaseMonsterSpecs,
+        world::{MonsterWaveBlueprint, WorldBlueprint},
+        DataInit,
+    },
+    utils::{increase_factors, rng, rng::RandomWeighted},
+};
 
 use super::skills_updater;
 

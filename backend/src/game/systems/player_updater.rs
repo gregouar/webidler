@@ -3,11 +3,11 @@ use std::{iter, time::Duration};
 use shared::data::{
     character::CharacterId,
     character_status::StatusType,
-    item_affix::{AffixEffectScope, Modifier, StatType},
+    item_affix::AffixEffectScope,
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerSpecs, PlayerState},
     skill::DamageType,
-    stat_effect::EffectsMap,
+    stat_effect::{EffectsMap, Modifier, StatType},
 };
 
 use crate::game::data::event::EventsQueue;

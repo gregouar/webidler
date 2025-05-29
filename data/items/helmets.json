@@ -3,7 +3,7 @@
     "name": "Leather Cap",
     "icon": "items/leather_cap.webp",
     "slot": "Helmet",
-    "affix_restrictions": ["Armor", "Helmet"],
+    "categories": ["Armor", "Helmet"],
     "armor_specs": {
       "armor": 15
     }
@@ -12,7 +12,7 @@
     "name": "Great Helm",
     "icon": "items/great_helm.webp",
     "slot": "Helmet",
-    "affix_restrictions": ["Armor", "Helmet"],
+    "categories": ["Armor", "Helmet"],
     "armor_specs": {
       "armor": 35
     }

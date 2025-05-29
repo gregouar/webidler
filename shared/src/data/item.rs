@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 pub use super::skill::{SkillRange, SkillShape};
 use super::{
-    item_affix::{AffixEffectBlueprint, AffixEffectScope, AffixRestriction, ItemAffix},
+    item_affix::{AffixEffectBlueprint, AffixEffectScope, ItemAffix},
     stat_effect::{DamageMap, EffectsMap},
     world::AreaLevel,
 };
@@ -31,6 +31,30 @@ pub enum ItemSlot {
     Weapon,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+// TODO: add others
+pub enum ItemCategory {
+    // Major categories:
+    Armor,
+    AttackWeapon,
+    SpellWeapon,
+    MeleeWeapon,
+    RangedWeapon,
+    Shield,
+    Focus,
+    Jewelry,
+    Trinket,
+    // Minor categories:
+    Body,
+    Boots,
+    Cloak,
+    Gloves,
+    Helmet,
+    Ring,
+    Amulet,
+    Relic,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ItemBase {
     pub name: String,
@@ -41,7 +65,7 @@ pub struct ItemBase {
     pub slot: ItemSlot,
     #[serde(default)]
     pub extra_slots: HashSet<ItemSlot>,
-    pub affix_restrictions: HashSet<AffixRestriction>,
+    pub categories: HashSet<ItemCategory>,
 
     #[serde(default)]
     pub min_area_level: Option<AreaLevel>,

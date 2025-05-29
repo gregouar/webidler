@@ -4,7 +4,7 @@
     "icon": "items/shortbow.webp",
     "slot": "Weapon",
     "extra_slots": ["Shield"],
-    "affix_restrictions": ["AttackWeapon", "RangedWeapon"],
+    "categories": ["AttackWeapon", "RangedWeapon"],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",

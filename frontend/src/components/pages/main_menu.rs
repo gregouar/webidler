@@ -3,14 +3,12 @@ use anyhow::Result;
 use codee::string::JsonSerdeCodec;
 use leptos::html::*;
 use leptos::prelude::*;
-use leptos::task::spawn_local;
 use leptos_router::hooks::use_navigate;
 
 use leptos_use::storage::{use_local_storage, use_session_storage};
 use reqwest;
 use serde_json;
 
-use shared::http::server::HelloResponse;
 use shared::http::server::PlayersCountResponse;
 use shared::messages::SessionKey;
 
@@ -18,36 +16,12 @@ use crate::components::ui::buttons::MenuButton;
 
 #[component]
 pub fn MainMenu() -> impl IntoView {
-    let (data, set_data) = signal(String::from(""));
-
     let players_count = LocalResource::new(|| async {
         get_players_count("https://webidler.gregoirenaisse.be")
             .await
             .map(|r| r.value)
             .unwrap_or_default()
     });
-
-    let ping_local_action = move |_| {
-        spawn_local(async move {
-            set_data.set(
-                get_hello("http://127.0.0.1:4200")
-                    .await
-                    .map(|x| x.greeting)
-                    .unwrap_or_else(|err| format!("Error: {}", err)),
-            )
-        })
-    };
-
-    let ping_online_action = move |_| {
-        spawn_local(async move {
-            set_data.set(
-                get_hello("https://webidler.gregoirenaisse.be")
-                    .await
-                    .map(|x| x.greeting)
-                    .unwrap_or_else(|err| format!("Error: {}", err)),
-            )
-        })
-    };
 
     let (_, _, delete_session_key) =
         use_session_storage::<Option<SessionKey>, JsonSerdeCodec>("session_key");
@@ -106,9 +80,6 @@ pub fn MainMenu() -> impl IntoView {
                     <MenuButton on:click=navigate_to_local_game disabled=disable_connect>
                         "Play Locally"
                     </MenuButton>
-                    <MenuButton on:click=ping_online_action>"Ping Online server"</MenuButton>
-                    <MenuButton on:click=ping_local_action>"Ping Local server"</MenuButton>
-                    <p>"From server:" {data}</p>
                 </div>
             </div>
 
@@ -139,16 +110,6 @@ pub fn MainMenu() -> impl IntoView {
             </div>
         </main>
     }
-}
-
-async fn get_hello(host: &str) -> Result<HelloResponse> {
-    Ok(serde_json::from_str(
-        &reqwest::get(format!("{}/hello", host))
-            .await?
-            .error_for_status()?
-            .text()
-            .await?,
-    )?)
 }
 
 async fn get_players_count(host: &str) -> Result<PlayersCountResponse> {

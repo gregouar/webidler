@@ -3,7 +3,7 @@
     "name": "Wand",
     "icon": "items/wand.webp",
     "slot": "Weapon",
-    "affix_restrictions": ["SpellWeapon"],
+    "categories": ["SpellWeapon"],
     "rarity": "Magic"
   }
 }

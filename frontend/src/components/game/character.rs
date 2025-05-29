@@ -1,12 +1,12 @@
-use std::time::Duration;
-
 use leptos::html::*;
 use leptos::prelude::*;
+use std::time::Duration;
 
-use shared::data::character_status::{StatusMap, StatusType};
-use shared::data::item_affix::StatType;
-use shared::data::skill::DamageType;
-use shared::data::skill::SkillType;
+use shared::data::{
+    character_status::{StatusMap, StatusType},
+    skill::{DamageType, SkillType},
+    stat_effect::StatType,
+};
 
 use crate::assets::img_asset;
 

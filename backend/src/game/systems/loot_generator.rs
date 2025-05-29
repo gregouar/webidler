@@ -2,9 +2,8 @@ use std::collections::HashSet;
 
 use shared::data::{
     item::{ItemBase, ItemRarity, ItemSpecs},
-    item_affix::{
-        AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint, StatEffect,
-    },
+    item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
+    stat_effect::StatEffect,
     world::AreaLevel,
 };
 
@@ -194,7 +193,7 @@ fn roll_affix(
         .filter(|a| {
             a.restrictions
                 .as_ref()
-                .map(|r| !r.is_disjoint(&base_item.affix_restrictions))
+                .map(|r| !r.is_disjoint(&base_item.categories))
                 .unwrap_or(true)
                 && area_level >= a.item_level
                 && a.affix_type == affix_type
@@ -302,7 +301,7 @@ fn generate_rare_name(
             weight: part
                 .restrictions
                 .iter()
-                .filter(|t| item_specs.base.affix_restrictions.contains(t))
+                .filter(|t| item_specs.base.categories.contains(t))
                 .count() as u64,
         })
         .collect();

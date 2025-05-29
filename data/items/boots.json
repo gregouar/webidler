@@ -3,7 +3,7 @@
     "name": "Leather Boots",
     "icon": "items/leather_boots.webp",
     "slot": "Boots",
-    "affix_restrictions": ["Armor", "Boots"],
+    "categories": ["Armor", "Boots"],
     "armor_specs": {
       "armor": 10
     }

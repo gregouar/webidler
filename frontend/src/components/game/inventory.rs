@@ -268,6 +268,7 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
                 </div>
 
                 <SellAllButton />
+                <LootFilterDropdown />
 
                 <CloseButton on:click=move |_| open.set(false) />
             </div>
@@ -523,5 +524,83 @@ fn SellAllButton() -> impl IntoView {
         <MenuButton on:click=sell disabled=disabled>
             "Sell all marked items"
         </MenuButton>
+    }
+}
+
+#[component]
+pub fn LootFilterDropdown() -> impl IntoView {
+    let filter = RwSignal::new("Preferred loot".to_string());
+    let options = vec!["dou", "bidou"];
+
+    let is_open = RwSignal::new(false);
+
+    let toggle = move |_| {
+        is_open.update(|open| *open = !*open);
+    };
+
+    let node_ref = NodeRef::new();
+
+    let _ = on_click_outside(node_ref, move |_| {
+        is_open.set(false);
+    });
+
+    view! {
+        <style>
+            ".dropdown-transition {
+            opacity: 0;
+            transform: scaleY(0.5);
+            transform-origin: top;
+            transition: all 150ms ease-out;
+            pointer-events: none;
+            max-height: 0;
+            overflow: hidden;
+            }
+            
+            .dropdown-transition.open {
+            opacity: 1;
+            transform: scaleY(1);
+            pointer-events: auto;
+            max-height: 15rem;
+            }"
+        </style>
+        <div class="relative w-full max-w-xs z-20">
+            <button
+                on:click=toggle
+                class="w-full text-left px-4 py-2 rounded-md text-white bg-gradient-to-t from-zinc-900 to-zinc-800 shadow-md border border-zinc-950 hover:from-zinc-800 hover:to-zinc-700 focus:outline-none"
+            >
+                {move || filter.get()}
+                <span class="float-right">"▼"</span>
+            </button>
+
+            <ul
+                class=move || {
+                    format!(
+                        "dropdown-transition absolute mt-1 w-full rounded-md bg-zinc-800 border border-zinc-950 shadow-lg max-h-60 overflow-auto {}",
+                        if is_open.get() { "open" } else { "" },
+                    )
+                }
+                node_ref=node_ref
+            >
+                {options
+                    .iter()
+                    .cloned()
+                    .map(|opt| {
+                        let filter = filter.clone();
+                        let is_open = is_open.clone();
+                        view! {
+                            <li
+                                on:click=move |_| {
+                                    filter.set(opt.to_string());
+                                    is_open.set(false);
+                                }
+                                class="cursor-pointer px-4 py-2 hover:bg-zinc-700 text-white"
+                            >
+                                {opt}
+                            </li>
+                        }
+                    })
+                    .collect::<Vec<_>>()}
+            </ul>
+        </div>
     }
 }

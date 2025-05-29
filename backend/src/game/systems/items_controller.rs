@@ -3,11 +3,12 @@ use std::vec;
 use shared::data::{
     character_status::StatusType,
     item::{ArmorSpecs, ItemSpecs, WeaponSpecs},
-    item_affix::{AffixEffectScope, Modifier, StatEffect, StatType},
+    item_affix::AffixEffectScope,
     skill::{
         BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType,
         TargetType,
     },
+    stat_effect::{Modifier, StatEffect, StatType},
 };
 
 use crate::game::data::items_store::{ItemAdjectivesTable, ItemNounsTable};

@@ -6,8 +6,8 @@ use leptos::prelude::*;
 use shared::data::item_affix::AffixEffectScope;
 use shared::data::skill::SkillType;
 use shared::data::{
-    item_affix::{Modifier, StatEffect, StatType},
     skill::DamageType,
+    stat_effect::{Modifier, StatEffect, StatType},
 };
 
 pub fn damage_type_str(damage_type: DamageType) -> &'static str {

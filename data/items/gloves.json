@@ -3,7 +3,7 @@
     "name": "Leather Gloves",
     "icon": "items/leather_gloves.webp",
     "slot": "Gloves",
-    "affix_restrictions": ["Armor","Gloves"],
+    "categories": ["Armor","Gloves"],
     "armor_specs": {
       "armor": 10
     }

@@ -3,7 +3,7 @@
     "name": "Leather Armor",
     "icon": "items/leather_armor.webp",
     "slot": "Body",
-    "affix_restrictions": ["Armor", "Body"],
+    "categories": ["Armor", "Body"],
     "armor_specs": {
       "armor": 20
     }

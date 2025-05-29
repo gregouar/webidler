@@ -2,10 +2,10 @@ use std::time::Duration;
 
 use shared::data::{
     character_status::StatusType,
-    item_affix::{Modifier, StatType},
     passive::StatEffect,
     skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType},
     stat_effect::DamageMap,
+    stat_effect::{Modifier, StatType},
 };
 
 use super::stats_controller::ApplyStatModifier;

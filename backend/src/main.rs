@@ -6,15 +6,15 @@ use axum::{
     routing::{any, get},
     Router,
 };
-
 use http::{HeaderValue, Method};
-use shared::http::server::{HelloResponse, PlayersCountResponse};
 use tokio::signal;
 use tower_http::{
     cors::CorsLayer,
     trace::{DefaultMakeSpan, TraceLayer},
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+
+use shared::http::server::PlayersCountResponse;
 
 use backend::{
     game::{data::master_store::MasterStore, session::SessionsStore},
@@ -71,7 +71,6 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(|| async { "OK" }))
-        .route("/hello", get(get_hello))
         .route("/players", get(get_players_count))
         .route("/ws", any(ws_connect::ws_handler))
         .with_state(AppState {
@@ -96,13 +95,6 @@ async fn main() {
     }
 
     purge_sessions_handle.abort();
-}
-
-async fn get_hello() -> Json<HelloResponse> {
-    Json(HelloResponse {
-        greeting: String::from("hello pou"),
-        value: 42,
-    })
 }
 
 async fn get_players_count(
