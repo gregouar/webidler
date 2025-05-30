@@ -541,7 +541,6 @@ fn SellAllButton() -> impl IntoView {
 pub fn LootFilterDropdown() -> impl IntoView {
     let node_ref = NodeRef::new();
 
-    let selected_value = RwSignal::new(None);
     let options = std::iter::once(None)
         .chain(ItemCategory::iter().map(Some))
         .collect::<Vec<_>>();
@@ -558,9 +557,10 @@ pub fn LootFilterDropdown() -> impl IntoView {
 
     let select_option = {
         let conn = expect_context::<WebsocketContext>();
+        let game_context = expect_context::<GameContext>();
 
         move |opt| {
-            selected_value.set(opt);
+            game_context.loot_preference.set(opt);
             is_open.set(false);
             conn.send(
                 &FilterLootMessage {
@@ -571,6 +571,7 @@ pub fn LootFilterDropdown() -> impl IntoView {
         }
     };
 
+    let game_context = expect_context::<GameContext>();
     view! {
         <style>
             ".dropdown-transition {
@@ -617,7 +618,7 @@ pub fn LootFilterDropdown() -> impl IntoView {
                 on:click=toggle
                 class="w-full text-left px-4 py-2 rounded-md text-white bg-gradient-to-t from-zinc-900 to-zinc-800 shadow-md border border-zinc-950 hover:from-zinc-800 hover:to-zinc-700 focus:outline-none"
             >
-                {move || loot_filter_category_to_str(selected_value.get())}
+                {move || loot_filter_category_to_str(game_context.loot_preference.get())}
                 <span class="float-right">"▼"</span>
             </button>
 
