@@ -277,7 +277,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     flex gold-float gold-text text-2xl  text-shadow-md
                     absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50
                     ">
-                        {format!("+{}", gold_reward.get())}
+                        {format!("+{}", format_number(gold_reward.get()))}
                         <img
                             src=img_asset("ui/gold.webp")
                             alt="Gold"
