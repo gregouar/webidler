@@ -18,8 +18,8 @@
                 "status_type": {
                   "DamageOverTime": { "damage_type": "Fire" }
                 },
-                "min_value": 5,
-                "max_value": 5,
+                "min_value": 2,
+                "max_value": 2,
                 "min_duration": 3,
                 "max_duration": 3
               }
