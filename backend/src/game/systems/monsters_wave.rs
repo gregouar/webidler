@@ -128,7 +128,7 @@ fn generate_monster_specs(bp_specs: &BaseMonsterSpecs, world_state: &WorldState)
         world_state.area_level,
         increase_factors::MONSTER_INCREASE_FACTOR,
     );
-    let lin_factor = increase_factors::linear(world_state.area_level as f64);
+
     monster_specs.power_factor *= exp_factor;
     monster_specs.character_specs.max_life *= exp_factor;
 
@@ -138,7 +138,7 @@ fn generate_monster_specs(bp_specs: &BaseMonsterSpecs, world_state: &WorldState)
             damage_type: None,
         },
         modifier: Modifier::Multiplier,
-        value: lin_factor - 1.0,
+        value: (world_state.area_level as f64 - 1.0) / 10.0,
     }];
     for skill_specs in monster_specs.skill_specs.iter_mut() {
         if skill_specs.base.upgrade_effects.is_empty() {
