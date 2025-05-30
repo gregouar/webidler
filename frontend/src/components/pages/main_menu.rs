@@ -36,7 +36,7 @@ pub fn MainMenu() -> impl IntoView {
         move |_| {
             delete_session_key();
             set_user_id_storage.set(user_id.get_untracked());
-            navigate("./game", Default::default());
+            navigate("game", Default::default());
         }
     };
 
@@ -46,7 +46,7 @@ pub fn MainMenu() -> impl IntoView {
         move |_| {
             delete_session_key();
             set_user_id_storage.set(user_id.get_untracked());
-            navigate("./local_game", Default::default());
+            navigate("local_game", Default::default());
         }
     };
 
