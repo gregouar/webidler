@@ -96,11 +96,14 @@ fn handle_kill_event(
         CharacterId::Monster(monster_index) => {
             game_data.game_stats.monsters_killed += 1;
             if let Some(monster_specs) = game_data.monster_specs.read().get(monster_index) {
-                player_controller::reward_player(
+                let gold_reward = player_controller::reward_player(
                     game_data.player_resources.mutate(),
                     game_data.player_specs.read(),
                     monster_specs,
                 );
+                if let Some(monster_state) = game_data.monster_states.get_mut(monster_index) {
+                    monster_state.gold_reward = gold_reward;
+                }
             }
 
             for triggered_effects in game_data.player_specs.read().triggers.iter() {

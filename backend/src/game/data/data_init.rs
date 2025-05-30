@@ -74,6 +74,7 @@ impl DataInit<&MonsterSpecs> for MonsterState {
             character_state: CharacterState::init(&specs.character_specs),
             skill_states: specs.skill_specs.iter().map(SkillState::init).collect(),
             initiative: rng::random_range(0.0..specs.max_initiative).unwrap_or_default(),
+            gold_reward: 0.0,
         }
     }
 }

@@ -157,7 +157,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .read()
             .get(index)
             .map(|x| !x.character_state.is_alive)
-            .unwrap_or(false)
+            .unwrap_or_default()
     });
 
     let just_hurt = Memo::new(move |_| {
@@ -166,7 +166,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .read()
             .get(index)
             .map(|x| x.character_state.just_hurt)
-            .unwrap_or(false)
+            .unwrap_or_default()
     });
 
     let just_hurt_crit = Memo::new(move |_| {
@@ -175,7 +175,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .read()
             .get(index)
             .map(|x| x.character_state.just_hurt_crit)
-            .unwrap_or(false)
+            .unwrap_or_default()
     });
 
     let just_blocked = Memo::new(move |_| {
@@ -184,7 +184,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .read()
             .get(index)
             .map(|x| x.character_state.just_blocked)
-            .unwrap_or(false)
+            .unwrap_or_default()
     });
 
     let statuses = Signal::derive(move || {
@@ -196,9 +196,64 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .unwrap_or_default()
     });
 
+    let gold_reward = RwSignal::new(0.0);
+    Effect::new(move |_| {
+        if is_dead.get() {
+            gold_reward.set(
+                game_context
+                    .monster_states
+                    .read()
+                    .get(index)
+                    .map(|x| x.gold_reward)
+                    .unwrap_or_default(),
+            );
+        }
+    });
+
     view! {
+        <style>
+            "
+            .gold-text {
+                font-weight: bold;
+                background: linear-gradient(90deg, #ffeb3b, #fcd34d, #fde68a, #fff);
+                background-size: 400%;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: goldShimmer 2s infinite linear;
+                text-shadow: 0 0 8px rgba(255, 223, 0, 0.9);
+            }
+            
+            .gold-float {
+            animation: goldFloat 2.5s ease-out forwards;
+            position: absolute;
+            }
+            
+            @keyframes goldShimmer {
+                0% { background-position: 0% }
+                100% { background-position: 400% }
+            }
+            
+            @keyframes goldFloat {
+                0% {
+                    opacity: 0;
+                    transform: translateY(0) scale(0.9);
+                }
+                20% {
+                    opacity: 1;
+                    transform: translateY(-12px) scale(1.1);
+                }
+                40% {
+                    opacity: 1;
+                    transform: translateY(-24px) scale(1.1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translateY(-64px) scale(1);
+                }
+            }"
+        </style>
         <div class="grid grid-cols-4 h-full bg-zinc-800 shadow-md rounded-md gap-2 p-2 ring-1 ring-zinc-950">
-            <div class="flex flex-col gap-2 col-span-3 h-full">
+            <div class="relative flex flex-col gap-2 col-span-3 h-full">
                 <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Bottom>
                     <HorizontalProgressBar
                         class:h-2
@@ -217,6 +272,19 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     is_dead=is_dead
                     statuses=statuses
                 />
+                <Show when=move || { gold_reward.get() > 0.0 }>
+                    <div class="
+                    flex gold-float gold-text text-2xl  text-shadow-md
+                    absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50
+                    ">
+                        {format!("+{}", gold_reward.get())}
+                        <img
+                            src=img_asset("ui/gold.webp")
+                            alt="Gold"
+                            class="h-[2em] aspect-square"
+                        />
+                    </div>
+                </Show>
             </div>
             <div class="flex flex-col justify-evenly w-full min-w-16">
                 <For

@@ -99,9 +99,11 @@ pub fn reward_player(
     player_resources: &mut PlayerResources,
     player_specs: &PlayerSpecs,
     monster_specs: &MonsterSpecs,
-) {
-    player_resources.gold += monster_specs.power_factor * player_specs.gold_find;
+) -> f64 {
+    let gold_reward = monster_specs.power_factor * player_specs.gold_find;
+    player_resources.gold += gold_reward;
     player_resources.experience += monster_specs.power_factor;
+    gold_reward
 }
 
 pub fn level_up(
