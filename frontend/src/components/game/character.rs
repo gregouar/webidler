@@ -103,16 +103,22 @@ pub fn CharacterPortrait(
                 is_dead_img_effect(),
             )
         }>
-            <div class="h-full w-full" style=crit_animation_style>
+            <div
+                class="border-8 border-double border-stone-500  h-full w-full"
+                style=crit_animation_style
+            >
                 <img
                     src=img_asset(&image_uri)
                     alt=character_name
-                    class="border-8 border-double border-stone-500 object-cover h-full w-full"
+                    class="bg-orange-300 object-cover h-full w-full"
+                    style=format!(
+                        "background-image: url('{}');",
+                        img_asset("ui/paper_background.webp"),
+                    )
                 />
 
                 <div class="absolute inset-0 flex place-items-start p-2">
                     <For each=move || active_statuses.get() key=|k| *k let(k)>
-                        // TODO: Stack amount
                         <StatusIcon status_type=k stack=Signal::derive(move || status_stack(k)) />
                     </For>
                 </div>
