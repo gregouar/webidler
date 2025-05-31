@@ -4,7 +4,7 @@
   "max_life": 5,
   "power_factor": 1.5,
   "max_initiative": 0.5,
-  "fire_armor": 100,
+  "fire_armor": 50,
   "skills": [
     {
       "name": "Burning Throw",

@@ -6,7 +6,7 @@
   "max_initiative": 0.5,
   "skills": [
     {
-      "name": "Smash",
+      "name": "Drunken Smash",
       "icon": "skills/attack.svg",
       "cooldown": 2.0,
       "targets": [

@@ -7,7 +7,7 @@
   "max_initiative": 2.0,
   "skills": [
     {
-      "name": "Poison Bite",
+      "name": "Venomous Bite",
       "icon": "skills/bite.svg",
       "cooldown": 5.0,
       "targets": [
