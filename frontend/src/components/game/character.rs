@@ -30,7 +30,7 @@ pub fn CharacterPortrait(
 
     let is_dead_img_effect = move || {
         if is_dead.get() {
-            "transition-all duration-1000 saturate-0 brightness-1
+            "transition-all duration-1000 saturate-0 brightness-50
             [transform:rotateY(180deg)]"
         } else {
             "transition-all duration-1000"
@@ -107,15 +107,24 @@ pub fn CharacterPortrait(
                 class="border-8 border-double border-stone-500  h-full w-full"
                 style=crit_animation_style
             >
-                <img
-                    src=img_asset(&image_uri)
-                    alt=character_name
-                    class="bg-orange-300 object-cover h-full w-full"
+                <div
+                    class="h-full w-full"
                     style=format!(
                         "background-image: url('{}');",
                         img_asset("ui/paper_background.webp"),
                     )
-                />
+                >
+                    <img
+                        src=img_asset(&image_uri)
+                        alt=character_name
+                        class=move || {
+                            format!(
+                                "object-cover h-full w-full transition-all duration-[5s] {}",
+                                if is_dead.get() { "opacity-50 " } else { "" },
+                            )
+                        }
+                    />
+                </div>
 
                 <div class="absolute inset-0 flex place-items-start p-2">
                     <For each=move || active_statuses.get() key=|k| *k let(k)>
