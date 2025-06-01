@@ -236,11 +236,11 @@ pub fn formatted_effects_list(
                 effect.value * 100.0
             )),
             (TakeFromManaBeforeLife, Multiplier) => merged.push(format!(
-                "{:.0}% Increased Mana taken before Life",
+                "{:.0}% Increased Damage taken from Mana before Life",
                 effect.value * 100.0
             )),
             (TakeFromManaBeforeLife, Flat) => merged.push(format!(
-                "{:.0}% of Mana taken before Life",
+                "{:.0}% of Damage taken from Mana before Life",
                 effect.value * 100.0
             )),
         }
