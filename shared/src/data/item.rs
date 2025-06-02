@@ -69,7 +69,7 @@ pub struct ItemBase {
     pub categories: HashSet<ItemCategory>,
 
     #[serde(default)]
-    pub min_area_level: Option<AreaLevel>,
+    pub min_area_level: AreaLevel,
     #[serde(default)]
     pub rarity: ItemRarity,
     #[serde(default)]

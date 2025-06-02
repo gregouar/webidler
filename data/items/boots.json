@@ -1,11 +1,21 @@
 {
+  "cloth_shoes": {
+    "name": "Cloth Shoes",
+    "icon": "items/cloth_shoes.webp",
+    "slot": "Boots",
+    "categories": ["Armor", "Boots"],
+    "armor_specs": {
+      "armor": 10
+    }
+  },
   "leather_boots": {
     "name": "Leather Boots",
     "icon": "items/leather_boots.webp",
     "slot": "Boots",
     "categories": ["Armor", "Boots"],
     "armor_specs": {
-      "armor": 10
-    }
+      "armor": 20
+    },
+    "min_area_level": 40
   }
 }

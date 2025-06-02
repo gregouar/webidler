@@ -12,7 +12,8 @@
       "helmets.json",
       "jewelry.json",
       "shields.json",
-      "weapons_melee.json",
+      "weapons_1h_melee.json",
+      "weapons_2h_melee.json",
       "weapons_ranged.json",
       "weapons_spell.json"
     ]

@@ -5,7 +5,17 @@
     "slot": "Shield",
     "categories": ["Armor", "Shield"],
     "armor_specs": {
-      "armor": 30,
+      "armor": 25,
+      "block": 0.15
+    }
+  },
+  "small_round_shield": {
+    "name": "Small Round Shield",
+    "icon": "items/small_round_shield.webp",
+    "slot": "Shield",
+    "categories": ["Armor", "Shield"],
+    "armor_specs": {
+      "armor": 50,
       "block": 0.2
     }
   }

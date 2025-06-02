@@ -1,32 +1,32 @@
 {
   "entries": [
     {
-      "item_id": "shortsword",
+      "item_id": "dagger",
       "weight": 1000
     },
     {
-      "item_id": "leather_cap",
+      "item_id": "cloth_hood",
       "weight": 1000
     },
     {
-      "item_id": "leather_armor",
+      "item_id": "padded_tunic",
       "weight": 1000
     },
     {
-      "item_id": "leather_gloves",
+      "item_id": "cloth_wraps",
       "weight": 1000
     },
     {
-      "item_id": "leather_boots",
+      "item_id": "cloth_shoes",
       "weight": 1000
     },
     {
-      "item_id": "shortsword_unique",
+      "item_id": "dagger_unique",
       "weight": 10,
       "min_area_level": 5
     },
     {
-      "item_id": "battleaxe",
+      "item_id": "quarterstaff",
       "weight": 1000,
       "min_area_level": 5
     },
@@ -36,7 +36,7 @@
       "min_area_level": 5
     },
     {
-      "item_id": "wand",
+      "item_id": "wooden_rod",
       "weight": 500,
       "min_area_level": 5
     },
@@ -56,11 +56,6 @@
       "min_area_level": 10
     },
     {
-      "item_id": "great_helm",
-      "weight": 1000,
-      "min_area_level": 10
-    },
-    {
       "item_id": "gold_ring",
       "weight": 400,
       "min_area_level": 10
@@ -69,6 +64,47 @@
       "item_id": "medallion",
       "weight": 400,
       "min_area_level": 10
+    },
+
+   {
+      "item_id": "shortsword",
+      "weight": 2000
+    },
+    {
+      "item_id": "leather_cap",
+      "weight": 2000
+    },
+    {
+      "item_id": "leather_armor",
+      "weight": 2000
+    },
+    {
+      "item_id": "leather_gloves",
+      "weight": 2000
+    },
+    {
+      "item_id": "leather_boots",
+      "weight": 2000
+    },
+    {
+      "item_id": "woodcutter_axe",
+      "weight": 2000
+    },
+    {
+      "item_id": "hunting_bow",
+      "weight": 2000
+    },
+    {
+      "item_id": "wooden_rod",
+      "weight": 1000
+    },
+    {
+      "item_id": "small_round_shield",
+      "weight": 2000
+    },
+    {
+      "item_id": "spellbook",
+      "weight": 1000
     }
   ]
 }
