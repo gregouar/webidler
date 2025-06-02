@@ -30,6 +30,9 @@
 
       "jewelry_prefixes.json",
       "jewelry_suffixes.json",
+      
+      "life_prefixes.json",
+      "life_suffixes.json",
 
       "mana_prefixes.json",
       "mana_suffixes.json",
