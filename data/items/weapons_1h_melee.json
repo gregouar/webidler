@@ -17,7 +17,7 @@
   "dagger_unique": {
     "name": "Onions Slicer",
     "description": "Forged in myth and honed in the kitchens of legend, this knife once sliced onions so fast it brought tears to gods and mortals alike.",
-    "icon": "items/shortsword.webp",
+    "icon": "items/dagger.webp",
     "slot": "Weapon",
     "categories": ["AttackWeapon", "MeleeWeapon"],
     "weapon_specs": {
