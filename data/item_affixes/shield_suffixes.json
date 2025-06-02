@@ -14,7 +14,7 @@
         "stat": "Block",
         "modifier": "Flat",
         "min": 0.02,
-        "max": 0.05
+        "max": 0.04
       }
     ]
   },
@@ -32,8 +32,8 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.39
+        "min": 0.15,
+        "max": 0.29
       }
     ]
   }

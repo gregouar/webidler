@@ -3,9 +3,7 @@
     "enabled": true
   },
   "resources": {
-    "item_affixes": [
-      "all_affixes.json",
-      
+    "item_affixes": [      
       "armor_prefixes.json",
       "armor_suffixes.json",
 
@@ -24,6 +22,8 @@
 
       "gloves_prefixes.json",
       "gloves_suffixes.json",
+      
+      "gold_suffixes.json",
 
       "helmet_prefixes.json",
       "helmet_suffixes.json",
