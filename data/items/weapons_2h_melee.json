@@ -31,6 +31,7 @@
       },
       "crit_chances": 0.05,
       "crit_damage": 1
-    }
+    },
+    "min_area_level": 40
   }
 }

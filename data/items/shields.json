@@ -17,6 +17,7 @@
     "armor_specs": {
       "armor": 50,
       "block": 0.2
-    }
+    },
+    "min_area_level": 40
   }
 }
