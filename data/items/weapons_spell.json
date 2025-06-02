@@ -4,6 +4,15 @@
     "icon": "items/wand.webp",
     "slot": "Weapon",
     "categories": ["SpellWeapon"],
-    "rarity": "Magic"
+    "rarity": "Magic",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "SpellPower",
+        "modifier": "Multiplier",
+        "min": 10.0,
+        "max": 19.0
+      }
+    ]
   }
 }

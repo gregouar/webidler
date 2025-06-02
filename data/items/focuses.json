@@ -4,6 +4,15 @@
     "icon": "items/grigri.webp",
     "slot": "Shield",
     "categories": ["Focus"],
-    "rarity": "Magic"
+    "rarity": "Magic",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "min": 25.0,
+        "max": 49.0
+      }
+    ]
   }
 }
