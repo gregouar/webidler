@@ -37,7 +37,7 @@
     },
     {
       "item_id": "wooden_rod",
-      "weight": 500,
+      "weight": 1000,
       "min_area_level": 5
     },
     {
@@ -47,22 +47,22 @@
     },
     {
       "item_id": "grigri",
-      "weight": 500,
+      "weight": 1000,
       "min_area_level": 5
     },
     {
       "item_id": "wool_cloak",
-      "weight": 400,
+      "weight": 1000,
       "min_area_level": 10
     },
     {
       "item_id": "copper_ring",
-      "weight": 400,
+      "weight": 1000,
       "min_area_level": 10
     },
     {
       "item_id": "wooden_beads",
-      "weight": 400,
+      "weight": 1000,
       "min_area_level": 10
     },
 
@@ -96,7 +96,7 @@
     },
     {
       "item_id": "wand",
-      "weight": 1000
+      "weight": 2000
     },
     {
       "item_id": "small_round_shield",
@@ -104,19 +104,19 @@
     },
     {
       "item_id": "spellbook",
-      "weight": 1000
+      "weight": 2000
     },
     {
       "item_id": "cloak",
-      "weight": 800
+      "weight": 2000
     },
     {
       "item_id": "gold_ring",
-      "weight": 800
+      "weight": 2000
     },
     {
       "item_id": "medallion",
-      "weight": 800
+      "weight": 2000
     }
   ]
 }

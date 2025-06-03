@@ -4,14 +4,13 @@
     "icon": "items/grigri.webp",
     "slot": "Shield",
     "categories": ["Focus"],
-    "rarity": "Magic",
     "affixes": [
       {
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "min": 25.0,
-        "max": 49.0
+        "min": 30.0,
+        "max": 30.0
       }
     ]
   },
@@ -20,14 +19,13 @@
     "icon": "items/spellbook.webp",
     "slot": "Shield",
     "categories": ["Focus"],
-    "rarity": "Magic",
     "affixes": [
       {
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "min": 40.0,
-        "max": 69.0
+        "min": 50.0,
+        "max": 50.0
       }
     ],
     "min_area_level": 40
