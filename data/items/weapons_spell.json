@@ -4,7 +4,6 @@
     "icon": "items/wooden_rod.webp",
     "slot": "Weapon",
     "categories": ["SpellWeapon"],
-    "rarity": "Magic",
     "affixes": [
       {
         "scope": "Global",
