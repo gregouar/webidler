@@ -14,7 +14,7 @@ pub enum EventTrigger {
 }
 
 // TODO: replace by simple tag system?
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub struct HitTrigger {
     #[serde(default)]
     pub skill_type: Option<SkillType>,
@@ -26,6 +26,7 @@ pub struct HitTrigger {
     pub is_blocked: Option<bool>,
     #[serde(default)]
     pub is_hurt: Option<bool>,
+    // TODO: Track skill id?
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

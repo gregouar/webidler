@@ -2,6 +2,8 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
+use crate::data::trigger::HitTrigger;
+
 use super::skill::SkillType;
 
 #[derive(
@@ -64,6 +66,9 @@ pub enum StatType {
     Speed(#[serde(default)] Option<SkillType>),
     MovementSpeed,
     GoldFind,
+    // Special ?
+    LifeOnHit(#[serde(default)] HitTrigger),
+    ManaOnHit(#[serde(default)] HitTrigger),
     // TODO: ReducedManaCost?
     // TODO: TriggerSkill (effect trigger + Box Skill) => separate because cannot be hashed/copy etc
 }

@@ -10,7 +10,9 @@ use shared::data::{
     stat_effect::{EffectsMap, Modifier, StatType},
 };
 
-use crate::game::data::event::EventsQueue;
+use crate::game::{
+    data::event::EventsQueue, systems::passives_controller::generate_effects_map_from_passives,
+};
 
 use super::{characters_updater, skills_updater, stats_controller::ApplyStatModifier};
 
@@ -89,26 +91,10 @@ pub fn update_player_specs(
     player_specs.effects = EffectsMap::combine_all(
         equipped_items
             .map(|i| i.aggregate_effects(AffixEffectScope::Global))
-            .chain(
-                passive_tree_state
-                    .purchased_nodes
-                    .iter()
-                    .filter_map(|node_id| {
-                        passives_tree_specs
-                            .nodes
-                            .get(node_id)
-                            .map(|node| -> EffectsMap {
-                                EffectsMap(
-                                    node.effects
-                                        .iter()
-                                        .map(|effect| {
-                                            ((effect.stat, effect.modifier), effect.value)
-                                        })
-                                        .collect(),
-                                )
-                            })
-                    }),
-            )
+            .chain(passives_controller::generate_effects_map_from_passives(
+                passives_tree_specs,
+                passives_tree_state,
+            ))
             .chain(iter::once(EffectsMap(
                 player_state
                     .character_state
@@ -137,6 +123,8 @@ pub fn update_player_specs(
         .filter_map(|node_id| passives_tree_specs.nodes.get(node_id))
         .flat_map(|node| node.triggers.iter().cloned())
         .collect();
+
+    // TODO: Collect item triggers and effects to triggers
 
     compute_player_specs(player_specs);
 }

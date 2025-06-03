@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 
+use crate::data::trigger::TriggeredEffect;
+
 use super::{
     item::ItemCategory,
     stat_effect::{Modifier, StatEffect, StatType},
@@ -50,7 +52,10 @@ pub struct ItemAffixBlueprint {
     pub restrictions: Option<HashSet<ItemCategory>>,
     pub item_level: AreaLevel,
 
+    #[serde(default)]
     pub effects: Vec<AffixEffectBlueprint>,
+    #[serde(default)]
+    pub triggers: Vec<TriggeredEffect>, // TODO
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
@@ -72,6 +77,7 @@ pub struct ItemAffix {
     pub tier: u8,
 
     pub effects: Vec<AffixEffect>,
+    pub triggers: Vec<TriggeredEffect>, // TODO
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
