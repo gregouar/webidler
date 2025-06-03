@@ -41,6 +41,8 @@ pub fn update_item_specs(
         item_specs.weapon_specs = Some(compute_weapon_specs(weapon_specs.clone(), &effects));
     }
 
+    // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
+
     item_specs
 }
 

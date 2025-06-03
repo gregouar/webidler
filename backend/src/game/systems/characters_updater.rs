@@ -1,13 +1,10 @@
 use std::time::Duration;
 
-use shared::data::{
-    character::{CharacterId, CharacterSpecs, CharacterState},
-    character_status::StatusType,
-};
+use shared::data::character::{CharacterId, CharacterSpecs, CharacterState};
 
 use crate::game::data::event::{EventsQueue, GameEvent};
 
-use super::characters_controller;
+use super::statuses_controller;
 
 pub fn update_character_state(
     events_queue: &mut EventsQueue,
@@ -32,34 +29,7 @@ pub fn update_character_state(
             + (elapsed_time_f64 * character_specs.mana_regen * character_specs.max_mana / 100.0),
     );
 
-    character_state
-        .statuses
-        .retain(|status_type, status_states| {
-            if let StatusType::DamageOverTime { .. } = status_type {
-                for status in status_states.iter() {
-                    characters_controller::damage_character(
-                        character_specs,
-                        &mut character_state.life,
-                        &mut character_state.mana,
-                        status.value * elapsed_time_f64.min(status.duration),
-                    );
-                }
-            }
-
-            let old_len = status_states.len();
-            status_states.retain_mut(|status| {
-                status.duration -= elapsed_time_f64;
-                status.duration > 0.0
-            });
-
-            if let StatusType::StatModifier { .. } = status_type {
-                if old_len != status_states.len() {
-                    character_state.buff_status_change = true;
-                }
-            }
-
-            !status_states.is_empty()
-        });
+    statuses_controller::update_character_statuses(character_specs, character_state, elapsed_time);
 
     character_state.life = character_state.life.clamp(0.0, character_specs.max_life);
     character_state.mana = character_state.mana.clamp(0.0, character_specs.max_mana);

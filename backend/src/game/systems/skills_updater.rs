@@ -140,7 +140,7 @@ pub fn compute_skill_specs_effect<'a, I>(
                     *max > 0.0
                 });
             }
-            SkillEffectType::Heal { min, max } => {
+            SkillEffectType::Restore { min, max, .. } => {
                 if effect.stat == StatType::SpellPower {
                     min.apply_effect(effect);
                     max.apply_effect(effect);

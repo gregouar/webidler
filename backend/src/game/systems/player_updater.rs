@@ -2,19 +2,19 @@ use std::{iter, time::Duration};
 
 use shared::data::{
     character::CharacterId,
-    character_status::StatusType,
     item_affix::AffixEffectScope,
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerSpecs, PlayerState},
-    skill::DamageType,
+    skill::{DamageType, RestoreType, SkillEffect, SkillEffectType},
     stat_effect::{EffectsMap, Modifier, StatType},
+    trigger::{EventTrigger, TriggerEffectType, TriggerTarget, TriggeredEffect},
 };
 
-use crate::game::{
-    data::event::EventsQueue, systems::passives_controller::generate_effects_map_from_passives,
-};
+use crate::game::{data::event::EventsQueue, systems::statuses_controller};
 
-use super::{characters_updater, skills_updater, stats_controller::ApplyStatModifier};
+use super::{
+    characters_updater, passives_controller, skills_updater, stats_controller::ApplyStatModifier,
+};
 
 pub fn update_player_state(
     events_queue: &mut EventsQueue,
@@ -56,7 +56,7 @@ pub fn update_player_specs(
     player_state: &PlayerState,
     player_inventory: &PlayerInventory,
     passives_tree_specs: &PassivesTreeSpecs,
-    passive_tree_state: &PassivesTreeState,
+    passives_tree_state: &PassivesTreeState,
 ) {
     // TODO: Reset player_specs
     player_specs.character_specs.armor = 0.0;
@@ -95,29 +95,14 @@ pub fn update_player_specs(
                 passives_tree_specs,
                 passives_tree_state,
             ))
-            .chain(iter::once(EffectsMap(
-                player_state
-                    .character_state
-                    .statuses
-                    .iter()
-                    .filter_map(|(s, v)| match s {
-                        StatusType::StatModifier {
-                            stat,
-                            modifier,
-                            debuff,
-                        } => Some((
-                            (*stat, *modifier),
-                            v.iter()
-                                .map(|s| if *debuff { -s.value } else { s.value })
-                                .sum(),
-                        )),
-                        _ => None,
-                    })
-                    .collect(),
-            ))),
+            .chain(iter::once(
+                statuses_controller::generate_effects_map_from_statuses(
+                    &player_state.character_state,
+                ),
+            )),
     );
 
-    player_specs.triggers = passive_tree_state
+    player_specs.triggers = passives_tree_state
         .purchased_nodes
         .iter()
         .filter_map(|node_id| passives_tree_specs.nodes.get(node_id))
@@ -158,6 +143,32 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
             StatType::Block => player_specs.character_specs.block.apply_effect(effect),
             StatType::MovementSpeed => player_specs.movement_cooldown.apply_inverse_effect(effect),
             StatType::GoldFind => player_specs.gold_find.apply_effect(effect),
+            StatType::LifeOnHit(hit_trigger) | StatType::ManaOnHit(hit_trigger) => {
+                if let Modifier::Flat = effect.modifier {
+                    player_specs.triggers.push(TriggeredEffect {
+                        trigger: EventTrigger::OnHit(hit_trigger),
+                        description: String::new(),
+                        effect: TriggerEffectType::ApplySkillEffects {
+                            target: TriggerTarget::Source,
+                            modifiers: Vec::new(),
+                            effects: vec![SkillEffect {
+                                failure_chances: 0.0,
+                                effect_type: SkillEffectType::Restore {
+                                    restore_type: if let StatType::LifeOnHit(_) = effect.stat {
+                                        RestoreType::Life
+                                    } else {
+                                        RestoreType::Mana
+                                    },
+                                    min: effect.value,
+                                    max: effect.value,
+                                },
+                            }],
+                        },
+                    });
+                }
+                // TODO: Find way to do increase?
+                // TODO: For multiplier, should iterate and apply to all trigger matching?
+            }
             // Delegate to skills
             StatType::Damage { .. }
             | StatType::MinDamage { .. }

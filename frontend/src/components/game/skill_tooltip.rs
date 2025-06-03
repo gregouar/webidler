@@ -4,6 +4,7 @@ use leptos::html::*;
 use leptos::prelude::*;
 
 use shared::data::character_status::StatusType;
+use shared::data::skill::RestoreType;
 use shared::data::skill::SkillTargetsGroup;
 use shared::data::skill::TargetType;
 use shared::data::skill::{SkillEffect, SkillEffectType, SkillRange, SkillShape, SkillSpecs};
@@ -107,56 +108,67 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
 
 fn format_effect(effect: SkillEffect) -> impl IntoView {
     match effect.effect_type {
-            SkillEffectType::FlatDamage { damage, crit_chances, crit_damage } => {
-                view! {
-                    {damage
-                        .into_iter()
-                        .map(|(damage_type, (min, max))| {
-                            view! {
-                                <EffectLi>
-                                    "Deals "
-                                    <span class="font-semibold">{format_min_max(min, max)}</span>
-                                    " " {damage_type_str(damage_type)} " Damage"
-                                </EffectLi>
-                            }
-                        })
-                        .collect::<Vec<_>>()}
-                    {if crit_chances > 0.0 {
-                        Some(
-                            view! {
-                                <EffectLi>
-                                    "Critical chances: "
-                                    <span class="font-semibold">
-                                        {format!("{:.2}%", crit_chances * 100.0)}
-                                    </span>
-                                </EffectLi>
-                                <EffectLi>
-                                    "Critical damage: "
-                                    <span class="font-semibold">
-                                        {format!("+{:.0}%", crit_damage * 100.0)}
-                                    </span>
-                                </EffectLi>
-                            },
-                        )
-                    } else {
-                        None
-                    }}
-                }
-                    .into_any()
-            }
-            SkillEffectType::Heal { min, max } => {
-                view! { <EffectLi>"Heals "<span class="font-semibold">{format_min_max(min, max)}</span></EffectLi> }
-                    .into_any()
-            }
-            SkillEffectType::ApplyStatus {
-                status_type,
-                min_value,
-                max_value,
-                min_duration,
-                max_duration,
-                ..
-            } => {
-                match status_type {
+        SkillEffectType::FlatDamage {
+            damage,
+            crit_chances,
+            crit_damage,
+        } => view! {
+            {damage
+                .into_iter()
+                .map(|(damage_type, (min, max))| {
+                    view! {
+                        <EffectLi>
+                            "Deals " <span class="font-semibold">{format_min_max(min, max)}</span>
+                            " " {damage_type_str(damage_type)} " Damage"
+                        </EffectLi>
+                    }
+                })
+                .collect::<Vec<_>>()}
+            {if crit_chances > 0.0 {
+                Some(
+                    view! {
+                        <EffectLi>
+                            "Critical chances: "
+                            <span class="font-semibold">
+                                {format!("{:.2}%", crit_chances * 100.0)}
+                            </span>
+                        </EffectLi>
+                        <EffectLi>
+                            "Critical damage: "
+                            <span class="font-semibold">
+                                {format!("+{:.0}%", crit_damage * 100.0)}
+                            </span>
+                        </EffectLi>
+                    },
+                )
+            } else {
+                None
+            }}
+        }
+        .into_any(),
+        SkillEffectType::Restore {
+            restore_type,
+            min,
+            max,
+        } => view! {
+            <EffectLi>
+                "Restore "<span class="font-semibold">{format_min_max(min, max)}</span>
+                {match restore_type {
+                    RestoreType::Life => "Life",
+                    RestoreType::Mana => "Mana",
+                }}
+            </EffectLi>
+        }
+        .into_any(),
+        SkillEffectType::ApplyStatus {
+            status_type,
+            min_value,
+            max_value,
+            min_duration,
+            max_duration,
+            ..
+        } => {
+            match status_type {
                     StatusType::Stun => {
                         view! { <EffectLi>"Stun for "{format_min_max(min_duration, max_duration)}" seconds"</EffectLi> }
                             .into_any()
@@ -178,8 +190,8 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                        view! { <EffectLi>{if debuff { "Debuff" } else { "Buff" }}</EffectLi> } .into_any()
                     }
                 }
-            }
         }
+    }
 }
 
 fn format_min_max(min: f64, max: f64) -> String {

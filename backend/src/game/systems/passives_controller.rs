@@ -1,6 +1,7 @@
 use shared::data::{
     passive::{PassiveNodeId, PassivesTreeSpecs, PassivesTreeState},
     player::PlayerResources,
+    stat_effect::EffectsMap,
 };
 
 pub fn purchase_node(
@@ -32,11 +33,11 @@ pub fn purchase_node(
     }
 }
 
-pub fn generate_effects_map_from_passives(
-    passives_tree_specs: &PassivesTreeSpecs,
-    passives_tree_state: &PassivesTreeState,
-) {
-    passive_tree_state
+pub fn generate_effects_map_from_passives<'a>(
+    passives_tree_specs: &'a PassivesTreeSpecs,
+    passives_tree_state: &'a PassivesTreeState,
+) -> impl Iterator<Item = EffectsMap> + use<'a> {
+    passives_tree_state
         .purchased_nodes
         .iter()
         .filter_map(|node_id| {

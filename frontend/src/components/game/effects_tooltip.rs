@@ -2,11 +2,11 @@ use std::collections::HashMap;
 
 use leptos::html::*;
 use leptos::prelude::*;
+use strum::IntoEnumIterator;
 
-use shared::data::item_affix::AffixEffectScope;
-use shared::data::skill::SkillType;
 use shared::data::{
-    skill::DamageType,
+    item_affix::AffixEffectScope,
+    skill::{DamageType, SkillType},
     stat_effect::{Modifier, StatEffect, StatType},
 };
 
@@ -242,6 +242,26 @@ pub fn formatted_effects_list(
             (TakeFromManaBeforeLife, Flat) => merged.push(format!(
                 "{:.0}% of Damage taken from Mana before Life",
                 effect.value * 100.0
+            )),
+            (LifeOnHit(hit_trigger), Flat) => merged.push(format!(
+                "Gain {:.0} Life on {}Hit",
+                effect.value,
+                skill_type_str(hit_trigger.skill_type)
+            )),
+            (LifeOnHit(hit_trigger), Multiplier) => merged.push(format!(
+                "{:.0}% Increased Life gained on {}Hit",
+                effect.value * 100.0,
+                skill_type_str(hit_trigger.skill_type)
+            )),
+            (ManaOnHit(hit_trigger), Flat) => merged.push(format!(
+                "Gain {:.0} Mana on {}Hit",
+                effect.value,
+                skill_type_str(hit_trigger.skill_type)
+            )),
+            (ManaOnHit(hit_trigger), Multiplier) => merged.push(format!(
+                "{:.0}% Increased Mana gained on {}Hit",
+                effect.value * 100.0,
+                skill_type_str(hit_trigger.skill_type)
             )),
         }
     }

@@ -4,7 +4,7 @@ use shared::data::{
     character::{CharacterId, CharacterSpecs, CharacterState},
     character_status::{StatusState, StatusType},
     item::SkillRange,
-    skill::{DamageType, SkillType},
+    skill::{DamageType, RestoreType, SkillType},
 };
 
 use crate::game::{
@@ -85,7 +85,7 @@ pub fn damage_character(
     *life -= take_from_life;
 }
 
-pub fn heal_character(target: &mut Target, amount: f64) {
+pub fn restore_character(target: &mut Target, restore_type: RestoreType, amount: f64) {
     let (_, (_, target_state)) = target;
 
     if amount <= 0.0 {
@@ -93,7 +93,10 @@ pub fn heal_character(target: &mut Target, amount: f64) {
     }
 
     if target_state.is_alive {
-        target_state.life += amount;
+        match restore_type {
+            RestoreType::Life => target_state.life += amount,
+            RestoreType::Mana => target_state.mana += amount,
+        }
     }
 }
 

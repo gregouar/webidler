@@ -51,17 +51,17 @@
       "min_area_level": 5
     },
     {
-      "item_id": "cloak",
+      "item_id": "wool_cloak",
       "weight": 400,
       "min_area_level": 10
     },
     {
-      "item_id": "gold_ring",
+      "item_id": "copper_ring",
       "weight": 400,
       "min_area_level": 10
     },
     {
-      "item_id": "medallion",
+      "item_id": "wooden_beads",
       "weight": 400,
       "min_area_level": 10
     },
@@ -105,6 +105,18 @@
     {
       "item_id": "spellbook",
       "weight": 1000
+    },
+    {
+      "item_id": "cloak",
+      "weight": 800
+    },
+    {
+      "item_id": "gold_ring",
+      "weight": 800
+    },
+    {
+      "item_id": "medallion",
+      "weight": 800
     }
   ]
 }

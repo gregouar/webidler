@@ -14,7 +14,9 @@ pub enum EventTrigger {
 }
 
 // TODO: replace by simple tag system?
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default, PartialOrd, Ord,
+)]
 pub struct HitTrigger {
     #[serde(default)]
     pub skill_type: Option<SkillType>,
@@ -29,7 +31,7 @@ pub struct HitTrigger {
     // TODO: Track skill id?
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggeredEffect {
     #[serde(flatten)]
     pub trigger: EventTrigger,
@@ -39,7 +41,7 @@ pub struct TriggeredEffect {
     pub effect: TriggerEffectType,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum TriggerEffectType {
     UseSkill, //TODO
     ApplySkillEffects {

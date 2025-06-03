@@ -138,40 +138,46 @@
     ],
     "affix_type": "Suffix",
     "tier": 1,
-    "weight": 100000,
+    "weight": 1000,
     "restrictions": [
       "AttackWeapon"
     ],
     "item_level": 1,
     "effects": [
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": {
-          "LifeOnHit": {"is_hurt": true}
+          "LifeOnHit": {"is_hurt": true, "skill_type": "Attack"}
         },
         "modifier": "Flat",
-        "min": 0.2,
-        "max": 0.5
+        "min": 2,
+        "max": 5
       }
+    ]
+  },
+  {
+    "name": "of the Octopus",
+    "family": "mana_leech",
+    "tags": [
+      "Attack",
+      "Mana"
     ],
-    "triggers": [
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": [
+      "AttackWeapon"
+    ],
+    "item_level": 1,
+    "effects": [
       {
-        "description": "Gain 5 Life on Hit with Attacks",
-        "OnHit": {
-          "skill_type": "Attack",
-          "is_hurt": true
+        "scope": "Global",
+        "stat": {
+          "ManaOnHit": {"is_hurt": true, "skill_type": "Attack"}
         },
-        "ApplySkillEffects": {
-          "target": "Source",
-          "effects": [
-            {
-              "Heal": {
-                "min": 5,
-                "max": 5
-              }
-            }
-          ]
-        }
+        "modifier": "Flat",
+        "min": 2,
+        "max": 5
       }
     ]
   }

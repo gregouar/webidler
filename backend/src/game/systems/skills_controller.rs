@@ -217,10 +217,14 @@ pub fn apply_skill_effect(
                 );
             }
         }
-        SkillEffectType::Heal { min, max } => {
+        SkillEffectType::Restore {
+            restore_type,
+            min,
+            max,
+        } => {
             if let Some(amount) = rng::random_range(*min..=*max) {
                 for target in targets {
-                    characters_controller::heal_character(target, amount);
+                    characters_controller::restore_character(target, *restore_type, amount);
                 }
             }
         }

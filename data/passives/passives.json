@@ -667,7 +667,8 @@
               "target": "Source",
               "effects": [
                 {
-                  "Heal": {
+                  "Restore": {
+                    "restore_type": "Life",
                     "min": 5,
                     "max": 5
                   }

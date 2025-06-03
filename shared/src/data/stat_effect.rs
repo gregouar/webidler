@@ -1,25 +1,31 @@
 use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
+use strum_macros::EnumIter;
 
 use crate::data::trigger::HitTrigger;
 
 use super::skill::SkillType;
 
 #[derive(
-    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,
+    Serialize,
+    Deserialize,
+    Debug,
+    Clone,
+    Copy,
+    PartialEq,
+    Eq,
+    Hash,
+    PartialOrd,
+    Ord,
+    Default,
+    EnumIter,
 )]
 pub enum DamageType {
     #[default]
     Physical,
     Fire,
     Poison,
-}
-
-impl DamageType {
-    pub fn iter() -> impl Iterator<Item = DamageType> {
-        [DamageType::Physical, DamageType::Fire, DamageType::Poison].into_iter()
-    }
 }
 
 pub type DamageMap = HashMap<DamageType, (f64, f64)>;
