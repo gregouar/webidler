@@ -1,11 +1,21 @@
 {
+  "padded_tunic": {
+    "name": "Padded Tunic",
+    "icon": "items/padded_tunic.webp",
+    "slot": "Body",
+    "categories": ["Armor", "Body"],
+    "armor_specs": {
+      "armor": 20
+    }
+  },
   "leather_armor": {
     "name": "Leather Armor",
     "icon": "items/leather_armor.webp",
     "slot": "Body",
     "categories": ["Armor", "Body"],
     "armor_specs": {
-      "armor": 20
-    }
+      "armor": 40
+    },
+    "min_area_level": 40
   }
 }

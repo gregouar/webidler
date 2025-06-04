@@ -1,0 +1,37 @@
+{
+  "quarterstaff": {
+    "name": "Quarterstaff",
+    "icon": "items/quarterstaff.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "MeleeWeapon"],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.5,
+      "damage": {
+        "Physical": [4, 10]
+      },
+      "crit_chances": 0.05,
+      "crit_damage": 1
+    }
+  },
+  "woodcutter_axe": {
+    "name": "Woodcutter's Axe",
+    "icon": "items/woodcutter_axe.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "MeleeWeapon"],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.5,
+      "damage": {
+        "Physical": [6, 18]
+      },
+      "crit_chances": 0.05,
+      "crit_damage": 1
+    },
+    "min_area_level": 40
+  }
+}

@@ -41,6 +41,8 @@ pub fn update_item_specs(
         item_specs.weapon_specs = Some(compute_weapon_specs(weapon_specs.clone(), &effects));
     }
 
+    // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
+
     item_specs
 }
 
@@ -183,6 +185,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             range: weapon_specs.range,
             target_type: TargetType::Enemy,
             shape: weapon_specs.shape,
+            target_dead: false,
             effects,
         }],
     }

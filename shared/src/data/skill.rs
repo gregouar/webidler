@@ -73,11 +73,13 @@ pub struct SkillTargetsGroup {
     pub target_type: TargetType,
     #[serde(default)]
     pub shape: SkillShape,
+    #[serde(default)]
+    pub target_dead: bool,
 
     pub effects: Vec<SkillEffect>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct SkillEffect {
     #[serde(default)]
     pub failure_chances: f32,
@@ -86,7 +88,7 @@ pub struct SkillEffect {
     pub effect_type: SkillEffectType,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum SkillEffectType {
     FlatDamage {
         damage: DamageMap,
@@ -94,10 +96,6 @@ pub enum SkillEffectType {
         crit_chances: f32,
         #[serde(default)]
         crit_damage: f64,
-    },
-    Heal {
-        min: f64,
-        max: f64,
     },
     ApplyStatus {
         status_type: StatusType,
@@ -108,6 +106,12 @@ pub enum SkillEffectType {
         min_duration: f64,
         max_duration: f64,
     },
+    Restore {
+        restore_type: RestoreType,
+        min: f64,
+        max: f64,
+    },
+    Resurrect,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq)]
@@ -118,7 +122,9 @@ pub enum TargetType {
     Me,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default, Eq, Hash)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default, Eq, Hash, PartialOrd, Ord,
+)]
 pub enum SkillRange {
     #[default]
     Melee,
@@ -135,4 +141,10 @@ pub enum SkillShape {
     Horizontal3,
     Square4,
     All,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+pub enum RestoreType {
+    Life,
+    Mana,
 }

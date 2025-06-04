@@ -2,12 +2,13 @@ use std::sync::Arc;
 
 use leptos::html::*;
 use leptos::prelude::*;
+use strum::IntoEnumIterator;
 
-use shared::data::item::SkillRange;
-use shared::data::item::SkillShape;
-use shared::data::item::{ItemRarity, ItemSlot, ItemSpecs};
-use shared::data::item_affix::AffixEffectScope;
-use shared::data::skill::DamageType;
+use shared::data::{
+    item::{ItemRarity, ItemSlot, ItemSpecs, SkillRange, SkillShape},
+    item_affix::AffixEffectScope,
+    skill::DamageType,
+};
 
 use crate::components::game::effects_tooltip;
 

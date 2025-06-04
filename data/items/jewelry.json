@@ -1,16 +1,65 @@
 {
+  "copper_ring": {
+    "name": "Copper Ring",
+    "icon": "items/copper_ring.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "min": 0.20,
+        "max": 0.20
+      }
+    ]
+  },
   "gold_ring": {
     "name": "Gold Ring",
     "icon": "items/gold_ring.webp",
     "slot": "Ring",
     "categories": ["Jewelry", "Ring"],
-    "rarity": "Magic"
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "min": 0.40,
+        "max": 0.40
+      }
+    ],
+    "min_area_level": 40
+  },
+
+  "wooden_beads": {
+    "name": "Wooden Beads",
+    "icon": "items/wooden_beads.webp",
+    "slot": "Amulet",
+    "categories": ["Jewelry", "Amulet"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "min": 0.20,
+        "max": 0.20
+      }
+    ]
   },
   "medallion": {
     "name": "Medallion",
     "icon": "items/medallion.webp",
     "slot": "Amulet",
     "categories": ["Jewelry", "Amulet"],
-    "rarity": "Magic"
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "min": 0.40,
+        "max": 0.40
+      }
+    ],
+    "min_area_level": 40
   }
 }

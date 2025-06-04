@@ -50,7 +50,10 @@ pub struct ItemAffixBlueprint {
     pub restrictions: Option<HashSet<ItemCategory>>,
     pub item_level: AreaLevel,
 
+    #[serde(default)]
     pub effects: Vec<AffixEffectBlueprint>,
+    // #[serde(default)]
+    // pub triggers: Vec<TriggeredEffect>, // TODO
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
@@ -72,6 +75,7 @@ pub struct ItemAffix {
     pub tier: u8,
 
     pub effects: Vec<AffixEffect>,
+    // pub triggers: Vec<TriggeredEffect>, // TODO
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

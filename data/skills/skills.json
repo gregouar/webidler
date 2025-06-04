@@ -78,7 +78,9 @@
     "targets": [
       {
         "target_type": "Me",
-        "effects": [{ "Heal": { "min": 25, "max": 25 } }]
+        "effects": [
+          { "Restore": { "restore_type": "Life", "min": 25, "max": 25 } }
+        ]
       }
     ]
   }

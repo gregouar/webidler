@@ -13,10 +13,13 @@ use crate::game::{
     data::{
         master_store::MonstersSpecsStore,
         monster::BaseMonsterSpecs,
-        world::{MonsterWaveBlueprint, WorldBlueprint},
+        world::{BossBlueprint, MonsterWaveBlueprint, MonsterWaveSpawnBlueprint, WorldBlueprint},
         DataInit,
     },
-    utils::{increase_factors, rng, rng::RandomWeighted},
+    utils::{
+        increase_factors,
+        rng::{self, RandomWeighted},
+    },
 };
 
 use super::skills_updater;
@@ -29,22 +32,44 @@ impl RandomWeighted for &MonsterWaveBlueprint {
     }
 }
 
+impl RandomWeighted for &BossBlueprint {
+    fn random_weight(&self) -> u64 {
+        1
+    }
+}
+
 pub fn generate_monsters_wave(
     world_blueprint: &WorldBlueprint,
     world_state: &WorldState,
     monsters_specs_store: &MonstersSpecsStore,
-) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>)> {
-    let monster_specs =
+) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>, bool)> {
+    let (monster_specs, is_boss) =
         generate_monsters_wave_specs(world_blueprint, world_state, monsters_specs_store)?;
     let monster_states = monster_specs.iter().map(MonsterState::init).collect();
-    Ok((monster_specs, monster_states))
+    Ok((monster_specs, monster_states, is_boss))
 }
 
 fn generate_monsters_wave_specs(
     world_blueprint: &WorldBlueprint,
     world_state: &WorldState,
     monsters_specs_store: &MonstersSpecsStore,
-) -> Result<Vec<MonsterSpecs>> {
+) -> Result<(Vec<MonsterSpecs>, bool)> {
+    let available_bosses: Vec<_> = world_blueprint
+        .bosses
+        .iter()
+        .filter(|b| {
+            world_state.area_level >= b.level
+                && (world_state.area_level - b.level) % b.interval.unwrap_or(AreaLevel::MAX) == 0
+        })
+        .collect();
+
+    if let Some(boss) = rng::random_weighted_pick(&available_bosses) {
+        return Ok((
+            generate_all_monsters_specs(&boss.spawns, world_state, monsters_specs_store),
+            true,
+        ));
+    }
+
     let available_waves: Vec<_> = world_blueprint
         .waves
         .iter()
@@ -54,19 +79,18 @@ fn generate_monsters_wave_specs(
         })
         .collect();
 
-    rng::random_weighted_pick(&available_waves)
-        .map(|wave| {
-            Ok(generate_all_monsters_specs(
-                wave,
-                world_state,
-                monsters_specs_store,
-            ))
-        })
-        .unwrap_or(Err(anyhow::format_err!("no monster wave available")))
+    if let Some(wave) = rng::random_weighted_pick(&available_waves) {
+        return Ok((
+            generate_all_monsters_specs(&wave.spawns, world_state, monsters_specs_store),
+            false,
+        ));
+    }
+
+    Err(anyhow::format_err!("no monster wave available"))
 }
 
 fn generate_all_monsters_specs(
-    wave: &MonsterWaveBlueprint,
+    spawns: &[MonsterWaveSpawnBlueprint],
     world_state: &WorldState,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Vec<MonsterSpecs> {
@@ -74,7 +98,7 @@ fn generate_all_monsters_specs(
     let mut bot_space_available = MAX_MONSTERS_PER_ROW;
 
     let mut monsters_specs = Vec::with_capacity(top_space_available + bot_space_available);
-    'spawnloop: for spawn in wave.spawns.iter() {
+    'spawnloop: for spawn in spawns.iter() {
         for _ in 0..rng::random_range(spawn.min_quantity..=spawn.max_quantity).unwrap_or_default() {
             if let Some(specs) = monsters_specs_store.get(&spawn.monster) {
                 let (x_size, y_size) = specs.character_specs.size.get_xy_size();

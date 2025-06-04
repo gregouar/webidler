@@ -18,6 +18,7 @@ impl DataInit<&WorldSpecs> for WorldState {
     fn init(specs: &WorldSpecs) -> Self {
         WorldState {
             area_level: specs.starting_level,
+            is_boss: false,
             waves_done: 0,
             auto_progress: true,
             going_back: 0,

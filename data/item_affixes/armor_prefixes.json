@@ -2,16 +2,23 @@
   {
     "name": "Fortified",
     "family": "add_armor",
-    "tags": ["Physical", "Armor"],
+    "tags": [
+      "Physical",
+      "Armor"
+    ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor"],
+    "restrictions": [
+      "Armor"
+    ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Local",
-        "stat": {"Armor": "Physical"},
+        "stat": {
+          "Armor": "Physical"
+        },
         "modifier": "Flat",
         "min": 5,
         "max": 10
@@ -21,57 +28,26 @@
   {
     "name": "Hard",
     "family": "inc_armor",
-    "tags": ["Physical", "Armor"],
+    "tags": [
+      "Physical",
+      "Armor"
+    ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor"],
+    "restrictions": [
+      "Armor"
+    ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Local",
-        "stat": {"Armor": "Physical"},
+        "stat": {
+          "Armor": "Physical"
+        },
         "modifier": "Multiplier",
         "min": 0.2,
         "max": 0.39
-      }
-    ]
-  },
-  {
-    "name": "Healthy",
-    "family": "add_life",
-    "tags": ["Life"],
-    "affix_type": "Prefix",
-    "tier": 1,
-    "weight": 1000,
-    "restrictions": ["Armor"],
-    "item_level": 1,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Life",
-        "modifier": "Flat",
-        "min": 10,
-        "max": 20
-      }
-    ]
-  },
-  {
-    "name": "Robust",
-    "family": "inc_life",
-    "tags": ["Life"],
-    "affix_type": "Prefix",
-    "tier": 1,
-    "weight": 1000,
-    "restrictions": ["Armor"],
-    "item_level": 1,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Life",
-        "modifier": "Multiplier",
-        "min": 0.02,
-        "max": 0.04
       }
     ]
   }

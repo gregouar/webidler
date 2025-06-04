@@ -623,26 +623,27 @@
         ]
       },
 
-      "stunning_crit": {
-        "name": "Lobotomy without Anesthesia",
-        "icon": "passives/broken_skull.svg",
-        "x": 40,
+      "stunning_block": {
+        "name": "Boinks Back",
+        "icon": "passives/shield_reflect.svg",
+        "x": -40,
         "y": 20,
-        "node_type": "Critical",
+        "node_type": "Armor",
         "size": 1,
         "triggers": [
           {
-            "description": "Critical Hit with Attacks inflict Stun for 4 seconds",
-            "OnHit": { "skill_type": "Attack", "is_crit": true },
+            "description": "Blocked Attacks inflict Stun for 2 seconds",
+            "OnTakeHit": { "skill_type": "Attack", "is_blocked": true },
             "ApplySkillEffects": {
+              "target": "Source",
               "effects": [
                 {
                   "ApplyStatus": {
                     "status_type": "Stun",
                     "min_value": 0,
                     "max_value": 0,
-                    "min_duration": 4,
-                    "max_duration": 4
+                    "min_duration": 2,
+                    "max_duration": 2
                   }
                 }
               ]
@@ -666,7 +667,8 @@
               "target": "Source",
               "effects": [
                 {
-                  "Heal": {
+                  "Restore": {
+                    "restore_type": "Life",
                     "min": 5,
                     "max": 5
                   }
@@ -688,9 +690,9 @@
       "bleeding_crit": {
         "name": "The Ripper",
         "icon": "passives/bleeding_heart.svg",
-        "x": 0,
-        "y": 40,
-        "node_type": "Attack",
+        "x": 40,
+        "y": 20,
+        "node_type": "Critical",
         "size": 1,
         "triggers": [
           {
@@ -759,6 +761,11 @@
             "stat": "TakeFromManaBeforeLife",
             "modifier": "Flat",
             "value": 1
+          },
+          {
+            "stat": "Mana",
+            "modifier": "Multiplier",
+            "value": 0.5
           }
         ]
       },
@@ -766,9 +773,9 @@
       "enrage": {
         "name": "Berserker",
         "icon": "passives/enrage.svg",
-        "x": -40,
-        "y": 20,
-        "node_type": "Armor",
+        "x": 0,
+        "y": 40,
+        "node_type": "Attack",
         "size": 1,
         "triggers": [
           {
@@ -845,11 +852,11 @@
       { "from": "mana_regen_2", "to": "mana_max_and_regen_1" },
 
       { "from": "gold_ul_1", "to": "armor_2" },
-      { "from": "gold_ul_1", "to": "enrage" },
+      { "from": "gold_ul_1", "to": "stunning_block" },
       { "from": "gold_ul_1", "to": "attack_damage_2" },
 
       { "from": "gold_ur_1", "to": "crit_chances_2" },
-      { "from": "gold_ur_1", "to": "stunning_crit" },
+      { "from": "gold_ur_1", "to": "bleeding_crit" },
       { "from": "gold_ur_1", "to": "life_max_2" },
 
       { "from": "gold_dl_1", "to": "block_2" },
@@ -861,7 +868,7 @@
       { "from": "gold_dr_1", "to": "spell_damage_2" },
 
       { "from": "gold_u_2", "to": "attack_speed_2" },
-      { "from": "gold_u_2", "to": "bleeding_crit" },
+      { "from": "gold_u_2", "to": "enrage" },
       { "from": "gold_u_2", "to": "crit_damage_2" },
 
       { "from": "gold_d_2", "to": "spell_speed_2" },

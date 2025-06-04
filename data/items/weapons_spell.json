@@ -1,9 +1,33 @@
 {
+  "wooden_rod": {
+    "name": "Wooden Rod",
+    "icon": "items/wooden_rod.webp",
+    "slot": "Weapon",
+    "categories": ["SpellWeapon"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "SpellPower",
+        "modifier": "Multiplier",
+        "min": 0.15,
+        "max": 0.29
+      }
+    ]
+  },
   "wand": {
     "name": "Wand",
     "icon": "items/wand.webp",
     "slot": "Weapon",
     "categories": ["SpellWeapon"],
-    "rarity": "Magic"
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "SpellPower",
+        "modifier": "Multiplier",
+        "min": 0.20,
+        "max": 0.20
+      }
+    ],
+    "min_area_level": 40
   }
 }

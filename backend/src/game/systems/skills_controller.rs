@@ -105,7 +105,10 @@ fn find_targets<'a, 'b>(
     me_position: (u8, u8),
     pre_targets: &'b mut [Target<'a>],
 ) -> Vec<&'b mut Target<'a>> {
-    let target_specs = pre_targets.iter().map(|(_, (specs, _))| specs);
+    let target_specs = pre_targets
+        .iter()
+        .filter(|(_, (_, state))| targets_group.target_dead != state.is_alive)
+        .map(|(_, (specs, _))| specs);
 
     let available_positions = target_specs
         .clone()
@@ -217,13 +220,6 @@ pub fn apply_skill_effect(
                 );
             }
         }
-        SkillEffectType::Heal { min, max } => {
-            if let Some(amount) = rng::random_range(*min..=*max) {
-                for target in targets {
-                    characters_controller::heal_character(target, amount);
-                }
-            }
-        }
         SkillEffectType::ApplyStatus {
             status_type,
             min_value,
@@ -245,6 +241,22 @@ pub fn apply_skill_effect(
                         *cumulate,
                     )
                 }
+            }
+        }
+        SkillEffectType::Restore {
+            restore_type,
+            min,
+            max,
+        } => {
+            if let Some(amount) = rng::random_range(*min..=*max) {
+                for target in targets {
+                    characters_controller::restore_character(target, *restore_type, amount);
+                }
+            }
+        }
+        SkillEffectType::Resurrect => {
+            for target in targets {
+                characters_controller::resuscitate_character(target);
             }
         }
     }

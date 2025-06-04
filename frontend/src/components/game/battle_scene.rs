@@ -137,11 +137,15 @@ pub fn BattleSceneFooter() -> impl IntoView {
             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
             <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-2xl font-bold">
                 {move || {
-                    format!(
-                        "Wave: {}/{}",
-                        game_context.world_state.read().waves_done,
-                        WAVES_PER_AREA_LEVEL,
-                    )
+                    if game_context.world_state.read().is_boss {
+                        "Boss".to_string()
+                    } else {
+                        format!(
+                            "Wave: {}/{}",
+                            game_context.world_state.read().waves_done,
+                            WAVES_PER_AREA_LEVEL,
+                        )
+                    }
                 }}
             </p>
         </div>

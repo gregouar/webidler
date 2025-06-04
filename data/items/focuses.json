@@ -4,6 +4,30 @@
     "icon": "items/grigri.webp",
     "slot": "Shield",
     "categories": ["Focus"],
-    "rarity": "Magic"
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "min": 30.0,
+        "max": 30.0
+      }
+    ]
+  },
+  "spellbook": {
+    "name": "Spellbook",
+    "icon": "items/spellbook.webp",
+    "slot": "Shield",
+    "categories": ["Focus"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "min": 50.0,
+        "max": 50.0
+      }
+    ],
+    "min_area_level": 40
   }
 }

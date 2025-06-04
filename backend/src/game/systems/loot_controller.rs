@@ -92,14 +92,14 @@ fn update_loot_states(
     }
 
     let amount_to_discard = queued_loot.len().saturating_sub(MAX_QUEUE_SIZE);
-    let last_index = queued_loot.len() - 1;
+    let last_index = queued_loot.len().saturating_sub(1);
     for i in 0..amount_to_discard {
         // If new loot is worst than the one we want to discard, we discard the new one instead
         // and put back old loot in front
         if is_better_loot(
             player_controller,
             &queued_loot[i].item_specs,
-            &queued_loot[queued_loot.len() - 1].item_specs,
+            &queued_loot[last_index].item_specs,
         ) && i != last_index
         {
             let (left, right) = queued_loot.split_at_mut(last_index);

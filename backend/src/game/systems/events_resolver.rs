@@ -169,9 +169,11 @@ fn handle_wave_completed_event(
 ) {
     let world_state = game_data.world_state.mutate();
 
-    world_state.waves_done += 1;
+    if !world_state.is_boss {
+        world_state.waves_done += 1;
+    }
 
-    if game_data.world_state.read().waves_done > WAVES_PER_AREA_LEVEL {
+    if world_state.is_boss || world_state.waves_done > WAVES_PER_AREA_LEVEL {
         events_queue.register_event(GameEvent::AreaCompleted(area_level));
     }
 

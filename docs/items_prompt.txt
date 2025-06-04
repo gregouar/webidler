@@ -1,0 +1,335 @@
+🎨 Prompt Template (for Midjourney, DALLE, etc.):
+
+    "A hand-drawn fantasy [ITEM NAME], illustrated in soft ink and pastel tones. Slight parchment backdrop, light shading and subtle crosshatching. Styled for an isometric action RPG inventory, consistent with medieval fantasy aesthetics. No background, centered, clean silhouette."
+
+⚔️ Refined One-Handed Weapons (Melee)
+
+    Dagger – "A hand-drawn fantasy dagger with a chipped blade and leather-wrapped hilt."
+
+    Club – "A wooden club with knotted grain and rough-carved handle."
+
+    Shortsword – "A short, straight sword with a basic crossguard and worn grip."
+
+    Hand Axe – "A one-handed axe with a wooden shaft and iron head, slightly nicked."
+
+    Militia Sword – "A crude but functional sword with iron fittings and leather wrapping."
+
+    Spiked Mace – "A spiked iron mace with a thick wooden haft and wrapped grip."
+
+    Folded Steel Sword – "A polished folded steel blade with intricate fullers and ornate guard."
+
+    Arming Sword – "A knight’s sidearm with a double-edged blade and cruciform hilt."
+
+    War Axe – "A forged war axe with reinforced head and battle scarring."
+
+    Knight’s Sword – "A pristine knight’s longsword with gem-inlaid pommel and engraved crossguard."
+
+🏹 Ranged Weapons
+
+    Short Bow – "A small wooden short bow, simple string and minimal reinforcement."
+
+    Hunting Bow – "A recurved hunting bow with wrapped grip and slight ornamentation."
+
+    Recurve Bow – "A recurved bow with sinew bindings and wood laminate body."
+
+    Longbow – "A tall longbow of yew wood, lightly curved with wrapped handle."
+
+    Fine Bow – "A finely crafted bow with carved limbs and polished accents."
+
+    Composite Bow – "A horn-and-wood composite bow with sinew bindings and ornate tips."
+
+    Light Crossbow – "A small crossbow with a wooden stock and iron mechanism."
+
+    Reinforced Crossbow – "A sturdier crossbow with steel reinforcements and crank lever."
+
+    Arbalest – "A heavy arbalest with steel bow arms and crank handle, high tension."
+
+    Siege Crossbow – "A massive crossbow with complex mechanisms and heavy stock, built for war."
+
+🪓 Two-Handed Melee
+
+    Quarterstaff – "A long wooden staff with carved ends and worn grip."
+
+    Woodcutter’s Axe – "A broad axe with chipped edge and thick wooden shaft."
+
+    Greatclub – "A giant wooden club with embedded stones and reinforced head."
+
+    Glaive – "A polearm with a curved blade and engraved shaft."
+
+    Halberd – "A halberd with axe head, spike, and rear hook on a long wooden shaft."
+
+    Billhook – "A hooked polearm for tearing, mounted on a gnarled staff."
+
+    Bardiche – "A two-handed axe with a long curved blade and riveted bindings."
+
+    Greatsword – "A massive sword with double-handed hilt and extended fuller."
+
+    Warhammer – "A two-handed hammer with square head and back spike."
+
+    Poleaxe – "A medieval poleaxe with axe blade, spike, and hammerface on a pole."
+
+🔮 Magical (Main-Hand Weapon)
+
+    Switch (wooden rod) – "A crude wooden switch, bark intact, lightly twisted."
+
+    Wand – "A plain magical wand with glowing tip and faint runes."
+
+    Birch Wand – "A slender wand of birch, pale with peeling bark."
+
+    Oak Wand – "A sturdy oak wand with engraved vines and knotwork."
+
+    Carved Wand – "An ornate wand with spiral carvings and crystal tip."
+
+    Bone Wand – "A wand crafted from bleached bone, etched with arcane symbols."
+
+    Iron Wand – "A heavy wand of black iron, adorned with angular runes."
+
+    Horn Wand – "A curved wand of horn, polished and capped with brass."
+
+    Mage’s Wand – "A decorated wand with silver inlay and glowing core."
+
+    Ritual Wand – "A ceremonial wand with gold filigree and embedded gems."
+
+🛡️ Offhand – Shields
+
+(Use same style as weapons: centered, top-down, or isometric view)
+
+    Wooden Buckler – "A small round wooden buckler with metal boss and rough planks."
+
+    Reinforced Buckler – "A wooden buckler with iron rims and leather strap."
+
+    Small Round Shield – "A round shield with painted surface and iron studs."
+
+    Hide Shield – "A stretched-hide shield with bone rim and primitive lashings."
+
+    Iron Buckler – "A plain iron buckler with hammered surface and riveted grip."
+
+    Heater Shield – "A knight’s heater shield with heraldic markings."
+
+    Round Shield – "A classic Viking-style round shield with boss and painted patterns."
+
+    Kite Shield – "A long kite-shaped shield with reinforced edges and insignia."
+
+    Tower Shield – "A large rectangular tower shield with viewing slit and heavy construction."
+
+    Reinforced Pavise – "A full-body pavise shield with reinforced struts and painted face."
+
+🛡️ Offhand – Foci
+
+    Spellbook – "A weathered spellbook with arcane runes and leather bindings."
+
+    Talisman – "A magical talisman strung on sinew, carved with symbols."
+
+    Orb – "A floating magical orb glowing faintly, with swirling mist inside."
+
+    Focus Stone – "A rough gemstone with magical etching and glow."
+
+    Seer’s Lens – "A crystal lens mounted in brass, flickering with inner light."
+
+    Engraved Tablet – "A stone tablet etched with glowing magical script."
+
+    Mage’s Codex – "A richly bound tome with gilded corners and arcane script."
+
+    Etched Crystal – "A multifaceted crystal with deep engravings and shimmer."
+
+    Ritual Orb – "An ornate orb in a metal stand, radiating magical energy."
+
+    Grimoire – "A thick black grimoire with chained clasp and glowing eye."
+
+    🪖 Helmets
+
+    Cloth Hood – "A simple cloth hood, hand-stitched with visible seams and soft folds."
+
+    Leather Cap – "A basic leather skullcap with stitch marks and forehead padding."
+
+    Quilted Coif – "A padded coif with quilted stitching, tied under the chin."
+
+    Iron Cap – "A domed iron cap with rivets and leather chin strap."
+
+    Mail Coif – "A chainmail coif with dense metal links and open face."
+
+    Padded Helm – "A thickly padded helmet with stitched outer fabric and ear flaps."
+
+    Nasal Helm – "A conical iron helmet with nasal guard and leather trim."
+
+    Bascinet – "A pointed bascinet helmet with mail aventail and visor studs."
+
+    Kettle Helm – "A broad-brimmed iron helmet with riveted construction."
+
+    Barbute – "A heavy open-faced barbute helm with T-shaped eye slit."
+
+👕 Body Armor
+
+    Padded Tunic – "A soft padded tunic with cross-stitched quilting and leather ties."
+
+    Quilted Jacket – "A long-sleeved quilted jacket with fabric layers and rough hemming."
+
+    Leather Jerkin – "A sleeveless leather jerkin with visible seams and straps."
+
+    Studded Vest – "A leather vest reinforced with iron studs across the chest."
+
+    Chain Shirt – "A chainmail shirt with dense rings and leather underlayer."
+
+    Scale Vest – "A vest covered in overlapping metal scales, stitched to leather."
+
+    Mail Hauberk – "A long-sleeved chainmail hauberk with reinforced neck and hem."
+
+    Brigandine – "A coat of plates hidden beneath a cloth covering with rivets visible."
+
+    Breastplate – "A polished steel breastplate with etched lines and shoulder hinges."
+
+    Plate Cuirass – "A full cuirass with articulated steel plates and ornate chestpiece."
+
+🧤 Gloves
+
+    Cloth Wraps – "Basic cloth handwraps, loosely tied with frayed edges."
+
+    Leather Gloves – "Plain leather gloves with stitch lines and finger creases."
+
+    Work Gloves – "Thick gloves with padded palms and reinforced fingers."
+
+    Padded Mitts – "Bulky mitts with quilted padding and leather straps."
+
+    Riding Gloves – "Form-fitting gloves with buttoned cuffs and subtle tooling."
+
+    Studded Gloves – "Leather gloves studded with iron knobs along the knuckles."
+
+    Chain Gloves – "Mail gloves with fine interlinked rings and leather lining."
+
+    Leather Gauntlets – "Heavy-duty gauntlets with overlapping wrist guards."
+
+    Steel Gauntlets – "Forged steel gauntlets with articulated joints and finger plates."
+
+    Plated Gauntlets – "Full plate gauntlets with reinforced knuckles and engraved cuffs."
+
+👢 Boots
+
+    Cloth Shoes – "Simple cloth shoes with drawstring closure and worn soles."
+
+    Leather Sandals – "Open-toed leather sandals with cross straps and wooden sole."
+
+    Soft Boots – "Ankle-high soft leather boots with folded tops."
+
+    Stitched Boots – "Mid-calf boots with visible stitches and wraparound lacing."
+
+    Traveler’s Boots – "Rugged boots with scuffed toes and thick soles for long travel."
+
+    Reinforced Boots – "Leather boots with added shin guards and toe caps."
+
+    Mail Boots – "Boots wrapped in chainmail links with leather underneath."
+
+    Riding Boots – "Tall riding boots with reinforced calves and buckle straps."
+
+    Iron-shod Boots – "Heavy boots with metal plating on the toes and heels."
+
+    Sabatons – "Articulated steel sabatons with layered foot plates."
+
+💍 Rings
+
+    Copper Ring – "A simple copper band with greenish patina."
+
+    Bronze Band – "A rough bronze ring, slightly worn and unadorned."
+
+    Iron Ring – "A thick iron band with hammer marks and blackened surface."
+
+    Pewter Ring – "A plain pewter ring with subtle wave etching."
+
+    Silver Ring – "A polished silver ring with a faint mystical glow."
+
+    Signet Ring – "A silver signet ring with engraved noble crest."
+
+    Gold Ring – "A gleaming gold ring with smooth finish and rich tone."
+
+    Inlaid Ring – "A silver ring with gemstone inlay and intricate bandwork."
+
+    Steel Signet – "A heavy steel ring with deep seal imprint and gothic design."
+
+    Inscribed Ring – "A magical ring etched with arcane glyphs and glowing runes."
+
+📿 Necklaces
+
+    Leather Cord – "A simple leather cord necklace tied with a wooden toggle."
+
+    Wooden Beads – "A necklace of carved wooden beads strung on twine."
+
+    Simple Pendant – "A circular stone pendant hanging from cord, crudely carved."
+
+    Carved Talisman – "A bone talisman with primitive carvings on a leather thong."
+
+    Stone Amulet – "A polished stone amulet engraved with mystic symbols."
+
+    Bronze Chain – "A bronze chain with oval links and natural tarnish."
+
+    Tooth Pendant – "A beast tooth pendant with sinew binding and blood stains."
+
+    Iron Pendant – "An iron medallion with a stamped sigil, worn on leather cord."
+
+    Silver Chain – "A delicate silver chain with a glowing charm attached."
+
+    Crest Pendant – "A noble pendant featuring a family crest in enamel and gold."
+
+🎒 Cloaks
+
+    Wool Cloak – "A coarse woolen cloak with visible weave, pinned at the shoulder."
+
+    Canvas Cloak – "A rough canvas cloak with frayed edges and stitched hemline."
+
+    Hooded Wrap – "A light hooded cloak, wrapped tightly around the shoulders."
+
+    Traveler’s Cloak – "A weathered cloak with road dust and a reinforced clasp."
+
+    Heavy Cloak – "A thick, dark cloak with weighted hems and storm flaps."
+
+    Leather Mantle – "A shoulder-length leather mantle with hide seams and rivets."
+
+    Fur-lined Cloak – "A regal cloak with thick fur lining and bone clasps."
+
+    Reinforced Cloak – "A cloak with embedded leather panels and stitched reinforcements."
+
+    Scout’s Drape – "A light, tattered cloak with camouflage markings and a leaf clasp."
+
+    Greatcloak – "A voluminous cloak with high collar and ornate trim."
+
+🧿 Relics (Sacred/Folk Items)
+
+    Wooden Icon – "A flat wooden carving of a saint or deity, worn with reverence."
+
+    Bone Relic – "A splintered bone tied with crimson ribbon, kept in a pouch."
+
+    Pebble Talisman – "A smooth river pebble inscribed with a holy rune."
+
+    Crude Fetish – "A bundle of sticks and feathers bound in twine and stained with ochre."
+
+    Ember Token – "A scorched wooden charm that glows faintly with inner fire."
+
+    Wax Seal – "A medallion with melted wax and stamped symbol of faith."
+
+    Saint’s Tooth – "A human tooth set in gold filigree, kept in a glass charm."
+
+    Knotted Cord – "A length of knotted twine used in old prayers, worn from use."
+
+    Ashen Token – "A locket filled with sacred ash, wrapped in leather binding."
+
+    Votive Charm – "A tiny tin figurine shaped like a limb or heart, offered in ritual."
+
+🪬 Charms (Pagan/Talismanic)
+
+    String of Teeth – "A necklace made of beast teeth strung on sinew, tribal and menacing."
+
+    Feathered Fetish – "A twig charm wrapped with colored feathers and bone beads."
+
+    Coin Charm – "An old coin pierced and worn as an amulet, inscribed with luck symbols."
+
+    Herb Pouch – "A small leather pouch filled with dried herbs and sacred roots."
+
+    Fingerbone Charm – "A carved finger bone hung from red thread, engraved with runes."
+
+    Woven Bracelet – "A braided bracelet made of flax, charms woven into its fibers."
+
+    Tusk Amulet – "A boar tusk engraved with primal symbols, hanging on rope."
+
+    Scrimshaw Token – "A piece of carved ivory depicting ancient myths and beasts."
+
+    Fetish Bundle – "A ritual bundle of cloth, herbs, claws, and string tied in layers."
+
+    Rune-Stone – "A palm-sized stone with deep runes etched into its surface, faintly glowing."

@@ -1,0 +1,92 @@
+{
+  "name": " Vintorus, the Corkscrewed Warden",
+  "portrait": "monsters/haunted_wine_rack.webp",
+  "max_life": 400,
+  "size": "Huge",
+  "power_factor": 50,
+  "max_initiative": 2,
+  "armor": 50,
+  "fire_armor": 50,
+  "poison_armor": 50,
+  "skills": [
+    {
+      "name": "Corkscrew Crush",
+      "icon": "skills/claw.svg",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [2, 4]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Physical" }
+                },
+                "min_value": 1,
+                "max_value": 2,
+                "min_duration": 2,
+                "max_duration": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Boiling Vintage Spray",
+      "icon": "skills/fireball.svg",
+      "cooldown": 5.0,
+      "targets": [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Fire" }
+                },
+                "min_value": 3,
+                "max_value": 6,
+                "min_duration": 2,
+                "max_duration": 2
+              }
+            },
+            {
+              "ApplyStatus": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Poison" }
+                },
+                "min_value": 1,
+                "max_value": 3,
+                "min_duration": 4,
+                "max_duration": 4
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Summon Oathbound Bottles",
+      "icon": "skills/heal.svg",
+      "cooldown": 10.0,
+      "targets": [
+        {
+          "target_type": "Friend",
+          "target_dead": true,
+          "effects": [
+            {
+              "Resurrect": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -244,7 +244,7 @@ async fn handle_new_session(user_id: &str, master_store: &MasterStore) -> Result
         None,
     );
 
-    if let Some(base_weapon) = master_store.items_store.get("shortsword").cloned() {
+    if let Some(base_weapon) = master_store.items_store.get("dagger").cloned() {
         let _ = player_controller::equip_item(
             &mut player_specs,
             &mut player_inventory,

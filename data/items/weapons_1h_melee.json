@@ -1,7 +1,7 @@
 {
-  "shortsword": {
-    "name": "Shortsword",
-    "icon": "items/shortsword.webp",
+  "dagger": {
+    "name": "Dagger",
+    "icon": "items/dagger.webp",
     "slot": "Weapon",
     "categories": ["AttackWeapon", "MeleeWeapon"],
     "weapon_specs": {
@@ -14,10 +14,10 @@
       "crit_damage": 1
     }
   },
-  "shortsword_unique": {
-    "name": "Fasty Slicy",
-    "description": "Forged in myth and honed in the kitchens of legend, this short sword once sliced onions so fast it brought tears to gods and mortals alike.",
-    "icon": "items/shortsword.webp",
+  "dagger_unique": {
+    "name": "Onions Slicer",
+    "description": "Forged in myth and honed in the kitchens of legend, this knife once sliced onions so fast it brought tears to gods and mortals alike.",
+    "icon": "items/onions_slicer.webp",
     "slot": "Weapon",
     "categories": ["AttackWeapon", "MeleeWeapon"],
     "weapon_specs": {
@@ -47,21 +47,20 @@
       }
     ]
   },
-  "battleaxe": {
-    "name": "Battleaxe",
-    "icon": "items/battleaxe.webp",
+  "shortsword": {
+    "name": "Shortsword",
+    "icon": "items/shortsword.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
     "categories": ["AttackWeapon", "MeleeWeapon"],
     "weapon_specs": {
       "range": "Melee",
-      "shape": "Vertical2",
-      "cooldown": 3.5,
+      "cooldown": 2.0,
       "damage": {
-        "Physical": [4, 10]
+        "Physical": [4, 7]
       },
       "crit_chances": 0.05,
       "crit_damage": 1
-    }
+    },
+    "min_area_level": 40
   }
 }

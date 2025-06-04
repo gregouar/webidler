@@ -131,7 +131,13 @@ fn roll_base_item(
         .entries
         .iter()
         .filter(|l| {
-            area_level >= l.min_area_level.unwrap_or(AreaLevel::MIN)
+            area_level
+                >= l.min_area_level.unwrap_or(
+                    items_store
+                        .get(&l.item_id)
+                        .map(|i| i.min_area_level)
+                        .unwrap_or(AreaLevel::MIN),
+                )
                 && area_level <= l.max_area_level.unwrap_or(AreaLevel::MAX)
         })
         .collect();

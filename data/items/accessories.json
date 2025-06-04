@@ -1,9 +1,47 @@
 {
-  "cloak": {
-    "name": "Cloak",
-    "icon": "items/cloak.webp",
+  "wool_cloak": {
+    "name": "Wool Cloak",
+    "icon": "items/wool_cloak.webp",
     "slot": "Accessory",
     "categories": ["Accessory", "Cloak"],
-    "rarity": "Magic"
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {"Armor":"Fire"},
+        "modifier": "Flat",
+        "min": 0.15,
+        "max": 0.15
+      },
+      {
+        "scope": "Global",
+        "stat": {"Armor":"Poison"},
+        "modifier": "Flat",
+        "min": 0.15,
+        "max": 0.15
+      }
+    ]
+  },
+  "hooded_wrap": {
+    "name": "Hooded Wrap",
+    "icon": "items/hooded_wrap.webp",
+    "slot": "Accessory",
+    "categories": ["Accessory", "Cloak"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {"Armor":"Fire"},
+        "modifier": "Flat",
+        "min": 0.30,
+        "max": 0.30
+      },
+      {
+        "scope": "Global",
+        "stat": {"Armor":"Poison"},
+        "modifier": "Flat",
+        "min": 0.30,
+        "max": 0.30
+      }
+    ],
+    "min_area_level": 40
   }
 }

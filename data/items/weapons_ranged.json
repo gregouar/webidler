@@ -15,5 +15,23 @@
       "crit_chances": 0.08,
       "crit_damage": 2
     }
+  },
+  "hunting_bow": {
+    "name": "Hunting Bow",
+    "icon": "items/hunting_bow.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "RangedWeapon"],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [8, 12]
+      },
+      "crit_chances": 0.08,
+      "crit_damage": 2
+    },
+    "min_area_level": 40
   }
 }

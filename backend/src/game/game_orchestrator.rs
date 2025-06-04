@@ -108,13 +108,16 @@ async fn control_entities(
                     world_controller::decrease_area_level(world_state, amount);
                     world_state.going_back = 0;
                 }
-                let (monster_specs, monster_states) = monsters_wave::generate_monsters_wave(
-                    &game_data.world_blueprint,
-                    game_data.world_state.read(),
-                    &master_store.monster_specs_store,
-                )?;
+
+                let (monster_specs, monster_states, is_boss) =
+                    monsters_wave::generate_monsters_wave(
+                        &game_data.world_blueprint,
+                        game_data.world_state.read(),
+                        &master_store.monster_specs_store,
+                    )?;
                 game_data.monster_specs = LazySyncer::new(monster_specs);
                 game_data.monster_states = monster_states;
+                game_data.world_state.mutate().is_boss = is_boss;
 
                 game_data.wave_completed = false;
             }
@@ -156,6 +159,14 @@ async fn update_entities(
 fn respawn_player(game_data: &mut GameInstanceData) {
     game_data.monster_specs.mutate().clear();
     game_data.monster_states.clear();
+
+    player_updater::update_player_specs(
+        game_data.player_specs.mutate(),
+        &game_data.player_state,
+        game_data.player_inventory.read(),
+        &game_data.passives_tree_specs,
+        game_data.passives_tree_state.read(),
+    );
 
     game_data.player_state = PlayerState::init(game_data.player_specs.read());
 
