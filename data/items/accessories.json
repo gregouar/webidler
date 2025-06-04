@@ -9,15 +9,15 @@
         "scope": "Global",
         "stat": {"Armor":"Fire"},
         "modifier": "Flat",
-        "min": 0.15,
-        "max": 0.15
+        "min": 15,
+        "max": 15
       },
       {
         "scope": "Global",
         "stat": {"Armor":"Poison"},
         "modifier": "Flat",
-        "min": 0.15,
-        "max": 0.15
+        "min": 15,
+        "max": 15
       }
     ]
   },
@@ -31,15 +31,15 @@
         "scope": "Global",
         "stat": {"Armor":"Fire"},
         "modifier": "Flat",
-        "min": 0.30,
-        "max": 0.30
+        "min": 30,
+        "max": 30
       },
       {
         "scope": "Global",
         "stat": {"Armor":"Poison"},
         "modifier": "Flat",
-        "min": 0.30,
-        "max": 0.30
+        "min": 30,
+        "max": 30
       }
     ],
     "min_area_level": 40
