@@ -1,9 +1,9 @@
 {
   "name": " Vintorus, the Corkscrewed Warden",
   "portrait": "monsters/haunted_wine_rack.webp",
-  "max_life": 200,
+  "max_life": 400,
   "size": "Huge",
-  "power_factor": 10,
+  "power_factor": 50,
   "max_initiative": 2,
   "armor": 50,
   "fire_armor": 50,
@@ -75,18 +75,14 @@
     {
       "name": "Summon Oathbound Bottles",
       "icon": "skills/heal.svg",
-      "cooldown": 20.0,
+      "cooldown": 10.0,
       "targets": [
         {
-          "range": "Distance",
           "target_type": "Friend",
+          "target_dead": true,
           "effects": [
             {
-              "Restore": {
-                "restore_type": "Life",
-                "min": 99999999,
-                "max": 99999999
-              }
+              "Resurrect": null
             }
           ]
         }

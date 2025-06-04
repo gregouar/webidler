@@ -73,6 +73,8 @@ pub struct SkillTargetsGroup {
     pub target_type: TargetType,
     #[serde(default)]
     pub shape: SkillShape,
+    #[serde(default)]
+    pub target_dead: bool,
 
     pub effects: Vec<SkillEffect>,
 }
@@ -95,11 +97,6 @@ pub enum SkillEffectType {
         #[serde(default)]
         crit_damage: f64,
     },
-    Restore {
-        restore_type: RestoreType,
-        min: f64,
-        max: f64,
-    },
     ApplyStatus {
         status_type: StatusType,
         #[serde(default)]
@@ -109,6 +106,12 @@ pub enum SkillEffectType {
         min_duration: f64,
         max_duration: f64,
     },
+    Restore {
+        restore_type: RestoreType,
+        min: f64,
+        max: f64,
+    },
+    Resurrect,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq)]

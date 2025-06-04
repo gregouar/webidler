@@ -9,7 +9,7 @@
   "loot_tables": ["default_loot_table.json"],
   "bosses": [
     {
-      "level": 3,
+      "level": 50,
       "interval": 50,
       "spawns": [
         {

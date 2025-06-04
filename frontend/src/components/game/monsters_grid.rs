@@ -1,11 +1,10 @@
 use std::sync::Arc;
 
-use leptos::html::*;
-use leptos::prelude::*;
+use leptos::{html::*, prelude::*};
 
 use rand::Rng;
 
-use shared::data::{monster::MonsterSpecs, skill::SkillSpecs};
+use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
 
 use crate::assets::img_asset;
 use crate::components::{
@@ -123,6 +122,10 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let monster_name = specs.character_specs.name.clone();
+    let is_big = match specs.character_specs.size {
+        CharacterSize::Small | CharacterSize::Large => false,
+        CharacterSize::Huge | CharacterSize::Gargantuan => true,
+    };
 
     let health = Memo::new(move |_| {
         game_context
@@ -256,8 +259,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             <div class="relative flex flex-col gap-2 col-span-3 h-full">
                 <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Bottom>
                     <HorizontalProgressBar
-                        class:h-2
-                        class:sm:h-4
+                        class=if is_big { "h-3 sm:h-6" } else { "h-2 sm:h-4" }
                         bar_color="bg-gradient-to-b from-red-500 to-red-700"
                         value=health_percent
                         text=monster_name.clone()

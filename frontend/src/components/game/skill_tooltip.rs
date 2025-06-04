@@ -146,20 +146,6 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
             }}
         }
         .into_any(),
-        SkillEffectType::Restore {
-            restore_type,
-            min,
-            max,
-        } => view! {
-            <EffectLi>
-                "Restore "<span class="font-semibold">{format_min_max(min, max)}</span>
-                {match restore_type {
-                    RestoreType::Life => "Life",
-                    RestoreType::Mana => "Mana",
-                }}
-            </EffectLi>
-        }
-        .into_any(),
         SkillEffectType::ApplyStatus {
             status_type,
             min_value,
@@ -191,6 +177,21 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                     }
                 }
         }
+        SkillEffectType::Restore {
+            restore_type,
+            min,
+            max,
+        } => view! {
+            <EffectLi>
+                "Restore "<span class="font-semibold">{format_min_max(min, max)}</span>
+                {match restore_type {
+                    RestoreType::Life => "Life",
+                    RestoreType::Mana => "Mana",
+                }}
+            </EffectLi>
+        }
+        .into_any(),
+        SkillEffectType::Resurrect => view! { <EffectLi>"Resurrect"</EffectLi> }.into_any(),
     }
 }
 

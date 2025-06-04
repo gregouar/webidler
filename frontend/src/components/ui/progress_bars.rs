@@ -13,6 +13,7 @@ pub fn HorizontalProgressBar(
     text: Option<String>, // TODO: Dynamic?
     // Instant reset
     #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
+    #[prop(optional)] class: Option<&'static str>,
 ) -> impl IntoView {
     let set_value = move || {
         if reset.get() {
@@ -63,12 +64,16 @@ pub fn HorizontalProgressBar(
             }
             "
         </style>
-        <div class="
-        relative flex w-full
-        rounded-lg
-        bg-stone-900 border border-neutral-950 
-        shadow-md
-        ">
+        <div class=format!(
+            "
+            relative flex w-full
+            rounded-lg
+            bg-stone-900 border border-neutral-950 
+            shadow-md
+            {}
+            ",
+            class.unwrap_or_default(),
+        )>
             <div
                 class=move || format!("flex flex-col {} rounded-lg {}", bar_color, transition())
                 style:width=move || format!("{}%", set_value())

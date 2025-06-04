@@ -100,6 +100,12 @@ pub fn restore_character(target: &mut Target, restore_type: RestoreType, amount:
     }
 }
 
+pub fn resuscitate_character(target: &mut Target) {
+    let (_, (target_specs, target_state)) = target;
+    target_state.is_alive = true;
+    target_state.life = target_specs.max_life;
+}
+
 pub fn apply_status(
     target: &mut Target,
     status_type: StatusType,

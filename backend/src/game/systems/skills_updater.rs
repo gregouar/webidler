@@ -140,12 +140,6 @@ pub fn compute_skill_specs_effect<'a, I>(
                     *max > 0.0
                 });
             }
-            SkillEffectType::Restore { min, max, .. } => {
-                if effect.stat == StatType::SpellPower {
-                    min.apply_effect(effect);
-                    max.apply_effect(effect);
-                }
-            }
             SkillEffectType::ApplyStatus {
                 status_type,
                 min_value,
@@ -178,6 +172,13 @@ pub fn compute_skill_specs_effect<'a, I>(
                     }
                 }
             },
+            SkillEffectType::Restore { min, max, .. } => {
+                if effect.stat == StatType::SpellPower {
+                    min.apply_effect(effect);
+                    max.apply_effect(effect);
+                }
+            }
+            SkillEffectType::Resurrect => {}
         }
     }
 }
