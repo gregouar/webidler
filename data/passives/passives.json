@@ -241,7 +241,7 @@
         "name": "Armor",
         "icon": "passives/armor.svg",
         "x": -20,
-        "y": 5,
+        "y": -5,
         "node_type": "Armor",
         "effects": [
           {
@@ -255,8 +255,7 @@
         "name": "Armor",
         "icon": "passives/armor.svg",
         "x": -30,
-        "y": 5,
-
+        "y": -5,
         "node_type": "Armor",
         "effects": [
           {
@@ -270,7 +269,7 @@
         "name": "Block",
         "icon": "passives/armor.svg",
         "x": -20,
-        "y": -5,
+        "y": 5,
         "node_type": "Armor",
         "effects": [
           {
@@ -284,7 +283,7 @@
         "name": "Block",
         "icon": "passives/armor.svg",
         "x": -30,
-        "y": -5,
+        "y": 5,
         "node_type": "Armor",
         "effects": [
           {
@@ -851,7 +850,7 @@
       { "from": "mana_max_2", "to": "mana_max_and_regen_1" },
       { "from": "mana_regen_2", "to": "mana_max_and_regen_1" },
 
-      { "from": "gold_ul_1", "to": "armor_2" },
+      { "from": "gold_ul_1", "to": "block_2" },
       { "from": "gold_ul_1", "to": "stunning_block" },
       { "from": "gold_ul_1", "to": "attack_damage_2" },
 
@@ -859,7 +858,7 @@
       { "from": "gold_ur_1", "to": "bleeding_crit" },
       { "from": "gold_ur_1", "to": "life_max_2" },
 
-      { "from": "gold_dl_1", "to": "block_2" },
+      { "from": "gold_dl_1", "to": "armor_2" },
       { "from": "gold_dl_1", "to": "mana_shield" },
       { "from": "gold_dl_1", "to": "mana_max_2" },
 
