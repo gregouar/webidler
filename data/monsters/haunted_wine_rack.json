@@ -1,0 +1,96 @@
+{
+  "name": " Vintorus, the Corkscrewed Warden",
+  "portrait": "monsters/haunted_wine_rack.webp",
+  "max_life": 200,
+  "size": "Huge",
+  "power_factor": 10,
+  "max_initiative": 2,
+  "armor": 50,
+  "fire_armor": 50,
+  "poison_armor": 50,
+  "skills": [
+    {
+      "name": "Corkscrew Crush",
+      "icon": "skills/claw.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [2, 4]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Physical" }
+                },
+                "min_value": 2,
+                "max_value": 4,
+                "min_duration": 2,
+                "max_duration": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Boiling Vintage Spray",
+      "icon": "skills/fireball.svg",
+      "cooldown": 5.0,
+      "targets": [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Fire" }
+                },
+                "min_value": 5,
+                "max_value": 10,
+                "min_duration": 2,
+                "max_duration": 2
+              }
+            },
+            {
+              "ApplyStatus": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Poison" }
+                },
+                "min_value": 2,
+                "max_value": 4,
+                "min_duration": 4,
+                "max_duration": 4
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Summon Oathbound Bottles",
+      "icon": "skills/heal.svg",
+      "cooldown": 20.0,
+      "targets": [
+        {
+          "range": "Distance",
+          "target_type": "Friend",
+          "effects": [
+            {
+              "Restore": {
+                "restore_type": "Life",
+                "min": 99999999,
+                "max": 99999999
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

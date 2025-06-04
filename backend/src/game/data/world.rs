@@ -10,6 +10,7 @@ use super::{loot_table::LootTable, master_store::LootTablesStore};
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct WorldBlueprintSchema {
     pub specs: WorldSpecs,
+    pub bosses: Vec<BossBlueprint>,
     pub waves: Vec<MonsterWaveBlueprint>,
     pub loot_tables: Vec<String>,
 }
@@ -17,8 +18,17 @@ pub struct WorldBlueprintSchema {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct WorldBlueprint {
     pub specs: WorldSpecs,
+    pub bosses: Vec<BossBlueprint>,
     pub waves: Vec<MonsterWaveBlueprint>,
     pub loot_table: LootTable,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct BossBlueprint {
+    pub level: u16,
+    #[serde(default)]
+    pub interval: Option<u16>,
+    pub spawns: Vec<MonsterWaveSpawnBlueprint>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -61,6 +71,7 @@ impl WorldBlueprint {
                     .collect(),
             },
             specs: schema.specs,
+            bosses: schema.bosses,
             waves: schema.waves,
         })
     }
