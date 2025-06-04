@@ -42,18 +42,18 @@ pub fn generate_monsters_wave(
     world_blueprint: &WorldBlueprint,
     world_state: &WorldState,
     monsters_specs_store: &MonstersSpecsStore,
-) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>)> {
-    let monster_specs =
+) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>, bool)> {
+    let (monster_specs, is_boss) =
         generate_monsters_wave_specs(world_blueprint, world_state, monsters_specs_store)?;
     let monster_states = monster_specs.iter().map(MonsterState::init).collect();
-    Ok((monster_specs, monster_states))
+    Ok((monster_specs, monster_states, is_boss))
 }
 
 fn generate_monsters_wave_specs(
     world_blueprint: &WorldBlueprint,
     world_state: &WorldState,
     monsters_specs_store: &MonstersSpecsStore,
-) -> Result<Vec<MonsterSpecs>> {
+) -> Result<(Vec<MonsterSpecs>, bool)> {
     let available_bosses: Vec<_> = world_blueprint
         .bosses
         .iter()
@@ -63,33 +63,30 @@ fn generate_monsters_wave_specs(
         })
         .collect();
 
-    if available_bosses.is_empty() {
-        let available_waves: Vec<_> = world_blueprint
-            .waves
-            .iter()
-            .filter(|wave| {
-                world_state.area_level >= wave.min_level.unwrap_or(AreaLevel::MIN)
-                    && world_state.area_level <= wave.max_level.unwrap_or(AreaLevel::MAX)
-            })
-            .collect();
-
-        rng::random_weighted_pick(&available_waves).map(|wave| {
-            Ok(generate_all_monsters_specs(
-                &wave.spawns,
-                world_state,
-                monsters_specs_store,
-            ))
-        })
-    } else {
-        rng::random_weighted_pick(&available_bosses).map(|boss| {
-            Ok(generate_all_monsters_specs(
-                &boss.spawns,
-                world_state,
-                monsters_specs_store,
-            ))
-        })
+    if let Some(boss) = rng::random_weighted_pick(&available_bosses) {
+        return Ok((
+            generate_all_monsters_specs(&boss.spawns, world_state, monsters_specs_store),
+            true,
+        ));
     }
-    .unwrap_or(Err(anyhow::format_err!("no monster wave available")))
+
+    let available_waves: Vec<_> = world_blueprint
+        .waves
+        .iter()
+        .filter(|wave| {
+            world_state.area_level >= wave.min_level.unwrap_or(AreaLevel::MIN)
+                && world_state.area_level <= wave.max_level.unwrap_or(AreaLevel::MAX)
+        })
+        .collect();
+
+    if let Some(wave) = rng::random_weighted_pick(&available_waves) {
+        return Ok((
+            generate_all_monsters_specs(&wave.spawns, world_state, monsters_specs_store),
+            false,
+        ));
+    }
+
+    Err(anyhow::format_err!("no monster wave available"))
 }
 
 fn generate_all_monsters_specs(

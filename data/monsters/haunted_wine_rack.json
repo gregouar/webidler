@@ -12,7 +12,7 @@
     {
       "name": "Corkscrew Crush",
       "icon": "skills/claw.svg",
-      "cooldown": 2.0,
+      "cooldown": 3.0,
       "targets": [
         {
           "effects": [
@@ -28,8 +28,8 @@
                 "status_type": {
                   "DamageOverTime": { "damage_type": "Physical" }
                 },
-                "min_value": 2,
-                "max_value": 4,
+                "min_value": 1,
+                "max_value": 2,
                 "min_duration": 2,
                 "max_duration": 2
               }
@@ -51,8 +51,8 @@
                 "status_type": {
                   "DamageOverTime": { "damage_type": "Fire" }
                 },
-                "min_value": 5,
-                "max_value": 10,
+                "min_value": 3,
+                "max_value": 6,
                 "min_duration": 2,
                 "max_duration": 2
               }
@@ -62,8 +62,8 @@
                 "status_type": {
                   "DamageOverTime": { "damage_type": "Poison" }
                 },
-                "min_value": 2,
-                "max_value": 4,
+                "min_value": 1,
+                "max_value": 3,
                 "min_duration": 4,
                 "max_duration": 4
               }

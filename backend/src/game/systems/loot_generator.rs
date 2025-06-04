@@ -136,7 +136,7 @@ fn roll_base_item(
                     items_store
                         .get(&l.item_id)
                         .map(|i| i.min_area_level)
-                        .unwrap_or_default(),
+                        .unwrap_or(AreaLevel::MIN),
                 )
                 && area_level <= l.max_area_level.unwrap_or(AreaLevel::MAX)
         })

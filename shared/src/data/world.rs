@@ -14,7 +14,9 @@ pub struct WorldSpecs {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct WorldState {
     pub area_level: AreaLevel,
+    pub is_boss: bool,
     pub waves_done: u8,
+
     pub auto_progress: bool,
     pub going_back: u16,
 }
