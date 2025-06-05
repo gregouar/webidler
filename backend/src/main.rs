@@ -1,8 +1,6 @@
 use std::net::SocketAddr;
 
 use axum::{
-    extract::{FromRef, State},
-    response::Json,
     routing::{any, get},
     Router,
 };
@@ -15,35 +13,12 @@ use tower_http::{
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-use shared::http::server::PlayersCountResponse;
-
 use backend::{
-    db::pool::{self, DbPool},
+    app_state::AppState,
+    db::pool,
     game::{data::master_store::MasterStore, session::SessionsStore},
-    tasks, ws_connect,
+    rest, tasks, ws_connect,
 };
-
-#[derive(Debug, Clone)]
-struct AppState {
-    db_pool: DbPool,
-    master_store: MasterStore,
-    sessions_store: SessionsStore,
-}
-impl FromRef<AppState> for DbPool {
-    fn from_ref(app_state: &AppState) -> DbPool {
-        app_state.db_pool.clone()
-    }
-}
-impl FromRef<AppState> for MasterStore {
-    fn from_ref(app_state: &AppState) -> MasterStore {
-        app_state.master_store.clone()
-    }
-}
-impl FromRef<AppState> for SessionsStore {
-    fn from_ref(app_state: &AppState) -> SessionsStore {
-        app_state.sessions_store.clone()
-    }
-}
 
 #[tokio::main]
 async fn main() {
@@ -90,11 +65,14 @@ async fn main() {
 
     let sessions_store = SessionsStore::new();
 
-    let purge_sessions_handle = tokio::spawn(tasks::purge_sessions(sessions_store.clone()));
+    let purge_sessions_handle = tokio::spawn(tasks::purge_sessions(
+        db_pool.clone(),
+        sessions_store.clone(),
+    ));
 
     let app = Router::new()
         .route("/", get(|| async { "OK" }))
-        .route("/players", get(get_players_count))
+        .merge(rest::routes())
         .route("/ws", any(ws_connect::ws_handler))
         .with_state(AppState {
             db_pool,
@@ -119,12 +97,4 @@ async fn main() {
     }
 
     purge_sessions_handle.abort();
-}
-
-async fn get_players_count(
-    State(sessions_store): State<SessionsStore>,
-) -> Json<PlayersCountResponse> {
-    Json(PlayersCountResponse {
-        value: *sessions_store.players.lock().unwrap(),
-    })
 }

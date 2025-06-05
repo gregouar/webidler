@@ -12,19 +12,25 @@ impl_into_message! {
     #[derive(Serialize, Deserialize, Debug, Clone,)]
     pub enum ClientMessage {
         Heartbeat,
+
         Connect(ClientConnectMessage),
+
         UseSkill(UseSkillMessage),
         SetAutoSkill(SetAutoSkillMessage),
         LevelUpSkill(LevelUpSkillMessage),
+
         LevelUpPlayer(LevelUpPlayerMessage),
+        PurchasePassive(PurchasePassiveMessage),
+
         EquipItem(EquipItemMessage),
         UnequipItem(UnequipItemMessage),
         SellItems(SellItemsMessage),
+
         FilterLoot(FilterLootMessage),
         PickupLoot(PickUpLootMessage),
+
         SetAutoProgress(SetAutoProgressMessage),
         GoBack(GoBackLevelMessage),
-        PurchasePassive(PurchasePassiveMessage),
     }
 }
 
@@ -64,6 +70,11 @@ pub struct LevelUpPlayerMessage {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct PurchasePassiveMessage {
+    pub node_id: PassiveNodeId,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EquipItemMessage {
     pub item_index: u8,
 }
@@ -96,9 +107,4 @@ pub struct GoBackLevelMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetAutoProgressMessage {
     pub value: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct PurchasePassiveMessage {
-    pub node_id: PassiveNodeId,
 }

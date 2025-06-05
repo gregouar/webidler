@@ -10,6 +10,8 @@ services:
       - 80:80
       - 443:443
     restart: always
+    networks:
+      - backend_net
 
   backend:
     image: backend:latest
@@ -25,5 +27,26 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    
-  
+    networks:
+      - backend_net
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: webidler
+      POSTGRES_USER: webidler_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend_net
+
+volumes:
+  pgdata:
+
+networks:
+  backend_net:

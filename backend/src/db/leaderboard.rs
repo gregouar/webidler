@@ -3,6 +3,8 @@ use sqlx::types::chrono::{DateTime, Utc};
 use sqlx::FromRow;
 use std::time::Duration;
 
+use super::pool::DbPool;
+
 #[derive(Debug, FromRow)]
 pub struct LeaderboardEntry {
     pub id: i32,
@@ -14,7 +16,7 @@ pub struct LeaderboardEntry {
 }
 
 pub async fn insert_leaderboard_entry(
-    pool: &sqlx::AnyPool,
+    pool: &DbPool,
     player_name: &str,
     area_level: AreaLevel,
     time_played: Duration,
@@ -37,7 +39,7 @@ pub async fn insert_leaderboard_entry(
 }
 
 pub async fn get_top_leaderboard(
-    pool: &sqlx::AnyPool,
+    pool: &DbPool,
     limit: i64,
 ) -> Result<Vec<LeaderboardEntry>, sqlx::Error> {
     let entries = sqlx::query_as(

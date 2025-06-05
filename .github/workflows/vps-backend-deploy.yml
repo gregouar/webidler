@@ -48,6 +48,7 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
+            echo "POSTGRES_PASSWORD=${{ secrets.VPS_DB_PASSWORD }}" > /webidler/tmp/.env
             docker load < /webidler/tmp/backend.tar
             docker compose -f /webidler/tmp/docker-compose.yml stop
             docker compose -f /webidler/tmp/docker-compose.yml down
