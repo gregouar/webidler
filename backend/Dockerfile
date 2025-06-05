@@ -5,7 +5,7 @@ WORKDIR /app
 COPY ./backend ./backend
 COPY ./shared ./shared
 WORKDIR /app/backend  
-RUN cargo build --release --bin backend --features postgres
+RUN cargo build --release --no-default-features --bin backend --features postgres 
 RUN strip ./target/release/backend -o /backend
 
 FROM debian:bookworm-slim
