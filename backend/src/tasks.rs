@@ -41,7 +41,7 @@ pub async fn purge_sessions(db_pool: db::DbPool, sessions_store: SessionsStore) 
 
 pub async fn save_session_score(db_pool: &db::DbPool, session: &Session) {
     if let Err(e) = db::leaderboard::insert_leaderboard_entry(
-        &db_pool,
+        db_pool,
         &session.data.player_specs.read().character_specs.name,
         session.data.game_stats.highest_area_level,
         session.data.game_stats.elapsed_time,

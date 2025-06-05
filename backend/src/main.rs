@@ -4,7 +4,6 @@ use axum::{
     routing::{any, get},
     Router,
 };
-use dotenvy;
 use http::{HeaderValue, Method};
 use tokio::signal;
 use tower_http::{
