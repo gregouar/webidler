@@ -1,6 +1,6 @@
-FROM rust:1.86.0-slim-bookworm as base
+FROM rust:1.86.0-slim-bookworm AS base
 
-FROM base as builder
+FROM base AS builder
 WORKDIR /app  
 COPY ./backend ./backend
 COPY ./shared ./shared
