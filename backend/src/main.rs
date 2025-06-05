@@ -6,6 +6,7 @@ use axum::{
     routing::{any, get},
     Router,
 };
+use dotenvy;
 use http::{HeaderValue, Method};
 use tokio::signal;
 use tower_http::{
@@ -17,14 +18,21 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use shared::http::server::PlayersCountResponse;
 
 use backend::{
+    db::pool::{self, DbPool},
     game::{data::master_store::MasterStore, session::SessionsStore},
     tasks, ws_connect,
 };
 
 #[derive(Debug, Clone)]
 struct AppState {
+    db_pool: DbPool,
     master_store: MasterStore,
     sessions_store: SessionsStore,
+}
+impl FromRef<AppState> for DbPool {
+    fn from_ref(app_state: &AppState) -> DbPool {
+        app_state.db_pool.clone()
+    }
 }
 impl FromRef<AppState> for MasterStore {
     fn from_ref(app_state: &AppState) -> MasterStore {
@@ -41,6 +49,21 @@ impl FromRef<AppState> for SessionsStore {
 async fn main() {
     // enable logging, since log defaults to silent
     std::env::set_var("RUST_LOG", "debug");
+
+    let _ = dotenvy::dotenv();
+
+    // TODO: depending on environment, only install necessary
+    sqlx::any::install_default_drivers();
+
+    let db_pool =
+        pool::create_pool(&std::env::var("DATABASE_URL").expect("missing 'DATABASE_URL' setting"))
+            .await
+            .expect("failed to connect to database");
+
+    sqlx::migrate!()
+        .run(&db_pool)
+        .await
+        .expect("failed to migrate database");
 
     tracing_subscriber::registry()
         .with(
@@ -74,6 +97,7 @@ async fn main() {
         .route("/players", get(get_players_count))
         .route("/ws", any(ws_connect::ws_handler))
         .with_state(AppState {
+            db_pool,
             master_store,
             sessions_store,
         })
