@@ -15,7 +15,7 @@ pub fn LeaderboardPage() -> impl IntoView {
     let navigate_to_menu = {
         let navigate = use_navigate();
         move |_| {
-            navigate("", Default::default());
+            navigate("/", Default::default());
         }
     };
 
