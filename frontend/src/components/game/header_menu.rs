@@ -1,5 +1,4 @@
-use leptos::html::*;
-use leptos::prelude::*;
+use leptos::{html::*, prelude::*};
 
 use crate::assets::{img_asset, music_asset};
 use crate::components::ui::{
@@ -12,8 +11,10 @@ use super::GameContext;
 
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
-    let navigate = leptos_router::hooks::use_navigate();
-    let abandon_quest = move |_| navigate("/", Default::default());
+    let abandon_quest = {
+        let navigate = leptos_router::hooks::use_navigate();
+        move |_| navigate("/", Default::default())
+    };
 
     let musics = {
         let game_context = expect_context::<GameContext>();

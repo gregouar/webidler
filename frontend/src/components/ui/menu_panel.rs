@@ -1,8 +1,6 @@
 use std::time::Duration;
 
-use leptos::ev::KeyboardEvent;
-use leptos::html::*;
-use leptos::prelude::*;
+use leptos::{ev::KeyboardEvent, html::*, prelude::*};
 
 #[component]
 pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {

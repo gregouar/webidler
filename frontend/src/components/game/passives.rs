@@ -1,6 +1,4 @@
-use leptos::html::*;
-use leptos::prelude::*;
-use leptos::web_sys;
+use leptos::{html::*, prelude::*, web_sys};
 use shared::data::item_affix::AffixEffectScope;
 
 use std::sync::Arc;

@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
-use leptos::html::*;
-use leptos::prelude::*;
+use leptos::{html::*, prelude::*};
 
 use shared::messages::client::{
     LevelUpPlayerMessage, LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage,

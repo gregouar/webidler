@@ -3,8 +3,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use strum::IntoEnumIterator;
 
-use leptos::html::*;
-use leptos::prelude::*;
+use leptos::{html::*, prelude::*};
 use leptos_use::on_click_outside;
 
 use shared::data::{

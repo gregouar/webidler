@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
-use leptos::html::*;
-use leptos::prelude::*;
+use leptos::{html::*, prelude::*};
 use leptos_use::{use_mouse, use_window_size};
 
 #[derive(Clone, Debug)]

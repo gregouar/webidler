@@ -1,5 +1,4 @@
-use leptos::html::*;
-use leptos::prelude::*;
+use leptos::{html::*, prelude::*};
 
 use shared::data::loot::LootState;
 use shared::messages::client::PickUpLootMessage;
@@ -14,12 +13,7 @@ use super::item_card::ItemCard;
 pub fn LootQueue() -> impl IntoView {
     let conn = expect_context::<WebsocketContext>();
     let pickup_loot = move |loot_identifier| {
-        conn.send(
-            &PickUpLootMessage {
-                loot_identifier,
-            }
-            .into(),
-        );
+        conn.send(&PickUpLootMessage { loot_identifier }.into());
     };
 
     let game_context = expect_context::<GameContext>();

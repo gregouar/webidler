@@ -1,8 +1,6 @@
 use codee::string::JsonSerdeCodec;
-use leptos::html::*;
-use leptos::prelude::*;
-use leptos_use::storage::use_local_storage;
-use leptos_use::storage::use_session_storage;
+use leptos::{html::*, prelude::*};
+use leptos_use::storage;
 
 use shared::messages::client::ClientConnectMessage;
 use shared::messages::server::{ErrorType, InitGameMessage, ServerMessage, SyncGameStateMessage};
@@ -30,9 +28,9 @@ pub fn GameInstance() -> impl IntoView {
     let confirm_state = provide_confirm_context();
 
     let (session_key, set_session_key, _) =
-        use_session_storage::<Option<SessionKey>, JsonSerdeCodec>("session_key");
+        storage::use_session_storage::<Option<SessionKey>, JsonSerdeCodec>("session_key");
 
-    let (user_id, _, _) = use_local_storage::<String, JsonSerdeCodec>("user_id");
+    let (user_id, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("user_id");
 
     Effect::new({
         let conn = expect_context::<WebsocketContext>();

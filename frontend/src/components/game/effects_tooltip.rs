@@ -1,8 +1,7 @@
 use std::collections::HashMap;
-
-use leptos::html::*;
-use leptos::prelude::*;
 use strum::IntoEnumIterator;
+
+use leptos::{html::*, prelude::*};
 
 use shared::data::{
     item_affix::AffixEffectScope,

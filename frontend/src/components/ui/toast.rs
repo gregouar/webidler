@@ -1,5 +1,4 @@
-use leptos::html::*;
-use leptos::prelude::*;
+use leptos::{html::*, prelude::*};
 use leptos_toaster::*;
 
 use super::buttons::CloseButton;

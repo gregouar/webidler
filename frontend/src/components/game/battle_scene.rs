@@ -1,5 +1,4 @@
-use leptos::html::*;
-use leptos::prelude::*;
+use leptos::{html::*, prelude::*};
 
 use shared::constants::WAVES_PER_AREA_LEVEL;
 use shared::messages::client::{GoBackLevelMessage, SetAutoProgressMessage};
