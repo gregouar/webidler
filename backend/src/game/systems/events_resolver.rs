@@ -129,7 +129,7 @@ fn handle_area_completed_event(
     master_store: &MasterStore,
     area_level: AreaLevel,
 ) {
-    if let Some(item_specs) = loot_generator::generate_loot(
+    match loot_generator::generate_loot(
         area_level,
         &game_data.world_blueprint.loot_table,
         &master_store.items_store,
@@ -137,17 +137,20 @@ fn handle_area_completed_event(
         &master_store.item_adjectives_table,
         &master_store.item_nouns_table,
     ) {
-        for item_specs in loot_controller::drop_loot(
-            &game_data.player_controller,
-            game_data.queued_loot.mutate(),
-            item_specs,
-        ) {
-            player_controller::sell_item(
-                game_data.player_specs.read(),
-                game_data.player_resources.mutate(),
-                &item_specs,
-            );
+        Some(item_specs) => {
+            for item_specs in loot_controller::drop_loot(
+                &game_data.player_controller,
+                game_data.queued_loot.mutate(),
+                item_specs,
+            ) {
+                player_controller::sell_item(
+                    game_data.player_specs.read(),
+                    game_data.player_resources.mutate(),
+                    &item_specs,
+                );
+            }
         }
+        None => tracing::warn!("Failed to generate loot"),
     }
 
     let world_state = game_data.world_state.mutate();

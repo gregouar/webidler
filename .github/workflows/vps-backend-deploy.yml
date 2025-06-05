@@ -20,6 +20,9 @@ jobs:
           
       - name: lint
         run: cargo clippy & cargo fmt
+        
+      - name: test
+        run: cargo test
 
       - name: Build Docker images
         run: |

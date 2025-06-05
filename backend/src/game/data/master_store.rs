@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use futures::future::join_all;
 use std::{
     collections::HashMap,
@@ -81,7 +81,7 @@ impl MasterStore {
                 })
                 .collect::<Result<_>>()?;
 
-        Ok(MasterStore {
+        let master_store = MasterStore {
             passives_store: Arc::new(passives_store?),
             skills_store: Arc::new(skills_store?),
             items_store: Arc::new(items_store?),
@@ -91,7 +91,11 @@ impl MasterStore {
             loot_tables_store: Arc::new(loot_tables_store),
             monster_specs_store: Arc::new(monster_specs_store?),
             world_blueprints_store: Arc::new(world_blueprints_store),
-        })
+        };
+
+        verify_store_integrity(&master_store)?;
+
+        Ok(master_store)
     }
 }
 
@@ -127,4 +131,57 @@ where
     .collect::<Result<_>>()?;
 
     Ok(table.into_iter().flatten().collect())
+}
+
+fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
+    let mut errors = Vec::new();
+
+    for loot in master_store
+        .loot_tables_store
+        .values()
+        .flat_map(|t| &t.entries)
+    {
+        if master_store.items_store.get(&loot.item_id).is_none() {
+            errors.push(anyhow!("Missing item '{}' from store", loot.item_id));
+        }
+    }
+
+    for spawn in master_store.world_blueprints_store.values().flat_map(|w| {
+        w.bosses
+            .iter()
+            .flat_map(|b| &b.spawns)
+            .chain(w.waves.iter().flat_map(|w| &w.spawns))
+    }) {
+        if master_store
+            .monster_specs_store
+            .get(&spawn.monster)
+            .is_none()
+        {
+            errors.push(anyhow!("Missing monster '{}' from store", spawn.monster));
+        }
+    }
+
+    if errors.is_empty() {
+        Ok(())
+    } else {
+        Err(anyhow!(
+            "Store integrity check failed:\n{}",
+            errors
+                .iter()
+                .map(|e| format!(" - {}", e))
+                .collect::<Vec<_>>()
+                .join("\n")
+        ))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_store_integrity() -> Result<(), Box<dyn std::error::Error>> {
+        MasterStore::load_from_folder("../data").await?;
+        Ok(())
+    }
 }

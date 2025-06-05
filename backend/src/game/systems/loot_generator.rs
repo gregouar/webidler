@@ -142,6 +142,10 @@ fn roll_base_item(
         })
         .collect();
 
+    if items_available.is_empty() {
+        tracing::warn!("No base items available for level {}", area_level);
+    }
+
     rng::random_weighted_pick(&items_available)
         .and_then(|loot_entry| items_store.get(&loot_entry.item_id).cloned())
 }
