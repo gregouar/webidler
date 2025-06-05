@@ -9,8 +9,8 @@
         "scope": "Global",
         "stat": "SpellPower",
         "modifier": "Multiplier",
-        "min": 0.15,
-        "max": 0.29
+        "min": 0.20,
+        "max": 0.20
       }
     ]
   },
@@ -24,8 +24,8 @@
         "scope": "Global",
         "stat": "SpellPower",
         "modifier": "Multiplier",
-        "min": 0.20,
-        "max": 0.20
+        "min": 0.40,
+        "max": 0.40
       }
     ],
     "min_area_level": 40
