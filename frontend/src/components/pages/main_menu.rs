@@ -1,11 +1,10 @@
 use anyhow::Result;
 
-use codee::string::JsonSerdeCodec;
-use leptos::html::*;
-use leptos::prelude::*;
+use leptos::{html::*, prelude::*};
 use leptos_router::hooks::use_navigate;
+use leptos_use::storage;
 
-use leptos_use::storage::{use_local_storage, use_session_storage};
+use codee::string::JsonSerdeCodec;
 use reqwest;
 use serde_json;
 
@@ -15,7 +14,7 @@ use shared::messages::SessionKey;
 use crate::components::ui::buttons::MenuButton;
 
 #[component]
-pub fn MainMenu() -> impl IntoView {
+pub fn MainMenuPage() -> impl IntoView {
     let players_count = LocalResource::new(|| async {
         get_players_count("https://webidler.gregoirenaisse.be")
             .await
@@ -24,9 +23,9 @@ pub fn MainMenu() -> impl IntoView {
     });
 
     let (_, _, delete_session_key) =
-        use_session_storage::<Option<SessionKey>, JsonSerdeCodec>("session_key");
+        storage::use_session_storage::<Option<SessionKey>, JsonSerdeCodec>("session_key");
     let (get_user_id, set_user_id_storage, _) =
-        use_local_storage::<String, JsonSerdeCodec>("user_id");
+        storage::use_local_storage::<String, JsonSerdeCodec>("user_id");
     let user_id = RwSignal::new(get_user_id.get_untracked());
     let disable_connect = Signal::derive(move || user_id.read().is_empty());
 
@@ -47,6 +46,13 @@ pub fn MainMenu() -> impl IntoView {
             delete_session_key();
             set_user_id_storage.set(user_id.get_untracked());
             navigate("local_game", Default::default());
+        }
+    };
+
+    let navigate_to_leaderboard = {
+        let navigate = use_navigate();
+        move |_| {
+            navigate("leaderboard", Default::default());
         }
     };
 
@@ -80,6 +86,7 @@ pub fn MainMenu() -> impl IntoView {
                     <MenuButton on:click=navigate_to_local_game disabled=disable_connect>
                         "Play Locally"
                     </MenuButton>
+                    <MenuButton on:click=navigate_to_leaderboard>"Leaderboard"</MenuButton>
                 </div>
             </div>
 

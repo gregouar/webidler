@@ -1,8 +1,7 @@
 use std::sync::Arc;
-
-use leptos::html::*;
-use leptos::prelude::*;
 use strum::IntoEnumIterator;
+
+use leptos::{html::*, prelude::*};
 
 use shared::data::{
     item::{ItemRarity, ItemSlot, ItemSpecs, SkillRange, SkillShape},

@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use leptos::prelude::*;
 
 #[component]
@@ -31,6 +33,14 @@ fn comma_format(value: f64) -> String {
             .chain(std::iter::once(c))
         })
         .collect::<String>()
+}
+
+pub fn format_duration(duration: Duration) -> String {
+    let secs = duration.as_secs();
+    let hours = secs / 3600;
+    let minutes = (secs % 3600) / 60;
+    let seconds = secs % 60;
+    format!("{:02}:{:02}:{:02}", hours, minutes, seconds)
 }
 
 #[cfg(test)]

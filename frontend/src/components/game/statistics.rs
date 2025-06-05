@@ -1,14 +1,15 @@
-use leptos::html::*;
-use leptos::prelude::*;
-use shared::data::skill::SkillType;
-use std::time::Duration;
+use leptos::{html::*, prelude::*};
 
 use shared::data::{
-    skill::DamageType,
+    skill::{DamageType, SkillType},
     stat_effect::{Modifier, StatType},
 };
 
-use crate::components::ui::{buttons::CloseButton, menu_panel::MenuPanel, number::format_number};
+use crate::components::ui::{
+    buttons::CloseButton,
+    menu_panel::MenuPanel,
+    number::{format_duration, format_number},
+};
 
 use super::game_context::GameContext;
 
@@ -364,12 +365,4 @@ fn Stat(label: &'static str, value: impl Fn() -> String + 'static) -> impl IntoV
             <span class="text-amber-100 font-medium">{value()}</span>
         </div>
     }
-}
-
-fn format_duration(dur: Duration) -> String {
-    let secs = dur.as_secs();
-    let hours = secs / 3600;
-    let minutes = (secs % 3600) / 60;
-    let seconds = secs % 60;
-    format!("{:02}:{:02}:{:02}", hours, minutes, seconds)
 }

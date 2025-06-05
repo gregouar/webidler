@@ -1,5 +1,4 @@
-use leptos::html::*;
-use leptos::prelude::*;
+use leptos::{html::*, prelude::*};
 
 use crate::assets::{img_asset, music_asset};
 use crate::components::ui::{

@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
-use leptos::html::*;
-use leptos::prelude::*;
+use leptos::{html::*, prelude::*};
 
 use shared::data::character_status::StatusType;
 use shared::data::skill::RestoreType;

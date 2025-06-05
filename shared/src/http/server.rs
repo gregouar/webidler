@@ -10,7 +10,7 @@ pub struct PlayersCountResponse {
     pub value: usize,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct LeaderboardResponse {
     pub entries: Vec<LeaderboardEntry>,
 }

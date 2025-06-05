@@ -1,4 +1,3 @@
-// use leptoaster::*;
 use leptos::prelude::*;
 use leptos_meta::*;
 use leptos_router::components::{Route, Router, Routes};
@@ -22,21 +21,14 @@ pub fn App() -> impl IntoView {
         .map(|url| url.path().to_string())
         .unwrap_or_else(|| "/".to_string());
 
-    // provide_toaster();
-
     view! {
-        // <Toaster stacked={true}
-        // style:--leptoaster-info-background-color="oklch(21% 0.006 285.885)"
-        // style:--leptoaster-info-border-color="oklch(14.1% 0.005 285.823)"
-        // style:--leptoaster-info-text-color="white"
-        // />
-        // ...
         <Toaster position=ToasterPosition::BottomCenter></Toaster>
         <Router base=base_uri>
             <Routes fallback=|| "Page not found.">
-                <Route path=path!("/") view=pages::MainMenu />
-                <Route path=path!("/game") view=pages::Game />
-                <Route path=path!("/local_game") view=pages::LocalGame />
+                <Route path=path!("/") view=pages::MainMenuPage />
+                <Route path=path!("/game") view=pages::GamePage />
+                <Route path=path!("/local_game") view=pages::LocalGamePage />
+                <Route path=path!("/leaderboard") view=pages::LeaderboardPage />
             </Routes>
         </Router>
     }

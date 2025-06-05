@@ -45,7 +45,7 @@ pub async fn save_session_score(db_pool: &db::DbPool, session: &Session) {
         &session.data.player_specs.read().character_specs.name,
         session.data.game_stats.highest_area_level,
         session.data.game_stats.elapsed_time,
-        "",
+        &format!("Player deaths: {}", session.data.game_stats.player_deaths),
     )
     .await
     {
