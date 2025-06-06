@@ -10,7 +10,7 @@ pub struct LeaderboardEntry {
     pub id: i32,
     pub player_name: String,
     pub area_level: i32,
-    pub time_played_seconds: i64,
+    pub time_played_seconds: i32,
     pub created_at: DateTime<Utc>,
     pub comments: String,
 }
@@ -30,7 +30,7 @@ pub async fn insert_leaderboard_entry(
     )
     .bind(player_name)
     .bind(area_level as i32)
-    .bind(time_played.as_secs() as i64)
+    .bind(time_played.as_secs() as i32)
     .bind(comments)
     .execute(pool)
     .await?;
