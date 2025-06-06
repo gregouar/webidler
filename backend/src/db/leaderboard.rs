@@ -25,7 +25,7 @@ pub async fn insert_leaderboard_entry(
     sqlx::query(
         r#"
         INSERT INTO leaderboard (player_name, area_level, time_played_seconds, comments)
-        VALUES (?, ?, ?, ?)
+        VALUES ($1, $2, $3, $4)
         "#,
     )
     .bind(player_name)
@@ -47,7 +47,7 @@ pub async fn get_top_leaderboard(
         SELECT id, player_name, area_level, time_played_seconds, created_at,comments
         FROM leaderboard
         ORDER BY area_level DESC, time_played_seconds ASC,created_at ASC
-        LIMIT ?
+        LIMIT $1
         "#,
     )
     .bind(limit)
