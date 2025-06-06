@@ -34,8 +34,7 @@ async fn main() {
             .await
             .expect("failed to connect to database");
 
-    sqlx::migrate!()
-        .run(&db_pool)
+    pool::migrate(&db_pool)
         .await
         .expect("failed to migrate database");
 

@@ -1,3 +1,4 @@
+use sqlx::migrate::Migrator;
 use std::str::FromStr;
 
 #[cfg(feature = "sqlite")]
@@ -25,4 +26,22 @@ pub async fn create_pool(database_url: &str) -> Result<DbPool, sqlx::Error> {
         .max_connections(5)
         .connect_with(options)
         .await
+}
+
+#[cfg(feature = "sqlite")]
+pub async fn migrate(db_pool: &DbPool) -> Result<(), sqlx::Error> {
+    Migrator::new(std::path::Path::new("./backend/migrations/sqlite"))
+        .await?
+        .run(db_pool)
+        .await?;
+    Ok(())
+}
+
+#[cfg(feature = "postgres")]
+pub async fn migrate(db_pool: &DbPool) -> Result<(), sqlx::Error> {
+    Migrator::new(std::path::Path::new("./backend/migrations/postgres"))
+        .await?
+        .run(db_pool)
+        .await?;
+    Ok(())
 }
