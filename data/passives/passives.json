@@ -660,7 +660,7 @@
         "size": 1,
         "triggers": [
           {
-            "description": "Restore Area Level x 5 Health at the end of each wave.",
+            "description": "Restore Area Level x 3 Health at the end of each wave.",
             "OnWaveCompleted": {},
             "ApplySkillEffects": {
               "target": "Source",
@@ -668,8 +668,8 @@
                 {
                   "Restore": {
                     "restore_type": "Life",
-                    "min": 5,
-                    "max": 5
+                    "min": 3,
+                    "max": 3
                   }
                 }
               ],
