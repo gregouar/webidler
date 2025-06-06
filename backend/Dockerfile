@@ -10,6 +10,7 @@ RUN strip ./target/release/backend -o /backend
 
 FROM debian:bookworm-slim
 COPY --from=builder /backend /
+COPY ./migrations ./migrations
 
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 RUN chown appuser:appgroup /backend -R

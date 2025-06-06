@@ -30,7 +30,7 @@ pub async fn create_pool(database_url: &str) -> Result<DbPool, sqlx::Error> {
 
 #[cfg(feature = "sqlite")]
 pub async fn migrate(db_pool: &DbPool) -> Result<(), sqlx::Error> {
-    Migrator::new(std::path::Path::new("./backend/migrations/sqlite"))
+    Migrator::new(std::path::Path::new("./migrations/sqlite"))
         .await?
         .run(db_pool)
         .await?;
@@ -39,7 +39,7 @@ pub async fn migrate(db_pool: &DbPool) -> Result<(), sqlx::Error> {
 
 #[cfg(feature = "postgres")]
 pub async fn migrate(db_pool: &DbPool) -> Result<(), sqlx::Error> {
-    Migrator::new(std::path::Path::new("./backend/migrations/postgres"))
+    Migrator::new(std::path::Path::new("./migrations/postgres"))
         .await?
         .run(db_pool)
         .await?;
