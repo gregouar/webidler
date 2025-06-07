@@ -7,7 +7,7 @@ use crate::data::world::AreaLevel;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayersCountResponse {
-    pub value: i32,
+    pub value: i64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

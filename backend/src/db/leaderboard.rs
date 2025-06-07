@@ -1,18 +1,17 @@
 use shared::data::world::AreaLevel;
 use shared::messages::SessionId;
-use sqlx::types::chrono::{DateTime, Utc};
 use sqlx::FromRow;
 use std::time::Duration;
 
-use super::pool::DbPool;
+use super::{pool::DbPool, utc_datetime::UtcDateTime};
 
 #[derive(Debug, FromRow)]
 pub struct LeaderboardEntry {
     pub session_id: SessionId,
     pub player_name: String,
-    pub area_level: i32,
-    pub time_played_seconds: i32,
-    pub created_at: DateTime<Utc>,
+    pub area_level: i64,
+    pub time_played_seconds: i64,
+    pub created_at: UtcDateTime,
     pub comments: String,
 }
 
@@ -53,15 +52,16 @@ pub async fn get_top_leaderboard(
     db_pool: &DbPool,
     limit: i64,
 ) -> Result<Vec<LeaderboardEntry>, sqlx::Error> {
-    let entries = sqlx::query_as(
-        r#"
+    let entries = sqlx::query_as!(
+        LeaderboardEntry,
+        "
         SELECT *
         FROM leaderboard
         ORDER BY area_level DESC, time_played_seconds ASC,created_at ASC
         LIMIT $1
-        "#,
+        ",
+        limit
     )
-    .bind(limit)
     .fetch_all(db_pool)
     .await?;
 

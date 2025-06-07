@@ -39,13 +39,13 @@ impl<'a> GameInstance<'a> {
     }
 
     pub async fn run(mut self) -> Result<()> {
-        game_sync::sync_init_game(self.client_conn, &mut self.game_data).await?;
+        game_sync::sync_init_game(self.client_conn, self.game_data).await?;
 
         let mut game_timer = GameTimer::new();
         loop {
-            game_orchestrator::reset_entities(&mut self.game_data).await;
+            game_orchestrator::reset_entities(self.game_data).await;
 
-            if game_inputs::handle_client_inputs(self.client_conn, &mut self.game_data)
+            if game_inputs::handle_client_inputs(self.client_conn, self.game_data)
                 .await
                 .is_break()
             {
@@ -54,21 +54,20 @@ impl<'a> GameInstance<'a> {
 
             game_orchestrator::tick(
                 &mut self.events_queue,
-                &mut self.game_data,
+                self.game_data,
                 &self.master_store,
                 game_timer.delta(),
             )
             .await?;
 
-            if let Err(e) = game_sync::sync_update_game(self.client_conn, &mut self.game_data).await
-            {
+            if let Err(e) = game_sync::sync_update_game(self.client_conn, self.game_data).await {
                 tracing::warn!("failed to sync client: {}", e);
             }
 
             if game_timer.should_autosave() {
                 let (db_pool, session_id, game_data) = (
                     self.db_pool.clone(),
-                    self.session_id.clone(),
+                    *self.session_id,
                     self.game_data.clone(), // TODO: Do something else
                 );
                 tokio::spawn(async move {

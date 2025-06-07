@@ -28,7 +28,7 @@ pub async fn get_leaderboard(
                 player_name: x.player_name,
                 area_level: x.area_level as u16,
                 time_played: Duration::from_secs(x.time_played_seconds as u64),
-                created_at: x.created_at,
+                created_at: x.created_at.into(),
                 comments: x.comments,
             })
             .collect(),

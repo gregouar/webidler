@@ -1,5 +1,5 @@
 CREATE TABLE leaderboard (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     player_name TEXT NOT NULL,
     area_level INTEGER NOT NULL,
     time_played_seconds INTEGER NOT NULL,

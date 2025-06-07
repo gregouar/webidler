@@ -13,17 +13,6 @@ pub struct SessionEntry {
 }
 
 pub async fn create_session(db_pool: &DbPool, user_id: &UserId) -> Result<SessionId, sqlx::Error> {
-    // let (session_id,) = sqlx::query_as(
-    //     r#"
-    //     INSERT INTO game_sessions (user_id)
-    //     VALUES ($1)
-    //     RETURNING session_id
-    //     "#,
-    // )
-    // .bind(user_id)
-    // .fetch_one(db_pool)
-    // .await?;
-
     Ok(sqlx::query_scalar!(
         "
         INSERT INTO game_sessions (user_id)
@@ -37,21 +26,21 @@ pub async fn create_session(db_pool: &DbPool, user_id: &UserId) -> Result<Sessio
 }
 
 pub async fn is_user_in_session(db_pool: &DbPool, user_id: &UserId) -> Result<bool, sqlx::Error> {
-    Ok(sqlx::query(
+    Ok(sqlx::query!(
         r#"
-        SELECT 1
+        SELECT session_id
         FROM game_sessions
         WHERE user_id = $1 AND ended_at IS NULL
         "#,
+        user_id
     )
-    .bind(user_id)
     .fetch_optional(db_pool)
     .await?
     .is_some())
 }
 
-pub async fn count_active_sessions(db_pool: &DbPool) -> Result<i32, sqlx::Error> {
-    let (count,) = sqlx::query_as(
+pub async fn count_active_sessions(db_pool: &DbPool) -> Result<i64, sqlx::Error> {
+    Ok(sqlx::query_scalar!(
         r#"
         SELECT COUNT(session_id) as count 
         FROM game_sessions
@@ -59,20 +48,18 @@ pub async fn count_active_sessions(db_pool: &DbPool) -> Result<i32, sqlx::Error>
         "#,
     )
     .fetch_one(db_pool)
-    .await?;
-
-    Ok(count)
+    .await?)
 }
 
 pub async fn end_session(db_pool: &DbPool, session_id: &SessionId) -> Result<(), sqlx::Error> {
-    sqlx::query(
+    sqlx::query!(
         r#"
         UPDATE game_sessions
         SET ended_at = CURRENT_TIMESTAMP
         WHERE session_id = $1
         "#,
+        session_id,
     )
-    .bind(session_id)
     .execute(db_pool)
     .await?;
 
@@ -80,7 +67,7 @@ pub async fn end_session(db_pool: &DbPool, session_id: &SessionId) -> Result<(),
 }
 
 pub async fn clean_all_sessions(db_pool: &DbPool) -> Result<(), sqlx::Error> {
-    sqlx::query(
+    sqlx::query!(
         r#"
         UPDATE game_sessions
         SET ended_at = CURRENT_TIMESTAMP

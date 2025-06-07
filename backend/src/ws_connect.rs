@@ -142,7 +142,7 @@ async fn handle_connect(
 
     conn.send(
         &ConnectMessage {
-            session_id: session_id,
+            session_id,
             session_key: session.session_key,
         }
         .into(),
