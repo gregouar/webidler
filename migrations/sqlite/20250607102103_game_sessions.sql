@@ -1,6 +1,6 @@
 CREATE TABLE game_sessions (
     session_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    user_id STRING,
+    user_id TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     ended_at TIMESTAMP DEFAULT NULL,
 
