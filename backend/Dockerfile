@@ -4,7 +4,7 @@ FROM base AS builder
 WORKDIR /app  
 COPY ./backend ./backend
 COPY ./shared ./shared
-COPY ./sqlx-data/sqlx-data.json ./sqlx-data.json
+COPY ./.sqlx ./.sqlx
 
 WORKDIR /app/backend  
 
