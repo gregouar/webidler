@@ -14,8 +14,8 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use backend::{
     app_state::AppState,
-    db::pool,
-    game::{data::master_store::MasterStore, session::SessionsStore},
+    db::{self, pool},
+    game::{data::master_store::MasterStore, sessions::SessionsStore},
     rest, tasks, ws_connect,
 };
 
@@ -37,6 +37,10 @@ async fn main() {
     pool::migrate(&db_pool)
         .await
         .expect("failed to migrate database");
+
+    db::game_sessions::clean_all_sessions(&db_pool)
+        .await
+        .expect("couldn't clean game sessions");
 
     tracing_subscriber::registry()
         .with(

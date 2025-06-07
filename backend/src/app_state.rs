@@ -2,7 +2,7 @@ use axum::extract::FromRef;
 
 pub use crate::{
     db::pool::DbPool,
-    game::{data::master_store::MasterStore, session::SessionsStore},
+    game::{data::master_store::MasterStore, sessions::SessionsStore},
 };
 
 #[derive(Debug, Clone)]

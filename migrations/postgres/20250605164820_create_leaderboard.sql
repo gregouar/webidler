@@ -1,4 +1,3 @@
-
 CREATE TABLE leaderboard (
     id SERIAL PRIMARY KEY,
     player_name VARCHAR(200) NOT NULL,
@@ -8,4 +7,8 @@ CREATE TABLE leaderboard (
     comments TEXT NOT NULL
 );
 
-CREATE INDEX idx_leaderboard_highest_level ON leaderboard (area_level DESC, time_played_seconds ASC, created_at ASC);
+CREATE INDEX idx_leaderboard_highest_level ON leaderboard (
+    area_level DESC,
+    time_played_seconds ASC,
+    created_at ASC
+);

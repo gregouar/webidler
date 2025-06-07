@@ -65,8 +65,8 @@
     "description": "A minor healing spell for yourself",
     "icon": "skills/heal.svg",
     "skill_type": "Spell",
-    "cooldown": 30,
-    "mana_cost": 20,
+    "cooldown": 20,
+    "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {

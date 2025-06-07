@@ -23,7 +23,7 @@ pub struct WebSocketConnection {
 
 impl WebSocketConnection {
     /// Establish a connection on the socket, starting a listening job in background
-    pub fn establish(socket: WebSocket, who: SocketAddr, timeout: Duration) -> Self {
+    pub fn establish(socket: WebSocket, addr: SocketAddr, timeout: Duration) -> Self {
         let (ws_sender, mut ws_receiver) = socket.split();
         let (receiver_tx, receiver_rx) = mpsc::channel(10);
 
@@ -31,7 +31,7 @@ impl WebSocketConnection {
         tokio::spawn(async move {
             loop {
                 match time::timeout(timeout, ws_receiver.next()).await {
-                    Ok(Some(Ok(m))) => match process_message(m, who) {
+                    Ok(Some(Ok(m))) => match process_message(m, addr) {
                         ControlFlow::Continue(Some(m)) => {
                             if receiver_tx.send(m).await.is_err() {
                                 // If channel is closed, we can stop

@@ -9,9 +9,8 @@ use reqwest;
 use serde_json;
 
 use shared::http::server::PlayersCountResponse;
-use shared::messages::SessionKey;
 
-use crate::components::ui::buttons::MenuButton;
+use crate::components::{game::game_instance::SessionInfos, ui::buttons::MenuButton};
 
 #[component]
 pub fn MainMenuPage() -> impl IntoView {
@@ -22,8 +21,8 @@ pub fn MainMenuPage() -> impl IntoView {
             .unwrap_or_default()
     });
 
-    let (_, _, delete_session_key) =
-        storage::use_session_storage::<Option<SessionKey>, JsonSerdeCodec>("session_key");
+    let (_, _, delete_session_infos) =
+        storage::use_session_storage::<Option<SessionInfos>, JsonSerdeCodec>("session_infos");
     let (get_user_id, set_user_id_storage, _) =
         storage::use_local_storage::<String, JsonSerdeCodec>("user_id");
     let user_id = RwSignal::new(get_user_id.get_untracked());
@@ -31,9 +30,9 @@ pub fn MainMenuPage() -> impl IntoView {
 
     let navigate_to_online_game = {
         let navigate = use_navigate();
-        let delete_session_key = delete_session_key.clone();
+        let delete_session_infos = delete_session_infos.clone();
         move |_| {
-            delete_session_key();
+            delete_session_infos();
             set_user_id_storage.set(user_id.get_untracked());
             navigate("game", Default::default());
         }
@@ -41,9 +40,9 @@ pub fn MainMenuPage() -> impl IntoView {
 
     let navigate_to_local_game = {
         let navigate = use_navigate();
-        let delete_session_key = delete_session_key.clone();
+        let delete_session_infos = delete_session_infos.clone();
         move |_| {
-            delete_session_key();
+            delete_session_infos();
             set_user_id_storage.set(user_id.get_untracked());
             navigate("local_game", Default::default());
         }

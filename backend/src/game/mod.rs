@@ -5,7 +5,7 @@ pub mod game_instance;
 pub mod game_orchestrator;
 pub mod game_sync;
 pub mod game_timer;
-pub mod session;
+pub mod sessions;
 pub mod systems;
 pub mod utils;
 

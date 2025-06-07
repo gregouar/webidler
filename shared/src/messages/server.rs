@@ -9,7 +9,7 @@ use crate::data::{
     world::{WorldSpecs, WorldState},
 };
 
-use super::{macros::impl_into_message, SessionKey};
+use super::{macros::impl_into_message, SessionId, SessionKey};
 
 impl_into_message! {
     #[derive(Serialize, Deserialize, Debug, Clone,)]
@@ -23,7 +23,7 @@ impl_into_message! {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ConnectMessage {
-    pub greeting: String,
+    pub session_id: SessionId,
     pub session_key: SessionKey,
 }
 

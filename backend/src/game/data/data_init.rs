@@ -22,6 +22,7 @@ impl DataInit<&WorldSpecs> for WorldState {
             waves_done: 0,
             auto_progress: true,
             going_back: 0,
+            end_quest: false,
         }
     }
 }

@@ -1,19 +1,42 @@
+use std::sync::Arc;
+
 use leptos::{html::*, prelude::*};
 
-use crate::assets::{img_asset, music_asset};
-use crate::components::ui::{
-    buttons::MenuButton,
-    number::Number,
-    tooltip::{StaticTooltip, StaticTooltipPosition},
+use shared::messages::client::ClientMessage;
+
+use crate::{
+    assets::{img_asset, music_asset},
+    components::{
+        ui::{
+            buttons::MenuButton,
+            confirm::ConfirmContext,
+            number::Number,
+            tooltip::{StaticTooltip, StaticTooltipPosition},
+        },
+        websocket::WebsocketContext,
+    },
 };
 
 use super::GameContext;
 
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
-    let abandon_quest = {
+    let abandon_quest = Arc::new({
+        let conn = expect_context::<WebsocketContext>();
         let navigate = leptos_router::hooks::use_navigate();
-        move |_| navigate("/", Default::default())
+        move || {
+            conn.send(&ClientMessage::EndQuest);
+            navigate("/", Default::default());
+        }
+    });
+    let try_abandon_quest = {
+        let confirm_context = expect_context::<ConfirmContext>();
+        move |_| {
+            (confirm_context.confirm)(
+                "Abandoning the quest will erase all progress, are you sure?".to_string(),
+                abandon_quest.clone(),
+            );
+        }
     };
 
     let musics = {
@@ -95,7 +118,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     game_context.open_passives.set(false);
                     game_context.open_statistics.set(!game_context.open_statistics.get());
                 }>"Statistics"</MenuButton>
-                <MenuButton on:click=abandon_quest>"Abandon Quest"</MenuButton>
+                <MenuButton on:click=try_abandon_quest>"Abandon Quest"</MenuButton>
             </div>
         </div>
     }

@@ -6,7 +6,7 @@ use crate::data::{
     world::AreaLevel,
 };
 
-use super::{macros::impl_into_message, SessionKey};
+use super::{macros::impl_into_message, SessionId, SessionKey};
 
 impl_into_message! {
     #[derive(Serialize, Deserialize, Debug, Clone,)]
@@ -14,6 +14,8 @@ impl_into_message! {
         Heartbeat,
 
         Connect(ClientConnectMessage),
+
+        EndQuest,
 
         UseSkill(UseSkillMessage),
         SetAutoSkill(SetAutoSkillMessage),
@@ -44,6 +46,7 @@ impl Default for ClientMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ClientConnectMessage {
     pub user_id: String,
+    pub session_id: Option<SessionId>,
     pub session_key: Option<SessionKey>,
 }
 

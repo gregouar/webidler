@@ -19,4 +19,6 @@ pub struct WorldState {
 
     pub auto_progress: bool,
     pub going_back: u16,
+
+    pub end_quest: bool,
 }

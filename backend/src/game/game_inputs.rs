@@ -42,6 +42,9 @@ fn handle_client_message(
 ) -> Option<ErrorMessage> {
     match msg {
         ClientMessage::Heartbeat => {}
+        ClientMessage::EndQuest => {
+            game_data.world_state.mutate().end_quest = true;
+        }
         ClientMessage::UseSkill(m) => {
             game_data
                 .player_controller

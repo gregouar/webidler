@@ -1,9 +1,6 @@
 use std::time::{Duration, Instant};
 
-use crate::{
-    db,
-    game::session::{Session, SessionsStore},
-};
+use crate::{db, game::sessions::SessionsStore, game::systems::sessions_controller};
 
 pub async fn purge_sessions(db_pool: db::DbPool, sessions_store: SessionsStore) {
     loop {
@@ -16,9 +13,9 @@ pub async fn purge_sessions(db_pool: db::DbPool, sessions_store: SessionsStore) 
             let mut sessions = sessions_store.sessions.lock().unwrap();
             let sessions_to_drop: Vec<_> = sessions
                 .iter()
-                .filter_map(|(k, session)| {
+                .filter_map(|(session_id, session)| {
                     if session.last_active < purge_before {
-                        Some(k)
+                        Some(session_id)
                     } else {
                         None
                     }
@@ -26,29 +23,18 @@ pub async fn purge_sessions(db_pool: db::DbPool, sessions_store: SessionsStore) 
                 .cloned()
                 .collect();
 
-            for k in sessions_to_drop {
-                if let Some(session) = sessions.remove(&k) {
-                    dropped_sessions.push(session);
+            for session_id in sessions_to_drop {
+                if let Some(session) = sessions.remove(&session_id) {
+                    dropped_sessions.push((session_id, session));
                 }
             }
         }
 
-        for session in dropped_sessions {
-            save_session_score(&db_pool, &session).await;
+        for (session_id, session) in dropped_sessions {
+            if let Err(e) = sessions_controller::end_session(&db_pool, &session_id, &session).await
+            {
+                tracing::error!("failed to end game session '{}': {}", session_id, e);
+            }
         }
-    }
-}
-
-pub async fn save_session_score(db_pool: &db::DbPool, session: &Session) {
-    if let Err(e) = db::leaderboard::insert_leaderboard_entry(
-        db_pool,
-        &session.data.player_specs.read().character_specs.name,
-        session.data.game_stats.highest_area_level,
-        session.data.game_stats.elapsed_time,
-        &format!("Player deaths: {}", session.data.game_stats.player_deaths),
-    )
-    .await
-    {
-        tracing::error!("Failed to save session score to db: {}", e);
     }
 }
