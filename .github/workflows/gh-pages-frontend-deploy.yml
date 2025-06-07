@@ -1,9 +1,15 @@
-name: Deploy to Github Pages
+name: Frontend
 
 on:
   push:
-    branches: ['main']
-    paths: ['frontend/**', 'shared/**', 'assets/**', '.github/workflows/gh-pages-frontend-deploy.yml']
+    branches: ["main"]
+    paths:
+      [
+        "frontend/**",
+        "shared/**",
+        "assets/**",
+        ".github/workflows/gh-pages-frontend-deploy.yml",
+      ]
   workflow_dispatch:
 
 permissions:
@@ -19,7 +25,6 @@ concurrency:
 
 jobs:
   Frontend-Build-and-deploy-to-Github-Pages:
-
     timeout-minutes: 10
 
     environment:
@@ -58,8 +63,6 @@ jobs:
           ./trunk build --release --public-url "${GITHUB_REPOSITORY#*/}"
           cp dist/index.html dist/404.html
 
-
-
       # Deploy with Github Static Pages
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -71,7 +74,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload dist dir
-          path: './frontend/dist'
+          path: "./frontend/dist"
 
       - name: Deploy to GitHub Pages 🚀
         id: deployment
