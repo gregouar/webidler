@@ -6,8 +6,6 @@ COPY ./backend ./backend
 COPY ./shared ./shared
 COPY ./.sqlx ./.sqlx
 
-WORKDIR /app/backend  
-
 ENV SQLX_OFFLINE=true
 RUN cargo build --release --no-default-features --bin backend --features postgres 
 RUN strip ./target/release/backend -o /backend
