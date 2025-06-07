@@ -4,7 +4,14 @@ on:
   push:
     branches: ["main"]
     paths:
-      ["docker-compose.yml", "backend/**", "shared/**", "nginx/**", "data/**"]
+      [
+        "docker-compose.yml",
+        "backend/**",
+        "shared/**",
+        "nginx/**",
+        "data/**",
+        ".github/workflows/vps-backend-deploy.yml",
+      ]
 
 jobs:
   Backend-Build-and-deploy-to-VPS:
