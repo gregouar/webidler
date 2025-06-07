@@ -28,8 +28,8 @@ pub fn LeaderboardPage() -> impl IntoView {
                 <div class="flex flex-col space-y-2">
                     <div class="w-full mx-auto mb-6 text-left">
                         <LeaderboardPanel />
+                        <MenuButton on:click=navigate_to_menu>"Back"</MenuButton>
                     </div>
-                    <MenuButton on:click=navigate_to_menu>"Back"</MenuButton>
                 </div>
             </div>
         </main>
