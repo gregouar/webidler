@@ -182,7 +182,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
             max,
         } => view! {
             <EffectLi>
-                "Restore "<span class="font-semibold">{format_min_max(min, max)}</span>
+                "Restore "<span class="font-semibold">{format_min_max(min, max)}</span>" "
                 {match restore_type {
                     RestoreType::Life => "Life",
                     RestoreType::Mana => "Mana",
