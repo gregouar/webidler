@@ -23,8 +23,8 @@ pub async fn upsert_leaderboard_entry(
     time_played: Duration,
     comments: &str,
 ) -> Result<(), sqlx::Error> {
-    let area_level = area_level as i32;
-    let time_played_seconds = time_played.as_secs() as i32;
+    let area_level = area_level as i64;
+    let time_played_seconds = time_played.as_secs() as i64;
     sqlx::query!(
         r#"
         INSERT INTO leaderboard (session_id, player_name, area_level, time_played_seconds, comments)
