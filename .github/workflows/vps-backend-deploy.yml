@@ -59,7 +59,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: sqlx-data
-          path: .sqlx/
+          path: .sqlx/*
 
       - name: Run tests
         run: cargo test --no-default-features --features postgres
