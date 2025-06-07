@@ -54,12 +54,21 @@ jobs:
           cargo sqlx prepare --workspace -- --bin backend --features postgres --no-default-features
         env:
           DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
+
+      - name: Debug working directory and files
+        run: |
+          echo "Current dir:"
+          pwd
+          echo "Listing files in current directory:"
+          ls -la
+          echo "Looking for .sqlx folder:"
+          ls -la .sqlx || echo ".sqlx folder not found"
           
       - name: Upload SQLx Data
         uses: actions/upload-artifact@v4
         with:
           name: sqlx-data
-          path: .sqlx/*
+          path: .sqlx
 
       - name: Run tests
         run: cargo test --no-default-features --features postgres
@@ -79,7 +88,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: sqlx-data
-          path: .sqlx/
+          path: .sqlx
 
       - name: Build Docker images
         run: |
