@@ -51,7 +51,7 @@ jobs:
         run: |
           cargo install sqlx-cli --no-default-features --features postgres
           cargo sqlx migrate run --source migrations/postgres
-          cargo sqlx prepare --workspace  --no-default-features --features postgres
+          cargo sqlx prepare --features postgres --no-default-features --workspace
         env:
           DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
 
