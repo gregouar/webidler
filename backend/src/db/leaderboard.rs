@@ -52,7 +52,7 @@ pub async fn get_top_leaderboard(
     db_pool: &DbPool,
     limit: i64,
 ) -> Result<Vec<LeaderboardEntry>, sqlx::Error> {
-    Ok(sqlx::query_as!(
+    sqlx::query_as!(
         LeaderboardEntry,
         "
         SELECT *
@@ -63,5 +63,5 @@ pub async fn get_top_leaderboard(
         limit
     )
     .fetch_all(db_pool)
-    .await?)
+    .await
 }

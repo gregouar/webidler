@@ -45,3 +45,9 @@ impl GameTimer {
         }
     }
 }
+
+impl Default for GameTimer {
+    fn default() -> Self {
+        Self::new()
+    }
+}

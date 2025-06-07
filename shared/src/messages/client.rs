@@ -37,6 +37,7 @@ impl_into_message! {
 }
 
 // Use default to generate heartbeats
+#[allow(clippy::derivable_impls)]
 impl Default for ClientMessage {
     fn default() -> Self {
         ClientMessage::Heartbeat

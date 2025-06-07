@@ -4,7 +4,9 @@ FROM base AS builder
 WORKDIR /app  
 COPY ./backend ./backend
 COPY ./shared ./shared
-COPY ./.sqlx ./.sqlx
+COPY ./.sqlx ./backend/.sqlx
+
+WORKDIR /app/backend  
 
 ENV SQLX_OFFLINE=true
 RUN cargo build --release --no-default-features --bin backend --features postgres 

@@ -13,7 +13,7 @@ pub struct SessionEntry {
 }
 
 pub async fn create_session(db_pool: &DbPool, user_id: &UserId) -> Result<SessionId, sqlx::Error> {
-    Ok(sqlx::query_scalar!(
+    sqlx::query_scalar!(
         "
         INSERT INTO game_sessions (user_id)
         VALUES ($1)
@@ -22,7 +22,7 @@ pub async fn create_session(db_pool: &DbPool, user_id: &UserId) -> Result<Sessio
         user_id
     )
     .fetch_one(db_pool)
-    .await? as SessionId)
+    .await
 }
 
 pub async fn is_user_in_session(db_pool: &DbPool, user_id: &UserId) -> Result<bool, sqlx::Error> {
@@ -40,7 +40,7 @@ pub async fn is_user_in_session(db_pool: &DbPool, user_id: &UserId) -> Result<bo
 }
 
 pub async fn count_active_sessions(db_pool: &DbPool) -> Result<i64, sqlx::Error> {
-    Ok(sqlx::query_scalar!(
+    sqlx::query_scalar!(
         r#"
         SELECT COUNT(*) as "count!" 
         FROM game_sessions
@@ -48,7 +48,7 @@ pub async fn count_active_sessions(db_pool: &DbPool) -> Result<i64, sqlx::Error>
         "#,
     )
     .fetch_one(db_pool)
-    .await?)
+    .await
 }
 
 pub async fn end_session(db_pool: &DbPool, session_id: &SessionId) -> Result<(), sqlx::Error> {
