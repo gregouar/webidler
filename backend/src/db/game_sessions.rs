@@ -42,7 +42,7 @@ pub async fn is_user_in_session(db_pool: &DbPool, user_id: &UserId) -> Result<bo
 pub async fn count_active_sessions(db_pool: &DbPool) -> Result<i64, sqlx::Error> {
     Ok(sqlx::query_scalar!(
         r#"
-        SELECT COUNT(session_id) as count 
+        SELECT COUNT(*) as "count!" 
         FROM game_sessions
         WHERE ended_at IS NULL
         "#,
