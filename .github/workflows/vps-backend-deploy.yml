@@ -2,27 +2,69 @@ name: Deploy to VPS
 
 on:
   push:
-    branches: ['main']
-    paths: ['docker-compose.yml','backend/**', 'shared/**', 'nginx/**', 'data/**']
+    branches: ["main"]
+    paths:
+      ["docker-compose.yml", "backend/**", "shared/**", "nginx/**", "data/**"]
 
 jobs:
   Backend-Build-and-deploy-to-VPS:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      TEST_DATABASE_URL: postgres://test_user:test_pass@localhost:5432/test_db
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Install nightly Rust
         uses: dtolnay/rust-toolchain@nightly
         with:
           components: clippy, rustfmt
-          
+
       - name: lint
         run: cargo clippy & cargo fmt
-        
-      - name: test
+
+      # - name: Install SQLx CLI
+      #   run: cargo install sqlx-cli --no-default-features --features postgres
+
+      # - name: Run migrations
+      #   run: sqlx migrate run
+      #   env:
+      #     DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
+
+      - name: Prepare SQLx Offline Data
+        run: |
+          cargo install sqlx-cli --no-default-features --features postgres
+          sqlx prepare --workspace
+        env:
+          DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
+
+      # - name: Upload SQLx Data
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: sqlx-data
+      #     path: sqlx-data.json
+
+      - name: Run tests
         run: cargo test
+        env:
+          DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
 
       - name: Build Docker images
         run: |
@@ -53,5 +95,3 @@ jobs:
             docker compose -f /webidler/tmp/docker-compose.yml stop
             docker compose -f /webidler/tmp/docker-compose.yml down
             docker compose -f /webidler/tmp/docker-compose.yml up -d
-            
-            
