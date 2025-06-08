@@ -72,11 +72,8 @@ pub enum StatType {
     Speed(#[serde(default)] Option<SkillType>),
     MovementSpeed,
     GoldFind,
-    // Special ?
     LifeOnHit(#[serde(default)] HitTrigger),
     ManaOnHit(#[serde(default)] HitTrigger),
-    // TODO: ReducedManaCost?
-    // TODO: TriggerSkill (effect trigger + Box Skill) => separate because cannot be hashed/copy etc
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

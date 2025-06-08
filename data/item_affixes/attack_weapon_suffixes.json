@@ -21,7 +21,7 @@
         },
         "modifier": "Multiplier",
         "min": 0.05,
-        "max": 0.15
+        "max": 0.1
       }
     ]
   },

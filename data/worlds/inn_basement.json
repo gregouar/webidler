@@ -28,7 +28,7 @@
   "waves": [
     {
       "min_level": 1,
-      "max_level": 10,
+      "max_level": 9,
       "weight": 1000,
       "spawns": [
         {
@@ -40,7 +40,7 @@
     },
     {
       "min_level": 5,
-      "max_level": 15,
+      "max_level": 14,
       "weight": 1000,
       "spawns": [
         {
