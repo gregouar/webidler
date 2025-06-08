@@ -60,7 +60,7 @@ pub fn LeaderboardPanel() -> impl IntoView {
                                     key=|(i,_)| *i
                                     let:((i, entry))
                                 >
-                                    <div class="bg-zinc-800 border border-zinc-700 rounded-xl p-4 shadow hover:shadow-lg transition-shadow duration-200">
+                                    <div class="bg-zinc-800 border border-zinc-700 rounded-xl p-4 shadow-lg transition-shadow duration-200">
                                         <div class="flex justify-between items-center mb-2">
                                             <div class="flex items-center space-x-3">
                                                 <div class="text-2xl font-bold text-amber-300">

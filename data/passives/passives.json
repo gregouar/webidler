@@ -808,7 +808,7 @@
         "size": 1,
         "triggers": [
           {
-            "description": "Taking a hit grants +20% Speed for 2s and stacks +20% Damage for 2s.",
+            "description": "Taking a hit grants +20% Attack Speed for 2s and stacks +20% Attack Damage for 2s.",
             "OnTakeHit": { "is_hurt": true },
             "ApplySkillEffects": {
               "effects": [
@@ -830,7 +830,7 @@
                   "ApplyStatus": {
                     "status_type": {
                       "StatModifier": {
-                        "stat": { "Speed": {} }
+                        "stat": { "Speed": "Attack" }
                       }
                     },
                     "min_value": 0.2,
