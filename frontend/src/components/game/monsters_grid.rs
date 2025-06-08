@@ -318,7 +318,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
     });
 
     let skill_cooldown = Signal::derive(move || {
-        if !is_dead.get() && skill_specs.cooldown > 0.0 {
+        if !is_dead.get() {
             (game_context
                 .monster_states
                 .read()
@@ -326,8 +326,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 .and_then(|m| m.skill_states.get(index))
                 .map(|s| s.elapsed_cooldown)
                 .unwrap_or(0.0)
-                * 100.0
-                / skill_specs.cooldown) as f32
+                * 100.0) as f32
         } else {
             0.0
         }

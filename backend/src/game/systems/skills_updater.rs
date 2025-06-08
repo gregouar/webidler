@@ -16,9 +16,9 @@ pub fn update_skills_states(
     skill_states: &mut [SkillState],
 ) {
     for (skill_specs, skill_state) in skill_specs.iter().zip(skill_states.iter_mut()) {
-        skill_state.elapsed_cooldown += elapsed_time.as_secs_f32();
-        if skill_state.elapsed_cooldown >= skill_specs.cooldown {
-            skill_state.elapsed_cooldown = skill_specs.cooldown;
+        skill_state.elapsed_cooldown += elapsed_time.as_secs_f32() / skill_specs.cooldown;
+        if skill_state.elapsed_cooldown >= 1.0 {
+            skill_state.elapsed_cooldown = 1.0;
             skill_state.is_ready = true;
         } else {
             skill_state.is_ready = false;

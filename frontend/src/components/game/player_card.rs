@@ -281,27 +281,14 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     });
 
     let skill_cooldown = Signal::derive(move || {
-        let cooldown = game_context
-            .player_specs
+        (game_context
+            .player_state
             .read()
-            .skills_specs
+            .skills_states
             .get(index)
-            .map(|x| x.cooldown)
-            .unwrap_or_default();
-
-        if cooldown > 0.0 {
-            (game_context
-                .player_state
-                .read()
-                .skills_states
-                .get(index)
-                .map(|x| x.elapsed_cooldown)
-                .unwrap_or_default()
-                * 100.0
-                / cooldown) as f32
-        } else {
-            0.0
-        }
+            .map(|x| x.elapsed_cooldown)
+            .unwrap_or_default()
+            * 100.0) as f32
     });
 
     // TODO: Make dynamic in case of reset?
