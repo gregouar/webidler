@@ -8,7 +8,7 @@ use shared::messages::client::PurchasePassiveMessage;
 
 use crate::assets::img_asset;
 use crate::components::{
-    game::effects_tooltip::formatted_effects_list,
+    game::{game_context::GameContext, tooltips::effects_tooltip::formatted_effects_list},
     ui::{
         buttons::CloseButton,
         menu_panel::MenuPanel,
@@ -16,8 +16,6 @@ use crate::components::{
     },
     websocket::WebsocketContext,
 };
-
-use super::game_context::GameContext;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 enum NodeStatus {

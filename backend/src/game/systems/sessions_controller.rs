@@ -98,31 +98,31 @@ pub async fn create_session(
 
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
-    player_controller::equip_skill(
-        &mut player_specs,
-        &mut player_state,
-        master_store
-            .skills_store
-            .get("magic_missile")
-            .unwrap()
-            .clone(),
-        false,
-        None,
-    );
-    player_controller::equip_skill(
-        &mut player_specs,
-        &mut player_state,
-        master_store.skills_store.get("fireball").unwrap().clone(),
-        false,
-        None,
-    );
-    player_controller::equip_skill(
-        &mut player_specs,
-        &mut player_state,
-        master_store.skills_store.get("heal").unwrap().clone(),
-        false,
-        None,
-    );
+    // player_controller::equip_skill(
+    //     &mut player_specs,
+    //     &mut player_state,
+    //     master_store
+    //         .skills_store
+    //         .get("magic_missile")
+    //         .unwrap()
+    //         .clone(),
+    //     false,
+    //     None,
+    // );
+    // player_controller::equip_skill(
+    //     &mut player_specs,
+    //     &mut player_state,
+    //     master_store.skills_store.get("fireball").unwrap().clone(),
+    //     false,
+    //     None,
+    // );
+    // player_controller::equip_skill(
+    //     &mut player_specs,
+    //     &mut player_state,
+    //     master_store.skills_store.get("heal").unwrap().clone(),
+    //     false,
+    //     None,
+    // );
 
     if let Some(base_weapon) = master_store.items_store.get("dagger").cloned() {
         let _ = player_controller::equip_item(

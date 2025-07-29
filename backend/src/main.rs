@@ -16,7 +16,7 @@ use backend::{
     app_state::AppState,
     db::{self, pool},
     game::{data::master_store::MasterStore, sessions::SessionsStore},
-    rest, tasks, ws_connect,
+    rest, tasks, websocket,
 };
 
 #[tokio::main]
@@ -72,7 +72,7 @@ async fn main() {
     let app = Router::new()
         .route("/", get(|| async { "OK" }))
         .merge(rest::routes())
-        .route("/ws", any(ws_connect::ws_handler))
+        .route("/ws", any(websocket::handler))
         .with_state(AppState {
             db_pool,
             master_store,

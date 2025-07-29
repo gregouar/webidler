@@ -8,7 +8,9 @@ use shared::data::skill::SkillTargetsGroup;
 use shared::data::skill::TargetType;
 use shared::data::skill::{SkillEffect, SkillEffectType, SkillRange, SkillShape, SkillSpecs};
 
-use crate::components::{game::effects_tooltip::damage_type_str, ui::number::format_number};
+use crate::components::ui::number::format_number;
+
+use super::effects_tooltip::damage_type_str;
 
 #[component]
 pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {

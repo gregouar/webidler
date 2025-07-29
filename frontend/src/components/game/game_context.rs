@@ -38,6 +38,7 @@ pub struct GameContext {
     pub open_inventory: RwSignal<bool>,
     pub open_passives: RwSignal<bool>,
     pub open_statistics: RwSignal<bool>,
+    pub open_skills: RwSignal<bool>,
 
     pub loot_preference: RwSignal<Option<ItemCategory>>,
 }
@@ -75,6 +76,7 @@ impl GameContext {
             open_inventory: RwSignal::new(false),
             open_passives: RwSignal::new(false),
             open_statistics: RwSignal::new(false),
+            open_skills: RwSignal::new(false),
             loot_preference: RwSignal::new(None),
         }
     }

@@ -21,7 +21,7 @@ use crate::components::{
 };
 
 use super::character::CharacterPortrait;
-use super::skill_tooltip::SkillTooltip;
+use super::tooltips::SkillTooltip;
 use super::GameContext;
 
 #[component]
@@ -128,6 +128,22 @@ pub fn PlayerCard() -> impl IntoView {
     });
     let just_leveled_up = Memo::new(move |_| game_context.player_state.read().just_leveled_up);
 
+    let buy_skill_cost = Memo::new(move |_| game_context.player_specs.read().buy_skill_cost);
+
+    let disable_buy_skill =
+        Memo::new(move |_| buy_skill_cost.get() > game_context.player_resources.read().gold);
+
+    let buy_skill_cost_tooltip = move || {
+        view! {
+            <div class="flex flex-col space-y-1 text-sm max-w-xs">
+                <span class="font-semibold text-white">{"Upgrade Cost"}</span>
+                <span class="text-zinc-300">
+                    {format!("{} Gold", format_number(buy_skill_cost.get()))}
+                </span>
+            </div>
+        }
+    };
+
     Effect::new({
         let toaster = expect_context::<Toasts>();
         move || {
@@ -232,6 +248,25 @@ pub fn PlayerCard() -> impl IntoView {
                 >
                     <PlayerSkill index=i />
                 </For>
+                <Show when=move || {
+                    game_context.player_specs.read().skills_specs.len()
+                        < game_context.player_specs.read().max_skills as usize
+                }>
+                    <div class="flex items-center justify-center">
+                        <StaticTooltip
+                            tooltip=buy_skill_cost_tooltip
+                            position=StaticTooltipPosition::Top
+                        >
+                            <FancyButton
+                                class:aspect-square
+                                on:click=move |_| game_context.open_skills.set(true)
+                                disabled=disable_buy_skill
+                            >
+                                "Buy Skill"
+                            </FancyButton>
+                        </StaticTooltip>
+                    </div>
+                </Show>
             </div>
         </div>
     }

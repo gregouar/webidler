@@ -25,13 +25,12 @@ use crate::components::{
     websocket::WebsocketContext,
 };
 
-use super::{
-    game_context::GameContext, item_card::ItemCard, item_tooltip::ItemTooltip,
-    player_card::PlayerName,
+use crate::components::game::{
+    game_context::GameContext, item_card::ItemCard, player_card::PlayerName, tooltips::ItemTooltip,
 };
 
 #[derive(Clone, Default)]
-pub struct SellQueue(RwSignal<HashSet<usize>>);
+struct SellQueue(RwSignal<HashSet<usize>>);
 
 #[component]
 pub fn InventoryPanel(open: RwSignal<bool>) -> impl IntoView {

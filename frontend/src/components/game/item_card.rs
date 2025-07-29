@@ -7,7 +7,7 @@ use shared::data::item::{ItemRarity, ItemSpecs};
 use crate::assets::img_asset;
 use crate::components::ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition};
 
-use super::item_tooltip::ItemTooltip;
+use super::tooltips::ItemTooltip;
 
 #[component]
 pub fn ItemCard(item_specs: ItemSpecs, tooltip_position: DynamicTooltipPosition) -> impl IntoView {

@@ -75,6 +75,19 @@ fn handle_client_message(
                 }
             }
         }
+        ClientMessage::BuySkill(m) => {
+            // if !player_controller::buy_skill(
+            //     game_data.player_specs.mutate(),
+            //     game_data.player_state.mutate(),
+            //     game_data.player_resources.mutate(),
+            //     &m.skill_id,
+            // ) {
+            //     return Some(ErrorMessage {
+            //         error_type: ErrorType::Game,
+            //         message: "Not enough resources to buy skill".to_string(),
+            //     });
+            // }
+        }
         ClientMessage::LevelUpPlayer(m) => {
             for _ in 0..m.amount {
                 player_controller::level_up(

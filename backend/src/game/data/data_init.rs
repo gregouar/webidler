@@ -50,6 +50,8 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             character_specs: specs.clone(),
             skills_specs: vec![],
             auto_skills: vec![],
+            max_skills: 4,
+            buy_skill_cost: 0.0,
             level: 1,
             experience_needed: 20.0,
             movement_cooldown: 2.0,

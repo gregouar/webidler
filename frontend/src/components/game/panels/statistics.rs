@@ -5,13 +5,14 @@ use shared::data::{
     stat_effect::{Modifier, StatType},
 };
 
-use crate::components::ui::{
-    buttons::CloseButton,
-    menu_panel::MenuPanel,
-    number::{format_duration, format_number},
+use crate::components::{
+    game::GameContext,
+    ui::{
+        buttons::CloseButton,
+        menu_panel::MenuPanel,
+        number::{format_duration, format_number},
+    },
 };
-
-use super::game_context::GameContext;
 
 #[component]
 pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {

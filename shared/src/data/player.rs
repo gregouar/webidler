@@ -14,8 +14,10 @@ use super::{
 pub struct PlayerSpecs {
     pub character_specs: CharacterSpecs,
     pub skills_specs: Vec<SkillSpecs>,
-
     pub auto_skills: Vec<bool>,
+
+    pub max_skills: u8,
+    pub buy_skill_cost: f64,
 
     pub level: u8,
     pub experience_needed: f64,

@@ -60,6 +60,43 @@
       }
     ]
   },
+  "poison_cloud": {
+    "name": "Poison Cloud",
+    "description": "Summon a cloud of poison that damages enemies over time",
+    "icon": "skills/poison_cloud.svg",
+    "skill_type": "Spell",
+    "cooldown": 10,
+    "mana_cost": 40,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": "SpellPower",
+        "modifier": "Multiplier",
+        "value": 0.2
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "All",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "status_type": {
+                "DamageOverTime": {
+                  "damage_type": "Poison"
+                }
+              },
+              "min_value": 4,
+              "max_value": 6,
+              "min_duration": 5,
+              "max_duration": 5
+            }
+          }
+        ]
+      }
+    ]
+  },
   "heal": {
     "name": "Heal",
     "description": "A minor healing spell for yourself",
