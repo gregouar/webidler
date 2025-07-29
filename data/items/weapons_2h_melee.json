@@ -13,7 +13,7 @@
         "Physical": [4, 10]
       },
       "crit_chances": 0.05,
-      "crit_damage": 1
+      "crit_damage": 2
     }
   },
   "woodcutter_axe": {
@@ -30,7 +30,7 @@
         "Physical": [6, 18]
       },
       "crit_chances": 0.05,
-      "crit_damage": 1
+      "crit_damage": 2
     },
     "min_area_level": 40
   }

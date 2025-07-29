@@ -6,6 +6,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt/live/webidler.gregoirenaisse.be/fullchain.pem:/etc/nginx/ssl/fullchain.pem
       - /etc/letsencrypt/live/webidler.gregoirenaisse.be/privkey.pem:/etc/nginx/ssl/privkey.pem
+      - /var/www/certbot:/var/www/certbot
     ports:
       - 80:80
       - 443:443

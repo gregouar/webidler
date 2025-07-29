@@ -13,7 +13,7 @@
         "Physical": [3, 7]
       },
       "crit_chances": 0.08,
-      "crit_damage": 2
+      "crit_damage": 1
     }
   },
   "hunting_bow": {
@@ -30,7 +30,7 @@
         "Physical": [8, 12]
       },
       "crit_chances": 0.08,
-      "crit_damage": 2
+      "crit_damage": 1
     },
     "min_area_level": 40
   }
