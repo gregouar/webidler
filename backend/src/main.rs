@@ -21,9 +21,6 @@ use backend::{
 
 #[tokio::main]
 async fn main() {
-    // enable logging, since log defaults to silent
-    std::env::set_var("RUST_LOG", "debug");
-
     let _ = dotenvy::dotenv();
 
     // TODO: depending on environment, only install necessary

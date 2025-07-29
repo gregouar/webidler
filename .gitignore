@@ -26,4 +26,5 @@ Cargo.lock
 *.db-shm
 *.db-wal
 .sqlx
+.cargo
 
