@@ -242,7 +242,14 @@ pub fn PlayerCard() -> impl IntoView {
 
             <div class="grid grid-cols-4 gap-2">
                 <For
-                    each=move || (0..game_context.player_specs.read().skills_specs.len())
+                    each=move || {
+                        0..game_context
+                            .player_specs
+                            .read()
+                            .skills_specs
+                            .len()
+                            .min(game_context.player_specs.read().max_skills as usize)
+                    }
                     key=|i| *i
                     let(i)
                 >

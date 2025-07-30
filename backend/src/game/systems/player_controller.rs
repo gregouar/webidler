@@ -10,15 +10,17 @@ use shared::data::{
 };
 
 use crate::game::{
-    data::{event::EventsQueue, DataInit},
+    data::{event::EventsQueue, master_store::SkillsStore, DataInit},
     utils::increase_factors,
 };
 
 use super::{characters_controller::Target, items_controller, skills_controller};
 
+pub const SKILL_INCREASE_COST_FACTOR: f64 = 1000.0;
+
 #[derive(Debug, Clone)]
 pub struct PlayerController {
-    pub auto_skills: Vec<bool>,
+    // pub auto_skills: Vec<bool>,
     pub use_skills: Vec<usize>,
     pub preferred_loot: Option<ItemCategory>,
 }
@@ -26,7 +28,7 @@ pub struct PlayerController {
 impl PlayerController {
     pub fn init(specs: &PlayerSpecs) -> Self {
         PlayerController {
-            auto_skills: specs.auto_skills.clone(),
+            // auto_skills: specs.auto_skills.clone(),
             use_skills: Vec::with_capacity(specs.skills_specs.len()),
             preferred_loot: None,
         }
@@ -62,6 +64,7 @@ impl PlayerController {
         let min_mana_needed = player_specs
             .skills_specs
             .iter()
+            .take(player_specs.max_skills as usize)
             .map(|s| s.mana_cost)
             .max_by(|a, b| a.total_cmp(b))
             .unwrap_or_default();
@@ -70,10 +73,11 @@ impl PlayerController {
             .skills_specs
             .iter()
             .zip(player_state.skills_states.iter_mut())
+            .take(player_specs.max_skills as usize)
             .enumerate()
         {
             // Always keep enough mana for a manual trigger, could be optional
-            if (!self.auto_skills.get(i).unwrap_or(&false)
+            if (!player_specs.auto_skills.get(i).unwrap_or(&false)
                 || (skill_specs.mana_cost > 0.0
                     && mana_available < min_mana_needed + skill_specs.mana_cost))
                 && !self.use_skills.contains(&i)
@@ -328,9 +332,46 @@ pub fn equip_skill(
     let mut skill_specs = SkillSpecs::init(base_skill_specs);
     skill_specs.item_slot = item_slot;
 
+    let index = if item_slot.is_some() {
+        0
+    } else {
+        player_specs.skills_specs.len()
+    };
+
     player_state
         .skills_states
-        .insert(0, SkillState::init(&skill_specs));
-    player_specs.skills_specs.insert(0, skill_specs);
-    player_specs.auto_skills.insert(0, auto_use);
+        .insert(index, SkillState::init(&skill_specs));
+    player_specs.skills_specs.insert(index, skill_specs);
+    player_specs.auto_skills.insert(index, auto_use);
+}
+
+pub fn buy_skill(
+    skills_store: &SkillsStore,
+    player_specs: &mut PlayerSpecs,
+    player_state: &mut PlayerState,
+    player_resources: &mut PlayerResources,
+    skill_id: &str,
+) -> bool {
+    if player_resources.gold < player_specs.buy_skill_cost {
+        return false;
+    }
+
+    if player_specs.skills_specs.len() >= player_specs.max_skills as usize {
+        return false;
+    }
+
+    if let Some(base_skill_specs) = skills_store.get(skill_id) {
+        equip_skill(
+            player_specs,
+            player_state,
+            base_skill_specs.clone(),
+            false,
+            None,
+        );
+        player_resources.gold -= player_specs.buy_skill_cost;
+        player_specs.buy_skill_cost *= SKILL_INCREASE_COST_FACTOR;
+        true
+    } else {
+        false
+    }
 }

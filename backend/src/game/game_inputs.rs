@@ -6,7 +6,7 @@ use shared::messages::{
     server::{ErrorMessage, ErrorType},
 };
 
-use crate::websocket::WebSocketConnection;
+use crate::{game::data::master_store::MasterStore, websocket::WebSocketConnection};
 
 use super::{
     game_data::GameInstanceData,
@@ -17,12 +17,13 @@ use super::{
 pub async fn handle_client_inputs(
     client_conn: &mut WebSocketConnection,
     game_data: &mut GameInstanceData,
+    master_store: &MasterStore,
 ) -> ControlFlow<(), ()> {
     // We limit the amount of events we handle in one loop
     for _ in 1..100 {
         match client_conn.poll_receive() {
             ControlFlow::Continue(Some(m)) => {
-                if let Some(error_message) = handle_client_message(game_data, m) {
+                if let Some(error_message) = handle_client_message(master_store, game_data, m) {
                     if let Err(e) = client_conn.send(&error_message.into()).await {
                         tracing::warn!("failed to send error to client: {}", e)
                     }
@@ -37,6 +38,7 @@ pub async fn handle_client_inputs(
 }
 
 fn handle_client_message(
+    master_store: &MasterStore,
     game_data: &mut GameInstanceData,
     msg: ClientMessage,
 ) -> Option<ErrorMessage> {
@@ -53,7 +55,8 @@ fn handle_client_message(
         }
         ClientMessage::SetAutoSkill(m) => {
             if let Some(x) = game_data
-                .player_controller
+                .player_specs
+                .mutate()
                 .auto_skills
                 .get_mut(m.skill_index as usize)
             {
@@ -76,17 +79,13 @@ fn handle_client_message(
             }
         }
         ClientMessage::BuySkill(m) => {
-            // if !player_controller::buy_skill(
-            //     game_data.player_specs.mutate(),
-            //     game_data.player_state.mutate(),
-            //     game_data.player_resources.mutate(),
-            //     &m.skill_id,
-            // ) {
-            //     return Some(ErrorMessage {
-            //         error_type: ErrorType::Game,
-            //         message: "Not enough resources to buy skill".to_string(),
-            //     });
-            // }
+            player_controller::buy_skill(
+                &master_store.skills_store,
+                game_data.player_specs.mutate(),
+                &mut game_data.player_state,
+                game_data.player_resources.mutate(),
+                &m.skill_id,
+            );
         }
         ClientMessage::LevelUpPlayer(m) => {
             for _ in 0..m.amount {

@@ -137,10 +137,20 @@ fn SkillCard(
     }
 }
 
+// async fn get_all_available_skills() -> Vec<(String, SkillSpecs)> {
+//     let skills_response = serde_json::from_str(
+//         &reqwest::get("https://webidler.gregoirenaisse.be/game/skills")
+//             .await?
+//             .error_for_status()?
+//             .text()
+//             .await?,
+//     )?;
+// }
+
 fn get_all_available_skills() -> Vec<(String, SkillSpecs)> {
     vec![
         (
-            "flame_burst".to_string(),
+            "fireball".to_string(),
             SkillSpecs {
                 base: BaseSkillSpecs {
                     name: "Flame Burst".to_string(),
