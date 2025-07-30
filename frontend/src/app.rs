@@ -6,6 +6,7 @@ use leptos_toaster::*;
 use url::Url;
 
 use crate::components::pages;
+use crate::components::rest::RestContext;
 
 // TODO: localization https://crates.io/crates/fluent-templates
 
@@ -20,6 +21,10 @@ pub fn App() -> impl IntoView {
         .and_then(|base| Url::parse(&base).ok())
         .map(|url| url.path().to_string())
         .unwrap_or_else(|| "/".to_string());
+
+    provide_context(RestContext::new(
+        option_env!("BACKEND_URL").unwrap_or("http://localhost:4200"),
+    ));
 
     view! {
         <Toaster position=ToasterPosition::BottomCenter></Toaster>

@@ -2,15 +2,13 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use shared::{
-    data::skill::{BaseSkillSpecs, SkillSpecs, SkillType},
-    messages::client::BuySkillMessage,
-};
+use shared::{data::skill::SkillSpecs, messages::client::BuySkillMessage};
 
 use crate::{
     assets::img_asset,
     components::{
         game::{game_context::GameContext, tooltips::SkillTooltip},
+        rest::RestContext,
         ui::{
             buttons::{CloseButton, FancyButton},
             menu_panel::MenuPanel,
@@ -55,27 +53,52 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
         }
     };
 
+    // TODO: filter and sort skills
+    let skills_response = LocalResource::new({
+        let backend = use_context::<RestContext>().unwrap();
+        move || {
+            let backend = backend.clone();
+            async move { backend.get_skills().await.unwrap_or_default() }
+        }
+    });
+
     let game_context = expect_context::<GameContext>();
     view! {
         <div class="flex flex-col gap-4 p-4">
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4
-                            bg-neutral-900 p-4 rounded-md shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] flex-1 overflow-auto max-h-[65vh]">
-                    <For
-                        each=move || get_all_available_skills().into_iter().enumerate()
-                        key=|(i, _)| *i
-                        let:((_, (skill_id,skill_specs)))
-                    >
-                        <SkillCard skill_id skill_specs selected=selected_skill />
-                    </For>
-                </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4
+            bg-neutral-900 p-4 rounded-md shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] flex-1 overflow-auto max-h-[65vh]">
 
-                <FancyButton
-                    disabled=disable_confirm
-                    on:click=buy_skill
-                >
-                    {move || format!("Confirm buying selected skill for {} Gold", format_number(game_context.player_specs.read().buy_skill_cost))}
-                </FancyButton>
+                <Suspense fallback=move || {
+                    view! { "Loading..." }
+                }>
+                    {move || {
+                        skills_response
+                            .get()
+                            .map(|skills_response| {
+                                view! {
+                                    <For
+                                    each=move || skills_response.skills.clone().into_iter()
+                                    key=|(skill_id, _)| skill_id.clone()
+                                    let:((skill_id,skill_specs))
+                                    >
+                                        <SkillCard skill_id skill_specs selected=selected_skill />
+                                    </For>
+                                }
+                            })
+                    }}
+
+                </Suspense>
             </div>
+
+            <FancyButton disabled=disable_confirm on:click=buy_skill>
+                {move || {
+                    format!(
+                        "Confirm buying selected skill for {} Gold",
+                        format_number(game_context.player_specs.read().buy_skill_cost),
+                    )
+                }}
+            </FancyButton>
+        </div>
     }
 }
 #[component]
@@ -135,42 +158,4 @@ fn SkillCard(
             </div>
         </div>
     }
-}
-
-// async fn get_all_available_skills() -> Vec<(String, SkillSpecs)> {
-//     let skills_response = serde_json::from_str(
-//         &reqwest::get("https://webidler.gregoirenaisse.be/game/skills")
-//             .await?
-//             .error_for_status()?
-//             .text()
-//             .await?,
-//     )?;
-// }
-
-fn get_all_available_skills() -> Vec<(String, SkillSpecs)> {
-    vec![
-        (
-            "fireball".to_string(),
-            SkillSpecs {
-                base: BaseSkillSpecs {
-                    name: "Flame Burst".to_string(),
-                    icon: "skills/fireball.svg".to_string(),
-                    description: "Deals fire damage to all enemies in a cone.".to_string(),
-                    skill_type: SkillType::Spell,
-                    cooldown: 3.0,
-                    mana_cost: 20.0,
-                    upgrade_cost: 150.0,
-                    upgrade_effects: vec![],
-                    targets: vec![],
-                },
-                cooldown: 3.0,
-                mana_cost: 20.0,
-                upgrade_level: 0,
-                next_upgrade_cost: 150.0,
-                targets: vec![],
-                item_slot: None,
-            },
-        ),
-        // More...
-    ]
 }

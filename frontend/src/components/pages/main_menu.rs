@@ -1,24 +1,26 @@
-use anyhow::Result;
-
 use leptos::{html::*, prelude::*};
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
+use crate::components::{
+    game::game_instance::SessionInfos, rest::RestContext, ui::buttons::MenuButton,
+};
 use codee::string::JsonSerdeCodec;
-use reqwest;
-use serde_json;
-
-use shared::http::server::PlayersCountResponse;
-
-use crate::components::{game::game_instance::SessionInfos, ui::buttons::MenuButton};
 
 #[component]
 pub fn MainMenuPage() -> impl IntoView {
-    let players_count = LocalResource::new(|| async {
-        get_players_count("https://webidler.gregoirenaisse.be")
-            .await
-            .map(|r| r.value)
-            .unwrap_or_default()
+    let players_count = LocalResource::new({
+        let backend = use_context::<RestContext>().unwrap();
+        move || {
+            let backend = backend.clone();
+            async move {
+                backend
+                    .get_players_count()
+                    .await
+                    .map(|r| r.value)
+                    .unwrap_or_default()
+            }
+        }
     });
 
     let (_, _, delete_session_infos) =
@@ -116,14 +118,4 @@ pub fn MainMenuPage() -> impl IntoView {
             </div>
         </main>
     }
-}
-
-async fn get_players_count(host: &str) -> Result<PlayersCountResponse> {
-    Ok(serde_json::from_str(
-        &reqwest::get(format!("{}/players", host))
-            .await?
-            .error_for_status()?
-            .text()
-            .await?,
-    )?)
 }
