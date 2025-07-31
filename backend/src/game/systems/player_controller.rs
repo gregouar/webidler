@@ -352,11 +352,10 @@ pub fn buy_skill(
     player_resources: &mut PlayerResources,
     skill_id: &str,
 ) -> bool {
-    if player_resources.gold < player_specs.buy_skill_cost {
-        return false;
-    }
-
-    if player_specs.skills_specs.len() >= player_specs.max_skills as usize {
+    if player_resources.gold < player_specs.buy_skill_cost
+        || player_specs.skills_specs.len() >= player_specs.max_skills as usize
+        || player_specs.bought_skills.contains(skill_id)
+    {
         return false;
     }
 
@@ -370,6 +369,7 @@ pub fn buy_skill(
         );
         player_resources.gold -= player_specs.buy_skill_cost;
         player_specs.buy_skill_cost *= SKILL_INCREASE_COST_FACTOR;
+        player_specs.bought_skills.insert(skill_id.to_string());
         true
     } else {
         false

@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
 
@@ -18,6 +18,7 @@ pub struct PlayerSpecs {
 
     pub max_skills: u8,
     pub buy_skill_cost: f64,
+    pub bought_skills: HashSet<String>,
 
     pub level: u8,
     pub experience_needed: f64,

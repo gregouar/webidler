@@ -53,48 +53,71 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
         }
     };
 
-    // TODO: filter and sort skills
     let skills_response = LocalResource::new({
         let backend = use_context::<BackendClient>().unwrap();
         move || async move { backend.get_skills().await.unwrap_or_default() }
     });
 
+    // TODO: sort by types, add dropdown to filter by type, etc
+    let available_skills = Signal::derive({
+        let game_context = expect_context::<GameContext>();
+        move || {
+            let mut skills = skills_response
+                .get()
+                .map(|skills_response| {
+                    skills_response
+                        .skills
+                        .clone()
+                        .into_iter()
+                        .filter(|(skill_id, _)| {
+                            !game_context
+                                .player_specs
+                                .read()
+                                .bought_skills
+                                .contains(skill_id)
+                        })
+                        .collect::<Vec<_>>()
+                })
+                .unwrap_or_default();
+            skills.sort_by_key(|(_, skill_specs)| skill_specs.base.name.clone());
+            skills
+        }
+    });
+
     let game_context = expect_context::<GameContext>();
     view! {
         <div class="flex flex-col gap-4 p-4">
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4
+            <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-4
             bg-neutral-900 p-4 rounded-md shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] flex-1 overflow-auto max-h-[65vh]">
 
                 <Suspense fallback=move || {
                     view! { "Loading..." }
                 }>
                     {move || {
-                        skills_response
-                            .get()
-                            .map(|skills_response| {
-                                view! {
-                                    <For
-                                    each=move || skills_response.skills.clone().into_iter()
-                                    key=|(skill_id, _)| skill_id.clone()
-                                    let:((skill_id,skill_specs))
-                                    >
-                                        <SkillCard skill_id skill_specs selected=selected_skill />
-                                    </For>
-                                }
-                            })
+                        view! {
+                            <For
+                            each=move || available_skills.get().into_iter()
+                            key=|(skill_id, _)| skill_id.clone()
+                            let:((skill_id,skill_specs))
+                            >
+                                <SkillCard skill_id skill_specs selected=selected_skill />
+                            </For>
+                        }
                     }}
 
                 </Suspense>
             </div>
 
-            <FancyButton disabled=disable_confirm on:click=buy_skill>
-                {move || {
-                    format!(
-                        "Confirm buying selected skill for {} Gold",
-                        format_number(game_context.player_specs.read().buy_skill_cost),
-                    )
-                }}
-            </FancyButton>
+            <div class="flex items-center justify-center">
+                <FancyButton disabled=disable_confirm on:click=buy_skill class:py-2 class:px-4>
+                    {move || {
+                        format!(
+                            "Confirm buying selected skill for {} Gold",
+                            format_number(game_context.player_specs.read().buy_skill_cost),
+                        )
+                    }}
+                </FancyButton>
+            </div>
         </div>
     }
 }
@@ -150,9 +173,9 @@ fn SkillCard(
             <div class="mt-2 text-lg font-bold text-white text-center">
                 {skill_specs.base.name.clone()}
             </div>
-            <div class="text-sm text-gray-400 text-center line-clamp-3">
-                {skill_specs.base.description.clone()}
-            </div>
+        // <div class="text-sm text-gray-400 text-center line-clamp-3">
+        // {skill_specs.base.description.clone()}
+        // </div>
         </div>
     }
 }
