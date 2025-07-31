@@ -29,6 +29,9 @@ pub struct GameInstanceData {
     pub player_controller: PlayerController,
     pub player_respawn_delay: Instant,
 
+    // TODO: Need to find better more granular way to handle these things...
+    // Probably need to split more between static and computed specs
+    pub monster_base_specs: Vec<MonsterSpecs>,
     pub monster_specs: LazySyncer<Vec<MonsterSpecs>>,
     pub monster_states: Vec<MonsterState>,
     pub monster_wave_delay: Instant,
@@ -61,6 +64,7 @@ impl GameInstanceData {
             player_inventory: LazySyncer::new(player_inventory),
             player_respawn_delay: Instant::now(),
 
+            monster_base_specs: Vec::new(),
             monster_specs: LazySyncer::new(Vec::new()),
             monster_states: Vec::new(),
             monster_wave_delay: Instant::now(),

@@ -172,7 +172,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                         }
                             .into_any()
                     }
-                    // TODO: Give different description, maybe get that frome somewhere else/share with effect tooltip
+                    // TODO: Give different description, maybe get that from somewhere else/share with effect tooltip
                     StatusType::StatModifier{ debuff, .. } => {
                        view! { <EffectLi>{if debuff { "Debuff" } else { "Buff" }}</EffectLi> } .into_any()
                     }

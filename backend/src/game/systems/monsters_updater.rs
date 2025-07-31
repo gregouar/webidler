@@ -5,7 +5,7 @@ use shared::data::{
     monster::{MonsterSpecs, MonsterState},
 };
 
-use crate::game::data::event::EventsQueue;
+use crate::game::{data::event::EventsQueue, systems::statuses_controller};
 
 use super::{characters_updater, skills_updater};
 
@@ -47,5 +47,25 @@ pub fn reset_monsters(monster_states: &mut [MonsterState]) {
     for monster_state in monster_states.iter_mut() {
         characters_updater::reset_character(&mut monster_state.character_state);
         skills_updater::reset_skills(&mut monster_state.skill_states);
+    }
+}
+
+pub fn update_monster_specs(
+    base_specs: &MonsterSpecs,
+    monster_specs: &mut MonsterSpecs,
+    monster_states: &MonsterState,
+) {
+    let effects = characters_updater::stats_map_to_vec(
+        &statuses_controller::generate_effects_map_from_statuses(
+            &monster_states.character_state.statuses,
+        ),
+    );
+
+    monster_specs.character_specs =
+        characters_updater::update_character_specs(&base_specs.character_specs, &effects);
+    monster_specs.skill_specs = base_specs.skill_specs.clone();
+
+    for skill_specs in monster_specs.skill_specs.iter_mut() {
+        skills_updater::apply_effects_to_skill_specs(skill_specs, &effects);
     }
 }

@@ -270,8 +270,8 @@ pub fn formatted_effects_list(
                 Flat,
             ) => {
                 merged.push(format!(
-                    "Adds {:.0}% Damage taken{}{}",
-                    effect.value * 100.0,
+                    "Adds {:.0} Damage taken{}{}",
+                    effect.value,
                     optional_damage_type_str(damage_type),
                     skill_type_str(skill_type)
                 ));

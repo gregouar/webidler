@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use shared::data::{
-    character_status::StatusType,
+    character_status::{StatusMap, StatusType},
     player::{CharacterSpecs, CharacterState},
     stat_effect::EffectsMap,
 };
@@ -45,10 +45,9 @@ pub fn update_character_statuses(
         });
 }
 
-pub fn generate_effects_map_from_statuses(character_state: &CharacterState) -> EffectsMap {
+pub fn generate_effects_map_from_statuses(statuses: &StatusMap) -> EffectsMap {
     EffectsMap(
-        character_state
-            .statuses
+        statuses
             .iter()
             .filter_map(|(s, v)| match s {
                 StatusType::StatModifier {
