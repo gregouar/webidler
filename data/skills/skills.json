@@ -120,5 +120,91 @@
         ]
       }
     ]
+  },
+  "frailty_curse": {
+    "name": "Frailty Curse",
+    "description": "A curse that makes enemies take more damage from all sources",
+    "icon": "skills/skull.svg",
+    "skill_type": "Spell",
+    "cooldown": 15,
+    "mana_cost": 25,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": "SpellPower",
+        "modifier": "Flat",
+        "value": 0.1
+      }
+    ],
+    "targets": [
+      {
+        "range": "All",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "status_type": {
+                "StatModifier": {
+                  "stat": {
+                    "DamageTaken": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  "modifier": "Multiplier",
+                  "debuff": true
+                }
+              },
+              "min_value": 0.3,
+              "max_value": 0.6,
+              "min_duration": 5,
+              "max_duration": 5
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "weaken_curse": {
+    "name": "Weaken Curse",
+    "description": "A curse that reduces the damage enemies deal",
+    "icon": "skills/skull.svg",
+    "skill_type": "Spell",
+    "cooldown": 10,
+    "mana_cost": 25,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": "SpellPower",
+        "modifier": "Flat",
+        "value": 0.1
+      }
+    ],
+    "targets": [
+      {
+        "range": "All",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "status_type": {
+                "StatModifier": {
+                  "stat": {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  "modifier": "Multiplier",
+                  "debuff": true
+                }
+              },
+              "min_value": 0.01,
+              "max_value": 0.01,
+              "min_duration": 5,
+              "max_duration": 5
+            }
+          }
+        ]
+      }
+    ]
   }
 }

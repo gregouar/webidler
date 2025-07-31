@@ -1,4 +1,4 @@
-use std::time::Instant;
+use std::{collections::HashMap, time::Instant};
 
 use anyhow::{anyhow, Result};
 use rand::TryRngCore;
@@ -75,6 +75,7 @@ pub async fn create_session(
         poison_armor: 0.0,
         block: 0.0,
         take_from_mana_before_life: 0.0,
+        damage_taken: HashMap::new(),
     });
 
     let mut player_inventory = PlayerInventory {
@@ -97,32 +98,6 @@ pub async fn create_session(
     };
 
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
-
-    // player_controller::equip_skill(
-    //     &mut player_specs,
-    //     &mut player_state,
-    //     master_store
-    //         .skills_store
-    //         .get("magic_missile")
-    //         .unwrap()
-    //         .clone(),
-    //     false,
-    //     None,
-    // );
-    // player_controller::equip_skill(
-    //     &mut player_specs,
-    //     &mut player_state,
-    //     master_store.skills_store.get("fireball").unwrap().clone(),
-    //     false,
-    //     None,
-    // );
-    // player_controller::equip_skill(
-    //     &mut player_specs,
-    //     &mut player_state,
-    //     master_store.skills_store.get("heal").unwrap().clone(),
-    //     false,
-    //     None,
-    // );
 
     if let Some(base_weapon) = master_store.items_store.get("dagger").cloned() {
         let _ = player_controller::equip_item(

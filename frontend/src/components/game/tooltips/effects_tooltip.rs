@@ -262,6 +262,34 @@ pub fn formatted_effects_list(
                 effect.value * 100.0,
                 skill_type_str(hit_trigger.skill_type)
             )),
+            (
+                DamageTaken {
+                    skill_type,
+                    damage_type,
+                },
+                Flat,
+            ) => {
+                merged.push(format!(
+                    "Adds {:.0}% Damage taken{}{}",
+                    effect.value * 100.0,
+                    optional_damage_type_str(damage_type),
+                    skill_type_str(skill_type)
+                ));
+            }
+            (
+                DamageTaken {
+                    skill_type,
+                    damage_type,
+                },
+                Multiplier,
+            ) => {
+                merged.push(format!(
+                    "{:.0}% Increased Damage taken{}{}",
+                    effect.value * 100.0,
+                    optional_damage_type_str(damage_type),
+                    skill_type_str(skill_type)
+                ));
+            }
         }
     }
 

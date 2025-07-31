@@ -1,11 +1,12 @@
 use std::{iter, time::Duration};
+use strum::IntoEnumIterator;
 
 use shared::data::{
     character::CharacterId,
     item_affix::AffixEffectScope,
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerSpecs, PlayerState},
-    skill::{DamageType, RestoreType, SkillEffect, SkillEffectType},
+    skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
     stat_effect::{EffectsMap, Modifier, StatType},
     trigger::{EventTrigger, TriggerEffectType, TriggerTarget, TriggeredEffect},
 };
@@ -67,6 +68,7 @@ pub fn update_player_specs(
     player_specs.character_specs.life_regen = 1.0;
     player_specs.character_specs.max_mana = 100.0;
     player_specs.character_specs.mana_regen = 1.0;
+    player_specs.character_specs.damage_taken.clear();
     player_specs.gold_find = 1.0;
     player_specs.movement_cooldown = 2.0;
     player_specs.triggers.clear();
@@ -168,6 +170,31 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
                 }
                 // TODO: Find way to do increase?
                 // TODO: For multiplier, should iterate and apply to all trigger matching?
+            }
+            StatType::DamageTaken {
+                skill_type,
+                damage_type,
+            } => {
+                let skill_types = match skill_type {
+                    Some(skill_type) => vec![skill_type],
+                    None => SkillType::iter().collect(),
+                };
+
+                let damage_types = match damage_type {
+                    Some(damage_type) => vec![damage_type],
+                    None => DamageType::iter().collect(),
+                };
+
+                for &skill in &skill_types {
+                    for &damage in &damage_types {
+                        player_specs
+                            .character_specs
+                            .damage_taken
+                            .entry((skill, damage))
+                            .or_insert(1.0)
+                            .apply_effect(effect);
+                    }
+                }
             }
             // Delegate to skills
             StatType::Damage { .. }
