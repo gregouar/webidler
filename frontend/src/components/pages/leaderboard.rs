@@ -2,7 +2,7 @@ use leptos::{html::*, prelude::*};
 use leptos_router::hooks::use_navigate;
 
 use crate::components::{
-    rest::RestContext,
+    backend_client::BackendClient,
     ui::{buttons::MenuButton, number::format_duration},
 };
 
@@ -35,11 +35,8 @@ pub fn LeaderboardPage() -> impl IntoView {
 #[component]
 pub fn LeaderboardPanel() -> impl IntoView {
     let leaderboard = LocalResource::new({
-        let backend = use_context::<RestContext>().unwrap();
-        move || {
-            let backend = backend.clone();
-            async move { backend.get_leaderboard().await.unwrap_or_default() }
-        }
+        let backend = use_context::<BackendClient>().unwrap();
+        move || async move { backend.get_leaderboard().await.unwrap_or_default() }
     });
 
     view! {

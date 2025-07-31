@@ -3,23 +3,20 @@ use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
 use crate::components::{
-    game::game_instance::SessionInfos, rest::RestContext, ui::buttons::MenuButton,
+    backend_client::BackendClient, game::game_instance::SessionInfos, ui::buttons::MenuButton,
 };
 use codee::string::JsonSerdeCodec;
 
 #[component]
 pub fn MainMenuPage() -> impl IntoView {
     let players_count = LocalResource::new({
-        let backend = use_context::<RestContext>().unwrap();
-        move || {
-            let backend = backend.clone();
-            async move {
-                backend
-                    .get_players_count()
-                    .await
-                    .map(|r| r.value)
-                    .unwrap_or_default()
-            }
+        let backend = use_context::<BackendClient>().unwrap();
+        move || async move {
+            backend
+                .get_players_count()
+                .await
+                .map(|r| r.value)
+                .unwrap_or_default()
         }
     });
 
@@ -30,23 +27,13 @@ pub fn MainMenuPage() -> impl IntoView {
     let user_id = RwSignal::new(get_user_id.get_untracked());
     let disable_connect = Signal::derive(move || user_id.read().is_empty());
 
-    let navigate_to_online_game = {
+    let navigate_to_game = {
         let navigate = use_navigate();
         let delete_session_infos = delete_session_infos.clone();
         move |_| {
             delete_session_infos();
             set_user_id_storage.set(user_id.get_untracked());
             navigate("game", Default::default());
-        }
-    };
-
-    let navigate_to_local_game = {
-        let navigate = use_navigate();
-        let delete_session_infos = delete_session_infos.clone();
-        move |_| {
-            delete_session_infos();
-            set_user_id_storage.set(user_id.get_untracked());
-            navigate("local_game", Default::default());
         }
     };
 
@@ -81,11 +68,8 @@ pub fn MainMenuPage() -> impl IntoView {
                             focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
                         />
                     </div>
-                    <MenuButton on:click=navigate_to_online_game disabled=disable_connect>
-                        "Play Online"
-                    </MenuButton>
-                    <MenuButton on:click=navigate_to_local_game disabled=disable_connect>
-                        "Play Locally"
+                    <MenuButton on:click=navigate_to_game disabled=disable_connect>
+                        "Play"
                     </MenuButton>
                     <MenuButton on:click=navigate_to_leaderboard>"Leaderboard"</MenuButton>
                 </div>

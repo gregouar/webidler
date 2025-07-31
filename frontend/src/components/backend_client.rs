@@ -2,16 +2,22 @@ use anyhow::Result;
 
 use shared::http::server::{LeaderboardResponse, PlayersCountResponse, SkillsResponse};
 
-#[derive(Clone)]
-pub struct RestContext {
-    host: String,
+#[derive(Clone, Copy)]
+pub struct BackendClient {
+    http_url: &'static str,
+    ws_url: &'static str,
 }
 
-impl RestContext {
-    pub fn new(host: &str) -> Self {
-        RestContext {
-            host: host.trim_end_matches('/').to_string(),
+impl BackendClient {
+    pub fn new(http_url: &'static str, ws_url: &'static str) -> Self {
+        BackendClient {
+            http_url: http_url.trim_end_matches('/').into(),
+            ws_url: ws_url.trim_end_matches('/').into(),
         }
+    }
+
+    pub fn get_game_ws_url(&self) -> String {
+        format!("{}/ws", self.ws_url)
     }
 
     pub async fn get<T>(&self, endoint: &str) -> Result<T>
@@ -19,7 +25,7 @@ impl RestContext {
         T: serde::de::DeserializeOwned,
     {
         Ok(serde_json::from_str(
-            &reqwest::get(format!("{}/{}", self.host, endoint))
+            &reqwest::get(format!("{}/{}", self.http_url, endoint))
                 .await?
                 .error_for_status()?
                 .text()

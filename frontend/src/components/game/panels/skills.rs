@@ -7,8 +7,8 @@ use shared::{data::skill::SkillSpecs, messages::client::BuySkillMessage};
 use crate::{
     assets::img_asset,
     components::{
+        backend_client::BackendClient,
         game::{game_context::GameContext, tooltips::SkillTooltip},
-        rest::RestContext,
         ui::{
             buttons::{CloseButton, FancyButton},
             menu_panel::MenuPanel,
@@ -55,11 +55,8 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
 
     // TODO: filter and sort skills
     let skills_response = LocalResource::new({
-        let backend = use_context::<RestContext>().unwrap();
-        move || {
-            let backend = backend.clone();
-            async move { backend.get_skills().await.unwrap_or_default() }
-        }
+        let backend = use_context::<BackendClient>().unwrap();
+        move || async move { backend.get_skills().await.unwrap_or_default() }
     });
 
     let game_context = expect_context::<GameContext>();
