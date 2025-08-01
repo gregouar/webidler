@@ -16,8 +16,6 @@ use crate::game::{
 
 use super::{characters_controller::Target, items_controller, skills_controller};
 
-pub const SKILL_INCREASE_COST_FACTOR: f64 = 1000.0;
-
 #[derive(Debug, Clone)]
 pub struct PlayerController {
     // pub auto_skills: Vec<bool>,
@@ -368,7 +366,7 @@ pub fn buy_skill(
             None,
         );
         player_resources.gold -= player_specs.buy_skill_cost;
-        player_specs.buy_skill_cost *= SKILL_INCREASE_COST_FACTOR;
+        player_specs.buy_skill_cost *= player_specs.buy_skill_cost;
         player_specs.bought_skills.insert(skill_id.to_string());
         true
     } else {
