@@ -75,7 +75,7 @@ pub async fn create_session(
         poison_armor: 0.0,
         block: 0.0,
         take_from_mana_before_life: 0.0,
-        damage_taken: HashMap::new(),
+        damage_resistance: HashMap::new(),
     });
 
     let mut player_inventory = PlayerInventory {

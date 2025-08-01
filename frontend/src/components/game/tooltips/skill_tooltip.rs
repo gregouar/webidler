@@ -3,11 +3,14 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*};
 
 use shared::data::character_status::StatusType;
+use shared::data::item_affix::AffixEffectScope;
+use shared::data::passive::StatEffect;
 use shared::data::skill::RestoreType;
 use shared::data::skill::SkillTargetsGroup;
 use shared::data::skill::TargetType;
 use shared::data::skill::{SkillEffect, SkillEffectType, SkillRange, SkillShape, SkillSpecs};
 
+use crate::components::game::tooltips::effects_tooltip;
 use crate::components::ui::number::format_number;
 
 use super::effects_tooltip::damage_type_str;
@@ -172,9 +175,46 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                         }
                             .into_any()
                     }
-                    // TODO: Give different description, maybe get that from somewhere else/share with effect tooltip
-                    StatusType::StatModifier{ debuff, .. } => {
-                       view! { <EffectLi>{if debuff { "Debuff" } else { "Buff" }}</EffectLi> } .into_any()
+                    StatusType::StatModifier{ stat,debuff, modifier } => {
+                        view! {
+                            <EffectLi>
+                                "Apply the following status for "
+                                {format_min_max(min_duration, max_duration)} " seconds:"
+                                <ul>
+                                    {effects_tooltip::formatted_effects_list(
+                                        vec![
+                                            StatEffect {
+                                                stat,
+                                                modifier,
+                                                value: if debuff { -min_value } else { min_value },
+                                            },
+                                        ],
+                                        AffixEffectScope::Global,
+                                    )}
+                                </ul>
+                                {if min_value != max_value {
+                                    view! {
+                                        "to"
+                                        <ul>
+                                            {effects_tooltip::formatted_effects_list(
+                                                vec![
+                                                    StatEffect {
+                                                        stat,
+                                                        modifier,
+                                                        value: if debuff { -max_value } else { max_value },
+                                                    },
+                                                ],
+                                                AffixEffectScope::Global,
+                                            )}
+                                        </ul>
+                                    }
+                                        .into_any()
+                                } else {
+                                    view! {}.into_any()
+                                }}
+                            </EffectLi>
+                        }
+                            .into_any()
                     }
                 }
         }

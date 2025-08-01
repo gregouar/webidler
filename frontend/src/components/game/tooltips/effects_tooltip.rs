@@ -263,32 +263,50 @@ pub fn formatted_effects_list(
                 skill_type_str(hit_trigger.skill_type)
             )),
             (
-                DamageTaken {
+                DamageResistance {
                     skill_type,
                     damage_type,
                 },
                 Flat,
             ) => {
-                merged.push(format!(
-                    "Adds {:.0} Damage taken{}{}",
-                    effect.value,
-                    optional_damage_type_str(damage_type),
-                    skill_type_str(skill_type)
-                ));
+                merged.push(if effect.value > 0.0 {
+                    format!(
+                        "Resists {:.0}{}{} Damage",
+                        effect.value,
+                        optional_damage_type_str(damage_type),
+                        skill_type_str(skill_type)
+                    )
+                } else {
+                    format!(
+                        "Takes {:.0} additional{}{} Damage",
+                        -effect.value,
+                        optional_damage_type_str(damage_type),
+                        skill_type_str(skill_type)
+                    )
+                });
             }
             (
-                DamageTaken {
+                DamageResistance {
                     skill_type,
                     damage_type,
                 },
                 Multiplier,
             ) => {
-                merged.push(format!(
-                    "{:.0}% Increased Damage taken{}{}",
-                    effect.value * 100.0,
-                    optional_damage_type_str(damage_type),
-                    skill_type_str(skill_type)
-                ));
+                merged.push(if effect.value > 0.0 {
+                    format!(
+                        "Resist {:.0}% of{}{} Damage",
+                        effect.value * 100.0,
+                        optional_damage_type_str(damage_type),
+                        skill_type_str(skill_type)
+                    )
+                } else {
+                    format!(
+                        "Takes {:.0}% Increased{}{} Damage",
+                        -effect.value * 100.0,
+                        optional_damage_type_str(damage_type),
+                        skill_type_str(skill_type)
+                    )
+                });
             }
         }
     }

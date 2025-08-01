@@ -5,7 +5,7 @@
     "icon": "skills/magic_missile.svg",
     "skill_type": "Spell",
     "cooldown": 2,
-    "mana_cost": 2,
+    "mana_cost": 1,
     "upgrade_cost": 20,
     "upgrade_effects": [
       {
@@ -121,10 +121,10 @@
       }
     ]
   },
-  "frailty_curse": {
-    "name": "Frailty Curse",
+  "curse_frailty": {
+    "name": "Curse of Frailty",
     "description": "A curse that makes enemies take more damage from all sources",
-    "icon": "skills/skull.svg",
+    "icon": "skills/curse_frailty.svg",
     "skill_type": "Spell",
     "cooldown": 15,
     "mana_cost": 25,
@@ -146,7 +146,7 @@
               "status_type": {
                 "StatModifier": {
                   "stat": {
-                    "DamageTaken": {
+                    "DamageResistance": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -165,10 +165,10 @@
       }
     ]
   },
-  "weaken_curse": {
-    "name": "Weaken Curse",
+  "cruse_weakness": {
+    "name": "Curse of Weakness",
     "description": "A curse that reduces the damage enemies deal",
-    "icon": "skills/skull.svg",
+    "icon": "skills/curse_weakness.svg",
     "skill_type": "Spell",
     "cooldown": 10,
     "mana_cost": 25,
@@ -199,8 +199,8 @@
                   "debuff": true
                 }
               },
-              "min_value": 0.1,
-              "max_value": 0.1,
+              "min_value": 0.2,
+              "max_value": 0.2,
               "min_duration": 5,
               "max_duration": 5
             }

@@ -71,7 +71,7 @@ pub struct CharacterSpecs {
     pub block: f32,
 
     #[serde(default)]
-    pub damage_taken: HashMap<(SkillType, DamageType), f64>,
+    pub damage_resistance: HashMap<(SkillType, DamageType), f64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

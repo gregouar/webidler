@@ -843,6 +843,66 @@
             }
           }
         ]
+      },
+
+      "gold_init_2": {
+        "name": "Unlucky Start",
+        "icon": "passives/gold.svg",
+        "initial_node": true,
+        "x": 100,
+        "y": 0,
+        "size": 1,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": -0.5
+          }
+        ]
+      },
+
+      "physical_damage_1": {
+        "name": "Physical Damage",
+        "icon": "passives/physical_damage.svg",
+        "x": 100,
+        "y": -10,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": { "Damage": { "damage_type": "Physical" } },
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ]
+      },
+      "poison_damage_1": {
+        "name": "Poison Damage",
+        "icon": "passives/poison_damage.svg",
+        "x": 90,
+        "y": -10,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": { "Damage": { "damage_type": "Poison" } },
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ]
+      },
+      "fire_damage_1": {
+        "name": "Poison Damage",
+        "icon": "passives/fire_damage.svg",
+        "x": 110,
+        "y": -10,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": { "Damage": { "damage_type": "Fire" } },
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ]
       }
     },
     "connections": [

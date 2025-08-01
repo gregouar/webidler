@@ -75,7 +75,7 @@ pub enum StatType {
     LifeOnHit(#[serde(default)] HitTrigger),
     ManaOnHit(#[serde(default)] HitTrigger),
     // Negative
-    DamageTaken {
+    DamageResistance {
         #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]

@@ -165,7 +165,7 @@ pub fn compute_damage(
     ignore_armor: bool,
 ) -> f64 {
     let amount = target_specs
-        .damage_taken
+        .damage_resistance
         .get(&(skill_type, damage_type))
         .cloned()
         .unwrap_or(1.0)

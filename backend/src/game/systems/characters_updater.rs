@@ -94,7 +94,7 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                 .take_from_mana_before_life
                 .apply_effect(effect),
             StatType::Block => character_specs.block.apply_effect(effect),
-            StatType::DamageTaken {
+            StatType::DamageResistance {
                 skill_type,
                 damage_type,
             } => {
@@ -111,7 +111,7 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                 for &skill in &skill_types {
                     for &damage in &damage_types {
                         character_specs
-                            .damage_taken
+                            .damage_resistance
                             .entry((skill, damage))
                             .or_insert(1.0)
                             .apply_effect(effect);
