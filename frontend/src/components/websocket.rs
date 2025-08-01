@@ -35,7 +35,7 @@ impl WebsocketContext {
 }
 
 #[component]
-pub fn Websocket(url: &'static str, children: Children) -> impl IntoView {
+pub fn Websocket(url: String, children: Children) -> impl IntoView {
     let on_error_callback = {
         let toaster = expect_context::<Toasts>();
         move |e: UseWebSocketError<_, _>| {
@@ -69,7 +69,7 @@ pub fn Websocket(url: &'static str, children: Children) -> impl IntoView {
         close,
         ..
     } = use_websocket_with_options::<ClientMessage, ServerMessage, MsgpackSerdeCodec, _, _>(
-        url,
+        &url,
         UseWebSocketOptions::default()
             // .immediate(false)
             .reconnect_limit(ReconnectLimit::Infinite)

@@ -16,6 +16,9 @@ pub enum PassiveNodeType {
     Critical,
     Mana,
     Gold,
+    Physical,
+    Poison,
+    Fire,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]

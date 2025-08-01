@@ -38,6 +38,7 @@ impl RandomWeighted for &BossBlueprint {
     }
 }
 
+/// Return generated monsters + if it is boss
 pub fn generate_monsters_wave(
     world_blueprint: &WorldBlueprint,
     world_state: &WorldState,
@@ -49,6 +50,7 @@ pub fn generate_monsters_wave(
     Ok((monster_specs, monster_states, is_boss))
 }
 
+/// Return generated monsters + if it is boss
 fn generate_monsters_wave_specs(
     world_blueprint: &WorldBlueprint,
     world_state: &WorldState,

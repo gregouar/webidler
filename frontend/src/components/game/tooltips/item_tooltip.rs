@@ -9,7 +9,7 @@ use shared::data::{
     skill::DamageType,
 };
 
-use crate::components::game::effects_tooltip;
+use super::effects_tooltip;
 
 #[component]
 pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {

@@ -1,4 +1,8 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
+
+use crate::data::skill::{DamageType, SkillType};
 
 use super::character_status::{StatusMap, StatusType};
 pub use super::skill::{SkillSpecs, SkillState};
@@ -65,6 +69,9 @@ pub struct CharacterSpecs {
     pub poison_armor: f64,
     #[serde(default)]
     pub block: f32,
+
+    #[serde(default)]
+    pub damage_resistance: HashMap<(SkillType, DamageType), f64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

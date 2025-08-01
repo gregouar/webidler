@@ -36,7 +36,7 @@ use crate::{
 
 const CLIENT_INACTIVITY_TIMEOUT: Duration = Duration::from_secs(60);
 
-pub async fn ws_handler(
+pub async fn handler(
     ws: WebSocketUpgrade,
     user_agent: Option<TypedHeader<headers::UserAgent>>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,

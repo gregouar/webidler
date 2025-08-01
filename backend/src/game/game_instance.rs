@@ -45,9 +45,13 @@ impl<'a> GameInstance<'a> {
         loop {
             game_orchestrator::reset_entities(self.game_data).await;
 
-            if game_inputs::handle_client_inputs(self.client_conn, self.game_data)
-                .await
-                .is_break()
+            if game_inputs::handle_client_inputs(
+                self.client_conn,
+                self.game_data,
+                &self.master_store,
+            )
+            .await
+            .is_break()
             {
                 break;
             }

@@ -1,9 +1,9 @@
 use chrono::{DateTime, Utc};
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 
 use serde::{Deserialize, Serialize};
 
-use crate::data::world::AreaLevel;
+use crate::data::{skill::SkillSpecs, world::AreaLevel};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayersCountResponse {
@@ -22,4 +22,9 @@ pub struct LeaderboardEntry {
     pub time_played: Duration,
     pub created_at: DateTime<Utc>,
     pub comments: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SkillsResponse {
+    pub skills: HashMap<String, SkillSpecs>,
 }

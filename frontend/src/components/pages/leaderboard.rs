@@ -1,14 +1,10 @@
-use anyhow::Result;
-
 use leptos::{html::*, prelude::*};
 use leptos_router::hooks::use_navigate;
 
-use reqwest;
-use serde_json;
-
-use shared::http::server::LeaderboardResponse;
-
-use crate::components::ui::{buttons::MenuButton, number::format_duration};
+use crate::components::{
+    backend_client::BackendClient,
+    ui::{buttons::MenuButton, number::format_duration},
+};
 
 #[component]
 pub fn LeaderboardPage() -> impl IntoView {
@@ -38,10 +34,9 @@ pub fn LeaderboardPage() -> impl IntoView {
 
 #[component]
 pub fn LeaderboardPanel() -> impl IntoView {
-    let leaderboard = LocalResource::new(|| async {
-        get_leaderboard("https://webidler.gregoirenaisse.be")
-            .await
-            .unwrap_or_default()
+    let leaderboard = LocalResource::new({
+        let backend = use_context::<BackendClient>().unwrap();
+        move || async move { backend.get_leaderboard().await.unwrap_or_default() }
     });
 
     view! {
@@ -97,14 +92,4 @@ pub fn LeaderboardPanel() -> impl IntoView {
             </Suspense>
         </div>
     }
-}
-
-async fn get_leaderboard(host: &str) -> Result<LeaderboardResponse> {
-    Ok(serde_json::from_str(
-        &reqwest::get(format!("{}/leaderboard", host))
-            .await?
-            .error_for_status()?
-            .text()
-            .await?,
-    )?)
 }

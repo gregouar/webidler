@@ -55,5 +55,24 @@
         "max": 0.49
       }
     ]
+  },
+  {
+    "name": "of Sickness",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Poison" } },
+        "modifier": "Multiplier",
+        "min": 0.25,
+        "max": 0.49
+      }
+    ]
   }
 ]

@@ -28,7 +28,7 @@ pub fn attack_character(
     let amount: f64 = damage
         .iter()
         .map(|(damage_type, amount)| {
-            decrease_damage_from_armor(*amount, *damage_type, target_specs)
+            compute_damage(target_specs, *amount, *damage_type, skill_type, false)
         })
         .sum();
 
@@ -109,6 +109,7 @@ pub fn resuscitate_character(target: &mut Target) {
 pub fn apply_status(
     target: &mut Target,
     status_type: StatusType,
+    skill_type: SkillType,
     value: f64,
     duration: f64,
     cumulate: bool,
@@ -122,8 +123,8 @@ pub fn apply_status(
     let value = match status_type {
         StatusType::DamageOverTime {
             damage_type,
-            ignore_armor: false,
-        } => decrease_damage_from_armor(value, damage_type, target_specs),
+            ignore_armor,
+        } => compute_damage(target_specs, value, damage_type, skill_type, ignore_armor),
         _ => value,
     };
 
@@ -156,10 +157,33 @@ pub fn apply_status(
     }
 }
 
-fn decrease_damage_from_armor(
+pub fn compute_damage(
+    target_specs: &CharacterSpecs,
     amount: f64,
     damage_type: DamageType,
+    skill_type: SkillType,
+    ignore_armor: bool,
+) -> f64 {
+    let amount = target_specs
+        .damage_resistance
+        .get(&(skill_type, damage_type))
+        .cloned()
+        .unwrap_or(1.0)
+        * amount;
+
+    let amount = if ignore_armor {
+        amount
+    } else {
+        decrease_damage_from_armor(target_specs, amount, damage_type)
+    };
+
+    amount
+}
+
+fn decrease_damage_from_armor(
     target_specs: &CharacterSpecs,
+    amount: f64,
+    damage_type: DamageType,
 ) -> f64 {
     amount
         * match damage_type {

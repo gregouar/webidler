@@ -51,11 +51,7 @@ pub fn apply_trigger_effects(
                         Some(&mut game_data.player_state.character_state),
                     ),
                     CharacterId::Monster(i) => (
-                        game_data
-                            .monster_specs
-                            .read()
-                            .get(i)
-                            .map(|m| &m.character_specs),
+                        game_data.monster_specs.get(i).map(|m| &m.character_specs),
                         game_data
                             .monster_states
                             .get_mut(i)

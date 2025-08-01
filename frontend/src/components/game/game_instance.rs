@@ -16,9 +16,7 @@ use crate::components::websocket::WebsocketContext;
 
 use super::battle_scene::BattleScene;
 use super::header_menu::HeaderMenu;
-use super::inventory::InventoryPanel;
-use super::passives::PassivesPanel;
-use super::statistics::StatisticsPanel;
+use super::panels::{InventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel};
 use super::GameContext;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -79,6 +77,7 @@ pub fn GameInstance() -> impl IntoView {
                     <InventoryPanel open=game_context.open_inventory />
                     <PassivesPanel open=game_context.open_passives />
                     <StatisticsPanel open=game_context.open_statistics />
+                    <SkillsPanel open=game_context.open_skills />
                 </div>
             </Show>
         </main>

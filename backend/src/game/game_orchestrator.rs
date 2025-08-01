@@ -48,10 +48,30 @@ pub async fn tick(
         );
     }
 
+    if game_data
+        .monster_states
+        .iter()
+        .any(|m| m.character_state.buff_status_change)
+    {
+        for ((base_specs, monster_specs), monster_state) in game_data
+            .monster_base_specs
+            .read()
+            .iter()
+            .zip(game_data.monster_specs.iter_mut())
+            .zip(game_data.monster_states.iter_mut())
+        {
+            if monster_state.character_state.buff_status_change {
+                monster_state.character_state.buff_status_change = false;
+                monsters_updater::update_monster_specs(base_specs, monster_specs, monster_state);
+            }
+        }
+    }
+
     control_entities(events_queue, game_data, master_store).await?;
     events_resolver::resolve_events(events_queue, game_data, master_store).await;
     update_entities(events_queue, game_data, elapsed_time).await;
 
+    game_data.game_stats.elapsed_time += elapsed_time;
     Ok(())
 }
 
@@ -69,7 +89,6 @@ async fn control_entities(
 
         let mut monsters_still_alive: Vec<_> = game_data
             .monster_specs
-            .read()
             .iter()
             .zip(game_data.monster_states.iter_mut())
             .enumerate()
@@ -115,7 +134,8 @@ async fn control_entities(
                         game_data.world_state.read(),
                         &master_store.monster_specs_store,
                     )?;
-                game_data.monster_specs = LazySyncer::new(monster_specs);
+                game_data.monster_base_specs = LazySyncer::new(monster_specs.clone());
+                game_data.monster_specs = monster_specs;
                 game_data.monster_states = monster_states;
                 game_data.world_state.mutate().is_boss = is_boss;
 
@@ -125,7 +145,7 @@ async fn control_entities(
             game_data.monster_wave_delay = Instant::now();
             monsters_controller::control_monsters(
                 events_queue,
-                game_data.monster_specs.read(),
+                &game_data.monster_specs,
                 &mut game_data.monster_states,
                 game_data.player_specs.read(),
                 &mut game_data.player_state,
@@ -141,7 +161,6 @@ async fn update_entities(
     game_data: &mut GameInstanceData,
     elapsed_time: Duration,
 ) {
-    game_data.game_stats.elapsed_time += elapsed_time;
     player_updater::update_player_state(
         events_queue,
         elapsed_time,
@@ -151,13 +170,14 @@ async fn update_entities(
     monsters_updater::update_monster_states(
         events_queue,
         elapsed_time,
-        game_data.monster_specs.read(),
+        &game_data.monster_specs,
         &mut game_data.monster_states,
     );
 }
 
 fn respawn_player(game_data: &mut GameInstanceData) {
-    game_data.monster_specs.mutate().clear();
+    game_data.monster_base_specs.mutate().clear();
+    game_data.monster_specs.clear();
     game_data.monster_states.clear();
 
     player_updater::update_player_specs(

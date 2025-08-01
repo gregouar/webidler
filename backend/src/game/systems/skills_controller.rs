@@ -236,6 +236,7 @@ pub fn apply_skill_effect(
                     characters_controller::apply_status(
                         target,
                         *status_type,
+                        skill_type,
                         value,
                         duration,
                         *cumulate,

@@ -74,6 +74,13 @@ pub enum StatType {
     GoldFind,
     LifeOnHit(#[serde(default)] HitTrigger),
     ManaOnHit(#[serde(default)] HitTrigger),
+    // Negative
+    DamageResistance {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

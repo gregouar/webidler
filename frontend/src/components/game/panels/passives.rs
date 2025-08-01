@@ -8,7 +8,7 @@ use shared::messages::client::PurchasePassiveMessage;
 
 use crate::assets::img_asset;
 use crate::components::{
-    game::effects_tooltip::formatted_effects_list,
+    game::{game_context::GameContext, tooltips::effects_tooltip::formatted_effects_list},
     ui::{
         buttons::CloseButton,
         menu_panel::MenuPanel,
@@ -16,8 +16,6 @@ use crate::components::{
     },
     websocket::WebsocketContext,
 };
-
-use super::game_context::GameContext;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 enum NodeStatus {
@@ -149,6 +147,9 @@ fn Node(
         PassiveNodeType::Critical => "#ea6110",
         PassiveNodeType::Mana => "#3e5ba9",
         PassiveNodeType::Gold => "goldenrod",
+        PassiveNodeType::Physical => "#4a4a4a",
+        PassiveNodeType::Poison => "#4a4a1a",
+        PassiveNodeType::Fire => "#4a1a1a",
     };
 
     let node_status = Memo::new({

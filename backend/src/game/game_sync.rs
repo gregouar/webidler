@@ -40,7 +40,7 @@ pub async fn sync_update_game(
                 player_inventory: game_data.player_inventory.sync(),
                 player_state: game_data.player_state.clone(),
                 player_resources: game_data.player_resources.sync(),
-                monster_specs: game_data.monster_specs.sync(),
+                monster_specs: game_data.monster_base_specs.sync(),
                 monster_states: game_data.monster_states.clone(),
                 queued_loot: game_data.queued_loot.sync(),
                 game_stats: game_data.game_stats.clone(),

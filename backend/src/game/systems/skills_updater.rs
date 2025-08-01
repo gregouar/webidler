@@ -37,11 +37,14 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) 
     skill_specs.cooldown = skill_specs.base.cooldown;
     skill_specs.mana_cost = skill_specs.base.mana_cost;
 
-    let base_effects = compute_skill_upgrade_effects(skill_specs, skill_specs.upgrade_level);
+    let mut base_effects = compute_skill_upgrade_effects(skill_specs, skill_specs.upgrade_level);
+    base_effects.extend_from_slice(effects);
 
-    let effects = effects.iter().chain(base_effects.iter());
+    apply_effects_to_skill_specs(skill_specs, &base_effects);
+}
 
-    for effect in effects.clone() {
+pub fn apply_effects_to_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) {
+    for effect in effects {
         match effect.stat {
             StatType::Speed(skill_type)
                 if skill_specs.base.skill_type
@@ -58,7 +61,7 @@ pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) 
         .iter_mut()
         .flat_map(|t| t.effects.iter_mut())
     {
-        compute_skill_specs_effect(skill_specs.base.skill_type, skill_effect, effects.clone())
+        compute_skill_specs_effect(skill_specs.base.skill_type, skill_effect, effects)
     }
 }
 

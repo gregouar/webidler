@@ -29,7 +29,10 @@ pub struct GameInstanceData {
     pub player_controller: PlayerController,
     pub player_respawn_delay: Instant,
 
-    pub monster_specs: LazySyncer<Vec<MonsterSpecs>>,
+    // TODO: Need to find better more granular way to handle these things...
+    // Probably need to split more between static and computed specs
+    pub monster_base_specs: LazySyncer<Vec<MonsterSpecs>>,
+    pub monster_specs: Vec<MonsterSpecs>, // Only use internally, not shared
     pub monster_states: Vec<MonsterState>,
     pub monster_wave_delay: Instant,
 
@@ -61,7 +64,8 @@ impl GameInstanceData {
             player_inventory: LazySyncer::new(player_inventory),
             player_respawn_delay: Instant::now(),
 
-            monster_specs: LazySyncer::new(Vec::new()),
+            monster_base_specs: LazySyncer::new(Vec::new()),
+            monster_specs: Vec::new(),
             monster_states: Vec::new(),
             monster_wave_delay: Instant::now(),
 
@@ -78,7 +82,7 @@ impl GameInstanceData {
         self.player_resources.mutate();
         self.player_specs.mutate();
         self.player_inventory.mutate();
-        self.monster_specs.mutate();
+        self.monster_base_specs.mutate();
         self.queued_loot.mutate();
     }
 }

@@ -5,7 +5,7 @@ use shared::data::{
     item_affix::AffixEffectScope,
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerSpecs, PlayerState},
-    skill::{DamageType, RestoreType, SkillEffect, SkillEffectType},
+    skill::{RestoreType, SkillEffect, SkillEffectType},
     stat_effect::{EffectsMap, Modifier, StatType},
     trigger::{EventTrigger, TriggerEffectType, TriggerTarget, TriggeredEffect},
 };
@@ -67,6 +67,7 @@ pub fn update_player_specs(
     player_specs.character_specs.life_regen = 1.0;
     player_specs.character_specs.max_mana = 100.0;
     player_specs.character_specs.mana_regen = 1.0;
+    player_specs.character_specs.damage_resistance.clear();
     player_specs.gold_find = 1.0;
     player_specs.movement_cooldown = 2.0;
     player_specs.triggers.clear();
@@ -97,7 +98,7 @@ pub fn update_player_specs(
             ))
             .chain(iter::once(
                 statuses_controller::generate_effects_map_from_statuses(
-                    &player_state.character_state,
+                    &player_state.character_state.statuses,
                 ),
             )),
     );
@@ -115,32 +116,13 @@ pub fn update_player_specs(
 }
 
 fn compute_player_specs(player_specs: &mut PlayerSpecs) {
-    let mut effects: Vec<_> = (&player_specs.effects).into();
+    let effects = characters_updater::stats_map_to_vec(&player_specs.effects);
 
-    effects.sort_by_key(|e| match e.modifier {
-        Modifier::Flat => 0,
-        Modifier::Multiplier => 1,
-    });
+    player_specs.character_specs =
+        characters_updater::update_character_specs(&player_specs.character_specs, &effects);
 
     for effect in effects.iter() {
         match effect.stat {
-            StatType::Life => player_specs.character_specs.max_life.apply_effect(effect),
-            StatType::LifeRegen => player_specs.character_specs.life_regen.apply_effect(effect),
-            StatType::Mana => player_specs.character_specs.max_mana.apply_effect(effect),
-            StatType::ManaRegen => player_specs.character_specs.mana_regen.apply_effect(effect),
-            StatType::Armor(armor_type) => match armor_type {
-                DamageType::Physical => player_specs.character_specs.armor.apply_effect(effect),
-                DamageType::Fire => player_specs.character_specs.fire_armor.apply_effect(effect),
-                DamageType::Poison => player_specs
-                    .character_specs
-                    .poison_armor
-                    .apply_effect(effect),
-            },
-            StatType::TakeFromManaBeforeLife => player_specs
-                .character_specs
-                .take_from_mana_before_life
-                .apply_effect(effect),
-            StatType::Block => player_specs.character_specs.block.apply_effect(effect),
             StatType::MovementSpeed => player_specs.movement_cooldown.apply_inverse_effect(effect),
             StatType::GoldFind => player_specs.gold_find.apply_effect(effect),
             StatType::LifeOnHit(hit_trigger) | StatType::ManaOnHit(hit_trigger) => {
@@ -168,6 +150,17 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
                 }
                 // TODO: Find way to do increase?
                 // TODO: For multiplier, should iterate and apply to all trigger matching?
+            }
+            // Handled by character
+            StatType::Life
+            | StatType::LifeRegen
+            | StatType::Mana
+            | StatType::ManaRegen
+            | StatType::Armor(_)
+            | StatType::TakeFromManaBeforeLife
+            | StatType::Block
+            | StatType::DamageResistance { .. } => {
+                player_specs.character_specs.block.apply_effect(effect)
             }
             // Delegate to skills
             StatType::Damage { .. }
