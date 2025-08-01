@@ -130,12 +130,21 @@ pub fn formatted_effects_list(
                     damage_type,
                 },
                 Multiplier,
-            ) => merged.push(format!(
-                "{:.0}% Increased{}{} Damage",
-                effect.value * 100.0,
-                optional_damage_type_str(damage_type),
-                skill_type_str(skill_type),
-            )),
+            ) => merged.push(if effect.value >= 0.0 {
+                format!(
+                    "{:.0}% Increased{}{} Damage",
+                    effect.value * 100.0,
+                    optional_damage_type_str(damage_type),
+                    skill_type_str(skill_type),
+                )
+            } else {
+                format!(
+                    "{:.0}% Decreased{}{} Damage",
+                    -effect.value * 100.0,
+                    optional_damage_type_str(damage_type),
+                    skill_type_str(skill_type),
+                )
+            }),
             (GoldFind, Flat) => {
                 merged.push(format!("Adds {:.0} Gold per Kill", effect.value));
             }
