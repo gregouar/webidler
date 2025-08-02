@@ -15,6 +15,10 @@ impl<T: Clone> LazySyncer<T> {
         }
     }
 
+    pub fn unwrap(self) -> T {
+        self.inner
+    }
+
     /// Get mutable access to the data struct and tag it as dirty
     pub fn mutate(&mut self) -> &mut T {
         self.need_to_sync = true;

@@ -1,3 +1,4 @@
+pub mod game_instances;
 pub mod game_sessions;
 pub mod leaderboard;
 pub mod pool;

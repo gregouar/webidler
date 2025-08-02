@@ -4,7 +4,7 @@ use std::{
     time::Instant,
 };
 
-pub use shared::messages::{SessionId, SessionKey};
+pub use shared::messages::{SessionId, SessionKey, UserId};
 
 use super::game_data::GameInstanceData;
 
@@ -15,6 +15,7 @@ pub struct SessionsStore {
 
 #[derive(Debug, Clone)]
 pub struct Session {
+    pub user_id: UserId,
     pub session_key: SessionKey,
     pub last_active: Instant,
 

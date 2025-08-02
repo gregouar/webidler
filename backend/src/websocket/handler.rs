@@ -158,11 +158,11 @@ async fn handle_disconnect(
     session_id: SessionId,
     mut session: Session,
 ) -> Result<()> {
-    let end_session = session.game_data.world_state.read().end_quest;
+    let end_quest = session.game_data.world_state.read().end_quest;
 
     session.last_active = Instant::now();
 
-    if end_session {
+    if end_quest {
         sessions_controller::end_session(db_pool, &session_id, &session).await?;
     } else {
         sessions_store
