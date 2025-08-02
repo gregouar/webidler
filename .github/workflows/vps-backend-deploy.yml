@@ -10,6 +10,7 @@ on:
         "shared/**",
         "nginx/**",
         "data/**",
+        "migrations/**",
         ".github/workflows/vps-backend-deploy.yml",
       ]
 
