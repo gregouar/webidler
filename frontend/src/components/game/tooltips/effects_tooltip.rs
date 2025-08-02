@@ -280,15 +280,15 @@ pub fn formatted_effects_list(
             ) => {
                 merged.push(if effect.value > 0.0 {
                     format!(
-                        "Resists {:.0}{}{} Damage",
-                        effect.value,
+                        "Resist {:.0}% of{}{} Damage",
+                        effect.value * 100.0,
                         optional_damage_type_str(damage_type),
                         skill_type_str(skill_type)
                     )
                 } else {
                     format!(
-                        "Takes {:.0} additional{}{} Damage",
-                        -effect.value,
+                        "Takes {:.0}% Increased{}{} Damage",
+                        -effect.value * 100.0,
                         optional_damage_type_str(damage_type),
                         skill_type_str(skill_type)
                     )
@@ -303,14 +303,14 @@ pub fn formatted_effects_list(
             ) => {
                 merged.push(if effect.value > 0.0 {
                     format!(
-                        "Resist {:.0}% of{}{} Damage",
+                        "{:.0}% more{}{} Damage Resistance",
                         effect.value * 100.0,
                         optional_damage_type_str(damage_type),
                         skill_type_str(skill_type)
                     )
                 } else {
                     format!(
-                        "Takes {:.0}% Increased{}{} Damage",
+                        "{:.0}% less{}{} Damage Resistance",
                         -effect.value * 100.0,
                         optional_damage_type_str(damage_type),
                         skill_type_str(skill_type)

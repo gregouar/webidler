@@ -113,7 +113,7 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                         character_specs
                             .damage_resistance
                             .entry((skill, damage))
-                            .or_insert(1.0)
+                            .or_insert(0.0)
                             .apply_effect(effect);
                     }
                 }
