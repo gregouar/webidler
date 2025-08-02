@@ -15,7 +15,9 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use backend::{
     app_state::AppState,
     db::{self, pool},
-    game::{data::master_store::MasterStore, sessions::SessionsStore},
+    game::{
+        data::master_store::MasterStore, sessions::SessionsStore, systems::sessions_controller,
+    },
     rest, tasks, websocket,
 };
 
@@ -74,9 +76,9 @@ async fn main() {
         .merge(rest::routes())
         .route("/ws", any(websocket::handler))
         .with_state(AppState {
-            db_pool,
+            db_pool: db_pool.clone(),
             master_store,
-            sessions_store,
+            sessions_store: sessions_store.clone(),
         })
         .layer(tracer_layer)
         .layer(cors_layer);
@@ -96,4 +98,11 @@ async fn main() {
     }
 
     purge_sessions_handle.abort();
+
+    // Note that this only save the sessions that were not active but in the store...
+    if let Err(e) = sessions_controller::save_all_sessions(&db_pool, &sessions_store).await {
+        tracing::error!("failed to save all sessions: {}", e);
+    }
+
+    tracing::debug!("server has been shut down");
 }

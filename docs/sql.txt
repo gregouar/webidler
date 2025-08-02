@@ -1,0 +1,2 @@
+sqlx migrate add --source migrations/sqlite save_session 
+sqlx migrate run --source migrations/sqlite  

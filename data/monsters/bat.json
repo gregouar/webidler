@@ -1,7 +1,7 @@
 {
   "name": "Angry Bat",
   "portrait": "monsters/bat.webp",
-  "max_life": 5,
+  "max_life": 3,
   "power_factor": 1.0,
   "max_initiative": 0.5,
   "skills": [

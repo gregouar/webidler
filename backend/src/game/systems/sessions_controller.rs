@@ -52,14 +52,55 @@ pub async fn create_session(
         return Err(anyhow!("player already in session"));
     }
 
+    let game_instance_data =
+        match load_and_remove_game_instance(db_pool, master_store, user_id).await {
+            Some(saved_instance) => saved_instance,
+            None => new_game_instance(master_store, user_id)?,
+        };
+
     let session_id = db::game_sessions::create_session(db_pool, user_id).await?;
 
     let mut rng = rand::rng();
     let mut session_key: SessionKey = [0u8; 32];
     rng.try_fill_bytes(&mut session_key)?;
 
-    let passives_tree_specs = master_store.passives_store.get("default").unwrap().clone();
+    Ok((
+        session_id,
+        Session {
+            user_id: user_id.to_string(),
+            session_key,
+            last_active: Instant::now(),
+            game_data: Box::new(game_instance_data),
+        },
+    ))
+}
 
+async fn load_and_remove_game_instance(
+    db_pool: &db::DbPool,
+    master_store: &MasterStore,
+    user_id: &UserId,
+) -> Option<GameInstanceData> {
+    let saved_game_instance =
+        match db::game_instances::load_game_instance_data(db_pool, master_store, user_id).await {
+            Ok(x) => x,
+            Err(e) => {
+                tracing::error!("failed to load game instance for user '{}': {}", user_id, e);
+                None
+            }
+        };
+
+    if let Err(e) = db::game_instances::delete_game_instance_data(db_pool, user_id).await {
+        tracing::error!(
+            "failed to delete saved game instance for user '{}': {}",
+            user_id,
+            e
+        );
+    };
+
+    saved_game_instance
+}
+
+fn new_game_instance(master_store: &MasterStore, user_id: &UserId) -> Result<GameInstanceData> {
     let mut player_specs = PlayerSpecs::init(CharacterSpecs {
         name: user_id.to_string(), // TODO: LOL
         portrait: String::from("adventurers/human_male_2.webp"),
@@ -85,18 +126,6 @@ pub async fn create_session(
 
     let player_resources = PlayerResources::default();
 
-    let world_id = "inn_basement.json";
-    let world_blueprint = match master_store
-        .world_blueprints_store
-        .get(world_id)
-        .cloned() // TODO: Avoid clone?
-    {
-        Some(world_blueprint) => world_blueprint,
-        None => {
-            return Err(anyhow!("couldn't load world: {}",world_id));
-        }
-    };
-
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
     if let Some(base_weapon) = master_store.items_store.get("dagger").cloned() {
@@ -115,20 +144,18 @@ pub async fn create_session(
         );
     }
 
-    Ok((
-        session_id,
-        Session {
-            session_key,
-            last_active: Instant::now(),
-            game_data: Box::new(GameInstanceData::init(
-                world_blueprint,
-                passives_tree_specs,
-                player_resources,
-                player_specs,
-                player_inventory,
-            )),
-        },
-    ))
+    GameInstanceData::init_from_store(
+        master_store,
+        "inn_basement.json",
+        None,
+        "default",
+        None,
+        player_resources,
+        player_specs,
+        player_inventory,
+        None,
+        None,
+    )
 }
 
 pub async fn end_session(
@@ -142,6 +169,32 @@ pub async fn end_session(
         tracing::error!("failed to save game score: {}", e);
     }
     db::game_sessions::end_session(db_pool, session_id).await?;
+
+    Ok(())
+}
+
+pub async fn save_all_sessions(db_pool: &db::DbPool, sessions_store: &SessionsStore) -> Result<()> {
+    let sessions = sessions_store
+        .sessions
+        .lock()
+        .unwrap()
+        .drain()
+        .collect::<Vec<_>>();
+
+    // TODO: Trace errors
+    futures::future::join_all(sessions.into_iter().map(|(session_id, session)| {
+        let db_pool = db_pool.clone();
+        tokio::spawn(async move {
+            end_session(&db_pool, &session_id, &session).await?;
+            db::game_instances::save_game_instance_data(
+                &db_pool,
+                &session.user_id,
+                *session.game_data,
+            )
+            .await
+        })
+    }))
+    .await;
 
     Ok(())
 }

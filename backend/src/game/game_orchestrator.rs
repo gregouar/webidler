@@ -124,7 +124,11 @@ async fn control_entities(
                     let world_state: &mut shared::data::world::WorldState =
                         game_data.world_state.mutate();
                     let amount = world_state.going_back;
-                    world_controller::decrease_area_level(world_state, amount);
+                    world_controller::decrease_area_level(
+                        &game_data.world_blueprint.specs,
+                        world_state,
+                        amount,
+                    );
                     world_state.going_back = 0;
                 }
 
@@ -190,5 +194,9 @@ fn respawn_player(game_data: &mut GameInstanceData) {
 
     game_data.player_state = PlayerState::init(game_data.player_specs.read());
 
-    world_controller::decrease_area_level(game_data.world_state.mutate(), 1);
+    world_controller::decrease_area_level(
+        &game_data.world_blueprint.specs,
+        game_data.world_state.mutate(),
+        1,
+    );
 }

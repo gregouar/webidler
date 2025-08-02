@@ -35,6 +35,19 @@ pub async fn purge_sessions(db_pool: db::DbPool, sessions_store: SessionsStore) 
             {
                 tracing::error!("failed to end game session '{}': {}", session_id, e);
             }
+            if let Err(e) = db::game_instances::save_game_instance_data(
+                &db_pool,
+                &session.user_id,
+                *session.game_data,
+            )
+            .await
+            {
+                tracing::error!(
+                    "failed to save game instance from session '{}': {}",
+                    session_id,
+                    e
+                );
+            }
         }
     }
 }
