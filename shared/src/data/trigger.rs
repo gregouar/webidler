@@ -32,25 +32,21 @@ pub struct HitTrigger {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct TriggeredEffect {
-    #[serde(flatten)]
-    pub trigger: EventTrigger,
+pub struct TriggerSpecs {
     pub description: String,
-
     #[serde(flatten)]
-    pub effect: TriggerEffectType,
+    pub triggered_effect: TriggeredEffect,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub enum TriggerEffectType {
-    UseSkill, //TODO
-    ApplySkillEffects {
-        #[serde(default)]
-        target: TriggerTarget,
-        #[serde(default)]
-        modifiers: Vec<TriggerEffectModifier>,
-        effects: Vec<SkillEffect>,
-    },
+pub struct TriggeredEffect {
+    #[serde(flatten)]
+    pub trigger: EventTrigger,
+    #[serde(default)]
+    pub target: TriggerTarget,
+    #[serde(default)]
+    pub modifiers: Vec<TriggerEffectModifier>,
+    pub effects: Vec<SkillEffect>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

@@ -9,6 +9,7 @@ use shared::data::skill::RestoreType;
 use shared::data::skill::SkillTargetsGroup;
 use shared::data::skill::TargetType;
 use shared::data::skill::{SkillEffect, SkillEffectType, SkillRange, SkillShape, SkillSpecs};
+use shared::data::trigger::TriggerSpecs;
 
 use crate::components::game::tooltips::effects_tooltip;
 use crate::components::ui::number::format_number;
@@ -24,6 +25,13 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         .map(format_target)
         .collect::<Vec<_>>();
 
+    let trigger_lines = skill_specs
+        .triggers
+        .clone()
+        .into_iter()
+        .map(format_trigger)
+        .collect::<Vec<_>>();
+
     view! {
         <div class="
         max-w-xs p-4 rounded-xl border border-purple-700 ring-2 ring-purple-500 
@@ -35,8 +43,15 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
             <hr class="border-t border-gray-700" />
 
             <p class="text-sm text-gray-400 leading-snug">
-                "Cooldown: "
-                <span class="text-white">{format!("{:.2}s", skill_specs.cooldown)}</span>
+                {if skill_specs.cooldown > 0.0 {
+                    view! {
+                        "Cooldown: "
+                        <span class="text-white">{format!("{:.2}s", skill_specs.cooldown)}</span>
+                    }
+                        .into_any()
+                } else {
+                    view! { "Permanent" }.into_any()
+                }}
                 {(skill_specs.mana_cost > 0.0)
                     .then(|| {
                         view! {
@@ -46,7 +61,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                     })}
             </p>
 
-            <ul class="list-none space-y-1">{targets_lines}</ul>
+            <ul class="list-none space-y-1">{targets_lines}{trigger_lines}</ul>
 
             {(!skill_specs.base.description.is_empty())
                 .then(|| {
@@ -247,4 +262,18 @@ fn format_min_max(min: f64, max: f64) -> String {
 #[component]
 fn EffectLi(children: Children) -> impl IntoView {
     view! { <li class="text-sm text-purple-200 leading-snug">{children()}</li> }
+}
+
+fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
+    let effects = trigger
+        .triggered_effect
+        .effects
+        .into_iter()
+        .map(format_effect)
+        .collect::<Vec<_>>();
+
+    view! {
+        <EffectLi>{trigger.description}</EffectLi>
+        {effects}
+    }
 }

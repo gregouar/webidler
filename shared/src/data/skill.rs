@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::data::trigger::TriggerSpecs;
+
 pub use super::stat_effect::DamageType;
 use super::{
     character_status::StatusType, item::ItemSlot, passive::StatEffect, stat_effect::DamageMap,
@@ -23,7 +25,10 @@ pub struct BaseSkillSpecs {
     #[serde(default)]
     pub upgrade_effects: Vec<StatEffect>,
 
+    #[serde(default)]
     pub targets: Vec<SkillTargetsGroup>,
+    #[serde(default)]
+    pub triggers: Vec<TriggerSpecs>,
     // TODO: special upgrades at some levels?
 }
 
@@ -38,6 +43,7 @@ pub struct SkillSpecs {
     pub next_upgrade_cost: f64,
 
     pub targets: Vec<SkillTargetsGroup>,
+    pub triggers: Vec<TriggerSpecs>,
 
     pub item_slot: Option<ItemSlot>,
 }

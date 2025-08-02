@@ -16,7 +16,9 @@ pub fn update_skills_states(
     skill_states: &mut [SkillState],
 ) {
     for (skill_specs, skill_state) in skill_specs.iter().zip(skill_states.iter_mut()) {
-        skill_state.elapsed_cooldown += elapsed_time.as_secs_f32() / skill_specs.cooldown;
+        if skill_specs.cooldown > 0.0 {
+            skill_state.elapsed_cooldown += elapsed_time.as_secs_f32() / skill_specs.cooldown;
+        }
         if skill_state.elapsed_cooldown >= 1.0 {
             skill_state.elapsed_cooldown = 1.0;
             skill_state.is_ready = true;
@@ -60,6 +62,12 @@ pub fn apply_effects_to_skill_specs(skill_specs: &mut SkillSpecs, effects: &[Sta
         .targets
         .iter_mut()
         .flat_map(|t| t.effects.iter_mut())
+        .chain(
+            skill_specs
+                .triggers
+                .iter_mut()
+                .flat_map(|trigger| trigger.triggered_effect.effects.iter_mut()),
+        )
     {
         compute_skill_specs_effect(skill_specs.base.skill_type, skill_effect, effects)
     }
@@ -158,6 +166,14 @@ pub fn compute_skill_specs_effect<'a, I>(
                         max_value.apply_effect(effect);
                     }
                     StatType::Damage {
+                        skill_type: skill_type2,
+                        damage_type: damage_type2,
+                    }
+                    | StatType::MinDamage {
+                        skill_type: skill_type2,
+                        damage_type: damage_type2,
+                    }
+                    | StatType::MaxDamage {
                         skill_type: skill_type2,
                         damage_type: damage_type2,
                     } if skill_type == skill_type2.unwrap_or(skill_type)

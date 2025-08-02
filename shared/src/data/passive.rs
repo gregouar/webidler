@@ -2,8 +2,9 @@ use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
 
+use crate::data::trigger::TriggerSpecs;
+
 pub use super::stat_effect::StatEffect;
-use super::trigger::TriggeredEffect;
 
 pub type PassiveNodeId = String;
 
@@ -51,7 +52,7 @@ pub struct PassiveNodeSpecs {
     #[serde(default)]
     pub effects: Vec<StatEffect>,
     #[serde(default)]
-    pub triggers: Vec<TriggeredEffect>,
+    pub triggers: Vec<TriggerSpecs>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]

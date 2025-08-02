@@ -51,7 +51,7 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             skills_specs: vec![],
             auto_skills: vec![],
             max_skills: 4,
-            buy_skill_cost: 100.0,
+            buy_skill_cost: 1.0,
             bought_skills: HashSet::new(),
             level: 1,
             experience_needed: 20.0,
@@ -92,6 +92,7 @@ impl DataInit<BaseSkillSpecs> for SkillSpecs {
             upgrade_level: 1,
             next_upgrade_cost: specs.upgrade_cost,
             targets: specs.targets.clone(),
+            triggers: specs.triggers.clone(),
             item_slot: None,
             base: specs,
         }

@@ -9,11 +9,11 @@ use crate::game::{
         master_store::MasterStore,
     },
     game_data::GameInstanceData,
+    systems::triggers_controller,
 };
 
 use super::{
-    loot_controller, loot_generator, player_controller,
-    triggers_controller::{self, TriggerContext},
+    loot_controller, loot_generator, player_controller, triggers_controller::TriggerContext,
 };
 
 pub async fn resolve_events(
@@ -77,7 +77,7 @@ fn handle_hit_event<'a>(
             && hit_trigger.is_hurt.unwrap_or(hit_event.is_hurt) == hit_event.is_hurt
         {
             trigger_effects.push(TriggerContext {
-                effect: triggered_effects.effect.clone(),
+                trigger: triggered_effects.clone(),
                 source: hit_event.source,
                 target: hit_event.target,
                 hit_context: Some(hit_event),
@@ -109,7 +109,7 @@ fn handle_kill_event(
             for triggered_effects in game_data.player_specs.read().triggers.iter() {
                 if let EventTrigger::OnKill = triggered_effects.trigger {
                     trigger_effects.push(TriggerContext {
-                        effect: triggered_effects.effect.clone(),
+                        trigger: triggered_effects.clone(),
                         source: CharacterId::Player,
                         target,
                         hit_context: None,
@@ -183,7 +183,7 @@ fn handle_wave_completed_event(
     for triggered_effects in game_data.player_specs.read().triggers.iter() {
         if let EventTrigger::OnWaveCompleted = triggered_effects.trigger {
             trigger_effects.push(TriggerContext {
-                effect: triggered_effects.effect.clone(),
+                trigger: triggered_effects.clone(),
                 source: CharacterId::Player,
                 target: CharacterId::Player,
                 hit_context: None,

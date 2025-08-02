@@ -663,20 +663,18 @@
           {
             "description": "Blocked Attacks inflict Stun for 3 seconds",
             "OnTakeHit": { "skill_type": "Attack", "is_blocked": true },
-            "ApplySkillEffects": {
-              "target": "Source",
-              "effects": [
-                {
-                  "ApplyStatus": {
-                    "status_type": "Stun",
-                    "min_value": 0,
-                    "max_value": 0,
-                    "min_duration": 3,
-                    "max_duration": 3
-                  }
+            "target": "Source",
+            "effects": [
+              {
+                "ApplyStatus": {
+                  "status_type": "Stun",
+                  "min_value": 0,
+                  "max_value": 0,
+                  "min_duration": 3,
+                  "max_duration": 3
                 }
-              ]
-            }
+              }
+            ]
           }
         ]
       },
@@ -692,26 +690,24 @@
           {
             "description": "Restore Area Level x 3 Health at the end of each wave.",
             "OnWaveCompleted": {},
-            "ApplySkillEffects": {
-              "target": "Source",
-              "effects": [
-                {
-                  "Restore": {
-                    "restore_type": "Life",
-                    "min": 3,
-                    "max": 3
-                  }
+            "target": "Source",
+            "effects": [
+              {
+                "Restore": {
+                  "restore_type": "Life",
+                  "min": 3,
+                  "max": 3
                 }
-              ],
-              "modifiers": [
-                {
-                  "stat": "SpellPower",
-                  "modifier": "Multiplier",
-                  "factor": 1,
-                  "source": "AreaLevel"
-                }
-              ]
-            }
+              }
+            ],
+            "modifiers": [
+              {
+                "stat": "SpellPower",
+                "modifier": "Multiplier",
+                "factor": 1,
+                "source": "AreaLevel"
+              }
+            ]
           }
         ]
       },
@@ -727,32 +723,30 @@
           {
             "description": "Critical Hit with Attacks inflict Bleed for 2 seconds. Bleed damage is 50% of Physical Damage dealt by initial Hit per second.",
             "OnHit": { "skill_type": "Attack", "is_crit": true },
-            "ApplySkillEffects": {
-              "effects": [
-                {
-                  "ApplyStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Physical",
-                        "ignore_armor": true
-                      }
-                    },
-                    "min_value": 1,
-                    "max_value": 1,
-                    "min_duration": 2,
-                    "max_duration": 2
-                  }
+            "effects": [
+              {
+                "ApplyStatus": {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Physical",
+                      "ignore_armor": true
+                    }
+                  },
+                  "min_value": 1,
+                  "max_value": 1,
+                  "min_duration": 2,
+                  "max_duration": 2
                 }
-              ],
-              "modifiers": [
-                {
-                  "stat": { "Damage": {} },
-                  "modifier": "Multiplier",
-                  "factor": 0.5,
-                  "source": { "HitDamage": "Physical" }
-                }
-              ]
-            }
+              }
+            ],
+            "modifiers": [
+              {
+                "stat": { "Damage": {} },
+                "modifier": "Multiplier",
+                "factor": 0.5,
+                "source": { "HitDamage": "Physical" }
+              }
+            ]
           }
         ]
       },
@@ -810,37 +804,35 @@
           {
             "description": "Taking a hit grants +20% Attack Speed for 2s and stacks +20% Attack Damage for 2s.",
             "OnTakeHit": { "is_hurt": true },
-            "ApplySkillEffects": {
-              "effects": [
-                {
-                  "ApplyStatus": {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "Damage": {} }
-                      }
-                    },
-                    "cumulate": true,
-                    "min_value": 0.2,
-                    "max_value": 0.2,
-                    "min_duration": 2,
-                    "max_duration": 2
-                  }
-                },
-                {
-                  "ApplyStatus": {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "Speed": "Attack" }
-                      }
-                    },
-                    "min_value": 0.2,
-                    "max_value": 0.2,
-                    "min_duration": 2,
-                    "max_duration": 2
-                  }
+            "effects": [
+              {
+                "ApplyStatus": {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": { "Damage": {} }
+                    }
+                  },
+                  "cumulate": true,
+                  "min_value": 0.2,
+                  "max_value": 0.2,
+                  "min_duration": 2,
+                  "max_duration": 2
                 }
-              ]
-            }
+              },
+              {
+                "ApplyStatus": {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": { "Speed": "Attack" }
+                    }
+                  },
+                  "min_value": 0.2,
+                  "max_value": 0.2,
+                  "min_duration": 2,
+                  "max_duration": 2
+                }
+              }
+            ]
           }
         ]
       },
