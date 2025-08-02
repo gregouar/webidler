@@ -292,8 +292,8 @@
     "upgrade_effects": [
       {
         "stat": "SpellPower",
-        "modifier": "Flat",
-        "value": 1.0
+        "modifier": "Multiplier",
+        "value": 0.2
       }
     ],
     "targets": [
