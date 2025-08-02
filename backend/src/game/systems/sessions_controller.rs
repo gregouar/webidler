@@ -52,65 +52,13 @@ pub async fn create_session(
         return Err(anyhow!("player already in session"));
     }
 
-    let session_id = db::game_sessions::create_session(db_pool, user_id).await?;
-
     let game_instance_data =
-        match db::game_instances::load_game_instance_data(db_pool, master_store, user_id).await? {
+        match load_and_remove_game_instance(db_pool, master_store, user_id).await {
             Some(saved_instance) => saved_instance,
-            None => {
-                let mut player_specs = PlayerSpecs::init(CharacterSpecs {
-                    name: user_id.to_string(), // TODO: LOL
-                    portrait: String::from("adventurers/human_male_2.webp"),
-                    size: CharacterSize::Small,
-                    position_x: 0,
-                    position_y: 0,
-                    max_life: 100.0,
-                    life_regen: 1.0,
-                    max_mana: 100.0,
-                    mana_regen: 1.0,
-                    armor: 0.0,
-                    fire_armor: 0.0,
-                    poison_armor: 0.0,
-                    block: 0.0,
-                    take_from_mana_before_life: 0.0,
-                    damage_resistance: HashMap::new(),
-                });
-
-                let mut player_inventory = PlayerInventory {
-                    max_bag_size: 40,
-                    ..Default::default()
-                };
-
-                let player_resources = PlayerResources::default();
-
-                let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
-
-                if let Some(base_weapon) = master_store.items_store.get("dagger").cloned() {
-                    let _ = player_controller::equip_item(
-                        &mut player_specs,
-                        &mut player_inventory,
-                        &mut player_state,
-                        loot_generator::roll_item(
-                            base_weapon,
-                            ItemRarity::Normal,
-                            1,
-                            &master_store.item_affixes_table,
-                            &master_store.item_adjectives_table,
-                            &master_store.item_nouns_table,
-                        ),
-                    );
-                }
-
-                GameInstanceData::init_from_store(
-                    master_store,
-                    "inn_basement.json",
-                    "default",
-                    player_resources,
-                    player_specs,
-                    player_inventory,
-                )?
-            }
+            None => new_game_instance(master_store, user_id)?,
         };
+
+    let session_id = db::game_sessions::create_session(db_pool, user_id).await?;
 
     let mut rng = rand::rng();
     let mut session_key: SessionKey = [0u8; 32];
@@ -125,6 +73,89 @@ pub async fn create_session(
             game_data: Box::new(game_instance_data),
         },
     ))
+}
+
+async fn load_and_remove_game_instance(
+    db_pool: &db::DbPool,
+    master_store: &MasterStore,
+    user_id: &UserId,
+) -> Option<GameInstanceData> {
+    let saved_game_instance =
+        match db::game_instances::load_game_instance_data(db_pool, master_store, user_id).await {
+            Ok(x) => x,
+            Err(e) => {
+                tracing::error!("failed to load game instance for user '{}': {}", user_id, e);
+                None
+            }
+        };
+
+    if let Err(e) = db::game_instances::delete_game_instance_data(db_pool, user_id).await {
+        tracing::error!(
+            "failed to delete saved game instance for user '{}': {}",
+            user_id,
+            e
+        );
+    };
+
+    saved_game_instance
+}
+
+fn new_game_instance(master_store: &MasterStore, user_id: &UserId) -> Result<GameInstanceData> {
+    let mut player_specs = PlayerSpecs::init(CharacterSpecs {
+        name: user_id.to_string(), // TODO: LOL
+        portrait: String::from("adventurers/human_male_2.webp"),
+        size: CharacterSize::Small,
+        position_x: 0,
+        position_y: 0,
+        max_life: 100.0,
+        life_regen: 1.0,
+        max_mana: 100.0,
+        mana_regen: 1.0,
+        armor: 0.0,
+        fire_armor: 0.0,
+        poison_armor: 0.0,
+        block: 0.0,
+        take_from_mana_before_life: 0.0,
+        damage_resistance: HashMap::new(),
+    });
+
+    let mut player_inventory = PlayerInventory {
+        max_bag_size: 40,
+        ..Default::default()
+    };
+
+    let player_resources = PlayerResources::default();
+
+    let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
+
+    if let Some(base_weapon) = master_store.items_store.get("dagger").cloned() {
+        let _ = player_controller::equip_item(
+            &mut player_specs,
+            &mut player_inventory,
+            &mut player_state,
+            loot_generator::roll_item(
+                base_weapon,
+                ItemRarity::Normal,
+                1,
+                &master_store.item_affixes_table,
+                &master_store.item_adjectives_table,
+                &master_store.item_nouns_table,
+            ),
+        );
+    }
+
+    GameInstanceData::init_from_store(
+        master_store,
+        "inn_basement.json",
+        None,
+        "default",
+        None,
+        player_resources,
+        player_specs,
+        player_inventory,
+        None,
+        None,
+    )
 }
 
 pub async fn end_session(
@@ -150,9 +181,11 @@ pub async fn save_all_sessions(db_pool: &db::DbPool, sessions_store: &SessionsSt
         .drain()
         .collect::<Vec<_>>();
 
-    futures::future::join_all(sessions.into_iter().map(|(_, session)| {
+    // TODO: Trace errors
+    futures::future::join_all(sessions.into_iter().map(|(session_id, session)| {
         let db_pool = db_pool.clone();
         tokio::spawn(async move {
+            end_session(&db_pool, &session_id, &session).await?;
             db::game_instances::save_game_instance_data(
                 &db_pool,
                 &session.user_id,

@@ -1,5 +1,5 @@
 use anyhow::Result;
-use shared::messages::SessionId;
+use shared::messages::{SessionId, UserId};
 
 use super::{
     data::{event::EventsQueue, master_store::MasterStore},
@@ -8,12 +8,17 @@ use super::{
     game_timer::GameTimer,
 };
 
-use crate::{db::DbPool, game::systems::leaderboard_controller, websocket::WebSocketConnection};
+use crate::{
+    db::{self, DbPool},
+    game::systems::leaderboard_controller,
+    websocket::WebSocketConnection,
+};
 
 pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
     db_pool: DbPool,
     master_store: MasterStore,
+    user_id: &'a UserId,
     session_id: &'a SessionId,
     game_data: &'a mut GameInstanceData,
     events_queue: EventsQueue,
@@ -22,6 +27,7 @@ pub struct GameInstance<'a> {
 impl<'a> GameInstance<'a> {
     pub fn new(
         client_conn: &'a mut WebSocketConnection,
+        user_id: &'a UserId,
         session_id: &'a SessionId,
         game_data: &'a mut GameInstanceData,
         db_pool: DbPool,
@@ -29,6 +35,7 @@ impl<'a> GameInstance<'a> {
     ) -> Self {
         GameInstance {
             client_conn,
+            user_id,
             session_id,
             db_pool,
             master_store,
@@ -69,14 +76,7 @@ impl<'a> GameInstance<'a> {
             }
 
             if game_timer.should_autosave() {
-                let (db_pool, session_id, game_data) = (
-                    self.db_pool.clone(),
-                    *self.session_id,
-                    self.game_data.clone(), // TODO: Do something else
-                );
-                tokio::spawn(async move {
-                    leaderboard_controller::save_game_score(&db_pool, &session_id, &game_data).await
-                });
+                self.auto_save();
             }
 
             game_timer.wait_tick().await;
@@ -84,5 +84,26 @@ impl<'a> GameInstance<'a> {
 
         tracing::debug!("game session '{}' ended ", self.session_id);
         Ok(())
+    }
+
+    fn auto_save(&self) {
+        let (db_pool, user_id, session_id, game_data) = (
+            self.db_pool.clone(),
+            self.user_id.clone(),
+            *self.session_id,
+            self.game_data.clone(), // TODO: Do something else, like only copy the necessary data
+        );
+        tokio::spawn(async move {
+            leaderboard_controller::save_game_score(&db_pool, &session_id, &game_data)
+                .await
+                .unwrap_or_else(|e| {
+                    tracing::error!("failed to save game score '{}': {}", user_id, e)
+                });
+            db::game_instances::save_game_instance_data(&db_pool, &user_id, game_data)
+                .await
+                .unwrap_or_else(|e| {
+                    tracing::error!("failed to save game instance for user '{}': {}", user_id, e)
+                });
+        });
     }
 }

@@ -159,9 +159,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
             | StatType::Armor(_)
             | StatType::TakeFromManaBeforeLife
             | StatType::Block
-            | StatType::DamageResistance { .. } => {
-                player_specs.character_specs.block.apply_effect(effect)
-            }
+            | StatType::DamageResistance { .. } => {}
             // Delegate to skills
             StatType::Damage { .. }
             | StatType::MinDamage { .. }

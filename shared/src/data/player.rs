@@ -14,7 +14,7 @@ use super::{
 pub struct PlayerSpecs {
     pub character_specs: CharacterSpecs,
     pub skills_specs: Vec<SkillSpecs>,
-    pub auto_skills: Vec<bool>,
+    pub auto_skills: Vec<bool>, // Should move to a separate synced struct
 
     pub max_skills: u8,
     pub buy_skill_cost: f64,
@@ -23,6 +23,7 @@ pub struct PlayerSpecs {
     pub level: u8,
     pub experience_needed: f64,
 
+    // Should move to a DerivedPlayerSpecs
     pub movement_cooldown: f32,
     pub gold_find: f64,
     pub effects: EffectsMap,

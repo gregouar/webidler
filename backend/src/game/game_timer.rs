@@ -1,7 +1,7 @@
 use std::time::{Duration, Instant};
 
 const LOOP_MIN_PERIOD: Duration = Duration::from_millis(100);
-const AUTOSAVE_SCORE_DELAY: Duration = Duration::from_secs(60);
+const AUTOSAVE_DELAY: Duration = Duration::from_secs(60);
 
 #[derive(Debug, Clone)]
 pub struct GameTimer {
@@ -37,7 +37,7 @@ impl GameTimer {
 
     pub fn should_autosave(&mut self) -> bool {
         let now = Instant::now();
-        if Instant::now() - self.last_autosave > AUTOSAVE_SCORE_DELAY {
+        if Instant::now() - self.last_autosave > AUTOSAVE_DELAY {
             self.last_autosave = now;
             true
         } else {

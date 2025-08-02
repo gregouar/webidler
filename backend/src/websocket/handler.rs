@@ -85,6 +85,7 @@ async fn handle_socket(
     tracing::debug!("starting the game...");
     let game = GameInstance::new(
         &mut conn,
+        &session.user_id,
         &session_id,
         &mut session.game_data,
         db_pool.clone(),

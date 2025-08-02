@@ -98,6 +98,8 @@ async fn main() {
     }
 
     purge_sessions_handle.abort();
+
+    // Note that this only save the sessions that were not active but in the store...
     if let Err(e) = sessions_controller::save_all_sessions(&db_pool, &sessions_store).await {
         tracing::error!("failed to save all sessions: {}", e);
     }
