@@ -392,7 +392,9 @@
             "FlatDamage": {
               "damage": {
                 "Physical": [5, 10]
-              }
+              },
+              "crit_chances": 0.05,
+              "crit_damage": 1
             }
           }
         ]
