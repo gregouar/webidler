@@ -285,7 +285,7 @@
     "name": "Poison Coating",
     "description": "Coat your weapon with poison, inflicting poison damage",
     "icon": "skills/poison_coating.svg",
-    "skill_type": "Attack",
+    "skill_type": "Spell",
     "cooldown": 15,
     "mana_cost": 25,
     "upgrade_cost": 50,
