@@ -51,7 +51,7 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             skills_specs: vec![],
             auto_skills: vec![],
             max_skills: 4,
-            buy_skill_cost: 1.0,
+            buy_skill_cost: 100.0,
             bought_skills: HashSet::new(),
             level: 1,
             experience_needed: 20.0,
