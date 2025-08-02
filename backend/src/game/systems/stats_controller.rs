@@ -9,8 +9,9 @@ pub trait ApplyStatModifier {
             match modifier {
                 Modifier::Flat => -value,
                 Modifier::Multiplier => {
-                    if value != -1.0 {
-                        -(value / (1.0 + value))
+                    let div = (1.0 + value).max(0.0);
+                    if div != -1.0 {
+                        -(value / div)
                     } else {
                         0.0
                     }
@@ -30,7 +31,7 @@ impl ApplyStatModifier for f32 {
     fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
         match modifier {
             Modifier::Flat => *self += value as f32,
-            Modifier::Multiplier => *self *= 1.0 + value as f32,
+            Modifier::Multiplier => *self *= (1.0 + value as f32).max(0.0),
         }
     }
 }
@@ -39,7 +40,7 @@ impl ApplyStatModifier for f64 {
     fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
         match modifier {
             Modifier::Flat => *self += value,
-            Modifier::Multiplier => *self *= 1.0 + value,
+            Modifier::Multiplier => *self *= (1.0 + value).max(0.0),
         }
     }
 }
