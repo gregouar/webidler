@@ -9,7 +9,7 @@ use crate::data::{
     world::{WorldSpecs, WorldState},
 };
 
-use super::{macros::impl_into_message, SessionId, SessionKey};
+use super::{SessionId, SessionKey, macros::impl_into_message};
 
 impl_into_message! {
     #[derive(Serialize, Deserialize, Debug, Clone,)]

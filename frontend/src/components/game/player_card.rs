@@ -20,9 +20,9 @@ use crate::components::{
     websocket::WebsocketContext,
 };
 
+use super::GameContext;
 use super::character::CharacterPortrait;
 use super::tooltips::SkillTooltip;
-use super::GameContext;
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {

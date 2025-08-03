@@ -173,8 +173,6 @@ pub fn compute_damage(
     .max(0.0)
         * amount;
 
-    
-
     if ignore_armor {
         amount
     } else {

@@ -3,8 +3,8 @@ use std::sync::Arc;
 use leptos::prelude::*;
 use leptos::web_sys::CloseEvent;
 use leptos_use::{
-    core::ConnectionReadyState, use_websocket_with_options, ReconnectLimit, UseWebSocketError,
-    UseWebSocketOptions, UseWebSocketReturn,
+    ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
+    core::ConnectionReadyState, use_websocket_with_options,
 };
 
 use codee::binary::MsgpackSerdeCodec;

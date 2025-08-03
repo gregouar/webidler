@@ -200,12 +200,28 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                         modifier,
                         debuff,
                     } => {
-                        stat_effects.push(StatEffect{stat, modifier,  value: if debuff { -status_effect.min_value } else { status_effect.min_value }});
+                        stat_effects.push(StatEffect {
+                            stat,
+                            modifier,
+                            value: if debuff {
+                                -status_effect.min_value
+                            } else {
+                                status_effect.min_value
+                            },
+                        });
                         if status_effect.min_value != status_effect.max_value {
-                            
-                        max_stat_effects.push(StatEffect{stat, modifier,  value: if debuff { -status_effect.min_value } else { status_effect.min_value }});
+                            max_stat_effects.push(StatEffect {
+                                stat,
+                                modifier,
+                                value: if debuff {
+                                    -status_effect.min_value
+                                } else {
+                                    status_effect.min_value
+                                },
+                            });
                         }
-                        ().into_any()},
+                        ().into_any()
+                    },
                 }
             }).collect();
 

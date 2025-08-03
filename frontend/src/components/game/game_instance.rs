@@ -8,16 +8,16 @@ use shared::messages::server::{ErrorType, InitGameMessage, ServerMessage, SyncGa
 use shared::messages::{SessionId, SessionKey};
 
 use crate::components::ui::{
-    confirm::{provide_confirm_context, ConfirmationModal},
+    confirm::{ConfirmationModal, provide_confirm_context},
     toast::*,
     tooltip::DynamicTooltip,
 };
 use crate::components::websocket::WebsocketContext;
 
+use super::GameContext;
 use super::battle_scene::BattleScene;
 use super::header_menu::HeaderMenu;
 use super::panels::{InventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel};
-use super::GameContext;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SessionInfos {

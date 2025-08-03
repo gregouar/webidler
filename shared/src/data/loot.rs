@@ -9,12 +9,10 @@ pub struct QueuedLoot {
     pub state: LootState,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
-#[derive(Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
 pub enum LootState {
     #[default]
     Normal,
     WillDisappear,
     HasDisappeared,
 }
-

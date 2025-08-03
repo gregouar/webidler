@@ -18,8 +18,8 @@ use crate::components::{
     },
 };
 
-use super::character::CharacterPortrait;
 use super::GameContext;
+use super::character::CharacterPortrait;
 
 #[component]
 pub fn MonstersGrid() -> impl IntoView {
