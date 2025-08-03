@@ -170,10 +170,10 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
             min_duration,
             max_duration,
         } => {
-            let stat_effects = Vec::new();
-            let max_stat_effects = Vec::new();
+            let mut stat_effects = Vec::new();
+            let mut max_stat_effects = Vec::new();
 
-            let formatted_status_effects:Vec<_> = statuses.iter().map(|status_effect| {
+            let formatted_status_effects:Vec<_> = statuses.iter().cloned().map(|status_effect| {
                 match status_effect.status_type {
                     StatusType::Stun => {
                         view! { <EffectLi>"Stun for "{format_min_max(min_duration, max_duration)}" seconds"</EffectLi> }
@@ -222,8 +222,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                                 )}
                             </ul>
                         </EffectLi>
-                        {(!max_stat_effects
-                            .is_empty()
+                        {(!max_stat_effects.is_empty())
                             .then(|| {
                                 view! {
                                     "to"
@@ -235,7 +234,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                                     </ul>
                                 }
                                     .into_any()
-                            }))}
+                            })}
                     }
                 })
             };
@@ -245,67 +244,6 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                 {formatted_stats_effects}
             }
             .into_any()
-
-            // match status_type {
-            //         StatusType::Stun => {
-            //             view! { <EffectLi>"Stun for "{format_min_max(min_duration, max_duration)}" seconds"</EffectLi> }
-            //                 .into_any()
-            //         }
-            //         StatusType::DamageOverTime { damage_type, .. } => {
-            //             view! {
-            //                 <EffectLi>
-            //                     "Deals "
-            //                     <span class="font-semibold">
-            //                         {format_min_max(min_value, max_value)}
-            //                     </span>"  "{optional_damage_type_str(Some(damage_type))}
-            //                     "Damage per second for "
-            //                     {format_min_max(min_duration, max_duration)}" seconds"
-            //                 </EffectLi>
-            //             }
-            //                 .into_any()
-            //         }
-            //         StatusType::StatModifier{ stat,debuff, modifier } => {
-            //             view! {
-            //                 <EffectLi>
-            //                     "Apply the following status for "
-            //                     {format_min_max(min_duration, max_duration)} " seconds:"
-            //                     <ul>
-            //                         {effects_tooltip::formatted_effects_list(
-            //                             vec![
-            //                                 StatEffect {
-            //                                     stat,
-            //                                     modifier,
-            //                                     value: if debuff { -min_value } else { min_value },
-            //                                 },
-            //                             ],
-            //                             AffixEffectScope::Global,
-            //                         )}
-            //                     </ul>
-            //                     {if min_value != max_value {
-            //                         view! {
-            //                             "to"
-            //                             <ul>
-            //                                 {effects_tooltip::formatted_effects_list(
-            //                                     vec![
-            //                                         StatEffect {
-            //                                             stat,
-            //                                             modifier,
-            //                                             value: if debuff { -max_value } else { max_value },
-            //                                         },
-            //                                     ],
-            //                                     AffixEffectScope::Global,
-            //                                 )}
-            //                             </ul>
-            //                         }
-            //                             .into_any()
-            //                     } else {
-            //                         view! {}.into_any()
-            //                     }}
-            //                 </EffectLi>
-            //             }
-            //                 .into_any()
-            //         }
-            //     }
         }
         SkillEffectType::Restore {
             restore_type,
