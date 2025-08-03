@@ -14,12 +14,32 @@
         "stat": "Mana",
         "modifier": "Flat",
         "min": 20,
-        "max": 40
+        "max": 39
       }
     ]
   },
   {
-    "name": "Enlightened",
+    "name": "Analytical",
+    "family": "add_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "min": 40,
+        "max": 59
+      }
+    ]
+  },
+
+  {
+    "name": "Cultivated",
     "family": "inc_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -34,6 +54,25 @@
         "modifier": "Multiplier",
         "min": 0.2,
         "max": 0.39
+      }
+    ]
+  },
+  {
+    "name": "Enlightened",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "min": 0.4,
+        "max": 0.59
       }
     ]
   }

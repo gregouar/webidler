@@ -1,6 +1,6 @@
 [
   {
-    "name": "Fortified",
+    "name": "Reinforced",
     "family": "add_armor",
     "tags": [
       "Physical",
@@ -26,7 +26,33 @@
     ]
   },
   {
-    "name": "Hard",
+    "name": "Fortified",
+    "family": "add_armor",
+    "tags": [
+      "Physical",
+      "Armor"
+    ],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": [
+      "Armor"
+    ],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Flat",
+        "min": 11,
+        "max": 20
+      }
+    ]
+  },
+  {
+    "name": "Though",
     "family": "inc_armor",
     "tags": [
       "Physical",
@@ -48,6 +74,32 @@
         "modifier": "Multiplier",
         "min": 0.2,
         "max": 0.39
+      }
+    ]
+  },
+  {
+    "name": "Hard",
+    "family": "inc_armor",
+    "tags": [
+      "Physical",
+      "Armor"
+    ],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": [
+      "Armor"
+    ],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Multiplier",
+        "min": 0.4,
+        "max": 0.59
       }
     ]
   }

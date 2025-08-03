@@ -11,10 +11,29 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {"Speed": null},
+        "stat": { "Speed": null },
         "modifier": "Multiplier",
         "min": 0.03,
-        "max": 0.06
+        "max": 0.059
+      }
+    ]
+  },
+  {
+    "name": "of Swiftness",
+    "family": "inc_action_speed",
+    "tags": ["Speed"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Gloves"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": null },
+        "modifier": "Multiplier",
+        "min": 0.06,
+        "max": 0.089
       }
     ]
   }

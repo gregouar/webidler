@@ -1,5 +1,5 @@
 [
-    {
+  {
     "name": "Nimble",
     "family": "inc_attack_speed",
     "tags": ["Attack", "Speed"],
@@ -11,15 +11,35 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {"Speed": "Attack"},
+        "stat": { "Speed": "Attack" },
         "modifier": "Multiplier",
         "min": 0.05,
-        "max": 0.1
+        "max": 0.9
       }
     ]
   },
   {
-    "name": "Surging",
+    "name": "Swift",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Cloak"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "min": 0.1,
+        "max": 0.14
+      }
+    ]
+  },
+
+  {
+    "name": "Spiraling",
     "family": "inc_spell_speed",
     "tags": ["Spell", "Speed"],
     "affix_type": "Prefix",
@@ -30,10 +50,29 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {"Speed": "Spell"},
+        "stat": { "Speed": "Spell" },
         "modifier": "Multiplier",
         "min": 0.05,
-        "max": 0.1
+        "max": 0.9
+      }
+    ]
+  },
+  {
+    "name": "Surging",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Cloak"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "min": 0.1,
+        "max": 0.14
       }
     ]
   }

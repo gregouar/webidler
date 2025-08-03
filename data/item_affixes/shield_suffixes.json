@@ -1,4 +1,4 @@
-[ 
+[
   {
     "name": "of Deflection",
     "family": "add_block",
@@ -14,12 +14,32 @@
         "stat": "Block",
         "modifier": "Flat",
         "min": 0.02,
-        "max": 0.04
+        "max": 0.039
       }
     ]
   },
   {
-    "name": "of Reinforcement",
+    "name": "of Block",
+    "family": "add_block",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Shield"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": "Block",
+        "modifier": "Flat",
+        "min": 0.04,
+        "max": 0.059
+      }
+    ]
+  },
+
+  {
+    "name": "of Oil",
     "family": "inc_block",
     "tags": ["Physical", "Armor"],
     "affix_type": "Suffix",
@@ -32,7 +52,26 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "min": 0.15,
+        "min": 0.1,
+        "max": 0.19
+      }
+    ]
+  },
+  {
+    "name": "of Coating",
+    "family": "inc_block",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Shield"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": "Block",
+        "modifier": "Multiplier",
+        "min": 0.2,
         "max": 0.29
       }
     ]

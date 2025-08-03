@@ -21,12 +21,39 @@
         },
         "modifier": "Multiplier",
         "min": 0.05,
-        "max": 0.1
+        "max": 0.9
       }
     ]
   },
   {
-    "name": "of Precision",
+    "name": "of Haste",
+    "family": "inc_speed",
+    "tags": [
+      "Attack",
+      "Speed"
+    ],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": [
+      "AttackWeapon"
+    ],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "Speed": "Attack"
+        },
+        "modifier": "Multiplier",
+        "min": 0.1,
+        "max": 0.14
+      }
+    ]
+  },
+
+  {
+    "name": "of Aim",
     "family": "add_crit_chances",
     "tags": [
       "Attack",
@@ -47,12 +74,39 @@
         },
         "modifier": "Flat",
         "min": 0.02,
-        "max": 0.04
+        "max": 0.039
       }
     ]
   },
   {
-    "name": "of the Hawk",
+    "name": "of Precision",
+    "family": "add_crit_chances",
+    "tags": [
+      "Attack",
+      "Critical"
+    ],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": [
+      "AttackWeapon"
+    ],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "CritChances": null
+        },
+        "modifier": "Flat",
+        "min": 0.04,
+        "max": 0.059
+      }
+    ]
+  },
+
+  {
+    "name": "of the Owl",
     "family": "inc_crit_chances",
     "tags": [
       "Attack",
@@ -78,7 +132,34 @@
     ]
   },
   {
-    "name": "of Impact",
+    "name": "of the Hawk",
+    "family": "inc_crit_chances",
+    "tags": [
+      "Attack",
+      "Critical"
+    ],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": [
+      "AttackWeapon"
+    ],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "CritChances": null
+        },
+        "modifier": "Multiplier",
+        "min": 0.4,
+        "max": 0.59
+      }
+    ]
+  },
+
+  {
+    "name": "of Force",
     "family": "add_crit_damage",
     "tags": [
       "Attack",
@@ -104,7 +185,34 @@
     ]
   },
   {
-    "name": "of Annihilation",
+    "name": "of Impact",
+    "family": "add_crit_damage",
+    "tags": [
+      "Attack",
+      "Critical"
+    ],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": [
+      "AttackWeapon"
+    ],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "CritDamage": null
+        },
+        "modifier": "Flat",
+        "min": 0.5,
+        "max": 0.74
+      }
+    ]
+  },
+  
+  {
+    "name": "of Destruction",
     "family": "inc_crit_damage",
     "tags": [
       "Attack",
@@ -130,6 +238,33 @@
     ]
   },
   {
+    "name": "of Annihilation",
+    "family": "inc_crit_damage",
+    "tags": [
+      "Attack",
+      "Critical"
+    ],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": [
+      "AttackWeapon"
+    ],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "CritDamage": null
+        },
+        "modifier": "Multiplier",
+        "min": 0.5,
+        "max": 0.74
+      }
+    ]
+  },
+
+  {
     "name": "of the Mosquito",
     "family": "life_leech",
     "tags": [
@@ -150,13 +285,40 @@
           "LifeOnHit": {"is_hurt": true, "skill_type": "Attack"}
         },
         "modifier": "Flat",
-        "min": 2,
-        "max": 5
+        "min": 1,
+        "max": 4
       }
     ]
   },
   {
-    "name": "of the Octopus",
+    "name": "of the Bat",
+    "family": "life_leech",
+    "tags": [
+      "Attack",
+      "Life"
+    ],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": [
+      "AttackWeapon"
+    ],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "LifeOnHit": {"is_hurt": true, "skill_type": "Attack"}
+        },
+        "modifier": "Flat",
+        "min": 5,
+        "max": 9
+      }
+    ]
+  },
+
+  {
+    "name": "of the Carp",
     "family": "mana_leech",
     "tags": [
       "Attack",
@@ -176,8 +338,34 @@
           "ManaOnHit": {"is_hurt": true, "skill_type": "Attack"}
         },
         "modifier": "Flat",
-        "min": 2,
-        "max": 5
+        "min": 1,
+        "max": 3
+      }
+    ]
+  },
+  {
+    "name": "of the Octopus",
+    "family": "mana_leech",
+    "tags": [
+      "Attack",
+      "Mana"
+    ],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": [
+      "AttackWeapon"
+    ],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "ManaOnHit": {"is_hurt": true, "skill_type": "Attack"}
+        },
+        "modifier": "Flat",
+        "min": 4,
+        "max": 6
       }
     ]
   }

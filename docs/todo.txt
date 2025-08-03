@@ -1,7 +1,12 @@
 Next things to do:
-- block chances on shields (mechanic & affixes & passives)
-- statuses (poison dot, stunned -> mega passive stun on crit)
-- another spell or attack skill
+
+- auth
+- multi characters
+- gem looting
+- choose world
+- market
+- shard looting
+- ascend
+
 - dual wield
-- resistances affixes
 - spider boss & minions

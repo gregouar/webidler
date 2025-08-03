@@ -1,39 +1,78 @@
 [
-    {
+  {
     "name": "of Emberguard",
     "family": "add_fire_res",
     "tags": ["Fire", "Armor"],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor","Accessory","Jewelry","Focus"],
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus"],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": {"Armor": "Fire"},
+        "stat": { "Armor": "Fire" },
         "modifier": "Flat",
-        "min": 20,
+        "min": 25,
         "max": 49
       }
     ]
   },
-    {
+  {
+    "name": "of Embershield",
+    "family": "add_fire_res",
+    "tags": ["Fire", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "min": 50,
+        "max": 74
+      }
+    ]
+  },
+
+  {
     "name": "of Venomguard",
     "family": "add_poison_res",
     "tags": ["Poison", "Armor"],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor","Accessory","Jewelry","Focus"],
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus"],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": {"Armor": "Poison"},
+        "stat": { "Armor": "Poison" },
         "modifier": "Flat",
-        "min": 20,
+        "min": 25,
         "max": 49
+      }
+    ]
+  },
+  {
+    "name": "of Venomshield",
+    "family": "add_poison_res",
+    "tags": ["Poison", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "min": 50,
+        "max": 74
       }
     ]
   }

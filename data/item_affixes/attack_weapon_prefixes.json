@@ -19,6 +19,26 @@
     ]
   },
   {
+    "name": "Brutal",
+    "family": "inc_damage",
+    "tags": ["Attack"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Damage": {} },
+        "modifier": "Multiplier",
+        "min": 0.4,
+        "max": 0.59
+      }
+    ]
+  },
+
+  {
     "name": "Sharp",
     "family": "add_physical_damage",
     "tags": ["Physical", "Attack"],
@@ -44,6 +64,33 @@
       }
     ]
   },
+  {
+    "name": "Strong",
+    "family": "add_physical_damage",
+    "tags": ["Physical", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "min": 2,
+        "max": 4
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "min": 5,
+        "max": 7
+      }
+    ]
+  },
+
   {
     "name": "Burning",
     "family": "add_fire_damage",
@@ -71,6 +118,34 @@
     ]
   },
   {
+    "name": "Scorching",
+    "family": "add_fire_damage",
+    "tags": ["Fire", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "modifier": "Flat",
+        "min": 2,
+        "max": 5
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "modifier": "Flat",
+        "min": 6,
+        "max": 8
+      }
+    ]
+  },
+
+
+  {
     "name": "Noxious",
     "family": "add_poison_damage",
     "tags": ["Poison", "Attack"],
@@ -93,6 +168,32 @@
         "modifier": "Flat",
         "min": 2,
         "max": 3
+      }
+    ]
+  },
+  {
+    "name": "Foul",
+    "family": "add_poison_damage",
+    "tags": ["Poison", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "modifier": "Flat",
+        "min": 1,
+        "max": 2
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "modifier": "Flat",
+        "min": 3,
+        "max": 4
       }
     ]
   }
