@@ -14,7 +14,7 @@ use shared::data::trigger::TriggerSpecs;
 use crate::components::game::tooltips::effects_tooltip;
 use crate::components::ui::number::format_number;
 
-use super::effects_tooltip::damage_type_str;
+use super::effects_tooltip::optional_damage_type_str;
 
 #[component]
 pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
@@ -138,7 +138,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                     view! {
                         <EffectLi>
                             "Deals " <span class="font-semibold">{format_min_max(min, max)}</span>
-                            " " {damage_type_str(damage_type)} " Damage"
+                            " " {optional_damage_type_str(Some(damage_type))} "Damage"
                         </EffectLi>
                     }
                 })
@@ -184,7 +184,8 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                                 "Deals "
                                 <span class="font-semibold">
                                     {format_min_max(min_value, max_value)}
-                                </span>"  "{damage_type_str(damage_type)}" Damage per second for "
+                                </span>"  "{optional_damage_type_str(Some(damage_type))}
+                                "Damage per second for "
                                 {format_min_max(min_duration, max_duration)}" seconds"
                             </EffectLi>
                         }

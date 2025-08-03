@@ -50,7 +50,7 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -
     for effect in effects {
         match effect.stat {
             StatType::Speed(Some(SkillType::Attack) | None) => {
-                weapon_specs.cooldown.apply_inverse_effect(effect)
+                weapon_specs.cooldown.apply_negative_effect(effect)
             }
             StatType::Damage {
                 skill_type: Some(SkillType::Attack) | None,

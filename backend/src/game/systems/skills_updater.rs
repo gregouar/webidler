@@ -52,7 +52,7 @@ pub fn apply_effects_to_skill_specs(skill_specs: &mut SkillSpecs, effects: &[Sta
                 if skill_specs.base.skill_type
                     == skill_type.unwrap_or(skill_specs.base.skill_type) =>
             {
-                skill_specs.cooldown.apply_inverse_effect(effect);
+                skill_specs.cooldown.apply_negative_effect(effect);
             }
             _ => {}
         }

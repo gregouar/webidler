@@ -130,7 +130,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
 
     for effect in effects.iter() {
         match effect.stat {
-            StatType::MovementSpeed => player_specs.movement_cooldown.apply_inverse_effect(effect),
+            StatType::MovementSpeed => player_specs.movement_cooldown.apply_negative_effect(effect),
             StatType::GoldFind => player_specs.gold_find.apply_effect(effect),
             StatType::LifeOnHit(hit_trigger) | StatType::ManaOnHit(hit_trigger) => {
                 if let Modifier::Flat = effect.modifier {

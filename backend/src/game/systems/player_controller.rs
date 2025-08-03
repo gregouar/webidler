@@ -102,9 +102,9 @@ pub fn reward_player(
     player_specs: &PlayerSpecs,
     monster_specs: &MonsterSpecs,
 ) -> f64 {
-    let gold_reward = monster_specs.power_factor * player_specs.gold_find;
+    let gold_reward = (monster_specs.power_factor * player_specs.gold_find).round();
     player_resources.gold += gold_reward;
-    player_resources.experience += monster_specs.power_factor;
+    player_resources.experience += monster_specs.power_factor.round();
     gold_reward
 }
 

@@ -9,27 +9,38 @@ use shared::data::{
     stat_effect::{Modifier, StatEffect, StatType},
 };
 
-pub fn damage_type_str(damage_type: DamageType) -> &'static str {
-    match damage_type {
-        DamageType::Physical => "Physical",
-        DamageType::Fire => "Fire",
-        DamageType::Poison => "Poison",
+use crate::components::ui::number::format_number;
+
+pub fn format_effect_value(effect: &StatEffect) -> String {
+    match effect.modifier {
+        Modifier::Flat => format_number(effect.value),
+        Modifier::Multiplier => {
+            if effect.value >= 0.0 {
+                format!("{}% Increased", format_number(effect.value * 100.0))
+            } else {
+                let div = (1.0 - effect.value).max(0.0);
+                format!(
+                    "{}% Decreased",
+                    format_number(-(if div != 0.0 { effect.value / div } else { 0.0 }) * 100.0)
+                )
+            }
+        }
     }
 }
 
 pub fn optional_damage_type_str(damage_type: Option<DamageType>) -> &'static str {
     match damage_type {
-        Some(DamageType::Physical) => " Physical",
-        Some(DamageType::Fire) => " Fire",
-        Some(DamageType::Poison) => " Poison",
+        Some(DamageType::Physical) => "Physical ",
+        Some(DamageType::Fire) => "Fire ",
+        Some(DamageType::Poison) => "Poison ",
         None => "",
     }
 }
 
 fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
-        Some(SkillType::Attack) => " Attack",
-        Some(SkillType::Spell) => " Spell",
+        Some(SkillType::Attack) => "Attack ",
+        Some(SkillType::Spell) => "Spell ",
         None => "",
     }
 }
@@ -45,7 +56,7 @@ fn to_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
 fn scope_str(scope: AffixEffectScope) -> &'static str {
     match scope {
         AffixEffectScope::Local => "",
-        AffixEffectScope::Global => " Global",
+        AffixEffectScope::Global => "Global ",
     }
 }
 
@@ -69,257 +80,34 @@ pub fn formatted_effects_list(
     let mut max_damage: HashMap<(Option<SkillType>, Option<DamageType>), f64> = HashMap::new();
 
     for effect in affix_effects.iter().rev() {
-        match (effect.stat, effect.modifier) {
-            (
-                MinDamage {
-                    skill_type,
-                    damage_type,
-                },
-                Flat,
-            ) => {
-                min_damage.insert((skill_type, damage_type), effect.value);
-            }
-            (
-                MaxDamage {
-                    skill_type,
-                    damage_type,
-                },
-                Flat,
-            ) => {
-                max_damage.insert((skill_type, damage_type), effect.value);
-            }
-            (
-                MinDamage {
-                    skill_type,
-                    damage_type,
-                },
-                Multiplier,
-            ) => merged.push(format!(
-                "{:.0}% Increased Minimum{}{} Damage",
-                effect.value * 100.0,
-                optional_damage_type_str(damage_type),
-                skill_type_str(skill_type),
-            )),
-            (
-                MaxDamage {
-                    skill_type,
-                    damage_type,
-                },
-                Multiplier,
-            ) => merged.push(format!(
-                "{:.0}% Increased Maximum{}{} Damage",
-                effect.value * 100.0,
-                optional_damage_type_str(damage_type),
-                skill_type_str(skill_type),
-            )),
-            (
-                Damage {
-                    skill_type,
-                    damage_type,
-                },
-                Flat,
-            ) => merged.push(format!(
-                "Adds {:.0}{} Damage{}",
-                effect.value,
-                optional_damage_type_str(damage_type),
-                to_skill_type_str(skill_type)
-            )),
-            (
-                Damage {
-                    skill_type,
-                    damage_type,
-                },
-                Multiplier,
-            ) => merged.push(if effect.value >= 0.0 {
-                format!(
-                    "{:.0}% Increased{}{} Damage",
-                    effect.value * 100.0,
-                    optional_damage_type_str(damage_type),
-                    skill_type_str(skill_type),
-                )
-            } else {
-                format!(
-                    "{:.0}% Decreased{}{} Damage",
-                    -effect.value * 100.0,
-                    optional_damage_type_str(damage_type),
-                    skill_type_str(skill_type),
-                )
-            }),
-            (GoldFind, Flat) => {
-                merged.push(format!("Adds {:.0} Gold per Kill", effect.value));
-            }
-            (GoldFind, Multiplier) => {
-                merged.push(format!("{:.0}% Increased Gold Find", effect.value * 100.0))
-            }
-            (Life, Flat) => merged.push(format!("Adds {:.0} Maximum Life", effect.value)),
-            (Life, Multiplier) => merged.push(format!(
-                "{:.0}% Increased Maximum Life",
-                effect.value * 100.0
-            )),
-            (LifeRegen, Flat) => merged.push(format!(
-                "Adds {:.2}% Life Regeneration per second",
-                effect.value
-            )),
-            (LifeRegen, Multiplier) => merged.push(format!(
-                "{:.0}% Increased Life Regeneration",
-                effect.value * 100.0
-            )),
-            (Mana, Flat) => merged.push(format!("Adds {:.0} Maximum Mana", effect.value)),
-            (Mana, Multiplier) => merged.push(format!(
-                "{:.0}% Increased Maximum Mana",
-                effect.value * 100.0
-            )),
-            (ManaRegen, Flat) => merged.push(format!(
-                "Adds {:.2}% Mana Regeneration per second",
-                effect.value
-            )),
-            (ManaRegen, Multiplier) => merged.push(format!(
-                "{:.0}% Increased Mana Regeneration",
-                effect.value * 100.0
-            )),
-            (Armor(armor_type), Flat) => merged.push(format!(
-                "Adds {:.0} {}",
-                effect.value,
-                match armor_type {
-                    DamageType::Physical => "Armor".to_string(),
-                    _ => format!("{} Resistance", damage_type_str(armor_type)),
-                }
-            )),
-            (Armor(armor_type), Multiplier) => merged.push(format!(
-                "{:.0}% Increased{} {}",
-                effect.value * 100.0,
+        match effect.modifier {
+            Multiplier => merged.push(format!(
+                "{} {}{}",
+                format_effect_value(effect),
                 scope_str(scope),
-                match armor_type {
-                    DamageType::Physical => "Armor".to_string(),
-                    _ => format!("{} Resistance", damage_type_str(armor_type)),
+                format_multiplier_stat_name(effect.stat),
+            )),
+            Flat => match effect.stat {
+                // Save to aggregate after
+                MinDamage {
+                    skill_type,
+                    damage_type,
+                } => {
+                    min_damage.insert((skill_type, damage_type), effect.value);
                 }
-            )),
-            (Block, Flat) => {
-                merged.push(format!("Adds {:.0}% Block Chances", effect.value * 100.0))
-            }
-            (Block, Multiplier) => merged.push(format!(
-                "{:.0}% Increased Block Chances",
-                effect.value * 100.0
-            )),
-            (CritChances(skill_type), Flat) => merged.push(format!(
-                "Adds {:.2}% Critical Hit Chances{}",
-                effect.value * 100.0,
-                to_skill_type_str(skill_type)
-            )),
-            (CritChances(skill_type), Multiplier) => merged.push(format!(
-                "{:.0}% Increased{} Critical Hit Chances",
-                effect.value * 100.0,
-                skill_type_str(skill_type)
-            )),
-            (CritDamage(skill_type), Flat) => merged.push(format!(
-                "Adds {:.0}% Critical Hit Damage{}",
-                effect.value * 100.0,
-                to_skill_type_str(skill_type)
-            )),
-            (CritDamage(skill_type), Multiplier) => merged.push(format!(
-                "{:.0}% Increased{} Critical Damage",
-                effect.value * 100.0,
-                skill_type_str(skill_type)
-            )),
-            (Speed(skill_type), Flat) => merged.push(format!(
-                "-{:.2}s Cooldown{}",
-                effect.value,
-                to_skill_type_str(skill_type)
-            )),
-            (Speed(skill_type), Multiplier) => merged.push(format!(
-                "{:.0}% Increased{} Speed",
-                effect.value * 100.0,
-                skill_type_str(skill_type)
-            )),
-            (MovementSpeed, Flat) => {
-                merged.push(format!("-{:.2}s Movement Cooldown", effect.value))
-            }
-            (MovementSpeed, Multiplier) => merged.push(format!(
-                "{:.0}% Increased Movement Speed",
-                effect.value * 100.0
-            )),
-            (SpellPower, Flat) => merged.push(format!("Adds {:.0} Power to Spells", effect.value)),
-            (SpellPower, Multiplier) => merged.push(format!(
-                "{:.0}% Increased Spell Power",
-                effect.value * 100.0
-            )),
-            (TakeFromManaBeforeLife, Multiplier) => merged.push(format!(
-                "{:.0}% Increased Damage taken from Mana before Life",
-                effect.value * 100.0
-            )),
-            (TakeFromManaBeforeLife, Flat) => merged.push(format!(
-                "{:.0}% of Damage taken from Mana before Life",
-                effect.value * 100.0
-            )),
-            (LifeOnHit(hit_trigger), Flat) => merged.push(format!(
-                "Gain {:.0} Life on{} Hit",
-                effect.value,
-                skill_type_str(hit_trigger.skill_type)
-            )),
-            (LifeOnHit(hit_trigger), Multiplier) => merged.push(format!(
-                "{:.0}% Increased Life gained on{} Hit",
-                effect.value * 100.0,
-                skill_type_str(hit_trigger.skill_type)
-            )),
-            (ManaOnHit(hit_trigger), Flat) => merged.push(format!(
-                "Gain {:.0} Mana on {}Hit",
-                effect.value,
-                skill_type_str(hit_trigger.skill_type)
-            )),
-            (ManaOnHit(hit_trigger), Multiplier) => merged.push(format!(
-                "{:.0}% Increased Mana gained on{} Hit",
-                effect.value * 100.0,
-                skill_type_str(hit_trigger.skill_type)
-            )),
-            (
-                DamageResistance {
+                MaxDamage {
                     skill_type,
                     damage_type,
-                },
-                Flat,
-            ) => {
-                merged.push(if effect.value > 0.0 {
-                    format!(
-                        "Resist {:.0}% of{}{} Damage",
-                        effect.value * 100.0,
-                        optional_damage_type_str(damage_type),
-                        skill_type_str(skill_type)
-                    )
-                } else {
-                    format!(
-                        "Takes {:.0}% Increased{}{} Damage",
-                        -effect.value * 100.0,
-                        optional_damage_type_str(damage_type),
-                        skill_type_str(skill_type)
-                    )
-                });
-            }
-            (
-                DamageResistance {
-                    skill_type,
-                    damage_type,
-                },
-                Multiplier,
-            ) => {
-                merged.push(if effect.value > 0.0 {
-                    format!(
-                        "{:.0}% more{}{} Damage Resistance",
-                        effect.value * 100.0,
-                        optional_damage_type_str(damage_type),
-                        skill_type_str(skill_type)
-                    )
-                } else {
-                    format!(
-                        "{:.0}% less{}{} Damage Resistance",
-                        -effect.value * 100.0,
-                        optional_damage_type_str(damage_type),
-                        skill_type_str(skill_type)
-                    )
-                });
-            }
+                } => {
+                    max_damage.insert((skill_type, damage_type), effect.value);
+                }
+                //
+                stat => merged.push(format_flat_stat(stat, effect.value)),
+            },
         }
     }
 
+    // Merge min and max added damages if possible
     for skill_type in SkillType::iter().map(Some).chain([None]) {
         for damage_type in DamageType::iter().map(Some).chain([None]) {
             match (
@@ -351,4 +139,147 @@ pub fn formatted_effects_list(
     }
 
     merged.into_iter().rev().map(effect_li).collect()
+}
+
+fn format_multiplier_stat_name(stat: StatType) -> String {
+    match stat {
+        StatType::Life => "Maximum Life".to_string(),
+        StatType::LifeRegen => "Life Regeneration".to_string(),
+        StatType::Mana => "Maximum Mana".to_string(),
+        StatType::ManaRegen => "Mana Regeneration".to_string(),
+        StatType::Armor(armor_type) => match armor_type {
+            DamageType::Physical => "Armor".to_string(),
+            _ => format!("{}Resistance", optional_damage_type_str(Some(armor_type))),
+        },
+        StatType::TakeFromManaBeforeLife => "Damage taken from Mana before Life".to_string(),
+        StatType::Block => "Block Chances".to_string(),
+        StatType::Damage {
+            skill_type,
+            damage_type,
+        } => format!(
+            "{}{}Damage",
+            optional_damage_type_str(damage_type),
+            skill_type_str(skill_type),
+        ),
+        StatType::MinDamage {
+            skill_type,
+            damage_type,
+        } => format!(
+            "{}{}Minimum Damage",
+            optional_damage_type_str(damage_type),
+            skill_type_str(skill_type),
+        ),
+        StatType::MaxDamage {
+            skill_type,
+            damage_type,
+        } => format!(
+            "{}{}Maximum Damage",
+            optional_damage_type_str(damage_type),
+            skill_type_str(skill_type),
+        ),
+        StatType::SpellPower => "Spell Power".to_string(),
+        StatType::CritChances(skill_type) => {
+            format!("{}Critical Hit Chances", skill_type_str(skill_type))
+        }
+        StatType::CritDamage(skill_type) => {
+            format!("{}Critical Hit Damages", skill_type_str(skill_type))
+        }
+        StatType::Speed(skill_type) => format!("{}Speed", skill_type_str(skill_type)),
+        StatType::MovementSpeed => "Movement Speed".to_string(),
+        StatType::GoldFind => "Gold Find".to_string(),
+        StatType::LifeOnHit(hit_trigger) => format!(
+            "Life gained on {}Hit",
+            skill_type_str(hit_trigger.skill_type)
+        ),
+        StatType::ManaOnHit(hit_trigger) => format!(
+            "Mana gained on {}Hit",
+            skill_type_str(hit_trigger.skill_type)
+        ),
+        StatType::DamageResistance {
+            skill_type,
+            damage_type,
+        } => format!(
+            "{}{}Damage Resistance",
+            optional_damage_type_str(damage_type),
+            skill_type_str(skill_type)
+        ),
+    }
+}
+
+fn format_flat_stat(stat: StatType, value: f64) -> String {
+    match stat {
+        StatType::MinDamage { .. } | StatType::MaxDamage { .. } => "".to_string(),
+        StatType::Life => format!("Adds {:.0} Maximum Life", value),
+        StatType::LifeRegen => format!("Adds {:.2}% Life Regeneration per second", value),
+        StatType::Mana => format!("Adds {:.0} Maximum Mana", value),
+        StatType::ManaRegen => format!("Adds {:.2}% Mana Regeneration per second", value),
+        StatType::Armor(armor_type) => format!(
+            "Adds {:.0} {}",
+            value,
+            match armor_type {
+                DamageType::Physical => "Armor".to_string(),
+                _ => format!("{}Resistance", optional_damage_type_str(Some(armor_type))),
+            }
+        ),
+        StatType::TakeFromManaBeforeLife => format!(
+            "{:.0}% of Damage taken from Mana before Life",
+            value * 100.0
+        ),
+        StatType::Block => format!("Adds {:.0}% Block Chances", value * 100.0),
+        StatType::Damage {
+            skill_type,
+            damage_type,
+        } => format!(
+            "Adds {:.0} {}Damage{}",
+            value,
+            optional_damage_type_str(damage_type),
+            to_skill_type_str(skill_type)
+        ),
+        StatType::SpellPower => format!("Adds {:.0} Power to Spells", value),
+        StatType::CritChances(skill_type) => format!(
+            "Adds {:.2}% Critical Hit Chances{}",
+            value * 100.0,
+            to_skill_type_str(skill_type)
+        ),
+        StatType::CritDamage(skill_type) => format!(
+            "Adds {:.0}% Critical Hit Damage{}",
+            value * 100.0,
+            to_skill_type_str(skill_type)
+        ),
+        StatType::Speed(skill_type) => {
+            format!("-{:.2}s Cooldown{}", value, to_skill_type_str(skill_type))
+        }
+        StatType::MovementSpeed => format!("-{:.2}s Movement Cooldown", value),
+        StatType::GoldFind => format!("Adds {:.0} Gold per Kill", value),
+        StatType::LifeOnHit(hit_trigger) => format!(
+            "Gain {:.0} Life on{} Hit",
+            value,
+            skill_type_str(hit_trigger.skill_type)
+        ),
+        StatType::ManaOnHit(hit_trigger) => format!(
+            "Gain {:.0} Mana on {}Hit",
+            value,
+            skill_type_str(hit_trigger.skill_type)
+        ),
+        StatType::DamageResistance {
+            skill_type,
+            damage_type,
+        } => {
+            if value > 0.0 {
+                format!(
+                    "Resist {:.0}% of {}{}Damage",
+                    value * 100.0,
+                    optional_damage_type_str(damage_type),
+                    skill_type_str(skill_type)
+                )
+            } else {
+                format!(
+                    "Takes {:.0}% Increased {}{}Damage",
+                    -value * 100.0,
+                    optional_damage_type_str(damage_type),
+                    skill_type_str(skill_type)
+                )
+            }
+        }
+    }
 }

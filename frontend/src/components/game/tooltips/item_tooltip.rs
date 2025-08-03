@@ -112,7 +112,8 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 if spec_min > 0.0 || spec_max > 0.0 {
                     damage_lines.push(view! {
                         <li class="text-gray-400 text-sm leading-snug">
-                            {effects_tooltip::damage_type_str(damage_type)} " Damage: "
+                            {effects_tooltip::optional_damage_type_str(Some(damage_type))}
+                            "Damage: "
                             <span class=format!(
                                 "{} font-semibold",
                                 damage_color,

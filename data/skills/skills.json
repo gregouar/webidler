@@ -198,7 +198,7 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 0.002
+        "value": 0.01
       }
     ],
     "targets": [

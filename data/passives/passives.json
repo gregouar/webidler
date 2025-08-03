@@ -849,7 +849,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": -0.5
+            "value": -1.0
           }
         ]
       },
