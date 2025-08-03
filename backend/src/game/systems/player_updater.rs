@@ -132,6 +132,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
         match effect.stat {
             StatType::MovementSpeed => player_specs.movement_cooldown.apply_negative_effect(effect),
             StatType::GoldFind => player_specs.gold_find.apply_effect(effect),
+            // TODO: Move the character specs
             StatType::LifeOnHit(hit_trigger) | StatType::ManaOnHit(hit_trigger) => {
                 if let Modifier::Flat = effect.modifier {
                     player_specs.triggers.push(TriggeredEffect {
@@ -155,6 +156,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
                 // TODO: Find way to do increase?
                 // TODO: For multiplier, should iterate and apply to all trigger matching?
             }
+            // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Handled by character
             StatType::Life
             | StatType::LifeRegen
@@ -171,6 +173,8 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
             | StatType::SpellPower
             | StatType::CritChances(_)
             | StatType::CritDamage(_)
+            | StatType::StatusDuration { .. }
+            | StatType::StatusPower { .. }
             | StatType::Speed(_) => {}
         }
     }

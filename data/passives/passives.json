@@ -847,10 +847,10 @@
 
       "gold_init_2": {
         "name": "Unlucky Start",
-        "icon": "passives/gold.svg",
+        "icon": "passives/gold_negative.svg",
         "initial_node": true,
-        "x": 100,
-        "y": 40,
+        "x": 90,
+        "y": 0,
         "size": 1,
         "node_type": "Gold",
         "effects": [
@@ -865,168 +865,219 @@
       "physical_damage_1": {
         "name": "Physical Damage",
         "icon": "passives/physical_damage.svg",
-        "x": 100,
-        "y": 30,
+        "x": 90,
+        "y": 10,
         "node_type": "Physical",
         "effects": [
           {
             "stat": { "Damage": { "damage_type": "Physical" } },
             "modifier": "Multiplier",
-            "value": 0.3
+            "value": 0.25
           }
         ]
       },
       "physical_damage_2": {
         "name": "Physical Damage",
         "icon": "passives/physical_damage.svg",
-        "x": 100,
-        "y": 20,
+        "x": 96,
+        "y": 18,
         "node_type": "Physical",
         "effects": [
           {
             "stat": { "Damage": { "damage_type": "Physical" } },
             "modifier": "Multiplier",
-            "value": 0.3
+            "value": 0.25
           }
         ]
       },
       "physical_damage_3": {
         "name": "Physical Damage",
         "icon": "passives/physical_damage.svg",
-        "x": 100,
-        "y": 10,
+        "x": 105,
+        "y": 21,
+        "size": 1,
         "node_type": "Physical",
         "effects": [
           {
             "stat": { "Damage": { "damage_type": "Physical" } },
             "modifier": "Multiplier",
-            "value": 0.3
+            "value": 0.5
           }
         ]
       },
-      "physical_damage_4": {
-        "name": "Physical Damage",
-        "icon": "passives/physical_damage.svg",
-        "x": 100,
-        "y": 0,
-        "node_type": "Physical",
-        "effects": [
-          {
-            "stat": { "Damage": { "damage_type": "Physical" } },
-            "modifier": "Multiplier",
-            "value": 0.3
-          }
-        ]
-      },
+
       "poison_damage_1": {
         "name": "Poison Damage",
         "icon": "passives/poison_damage.svg",
-        "x": 90,
-        "y": 30,
+        "x": 99,
+        "y": 3,
         "node_type": "Poison",
         "effects": [
           {
             "stat": { "Damage": { "damage_type": "Poison" } },
             "modifier": "Multiplier",
-            "value": 0.3
+            "value": 0.25
           }
         ]
       },
       "poison_damage_2": {
         "name": "Poison Damage",
         "icon": "passives/poison_damage.svg",
-        "x": 90,
-        "y": 20,
+        "x": 108,
+        "y": 0,
         "node_type": "Poison",
         "effects": [
           {
             "stat": { "Damage": { "damage_type": "Poison" } },
             "modifier": "Multiplier",
-            "value": 0.3
+            "value": 0.25
           }
         ]
       },
       "poison_damage_3": {
         "name": "Poison Damage",
         "icon": "passives/poison_damage.svg",
-        "x": 90,
-        "y": 10,
+        "x": 114,
+        "y": -8,
+        "size": 1,
         "node_type": "Poison",
         "effects": [
           {
             "stat": { "Damage": { "damage_type": "Poison" } },
             "modifier": "Multiplier",
-            "value": 0.3
+            "value": 0.5
           }
         ]
       },
-      "poison_damage_4": {
-        "name": "Poison Damage",
-        "icon": "passives/poison_damage.svg",
-        "x": 90,
-        "y": 0,
-        "node_type": "Poison",
-        "effects": [
-          {
-            "stat": { "Damage": { "damage_type": "Poison" } },
-            "modifier": "Multiplier",
-            "value": 0.3
-          }
-        ]
-      },
+
       "fire_damage_1": {
         "name": "Fire Damage",
         "icon": "passives/fire_damage.svg",
-        "x": 110,
-        "y": 30,
+        "x": 81,
+        "y": 3,
         "node_type": "Fire",
         "effects": [
           {
             "stat": { "Damage": { "damage_type": "Fire" } },
             "modifier": "Multiplier",
-            "value": 0.3
+            "value": 0.25
           }
         ]
       },
       "fire_damage_2": {
         "name": "Fire Damage",
         "icon": "passives/fire_damage.svg",
-        "x": 110,
-        "y": 20,
+        "x": 75,
+        "y": 11,
         "node_type": "Fire",
         "effects": [
           {
             "stat": { "Damage": { "damage_type": "Fire" } },
             "modifier": "Multiplier",
-            "value": 0.3
+            "value": 0.25
           }
         ]
       },
       "fire_damage_3": {
         "name": "Fire Damage",
         "icon": "passives/fire_damage.svg",
-        "x": 110,
-        "y": 10,
+        "x": 75,
+        "y": 21,
+        "size": 1,
         "node_type": "Fire",
         "effects": [
           {
             "stat": { "Damage": { "damage_type": "Fire" } },
             "modifier": "Multiplier",
-            "value": 0.3
+            "value": 0.5
           }
         ]
       },
-      "fire_damage_4": {
-        "name": "Fire Damage",
-        "icon": "passives/fire_damage.svg",
-        "x": 110,
-        "y": 0,
-        "node_type": "Fire",
+
+      "status_duration_1": {
+        "name": "Effects Duration",
+        "icon": "passives/duration.svg",
+        "x": 96,
+        "y": -8,
+        "node_type": "Status",
         "effects": [
           {
-            "stat": { "Damage": { "damage_type": "Fire" } },
+            "stat": { "StatusDuration": null },
             "modifier": "Multiplier",
-            "value": 0.3
+            "value": 0.1
+          }
+        ]
+      },
+      "status_duration_2": {
+        "name": "Effects Duration",
+        "icon": "passives/duration.svg",
+        "x": 96,
+        "y": -18,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": { "StatusDuration": null },
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ]
+      },
+      "status_duration_3": {
+        "name": "Effects Duration",
+        "icon": "passives/duration.svg",
+        "x": 90,
+        "y": -26,
+        "size": 1,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": { "StatusDuration": null },
+            "modifier": "Multiplier",
+            "value": 0.2
+          }
+        ]
+      },
+
+      "damage_over_time_1": {
+        "name": "Damage over Time",
+        "icon": "passives/damage_over_time.svg",
+        "x": 84,
+        "y": -8,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": { "StatusPower": { "DamageOverTime": {} } },
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "damage_over_time_2": {
+        "name": "Damage over Time",
+        "icon": "passives/damage_over_time.svg",
+        "x": 75,
+        "y": -11,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": { "StatusPower": { "DamageOverTime": {} } },
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ]
+      },
+      "damage_over_time_3": {
+        "name": "Damage over Time",
+        "icon": "passives/damage_over_time.svg",
+        "x": 66,
+        "y": -8,
+        "size": 1,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": { "StatusPower": { "DamageOverTime": {} } },
+            "modifier": "Multiplier",
+            "value": 0.5
           }
         ]
       }
@@ -1106,18 +1157,23 @@
       { "from": "gold_init_2", "to": "physical_damage_1" },
       { "from": "gold_init_2", "to": "poison_damage_1" },
       { "from": "gold_init_2", "to": "fire_damage_1" },
+      { "from": "gold_init_2", "to": "damage_over_time_1" },
+      { "from": "gold_init_2", "to": "status_duration_1" },
 
       { "from": "physical_damage_1", "to": "physical_damage_2" },
       { "from": "physical_damage_2", "to": "physical_damage_3" },
-      { "from": "physical_damage_3", "to": "physical_damage_4" },
 
       { "from": "poison_damage_1", "to": "poison_damage_2" },
       { "from": "poison_damage_2", "to": "poison_damage_3" },
-      { "from": "poison_damage_3", "to": "poison_damage_4" },
 
       { "from": "fire_damage_1", "to": "fire_damage_2" },
       { "from": "fire_damage_2", "to": "fire_damage_3" },
-      { "from": "fire_damage_3", "to": "fire_damage_4" }
+
+      { "from": "damage_over_time_1", "to": "damage_over_time_2" },
+      { "from": "damage_over_time_2", "to": "damage_over_time_3" },
+
+      { "from": "status_duration_1", "to": "status_duration_2" },
+      { "from": "status_duration_2", "to": "status_duration_3" }
     ]
   }
 }

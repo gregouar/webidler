@@ -69,6 +69,8 @@ pub enum StatType {
     SpellPower,
     CritChances(#[serde(default)] Option<SkillType>),
     CritDamage(#[serde(default)] Option<SkillType>),
+    StatusPower(#[serde(default)] Option<StatStatusType>),
+    StatusDuration(#[serde(default)] Option<StatStatusType>),
     Speed(#[serde(default)] Option<SkillType>),
     MovementSpeed,
     GoldFind,
@@ -79,6 +81,19 @@ pub enum StatType {
         skill_type: Option<SkillType>,
         #[serde(default)]
         damage_type: Option<DamageType>,
+    },
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum StatStatusType {
+    Stun,
+    DamageOverTime {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
+    StatModifier {
+        #[serde(default)]
+        debuff: Option<bool>,
     },
 }
 

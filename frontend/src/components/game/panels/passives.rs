@@ -147,9 +147,10 @@ fn Node(
         PassiveNodeType::Critical => "#ea6110",
         PassiveNodeType::Mana => "#3e5ba9",
         PassiveNodeType::Gold => "goldenrod",
-        PassiveNodeType::Physical => "#4a4a4a",
-        PassiveNodeType::Poison => "#4a4a1a",
-        PassiveNodeType::Fire => "#4a1a1a",
+        PassiveNodeType::Physical => "#2e2929ff",
+        PassiveNodeType::Poison => "#98bb1bff",
+        PassiveNodeType::Fire => "#da5011ff",
+        PassiveNodeType::Status => "#3ea9a4ff",
     };
 
     let node_status = Memo::new({

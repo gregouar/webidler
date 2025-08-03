@@ -4,8 +4,7 @@ use shared::data::{
     character_status::StatusType,
     passive::StatEffect,
     skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType},
-    stat_effect::DamageMap,
-    stat_effect::{Modifier, StatType},
+    stat_effect::{self, DamageMap, Modifier, StatType},
 };
 
 use super::stats_controller::ApplyStatModifier;
@@ -151,8 +150,28 @@ pub fn compute_skill_specs_effect<'a, I>(
                     *max > 0.0
                 });
             }
-            SkillEffectType::ApplyStatus { statuses, .. } => {
+            SkillEffectType::ApplyStatus {
+                statuses,
+                min_duration,
+                max_duration,
+            } => {
+                if let StatType::StatusDuration(status_type) = effect.stat {
+                    if statuses.iter().any(|status_effect| {
+                        compare_status_types(status_type, status_effect.status_type)
+                    }) {
+                        min_duration.apply_effect(effect);
+                        max_duration.apply_effect(effect);
+                    }
+                }
+
                 for status_effect in statuses.iter_mut() {
+                    if let StatType::StatusPower(status_type) = effect.stat {
+                        if compare_status_types(status_type, status_effect.status_type) {
+                            status_effect.min_value.apply_effect(effect);
+                            status_effect.max_value.apply_effect(effect);
+                        }
+                    }
+
                     match status_effect.status_type {
                         StatusType::Stun => {
                             // Something?
@@ -228,5 +247,38 @@ fn apply_effect_on_damage(
                 }
             }
         }
+    }
+}
+
+fn compare_status_types(
+    stat_status_type: Option<stat_effect::StatStatusType>,
+    skill_status_type: StatusType,
+) -> bool {
+    use stat_effect::StatStatusType::*;
+
+    match stat_status_type {
+        None => true,
+        Some(stat_status_type) => match (stat_status_type, skill_status_type) {
+            (Stun, StatusType::Stun) => true,
+            (
+                DamageOverTime {
+                    damage_type: stat_damage_type,
+                },
+                StatusType::DamageOverTime {
+                    damage_type: skill_damage_type,
+                    ..
+                },
+            ) => stat_damage_type.unwrap_or(skill_damage_type) == skill_damage_type,
+            (
+                StatModifier {
+                    debuff: stat_debuff,
+                },
+                StatusType::StatModifier {
+                    debuff: skill_debuff,
+                    ..
+                },
+            ) => stat_debuff.unwrap_or(skill_debuff) == skill_debuff,
+            _ => false,
+        },
     }
 }

@@ -20,6 +20,9 @@
       
       "crit_prefixes.json",
 
+      "focus_prefixes.json",
+      "focus_suffixes.json",
+
       "gloves_prefixes.json",
       "gloves_suffixes.json",
       

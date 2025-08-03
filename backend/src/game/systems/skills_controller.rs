@@ -201,9 +201,8 @@ pub fn apply_skill_effect(
                 .map(|(damage_type, (min, max))| {
                     (
                         *damage_type,
-                        rng::random_range(*min..=*max)
-                            .map(|d| if is_crit { d * (1.0 + crit_damage) } else { d })
-                            .unwrap_or(0.0),
+                        rng::random_range(*min..=*max).unwrap_or(*max)
+                            * (if is_crit { 1.0 + crit_damage } else { 1.0 }),
                     )
                 })
                 .collect();
@@ -225,22 +224,22 @@ pub fn apply_skill_effect(
             max_duration,
             statuses,
         } => {
-            if let Some(duration) = rng::random_range(*min_duration..=*max_duration) {
-                for status_effect in statuses.iter() {
-                    if let Some(value) =
-                        rng::random_range(status_effect.min_value..=status_effect.max_value)
-                    {
-                        for target in targets.iter_mut() {
-                            characters_controller::apply_status(
-                                target,
-                                status_effect.status_type,
-                                skill_type,
-                                value,
-                                duration,
-                                status_effect.cumulate,
-                            )
-                        }
-                    }
+            let duration =
+                rng::random_range(*min_duration..=*max_duration).unwrap_or(*max_duration);
+            for status_effect in statuses.iter() {
+                let value: f64 =
+                    rng::random_range(status_effect.min_value..=status_effect.max_value)
+                        .unwrap_or(status_effect.max_value);
+
+                for target in targets.iter_mut() {
+                    characters_controller::apply_status(
+                        target,
+                        status_effect.status_type,
+                        skill_type,
+                        value,
+                        duration,
+                        status_effect.cumulate,
+                    )
                 }
             }
         }

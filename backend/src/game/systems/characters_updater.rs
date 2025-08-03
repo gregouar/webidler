@@ -118,6 +118,7 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                     }
                 }
             }
+            // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Only for player (for now...)
             StatType::LifeOnHit(_) | StatType::ManaOnHit(_) => {}
             // Only for player
@@ -129,6 +130,8 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             | StatType::SpellPower
             | StatType::CritChances(_)
             | StatType::CritDamage(_)
+            | StatType::StatusDuration { .. }
+            | StatType::StatusPower { .. }
             | StatType::Speed(_) => {}
         }
     }

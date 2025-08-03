@@ -6,7 +6,7 @@ use leptos::{html::*, prelude::*};
 use shared::data::{
     item_affix::AffixEffectScope,
     skill::{DamageType, SkillType},
-    stat_effect::{Modifier, StatEffect, StatType},
+    stat_effect::{Modifier, StatEffect, StatStatusType, StatType},
 };
 
 use crate::components::ui::number::format_number;
@@ -20,7 +20,7 @@ pub fn format_effect_value(effect: &StatEffect) -> String {
             } else {
                 let div = (1.0 - effect.value).max(0.0);
                 format!(
-                    "{}% Decreased",
+                    "{}% Reduced",
                     format_number(-(if div != 0.0 { effect.value / div } else { 0.0 }) * 100.0)
                 )
             }
@@ -50,6 +50,23 @@ fn to_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
         Some(SkillType::Attack) => " to Attacks",
         Some(SkillType::Spell) => " to Spells",
         None => "",
+    }
+}
+
+fn status_type_str(status_type: Option<StatStatusType>) -> String {
+    match status_type {
+        Some(status_type) => match status_type {
+            StatStatusType::Stun => "Stun".to_string(),
+            StatStatusType::DamageOverTime { damage_type } => {
+                format!("{}Damage over Time", optional_damage_type_str(damage_type))
+            }
+            StatStatusType::StatModifier { debuff } => match debuff {
+                Some(true) => "Curses".to_string(),
+                Some(false) => "Blessings".to_string(),
+                None => "Curses and Blessings".to_string(),
+            },
+        },
+        None => "Effects over Time".to_string(),
     }
 }
 
@@ -186,6 +203,12 @@ fn format_multiplier_stat_name(stat: StatType) -> String {
         StatType::CritDamage(skill_type) => {
             format!("{}Critical Hit Damages", skill_type_str(skill_type))
         }
+        StatType::StatusPower(status_type) => {
+            format!("{} Power", status_type_str(status_type))
+        }
+        StatType::StatusDuration(status_type) => {
+            format!("{} Duration", status_type_str(status_type))
+        }
         StatType::Speed(skill_type) => format!("{}Speed", skill_type_str(skill_type)),
         StatType::MovementSpeed => "Movement Speed".to_string(),
         StatType::GoldFind => "Gold Find".to_string(),
@@ -247,6 +270,15 @@ fn format_flat_stat(stat: StatType, value: f64) -> String {
             "Adds {:.0}% Critical Hit Damage{}",
             value * 100.0,
             to_skill_type_str(skill_type)
+        ),
+        StatType::StatusPower(status_type) => format!(
+            "Adds {:.0} Power to {}",
+            value * 100.0,
+            status_type_str(status_type)
+        ),
+        StatType::StatusDuration(status_type) => format!(
+            "Adds {value:.2} seconds duration to {}",
+            status_type_str(status_type)
         ),
         StatType::Speed(skill_type) => {
             format!("-{:.2}s Cooldown{}", value, to_skill_type_str(skill_type))

@@ -1,0 +1,21 @@
+[
+  {
+    "name": "Witchy",
+    "family": "inc_status_power",
+    "tags": ["Spell", "Status"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Focus"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {"StatusPower": null},
+        "modifier": "Multiplier",
+        "min": 0.25,
+        "max": 0.49
+      }
+    ]
+  }
+]

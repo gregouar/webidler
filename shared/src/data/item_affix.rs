@@ -27,6 +27,7 @@ pub enum AffixTag {
     Poison,
     Speed,
     Spell,
+    Status,
     // TODO: add others
 }
 
