@@ -53,12 +53,12 @@ fn to_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     }
 }
 
-fn scope_str(scope: AffixEffectScope) -> &'static str {
-    match scope {
-        AffixEffectScope::Local => "",
-        AffixEffectScope::Global => "Global ",
-    }
-}
+// fn scope_str(scope: AffixEffectScope) -> &'static str {
+//     match scope {
+//         AffixEffectScope::Local => "",
+//         AffixEffectScope::Global => "Global ",
+//     }
+// }
 
 fn effect_li(text: String) -> impl IntoView {
     view! { <li class="text-blue-400 text-sm leading-snug">{text}</li> }
@@ -71,6 +71,8 @@ pub fn formatted_effects_list(
     use Modifier::*;
     use StatType::*;
 
+    let _ = scope; // TODO: maybe later display scope for some effects like armor
+
     affix_effects.sort_by_key(|effect| (effect.stat, effect.modifier));
 
     let mut merged: Vec<String> = Vec::with_capacity(affix_effects.len());
@@ -82,9 +84,9 @@ pub fn formatted_effects_list(
     for effect in affix_effects.iter().rev() {
         match effect.modifier {
             Multiplier => merged.push(format!(
-                "{} {}{}",
+                "{} {}",
                 format_effect_value(effect),
-                scope_str(scope),
+                // scope_str(scope),
                 format_multiplier_stat_name(effect.stat),
             )),
             Flat => match effect.stat {
