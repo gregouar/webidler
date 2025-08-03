@@ -115,21 +115,21 @@ pub fn formatted_effects_list(
                 max_damage.get(&(skill_type, damage_type)),
             ) {
                 (Some(min_flat), Some(max_flat)) => merged.push(format!(
-                    "Adds {:.0} - {:.0}{} Damage{}",
-                    min_flat,
-                    max_flat,
+                    "Adds {} - {} {}Damage{}",
+                    format_number(*min_flat),
+                    format_number(*max_flat),
                     optional_damage_type_str(damage_type),
                     to_skill_type_str(skill_type)
                 )),
                 (Some(min_flat), None) => merged.push(format!(
-                    "Adds {:.0} Minimum{} Damage{}",
-                    min_flat,
+                    "Adds {} Minimum {}Damage{}",
+                    format_number(*min_flat),
                     optional_damage_type_str(damage_type),
                     to_skill_type_str(skill_type)
                 )),
                 (None, Some(max_flat)) => merged.push(format!(
-                    "Adds {:.0} Maximum{} Damage{}",
-                    max_flat,
+                    "Adds {} Maximum {}Damage{}",
+                    format_number(*max_flat),
                     optional_damage_type_str(damage_type),
                     to_skill_type_str(skill_type)
                 )),
