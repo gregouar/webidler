@@ -16,8 +16,8 @@ pub enum AppError {
 impl fmt::Display for AppError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            AppError::Database(err) => write!(f, "Database error: {}", err),
-            AppError::Anyhow(err) => write!(f, "Unexpected error: {}", err),
+            AppError::Database(err) => write!(f, "Database error: {err}"),
+            AppError::Anyhow(err) => write!(f, "Unexpected error: {err}"),
             AppError::NotFound => write!(f, "Not found"),
         }
     }

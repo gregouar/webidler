@@ -117,7 +117,7 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                             <span class=format!(
                                 "{} font-semibold",
                                 damage_color,
-                            )>{format!("{:.0} - {:.0}", spec_min, spec_max)}</span>
+                            )>{format!("{spec_min:.0} - {spec_max:.0}")}</span>
                         </li>
                     });
                 }

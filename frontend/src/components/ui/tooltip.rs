@@ -87,7 +87,7 @@ pub fn DynamicTooltip() -> impl IntoView {
             _ => (0.0, 0.0),
         };
 
-        format!("top: {}px; left: {}px;", top, left)
+        format!("top: {top}px; left: {left}px;")
     };
 
     view! {

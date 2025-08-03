@@ -15,7 +15,7 @@ pub fn format_number(value: f64) -> String {
     }
 
     if value >= 1_000_000.0 {
-        format!("{:.2e}", value)
+        format!("{value:.2e}")
     } else {
         comma_format(value)
     }
@@ -45,7 +45,7 @@ pub fn format_duration(duration: Duration) -> String {
     let hours = secs / 3600;
     let minutes = (secs % 3600) / 60;
     let seconds = secs % 60;
-    format!("{:02}:{:02}:{:02}", hours, minutes, seconds)
+    format!("{hours:02}:{minutes:02}:{seconds:02}")
 }
 
 #[cfg(test)]

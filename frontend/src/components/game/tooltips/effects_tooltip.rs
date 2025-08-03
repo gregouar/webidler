@@ -209,10 +209,10 @@ fn format_multiplier_stat_name(stat: StatType) -> String {
 fn format_flat_stat(stat: StatType, value: f64) -> String {
     match stat {
         StatType::MinDamage { .. } | StatType::MaxDamage { .. } => "".to_string(),
-        StatType::Life => format!("Adds {:.0} Maximum Life", value),
-        StatType::LifeRegen => format!("Adds {:.2}% Life Regeneration per second", value),
-        StatType::Mana => format!("Adds {:.0} Maximum Mana", value),
-        StatType::ManaRegen => format!("Adds {:.2}% Mana Regeneration per second", value),
+        StatType::Life => format!("Adds {value:.0} Maximum Life"),
+        StatType::LifeRegen => format!("Adds {value:.2}% Life Regeneration per second"),
+        StatType::Mana => format!("Adds {value:.0} Maximum Mana"),
+        StatType::ManaRegen => format!("Adds {value:.2}% Mana Regeneration per second"),
         StatType::Armor(armor_type) => format!(
             "Adds {:.0} {}",
             value,
@@ -235,7 +235,7 @@ fn format_flat_stat(stat: StatType, value: f64) -> String {
             optional_damage_type_str(damage_type),
             to_skill_type_str(skill_type)
         ),
-        StatType::SpellPower => format!("Adds {:.0} Power to Spells", value),
+        StatType::SpellPower => format!("Adds {value:.0} Power to Spells"),
         StatType::CritChances(skill_type) => format!(
             "Adds {:.2}% Critical Hit Chances{}",
             value * 100.0,
@@ -249,8 +249,8 @@ fn format_flat_stat(stat: StatType, value: f64) -> String {
         StatType::Speed(skill_type) => {
             format!("-{:.2}s Cooldown{}", value, to_skill_type_str(skill_type))
         }
-        StatType::MovementSpeed => format!("-{:.2}s Movement Cooldown", value),
-        StatType::GoldFind => format!("Adds {:.0} Gold per Kill", value),
+        StatType::MovementSpeed => format!("-{value:.2}s Movement Cooldown"),
+        StatType::GoldFind => format!("Adds {value:.0} Gold per Kill"),
         StatType::LifeOnHit(hit_trigger) => format!(
             "Gain {:.0} Life on{} Hit",
             value,

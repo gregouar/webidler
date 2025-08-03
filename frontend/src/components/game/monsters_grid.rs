@@ -97,13 +97,11 @@ pub fn MonstersGrid() -> impl IntoView {
                                         .to_string()
                                 } else if flee.get() {
                                     format!(
-                                        "animation: monster-flee 1s ease-out; animation-fill-mode: both; {} pointer-events: none;",
-                                        animation_delay,
+                                        "animation: monster-flee 1s ease-out; animation-fill-mode: both; {animation_delay} pointer-events: none;",
                                     )
                                 } else {
                                     format!(
-                                        "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {}",
-                                        animation_delay,
+                                        "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {animation_delay}",
                                     )
                                 }
                             }

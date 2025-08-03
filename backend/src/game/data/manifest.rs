@@ -46,8 +46,7 @@ pub async fn load_manifest(folder_path: impl AsRef<Path>) -> Result<Manifest> {
     let local_manifest = Manifest::load_from_file(folder_path.join(".manifest.json"))
         .await
         .context(format!(
-            "Failed to load folder manifest from {:?}",
-            folder_path
+            "Failed to load folder manifest from {folder_path:?}"
         ))?;
 
     if !local_manifest.meta.enabled {

@@ -41,7 +41,7 @@ pub fn Websocket(url: String, children: Children) -> impl IntoView {
         move |e: UseWebSocketError<_, _>| {
             show_toast(
                 toaster,
-                format!("Connection error: {:?}", e),
+                format!("Connection error: {e:?}"),
                 ToastVariant::Error,
             )
         }

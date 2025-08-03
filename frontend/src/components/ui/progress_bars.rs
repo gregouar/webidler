@@ -106,7 +106,7 @@ pub fn VerticalProgressBar(
             shadow-md
             ">
             <div
-                class={format!("{} rounded-lg overflow-hidden transition-all ease duration-300",bar_color)}
+                class={format!("{bar_color} rounded-lg overflow-hidden transition-all ease duration-300")}
                 style:height=move || format!("{}%", value.get().clamp(0.0,100.0).round())
                 style:-webkit-mask="linear-gradient(#fff 0 0)"
             ></div>
@@ -230,7 +230,7 @@ pub fn CircularProgressBar(
 
                         // For nice fade out during reset
                         <path
-                            class=move || { format!("main-arc stroke-current {}", bar_color) }
+                            class=move || { format!("main-arc stroke-current {bar_color}") }
                             style=reset_bar_animation
                             stroke-dasharray="452.389"
                             d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"

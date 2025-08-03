@@ -110,7 +110,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     "Passive Skills"
                     {move || {
                         let points = game_context.player_resources.read().passive_points;
-                        if points > 0 { format!(" ({})", points) } else { "".to_string() }
+                        if points > 0 { format!(" ({points})") } else { "".to_string() }
                     }}
                 </MenuButton>
                 <MenuButton on:click=move |_| {

@@ -11,8 +11,8 @@ pub struct BackendClient {
 impl BackendClient {
     pub fn new(http_url: &'static str, ws_url: &'static str) -> Self {
         BackendClient {
-            http_url: http_url.trim_end_matches('/').into(),
-            ws_url: ws_url.trim_end_matches('/').into(),
+            http_url: http_url.trim_end_matches('/'),
+            ws_url: ws_url.trim_end_matches('/'),
         }
     }
 

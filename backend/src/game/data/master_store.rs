@@ -168,7 +168,7 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
             "Store integrity check failed:\n{}",
             errors
                 .iter()
-                .map(|e| format!(" - {}", e))
+                .map(|e| format!(" - {e}"))
                 .collect::<Vec<_>>()
                 .join("\n")
         ))

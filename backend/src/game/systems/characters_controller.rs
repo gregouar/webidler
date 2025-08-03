@@ -173,13 +173,13 @@ pub fn compute_damage(
     .max(0.0)
         * amount;
 
-    let amount = if ignore_armor {
+    
+
+    if ignore_armor {
         amount
     } else {
         decrease_damage_from_armor(target_specs, amount, damage_type)
-    };
-
-    amount
+    }
 }
 
 fn decrease_damage_from_armor(

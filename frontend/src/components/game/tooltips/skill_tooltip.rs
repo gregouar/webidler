@@ -205,7 +205,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                             
                         max_stat_effects.push(StatEffect{stat, modifier,  value: if debuff { -status_effect.min_value } else { status_effect.min_value }});
                         }
-                        view! {}.into_any()},
+                        ().into_any()},
                 }
             }).collect();
 
