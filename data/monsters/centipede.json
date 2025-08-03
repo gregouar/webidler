@@ -23,13 +23,17 @@
             },
             {
               "ApplyStatus": {
-                "status_type": {
-                  "DamageOverTime": { "damage_type": "Poison" }
-                },
-                "min_value": 1,
-                "max_value": 1,
                 "min_duration": 3,
-                "max_duration": 3
+                "max_duration": 3,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Poison" }
+                    },
+                    "min_value": 1,
+                    "max_value": 1
+                  }
+                ]
               }
             }
           ]

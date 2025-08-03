@@ -25,13 +25,17 @@
             },
             {
               "ApplyStatus": {
-                "status_type": {
-                  "DamageOverTime": { "damage_type": "Physical" }
-                },
-                "min_value": 1,
-                "max_value": 2,
                 "min_duration": 2,
-                "max_duration": 2
+                "max_duration": 2,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Physical" }
+                    },
+                    "min_value": 1,
+                    "max_value": 2
+                  }
+                ]
               }
             }
           ]
@@ -48,24 +52,32 @@
           "effects": [
             {
               "ApplyStatus": {
-                "status_type": {
-                  "DamageOverTime": { "damage_type": "Fire" }
-                },
-                "min_value": 3,
-                "max_value": 6,
                 "min_duration": 2,
-                "max_duration": 2
+                "max_duration": 2,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Fire" }
+                    },
+                    "min_value": 3,
+                    "max_value": 6
+                  }
+                ]
               }
             },
             {
               "ApplyStatus": {
-                "status_type": {
-                  "DamageOverTime": { "damage_type": "Poison" }
-                },
-                "min_value": 1,
-                "max_value": 3,
                 "min_duration": 4,
-                "max_duration": 4
+                "max_duration": 4,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Poison" }
+                    },
+                    "min_value": 1,
+                    "max_value": 3
+                  }
+                ]
               }
             }
           ]

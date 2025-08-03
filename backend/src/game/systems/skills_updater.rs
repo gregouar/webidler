@@ -151,46 +151,46 @@ pub fn compute_skill_specs_effect<'a, I>(
                     *max > 0.0
                 });
             }
-            SkillEffectType::ApplyStatus {
-                status_type,
-                min_value,
-                max_value,
-                ..
-            } => match status_type {
-                StatusType::Stun => {
-                    // Something?
+            SkillEffectType::ApplyStatus { statuses, .. } => {
+                for status_effect in statuses.iter_mut() {
+                    match status_effect.status_type {
+                        StatusType::Stun => {
+                            // Something?
+                        }
+                        StatusType::DamageOverTime { damage_type, .. } => match effect.stat {
+                            StatType::SpellPower if skill_type == SkillType::Spell => {
+                                status_effect.min_value.apply_effect(effect);
+                                status_effect.max_value.apply_effect(effect);
+                            }
+                            StatType::Damage {
+                                skill_type: skill_type2,
+                                damage_type: damage_type2,
+                            }
+                            | StatType::MinDamage {
+                                skill_type: skill_type2,
+                                damage_type: damage_type2,
+                            }
+                            | StatType::MaxDamage {
+                                skill_type: skill_type2,
+                                damage_type: damage_type2,
+                            } if skill_type == skill_type2.unwrap_or(skill_type)
+                                && damage_type == damage_type2.unwrap_or(damage_type) =>
+                            {
+                                status_effect.min_value.apply_effect(effect);
+                                status_effect.max_value.apply_effect(effect);
+                            }
+                            _ => {}
+                        },
+                        StatusType::StatModifier { .. } => {
+                            if StatType::SpellPower == effect.stat && skill_type == SkillType::Spell
+                            {
+                                status_effect.min_value.apply_effect(effect);
+                                status_effect.max_value.apply_effect(effect);
+                            }
+                        }
+                    }
                 }
-                StatusType::DamageOverTime { damage_type, .. } => match effect.stat {
-                    StatType::SpellPower if skill_type == SkillType::Spell => {
-                        min_value.apply_effect(effect);
-                        max_value.apply_effect(effect);
-                    }
-                    StatType::Damage {
-                        skill_type: skill_type2,
-                        damage_type: damage_type2,
-                    }
-                    | StatType::MinDamage {
-                        skill_type: skill_type2,
-                        damage_type: damage_type2,
-                    }
-                    | StatType::MaxDamage {
-                        skill_type: skill_type2,
-                        damage_type: damage_type2,
-                    } if skill_type == skill_type2.unwrap_or(skill_type)
-                        && *damage_type == damage_type2.unwrap_or(*damage_type) =>
-                    {
-                        min_value.apply_effect(effect);
-                        max_value.apply_effect(effect);
-                    }
-                    _ => {}
-                },
-                StatusType::StatModifier { .. } => {
-                    if StatType::SpellPower == effect.stat && skill_type == SkillType::Spell {
-                        min_value.apply_effect(effect);
-                        max_value.apply_effect(effect);
-                    }
-                }
-            },
+            }
             SkillEffectType::Restore { min, max, .. } => {
                 if effect.stat == StatType::SpellPower {
                     min.apply_effect(effect);

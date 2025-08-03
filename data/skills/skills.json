@@ -89,15 +89,19 @@
           },
           {
             "ApplyStatus": {
-              "status_type": {
-                "DamageOverTime": {
-                  "damage_type": "Fire"
-                }
-              },
-              "min_value": 1,
-              "max_value": 2,
               "min_duration": 3,
-              "max_duration": 3
+              "max_duration": 3,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Fire"
+                    }
+                  },
+                  "min_value": 1,
+                  "max_value": 2
+                }
+              ]
             }
           }
         ]
@@ -126,15 +130,19 @@
         "effects": [
           {
             "ApplyStatus": {
-              "status_type": {
-                "DamageOverTime": {
-                  "damage_type": "Poison"
-                }
-              },
-              "min_value": 2,
-              "max_value": 3,
               "min_duration": 5,
-              "max_duration": 5
+              "max_duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "min_value": 2,
+                  "max_value": 3
+                }
+              ]
             }
           }
         ]
@@ -164,22 +172,26 @@
         "effects": [
           {
             "ApplyStatus": {
-              "status_type": {
-                "StatModifier": {
-                  "stat": {
-                    "DamageResistance": {
-                      "skill_type": null,
-                      "damage_type": null
+              "min_duration": 5,
+              "max_duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "DamageResistance": {
+                          "skill_type": null,
+                          "damage_type": null
+                        }
+                      },
+                      "modifier": "Flat",
+                      "debuff": true
                     }
                   },
-                  "modifier": "Flat",
-                  "debuff": true
+                  "min_value": 0.3,
+                  "max_value": 0.3
                 }
-              },
-              "min_value": 0.3,
-              "max_value": 0.3,
-              "min_duration": 5,
-              "max_duration": 5
+              ]
             }
           }
         ]
@@ -208,22 +220,26 @@
         "effects": [
           {
             "ApplyStatus": {
-              "status_type": {
-                "StatModifier": {
-                  "stat": {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null
+              "min_duration": 5,
+              "max_duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "skill_type": null,
+                          "damage_type": null
+                        }
+                      },
+                      "modifier": "Multiplier",
+                      "debuff": true
                     }
                   },
-                  "modifier": "Multiplier",
-                  "debuff": true
+                  "min_value": 0.5,
+                  "max_value": 0.5
                 }
-              },
-              "min_value": 0.5,
-              "max_value": 0.5,
-              "min_duration": 5,
-              "max_duration": 5
+              ]
             }
           }
         ]
@@ -251,30 +267,30 @@
         "effects": [
           {
             "ApplyStatus": {
-              "status_type": {
-                "StatModifier": {
-                  "stat": { "Speed": null },
-                  "modifier": "Multiplier"
-                }
-              },
-              "min_value": 0.2,
-              "max_value": 0.2,
               "min_duration": 5,
-              "max_duration": 5
-            }
-          },
-          {
-            "ApplyStatus": {
-              "status_type": {
-                "StatModifier": {
-                  "stat": "MovementSpeed",
-                  "modifier": "Multiplier"
+              "max_duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": { "Speed": null },
+                      "modifier": "Multiplier"
+                    }
+                  },
+                  "min_value": 0.2,
+                  "max_value": 0.2
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": "MovementSpeed",
+                      "modifier": "Multiplier"
+                    }
+                  },
+                  "min_value": 0.2,
+                  "max_value": 0.2
                 }
-              },
-              "min_value": 0.2,
-              "max_value": 0.2,
-              "min_duration": 5,
-              "max_duration": 5
+              ]
             }
           }
         ]
@@ -302,40 +318,40 @@
         "effects": [
           {
             "ApplyStatus": {
-              "status_type": {
-                "StatModifier": {
-                  "stat": {
-                    "MinDamage": {
-                      "skill_type": "Attack",
-                      "damage_type": "Poison"
+              "min_duration": 5,
+              "max_duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "MinDamage": {
+                          "skill_type": "Attack",
+                          "damage_type": "Poison"
+                        }
+                      },
+                      "modifier": "Flat"
                     }
                   },
-                  "modifier": "Flat"
-                }
-              },
-              "min_value": 1,
-              "max_value": 1,
-              "min_duration": 5,
-              "max_duration": 5
-            }
-          },
-          {
-            "ApplyStatus": {
-              "status_type": {
-                "StatModifier": {
-                  "stat": {
-                    "MaxDamage": {
-                      "skill_type": "Attack",
-                      "damage_type": "Poison"
+                  "min_value": 1,
+                  "max_value": 1
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "MaxDamage": {
+                          "skill_type": "Attack",
+                          "damage_type": "Poison"
+                        }
+                      },
+                      "modifier": "Flat"
                     }
                   },
-                  "modifier": "Flat"
+                  "min_value": 2,
+                  "max_value": 2
                 }
-              },
-              "min_value": 2,
-              "max_value": 2,
-              "min_duration": 5,
-              "max_duration": 5
+              ]
             }
           }
         ]

@@ -221,26 +221,26 @@ pub fn apply_skill_effect(
             }
         }
         SkillEffectType::ApplyStatus {
-            status_type,
-            min_value,
-            max_value,
             min_duration,
             max_duration,
-            cumulate,
+            statuses,
         } => {
-            if let (Some(value), Some(duration)) = (
-                rng::random_range(*min_value..=*max_value),
-                rng::random_range(*min_duration..=*max_duration),
-            ) {
-                for target in targets {
-                    characters_controller::apply_status(
-                        target,
-                        *status_type,
-                        skill_type,
-                        value,
-                        duration,
-                        *cumulate,
-                    )
+            if let Some(duration) = rng::random_range(*min_duration..=*max_duration) {
+                for status_effect in statuses.iter() {
+                    if let Some(value) =
+                        rng::random_range(status_effect.min_value..=status_effect.max_value)
+                    {
+                        for target in targets.iter_mut() {
+                            characters_controller::apply_status(
+                                target,
+                                status_effect.status_type,
+                                skill_type,
+                                value,
+                                duration,
+                                status_effect.cumulate,
+                            )
+                        }
+                    }
                 }
             }
         }

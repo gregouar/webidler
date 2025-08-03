@@ -104,11 +104,7 @@ pub enum SkillEffectType {
         crit_damage: f64,
     },
     ApplyStatus {
-        status_type: StatusType,
-        #[serde(default)]
-        cumulate: bool,
-        min_value: f64,
-        max_value: f64,
+        statuses: Vec<ApplyStatusEffect>,
         min_duration: f64,
         max_duration: f64,
     },
@@ -118,6 +114,15 @@ pub enum SkillEffectType {
         max: f64,
     },
     Resurrect,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ApplyStatusEffect {
+    pub status_type: StatusType,
+    pub min_value: f64,
+    pub max_value: f64,
+    #[serde(default)]
+    pub cumulate: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq)]

@@ -667,11 +667,15 @@
             "effects": [
               {
                 "ApplyStatus": {
-                  "status_type": "Stun",
-                  "min_value": 0,
-                  "max_value": 0,
                   "min_duration": 3,
-                  "max_duration": 3
+                  "max_duration": 3,
+                  "statuses": [
+                    {
+                      "status_type": "Stun",
+                      "min_value": 0,
+                      "max_value": 0
+                    }
+                  ]
                 }
               }
             ]
@@ -726,16 +730,20 @@
             "effects": [
               {
                 "ApplyStatus": {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Physical",
-                      "ignore_armor": true
-                    }
-                  },
-                  "min_value": 1,
-                  "max_value": 1,
                   "min_duration": 2,
-                  "max_duration": 2
+                  "max_duration": 2,
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Physical",
+                          "ignore_armor": true
+                        }
+                      },
+                      "min_value": 1,
+                      "max_value": 1
+                    }
+                  ]
                 }
               }
             ],
@@ -807,29 +815,29 @@
             "effects": [
               {
                 "ApplyStatus": {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": { "Damage": {} }
-                    }
-                  },
-                  "cumulate": true,
-                  "min_value": 0.2,
-                  "max_value": 0.2,
                   "min_duration": 2,
-                  "max_duration": 2
-                }
-              },
-              {
-                "ApplyStatus": {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": { "Speed": "Attack" }
+                  "max_duration": 2,
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "StatModifier": {
+                          "stat": { "Damage": {} }
+                        }
+                      },
+                      "cumulate": true,
+                      "min_value": 0.2,
+                      "max_value": 0.2
+                    },
+                    {
+                      "status_type": {
+                        "StatModifier": {
+                          "stat": { "Speed": "Attack" }
+                        }
+                      },
+                      "min_value": 0.2,
+                      "max_value": 0.2
                     }
-                  },
-                  "min_value": 0.2,
-                  "max_value": 0.2,
-                  "min_duration": 2,
-                  "max_duration": 2
+                  ]
                 }
               }
             ]

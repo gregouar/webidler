@@ -21,16 +21,20 @@
             },
             {
               "ApplyStatus": {
-                "status_type": {
-                  "StatModifier": {
-                    "stat": { "Armor": "Physical" },
-                    "debuff": true
-                  }
-                },
-                "min_value": 0.5,
-                "max_value": 0.5,
                 "min_duration": 3,
-                "max_duration": 3
+                "max_duration": 3,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "Armor": "Physical" },
+                        "debuff": true
+                      }
+                    },
+                    "min_value": 0.5,
+                    "max_value": 0.5
+                  }
+                ]
               }
             }
           ]
