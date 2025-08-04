@@ -22,17 +22,18 @@ pub fn MainMenuPage() -> impl IntoView {
 
     let (_, _, delete_session_infos) =
         storage::use_session_storage::<Option<SessionInfos>, JsonSerdeCodec>("session_infos");
-    let (get_user_id, set_user_id_storage, _) =
-        storage::use_local_storage::<String, JsonSerdeCodec>("user_id");
-    let user_id = RwSignal::new(get_user_id.get_untracked());
-    let disable_connect = Signal::derive(move || user_id.read().is_empty());
+    let (get_username, set_user_id_storage, _) =
+        storage::use_local_storage::<String, JsonSerdeCodec>("username");
+    let username = RwSignal::new(get_username.get_untracked());
+    let password = RwSignal::new(String::new());
+    let disable_connect = Signal::derive(move || username.read().is_empty());
 
     let navigate_to_game = {
         let navigate = use_navigate();
         let delete_session_infos = delete_session_infos.clone();
         move |_| {
             delete_session_infos();
-            set_user_id_storage.set(user_id.get_untracked());
+            set_user_id_storage.set(username.get_untracked());
             navigate("game", Default::default());
         }
     };
@@ -41,6 +42,13 @@ pub fn MainMenuPage() -> impl IntoView {
         let navigate = use_navigate();
         move |_| {
             navigate("leaderboard", Default::default());
+        }
+    };
+
+    let navigate_to_signup = {
+        let navigate = use_navigate();
+        move |_| {
+            navigate("signup", Default::default());
         }
     };
 
@@ -55,22 +63,31 @@ pub fn MainMenuPage() -> impl IntoView {
                     "Grind to Rust!"
                 </h1>
                 <div class="flex flex-col space-y-2">
-                    <div class="w-full mx-auto mb-6 text-left">
-                        <label for="username" class="block mb-2 text-sm font-medium text-gray-300">
-                            "Username:"
-                        </label>
+                    <div class="w-full mx-auto text-left">
+                        <label class="block mb-2 text-sm font-medium text-gray-300">"Login:"</label>
                         <input
                             id="username"
                             type="text"
-                            bind:value=user_id
+                            bind:value=username
                             placeholder="Enter your username"
                             class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400
                             focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
                         />
                     </div>
+                    <div class="w-full mx-auto mb-6 text-left">
+                        <input
+                            id="password"
+                            type="password"
+                            bind:value=password
+                            placeholder="Enter your password"
+                            class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400
+                            focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
+                        />
+                    </div>
                     <MenuButton on:click=navigate_to_game disabled=disable_connect>
-                        "Play"
+                        "Connect"
                     </MenuButton>
+                    <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>
                     <MenuButton on:click=navigate_to_leaderboard>"Leaderboard"</MenuButton>
                 </div>
             </div>
