@@ -8,12 +8,12 @@ use shared::data::{
         ApplyStatusEffect, BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{Modifier, StatEffect, StatType},
+    stat_effect::{ApplyStatModifier, Modifier, StatEffect, StatType},
 };
 
 use crate::game::data::items_store::{ItemAdjectivesTable, ItemNounsTable};
 
-use super::{loot_generator::generate_name, stats_controller::ApplyStatModifier};
+use super::loot_generator::generate_name;
 
 const WEAPON_POISON_DAMAGE_DURATION: f64 = 3.0;
 

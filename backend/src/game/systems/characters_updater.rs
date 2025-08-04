@@ -5,13 +5,10 @@ use shared::data::{
     character::{CharacterId, CharacterSpecs, CharacterState},
     passive::StatEffect,
     skill::{DamageType, SkillType},
-    stat_effect::{EffectsMap, Modifier, StatType},
+    stat_effect::{ApplyStatModifier, EffectsMap, Modifier, StatType},
 };
 
-use crate::game::{
-    data::event::{EventsQueue, GameEvent},
-    systems::stats_controller::ApplyStatModifier,
-};
+use crate::game::data::event::{EventsQueue, GameEvent};
 
 use super::statuses_controller;
 

@@ -6,15 +6,13 @@ use shared::data::{
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerSpecs, PlayerState},
     skill::{RestoreType, SkillEffect, SkillEffectType},
-    stat_effect::{EffectsMap, Modifier, StatType},
+    stat_effect::{ApplyStatModifier, EffectsMap, Modifier, StatType},
     trigger::{EventTrigger, TriggerTarget, TriggeredEffect},
 };
 
 use crate::game::{data::event::EventsQueue, systems::statuses_controller};
 
-use super::{
-    characters_updater, passives_controller, skills_updater, stats_controller::ApplyStatModifier,
-};
+use super::{characters_updater, passives_controller, skills_updater};
 
 pub fn update_player_state(
     events_queue: &mut EventsQueue,

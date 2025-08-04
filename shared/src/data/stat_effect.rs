@@ -129,11 +129,68 @@ impl EffectsMap {
                     .entry((target, modifier))
                     .and_modify(|entry| match modifier {
                         Modifier::Flat => *entry += value,
-                        Modifier::Multiplier => *entry = (*entry + 1.0) * (1.0 + value) - 1.0,
+                        Modifier::Multiplier => {
+                            let mut new_entry = *entry + 1.0;
+                            new_entry.apply_effect(&StatEffect {
+                                stat: target,
+                                modifier,
+                                value,
+                            });
+                            *entry = new_entry - 1.0;
+                        }
                     })
                     .or_insert(value);
                 result
             },
         ))
+    }
+}
+
+pub trait ApplyStatModifier {
+    fn apply_modifier(&mut self, modifier: Modifier, value: f64);
+    fn apply_effect(&mut self, effect: &StatEffect) {
+        // We want that negative effect are diminishingly interesting
+        let value = match effect.modifier {
+            Modifier::Flat => effect.value,
+            Modifier::Multiplier => {
+                if effect.value >= 0.0 {
+                    effect.value
+                } else {
+                    let div = (1.0 - effect.value).max(0.0);
+                    if div != 0.0 {
+                        effect.value / div
+                    } else {
+                        0.0
+                    }
+                }
+            }
+        };
+        self.apply_modifier(effect.modifier, value);
+    }
+
+    fn apply_negative_effect(&mut self, effect: &StatEffect) {
+        self.apply_effect(&StatEffect {
+            stat: effect.stat,
+            modifier: effect.modifier,
+            value: -effect.value,
+        })
+    }
+}
+
+impl ApplyStatModifier for f32 {
+    fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
+        match modifier {
+            Modifier::Flat => *self += value as f32,
+            Modifier::Multiplier => *self *= (1.0 + value as f32).max(0.0),
+        }
+    }
+}
+
+impl ApplyStatModifier for f64 {
+    fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
+        match modifier {
+            Modifier::Flat => *self += value,
+            Modifier::Multiplier => *self *= (1.0 + value).max(0.0),
+        }
     }
 }

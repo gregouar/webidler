@@ -2,12 +2,9 @@ use std::time::Duration;
 
 use shared::data::{
     character_status::StatusType,
-    passive::StatEffect,
     skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType},
-    stat_effect::{self, DamageMap, Modifier, StatType},
+    stat_effect::{self, ApplyStatModifier, DamageMap, Modifier, StatEffect, StatType},
 };
-
-use super::stats_controller::ApplyStatModifier;
 
 pub fn update_skills_states(
     elapsed_time: Duration,
