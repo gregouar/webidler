@@ -35,6 +35,7 @@ pub fn reset_skills(skill_states: &mut [SkillState]) {
 
 pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) {
     skill_specs.targets = skill_specs.base.targets.clone();
+    skill_specs.triggers = skill_specs.base.triggers.clone();
     skill_specs.cooldown = skill_specs.base.cooldown;
     skill_specs.mana_cost = skill_specs.base.mana_cost;
 
