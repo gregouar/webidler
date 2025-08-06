@@ -102,6 +102,8 @@ pub fn update_player_specs(
             )),
     );
 
+    compute_player_specs(player_specs);
+
     player_specs.triggers = passives_tree_state
         .purchased_nodes
         .iter()
@@ -127,8 +129,6 @@ pub fn update_player_specs(
         .collect();
 
     // TODO: Collect item triggers and effects to triggers
-
-    compute_player_specs(player_specs);
 }
 
 fn compute_player_specs(player_specs: &mut PlayerSpecs) {

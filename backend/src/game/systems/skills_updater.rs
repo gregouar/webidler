@@ -94,6 +94,16 @@ pub fn compute_skill_specs_effect<'a, I>(
 ) where
     I: IntoIterator<Item = &'a StatEffect> + Clone,
 {
+    if let SkillEffectType::ApplyStatus { statuses, .. } = &mut skill_effect.effect_type {
+        for status_effect in statuses.iter_mut() {
+            if let StatusSpecs::Trigger(ref mut trigger_specs) = status_effect.status_type {
+                for triggered_effect in trigger_specs.triggered_effect.effects.iter_mut() {
+                    compute_skill_specs_effect(skill_type, triggered_effect, effects.clone())
+                }
+            }
+        }
+    }
+
     for effect in effects.clone() {
         match &mut skill_effect.effect_type {
             SkillEffectType::FlatDamage {
@@ -205,17 +215,7 @@ pub fn compute_skill_specs_effect<'a, I>(
                                 status_effect.max_value.apply_effect(effect);
                             }
                         }
-                        StatusSpecs::Trigger(ref mut trigger_specs) => {
-                            for triggered_effect in
-                                trigger_specs.triggered_effect.effects.iter_mut()
-                            {
-                                compute_skill_specs_effect(
-                                    skill_type,
-                                    triggered_effect,
-                                    effects.clone(),
-                                )
-                            }
-                        }
+                        StatusSpecs::Trigger(_) => {}
                     }
                 }
             }
