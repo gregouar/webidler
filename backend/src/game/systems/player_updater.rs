@@ -2,6 +2,7 @@ use std::{iter, time::Duration};
 
 use shared::data::{
     character::CharacterId,
+    character_status::StatusSpecs,
     item_affix::AffixEffectScope,
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerSpecs, PlayerState},
@@ -111,6 +112,16 @@ pub fn update_player_specs(
                 .skills_specs
                 .iter()
                 .flat_map(|skill_specs| skill_specs.triggers.iter()),
+        )
+        .chain(
+            player_state
+                .character_state
+                .statuses
+                .iter()
+                .filter_map(|(status_specs, _)| match status_specs {
+                    StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
+                    _ => None,
+                }),
         )
         .map(|trigger_specs| trigger_specs.triggered_effect.clone())
         .collect();
