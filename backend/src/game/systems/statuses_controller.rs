@@ -67,7 +67,7 @@ fn update_status(
     status_state.duration -= elapsed_time_f64;
     let remove_status = status_state.duration <= 0.0;
 
-    if let StatusSpecs::StatModifier { .. } = status_specs {
+    if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger(_) = status_specs {
         if remove_status {
             *character_buff_status_change = true;
         }

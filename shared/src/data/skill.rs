@@ -119,7 +119,9 @@ pub enum SkillEffectType {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ApplyStatusEffect {
     pub status_type: StatusSpecs,
+    #[serde(default)]
     pub min_value: f64,
+    #[serde(default)]
     pub max_value: f64,
     #[serde(default)]
     pub cumulate: bool,

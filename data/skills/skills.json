@@ -21,10 +21,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [
-                  4,
-                  8
-                ]
+                "Physical": [4, 8]
               }
             }
           }
@@ -55,10 +52,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Fire": [
-                  4,
-                  12
-                ]
+                "Fire": [4, 12]
               }
             }
           }
@@ -89,10 +83,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Fire": [
-                  2,
-                  5
-                ]
+                "Fire": [2, 5]
               }
             }
           },
@@ -334,7 +325,8 @@
                 {
                   "status_type": {
                     "Trigger": {
-                      "description": "Successful Attacks inflict Poison Damage over Time.",
+                      "trigger_id": "poison_coating",
+                      "description": "Successful Attacks inflict:",
                       "OnHit": {
                         "skill_type": "Attack",
                         "is_hurt": true
@@ -417,6 +409,7 @@
     ],
     "triggers": [
       {
+        "trigger_id": "retaliate",
         "description": "Trigger on block:",
         "OnTakeHit": {
           "is_blocked": true
@@ -426,10 +419,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [
-                  5,
-                  10
-                ]
+                "Physical": [5, 10]
               },
               "crit_chances": 0.05,
               "crit_damage": 1
