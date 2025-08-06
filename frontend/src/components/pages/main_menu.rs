@@ -26,7 +26,8 @@ pub fn MainMenuPage() -> impl IntoView {
         storage::use_local_storage::<String, JsonSerdeCodec>("username");
     let username = RwSignal::new(get_username.get_untracked());
     let password = RwSignal::new(String::new());
-    let disable_connect = Signal::derive(move || username.read().is_empty());
+    let disable_connect =
+        Signal::derive(move || username.read().is_empty() || password.read().is_empty());
 
     let navigate_to_game = {
         let navigate = use_navigate();
