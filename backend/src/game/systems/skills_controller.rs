@@ -234,7 +234,7 @@ pub fn apply_skill_effect(
                 for target in targets.iter_mut() {
                     characters_controller::apply_status(
                         target,
-                        status_effect.status_type,
+                        &status_effect.status_type,
                         skill_type,
                         value,
                         duration,
@@ -270,9 +270,10 @@ pub fn level_up_skill(skill_specs: &mut SkillSpecs, player_resources: &mut Playe
     player_resources.gold -= skill_specs.next_upgrade_cost;
 
     skill_specs.upgrade_level += 1;
-    skill_specs.next_upgrade_cost += 10.0
+    skill_specs.next_upgrade_cost += (10.0
         * increase_factors::exponential(
             skill_specs.upgrade_level,
             increase_factors::MONSTER_INCREASE_FACTOR,
-        );
+        ))
+    .round();
 }

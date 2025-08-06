@@ -4,7 +4,7 @@
     "icon": "items/quarterstaff.webp",
     "slot": "Weapon",
     "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "MeleeWeapon"],
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
@@ -21,7 +21,7 @@
     "icon": "items/woodcutter_axe.webp",
     "slot": "Weapon",
     "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "MeleeWeapon"],
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",

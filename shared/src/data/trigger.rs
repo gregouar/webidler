@@ -33,6 +33,7 @@ pub struct HitTrigger {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggerSpecs {
+    pub trigger_id: String,
     pub description: String,
     #[serde(flatten)]
     pub triggered_effect: TriggeredEffect,

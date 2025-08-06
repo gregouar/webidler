@@ -149,13 +149,12 @@
       }
     ]
   },
-
   "curse_frailty": {
     "name": "Curse of Frailty",
     "description": "A curse that makes enemies take more damage from all sources",
     "icon": "skills/curse_frailty.svg",
     "skill_type": "Spell",
-    "cooldown": 15,
+    "cooldown": 10,
     "mana_cost": 25,
     "upgrade_cost": 50,
     "upgrade_effects": [
@@ -198,7 +197,7 @@
       }
     ]
   },
-  "cruse_weakness": {
+  "curse_weakness": {
     "name": "Curse of Weakness",
     "description": "A curse that reduces the damage enemies deal",
     "icon": "skills/curse_weakness.svg",
@@ -258,7 +257,7 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 0.01
+        "value": 0.005
       }
     ],
     "targets": [
@@ -273,7 +272,9 @@
                 {
                   "status_type": {
                     "StatModifier": {
-                      "stat": { "Speed": null },
+                      "stat": {
+                        "Speed": null
+                      },
                       "modifier": "Multiplier"
                     }
                   },
@@ -323,33 +324,34 @@
               "statuses": [
                 {
                   "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "MinDamage": {
-                          "skill_type": "Attack",
-                          "damage_type": "Poison"
-                        }
+                    "Trigger": {
+                      "trigger_id": "poison_coating",
+                      "description": "Successful Attacks inflict:",
+                      "OnHit": {
+                        "skill_type": "Attack",
+                        "is_hurt": true
                       },
-                      "modifier": "Flat"
-                    }
-                  },
-                  "min_value": 1,
-                  "max_value": 1
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "MaxDamage": {
-                          "skill_type": "Attack",
-                          "damage_type": "Poison"
+                      "effects": [
+                        {
+                          "ApplyStatus": {
+                            "min_duration": 2,
+                            "max_duration": 2,
+                            "statuses": [
+                              {
+                                "status_type": {
+                                  "DamageOverTime": {
+                                    "damage_type": "Poison"
+                                  }
+                                },
+                                "min_value": 1,
+                                "max_value": 2
+                              }
+                            ]
+                          }
                         }
-                      },
-                      "modifier": "Flat"
+                      ]
                     }
-                  },
-                  "min_value": 2,
-                  "max_value": 2
+                  }
                 }
               ]
             }
@@ -358,7 +360,6 @@
       }
     ]
   },
-
   "heal": {
     "name": "Heal",
     "description": "A minor healing spell for yourself",
@@ -378,7 +379,13 @@
       {
         "target_type": "Me",
         "effects": [
-          { "Restore": { "restore_type": "Life", "min": 25, "max": 25 } }
+          {
+            "Restore": {
+              "restore_type": "Life",
+              "min": 25,
+              "max": 25
+            }
+          }
         ]
       }
     ]
@@ -393,15 +400,20 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "Damage": {} },
+        "stat": {
+          "Damage": {}
+        },
         "modifier": "Multiplier",
         "value": 0.2
       }
     ],
     "triggers": [
       {
+        "trigger_id": "retaliate",
         "description": "Trigger on block:",
-        "OnTakeHit": { "is_blocked": true },
+        "OnTakeHit": {
+          "is_blocked": true
+        },
         "target": "Source",
         "effects": [
           {

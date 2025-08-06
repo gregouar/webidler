@@ -40,20 +40,22 @@ pub enum ItemCategory {
     AttackWeapon,
     SpellWeapon,
     MeleeWeapon,
+    MeleeWeapon1H,
+    MeleeWeapon2H,
     RangedWeapon,
-    Jewelry,
-    Accessory,
     Shield,
     Focus,
+    Jewelry,
+    Accessory,
     // Minor categories:
+    Amulet,
     Body,
     Boots,
     Cloak,
     Gloves,
     Helmet,
-    Ring,
-    Amulet,
     Relic,
+    Ring,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

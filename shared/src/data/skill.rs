@@ -4,7 +4,7 @@ use crate::data::trigger::TriggerSpecs;
 
 pub use super::stat_effect::DamageType;
 use super::{
-    character_status::StatusType, item::ItemSlot, passive::StatEffect, stat_effect::DamageMap,
+    character_status::StatusSpecs, item::ItemSlot, passive::StatEffect, stat_effect::DamageMap,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -118,8 +118,10 @@ pub enum SkillEffectType {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ApplyStatusEffect {
-    pub status_type: StatusType,
+    pub status_type: StatusSpecs,
+    #[serde(default)]
     pub min_value: f64,
+    #[serde(default)]
     pub max_value: f64,
     #[serde(default)]
     pub cumulate: bool,

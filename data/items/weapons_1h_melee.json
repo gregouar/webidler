@@ -3,7 +3,7 @@
     "name": "Dagger",
     "icon": "items/dagger.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon"],
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
@@ -19,7 +19,7 @@
     "description": "Forged in myth and honed in the kitchens of legend, this knife once sliced onions so fast it brought tears to gods and mortals alike.",
     "icon": "items/onions_slicer.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon"],
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
@@ -51,7 +51,7 @@
     "name": "Shortsword",
     "icon": "items/shortsword.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon"],
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,

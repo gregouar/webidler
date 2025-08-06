@@ -120,11 +120,12 @@ pub fn level_up(
     player_specs.level += 1;
     player_resources.passive_points += 1;
     player_resources.experience -= player_specs.experience_needed;
-    player_specs.experience_needed = 20.0
+    player_specs.experience_needed = (20.0
         * increase_factors::exponential(
             player_specs.level as AreaLevel,
             increase_factors::XP_INCREASE_FACTOR,
-        );
+        ))
+    .round();
 
     player_state.character_state.life += 10.0;
 
@@ -366,7 +367,8 @@ pub fn buy_skill(
             None,
         );
         player_resources.gold -= player_specs.buy_skill_cost;
-        player_specs.buy_skill_cost *= player_specs.buy_skill_cost;
+        player_specs.buy_skill_cost =
+            (player_specs.buy_skill_cost * player_specs.buy_skill_cost).round();
         player_specs.bought_skills.insert(skill_id.to_string());
         true
     } else {

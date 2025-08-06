@@ -661,6 +661,7 @@
         "size": 1,
         "triggers": [
           {
+            "trigger_id": "stunning_block",
             "description": "Blocked Attacks inflict Stun for 3 seconds",
             "OnTakeHit": { "skill_type": "Attack", "is_blocked": true },
             "target": "Source",
@@ -692,6 +693,7 @@
         "size": 1,
         "triggers": [
           {
+            "trigger_id": "healing_aura",
             "description": "Restore Area Level x 3 Health at the end of each wave.",
             "OnWaveCompleted": {},
             "target": "Source",
@@ -725,6 +727,7 @@
         "size": 1,
         "triggers": [
           {
+            "trigger_id": "bleeding_crit",
             "description": "Critical Hit with Attacks inflict Bleed for 2 seconds. Bleed damage is 50% of Physical Damage dealt by initial Hit per second.",
             "OnHit": { "skill_type": "Attack", "is_crit": true },
             "effects": [
@@ -810,6 +813,7 @@
         "size": 1,
         "triggers": [
           {
+            "trigger_id": "enrage",
             "description": "Taking a hit grants +20% Attack Speed for 2s and stacks +20% Attack Damage for 2s.",
             "OnTakeHit": { "is_hurt": true },
             "effects": [
