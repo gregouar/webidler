@@ -1,8 +1,8 @@
 use leptos::{html::*, prelude::*};
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
-    character_status::{StatusMap, StatusType},
+    character_status::{StatusId, StatusMap},
     skill::{DamageType, SkillType},
     stat_effect::StatType,
 };
@@ -61,17 +61,30 @@ pub fn CharacterPortrait(
         }
     });
 
+    let statuses_map = Signal::derive({
+        let statuses = statuses.clone();
+        move || {
+            statuses.read().iter().fold(
+                HashMap::<StatusId, usize>::new(),
+                |mut acc, (status_specs, _)| {
+                    *acc.entry(status_specs.into()).or_default() += 1;
+                    acc
+                },
+            )
+        }
+    });
+
     let active_statuses = Memo::new(move |_| {
-        let mut active_statuses = statuses.get().into_keys().collect::<Vec<_>>();
+        let mut active_statuses: Vec<_> = statuses_map.read().keys().cloned().collect();
         active_statuses.sort();
         active_statuses
     });
 
-    let status_stack = move |status_type| {
-        statuses
+    let status_stack = move |status_id| {
+        statuses_map
             .read()
-            .get(&status_type)
-            .map(|v| v.len())
+            .get(&status_id)
+            .cloned()
             .unwrap_or_default()
     };
 
@@ -126,8 +139,11 @@ pub fn CharacterPortrait(
                 </div>
 
                 <div class="absolute inset-0 flex place-items-start p-2">
-                    <For each=move || active_statuses.get() key=|k| *k let(k)>
-                        <StatusIcon status_type=k stack=Signal::derive(move || status_stack(k)) />
+                    <For each=move || active_statuses.get() key=|k| k.clone() let(k)>
+                        <StatusIcon
+                            status_type=k.clone()
+                            stack=Signal::derive(move || status_stack(k.clone()))
+                        />
                     </For>
                 </div>
                 <div class=move || { format!("absolute inset-0  {}", just_hurt_class()) }></div>
@@ -154,16 +170,16 @@ pub fn CharacterPortrait(
 }
 
 #[component]
-fn StatusIcon(status_type: StatusType, stack: Signal<usize>) -> impl IntoView {
+fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
     let (icon_uri, alt) = match status_type {
-        StatusType::Stun => ("statuses/stunned.svg", "Stunned"),
-        StatusType::DamageOverTime { damage_type, .. } => match damage_type {
-            shared::data::skill::DamageType::Physical => ("statuses/bleed.svg", "Bleeding"),
-            shared::data::skill::DamageType::Fire => ("statuses/burning.svg", "Burning"),
-            shared::data::skill::DamageType::Poison => ("statuses/poison.svg", "Poisoned"),
+        StatusId::Stun => ("statuses/stunned.svg", "Stunned"),
+        StatusId::DamageOverTime { damage_type, .. } => match damage_type {
+            DamageType::Physical => ("statuses/bleed.svg", "Bleeding"),
+            DamageType::Fire => ("statuses/burning.svg", "Burning"),
+            DamageType::Poison => ("statuses/poison.svg", "Poisoned"),
         },
         // TODO: More buff types
-        StatusType::StatModifier {
+        StatusId::StatModifier {
             stat,
             debuff: false,
             ..
@@ -174,12 +190,13 @@ fn StatusIcon(status_type: StatusType, stack: Signal<usize>) -> impl IntoView {
             } => ("statuses/buff_attack_damage.svg", "Increased Attack Damage"),
             _ => ("statuses/buff.svg", "Buffed"),
         },
-        StatusType::StatModifier {
+        StatusId::StatModifier {
             stat, debuff: true, ..
         } => match stat {
             StatType::Armor(DamageType::Physical) => ("statuses/debuff_armor.svg", "Broken Armor"),
             _ => ("statuses/debuff.svg", "Debuffed"),
         },
+        StatusId::Trigger(_) => ("statuses/buff.svg", "Buffed"),
     };
     view! {
         <div class="relative h-[15%] aspect-square p-1">

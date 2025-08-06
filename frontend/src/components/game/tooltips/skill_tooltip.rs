@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use shared::data::character_status::StatusType;
+use shared::data::character_status::StatusSpecs;
 use shared::data::item_affix::AffixEffectScope;
 use shared::data::passive::StatEffect;
 use shared::data::skill::RestoreType;
@@ -175,54 +175,64 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
 
             let formatted_status_effects:Vec<_> = statuses.iter().cloned().map(|status_effect| {
                 match status_effect.status_type {
-                    StatusType::Stun => {
-                        view! { <EffectLi>"Stun for "{format_min_max(min_duration, max_duration)}" seconds"</EffectLi> }
-                            .into_any()
-                    }
-                    StatusType::DamageOverTime { damage_type, .. } => {
-                        view! {
-                            <EffectLi>
-                                "Deals "
-                                <span class="font-semibold">
-                                    {format_min_max(
-                                        status_effect.min_value,
-                                        status_effect.max_value,
-                                    )}
-                                </span>"  "{optional_damage_type_str(Some(damage_type))}
-                                "Damage per second for "
-                                {format_min_max(min_duration, max_duration)}" seconds"
-                            </EffectLi>
-                        }
-                            .into_any()
-                    }
-                    StatusType::StatModifier {
-                        stat,
-                        modifier,
-                        debuff,
-                    } => {
-                        stat_effects.push(StatEffect {
-                            stat,
-                            modifier,
-                            value: if debuff {
-                                -status_effect.min_value
-                            } else {
-                                status_effect.min_value
-                            },
-                        });
-                        if status_effect.min_value != status_effect.max_value {
-                            max_stat_effects.push(StatEffect {
-                                stat,
-                                modifier,
-                                value: if debuff {
-                                    -status_effect.min_value
-                                } else {
-                                    status_effect.min_value
-                                },
-                            });
-                        }
-                        ().into_any()
-                    },
-                }
+                    StatusSpecs::Stun => {
+                                        view! { <EffectLi>"Stun for "{format_min_max(min_duration, max_duration)}" seconds"</EffectLi> }
+                                            .into_any()
+                                    }
+                    StatusSpecs::DamageOverTime { damage_type, .. } => {
+                                        view! {
+                                            <EffectLi>
+                                                "Deals "
+                                                <span class="font-semibold">
+                                                    {format_min_max(
+                                                        status_effect.min_value,
+                                                        status_effect.max_value,
+                                                    )}
+                                                </span>"  "{optional_damage_type_str(Some(damage_type))}
+                                                "Damage per second for "
+                                                {format_min_max(min_duration, max_duration)}" seconds"
+                                            </EffectLi>
+                                        }
+                                            .into_any()
+                                    }
+                    StatusSpecs::StatModifier {
+                                        stat,
+                                        modifier,
+                                        debuff,
+                                    } => {
+                                        stat_effects.push(StatEffect {
+                                            stat,
+                                            modifier,
+                                            value: if debuff {
+                                                -status_effect.min_value
+                                            } else {
+                                                status_effect.min_value
+                                            },
+                                        });
+                                        if status_effect.min_value != status_effect.max_value {
+                                            max_stat_effects.push(StatEffect {
+                                                stat,
+                                                modifier,
+                                                value: if debuff {
+                                                    -status_effect.min_value
+                                                } else {
+                                                    status_effect.min_value
+                                                },
+                                            });
+                                        }
+                                        ().into_any()
+                                    },
+StatusSpecs::Trigger(trigger_specs) => {
+                                        view! {
+                                            <EffectLi>
+                                                "Apply the following status for "
+                                                {format_min_max(min_duration, max_duration)} " seconds:"
+                                                <ul>{format_trigger(*trigger_specs)}</ul>
+                                            </EffectLi>
+                                        }
+                                            .into_any()
+                                    },
+                                    }
             }).collect();
 
             let formatted_stats_effects = {

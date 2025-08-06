@@ -1,7 +1,7 @@
 use std::vec;
 
 use shared::data::{
-    character_status::StatusType,
+    character_status::StatusSpecs,
     item::{ArmorSpecs, ItemSpecs, WeaponSpecs},
     item_affix::AffixEffectScope,
     skill::{
@@ -154,13 +154,13 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                 min_duration: WEAPON_POISON_DAMAGE_DURATION,
                 max_duration: WEAPON_POISON_DAMAGE_DURATION,
                 statuses: vec![ApplyStatusEffect {
-                    status_type: StatusType::DamageOverTime {
+                    status_type: StatusSpecs::DamageOverTime {
                         damage_type: DamageType::Poison,
                         ignore_armor: false,
                     },
                     min_value,
                     max_value,
-                    cumulate: false,
+                    cumulate: true,
                 }],
             },
             failure_chances: 0.0,

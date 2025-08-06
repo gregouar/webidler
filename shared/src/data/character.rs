@@ -2,9 +2,12 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use crate::data::skill::{DamageType, SkillType};
+use crate::data::{
+    character_status::StatusId,
+    skill::{DamageType, SkillType},
+};
 
-use super::character_status::{StatusMap, StatusType};
+use super::character_status::StatusMap;
 pub use super::skill::{SkillSpecs, SkillState};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
@@ -92,6 +95,6 @@ pub struct CharacterState {
 
 impl CharacterState {
     pub fn is_stunned(&self) -> bool {
-        self.statuses.contains_key(&StatusType::Stun)
+        self.statuses.unique_statuses.contains_key(&StatusId::Stun)
     }
 }
