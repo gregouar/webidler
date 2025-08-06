@@ -154,7 +154,7 @@
     "description": "A curse that makes enemies take more damage from all sources",
     "icon": "skills/curse_frailty.svg",
     "skill_type": "Spell",
-    "cooldown": 15,
+    "cooldown": 10,
     "mana_cost": 25,
     "upgrade_cost": 50,
     "upgrade_effects": [
@@ -197,7 +197,7 @@
       }
     ]
   },
-  "cruse_weakness": {
+  "curse_weakness": {
     "name": "Curse of Weakness",
     "description": "A curse that reduces the damage enemies deal",
     "icon": "skills/curse_weakness.svg",
