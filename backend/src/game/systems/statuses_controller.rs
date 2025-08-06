@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use shared::data::{
-    character_status::{StatusMap, StatusType},
+    character_status::{StatusMap, StatusSpecs, StatusState},
     player::{CharacterSpecs, CharacterState},
     stat_effect::EffectsMap,
 };
@@ -17,48 +17,80 @@ pub fn update_character_statuses(
 
     character_state
         .statuses
-        .retain(|status_type, status_states| {
-            if let StatusType::DamageOverTime { .. } = status_type {
-                for status in status_states.iter() {
-                    characters_controller::damage_character(
-                        character_specs,
-                        &mut character_state.life,
-                        &mut character_state.mana,
-                        status.value * elapsed_time_f64.min(status.duration),
-                    );
-                }
-            }
-
-            let old_len = status_states.len();
-            status_states.retain_mut(|status| {
-                status.duration -= elapsed_time_f64;
-                status.duration > 0.0
-            });
-
-            if let StatusType::StatModifier { .. } = status_type {
-                if old_len != status_states.len() {
-                    character_state.buff_status_change = true;
-                }
-            }
-
-            !status_states.is_empty()
+        .unique_statuses
+        .retain(|_, (status_specs, status_state)| {
+            update_status(
+                character_specs,
+                &mut character_state.life,
+                &mut character_state.mana,
+                &mut character_state.buff_status_change,
+                status_specs,
+                status_state,
+                elapsed_time_f64,
+            )
         });
+
+    character_state
+        .statuses
+        .cumulative_statuses
+        .retain_mut(|(status_specs, status_state)| {
+            update_status(
+                character_specs,
+                &mut character_state.life,
+                &mut character_state.mana,
+                &mut character_state.buff_status_change,
+                status_specs,
+                status_state,
+                elapsed_time_f64,
+            )
+        });
+}
+
+fn update_status(
+    character_specs: &CharacterSpecs,
+    character_life: &mut f64,
+    character_mana: &mut f64,
+    character_buff_status_change: &mut bool,
+    status_specs: &StatusSpecs,
+    status_state: &mut StatusState,
+    elapsed_time_f64: f64,
+) -> bool {
+    if let StatusSpecs::DamageOverTime { .. } = status_specs {
+        characters_controller::damage_character(
+            character_specs,
+            character_life,
+            character_mana,
+            status_state.value * elapsed_time_f64.min(status_state.duration),
+        );
+    }
+
+    status_state.duration -= elapsed_time_f64;
+    let remove_status = status_state.duration <= 0.0;
+
+    if let StatusSpecs::StatModifier { .. } = status_specs {
+        if remove_status {
+            *character_buff_status_change = true;
+        }
+    }
+    !remove_status
 }
 
 pub fn generate_effects_map_from_statuses(statuses: &StatusMap) -> EffectsMap {
     EffectsMap(
         statuses
             .iter()
-            .filter_map(|(s, v)| match s {
-                StatusType::StatModifier {
+            .filter_map(|(status_specs, status_state)| match status_specs {
+                StatusSpecs::StatModifier {
                     stat,
                     modifier,
                     debuff,
                 } => Some((
                     (*stat, *modifier),
-                    v.iter()
-                        .map(|s| if *debuff { -s.value } else { s.value })
-                        .sum(),
+                    if *debuff {
+                        -status_state.value
+                    } else {
+                        status_state.value
+                    },
                 )),
                 _ => None,
             })

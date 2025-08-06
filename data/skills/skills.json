@@ -21,7 +21,10 @@
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [4, 8]
+                "Physical": [
+                  4,
+                  8
+                ]
               }
             }
           }
@@ -52,7 +55,10 @@
           {
             "FlatDamage": {
               "damage": {
-                "Fire": [4, 12]
+                "Fire": [
+                  4,
+                  12
+                ]
               }
             }
           }
@@ -83,7 +89,10 @@
           {
             "FlatDamage": {
               "damage": {
-                "Fire": [2, 5]
+                "Fire": [
+                  2,
+                  5
+                ]
               }
             }
           },
@@ -149,7 +158,6 @@
       }
     ]
   },
-
   "curse_frailty": {
     "name": "Curse of Frailty",
     "description": "A curse that makes enemies take more damage from all sources",
@@ -273,7 +281,9 @@
                 {
                   "status_type": {
                     "StatModifier": {
-                      "stat": { "Speed": null },
+                      "stat": {
+                        "Speed": null
+                      },
                       "modifier": "Multiplier"
                     }
                   },
@@ -323,33 +333,33 @@
               "statuses": [
                 {
                   "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "MinDamage": {
-                          "skill_type": "Attack",
-                          "damage_type": "Poison"
-                        }
+                    "Trigger": {
+                      "description": "Successful Attacks inflict Poison Damage over Time.",
+                      "OnHit": {
+                        "skill_type": "Attack",
+                        "is_hurt": true
                       },
-                      "modifier": "Flat"
-                    }
-                  },
-                  "min_value": 1,
-                  "max_value": 1
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "MaxDamage": {
-                          "skill_type": "Attack",
-                          "damage_type": "Poison"
+                      "effects": [
+                        {
+                          "ApplyStatus": {
+                            "min_duration": 2,
+                            "max_duration": 2,
+                            "statuses": [
+                              {
+                                "status_type": {
+                                  "DamageOverTime": {
+                                    "damage_type": "Poison"
+                                  }
+                                },
+                                "min_value": 1,
+                                "max_value": 2
+                              }
+                            ]
+                          }
                         }
-                      },
-                      "modifier": "Flat"
+                      ]
                     }
-                  },
-                  "min_value": 2,
-                  "max_value": 2
+                  }
                 }
               ]
             }
@@ -358,7 +368,6 @@
       }
     ]
   },
-
   "heal": {
     "name": "Heal",
     "description": "A minor healing spell for yourself",
@@ -378,7 +387,13 @@
       {
         "target_type": "Me",
         "effects": [
-          { "Restore": { "restore_type": "Life", "min": 25, "max": 25 } }
+          {
+            "Restore": {
+              "restore_type": "Life",
+              "min": 25,
+              "max": 25
+            }
+          }
         ]
       }
     ]
@@ -393,7 +408,9 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "Damage": {} },
+        "stat": {
+          "Damage": {}
+        },
         "modifier": "Multiplier",
         "value": 0.2
       }
@@ -401,13 +418,18 @@
     "triggers": [
       {
         "description": "Trigger on block:",
-        "OnTakeHit": { "is_blocked": true },
+        "OnTakeHit": {
+          "is_blocked": true
+        },
         "target": "Source",
         "effects": [
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [5, 10]
+                "Physical": [
+                  5,
+                  10
+                ]
               },
               "crit_chances": 0.05,
               "crit_damage": 1

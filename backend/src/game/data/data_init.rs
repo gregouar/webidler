@@ -1,7 +1,8 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 use shared::data::{
     character::{CharacterSpecs, CharacterState},
+    character_status::StatusMap,
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerSpecs, PlayerState},
     skill::{BaseSkillSpecs, SkillSpecs, SkillState},
@@ -33,7 +34,7 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             life: specs.max_life,
             mana: specs.max_mana,
 
-            statuses: HashMap::new(),
+            statuses: StatusMap::default(),
             buff_status_change: false,
 
             is_alive: true,

@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use shared::data::{
     character::{CharacterId, CharacterSpecs, CharacterState},
-    character_status::{StatusState, StatusType},
+    character_status::{StatusSpecs, StatusState},
     item::SkillRange,
     skill::{DamageType, RestoreType, SkillType},
 };
@@ -108,7 +108,7 @@ pub fn resuscitate_character(target: &mut Target) {
 
 pub fn apply_status(
     target: &mut Target,
-    status_type: StatusType,
+    status_specs: &StatusSpecs,
     skill_type: SkillType,
     value: f64,
     duration: f64,
@@ -120,39 +120,46 @@ pub fn apply_status(
         return;
     }
 
-    let value = match status_type {
-        StatusType::DamageOverTime {
+    let value = match status_specs {
+        StatusSpecs::DamageOverTime {
             damage_type,
             ignore_armor,
-        } => compute_damage(target_specs, value, damage_type, skill_type, ignore_armor),
+        } => compute_damage(target_specs, value, *damage_type, skill_type, *ignore_armor),
         _ => value,
     };
 
-    let statuses = target_state
-        .statuses
-        .entry(status_type)
-        .or_insert_with(Vec::new);
-
     if cumulate {
-        statuses.push(StatusState {
-            value,
-            duration,
-            cumulate,
-        });
-    } else if let Some(cur_status) = statuses.iter_mut().find(|s| !s.cumulate) {
-        if value * duration > cur_status.value * cur_status.duration {
-            cur_status.value = value;
-            cur_status.duration = duration;
-        }
+        target_state.statuses.cumulative_statuses.push((
+            status_specs.clone(),
+            StatusState {
+                value,
+                duration,
+                cumulate,
+            },
+        ));
     } else {
-        statuses.push(StatusState {
-            value,
-            duration,
-            cumulate,
-        })
+        target_state
+            .statuses
+            .unique_statuses
+            .entry(status_specs.into())
+            .and_modify(|(cur_status_specs, cur_status_state)| {
+                if value * duration > cur_status_state.value * cur_status_state.duration {
+                    cur_status_state.value = value;
+                    cur_status_state.duration = duration;
+                    *cur_status_specs = status_specs.clone();
+                }
+            })
+            .or_insert((
+                status_specs.clone(),
+                StatusState {
+                    value,
+                    duration,
+                    cumulate,
+                },
+            ));
     }
 
-    if let StatusType::StatModifier { .. } = status_type {
+    if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger { .. } = status_specs {
         target_state.buff_status_change = true;
     }
 }

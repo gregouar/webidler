@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use shared::data::{
-    character_status::StatusType,
+    character_status::StatusSpecs,
     skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType},
     stat_effect::{self, ApplyStatModifier, DamageMap, Modifier, StatEffect, StatType},
 };
@@ -92,9 +92,9 @@ pub fn compute_skill_specs_effect<'a, I>(
     skill_effect: &mut SkillEffect,
     effects: I,
 ) where
-    I: IntoIterator<Item = &'a StatEffect>,
+    I: IntoIterator<Item = &'a StatEffect> + Clone,
 {
-    for effect in effects {
+    for effect in effects.clone() {
         match &mut skill_effect.effect_type {
             SkillEffectType::FlatDamage {
                 damage,
@@ -155,7 +155,7 @@ pub fn compute_skill_specs_effect<'a, I>(
             } => {
                 if let StatType::StatusDuration(status_type) = effect.stat {
                     if statuses.iter().any(|status_effect| {
-                        compare_status_types(status_type, status_effect.status_type)
+                        compare_status_types(status_type, &status_effect.status_type)
                     }) {
                         min_duration.apply_effect(effect);
                         max_duration.apply_effect(effect);
@@ -164,17 +164,17 @@ pub fn compute_skill_specs_effect<'a, I>(
 
                 for status_effect in statuses.iter_mut() {
                     if let StatType::StatusPower(status_type) = effect.stat {
-                        if compare_status_types(status_type, status_effect.status_type) {
+                        if compare_status_types(status_type, &status_effect.status_type) {
                             status_effect.min_value.apply_effect(effect);
                             status_effect.max_value.apply_effect(effect);
                         }
                     }
 
                     match status_effect.status_type {
-                        StatusType::Stun => {
+                        StatusSpecs::Stun => {
                             // Something?
                         }
-                        StatusType::DamageOverTime { damage_type, .. } => match effect.stat {
+                        StatusSpecs::DamageOverTime { damage_type, .. } => match effect.stat {
                             StatType::SpellPower if skill_type == SkillType::Spell => {
                                 status_effect.min_value.apply_effect(effect);
                                 status_effect.max_value.apply_effect(effect);
@@ -198,11 +198,22 @@ pub fn compute_skill_specs_effect<'a, I>(
                             }
                             _ => {}
                         },
-                        StatusType::StatModifier { .. } => {
+                        StatusSpecs::StatModifier { .. } => {
                             if StatType::SpellPower == effect.stat && skill_type == SkillType::Spell
                             {
                                 status_effect.min_value.apply_effect(effect);
                                 status_effect.max_value.apply_effect(effect);
+                            }
+                        }
+                        StatusSpecs::Trigger(ref mut trigger_specs) => {
+                            for triggered_effect in
+                                trigger_specs.triggered_effect.effects.iter_mut()
+                            {
+                                compute_skill_specs_effect(
+                                    skill_type,
+                                    triggered_effect,
+                                    effects.clone(),
+                                )
                             }
                         }
                     }
@@ -250,32 +261,32 @@ fn apply_effect_on_damage(
 
 fn compare_status_types(
     stat_status_type: Option<stat_effect::StatStatusType>,
-    skill_status_type: StatusType,
+    skill_status_type: &StatusSpecs,
 ) -> bool {
     use stat_effect::StatStatusType::*;
 
     match stat_status_type {
         None => true,
         Some(stat_status_type) => match (stat_status_type, skill_status_type) {
-            (Stun, StatusType::Stun) => true,
+            (Stun, StatusSpecs::Stun) => true,
             (
                 DamageOverTime {
                     damage_type: stat_damage_type,
                 },
-                StatusType::DamageOverTime {
+                StatusSpecs::DamageOverTime {
                     damage_type: skill_damage_type,
                     ..
                 },
-            ) => stat_damage_type.unwrap_or(skill_damage_type) == skill_damage_type,
+            ) => stat_damage_type.unwrap_or(*skill_damage_type) == *skill_damage_type,
             (
                 StatModifier {
                     debuff: stat_debuff,
                 },
-                StatusType::StatModifier {
+                StatusSpecs::StatModifier {
                     debuff: skill_debuff,
                     ..
                 },
-            ) => stat_debuff.unwrap_or(skill_debuff) == skill_debuff,
+            ) => stat_debuff.unwrap_or(*skill_debuff) == *skill_debuff,
             _ => false,
         },
     }
