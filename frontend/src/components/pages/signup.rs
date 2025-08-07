@@ -1,47 +1,42 @@
-use leptos::wasm_bindgen::JsCast;
-use leptos::web_sys::{window, HtmlInputElement};
 use leptos::{html::*, prelude::*};
+use leptos_router::hooks::use_navigate;
 
-use crate::components::ui::buttons::MenuButton;
+use crate::components::{captcha::Captcha, ui::buttons::MenuButton};
 
 #[component]
 pub fn SignUpPage() -> impl IntoView {
+    let navigate_to_menu = {
+        let navigate = use_navigate();
+        move |_| {
+            navigate("/", Default::default());
+        }
+    };
+
     let username = RwSignal::new(String::new());
     let password = RwSignal::new(String::new());
     let confirm_password = RwSignal::new(String::new());
     let accepted_terms = RwSignal::new(false);
+    let captcha_token = RwSignal::new(None);
 
     let passwords_match = Signal::derive(move || password.get() == confirm_password.get());
     let can_submit = Signal::derive(move || {
-        !username.get().is_empty()
-            && !password.get().is_empty()
+        !username.read().is_empty()
+            && !password.read().is_empty()
             && passwords_match.get()
             && accepted_terms.get()
+            && captcha_token.read().is_some()
     });
 
     let on_submit = move |_| {
         if !can_submit.get() {
             return;
         }
-
-        if let Some(token_input) = window()
-            .unwrap()
-            .document()
-            .unwrap()
-            .query_selector("input[name='cf-turnstile-response']")
-            .unwrap()
-            .and_then(|el| el.dyn_into::<HtmlInputElement>().ok())
-        {
-            let token = token_input.value();
-            // TODO: query backend
-        } else {
-            // TODO: toast error
-        }
+        // TODO: call backend with captcha token
     };
 
     view! {
         <main class="my-0 mx-auto max-w-2xl text-center flex flex-col justify-center p-6">
-            <h1 class="text-amber-200 text-4xl font-extrabold mb-6">"Sign Up"</h1>
+            <h1 class="text-amber-200 text-4xl font-extrabold mb-6">"Create Account"</h1>
 
             <div class="space-y-4 text-left text-white">
                 <div>
@@ -114,20 +109,23 @@ pub fn SignUpPage() -> impl IntoView {
                     </label>
                 </div>
 
-                <div
-                    class="cf-turnstile"
-                    data-sitekey="0x4AAAAAABoSog3mlP1Ok1U9"
-                    data-theme="dark"
-                ></div>
+                <Captcha token=captcha_token class:justify-self-center />
 
-                <MenuButton on:click=on_submit disabled=Signal::derive(move || !can_submit.get())>
-                    "Sign Up"
+                <MenuButton
+                    class:w-full
+                    on:click=on_submit
+                    disabled=Signal::derive(move || !can_submit.get())
+                >
+                    "Confirm"
                 </MenuButton>
             </div>
 
             <p class="mt-6 text-xs text-gray-400 text-left">
                 "By signing up, you consent to the storage and processing of your data in accordance with GDPR. You can request data deletion at any time via the account page."
             </p>
+            <div>
+                <MenuButton on:click=navigate_to_menu>"Back"</MenuButton>
+            </div>
         </main>
     }
 }

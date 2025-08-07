@@ -1,11 +1,12 @@
+use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*};
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
 use crate::components::{
-    backend_client::BackendClient, game::game_instance::SessionInfos, ui::buttons::MenuButton,
+    backend_client::BackendClient, captcha::*, game::game_instance::SessionInfos,
+    ui::buttons::MenuButton,
 };
-use codee::string::JsonSerdeCodec;
 
 #[component]
 pub fn MainMenuPage() -> impl IntoView {
@@ -26,13 +27,17 @@ pub fn MainMenuPage() -> impl IntoView {
         storage::use_local_storage::<String, JsonSerdeCodec>("username");
     let username = RwSignal::new(get_username.get_untracked());
     let password = RwSignal::new(String::new());
-    let disable_connect =
-        Signal::derive(move || username.read().is_empty() || password.read().is_empty());
+    let captcha_token = RwSignal::new(None);
+
+    let disable_connect = Signal::derive(move || {
+        username.read().is_empty() || password.read().is_empty() || captcha_token.read().is_none()
+    });
 
     let navigate_to_game = {
         let navigate = use_navigate();
         let delete_session_infos = delete_session_infos.clone();
         move |_| {
+            // TODO: give token to backend alongside
             delete_session_infos();
             set_user_id_storage.set(username.get_untracked());
             navigate("game", Default::default());
@@ -64,6 +69,7 @@ pub fn MainMenuPage() -> impl IntoView {
                     "Grind to Rust!"
                 </h1>
                 <div class="flex flex-col space-y-2">
+                    // <form>
                     <div class="w-full mx-auto text-left">
                         <label class="block mb-2 text-sm font-medium text-gray-300">"Login:"</label>
                         <input
@@ -85,6 +91,9 @@ pub fn MainMenuPage() -> impl IntoView {
                             focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
                         />
                     </div>
+                    <Captcha token=captcha_token />
+                    // </form>
+
                     <MenuButton on:click=navigate_to_game disabled=disable_connect>
                         "Connect"
                     </MenuButton>

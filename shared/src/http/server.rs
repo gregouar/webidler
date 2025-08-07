@@ -3,7 +3,7 @@ use std::{collections::HashMap, time::Duration};
 
 use serde::{Deserialize, Serialize};
 
-use crate::data::{skill::SkillSpecs, world::AreaLevel};
+use crate::data::{skill::SkillSpecs, user::User, world::AreaLevel};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayersCountResponse {
@@ -22,6 +22,21 @@ pub struct LeaderboardEntry {
     pub time_played: Duration,
     pub created_at: DateTime<Utc>,
     pub comments: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SignUpResponse {
+    pub jwt: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SignInResponse {
+    pub jwt: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetUserResponse {
+    pub user: User,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
