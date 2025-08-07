@@ -49,24 +49,24 @@ pub fn UserDashboardPage(// user: RwSignal<User>,
                 <h2 class="text-xl font-semibold">"Your Characters"</h2>
                 <div class="text-sm text-gray-400">
                     {move || {
-                        if let (Some(user), Some(chars)) = (user.get(), characters.get()) {
-                            format!("{} / {} characters", chars.len(), user.max_characters)
-                        } else {
-                            String::from("Loading...")
-                        }
+                        format!(
+                            "{} / {} characters",
+                            characters.read().len(),
+                            user.read().max_characters,
+                        )
                     }}
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <For
-                    each=move || characters.get().unwrap_or_default()
+                    each=move || characters.get()
                     key=|char| char.character_id.clone()
                     children=move |character| {
                         view! {
                             <div class="p-4 bg-gray-800 rounded-xl shadow-md space-y-2">
                                 <img
-                                    src=character.avatar_url
+                                    src=character.portrait
                                     alt="Avatar"
                                     class="w-full h-48 object-cover rounded"
                                 />
@@ -89,11 +89,10 @@ pub fn UserDashboardPage(// user: RwSignal<User>,
                                     </button>
                                     <button
                                         class="text-red-400 hover:text-red-600 text-sm"
-                                        on:click=move |_| {
-                                            backend.delete_character(character.character_id.clone());
-                                            characters.refetch();
-                                        }
+                                        on:click=move |_| {}
                                     >
+                                        // backend.delete_character(character.character_id.clone());
+                                        // characters.refetch();
                                         "Delete"
                                     </button>
                                 </div>
@@ -106,18 +105,13 @@ pub fn UserDashboardPage(// user: RwSignal<User>,
             <div class="flex justify-end">
                 <button
                     class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded disabled:opacity-50"
-                    on:click=move |_| {
-                        spawn_local(create_character.clone());
-                    }
+                    on:click=move |_| {}
+                    // spawn_local(create_character.clone());
                     disabled=Signal::derive(move || {
-                        if let (Some(user), Some(chars)) = (user.get(), characters.get()) {
-                            chars.len() >= user.max_characters || creating.get()
-                        } else {
-                            true
-                        }
+                        characters.read().len() >= user.read().max_characters
                     })
                 >
-                    {move || if creating.get() { "Creating..." } else { "Create Character" }}
+                    "Create Character"
                 </button>
             </div>
 

@@ -8,7 +8,7 @@ use shared::http::{
     },
 };
 
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub struct BackendClient {
     http_url: &'static str,
     ws_url: &'static str,
@@ -54,13 +54,11 @@ impl BackendClient {
     where
         T: serde::de::DeserializeOwned,
     {
-        Ok(serde_json::from_str(
-            &(reqwest::get(format!("{}/{}", self.http_url, endpoint))
-                .await?
-                .error_for_status()?
-                .text()
-                .await?),
-        )?)
+        Ok(reqwest::get(format!("{}/{}", self.http_url, endpoint))
+            .await?
+            .error_for_status()?
+            .json()
+            .await?)
     }
 
     async fn post<T, P>(&self, endpoint: &str, payload: P) -> Result<T>
@@ -68,15 +66,13 @@ impl BackendClient {
         T: serde::de::DeserializeOwned,
         P: serde::ser::Serialize,
     {
-        Ok(serde_json::from_str(
-            &reqwest::Client::new()
-                .post(format!("{}/{}", self.http_url, endpoint))
-                .body(serde_json::to_string(&payload)?)
-                .send()
-                .await?
-                .error_for_status()?
-                .text()
-                .await?,
-        )?)
+        Ok(reqwest::Client::new()
+            .post(format!("{}/{}", self.http_url, endpoint))
+            .json(&payload)
+            .send()
+            .await?
+            .error_for_status()?
+            .json()
+            .await?)
     }
 }
