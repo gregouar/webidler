@@ -13,21 +13,21 @@ pub fn UserDashboardPage(// user: RwSignal<User>,
     let navigate = use_navigate();
 
     // Handlers
-    let on_logout = move |_| {
-        // Clear user session/token and navigate to login page
-        // user.set(None);
-        navigate("/", Default::default());
-    };
+    // let on_logout = move |_| {
+    //     // Clear user session/token and navigate to login page
+    //     // user.set(None);
+    //     navigate("/", Default::default());
+    // };
 
-    let on_request_deletion = move |_| {
-        // Ideally opens confirmation modal
-        // Or call backend to mark account for deletion
-    };
+    // let on_request_deletion = move |_| {
+    //     // Ideally opens confirmation modal
+    //     // Or call backend to mark account for deletion
+    // };
 
-    let on_play_character = move |character_id: String| {
-        // Navigate to game with this character
-        navigate(&format!("/game/{}", character_id), Default::default());
-    };
+    // let on_play_character = move |character_id: String| {
+    //     // Navigate to game with this character
+    //     navigate(&format!("/game/{}", character_id), Default::default());
+    // };
 
     let user = RwSignal::new(User {
         user_id: "xxx".to_string(),
@@ -67,24 +67,17 @@ pub fn UserDashboardPage(// user: RwSignal<User>,
                             <div class="p-4 bg-gray-800 rounded-xl shadow-md space-y-2">
                                 <img
                                     src=character.portrait
-                                    alt="Avatar"
+                                    alt="Portrait"
                                     class="w-full h-48 object-cover rounded"
                                 />
                                 <div class="text-lg font-semibold">{character.name.clone()}</div>
-                                <div class="text-sm text-gray-400">
-                                    {if character.status.in_quest {
-                                        format!("On quest: {}", character.status.quest_name)
-                                    } else {
-                                        "Idle".into()
-                                    }}
-                                </div>
+                                <div class="text-sm text-gray-400">"Idle"</div>
                                 <div class="flex justify-between mt-2">
                                     <button
                                         class="bg-amber-500 hover:bg-amber-600 text-black px-4 py-1 rounded"
-                                        on:click=move |_| {
-                                            navigate_to_game_with(character.character_id.clone());
-                                        }
+                                        on:click=move |_| {}
                                     >
+                                        // navigate_to_game_with(character.character_id.clone());
                                         "Play"
                                     </button>
                                     <button
@@ -108,7 +101,7 @@ pub fn UserDashboardPage(// user: RwSignal<User>,
                     on:click=move |_| {}
                     // spawn_local(create_character.clone());
                     disabled=Signal::derive(move || {
-                        characters.read().len() >= user.read().max_characters
+                        characters.read().len() >= user.read().max_characters as usize
                     })
                 >
                     "Create Character"

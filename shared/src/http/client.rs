@@ -13,5 +13,4 @@ pub struct SignInRequest {
     pub captcha_token: String,
     pub username: String,
     pub password: String,
-    pub accepted_terms: bool,
 }

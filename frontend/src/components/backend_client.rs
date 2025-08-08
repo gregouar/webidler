@@ -42,11 +42,11 @@ impl BackendClient {
         self.get(&format!("account/users/{user_id}")).await
     }
 
-    pub async fn post_signin(&self, request: SignInRequest) -> Result<SignInResponse> {
+    pub async fn post_signin(&self, request: &SignInRequest) -> Result<SignInResponse> {
         self.post("account/signin", request).await
     }
 
-    pub async fn post_signup(&self, request: SignUpRequest) -> Result<SignUpResponse> {
+    pub async fn post_signup(&self, request: &SignUpRequest) -> Result<SignUpResponse> {
         self.post("account/signup", request).await
     }
 
@@ -61,14 +61,14 @@ impl BackendClient {
             .await?)
     }
 
-    async fn post<T, P>(&self, endpoint: &str, payload: P) -> Result<T>
+    async fn post<T, P>(&self, endpoint: &str, payload: &P) -> Result<T>
     where
         T: serde::de::DeserializeOwned,
         P: serde::ser::Serialize,
     {
         Ok(reqwest::Client::new()
             .post(format!("{}/{}", self.http_url, endpoint))
-            .json(&payload)
+            .json(payload)
             .send()
             .await?
             .error_for_status()?

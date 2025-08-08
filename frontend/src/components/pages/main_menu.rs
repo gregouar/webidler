@@ -3,9 +3,11 @@ use leptos::{html::*, prelude::*};
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
+use shared::http::client::SignInRequest;
+
 use crate::components::{
     backend_client::BackendClient, captcha::*, game::game_instance::SessionInfos,
-    ui::buttons::MenuButton,
+    ui::buttons::MenuButton, ui::toast::*,
 };
 
 #[component]
@@ -29,20 +31,50 @@ pub fn MainMenuPage() -> impl IntoView {
     let password = RwSignal::new(String::new());
     let captcha_token = RwSignal::new(None);
 
-    let disable_connect = Signal::derive(move || {
-        username.read().is_empty() || password.read().is_empty() || captcha_token.read().is_none()
+    let signin = Action::new({
+        let backend = use_context::<BackendClient>().unwrap();
+        let toaster = expect_context::<Toasts>();
+        move |_: &()| {
+            let toaster = toaster.clone();
+            async move {
+                match backend
+                    .post_signin(&SignInRequest {
+                        captcha_token: captcha_token.get().unwrap_or_default(),
+                        username: username.get(),
+                        password: password.get(),
+                    })
+                    .await
+                {
+                    Ok(response) => {
+                        show_toast(toaster, format!("Connected!"), ToastVariant::Success)
+                    }
+                    Err(e) => show_toast(
+                        toaster,
+                        format!("Authentication error: {e:?}"),
+                        ToastVariant::Error,
+                    ),
+                }
+            }
+        }
     });
 
-    let navigate_to_game = {
-        let navigate = use_navigate();
-        let delete_session_infos = delete_session_infos.clone();
-        move |_| {
-            // TODO: give token to backend alongside
-            delete_session_infos();
-            set_user_id_storage.set(username.get_untracked());
-            navigate("game", Default::default());
-        }
-    };
+    let disable_connect = Signal::derive(move || {
+        username.read().is_empty()
+            || password.read().is_empty()
+            || captcha_token.read().is_none()
+            || signin.pending().get()
+    });
+
+    // let navigate_to_game = {
+    //     let navigate = use_navigate();
+    //     let delete_session_infos = delete_session_infos.clone();
+    //     move |_| {
+    //         // TODO: give token to backend alongside
+    //         delete_session_infos();
+    //         set_user_id_storage.set(username.get_untracked());
+    //         navigate("game", Default::default());
+    //     }
+    // };
 
     let navigate_to_leaderboard = {
         let navigate = use_navigate();
@@ -94,7 +126,12 @@ pub fn MainMenuPage() -> impl IntoView {
                     <Captcha token=captcha_token />
                     // </form>
 
-                    <MenuButton on:click=navigate_to_game disabled=disable_connect>
+                    <MenuButton
+                        on:click=move |_| {
+                            signin.dispatch(());
+                        }
+                        disabled=disable_connect
+                    >
                         "Connect"
                     </MenuButton>
                     <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>

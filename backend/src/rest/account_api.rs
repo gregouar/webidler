@@ -22,6 +22,11 @@ async fn post_signup(
     State(db_pool): State<db::DbPool>,
     Json(payload): Json<SignUpRequest>,
 ) -> Result<Json<SignUpResponse>, AppError> {
+    if !verify_captcha(&payload.captcha_token).await {
+        return Err(AppError::NotFound);
+        // TODO: give proper error
+    }
+
     Ok(Json(SignUpResponse {
         jwt: "jwt".to_string(),
     }))
