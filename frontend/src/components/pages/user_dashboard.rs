@@ -1,34 +1,17 @@
 use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*};
-use leptos_router::hooks::use_navigate;
+use leptos_router::hooks::{use_navigate, use_params_map};
 use leptos_use::storage;
 
 use shared::data::user::{Character, User};
 
+use crate::{
+    assets::img_asset,
+    components::ui::buttons::{MenuButton, MenuButtonRed},
+};
+
 #[component]
-pub fn UserDashboardPage(// user: RwSignal<User>,
-    // characters: RwSignal<Vec<Character>>,
-) -> impl IntoView {
-    // Navigation
-    let navigate = use_navigate();
-
-    // Handlers
-    // let on_logout = move |_| {
-    //     // Clear user session/token and navigate to login page
-    //     // user.set(None);
-    //     navigate("/", Default::default());
-    // };
-
-    // let on_request_deletion = move |_| {
-    //     // Ideally opens confirmation modal
-    //     // Or call backend to mark account for deletion
-    // };
-
-    // let on_play_character = move |character_id: String| {
-    //     // Navigate to game with this character
-    //     navigate(&format!("/game/{}", character_id), Default::default());
-    // };
-
+pub fn UserDashboardPage() -> impl IntoView {
     let user = RwSignal::new(User {
         user_id: "xxx".to_string(),
         username: "Username".to_string(),
@@ -41,83 +24,113 @@ pub fn UserDashboardPage(// user: RwSignal<User>,
         max_area_level: 3,
     }]);
 
+    // TODO: Split in components
     view! {
-        <main class="max-w-4xl mx-auto p-6 space-y-8 text-white">
-            <h1 class="text-3xl font-bold">"Welcome, " {move || user.read().username.clone()}</h1>
+        <main class="my-0 mx-auto max-w-3xl px-4 py-8 flex flex-col gap-6 text-white text-center">
 
-            <div class="flex justify-between items-center">
-                <h2 class="text-xl font-semibold">"Your Characters"</h2>
-                <div class="text-sm text-gray-400">
+            <h1 class="text-4xl font-extrabold text-amber-200 text-shadow-lg shadow-gray-950 tracking-tight">
+                "Welcome, " {move || user.read().username.clone()}
+            </h1>
+
+            <div class="bg-zinc-800 rounded-xl border border-zinc-700 shadow-inner px-6 py-6 text-left space-y-6">
+
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <h2 class="text-2xl font-bold text-white">"Your Characters"</h2>
+                    <span class="text-sm text-gray-400 font-medium">
+                        {move || {
+                            format!(
+                                "{} / {} characters",
+                                characters.read().len(),
+                                user.read().max_characters,
+                            )
+                        }}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <For
+                        each=move || characters.get()
+                        key=|char| char.character_id.clone()
+                        children=move |character| {
+                            view! {
+                                <div class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md overflow-hidden flex flex-col">
+                                    <div
+                                        class="h-full w-full"
+                                        style=format!(
+                                            "background-image: url('{}');",
+                                            img_asset("ui/paper_background.webp"),
+                                        )
+                                    >
+                                        <img
+                                            src=img_asset(&character.portrait)
+                                            alt="Portrait"
+                                            class="object-cover h-full w-full"
+                                        />
+                                    </div>
+                                    <div class="p-4 flex flex-col gap-1">
+                                        <div class="text-lg font-semibold text-white">
+                                            {character.name.clone()}
+                                        </div>
+                                        <div class="text-sm text-gray-400">
+                                            "Grinding <<Inn Basement - level 134>>"
+                                        // Or "Rusting in Town"
+                                        </div>
+                                        <div class="mt-3 flex justify-between gap-2">
+                                            <MenuButton on:click=move |_| {}>"Play"</MenuButton>
+                                            <MenuButtonRed on:click=move |_| {}>"Delete"</MenuButtonRed>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    />
+
                     {move || {
-                        format!(
-                            "{} / {} characters",
-                            characters.read().len(),
-                            user.read().max_characters,
-                        )
+                        if characters.read().len() < user.read().max_characters as usize {
+                            Some(
+                                view! {
+                                    <div
+                                        on:click=move |_| {}
+                                        class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md min-h-[16rem]
+                                        flex flex-col items-center justify-center cursor-pointer
+                                        hover:border-amber-400 hover:shadow-lg transition group"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            class="h-12 w-12 text-amber-300 group-hover:scale-110 transition-transform duration-200"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M12 4v16m8-8H4"
+                                            />
+                                        </svg>
+                                        <span class="mt-2 text-lg font-semibold text-amber-300 group-hover:text-amber-200 transition-colors">
+                                            "Create Character"
+                                        </span>
+                                    </div>
+                                },
+                            )
+                        } else {
+                            None
+                        }
                     }}
                 </div>
+
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <For
-                    each=move || characters.get()
-                    key=|char| char.character_id.clone()
-                    children=move |character| {
-                        view! {
-                            <div class="p-4 bg-gray-800 rounded-xl shadow-md space-y-2">
-                                <img
-                                    src=character.portrait
-                                    alt="Portrait"
-                                    class="w-full h-48 object-cover rounded"
-                                />
-                                <div class="text-lg font-semibold">{character.name.clone()}</div>
-                                <div class="text-sm text-gray-400">"Idle"</div>
-                                <div class="flex justify-between mt-2">
-                                    <button
-                                        class="bg-amber-500 hover:bg-amber-600 text-black px-4 py-1 rounded"
-                                        on:click=move |_| {}
-                                    >
-                                        // navigate_to_game_with(character.character_id.clone());
-                                        "Play"
-                                    </button>
-                                    <button
-                                        class="text-red-400 hover:text-red-600 text-sm"
-                                        on:click=move |_| {}
-                                    >
-                                        // backend.delete_character(character.character_id.clone());
-                                        // characters.refetch();
-                                        "Delete"
-                                    </button>
-                                </div>
-                            </div>
-                        }
-                    }
-                />
-            </div>
-
-            <div class="flex justify-end">
-                <button
-                    class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded disabled:opacity-50"
-                    on:click=move |_| {}
-                    // spawn_local(create_character.clone());
-                    disabled=Signal::derive(move || {
-                        characters.read().len() >= user.read().max_characters as usize
-                    })
-                >
-                    "Create Character"
-                </button>
-            </div>
-
-            <hr class="border-gray-700 my-6" />
-
-            <div class="text-sm text-gray-400 space-x-4">
-                <a href="/account" class="underline hover:text-gray-200">
+            <div class="flex flex-col items-center gap-2 text-sm text-gray-400">
+                <a href="/account" class="underline hover:text-amber-300 transition">
                     "Account Settings"
                 </a>
-                <a href="/account/delete" class="underline text-red-400 hover:text-red-500">
-                    "Request Account Deletion"
-                </a>
+
+                <MenuButtonRed on:click=move |_| {}>"Logout"</MenuButtonRed>
             </div>
+
         </main>
     }
 }

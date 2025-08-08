@@ -26,11 +26,13 @@ pub struct LeaderboardEntry {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SignUpResponse {
-    pub jwt: String,
+    pub success: bool,
+    pub reason: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SignInResponse {
+    pub user_id: String,
     pub jwt: String,
 }
 

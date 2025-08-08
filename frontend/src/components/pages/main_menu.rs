@@ -6,8 +6,7 @@ use leptos_use::storage;
 use shared::http::client::SignInRequest;
 
 use crate::components::{
-    backend_client::BackendClient, captcha::*, game::game_instance::SessionInfos,
-    ui::buttons::MenuButton, ui::toast::*,
+    backend_client::BackendClient, captcha::*, ui::buttons::MenuButton, ui::toast::*,
 };
 
 #[component]
@@ -23,19 +22,24 @@ pub fn MainMenuPage() -> impl IntoView {
         }
     });
 
-    let (_, _, delete_session_infos) =
-        storage::use_session_storage::<Option<SessionInfos>, JsonSerdeCodec>("session_infos");
-    let (get_username, set_user_id_storage, _) =
+    let (get_username, set_username_storage, _) =
         storage::use_local_storage::<String, JsonSerdeCodec>("username");
 
     let username = RwSignal::new(get_username.get_untracked());
     let password = RwSignal::new(String::new());
     let captcha_token = RwSignal::new(None);
+    let connecting = RwSignal::new(false);
+
+    let (_, set_jwt_storage, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
 
     let signin = {
         let toaster = expect_context::<Toasts>();
         let backend = use_context::<BackendClient>().unwrap();
+        let navigate = use_navigate();
         move |_| {
+            connecting.set(true);
+            set_username_storage.set(username.get());
+            let navigate = navigate.clone();
             spawn_local({
                 async move {
                     match backend
@@ -46,12 +50,18 @@ pub fn MainMenuPage() -> impl IntoView {
                         })
                         .await
                     {
-                        Ok(_) => show_toast(toaster, "Connected!", ToastVariant::Success),
-                        Err(e) => show_toast(
-                            toaster,
-                            format!("Authentication error: {e:?}"),
-                            ToastVariant::Error,
-                        ),
+                        Ok(response) => {
+                            set_jwt_storage.set(response.jwt);
+                            navigate("user-dashboard", Default::default());
+                        }
+                        Err(e) => {
+                            show_toast(
+                                toaster,
+                                format!("Authentication error: {e:?}"),
+                                ToastVariant::Error,
+                            );
+                            connecting.set(false);
+                        }
                     }
                 }
             });
@@ -60,7 +70,10 @@ pub fn MainMenuPage() -> impl IntoView {
 
     // TODO: connect pending
     let disable_connect = Signal::derive(move || {
-        username.read().is_empty() || password.read().is_empty() || captcha_token.read().is_none()
+        username.read().is_empty()
+            || password.read().is_empty()
+            || captcha_token.read().is_none()
+            || connecting.get()
     });
 
     // let navigate_to_game = {

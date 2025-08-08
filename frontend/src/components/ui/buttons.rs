@@ -26,6 +26,32 @@ pub fn MenuButton(
         </button>
     }
 }
+#[component]
+pub fn MenuButtonRed(
+    #[prop(optional)] disabled: Option<Signal<bool>>,
+    children: Children,
+) -> impl IntoView {
+    view! {
+        <button
+            class="
+            text-red-300 font-bold text-shadow shadow-neutral-950
+            py-2 px-4 rounded shadow-md
+            border border-red-800
+            bg-gradient-to-t from-red-900 to-red-800
+            overflow-hidden
+            hover:bg-gradient-to-tr hover:from-red-800 hover:to-red-700
+            active:bg-gradient-to-t active:from-red-900 active:to-red-950
+            
+            disabled:from-zinc-700 disabled:to-zinc-600
+            disabled:text-zinc-400 disabled:pointer-events-none
+            disabled:opacity-60 disabled:shadow-none
+            "
+            disabled=disabled
+        >
+            {children()}
+        </button>
+    }
+}
 
 #[component]
 pub fn FancyButton(

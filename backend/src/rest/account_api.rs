@@ -22,13 +22,11 @@ async fn post_signup(
     State(db_pool): State<db::DbPool>,
     Json(payload): Json<SignUpRequest>,
 ) -> Result<Json<SignUpResponse>, AppError> {
-    if !verify_captcha(&payload.captcha_token).await {
-        return Err(AppError::NotFound);
-        // TODO: give proper error
-    }
+    verify_captcha(&payload.captcha_token).await?;
 
     Ok(Json(SignUpResponse {
-        jwt: "jwt".to_string(),
+        success: true,
+        reason: None,
     }))
 }
 
@@ -36,37 +34,25 @@ async fn post_signin(
     State(db_pool): State<db::DbPool>,
     Json(payload): Json<SignInRequest>,
 ) -> Result<Json<SignInResponse>, AppError> {
-    if !verify_captcha(&payload.captcha_token).await {
-        return Err(AppError::NotFound);
-        // TODO: give proper error
-    }
+    verify_captcha(&payload.captcha_token).await?;
 
     Ok(Json(SignInResponse {
-        jwt: "jwt".to_string(),
+        user_id: payload.username, //TODO
+        jwt: "jwt".to_string(),    //TODO
     }))
 }
 
-async fn verify_captcha(token: &str) -> bool {
+async fn verify_captcha(token: &str) -> anyhow::Result<bool> {
     let secret = std::env::var("TURNSTILE_SECRET").expect("missing setting 'TURNSTILE_SECRET'");
-    let client = reqwest::Client::new();
-    let params = vec![("secret", secret), ("response", token.to_string())];
 
-    // if let Some(ip) = user_ip {
-    //     params.push(("remoteip", ip.to_string()));
-    // }
-
-    if let Ok(res) = client
+    Ok(reqwest::Client::new()
         .post("https://challenges.cloudflare.com/turnstile/v0/siteverify")
-        .form(&params)
+        .form(&vec![("secret", secret), ("response", token.to_string())])
         .send()
-        .await
-    {
-        res.json::<serde_json::Value>()
-            .await
-            .ok()
-            .and_then(|json| json.get("success").and_then(|s| s.as_bool()))
-            .unwrap_or(false)
-    } else {
-        false
-    }
+        .await?
+        .json::<serde_json::Value>()
+        .await?
+        .get("success")
+        .and_then(|success| success.as_bool())
+        .unwrap_or(false))
 }
