@@ -47,7 +47,7 @@ async fn post_signin(
 }
 
 async fn verify_captcha(token: &str) -> bool {
-    let secret = std::env::var("TURNSTILE_SECRET").unwrap();
+    let secret = std::env::var("TURNSTILE_SECRET").expect("missing setting 'TURNSTILE_SECRET'");
     let client = reqwest::Client::new();
     let params = vec![("secret", secret), ("response", token.to_string())];
 

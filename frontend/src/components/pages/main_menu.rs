@@ -1,5 +1,5 @@
 use codee::string::JsonSerdeCodec;
-use leptos::{html::*, prelude::*};
+use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
@@ -27,42 +27,40 @@ pub fn MainMenuPage() -> impl IntoView {
         storage::use_session_storage::<Option<SessionInfos>, JsonSerdeCodec>("session_infos");
     let (get_username, set_user_id_storage, _) =
         storage::use_local_storage::<String, JsonSerdeCodec>("username");
+
     let username = RwSignal::new(get_username.get_untracked());
     let password = RwSignal::new(String::new());
     let captcha_token = RwSignal::new(None);
 
-    let signin = Action::new({
-        let backend = use_context::<BackendClient>().unwrap();
+    let signin = {
         let toaster = expect_context::<Toasts>();
-        move |_: &()| {
-            let toaster = toaster.clone();
-            async move {
-                match backend
-                    .post_signin(&SignInRequest {
-                        captcha_token: captcha_token.get().unwrap_or_default(),
-                        username: username.get(),
-                        password: password.get(),
-                    })
-                    .await
-                {
-                    Ok(response) => {
-                        show_toast(toaster, format!("Connected!"), ToastVariant::Success)
+        let backend = use_context::<BackendClient>().unwrap();
+        move |_| {
+            spawn_local({
+                async move {
+                    match backend
+                        .post_signin(&SignInRequest {
+                            captcha_token: captcha_token.get().unwrap_or_default(),
+                            username: username.get(),
+                            password: password.get(),
+                        })
+                        .await
+                    {
+                        Ok(_) => show_toast(toaster, "Connected!", ToastVariant::Success),
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("Authentication error: {e:?}"),
+                            ToastVariant::Error,
+                        ),
                     }
-                    Err(e) => show_toast(
-                        toaster,
-                        format!("Authentication error: {e:?}"),
-                        ToastVariant::Error,
-                    ),
                 }
-            }
+            });
         }
-    });
+    };
 
+    // TODO: connect pending
     let disable_connect = Signal::derive(move || {
-        username.read().is_empty()
-            || password.read().is_empty()
-            || captcha_token.read().is_none()
-            || signin.pending().get()
+        username.read().is_empty() || password.read().is_empty() || captcha_token.read().is_none()
     });
 
     // let navigate_to_game = {
@@ -126,12 +124,7 @@ pub fn MainMenuPage() -> impl IntoView {
                     <Captcha token=captcha_token />
                     // </form>
 
-                    <MenuButton
-                        on:click=move |_| {
-                            signin.dispatch(());
-                        }
-                        disabled=disable_connect
-                    >
+                    <MenuButton on:click=signin disabled=disable_connect>
                         "Connect"
                     </MenuButton>
                     <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>

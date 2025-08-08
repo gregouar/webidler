@@ -4,7 +4,10 @@ use axum::{
     routing::{any, get},
     Router,
 };
-use http::{HeaderValue, Method};
+use http::{
+    header::{AUTHORIZATION, CONTENT_TYPE},
+    HeaderValue, Method,
+};
 use tokio::signal;
 use tower_http::{
     cors::CorsLayer,
@@ -54,11 +57,12 @@ async fn main() {
         TraceLayer::new_for_http().make_span_with(DefaultMakeSpan::default().include_headers(true));
 
     let cors_layer = CorsLayer::new()
-        .allow_origin([
-            "http://127.0.0.1:8080".parse::<HeaderValue>().unwrap(),
-            "https://gregouar.github.io".parse::<HeaderValue>().unwrap(),
-        ])
-        .allow_methods([Method::GET, Method::POST]);
+        .allow_origin([std::env::var("CORS_FRONTEND_URL")
+            .expect("missing 'CORS_FRONTEND_URL' setting")
+            .parse::<HeaderValue>()
+            .unwrap()])
+        .allow_methods([Method::GET, Method::POST])
+        .allow_headers([CONTENT_TYPE, AUTHORIZATION]);
 
     let master_store = MasterStore::load_from_folder("data")
         .await

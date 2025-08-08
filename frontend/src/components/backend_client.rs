@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use anyhow::Result;
 
 use shared::http::{
@@ -68,6 +70,7 @@ impl BackendClient {
     {
         Ok(reqwest::Client::new()
             .post(format!("{}/{}", self.http_url, endpoint))
+            .timeout(Duration::from_secs(60))
             .json(payload)
             .send()
             .await?
