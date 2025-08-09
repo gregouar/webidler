@@ -10,7 +10,7 @@ pub struct User {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Character {
+pub struct UserCharacter {
     pub character_id: String,
     pub name: String,
     pub portrait: String,

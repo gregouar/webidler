@@ -3,7 +3,7 @@ use leptos::{html::*, prelude::*};
 use leptos_router::hooks::{use_navigate, use_params_map};
 use leptos_use::storage;
 
-use shared::data::user::{Character, User};
+use shared::data::user::{User, UserCharacter};
 
 use crate::{
     assets::img_asset,
@@ -17,7 +17,7 @@ pub fn UserDashboardPage() -> impl IntoView {
         username: "Username".to_string(),
         max_characters: 5,
     });
-    let characters = RwSignal::new(vec![Character {
+    let characters = RwSignal::new(vec![UserCharacter {
         character_id: "yyy".to_string(),
         name: "Name".to_string(),
         portrait: "adventurers/human_male_2.webp".to_string(),
@@ -52,69 +52,13 @@ pub fn UserDashboardPage() -> impl IntoView {
                         each=move || characters.get()
                         key=|char| char.character_id.clone()
                         children=move |character| {
-                            view! {
-                                <div class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md overflow-hidden flex flex-col">
-                                    <div
-                                        class="h-full w-full"
-                                        style=format!(
-                                            "background-image: url('{}');",
-                                            img_asset("ui/paper_background.webp"),
-                                        )
-                                    >
-                                        <img
-                                            src=img_asset(&character.portrait)
-                                            alt="Portrait"
-                                            class="object-cover h-full w-full"
-                                        />
-                                    </div>
-                                    <div class="p-4 flex flex-col gap-1">
-                                        <div class="text-lg font-semibold text-white">
-                                            {character.name.clone()}
-                                        </div>
-                                        <div class="text-sm text-gray-400">
-                                            "Grinding <<Inn Basement - level 134>>"
-                                        // Or "Rusting in Town"
-                                        </div>
-                                        <div class="mt-3 flex justify-between gap-2">
-                                            <MenuButton on:click=move |_| {}>"Play"</MenuButton>
-                                            <MenuButtonRed on:click=move |_| {}>"Delete"</MenuButtonRed>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
+                            view! { <CharacterSlot character=character /> }
                         }
                     />
 
                     {move || {
                         if characters.read().len() < user.read().max_characters as usize {
-                            Some(
-                                view! {
-                                    <div
-                                        on:click=move |_| {}
-                                        class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md min-h-[16rem]
-                                        flex flex-col items-center justify-center cursor-pointer
-                                        hover:border-amber-400 hover:shadow-lg transition group"
-                                    >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            class="h-12 w-12 text-amber-300 group-hover:scale-110 transition-transform duration-200"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M12 4v16m8-8H4"
-                                            />
-                                        </svg>
-                                        <span class="mt-2 text-lg font-semibold text-amber-300 group-hover:text-amber-200 transition-colors">
-                                            "Create Character"
-                                        </span>
-                                    </div>
-                                },
-                            )
+                            Some(view! { <CreateCharacterSlot /> })
                         } else {
                             None
                         }
@@ -132,5 +76,70 @@ pub fn UserDashboardPage() -> impl IntoView {
             </div>
 
         </main>
+    }
+}
+
+#[component]
+fn CharacterSlot(character: UserCharacter) -> impl IntoView {
+    view! {
+        <div
+            class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md min-h-[16rem]
+            flex flex-col items-center justify-center cursor-pointer
+            hover:border-amber-400 hover:shadow-lg transition group
+            overflow-hidden flex flex-col"
+            on:click=move |_| {}
+        >
+            <div
+                class="h-full w-full"
+                style=format!("background-image: url('{}');", img_asset("ui/paper_background.webp"))
+            >
+                <img
+                    src=img_asset(&character.portrait)
+                    alt="Portrait"
+                    class="object-cover h-full w-full"
+                />
+            </div>
+            <div class="p-4 flex flex-col gap-1">
+                <div class="text-lg font-semibold text-shadow-md shadow-gray-950 text-amber-200">
+                    {character.name.clone()}
+                </div>
+                <div class="text-sm text-gray-400">
+                    "Grinding: Inn Basement - level 134"
+                // Or "Rusting in Town"
+                </div>
+                <div class="mt-3 flex justify-between gap-2">
+                    <MenuButton class:justify-self-stretch on:click=move |_| {}>
+                        "Play"
+                    </MenuButton>
+                    <MenuButtonRed on:click=move |_| {}>"Delete"</MenuButtonRed>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+#[component]
+fn CreateCharacterSlot() -> impl IntoView {
+    view! {
+        <div
+            on:click=move |_| {}
+            class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md min-h-[16rem]
+            flex flex-col items-center justify-center cursor-pointer
+            hover:border-amber-400 hover:shadow-lg transition group"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-12 w-12 text-amber-300 group-hover:scale-110 group-active:scale-90 transition-transform duration-200"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            <span class="mt-2 text-lg font-semibold text-amber-300 group-hover:text-amber-200 transition-colors">
+                "Create Character"
+            </span>
+        </div>
     }
 }
