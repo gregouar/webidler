@@ -108,10 +108,11 @@ fn CharacterSlot(character: UserCharacter) -> impl IntoView {
                 // Or "Rusting in Town"
                 </div>
                 <div class="mt-3 flex gap-2">
-                    <MenuButton class:w-full on:click=move |_| {}>
+                    <MenuButton class:flex-grow on:click=move |_| {}>
                         "Play"
                     </MenuButton>
-                    <MenuButtonRed on:click=move |_| {}>"Del."</MenuButtonRed>
+                    <MenuButton on:click=move |_| {}>"❌"</MenuButton>
+                // TODO: confirm + delete
                 </div>
             </div>
         </div>
