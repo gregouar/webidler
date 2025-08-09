@@ -84,13 +84,13 @@ fn CharacterSlot(character: UserCharacter) -> impl IntoView {
     view! {
         <div
             class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md min-h-[16rem]
-            flex flex-col items-center justify-center cursor-pointer
+            cursor-pointer
             hover:border-amber-400 hover:shadow-lg transition group
             overflow-hidden flex flex-col"
             on:click=move |_| {}
         >
             <div
-                class="h-full w-full"
+                class="h-full w-full "
                 style=format!("background-image: url('{}');", img_asset("ui/paper_background.webp"))
             >
                 <img
@@ -107,11 +107,11 @@ fn CharacterSlot(character: UserCharacter) -> impl IntoView {
                     "Grinding: Inn Basement - level 134"
                 // Or "Rusting in Town"
                 </div>
-                <div class="mt-3 flex justify-between gap-2">
-                    <MenuButton class:justify-self-stretch on:click=move |_| {}>
+                <div class="mt-3 flex gap-2">
+                    <MenuButton class:w-full on:click=move |_| {}>
                         "Play"
                     </MenuButton>
-                    <MenuButtonRed on:click=move |_| {}>"Delete"</MenuButtonRed>
+                    <MenuButtonRed on:click=move |_| {}>"Del."</MenuButtonRed>
                 </div>
             </div>
         </div>
