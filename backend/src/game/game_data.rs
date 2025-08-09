@@ -5,7 +5,7 @@ use crate::game::data::master_store;
 
 use super::data::DataInit;
 use super::systems::player_controller::PlayerController;
-use super::{data::AreaBlueprint, utils::LazySyncer};
+use super::{data::area::AreaBlueprint, utils::LazySyncer};
 
 use serde::{Deserialize, Serialize};
 use shared::data::area::AreaLevel;
