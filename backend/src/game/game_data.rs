@@ -5,24 +5,24 @@ use crate::game::data::master_store;
 
 use super::data::DataInit;
 use super::systems::player_controller::PlayerController;
-use super::{data::world::WorldBlueprint, utils::LazySyncer};
+use super::{data::AreaBlueprint, utils::LazySyncer};
 
 use serde::{Deserialize, Serialize};
+use shared::data::area::AreaLevel;
 use shared::data::game_stats::GameStats;
 use shared::data::passive::{PassivesTreeSpecs, PassivesTreeState};
-use shared::data::world::AreaLevel;
 use shared::data::{
+    area::AreaState,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-    world::WorldState,
 };
 
 #[derive(Debug, Clone)]
 pub struct GameInstanceData {
-    pub world_id: String,
-    pub world_blueprint: WorldBlueprint,
-    pub world_state: LazySyncer<WorldState>,
+    pub area_id: String,
+    pub area_blueprint: AreaBlueprint,
+    pub area_state: LazySyncer<AreaState>,
 
     pub passives_tree_id: String,
     pub passives_tree_specs: PassivesTreeSpecs,
@@ -51,7 +51,7 @@ pub struct GameInstanceData {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SavedGameData {
-    pub world_id: String,
+    pub area_id: String,
     pub area_level: AreaLevel,
     pub passives_tree_id: String,
     pub passives_tree_state: PassivesTreeState,
@@ -64,8 +64,8 @@ pub struct SavedGameData {
 
 impl GameInstanceData {
     pub fn new(
-        world_id: String,
-        world_blueprint: WorldBlueprint,
+        area_id: String,
+        area_blueprint: AreaBlueprint,
         area_level: Option<AreaLevel>,
         passives_tree_id: String,
         passives_tree_specs: PassivesTreeSpecs,
@@ -76,14 +76,14 @@ impl GameInstanceData {
         queued_loot: Option<Vec<QueuedLoot>>,
         game_stats: Option<GameStats>,
     ) -> Self {
-        let mut world_state = WorldState::init(&world_blueprint.specs);
+        let mut area_state = AreaState::init(&area_blueprint.specs);
         if let Some(area_level) = area_level {
-            world_state.area_level = area_level;
+            area_state.area_level = area_level;
         }
         Self {
-            world_id,
-            world_state: LazySyncer::new(world_state),
-            world_blueprint,
+            area_id,
+            area_state: LazySyncer::new(area_state),
+            area_blueprint,
 
             passives_tree_id,
             passives_tree_specs,
@@ -110,7 +110,7 @@ impl GameInstanceData {
 
     pub fn init_from_store(
         master_store: &master_store::MasterStore,
-        world_id: &str,
+        area_id: &str,
         area_level: Option<AreaLevel>,
         passives_tree_id: &str,
         passives_tree_state: Option<PassivesTreeState>,
@@ -120,11 +120,11 @@ impl GameInstanceData {
         queued_loot: Option<Vec<QueuedLoot>>,
         game_stats: Option<GameStats>,
     ) -> Result<Self> {
-        let world_blueprint = master_store
-            .world_blueprints_store
-            .get(world_id)
+        let area_blueprint = master_store
+            .area_blueprints_store
+            .get(area_id)
             .cloned()
-            .ok_or_else(|| anyhow::anyhow!("couldn't load world: {}", world_id))?;
+            .ok_or_else(|| anyhow::anyhow!("couldn't load area: {}", area_id))?;
 
         let passives_tree_specs = master_store
             .passives_store
@@ -133,8 +133,8 @@ impl GameInstanceData {
             .ok_or_else(|| anyhow::anyhow!("couldn't load passives tree: {}", passives_tree_id))?;
 
         Ok(Self::new(
-            world_id.to_string(),
-            world_blueprint,
+            area_id.to_string(),
+            area_blueprint,
             area_level,
             passives_tree_id.to_string(),
             passives_tree_specs,
@@ -149,8 +149,8 @@ impl GameInstanceData {
 
     pub fn to_bytes(self) -> Result<Vec<u8>> {
         Ok(rmp_serde::to_vec(&SavedGameData {
-            world_id: self.world_id,
-            area_level: self.world_state.read().area_level,
+            area_id: self.area_id,
+            area_level: self.area_state.read().area_level,
             passives_tree_id: self.passives_tree_id,
             passives_tree_state: self.passives_tree_state.unwrap(),
             player_resources: self.player_resources.unwrap(),
@@ -163,7 +163,7 @@ impl GameInstanceData {
 
     pub fn from_bytes(master_store: &master_store::MasterStore, bytes: &[u8]) -> Result<Self> {
         let SavedGameData {
-            world_id,
+            area_id,
             area_level,
             passives_tree_id,
             passives_tree_state,
@@ -176,7 +176,7 @@ impl GameInstanceData {
 
         Self::init_from_store(
             master_store,
-            &world_id,
+            &area_id,
             Some(area_level),
             &passives_tree_id,
             Some(passives_tree_state),
@@ -189,7 +189,7 @@ impl GameInstanceData {
     }
 
     pub fn reset_syncers(&mut self) {
-        self.world_state.mutate();
+        self.area_state.mutate();
         self.passives_tree_state.mutate();
         self.player_resources.mutate();
         self.player_specs.mutate();

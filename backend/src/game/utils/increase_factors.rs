@@ -1,4 +1,4 @@
-use shared::data::world::AreaLevel;
+use shared::data::area::AreaLevel;
 
 pub const MONSTER_INCREASE_FACTOR: f64 = 0.125;
 pub const XP_INCREASE_FACTOR: f64 = 0.4;

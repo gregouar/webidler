@@ -1,3 +1,4 @@
+pub mod area_controller;
 pub mod characters_controller;
 pub mod characters_updater;
 pub mod events_resolver;
@@ -16,4 +17,3 @@ pub mod skills_controller;
 pub mod skills_updater;
 pub mod statuses_controller;
 pub mod triggers_controller;
-pub mod world_controller;

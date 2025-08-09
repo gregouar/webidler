@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     item::{ItemCategory, ItemSlot},
     passive::PassiveNodeId,
-    world::AreaLevel,
+    area::AreaLevel,
 };
 
 use super::{SessionId, SessionKey, macros::impl_into_message};

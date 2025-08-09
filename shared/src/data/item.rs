@@ -7,7 +7,7 @@ pub use super::skill::{SkillRange, SkillShape};
 use super::{
     item_affix::{AffixEffectBlueprint, AffixEffectScope, ItemAffix},
     stat_effect::{DamageMap, EffectsMap},
-    world::AreaLevel,
+    area::AreaLevel,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Default)]

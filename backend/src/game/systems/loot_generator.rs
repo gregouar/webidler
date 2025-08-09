@@ -1,10 +1,10 @@
 use std::collections::HashSet;
 
 use shared::data::{
+    area::AreaLevel,
     item::{ItemBase, ItemRarity, ItemSpecs},
     item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
     stat_effect::StatEffect,
-    world::AreaLevel,
 };
 
 use crate::game::{

@@ -4,7 +4,7 @@ use std::collections::HashSet;
 use super::{
     item::ItemCategory,
     stat_effect::{Modifier, StatEffect, StatType},
-    world::AreaLevel,
+    area::AreaLevel,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]

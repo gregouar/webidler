@@ -3,7 +3,7 @@ Next things to do:
 - auth
 - multi characters
 - gem looting
-- choose world
+- choose area
 - market
 - shard looting
 - ascend

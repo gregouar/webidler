@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 pub type AreaLevel = u16;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct WorldSpecs {
+pub struct AreaSpecs {
     pub name: String,
     pub starting_level: AreaLevel,
     pub musics: Vec<String>,
@@ -12,7 +12,7 @@ pub struct WorldSpecs {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct WorldState {
+pub struct AreaState {
     pub area_level: AreaLevel,
     pub is_boss: bool,
     pub waves_done: u8,

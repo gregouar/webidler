@@ -11,4 +11,4 @@ pub mod skill;
 pub mod stat_effect;
 pub mod trigger;
 pub mod user;
-pub mod world;
+pub mod area;

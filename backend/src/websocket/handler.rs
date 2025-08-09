@@ -159,7 +159,7 @@ async fn handle_disconnect(
     session_id: SessionId,
     mut session: Session,
 ) -> Result<()> {
-    let end_quest = session.game_data.world_state.read().end_quest;
+    let end_quest = session.game_data.area_state.read().end_quest;
 
     session.last_active = Instant::now();
 

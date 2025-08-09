@@ -1,13 +1,13 @@
 use std::collections::HashSet;
 
 use shared::data::{
+    area::{AreaSpecs, AreaState},
     character::{CharacterSpecs, CharacterState},
     character_status::StatusMap,
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerSpecs, PlayerState},
     skill::{BaseSkillSpecs, SkillSpecs, SkillState},
     stat_effect::EffectsMap,
-    world::{WorldSpecs, WorldState},
 };
 
 use crate::game::utils::rng;
@@ -15,9 +15,9 @@ pub trait DataInit<Specs> {
     fn init(specs: Specs) -> Self;
 }
 
-impl DataInit<&WorldSpecs> for WorldState {
-    fn init(specs: &WorldSpecs) -> Self {
-        WorldState {
+impl DataInit<&AreaSpecs> for AreaState {
+    fn init(specs: &AreaSpecs) -> Self {
+        AreaState {
             area_level: specs.starting_level,
             is_boss: false,
             waves_done: 0,

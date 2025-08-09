@@ -4,7 +4,7 @@ use shared::data::{
     passive::StatEffect,
     skill::SkillType,
     trigger::{TriggerEffectModifierSource, TriggerTarget, TriggeredEffect},
-    world::AreaLevel,
+    area::AreaLevel,
 };
 
 use crate::game::{

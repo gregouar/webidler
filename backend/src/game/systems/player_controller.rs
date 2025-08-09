@@ -1,12 +1,12 @@
 use anyhow::{anyhow, Result};
 
 use shared::data::{
+    area::AreaLevel,
     character::CharacterId,
     item::{ItemCategory, ItemSlot, ItemSpecs, WeaponSpecs},
     monster::MonsterSpecs,
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{BaseSkillSpecs, SkillSpecs, SkillState},
-    world::AreaLevel,
 };
 
 use crate::game::{

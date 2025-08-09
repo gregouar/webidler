@@ -1,15 +1,15 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
+    area::{AreaSpecs, AreaState},
     game_stats::GameStats,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-    world::{WorldSpecs, WorldState},
 };
 
-use super::{SessionId, SessionKey, macros::impl_into_message};
+use super::{macros::impl_into_message, SessionId, SessionKey};
 
 impl_into_message! {
     #[derive(Serialize, Deserialize, Debug, Clone,)]
@@ -41,8 +41,8 @@ pub enum ErrorType {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InitGameMessage {
-    pub world_specs: WorldSpecs,
-    pub world_state: WorldState,
+    pub area_specs: AreaSpecs,
+    pub area_state: AreaState,
     pub passives_tree_specs: PassivesTreeSpecs,
     pub passives_tree_state: PassivesTreeState,
     pub player_specs: PlayerSpecs,
@@ -52,7 +52,7 @@ pub struct InitGameMessage {
 /// Message to be sent every tick to sync current state of the game with clients
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SyncGameStateMessage {
-    pub world_state: Option<WorldState>,
+    pub area_state: Option<AreaState>,
     pub passives_tree_state: Option<PassivesTreeState>,
     pub player_specs: Option<PlayerSpecs>,
     pub player_inventory: Option<PlayerInventory>,

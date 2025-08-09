@@ -1,4 +1,4 @@
-use shared::data::world::AreaLevel;
+use shared::data::area::AreaLevel;
 use shared::messages::SessionId;
 use sqlx::FromRow;
 use std::time::Duration;

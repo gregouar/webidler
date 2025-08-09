@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::world::AreaLevel;
+use crate::data::area::AreaLevel;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct User {

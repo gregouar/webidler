@@ -3,6 +3,6 @@
     "enabled": true
   },
   "resources": {
-    "worlds": ["inn_basement.json"]
+    "areas": ["inn_basement.json"]
   }
 }

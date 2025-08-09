@@ -8,16 +8,16 @@ use shared::messages::server::{ErrorType, InitGameMessage, ServerMessage, SyncGa
 use shared::messages::{SessionId, SessionKey};
 
 use crate::components::ui::{
-    confirm::{ConfirmationModal, provide_confirm_context},
+    confirm::{provide_confirm_context, ConfirmationModal},
     toast::*,
     tooltip::DynamicTooltip,
 };
 use crate::components::websocket::WebsocketContext;
 
-use super::GameContext;
 use super::battle_scene::BattleScene;
 use super::header_menu::HeaderMenu;
 use super::panels::{InventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel};
+use super::GameContext;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SessionInfos {
@@ -118,8 +118,8 @@ fn handle_message(
 
 fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     let InitGameMessage {
-        world_specs,
-        world_state,
+        area_specs,
+        area_state,
         passives_tree_specs,
         passives_tree_state,
         player_specs,
@@ -127,8 +127,8 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     } = init_message;
 
     game_context.started.set(true);
-    game_context.world_specs.set(world_specs);
-    game_context.world_state.set(world_state);
+    game_context.area_specs.set(area_specs);
+    game_context.area_state.set(area_state);
     game_context.passives_tree_specs.set(passives_tree_specs);
     game_context.passives_tree_state.set(passives_tree_state);
     game_context.player_specs.set(player_specs);
@@ -137,7 +137,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
 
 fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     let SyncGameStateMessage {
-        world_state,
+        area_state,
         passives_tree_state,
         player_specs,
         player_inventory,
@@ -149,8 +149,8 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         game_stats,
     } = sync_message;
 
-    if let Some(world_state) = world_state {
-        game_context.world_state.set(world_state);
+    if let Some(area_state) = area_state {
+        game_context.area_state.set(area_state);
     }
     if let Some(passives_tree_state) = passives_tree_state {
         game_context.passives_tree_state.set(passives_tree_state);

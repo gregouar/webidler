@@ -43,7 +43,7 @@ pub fn HeaderMenu() -> impl IntoView {
         let game_context = expect_context::<GameContext>();
         move || {
             game_context
-                .world_specs
+                .area_specs
                 .read()
                 .musics
                 .iter()

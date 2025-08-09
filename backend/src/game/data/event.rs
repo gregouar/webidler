@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use shared::data::{
     character::CharacterId,
     skill::{DamageType, SkillRange, SkillType},
-    world::AreaLevel,
+    area::AreaLevel,
 };
 
 #[derive(Debug, Clone)]

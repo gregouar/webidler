@@ -3,7 +3,7 @@ use std::{collections::HashMap, time::Duration};
 
 use serde::{Deserialize, Serialize};
 
-use crate::data::{skill::SkillSpecs, user::User, world::AreaLevel};
+use crate::data::{skill::SkillSpecs, user::User, area::AreaLevel};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayersCountResponse {

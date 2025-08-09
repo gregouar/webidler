@@ -1,6 +1,6 @@
 use shared::{
     constants::WAVES_PER_AREA_LEVEL,
-    data::{character::CharacterId, trigger::EventTrigger, world::AreaLevel},
+    data::{area::AreaLevel, character::CharacterId, trigger::EventTrigger},
 };
 
 use crate::game::{
@@ -81,7 +81,7 @@ fn handle_hit_event<'a>(
                 source: hit_event.source,
                 target: hit_event.target,
                 hit_context: Some(hit_event),
-                area_level: game_data.world_state.read().area_level,
+                area_level: game_data.area_state.read().area_level,
             });
         }
     }
@@ -113,7 +113,7 @@ fn handle_kill_event(
                         source: CharacterId::Player,
                         target,
                         hit_context: None,
-                        area_level: game_data.world_state.read().area_level,
+                        area_level: game_data.area_state.read().area_level,
                     });
                 }
             }
@@ -131,7 +131,7 @@ fn handle_area_completed_event(
 ) {
     match loot_generator::generate_loot(
         area_level,
-        &game_data.world_blueprint.loot_table,
+        &game_data.area_blueprint.loot_table,
         &master_store.items_store,
         &master_store.item_affixes_table,
         &master_store.item_adjectives_table,
@@ -153,10 +153,10 @@ fn handle_area_completed_event(
         None => tracing::warn!("Failed to generate loot"),
     }
 
-    let world_state = game_data.world_state.mutate();
-    world_state.waves_done = 1;
-    if world_state.auto_progress {
-        world_state.area_level += 1;
+    let area_state = game_data.area_state.mutate();
+    area_state.waves_done = 1;
+    if area_state.auto_progress {
+        area_state.area_level += 1;
     }
 
     game_data.game_stats.areas_completed += 1;
@@ -170,13 +170,13 @@ fn handle_wave_completed_event(
     game_data: &mut GameInstanceData,
     area_level: AreaLevel,
 ) {
-    let world_state = game_data.world_state.mutate();
+    let area_state = game_data.area_state.mutate();
 
-    if !world_state.is_boss {
-        world_state.waves_done += 1;
+    if !area_state.is_boss {
+        area_state.waves_done += 1;
     }
 
-    if world_state.is_boss || world_state.waves_done > WAVES_PER_AREA_LEVEL {
+    if area_state.is_boss || area_state.waves_done > WAVES_PER_AREA_LEVEL {
         events_queue.register_event(GameEvent::AreaCompleted(area_level));
     }
 
@@ -187,7 +187,7 @@ fn handle_wave_completed_event(
                 source: CharacterId::Player,
                 target: CharacterId::Player,
                 hit_context: None,
-                area_level: game_data.world_state.read().area_level,
+                area_level: game_data.area_state.read().area_level,
             });
         }
     }
