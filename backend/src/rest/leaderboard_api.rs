@@ -20,17 +20,6 @@ pub fn routes() -> Router<AppState> {
 pub async fn get_leaderboard(
     State(db_pool): State<DbPool>,
 ) -> Result<Json<LeaderboardResponse>, AppError> {
-    Ok(Json(LeaderboardResponse {
-        entries: db::leaderboard::get_top_leaderboard(&db_pool, 10)
-            .await?
-            .into_iter()
-            .map(|x| LeaderboardEntry {
-                player_name: x.player_name,
-                area_level: x.area_level as u16,
-                time_played: Duration::from_secs(x.time_played_seconds as u64),
-                created_at: x.created_at.into(),
-                comments: x.comments,
-            })
-            .collect(),
-    }))
+    // TODO: new leaderboard from characters table
+    Ok(Json(LeaderboardResponse { entries: vec![] }))
 }

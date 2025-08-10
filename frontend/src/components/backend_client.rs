@@ -40,8 +40,8 @@ impl BackendClient {
         self.get("game/skills").await
     }
 
-    pub async fn get_user(&self, jwt: String, user_id: &str) -> Result<GetUserResponse> {
-        self.get(&format!("account/users/{user_id}")).await
+    pub async fn get_me(&self, token: &str) -> Result<GetUserResponse> {
+        self.get_auth(&format!("account/me"), token).await
     }
 
     pub async fn post_signin(&self, request: &SignInRequest) -> Result<SignInResponse> {
@@ -57,6 +57,20 @@ impl BackendClient {
         T: serde::de::DeserializeOwned,
     {
         Ok(reqwest::get(format!("{}/{}", self.http_url, endpoint))
+            .await?
+            .error_for_status()?
+            .json()
+            .await?)
+    }
+
+    async fn get_auth<T>(&self, endpoint: &str, token: &str) -> Result<T>
+    where
+        T: serde::de::DeserializeOwned,
+    {
+        Ok(reqwest::Client::new()
+            .get(format!("{}/{}", self.http_url, endpoint))
+            .bearer_auth(token)
+            .send()
             .await?
             .error_for_status()?
             .json()

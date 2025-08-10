@@ -22,10 +22,7 @@ pub fn MainMenuPage() -> impl IntoView {
         }
     });
 
-    let (get_username, set_username_storage, _) =
-        storage::use_local_storage::<String, JsonSerdeCodec>("username");
-
-    let username = RwSignal::new(get_username.get_untracked());
+    let username = RwSignal::new(String::new());
     let password = RwSignal::new(String::new());
     let captcha_token = RwSignal::new(None);
     let connecting = RwSignal::new(false);
@@ -38,7 +35,6 @@ pub fn MainMenuPage() -> impl IntoView {
         let navigate = use_navigate();
         move |_| {
             connecting.set(true);
-            set_username_storage.set(username.get());
             let navigate = navigate.clone();
             spawn_local({
                 async move {
@@ -75,17 +71,6 @@ pub fn MainMenuPage() -> impl IntoView {
             || captcha_token.read().is_none()
             || connecting.get()
     });
-
-    // let navigate_to_game = {
-    //     let navigate = use_navigate();
-    //     let delete_session_infos = delete_session_infos.clone();
-    //     move |_| {
-    //         // TODO: give token to backend alongside
-    //         delete_session_infos();
-    //         set_user_id_storage.set(username.get_untracked());
-    //         navigate("game", Default::default());
-    //     }
-    // };
 
     let navigate_to_leaderboard = {
         let navigate = use_navigate();

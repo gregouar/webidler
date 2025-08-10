@@ -1,58 +1,103 @@
-use axum::{extract::State, routing::post, Json, Router};
-
-use shared::{
-    data::user::User,
-    http::{
-        client::{SignInRequest, SignUpRequest},
-        server::{SignInResponse, SignUpResponse},
-    },
+use axum::{
+    extract::State,
+    middleware,
+    routing::{get, post},
+    Extension, Json, Router,
 };
 
-use crate::{app_state::AppState, db};
+use chrono::Utc;
+use shared::http::{
+    client::{SignInRequest, SignUpRequest},
+    server::{GetUserResponse, SignInResponse, SignUpResponse},
+};
+
+use crate::{
+    app_state::AppState,
+    auth::{self, CurrentUser},
+    constants, db,
+};
 
 use super::AppError;
 
 pub fn routes() -> Router<AppState> {
     Router::new()
-        .route("/account/signup", post(post_signup))
-        .route("/account/signin", post(post_signin))
+        .route("/account/signup", post(post_sign_up))
+        .route("/account/signin", post(post_sign_in))
+        .route(
+            "/account/me",
+            get(get_me).layer(middleware::from_fn(auth::authorization_middleware)),
+        )
+    // .route(
+    //     "/account/users/:userid",
+    //     get(get_user).layer(middleware::from_fn(auth::authorization_middleware)),
+    // )
 }
 
-async fn post_signup(
+async fn post_sign_up(
     State(db_pool): State<db::DbPool>,
     Json(payload): Json<SignUpRequest>,
 ) -> Result<Json<SignUpResponse>, AppError> {
-    verify_captcha(&payload.captcha_token).await?;
+    // TODO: middleware?
+    auth::verify_captcha(&payload.captcha_token).await?;
 
-    Ok(Json(SignUpResponse {
-        success: true,
-        reason: None,
-    }))
+    if !payload.accepted_terms {
+        return Err(AppError::Forbidden);
+    }
+    // TODO validation
+
+    let email = match payload.email {
+        Some(email) => {
+            if email.is_empty() {
+                None
+            } else {
+                Some(email)
+            }
+        }
+        None => None,
+    };
+
+    match db::users::create_user(
+        &db_pool,
+        &payload.username,
+        email.as_deref(),
+        &auth::hash_password(&payload.password)?,
+        &Utc::now(),
+        constants::DEFAULT_MAX_CHARACTERS,
+    )
+    .await?
+    {
+        Some(_) => Ok(Json(SignUpResponse {})),
+        None => Err(AppError::UserError("user already exists".to_string())),
+    }
 }
 
-async fn post_signin(
+// async fn get_user(user_id: &str) -> Result<Json<GetUserResponse>, AppError> {
+//     Ok(Json(GetUserResponse {
+//         user: User {
+//             user_id: "user_id".to_string(),
+//             username: "username".to_string(),
+//             max_characters: 5,
+//         },
+//     }))
+// }
+
+// TODO: move to auth api ?
+
+async fn post_sign_in(
     State(db_pool): State<db::DbPool>,
     Json(payload): Json<SignInRequest>,
 ) -> Result<Json<SignInResponse>, AppError> {
-    verify_captcha(&payload.captcha_token).await?;
+    auth::verify_captcha(&payload.captcha_token).await?;
 
     Ok(Json(SignInResponse {
-        user_id: payload.username, //TODO
-        jwt: "jwt".to_string(),    //TODO
+        jwt: auth::sign_in(&db_pool, &payload.username, &payload.password).await?,
     }))
 }
 
-async fn verify_captcha(token: &str) -> anyhow::Result<bool> {
-    let secret = std::env::var("TURNSTILE_SECRET").expect("missing setting 'TURNSTILE_SECRET'");
-
-    Ok(reqwest::Client::new()
-        .post("https://challenges.cloudflare.com/turnstile/v0/siteverify")
-        .form(&vec![("secret", secret), ("response", token.to_string())])
-        .send()
-        .await?
-        .json::<serde_json::Value>()
-        .await?
-        .get("success")
-        .and_then(|success| success.as_bool())
-        .unwrap_or(false))
+async fn get_me(
+    Extension(current_user): Extension<CurrentUser>,
+) -> Result<Json<GetUserResponse>, AppError> {
+    Ok(Json(GetUserResponse {
+        user: current_user.user,
+    }))
 }

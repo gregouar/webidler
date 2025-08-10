@@ -10,6 +10,7 @@ use serde::Serialize;
 pub enum AppError {
     Database(sqlx::Error),
     Anyhow(anyhow::Error),
+    UserError(String),
     Unauthorized,
     Forbidden,
     NotFound,
@@ -20,6 +21,7 @@ impl fmt::Display for AppError {
         match self {
             AppError::Database(err) => write!(f, "Database error: {err}"),
             AppError::Anyhow(err) => write!(f, "Unexpected error: {err}"),
+            AppError::UserError(err) => write!(f, "{err}"),
             AppError::Unauthorized => write!(f, "Unauthorized"),
             AppError::Forbidden => write!(f, "Forbidden"),
             AppError::NotFound => write!(f, "Not found"),
@@ -32,7 +34,10 @@ impl Error for AppError {
         match self {
             AppError::Database(err) => Some(err),
             AppError::Anyhow(err) => Some(err.root_cause()),
-            AppError::NotFound | AppError::Unauthorized | AppError::Forbidden => None,
+            AppError::NotFound
+            | AppError::Unauthorized
+            | AppError::Forbidden
+            | AppError::UserError(_) => None,
         }
     }
 }
@@ -60,6 +65,7 @@ impl IntoResponse for AppError {
             AppError::NotFound => StatusCode::NOT_FOUND,
             AppError::Unauthorized => StatusCode::UNAUTHORIZED,
             AppError::Forbidden => StatusCode::FORBIDDEN,
+            AppError::UserError(_) => StatusCode::CONFLICT,
             AppError::Database(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Anyhow(_) => StatusCode::INTERNAL_SERVER_ERROR,
         };

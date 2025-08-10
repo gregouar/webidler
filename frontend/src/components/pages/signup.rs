@@ -1,7 +1,12 @@
-use leptos::{html::*, prelude::*};
+use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
+use shared::http::client::SignUpRequest;
 
-use crate::components::{captcha::Captcha, ui::buttons::MenuButton};
+use crate::components::{
+    backend_client::BackendClient,
+    captcha::Captcha,
+    ui::{buttons::MenuButton, toast::*},
+};
 
 #[component]
 pub fn SignUpPage() -> impl IntoView {
@@ -13,11 +18,13 @@ pub fn SignUpPage() -> impl IntoView {
     };
 
     let username = RwSignal::new(String::new());
+    let email = RwSignal::new(String::new());
     let password = RwSignal::new(String::new());
     let confirm_password = RwSignal::new(String::new());
     let accepted_terms = RwSignal::new(false);
     let captcha_token = RwSignal::new(None);
 
+    let processing = RwSignal::new(false);
     let passwords_match = Signal::derive(move || password.get() == confirm_password.get());
     let can_submit = Signal::derive(move || {
         !username.read().is_empty()
@@ -25,13 +32,48 @@ pub fn SignUpPage() -> impl IntoView {
             && passwords_match.get()
             && accepted_terms.get()
             && captcha_token.read().is_some()
+            && !processing.get()
     });
 
-    let on_submit = move |_| {
-        if !can_submit.get() {
-            return;
+    let on_submit = {
+        let toaster = expect_context::<Toasts>();
+        let backend = use_context::<BackendClient>().unwrap();
+        let navigate = use_navigate();
+        move |_| {
+            if !can_submit.get() {
+                return;
+            }
+
+            processing.set(true);
+            let navigate = navigate.clone();
+            spawn_local({
+                async move {
+                    match backend
+                        .post_signup(&SignUpRequest {
+                            captcha_token: captcha_token.get().unwrap_or_default(),
+                            username: username.get(),
+                            email: Some(email.get()),
+                            password: password.get(),
+                            accepted_terms: accepted_terms.get(),
+                        })
+                        .await
+                    {
+                        Ok(_) => {
+                            // set_jwt_storage.set(response.jwt);
+                            navigate("/", Default::default());
+                        }
+                        Err(e) => {
+                            show_toast(
+                                toaster,
+                                format!("Registration error: {e:?}"),
+                                ToastVariant::Error,
+                            );
+                            processing.set(false);
+                        }
+                    }
+                }
+            });
         }
-        // TODO: call backend with captcha token
     };
 
     view! {
@@ -49,6 +91,19 @@ pub fn SignUpPage() -> impl IntoView {
                         class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
                         placeholder="Enter your username"
                         bind:value=username
+                    />
+                </div>
+
+                <div>
+                    <label for="email" class="block mb-1 text-sm font-medium text-gray-300">
+                        "Email recovery"
+                    </label>
+                    <input
+                        id="email"
+                        type="email"
+                        class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
+                        placeholder="Optionally enter your email for password recovery"
+                        bind:value=email
                     />
                 </div>
 

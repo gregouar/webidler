@@ -31,13 +31,12 @@ pub async fn purge_sessions(db_pool: db::DbPool, sessions_store: SessionsStore) 
         }
 
         for (session_id, session) in dropped_sessions {
-            if let Err(e) = sessions_controller::end_session(&db_pool, &session_id, &session).await
-            {
+            if let Err(e) = sessions_controller::end_session(&db_pool, &session_id).await {
                 tracing::error!("failed to end game session '{}': {}", session_id, e);
             }
             if let Err(e) = db::game_instances::save_game_instance_data(
                 &db_pool,
-                &session.user_id,
+                &session.character_id,
                 *session.game_data,
             )
             .await

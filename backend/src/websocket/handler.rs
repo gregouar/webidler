@@ -24,6 +24,7 @@ use shared::messages::{
 };
 
 use crate::{
+    auth,
     db::DbPool,
     game::{
         data::master_store::MasterStore,
@@ -85,7 +86,7 @@ async fn handle_socket(
     tracing::debug!("starting the game...");
     let game = GameInstance::new(
         &mut conn,
-        &session.user_id,
+        &session.character_id,
         &session_id,
         &mut session.game_data,
         db_pool.clone(),
@@ -134,11 +135,19 @@ async fn handle_connect(
 ) -> Result<(SessionId, Session)> {
     tracing::info!("connect: {:?}", msg);
 
+    let user_id = match auth::authorize_jwt(&msg.jwt) {
+        Some(user_id) => user_id,
+        None => return Err(anyhow::format_err!("invalid jwt")),
+    };
+
+    // TODO: load character
+    // TODO: verify character/session belongs to user !!!!
+
     let (session_id, session) = match (msg.session_id, msg.session_key) {
         (Some(session_id), Some(session_key)) => {
             sessions_controller::resume_session(sessions_store, session_id, session_key).await?
         }
-        _ => sessions_controller::create_session(db_pool, master_store, &msg.user_id).await?,
+        _ => sessions_controller::create_session(db_pool, master_store, &msg.character_id).await?,
     };
 
     conn.send(
@@ -164,7 +173,7 @@ async fn handle_disconnect(
     session.last_active = Instant::now();
 
     if end_quest {
-        sessions_controller::end_session(db_pool, &session_id, &session).await?;
+        sessions_controller::end_session(db_pool, &session_id).await?;
     } else {
         sessions_store
             .sessions

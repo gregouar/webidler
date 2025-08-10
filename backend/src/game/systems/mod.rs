@@ -3,7 +3,6 @@ pub mod characters_controller;
 pub mod characters_updater;
 pub mod events_resolver;
 pub mod items_controller;
-pub mod leaderboard_controller;
 pub mod loot_controller;
 pub mod loot_generator;
 pub mod monsters_controller;

@@ -3,6 +3,7 @@ use leptos::{html::*, prelude::*};
 use leptos_use::storage;
 use serde::{Deserialize, Serialize};
 
+use shared::data::user::UserCharacterId;
 use shared::messages::client::ClientConnectMessage;
 use shared::messages::server::{ErrorType, InitGameMessage, ServerMessage, SyncGameStateMessage};
 use shared::messages::{SessionId, SessionKey};
@@ -26,16 +27,16 @@ pub struct SessionInfos {
 }
 
 #[component]
-pub fn GameInstance() -> impl IntoView {
+pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
     let game_context = GameContext::new();
     provide_context(game_context.clone());
+
+    let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
 
     let confirm_state = provide_confirm_context();
 
     let (session_infos, set_session_infos, _) =
         storage::use_session_storage::<Option<SessionInfos>, JsonSerdeCodec>("session_infos");
-
-    let (user_id, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("user_id");
 
     Effect::new({
         let conn = expect_context::<WebsocketContext>();
@@ -43,7 +44,8 @@ pub fn GameInstance() -> impl IntoView {
             if conn.connected.get() {
                 conn.send(
                     &ClientConnectMessage {
-                        user_id: user_id.get_untracked(),
+                        jwt: get_jwt_storage.get(),
+                        character_id,
                         session_id: session_infos.get_untracked().map(|s| s.session_id),
                         session_key: session_infos.get_untracked().map(|s| s.session_key),
                     }

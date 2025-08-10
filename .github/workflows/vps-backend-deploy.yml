@@ -83,6 +83,9 @@ jobs:
           path: .sqlx
 
       - name: Build Docker images
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          BACKEND_WS_URL: "wss://webidler.gregoirenaisse.be"
         run: |
           docker build -t backend:latest -f ./backend/Dockerfile .
           docker save backend:latest > backend.tar

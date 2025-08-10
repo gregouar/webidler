@@ -3,7 +3,11 @@ use std::{collections::HashMap, time::Duration};
 
 use serde::{Deserialize, Serialize};
 
-use crate::data::{skill::SkillSpecs, user::User, area::AreaLevel};
+use crate::data::{
+    area::AreaLevel,
+    skill::SkillSpecs,
+    user::{User, UserId},
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayersCountResponse {
@@ -25,14 +29,10 @@ pub struct LeaderboardEntry {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct SignUpResponse {
-    pub success: bool,
-    pub reason: Option<String>,
-}
+pub struct SignUpResponse {}
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SignInResponse {
-    pub user_id: String,
     pub jwt: String,
 }
 
