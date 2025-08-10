@@ -82,7 +82,8 @@ pub fn UserDashboardPage() -> impl IntoView {
     });
 
     view! {
-        <main class="my-0 mx-auto max-w-3xl px-4 py-8 flex flex-col gap-6 text-white text-center">
+        // <main class="my-0 mx-auto max-w-3xl px-4 py-8 flex flex-col gap-6 text-white text-center">
+        <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <CreateCharacterPanel open=open_create_character.clone() />
             <Suspense fallback=move || {
                 view! { <p>"Loading..."</p> }
@@ -230,74 +231,72 @@ pub fn CreateCharacterPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <div class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-                <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl p-6 w-full max-w-lg space-y-6">
-                    <h2 class="text-2xl font-bold text-amber-300 text-center">
-                        "Create Character"
-                    </h2>
+            // <div class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+            <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl p-6 space-y-6">
+                <h2 class="text-2xl font-bold text-amber-300 text-center">"Create Character"</h2>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-1">
-                            "Character Name"
-                        </label>
-                        <input
-                            type="text"
-                            bind:value=name
-                            placeholder="Enter a name"
-                            class="w-full px-4 py-2 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500
-                            focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">
+                        "Character Name"
+                    </label>
+                    <input
+                        type="text"
+                        bind:value=name
+                        placeholder="Enter a name"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500
+                        focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
+                    />
+                </div>
+
+                <div>
+                    <span class="block text-sm font-medium text-gray-300 mb-2">
+                        "Choose a Portrait"
+                    </span>
+                    <div class="grid grid-cols-3 gap-3">
+                        <For
+                            each=move || portraits.clone()
+                            key=|src| src.to_string()
+                            children=move |src| {
+                                let is_selected = Signal::derive(move || {
+                                    selected_portrait.get() == src
+                                });
+                                view! {
+                                    <div
+                                        class="relative rounded-lg overflow-hidden border-2 cursor-pointer transition
+                                        hover:scale-105"
+                                        class:border-amber-400=move || is_selected.get()
+                                        class:border-transparent=move || !is_selected.get()
+                                        on:click=move |_| {
+                                            selected_portrait.set(src.to_string());
+                                        }
+                                    >
+                                        <img
+                                            src=img_asset(&format!("adventurers/{}.webp", src))
+                                            alt="Portrait"
+                                            class="object-cover w-full h-24"
+                                        />
+                                        {move || {
+                                            is_selected
+                                                .get()
+                                                .then(|| {
+                                                    view! {
+                                                        <div class="absolute inset-0 bg-amber-400/20"></div>
+                                                    }
+                                                })
+                                        }}
+                                    </div>
+                                }
+                            }
                         />
                     </div>
+                </div>
 
-                    <div>
-                        <span class="block text-sm font-medium text-gray-300 mb-2">
-                            "Choose a Portrait"
-                        </span>
-                        <div class="grid grid-cols-3 gap-3">
-                            <For
-                                each=move || portraits.clone()
-                                key=|src| src.to_string()
-                                children=move |src| {
-                                    let is_selected = Signal::derive(move || {
-                                        selected_portrait.get() == src
-                                    });
-                                    view! {
-                                        <div
-                                            class="relative rounded-lg overflow-hidden border-2 cursor-pointer transition
-                                            hover:scale-105"
-                                            class:border-amber-400=move || is_selected.get()
-                                            class:border-transparent=move || !is_selected.get()
-                                            on:click=move |_| {
-                                                selected_portrait.set(src.to_string());
-                                            }
-                                        >
-                                            <img
-                                                src=img_asset(&format!("adventurers/{}.webp", src))
-                                                alt="Portrait"
-                                                class="object-cover w-full h-24"
-                                            />
-                                            {move || {
-                                                is_selected
-                                                    .get()
-                                                    .then(|| {
-                                                        view! {
-                                                            <div class="absolute inset-0 bg-amber-400/20"></div>
-                                                        }
-                                                    })
-                                            }}
-                                        </div>
-                                    }
-                                }
-                            />
-                        </div>
-                    </div>
-
-                    <div class="flex justify-end gap-3 pt-4 border-t border-zinc-700">
-                        <MenuButtonRed on:click=move |_| {}>"Cancel"</MenuButtonRed>
-                        <MenuButton on:click=move |_| {}>"Confirm"</MenuButton>
-                    </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-zinc-700">
+                    <MenuButtonRed on:click=move |_| {}>"Cancel"</MenuButtonRed>
+                    <MenuButton on:click=move |_| {}>"Confirm"</MenuButton>
                 </div>
             </div>
+        // </div>
         </MenuPanel>
     }
 }

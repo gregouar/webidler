@@ -36,6 +36,10 @@ pub fn SignUpPage() -> impl IntoView {
         !username.read().is_none()
             && !password.read().is_none()
             && passwords_match.get()
+            && match email.get() {
+                Some(Ok(_)) | None => true,
+                Some(Err(_)) => false,
+            }
             && accepted_terms.get()
             && captcha_token.read().is_some()
             && !processing.get()
@@ -58,13 +62,14 @@ pub fn SignUpPage() -> impl IntoView {
                         .post_signup(&SignUpRequest {
                             captcha_token: captcha_token.get().unwrap_or_default(),
                             username: username.get().unwrap(),
-                            email: email.get(),
+                            email: email.get().map(Result::unwrap),
                             password: password.get().unwrap(),
                             accepted_terms: accepted_terms.get(),
                         })
                         .await
                     {
                         Ok(_) => {
+                            // Or directly signin and go to user dashboard?
                             // set_jwt_storage.set(response.jwt);
                             navigate("/", Default::default());
                         }
@@ -112,7 +117,7 @@ pub fn SignUpPage() -> impl IntoView {
                         class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
                         placeholder="Optionally enter your email for password recovery"
                         on:input:target=move |ev| {
-                            email.set(Email::try_new(ev.target().value()).ok())
+                            email.set(Some(Email::try_new(ev.target().value())))
                         }
                     />
                 </div>
