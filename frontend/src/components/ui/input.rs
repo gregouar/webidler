@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use serde_json;
+use serde_plain;
 
 #[component]
 pub fn Input(
@@ -48,7 +48,7 @@ where
                     )
                 }
                 placeholder=placeholder
-                on:input:target=move |ev| match serde_json::from_str(&ev.target().value()) {
+                on:input:target=move |ev| match serde_plain::from_str(&ev.target().value()) {
                     Ok(v) => {
                         bind.set(Some(v));
                         validation_error.set(None);

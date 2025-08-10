@@ -102,16 +102,6 @@ pub fn SignUpPage() -> impl IntoView {
                         placeholder="Enter your username"
                         bind=username
                     />
-
-                // <input
-                // id="username"
-                // type="text"
-                // class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
-                // placeholder="Enter your username"
-                // on:input:target=move |ev| {
-                // username.set(Name::try_new(ev.target().value()).ok())
-                // }
-                // />
                 </div>
 
                 <div>
