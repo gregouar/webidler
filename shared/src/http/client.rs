@@ -1,12 +1,56 @@
 use nutype::nutype;
 use serde::{Deserialize, Serialize};
 
+// #[macro_export]
+// macro_rules! define_nutype {
+//     (
+//         $(#[$meta:meta])*
+//         $vis:vis struct $name:ident($inner:ty);
+
+//         sanitize = [$($sanitize:ident),*],
+//         validate = [$($validate:expr),*],
+//         derive = [$($derive:meta),*],
+//         error = $error:ty
+//     ) => {
+//         #[nutype(
+//             sanitize($( $sanitize ),*),
+//             validate($( $validate ),*),
+//             derive($( $derive ),*)
+//         )]
+//         $vis struct $name($inner);
+
+//         impl std::convert::TryFrom<String> for $name {
+//             type Error = $error;
+
+//             fn try_from(value: String) -> Result<Self, Self::Error> {
+//                 Self::try_new(value)
+//             }
+//         }
+//     };
+// }
+
 #[nutype(
     sanitize(trim),
     validate(not_empty, len_char_max = 20, regex = "^[a-zA-Z0-9_]*$"),
     derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
 )]
 pub struct Name(String);
+
+// impl TryFrom<String> for Name {
+//     type Error = anyhow::Error;
+
+//     fn try_from(value: String) -> Result<Self, Self::Error> {
+//         Name::try_new(value).map_err(|e| anyhow::anyhow!(e))
+//     }
+// }
+
+// impl TryFrom<String> for Name {
+//     type Error = NameError;
+
+//     fn try_from(value: String) -> Result<Self, Self::Error> {
+//         Self::try_new(value)
+//     }
+// }
 
 #[nutype(
     sanitize(trim, lowercase),

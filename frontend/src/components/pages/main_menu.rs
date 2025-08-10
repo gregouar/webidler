@@ -6,7 +6,9 @@ use leptos_use::storage;
 use shared::http::client::{Name, Password, SignInRequest};
 
 use crate::components::{
-    backend_client::BackendClient, captcha::*, ui::buttons::MenuButton, ui::toast::*,
+    backend_client::BackendClient,
+    captcha::*,
+    ui::{buttons::MenuButton, input::Input, toast::*},
 };
 
 #[component]
@@ -100,27 +102,23 @@ pub fn MainMenuPage() -> impl IntoView {
                     // <form>
                     <div class="w-full mx-auto text-left">
                         <label class="block mb-2 text-sm font-medium text-gray-300">"Login:"</label>
-                        <input
+                        <Input
                             id="username"
-                            type="text"
-                            on:input:target=move |ev| {
-                                username.set(Name::try_new(ev.target().value()).ok())
-                            }
+                            input_type="text"
+                            // on:input:target=move |ev| {
+                            // username.set(Name::try_new(ev.target().value()).ok())
+                            // }
                             placeholder="Enter your username"
-                            class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400
-                            focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
                         />
                     </div>
                     <div class="w-full mx-auto mb-6 text-left">
-                        <input
+                        <Input
                             id="password"
-                            type="password"
-                            on:input:target=move |ev| {
-                                password.set(Password::try_new(ev.target().value()).ok())
-                            }
+                            input_type="password"
+                            // on:input:target=move |ev| {
+                            // password.set(Password::try_new(ev.target().value()).ok())
+                            // }
                             placeholder="Enter your password"
-                            class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400
-                            focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
                         />
                     </div>
                     <Captcha token=captcha_token />
