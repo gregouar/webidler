@@ -35,28 +35,26 @@ pub struct Claims {
     pub iat: usize,  // Issued at time of the token
     pub sub: UserId, // Subject associated with the token
 }
-
 pub async fn sign_in(
     db_pool: &db::DbPool,
     username: &str,
     password: &str,
 ) -> Result<String, AppError> {
-    let (user_id, password_hash) = match db::users::auth_user(db_pool, username).await? {
-        Some(x) => x,
-        None => return Err(AppError::Unauthorized),
-    };
+    let (user_id, password_hash_opt) = db::users::auth_user(db_pool, username)
+        .await?
+        .ok_or_else(|| AppError::Unauthorized("incorrect username or password".to_string()))?;
 
-    // Will be used later in case of other auth providers
-    let password_hash = match password_hash {
-        Some(password_hash) => password_hash,
-        None => return Err(AppError::Unauthorized),
-    };
+    let password_hash = password_hash_opt
+        .ok_or_else(|| AppError::Unauthorized("incorrect username or password".to_string()))?;
 
-    // TODO: last login, activity log, etc
+    // TODO: Track last login, activity logs, etc.
 
-    match verify_password(password, &password_hash) {
-        true => Ok(encode_jwt(user_id)?),
-        false => Err(AppError::Unauthorized),
+    if verify_password(password, &password_hash) {
+        Ok(encode_jwt(user_id)?)
+    } else {
+        Err(AppError::Unauthorized(
+            "incorrect username or password".to_string(),
+        ))
     }
 }
 
@@ -69,21 +67,17 @@ pub async fn authorization_middleware(
     mut req: Request,
     next: Next,
 ) -> Result<Response<Body>, AppError> {
-    let user_id = match req
+    let user_id = req
         .headers_mut()
         .get(http::header::AUTHORIZATION)
         .and_then(|header| header.to_str().ok())
         .and_then(|header| header.strip_prefix("Bearer "))
         .and_then(|token| authorize_jwt(token))
-    {
-        Some(user_id) => user_id,
-        None => return Err(AppError::Unauthorized),
-    };
+        .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
-    let current_user = match get_user(&user_id).await {
-        Some(user) => user,
-        None => return Err(AppError::Unauthorized),
-    };
+    let current_user = get_user(&user_id)
+        .await
+        .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
     req.extensions_mut().insert(current_user);
     Ok(next.run(req).await)

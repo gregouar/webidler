@@ -27,10 +27,6 @@ pub fn routes() -> Router<AppState> {
             "/account/me",
             get(get_me).layer(middleware::from_fn(auth::authorization_middleware)),
         )
-    // .route(
-    //     "/account/users/:userid",
-    //     get(get_user).layer(middleware::from_fn(auth::authorization_middleware)),
-    // )
 }
 
 async fn post_sign_up(
@@ -45,16 +41,9 @@ async fn post_sign_up(
     }
     // TODO validation
 
-    let email = match payload.email {
-        Some(email) => {
-            if email.is_empty() {
-                None
-            } else {
-                Some(email)
-            }
-        }
-        None => None,
-    };
+    let email = payload
+        .email
+        .and_then(|email| (!email.is_empty()).then_some(email));
 
     match db::users::create_user(
         &db_pool,
@@ -70,16 +59,6 @@ async fn post_sign_up(
         None => Err(AppError::UserError("user already exists".to_string())),
     }
 }
-
-// async fn get_user(user_id: &str) -> Result<Json<GetUserResponse>, AppError> {
-//     Ok(Json(GetUserResponse {
-//         user: User {
-//             user_id: "user_id".to_string(),
-//             username: "username".to_string(),
-//             max_characters: 5,
-//         },
-//     }))
-// }
 
 // TODO: move to auth api ?
 
