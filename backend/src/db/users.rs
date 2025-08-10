@@ -90,3 +90,39 @@ pub async fn auth_user(
     .await?
     .map(|record| (record.user_id, record.password_hash)))
 }
+
+pub async fn update_last_login(db_pool: &DbPool, user_id: &UserId) -> Result<(), sqlx::Error> {
+    sqlx::query!(
+        r#"
+            UPDATE users
+            SET last_login_at = CURRENT_TIMESTAMP
+            WHERE user_id = $1
+        "#,
+        user_id,
+    )
+    .execute(db_pool)
+    .await?;
+    Ok(())
+}
+
+// pub async fn delete_user(
+//     db_pool: &DbPool,
+//     user_id: &UserId,
+// ) -> Result<Option<UserEntry>, sqlx::Error> {
+//     Ok(sqlx::query_as!(
+//         UserEntry,
+//         r#"
+//         SELECT
+//             user_id as "user_id: UserId",
+//             username, email, terms_accepted_at, is_admin,
+//             max_characters as "max_characters: u8",
+//             last_login_at as "last_login_at: UtcDateTime",
+//             created_at, updated_at,
+//             deleted_at as "deleted_at: UtcDateTime"
+//          FROM users WHERE user_id = $1
+//          "#,
+//         user_id
+//     )
+//     .fetch_optional(db_pool)
+//     .await?)
+// }

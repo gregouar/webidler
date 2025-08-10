@@ -1,6 +1,6 @@
 use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
-use shared::http::client::SignUpRequest;
+use shared::http::client::{Email, Name, Password, SignUpRequest};
 
 use crate::components::{
     backend_client::BackendClient,
@@ -17,18 +17,24 @@ pub fn SignUpPage() -> impl IntoView {
         }
     };
 
-    let username = RwSignal::new(String::new());
-    let email = RwSignal::new(String::new());
-    let password = RwSignal::new(String::new());
+    let username = RwSignal::new(None);
+    let email = RwSignal::new(None);
+    let password = RwSignal::new(None);
     let confirm_password = RwSignal::new(String::new());
     let accepted_terms = RwSignal::new(false);
     let captcha_token = RwSignal::new(None);
 
     let processing = RwSignal::new(false);
-    let passwords_match = Signal::derive(move || password.get() == confirm_password.get());
+    let passwords_match = Signal::derive(move || {
+        password
+            .get()
+            .map(|x: Password| x.into_inner())
+            .unwrap_or_default()
+            == confirm_password.get()
+    });
     let can_submit = Signal::derive(move || {
-        !username.read().is_empty()
-            && !password.read().is_empty()
+        !username.read().is_none()
+            && !password.read().is_none()
             && passwords_match.get()
             && accepted_terms.get()
             && captcha_token.read().is_some()
@@ -51,9 +57,9 @@ pub fn SignUpPage() -> impl IntoView {
                     match backend
                         .post_signup(&SignUpRequest {
                             captcha_token: captcha_token.get().unwrap_or_default(),
-                            username: username.get(),
-                            email: Some(email.get()),
-                            password: password.get(),
+                            username: username.get().unwrap(),
+                            email: email.get(),
+                            password: password.get().unwrap(),
                             accepted_terms: accepted_terms.get(),
                         })
                         .await
@@ -90,7 +96,9 @@ pub fn SignUpPage() -> impl IntoView {
                         type="text"
                         class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
                         placeholder="Enter your username"
-                        bind:value=username
+                        on:input:target=move |ev| {
+                            username.set(Name::try_new(ev.target().value()).ok())
+                        }
                     />
                 </div>
 
@@ -103,7 +111,9 @@ pub fn SignUpPage() -> impl IntoView {
                         type="email"
                         class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
                         placeholder="Optionally enter your email for password recovery"
-                        bind:value=email
+                        on:input:target=move |ev| {
+                            email.set(Email::try_new(ev.target().value()).ok())
+                        }
                     />
                 </div>
 
@@ -116,7 +126,9 @@ pub fn SignUpPage() -> impl IntoView {
                         type="password"
                         class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
                         placeholder="Enter your password"
-                        bind:value=password
+                        on:input:target=move |ev| {
+                            password.set(Password::try_new(ev.target().value()).ok())
+                        }
                     />
                 </div>
 

@@ -13,7 +13,14 @@ pub struct User {
     pub max_characters: u8,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub enum UserCharacterActivity {
+    #[default]
+    Idle,
+    InQuest(String),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct UserCharacter {
     pub character_id: UserCharacterId,
 
@@ -21,4 +28,5 @@ pub struct UserCharacter {
     pub portrait: String,
     pub max_area_level: AreaLevel,
     // pub resources...,
+    pub activity: UserCharacterActivity,
 }

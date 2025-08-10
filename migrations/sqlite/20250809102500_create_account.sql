@@ -30,8 +30,8 @@ CREATE TABLE characters (
     -- 
     user_id TEXT NOT NULL,
     -- 
-    character_name TEXT,
-    portrait TEXT,
+    character_name TEXT NOT NULL,
+    portrait TEXT NOT NULL,
     -- 
     max_area_level INT NOT NULL DEFAULT 0,
     resource_gems FLOAT NOT NULL DEFAULT 0,

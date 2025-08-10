@@ -2,11 +2,14 @@ use anyhow::Result;
 use reqwest::StatusCode;
 use std::time::Duration;
 
-use shared::http::{
-    client::{SignInRequest, SignUpRequest},
-    server::{
-        ErrorResponse, GetUserResponse, LeaderboardResponse, PlayersCountResponse, SignInResponse,
-        SignUpResponse, SkillsResponse,
+use shared::{
+    data::user::UserId,
+    http::{
+        client::{SignInRequest, SignUpRequest},
+        server::{
+            ErrorResponse, GetUserCharactersResponse, GetUserResponse, LeaderboardResponse,
+            PlayersCountResponse, SignInResponse, SignUpResponse, SkillsResponse,
+        },
     },
 };
 
@@ -42,6 +45,15 @@ impl BackendClient {
 
     pub async fn get_me(&self, token: &str) -> Result<GetUserResponse> {
         self.get_auth(&format!("account/me"), token).await
+    }
+
+    pub async fn get_characters(
+        &self,
+        token: &str,
+        user_id: &UserId,
+    ) -> Result<GetUserCharactersResponse> {
+        self.get_auth(&format!("users/{user_id}/characters"), token)
+            .await
     }
 
     pub async fn post_signin(&self, request: &SignInRequest) -> Result<SignInResponse> {

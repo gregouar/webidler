@@ -50,6 +50,9 @@ pub async fn sign_in(
     // TODO: Track last login, activity logs, etc.
 
     if verify_password(password, &password_hash) {
+        db::users::update_last_login(db_pool, &user_id)
+            .await
+            .unwrap_or_else(|e| tracing::error!("couldn't update user last login: {e}"));
         Ok(encode_jwt(user_id)?)
     } else {
         Err(AppError::Unauthorized(

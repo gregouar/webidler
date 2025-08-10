@@ -39,16 +39,11 @@ async fn post_sign_up(
     if !payload.accepted_terms {
         return Err(AppError::Forbidden);
     }
-    // TODO validation
-
-    let email = payload
-        .email
-        .and_then(|email| (!email.is_empty()).then_some(email));
 
     match db::users::create_user(
         &db_pool,
         &payload.username,
-        email.as_deref(),
+        payload.email.as_deref().map(String::as_str),
         &auth::hash_password(&payload.password)?,
         &Utc::now(),
         constants::DEFAULT_MAX_CHARACTERS,
@@ -69,7 +64,12 @@ async fn post_sign_in(
     auth::verify_captcha(&payload.captcha_token).await?;
 
     Ok(Json(SignInResponse {
-        jwt: auth::sign_in(&db_pool, &payload.username, &payload.password).await?,
+        jwt: auth::sign_in(
+            &db_pool,
+            &payload.username.into_inner(),
+            &payload.password.into_inner(),
+        )
+        .await?,
     }))
 }
 

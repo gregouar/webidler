@@ -3,7 +3,11 @@ use std::{collections::HashMap, fmt, time::Duration};
 
 use serde::{Deserialize, Serialize};
 
-use crate::data::{area::AreaLevel, skill::SkillSpecs, user::User};
+use crate::data::{
+    area::AreaLevel,
+    skill::SkillSpecs,
+    user::{User, UserCharacter, UserCharacterId},
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ErrorResponse {
@@ -46,6 +50,16 @@ pub struct SignInResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GetUserResponse {
     pub user: User,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct CreateCharacterResponse {
+    pub character_id: UserCharacterId,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetUserCharactersResponse {
+    pub characters: Vec<UserCharacter>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

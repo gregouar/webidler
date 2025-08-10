@@ -3,7 +3,7 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
-use shared::http::client::SignInRequest;
+use shared::http::client::{Name, Password, SignInRequest};
 
 use crate::components::{
     backend_client::BackendClient, captcha::*, ui::buttons::MenuButton, ui::toast::*,
@@ -22,8 +22,8 @@ pub fn MainMenuPage() -> impl IntoView {
         }
     });
 
-    let username = RwSignal::new(String::new());
-    let password = RwSignal::new(String::new());
+    let username = RwSignal::new(None);
+    let password = RwSignal::new(None);
     let captcha_token = RwSignal::new(None);
     let connecting = RwSignal::new(false);
 
@@ -41,8 +41,8 @@ pub fn MainMenuPage() -> impl IntoView {
                     match backend
                         .post_signin(&SignInRequest {
                             captcha_token: captcha_token.get().unwrap_or_default(),
-                            username: username.get(),
-                            password: password.get(),
+                            username: username.get().unwrap(), // TODO: better error?
+                            password: password.get().unwrap(),
                         })
                         .await
                     {
@@ -66,8 +66,8 @@ pub fn MainMenuPage() -> impl IntoView {
 
     // TODO: connect pending
     let disable_connect = Signal::derive(move || {
-        username.read().is_empty()
-            || password.read().is_empty()
+        username.read().is_none()
+            || password.read().is_none()
             || captcha_token.read().is_none()
             || connecting.get()
     });
@@ -103,7 +103,9 @@ pub fn MainMenuPage() -> impl IntoView {
                         <input
                             id="username"
                             type="text"
-                            bind:value=username
+                            on:input:target=move |ev| {
+                                username.set(Name::try_new(ev.target().value()).ok())
+                            }
                             placeholder="Enter your username"
                             class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400
                             focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
@@ -113,7 +115,9 @@ pub fn MainMenuPage() -> impl IntoView {
                         <input
                             id="password"
                             type="password"
-                            bind:value=password
+                            on:input:target=move |ev| {
+                                password.set(Password::try_new(ev.target().value()).ok())
+                            }
                             placeholder="Enter your password"
                             class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400
                             focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
