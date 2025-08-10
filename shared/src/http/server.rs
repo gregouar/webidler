@@ -1,13 +1,20 @@
 use chrono::{DateTime, Utc};
-use std::{collections::HashMap, time::Duration};
+use std::{collections::HashMap, fmt, time::Duration};
 
 use serde::{Deserialize, Serialize};
 
-use crate::data::{
-    area::AreaLevel,
-    skill::SkillSpecs,
-    user::{User, UserId},
-};
+use crate::data::{area::AreaLevel, skill::SkillSpecs, user::User};
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ErrorResponse {
+    pub error: String,
+}
+
+impl fmt::Display for ErrorResponse {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.error)
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayersCountResponse {

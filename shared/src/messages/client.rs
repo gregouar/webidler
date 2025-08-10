@@ -4,7 +4,7 @@ use crate::data::{
     area::AreaLevel,
     item::{ItemCategory, ItemSlot},
     passive::PassiveNodeId,
-    user::{UserCharacterId, UserId},
+    user::UserCharacterId,
 };
 
 use super::{macros::impl_into_message, SessionId, SessionKey};

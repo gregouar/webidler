@@ -1,12 +1,12 @@
-use std::time::Duration;
-
 use anyhow::Result;
+use reqwest::StatusCode;
+use std::time::Duration;
 
 use shared::http::{
     client::{SignInRequest, SignUpRequest},
     server::{
-        GetUserResponse, LeaderboardResponse, PlayersCountResponse, SignInResponse, SignUpResponse,
-        SkillsResponse,
+        ErrorResponse, GetUserResponse, LeaderboardResponse, PlayersCountResponse, SignInResponse,
+        SignUpResponse, SkillsResponse,
     },
 };
 
@@ -56,25 +56,21 @@ impl BackendClient {
     where
         T: serde::de::DeserializeOwned,
     {
-        Ok(reqwest::get(format!("{}/{}", self.http_url, endpoint))
-            .await?
-            .error_for_status()?
-            .json()
-            .await?)
+        check_error(reqwest::get(format!("{}/{}", self.http_url, endpoint)).await?).await
     }
 
     async fn get_auth<T>(&self, endpoint: &str, token: &str) -> Result<T>
     where
         T: serde::de::DeserializeOwned,
     {
-        Ok(reqwest::Client::new()
-            .get(format!("{}/{}", self.http_url, endpoint))
-            .bearer_auth(token)
-            .send()
-            .await?
-            .error_for_status()?
-            .json()
-            .await?)
+        check_error(
+            reqwest::Client::new()
+                .get(format!("{}/{}", self.http_url, endpoint))
+                .bearer_auth(token)
+                .send()
+                .await?,
+        )
+        .await
     }
 
     async fn post<T, P>(&self, endpoint: &str, payload: &P) -> Result<T>
@@ -82,14 +78,27 @@ impl BackendClient {
         T: serde::de::DeserializeOwned,
         P: serde::ser::Serialize,
     {
-        Ok(reqwest::Client::new()
-            .post(format!("{}/{}", self.http_url, endpoint))
-            .timeout(Duration::from_secs(60))
-            .json(payload)
-            .send()
-            .await?
-            .error_for_status()?
-            .json()
-            .await?)
+        check_error(
+            reqwest::Client::new()
+                .post(format!("{}/{}", self.http_url, endpoint))
+                .timeout(Duration::from_secs(60))
+                .json(payload)
+                .send()
+                .await?,
+        )
+        .await
+    }
+}
+
+async fn check_error<T>(response: reqwest::Response) -> Result<T>
+where
+    T: serde::de::DeserializeOwned,
+{
+    match response.status() {
+        StatusCode::OK => Ok(response.json().await?),
+        _ => Err(anyhow::anyhow!(
+            "{}",
+            response.json::<ErrorResponse>().await?
+        )),
     }
 }

@@ -4,7 +4,8 @@ use std::fmt;
 use axum::response::{IntoResponse, Response};
 use axum::Json;
 use http::StatusCode;
-use serde::Serialize;
+
+use shared::http::server::ErrorResponse;
 
 #[derive(Debug)]
 pub enum AppError {
@@ -52,11 +53,6 @@ impl From<anyhow::Error> for AppError {
     fn from(e: anyhow::Error) -> Self {
         AppError::Anyhow(e)
     }
-}
-
-#[derive(Serialize)]
-struct ErrorResponse {
-    error: String,
 }
 
 impl IntoResponse for AppError {
