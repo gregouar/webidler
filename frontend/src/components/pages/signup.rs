@@ -29,15 +29,15 @@ pub fn SignUpPage() -> impl IntoView {
     let captcha_token = RwSignal::new(None);
 
     let processing = RwSignal::new(false);
-    let passwords_match = Signal::derive(move || password.get() == confirm_password.get());
-    let can_submit = Signal::derive(move || {
-        !username.read().is_none()
-            && !password.read().is_none()
-            && passwords_match.get()
-            && !email.read().is_none()
-            && accepted_terms.get()
-            && captcha_token.read().is_some()
-            && !processing.get()
+    let passwords_mismatch = Signal::derive(move || password.get() != confirm_password.get());
+    let disable_submit = Signal::derive(move || {
+        username.read().is_none()
+            || password.read().is_none()
+            || passwords_mismatch.get()
+            || email.read().is_none()
+            || !accepted_terms.get()
+            || captcha_token.read().is_none()
+            || processing.get()
     });
 
     let on_submit = {
@@ -45,7 +45,7 @@ pub fn SignUpPage() -> impl IntoView {
         let backend = use_context::<BackendClient>().unwrap();
         let navigate = use_navigate();
         move |_| {
-            if !can_submit.get() {
+            if disable_submit.get() {
                 return;
             }
 
@@ -111,17 +111,13 @@ pub fn SignUpPage() -> impl IntoView {
                     bind=password
                 />
 
-                <div>
-                    <Input
-                        id="confirm-password"
-                        input_type="password"
-                        placeholder="Confirm your password"
-                        bind=confirm_password
-                    />
-                    <Show when=move || !passwords_match.get()>
-                        <p class="text-red-500 text-sm mt-1">"Passwords do not match."</p>
-                    </Show>
-                </div>
+                <Input
+                    id="confirm-password"
+                    input_type="password"
+                    placeholder="Confirm your password"
+                    bind=confirm_password
+                    invalid=passwords_mismatch
+                />
 
                 <div class="flex items-start mt-4">
                     <input
@@ -156,11 +152,7 @@ pub fn SignUpPage() -> impl IntoView {
 
                 <Captcha token=captcha_token class:justify-self-center />
 
-                <MenuButton
-                    class:w-full
-                    on:click=on_submit
-                    disabled=Signal::derive(move || !can_submit.get())
-                >
+                <MenuButton class:w-full on:click=on_submit disabled=disable_submit>
                     "Confirm"
                 </MenuButton>
             </div>

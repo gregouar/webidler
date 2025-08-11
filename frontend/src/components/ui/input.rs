@@ -7,6 +7,8 @@ pub fn Input<T>(
     input_type: &'static str,
     placeholder: &'static str,
     bind: RwSignal<Option<T>>,
+    #[prop(optional)] invalid: Option<Signal<bool>>,
+    #[prop(optional)] node_ref: NodeRef<leptos::html::Input>,
 ) -> impl IntoView
 where
     T: serde::de::DeserializeOwned + Clone + Send + Sync + 'static,
@@ -17,12 +19,21 @@ where
             type=input_type
             placeholder=placeholder
             on:input:target=move |ev| bind.set(serde_plain::from_str(&ev.target().value()).ok())
-            class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400
-            focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
+            class=move || {
+                format!(
+                    "w-full px-4 py-2 rounded-xl border bg-gray-800 text-white placeholder-gray-400
+                        focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md {}",
+                    if invalid.map(|invalid| invalid.get()).unwrap_or_default() {
+                        "border-red-500 focus:ring-red-500"
+                    } else {
+                        "border-gray-700"
+                    },
+                )
+            }
+            node_ref=node_ref
         />
     }
 }
-
 #[component]
 pub fn ValidatedInput<T>(
     id: &'static str,
@@ -42,9 +53,14 @@ where
             {(!label.is_empty())
                 .then(|| {
                     view! {
-                        <label for=id class="block mb-1 text-sm font-medium text-gray-300">
-                            {label}
-                        </label>
+                        <div class="flex justify-between items-center mb-1">
+                            <label for=id class="text-sm font-medium text-gray-300">
+                                {label}
+                            </label>
+                            <span class="text-red-500 text-xs">
+                                {move || validation_error.get().unwrap_or_default()}
+                            </span>
+                        </div>
                     }
                 })}
             <input
@@ -53,7 +69,7 @@ where
                 class=move || {
                     format!(
                         "w-full px-4 py-2 rounded-xl border bg-gray-800 text-white placeholder-gray-400
-                    focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md {}",
+                        focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md {}",
                         if is_invalid.get() {
                             "border-red-500 focus:ring-red-500"
                         } else {
@@ -82,7 +98,7 @@ where
                             );
                     }
                 }
-            /> <div class="text-red-500 text-sm mt-1">{move || validation_error}</div>
+            />
         </div>
     }
 }

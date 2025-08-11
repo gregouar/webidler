@@ -27,15 +27,26 @@ pub fn MainMenuPage() -> impl IntoView {
     let username = RwSignal::new(None);
     let password = RwSignal::new(None);
     let captcha_token = RwSignal::new(None);
-    let connecting = RwSignal::new(false);
 
     let (_, set_jwt_storage, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
+
+    let connecting = RwSignal::new(false);
+    let disable_connect = Signal::derive(move || {
+        username.read().is_none()
+            || password.read().is_none()
+            || captcha_token.read().is_none()
+            || connecting.get()
+    });
 
     let signin = {
         let toaster = expect_context::<Toasts>();
         let backend = use_context::<BackendClient>().unwrap();
         let navigate = use_navigate();
-        move |_| {
+        move || {
+            if disable_connect.get() {
+                return;
+            }
+
             connecting.set(true);
             let navigate = navigate.clone();
             spawn_local({
@@ -66,14 +77,6 @@ pub fn MainMenuPage() -> impl IntoView {
         }
     };
 
-    // TODO: connect pending
-    let disable_connect = Signal::derive(move || {
-        username.read().is_none()
-            || password.read().is_none()
-            || captcha_token.read().is_none()
-            || connecting.get()
-    });
-
     let navigate_to_leaderboard = {
         let navigate = use_navigate();
         move |_| {
@@ -87,6 +90,7 @@ pub fn MainMenuPage() -> impl IntoView {
             navigate("signup", Default::default());
         }
     };
+    let password_ref = NodeRef::<leptos::html::Input>::new();
 
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
@@ -107,20 +111,36 @@ pub fn MainMenuPage() -> impl IntoView {
                             input_type="text"
                             placeholder="Enter your username"
                             bind=username
+                            on:keydown=move |ev: leptos::ev::KeyboardEvent| {
+                                if ev.key() == "Enter" {
+                                    if let Some(pw) = password_ref.get() {
+                                        pw.focus().unwrap();
+                                    }
+                                }
+                            }
                         />
                     </div>
                     <div class="w-full mx-auto mb-6 text-left">
                         <Input
+                            node_ref=password_ref
                             id="password"
                             input_type="password"
                             placeholder="Enter your password"
                             bind=password
+                            on:keydown={
+                                let signin = signin.clone();
+                                move |ev| {
+                                    if ev.key() == "Enter" {
+                                        signin();
+                                    }
+                                }
+                            }
                         />
                     </div>
                     <Captcha token=captcha_token />
                     // </form>
 
-                    <MenuButton on:click=signin disabled=disable_connect>
+                    <MenuButton on:click=move |_| signin() disabled=disable_connect>
                         "Connect"
                     </MenuButton>
                     <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>

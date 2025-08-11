@@ -82,7 +82,6 @@ pub fn UserDashboardPage() -> impl IntoView {
     });
 
     view! {
-        // <main class="my-0 mx-auto max-w-3xl px-4 py-8 flex flex-col gap-6 text-white text-center">
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <CreateCharacterPanel open=open_create_character.clone() />
             <Suspense fallback=move || {
