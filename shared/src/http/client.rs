@@ -1,56 +1,33 @@
 use nutype::nutype;
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 
-// #[macro_export]
-// macro_rules! define_nutype {
-//     (
-//         $(#[$meta:meta])*
-//         $vis:vis struct $name:ident($inner:ty);
+// TODO: move
 
-//         sanitize = [$($sanitize:ident),*],
-//         validate = [$($validate:expr),*],
-//         derive = [$($derive:meta),*],
-//         error = $error:ty
-//     ) => {
-//         #[nutype(
-//             sanitize($( $sanitize ),*),
-//             validate($( $validate ),*),
-//             derive($( $derive ),*)
-//         )]
-//         $vis struct $name($inner);
+pub struct IsAlphaNumericError {}
 
-//         impl std::convert::TryFrom<String> for $name {
-//             type Error = $error;
+// impl Display for IsAlphaNumericError {}
 
-//             fn try_from(value: String) -> Result<Self, Self::Error> {
-//                 Self::try_new(value)
-//             }
-//         }
-//     };
-// }
+fn is_alphanumeric(s: &str) -> Result<(), String> {
+    // Compile once for efficiency
+    // lazy_static::lazy_static! {
+    //     static ref RE: Regex = Regex::new(r"^[a-zA-Z0-9_]$").unwrap();
+    // }
+
+    if Regex::new(r"^[a-zA-Z0-9_]$").unwrap().is_match(s) {
+        Ok(())
+    } else {
+        Err("Only alphanumeric characters and underscores are allowed.".to_string())
+    }
+}
 
 #[nutype(
     sanitize(trim),
-    validate(not_empty, len_char_max = 20, regex = "^[a-zA-Z0-9_]*$"),
+    validate(not_empty, len_char_max = 20),
+    validate(with = is_alphanumeric, error=String),
     derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
 )]
 pub struct Name(String);
-
-// impl TryFrom<String> for Name {
-//     type Error = anyhow::Error;
-
-//     fn try_from(value: String) -> Result<Self, Self::Error> {
-//         Name::try_new(value).map_err(|e| anyhow::anyhow!(e))
-//     }
-// }
-
-// impl TryFrom<String> for Name {
-//     type Error = NameError;
-
-//     fn try_from(value: String) -> Result<Self, Self::Error> {
-//         Self::try_new(value)
-//     }
-// }
 
 #[nutype(
     sanitize(trim, lowercase),

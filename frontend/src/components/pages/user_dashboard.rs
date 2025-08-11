@@ -23,6 +23,7 @@ use crate::{
         },
     },
 };
+
 #[component]
 pub fn UserDashboardPage() -> impl IntoView {
     let confirm_state = provide_confirm_context();
@@ -30,9 +31,13 @@ pub fn UserDashboardPage() -> impl IntoView {
     let (get_jwt_storage, set_jwt_storage, _) =
         storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
 
+    let refresh_trigger = RwSignal::new(0u64);
+
     let user_and_characters = LocalResource::new({
         let backend = use_context::<BackendClient>().unwrap();
+        let refresh_trigger = refresh_trigger.clone();
         move || async move {
+            let _ = refresh_trigger.read();
             let user = backend
                 .get_me(&get_jwt_storage.get())
                 .await
@@ -82,7 +87,7 @@ pub fn UserDashboardPage() -> impl IntoView {
 
             <ConfirmationModal state=confirm_state />
 
-            <Suspense fallback=move || {
+            <Transition fallback=move || {
                 view! { <p class="text-gray-400">"Loading..."</p> }
             }>
                 {move || {
@@ -95,6 +100,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                             <CreateCharacterPanel
                                 open=open_create_character.clone()
                                 user_id=user.user_id.clone()
+                                refresh_trigger=refresh_trigger.clone()
                             />
 
                             <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">
@@ -118,7 +124,12 @@ pub fn UserDashboardPage() -> impl IntoView {
                                         each=move || characters.clone()
                                         key=|c| c.character_id.clone()
                                         children=move |character| {
-                                            view! { <CharacterSlot character=character /> }
+                                            view! {
+                                                <CharacterSlot
+                                                    character=character
+                                                    refresh_trigger=refresh_trigger.clone()
+                                                />
+                                            }
                                         }
                                     />
 
@@ -148,13 +159,13 @@ pub fn UserDashboardPage() -> impl IntoView {
                         }
                     })
                 }}
-            </Suspense>
+            </Transition>
         </main>
     }
 }
 
 #[component]
-fn CharacterSlot(character: UserCharacter) -> impl IntoView {
+fn CharacterSlot(character: UserCharacter, refresh_trigger: RwSignal<u64>) -> impl IntoView {
     let delete_character = Arc::new({
         let backend = use_context::<BackendClient>().unwrap();
         let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
@@ -168,6 +179,7 @@ fn CharacterSlot(character: UserCharacter) -> impl IntoView {
                     .await
                 {
                     Ok(_) => {
+                        refresh_trigger.update(|n| *n += 1);
                         show_toast(toaster, format!("Character deleted"), ToastVariant::Success);
                     }
                     Err(e) => {
@@ -253,7 +265,11 @@ fn CreateCharacterSlot() -> impl IntoView {
 }
 
 #[component]
-pub fn CreateCharacterPanel(open: RwSignal<bool>, user_id: UserId) -> impl IntoView {
+pub fn CreateCharacterPanel(
+    open: RwSignal<bool>,
+    user_id: UserId,
+    refresh_trigger: RwSignal<u64>,
+) -> impl IntoView {
     let name = RwSignal::new(None);
     let selected_portrait = RwSignal::new(None);
 
@@ -292,6 +308,7 @@ pub fn CreateCharacterPanel(open: RwSignal<bool>, user_id: UserId) -> impl IntoV
                         Ok(_) => {
                             open.set(false);
                             processing.set(false);
+                            refresh_trigger.update(|n| *n += 1);
                         }
                         Err(e) => {
                             show_toast(
@@ -313,6 +330,7 @@ pub fn CreateCharacterPanel(open: RwSignal<bool>, user_id: UserId) -> impl IntoV
         "human_male_3",
         "human_female_1",
         "human_female_2",
+        "human_female_3",
     ];
 
     view! {
