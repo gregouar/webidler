@@ -7,6 +7,7 @@ use url::Url;
 
 use crate::components::backend_client::BackendClient;
 use crate::components::pages;
+use crate::components::ui::confirm::{provide_confirm_context, ConfirmationModal};
 
 // TODO: localization https://crates.io/crates/fluent-templates
 
@@ -27,8 +28,11 @@ pub fn App() -> impl IntoView {
         option_env!("BACKEND_WS_URL").unwrap_or("ws://localhost:4200"),
     ));
 
+    let confirm_state = provide_confirm_context();
+
     view! {
         <Toaster position=ToasterPosition::BottomCenter></Toaster>
+        <ConfirmationModal state=confirm_state />
         <Router base=base_uri>
             <Routes fallback=|| "Page not found.">
                 <Route path=path!("/") view=pages::MainMenuPage />

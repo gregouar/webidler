@@ -16,7 +16,7 @@ use crate::{
         backend_client::BackendClient,
         ui::{
             buttons::{MenuButton, MenuButtonRed},
-            confirm::{provide_confirm_context, ConfirmContext, ConfirmationModal},
+            confirm::ConfirmContext,
             input::ValidatedInput,
             menu_panel::MenuPanel,
             toast::*,
@@ -26,8 +26,6 @@ use crate::{
 
 #[component]
 pub fn UserDashboardPage() -> impl IntoView {
-    let confirm_state = provide_confirm_context();
-
     let (get_jwt_storage, set_jwt_storage, _) =
         storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
 
@@ -83,10 +81,7 @@ pub fn UserDashboardPage() -> impl IntoView {
     });
 
     view! {
-        <main class="my-0 mx-auto w-full max-w-6xl px-4 sm:px-8 text-center overflow-x-hidden flex flex-col min-h-screen">
-
-            <ConfirmationModal state=confirm_state />
-
+        <main class="my-0 mx-auto w-full max-w-6xl px-4 sm:px-8 text-center overflow-x-hidden flex flex-col  justify-around min-h-screen">
             <Transition fallback=move || {
                 view! { <p class="text-gray-400">"Loading..."</p> }
             }>
@@ -119,7 +114,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     </span>
                                 </div>
 
-                                <div class="flex gap-6 overflow-auto ">
+                                <div class="flex flex-nowrap gap-6 overflow-x-auto pb-2">
                                     <For
                                         each=move || characters.clone()
                                         key=|c| c.character_id.clone()
@@ -208,7 +203,7 @@ fn CharacterSlot(character: UserCharacter, refresh_trigger: RwSignal<u64>) -> im
         <div
             class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md overflow-hidden
             flex flex-col hover:border-amber-400 hover:shadow-lg transition group
-            min-h-[20rem]"
+            min-h-[20rem] w-40 sm:w-48 md:w-56 flex-shrink-0"
             on:click=move |_| {}
         >
             <div class="aspect-[3/4] w-full relative">
@@ -245,6 +240,7 @@ fn CharacterSlot(character: UserCharacter, refresh_trigger: RwSignal<u64>) -> im
 fn CreateCharacterSlot() -> impl IntoView {
     view! {
         <div class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md min-h-[20rem]
+        w-40 sm:w-48 md:w-56 flex-shrink-0
         flex flex-col items-center justify-center cursor-pointer
         hover:border-amber-400 hover:shadow-lg transition group">
             <svg
