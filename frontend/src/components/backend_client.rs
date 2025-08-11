@@ -5,10 +5,11 @@ use std::time::Duration;
 use shared::{
     data::user::UserId,
     http::{
-        client::{SignInRequest, SignUpRequest},
+        client::{CreateCharacterRequest, SignInRequest, SignUpRequest},
         server::{
-            ErrorResponse, GetUserCharactersResponse, GetUserResponse, LeaderboardResponse,
-            PlayersCountResponse, SignInResponse, SignUpResponse, SkillsResponse,
+            CreateCharacterResponse, ErrorResponse, GetUserCharactersResponse, GetUserResponse,
+            LeaderboardResponse, PlayersCountResponse, SignInResponse, SignUpResponse,
+            SkillsResponse,
         },
     },
 };
@@ -64,6 +65,18 @@ impl BackendClient {
         self.post("account/signup", request).await
     }
 
+    pub async fn post_create_character(
+        &self,
+        token: &str,
+        user_id: &UserId,
+        request: &CreateCharacterRequest,
+    ) -> Result<CreateCharacterResponse> {
+        self.post_auth(&format!("users/{user_id}/characters"), token, request)
+            .await
+    }
+
+    // Protected
+
     async fn get<T>(&self, endpoint: &str) -> Result<T>
     where
         T: serde::de::DeserializeOwned,
@@ -78,6 +91,7 @@ impl BackendClient {
         check_error(
             reqwest::Client::new()
                 .get(format!("{}/{}", self.http_url, endpoint))
+                .timeout(Duration::from_secs(60))
                 .bearer_auth(token)
                 .send()
                 .await?,
@@ -93,6 +107,23 @@ impl BackendClient {
         check_error(
             reqwest::Client::new()
                 .post(format!("{}/{}", self.http_url, endpoint))
+                .timeout(Duration::from_secs(60))
+                .json(payload)
+                .send()
+                .await?,
+        )
+        .await
+    }
+
+    async fn post_auth<T, P>(&self, endpoint: &str, token: &str, payload: &P) -> Result<T>
+    where
+        T: serde::de::DeserializeOwned,
+        P: serde::ser::Serialize,
+    {
+        check_error(
+            reqwest::Client::new()
+                .post(format!("{}/{}", self.http_url, endpoint))
+                .bearer_auth(token)
                 .timeout(Duration::from_secs(60))
                 .json(payload)
                 .send()

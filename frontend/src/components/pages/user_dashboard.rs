@@ -1,9 +1,12 @@
 use codee::string::JsonSerdeCodec;
-use leptos::{html::*, prelude::*};
+use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
-use shared::data::user::UserCharacter;
+use shared::{
+    data::user::{UserCharacter, UserId},
+    http::client::{AssetName, CreateCharacterRequest},
+};
 
 use crate::{
     assets::img_asset,
@@ -11,11 +14,12 @@ use crate::{
         backend_client::BackendClient,
         ui::{
             buttons::{MenuButton, MenuButtonRed},
+            input::ValidatedInput,
             menu_panel::MenuPanel,
+            toast::*,
         },
     },
 };
-
 #[component]
 pub fn UserDashboardPage() -> impl IntoView {
     let (get_jwt_storage, set_jwt_storage, _) =
@@ -28,7 +32,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                 .get_me(&get_jwt_storage.get())
                 .await
                 .map(|r| r.user)
-                .ok(); // TODO: better error
+                .ok();
 
             match user {
                 Some(user) => {
@@ -37,7 +41,6 @@ pub fn UserDashboardPage() -> impl IntoView {
                         .await
                         .map(|r| r.characters)
                         .unwrap_or_default();
-
                     Some((user, characters))
                 }
                 None => None,
@@ -56,18 +59,6 @@ pub fn UserDashboardPage() -> impl IntoView {
 
     let open_create_character = RwSignal::new(false);
 
-    // let navigate_to_game = {
-    //     let navigate = use_navigate();
-    //     let delete_session_infos = delete_session_infos.clone();
-    //     move |_| {
-    //         // TODO: give token to backend alongside
-    //         delete_session_infos();
-    //         set_user_id_storage.set(username.get_untracked());
-    //         navigate("game", Default::default());
-    //     }
-    // };
-
-    // Redirect if not authenticated
     Effect::new({
         let navigate = use_navigate();
         move || {
@@ -82,23 +73,28 @@ pub fn UserDashboardPage() -> impl IntoView {
     });
 
     view! {
-        <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
-            <CreateCharacterPanel open=open_create_character.clone() />
+        <main class="my-0 mx-auto w-full max-w-6xl px-4 sm:px-8 text-center overflow-x-hidden flex flex-col min-h-screen">
+
             <Suspense fallback=move || {
-                view! { <p>"Loading..."</p> }
+                view! { <p class="text-gray-400">"Loading..."</p> }
             }>
                 {move || {
                     let logout = logout.clone();
                     Suspend::new(async move {
                         let (user, characters) = user_and_characters.await.unwrap_or_default();
                         let characters_len = characters.len();
+
                         view! {
-                            <h1 class="text-4xl font-extrabold text-amber-200 text-shadow-lg shadow-gray-950 tracking-tight">
+                            <CreateCharacterPanel
+                                open=open_create_character.clone()
+                                user_id=user.user_id.clone()
+                            />
+
+                            <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">
                                 "Welcome, " {user.username}
                             </h1>
 
-                            <div class="bg-zinc-800 rounded-xl border border-zinc-700 shadow-inner px-6 py-6 text-left space-y-6">
-
+                            <div class="bg-zinc-800 rounded-xl border border-zinc-700 shadow-inner px-6 py-6 sm:px-8 sm:py-8 text-left space-y-8">
                                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                                     <h2 class="text-2xl font-bold text-white">"Your Characters"</h2>
                                     <span class="text-sm text-gray-400 font-medium">
@@ -110,7 +106,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     </span>
                                 </div>
 
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                     <For
                                         each=move || characters.clone()
                                         key=|c| c.character_id.clone()
@@ -131,7 +127,6 @@ pub fn UserDashboardPage() -> impl IntoView {
                                         None
                                     }}
                                 </div>
-
                             </div>
 
                             <div class="flex flex-col items-center gap-2 text-sm text-gray-400">
@@ -141,7 +136,6 @@ pub fn UserDashboardPage() -> impl IntoView {
                                 >
                                     "Account Settings"
                                 </a>
-
                                 <MenuButtonRed on:click=logout>"Logout"</MenuButtonRed>
                             </div>
                         }
@@ -156,36 +150,35 @@ pub fn UserDashboardPage() -> impl IntoView {
 fn CharacterSlot(character: UserCharacter) -> impl IntoView {
     view! {
         <div
-            class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md min-h-[16rem]
-            cursor-pointer
-            hover:border-amber-400 hover:shadow-lg transition group
-            overflow-hidden flex flex-col"
+            class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md overflow-hidden
+            flex flex-col hover:border-amber-400 hover:shadow-lg transition group
+            min-h-[20rem]"
             on:click=move |_| {}
         >
-            <div
-                class="h-full w-full "
-                style=format!("background-image: url('{}');", img_asset("ui/paper_background.webp"))
-            >
+            <div class="aspect-[3/4] w-full relative">
                 <img
                     src=img_asset(&character.portrait)
                     alt="Portrait"
-                    class="object-cover h-full w-full"
+                    class="object-cover w-full h-full"
                 />
+                <div class="absolute inset-0 bg-[url('/assets/ui/paper_background.webp')] opacity-20"></div>
             </div>
-            <div class="p-4 flex flex-col gap-1">
-                <div class="text-lg font-semibold text-shadow-md shadow-gray-950 text-amber-200">
-                    {character.name.clone()}
+
+            <div class="p-4 flex flex-col flex-grow justify-between">
+                <div class="space-y-1">
+                    <div class="text-lg font-semibold text-shadow-md shadow-gray-950 text-amber-200 truncate">
+                        {character.name.clone()}
+                    </div>
+                    <div class="text-sm text-gray-400 truncate">
+                        "Grinding: Inn Basement - level 134"
+                    </div>
                 </div>
-                <div class="text-sm text-gray-400">
-                    "Grinding: Inn Basement - level 134"
-                // Or "Rusting in Town"
-                </div>
-                <div class="mt-3 flex gap-2">
+
+                <div class="mt-4 flex gap-2">
                     <MenuButton class:flex-grow on:click=move |_| {}>
                         "Play"
                     </MenuButton>
-                    <MenuButton on:click=move |_| {}>"❌"</MenuButton>
-                // TODO: confirm + delete
+                    <MenuButtonRed on:click=move |_| {}>"❌"</MenuButtonRed>
                 </div>
             </div>
         </div>
@@ -195,7 +188,7 @@ fn CharacterSlot(character: UserCharacter) -> impl IntoView {
 #[component]
 fn CreateCharacterSlot() -> impl IntoView {
     view! {
-        <div class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md min-h-[16rem]
+        <div class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md min-h-[20rem]
         flex flex-col items-center justify-center cursor-pointer
         hover:border-amber-400 hover:shadow-lg transition group">
             <svg
@@ -216,86 +209,139 @@ fn CreateCharacterSlot() -> impl IntoView {
 }
 
 #[component]
-pub fn CreateCharacterPanel(open: RwSignal<bool>) -> impl IntoView {
-    let name = RwSignal::new(String::new());
+pub fn CreateCharacterPanel(open: RwSignal<bool>, user_id: UserId) -> impl IntoView {
+    let name = RwSignal::new(None);
+    let selected_portrait = RwSignal::new(None);
+
+    let processing = RwSignal::new(false);
+    let disable_submit =
+        Signal::derive(move || name.read().is_none() || selected_portrait.read().is_none());
+
+    let on_submit = {
+        let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
+        let toaster = expect_context::<Toasts>();
+        let backend = use_context::<BackendClient>().unwrap();
+
+        let name = name.clone();
+        let selected_portrait = selected_portrait.clone();
+        let processing = processing.clone();
+        let disable_submit = disable_submit.clone();
+        move |_| {
+            if disable_submit.get() {
+                return;
+            }
+
+            processing.set(true);
+            spawn_local({
+                async move {
+                    match backend
+                        .post_create_character(
+                            &get_jwt_storage.get(),
+                            &user_id,
+                            &CreateCharacterRequest {
+                                name: name.get().unwrap(),
+                                portrait: selected_portrait.get().unwrap(),
+                            },
+                        )
+                        .await
+                    {
+                        Ok(_) => {
+                            open.set(false);
+                            processing.set(false);
+                        }
+                        Err(e) => {
+                            show_toast(
+                                toaster,
+                                format!("Character creation error: {e:?}"),
+                                ToastVariant::Error,
+                            );
+                            processing.set(false);
+                        }
+                    }
+                }
+            });
+        }
+    };
+
     let portraits = [
         "human_male_1",
-        "human_female_1p",
-        "elf_male_1",
-        "elf_female_1",
-        "dwarf_male_1",
-        "dwarf_female_1",
+        "human_male_2",
+        "human_male_3",
+        "human_female_1",
     ];
-    let selected_portrait = RwSignal::new(portraits[0].to_string());
 
     view! {
         <MenuPanel open=open>
-            // <div class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-            <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl p-6 space-y-6">
-                <h2 class="text-2xl font-bold text-amber-300 text-center">"Create Character"</h2>
+            <div class="flex items-center justify-center p-4">
+                <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl p-6 sm:p-8 space-y-8 w-full max-w-lg mx-auto self-center">
+                    <h2 class="text-2xl font-bold text-amber-300 text-center">
+                        "Create Character"
+                    </h2>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-1">
-                        "Character Name"
-                    </label>
-                    <input
-                        type="text"
-                        bind:value=name
+                    <ValidatedInput
+                        id="name"
+                        label="Character Name"
+                        input_type="text"
+                        bind=name
                         placeholder="Enter a name"
-                        class="w-full px-4 py-2 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500
-                        focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
                     />
-                </div>
 
-                <div>
-                    <span class="block text-sm font-medium text-gray-300 mb-2">
-                        "Choose a Portrait"
-                    </span>
-                    <div class="grid grid-cols-3 gap-3">
-                        <For
-                            each=move || portraits.clone()
-                            key=|src| src.to_string()
-                            children=move |src| {
-                                let is_selected = Signal::derive(move || {
-                                    selected_portrait.get() == src
-                                });
-                                view! {
-                                    <div
-                                        class="relative rounded-lg overflow-hidden border-2 cursor-pointer transition
-                                        hover:scale-105"
-                                        class:border-amber-400=move || is_selected.get()
-                                        class:border-transparent=move || !is_selected.get()
-                                        on:click=move |_| {
-                                            selected_portrait.set(src.to_string());
-                                        }
-                                    >
-                                        <img
-                                            src=img_asset(&format!("adventurers/{}.webp", src))
-                                            alt="Portrait"
-                                            class="object-cover w-full h-24"
-                                        />
-                                        {move || {
-                                            is_selected
-                                                .get()
-                                                .then(|| {
-                                                    view! {
-                                                        <div class="absolute inset-0 bg-amber-400/20"></div>
-                                                    }
-                                                })
-                                        }}
-                                    </div>
+                    <div>
+                        <span class="block text-sm font-medium text-gray-300 mb-2">
+                            "Choose a Portrait"
+                        </span>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                            <For
+                                each=move || portraits
+                                key=|src| src.to_string()
+                                children=move |src| {
+                                    let is_selected = Signal::derive(move || {
+                                        selected_portrait
+                                            .get()
+                                            .map(|portrait| portrait.into_inner() == src)
+                                            .unwrap_or_default()
+                                    });
+                                    view! {
+                                        <div
+                                            class="relative rounded-lg overflow-hidden border-2 cursor-pointer transition
+                                            hover:scale-105"
+                                            class:border-amber-400=move || is_selected.get()
+                                            class:border-transparent=move || !is_selected.get()
+                                            on:click=move |_| {
+                                                selected_portrait.set(AssetName::try_new(src).ok());
+                                            }
+                                        >
+                                            <img
+                                                src=img_asset(&format!("adventurers/{}.webp", src))
+                                                alt="Portrait"
+                                                class="object-cover w-full h-28 sm:h-32"
+                                            />
+                                            {move || {
+                                                is_selected
+                                                    .get()
+                                                    .then(|| {
+                                                        view! {
+                                                            <div class="absolute inset-0 bg-amber-400/20"></div>
+                                                        }
+                                                    })
+                                            }}
+                                        </div>
+                                    }
                                 }
-                            }
-                        />
+                            />
+                        </div>
+                    </div>
+
+                    <div class="flex justify-around gap-3 pt-4 border-t border-zinc-700">
+                        <MenuButtonRed on:click=move |_| {
+                            open.set(false)
+                        }>"Cancel"</MenuButtonRed>
+                        <MenuButton on:click=on_submit.clone() disabled=disable_submit>
+                            "Confirm"
+                        </MenuButton>
                     </div>
                 </div>
-
-                <div class="flex justify-end gap-3 pt-4 border-t border-zinc-700">
-                    <MenuButtonRed on:click=move |_| {}>"Cancel"</MenuButtonRed>
-                    <MenuButton on:click=move |_| {}>"Confirm"</MenuButton>
-                </div>
             </div>
-        // </div>
         </MenuPanel>
     }
 }
