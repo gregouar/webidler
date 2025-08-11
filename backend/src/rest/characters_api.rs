@@ -1,14 +1,14 @@
 use axum::{
     extract::{Path, State},
     middleware,
-    routing::{get, post},
+    routing::{delete, get, post},
     Extension, Json, Router,
 };
 use shared::{
-    data::user::{self, UserCharacter, UserId},
+    data::user::{self, UserCharacter, UserCharacterId, UserId},
     http::{
         client::CreateCharacterRequest,
-        server::{CreateCharacterResponse, GetUserCharactersResponse},
+        server::{CreateCharacterResponse, DeleteUserCharacterResponse, GetUserCharactersResponse},
     },
 };
 
@@ -23,6 +23,7 @@ use super::AppError;
 pub fn routes(app_state: AppState) -> Router<AppState> {
     let auth_routes = Router::new()
         .route("/users/{user_id}/characters", post(post_create_character))
+        .route("/characters/{character_id}", delete(delete_character))
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
@@ -67,6 +68,24 @@ async fn get_user_characters(
             .map(|c| c.into())
             .collect(),
     }))
+}
+
+async fn delete_character(
+    State(db_pool): State<db::DbPool>,
+    Path(character_id): Path<UserCharacterId>,
+    Extension(current_user): Extension<CurrentUser>,
+) -> Result<Json<DeleteUserCharacterResponse>, AppError> {
+    let character = db::characters::read_character(&db_pool, &character_id).await?;
+
+    if !character
+        .map(|character| character.user_id == current_user.user.user_id)
+        .unwrap_or_default()
+    {
+        return Err(AppError::NotFound);
+    }
+
+    db::characters::delete_character(&db_pool, &character_id).await?;
+    Ok(Json(DeleteUserCharacterResponse {}))
 }
 
 impl Into<UserCharacter> for db::characters::CharacterEntry {

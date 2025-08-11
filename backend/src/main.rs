@@ -61,7 +61,7 @@ async fn main() {
             .expect("missing 'CORS_FRONTEND_URL' setting")
             .parse::<HeaderValue>()
             .unwrap()])
-        .allow_methods([Method::GET, Method::POST])
+        .allow_methods([Method::GET, Method::POST, Method::DELETE])
         .allow_headers([CONTENT_TYPE, AUTHORIZATION]);
 
     let master_store = MasterStore::load_from_folder("data")

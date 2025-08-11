@@ -90,13 +90,8 @@ pub async fn authorization_middleware(
         .flatten()
         .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
-    req.extensions_mut().insert(CurrentUser {
-        user: User {
-            user_id: user.user_id,
-            username: user.username.unwrap_or_default(),
-            max_characters: user.max_characters,
-        },
-    });
+    req.extensions_mut()
+        .insert(CurrentUser { user: user.into() });
     Ok(next.run(req).await)
 }
 
@@ -143,4 +138,14 @@ pub fn verify_password(password: &str, password_hash: &str) -> bool {
                 .is_ok()
         })
         .unwrap_or(false)
+}
+
+impl Into<User> for db::users::UserEntry {
+    fn into(self) -> User {
+        User {
+            user_id: self.user_id,
+            username: self.username.unwrap_or_default(),
+            max_characters: self.max_characters,
+        }
+    }
 }

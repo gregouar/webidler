@@ -7,7 +7,7 @@ use shared::{
     http::{
         client::{CreateCharacterRequest, SignInRequest, SignUpRequest},
         server::{
-            CreateCharacterResponse, DeleteCharacterResponse, ErrorResponse,
+            CreateCharacterResponse, DeleteUserCharacterResponse, ErrorResponse,
             GetUserCharactersResponse, GetUserResponse, LeaderboardResponse, PlayersCountResponse,
             SignInResponse, SignUpResponse, SkillsResponse,
         },
@@ -79,7 +79,7 @@ impl BackendClient {
         &self,
         token: &str,
         character_id: &UserCharacterId,
-    ) -> Result<DeleteCharacterResponse> {
+    ) -> Result<DeleteUserCharacterResponse> {
         self.del_auth(&format!("characters/{character_id}"), token)
             .await
     }

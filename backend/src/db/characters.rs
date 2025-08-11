@@ -112,8 +112,22 @@ pub async fn count_user_characters(db_pool: &DbPool, user_id: &UserId) -> Result
     .await
 }
 
-// pub async fn delete_user_characters(
-//     db_pool: &DbPool,
-//     character_id: &CharacterId,
-// ) -> Result<Vec<CharacterEntry>, sqlx::Error> {
-// }
+pub async fn delete_character(
+    db_pool: &DbPool,
+    character_id: &UserCharacterId,
+) -> Result<(), sqlx::Error> {
+    sqlx::query!(
+        r#"
+        UPDATE characters
+        SET 
+            deleted_at = CURRENT_TIMESTAMP,
+            updated_at = CURRENT_TIMESTAMP 
+        WHERE character_id = $1
+        "#,
+        character_id,
+    )
+    .execute(db_pool)
+    .await?;
+
+    Ok(())
+}

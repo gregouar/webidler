@@ -69,7 +69,7 @@ pub struct GetUserCharactersResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct DeleteCharacterResponse {}
+pub struct DeleteUserCharacterResponse {}
 
 // Game
 
