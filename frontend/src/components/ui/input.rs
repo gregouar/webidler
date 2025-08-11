@@ -2,16 +2,21 @@ use leptos::prelude::*;
 use serde_plain;
 
 #[component]
-pub fn Input(
+pub fn Input<T>(
     id: &'static str,
     input_type: &'static str,
     placeholder: &'static str,
-) -> impl IntoView {
+    bind: RwSignal<Option<T>>,
+) -> impl IntoView
+where
+    T: serde::de::DeserializeOwned + Clone + Send + Sync + 'static,
+{
     view! {
         <input
             id=id
             type=input_type
             placeholder=placeholder
+            on:input:target=move |ev| bind.set(serde_plain::from_str(&ev.target().value()).ok())
             class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400
             focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
         />
@@ -21,6 +26,7 @@ pub fn Input(
 #[component]
 pub fn ValidatedInput<T>(
     id: &'static str,
+    #[prop(default = "")] label: &'static str,
     input_type: &'static str,
     placeholder: &'static str,
     bind: RwSignal<Option<T>>,
@@ -33,6 +39,14 @@ where
 
     view! {
         <div class="flex flex-col">
+            {(!label.is_empty())
+                .then(|| {
+                    view! {
+                        <label for=id class="block mb-1 text-sm font-medium text-gray-300">
+                            {label}
+                        </label>
+                    }
+                })}
             <input
                 id=id
                 type=input_type
@@ -55,15 +69,20 @@ where
                     }
                     Err(err) => {
                         bind.set(None);
-                        validation_error.set(Some(err.to_string()));
+                        validation_error
+                            .set(
+                                Some(
+                                    err
+                                        .to_string()
+                                        .split(" Expected valid")
+                                        .next()
+                                        .unwrap_or_default()
+                                        .to_string(),
+                                ),
+                            );
                     }
                 }
-            />
-            <div class="min-h-[1.25rem] text-red-500 text-sm mt-1">
-                {move || {
-                    view! { {validation_error} }
-                }}
-            </div>
+            /> <div class="text-red-500 text-sm mt-1">{move || validation_error}</div>
         </div>
     }
 }

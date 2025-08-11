@@ -1,11 +1,15 @@
 use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
-use shared::http::client::{Email, Name, Password, SignUpRequest};
+use shared::http::client::SignUpRequest;
 
 use crate::components::{
     backend_client::BackendClient,
     captcha::Captcha,
-    ui::{buttons::MenuButton, input::ValidatedInput, toast::*},
+    ui::{
+        buttons::MenuButton,
+        input::{Input, ValidatedInput},
+        toast::*,
+    },
 };
 
 #[component]
@@ -20,26 +24,17 @@ pub fn SignUpPage() -> impl IntoView {
     let username = RwSignal::new(None);
     let email = RwSignal::new(None);
     let password = RwSignal::new(None);
-    let confirm_password = RwSignal::new(String::new());
+    let confirm_password = RwSignal::new(None);
     let accepted_terms = RwSignal::new(false);
     let captcha_token = RwSignal::new(None);
 
     let processing = RwSignal::new(false);
-    let passwords_match = Signal::derive(move || {
-        password
-            .get()
-            .map(|x: Password| x.into_inner())
-            .unwrap_or_default()
-            == confirm_password.get()
-    });
+    let passwords_match = Signal::derive(move || password.get() == confirm_password.get());
     let can_submit = Signal::derive(move || {
         !username.read().is_none()
             && !password.read().is_none()
             && passwords_match.get()
-            && match email.get() {
-                Some(Ok(_)) | None => true,
-                Some(Err(_)) => false,
-            }
+            && !email.read().is_none()
             && accepted_terms.get()
             && captcha_token.read().is_some()
             && !processing.get()
@@ -62,7 +57,7 @@ pub fn SignUpPage() -> impl IntoView {
                         .post_signup(&SignUpRequest {
                             captcha_token: captcha_token.get().unwrap_or_default(),
                             username: username.get().unwrap(),
-                            email: email.get().map(Result::unwrap),
+                            email: email.get().unwrap(),
                             password: password.get().unwrap(),
                             accepted_terms: accepted_terms.get(),
                         })
@@ -92,58 +87,39 @@ pub fn SignUpPage() -> impl IntoView {
             <h1 class="text-amber-200 text-4xl font-extrabold mb-6">"Create Account"</h1>
 
             <div class="space-y-4 text-left text-white">
-                <div>
-                    <label for="username" class="block mb-1 text-sm font-medium text-gray-300">
-                        "Username"
-                    </label>
-                    <ValidatedInput
-                        id="username"
-                        input_type="text"
-                        placeholder="Enter your username"
-                        bind=username
-                    />
-                </div>
+                <ValidatedInput
+                    label="Username"
+                    id="username"
+                    input_type="text"
+                    placeholder="Enter your username"
+                    bind=username
+                />
+
+                <ValidatedInput
+                    label="Email recovery"
+                    id="email"
+                    input_type="text"
+                    placeholder="Optionally enter your email for password recovery"
+                    bind=email
+                />
+
+                <ValidatedInput
+                    label="Password"
+                    id="password"
+                    input_type="password"
+                    placeholder="Enter your password"
+                    bind=password
+                />
 
                 <div>
-                    <label for="email" class="block mb-1 text-sm font-medium text-gray-300">
-                        "Email recovery"
-                    </label>
-                    <input
-                        id="email"
-                        type="email"
-                        class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
-                        placeholder="Optionally enter your email for password recovery"
-                        on:input:target=move |ev| {
-                            email.set(Some(Email::try_new(ev.target().value())))
-                        }
-                    />
-                </div>
-
-                <div>
-                    <label for="password" class="block mb-1 text-sm font-medium text-gray-300">
-                        "Password"
-                    </label>
-                    <input
-                        id="password"
-                        type="password"
-                        class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
-                        placeholder="Enter your password"
-                        on:input:target=move |ev| {
-                            password.set(Password::try_new(ev.target().value()).ok())
-                        }
-                    />
-                </div>
-
-                <div>
-                    <input
+                    <Input
                         id="confirm-password"
-                        type="password"
-                        class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
+                        input_type="password"
                         placeholder="Confirm your password"
-                        bind:value=confirm_password
+                        bind=confirm_password
                     />
-                    <Show when=move || !passwords_match.get() && !confirm_password.get().is_empty()>
-                        <p class="text-red-400 text-sm mt-1">"Passwords do not match."</p>
+                    <Show when=move || !passwords_match.get()>
+                        <p class="text-red-500 text-sm mt-1">"Passwords do not match."</p>
                     </Show>
                 </div>
 

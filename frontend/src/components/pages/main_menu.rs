@@ -3,7 +3,7 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
-use shared::http::client::{Name, Password, SignInRequest};
+use shared::http::client::SignInRequest;
 
 use crate::components::{
     backend_client::BackendClient,
@@ -105,20 +105,16 @@ pub fn MainMenuPage() -> impl IntoView {
                         <Input
                             id="username"
                             input_type="text"
-                            // on:input:target=move |ev| {
-                            // username.set(Name::try_new(ev.target().value()).ok())
-                            // }
                             placeholder="Enter your username"
+                            bind=username
                         />
                     </div>
                     <div class="w-full mx-auto mb-6 text-left">
                         <Input
                             id="password"
                             input_type="password"
-                            // on:input:target=move |ev| {
-                            // password.set(Password::try_new(ev.target().value()).ok())
-                            // }
                             placeholder="Enter your password"
+                            bind=password
                         />
                     </div>
                     <Captcha token=captcha_token />
