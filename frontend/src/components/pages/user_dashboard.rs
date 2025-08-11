@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
@@ -14,6 +16,7 @@ use crate::{
         backend_client::BackendClient,
         ui::{
             buttons::{MenuButton, MenuButtonRed},
+            confirm::{provide_confirm_context, ConfirmContext, ConfirmationModal},
             input::ValidatedInput,
             menu_panel::MenuPanel,
             toast::*,
@@ -22,6 +25,8 @@ use crate::{
 };
 #[component]
 pub fn UserDashboardPage() -> impl IntoView {
+    let confirm_state = provide_confirm_context();
+
     let (get_jwt_storage, set_jwt_storage, _) =
         storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
 
@@ -75,6 +80,8 @@ pub fn UserDashboardPage() -> impl IntoView {
     view! {
         <main class="my-0 mx-auto w-full max-w-6xl px-4 sm:px-8 text-center overflow-x-hidden flex flex-col min-h-screen">
 
+            <ConfirmationModal state=confirm_state />
+
             <Suspense fallback=move || {
                 view! { <p class="text-gray-400">"Loading..."</p> }
             }>
@@ -106,7 +113,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     </span>
                                 </div>
 
-                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div class="flex gap-6 overflow-auto ">
                                     <For
                                         each=move || characters.clone()
                                         key=|c| c.character_id.clone()
@@ -148,6 +155,43 @@ pub fn UserDashboardPage() -> impl IntoView {
 
 #[component]
 fn CharacterSlot(character: UserCharacter) -> impl IntoView {
+    let delete_character = Arc::new({
+        let backend = use_context::<BackendClient>().unwrap();
+        let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
+        let toaster = expect_context::<Toasts>();
+        let character_id = character.character_id.clone();
+
+        move || {
+            spawn_local(async move {
+                match backend
+                    .delete_character(&get_jwt_storage.get(), &character_id)
+                    .await
+                {
+                    Ok(_) => {
+                        show_toast(toaster, format!("Character deleted"), ToastVariant::Success);
+                    }
+                    Err(e) => {
+                        show_toast(
+                            toaster,
+                            format!("Failed to delete character: {e:?}"),
+                            ToastVariant::Error,
+                        );
+                    }
+                }
+            });
+        }
+    });
+
+    let try_delete_character = {
+        let confirm_context = expect_context::<ConfirmContext>();
+        move |_| {
+            (confirm_context.confirm)(
+                "Deleting your character is irreversible and you will loose all items and progress, are you sure?".to_string(),
+                delete_character.clone(),
+            );
+        }
+    };
+
     view! {
         <div
             class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md overflow-hidden
@@ -178,7 +222,7 @@ fn CharacterSlot(character: UserCharacter) -> impl IntoView {
                     <MenuButton class:flex-grow on:click=move |_| {}>
                         "Play"
                     </MenuButton>
-                    <MenuButtonRed on:click=move |_| {}>"❌"</MenuButtonRed>
+                    <MenuButton on:click=try_delete_character>"❌"</MenuButton>
                 </div>
             </div>
         </div>
@@ -268,6 +312,7 @@ pub fn CreateCharacterPanel(open: RwSignal<bool>, user_id: UserId) -> impl IntoV
         "human_male_2",
         "human_male_3",
         "human_female_1",
+        "human_female_2",
     ];
 
     view! {

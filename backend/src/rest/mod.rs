@@ -11,11 +11,11 @@ mod users_api;
 
 pub use app_error::AppError;
 
-pub fn routes() -> Router<AppState> {
+pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
-        .merge(characters_api::routes())
+        .merge(characters_api::routes(app_state.clone()))
         .merge(game_api::routes())
         .merge(leaderboard_api::routes())
         .merge(stats_api::routes())
-        .merge(users_api::routes())
+        .merge(users_api::routes(app_state.clone()))
 }

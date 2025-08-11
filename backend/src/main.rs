@@ -75,15 +75,17 @@ async fn main() {
         sessions_store.clone(),
     ));
 
+    let app_state = AppState {
+        db_pool: db_pool.clone(),
+        master_store,
+        sessions_store: sessions_store.clone(),
+    };
+
     let app = Router::new()
         .route("/", get(|| async { "OK" }))
-        .merge(rest::routes())
+        .merge(rest::routes(app_state.clone()))
         .route("/ws", any(websocket::handler))
-        .with_state(AppState {
-            db_pool: db_pool.clone(),
-            master_store,
-            sessions_store: sessions_store.clone(),
-        })
+        .with_state(app_state.clone())
         .layer(tracer_layer)
         .layer(cors_layer);
 

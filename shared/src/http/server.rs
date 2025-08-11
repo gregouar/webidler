@@ -20,6 +20,8 @@ impl fmt::Display for ErrorResponse {
     }
 }
 
+// Stats
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayersCountResponse {
     pub value: i64,
@@ -39,6 +41,8 @@ pub struct LeaderboardEntry {
     pub comments: String,
 }
 
+// Users
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SignUpResponse {}
 
@@ -52,6 +56,8 @@ pub struct GetUserResponse {
     pub user: User,
 }
 
+// Characters
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CreateCharacterResponse {
     pub character_id: UserCharacterId,
@@ -61,6 +67,11 @@ pub struct CreateCharacterResponse {
 pub struct GetUserCharactersResponse {
     pub characters: Vec<UserCharacter>,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct DeleteCharacterResponse {}
+
+// Game
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SkillsResponse {

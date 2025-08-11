@@ -20,11 +20,17 @@ use crate::{
 
 use super::AppError;
 
-pub fn routes() -> Router<AppState> {
-    Router::new()
+pub fn routes(app_state: AppState) -> Router<AppState> {
+    let auth_routes = Router::new()
         .route("/users/{user_id}/characters", post(post_create_character))
-        .layer(middleware::from_fn(auth::authorization_middleware))
+        .layer(middleware::from_fn_with_state(
+            app_state,
+            auth::authorization_middleware,
+        ));
+
+    Router::new()
         .route("/users/{user_id}/characters", get(get_user_characters))
+        .merge(auth_routes)
     // .route("characters/{character_id}", get(get_character))
 }
 

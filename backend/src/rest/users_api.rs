@@ -19,14 +19,19 @@ use crate::{
 
 use super::AppError;
 
-pub fn routes() -> Router<AppState> {
+pub fn routes(app_state: AppState) -> Router<AppState> {
+    let auth_routes =
+        Router::new()
+            .route("/account/me", get(get_me))
+            .layer(middleware::from_fn_with_state(
+                app_state,
+                auth::authorization_middleware,
+            ));
+
     Router::new()
         .route("/account/signup", post(post_sign_up))
         .route("/account/signin", post(post_sign_in))
-        .route(
-            "/account/me",
-            get(get_me).layer(middleware::from_fn(auth::authorization_middleware)),
-        )
+        .merge(auth_routes)
 }
 
 async fn post_sign_up(

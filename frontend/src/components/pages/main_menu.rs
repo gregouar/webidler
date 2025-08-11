@@ -141,7 +141,7 @@ pub fn MainMenuPage() -> impl IntoView {
                     // </form>
 
                     <MenuButton on:click=move |_| signin() disabled=disable_connect>
-                        "Connect"
+                        {move || if connecting.get() { "Connecting..." } else { "Connect" }}
                     </MenuButton>
                     <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>
                     <MenuButton on:click=navigate_to_leaderboard>"Leaderboard"</MenuButton>

@@ -3,13 +3,13 @@ use reqwest::StatusCode;
 use std::time::Duration;
 
 use shared::{
-    data::user::UserId,
+    data::user::{UserCharacterId, UserId},
     http::{
         client::{CreateCharacterRequest, SignInRequest, SignUpRequest},
         server::{
-            CreateCharacterResponse, ErrorResponse, GetUserCharactersResponse, GetUserResponse,
-            LeaderboardResponse, PlayersCountResponse, SignInResponse, SignUpResponse,
-            SkillsResponse,
+            CreateCharacterResponse, DeleteCharacterResponse, ErrorResponse,
+            GetUserCharactersResponse, GetUserResponse, LeaderboardResponse, PlayersCountResponse,
+            SignInResponse, SignUpResponse, SkillsResponse,
         },
     },
 };
@@ -75,6 +75,15 @@ impl BackendClient {
             .await
     }
 
+    pub async fn delete_character(
+        &self,
+        token: &str,
+        character_id: &UserCharacterId,
+    ) -> Result<DeleteCharacterResponse> {
+        self.del_auth(&format!("characters/{character_id}"), token)
+            .await
+    }
+
     // Protected
 
     async fn get<T>(&self, endpoint: &str) -> Result<T>
@@ -126,6 +135,21 @@ impl BackendClient {
                 .bearer_auth(token)
                 .timeout(Duration::from_secs(60))
                 .json(payload)
+                .send()
+                .await?,
+        )
+        .await
+    }
+
+    async fn del_auth<T>(&self, endpoint: &str, token: &str) -> Result<T>
+    where
+        T: serde::de::DeserializeOwned,
+    {
+        check_error(
+            reqwest::Client::new()
+                .delete(format!("{}/{}", self.http_url, endpoint))
+                .timeout(Duration::from_secs(60))
+                .bearer_auth(token)
                 .send()
                 .await?,
         )

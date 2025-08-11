@@ -3,14 +3,19 @@ use argon2::{
     password_hash::{rand_core::OsRng, PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
     Argon2,
 };
-use axum::{body::Body, extract::Request, http, http::Response, middleware::Next};
+use axum::{
+    body::Body,
+    extract::{Request, State},
+    http::{self, Response},
+    middleware::Next,
+};
 use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, TokenData, Validation};
 use serde::{Deserialize, Serialize};
 
 use shared::data::user::{User, UserId};
 
-use crate::{db, rest::AppError};
+use crate::{app_state::AppState, db, rest::AppError};
 
 pub async fn verify_captcha(token: &str) -> anyhow::Result<bool> {
     // TODO: move to env!("TURNSTILE_SECRET")
@@ -47,7 +52,7 @@ pub async fn sign_in(
     let password_hash = password_hash_opt
         .ok_or_else(|| AppError::Unauthorized("incorrect username or password".to_string()))?;
 
-    // TODO: Track last login, activity logs, etc.
+    // TODO: Track activity logs, etc.
 
     if verify_password(password, &password_hash) {
         db::users::update_last_login(db_pool, &user_id)
@@ -67,6 +72,7 @@ pub struct CurrentUser {
 }
 
 pub async fn authorization_middleware(
+    State(state): State<AppState>,
     mut req: Request,
     next: Next,
 ) -> Result<Response<Body>, AppError> {
@@ -78,11 +84,19 @@ pub async fn authorization_middleware(
         .and_then(|token| authorize_jwt(token))
         .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
-    let current_user = get_user(&user_id)
+    let user = db::users::read_user(&state.db_pool, &user_id)
         .await
+        .ok()
+        .flatten()
         .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
-    req.extensions_mut().insert(current_user);
+    req.extensions_mut().insert(CurrentUser {
+        user: User {
+            user_id: user.user_id,
+            username: user.username.unwrap_or_default(),
+            max_characters: user.max_characters,
+        },
+    });
     Ok(next.run(req).await)
 }
 
@@ -90,17 +104,6 @@ pub fn authorize_jwt(token: &str) -> Option<UserId> {
     decode_jwt(token)
         .ok()
         .map(|token_data| token_data.claims.sub)
-}
-
-async fn get_user(user_id: &UserId) -> Option<CurrentUser> {
-    let current_user: CurrentUser = CurrentUser {
-        user: User {
-            user_id: user_id.clone(),
-            username: "username".to_string(),
-            max_characters: 5,
-        },
-    };
-    Some(current_user)
 }
 
 fn encode_jwt(sub: UserId) -> anyhow::Result<String> {
