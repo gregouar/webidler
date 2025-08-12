@@ -1,5 +1,6 @@
 use shared::data::area::AreaLevel;
 
+// TODO: put in some game config file
 pub const MONSTER_INCREASE_FACTOR: f64 = 0.125;
 pub const XP_INCREASE_FACTOR: f64 = 0.4;
 pub const ARMOR_FACTOR: f64 = 100.0;
