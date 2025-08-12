@@ -11,13 +11,17 @@ pub fn Input<T>(
     #[prop(optional)] node_ref: NodeRef<leptos::html::Input>,
 ) -> impl IntoView
 where
-    T: serde::de::DeserializeOwned + Clone + Send + Sync + 'static,
+    T: serde::de::DeserializeOwned + serde::ser::Serialize + Clone + Send + Sync + 'static,
 {
     view! {
         <input
             id=id
             type=input_type
             placeholder=placeholder
+            value=bind
+                .get_untracked()
+                .map(|value| serde_plain::to_string(&value).ok())
+                .unwrap_or_default()
             on:input:target=move |ev| bind.set(serde_plain::from_str(&ev.target().value()).ok())
             class=move || {
                 format!(
@@ -43,7 +47,7 @@ pub fn ValidatedInput<T>(
     bind: RwSignal<Option<T>>,
 ) -> impl IntoView
 where
-    T: serde::de::DeserializeOwned + Clone + Send + Sync + 'static,
+    T: serde::de::DeserializeOwned + serde::ser::Serialize + Clone + Send + Sync + 'static,
 {
     let validation_error = RwSignal::new(None);
     let is_invalid = Memo::new(move |_| validation_error.read().is_some());
@@ -78,6 +82,10 @@ where
                     )
                 }
                 placeholder=placeholder
+                value=bind
+                    .get_untracked()
+                    .map(|value| serde_plain::to_string(&value).ok())
+                    .unwrap_or_default()
                 on:input:target=move |ev| match serde_plain::from_str(&ev.target().value()) {
                     Ok(v) => {
                         bind.set(Some(v));
