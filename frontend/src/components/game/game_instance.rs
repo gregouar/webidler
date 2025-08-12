@@ -29,8 +29,6 @@ pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
 
     let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
 
-    // let confirm_state = provide_confirm_context();
-
     let (session_infos, set_session_infos, _) =
         storage::use_session_storage::<Option<SessionInfos>, JsonSerdeCodec>("session_infos");
 
@@ -64,7 +62,6 @@ pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <DynamicTooltip />
-            // <ConfirmationModal state=confirm_state />
             <Show
                 when=move || game_context.started.get()
                 fallback=move || view! { <p>"Connecting..."</p> }

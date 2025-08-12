@@ -33,7 +33,7 @@ pub fn HeaderMenu() -> impl IntoView {
         let confirm_context = expect_context::<ConfirmContext>();
         move |_| {
             (confirm_context.confirm)(
-                "Abandoning the quest will erase all progress, are you sure?".to_string(),
+                "Abandoning the grind will reset the area level, player level and gold, you will only keep items, gems and power shards. Are you sure?".to_string(),
                 abandon_quest.clone(),
             );
         }
@@ -66,7 +66,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     class:text-amber-200
                     icon="ui/gold.webp"
                     name="Gold"
-                    description="To buy level up for skills. Reset at every quest."
+                    description="To buy level up for skills. Reset at every grind."
                     value=gold
                 />
                 // TODO: Magic Essence
@@ -74,7 +74,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 <ResourceCounter
                     icon="ui/gems.webp"
                     name="Gems"
-                    description="To buy items in the market between quests."
+                    description="To buy items in the market between grinds."
                     value=gems
                 />
                 // TODO: Power Shards
@@ -85,7 +85,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     value=gems
                 />
             </div>
-            <div class="flex space-x-2  w-full">
+            <div class="flex justify-end space-x-2  w-full">
                 <audio autoplay loop controls>
                     {move || {
                         musics()
