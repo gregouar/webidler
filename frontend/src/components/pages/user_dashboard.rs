@@ -6,7 +6,7 @@ use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
 use shared::{
-    data::user::{UserCharacter, UserId},
+    data::user::{UserCharacter, UserCharacterId, UserId},
     http::client::CreateCharacterRequest,
     types::AssetName,
 };
@@ -200,12 +200,23 @@ fn CharacterSlot(character: UserCharacter, refresh_trigger: RwSignal<u64>) -> im
         }
     };
 
+    let play_character = {
+        let navigate = use_navigate();
+        let (_, set_character_id_storage, _) =
+            storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
+
+        move |_| {
+            set_character_id_storage.set(character.character_id.clone());
+            navigate("/town", Default::default());
+        }
+    };
+
     view! {
         <div
             class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md overflow-hidden
             flex flex-col hover:border-amber-400 hover:shadow-lg transition group
             min-h-[20rem] w-40 sm:w-48 md:w-56 flex-shrink-0"
-            on:click=move |_| {}
+            on:click=play_character.clone()
         >
             <div class="aspect-[3/4] w-full relative">
                 <img
@@ -227,7 +238,7 @@ fn CharacterSlot(character: UserCharacter, refresh_trigger: RwSignal<u64>) -> im
                 </div>
 
                 <div class="mt-4 flex gap-2">
-                    <MenuButton class:flex-grow on:click=move |_| {}>
+                    <MenuButton class:flex-grow on:click=play_character.clone()>
                         "Play"
                     </MenuButton>
                     <MenuButton on:click=try_delete_character>"❌"</MenuButton>

@@ -1,1 +1,1 @@
-pub const DEFAULT_MAX_CHARACTERS: u8 = 3;
+pub const DEFAULT_MAX_CHARACTERS: u8 = 5;

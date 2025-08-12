@@ -40,6 +40,7 @@ pub fn App() -> impl IntoView {
                 <Route path=path!("/leaderboard") view=pages::LeaderboardPage />
                 <Route path=path!("/signup") view=pages::SignUpPage />
                 <Route path=path!("/user-dashboard") view=pages::UserDashboardPage />
+                <Route path=path!("/town") view=pages::TownPage />
             </Routes>
         </Router>
     }

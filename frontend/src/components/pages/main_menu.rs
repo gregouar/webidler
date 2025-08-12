@@ -24,7 +24,10 @@ pub fn MainMenuPage() -> impl IntoView {
         }
     });
 
-    let username = RwSignal::new(None);
+    let (get_username_storage, set_username_storage, _) =
+        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
+
+    let username = RwSignal::new(get_username_storage.get_untracked());
     let password = RwSignal::new(None);
     let captcha_token = RwSignal::new(None);
 
@@ -61,6 +64,7 @@ pub fn MainMenuPage() -> impl IntoView {
                     {
                         Ok(response) => {
                             set_jwt_storage.set(response.jwt);
+                            set_username_storage.set(username.get());
                             navigate("user-dashboard", Default::default());
                         }
                         Err(e) => {

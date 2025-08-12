@@ -16,8 +16,8 @@ pub struct User {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub enum UserCharacterActivity {
     #[default]
-    Idle,
-    InQuest(String),
+    Rusting,
+    Grinding(String),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -27,6 +27,9 @@ pub struct UserCharacter {
     pub name: String,
     pub portrait: String,
     pub max_area_level: AreaLevel,
-    // pub resources...,
+
+    pub resource_gems: f64,
+    pub resource_shards: f64,
+
     pub activity: UserCharacterActivity,
 }

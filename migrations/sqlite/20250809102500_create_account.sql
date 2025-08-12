@@ -23,7 +23,6 @@ CREATE INDEX idx_users_username ON users (username);
 CREATE INDEX idx_users_deleted ON users (deleted_at);
 
 -- CHARACTER table
--- inventory/ascended passives are stored in separate table CHARACTERS_DATA that will be added later 
 CREATE TABLE characters (
     character_id TEXT NOT NULL PRIMARY KEY,
     -- UUID
@@ -48,6 +47,23 @@ CREATE INDEX idx_characters_user_id ON characters (user_id, deleted_at);
 
 CREATE INDEX idx_characters_deleted ON characters (deleted_at);
 
+-- CHARACTER_DATA table
+-- contain serialized data
+CREATE TABLE characters_data (
+    character_id TEXT NOT NULL PRIMARY KEY,
+    -- UUID
+    -- 
+    data_version TEXT NOT NULL,
+    inventory_data BLOB NOT NULL,
+    ascended_data BLOB NOT NULL,
+    --
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    --
+    FOREIGN KEY(character_id) REFERENCES characters(character_id) ON DELETE CASCADE
+);
+
+-- CHARACTER_AREA_COMPLETED table
 CREATE TABLE character_area_completed (
     character_id TEXT NOT NULL,
     area_id TEXT NOT NULL,
@@ -91,15 +107,16 @@ CREATE TABLE saved_game_instances (
     -- 
     saved_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- 
+    data_version TEXT NOT NULL,
     game_data BLOB NOT NULL,
     --
     FOREIGN KEY(character_id) REFERENCES characters(character_id) ON DELETE CASCADE
 );
 
 -- LEADERBOARD table 
+-- replaced by looking into characters and completed_areas tables
 DROP TABLE leaderboard;
 
--- replaced by looking into characters and completed_areas tables
 -- USER_ACTIVITY_LOG table 
 CREATE TABLE user_activity_log (
     log_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,

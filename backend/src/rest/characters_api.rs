@@ -94,8 +94,10 @@ impl Into<UserCharacter> for db::characters::CharacterEntry {
             character_id: self.character_id,
             name: self.character_name,
             portrait: self.portrait,
+            resource_gems: self.resource_gems,
+            resource_shards: self.resource_shards,
             max_area_level: self.max_area_level,
-            activity: user::UserCharacterActivity::Idle, // TODO
+            activity: user::UserCharacterActivity::Rusting,
         }
     }
 }

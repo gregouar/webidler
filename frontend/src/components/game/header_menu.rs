@@ -118,7 +118,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     game_context.open_passives.set(false);
                     game_context.open_statistics.set(!game_context.open_statistics.get());
                 }>"Statistics"</MenuButton>
-                <MenuButton on:click=try_abandon_quest>"Abandon Quest"</MenuButton>
+                <MenuButton on:click=try_abandon_quest>"Abandon Grind"</MenuButton>
             </div>
         </div>
     }
