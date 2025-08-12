@@ -7,7 +7,8 @@ use leptos_use::storage;
 
 use shared::{
     data::user::{UserCharacter, UserId},
-    http::client::{AssetName, CreateCharacterRequest},
+    http::client::CreateCharacterRequest,
+    types::AssetName,
 };
 
 use crate::{
