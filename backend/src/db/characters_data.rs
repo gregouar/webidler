@@ -19,15 +19,15 @@ struct CharacterDataEntry {
 }
 
 pub async fn save_character_data(
-    pool: &DbPool,
+    db_pool: &DbPool,
     character_id: &UserCharacterId,
     inventory: &PlayerInventory,
 ) -> anyhow::Result<()> {
-    Ok(upsert_character_data(pool, character_id, rmp_serde::to_vec(inventory)?).await?)
+    Ok(upsert_character_data(db_pool, character_id, rmp_serde::to_vec(inventory)?).await?)
 }
 
 async fn upsert_character_data(
-    pool: &DbPool,
+    db_pool: &DbPool,
     character_id: &UserCharacterId,
     inventory_data: Vec<u8>,
 ) -> Result<(), sqlx::Error> {
@@ -41,7 +41,7 @@ async fn upsert_character_data(
         CHARACTER_DATA_VERSION,
         inventory_data
     )
-    .execute(pool)
+    .execute(db_pool)
     .await?;
 
     Ok(())

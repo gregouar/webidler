@@ -78,6 +78,11 @@ impl<'a> GameInstance<'a> {
                 self.auto_save();
             }
 
+            if self.game_data.area_state.read().end_quest {
+                self.end_quest().await?;
+                break;
+            }
+
             game_timer.wait_tick().await;
         }
 
@@ -101,6 +106,30 @@ impl<'a> GameInstance<'a> {
                         e
                     )
                 });
+
+            // TODO: update character table as well
         });
+    }
+
+    async fn end_quest(&self) -> Result<()> {
+        db::characters_data::save_character_data(
+            &self.db_pool,
+            self.character_id,
+            self.game_data.player_inventory.read(),
+        )
+        .await?;
+        db::characters::update_character_progress(
+            &self.db_pool,
+            self.character_id,
+            &self.game_data.area_id,
+            self.game_data.game_stats.highest_area_level,
+            self.game_data.player_resources.read().gems,
+            self.game_data.player_resources.read().shards,
+        )
+        .await?;
+
+        db::game_instances::delete_game_instance_data(&self.db_pool, self.character_id).await?;
+
+        Ok(())
     }
 }

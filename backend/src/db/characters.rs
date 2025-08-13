@@ -22,6 +22,7 @@ pub struct CharacterEntry {
     pub updated_at: UtcDateTime,
     pub deleted_at: Option<UtcDateTime>,
 
+    // Joined
     pub area_id: Option<String>,
     pub area_level: Option<i64>,
 }
@@ -154,6 +155,47 @@ pub async fn count_user_characters(db_pool: &DbPool, user_id: &UserId) -> Result
     )
     .fetch_one(db_pool)
     .await
+}
+
+pub async fn update_character_progress(
+    db_pool: &DbPool,
+    character_id: &UserCharacterId,
+    area_id: &str,
+    max_area_level: AreaLevel,
+    resource_gems: f64,
+    resource_shards: f64,
+) -> Result<(), sqlx::Error> {
+    sqlx::query!(
+        r#"
+        UPDATE characters
+        SET 
+            max_area_level = CASE WHEN max_area_level > $2 THEN max_area_level ELSE $2 END,
+            resource_gems = $3,
+            resource_shards = $4,
+            updated_at = CURRENT_TIMESTAMP 
+        WHERE character_id = $1
+        "#,
+        character_id,
+        max_area_level,
+        resource_gems,
+        resource_shards,
+    )
+    .execute(db_pool)
+    .await?;
+
+    sqlx::query!(
+        "INSERT INTO character_area_completed (character_id, area_id, max_area_level) VALUES ($1, $2, $3)
+         ON CONFLICT(character_id, area_id) DO UPDATE SET 
+            max_area_level = CASE WHEN EXCLUDED.max_area_level > $3 THEN EXCLUDED.max_area_level ELSE $3 END, 
+            updated_at = CURRENT_TIMESTAMP",
+        character_id,
+        area_id,
+        max_area_level
+    )
+    .execute(db_pool)
+    .await?;
+
+    Ok(())
 }
 
 pub async fn delete_character(
