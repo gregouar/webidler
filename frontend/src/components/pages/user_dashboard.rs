@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*, task::spawn_local};
@@ -6,7 +6,10 @@ use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
 use shared::{
-    data::user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserId},
+    data::{
+        area::AreaSpecs,
+        user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserId},
+    },
     http::client::CreateCharacterRequest,
     types::AssetName,
 };
@@ -32,11 +35,18 @@ pub fn UserDashboardPage() -> impl IntoView {
 
     let refresh_trigger = RwSignal::new(0u64);
 
-    let user_and_characters = LocalResource::new({
+    let async_data = LocalResource::new({
         let backend = use_context::<BackendClient>().unwrap();
         let refresh_trigger = refresh_trigger.clone();
         move || async move {
             let _ = refresh_trigger.read();
+
+            let areas = backend
+                .get_areas()
+                .await
+                .map(|r| r.areas)
+                .unwrap_or_default();
+
             let user = backend
                 .get_me(&get_jwt_storage.get())
                 .await
@@ -50,7 +60,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                         .await
                         .map(|r| r.characters)
                         .unwrap_or_default();
-                    Some((user, characters))
+                    Some((areas, user, characters))
                 }
                 None => None,
             }
@@ -60,11 +70,7 @@ pub fn UserDashboardPage() -> impl IntoView {
     Effect::new({
         let navigate = use_navigate();
         move || {
-            if user_and_characters
-                .get()
-                .map(|x| x.is_none())
-                .unwrap_or_default()
-            {
+            if async_data.get().map(|x| x.is_none()).unwrap_or_default() {
                 navigate("/", Default::default());
             }
         }
@@ -89,7 +95,8 @@ pub fn UserDashboardPage() -> impl IntoView {
                 {move || {
                     let logout = logout.clone();
                     Suspend::new(async move {
-                        let (user, characters) = user_and_characters.await.unwrap_or_default();
+                        let (areas, user, characters) = async_data.await.unwrap_or_default();
+                        let areas = Arc::new(areas);
                         let characters_len = characters.len();
 
                         view! {
@@ -127,6 +134,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                             view! {
                                                 <CharacterSlot
                                                     character=character
+                                                    areas=areas.clone()
                                                     refresh_trigger=refresh_trigger.clone()
                                                 />
                                             }
@@ -165,7 +173,11 @@ pub fn UserDashboardPage() -> impl IntoView {
 }
 
 #[component]
-fn CharacterSlot(character: UserCharacter, refresh_trigger: RwSignal<u64>) -> impl IntoView {
+fn CharacterSlot(
+    character: UserCharacter,
+    refresh_trigger: RwSignal<u64>,
+    areas: Arc<HashMap<String, AreaSpecs>>,
+) -> impl IntoView {
     let delete_character = Arc::new({
         let backend = use_context::<BackendClient>().unwrap();
         let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
@@ -251,8 +263,15 @@ fn CharacterSlot(character: UserCharacter, refresh_trigger: RwSignal<u64>) -> im
                     <div class="text-sm text-gray-400 truncate">
                         {match character.activity {
                             UserCharacterActivity::Rusting => "Rusting in Town".to_string(),
-                            UserCharacterActivity::Grinding(area_name, area_level) => {
-                                format!("Grinding: {} - level {}", area_name, area_level)
+                            UserCharacterActivity::Grinding(area_id, area_level) => {
+                                format!(
+                                    "Grinding: {} - level {}",
+                                    areas
+                                        .get(&area_id)
+                                        .map(|area_specs| area_specs.name.clone())
+                                        .unwrap_or(area_id),
+                                    area_level,
+                                )
                             }
                         }}
                     </div>

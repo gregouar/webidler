@@ -7,10 +7,10 @@ use shared::{
     http::{
         client::{CreateCharacterRequest, SignInRequest, SignUpRequest},
         server::{
-            CreateCharacterResponse, DeleteCharacterResponse, ErrorResponse,
-            GetCharacterDetailsResponse, GetUserCharactersResponse, GetUserResponse,
-            LeaderboardResponse, PlayersCountResponse, SignInResponse, SignUpResponse,
-            SkillsResponse,
+            CreateCharacterResponse, DeleteCharacterResponse, ErrorResponse, GetAreasResponse,
+            GetCharacterDetailsResponse, GetSkillsResponse, GetUserCharactersResponse,
+            GetUserResponse, LeaderboardResponse, PlayersCountResponse, SignInResponse,
+            SignUpResponse,
         },
     },
 };
@@ -43,7 +43,11 @@ impl BackendClient {
         self.get("leaderboard").await
     }
 
-    pub async fn get_skills(&self) -> Result<SkillsResponse> {
+    pub async fn get_areas(&self) -> Result<GetAreasResponse> {
+        self.get("game/areas").await
+    }
+
+    pub async fn get_skills(&self) -> Result<GetSkillsResponse> {
         self.get("game/skills").await
     }
 

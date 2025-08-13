@@ -4,7 +4,7 @@ use std::{collections::HashMap, fmt, time::Duration};
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    area::AreaLevel,
+    area::{AreaLevel, AreaSpecs},
     skill::SkillSpecs,
     user::{User, UserCharacter, UserCharacterId, UserGrindArea},
 };
@@ -80,6 +80,11 @@ pub struct DeleteCharacterResponse {}
 // Game
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct SkillsResponse {
+pub struct GetAreasResponse {
+    pub areas: HashMap<String, AreaSpecs>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetSkillsResponse {
     pub skills: HashMap<String, SkillSpecs>,
 }
