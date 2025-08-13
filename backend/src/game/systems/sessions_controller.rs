@@ -42,7 +42,7 @@ pub async fn create_session(
     db_pool: &db::DbPool,
     master_store: &MasterStore,
     character: CharacterEntry,
-    area_id: &str,
+    area_id: &Option<String>,
 ) -> Result<(SessionId, Session)> {
     tracing::debug!(
         "create new session for player '{}'...",
@@ -56,7 +56,10 @@ pub async fn create_session(
     let game_instance_data =
         match load_game_instance(db_pool, master_store, &character.character_id).await {
             Some(saved_instance) => saved_instance,
-            None => new_game_instance(db_pool, master_store, &character, area_id).await?,
+            None => {
+                let area_id = area_id.as_ref().ok_or(anyhow::anyhow!("missing area id"))?;
+                new_game_instance(db_pool, master_store, &character, area_id).await?
+            }
         };
 
     let session_id = db::game_sessions::create_session(db_pool, &character.character_id).await?;

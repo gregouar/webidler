@@ -12,6 +12,8 @@ use crate::assets::img_asset;
 
 #[component]
 pub fn TownScene(character: UserCharacter, areas: Vec<UserGrindArea>) -> impl IntoView {
+    let mut areas = areas;
+    areas.sort_by_key(|area| area.area_specs.starting_level);
     view! {
         <div class="w-full grid grid-cols-3                                                                                                                      gap-4 p-4 ">
             <PlayerCard character=character class:col-span-1 class:justify-self-end />

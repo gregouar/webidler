@@ -24,8 +24,11 @@ pub fn HeaderMenu() -> impl IntoView {
     let abandon_quest = Arc::new({
         let conn = expect_context::<WebsocketContext>();
         let navigate = leptos_router::hooks::use_navigate();
+        let (_, _, delete_session_infos) =
+            storage::use_session_storage::<Option<SessionInfos>, JsonSerdeCodec>("session_infos");
         move || {
             conn.send(&ClientMessage::EndQuest);
+            delete_session_infos();
             navigate("/town", Default::default());
         }
     });
@@ -40,12 +43,13 @@ pub fn HeaderMenu() -> impl IntoView {
         }
     };
 
-    let quit = {
-        let navigate = leptos_router::hooks::use_navigate();
-        move |_| {
-            navigate("/user-dashboard", Default::default());
-        }
-    };
+    // ToDO: clear session, and send message to backend to stop session?
+    // let quit = {
+    //     let navigate = leptos_router::hooks::use_navigate();
+    //     move |_| {
+    //         navigate("/user-dashboard", Default::default());
+    //     }
+    // };
 
     let musics = {
         let game_context = expect_context::<GameContext>();
@@ -131,7 +135,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     game_context.open_statistics.set(!game_context.open_statistics.get());
                 }>"Statistics"</MenuButton>
                 <MenuButtonRed on:click=try_abandon_quest>"Stop Grind"</MenuButtonRed>
-                <MenuButton on:click=quit>"Quit"</MenuButton>
+            // <MenuButton on:click=quit>"Quit"</MenuButton>
             </div>
         </div>
     }

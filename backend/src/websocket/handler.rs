@@ -148,16 +148,12 @@ async fn handle_connect(
         return Err(anyhow::anyhow!("character not found"));
     }
 
-    // TODO: load character
-    // TODO: verify character/session belongs to user !!!!
-
     let (session_id, session) = match (msg.session_id, msg.session_key) {
         (Some(session_id), Some(session_key)) => {
             sessions_controller::resume_session(sessions_store, session_id, session_key).await?
         }
         _ => {
-            let area_id: String = msg.area_id.ok_or(anyhow::anyhow!("missing area id"))?;
-            sessions_controller::create_session(db_pool, master_store, user_character, &area_id)
+            sessions_controller::create_session(db_pool, master_store, user_character, &msg.area_id)
                 .await?
         }
     };
