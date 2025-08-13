@@ -1,6 +1,6 @@
 {
   "specs": {
-    "name": "The Dark Forest",
+    "name": "Dark Forest",
     "starting_level": 10,
     "musics": ["ambient1.mp3"],
     "header_background": "areas/forest_header.webp",

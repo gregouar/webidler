@@ -97,6 +97,23 @@ impl<'a> GameInstance<'a> {
             self.game_data.clone(), // TODO: Do something else, like only copy the necessary data
         );
         tokio::spawn(async move {
+            db::characters::update_character_progress(
+                &db_pool,
+                &character_id,
+                &game_data.area_id,
+                game_data.game_stats.highest_area_level,
+                game_data.player_resources.read().gems,
+                game_data.player_resources.read().shards,
+            )
+            .await
+            .unwrap_or_else(|e| {
+                tracing::error!(
+                    "failed to save character progress '{}': {}",
+                    character_id,
+                    e
+                )
+            });
+
             db::game_instances::save_game_instance_data(&db_pool, &character_id, game_data)
                 .await
                 .unwrap_or_else(|e| {
@@ -106,8 +123,6 @@ impl<'a> GameInstance<'a> {
                         e
                     )
                 });
-
-            // TODO: update character table as well
         });
     }
 
