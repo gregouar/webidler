@@ -1,12 +1,12 @@
 use chrono::{DateTime, Utc};
-use std::{collections::HashMap, fmt, time::Duration};
+use std::{collections::HashMap, fmt};
 
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
     area::{AreaLevel, AreaSpecs},
     skill::SkillSpecs,
-    user::{User, UserCharacter, UserCharacterId, UserGrindArea},
+    user::{User, UserCharacter, UserCharacterId, UserGrindArea, UserId},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -34,9 +34,13 @@ pub struct LeaderboardResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct LeaderboardEntry {
-    pub player_name: String,
+    pub user_id: UserId,
+    pub username: String,
+    pub character_id: UserCharacterId,
+    pub character_name: String,
+
+    pub area_id: String,
     pub area_level: AreaLevel,
-    pub time_played: Duration,
     pub created_at: DateTime<Utc>,
     pub comments: String,
 }

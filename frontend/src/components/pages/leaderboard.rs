@@ -1,10 +1,7 @@
 use leptos::{html::*, prelude::*};
 use leptos_router::hooks::use_navigate;
 
-use crate::components::{
-    backend_client::BackendClient,
-    ui::{buttons::MenuButton, number::format_duration},
-};
+use crate::components::{backend_client::BackendClient, ui::buttons::MenuButton};
 
 #[component]
 pub fn LeaderboardPage() -> impl IntoView {
@@ -55,6 +52,7 @@ pub fn LeaderboardPanel() -> impl IntoView {
                                     key=|(i,_)| *i
                                     let:((i, entry))
                                 >
+                                // TODO: display all infos and better
                                     <div class="bg-zinc-800 border border-zinc-700 rounded-xl p-4 shadow-lg transition-shadow duration-200">
                                         <div class="flex justify-between items-center mb-2">
                                             <div class="flex items-center space-x-3">
@@ -62,7 +60,7 @@ pub fn LeaderboardPanel() -> impl IntoView {
                                                     #{i + 1}
                                                 </div>
                                                 <div class="text-white font-semibold text-lg">
-                                                    {entry.player_name}
+                                                    {entry.character_name}
                                                 </div>
                                             </div>
                                             <div class="text-sm text-gray-400">
@@ -73,11 +71,11 @@ pub fn LeaderboardPanel() -> impl IntoView {
                                             <div class="text-sm text-zinc-300">
                                                 "Area: " <span class="font-semibold text-white">{entry.area_level}</span>
                                             </div>
-                                            <div class="text-sm text-zinc-300">
-                                                "Time played: " <span class="font-semibold text-white">
-                                                    {format_duration(entry.time_played)}
-                                                </span>
-                                            </div>
+                                            // <div class="text-sm text-zinc-300">
+                                            //     "Time played: " <span class="font-semibold text-white">
+                                            //         {format_duration(entry.time_played)}
+                                            //     </span>
+                                            // </div>
                                         </div>
 
                                         <div class="mt-2 text-xs italic text-zinc-400 border-t border-zinc-700 pt-2">

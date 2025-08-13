@@ -262,16 +262,19 @@ fn CharacterSlot(
                     </div>
                     <div class="text-sm text-gray-400 truncate">
                         {match character.activity {
-                            UserCharacterActivity::Rusting => "Rusting in Town".to_string(),
+                            UserCharacterActivity::Rusting => view! { "Rusting in Town" }.into_any(),
                             UserCharacterActivity::Grinding(area_id, area_level) => {
-                                format!(
-                                    "Grinding: {} - level {}",
-                                    areas
+                                view! {
+                                    "Grinding: "
+                                    {areas
                                         .get(&area_id)
                                         .map(|area_specs| area_specs.name.clone())
-                                        .unwrap_or(area_id),
-                                    area_level,
-                                )
+                                        .unwrap_or(area_id)}
+                                    <br />
+                                    "Level reached: "
+                                    {area_level}
+                                }
+                                    .into_any()
                             }
                         }}
                     </div>
