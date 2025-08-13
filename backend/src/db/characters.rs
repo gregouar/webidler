@@ -23,6 +23,16 @@ pub struct CharacterEntry {
     pub deleted_at: Option<UtcDateTime>,
 }
 
+#[derive(Debug, FromRow)]
+pub struct CharacterAreaEntry {
+    pub character_id: UserCharacterId,
+    pub area_id: String,
+    pub max_area_level: AreaLevel,
+
+    pub created_at: UtcDateTime,
+    pub updated_at: UtcDateTime,
+}
+
 pub async fn create_character(
     db_pool: &DbPool,
     user_id: &UserId,
@@ -70,6 +80,27 @@ pub async fn read_character(
         character_id
     )
     .fetch_optional(db_pool)
+    .await?)
+}
+
+pub async fn read_character_areas_completed(
+    db_pool: &DbPool,
+    character_id: &UserCharacterId,
+) -> Result<Vec<CharacterAreaEntry>, sqlx::Error> {
+    Ok(sqlx::query_as!(
+        CharacterAreaEntry,
+        r#"
+        SELECT
+            character_id as "character_id: UserCharacterId",
+            area_id,
+            max_area_level as "max_area_level: AreaLevel",
+            created_at,
+            updated_at
+         FROM character_area_completed WHERE character_id = $1
+         "#,
+        character_id
+    )
+    .fetch_all(db_pool)
     .await?)
 }
 

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     area::AreaLevel,
     skill::SkillSpecs,
-    user::{User, UserCharacter, UserCharacterId},
+    user::{User, UserCharacter, UserCharacterId, UserGrindArea},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -69,7 +69,13 @@ pub struct GetUserCharactersResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct DeleteUserCharacterResponse {}
+pub struct GetCharacterDetailsResponse {
+    pub character: UserCharacter,
+    pub areas: Vec<UserGrindArea>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct DeleteCharacterResponse {}
 
 // Game
 

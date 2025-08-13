@@ -13,18 +13,22 @@ use crate::{
 pub fn HeaderMenu() -> impl IntoView {
     let gems = Signal::derive(move || 0.0);
 
+    let navigate_quit = {
+        let navigate = leptos_router::hooks::use_navigate();
+        move |_| {
+            navigate("/user-dashboard", Default::default());
+        }
+    };
+
     view! {
         <div class="relative z-50 w-full flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
-                // TODO: Magic Essence
-                // <ResourceCounter icon="ui/magic_essence.webp" tooltip="Magic Essence" value=gems />
                 <ResourceCounter
                     icon="ui/gems.webp"
                     name="Gems"
                     description="To buy items in the market between grinds."
                     value=gems
                 />
-                // TODO: Power Shards
                 <ResourceCounter
                     icon="ui/power_shard.webp"
                     name="Power Shards"
@@ -36,7 +40,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButton on:click=|_| {}>"Market"</MenuButton>
                 <MenuButton on:click=|_| {}>"Ascend"</MenuButton>
                 <MenuButton on:click=|_| {}>"Forge"</MenuButton>
-                <MenuButton on:click=|_| {}>"Quit"</MenuButton>
+                <MenuButton on:click=navigate_quit>"Quit"</MenuButton>
             </div>
         </div>
     }

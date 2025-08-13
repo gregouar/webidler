@@ -70,6 +70,9 @@ CREATE TABLE character_area_completed (
     --
     max_area_level INT NOT NULL DEFAULT 0,
     --
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    --
     PRIMARY KEY(character_id, area_id),
     FOREIGN KEY(character_id) REFERENCES characters(character_id) ON DELETE CASCADE
 );

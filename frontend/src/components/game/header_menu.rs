@@ -26,7 +26,7 @@ pub fn HeaderMenu() -> impl IntoView {
         let navigate = leptos_router::hooks::use_navigate();
         move || {
             conn.send(&ClientMessage::EndQuest);
-            navigate("/", Default::default());
+            navigate("/town", Default::default());
         }
     });
     let try_abandon_quest = {
@@ -69,15 +69,12 @@ pub fn HeaderMenu() -> impl IntoView {
                     description="To buy level up for skills. Reset at every grind."
                     value=gold
                 />
-                // TODO: Magic Essence
-                // <ResourceCounter icon="ui/magic_essence.webp" tooltip="Magic Essence" value=gems />
                 <ResourceCounter
                     icon="ui/gems.webp"
                     name="Gems"
                     description="To buy items in the market between grinds."
                     value=gems
                 />
-                // TODO: Power Shards
                 <ResourceCounter
                     icon="ui/power_shard.webp"
                     name="Power Shards"

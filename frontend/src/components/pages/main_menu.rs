@@ -144,7 +144,7 @@ pub fn MainMenuPage() -> impl IntoView {
                     <Captcha token=captcha_token />
                     // </form>
 
-                    <MenuButton on:click=move |_| signin() disabled=disable_connect>
+                    <MenuButton on:click=move |_| signin() disabled=disable_connect class:mb-4>
                         {move || if connecting.get() { "Connecting..." } else { "Connect" }}
                     </MenuButton>
                     <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>

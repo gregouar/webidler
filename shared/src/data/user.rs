@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::area::AreaLevel;
+use crate::data::area::{AreaLevel, AreaSpecs};
 
 pub type UserId = uuid::Uuid;
 pub type UserCharacterId = uuid::Uuid;
@@ -32,4 +32,11 @@ pub struct UserCharacter {
     pub resource_shards: f64,
 
     pub activity: UserCharacterActivity,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UserGrindArea {
+    pub area_id: String,
+    pub area_specs: AreaSpecs,
+    pub max_level_reached: AreaLevel,
 }

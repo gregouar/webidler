@@ -7,9 +7,10 @@ use shared::{
     http::{
         client::{CreateCharacterRequest, SignInRequest, SignUpRequest},
         server::{
-            CreateCharacterResponse, DeleteUserCharacterResponse, ErrorResponse,
-            GetUserCharactersResponse, GetUserResponse, LeaderboardResponse, PlayersCountResponse,
-            SignInResponse, SignUpResponse, SkillsResponse,
+            CreateCharacterResponse, DeleteCharacterResponse, ErrorResponse,
+            GetCharacterDetailsResponse, GetUserCharactersResponse, GetUserResponse,
+            LeaderboardResponse, PlayersCountResponse, SignInResponse, SignUpResponse,
+            SkillsResponse,
         },
     },
 };
@@ -28,6 +29,8 @@ impl BackendClient {
         }
     }
 
+    // Game
+
     pub fn get_game_ws_url(&self) -> String {
         format!("{}/ws", self.ws_url)
     }
@@ -44,17 +47,10 @@ impl BackendClient {
         self.get("game/skills").await
     }
 
+    // Auth
+
     pub async fn get_me(&self, token: &str) -> Result<GetUserResponse> {
         self.get_auth(&format!("account/me"), token).await
-    }
-
-    pub async fn get_characters(
-        &self,
-        token: &str,
-        user_id: &UserId,
-    ) -> Result<GetUserCharactersResponse> {
-        self.get_auth(&format!("users/{user_id}/characters"), token)
-            .await
     }
 
     pub async fn post_signin(&self, request: &SignInRequest) -> Result<SignInResponse> {
@@ -63,6 +59,26 @@ impl BackendClient {
 
     pub async fn post_signup(&self, request: &SignUpRequest) -> Result<SignUpResponse> {
         self.post("account/signup", request).await
+    }
+
+    // Characters
+
+    pub async fn get_user_characters(
+        &self,
+        token: &str,
+        user_id: &UserId,
+    ) -> Result<GetUserCharactersResponse> {
+        self.get_auth(&format!("users/{user_id}/characters"), token)
+            .await
+    }
+
+    pub async fn get_character_details(
+        &self,
+        token: &str,
+        character_id: &UserCharacterId,
+    ) -> Result<GetCharacterDetailsResponse> {
+        self.get_auth(&format!("characters/{character_id}"), token)
+            .await
     }
 
     pub async fn post_create_character(
@@ -79,7 +95,7 @@ impl BackendClient {
         &self,
         token: &str,
         character_id: &UserCharacterId,
-    ) -> Result<DeleteUserCharacterResponse> {
+    ) -> Result<DeleteCharacterResponse> {
         self.del_auth(&format!("characters/{character_id}"), token)
             .await
     }

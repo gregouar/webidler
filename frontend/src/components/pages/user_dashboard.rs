@@ -46,13 +46,26 @@ pub fn UserDashboardPage() -> impl IntoView {
             match user {
                 Some(user) => {
                     let characters = backend
-                        .get_characters(&get_jwt_storage.get(), &user.user_id)
+                        .get_user_characters(&get_jwt_storage.get(), &user.user_id)
                         .await
                         .map(|r| r.characters)
                         .unwrap_or_default();
                     Some((user, characters))
                 }
                 None => None,
+            }
+        }
+    });
+
+    Effect::new({
+        let navigate = use_navigate();
+        move || {
+            if user_and_characters
+                .get()
+                .map(|x| x.is_none())
+                .unwrap_or_default()
+            {
+                navigate("/", Default::default());
             }
         }
     });
@@ -67,19 +80,6 @@ pub fn UserDashboardPage() -> impl IntoView {
     };
 
     let open_create_character = RwSignal::new(false);
-
-    Effect::new({
-        let navigate = use_navigate();
-        move || {
-            if user_and_characters
-                .get()
-                .map(|x| x.is_none())
-                .unwrap_or_default()
-            {
-                navigate("/", Default::default());
-            }
-        }
-    });
 
     view! {
         <main class="my-0 mx-auto w-full max-w-6xl px-4 sm:px-8 text-center overflow-x-hidden flex flex-col  justify-around min-h-screen">
@@ -103,9 +103,13 @@ pub fn UserDashboardPage() -> impl IntoView {
                                 "Welcome, " {user.username}
                             </h1>
 
-                            <div class="bg-zinc-800 rounded-xl border border-zinc-700 shadow-inner px-6 py-6 sm:px-8 sm:py-8 text-left space-y-8">
+                            <div class="bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner px-6 py-6 sm:px-8 sm:py-8 text-left space-y-8">
                                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                                    <h2 class="text-2xl font-bold text-white">"Your Characters"</h2>
+                                    // <h2 class="text-2xl font-bold text-white">"Your Characters"</h2>
+                                    <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
+                                        "Your Characters"
+                                    </span>
+
                                     <span class="text-sm text-gray-400 font-medium">
                                         {format!(
                                             "{} / {} characters",
@@ -115,7 +119,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     </span>
                                 </div>
 
-                                <div class="flex flex-nowrap gap-6 overflow-x-auto pb-2">
+                                <div class="flex flex-nowrap gap-6 overflow-x-auto p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                                     <For
                                         each=move || characters.clone()
                                         key=|c| c.character_id.clone()
@@ -213,18 +217,22 @@ fn CharacterSlot(character: UserCharacter, refresh_trigger: RwSignal<u64>) -> im
 
     view! {
         <div
-            class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md overflow-hidden
-            flex flex-col hover:border-amber-400 hover:shadow-lg transition group
-            min-h-[20rem] w-40 sm:w-48 md:w-56 flex-shrink-0"
+            class="bg-zinc-800 rounded-xl border border-zinc-700 shadow-md overflow-hidden
+            flex flex-col 
+            min-h-[20rem] w-40 sm:w-48 md:w-56 flex-shrink-0
+            transition group cursor-pointer
+            hover:border-amber-400 hover:shadow-lg active:scale-95 active:border-amber-500"
             on:click=play_character.clone()
         >
-            <div class="aspect-[3/4] w-full relative">
+            <div
+                class="aspect-[3/4] w-full relative"
+                style=format!("background-image: url('{}');", img_asset("ui/paper_background.webp"))
+            >
                 <img
                     src=img_asset(&character.portrait)
                     alt="Portrait"
                     class="object-cover w-full h-full"
                 />
-                <div class="absolute inset-0 bg-[url('/assets/ui/paper_background.webp')] opacity-20"></div>
             </div>
 
             <div class="p-4 flex flex-col flex-grow justify-between">
@@ -251,13 +259,13 @@ fn CharacterSlot(character: UserCharacter, refresh_trigger: RwSignal<u64>) -> im
 #[component]
 fn CreateCharacterSlot() -> impl IntoView {
     view! {
-        <div class="bg-neutral-900 rounded-xl border border-zinc-700 shadow-md min-h-[20rem]
+        <div class="bg-zinc-800 rounded-xl border border-zinc-700 shadow-md min-h-[20rem]
         w-40 sm:w-48 md:w-56 flex-shrink-0
         flex flex-col items-center justify-center cursor-pointer
-        hover:border-amber-400 hover:shadow-lg transition group">
+        hover:border-amber-400 hover:shadow-lg active:scale-95 active:border-amber-500 transition group">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-12 w-12 text-amber-300 group-hover:scale-110 group-active:scale-90 transition-transform duration-200"
+                class="h-12 w-12 text-amber-300 group-hover:scale-110 transition-transform"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -343,8 +351,8 @@ pub fn CreateCharacterPanel(
 
     view! {
         <MenuPanel open=open>
-            <div class="flex items-center justify-center p-4">
-                <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl p-6 sm:p-8 space-y-8 w-full max-w-lg mx-auto self-center">
+            <div class="flex items-center justify-center p-4 min-h-screen">
+                <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl p-6 sm:p-8 space-y-8 w-full max-w-lg mx-auto">
                     <h2 class="text-2xl font-bold text-amber-300 text-center">
                         "Create Character"
                     </h2>
@@ -376,6 +384,10 @@ pub fn CreateCharacterPanel(
                                         <div
                                             class="relative rounded-lg overflow-hidden border-2 cursor-pointer transition
                                             hover:scale-105"
+                                            style=format!(
+                                                "background-image: url('{}');",
+                                                img_asset("ui/paper_background.webp"),
+                                            )
                                             class:border-amber-400=move || is_selected.get()
                                             class:border-transparent=move || !is_selected.get()
                                             on:click=move |_| {
