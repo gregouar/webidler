@@ -50,6 +50,7 @@ impl Default for ClientMessage {
 pub struct ClientConnectMessage {
     pub jwt: String,
     pub character_id: UserCharacterId,
+    pub area_id: Option<String>,
     pub session_id: Option<SessionId>,
     pub session_key: Option<SessionKey>,
 }

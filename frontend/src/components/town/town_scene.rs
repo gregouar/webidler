@@ -1,4 +1,8 @@
+use codee::string::JsonSerdeCodec;
 use leptos::prelude::*;
+use leptos_router::hooks::use_navigate;
+use leptos_use::storage;
+
 use shared::data::{
     area::AreaLevel,
     user::{UserCharacter, UserGrindArea},
@@ -23,6 +27,7 @@ pub fn TownScene(character: UserCharacter, areas: Vec<UserGrindArea>) -> impl In
                     </div>
 
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 p-4
+                    h-full
                     bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                         <For
                             each=move || areas.clone()
@@ -92,20 +97,38 @@ pub fn PlayerName(character_name: String, max_area_level: AreaLevel) -> impl Int
     view! {
         <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
             <span class="font-bold">{character_name}</span>
-            " — Max Area Level: "
-            {max_area_level}
+            " — "
+            {if max_area_level > 0 {
+                format!("Max Area Level: {max_area_level}")
+            } else {
+                "Newbie".to_string()
+            }}
         </p>
     }
 }
 
 #[component]
 fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
+    let play_area = {
+        let navigate = use_navigate();
+        let (_, set_area_id_storage, _) =
+            storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
+
+        move |_| {
+            set_area_id_storage.set(Some(area.area_id.clone()));
+            navigate("/game", Default::default());
+        }
+    };
+
     view! {
-        <div class="
-        bg-zinc-800 rounded-xl border border-zinc-700 shadow-md w-64 flex-shrink-0 overflow-hidden 
-        transition cursor-pointer 
-        hover:border-amber-400 hover:shadow-lg
-        active:scale-95 active:border-amber-500">
+        <div
+            class="
+            bg-zinc-800 rounded-xl border border-zinc-700 shadow-md overflow-hidden 
+            transition cursor-pointer 
+            hover:border-amber-400 hover:shadow-lg
+            active:scale-95 active:border-amber-500"
+            on:click=play_area
+        >
             <div class="h-20 w-full relative">
                 <img
                     src=img_asset(&area.area_specs.header_background)
@@ -118,14 +141,14 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
                 <div class="text-sm text-gray-400">
                     "Starting Level: "{area.area_specs.starting_level}
                 </div>
-                {(area.max_level_reached > 0)
-                    .then(|| {
-                        view! {
-                            <div class="text-sm text-gray-400">
-                                "Level Reached: "{area.max_level_reached}
-                            </div>
-                        }
-                    })}
+                <div class="text-sm text-gray-400">
+                    {if area.max_level_reached > 0 {
+                        format!("Level Reached: {}", area.max_level_reached)
+                    } else {
+                        "New Grind!".to_string()
+                    }}
+                </div>
+
             </div>
             <div class="h-12 w-full relative">
                 <img

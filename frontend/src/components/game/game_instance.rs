@@ -29,6 +29,9 @@ pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
 
     let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
 
+    let (get_area_id_storage, _, _) =
+        storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
+
     let (session_infos, set_session_infos, _) =
         storage::use_session_storage::<Option<SessionInfos>, JsonSerdeCodec>("session_infos");
 
@@ -40,6 +43,7 @@ pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
                     &ClientConnectMessage {
                         jwt: get_jwt_storage.get(),
                         character_id,
+                        area_id: get_area_id_storage.get_untracked(),
                         session_id: session_infos.get_untracked().map(|s| s.session_id),
                         session_key: session_infos.get_untracked().map(|s| s.session_key),
                     }

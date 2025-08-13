@@ -3,7 +3,7 @@ use leptos::prelude::*;
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
-use shared::data::user::UserCharacterId;
+use shared::data::user::{UserCharacterActivity, UserCharacterId};
 
 use crate::components::{
     backend_client::BackendClient,
@@ -34,17 +34,20 @@ pub fn TownPage() -> impl IntoView {
         }
     });
 
-    Effect::new({
-        let navigate = use_navigate();
-        move || {
-            if character_and_areas
-                .get()
-                .map(|x| x.is_none())
-                .unwrap_or_default()
-            {
-                navigate("/", Default::default());
+    Effect::new(move |_| {
+        character_and_areas.with(|data| {
+            if let Some(send_wrapper) = data {
+                if let Some((character, _)) = send_wrapper.as_ref() {
+                    if let UserCharacterActivity::Grinding(_, _) = character.activity {
+                        // If character in game, we redirect to game
+                        use_navigate()("/game", Default::default());
+                    }
+                } else {
+                    // If no character, we redirect to main menu
+                    use_navigate()("/", Default::default());
+                }
             }
-        }
+        });
     });
 
     view! {

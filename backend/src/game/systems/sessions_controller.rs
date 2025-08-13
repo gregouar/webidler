@@ -11,7 +11,7 @@ use shared::data::{
 };
 
 use crate::{
-    db,
+    db::{self, characters::CharacterEntry},
     game::{
         data::{master_store::MasterStore, DataInit},
         game_data::GameInstanceData,
@@ -41,21 +41,25 @@ pub async fn resume_session(
 pub async fn create_session(
     db_pool: &db::DbPool,
     master_store: &MasterStore,
-    character_id: &UserCharacterId,
+    character: CharacterEntry,
+    area_id: &str,
 ) -> Result<(SessionId, Session)> {
-    tracing::debug!("create new session for player '{character_id}'...");
+    tracing::debug!(
+        "create new session for player '{}'...",
+        character.character_id
+    );
 
-    if db::game_sessions::is_character_id_in_session(db_pool, character_id).await? {
+    if db::game_sessions::is_character_id_in_session(db_pool, &character.character_id).await? {
         return Err(anyhow!("character already in session"));
     }
 
     let game_instance_data =
-        match load_and_remove_game_instance(db_pool, master_store, character_id).await {
+        match load_and_remove_game_instance(db_pool, master_store, &character.character_id).await {
             Some(saved_instance) => saved_instance,
-            None => new_game_instance(master_store, character_id)?,
+            None => new_game_instance(db_pool, master_store, &character, area_id).await?,
         };
 
-    let session_id = db::game_sessions::create_session(db_pool, character_id).await?;
+    let session_id = db::game_sessions::create_session(db_pool, &character.character_id).await?;
 
     let mut rng = rand::rng();
     let mut session_key: SessionKey = [0u8; 32];
@@ -64,7 +68,7 @@ pub async fn create_session(
     Ok((
         session_id,
         Session {
-            character_id: character_id.clone(),
+            character_id: character.character_id.clone(),
             session_key,
             last_active: Instant::now(),
             game_data: Box::new(game_instance_data),
@@ -106,13 +110,15 @@ async fn load_and_remove_game_instance(
     saved_game_instance
 }
 
-fn new_game_instance(
+async fn new_game_instance(
+    db_pool: &db::DbPool,
     master_store: &MasterStore,
-    character_id: &UserCharacterId,
+    character: &CharacterEntry,
+    area_id: &str,
 ) -> Result<GameInstanceData> {
     let mut player_specs = PlayerSpecs::init(CharacterSpecs {
-        name: character_id.to_string(), // TODO: LOL
-        portrait: String::from("adventurers/human_male_2.webp"),
+        name: character.character_name.clone(),
+        portrait: character.portrait.clone(),
         size: CharacterSize::Small,
         position_x: 0,
         position_y: 0,
@@ -128,34 +134,50 @@ fn new_game_instance(
         damage_resistance: HashMap::new(),
     });
 
-    let mut player_inventory = PlayerInventory {
-        max_bag_size: 40,
-        ..Default::default()
+    let player_resources = PlayerResources {
+        experience: 0.0,
+        passive_points: 0,
+        gold: 0.0,
+        gems: character.resource_gems,
+        shards: character.resource_shards,
     };
 
-    let player_resources = PlayerResources::default();
+    let character_data =
+        db::characters_data::load_character_data(db_pool, &character.character_id).await?;
 
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
-    if let Some(base_weapon) = master_store.items_store.get("dagger").cloned() {
-        let _ = player_controller::equip_item(
-            &mut player_specs,
-            &mut player_inventory,
-            &mut player_state,
-            loot_generator::roll_item(
-                base_weapon,
-                ItemRarity::Normal,
-                1,
-                &master_store.item_affixes_table,
-                &master_store.item_adjectives_table,
-                &master_store.item_nouns_table,
-            ),
-        );
-    }
+    let player_inventory = match character_data {
+        Some(inventory) => inventory,
+        None => {
+            let mut player_inventory = PlayerInventory {
+                max_bag_size: 40,
+                ..Default::default()
+            };
+
+            if let Some(base_weapon) = master_store.items_store.get("dagger").cloned() {
+                let _ = player_controller::equip_item(
+                    &mut player_specs,
+                    &mut player_inventory,
+                    &mut player_state,
+                    loot_generator::roll_item(
+                        base_weapon,
+                        ItemRarity::Normal,
+                        1,
+                        &master_store.item_affixes_table,
+                        &master_store.item_adjectives_table,
+                        &master_store.item_nouns_table,
+                    ),
+                );
+            }
+
+            player_inventory
+        }
+    };
 
     GameInstanceData::init_from_store(
         master_store,
-        "inn_basement.json",
+        area_id,
         None,
         "default",
         None,

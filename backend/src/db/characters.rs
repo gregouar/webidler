@@ -21,6 +21,9 @@ pub struct CharacterEntry {
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
     pub deleted_at: Option<UtcDateTime>,
+
+    pub area_id: Option<String>,
+    pub area_level: Option<AreaLevel>,
 }
 
 #[derive(Debug, FromRow)]
@@ -65,7 +68,7 @@ pub async fn read_character(
         CharacterEntry,
         r#"
         SELECT
-            character_id as "character_id: UserCharacterId",
+            characters.character_id as "character_id: UserCharacterId",
             user_id as "user_id: UserId",
             character_name,
             portrait,
@@ -74,9 +77,14 @@ pub async fn read_character(
             resource_shards,
             created_at,
             updated_at,
-            deleted_at as "deleted_at: UtcDateTime"
-         FROM characters WHERE character_id = $1
-         "#,
+            deleted_at as "deleted_at: UtcDateTime",
+            saved_game_instances.area_id as 'area_id',
+            saved_game_instances.area_level as "area_level: AreaLevel"
+        FROM characters
+        LEFT OUTER JOIN saved_game_instances
+        ON characters.character_id = saved_game_instances.character_id
+        WHERE characters.character_id = $1
+        "#,
         character_id
     )
     .fetch_optional(db_pool)
@@ -112,7 +120,7 @@ pub async fn read_all_user_characters(
         CharacterEntry,
         r#"
         SELECT
-            character_id as "character_id: UserCharacterId",
+            characters.character_id as "character_id: UserCharacterId",
             user_id as "user_id: UserId",
             character_name,
             portrait,
@@ -121,9 +129,14 @@ pub async fn read_all_user_characters(
             resource_shards,
             created_at,
             updated_at,
-            deleted_at as "deleted_at: UtcDateTime"
-         FROM characters WHERE user_id = $1 AND deleted_at IS NULL
-         "#,
+            deleted_at as "deleted_at: UtcDateTime",
+            saved_game_instances.area_id as 'area_id',
+            saved_game_instances.area_level as "area_level: AreaLevel"
+        FROM characters 
+        LEFT OUTER JOIN saved_game_instances
+        ON characters.character_id = saved_game_instances.character_id
+        WHERE user_id = $1 AND deleted_at IS NULL
+        "#,
         user_id
     )
     .fetch_all(db_pool)

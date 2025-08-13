@@ -2,9 +2,10 @@ use anyhow;
 
 use sqlx::FromRow;
 
-use shared::data::user::UserCharacterId;
+use shared::data::{area::AreaLevel, user::UserCharacterId};
 
 use crate::{
+    constants::CHARACTER_DATA_VERSION,
     db::utc_datetime::UtcDateTime,
     game::{data::master_store, game_data::GameInstanceData},
 };
@@ -14,7 +15,12 @@ use super::pool::DbPool;
 #[derive(Debug, FromRow)]
 pub struct SavedGameInstance {
     pub character_id: UserCharacterId,
+
+    pub area_id: String,
+    pub area_level: AreaLevel,
+
     pub saved_at: UtcDateTime,
+    pub data_version: String,
     pub game_data: Vec<u8>, // Assuming game_data is stored as a binary blob
 }
 
@@ -23,18 +29,37 @@ pub async fn save_game_instance_data(
     character_id: &UserCharacterId,
     game_instance_data: GameInstanceData,
 ) -> anyhow::Result<()> {
-    Ok(upsert_saved_game_instance(pool, character_id, game_instance_data.to_bytes()?).await?)
+    Ok(upsert_saved_game_instance(
+        pool,
+        character_id,
+        &game_instance_data.area_id.clone(),
+        game_instance_data.area_state.read().area_level,
+        game_instance_data.to_bytes()?,
+    )
+    .await?)
 }
 
 async fn upsert_saved_game_instance(
     pool: &DbPool,
     character_id: &UserCharacterId,
+    area_id: &str,
+    area_level: AreaLevel,
     game_data: Vec<u8>,
 ) -> Result<(), sqlx::Error> {
     sqlx::query!(
-        "INSERT INTO saved_game_instances (character_id, game_data) VALUES ($1, $2)
-         ON CONFLICT(character_id) DO UPDATE SET game_data = EXCLUDED.game_data, saved_at = CURRENT_TIMESTAMP",
+        "INSERT INTO saved_game_instances 
+            (character_id, area_id, area_level, data_version, game_data) 
+            VALUES ($1, $2, $3, $4, $5)
+         ON CONFLICT(character_id) DO UPDATE SET 
+            area_id = EXCLUDED.area_id, 
+            area_level = EXCLUDED.area_level, 
+            game_data = EXCLUDED.game_data, 
+            data_version = EXCLUDED.data_version, 
+            saved_at = CURRENT_TIMESTAMP",
         character_id,
+        area_id,
+        area_level,
+        CHARACTER_DATA_VERSION,
         game_data
     )
     .execute(pool)
@@ -65,7 +90,15 @@ async fn load_saved_game_instance(
 ) -> Result<Option<SavedGameInstance>, sqlx::Error> {
     let instance = sqlx::query_as!(
         SavedGameInstance,
-         r#"SELECT character_id as "character_id: UserCharacterId", saved_at, game_data FROM saved_game_instances WHERE character_id = $1"#,
+        r#"SELECT 
+                character_id as "character_id: UserCharacterId", 
+                area_id, 
+                area_level as "area_level: AreaLevel", 
+                saved_at, 
+                data_version, 
+                game_data 
+            FROM saved_game_instances 
+            WHERE character_id = $1"#,
         character_id
     )
     .fetch_optional(pool)

@@ -25,7 +25,7 @@ use shared::messages::{
 
 use crate::{
     auth,
-    db::DbPool,
+    db::{self, DbPool},
     game::{
         data::master_store::MasterStore,
         sessions::{Session, SessionsStore},
@@ -137,8 +137,16 @@ async fn handle_connect(
 
     let user_id = match auth::authorize_jwt(&msg.jwt) {
         Some(user_id) => user_id,
-        None => return Err(anyhow::format_err!("invalid jwt")),
+        None => return Err(anyhow::anyhow!("invalid jwt")),
     };
+
+    let user_character = db::characters::read_character(db_pool, &msg.character_id)
+        .await?
+        .ok_or(anyhow::anyhow!("character not found"))?;
+
+    if user_character.user_id != user_id {
+        return Err(anyhow::anyhow!("character not found"));
+    }
 
     // TODO: load character
     // TODO: verify character/session belongs to user !!!!
@@ -147,7 +155,11 @@ async fn handle_connect(
         (Some(session_id), Some(session_key)) => {
             sessions_controller::resume_session(sessions_store, session_id, session_key).await?
         }
-        _ => sessions_controller::create_session(db_pool, master_store, &msg.character_id).await?,
+        _ => {
+            let area_id: String = msg.area_id.ok_or(anyhow::anyhow!("missing area id"))?;
+            sessions_controller::create_session(db_pool, master_store, user_character, &area_id)
+                .await?
+        }
     };
 
     conn.send(

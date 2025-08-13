@@ -56,7 +56,14 @@ pub fn HeaderMenu() -> impl IntoView {
         let game_context = expect_context::<GameContext>();
         Signal::derive(move || game_context.player_resources.read().gold)
     };
-    let gems = Signal::derive(move || 0.0);
+    let gems = {
+        let game_context = expect_context::<GameContext>();
+        Signal::derive(move || game_context.player_resources.read().gems)
+    };
+    let shards = {
+        let game_context = expect_context::<GameContext>();
+        Signal::derive(move || game_context.player_resources.read().shards)
+    };
 
     let game_context = expect_context::<GameContext>();
     view! {
@@ -79,7 +86,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     icon="ui/power_shard.webp"
                     name="Power Shards"
                     description="To permanently increase power of passive skills."
-                    value=gems
+                    value=shards
                 />
             </div>
             <div class="flex justify-end space-x-2  w-full">

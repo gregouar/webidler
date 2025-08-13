@@ -17,7 +17,7 @@ pub struct User {
 pub enum UserCharacterActivity {
     #[default]
     Rusting,
-    Grinding(String),
+    Grinding(String, AreaLevel),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

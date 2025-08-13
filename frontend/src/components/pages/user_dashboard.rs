@@ -6,7 +6,7 @@ use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
 use shared::{
-    data::user::{UserCharacter, UserCharacterId, UserId},
+    data::user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserId},
     http::client::CreateCharacterRequest,
     types::AssetName,
 };
@@ -240,8 +240,21 @@ fn CharacterSlot(character: UserCharacter, refresh_trigger: RwSignal<u64>) -> im
                     <div class="text-lg font-semibold text-shadow-md shadow-gray-950 text-amber-200 truncate">
                         {character.name.clone()}
                     </div>
+
                     <div class="text-sm text-gray-400 truncate">
-                        "Grinding: Inn Basement - level 134"
+                        {if character.max_area_level > 0 {
+                            format!("Max Area Level: {}", character.max_area_level)
+                        } else {
+                            "Newbie".to_string()
+                        }}
+                    </div>
+                    <div class="text-sm text-gray-400 truncate">
+                        {match character.activity {
+                            UserCharacterActivity::Rusting => "Rusting in Town".to_string(),
+                            UserCharacterActivity::Grinding(area_name, area_level) => {
+                                format!("Grinding: {} - level {}", area_name, area_level)
+                            }
+                        }}
                     </div>
                 </div>
 

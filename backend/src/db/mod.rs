@@ -1,4 +1,5 @@
 pub mod characters;
+pub mod characters_data;
 pub mod game_instances;
 pub mod game_sessions;
 pub mod pool;

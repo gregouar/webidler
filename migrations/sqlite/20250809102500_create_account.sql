@@ -55,7 +55,6 @@ CREATE TABLE characters_data (
     -- 
     data_version TEXT NOT NULL,
     inventory_data BLOB NOT NULL,
-    ascended_data BLOB NOT NULL,
     --
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -87,9 +86,6 @@ CREATE TABLE game_sessions (
     -- 
     character_id TEXT NOT NULL,
     -- 
-    area_id TEXT NOT NULL,
-    area_level INT NOT NULL DEFAULT 0,
-    -- 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     ended_at TIMESTAMP DEFAULT NULL,
     -- 
@@ -106,7 +102,7 @@ CREATE TABLE saved_game_instances (
     character_id TEXT NOT NULL PRIMARY KEY,
     -- 
     area_id TEXT NOT NULL,
-    area_level INT NOT NULL DEFAULT 0,
+    area_level INT NOT NULL,
     -- 
     saved_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- 

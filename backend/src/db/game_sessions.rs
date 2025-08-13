@@ -9,7 +9,9 @@ use super::pool::DbPool;
 #[derive(Debug, FromRow)]
 pub struct SessionEntry {
     pub session_id: SessionId,
+
     pub character_id: UserCharacterId,
+
     pub created_at: DateTime<Utc>,
     pub ended_at: Option<DateTime<Utc>>,
 }

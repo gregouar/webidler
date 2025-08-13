@@ -44,6 +44,8 @@ pub struct PlayerResources {
     pub experience: f64,
     pub passive_points: u16,
     pub gold: f64,
+    pub gems: f64,
+    pub shards: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
