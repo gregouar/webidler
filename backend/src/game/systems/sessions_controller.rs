@@ -54,7 +54,7 @@ pub async fn create_session(
     }
 
     let game_instance_data =
-        match load_and_remove_game_instance(db_pool, master_store, &character.character_id).await {
+        match load_game_instance(db_pool, master_store, &character.character_id).await {
             Some(saved_instance) => saved_instance,
             None => new_game_instance(db_pool, master_store, &character, area_id).await?,
         };
@@ -76,7 +76,7 @@ pub async fn create_session(
     ))
 }
 
-async fn load_and_remove_game_instance(
+async fn load_game_instance(
     db_pool: &db::DbPool,
     master_store: &MasterStore,
     character_id: &UserCharacterId,
@@ -99,13 +99,13 @@ async fn load_and_remove_game_instance(
         }
     };
 
-    if let Err(e) = db::game_instances::delete_game_instance_data(db_pool, character_id).await {
-        tracing::error!(
-            "failed to delete saved game instance for character '{}': {}",
-            character_id,
-            e
-        );
-    };
+    // if let Err(e) = db::game_instances::delete_game_instance_data(db_pool, character_id).await {
+    //     tracing::error!(
+    //         "failed to delete saved game instance for character '{}': {}",
+    //         character_id,
+    //         e
+    //     );
+    // };
 
     saved_game_instance
 }
@@ -175,7 +175,7 @@ async fn new_game_instance(
         }
     };
 
-    GameInstanceData::init_from_store(
+    let game_data = GameInstanceData::init_from_store(
         master_store,
         area_id,
         None,
@@ -186,7 +186,16 @@ async fn new_game_instance(
         player_inventory,
         None,
         None,
+    )?;
+
+    db::game_instances::save_game_instance_data(
+        &db_pool,
+        &character.character_id,
+        game_data.clone(),
     )
+    .await?;
+
+    Ok(game_data)
 }
 
 pub async fn end_session(db_pool: &db::DbPool, session_id: &SessionId) -> Result<()> {

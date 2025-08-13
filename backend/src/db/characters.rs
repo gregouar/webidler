@@ -23,7 +23,7 @@ pub struct CharacterEntry {
     pub deleted_at: Option<UtcDateTime>,
 
     pub area_id: Option<String>,
-    pub area_level: Option<AreaLevel>,
+    pub area_level: Option<i64>,
 }
 
 #[derive(Debug, FromRow)]
@@ -78,8 +78,8 @@ pub async fn read_character(
             created_at,
             updated_at,
             deleted_at as "deleted_at: UtcDateTime",
-            saved_game_instances.area_id as 'area_id',
-            saved_game_instances.area_level as "area_level: AreaLevel"
+            saved_game_instances.area_id as "area_id?",
+            saved_game_instances.area_level as "area_level?"
         FROM characters
         LEFT OUTER JOIN saved_game_instances
         ON characters.character_id = saved_game_instances.character_id
@@ -130,8 +130,8 @@ pub async fn read_all_user_characters(
             created_at,
             updated_at,
             deleted_at as "deleted_at: UtcDateTime",
-            saved_game_instances.area_id as 'area_id',
-            saved_game_instances.area_level as "area_level: AreaLevel"
+            saved_game_instances.area_id as "area_id?",
+            saved_game_instances.area_level as "area_level?"
         FROM characters 
         LEFT OUTER JOIN saved_game_instances
         ON characters.character_id = saved_game_instances.character_id

@@ -5,8 +5,9 @@ use axum::{
     Extension, Json, Router,
 };
 use shared::{
-    data::user::{
-        self, UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId,
+    data::{
+        area::AreaLevel,
+        user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId},
     },
     http::{
         client::CreateCharacterRequest,
@@ -136,7 +137,7 @@ impl Into<UserCharacter> for db::characters::CharacterEntry {
             max_area_level: self.max_area_level,
             activity: if let (Some(area_id), Some(area_level)) = (self.area_id, self.area_level) {
                 // TODO: find a way to switch somewhere to area_name
-                UserCharacterActivity::Grinding(area_id, area_level)
+                UserCharacterActivity::Grinding(area_id, area_level as AreaLevel)
             } else {
                 UserCharacterActivity::Rusting
             },

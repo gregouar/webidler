@@ -36,7 +36,8 @@ pub fn App() -> impl IntoView {
         <Router base=base_uri>
             <Routes fallback=|| "Page not found.">
                 <Route path=path!("/") view=pages::MainMenuPage />
-                <Route path=path!("/game/:characterid") view=pages::GamePage />
+                <Route path=path!("/game") view=pages::GamePage />
+                // <Route path=path!("/game/:characterid") view=pages::GamePage />
                 <Route path=path!("/leaderboard") view=pages::LeaderboardPage />
                 <Route path=path!("/signup") view=pages::SignUpPage />
                 <Route path=path!("/user-dashboard") view=pages::UserDashboardPage />
