@@ -6,10 +6,10 @@ use shared::messages::client::{GoBackLevelMessage, SetAutoProgressMessage};
 use crate::assets::img_asset;
 use crate::components::websocket::WebsocketContext;
 
+use super::GameContext;
 use super::loot_queue::LootQueue;
 use super::monsters_grid::MonstersGrid;
 use super::player_card::PlayerCard;
-use super::GameContext;
 
 #[component]
 pub fn BattleScene() -> impl IntoView {

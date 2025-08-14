@@ -7,7 +7,7 @@ use url::Url;
 
 use crate::components::backend_client::BackendClient;
 use crate::components::pages;
-use crate::components::ui::confirm::{provide_confirm_context, ConfirmationModal};
+use crate::components::ui::confirm::{ConfirmationModal, provide_confirm_context};
 
 // TODO: localization https://crates.io/crates/fluent-templates
 

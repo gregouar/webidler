@@ -5,9 +5,9 @@ use strum_macros::EnumIter;
 
 pub use super::skill::{SkillRange, SkillShape};
 use super::{
+    area::AreaLevel,
     item_affix::{AffixEffectBlueprint, AffixEffectScope, ItemAffix},
     stat_effect::{DamageMap, EffectsMap},
-    area::AreaLevel,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Default)]

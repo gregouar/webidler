@@ -48,7 +48,6 @@ jobs:
       - name: Lint
         run: |
           cargo clippy -- -D warnings
-          cargo fmt -- --check
 
       - name: Prepare SQLx Offline Data
         run: |

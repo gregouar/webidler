@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use leptos::wasm_bindgen::{closure::Closure, JsCast, JsValue};
+use leptos::wasm_bindgen::{JsCast, JsValue, closure::Closure};
 use leptos::web_sys::{js_sys, window};
 use leptos::*;
 
@@ -30,9 +30,10 @@ pub fn Captcha(token: RwSignal<Option<String>>) -> impl IntoView {
                     js_sys::Reflect::get(&window, &JsValue::from_str("turnstile"))
                     && let Ok(render_fn) =
                         js_sys::Reflect::get(&turnstile, &JsValue::from_str("render"))
-                        && let Some(render_fn) = render_fn.dyn_ref::<js_sys::Function>() {
-                            let _ = render_fn.call1(&JsValue::NULL, &JsValue::from(elem));
-                        }
+                    && let Some(render_fn) = render_fn.dyn_ref::<js_sys::Function>()
+                {
+                    let _ = render_fn.call1(&JsValue::NULL, &JsValue::from(elem));
+                }
             }
 
             closure.forget();

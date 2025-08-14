@@ -8,9 +8,10 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
 
     Effect::new(move |_| {
         if open.get()
-            && let Some(el) = panel_ref.get_untracked() {
-                _ = el.focus();
-            }
+            && let Some(el) = panel_ref.get_untracked()
+        {
+            _ = el.focus();
+        }
     });
 
     let handle_key = move |e: KeyboardEvent| {
