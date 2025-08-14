@@ -8,7 +8,7 @@ pub fn Captcha(token: RwSignal<Option<String>>) -> impl IntoView {
     let turnstile_ref = NodeRef::new();
 
     Effect::new({
-        let turnstile_ref = turnstile_ref.clone();
+        let turnstile_ref = turnstile_ref;
         move || {
             // Wrap the rust closure as JS closure
             let closure = Closure::wrap(Box::new(move |token_js: JsValue| {

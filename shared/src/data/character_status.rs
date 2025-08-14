@@ -57,9 +57,9 @@ pub enum StatusSpecs {
     Trigger(Box<TriggerSpecs>),
 }
 
-impl Into<StatusId> for &StatusSpecs {
-    fn into(self) -> StatusId {
-        match self {
+impl From<&StatusSpecs> for StatusId {
+    fn from(val: &StatusSpecs) -> Self {
+        match val {
             StatusSpecs::Stun => StatusId::Stun,
             StatusSpecs::DamageOverTime { damage_type, .. } => StatusId::DamageOverTime {
                 damage_type: *damage_type,

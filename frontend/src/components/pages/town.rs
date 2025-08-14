@@ -22,7 +22,6 @@ pub fn TownPage() -> impl IntoView {
 
     let character_and_areas = LocalResource::new({
         let backend = use_context::<BackendClient>().unwrap();
-        let refresh_trigger = refresh_trigger.clone();
         move || async move {
             let _ = refresh_trigger.read();
 

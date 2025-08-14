@@ -54,7 +54,7 @@ impl BackendClient {
     // Auth
 
     pub async fn get_me(&self, token: &str) -> Result<GetUserResponse> {
-        self.get_auth(&format!("account/me"), token).await
+        self.get_auth("account/me", token).await
     }
 
     pub async fn post_signin(&self, request: &SignInRequest) -> Result<SignInResponse> {

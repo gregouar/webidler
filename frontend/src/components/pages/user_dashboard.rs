@@ -37,7 +37,6 @@ pub fn UserDashboardPage() -> impl IntoView {
 
     let async_data = LocalResource::new({
         let backend = use_context::<BackendClient>().unwrap();
-        let refresh_trigger = refresh_trigger.clone();
         move || async move {
             let _ = refresh_trigger.read();
 
@@ -78,7 +77,6 @@ pub fn UserDashboardPage() -> impl IntoView {
 
     let logout = {
         let navigate = use_navigate();
-        let set_jwt_storage = set_jwt_storage.clone();
         move |_| {
             set_jwt_storage.set("".to_string());
             navigate("/", Default::default());
@@ -101,9 +99,9 @@ pub fn UserDashboardPage() -> impl IntoView {
 
                         view! {
                             <CreateCharacterPanel
-                                open=open_create_character.clone()
-                                user_id=user.user_id.clone()
-                                refresh_trigger=refresh_trigger.clone()
+                                open=open_create_character
+                                user_id=user.user_id
+                                refresh_trigger=refresh_trigger
                             />
 
                             <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">
@@ -129,13 +127,13 @@ pub fn UserDashboardPage() -> impl IntoView {
                                 <div class="flex flex-nowrap gap-6 overflow-x-auto p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                                     <For
                                         each=move || characters.clone()
-                                        key=|c| c.character_id.clone()
+                                        key=|c| c.character_id
                                         children=move |character| {
                                             view! {
                                                 <CharacterSlot
                                                     character=character
                                                     areas=areas.clone()
-                                                    refresh_trigger=refresh_trigger.clone()
+                                                    refresh_trigger=refresh_trigger
                                                 />
                                             }
                                         }
@@ -182,7 +180,7 @@ fn CharacterSlot(
         let backend = use_context::<BackendClient>().unwrap();
         let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
         let toaster = expect_context::<Toasts>();
-        let character_id = character.character_id.clone();
+        let character_id = character.character_id;
 
         move || {
             spawn_local(async move {
@@ -192,7 +190,11 @@ fn CharacterSlot(
                 {
                     Ok(_) => {
                         refresh_trigger.update(|n| *n += 1);
-                        show_toast(toaster, format!("Character deleted"), ToastVariant::Success);
+                        show_toast(
+                            toaster,
+                            "Character deleted".to_string(),
+                            ToastVariant::Success,
+                        );
                     }
                     Err(e) => {
                         show_toast(
@@ -222,7 +224,7 @@ fn CharacterSlot(
             storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
 
         move |_| {
-            set_character_id_storage.set(character.character_id.clone());
+            set_character_id_storage.set(character.character_id);
             navigate("/town", Default::default());
         }
     };

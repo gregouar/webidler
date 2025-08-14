@@ -62,7 +62,6 @@ pub fn CharacterPortrait(
     });
 
     let statuses_map = Signal::derive({
-        let statuses = statuses.clone();
         move || {
             statuses.read().iter().fold(
                 HashMap::<StatusId, usize>::new(),
