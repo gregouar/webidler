@@ -126,16 +126,16 @@ async fn delete_character(
     Ok(Json(DeleteCharacterResponse {}))
 }
 
-impl Into<UserCharacter> for db::characters::CharacterEntry {
-    fn into(self) -> UserCharacter {
+impl From<db::characters::CharacterEntry> for UserCharacter {
+    fn from(val: db::characters::CharacterEntry) -> Self {
         UserCharacter {
-            character_id: self.character_id,
-            name: self.character_name,
-            portrait: self.portrait,
-            resource_gems: self.resource_gems,
-            resource_shards: self.resource_shards,
-            max_area_level: self.max_area_level,
-            activity: if let (Some(area_id), Some(area_level)) = (self.area_id, self.area_level) {
+            character_id: val.character_id,
+            name: val.character_name,
+            portrait: val.portrait,
+            resource_gems: val.resource_gems,
+            resource_shards: val.resource_shards,
+            max_area_level: val.max_area_level,
+            activity: if let (Some(area_id), Some(area_level)) = (val.area_id, val.area_level) {
                 // TODO: find a way to switch somewhere to area_name
                 UserCharacterActivity::Grinding(area_id, area_level as AreaLevel)
             } else {

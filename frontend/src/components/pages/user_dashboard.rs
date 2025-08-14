@@ -432,7 +432,7 @@ pub fn CreateCharacterPanel(
                                             }
                                         >
                                             <img
-                                                src=img_asset(&format!("adventurers/{}.webp", src))
+                                                src=img_asset(&format!("adventurers/{src}.webp"))
                                                 alt="Portrait"
                                                 class="object-cover w-full h-28 sm:h-32"
                                             />

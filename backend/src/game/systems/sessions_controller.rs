@@ -28,7 +28,7 @@ pub async fn create_session(
     character: CharacterEntry,
     area_id: &Option<String>,
 ) -> Result<Session> {
-    let character_id = character.character_id.clone();
+    let character_id = character.character_id;
     tracing::debug!("create new session for player '{character_id}'...");
 
     if let None = db::game_sessions::create_session(db_pool, &character_id).await? {
@@ -167,7 +167,7 @@ async fn new_game_instance(
     )?;
 
     db::game_instances::save_game_instance_data(
-        &db_pool,
+        db_pool,
         &character.character_id,
         game_data.clone(),
     )

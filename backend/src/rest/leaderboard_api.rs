@@ -27,16 +27,16 @@ pub async fn get_leaderboard(
     }))
 }
 
-impl Into<LeaderboardEntry> for db::leaderboard::LeaderboardEntry {
-    fn into(self) -> LeaderboardEntry {
+impl From<db::leaderboard::LeaderboardEntry> for LeaderboardEntry {
+    fn from(val: db::leaderboard::LeaderboardEntry) -> Self {
         LeaderboardEntry {
-            user_id: self.user_id,
-            username: self.username.unwrap_or_default(),
-            character_id: self.character_id,
-            character_name: self.character_name,
-            area_id: self.area_id,
-            area_level: self.area_level,
-            created_at: self.created_at.into(),
+            user_id: val.user_id,
+            username: val.username.unwrap_or_default(),
+            character_id: val.character_id,
+            character_name: val.character_name,
+            area_id: val.area_id,
+            area_level: val.area_level,
+            created_at: val.created_at.into(),
             comments: "".to_string(),
         }
     }

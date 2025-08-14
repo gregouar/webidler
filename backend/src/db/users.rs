@@ -55,7 +55,7 @@ pub async fn read_user(
     db_pool: &DbPool,
     user_id: &UserId,
 ) -> Result<Option<UserEntry>, sqlx::Error> {
-    Ok(sqlx::query_as!(
+    sqlx::query_as!(
         UserEntry,
         r#"
         SELECT 
@@ -70,7 +70,7 @@ pub async fn read_user(
         user_id
     )
     .fetch_optional(db_pool)
-    .await?)
+    .await
 }
 
 pub async fn auth_user(

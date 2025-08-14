@@ -65,7 +65,7 @@ pub async fn read_character(
     db_pool: &DbPool,
     character_id: &UserCharacterId,
 ) -> Result<Option<CharacterEntry>, sqlx::Error> {
-    Ok(sqlx::query_as!(
+    sqlx::query_as!(
         CharacterEntry,
         r#"
         SELECT
@@ -89,14 +89,14 @@ pub async fn read_character(
         character_id
     )
     .fetch_optional(db_pool)
-    .await?)
+    .await
 }
 
 pub async fn read_character_areas_completed(
     db_pool: &DbPool,
     character_id: &UserCharacterId,
 ) -> Result<Vec<CharacterAreaEntry>, sqlx::Error> {
-    Ok(sqlx::query_as!(
+    sqlx::query_as!(
         CharacterAreaEntry,
         r#"
         SELECT
@@ -110,14 +110,14 @@ pub async fn read_character_areas_completed(
         character_id
     )
     .fetch_all(db_pool)
-    .await?)
+    .await
 }
 
 pub async fn read_all_user_characters(
     db_pool: &DbPool,
     user_id: &UserId,
 ) -> Result<Vec<CharacterEntry>, sqlx::Error> {
-    Ok(sqlx::query_as!(
+    sqlx::query_as!(
         CharacterEntry,
         r#"
         SELECT
@@ -141,7 +141,7 @@ pub async fn read_all_user_characters(
         user_id
     )
     .fetch_all(db_pool)
-    .await?)
+    .await
 }
 
 pub async fn count_user_characters(db_pool: &DbPool, user_id: &UserId) -> Result<u8, sqlx::Error> {

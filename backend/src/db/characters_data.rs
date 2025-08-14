@@ -65,7 +65,7 @@ async fn read_character_data(
     db_pool: &DbPool,
     character_id: &UserCharacterId,
 ) -> Result<Option<CharacterDataEntry>, sqlx::Error> {
-    Ok(sqlx::query_as!(
+    sqlx::query_as!(
         CharacterDataEntry,
         r#"
         SELECT
@@ -79,5 +79,5 @@ async fn read_character_data(
         character_id
     )
     .fetch_optional(db_pool)
-    .await?)
+    .await
 }

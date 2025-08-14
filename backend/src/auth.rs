@@ -126,7 +126,7 @@ pub fn hash_password(password: &str) -> anyhow::Result<String> {
 }
 
 pub fn verify_password(password: &str, password_hash: &str) -> bool {
-    PasswordHash::new(&password_hash)
+    PasswordHash::new(password_hash)
         .map(|parsed_hash| {
             Argon2::default()
                 .verify_password(password.as_ref(), &parsed_hash)
@@ -135,12 +135,12 @@ pub fn verify_password(password: &str, password_hash: &str) -> bool {
         .unwrap_or(false)
 }
 
-impl Into<User> for db::users::UserEntry {
-    fn into(self) -> User {
+impl From<db::users::UserEntry> for User {
+    fn from(val: db::users::UserEntry) -> Self {
         User {
-            user_id: self.user_id,
-            username: self.username.unwrap_or_default(),
-            max_characters: self.max_characters,
+            user_id: val.user_id,
+            username: val.username.unwrap_or_default(),
+            max_characters: val.max_characters,
         }
     }
 }

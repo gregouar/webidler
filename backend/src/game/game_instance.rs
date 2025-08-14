@@ -93,7 +93,7 @@ impl<'a> GameInstance<'a> {
     fn auto_save(&self) {
         let (db_pool, character_id, game_data) = (
             self.db_pool.clone(),
-            self.character_id.clone(),
+            *self.character_id,
             self.game_data.clone(), // TODO: Do something else, like only copy the necessary data
         );
         tokio::spawn(async move {

@@ -100,7 +100,7 @@ async fn handle_socket(
         master_store,
     );
 
-    let character_id = session.character_id.clone();
+    let character_id = session.character_id;
 
     match game.run().await {
         Ok(()) => {
@@ -185,7 +185,7 @@ async fn handle_disconnect(
 
     if end_quest {
         db::characters::update_character_progress(
-            &db_pool,
+            db_pool,
             &session.character_id,
             &session.game_data.area_id,
             session.game_data.game_stats.highest_area_level,
@@ -193,13 +193,13 @@ async fn handle_disconnect(
             session.game_data.player_resources.read().shards,
         )
         .await?;
-        db::game_instances::delete_game_instance_data(&db_pool, &session.character_id).await?;
+        db::game_instances::delete_game_instance_data(db_pool, &session.character_id).await?;
     } else {
         sessions_store
             .sessions
             .lock()
             .unwrap()
-            .insert(session.character_id.clone(), session);
+            .insert(session.character_id, session);
     }
 
     Ok(())
