@@ -45,7 +45,7 @@ pub async fn count_active_sessions(db_pool: &DbPool) -> Result<i64, sqlx::Error>
         r#"
         SELECT COUNT(*) as "count!" 
         FROM game_sessions
-        WHERE ended_at IS NULL
+        WHERE ended_at = '9999-1-1 23:59:59'
         "#,
     )
     .fetch_one(db_pool)
@@ -60,7 +60,7 @@ pub async fn end_session(
         r#"
         UPDATE game_sessions
         SET ended_at = CURRENT_TIMESTAMP
-        WHERE character_id = $1 AND ended_at IS NULL
+        WHERE character_id = $1 AND ended_at = '9999-1-1 23:59:59'
         "#,
         character_id,
     )
@@ -75,7 +75,7 @@ pub async fn clean_all_sessions(db_pool: &DbPool) -> Result<(), sqlx::Error> {
         r#"
         UPDATE game_sessions
         SET ended_at = CURRENT_TIMESTAMP
-        WHERE ended_at IS NULL
+        WHERE ended_at = '9999-1-1 23:59:59'
     "#,
     )
     .execute(db_pool)
