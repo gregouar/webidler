@@ -63,6 +63,7 @@ pub struct SavedGameData {
 }
 
 impl GameInstanceData {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         area_id: String,
         area_blueprint: AreaBlueprint,
@@ -108,6 +109,7 @@ impl GameInstanceData {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn init_from_store(
         master_store: &master_store::MasterStore,
         area_id: &str,
