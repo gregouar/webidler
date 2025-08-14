@@ -3,7 +3,7 @@ use leptos::prelude::*;
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
-use shared::data::user::{UserCharacterActivity, UserCharacterId};
+use shared::data::user::UserCharacterId;
 
 use crate::components::{
     backend_client::BackendClient,
@@ -37,10 +37,12 @@ pub fn TownPage() -> impl IntoView {
         character_and_areas.with(|data| {
             if let Some(send_wrapper) = data {
                 if let Some((character, _)) = send_wrapper.as_ref() {
-                    if let UserCharacterActivity::Grinding(_, _) = character.activity {
-                        // If character in game, we redirect to game
-                        use_navigate()("/game", Default::default());
-                    }
+                    let _ = character;
+                    // TODO: update state and menu if not in town, disable stuff, need to trigger some polling refresh?
+                    // if let UserCharacterActivity::Grinding(_, _) = character.activity {
+                    //     // If character in game, we redirect to game
+                    //     use_navigate()("/game", Default::default());
+                    // }
                 } else {
                     // If no character, we redirect to main menu
                     use_navigate()("/", Default::default());

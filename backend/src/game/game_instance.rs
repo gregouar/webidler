@@ -76,11 +76,14 @@ impl<'a> GameInstance<'a> {
             }
 
             if self.game_data.area_state.read().end_quest {
-                self.end_quest().await?;
                 break;
             }
 
             game_timer.wait_tick().await;
+        }
+
+        if self.game_data.area_state.read().end_quest {
+            self.end_quest().await?;
         }
 
         tracing::debug!("game session '{}' ended ", self.character_id);

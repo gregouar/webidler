@@ -19,7 +19,7 @@ use std::{
 
 use shared::messages::{
     client::{ClientConnectMessage, ClientMessage},
-    server::ConnectMessage,
+    server::{ErrorMessage, ErrorType},
 };
 
 use crate::{
@@ -31,6 +31,7 @@ use crate::{
         systems::sessions_controller,
         GameInstance,
     },
+    rest::AppError,
     websocket::WebSocketConnection,
 };
 
@@ -76,13 +77,21 @@ async fn handle_socket(
         }
         Ok(Err(e)) => {
             tracing::error!("unable to connect: {}", e);
+            conn.send(
+                &ErrorMessage {
+                    error_type: ErrorType::Server,
+                    message: e.to_string(),
+                }
+                .into(),
+            )
+            .await
+            .unwrap_or_else(|e| tracing::error!("failed to send error message: {}", e));
             return;
         }
         Ok(Ok(p)) => p,
     };
     tracing::debug!("client connected");
 
-    tracing::debug!("starting the game...");
     let game = GameInstance::new(
         &mut conn,
         &session.character_id,
@@ -119,7 +128,7 @@ async fn wait_for_connect(
     loop {
         match conn.poll_receive() {
             ControlFlow::Continue(Some(ClientMessage::Connect(msg))) => {
-                return handle_connect(db_pool, sessions_store, master_store, conn, msg).await;
+                return handle_connect(db_pool, sessions_store, master_store, msg).await;
             }
             ControlFlow::Break(_) => {
                 return Err(anyhow::format_err!("disconnected"));
@@ -134,24 +143,25 @@ async fn handle_connect(
     db_pool: &DbPool,
     sessions_store: &SessionsStore,
     master_store: &MasterStore,
-    conn: &mut WebSocketConnection,
+    // conn: &mut WebSocketConnection,
     msg: ClientConnectMessage,
 ) -> Result<Session> {
     tracing::info!("connect: {:?}", msg);
 
-    let user_id = match auth::authorize_jwt(&msg.jwt) {
-        Some(user_id) => user_id,
-        None => return Err(anyhow::anyhow!("invalid jwt")),
-    };
+    let user_id =
+        auth::authorize_jwt(&msg.jwt).ok_or(AppError::Unauthorized("invalid token".to_string()))?;
 
     let user_character = db::characters::read_character(db_pool, &msg.character_id)
         .await?
-        .ok_or(anyhow::anyhow!("character not found"))?;
+        .ok_or(AppError::NotFound)?;
 
     if user_character.user_id != user_id {
-        return Err(anyhow::anyhow!("character not found"));
+        return Err(AppError::NotFound.into());
     }
 
+    // conn.send(&ConnectMessage {}.into()).await?;
+
+    // Must be the last thing we do because we cannot fail after
     let session = sessions_controller::create_session(
         db_pool,
         sessions_store,
@@ -160,8 +170,6 @@ async fn handle_connect(
         &msg.area_id,
     )
     .await?;
-
-    conn.send(&ConnectMessage {}.into()).await?;
 
     Ok(session)
 }

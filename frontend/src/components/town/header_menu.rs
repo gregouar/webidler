@@ -20,6 +20,8 @@ pub fn HeaderMenu() -> impl IntoView {
         }
     };
 
+    let disable_buttons = Signal::derive(|| true);
+
     view! {
         <div class="relative z-50 w-full flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
@@ -37,9 +39,15 @@ pub fn HeaderMenu() -> impl IntoView {
                 />
             </div>
             <div class="flex justify-end space-x-2  w-full">
-                <MenuButton on:click=|_| {}>"Market"</MenuButton>
-                <MenuButton on:click=|_| {}>"Ascend"</MenuButton>
-                <MenuButton on:click=|_| {}>"Forge"</MenuButton>
+                <MenuButton on:click=|_| {} disabled=disable_buttons>
+                    "Market"
+                </MenuButton>
+                <MenuButton on:click=|_| {} disabled=disable_buttons>
+                    "Ascend"
+                </MenuButton>
+                <MenuButton on:click=|_| {} disabled=disable_buttons>
+                    "Forge"
+                </MenuButton>
                 <MenuButton on:click=navigate_quit>"Quit"</MenuButton>
             </div>
         </div>

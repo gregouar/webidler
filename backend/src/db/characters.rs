@@ -186,8 +186,8 @@ pub async fn update_character_progress(
     sqlx::query!(
         "INSERT INTO character_area_completed (character_id, area_id, max_area_level) VALUES ($1, $2, $3)
          ON CONFLICT(character_id, area_id) DO UPDATE SET 
-            max_area_level = CASE WHEN EXCLUDED.max_area_level > $3 THEN EXCLUDED.max_area_level ELSE $3 END, 
-            updated_at = CASE WHEN EXCLUDED.max_area_level > $3 THEN EXCLUDED.updated_at ELSE CURRENT_TIMESTAMP END",
+            max_area_level = CASE WHEN max_area_level > $3 THEN max_area_level ELSE $3 END, 
+            updated_at = CASE WHEN max_area_level > $3 THEN updated_at ELSE CURRENT_TIMESTAMP END",
         character_id,
         area_id,
         max_area_level

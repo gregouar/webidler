@@ -119,7 +119,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     game_context.open_passives.set(!game_context.open_passives.get());
                     game_context.open_statistics.set(false);
                 }>
-                    "Passive Skills"
+                    "Passives"
                     {move || {
                         let points = game_context.player_resources.read().passive_points;
                         if points > 0 { format!(" ({points})") } else { "".to_string() }
@@ -129,7 +129,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     game_context.open_inventory.set(false);
                     game_context.open_passives.set(false);
                     game_context.open_statistics.set(!game_context.open_statistics.get());
-                }>"Statistics"</MenuButton>
+                }>"Stats"</MenuButton>
                 <MenuButtonRed on:click=try_abandon_quest>"Stop Grind"</MenuButtonRed>
                 <MenuButton on:click=quit>"Quit"</MenuButton>
             </div>

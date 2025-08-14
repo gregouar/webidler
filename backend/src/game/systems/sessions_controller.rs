@@ -16,6 +16,7 @@ use crate::{
         game_data::GameInstanceData,
         sessions::{Session, SessionsStore},
     },
+    rest::AppError,
 };
 
 use super::{loot_generator, player_controller};
@@ -31,7 +32,7 @@ pub async fn create_session(
     tracing::debug!("create new session for player '{character_id}'...");
 
     if let None = db::game_sessions::create_session(db_pool, &character_id).await? {
-        return Err(anyhow::anyhow!("character already in session"));
+        return Err(AppError::UserError("character already in session".to_string()).into());
     }
 
     // First try to get session from memory
@@ -122,7 +123,10 @@ async fn new_game_instance(
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
     let player_inventory = match character_data {
-        Some(inventory) => inventory,
+        Some(inventory) => {
+            player_controller::init_item_skills(&mut player_specs, &inventory, &mut player_state);
+            inventory
+        }
         None => {
             let mut player_inventory = PlayerInventory {
                 max_bag_size: 40,

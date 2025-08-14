@@ -31,9 +31,18 @@ pub fn LeaderboardPage() -> impl IntoView {
 
 #[component]
 pub fn LeaderboardPanel() -> impl IntoView {
-    let leaderboard = LocalResource::new({
+    let leaderboard_and_areas = LocalResource::new({
         let backend = use_context::<BackendClient>().unwrap();
-        move || async move { backend.get_leaderboard().await.unwrap_or_default() }
+        move || async move {
+            (
+                backend.get_leaderboard().await.unwrap_or_default(),
+                backend
+                    .get_areas()
+                    .await
+                    .map(|resp| resp.areas)
+                    .unwrap_or_default(),
+            )
+        }
     });
 
     view! {
@@ -42,11 +51,10 @@ pub fn LeaderboardPanel() -> impl IntoView {
                 view! { "Loading..." }
             }>
                 {move || {
-                    leaderboard
-                        .get()
-                        .map(|leaderboard| {
-                            view! {
-                                <div class="grid gap-4">
+                    Suspend::new(async move {
+                        let (leaderboard, areas) = leaderboard_and_areas.await;
+                        view! {
+                            <div class="grid gap-4">
                                 <For
                                     each=move || leaderboard.entries.clone().into_iter().enumerate()
                                     key=|(i,_)| *i
@@ -64,18 +72,22 @@ pub fn LeaderboardPanel() -> impl IntoView {
                                                 </div>
                                             </div>
                                             <div class="text-sm text-gray-400">
-                                                { format!("{}", entry.created_at.format("%Y-%m-%d %H:%M"))}
+                                                    {entry.username}
                                             </div>
                                         </div>
                                         <div class="flex justify-between items-center">
                                             <div class="text-sm text-zinc-300">
-                                                "Area: " <span class="font-semibold text-white">{entry.area_level}</span>
+                                                {areas.get(&entry.area_id).map(|area_specs| area_specs.name.clone()).unwrap_or(entry.area_id)}
+                                                " - Level "
+                                                <span class="font-semibold text-white">{entry.area_level}</span>
                                             </div>
-                                            // <div class="text-sm text-zinc-300">
+                                            <div class="text-sm text-zinc-300">
+
+                                                { format!("{}", entry.created_at.format("%Y-%m-%d %H:%M"))}
                                             //     "Time played: " <span class="font-semibold text-white">
                                             //         {format_duration(entry.time_played)}
                                             //     </span>
-                                            // </div>
+                                            </div>
                                         </div>
 
                                         <div class="mt-2 text-xs italic text-zinc-400 border-t border-zinc-700 pt-2">
@@ -84,8 +96,8 @@ pub fn LeaderboardPanel() -> impl IntoView {
                                     </div>
                                 </For>
                             </div>
-                            }
-                        })
+                        }
+                    })
                 }}
             </Suspense>
         </div>

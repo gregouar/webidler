@@ -181,6 +181,26 @@ pub fn unequip_item_to_bag(
     true
 }
 
+pub fn init_item_skills(
+    player_specs: &mut PlayerSpecs,
+    player_inventory: &PlayerInventory,
+    player_state: &mut PlayerState,
+) {
+    for equipped in player_inventory.equipped.values() {
+        if let EquippedSlot::MainSlot(item_specs) = equipped {
+            if let Some(ref weapon_specs) = item_specs.weapon_specs {
+                equip_weapon(
+                    player_specs,
+                    player_state,
+                    item_specs.base.slot,
+                    item_specs.level,
+                    weapon_specs,
+                );
+            }
+        }
+    }
+}
+
 /// Equip new item and return old equipped item
 pub fn equip_item(
     player_specs: &mut PlayerSpecs,
