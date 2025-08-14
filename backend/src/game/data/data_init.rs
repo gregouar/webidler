@@ -10,7 +10,7 @@ use shared::data::{
     stat_effect::EffectsMap,
 };
 
-use crate::game::utils::rng;
+use crate::{constants::SKILL_BASE_COST, game::utils::rng};
 pub trait DataInit<Specs> {
     fn init(specs: Specs) -> Self;
 }
@@ -52,7 +52,7 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             skills_specs: vec![],
             auto_skills: vec![],
             max_skills: 4,
-            buy_skill_cost: 100.0,
+            buy_skill_cost: SKILL_BASE_COST,
             bought_skills: HashSet::new(),
             level: 1,
             experience_needed: 20.0,

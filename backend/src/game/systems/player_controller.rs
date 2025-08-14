@@ -9,15 +9,15 @@ use shared::data::{
     skill::{BaseSkillSpecs, SkillSpecs, SkillState},
 };
 
-use crate::game::{
-    data::{event::EventsQueue, master_store::SkillsStore, DataInit},
-    utils::increase_factors,
+use crate::{
+    constants::{SKILL_BASE_COST, SKILL_COST_FACTOR},
+    game::{
+        data::{event::EventsQueue, master_store::SkillsStore, DataInit},
+        utils::increase_factors,
+    },
 };
 
 use super::{characters_controller::Target, items_controller, skills_controller};
-
-// TODO: put in some game config file
-const SKILL_COST_FACTOR: f64 = 1_000.0;
 
 #[derive(Debug, Clone)]
 pub struct PlayerController {
@@ -185,7 +185,8 @@ pub fn init_item_skills(
     player_specs: &mut PlayerSpecs,
     player_inventory: &PlayerInventory,
     player_state: &mut PlayerState,
-) {
+) -> bool {
+    let mut found_skill = false;
     for equipped in player_inventory.equipped.values() {
         if let EquippedSlot::MainSlot(item_specs) = equipped {
             if let Some(ref weapon_specs) = item_specs.weapon_specs {
@@ -196,9 +197,11 @@ pub fn init_item_skills(
                     item_specs.level,
                     weapon_specs,
                 );
+                found_skill = true;
             }
         }
     }
+    found_skill
 }
 
 /// Equip new item and return old equipped item
@@ -390,7 +393,12 @@ pub fn buy_skill(
             None,
         );
         player_resources.gold -= player_specs.buy_skill_cost;
-        player_specs.buy_skill_cost = (player_specs.buy_skill_cost * SKILL_COST_FACTOR).round();
+        player_specs.buy_skill_cost = (if player_specs.buy_skill_cost > 0.0 {
+            player_specs.buy_skill_cost * SKILL_COST_FACTOR
+        } else {
+            SKILL_BASE_COST * SKILL_COST_FACTOR
+        })
+        .round();
         player_specs.bought_skills.insert(skill_id.to_string());
         true
     } else {

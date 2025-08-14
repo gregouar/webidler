@@ -1,7 +1,7 @@
 use codee::string::JsonSerdeCodec;
 use leptos::prelude::*;
 use leptos_router::hooks::use_navigate;
-use leptos_use::storage;
+use leptos_use::{storage, use_interval_fn};
 
 use shared::data::user::UserCharacterId;
 
@@ -32,6 +32,13 @@ pub fn TownPage() -> impl IntoView {
                 .ok()
         }
     });
+
+    let _ = use_interval_fn(
+        move || {
+            refresh_trigger.update(|n| *n += 1);
+        },
+        5_000,
+    );
 
     Effect::new(move |_| {
         character_and_areas.with(|data| {

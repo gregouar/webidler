@@ -127,7 +127,13 @@ async fn new_game_instance(
 
     let player_inventory = match character_data {
         Some(inventory) => {
-            player_controller::init_item_skills(&mut player_specs, &inventory, &mut player_state);
+            if !player_controller::init_item_skills(
+                &mut player_specs,
+                &inventory,
+                &mut player_state,
+            ) {
+                player_specs.buy_skill_cost = 0.0;
+            }
             inventory
         }
         None => {
