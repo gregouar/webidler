@@ -6,10 +6,12 @@ use argon2::{
 use axum::{
     body::Body,
     extract::{Request, State},
-    http::{self, Response},
+    http::Response,
     middleware::Next,
 };
+use axum_extra::TypedHeader;
 use chrono::{Duration, Utc};
+use headers::{authorization::Bearer, Authorization};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, TokenData, Validation};
 use serde::{Deserialize, Serialize};
 
@@ -34,7 +36,6 @@ pub async fn verify_captcha(token: &str) -> anyhow::Result<bool> {
 }
 
 #[derive(Serialize, Deserialize)]
-// Define a structure for holding claims data used in JWT tokens
 pub struct Claims {
     pub exp: usize,  // Expiry time of the token
     pub iat: usize,  // Issued at time of the token
@@ -73,21 +74,15 @@ pub struct CurrentUser {
 
 pub async fn authorization_middleware(
     State(state): State<AppState>,
+    TypedHeader(Authorization(bearer)): TypedHeader<Authorization<Bearer>>,
     mut req: Request,
     next: Next,
 ) -> Result<Response<Body>, AppError> {
-    let user_id = req
-        .headers_mut()
-        .get(http::header::AUTHORIZATION)
-        .and_then(|header| header.to_str().ok())
-        .and_then(|header| header.strip_prefix("Bearer "))
-        .and_then(|token| authorize_jwt(token))
+    let user_id = authorize_jwt(bearer.token())
         .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
     let user = db::users::read_user(&state.db_pool, &user_id)
-        .await
-        .ok()
-        .flatten()
+        .await?
         .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
     req.extensions_mut()
