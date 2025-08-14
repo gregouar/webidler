@@ -31,7 +31,10 @@ pub async fn create_session(
     let character_id = character.character_id;
     tracing::debug!("create new session for player '{character_id}'...");
 
-    if let None = db::game_sessions::create_session(db_pool, &character_id).await? {
+    if db::game_sessions::create_session(db_pool, &character_id)
+        .await?
+        .is_none()
+    {
         return Err(AppError::UserError("character already in session".to_string()).into());
     }
 
