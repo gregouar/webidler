@@ -148,15 +148,18 @@ async fn handle_connect(
         return Err(anyhow::anyhow!("character not found"));
     }
 
-    let (session_id, session) = match (msg.session_id, msg.session_key) {
-        (Some(session_id), Some(session_key)) => {
-            sessions_controller::resume_session(sessions_store, session_id, session_key).await?
-        }
-        _ => {
+    let (session_id, session) =
+        if db::game_sessions::is_character_id_in_session(db_pool, &msg.character_id).await? {
+            sessions_controller::resume_session(
+                sessions_store,
+                msg.session_id.unwrap_or_default(),
+                msg.session_key.unwrap_or_default(),
+            )
+            .await?
+        } else {
             sessions_controller::create_session(db_pool, master_store, user_character, &msg.area_id)
                 .await?
-        }
-    };
+        };
 
     conn.send(
         &ConnectMessage {
