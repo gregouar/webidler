@@ -9,7 +9,7 @@ use crate::data::{
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
 };
 
-use super::{macros::impl_into_message, SessionId, SessionKey};
+use super::macros::impl_into_message;
 
 impl_into_message! {
     #[derive(Serialize, Deserialize, Debug, Clone,)]
@@ -22,10 +22,7 @@ impl_into_message! {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ConnectMessage {
-    pub session_id: SessionId,
-    pub session_key: SessionKey,
-}
+pub struct ConnectMessage {}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ErrorMessage {

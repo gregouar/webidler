@@ -7,7 +7,7 @@ use crate::data::{
     user::UserCharacterId,
 };
 
-use super::{macros::impl_into_message, SessionId, SessionKey};
+use super::macros::impl_into_message;
 
 impl_into_message! {
     #[derive(Serialize, Deserialize, Debug, Clone,)]
@@ -51,8 +51,6 @@ pub struct ClientConnectMessage {
     pub jwt: String,
     pub character_id: UserCharacterId,
     pub area_id: Option<String>,
-    pub session_id: Option<SessionId>,
-    pub session_key: Option<SessionKey>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

@@ -1,12 +1,10 @@
 use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*};
 use leptos_use::storage;
-use serde::{Deserialize, Serialize};
 
 use shared::data::user::UserCharacterId;
 use shared::messages::client::ClientConnectMessage;
 use shared::messages::server::{ErrorType, InitGameMessage, ServerMessage, SyncGameStateMessage};
-use shared::messages::{SessionId, SessionKey};
 
 use crate::components::ui::{toast::*, tooltip::DynamicTooltip};
 use crate::components::websocket::WebsocketContext;
@@ -15,12 +13,6 @@ use super::battle_scene::BattleScene;
 use super::header_menu::HeaderMenu;
 use super::panels::{InventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel};
 use super::GameContext;
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SessionInfos {
-    session_id: SessionId,
-    session_key: SessionKey,
-}
 
 #[component]
 pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
@@ -32,9 +24,6 @@ pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
     let (get_area_id_storage, _, _) =
         storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
 
-    let (session_infos, set_session_infos, _) =
-        storage::use_session_storage::<Option<SessionInfos>, JsonSerdeCodec>("session_infos");
-
     Effect::new({
         let conn = expect_context::<WebsocketContext>();
         move |_| {
@@ -44,8 +33,6 @@ pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
                         jwt: get_jwt_storage.get(),
                         character_id,
                         area_id: get_area_id_storage.get_untracked(),
-                        session_id: session_infos.get_untracked().map(|s| s.session_id),
-                        session_key: session_infos.get_untracked().map(|s| s.session_key),
                     }
                     .into(),
                 );
@@ -58,7 +45,7 @@ pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
         let conn = expect_context::<WebsocketContext>();
         move |_| {
             if let Some(message) = conn.message.get() {
-                handle_message(&game_context, set_session_infos, message);
+                handle_message(&game_context, message);
             }
         }
     });
@@ -83,18 +70,9 @@ pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
     }
 }
 
-fn handle_message(
-    game_context: &GameContext,
-    set_session_infos: WriteSignal<Option<SessionInfos>>,
-    message: ServerMessage,
-) {
+fn handle_message(game_context: &GameContext, message: ServerMessage) {
     match message {
-        ServerMessage::Connect(m) => {
-            set_session_infos.set(Some(SessionInfos {
-                session_id: m.session_id,
-                session_key: m.session_key,
-            }));
-        }
+        ServerMessage::Connect(_) => {}
         ServerMessage::InitGame(m) => {
             init_game(game_context, m);
         }

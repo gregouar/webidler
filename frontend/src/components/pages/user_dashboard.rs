@@ -333,10 +333,6 @@ pub fn CreateCharacterPanel(
         let toaster = expect_context::<Toasts>();
         let backend = use_context::<BackendClient>().unwrap();
 
-        let name = name.clone();
-        let selected_portrait = selected_portrait.clone();
-        let processing = processing.clone();
-        let disable_submit = disable_submit.clone();
         move |_| {
             if disable_submit.get() {
                 return;
@@ -454,7 +450,7 @@ pub fn CreateCharacterPanel(
                         <MenuButtonRed on:click=move |_| {
                             open.set(false)
                         }>"Cancel"</MenuButtonRed>
-                        <MenuButton on:click=on_submit.clone() disabled=disable_submit>
+                        <MenuButton on:click=on_submit disabled=disable_submit>
                             "Confirm"
                         </MenuButton>
                     </div>

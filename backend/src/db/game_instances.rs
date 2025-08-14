@@ -25,12 +25,12 @@ pub struct SavedGameInstance {
 }
 
 pub async fn save_game_instance_data(
-    pool: &DbPool,
+    db_pool: &DbPool,
     character_id: &UserCharacterId,
     game_instance_data: GameInstanceData,
 ) -> anyhow::Result<()> {
     Ok(upsert_saved_game_instance(
-        pool,
+        db_pool,
         character_id,
         &game_instance_data.area_id.clone(),
         game_instance_data.area_state.read().area_level,
@@ -40,7 +40,7 @@ pub async fn save_game_instance_data(
 }
 
 async fn upsert_saved_game_instance(
-    pool: &DbPool,
+    db_pool: &DbPool,
     character_id: &UserCharacterId,
     area_id: &str,
     area_level: AreaLevel,
@@ -62,18 +62,18 @@ async fn upsert_saved_game_instance(
         CHARACTER_DATA_VERSION,
         game_data
     )
-    .execute(pool)
+    .execute(db_pool)
     .await?;
 
     Ok(())
 }
 
 pub async fn load_game_instance_data(
-    pool: &DbPool,
+    db_pool: &DbPool,
     master_store: &master_store::MasterStore,
     character_id: &UserCharacterId,
 ) -> anyhow::Result<Option<GameInstanceData>> {
-    let saved_game_instance = load_saved_game_instance(pool, character_id).await?;
+    let saved_game_instance = load_saved_game_instance(db_pool, character_id).await?;
     if let Some(instance) = saved_game_instance {
         Ok(Some(GameInstanceData::from_bytes(
             master_store,
@@ -85,7 +85,7 @@ pub async fn load_game_instance_data(
 }
 
 async fn load_saved_game_instance(
-    pool: &DbPool,
+    db_pool: &DbPool,
     character_id: &UserCharacterId,
 ) -> Result<Option<SavedGameInstance>, sqlx::Error> {
     let instance = sqlx::query_as!(
@@ -101,21 +101,21 @@ async fn load_saved_game_instance(
             WHERE character_id = $1"#,
         character_id
     )
-    .fetch_optional(pool)
+    .fetch_optional(db_pool)
     .await?;
 
     Ok(instance)
 }
 
 pub async fn delete_game_instance_data(
-    pool: &DbPool,
+    db_pool: &DbPool,
     character_id: &UserCharacterId,
 ) -> Result<(), sqlx::Error> {
     sqlx::query!(
         "DELETE FROM saved_game_instances WHERE character_id = $1",
         character_id
     )
-    .execute(pool)
+    .execute(db_pool)
     .await?;
 
     Ok(())

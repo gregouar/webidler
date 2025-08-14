@@ -1,5 +1,5 @@
 use anyhow::Result;
-use shared::{data::user::UserCharacterId, messages::SessionId};
+use shared::data::user::UserCharacterId;
 
 use super::{
     data::{event::EventsQueue, master_store::MasterStore},
@@ -18,7 +18,6 @@ pub struct GameInstance<'a> {
     db_pool: DbPool,
     master_store: MasterStore,
     character_id: &'a UserCharacterId,
-    session_id: &'a SessionId,
     game_data: &'a mut GameInstanceData,
     events_queue: EventsQueue,
 }
@@ -27,7 +26,6 @@ impl<'a> GameInstance<'a> {
     pub fn new(
         client_conn: &'a mut WebSocketConnection,
         character_id: &'a UserCharacterId,
-        session_id: &'a SessionId,
         game_data: &'a mut GameInstanceData,
         db_pool: DbPool,
         master_store: MasterStore,
@@ -35,7 +33,6 @@ impl<'a> GameInstance<'a> {
         GameInstance {
             client_conn,
             character_id,
-            session_id,
             db_pool,
             master_store,
             game_data,
@@ -86,7 +83,7 @@ impl<'a> GameInstance<'a> {
             game_timer.wait_tick().await;
         }
 
-        tracing::debug!("game session '{}' ended ", self.session_id);
+        tracing::debug!("game session '{}' ended ", self.character_id);
         Ok(())
     }
 

@@ -1,6 +1,6 @@
 use std::time::{Duration, Instant};
 
-use crate::{db, game::sessions::SessionsStore, game::systems::sessions_controller};
+use crate::{db, game::sessions::SessionsStore};
 
 pub async fn purge_sessions(db_pool: db::DbPool, sessions_store: SessionsStore) {
     loop {
@@ -13,9 +13,9 @@ pub async fn purge_sessions(db_pool: db::DbPool, sessions_store: SessionsStore) 
             let mut sessions = sessions_store.sessions.lock().unwrap();
             let sessions_to_drop: Vec<_> = sessions
                 .iter()
-                .filter_map(|(session_id, session)| {
+                .filter_map(|(character_id, session)| {
                     if session.last_active < purge_before {
-                        Some(session_id)
+                        Some(character_id)
                     } else {
                         None
                     }
@@ -23,17 +23,14 @@ pub async fn purge_sessions(db_pool: db::DbPool, sessions_store: SessionsStore) 
                 .cloned()
                 .collect();
 
-            for session_id in sessions_to_drop {
-                if let Some(session) = sessions.remove(&session_id) {
-                    dropped_sessions.push((session_id, session));
+            for character_id in sessions_to_drop {
+                if let Some(session) = sessions.remove(&character_id) {
+                    dropped_sessions.push((character_id, session));
                 }
             }
         }
 
-        for (session_id, session) in dropped_sessions {
-            if let Err(e) = sessions_controller::end_session(&db_pool, &session_id).await {
-                tracing::error!("failed to end game session '{}': {}", session_id, e);
-            }
+        for (character_id, session) in dropped_sessions {
             if let Err(e) = db::game_instances::save_game_instance_data(
                 &db_pool,
                 &session.character_id,
@@ -43,7 +40,7 @@ pub async fn purge_sessions(db_pool: db::DbPool, sessions_store: SessionsStore) 
             {
                 tracing::error!(
                     "failed to save game instance from session '{}': {}",
-                    session_id,
+                    character_id,
                     e
                 );
             }

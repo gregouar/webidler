@@ -2,9 +2,10 @@ use sqlx::types::chrono::{DateTime, Utc};
 use sqlx::FromRow;
 
 use shared::data::user::UserCharacterId;
-use shared::messages::SessionId;
 
 use super::pool::DbPool;
+
+pub type SessionId = i64;
 
 #[derive(Debug, FromRow)]
 pub struct SessionEntry {
@@ -16,11 +17,12 @@ pub struct SessionEntry {
     pub ended_at: Option<DateTime<Utc>>,
 }
 
+/// Return Ok(None) if session already exist
 pub async fn create_session(
     db_pool: &DbPool,
     character_id: &UserCharacterId,
-) -> Result<SessionId, sqlx::Error> {
-    sqlx::query_scalar!(
+) -> Result<Option<SessionId>, sqlx::Error> {
+    let res = sqlx::query_scalar!(
         "
         INSERT INTO game_sessions (character_id)
         VALUES ($1)
@@ -29,24 +31,13 @@ pub async fn create_session(
         character_id
     )
     .fetch_one(db_pool)
-    .await
-}
+    .await;
 
-pub async fn is_character_id_in_session(
-    db_pool: &DbPool,
-    character_id: &UserCharacterId,
-) -> Result<bool, sqlx::Error> {
-    Ok(sqlx::query!(
-        r#"
-        SELECT session_id
-        FROM game_sessions
-        WHERE character_id = $1 AND ended_at IS NULL
-        "#,
-        character_id
-    )
-    .fetch_optional(db_pool)
-    .await?
-    .is_some())
+    match res {
+        Ok(session_id) => Ok(Some(session_id)),
+        Err(sqlx::Error::Database(db_err)) if db_err.is_unique_violation() => Ok(None),
+        Err(e) => Err(e),
+    }
 }
 
 pub async fn count_active_sessions(db_pool: &DbPool) -> Result<i64, sqlx::Error> {
@@ -61,14 +52,17 @@ pub async fn count_active_sessions(db_pool: &DbPool) -> Result<i64, sqlx::Error>
     .await
 }
 
-pub async fn end_session(db_pool: &DbPool, session_id: &SessionId) -> Result<(), sqlx::Error> {
+pub async fn end_session(
+    db_pool: &DbPool,
+    character_id: &UserCharacterId,
+) -> Result<(), sqlx::Error> {
     sqlx::query!(
         r#"
         UPDATE game_sessions
         SET ended_at = CURRENT_TIMESTAMP
-        WHERE session_id = $1
+        WHERE character_id = $1 AND ended_at IS NULL
         "#,
-        session_id,
+        character_id,
     )
     .execute(db_pool)
     .await?;
