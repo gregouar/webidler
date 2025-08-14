@@ -28,15 +28,11 @@ pub fn Captcha(token: RwSignal<Option<String>>) -> impl IntoView {
                 let window = web_sys::window().unwrap();
                 if let Ok(turnstile) =
                     js_sys::Reflect::get(&window, &JsValue::from_str("turnstile"))
-                {
-                    if let Ok(render_fn) =
+                    && let Ok(render_fn) =
                         js_sys::Reflect::get(&turnstile, &JsValue::from_str("render"))
-                    {
-                        if let Some(render_fn) = render_fn.dyn_ref::<js_sys::Function>() {
+                        && let Some(render_fn) = render_fn.dyn_ref::<js_sys::Function>() {
                             let _ = render_fn.call1(&JsValue::NULL, &JsValue::from(elem));
                         }
-                    }
-                }
             }
 
             closure.forget();

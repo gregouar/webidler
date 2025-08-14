@@ -116,11 +116,10 @@ pub fn MainMenuPage() -> impl IntoView {
                             placeholder="Enter your username"
                             bind=username
                             on:keydown=move |ev: leptos::ev::KeyboardEvent| {
-                                if ev.key() == "Enter" {
-                                    if let Some(pw) = password_ref.get() {
+                                if ev.key() == "Enter"
+                                    && let Some(pw) = password_ref.get() {
                                         pw.focus().unwrap();
                                     }
-                                }
                             }
                         />
                     </div>
