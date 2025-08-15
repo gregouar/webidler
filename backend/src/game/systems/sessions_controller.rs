@@ -123,6 +123,12 @@ async fn new_game_instance(
     let character_data =
         db::characters_data::load_character_data(db_pool, &character.character_id).await?;
 
+    let area_level_completed =
+        db::characters::read_character_area_completed(db_pool, &character.character_id, area_id)
+            .await?
+            .map(|area_completed| area_completed.max_area_level)
+            .unwrap_or_default();
+
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
     let player_inventory = match character_data {
@@ -162,9 +168,7 @@ async fn new_game_instance(
         }
     };
 
-    // TODO: get max area level reached for area and store somewhere
-
-    let game_data = GameInstanceData::init_from_store(
+    let mut game_data = GameInstanceData::init_from_store(
         master_store,
         area_id,
         None,
@@ -176,6 +180,8 @@ async fn new_game_instance(
         None,
         None,
     )?;
+
+    game_data.area_state.mutate().max_area_level_completed = area_level_completed;
 
     db::game_instances::save_game_instance_data(
         db_pool,

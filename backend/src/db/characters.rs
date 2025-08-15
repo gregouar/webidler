@@ -92,6 +92,30 @@ pub async fn read_character(
     .await
 }
 
+pub async fn read_character_area_completed(
+    db_pool: &DbPool,
+    character_id: &UserCharacterId,
+    area_id: &str,
+) -> Result<Option<CharacterAreaEntry>, sqlx::Error> {
+    sqlx::query_as!(
+        CharacterAreaEntry,
+        r#"
+        SELECT
+            character_id as "character_id: UserCharacterId",
+            area_id,
+            max_area_level as "max_area_level: AreaLevel",
+            created_at,
+            updated_at
+         FROM character_area_completed 
+         WHERE character_id = $1 AND area_id = $2
+         "#,
+        character_id,
+        area_id
+    )
+    .fetch_optional(db_pool)
+    .await
+}
+
 pub async fn read_character_areas_completed(
     db_pool: &DbPool,
     character_id: &UserCharacterId,
@@ -184,7 +208,7 @@ pub async fn update_character_progress(
     .await?;
 
     if max_area_level > 0 {
-    sqlx::query!(
+        sqlx::query!(
         "INSERT INTO character_area_completed (character_id, area_id, max_area_level) VALUES ($1, $2, $3)
          ON CONFLICT(character_id, area_id) DO UPDATE SET 
             max_area_level = CASE WHEN max_area_level > $3 THEN max_area_level ELSE $3 END, 

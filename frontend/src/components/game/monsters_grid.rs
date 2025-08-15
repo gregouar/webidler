@@ -276,7 +276,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             
             .champion-title {                
                 font-weight: bold;
-                color: #3b82f6;
+                color: #06b6d4;
             }
             
             .boss-title {
@@ -311,7 +311,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 <Show when=move || { gold_reward.get() > 0.0 }>
                     <div class="
                     reward-float gold-text text-2xl  text-shadow-md
-                    absolute left-1/2 top-[35%] transform -translate-y-1/2
+                    absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-50 flex items-center gap-1
                     ">
                         <span>+{format_number(gold_reward.get())}</span>
@@ -326,7 +326,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 <Show when=move || { gems_reward.get() > 0.0 }>
                     <div class="
                     reward-float gems-text text-2xl text-shadow-md
-                    absolute left-1/2 top-[65%] transform  -translate-y-1/2
+                    absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-50 flex items-center gap-1
                     ">
                         <span>+{format_number(gems_reward.get())}</span>
