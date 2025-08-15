@@ -18,7 +18,7 @@ pub struct AreaState {
     pub waves_done: u8,
 
     pub max_area_level_completed: AreaLevel,
-    pub last_gems_found: AreaLevel,
+    pub last_champion_spawn: AreaLevel,
 
     pub auto_progress: bool,
     pub going_back: u16,

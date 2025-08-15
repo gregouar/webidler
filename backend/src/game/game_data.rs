@@ -118,6 +118,8 @@ impl GameInstanceData {
             game_data.passives_tree_state.read(),
         );
 
+        game_data.player_state = PlayerState::init(game_data.player_specs.read());
+
         game_data
     }
 

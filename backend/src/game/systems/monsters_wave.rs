@@ -1,24 +1,25 @@
 use anyhow::Result;
 
 use shared::data::{
-    area::AreaLevel,
-    area::AreaState,
-    monster::MonsterSpecs,
-    monster::MonsterState,
+    area::{AreaLevel, AreaState},
+    monster::{MonsterRarity, MonsterSpecs, MonsterState},
     passive::StatEffect,
     stat_effect::{Modifier, StatType},
 };
 
-use crate::game::{
-    data::{
-        area::{AreaBlueprint, BossBlueprint, MonsterWaveBlueprint, MonsterWaveSpawnBlueprint},
-        master_store::MonstersSpecsStore,
-        monster::BaseMonsterSpecs,
-        DataInit,
-    },
-    utils::{
-        increase_factors,
-        rng::{self, RandomWeighted},
+use crate::{
+    constants::{CHAMPION_BASE_CHANCES, CHAMPION_INC_CHANCES, CHAMPION_LEVEL_INC},
+    game::{
+        data::{
+            area::{AreaBlueprint, BossBlueprint, MonsterWaveBlueprint, MonsterWaveSpawnBlueprint},
+            master_store::MonstersSpecsStore,
+            monster::BaseMonsterSpecs,
+            DataInit,
+        },
+        utils::{
+            increase_factors,
+            rng::{self, RandomWeighted},
+        },
     },
 };
 
@@ -41,7 +42,7 @@ impl RandomWeighted for &BossBlueprint {
 /// Return generated monsters + if it is boss
 pub fn generate_monsters_wave(
     area_blueprint: &AreaBlueprint,
-    area_state: &AreaState,
+    area_state: &mut AreaState,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>, bool)> {
     let (monster_specs, is_boss) =
@@ -53,7 +54,7 @@ pub fn generate_monsters_wave(
 /// Return generated monsters + if it is boss
 fn generate_monsters_wave_specs(
     area_blueprint: &AreaBlueprint,
-    area_state: &AreaState,
+    area_state: &mut AreaState,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Result<(Vec<MonsterSpecs>, bool)> {
     let available_bosses: Vec<_> = area_blueprint
@@ -104,7 +105,7 @@ fn generate_monsters_wave_specs(
 fn generate_all_monsters_specs(
     spawns: &[MonsterWaveSpawnBlueprint],
     area_blueprint: &AreaBlueprint,
-    area_state: &AreaState,
+    area_state: &mut AreaState,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Vec<MonsterSpecs> {
     let mut top_space_available = MAX_MONSTERS_PER_ROW;
@@ -162,15 +163,26 @@ fn generate_all_monsters_specs(
 fn generate_monster_specs(
     bp_specs: &BaseMonsterSpecs,
     area_blueprint: &AreaBlueprint,
-    area_state: &AreaState,
+    area_state: &mut AreaState,
 ) -> MonsterSpecs {
     let mut monster_specs = MonsterSpecs::init(bp_specs.clone());
-    let exp_factor = increase_factors::exponential(
-        area_state.area_level,
-        increase_factors::MONSTER_INCREASE_FACTOR,
-    );
+    let mut monster_level = area_state.area_level;
+
+    if area_state.area_level > area_state.last_champion_spawn {
+        let gem_chances = CHAMPION_BASE_CHANCES
+            + (CHAMPION_INC_CHANCES
+                * (area_state.area_level - area_state.last_champion_spawn) as f64);
+        if rng::random_range(0.0..1.0).unwrap_or(1.0) <= gem_chances {
+            area_state.last_champion_spawn = area_state.area_level;
+            monster_specs.rarity = MonsterRarity::Champion;
+            monster_level += CHAMPION_LEVEL_INC;
+        }
+    };
+
+    let exp_factor =
+        increase_factors::exponential(monster_level, increase_factors::MONSTER_INCREASE_FACTOR);
     let reward_factor = increase_factors::exponential(
-        area_state.area_level - area_blueprint.specs.starting_level + 1,
+        monster_level - area_blueprint.specs.starting_level + 1,
         increase_factors::MONSTER_INCREASE_FACTOR,
     );
 
@@ -184,7 +196,7 @@ fn generate_monster_specs(
             damage_type: None,
         },
         modifier: Modifier::Multiplier,
-        value: (area_state.area_level as f64 - 1.0) / 10.0,
+        value: (monster_level as f64 - 1.0) / 10.0,
     }];
     for skill_specs in monster_specs.skill_specs.iter_mut() {
         if skill_specs.base.upgrade_effects.is_empty() {
@@ -192,7 +204,7 @@ fn generate_monster_specs(
         } else {
             skills_updater::update_skill_specs(
                 skill_specs,
-                &skills_updater::compute_skill_upgrade_effects(skill_specs, area_state.area_level),
+                &skills_updater::compute_skill_upgrade_effects(skill_specs, monster_level),
             );
         }
     }

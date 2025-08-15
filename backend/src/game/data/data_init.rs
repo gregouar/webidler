@@ -22,7 +22,7 @@ impl DataInit<&AreaSpecs> for AreaState {
             is_boss: false,
             waves_done: 0,
             max_area_level_completed: 0,
-            last_gems_found: 0,
+            last_champion_spawn: 0,
             auto_progress: true,
             going_back: 0,
             end_quest: false,

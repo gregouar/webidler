@@ -135,7 +135,7 @@ async fn control_entities(
                 let (monster_specs, monster_states, is_boss) =
                     monsters_wave::generate_monsters_wave(
                         &game_data.area_blueprint,
-                        game_data.area_state.read(),
+                        game_data.area_state.mutate(),
                         &master_store.monster_specs_store,
                     )?;
                 game_data.monster_base_specs = LazySyncer::new(monster_specs.clone());

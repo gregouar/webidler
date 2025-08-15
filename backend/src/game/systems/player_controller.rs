@@ -108,7 +108,7 @@ pub fn reward_player(
 ) -> (f64, f64) {
     let gold_reward = (monster_specs.reward_factor * player_specs.gold_find).round();
     let gems_reward = if let MonsterRarity::Champion = monster_specs.rarity {
-        area_state.last_gems_found = area_state.area_level;
+        area_state.last_champion_spawn = area_state.area_level;
         area_state.area_level as f64
     } else {
         0.0
