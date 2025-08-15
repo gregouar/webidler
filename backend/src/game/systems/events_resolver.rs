@@ -95,14 +95,17 @@ fn handle_kill_event(
     match target {
         CharacterId::Monster(monster_index) => {
             game_data.game_stats.monsters_killed += 1;
+
             if let Some(monster_specs) = game_data.monster_specs.get(monster_index) {
-                let gold_reward = player_controller::reward_player(
+                let (gold_reward, gems_reward) = player_controller::reward_player(
                     game_data.player_resources.mutate(),
                     game_data.player_specs.read(),
                     monster_specs,
+                    game_data.area_state.mutate(),
                 );
                 if let Some(monster_state) = game_data.monster_states.get_mut(monster_index) {
                     monster_state.gold_reward = gold_reward;
+                    monster_state.gems_reward = gems_reward;
                 }
             }
 
@@ -154,6 +157,18 @@ fn handle_area_completed_event(
     }
 
     let area_state = game_data.area_state.mutate();
+
+    if (area_state.area_level > area_state.max_area_level_completed)
+        && (area_state.area_level - game_data.area_blueprint.specs.starting_level)
+            .is_multiple_of(10)
+    {
+        game_data.player_resources.mutate().shards += 1.0;
+    }
+
+    area_state.max_area_level_completed = area_state
+        .max_area_level_completed
+        .max(area_state.area_level);
+
     area_state.waves_done = 1;
     if area_state.auto_progress {
         area_state.area_level += 1;

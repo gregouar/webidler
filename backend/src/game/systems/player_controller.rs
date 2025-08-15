@@ -1,10 +1,10 @@
 use anyhow::{anyhow, Result};
 
 use shared::data::{
-    area::AreaLevel,
+    area::{AreaLevel, AreaState},
     character::CharacterId,
     item::{ItemCategory, ItemSlot, ItemSpecs, WeaponSpecs},
-    monster::MonsterSpecs,
+    monster::{MonsterRarity, MonsterSpecs},
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{BaseSkillSpecs, SkillSpecs, SkillState},
 };
@@ -104,11 +104,20 @@ pub fn reward_player(
     player_resources: &mut PlayerResources,
     player_specs: &PlayerSpecs,
     monster_specs: &MonsterSpecs,
-) -> f64 {
-    let gold_reward = (monster_specs.power_factor * player_specs.gold_find).round();
+    area_state: &mut AreaState,
+) -> (f64, f64) {
+    let gold_reward = (monster_specs.reward_factor * player_specs.gold_find).round();
+    let gems_reward = if let MonsterRarity::Champion = monster_specs.rarity {
+        area_state.last_gems_found = area_state.area_level;
+        area_state.area_level as f64
+    } else {
+        0.0
+    };
     player_resources.gold += gold_reward;
-    player_resources.experience += monster_specs.power_factor.round();
-    gold_reward
+    player_resources.gems += gems_reward;
+    player_resources.experience += monster_specs.reward_factor.round();
+
+    (gold_reward, gems_reward)
 }
 
 pub fn level_up(

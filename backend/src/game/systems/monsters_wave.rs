@@ -67,7 +67,12 @@ fn generate_monsters_wave_specs(
 
     if let Some(boss) = rng::random_weighted_pick(&available_bosses) {
         return Ok((
-            generate_all_monsters_specs(&boss.spawns, area_state, monsters_specs_store),
+            generate_all_monsters_specs(
+                &boss.spawns,
+                area_blueprint,
+                area_state,
+                monsters_specs_store,
+            ),
             true,
         ));
     }
@@ -83,7 +88,12 @@ fn generate_monsters_wave_specs(
 
     if let Some(wave) = rng::random_weighted_pick(&available_waves) {
         return Ok((
-            generate_all_monsters_specs(&wave.spawns, area_state, monsters_specs_store),
+            generate_all_monsters_specs(
+                &wave.spawns,
+                area_blueprint,
+                area_state,
+                monsters_specs_store,
+            ),
             false,
         ));
     }
@@ -93,6 +103,7 @@ fn generate_monsters_wave_specs(
 
 fn generate_all_monsters_specs(
     spawns: &[MonsterWaveSpawnBlueprint],
+    area_blueprint: &AreaBlueprint,
     area_state: &AreaState,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Vec<MonsterSpecs> {
@@ -132,7 +143,7 @@ fn generate_all_monsters_specs(
                     }
                 }
 
-                let mut specs = generate_monster_specs(specs, area_state);
+                let mut specs = generate_monster_specs(specs, area_blueprint, area_state);
                 specs.character_specs.position_y = if use_top { 1 } else { 2 };
                 specs.character_specs.position_x = x_pos;
                 monsters_specs.push(specs);
@@ -148,14 +159,23 @@ fn generate_all_monsters_specs(
     monsters_specs
 }
 
-fn generate_monster_specs(bp_specs: &BaseMonsterSpecs, area_state: &AreaState) -> MonsterSpecs {
+fn generate_monster_specs(
+    bp_specs: &BaseMonsterSpecs,
+    area_blueprint: &AreaBlueprint,
+    area_state: &AreaState,
+) -> MonsterSpecs {
     let mut monster_specs = MonsterSpecs::init(bp_specs.clone());
     let exp_factor = increase_factors::exponential(
         area_state.area_level,
         increase_factors::MONSTER_INCREASE_FACTOR,
     );
+    let reward_factor = increase_factors::exponential(
+        area_state.area_level - area_blueprint.specs.starting_level + 1,
+        increase_factors::MONSTER_INCREASE_FACTOR,
+    );
 
     monster_specs.power_factor *= exp_factor;
+    monster_specs.reward_factor *= reward_factor;
     monster_specs.character_specs.max_life *= exp_factor;
 
     let effects = vec![StatEffect {

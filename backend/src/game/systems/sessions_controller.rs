@@ -162,6 +162,8 @@ async fn new_game_instance(
         }
     };
 
+    // TODO: get max area level reached for area and store somewhere
+
     let game_data = GameInstanceData::init_from_store(
         master_store,
         area_id,

@@ -21,6 +21,8 @@ impl DataInit<&AreaSpecs> for AreaState {
             area_level: specs.starting_level,
             is_boss: false,
             waves_done: 0,
+            max_area_level_completed: 0,
+            last_gems_found: 0,
             auto_progress: true,
             going_back: 0,
             end_quest: false,
@@ -81,6 +83,7 @@ impl DataInit<&MonsterSpecs> for MonsterState {
             skill_states: specs.skill_specs.iter().map(SkillState::init).collect(),
             initiative: rng::random_range(0.0..specs.max_initiative).unwrap_or_default(),
             gold_reward: 0.0,
+            gems_reward: 0.0,
         }
     }
 }

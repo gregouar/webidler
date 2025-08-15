@@ -4,6 +4,7 @@ use leptos::{html::*, prelude::*};
 
 use rand::Rng;
 
+use shared::data::monster::MonsterRarity;
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
 
 use crate::assets::img_asset;
@@ -18,8 +19,8 @@ use crate::components::{
     },
 };
 
-use super::GameContext;
 use super::character::CharacterPortrait;
+use super::GameContext;
 
 #[component]
 pub fn MonstersGrid() -> impl IntoView {
@@ -198,18 +199,28 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     });
 
     let gold_reward = RwSignal::new(0.0);
+    let gems_reward = RwSignal::new(0.0);
+
     Effect::new(move |_| {
         if is_dead.get() {
-            gold_reward.set(
-                game_context
-                    .monster_states
-                    .read()
-                    .get(index)
-                    .map(|x| x.gold_reward)
-                    .unwrap_or_default(),
-            );
+            let (gold, gems) = game_context
+                .monster_states
+                .read()
+                .get(index)
+                .map(|x| (x.gold_reward, x.gems_reward))
+                .unwrap_or_default();
+
+            gold_reward.set(gold);
+
+            gems_reward.set(gems);
         }
     });
+
+    let title_style = match specs.rarity {
+        MonsterRarity::Normal => "",
+        MonsterRarity::Champion => "champion-title",
+        MonsterRarity::Boss => "boss-title",
+    };
 
     view! {
         <style>
@@ -220,21 +231,31 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 background-size: 400%;
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
-                animation: goldShimmer 2s infinite linear;
+                animation: rewardShimmer 2s infinite linear;
                 text-shadow: 0 0 8px rgba(255, 223, 0, 0.9);
             }
             
-            .gold-float {
-            animation: goldFloat 2.5s ease-out forwards;
-            position: absolute;
+            .gems-text {
+                font-weight: bold;
+                background: linear-gradient(90deg, #06b6d4, #3b82f6, #9333ea, #06b6d4);
+                background-size: 400%;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: rewardShimmer 2s infinite linear;
+                text-shadow: 0 0 8px rgba(0, 200, 255, 0.9);
             }
             
-            @keyframes goldShimmer {
+            .reward-float {
+                animation: rewardFloat 2.5s ease-out forwards;
+                position: absolute;
+            }
+            
+            @keyframes rewardShimmer {
                 0% { background-position: 0% }
                 100% { background-position: 400% }
             }
             
-            @keyframes goldFloat {
+            @keyframes rewardFloat {
                 0% {
                     opacity: 0;
                     transform: translateY(0) scale(0.9);
@@ -251,7 +272,18 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     opacity: 0;
                     transform: translateY(-64px) scale(1);
                 }
-            }"
+            }
+            
+            .champion-title {                
+                font-weight: bold;
+                color: #3b82f6;
+            }
+            
+            .boss-title {
+                font-weight: bold;
+                color: #facc15;
+            }
+            "
         </style>
         <div class="grid grid-cols-4 h-full bg-zinc-800 shadow-md rounded-md gap-2 p-2 ring-1 ring-zinc-950">
             <div class="relative flex flex-col gap-2 col-span-3 h-full">
@@ -260,24 +292,29 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                         class=if is_big { "h-3 sm:h-6" } else { "h-2 sm:h-4" }
                         bar_color="bg-gradient-to-b from-red-500 to-red-700"
                         value=health_percent
-                        text=monster_name.clone()
-                    />
+                    >
+                        <span class=title_style>{monster_name}</span>
+                    </HorizontalProgressBar>
                 </StaticTooltip>
+
                 <CharacterPortrait
                     image_uri=specs.character_specs.portrait.clone()
                     character_name=specs.character_specs.name.clone()
+                    rarity=specs.rarity
                     just_hurt=just_hurt
                     just_hurt_crit=just_hurt_crit
                     just_blocked=just_blocked
                     is_dead=is_dead
                     statuses=statuses
                 />
+
                 <Show when=move || { gold_reward.get() > 0.0 }>
                     <div class="
-                    flex gold-float gold-text text-2xl  text-shadow-md
-                    absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50
+                    reward-float gold-text text-2xl  text-shadow-md
+                    absolute left-1/2 top-[35%] transform -translate-y-1/2
+                    pointer-events-none z-50 flex items-center gap-1
                     ">
-                        {format!("+{}", format_number(gold_reward.get()))}
+                        <span>+{format_number(gold_reward.get())}</span>
                         <img
                             src=img_asset("ui/gold.webp")
                             alt="Gold"
@@ -285,7 +322,23 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                         />
                     </div>
                 </Show>
+
+                <Show when=move || { gems_reward.get() > 0.0 }>
+                    <div class="
+                    reward-float gems-text text-2xl text-shadow-md
+                    absolute left-1/2 top-[65%] transform  -translate-y-1/2
+                    pointer-events-none z-50 flex items-center gap-1
+                    ">
+                        <span>+{format_number(gems_reward.get())}</span>
+                        <img
+                            src=img_asset("ui/gems.webp")
+                            alt="Gems"
+                            class="h-[1.2em] aspect-square"
+                        />
+                    </div>
+                </Show>
             </div>
+
             <div class="flex flex-col justify-evenly w-full min-w-16">
                 <For
                     each=move || { specs.skill_specs.clone().into_iter().enumerate() }
