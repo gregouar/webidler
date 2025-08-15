@@ -73,7 +73,7 @@ pub async fn read_character(
             user_id as "user_id: UserId",
             character_name,
             portrait,
-            max_area_level as "max_area_level: AreaLevel",
+            max_area_level as "max_area_level!: AreaLevel",
             resource_gems,
             resource_shards,
             created_at,
@@ -103,7 +103,7 @@ pub async fn read_character_area_completed(
         SELECT
             character_id as "character_id: UserCharacterId",
             area_id,
-            max_area_level as "max_area_level: AreaLevel",
+            max_area_level as "max_area_level!: AreaLevel",
             created_at,
             updated_at
          FROM character_area_completed 
@@ -126,7 +126,7 @@ pub async fn read_character_areas_completed(
         SELECT
             character_id as "character_id: UserCharacterId",
             area_id,
-            max_area_level as "max_area_level: AreaLevel",
+            max_area_level as "max_area_level!: AreaLevel",
             created_at,
             updated_at
          FROM character_area_completed WHERE character_id = $1
@@ -149,7 +149,7 @@ pub async fn read_all_user_characters(
             user_id as "user_id: UserId",
             character_name,
             portrait,
-            max_area_level as "max_area_level: AreaLevel",
+            max_area_level as "max_area_level!: AreaLevel",
             resource_gems,
             resource_shards,
             created_at,
@@ -210,9 +210,17 @@ pub async fn update_character_progress(
     if max_area_level > 0 {
         sqlx::query!(
         "INSERT INTO character_area_completed (character_id, area_id, max_area_level) VALUES ($1, $2, $3)
-         ON CONFLICT(character_id, area_id) DO UPDATE SET 
-            max_area_level = CASE WHEN max_area_level > $3 THEN max_area_level ELSE $3 END, 
-            updated_at = CASE WHEN max_area_level > $3 THEN updated_at ELSE CURRENT_TIMESTAMP END",
+         ON CONFLICT(character_id, area_id) DO UPDATE 
+         SET max_area_level = CASE
+            WHEN character_area_completed.max_area_level > EXCLUDED.max_area_level
+            THEN character_area_completed.max_area_level
+            ELSE EXCLUDED.max_area_level
+        END,
+        updated_at = CASE
+            WHEN character_area_completed.max_area_level > EXCLUDED.max_area_level
+            THEN character_area_completed.updated_at
+            ELSE CURRENT_TIMESTAMP
+        END;",
         character_id,
         area_id,
         max_area_level
