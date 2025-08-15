@@ -2,6 +2,7 @@ use anyhow::Result;
 use std::time::Instant;
 
 use crate::game::data::master_store;
+use crate::game::systems::player_updater;
 
 use super::data::DataInit;
 use super::systems::player_controller::PlayerController;
@@ -81,7 +82,8 @@ impl GameInstanceData {
         if let Some(area_level) = area_level {
             area_state.area_level = area_level;
         }
-        Self {
+
+        let mut game_data = Self {
             area_id,
             area_state: LazySyncer::new(area_state),
             area_blueprint,
@@ -106,7 +108,17 @@ impl GameInstanceData {
             queued_loot: LazySyncer::new(queued_loot.unwrap_or_default()),
 
             game_stats: game_stats.unwrap_or_default(),
-        }
+        };
+
+        player_updater::update_player_specs(
+            game_data.player_specs.mutate(),
+            &game_data.player_state,
+            game_data.player_inventory.read(),
+            &game_data.passives_tree_specs,
+            game_data.passives_tree_state.read(),
+        );
+
+        game_data
     }
 
     #[allow(clippy::too_many_arguments)]
