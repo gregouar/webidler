@@ -188,7 +188,7 @@ async fn handle_disconnect(
             db_pool,
             &session.character_id,
             &session.game_data.area_id,
-            session.game_data.game_stats.highest_area_level,
+            session.game_data.area_state.read().max_area_level_completed,
             session.game_data.player_resources.read().gems,
             session.game_data.player_resources.read().shards,
         )
