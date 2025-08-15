@@ -43,10 +43,10 @@ jobs:
       - name: Install nightly Rust
         uses: dtolnay/rust-toolchain@nightly
         with:
-          components: clippy, rustfmt
+          components: clippy
 
       - name: lint
-        run: cargo clippy & cargo fmt
+        run: cargo clippy -- -D warnings
 
       - name: Prepare SQLx Offline Data
         run: |
