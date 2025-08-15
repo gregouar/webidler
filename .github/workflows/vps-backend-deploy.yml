@@ -57,7 +57,7 @@ jobs:
       - name: lint
         run: cargo clippy -- -D warnings
         env:
-          JWT_TOKEN: "test"
+          JWT_SECRET: "test"
           DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
 
       - name: Upload SQLx Data
