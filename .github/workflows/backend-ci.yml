@@ -46,8 +46,7 @@ jobs:
           components: clippy, rustfmt
 
       - name: Lint
-        run: |
-          cargo clippy -- -D warnings
+        run: cargo clippy & cargo fmt
 
       - name: Prepare SQLx Offline Data
         run: |

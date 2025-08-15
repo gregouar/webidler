@@ -286,7 +286,7 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
                 <div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 p-4 relative
                 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                     <For
-                        each=move || (0..game_context.player_inventory.read().max_bag_size as usize)
+                        each=move || 0..game_context.player_inventory.read().max_bag_size as usize
                         key=|i| *i
                         let(i)
                     >

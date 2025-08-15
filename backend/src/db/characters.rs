@@ -183,6 +183,7 @@ pub async fn update_character_progress(
     .execute(db_pool)
     .await?;
 
+    if max_area_level > 0 {
     sqlx::query!(
         "INSERT INTO character_area_completed (character_id, area_id, max_area_level) VALUES ($1, $2, $3)
          ON CONFLICT(character_id, area_id) DO UPDATE SET 
@@ -194,6 +195,7 @@ pub async fn update_character_progress(
     )
     .execute(db_pool)
     .await?;
+    }
 
     Ok(())
 }
