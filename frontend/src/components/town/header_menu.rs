@@ -1,5 +1,7 @@
 use leptos::{html::*, prelude::*};
 
+use shared::data::user::UserCharacter;
+
 use crate::{
     assets::img_asset,
     components::ui::{
@@ -10,8 +12,9 @@ use crate::{
 };
 
 #[component]
-pub fn HeaderMenu() -> impl IntoView {
-    let gems = Signal::derive(move || 0.0);
+pub fn HeaderMenu(character: UserCharacter) -> impl IntoView {
+    let gems = Signal::derive(move || character.resource_gems);
+    let shards = Signal::derive(move || character.resource_shards);
 
     let navigate_quit = {
         let navigate = leptos_router::hooks::use_navigate();
@@ -35,7 +38,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     icon="ui/power_shard.webp"
                     name="Power Shards"
                     description="To permanently increase power of passive skills."
-                    value=gems
+                    value=shards
                 />
             </div>
             <div class="flex justify-end space-x-2  w-full">

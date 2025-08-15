@@ -67,9 +67,10 @@ pub fn TownPage() -> impl IntoView {
                 {move || {
                     Suspend::new(async move {
                         let (character, areas) = character_and_areas.await.unwrap_or_default();
+                        // TODO: arc it
 
                         view! {
-                            <HeaderMenu />
+                            <HeaderMenu character=character.clone() />
                             <div class="relative flex-1">
                                 <TownScene character=character areas=areas />
                             // <MarketPanel open=town_context.open_market />
