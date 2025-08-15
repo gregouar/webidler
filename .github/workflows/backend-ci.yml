@@ -40,14 +40,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install nightly Rust
-        uses: dtolnay/rust-toolchain@nightly
+      - name: Install stable Rust
+        uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
 
       - name: Lint
-        run: |
-          cargo clippy
+        run: cargo clippy -- -D warnings
 
       - name: Prepare SQLx Offline Data
         run: |
