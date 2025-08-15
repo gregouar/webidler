@@ -45,9 +45,6 @@ jobs:
         with:
           components: clippy
 
-      - name: Lint
-        run: cargo clippy -- -D warnings
-
       - name: Prepare SQLx Offline Data
         run: |
           cargo install sqlx-cli --no-default-features --features postgres
@@ -56,6 +53,12 @@ jobs:
         env:
           DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
 
+      - name: Lint
+        run: cargo clippy -- -D warnings
+        env:
+          JWT_TOKEN: "test"
+          DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
+          
       - name: Run tests
         run: cargo test --no-default-features --features postgres
         env:
