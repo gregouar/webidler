@@ -87,7 +87,7 @@ CREATE TABLE game_sessions (
     character_id TEXT NOT NULL,
     -- 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    ended_at TIMESTAMP NOT NULL DEFAULT '9999-1-1 23:59:59',
+    ended_at TIMESTAMP NOT NULL DEFAULT '9999-01-01 23:59:59',
     -- 
     UNIQUE(character_id, ended_at),
     FOREIGN KEY(character_id) REFERENCES characters(character_id) ON DELETE CASCADE

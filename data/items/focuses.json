@@ -29,5 +29,64 @@
       }
     ],
     "min_area_level": 40
+  },
+  "spellbook_unique": {
+    "name": "Vile Codex",
+    "description": "Each cursed name written in its pages rots faster than flesh should.",
+    "icon": "items/vile_codex.webp",
+    "slot": "Shield",
+    "categories": ["Focus"],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "min": 50.0,
+        "max": 50.0
+      },
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Poison" } },
+        "modifier": "Multiplier",
+        "min": 0.4,
+        "max": 0.6
+      },
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "min": 0.3,
+        "max": 0.5
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "vile_codex",
+        "description": "On Killing a Cursed Enemy:",
+        "OnKill": { "is_debuffed": true },
+        "target": "Source",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "min_duration": 5,
+              "max_duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": { "Damage": {"damage_type": "Poison"} }
+                    }
+                  },
+                  "min_value": 3,
+                  "max_value": 3
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 40
   }
 }

@@ -126,6 +126,15 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
 }
 
 fn format_effect(effect: SkillEffect) -> impl IntoView {
+    let success_chances = if effect.failure_chances > 0.0 {
+        Some(format!(
+            "{:.0}% chances to ",
+            (1.0 - effect.failure_chances) * 100.0
+        ))
+    } else {
+        None
+    };
+
     match effect.effect_type {
         SkillEffectType::FlatDamage {
             damage,
@@ -135,10 +144,12 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
             {damage
                 .into_iter()
                 .map(|(damage_type, (min, max))| {
+                    let success_chances = success_chances.clone();
                     view! {
                         <EffectLi>
-                            "Deals " <span class="font-semibold">{format_min_max(min, max)}</span>
-                            " " {optional_damage_type_str(Some(damage_type))} "Damage"
+                            {success_chances}"Deal "
+                            <span class="font-semibold">{format_min_max(min, max)}</span> " "
+                            {optional_damage_type_str(Some(damage_type))} "Damage"
                         </EffectLi>
                     }
                 })
@@ -173,73 +184,83 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
             let mut stat_effects = Vec::new();
             let mut max_stat_effects = Vec::new();
 
-            let formatted_status_effects:Vec<_> = statuses.iter().cloned().map(|status_effect| {
-                match status_effect.status_type {
+            let formatted_status_effects: Vec<_> = statuses
+                .iter()
+                .cloned()
+                .map(|status_effect| match status_effect.status_type {
                     StatusSpecs::Stun => {
-                                        view! { <EffectLi>"Stun for "{format_min_max(min_duration, max_duration)}" seconds"</EffectLi> }
-                                            .into_any()
-                                    }
+                        let success_chances = success_chances.clone();
+                        view! {
+                            <EffectLi>
+                                {success_chances}"Stun for "
+                                {format_min_max(min_duration, max_duration)}" seconds"
+                            </EffectLi>
+                        }
+                        .into_any()
+                    }
                     StatusSpecs::DamageOverTime { damage_type, .. } => {
-                                        view! {
-                                            <EffectLi>
-                                                "Deals "
-                                                <span class="font-semibold">
-                                                    {format_min_max(
-                                                        status_effect.min_value,
-                                                        status_effect.max_value,
-                                                    )}
-                                                </span>"  "{optional_damage_type_str(Some(damage_type))}
-                                                "Damage per second for "
-                                                {format_min_max(min_duration, max_duration)}" seconds"
-                                            </EffectLi>
-                                        }
-                                            .into_any()
-                                    }
+                        let success_chances = success_chances.clone();
+                        view! {
+                            <EffectLi>
+                                {success_chances}"Deal "
+                                <span class="font-semibold">
+                                    {format_min_max(
+                                        status_effect.min_value,
+                                        status_effect.max_value,
+                                    )}
+                                </span>"  "{optional_damage_type_str(Some(damage_type))}
+                                "Damage per second for "
+                                {format_min_max(min_duration, max_duration)} " seconds"
+                            </EffectLi>
+                        }
+                        .into_any()
+                    }
                     StatusSpecs::StatModifier {
-                                        stat,
-                                        modifier,
-                                        debuff,
-                                    } => {
-                                        stat_effects.push(StatEffect {
-                                            stat,
-                                            modifier,
-                                            value: if debuff {
-                                                -status_effect.min_value
-                                            } else {
-                                                status_effect.min_value
-                                            },
-                                        });
-                                        if status_effect.min_value != status_effect.max_value {
-                                            max_stat_effects.push(StatEffect {
-                                                stat,
-                                                modifier,
-                                                value: if debuff {
-                                                    -status_effect.min_value
-                                                } else {
-                                                    status_effect.min_value
-                                                },
-                                            });
-                                        }
-                                        ().into_any()
-                                    },
-StatusSpecs::Trigger(trigger_specs) => {
-                                        view! {
-                                            <EffectLi>
-                                                "Apply the following status for "
-                                                {format_min_max(min_duration, max_duration)} " seconds:"
-                                                <ul>{format_trigger(*trigger_specs)}</ul>
-                                            </EffectLi>
-                                        }
-                                            .into_any()
-                                    },
-                                    }
-            }).collect();
+                        stat,
+                        modifier,
+                        debuff,
+                    } => {
+                        stat_effects.push(StatEffect {
+                            stat,
+                            modifier,
+                            value: if debuff {
+                                -status_effect.min_value
+                            } else {
+                                status_effect.min_value
+                            },
+                        });
+                        if status_effect.min_value != status_effect.max_value {
+                            max_stat_effects.push(StatEffect {
+                                stat,
+                                modifier,
+                                value: if debuff {
+                                    -status_effect.min_value
+                                } else {
+                                    status_effect.min_value
+                                },
+                            });
+                        }
+                        ().into_any()
+                    }
+                    StatusSpecs::Trigger(trigger_specs) => {
+                        let success_chances = success_chances.clone();
+                        view! {
+                            <EffectLi>
+                                {success_chances}"Apply the following status for "
+                                {format_min_max(min_duration, max_duration)} " seconds:"
+                                <ul>{format_trigger(*trigger_specs)}</ul>
+                            </EffectLi>
+                        }
+                        .into_any()
+                    }
+                })
+                .collect();
 
             let formatted_stats_effects = {
                 (!stat_effects.is_empty()).then(|| {
                     view! {
                         <EffectLi>
-                            "Apply the following status for "
+                            {success_chances}"Apply the following status for "
                             {format_min_max(min_duration, max_duration)} " seconds:"
                             <ul>
                                 {effects_tooltip::formatted_effects_list(
@@ -277,7 +298,8 @@ StatusSpecs::Trigger(trigger_specs) => {
             max,
         } => view! {
             <EffectLi>
-                "Restore "<span class="font-semibold">{format_min_max(min, max)}</span>" "
+                {success_chances}"Restore "
+                <span class="font-semibold">{format_min_max(min, max)}</span>" "
                 {match restore_type {
                     RestoreType::Life => "Life",
                     RestoreType::Mana => "Mana",
@@ -285,7 +307,9 @@ StatusSpecs::Trigger(trigger_specs) => {
             </EffectLi>
         }
         .into_any(),
-        SkillEffectType::Resurrect => view! { <EffectLi>"Resurrect"</EffectLi> }.into_any(),
+        SkillEffectType::Resurrect => {
+            view! { <EffectLi>{success_chances}"Resurrect"</EffectLi> }.into_any()
+        }
     }
 }
 
@@ -302,13 +326,17 @@ fn EffectLi(children: Children) -> impl IntoView {
     view! { <li class="text-sm text-purple-200 leading-snug">{children()}</li> }
 }
 
-fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
-    let effects = trigger
-        .triggered_effect
-        .effects
-        .into_iter()
-        .map(format_effect)
-        .collect::<Vec<_>>();
+pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
+    let effects = if trigger.triggered_effect.modifiers.is_empty() {
+        trigger
+            .triggered_effect
+            .effects
+            .into_iter()
+            .map(format_effect)
+            .collect::<Vec<_>>()
+    } else {
+        vec![]
+    };
 
     view! {
         <EffectLi>{trigger.description}</EffectLi>

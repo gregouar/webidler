@@ -126,6 +126,17 @@ pub fn update_player_specs(
                 }),
         )
         .map(|trigger_specs| trigger_specs.triggered_effect.clone())
+        .chain(
+            player_inventory
+                .equipped
+                .values()
+                .filter_map(|equipped| match equipped {
+                    EquippedSlot::MainSlot(item_specs) => Some(&item_specs.triggers),
+                    EquippedSlot::ExtraSlot(_) => None,
+                })
+                .flat_map(|triggers| triggers.iter())
+                .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
+        )
         .collect();
 
     // TODO: Collect item triggers and effects to triggers

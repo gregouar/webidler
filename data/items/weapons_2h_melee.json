@@ -33,5 +33,98 @@
       "crit_damage": 2
     },
     "min_area_level": 40
+  },
+  "woodcutter_axe_unique": {
+    "name": "Sootreaver",
+    "description": "Ash feeds ash.",
+    "icon": "items/sootreaver.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.5,
+      "damage": {
+        "Physical": [6, 18]
+      },
+      "crit_chances": 0.05,
+      "crit_damage": 2
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "min": -6.0,
+        "max": -6.0
+      },
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "modifier": "Flat",
+        "min": 6.0,
+        "max": 6.0
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "min": -18.0,
+        "max": -18.0
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "modifier": "Flat",
+        "min": 18.0,
+        "max": 18.0
+      },
+      {
+        "scope": "Local",
+        "stat": { "Damage": { "damage_type": "Fire" } },
+        "modifier": "Multiplier",
+        "min": 0.5,
+        "max": 1.0
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "sootreaver_burn",
+        "description": "50% to inflict 100% of Fire Damage as Fire Damage over Time per second for 4 seconds.",
+        "OnHit": { "skill_type": "Attack" },
+        "effects": [
+          {
+            "failure_chances": 0.5,
+            "ApplyStatus": {
+              "min_duration": 4,
+              "max_duration": 4,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Fire",
+                      "ignore_armor": true
+                    }
+                  },
+                  "min_value": 1,
+                  "max_value": 1
+                }
+              ]
+            }
+          }
+        ],
+        "modifiers": [
+          {
+            "stat": { "Damage": {} },
+            "modifier": "Multiplier",
+            "factor": 1.0,
+            "source": { "HitDamage": "Fire" }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 40
   }
 }

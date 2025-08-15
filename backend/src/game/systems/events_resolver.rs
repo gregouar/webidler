@@ -1,6 +1,11 @@
+use std::collections::HashSet;
+
 use shared::{
     constants::WAVES_PER_AREA_LEVEL,
-    data::{area::AreaLevel, character::CharacterId, trigger::EventTrigger},
+    data::{
+        area::AreaLevel, character::CharacterId, character_status::StatusSpecs,
+        trigger::EventTrigger,
+    },
 };
 
 use crate::game::{
@@ -106,18 +111,43 @@ fn handle_kill_event(
                 if let Some(monster_state) = game_data.monster_states.get_mut(monster_index) {
                     monster_state.gold_reward = gold_reward;
                     monster_state.gems_reward = gems_reward;
-                }
-            }
 
-            for triggered_effects in game_data.player_specs.read().triggers.iter() {
-                if let EventTrigger::OnKill = triggered_effects.trigger {
-                    trigger_effects.push(TriggerContext {
-                        trigger: triggered_effects.clone(),
-                        source: CharacterId::Player,
-                        target,
-                        hit_context: None,
-                        area_level: game_data.area_state.read().area_level,
-                    });
+                    let mut is_debuffed = false;
+                    let mut is_stunned = false;
+                    let mut is_damaged_over_time = HashSet::new();
+                    for (status_specs, _) in monster_state.character_state.statuses.iter() {
+                        match status_specs {
+                            StatusSpecs::Stun => {
+                                is_stunned = true;
+                            }
+                            StatusSpecs::DamageOverTime { damage_type, .. } => {
+                                is_damaged_over_time.insert(damage_type);
+                            }
+                            StatusSpecs::StatModifier { debuff: true, .. } => {
+                                is_debuffed = true;
+                            }
+                            __ => {}
+                        }
+                    }
+
+                    for triggered_effects in game_data.player_specs.read().triggers.iter() {
+                        if let EventTrigger::OnKill(kill_trigger) = triggered_effects.trigger {
+                            if kill_trigger.is_stunned.unwrap_or(is_stunned) == is_stunned
+                                && kill_trigger.is_debuffed.unwrap_or(is_debuffed) == is_debuffed
+                                && kill_trigger
+                                    .is_damaged_over_time
+                                    .map_or(true, |dt| is_damaged_over_time.contains(&dt))
+                            {
+                                trigger_effects.push(TriggerContext {
+                                    trigger: triggered_effects.clone(),
+                                    source: CharacterId::Player,
+                                    target,
+                                    hit_context: None,
+                                    area_level: game_data.area_state.read().area_level,
+                                });
+                            }
+                        }
+                    }
                 }
             }
         }

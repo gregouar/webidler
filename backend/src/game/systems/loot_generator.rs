@@ -110,6 +110,7 @@ pub fn roll_item(
     items_controller::update_item_specs(
         ItemSpecs {
             name: base.name.clone(),
+            triggers: base.triggers.clone(),
             base,
             rarity,
             level,

@@ -85,16 +85,14 @@ fn apply_skill_on_targets<'a>(
     }
 
     for skill_effect in targets_group.effects.iter() {
-        if rng::random_range(0.0..=1.0).unwrap_or(1.0) >= skill_effect.failure_chances {
-            apply_skill_effect(
-                events_queue,
-                attacker,
-                skill_type,
-                targets_group.range,
-                skill_effect,
-                &mut targets,
-            );
-        }
+        apply_skill_effect(
+            events_queue,
+            attacker,
+            skill_type,
+            targets_group.range,
+            skill_effect,
+            &mut targets,
+        );
     }
 
     true
@@ -188,6 +186,10 @@ pub fn apply_skill_effect(
     skill_effect: &SkillEffect,
     targets: &mut [&mut Target],
 ) {
+    if rng::random_range(0.0..=1.0).unwrap_or(1.0) <= skill_effect.failure_chances {
+        return;
+    }
+
     match &skill_effect.effect_type {
         SkillEffectType::FlatDamage {
             damage,

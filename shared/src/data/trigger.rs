@@ -9,7 +9,7 @@ use super::{
 pub enum EventTrigger {
     OnHit(HitTrigger),
     OnTakeHit(HitTrigger),
-    OnKill,
+    OnKill(KillTrigger),
     OnWaveCompleted,
 }
 
@@ -29,6 +29,17 @@ pub struct HitTrigger {
     #[serde(default)]
     pub is_hurt: Option<bool>,
     // TODO: Track skill id?
+}
+
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default, PartialOrd, Ord,
+)]
+pub struct KillTrigger {
+    #[serde(default)]
+    pub is_stunned: Option<bool>,
+    pub is_debuffed: Option<bool>,
+    pub is_damaged_over_time: Option<DamageType>,
+    // TODO: more?
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

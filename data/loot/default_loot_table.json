@@ -87,8 +87,16 @@
       "weight": 2000
     },
     {
+      "item_id": "leather_boots_unique",
+      "weight": 20
+    },
+    {
       "item_id": "woodcutter_axe",
       "weight": 2000
+    },
+    {
+      "item_id": "woodcutter_axe_unique",
+      "weight": 20
     },
     {
       "item_id": "hunting_bow",
@@ -105,6 +113,10 @@
     {
       "item_id": "spellbook",
       "weight": 2000
+    },
+    {
+      "item_id": "spellbook_unique",
+      "weight": 20
     },
     {
       "item_id": "hooded_wrap",

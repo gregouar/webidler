@@ -95,8 +95,10 @@ pub fn formatted_effects_list(
     let mut merged: Vec<String> = Vec::with_capacity(affix_effects.len());
 
     // This will be used to merge added min and added max damage together
-    let mut min_damage: HashMap<(Option<SkillType>, Option<DamageType>), f64> = HashMap::new();
-    let mut max_damage: HashMap<(Option<SkillType>, Option<DamageType>), f64> = HashMap::new();
+    let mut min_damage: HashMap<(Option<SkillType>, Option<DamageType>, bool), f64> =
+        HashMap::new();
+    let mut max_damage: HashMap<(Option<SkillType>, Option<DamageType>, bool), f64> =
+        HashMap::new();
 
     for effect in affix_effects.iter().rev() {
         match effect.modifier {
@@ -112,13 +114,13 @@ pub fn formatted_effects_list(
                     skill_type,
                     damage_type,
                 } => {
-                    min_damage.insert((skill_type, damage_type), effect.value);
+                    min_damage.insert((skill_type, damage_type, effect.value > 0.0), effect.value);
                 }
                 MaxDamage {
                     skill_type,
                     damage_type,
                 } => {
-                    max_damage.insert((skill_type, damage_type), effect.value);
+                    max_damage.insert((skill_type, damage_type, effect.value > 0.0), effect.value);
                 }
                 //
                 stat => merged.push(format_flat_stat(stat, effect.value)),
@@ -130,8 +132,8 @@ pub fn formatted_effects_list(
     for skill_type in SkillType::iter().map(Some).chain([None]) {
         for damage_type in DamageType::iter().map(Some).chain([None]) {
             match (
-                min_damage.get(&(skill_type, damage_type)),
-                max_damage.get(&(skill_type, damage_type)),
+                min_damage.get(&(skill_type, damage_type, true)),
+                max_damage.get(&(skill_type, damage_type, true)),
             ) {
                 (Some(min_flat), Some(max_flat)) => merged.push(format!(
                     "Adds {} - {} {}Damage{}",
@@ -149,6 +151,32 @@ pub fn formatted_effects_list(
                 (None, Some(max_flat)) => merged.push(format!(
                     "Adds {} Maximum {}Damage{}",
                     format_number(*max_flat),
+                    optional_damage_type_str(damage_type),
+                    to_skill_type_str(skill_type)
+                )),
+                _ => {}
+            }
+
+            match (
+                min_damage.get(&(skill_type, damage_type, false)),
+                max_damage.get(&(skill_type, damage_type, false)),
+            ) {
+                (Some(min_flat), Some(max_flat)) => merged.push(format!(
+                    "Removes {} - {} {}Damage{}",
+                    format_number(-*min_flat),
+                    format_number(-*max_flat),
+                    optional_damage_type_str(damage_type),
+                    to_skill_type_str(skill_type)
+                )),
+                (Some(min_flat), None) => merged.push(format!(
+                    "Removes {} Minimum {}Damage{}",
+                    format_number(-*min_flat),
+                    optional_damage_type_str(damage_type),
+                    to_skill_type_str(skill_type)
+                )),
+                (None, Some(max_flat)) => merged.push(format!(
+                    "Removes {} Maximum {}Damage{}",
+                    format_number(-*max_flat),
                     optional_damage_type_str(damage_type),
                     to_skill_type_str(skill_type)
                 )),
