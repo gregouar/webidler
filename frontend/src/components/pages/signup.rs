@@ -28,7 +28,7 @@ pub fn SignUpPage() -> impl IntoView {
         storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
 
     let username = RwSignal::new(get_username_storage.get_untracked());
-    let email = RwSignal::new(None);
+    let email = RwSignal::new(Some(None));
     let password = RwSignal::new(None);
     let confirm_password = RwSignal::new(None);
     let accepted_terms = RwSignal::new(false);
