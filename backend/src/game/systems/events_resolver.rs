@@ -136,7 +136,7 @@ fn handle_kill_event(
                                 && kill_trigger.is_debuffed.unwrap_or(is_debuffed) == is_debuffed
                                 && kill_trigger
                                     .is_damaged_over_time
-                                    .map_or(true, |dt| is_damaged_over_time.contains(&dt))
+                                    .is_none_or(|dt| is_damaged_over_time.contains(&dt))
                             {
                                 trigger_effects.push(TriggerContext {
                                     trigger: triggered_effects.clone(),
