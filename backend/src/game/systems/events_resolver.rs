@@ -189,6 +189,7 @@ fn handle_area_completed_event(
     let area_state = game_data.area_state.mutate();
 
     if (area_state.area_level > area_state.max_area_level_completed)
+        && (area_state.area_level > game_data.area_blueprint.specs.starting_level)
         && (area_state.area_level - game_data.area_blueprint.specs.starting_level)
             .is_multiple_of(10)
     {
