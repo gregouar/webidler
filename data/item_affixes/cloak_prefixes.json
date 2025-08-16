@@ -14,7 +14,7 @@
         "stat": { "Speed": "Attack" },
         "modifier": "Multiplier",
         "min": 0.05,
-        "max": 0.9
+        "max": 0.09
       }
     ]
   },
