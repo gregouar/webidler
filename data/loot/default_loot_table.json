@@ -22,7 +22,7 @@
     },
     {
       "item_id": "dagger_unique",
-      "weight": 10,
+      "weight": 5,
       "min_area_level": 5
     },
     {
@@ -72,7 +72,7 @@
     },
     {
       "item_id": "shortsword_unique",
-      "weight": 20
+      "weight": 5
     },
     {
       "item_id": "leather_cap",
@@ -92,7 +92,7 @@
     },
     {
       "item_id": "leather_boots_unique",
-      "weight": 20
+      "weight": 5
     },
     {
       "item_id": "woodcutter_axe",
@@ -100,7 +100,7 @@
     },
     {
       "item_id": "woodcutter_axe_unique",
-      "weight": 20
+      "weight": 5
     },
     {
       "item_id": "hunting_bow",
@@ -120,7 +120,7 @@
     },
     {
       "item_id": "spellbook_unique",
-      "weight": 20
+      "weight": 5
     },
     {
       "item_id": "hooded_wrap",
@@ -136,7 +136,7 @@
     },
     {
       "item_id": "medallion_unique",
-      "weight": 20
+      "weight": 5
     }
   ]
 }
