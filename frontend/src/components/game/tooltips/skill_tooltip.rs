@@ -323,7 +323,7 @@ fn format_min_max(min: f64, max: f64) -> String {
 
 #[component]
 fn EffectLi(children: Children) -> impl IntoView {
-    view! { <li class="text-sm text-purple-200 leading-snug">{children()}</li> }
+    view! { <li class="text-sm text-purple-200 leading-snug whitespace-pre-line">{children()}</li> }
 }
 
 pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
