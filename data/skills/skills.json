@@ -161,7 +161,7 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 0.05
+        "value": 0.01
       }
     ],
     "targets": [
@@ -402,7 +402,7 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 5
+        "value": 2
       }
     ],
     "targets": [
@@ -412,8 +412,8 @@
           {
             "Restore": {
               "restore_type": "Mana",
-              "min": 25,
-              "max": 25
+              "min": 10,
+              "max": 10
             }
           }
         ]
