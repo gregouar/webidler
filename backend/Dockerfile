@@ -21,6 +21,14 @@ RUN cargo build --release --no-default-features --bin backend --features postgre
 RUN strip ./target/release/backend -o /backend
 
 FROM debian:bookworm-slim
+
+# Install system dependencies for OpenSSL and pkg-config
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    pkg-config \
+    libssl-dev \
+    ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+ 
 COPY --from=builder /backend /
 COPY ./migrations ./migrations
 
