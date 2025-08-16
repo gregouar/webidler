@@ -66,9 +66,13 @@
       "min_area_level": 10
     },
 
-   {
+    {
       "item_id": "shortsword",
       "weight": 2000
+    },
+    {
+      "item_id": "shortsword_unique",
+      "weight": 20
     },
     {
       "item_id": "leather_cap",

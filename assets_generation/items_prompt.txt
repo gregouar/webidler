@@ -1,5 +1,0 @@
-As a game illustrator, I want to draw items, weapons and equipment in a old-school hand draw style with few pastel colors.
-These items should be suitable to be used in the UI, like in the inventory.
-A want a short sword.
-Generate it for me.
-

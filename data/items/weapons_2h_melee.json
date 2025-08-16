@@ -92,7 +92,7 @@
     "triggers": [
       {
         "trigger_id": "sootreaver_burn",
-        "description": "50% to inflict 100% of Fire Damage as Fire Damage over Time per second for 4 seconds.",
+        "description": "50% chances to inflict 100% of Fire Damage as extra Fire Damage over Time per second for 4 seconds.",
         "OnHit": { "skill_type": "Attack" },
         "effects": [
           {
@@ -125,6 +125,6 @@
         ]
       }
     ],
-    "min_area_level": 40
+    "min_area_level": 50
   }
 }

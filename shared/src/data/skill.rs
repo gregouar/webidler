@@ -110,6 +110,7 @@ pub enum SkillEffectType {
     },
     Restore {
         restore_type: RestoreType,
+        // TODO: Flat vs Multiplier (=percent?)
         min: f64,
         max: f64,
     },

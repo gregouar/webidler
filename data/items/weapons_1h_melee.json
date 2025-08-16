@@ -62,5 +62,97 @@
       "crit_damage": 1
     },
     "min_area_level": 40
+  },
+  "shortsword_unique": {
+    "name": "Broken Trophy",
+    "description": "A kind remembrance of a foe you'd rather drink to forget...",
+    "icon": "items/broken_trophy.webp",
+    "slot": "Weapon",
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [4, 7]
+      },
+      "crit_chances": 0.05,
+      "crit_damage": 1
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "min": 2,
+        "max": 4
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "min": 5,
+        "max": 7
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "CritChances": null
+        },
+        "modifier": "Flat",
+        "min": 0.04,
+        "max": 0.06
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "broken_trophy",
+        "description": "25% chances to inflict 50% of Physical Damage as extra Physical Damage over Time per second for 3 seconds and Decrease enemy Armor by 50%.",
+        "OnHit": { "skill_type": "Attack" },
+        "effects": [
+          {
+            "failure_chances": 0.75,
+            "ApplyStatus": {
+              "min_duration": 3,
+              "max_duration": 3,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Physical",
+                      "ignore_armor": true
+                    }
+                  },
+                  "min_value": 0.5,
+                  "max_value": 0.5
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Armor": "Physical"
+                      },
+                      "modifier": "Multiplier",
+                      "debuff": true
+                    }
+                  },
+                  "min_value": 1.0,
+                  "max_value": 1.0
+                }
+              ]
+            }
+          }
+        ],
+        "modifiers": [
+          {
+            "stat": { "Damage": {} },
+            "modifier": "Multiplier",
+            "factor": 1.0,
+            "source": { "HitDamage": "Physical" }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 1
   }
 }

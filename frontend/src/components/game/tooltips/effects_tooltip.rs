@@ -314,7 +314,7 @@ fn format_flat_stat(stat: StatType, value: f64) -> String {
         StatType::MovementSpeed => format!("-{value:.2}s Movement Cooldown"),
         StatType::GoldFind => format!("Adds {value:.0} Gold per Kill"),
         StatType::LifeOnHit(hit_trigger) => format!(
-            "Gain {:.0} Life on{} Hit",
+            "Gain {:.0} Life on {}Hit",
             value,
             skill_type_str(hit_trigger.skill_type)
         ),

@@ -106,7 +106,7 @@
         "min": -0.5
       }
     ],
-    "min_area_level": 40,
+    "min_area_level": 50,
     "rarity": "Unique"
   }
 }
