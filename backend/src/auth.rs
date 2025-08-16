@@ -140,7 +140,7 @@ impl From<db::users::UserEntry> for User {
         User {
             user_id: val.user_id,
             username: val.username.unwrap_or_default(),
-            max_characters: val.max_characters,
+            max_characters: val.max_characters as u8,
         }
     }
 }

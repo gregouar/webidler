@@ -17,7 +17,7 @@ pub struct SavedGameInstance {
     pub character_id: UserCharacterId,
 
     pub area_id: String,
-    pub area_level: AreaLevel,
+    pub area_level: i32,
 
     pub saved_at: UtcDateTime,
     pub data_version: String,

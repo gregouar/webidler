@@ -3,6 +3,7 @@ use std::{collections::HashMap, time::Instant};
 use anyhow::Result;
 
 use shared::data::{
+    area::AreaLevel,
     character::CharacterSize,
     item::ItemRarity,
     player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
@@ -181,7 +182,7 @@ async fn new_game_instance(
         None,
     )?;
 
-    game_data.area_state.mutate().max_area_level_completed = area_level_completed;
+    game_data.area_state.mutate().max_area_level_completed = area_level_completed as AreaLevel;
 
     db::game_instances::save_game_instance_data(
         db_pool,

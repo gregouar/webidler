@@ -2,7 +2,10 @@ use anyhow::Result;
 
 use axum::{extract::State, routing::get, Json, Router};
 
-use shared::http::server::{LeaderboardEntry, LeaderboardResponse};
+use shared::{
+    data::area::AreaLevel,
+    http::server::{LeaderboardEntry, LeaderboardResponse},
+};
 
 use crate::{
     app_state::{AppState, DbPool},
@@ -35,7 +38,7 @@ impl From<db::leaderboard::LeaderboardEntry> for LeaderboardEntry {
             character_id: val.character_id,
             character_name: val.character_name,
             area_id: val.area_id,
-            area_level: val.area_level,
+            area_level: val.area_level as AreaLevel,
             created_at: val.created_at.into(),
             comments: "".to_string(),
         }

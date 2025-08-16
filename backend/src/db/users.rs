@@ -12,7 +12,7 @@ pub struct UserEntry {
     pub email: Option<String>,
     pub terms_accepted_at: UtcDateTime,
     pub is_admin: bool,
-    pub max_characters: u8,
+    pub max_characters: i16,
     pub last_login_at: Option<UtcDateTime>,
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
@@ -61,10 +61,10 @@ pub async fn read_user(
         SELECT 
             user_id as "user_id: UserId", 
             username, email, terms_accepted_at, is_admin, 
-            max_characters as "max_characters: u8", 
-            last_login_at as "last_login_at: UtcDateTime",
+            max_characters as "max_characters!: u8", 
+            last_login_at as "last_login_at?: UtcDateTime",
             created_at, updated_at, 
-            deleted_at as "deleted_at: UtcDateTime"
+            deleted_at as "deleted_at?: UtcDateTime"
          FROM users WHERE user_id = $1
          "#,
         user_id

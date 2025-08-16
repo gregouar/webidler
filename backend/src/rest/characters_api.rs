@@ -101,7 +101,7 @@ async fn get_character_details(
                 max_level_reached: areas_completed
                     .iter()
                     .find(|area_completed| area_completed.area_id.eq(area_id))
-                    .map(|area_completed| area_completed.max_area_level)
+                    .map(|area_completed| area_completed.max_area_level as AreaLevel)
                     .unwrap_or_default(),
             })
             .collect(),
@@ -134,7 +134,7 @@ impl From<db::characters::CharacterEntry> for UserCharacter {
             portrait: val.portrait,
             resource_gems: val.resource_gems,
             resource_shards: val.resource_shards,
-            max_area_level: val.max_area_level,
+            max_area_level: val.max_area_level as AreaLevel,
             activity: if let (Some(area_id), Some(area_level)) = (val.area_id, val.area_level) {
                 // TODO: find a way to switch somewhere to area_name
                 UserCharacterActivity::Grinding(area_id, area_level as AreaLevel)

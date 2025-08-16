@@ -14,7 +14,7 @@ pub struct CharacterEntry {
 
     pub character_name: String,
     pub portrait: String,
-    pub max_area_level: AreaLevel,
+    pub max_area_level: i32,
     pub resource_gems: f64,
     pub resource_shards: f64,
 
@@ -31,7 +31,7 @@ pub struct CharacterEntry {
 pub struct CharacterAreaEntry {
     pub character_id: UserCharacterId,
     pub area_id: String,
-    pub max_area_level: AreaLevel,
+    pub max_area_level: i32,
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,

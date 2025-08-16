@@ -15,7 +15,7 @@ pub struct LeaderboardEntry {
     pub character_name: String,
     // pub portrait: String,
     pub area_id: String,
-    pub area_level: AreaLevel,
+    pub area_level: i32,
 
     pub created_at: UtcDateTime,
 }

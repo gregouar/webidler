@@ -1,7 +1,8 @@
-use sqlx::types::chrono::{DateTime, Utc};
 use sqlx::FromRow;
 
 use shared::data::user::UserCharacterId;
+
+use crate::db::utc_datetime::UtcDateTime;
 
 use super::pool::DbPool;
 
@@ -13,8 +14,8 @@ pub struct SessionEntry {
 
     pub character_id: UserCharacterId,
 
-    pub created_at: DateTime<Utc>,
-    pub ended_at: Option<DateTime<Utc>>,
+    pub created_at: UtcDateTime,
+    pub ended_at: UtcDateTime,
 }
 
 /// Return Ok(None) if session already exist
