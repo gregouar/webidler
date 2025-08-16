@@ -24,7 +24,7 @@ use crate::{
 };
 
 pub async fn verify_captcha(token: &str) -> anyhow::Result<bool> {
-    // TODO: move to env!("TURNSTILE_SECRET")
+    // TODO: move to app_settings
     let secret = std::env::var("TURNSTILE_SECRET").expect("missing setting 'TURNSTILE_SECRET'");
 
     Ok(reqwest::Client::new()
