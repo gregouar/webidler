@@ -169,7 +169,7 @@ pub async fn count_user_characters(db_pool: &DbPool, user_id: &UserId) -> Result
     sqlx::query_scalar!(
         r#"
         SELECT
-        COUNT(*)
+        COUNT(*) as "count!"
         FROM characters WHERE user_id = $1 AND deleted_at IS NULL
         "#,
         user_id

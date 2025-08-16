@@ -60,10 +60,14 @@ pub async fn read_user(
         r#"
         SELECT 
             user_id as "user_id: UserId", 
-            username, email, terms_accepted_at, is_admin, 
-            max_characters as "max_characters!: u8", 
+            username,
+            email, 
+            terms_accepted_at, 
+            is_admin, 
+            max_characters as "max_characters!: i16", 
             last_login_at as "last_login_at?: UtcDateTime",
-            created_at, updated_at, 
+            created_at, 
+            updated_at, 
             deleted_at as "deleted_at?: UtcDateTime"
          FROM users WHERE user_id = $1
          "#,

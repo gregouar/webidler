@@ -1,9 +1,6 @@
 use sqlx::FromRow;
 
-use shared::data::{
-    area::AreaLevel,
-    user::{UserCharacterId, UserId},
-};
+use shared::data::user::{UserCharacterId, UserId};
 
 use super::{pool::DbPool, utc_datetime::UtcDateTime};
 
@@ -33,7 +30,7 @@ pub async fn get_leaderboard(
             characters.character_id as "character_id: UserCharacterId",
             character_name,
             character_area_completed.area_id,
-            character_area_completed.max_area_level as "area_level: AreaLevel",
+            character_area_completed.max_area_level as "area_level: i32",
             character_area_completed.updated_at as "created_at"
         FROM character_area_completed 
         INNER JOIN characters
