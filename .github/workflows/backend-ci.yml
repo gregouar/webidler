@@ -55,7 +55,7 @@ jobs:
           DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
 
       - name: Lint
-        run: cargo clippy -- -D warnings --no-default-features --features postgres
+        run: cargo clippy --no-default-features --features postgres -- -D warnings
         env:
           JWT_SECRET: "test"
           DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
