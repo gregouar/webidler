@@ -51,7 +51,6 @@ jobs:
           cargo sqlx migrate run --source migrations/postgres
           cargo sqlx prepare --workspace -- --bin backend --features postgres --no-default-features
         env:
-          JWT_SECRET: "test"
           DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
 
       - name: Upload SQLx Data
