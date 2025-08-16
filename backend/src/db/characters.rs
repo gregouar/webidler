@@ -21,7 +21,7 @@ pub struct CharacterEntry {
 
     // Joined
     pub area_id: Option<String>,
-    pub area_level: Option<i64>,
+    pub area_level: Option<i32>,
 }
 
 #[derive(Debug, FromRow)]
@@ -77,7 +77,7 @@ pub async fn read_character(
             updated_at,
             deleted_at as "deleted_at?: UtcDateTime",
             saved_game_instances.area_id as "area_id?",
-            saved_game_instances.area_level as "area_level?"
+            saved_game_instances.area_level as "area_level?: i32"
         FROM characters
         LEFT OUTER JOIN saved_game_instances
         ON characters.character_id = saved_game_instances.character_id
@@ -153,7 +153,7 @@ pub async fn read_all_user_characters(
             updated_at,
             deleted_at as "deleted_at: UtcDateTime",
             saved_game_instances.area_id as "area_id?",
-            saved_game_instances.area_level as "area_level?"
+            saved_game_instances.area_level as "area_level?: i32"
         FROM characters 
         LEFT OUTER JOIN saved_game_instances
         ON characters.character_id = saved_game_instances.character_id
@@ -165,11 +165,11 @@ pub async fn read_all_user_characters(
     .await
 }
 
-pub async fn count_user_characters(db_pool: &DbPool, user_id: &UserId) -> Result<u8, sqlx::Error> {
+pub async fn count_user_characters(db_pool: &DbPool, user_id: &UserId) -> Result<i64, sqlx::Error> {
     sqlx::query_scalar!(
         r#"
         SELECT
-        COUNT(*) as "count!:u8" 
+        COUNT(*)
         FROM characters WHERE user_id = $1 AND deleted_at IS NULL
         "#,
         user_id
