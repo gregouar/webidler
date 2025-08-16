@@ -111,7 +111,7 @@ pub fn CharacterPortrait(
                 );
                 background-size: 300% 100%;
                 background-repeat: repeat;
-                animation: shimmerMove 3.5s infinite linear;
+                animation: shimmerMove 5s infinite linear;
                 pointer-events: none;
             }
             
@@ -125,7 +125,7 @@ pub fn CharacterPortrait(
                 );
                 background-size: 300% 100%;
                 background-repeat: repeat;
-                animation: shimmerMove 3.5s infinite linear;
+                animation: shimmerMove 7s infinite linear;
                 pointer-events: none;
             }
             
