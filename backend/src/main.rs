@@ -113,3 +113,13 @@ async fn main() {
 
     tracing::debug!("server has been shut down");
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_master_store() {
+        MasterStore::load_from_folder("../data").await.unwrap();
+    }
+}
