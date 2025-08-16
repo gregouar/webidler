@@ -60,6 +60,12 @@ jobs:
           path: .sqlx
           include-hidden-files: true
 
+      - name: Run tests
+        run: cargo test --no-default-features --features postgres
+        env:
+          DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
+
+
   Backend-Build-and-deploy-to-VPS:
     needs: Pre-Build
     runs-on: ubuntu-latest
