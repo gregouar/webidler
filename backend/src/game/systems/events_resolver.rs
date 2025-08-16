@@ -126,7 +126,7 @@ fn handle_kill_event(
                             StatusSpecs::StatModifier { debuff: true, .. } => {
                                 is_debuffed = true;
                             }
-                            __ => {}
+                            _ => {}
                         }
                     }
 
