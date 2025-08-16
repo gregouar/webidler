@@ -15,7 +15,7 @@ on:
       ]
 
 jobs:
-  Tests:
+  Pre-Build:
     runs-on: ubuntu-latest
 
     services:
@@ -62,7 +62,7 @@ jobs:
           include-hidden-files: true
 
   Backend-Build-and-deploy-to-VPS:
-    needs: Tests
+    needs: Pre-Build
     runs-on: ubuntu-latest
 
     steps:
@@ -104,6 +104,7 @@ jobs:
           script: |
             echo "POSTGRES_PASSWORD=${{ secrets.VPS_DB_PASSWORD }}" > /webidler/tmp/.env
             echo "TURNSTILE_SECRET=${{ secrets.TURNSTILE_SECRET }}" > /webidler/tmp/.env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > /webidler/tmp/.env
             docker load < /webidler/tmp/backend.tar
             docker compose -f /webidler/tmp/docker-compose.yml stop
             docker compose -f /webidler/tmp/docker-compose.yml down

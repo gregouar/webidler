@@ -104,14 +104,22 @@ fn encode_jwt(sub: UserId) -> anyhow::Result<String> {
     Ok(encode(
         &Header::default(),
         &Claims { iat, exp, sub },
-        &EncodingKey::from_secret(env!("JWT_SECRET").as_ref()),
+        &EncodingKey::from_secret(
+            std::env::var("JWT_SECRET")
+                .expect("missing environment setting 'JWT_SECRET'")
+                .as_ref(),
+        ),
     )?)
 }
 
 fn decode_jwt(jwt_token: &str) -> anyhow::Result<TokenData<Claims>> {
     Ok(decode(
         jwt_token,
-        &DecodingKey::from_secret(env!("JWT_SECRET").as_ref()),
+        &DecodingKey::from_secret(
+            std::env::var("JWT_SECRET")
+                .expect("missing environment setting 'JWT_SECRET'")
+                .as_ref(),
+        ),
         &Validation::default(),
     )?)
 }
