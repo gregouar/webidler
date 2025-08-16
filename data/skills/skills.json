@@ -302,7 +302,7 @@
     "name": "Poison Coating",
     "description": "Coat your weapon with venom, causing your attacks to inflict poison damage over time.",
     "icon": "skills/poison_coating.svg",
-    "skill_type": "Attacks",
+    "skill_type": "Attack",
     "cooldown": 15,
     "mana_cost": 25,
     "upgrade_cost": 50,
