@@ -1,7 +1,15 @@
-FROM rust:1.86.0-slim-bookworm AS base
+FROM rust:1.89.0-slim-bookworm AS base
 
 FROM base AS builder
 WORKDIR /app  
+
+# Install system dependencies for OpenSSL and pkg-config
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    pkg-config \
+    libssl-dev \
+    ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
 COPY ./backend ./backend
 COPY ./shared ./shared
 COPY ./.sqlx ./backend/.sqlx
