@@ -1,7 +1,9 @@
 use sqlx::decode::Decode;
+use sqlx::postgres::{PgTypeInfo, PgValueRef};
 use sqlx::sqlite::{Sqlite, SqliteValueRef};
 use sqlx::types::chrono::{DateTime, NaiveDateTime, Utc};
 use sqlx::types::Type;
+use sqlx::Postgres;
 use std::error::Error;
 
 #[derive(Debug, Clone)]
@@ -37,5 +39,18 @@ impl<'r> Decode<'r, Sqlite> for UtcDateTime {
         Ok(UtcDateTime(DateTime::<Utc>::from_naive_utc_and_offset(
             naive, Utc,
         )))
+    }
+}
+
+impl Type<Postgres> for UtcDateTime {
+    fn type_info() -> PgTypeInfo {
+        <DateTime<Utc> as Type<Postgres>>::type_info()
+    }
+}
+
+impl<'r> Decode<'r, Postgres> for UtcDateTime {
+    fn decode(value: PgValueRef<'r>) -> Result<Self, Box<dyn Error + Send + Sync>> {
+        let dt = <DateTime<Utc> as Decode<Postgres>>::decode(value)?;
+        Ok(UtcDateTime(dt))
     }
 }

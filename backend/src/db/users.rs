@@ -25,7 +25,7 @@ pub async fn create_user(
     email: Option<&str>,
     password_hash: &str,
     terms_accepted_at: &DateTime<Utc>,
-    max_characters: u8,
+    max_characters: i16,
 ) -> Result<Option<uuid::Uuid>, sqlx::Error> {
     let user_id = uuid::Uuid::new_v4();
 

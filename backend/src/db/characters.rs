@@ -1,9 +1,6 @@
 use sqlx::FromRow;
 
-use shared::data::{
-    area::AreaLevel,
-    user::{UserCharacterId, UserId},
-};
+use shared::data::user::{UserCharacterId, UserId};
 
 use super::{pool::DbPool, utc_datetime::UtcDateTime};
 
@@ -73,12 +70,12 @@ pub async fn read_character(
             user_id as "user_id: UserId",
             character_name,
             portrait,
-            max_area_level as "max_area_level!: AreaLevel",
+            max_area_level as "max_area_level!: i32",
             resource_gems,
             resource_shards,
             created_at,
             updated_at,
-            deleted_at as "deleted_at: UtcDateTime",
+            deleted_at as "deleted_at?: UtcDateTime",
             saved_game_instances.area_id as "area_id?",
             saved_game_instances.area_level as "area_level?"
         FROM characters
@@ -103,7 +100,7 @@ pub async fn read_character_area_completed(
         SELECT
             character_id as "character_id: UserCharacterId",
             area_id,
-            max_area_level as "max_area_level!: AreaLevel",
+            max_area_level as "max_area_level!: i32",
             created_at,
             updated_at
          FROM character_area_completed 
@@ -126,7 +123,7 @@ pub async fn read_character_areas_completed(
         SELECT
             character_id as "character_id: UserCharacterId",
             area_id,
-            max_area_level as "max_area_level!: AreaLevel",
+            max_area_level as "max_area_level!: i32",
             created_at,
             updated_at
          FROM character_area_completed WHERE character_id = $1
@@ -149,7 +146,7 @@ pub async fn read_all_user_characters(
             user_id as "user_id: UserId",
             character_name,
             portrait,
-            max_area_level as "max_area_level!: AreaLevel",
+            max_area_level as "max_area_level!: i32",
             resource_gems,
             resource_shards,
             created_at,
@@ -185,7 +182,7 @@ pub async fn update_character_progress(
     db_pool: &DbPool,
     character_id: &UserCharacterId,
     area_id: &str,
-    max_area_level: AreaLevel,
+    max_area_level: i32,
     resource_gems: f64,
     resource_shards: f64,
 ) -> Result<(), sqlx::Error> {

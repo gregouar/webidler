@@ -2,7 +2,7 @@ use anyhow;
 
 use sqlx::FromRow;
 
-use shared::data::{area::AreaLevel, user::UserCharacterId};
+use shared::data::user::UserCharacterId;
 
 use crate::{
     constants::CHARACTER_DATA_VERSION,
@@ -33,7 +33,7 @@ pub async fn save_game_instance_data(
         db_pool,
         character_id,
         &game_instance_data.area_id.clone(),
-        game_instance_data.area_state.read().area_level,
+        game_instance_data.area_state.read().area_level as i32,
         game_instance_data.to_bytes()?,
     )
     .await?)
@@ -43,7 +43,7 @@ async fn upsert_saved_game_instance(
     db_pool: &DbPool,
     character_id: &UserCharacterId,
     area_id: &str,
-    area_level: AreaLevel,
+    area_level: i32,
     game_data: Vec<u8>,
 ) -> Result<(), sqlx::Error> {
     sqlx::query!(
@@ -93,7 +93,7 @@ async fn load_saved_game_instance(
         r#"SELECT 
                 character_id as "character_id: UserCharacterId", 
                 area_id, 
-                area_level as "area_level: AreaLevel", 
+                area_level as "area_level: i32", 
                 saved_at, 
                 data_version, 
                 game_data 

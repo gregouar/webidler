@@ -101,7 +101,7 @@ impl<'a> GameInstance<'a> {
                 &db_pool,
                 &character_id,
                 &game_data.area_id,
-                game_data.area_state.read().max_area_level_completed,
+                game_data.area_state.read().max_area_level_completed as i32,
                 game_data.player_resources.read().gems,
                 game_data.player_resources.read().shards,
             )
@@ -137,7 +137,7 @@ impl<'a> GameInstance<'a> {
             &self.db_pool,
             self.character_id,
             &self.game_data.area_id,
-            self.game_data.area_state.read().max_area_level_completed,
+            self.game_data.area_state.read().max_area_level_completed as i32,
             self.game_data.player_resources.read().gems,
             self.game_data.player_resources.read().shards,
         )

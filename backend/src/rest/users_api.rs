@@ -51,7 +51,7 @@ async fn post_sign_up(
         payload.email.as_deref().map(String::as_str),
         &auth::hash_password(&payload.password)?,
         &Utc::now(),
-        constants::DEFAULT_MAX_CHARACTERS,
+        constants::DEFAULT_MAX_CHARACTERS as i16,
     )
     .await?
     {
