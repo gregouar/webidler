@@ -1052,7 +1052,7 @@
           {
             "stat": { "StatusPower": { "DamageOverTime": {} } },
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.1
           }
         ]
       },
@@ -1066,7 +1066,7 @@
           {
             "stat": { "StatusPower": { "DamageOverTime": {} } },
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.1
           }
         ]
       },
@@ -1081,7 +1081,7 @@
           {
             "stat": { "StatusPower": { "DamageOverTime": {} } },
             "modifier": "Multiplier",
-            "value": 0.5
+            "value": 0.2
           }
         ]
       }
