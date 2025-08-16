@@ -6,7 +6,7 @@ CREATE TABLE users (
     password_hash TEXT,
     terms_accepted_at TIMESTAMPTZ NOT NULL,
     is_admin BOOLEAN NOT NULL DEFAULT FALSE,
-    max_characters SMALLINT3 NOT NULL,
+    max_characters SMALLINT NOT NULL,
     last_login_at TIMESTAMPTZ DEFAULT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
