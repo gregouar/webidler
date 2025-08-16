@@ -16,7 +16,7 @@ use tower_http::{
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use backend::{
-    app_state::AppState,
+    app_state::{AppSettings, AppState},
     db::{self, pool},
     game::{
         data::master_store::MasterStore, sessions::SessionsStore, systems::sessions_controller,
@@ -76,6 +76,7 @@ async fn main() {
     ));
 
     let app_state = AppState {
+        app_settings: AppSettings::from_env(),
         db_pool: db_pool.clone(),
         master_store,
         sessions_store: sessions_store.clone(),

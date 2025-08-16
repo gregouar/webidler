@@ -12,7 +12,7 @@ use shared::http::{
 };
 
 use crate::{
-    app_state::AppState,
+    app_state::{AppSettings, AppState},
     auth::{self, CurrentUser},
     constants, db,
 };
@@ -63,6 +63,7 @@ async fn post_sign_up(
 // TODO: move to auth api ?
 
 async fn post_sign_in(
+    State(app_settings): State<AppSettings>,
     State(db_pool): State<db::DbPool>,
     Json(payload): Json<SignInRequest>,
 ) -> Result<Json<SignInResponse>, AppError> {
@@ -70,6 +71,7 @@ async fn post_sign_in(
 
     Ok(Json(SignInResponse {
         jwt: auth::sign_in(
+            &app_settings,
             &db_pool,
             &payload.username.into_inner(),
             &payload.password.into_inner(),

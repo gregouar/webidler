@@ -23,10 +23,10 @@ use shared::messages::{
 };
 
 use crate::{
+    app_state::AppState,
     auth,
     db::{self, DbPool},
     game::{
-        data::master_store::MasterStore,
         sessions::{Session, SessionsStore},
         systems::sessions_controller,
         GameInstance,
@@ -41,9 +41,7 @@ pub async fn handler(
     ws: WebSocketUpgrade,
     user_agent: Option<TypedHeader<headers::UserAgent>>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
-    State(db_pool): State<DbPool>,
-    State(sessions_store): State<SessionsStore>,
-    State(master_store): State<MasterStore>,
+    State(app_state): State<AppState>,
 ) -> impl IntoResponse {
     let user_agent = if let Some(TypedHeader(user_agent)) = user_agent {
         user_agent.to_string()
@@ -52,22 +50,16 @@ pub async fn handler(
     };
     tracing::info!("`{user_agent}` at {addr} connected.");
 
-    ws.on_upgrade(move |socket| handle_socket(socket, addr, db_pool, sessions_store, master_store))
+    ws.on_upgrade(move |socket| handle_socket(socket, addr, app_state))
 }
 
-async fn handle_socket(
-    socket: WebSocket,
-    addr: SocketAddr,
-    db_pool: DbPool,
-    sessions_store: SessionsStore,
-    master_store: MasterStore,
-) {
+async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState) {
     let mut conn = WebSocketConnection::establish(socket, addr, CLIENT_INACTIVITY_TIMEOUT);
 
     tracing::debug!("waiting for client to connect...");
     let mut session = match timeout(
         Duration::from_secs(30),
-        wait_for_connect(&db_pool, &master_store, &sessions_store, &mut conn),
+        wait_for_connect(&app_state, &mut conn),
     )
     .await
     {
@@ -96,22 +88,24 @@ async fn handle_socket(
         &mut conn,
         &session.character_id,
         &mut session.game_data,
-        db_pool.clone(),
-        master_store,
+        app_state.db_pool.clone(),
+        app_state.master_store,
     );
 
     let character_id = session.character_id;
 
     match game.run().await {
         Ok(()) => {
-            if let Err(e) = handle_disconnect(&db_pool, &sessions_store, session).await {
+            if let Err(e) =
+                handle_disconnect(&app_state.db_pool, &app_state.sessions_store, session).await
+            {
                 tracing::error!("error handling disconnect for '{addr}': {e}")
             }
         }
         Err(e) => tracing::error!("error running game: {e}"),
     }
 
-    db::game_sessions::end_session(&db_pool, &character_id)
+    db::game_sessions::end_session(&app_state.db_pool, &character_id)
         .await
         .unwrap_or_else(|e| tracing::error!("error ending session for '{character_id}': {e}"));
 
@@ -119,16 +113,11 @@ async fn handle_socket(
     tracing::info!("websocket context '{addr}' destroyed");
 }
 
-async fn wait_for_connect(
-    db_pool: &DbPool,
-    master_store: &MasterStore,
-    sessions_store: &SessionsStore,
-    conn: &mut WebSocketConnection,
-) -> Result<Session> {
+async fn wait_for_connect(app_state: &AppState, conn: &mut WebSocketConnection) -> Result<Session> {
     loop {
         match conn.poll_receive() {
             ControlFlow::Continue(Some(ClientMessage::Connect(msg))) => {
-                return handle_connect(db_pool, sessions_store, master_store, msg).await;
+                return handle_connect(app_state, msg).await;
             }
             ControlFlow::Break(_) => {
                 return Err(anyhow::format_err!("disconnected"));
@@ -140,18 +129,16 @@ async fn wait_for_connect(
 }
 
 async fn handle_connect(
-    db_pool: &DbPool,
-    sessions_store: &SessionsStore,
-    master_store: &MasterStore,
+    app_state: &AppState,
     // conn: &mut WebSocketConnection,
     msg: ClientConnectMessage,
 ) -> Result<Session> {
     tracing::info!("connect: {:?}", msg);
 
-    let user_id =
-        auth::authorize_jwt(&msg.jwt).ok_or(AppError::Unauthorized("invalid token".to_string()))?;
+    let user_id = auth::authorize_jwt(&app_state.app_settings, &msg.jwt)
+        .ok_or(AppError::Unauthorized("invalid token".to_string()))?;
 
-    let user_character = db::characters::read_character(db_pool, &msg.character_id)
+    let user_character = db::characters::read_character(&app_state.db_pool, &msg.character_id)
         .await?
         .ok_or(AppError::NotFound)?;
 
@@ -163,9 +150,9 @@ async fn handle_connect(
 
     // Must be the last thing we do because we cannot fail after
     let session = sessions_controller::create_session(
-        db_pool,
-        sessions_store,
-        master_store,
+        &app_state.db_pool,
+        &app_state.sessions_store,
+        &app_state.master_store,
         user_character,
         &msg.area_id,
     )

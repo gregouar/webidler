@@ -12,12 +12,16 @@ use axum::{
 use axum_extra::TypedHeader;
 use chrono::{Duration, Utc};
 use headers::{authorization::Bearer, Authorization};
-use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, TokenData, Validation};
+use jsonwebtoken::{decode, encode, Header, TokenData, Validation};
 use serde::{Deserialize, Serialize};
 
 use shared::data::user::{User, UserId};
 
-use crate::{app_state::AppState, db, rest::AppError};
+use crate::{
+    app_state::{AppSettings, AppState},
+    db,
+    rest::AppError,
+};
 
 pub async fn verify_captcha(token: &str) -> anyhow::Result<bool> {
     // TODO: move to env!("TURNSTILE_SECRET")
@@ -42,6 +46,7 @@ pub struct Claims {
     pub sub: UserId, // Subject associated with the token
 }
 pub async fn sign_in(
+    app_settings: &AppSettings,
     db_pool: &db::DbPool,
     username: &str,
     password: &str,
@@ -59,7 +64,7 @@ pub async fn sign_in(
         db::users::update_last_login(db_pool, &user_id)
             .await
             .unwrap_or_else(|e| tracing::error!("couldn't update user last login: {e}"));
-        Ok(encode_jwt(user_id)?)
+        Ok(encode_jwt(app_settings, user_id)?)
     } else {
         Err(AppError::Unauthorized(
             "incorrect username or password".to_string(),
@@ -78,7 +83,7 @@ pub async fn authorization_middleware(
     mut req: Request,
     next: Next,
 ) -> Result<Response<Body>, AppError> {
-    let user_id = authorize_jwt(bearer.token())
+    let user_id = authorize_jwt(&state.app_settings, bearer.token())
         .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
     let user = db::users::read_user(&state.db_pool, &user_id)
@@ -90,13 +95,17 @@ pub async fn authorization_middleware(
     Ok(next.run(req).await)
 }
 
-pub fn authorize_jwt(token: &str) -> Option<UserId> {
-    decode_jwt(token)
-        .ok()
-        .map(|token_data| token_data.claims.sub)
+pub fn authorize_jwt(app_settings: &AppSettings, token: &str) -> Option<UserId> {
+    decode(
+        token,
+        &app_settings.jwt_decoding_key,
+        &Validation::default(),
+    )
+    .ok()
+    .map(|token_data: TokenData<Claims>| token_data.claims.sub)
 }
 
-fn encode_jwt(sub: UserId) -> anyhow::Result<String> {
+fn encode_jwt(app_settings: &AppSettings, sub: UserId) -> anyhow::Result<String> {
     let now = Utc::now();
     let exp: usize = (now + Duration::hours(24)).timestamp() as usize;
     let iat: usize = now.timestamp() as usize;
@@ -104,23 +113,7 @@ fn encode_jwt(sub: UserId) -> anyhow::Result<String> {
     Ok(encode(
         &Header::default(),
         &Claims { iat, exp, sub },
-        &EncodingKey::from_secret(
-            std::env::var("JWT_SECRET")
-                .expect("missing environment setting 'JWT_SECRET'")
-                .as_ref(),
-        ),
-    )?)
-}
-
-fn decode_jwt(jwt_token: &str) -> anyhow::Result<TokenData<Claims>> {
-    Ok(decode(
-        jwt_token,
-        &DecodingKey::from_secret(
-            std::env::var("JWT_SECRET")
-                .expect("missing environment setting 'JWT_SECRET'")
-                .as_ref(),
-        ),
-        &Validation::default(),
+        &app_settings.jwt_encoding_key,
     )?)
 }
 
