@@ -139,10 +139,8 @@ fn item_score(player_controller: &PlayerController, item: &ItemSpecs) -> usize {
     }
 
     score += match item.rarity {
-        ItemRarity::Normal => 0,
-        ItemRarity::Magic => 100_000,
-        ItemRarity::Rare => 200_000,
-        ItemRarity::Unique => 300_000,
+        ItemRarity::Normal | ItemRarity::Magic | ItemRarity::Rare => 0,
+        ItemRarity::Unique => 1_000_000,
     };
 
     score += item.affixes.iter().map(|a| a.tier as usize).sum::<usize>() * 10_000;
