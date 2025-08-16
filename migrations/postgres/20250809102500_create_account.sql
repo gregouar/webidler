@@ -49,7 +49,7 @@ CREATE TABLE characters_data (
 -- CHARACTER_AREA_COMPLETED table
 CREATE TABLE character_area_completed (
     character_id UUID NOT NULL,
-    area_id UUID NOT NULL,
+    area_id TEXT NOT NULL,
     max_area_level INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -78,7 +78,7 @@ DROP TABLE IF EXISTS saved_game_instances;
 
 CREATE TABLE saved_game_instances (
     character_id UUID NOT NULL PRIMARY KEY,
-    area_id UUID NOT NULL,
+    area_id TEXT NOT NULL,
     area_level INTEGER NOT NULL,
     saved_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     data_version TEXT NOT NULL,
