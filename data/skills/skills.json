@@ -1,7 +1,7 @@
 {
   "magic_missile": {
     "name": "Magic Missile",
-    "description": "A fast spell to spam",
+    "description": "A quick and reliable spell that fires a bolt of energy at any enemy. Ideal for consistent damage spamming.",
     "icon": "skills/magic_missile.svg",
     "skill_type": "Spell",
     "cooldown": 2,
@@ -31,7 +31,7 @@
   },
   "fireball": {
     "name": "Fireball",
-    "description": "Throw a mighty fireball, burning multiple enemies",
+    "description": "THurl a blazing fireball that explodes on impact, scorching multiple enemies within its area.",
     "icon": "skills/fireball.svg",
     "skill_type": "Spell",
     "cooldown": 5,
@@ -62,7 +62,7 @@
   },
   "burning_ray": {
     "name": "Burning Ray",
-    "description": "A beam of fire that burns enemies",
+    "description": "Release a horizontal beam of fire that burns enemies over time. Useful for hitting groups in a line.",
     "icon": "skills/burning_ray.svg",
     "skill_type": "Spell",
     "cooldown": 5,
@@ -110,7 +110,7 @@
   },
   "poison_cloud": {
     "name": "Poison Cloud",
-    "description": "Summon a cloud of poison that damages enemies over time",
+    "description": "Summon a toxic cloud that poisons all enemies in its area, dealing damage over time.",
     "icon": "skills/poison_cloud.svg",
     "skill_type": "Spell",
     "cooldown": 10,
@@ -151,7 +151,7 @@
   },
   "curse_frailty": {
     "name": "Curse of Frailty",
-    "description": "A curse that makes enemies take more damage from all sources",
+    "description": "Curse enemies to weaken their defenses, making them take more damage from all sources.",
     "icon": "skills/curse_frailty.svg",
     "skill_type": "Spell",
     "cooldown": 10,
@@ -199,7 +199,7 @@
   },
   "curse_weakness": {
     "name": "Curse of Weakness",
-    "description": "A curse that reduces the damage enemies deal",
+    "description": "A debilitating curse that reduces enemies' damage output.",
     "icon": "skills/curse_weakness.svg",
     "skill_type": "Spell",
     "cooldown": 10,
@@ -247,7 +247,7 @@
   },
   "blessing_haste": {
     "name": "Blessing of Haste",
-    "description": "A blessing that makes you faster",
+    "description": "A blessing that increases your speed and movement, allowing quicker actions in battle.",
     "icon": "skills/haste.svg",
     "skill_type": "Spell",
     "cooldown": 20,
@@ -300,7 +300,7 @@
   },
   "poison_coating": {
     "name": "Poison Coating",
-    "description": "Coat your weapon with poison, inflicting poison damage",
+    "description": "Coat your weapon with venom, causing your attacks to inflict poison damage over time.",
     "icon": "skills/poison_coating.svg",
     "skill_type": "Spell",
     "cooldown": 15,
@@ -326,7 +326,7 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "poison_coating",
-                      "description": "Successful Attacks inflict:",
+                      "description": "On Attack Hits inflict:",
                       "OnHit": {
                         "skill_type": "Attack",
                         "is_hurt": true
@@ -334,8 +334,8 @@
                       "effects": [
                         {
                           "ApplyStatus": {
-                            "min_duration": 2,
-                            "max_duration": 2,
+                            "min_duration": 3,
+                            "max_duration": 3,
                             "statuses": [
                               {
                                 "status_type": {
@@ -362,7 +362,7 @@
   },
   "heal": {
     "name": "Heal",
-    "description": "A minor healing spell for yourself",
+    "description": "Restore a portion of your health with this simple yet effective healing spell.",
     "icon": "skills/heal.svg",
     "skill_type": "Spell",
     "cooldown": 20,
@@ -390,9 +390,39 @@
       }
     ]
   },
+  "meditate": {
+    "name": "Meditate",
+    "description": "Focus your mind to recover mana, replenishing your magical energy for continued spellcasting.",
+    "icon": "skills/meditate.svg",
+    "skill_type": "Spell",
+    "cooldown": 20,
+    "mana_cost": 0,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": "SpellPower",
+        "modifier": "Flat",
+        "value": 5
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "Restore": {
+              "restore_type": "Mana",
+              "min": 25,
+              "max": 25
+            }
+          }
+        ]
+      }
+    ]
+  },
   "retaliate": {
     "name": "Retaliate",
-    "description": "A defensive skill that inflict damage when blocking",
+    "description": "A defensive technique that punishes enemies when you block their attacks.",
     "icon": "skills/retaliate.svg",
     "skill_type": "Attack",
     "cooldown": 0,
