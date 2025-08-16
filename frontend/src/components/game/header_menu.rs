@@ -8,7 +8,7 @@ use crate::{
     assets::{img_asset, music_asset},
     components::{
         ui::{
-            buttons::MenuButton,
+            buttons::{MenuButton, MenuButtonRed},
             confirm::ConfirmContext,
             number::Number,
             tooltip::{StaticTooltip, StaticTooltipPosition},
@@ -26,16 +26,24 @@ pub fn HeaderMenu() -> impl IntoView {
         let navigate = leptos_router::hooks::use_navigate();
         move || {
             conn.send(&ClientMessage::EndQuest);
-            navigate("/", Default::default());
+            navigate("/town", Default::default());
         }
     });
+
     let try_abandon_quest = {
         let confirm_context = expect_context::<ConfirmContext>();
         move |_| {
             (confirm_context.confirm)(
-                "Abandoning the quest will erase all progress, are you sure?".to_string(),
+                "Abandoning the grind will reset the area level, player level and gold, you will only keep items, gems and power shards. Are you sure?".to_string(),
                 abandon_quest.clone(),
             );
+        }
+    };
+
+    let quit = {
+        let navigate = leptos_router::hooks::use_navigate();
+        move |_| {
+            navigate("/user-dashboard", Default::default());
         }
     };
 
@@ -43,7 +51,7 @@ pub fn HeaderMenu() -> impl IntoView {
         let game_context = expect_context::<GameContext>();
         move || {
             game_context
-                .world_specs
+                .area_specs
                 .read()
                 .musics
                 .iter()
@@ -56,7 +64,14 @@ pub fn HeaderMenu() -> impl IntoView {
         let game_context = expect_context::<GameContext>();
         Signal::derive(move || game_context.player_resources.read().gold)
     };
-    let gems = Signal::derive(move || 0.0);
+    let gems = {
+        let game_context = expect_context::<GameContext>();
+        Signal::derive(move || game_context.player_resources.read().gems)
+    };
+    let shards = {
+        let game_context = expect_context::<GameContext>();
+        Signal::derive(move || game_context.player_resources.read().shards)
+    };
 
     let game_context = expect_context::<GameContext>();
     view! {
@@ -66,26 +81,23 @@ pub fn HeaderMenu() -> impl IntoView {
                     class:text-amber-200
                     icon="ui/gold.webp"
                     name="Gold"
-                    description="To buy level up for skills. Reset at every quest."
+                    description="To buy level up for skills. Reset at every grind."
                     value=gold
                 />
-                // TODO: Magic Essence
-                // <ResourceCounter icon="ui/magic_essence.webp" tooltip="Magic Essence" value=gems />
                 <ResourceCounter
                     icon="ui/gems.webp"
                     name="Gems"
-                    description="To buy items in the market between quests."
+                    description="To buy items in the market between grinds."
                     value=gems
                 />
-                // TODO: Power Shards
                 <ResourceCounter
                     icon="ui/power_shard.webp"
                     name="Power Shards"
                     description="To permanently increase power of passive skills."
-                    value=gems
+                    value=shards
                 />
             </div>
-            <div class="flex space-x-2  w-full">
+            <div class="flex justify-end space-x-2  w-full">
                 <audio autoplay loop controls>
                     {move || {
                         musics()
@@ -107,7 +119,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     game_context.open_passives.set(!game_context.open_passives.get());
                     game_context.open_statistics.set(false);
                 }>
-                    "Passive Skills"
+                    "Passives"
                     {move || {
                         let points = game_context.player_resources.read().passive_points;
                         if points > 0 { format!(" ({points})") } else { "".to_string() }
@@ -117,8 +129,9 @@ pub fn HeaderMenu() -> impl IntoView {
                     game_context.open_inventory.set(false);
                     game_context.open_passives.set(false);
                     game_context.open_statistics.set(!game_context.open_statistics.get());
-                }>"Statistics"</MenuButton>
-                <MenuButton on:click=try_abandon_quest>"Abandon Quest"</MenuButton>
+                }>"Stats"</MenuButton>
+                <MenuButtonRed on:click=try_abandon_quest>"Stop Grind"</MenuButtonRed>
+                <MenuButton on:click=quit>"Quit"</MenuButton>
             </div>
         </div>
     }

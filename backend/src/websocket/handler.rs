@@ -19,18 +19,19 @@ use std::{
 
 use shared::messages::{
     client::{ClientConnectMessage, ClientMessage},
-    server::ConnectMessage,
-    SessionId,
+    server::{ErrorMessage, ErrorType},
 };
 
 use crate::{
-    db::DbPool,
+    auth,
+    db::{self, DbPool},
     game::{
         data::master_store::MasterStore,
         sessions::{Session, SessionsStore},
         systems::sessions_controller,
         GameInstance,
     },
+    rest::AppError,
     websocket::WebSocketConnection,
 };
 
@@ -64,7 +65,7 @@ async fn handle_socket(
     let mut conn = WebSocketConnection::establish(socket, addr, CLIENT_INACTIVITY_TIMEOUT);
 
     tracing::debug!("waiting for client to connect...");
-    let (session_id, mut session) = match timeout(
+    let mut session = match timeout(
         Duration::from_secs(30),
         wait_for_connect(&db_pool, &master_store, &sessions_store, &mut conn),
     )
@@ -76,30 +77,43 @@ async fn handle_socket(
         }
         Ok(Err(e)) => {
             tracing::error!("unable to connect: {}", e);
+            conn.send(
+                &ErrorMessage {
+                    error_type: ErrorType::Server,
+                    message: e.to_string(),
+                }
+                .into(),
+            )
+            .await
+            .unwrap_or_else(|e| tracing::error!("failed to send error message: {}", e));
             return;
         }
         Ok(Ok(p)) => p,
     };
     tracing::debug!("client connected");
 
-    tracing::debug!("starting the game...");
     let game = GameInstance::new(
         &mut conn,
-        &session.user_id,
-        &session_id,
+        &session.character_id,
         &mut session.game_data,
         db_pool.clone(),
         master_store,
     );
+
+    let character_id = session.character_id;
+
     match game.run().await {
         Ok(()) => {
-            if let Err(e) = handle_disconnect(&db_pool, &sessions_store, session_id, session).await
-            {
+            if let Err(e) = handle_disconnect(&db_pool, &sessions_store, session).await {
                 tracing::error!("error handling disconnect for '{addr}': {e}")
             }
         }
         Err(e) => tracing::error!("error running game: {e}"),
     }
+
+    db::game_sessions::end_session(&db_pool, &character_id)
+        .await
+        .unwrap_or_else(|e| tracing::error!("error ending session for '{character_id}': {e}"));
 
     // returning from the handler closes the websocket connection
     tracing::info!("websocket context '{addr}' destroyed");
@@ -110,11 +124,11 @@ async fn wait_for_connect(
     master_store: &MasterStore,
     sessions_store: &SessionsStore,
     conn: &mut WebSocketConnection,
-) -> Result<(SessionId, Session)> {
+) -> Result<Session> {
     loop {
         match conn.poll_receive() {
             ControlFlow::Continue(Some(ClientMessage::Connect(msg))) => {
-                return handle_connect(db_pool, sessions_store, master_store, conn, msg).await;
+                return handle_connect(db_pool, sessions_store, master_store, msg).await;
             }
             ControlFlow::Break(_) => {
                 return Err(anyhow::format_err!("disconnected"));
@@ -129,48 +143,63 @@ async fn handle_connect(
     db_pool: &DbPool,
     sessions_store: &SessionsStore,
     master_store: &MasterStore,
-    conn: &mut WebSocketConnection,
+    // conn: &mut WebSocketConnection,
     msg: ClientConnectMessage,
-) -> Result<(SessionId, Session)> {
+) -> Result<Session> {
     tracing::info!("connect: {:?}", msg);
 
-    let (session_id, session) = match (msg.session_id, msg.session_key) {
-        (Some(session_id), Some(session_key)) => {
-            sessions_controller::resume_session(sessions_store, session_id, session_key).await?
-        }
-        _ => sessions_controller::create_session(db_pool, master_store, &msg.user_id).await?,
-    };
+    let user_id =
+        auth::authorize_jwt(&msg.jwt).ok_or(AppError::Unauthorized("invalid token".to_string()))?;
 
-    conn.send(
-        &ConnectMessage {
-            session_id,
-            session_key: session.session_key,
-        }
-        .into(),
+    let user_character = db::characters::read_character(db_pool, &msg.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    if user_character.user_id != user_id {
+        return Err(AppError::NotFound.into());
+    }
+
+    // conn.send(&ConnectMessage {}.into()).await?;
+
+    // Must be the last thing we do because we cannot fail after
+    let session = sessions_controller::create_session(
+        db_pool,
+        sessions_store,
+        master_store,
+        user_character,
+        &msg.area_id,
     )
     .await?;
 
-    Ok((session_id, session))
+    Ok(session)
 }
 
 async fn handle_disconnect(
     db_pool: &DbPool,
     sessions_store: &SessionsStore,
-    session_id: SessionId,
     mut session: Session,
 ) -> Result<()> {
-    let end_quest = session.game_data.world_state.read().end_quest;
+    let end_quest = session.game_data.area_state.read().end_quest;
 
     session.last_active = Instant::now();
 
     if end_quest {
-        sessions_controller::end_session(db_pool, &session_id, &session).await?;
+        db::characters::update_character_progress(
+            db_pool,
+            &session.character_id,
+            &session.game_data.area_id,
+            session.game_data.area_state.read().max_area_level_completed as i32,
+            session.game_data.player_resources.read().gems,
+            session.game_data.player_resources.read().shards,
+        )
+        .await?;
+        db::game_instances::delete_game_instance_data(db_pool, &session.character_id).await?;
     } else {
         sessions_store
             .sessions
             .lock()
             .unwrap()
-            .insert(session_id, session);
+            .insert(session.character_id, session);
     }
 
     Ok(())

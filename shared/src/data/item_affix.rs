@@ -2,9 +2,9 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 
 use super::{
+    area::AreaLevel,
     item::ItemCategory,
     stat_effect::{Modifier, StatEffect, StatType},
-    world::AreaLevel,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]

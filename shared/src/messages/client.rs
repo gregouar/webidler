@@ -1,12 +1,13 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
+    area::AreaLevel,
     item::{ItemCategory, ItemSlot},
     passive::PassiveNodeId,
-    world::AreaLevel,
+    user::UserCharacterId,
 };
 
-use super::{SessionId, SessionKey, macros::impl_into_message};
+use super::macros::impl_into_message;
 
 impl_into_message! {
     #[derive(Serialize, Deserialize, Debug, Clone,)]
@@ -47,9 +48,9 @@ impl Default for ClientMessage {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ClientConnectMessage {
-    pub user_id: String,
-    pub session_id: Option<SessionId>,
-    pub session_key: Option<SessionKey>,
+    pub jwt: String,
+    pub character_id: UserCharacterId,
+    pub area_id: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

@@ -20,9 +20,9 @@ use crate::components::{
     websocket::WebsocketContext,
 };
 
-use super::GameContext;
 use super::character::CharacterPortrait;
 use super::tooltips::SkillTooltip;
+use super::GameContext;
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {
@@ -232,7 +232,9 @@ pub fn PlayerCard() -> impl IntoView {
                         bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
                         value=xp_percent
                         reset=just_leveled_up
-                    />
+                    >
+                        {}
+                    </HorizontalProgressBar>
                 </StaticTooltip>
                 <FancyButton disabled=disable_level_up on:click=level_up>
                     <span class="text-lg">"Level Up"</span>

@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
 use shared::data::{
+    area::AreaLevel,
     character::CharacterId,
     skill::{DamageType, SkillRange, SkillType},
-    world::AreaLevel,
 };
 
 #[derive(Debug, Clone)]

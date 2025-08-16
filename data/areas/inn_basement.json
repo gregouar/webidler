@@ -1,10 +1,10 @@
 {
   "specs": {
-    "name": "The Inn Basement",
+    "name": "Inn Basement",
     "starting_level": 1,
     "musics": ["ambient1.mp3"],
-    "header_background": "worlds/inn_header.webp",
-    "footer_background": "worlds/inn_footer.webp"
+    "header_background": "areas/inn_header.webp",
+    "footer_background": "areas/inn_footer.webp"
   },
   "loot_tables": ["default_loot_table.json"],
   "bosses": [

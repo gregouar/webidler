@@ -45,7 +45,7 @@ fn handle_client_message(
     match msg {
         ClientMessage::Heartbeat => {}
         ClientMessage::EndQuest => {
-            game_data.world_state.mutate().end_quest = true;
+            game_data.area_state.mutate().end_quest = true;
         }
         ClientMessage::UseSkill(m) => {
             game_data
@@ -150,11 +150,11 @@ fn handle_client_message(
                 });
             }
         }
-        ClientMessage::SetAutoProgress(m) => game_data.world_state.mutate().auto_progress = m.value,
+        ClientMessage::SetAutoProgress(m) => game_data.area_state.mutate().auto_progress = m.value,
         ClientMessage::GoBack(m) => {
-            let world_state = game_data.world_state.mutate();
-            world_state.going_back += m.amount;
-            world_state.auto_progress = false;
+            let area_state = game_data.area_state.mutate();
+            area_state.going_back += m.amount;
+            area_state.auto_progress = false;
         }
         ClientMessage::PurchasePassive(m) => passives_controller::purchase_node(
             game_data.player_resources.mutate(),

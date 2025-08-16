@@ -4,20 +4,27 @@ use std::fmt;
 use axum::response::{IntoResponse, Response};
 use axum::Json;
 use http::StatusCode;
-use serde::Serialize;
+
+use shared::http::server::ErrorResponse;
 
 #[derive(Debug)]
 pub enum AppError {
     Database(sqlx::Error),
     Anyhow(anyhow::Error),
+    UserError(String),
+    Unauthorized(String),
+    Forbidden,
     NotFound,
 }
 
 impl fmt::Display for AppError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            AppError::Database(err) => write!(f, "Database error: {err}"),
-            AppError::Anyhow(err) => write!(f, "Unexpected error: {err}"),
+            AppError::Database(err) => write!(f, "Database error: {err}"), // TODO: remove details?
+            AppError::Anyhow(err) => write!(f, "Unexpected error: {err}"), // TODO: remove details?
+            AppError::UserError(err) => write!(f, "{err}"),
+            AppError::Unauthorized(err) => write!(f, "{err}"),
+            AppError::Forbidden => write!(f, "Forbidden"),
             AppError::NotFound => write!(f, "Not found"),
         }
     }
@@ -28,7 +35,10 @@ impl Error for AppError {
         match self {
             AppError::Database(err) => Some(err),
             AppError::Anyhow(err) => Some(err.root_cause()),
-            AppError::NotFound => None,
+            AppError::NotFound
+            | AppError::Unauthorized(_)
+            | AppError::Forbidden
+            | AppError::UserError(_) => None,
         }
     }
 }
@@ -45,15 +55,13 @@ impl From<anyhow::Error> for AppError {
     }
 }
 
-#[derive(Serialize)]
-struct ErrorResponse {
-    error: String,
-}
-
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         let code = match self {
             AppError::NotFound => StatusCode::NOT_FOUND,
+            AppError::Unauthorized(_) => StatusCode::UNAUTHORIZED,
+            AppError::Forbidden => StatusCode::FORBIDDEN,
+            AppError::UserError(_) => StatusCode::CONFLICT,
             AppError::Database(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::Anyhow(_) => StatusCode::INTERNAL_SERVER_ERROR,
         };

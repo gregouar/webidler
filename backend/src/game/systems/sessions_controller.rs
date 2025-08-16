@@ -1,109 +1,103 @@
 use std::{collections::HashMap, time::Instant};
 
-use anyhow::{anyhow, Result};
-use rand::TryRngCore;
+use anyhow::Result;
 
-use shared::{
-    data::{
-        character::CharacterSize,
-        item::ItemRarity,
-        player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-    },
-    messages::UserId,
+use shared::data::{
+    area::AreaLevel,
+    character::CharacterSize,
+    item::ItemRarity,
+    player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    user::UserCharacterId,
 };
 
 use crate::{
-    db,
+    db::{self, characters::CharacterEntry},
     game::{
         data::{master_store::MasterStore, DataInit},
         game_data::GameInstanceData,
-        sessions::{Session, SessionId, SessionKey, SessionsStore},
-        systems::leaderboard_controller,
+        sessions::{Session, SessionsStore},
     },
+    rest::AppError,
 };
 
 use super::{loot_generator, player_controller};
 
-pub async fn resume_session(
-    sessions_store: &SessionsStore,
-    session_id: SessionId,
-    session_key: SessionKey,
-) -> Result<(SessionId, Session)> {
-    tracing::debug!("loading player session '{session_id}'...");
-
-    let mut sessions_store = sessions_store.sessions.lock().unwrap();
-
-    match sessions_store.get(&session_id) {
-        Some(session) if session.session_key == session_key => {
-            Ok((session_id, sessions_store.remove(&session_id).unwrap()))
-        }
-        _ => Err(anyhow!("couldn't load player session")),
-    }
-}
-
 pub async fn create_session(
     db_pool: &db::DbPool,
+    sessions_store: &SessionsStore,
     master_store: &MasterStore,
-    user_id: &UserId,
-) -> Result<(SessionId, Session)> {
-    tracing::debug!("create new session for player '{user_id}'...");
+    character: CharacterEntry,
+    area_id: &Option<String>,
+) -> Result<Session> {
+    let character_id = character.character_id;
+    tracing::debug!("create new session for player '{character_id}'...");
 
-    if db::game_sessions::is_user_in_session(db_pool, user_id).await? {
-        return Err(anyhow!("player already in session"));
+    if db::game_sessions::create_session(db_pool, &character_id)
+        .await?
+        .is_none()
+    {
+        return Err(AppError::UserError("character already in session".to_string()).into());
     }
 
-    let game_instance_data =
-        match load_and_remove_game_instance(db_pool, master_store, user_id).await {
-            Some(saved_instance) => saved_instance,
-            None => new_game_instance(master_store, user_id)?,
-        };
+    // First try to get session from memory
+    if let Some(session) = {
+        let mut sessions_store = sessions_store.sessions.lock().unwrap();
+        sessions_store.remove(&character_id)
+    } {
+        return Ok(session);
+    }
 
-    let session_id = db::game_sessions::create_session(db_pool, user_id).await?;
+    // If not available, try from saved games, otherwise start new game
+    let game_instance_data = match load_game_instance(db_pool, master_store, &character_id).await {
+        Some(saved_instance) => saved_instance,
+        None => {
+            let area_id = area_id.as_ref().ok_or(anyhow::anyhow!("missing area id"))?;
+            new_game_instance(db_pool, master_store, character, area_id).await?
+        }
+    };
 
-    let mut rng = rand::rng();
-    let mut session_key: SessionKey = [0u8; 32];
-    rng.try_fill_bytes(&mut session_key)?;
-
-    Ok((
-        session_id,
-        Session {
-            user_id: user_id.to_string(),
-            session_key,
-            last_active: Instant::now(),
-            game_data: Box::new(game_instance_data),
-        },
-    ))
+    Ok(Session {
+        character_id,
+        last_active: Instant::now(),
+        game_data: Box::new(game_instance_data),
+    })
 }
 
-async fn load_and_remove_game_instance(
+async fn load_game_instance(
     db_pool: &db::DbPool,
     master_store: &MasterStore,
-    user_id: &UserId,
+    character_id: &UserCharacterId,
 ) -> Option<GameInstanceData> {
-    let saved_game_instance =
-        match db::game_instances::load_game_instance_data(db_pool, master_store, user_id).await {
-            Ok(x) => x,
-            Err(e) => {
-                tracing::error!("failed to load game instance for user '{}': {}", user_id, e);
-                None
-            }
-        };
-
-    if let Err(e) = db::game_instances::delete_game_instance_data(db_pool, user_id).await {
-        tracing::error!(
-            "failed to delete saved game instance for user '{}': {}",
-            user_id,
-            e
-        );
+    let saved_game_instance = match db::game_instances::load_game_instance_data(
+        db_pool,
+        master_store,
+        character_id,
+    )
+    .await
+    {
+        Ok(x) => x,
+        Err(e) => {
+            tracing::error!(
+                "failed to load game instance for character '{}': {}",
+                character_id,
+                e
+            );
+            None
+        }
     };
 
     saved_game_instance
 }
 
-fn new_game_instance(master_store: &MasterStore, user_id: &UserId) -> Result<GameInstanceData> {
+async fn new_game_instance(
+    db_pool: &db::DbPool,
+    master_store: &MasterStore,
+    character: CharacterEntry,
+    area_id: &str,
+) -> Result<GameInstanceData> {
     let mut player_specs = PlayerSpecs::init(CharacterSpecs {
-        name: user_id.to_string(), // TODO: LOL
-        portrait: String::from("adventurers/human_male_2.webp"),
+        name: character.character_name.clone(),
+        portrait: character.portrait.clone(),
         size: CharacterSize::Small,
         position_x: 0,
         position_y: 0,
@@ -119,34 +113,65 @@ fn new_game_instance(master_store: &MasterStore, user_id: &UserId) -> Result<Gam
         damage_resistance: HashMap::new(),
     });
 
-    let mut player_inventory = PlayerInventory {
-        max_bag_size: 40,
-        ..Default::default()
+    let player_resources = PlayerResources {
+        experience: 0.0,
+        passive_points: 0,
+        gold: 0.0,
+        gems: character.resource_gems,
+        shards: character.resource_shards,
     };
 
-    let player_resources = PlayerResources::default();
+    let character_data =
+        db::characters_data::load_character_data(db_pool, &character.character_id).await?;
+
+    let area_level_completed =
+        db::characters::read_character_area_completed(db_pool, &character.character_id, area_id)
+            .await?
+            .map(|area_completed| area_completed.max_area_level)
+            .unwrap_or_default();
 
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
-    if let Some(base_weapon) = master_store.items_store.get("dagger").cloned() {
-        let _ = player_controller::equip_item(
-            &mut player_specs,
-            &mut player_inventory,
-            &mut player_state,
-            loot_generator::roll_item(
-                base_weapon,
-                ItemRarity::Normal,
-                1,
-                &master_store.item_affixes_table,
-                &master_store.item_adjectives_table,
-                &master_store.item_nouns_table,
-            ),
-        );
-    }
+    let player_inventory = match character_data {
+        Some(inventory) => {
+            if !player_controller::init_item_skills(
+                &mut player_specs,
+                &inventory,
+                &mut player_state,
+            ) {
+                player_specs.buy_skill_cost = 0.0;
+            }
+            inventory
+        }
+        None => {
+            let mut player_inventory = PlayerInventory {
+                max_bag_size: 40,
+                ..Default::default()
+            };
 
-    GameInstanceData::init_from_store(
+            if let Some(base_weapon) = master_store.items_store.get("dagger").cloned() {
+                let _ = player_controller::equip_item(
+                    &mut player_specs,
+                    &mut player_inventory,
+                    &mut player_state,
+                    loot_generator::roll_item(
+                        base_weapon,
+                        ItemRarity::Normal,
+                        1,
+                        &master_store.item_affixes_table,
+                        &master_store.item_adjectives_table,
+                        &master_store.item_nouns_table,
+                    ),
+                );
+            }
+
+            player_inventory
+        }
+    };
+
+    let mut game_data = GameInstanceData::init_from_store(
         master_store,
-        "inn_basement.json",
+        area_id,
         None,
         "default",
         None,
@@ -155,22 +180,18 @@ fn new_game_instance(master_store: &MasterStore, user_id: &UserId) -> Result<Gam
         player_inventory,
         None,
         None,
+    )?;
+
+    game_data.area_state.mutate().max_area_level_completed = area_level_completed as AreaLevel;
+
+    db::game_instances::save_game_instance_data(
+        db_pool,
+        &character.character_id,
+        game_data.clone(),
     )
-}
+    .await?;
 
-pub async fn end_session(
-    db_pool: &db::DbPool,
-    session_id: &SessionId,
-    session: &Session,
-) -> Result<()> {
-    if let Err(e) =
-        leaderboard_controller::save_game_score(db_pool, session_id, &session.game_data).await
-    {
-        tracing::error!("failed to save game score: {}", e);
-    }
-    db::game_sessions::end_session(db_pool, session_id).await?;
-
-    Ok(())
+    Ok(game_data)
 }
 
 pub async fn save_all_sessions(db_pool: &db::DbPool, sessions_store: &SessionsStore) -> Result<()> {
@@ -182,13 +203,12 @@ pub async fn save_all_sessions(db_pool: &db::DbPool, sessions_store: &SessionsSt
         .collect::<Vec<_>>();
 
     // TODO: Trace errors
-    futures::future::join_all(sessions.into_iter().map(|(session_id, session)| {
+    futures::future::join_all(sessions.into_iter().map(|(_, session)| {
         let db_pool = db_pool.clone();
         tokio::spawn(async move {
-            end_session(&db_pool, &session_id, &session).await?;
             db::game_instances::save_game_instance_data(
                 &db_pool,
-                &session.user_id,
+                &session.character_id,
                 *session.game_data,
             )
             .await

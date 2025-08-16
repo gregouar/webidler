@@ -1,23 +1,23 @@
 use anyhow::{anyhow, Result};
 
 use shared::data::{
+    area::{AreaLevel, AreaState},
     character::CharacterId,
     item::{ItemCategory, ItemSlot, ItemSpecs, WeaponSpecs},
-    monster::MonsterSpecs,
+    monster::{MonsterRarity, MonsterSpecs},
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{BaseSkillSpecs, SkillSpecs, SkillState},
-    world::AreaLevel,
 };
 
-use crate::game::{
-    data::{event::EventsQueue, master_store::SkillsStore, DataInit},
-    utils::increase_factors,
+use crate::{
+    constants::{SKILL_BASE_COST, SKILL_COST_FACTOR},
+    game::{
+        data::{event::EventsQueue, master_store::SkillsStore, DataInit},
+        utils::increase_factors,
+    },
 };
 
 use super::{characters_controller::Target, items_controller, skills_controller};
-
-// TODO: put in some game config file
-const SKILL_COST_FACTOR: f64 = 1_000.0;
 
 #[derive(Debug, Clone)]
 pub struct PlayerController {
@@ -104,11 +104,20 @@ pub fn reward_player(
     player_resources: &mut PlayerResources,
     player_specs: &PlayerSpecs,
     monster_specs: &MonsterSpecs,
-) -> f64 {
-    let gold_reward = (monster_specs.power_factor * player_specs.gold_find).round();
+    area_state: &mut AreaState,
+) -> (f64, f64) {
+    let gold_reward = (monster_specs.reward_factor * player_specs.gold_find).round();
+    let gems_reward = if let MonsterRarity::Champion = monster_specs.rarity {
+        area_state.last_champion_spawn = area_state.area_level;
+        area_state.area_level as f64
+    } else {
+        0.0
+    };
     player_resources.gold += gold_reward;
-    player_resources.experience += monster_specs.power_factor.round();
-    gold_reward
+    player_resources.gems += gems_reward;
+    player_resources.experience += monster_specs.reward_factor.round();
+
+    (gold_reward, gems_reward)
 }
 
 pub fn level_up(
@@ -179,6 +188,29 @@ pub fn unequip_item_to_bag(
     }
 
     true
+}
+
+pub fn init_item_skills(
+    player_specs: &mut PlayerSpecs,
+    player_inventory: &PlayerInventory,
+    player_state: &mut PlayerState,
+) -> bool {
+    let mut found_skill = false;
+    for equipped in player_inventory.equipped.values() {
+        if let EquippedSlot::MainSlot(item_specs) = equipped {
+            if let Some(ref weapon_specs) = item_specs.weapon_specs {
+                equip_weapon(
+                    player_specs,
+                    player_state,
+                    item_specs.base.slot,
+                    item_specs.level,
+                    weapon_specs,
+                );
+                found_skill = true;
+            }
+        }
+    }
+    found_skill
 }
 
 /// Equip new item and return old equipped item
@@ -370,7 +402,12 @@ pub fn buy_skill(
             None,
         );
         player_resources.gold -= player_specs.buy_skill_cost;
-        player_specs.buy_skill_cost = (player_specs.buy_skill_cost * SKILL_COST_FACTOR).round();
+        player_specs.buy_skill_cost = (if player_specs.buy_skill_cost > 0.0 {
+            player_specs.buy_skill_cost * SKILL_COST_FACTOR
+        } else {
+            SKILL_BASE_COST * SKILL_COST_FACTOR
+        })
+        .round();
         player_specs.bought_skills.insert(skill_id.to_string());
         true
     } else {

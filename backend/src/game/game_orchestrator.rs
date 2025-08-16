@@ -11,8 +11,8 @@ use super::{
     },
     game_data::GameInstanceData,
     systems::{
-        events_resolver, monsters_controller, monsters_updater, monsters_wave, player_updater,
-        world_controller,
+        area_controller, events_resolver, monsters_controller, monsters_updater, monsters_wave,
+        player_updater,
     },
     utils::LazySyncer,
 };
@@ -109,39 +109,39 @@ async fn control_entities(
         );
 
         let wave_completed = monsters_still_alive.is_empty();
-        if wave_completed || game_data.world_state.read().going_back > 0 {
+        if wave_completed || game_data.area_state.read().going_back > 0 {
             if wave_completed && !game_data.wave_completed {
                 game_data.wave_completed = true;
                 events_queue.register_event(GameEvent::WaveCompleted(
-                    game_data.world_state.read().area_level,
+                    game_data.area_state.read().area_level,
                 ));
             }
 
             if game_data.monster_wave_delay.elapsed()
                 > Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown)
             {
-                if game_data.world_state.read().going_back > 0 {
-                    let world_state: &mut shared::data::world::WorldState =
-                        game_data.world_state.mutate();
-                    let amount = world_state.going_back;
-                    world_controller::decrease_area_level(
-                        &game_data.world_blueprint.specs,
-                        world_state,
+                if game_data.area_state.read().going_back > 0 {
+                    let area_state: &mut shared::data::area::AreaState =
+                        game_data.area_state.mutate();
+                    let amount = area_state.going_back;
+                    area_controller::decrease_area_level(
+                        &game_data.area_blueprint.specs,
+                        area_state,
                         amount,
                     );
-                    world_state.going_back = 0;
+                    area_state.going_back = 0;
                 }
 
                 let (monster_specs, monster_states, is_boss) =
                     monsters_wave::generate_monsters_wave(
-                        &game_data.world_blueprint,
-                        game_data.world_state.read(),
+                        &game_data.area_blueprint,
+                        game_data.area_state.mutate(),
                         &master_store.monster_specs_store,
                     )?;
                 game_data.monster_base_specs = LazySyncer::new(monster_specs.clone());
                 game_data.monster_specs = monster_specs;
                 game_data.monster_states = monster_states;
-                game_data.world_state.mutate().is_boss = is_boss;
+                game_data.area_state.mutate().is_boss = is_boss;
 
                 game_data.wave_completed = false;
             }
@@ -194,9 +194,9 @@ fn respawn_player(game_data: &mut GameInstanceData) {
 
     game_data.player_state = PlayerState::init(game_data.player_specs.read());
 
-    world_controller::decrease_area_level(
-        &game_data.world_blueprint.specs,
-        game_data.world_state.mutate(),
+    area_controller::decrease_area_level(
+        &game_data.area_blueprint.specs,
+        game_data.area_state.mutate(),
         1,
     );
 }

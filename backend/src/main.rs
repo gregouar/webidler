@@ -4,7 +4,10 @@ use axum::{
     routing::{any, get},
     Router,
 };
-use http::{HeaderValue, Method};
+use http::{
+    header::{AUTHORIZATION, CONTENT_TYPE},
+    HeaderValue, Method,
+};
 use tokio::signal;
 use tower_http::{
     cors::CorsLayer,
@@ -54,11 +57,12 @@ async fn main() {
         TraceLayer::new_for_http().make_span_with(DefaultMakeSpan::default().include_headers(true));
 
     let cors_layer = CorsLayer::new()
-        .allow_origin([
-            "http://127.0.0.1:8080".parse::<HeaderValue>().unwrap(),
-            "https://gregouar.github.io".parse::<HeaderValue>().unwrap(),
-        ])
-        .allow_methods([Method::GET, Method::POST]);
+        .allow_origin([std::env::var("CORS_FRONTEND_URL")
+            .expect("missing 'CORS_FRONTEND_URL' setting")
+            .parse::<HeaderValue>()
+            .unwrap()])
+        .allow_methods([Method::GET, Method::POST, Method::DELETE])
+        .allow_headers([CONTENT_TYPE, AUTHORIZATION]);
 
     let master_store = MasterStore::load_from_folder("data")
         .await
@@ -71,15 +75,17 @@ async fn main() {
         sessions_store.clone(),
     ));
 
+    let app_state = AppState {
+        db_pool: db_pool.clone(),
+        master_store,
+        sessions_store: sessions_store.clone(),
+    };
+
     let app = Router::new()
         .route("/", get(|| async { "OK" }))
-        .merge(rest::routes())
+        .merge(rest::routes(app_state.clone()))
         .route("/ws", any(websocket::handler))
-        .with_state(AppState {
-            db_pool: db_pool.clone(),
-            master_store,
-            sessions_store: sessions_store.clone(),
-        })
+        .with_state(app_state.clone())
         .layer(tracer_layer)
         .layer(cors_layer);
 

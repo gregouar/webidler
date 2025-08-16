@@ -1,11 +1,15 @@
-use leptos::{html::*, prelude::*};
+use codee::string::JsonSerdeCodec;
+use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
+use shared::http::client::SignInRequest;
+
 use crate::components::{
-    backend_client::BackendClient, game::game_instance::SessionInfos, ui::buttons::MenuButton,
+    backend_client::BackendClient,
+    captcha::*,
+    ui::{buttons::MenuButton, input::Input, toast::*},
 };
-use codee::string::JsonSerdeCodec;
 
 #[component]
 pub fn MainMenuPage() -> impl IntoView {
@@ -20,20 +24,60 @@ pub fn MainMenuPage() -> impl IntoView {
         }
     });
 
-    let (_, _, delete_session_infos) =
-        storage::use_session_storage::<Option<SessionInfos>, JsonSerdeCodec>("session_infos");
-    let (get_user_id, set_user_id_storage, _) =
-        storage::use_local_storage::<String, JsonSerdeCodec>("user_id");
-    let user_id = RwSignal::new(get_user_id.get_untracked());
-    let disable_connect = Signal::derive(move || user_id.read().is_empty());
+    let (get_username_storage, set_username_storage, _) =
+        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
 
-    let navigate_to_game = {
+    let username = RwSignal::new(get_username_storage.get_untracked());
+    let password = RwSignal::new(None);
+    let captcha_token = RwSignal::new(None);
+
+    let (_, set_jwt_storage, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
+
+    let connecting = RwSignal::new(false);
+    let disable_connect = Signal::derive(move || {
+        username.read().is_none()
+            || password.read().is_none()
+            || captcha_token.read().is_none()
+            || connecting.get()
+    });
+
+    let signin = {
+        let toaster = expect_context::<Toasts>();
+        let backend = use_context::<BackendClient>().unwrap();
         let navigate = use_navigate();
-        let delete_session_infos = delete_session_infos.clone();
-        move |_| {
-            delete_session_infos();
-            set_user_id_storage.set(user_id.get_untracked());
-            navigate("game", Default::default());
+        move || {
+            if disable_connect.get() {
+                return;
+            }
+
+            connecting.set(true);
+            let navigate = navigate.clone();
+            spawn_local({
+                async move {
+                    match backend
+                        .post_signin(&SignInRequest {
+                            captcha_token: captcha_token.get().unwrap_or_default(),
+                            username: username.get().unwrap(), // TODO: better error?
+                            password: password.get().unwrap(),
+                        })
+                        .await
+                    {
+                        Ok(response) => {
+                            set_jwt_storage.set(response.jwt);
+                            set_username_storage.set(username.get());
+                            navigate("user-dashboard", Default::default());
+                        }
+                        Err(e) => {
+                            show_toast(
+                                toaster,
+                                format!("Authentication error: {e:?}"),
+                                ToastVariant::Error,
+                            );
+                            connecting.set(false);
+                        }
+                    }
+                }
+            });
         }
     };
 
@@ -43,6 +87,14 @@ pub fn MainMenuPage() -> impl IntoView {
             navigate("leaderboard", Default::default());
         }
     };
+
+    let navigate_to_signup = {
+        let navigate = use_navigate();
+        move |_| {
+            navigate("signup", Default::default());
+        }
+    };
+    let password_ref = NodeRef::<leptos::html::Input>::new();
 
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
@@ -55,22 +107,46 @@ pub fn MainMenuPage() -> impl IntoView {
                     "Grind to Rust!"
                 </h1>
                 <div class="flex flex-col space-y-2">
-                    <div class="w-full mx-auto mb-6 text-left">
-                        <label for="username" class="block mb-2 text-sm font-medium text-gray-300">
-                            "Username:"
-                        </label>
-                        <input
+                    // <form>
+                    <div class="w-full mx-auto text-left">
+                        <label class="block mb-2 text-sm font-medium text-gray-300">"Login:"</label>
+                        <Input
                             id="username"
-                            type="text"
-                            bind:value=user_id
+                            input_type="text"
                             placeholder="Enter your username"
-                            class="w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400
-                            focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md"
+                            bind=username
+                            on:keydown=move |ev: leptos::ev::KeyboardEvent| {
+                                if ev.key() == "Enter"
+                                    && let Some(pw) = password_ref.get() {
+                                        pw.focus().unwrap();
+                                    }
+                            }
                         />
                     </div>
-                    <MenuButton on:click=navigate_to_game disabled=disable_connect>
-                        "Play"
+                    <div class="w-full mx-auto mb-6 text-left">
+                        <Input
+                            node_ref=password_ref
+                            id="password"
+                            input_type="password"
+                            placeholder="Enter your password"
+                            bind=password
+                            on:keydown={
+                                let signin = signin.clone();
+                                move |ev| {
+                                    if ev.key() == "Enter" {
+                                        signin();
+                                    }
+                                }
+                            }
+                        />
+                    </div>
+                    <Captcha token=captcha_token />
+                    // </form>
+
+                    <MenuButton on:click=move |_| signin() disabled=disable_connect class:mb-4>
+                        {move || if connecting.get() { "Connecting..." } else { "Connect" }}
                     </MenuButton>
+                    <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>
                     <MenuButton on:click=navigate_to_leaderboard>"Leaderboard"</MenuButton>
                 </div>
             </div>

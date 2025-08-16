@@ -9,6 +9,8 @@ use shared::data::{
     skill::DamageType,
 };
 
+use crate::components::game::tooltips::skill_tooltip::format_trigger;
+
 use super::effects_tooltip;
 
 #[component]
@@ -192,6 +194,13 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         AffixEffectScope::Global,
     );
 
+    let trigger_lines = item_specs
+        .triggers
+        .clone()
+        .into_iter()
+        .map(format_trigger)
+        .collect::<Vec<_>>();
+
     let (name_color, border_color, ring_color, shadow_color) = match item_specs.rarity {
         ItemRarity::Normal => (
             "text-white",
@@ -252,7 +261,9 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 .then(|| {
                     view! {
                         <hr class="border-t border-gray-700 my-1" />
-                        <ul class="list-none space-y-1">{local_affixes}{global_affixes}</ul>
+                        <ul class="list-none space-y-1">
+                            {trigger_lines}{local_affixes}{global_affixes}
+                        </ul>
                     }
                 })}
             <hr class="border-t border-gray-700" />

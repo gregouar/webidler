@@ -7,10 +7,10 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
     let panel_ref = NodeRef::<Div>::new();
 
     Effect::new(move |_| {
-        if open.get() {
-            if let Some(el) = panel_ref.get_untracked() {
-                _ = el.focus();
-            }
+        if open.get()
+            && let Some(el) = panel_ref.get_untracked()
+        {
+            _ = el.focus();
         }
     });
 

@@ -1,26 +1,28 @@
 use std::collections::HashSet;
 
 use shared::data::{
+    area::{AreaSpecs, AreaState},
     character::{CharacterSpecs, CharacterState},
     character_status::StatusMap,
     monster::{MonsterSpecs, MonsterState},
     player::{PlayerSpecs, PlayerState},
     skill::{BaseSkillSpecs, SkillSpecs, SkillState},
     stat_effect::EffectsMap,
-    world::{WorldSpecs, WorldState},
 };
 
-use crate::game::utils::rng;
+use crate::{constants::SKILL_BASE_COST, game::utils::rng};
 pub trait DataInit<Specs> {
     fn init(specs: Specs) -> Self;
 }
 
-impl DataInit<&WorldSpecs> for WorldState {
-    fn init(specs: &WorldSpecs) -> Self {
-        WorldState {
+impl DataInit<&AreaSpecs> for AreaState {
+    fn init(specs: &AreaSpecs) -> Self {
+        AreaState {
             area_level: specs.starting_level,
             is_boss: false,
             waves_done: 0,
+            max_area_level_completed: 0,
+            last_champion_spawn: 0,
             auto_progress: true,
             going_back: 0,
             end_quest: false,
@@ -52,7 +54,7 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             skills_specs: vec![],
             auto_skills: vec![],
             max_skills: 4,
-            buy_skill_cost: 100.0,
+            buy_skill_cost: SKILL_BASE_COST,
             bought_skills: HashSet::new(),
             level: 1,
             experience_needed: 20.0,
@@ -81,6 +83,7 @@ impl DataInit<&MonsterSpecs> for MonsterState {
             skill_states: specs.skill_specs.iter().map(SkillState::init).collect(),
             initiative: rng::random_range(0.0..specs.max_initiative).unwrap_or_default(),
             gold_reward: 0.0,
+            gems_reward: 0.0,
         }
     }
 }

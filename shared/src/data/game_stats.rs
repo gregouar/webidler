@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
-use super::world::AreaLevel;
+use super::area::AreaLevel;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GameStats {

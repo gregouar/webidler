@@ -9,11 +9,11 @@ use std::{
 use shared::data::{monster::MonsterSpecs, passive::PassivesTreeSpecs, skill::BaseSkillSpecs};
 
 use super::{
+    area::AreaBlueprint,
     items_store::{ItemAdjectivesTable, ItemAffixesTable, ItemNounsTable, ItemsStore},
     loot_table::LootTable,
     manifest,
     monster::BaseMonsterSpecs,
-    world::WorldBlueprint,
 };
 
 use crate::game::{data::manifest::ManifestCategory, utils::json::LoadJsonFromFile};
@@ -24,7 +24,7 @@ pub type PassivesStore = HashMap<String, PassivesTreeSpecs>;
 pub type SkillsStore = HashMap<String, BaseSkillSpecs>;
 pub type MonstersSpecsStore = HashMap<String, BaseMonsterSpecs>;
 pub type LootTablesStore = HashMap<String, LootTable>;
-pub type WorldBlueprintStore = HashMap<String, WorldBlueprint>;
+pub type AreaBlueprintStore = HashMap<String, AreaBlueprint>;
 
 #[derive(Debug, Clone)]
 pub struct MasterStore {
@@ -36,7 +36,7 @@ pub struct MasterStore {
     pub item_nouns_table: Arc<ItemNounsTable>,
     pub loot_tables_store: Arc<LootTablesStore>,
     pub monster_specs_store: Arc<MonstersSpecsStore>,
-    pub world_blueprints_store: Arc<WorldBlueprintStore>,
+    pub area_blueprints_store: Arc<AreaBlueprintStore>,
 }
 
 impl LoadJsonFromFile for MonsterSpecs {}
@@ -69,14 +69,14 @@ impl MasterStore {
 
         let loot_tables_store = loot_tables_store?;
 
-        let world_blueprints_store =
-            join_load_and_map(manifest.get_resources(ManifestCategory::Worlds))
+        let area_blueprints_store =
+            join_load_and_map(manifest.get_resources(ManifestCategory::Areas))
                 .await?
                 .into_iter()
                 .map(|(f, schema)| {
                     Ok((
                         f,
-                        WorldBlueprint::populate_from_schema(schema, &loot_tables_store)?,
+                        AreaBlueprint::populate_from_schema(schema, &loot_tables_store)?,
                     ))
                 })
                 .collect::<Result<_>>()?;
@@ -90,7 +90,7 @@ impl MasterStore {
             item_nouns_table: Arc::new(item_nouns_table?),
             loot_tables_store: Arc::new(loot_tables_store),
             monster_specs_store: Arc::new(monster_specs_store?),
-            world_blueprints_store: Arc::new(world_blueprints_store),
+            area_blueprints_store: Arc::new(area_blueprints_store),
         };
 
         verify_store_integrity(&master_store)?;
@@ -146,7 +146,7 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
         }
     }
 
-    for spawn in master_store.world_blueprints_store.values().flat_map(|w| {
+    for spawn in master_store.area_blueprints_store.values().flat_map(|w| {
         w.bosses
             .iter()
             .flat_map(|b| &b.spawns)

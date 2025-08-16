@@ -19,7 +19,7 @@ pub enum ManifestCategory {
     ItemNouns,
     Loot,
     Monsters,
-    Worlds,
+    Areas,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

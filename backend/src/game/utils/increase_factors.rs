@@ -1,4 +1,4 @@
-use shared::data::world::AreaLevel;
+use shared::data::area::AreaLevel;
 
 // TODO: put in some game config file
 pub const MONSTER_INCREASE_FACTOR: f64 = 0.125;

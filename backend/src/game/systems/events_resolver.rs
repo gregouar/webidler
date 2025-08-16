@@ -1,6 +1,11 @@
+use std::collections::HashSet;
+
 use shared::{
     constants::WAVES_PER_AREA_LEVEL,
-    data::{character::CharacterId, trigger::EventTrigger, world::AreaLevel},
+    data::{
+        area::AreaLevel, character::CharacterId, character_status::StatusSpecs,
+        trigger::EventTrigger,
+    },
 };
 
 use crate::game::{
@@ -81,7 +86,7 @@ fn handle_hit_event<'a>(
                 source: hit_event.source,
                 target: hit_event.target,
                 hit_context: Some(hit_event),
-                area_level: game_data.world_state.read().area_level,
+                area_level: game_data.area_state.read().area_level,
             });
         }
     }
@@ -95,26 +100,54 @@ fn handle_kill_event(
     match target {
         CharacterId::Monster(monster_index) => {
             game_data.game_stats.monsters_killed += 1;
+
             if let Some(monster_specs) = game_data.monster_specs.get(monster_index) {
-                let gold_reward = player_controller::reward_player(
+                let (gold_reward, gems_reward) = player_controller::reward_player(
                     game_data.player_resources.mutate(),
                     game_data.player_specs.read(),
                     monster_specs,
+                    game_data.area_state.mutate(),
                 );
                 if let Some(monster_state) = game_data.monster_states.get_mut(monster_index) {
                     monster_state.gold_reward = gold_reward;
-                }
-            }
+                    monster_state.gems_reward = gems_reward;
 
-            for triggered_effects in game_data.player_specs.read().triggers.iter() {
-                if let EventTrigger::OnKill = triggered_effects.trigger {
-                    trigger_effects.push(TriggerContext {
-                        trigger: triggered_effects.clone(),
-                        source: CharacterId::Player,
-                        target,
-                        hit_context: None,
-                        area_level: game_data.world_state.read().area_level,
-                    });
+                    let mut is_debuffed = false;
+                    let mut is_stunned = false;
+                    let mut is_damaged_over_time = HashSet::new();
+                    for (status_specs, _) in monster_state.character_state.statuses.iter() {
+                        match status_specs {
+                            StatusSpecs::Stun => {
+                                is_stunned = true;
+                            }
+                            StatusSpecs::DamageOverTime { damage_type, .. } => {
+                                is_damaged_over_time.insert(damage_type);
+                            }
+                            StatusSpecs::StatModifier { debuff: true, .. } => {
+                                is_debuffed = true;
+                            }
+                            _ => {}
+                        }
+                    }
+
+                    for triggered_effects in game_data.player_specs.read().triggers.iter() {
+                        if let EventTrigger::OnKill(kill_trigger) = triggered_effects.trigger {
+                            if kill_trigger.is_stunned.unwrap_or(is_stunned) == is_stunned
+                                && kill_trigger.is_debuffed.unwrap_or(is_debuffed) == is_debuffed
+                                && kill_trigger
+                                    .is_damaged_over_time
+                                    .is_none_or(|dt| is_damaged_over_time.contains(&dt))
+                            {
+                                trigger_effects.push(TriggerContext {
+                                    trigger: triggered_effects.clone(),
+                                    source: CharacterId::Player,
+                                    target,
+                                    hit_context: None,
+                                    area_level: game_data.area_state.read().area_level,
+                                });
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -131,7 +164,7 @@ fn handle_area_completed_event(
 ) {
     match loot_generator::generate_loot(
         area_level,
-        &game_data.world_blueprint.loot_table,
+        &game_data.area_blueprint.loot_table,
         &master_store.items_store,
         &master_store.item_affixes_table,
         &master_store.item_adjectives_table,
@@ -153,10 +186,22 @@ fn handle_area_completed_event(
         None => tracing::warn!("Failed to generate loot"),
     }
 
-    let world_state = game_data.world_state.mutate();
-    world_state.waves_done = 1;
-    if world_state.auto_progress {
-        world_state.area_level += 1;
+    let area_state = game_data.area_state.mutate();
+
+    if (area_state.area_level > area_state.max_area_level_completed)
+        && (area_state.area_level - game_data.area_blueprint.specs.starting_level)
+            .is_multiple_of(10)
+    {
+        game_data.player_resources.mutate().shards += 1.0;
+    }
+
+    area_state.max_area_level_completed = area_state
+        .max_area_level_completed
+        .max(area_state.area_level);
+
+    area_state.waves_done = 1;
+    if area_state.auto_progress {
+        area_state.area_level += 1;
     }
 
     game_data.game_stats.areas_completed += 1;
@@ -170,13 +215,13 @@ fn handle_wave_completed_event(
     game_data: &mut GameInstanceData,
     area_level: AreaLevel,
 ) {
-    let world_state = game_data.world_state.mutate();
+    let area_state = game_data.area_state.mutate();
 
-    if !world_state.is_boss {
-        world_state.waves_done += 1;
+    if !area_state.is_boss {
+        area_state.waves_done += 1;
     }
 
-    if world_state.is_boss || world_state.waves_done > WAVES_PER_AREA_LEVEL {
+    if area_state.is_boss || area_state.waves_done > WAVES_PER_AREA_LEVEL {
         events_queue.register_event(GameEvent::AreaCompleted(area_level));
     }
 
@@ -187,7 +232,7 @@ fn handle_wave_completed_event(
                 source: CharacterId::Player,
                 target: CharacterId::Player,
                 hit_context: None,
-                area_level: game_data.world_state.read().area_level,
+                area_level: game_data.area_state.read().area_level,
             });
         }
     }

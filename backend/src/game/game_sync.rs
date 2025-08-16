@@ -14,8 +14,8 @@ pub async fn sync_init_game(
     client_conn
         .send(
             &InitGameMessage {
-                world_specs: game_data.world_blueprint.specs.clone(),
-                world_state: game_data.world_state.read().clone(),
+                area_specs: game_data.area_blueprint.specs.clone(),
+                area_state: game_data.area_state.read().clone(),
                 passives_tree_specs: game_data.passives_tree_specs.clone(),
                 passives_tree_state: game_data.passives_tree_state.read().clone(),
                 player_specs: game_data.player_specs.read().clone(),
@@ -34,7 +34,7 @@ pub async fn sync_update_game(
     client_conn
         .send(
             &SyncGameStateMessage {
-                world_state: game_data.world_state.sync(),
+                area_state: game_data.area_state.sync(),
                 passives_tree_state: game_data.passives_tree_state.sync(),
                 player_specs: game_data.player_specs.sync(),
                 player_inventory: game_data.player_inventory.sync(),

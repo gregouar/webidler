@@ -29,7 +29,7 @@ fn comma_format(value: f64) -> String {
         .chars()
         .enumerate()
         .flat_map(|(i, c)| {
-            if i != 0 && (n_chars - i) % 3 == 0 {
+            if i != 0 && (n_chars - i).is_multiple_of(3) {
                 Some(',')
             } else {
                 None

@@ -40,20 +40,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install nightly Rust
-        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Install stable Rust
+        uses: dtolnay/rust-toolchain@stable
         with:
-          components: clippy, rustfmt
-
-      - name: lint
-        run: cargo clippy & cargo fmt
-
+          components: clippy
+          
       - name: Prepare SQLx Offline Data
         run: |
           cargo install sqlx-cli --no-default-features --features postgres
           cargo sqlx migrate run --source migrations/postgres
           cargo sqlx prepare --workspace -- --bin backend --features postgres --no-default-features
         env:
+          JWT_SECRET: "test"
+          DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
+
+      - name: lint
+        run: cargo clippy --no-default-features --features postgres -- -D warnings
+        env:
+          JWT_SECRET: "test"
           DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
 
       - name: Upload SQLx Data
@@ -66,6 +71,7 @@ jobs:
       - name: Run tests
         run: cargo test --no-default-features --features postgres
         env:
+          JWT_SECRET: "test"
           DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
 
   Backend-Build-and-deploy-to-VPS:
@@ -83,6 +89,9 @@ jobs:
           path: .sqlx
 
       - name: Build Docker images
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          BACKEND_WS_URL: "wss://webidler.gregoirenaisse.be"
         run: |
           docker build -t backend:latest -f ./backend/Dockerfile .
           docker save backend:latest > backend.tar
@@ -107,6 +116,7 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             echo "POSTGRES_PASSWORD=${{ secrets.VPS_DB_PASSWORD }}" > /webidler/tmp/.env
+            echo "TURNSTILE_SECRET=${{ secrets.TURNSTILE_SECRET }}" > /webidler/tmp/.env
             docker load < /webidler/tmp/backend.tar
             docker compose -f /webidler/tmp/docker-compose.yml stop
             docker compose -f /webidler/tmp/docker-compose.yml down

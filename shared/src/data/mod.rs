@@ -1,3 +1,4 @@
+pub mod area;
 pub mod character;
 pub mod character_status;
 pub mod game_stats;
@@ -10,4 +11,4 @@ pub mod player;
 pub mod skill;
 pub mod stat_effect;
 pub mod trigger;
-pub mod world;
+pub mod user;

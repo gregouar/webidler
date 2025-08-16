@@ -1,5 +1,5 @@
 use anyhow::Result;
-use shared::messages::{SessionId, UserId};
+use shared::data::user::UserCharacterId;
 
 use super::{
     data::{event::EventsQueue, master_store::MasterStore},
@@ -10,7 +10,6 @@ use super::{
 
 use crate::{
     db::{self, DbPool},
-    game::systems::leaderboard_controller,
     websocket::WebSocketConnection,
 };
 
@@ -18,8 +17,7 @@ pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
     db_pool: DbPool,
     master_store: MasterStore,
-    user_id: &'a UserId,
-    session_id: &'a SessionId,
+    character_id: &'a UserCharacterId,
     game_data: &'a mut GameInstanceData,
     events_queue: EventsQueue,
 }
@@ -27,16 +25,14 @@ pub struct GameInstance<'a> {
 impl<'a> GameInstance<'a> {
     pub fn new(
         client_conn: &'a mut WebSocketConnection,
-        user_id: &'a UserId,
-        session_id: &'a SessionId,
+        character_id: &'a UserCharacterId,
         game_data: &'a mut GameInstanceData,
         db_pool: DbPool,
         master_store: MasterStore,
     ) -> Self {
         GameInstance {
             client_conn,
-            user_id,
-            session_id,
+            character_id,
             db_pool,
             master_store,
             game_data,
@@ -79,31 +75,76 @@ impl<'a> GameInstance<'a> {
                 self.auto_save();
             }
 
+            if self.game_data.area_state.read().end_quest {
+                break;
+            }
+
             game_timer.wait_tick().await;
         }
 
-        tracing::debug!("game session '{}' ended ", self.session_id);
+        if self.game_data.area_state.read().end_quest {
+            self.end_quest().await?;
+        }
+
+        tracing::debug!("game session '{}' ended ", self.character_id);
         Ok(())
     }
 
     fn auto_save(&self) {
-        let (db_pool, user_id, session_id, game_data) = (
+        let (db_pool, character_id, game_data) = (
             self.db_pool.clone(),
-            self.user_id.clone(),
-            *self.session_id,
+            *self.character_id,
             self.game_data.clone(), // TODO: Do something else, like only copy the necessary data
         );
         tokio::spawn(async move {
-            leaderboard_controller::save_game_score(&db_pool, &session_id, &game_data)
+            db::characters::update_character_progress(
+                &db_pool,
+                &character_id,
+                &game_data.area_id,
+                game_data.area_state.read().max_area_level_completed as i32,
+                game_data.player_resources.read().gems,
+                game_data.player_resources.read().shards,
+            )
+            .await
+            .unwrap_or_else(|e| {
+                tracing::error!(
+                    "failed to save character progress '{}': {}",
+                    character_id,
+                    e
+                )
+            });
+
+            db::game_instances::save_game_instance_data(&db_pool, &character_id, game_data)
                 .await
                 .unwrap_or_else(|e| {
-                    tracing::error!("failed to save game score '{}': {}", user_id, e)
-                });
-            db::game_instances::save_game_instance_data(&db_pool, &user_id, game_data)
-                .await
-                .unwrap_or_else(|e| {
-                    tracing::error!("failed to save game instance for user '{}': {}", user_id, e)
+                    tracing::error!(
+                        "failed to save game instance for character '{}': {}",
+                        character_id,
+                        e
+                    )
                 });
         });
+    }
+
+    async fn end_quest(&self) -> Result<()> {
+        db::characters_data::save_character_data(
+            &self.db_pool,
+            self.character_id,
+            self.game_data.player_inventory.read(),
+        )
+        .await?;
+        db::characters::update_character_progress(
+            &self.db_pool,
+            self.character_id,
+            &self.game_data.area_id,
+            self.game_data.area_state.read().max_area_level_completed as i32,
+            self.game_data.player_resources.read().gems,
+            self.game_data.player_resources.read().shards,
+        )
+        .await?;
+
+        db::game_instances::delete_game_instance_data(&self.db_pool, self.character_id).await?;
+
+        Ok(())
     }
 }

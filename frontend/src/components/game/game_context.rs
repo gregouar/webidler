@@ -1,21 +1,21 @@
 use leptos::prelude::*;
 
 use shared::data::{
+    area::{AreaSpecs, AreaState},
     game_stats::GameStats,
     item::ItemCategory,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-    world::{WorldSpecs, WorldState},
 };
 
 #[derive(Clone)]
 pub struct GameContext {
     pub started: RwSignal<bool>,
 
-    pub world_specs: RwSignal<WorldSpecs>,
-    pub world_state: RwSignal<WorldState>,
+    pub area_specs: RwSignal<AreaSpecs>,
+    pub area_state: RwSignal<AreaState>,
 
     pub passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     pub passives_tree_state: RwSignal<PassivesTreeState>,
@@ -54,8 +54,8 @@ impl GameContext {
         GameContext {
             started: RwSignal::new(false),
 
-            world_specs: RwSignal::new(WorldSpecs::default()),
-            world_state: RwSignal::new(WorldState::default()),
+            area_specs: RwSignal::new(AreaSpecs::default()),
+            area_state: RwSignal::new(AreaState::default()),
 
             passives_tree_specs: RwSignal::new(PassivesTreeSpecs::default()),
             passives_tree_state: RwSignal::new(PassivesTreeState::default()),

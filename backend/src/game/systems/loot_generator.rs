@@ -1,10 +1,10 @@
 use std::collections::HashSet;
 
 use shared::data::{
+    area::AreaLevel,
     item::{ItemBase, ItemRarity, ItemSpecs},
     item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
     stat_effect::StatEffect,
-    world::AreaLevel,
 };
 
 use crate::game::{
@@ -110,6 +110,7 @@ pub fn roll_item(
     items_controller::update_item_specs(
         ItemSpecs {
             name: base.name.clone(),
+            triggers: base.triggers.clone(),
             base,
             rarity,
             level,

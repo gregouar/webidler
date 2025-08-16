@@ -3,10 +3,11 @@ Next things to do:
 - auth
 - multi characters
 - gem looting
-- choose world
+- choose area
 - market
 - shard looting
 - ascend
+- last login, activity log, etc
 
 - dual wield
 - spider boss & minions

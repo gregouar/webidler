@@ -8,8 +8,7 @@ pub fn HorizontalProgressBar(
     /// Bar color, must be of format "bg-XXXX-NNN"
     bar_color: &'static str,
     /// Text
-    #[prop(optional)]
-    text: Option<String>, // TODO: Dynamic?
+    children: Children,
     // Instant reset
     #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
     #[prop(optional)] class: Option<&'static str>,
@@ -84,7 +83,7 @@ pub fn HorizontalProgressBar(
                 ></div>
             </div>
             <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-sm pointer-events-none overflow-hidden">
-                {text}
+                {children()}
             </div>
 
         </div>

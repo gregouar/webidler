@@ -3,11 +3,13 @@ use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
+use crate::data::trigger::TriggerSpecs;
+
 pub use super::skill::{SkillRange, SkillShape};
 use super::{
+    area::AreaLevel,
     item_affix::{AffixEffectBlueprint, AffixEffectScope, ItemAffix},
     stat_effect::{DamageMap, EffectsMap},
-    world::AreaLevel,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Default)]
@@ -76,6 +78,8 @@ pub struct ItemBase {
     pub rarity: ItemRarity,
     #[serde(default)]
     pub affixes: Vec<AffixEffectBlueprint>,
+    #[serde(default)]
+    pub triggers: Vec<TriggerSpecs>,
 
     // TODO:
     // #[serde(default)]
@@ -100,6 +104,7 @@ pub struct ItemSpecs {
     pub armor_specs: Option<ArmorSpecs>,
 
     pub affixes: Vec<ItemAffix>,
+    pub triggers: Vec<TriggerSpecs>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]

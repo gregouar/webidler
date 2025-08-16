@@ -1,10 +1,10 @@
 use shared::data::{
+    area::AreaLevel,
     character::CharacterId,
     item::SkillRange,
     passive::StatEffect,
     skill::SkillType,
     trigger::{TriggerEffectModifierSource, TriggerTarget, TriggeredEffect},
-    world::AreaLevel,
 };
 
 use crate::game::{

@@ -1,42 +1,44 @@
-use shared::messages::{SessionId, UserId};
-use sqlx::types::chrono::{DateTime, Utc};
 use sqlx::FromRow;
 
+use shared::data::user::UserCharacterId;
+
+use crate::db::utc_datetime::UtcDateTime;
+
 use super::pool::DbPool;
+
+pub type SessionId = i64;
 
 #[derive(Debug, FromRow)]
 pub struct SessionEntry {
     pub session_id: SessionId,
-    pub user_id: UserId,
-    pub created_at: DateTime<Utc>,
-    pub ended_at: Option<DateTime<Utc>>,
+
+    pub character_id: UserCharacterId,
+
+    pub created_at: UtcDateTime,
+    pub ended_at: UtcDateTime,
 }
 
-pub async fn create_session(db_pool: &DbPool, user_id: &UserId) -> Result<SessionId, sqlx::Error> {
-    sqlx::query_scalar!(
+/// Return Ok(None) if session already exist
+pub async fn create_session(
+    db_pool: &DbPool,
+    character_id: &UserCharacterId,
+) -> Result<Option<SessionId>, sqlx::Error> {
+    let res = sqlx::query_scalar!(
         "
-        INSERT INTO game_sessions (user_id)
+        INSERT INTO game_sessions (character_id)
         VALUES ($1)
         RETURNING session_id
         ",
-        user_id
+        character_id
     )
     .fetch_one(db_pool)
-    .await
-}
+    .await;
 
-pub async fn is_user_in_session(db_pool: &DbPool, user_id: &UserId) -> Result<bool, sqlx::Error> {
-    Ok(sqlx::query!(
-        r#"
-        SELECT session_id
-        FROM game_sessions
-        WHERE user_id = $1 AND ended_at IS NULL
-        "#,
-        user_id
-    )
-    .fetch_optional(db_pool)
-    .await?
-    .is_some())
+    match res {
+        Ok(session_id) => Ok(Some(session_id)),
+        Err(sqlx::Error::Database(db_err)) if db_err.is_unique_violation() => Ok(None),
+        Err(e) => Err(e),
+    }
 }
 
 pub async fn count_active_sessions(db_pool: &DbPool) -> Result<i64, sqlx::Error> {
@@ -44,21 +46,24 @@ pub async fn count_active_sessions(db_pool: &DbPool) -> Result<i64, sqlx::Error>
         r#"
         SELECT COUNT(*) as "count!" 
         FROM game_sessions
-        WHERE ended_at IS NULL
+        WHERE ended_at = '9999-01-01 23:59:59'
         "#,
     )
     .fetch_one(db_pool)
     .await
 }
 
-pub async fn end_session(db_pool: &DbPool, session_id: &SessionId) -> Result<(), sqlx::Error> {
+pub async fn end_session(
+    db_pool: &DbPool,
+    character_id: &UserCharacterId,
+) -> Result<(), sqlx::Error> {
     sqlx::query!(
         r#"
         UPDATE game_sessions
         SET ended_at = CURRENT_TIMESTAMP
-        WHERE session_id = $1
+        WHERE character_id = $1 AND ended_at = '9999-01-01 23:59:59'
         "#,
-        session_id,
+        character_id,
     )
     .execute(db_pool)
     .await?;
@@ -71,7 +76,7 @@ pub async fn clean_all_sessions(db_pool: &DbPool) -> Result<(), sqlx::Error> {
         r#"
         UPDATE game_sessions
         SET ended_at = CURRENT_TIMESTAMP
-        WHERE ended_at IS NULL
+        WHERE ended_at = '9999-01-01 23:59:59'
     "#,
     )
     .execute(db_pool)

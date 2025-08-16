@@ -3,6 +3,7 @@ use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
     character_status::{StatusId, StatusMap},
+    monster::MonsterRarity,
     skill::{DamageType, SkillType},
     stat_effect::StatType,
 };
@@ -13,6 +14,7 @@ use crate::assets::img_asset;
 pub fn CharacterPortrait(
     image_uri: String,
     character_name: String,
+    #[prop(default = MonsterRarity::Normal)] rarity: MonsterRarity,
     #[prop(into)] just_hurt: Signal<bool>,
     #[prop(into)] just_hurt_crit: Signal<bool>,
     #[prop(into)] just_blocked: Signal<bool>,
@@ -62,7 +64,6 @@ pub fn CharacterPortrait(
     });
 
     let statuses_map = Signal::derive({
-        let statuses = statuses.clone();
         move || {
             statuses.read().iter().fold(
                 HashMap::<StatusId, usize>::new(),
@@ -88,14 +89,56 @@ pub fn CharacterPortrait(
             .unwrap_or_default()
     };
 
+    let (border_class, shimmer_effect) = match rarity {
+        MonsterRarity::Normal => ("border-8 border-double border-stone-500", ""),
+        MonsterRarity::Champion => (
+            "border-8 border-double border-indigo-700",
+            "champion-shimmer",
+        ),
+        MonsterRarity::Boss => ("border-12 border-double border-red-700", "boss-shimmer"),
+    };
+
     view! {
         <style>
             "
+            .champion-shimmer {
+                background: linear-gradient(
+                    130deg,
+                    rgba(255,255,255,0) 40%,
+                    rgba(6,182,212,0.35) 50%,
+                    rgba(59,130,246,0.35) 60%,
+                    rgba(255,255,255,0) 70%
+                );
+                background-size: 300% 100%;
+                background-repeat: repeat;
+                animation: shimmerMove 3.5s infinite linear;
+                pointer-events: none;
+            }
+            
+            .boss-shimmer {
+                background: linear-gradient(
+                    130deg,
+                    rgba(255,255,255,0) 40%,
+                    rgba(255,50,50,0.4) 50%,
+                    rgba(139,0,0,0.4) 60%,
+                    rgba(255,255,255,0) 70%
+                );
+                background-size: 300% 100%;
+                background-repeat: repeat;
+                animation: shimmerMove 3.5s infinite linear;
+                pointer-events: none;
+            }
+            
+            @keyframes shimmerMove {
+                0%   { background-position: -100% 0; }
+                100% { background-position: 200% 0; }
+            }        
+            
             .just_hurt_effect {
                 box-shadow: inset 0 0 32px rgba(192, 0, 0, 1.0);
             }
             
-             @keyframes shake {
+            @keyframes shake {
                 0%, 100% { transform: translate(0, 0) rotate(0); }
                 25% { transform: translate(-4px, 2px) rotate(-2deg); }
                 50% { transform: translate(4px, -2px) rotate(2deg); }
@@ -115,10 +158,7 @@ pub fn CharacterPortrait(
                 is_dead_img_effect(),
             )
         }>
-            <div
-                class="border-8 border-double border-stone-500  h-full w-full"
-                style=crit_animation_style
-            >
+            <div class=format!("h-full w-full {}", border_class) style=crit_animation_style>
                 <div
                     class="h-full w-full"
                     style=format!(
@@ -146,6 +186,8 @@ pub fn CharacterPortrait(
                         />
                     </For>
                 </div>
+
+                <div class=format!("absolute inset-0  {}", shimmer_effect)></div>
                 <div class=move || { format!("absolute inset-0  {}", just_hurt_class()) }></div>
             </div>
 

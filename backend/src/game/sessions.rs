@@ -4,19 +4,18 @@ use std::{
     time::Instant,
 };
 
-pub use shared::messages::{SessionId, SessionKey, UserId};
+pub use shared::data::user::UserCharacterId;
 
 use super::game_data::GameInstanceData;
 
 #[derive(Debug, Clone)]
 pub struct SessionsStore {
-    pub sessions: Arc<Mutex<HashMap<SessionId, Session>>>,
+    pub sessions: Arc<Mutex<HashMap<UserCharacterId, Session>>>,
 }
 
 #[derive(Debug, Clone)]
 pub struct Session {
-    pub user_id: UserId,
-    pub session_key: SessionKey,
+    pub character_id: UserCharacterId,
     pub last_active: Instant,
 
     pub game_data: Box<GameInstanceData>,

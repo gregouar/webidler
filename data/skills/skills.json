@@ -250,14 +250,14 @@
     "description": "A blessing that makes you faster",
     "icon": "skills/haste.svg",
     "skill_type": "Spell",
-    "cooldown": 15,
+    "cooldown": 20,
     "mana_cost": 25,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 0.005
+        "value": 0.0025
       }
     ],
     "targets": [

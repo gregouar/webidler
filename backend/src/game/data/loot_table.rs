@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use shared::data::world::AreaLevel;
+use shared::data::area::AreaLevel;
 
 use crate::game::utils::json::LoadJsonFromFile;
 

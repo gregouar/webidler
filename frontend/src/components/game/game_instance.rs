@@ -1,17 +1,12 @@
 use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*};
 use leptos_use::storage;
-use serde::{Deserialize, Serialize};
 
+use shared::data::user::UserCharacterId;
 use shared::messages::client::ClientConnectMessage;
 use shared::messages::server::{ErrorType, InitGameMessage, ServerMessage, SyncGameStateMessage};
-use shared::messages::{SessionId, SessionKey};
 
-use crate::components::ui::{
-    confirm::{ConfirmationModal, provide_confirm_context},
-    toast::*,
-    tooltip::DynamicTooltip,
-};
+use crate::components::ui::{toast::*, tooltip::DynamicTooltip};
 use crate::components::websocket::WebsocketContext;
 
 use super::GameContext;
@@ -19,23 +14,15 @@ use super::battle_scene::BattleScene;
 use super::header_menu::HeaderMenu;
 use super::panels::{InventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SessionInfos {
-    session_id: SessionId,
-    session_key: SessionKey,
-}
-
 #[component]
-pub fn GameInstance() -> impl IntoView {
+pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
     let game_context = GameContext::new();
     provide_context(game_context.clone());
 
-    let confirm_state = provide_confirm_context();
+    let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
 
-    let (session_infos, set_session_infos, _) =
-        storage::use_session_storage::<Option<SessionInfos>, JsonSerdeCodec>("session_infos");
-
-    let (user_id, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("user_id");
+    let (get_area_id_storage, _, _) =
+        storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
 
     Effect::new({
         let conn = expect_context::<WebsocketContext>();
@@ -43,9 +30,9 @@ pub fn GameInstance() -> impl IntoView {
             if conn.connected.get() {
                 conn.send(
                     &ClientConnectMessage {
-                        user_id: user_id.get_untracked(),
-                        session_id: session_infos.get_untracked().map(|s| s.session_id),
-                        session_key: session_infos.get_untracked().map(|s| s.session_key),
+                        jwt: get_jwt_storage.get(),
+                        character_id,
+                        area_id: get_area_id_storage.get_untracked(),
                     }
                     .into(),
                 );
@@ -58,7 +45,7 @@ pub fn GameInstance() -> impl IntoView {
         let conn = expect_context::<WebsocketContext>();
         move |_| {
             if let Some(message) = conn.message.get() {
-                handle_message(&game_context, set_session_infos, message);
+                handle_message(&game_context, message);
             }
         }
     });
@@ -66,7 +53,6 @@ pub fn GameInstance() -> impl IntoView {
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <DynamicTooltip />
-            <ConfirmationModal state=confirm_state />
             <Show
                 when=move || game_context.started.get()
                 fallback=move || view! { <p>"Connecting..."</p> }
@@ -84,18 +70,9 @@ pub fn GameInstance() -> impl IntoView {
     }
 }
 
-fn handle_message(
-    game_context: &GameContext,
-    set_session_infos: WriteSignal<Option<SessionInfos>>,
-    message: ServerMessage,
-) {
+fn handle_message(game_context: &GameContext, message: ServerMessage) {
     match message {
-        ServerMessage::Connect(m) => {
-            set_session_infos.set(Some(SessionInfos {
-                session_id: m.session_id,
-                session_key: m.session_key,
-            }));
-        }
+        ServerMessage::Connect(_) => {}
         ServerMessage::InitGame(m) => {
             init_game(game_context, m);
         }
@@ -118,8 +95,8 @@ fn handle_message(
 
 fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     let InitGameMessage {
-        world_specs,
-        world_state,
+        area_specs,
+        area_state,
         passives_tree_specs,
         passives_tree_state,
         player_specs,
@@ -127,8 +104,8 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     } = init_message;
 
     game_context.started.set(true);
-    game_context.world_specs.set(world_specs);
-    game_context.world_state.set(world_state);
+    game_context.area_specs.set(area_specs);
+    game_context.area_state.set(area_state);
     game_context.passives_tree_specs.set(passives_tree_specs);
     game_context.passives_tree_state.set(passives_tree_state);
     game_context.player_specs.set(player_specs);
@@ -137,7 +114,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
 
 fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     let SyncGameStateMessage {
-        world_state,
+        area_state,
         passives_tree_state,
         player_specs,
         player_inventory,
@@ -149,8 +126,8 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         game_stats,
     } = sync_message;
 
-    if let Some(world_state) = world_state {
-        game_context.world_state.set(world_state);
+    if let Some(area_state) = area_state {
+        game_context.area_state.set(area_state);
     }
     if let Some(passives_tree_state) = passives_tree_state {
         game_context.passives_tree_state.set(passives_tree_state);

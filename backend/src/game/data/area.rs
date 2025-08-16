@@ -1,23 +1,23 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
-use shared::data::world::WorldSpecs;
+use shared::data::area::AreaSpecs;
 
 use crate::game::utils::json::LoadJsonFromFile;
 
 use super::{loot_table::LootTable, master_store::LootTablesStore};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct WorldBlueprintSchema {
-    pub specs: WorldSpecs,
+pub struct AreaBlueprintSchema {
+    pub specs: AreaSpecs,
     pub bosses: Vec<BossBlueprint>,
     pub waves: Vec<MonsterWaveBlueprint>,
     pub loot_tables: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct WorldBlueprint {
-    pub specs: WorldSpecs,
+pub struct AreaBlueprint {
+    pub specs: AreaSpecs,
     pub bosses: Vec<BossBlueprint>,
     pub waves: Vec<MonsterWaveBlueprint>,
     pub loot_table: LootTable,
@@ -46,11 +46,11 @@ pub struct MonsterWaveSpawnBlueprint {
     pub max_quantity: u8,
 }
 
-impl LoadJsonFromFile for WorldBlueprintSchema {}
+impl LoadJsonFromFile for AreaBlueprintSchema {}
 
-impl WorldBlueprint {
+impl AreaBlueprint {
     pub fn populate_from_schema(
-        schema: WorldBlueprintSchema,
+        schema: AreaBlueprintSchema,
         loot_tables_store: &LootTablesStore,
     ) -> Result<Self> {
         let loot_tables: Vec<_> = schema

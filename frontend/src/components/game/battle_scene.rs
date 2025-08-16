@@ -33,7 +33,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let auto_icon = move || {
-        if game_context.world_state.read().auto_progress {
+        if game_context.area_state.read().auto_progress {
             "⏸"
         } else {
             "▶"
@@ -50,8 +50,8 @@ pub fn BattleSceneHeader() -> impl IntoView {
     let toggle_auto_progress = {
         let conn = expect_context::<WebsocketContext>();
         move |_| {
-            let auto_progress = !game_context.world_state.read_untracked().auto_progress;
-            game_context.world_state.write().auto_progress = auto_progress;
+            let auto_progress = !game_context.area_state.read_untracked().auto_progress;
+            game_context.area_state.write().auto_progress = auto_progress;
             conn.send(
                 &SetAutoProgressMessage {
                     value: auto_progress,
@@ -64,7 +64,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
     let header_background = move || {
         format!(
             "background-image: url('{}');",
-            img_asset(&game_context.world_specs.read().header_background)
+            img_asset(&game_context.area_specs.read().header_background)
         )
     };
 
@@ -92,10 +92,10 @@ pub fn BattleSceneHeader() -> impl IntoView {
             <div class="flex-1 text-center">
                 <p class="relative z-10 text-shadow text-amber-200 text-2xl font-bold">
                     <span class="[font-variant:small-caps]">
-                        {move || game_context.world_specs.read().name.clone()}
+                        {move || game_context.area_specs.read().name.clone()}
                     </span>
                     {move || {
-                        format!(" — Area Level: {}", game_context.world_state.read().area_level)
+                        format!(" — Area Level: {}", game_context.area_state.read().area_level)
                     }}
                 </p>
             </div>
@@ -122,7 +122,7 @@ pub fn BattleSceneFooter() -> impl IntoView {
     let footer_background = move || {
         format!(
             "background-image: url('{}');",
-            img_asset(&game_context.world_specs.read().footer_background)
+            img_asset(&game_context.area_specs.read().footer_background)
         )
     };
 
@@ -136,12 +136,12 @@ pub fn BattleSceneFooter() -> impl IntoView {
             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
             <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-2xl font-bold">
                 {move || {
-                    if game_context.world_state.read().is_boss {
+                    if game_context.area_state.read().is_boss {
                         "Boss".to_string()
                     } else {
                         format!(
                             "Wave: {}/{}",
-                            game_context.world_state.read().waves_done,
+                            game_context.area_state.read().waves_done,
                             WAVES_PER_AREA_LEVEL,
                         )
                     }
