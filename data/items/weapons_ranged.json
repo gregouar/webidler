@@ -33,5 +33,80 @@
       "crit_damage": 1
     },
     "min_area_level": 40
+  },
+  "hunting_bow_unique": {
+    "name": "Bloodspiller",
+    "description": "It drinks deep of crimson under moonlight, never sated, never silent.",
+    "icon": "items/bloodspiller.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "RangedWeapon"],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [8, 12]
+      },
+      "crit_chances": 0.08,
+      "crit_damage": 1
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": {
+          "CritDamage": null
+        },
+        "modifier": "Multiplier",
+        "min": 0.4,
+        "max": 0.6
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "CritChances": null
+        },
+        "modifier": "Multiplier",
+        "min": 0.15,
+        "max": 0.3
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "Multiplier",
+        "min": 0.4,
+        "max": 0.6
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
+        },
+        "modifier": "Flat",
+        "min": 4,
+        "max": 8
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "vile_codex",
+        "description": "On Killing a Bleeding Enemy:",
+        "OnKill": { "is_damaged_over_time": "Physical" },
+        "target": "Source",
+        "effects": [
+          {
+            "Restore": {
+              "restore_type": "Life",
+              "min": 20,
+              "max": 40
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 50
   }
 }

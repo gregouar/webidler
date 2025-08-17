@@ -71,16 +71,9 @@ pub fn update_player_specs(
     player_specs.movement_cooldown = 2.0;
     player_specs.triggers.clear();
 
-    let equipped_items = player_inventory
-        .equipped
-        .values()
-        .filter_map(|slot| match slot {
-            EquippedSlot::MainSlot(item) => Some(item),
-            _ => None,
-        });
-
-    let (total_armor, total_block) = equipped_items
-        .clone()
+    let (total_armor, total_block) = player_inventory
+        .equipped_items()
+        .map(|(_, item)| item)
         .filter_map(|item| item.armor_specs.as_ref())
         .map(|spec| (spec.armor, spec.block))
         .fold((0.0, 0.0), |(a_sum, b_sum), (a, b)| (a_sum + a, b_sum + b));
@@ -89,8 +82,9 @@ pub fn update_player_specs(
     player_specs.character_specs.block += total_block;
 
     player_specs.effects = EffectsMap::combine_all(
-        equipped_items
-            .map(|i| i.aggregate_effects(AffixEffectScope::Global))
+        player_inventory
+            .equipped_items()
+            .map(|(_, i)| i.aggregate_effects(AffixEffectScope::Global))
             .chain(passives_controller::generate_effects_map_from_passives(
                 passives_tree_specs,
                 passives_tree_state,
@@ -102,7 +96,7 @@ pub fn update_player_specs(
             )),
     );
 
-    compute_player_specs(player_specs);
+    compute_player_specs(player_specs, player_inventory);
 
     player_specs.triggers = passives_tree_state
         .purchased_nodes
@@ -142,7 +136,7 @@ pub fn update_player_specs(
     // TODO: Collect item triggers and effects to triggers
 }
 
-fn compute_player_specs(player_specs: &mut PlayerSpecs) {
+fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &PlayerInventory) {
     let effects = characters_updater::stats_map_to_vec(&player_specs.effects);
 
     player_specs.character_specs =
@@ -200,6 +194,6 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs) {
     }
 
     for skill_specs in player_specs.skills_specs.iter_mut() {
-        skills_updater::update_skill_specs(skill_specs, &effects);
+        skills_updater::update_skill_specs(skill_specs, effects.iter(), Some(player_inventory));
     }
 }

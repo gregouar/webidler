@@ -183,6 +183,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             modifier: Modifier::Multiplier,
             value: 0.2,
         }],
+        modifier_effects: vec![],
         targets: vec![SkillTargetsGroup {
             range: weapon_specs.range,
             target_type: TargetType::Enemy,

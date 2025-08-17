@@ -26,6 +26,9 @@ pub struct BaseSkillSpecs {
     pub upgrade_effects: Vec<StatEffect>,
 
     #[serde(default)]
+    pub modifier_effects: Vec<ModifierEffect>,
+
+    #[serde(default)]
     pub targets: Vec<SkillTargetsGroup>,
     #[serde(default)]
     pub triggers: Vec<TriggerSpecs>,
@@ -69,6 +72,27 @@ impl SkillType {
     pub fn iter() -> impl Iterator<Item = SkillType> {
         [SkillType::Attack, SkillType::Spell].into_iter()
     }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ModifierEffect {
+    pub effects: Vec<StatEffect>,
+    pub source: ModifierEffectSource,
+    pub factor: f64,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub enum ModifierEffectSource {
+    ItemStats {
+        slot: Option<ItemSlot>,
+        item_stats: ItemStatsSource,
+    },
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub enum ItemStatsSource {
+    Damage(Option<DamageType>), // TODO: split in min and max
+    Armor,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

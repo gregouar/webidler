@@ -61,3 +61,14 @@ pub struct PlayerInventory {
     pub bag: Vec<ItemSpecs>,
     pub max_bag_size: u8,
 }
+
+impl PlayerInventory {
+    pub fn equipped_items(&self) -> impl Iterator<Item = (ItemSlot, &Box<ItemSpecs>)> + Clone {
+        self.equipped
+            .iter()
+            .filter_map(|(slot, equipped_slot)| match equipped_slot {
+                EquippedSlot::MainSlot(item_specs) => Some((*slot, item_specs)),
+                EquippedSlot::ExtraSlot(_) => None,
+            })
+    }
+}

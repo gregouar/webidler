@@ -2,7 +2,11 @@ use std::time::Duration;
 
 use shared::data::{
     character_status::StatusSpecs,
-    skill::{DamageType, SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType},
+    player::PlayerInventory,
+    skill::{
+        DamageType, ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType,
+        SkillSpecs, SkillState, SkillType,
+    },
     stat_effect::{self, ApplyStatModifier, DamageMap, Modifier, StatEffect, StatType},
 };
 
@@ -30,26 +34,43 @@ pub fn reset_skills(skill_states: &mut [SkillState]) {
     }
 }
 
-pub fn update_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) {
+pub fn update_skill_specs<'a>(
+    skill_specs: &mut SkillSpecs,
+    effects: impl Iterator<Item = &'a StatEffect> + Clone,
+    inventory: Option<&PlayerInventory>,
+) {
     skill_specs.targets = skill_specs.base.targets.clone();
     skill_specs.triggers = skill_specs.base.triggers.clone();
     skill_specs.cooldown = skill_specs.base.cooldown;
     skill_specs.mana_cost = skill_specs.base.mana_cost;
 
-    let mut base_effects = compute_skill_upgrade_effects(skill_specs, skill_specs.upgrade_level);
-    base_effects.extend_from_slice(effects);
+    // TODO: Could we do something better?
+    let default_inventory = PlayerInventory::default();
+    let inventory = inventory.unwrap_or(&default_inventory);
 
-    apply_effects_to_skill_specs(skill_specs, &base_effects);
+    let all_effects: Vec<_> = effects
+        .cloned()
+        .chain(compute_skill_upgrade_effects(
+            skill_specs,
+            skill_specs.upgrade_level,
+        ))
+        .chain(compute_skill_modifier_effects(skill_specs, inventory))
+        .collect();
+
+    apply_effects_to_skill_specs(skill_specs, all_effects.iter());
 }
 
-pub fn apply_effects_to_skill_specs(skill_specs: &mut SkillSpecs, effects: &[StatEffect]) {
-    for effect in effects {
+pub fn apply_effects_to_skill_specs<'a>(
+    skill_specs: &mut SkillSpecs,
+    effects: impl Iterator<Item = &'a StatEffect> + Clone,
+) {
+    for effect in effects.clone() {
         match effect.stat {
             StatType::Speed(skill_type)
                 if skill_specs.base.skill_type
                     == skill_type.unwrap_or(skill_specs.base.skill_type) =>
             {
-                skill_specs.cooldown.apply_negative_effect(effect);
+                skill_specs.cooldown.apply_negative_effect(&effect);
             }
             _ => {}
         }
@@ -66,17 +87,20 @@ pub fn apply_effects_to_skill_specs(skill_specs: &mut SkillSpecs, effects: &[Sta
                 .flat_map(|trigger| trigger.triggered_effect.effects.iter_mut()),
         )
     {
-        compute_skill_specs_effect(skill_specs.base.skill_type, skill_effect, effects)
+        compute_skill_specs_effect(skill_specs.base.skill_type, skill_effect, effects.clone())
     }
 }
 
-pub fn compute_skill_upgrade_effects(skill_specs: &SkillSpecs, level: u16) -> Vec<StatEffect> {
+pub fn compute_skill_upgrade_effects(
+    skill_specs: &SkillSpecs,
+    level: u16,
+) -> impl Iterator<Item = StatEffect> + use<'_> + Clone {
     let level = level as f64 - 1.0;
     skill_specs
         .base
         .upgrade_effects
         .iter()
-        .map(|effect| StatEffect {
+        .map(move |effect| StatEffect {
             stat: effect.stat,
             modifier: effect.modifier,
             value: match effect.modifier {
@@ -84,16 +108,73 @@ pub fn compute_skill_upgrade_effects(skill_specs: &SkillSpecs, level: u16) -> Ve
                 Modifier::Flat => effect.value * level,
             },
         })
-        .collect::<Vec<_>>()
 }
 
-pub fn compute_skill_specs_effect<'a, I>(
+fn compute_skill_modifier_effects<'a>(
+    skill_specs: &'a SkillSpecs,
+    inventory: &'a PlayerInventory,
+) -> impl Iterator<Item = StatEffect> + use<'a> + Clone {
+    skill_specs
+        .base
+        .modifier_effects
+        .iter()
+        .flat_map(move |modifier_effect| match modifier_effect.source {
+            ModifierEffectSource::ItemStats { slot, item_stats } => inventory
+                // .unwrap_or(&PlayerInventory::default())
+                .equipped_items()
+                .filter_map(move |(item_slot, item_specs)| {
+                    let factor = if slot.unwrap_or(item_slot) == item_slot {
+                        match (
+                            item_stats,
+                            &item_specs.weapon_specs,
+                            &item_specs.armor_specs,
+                        ) {
+                            (ItemStatsSource::Damage(damage_type), Some(weapon_specs), _) => {
+                                if let Some(damage_type) = damage_type {
+                                    weapon_specs
+                                        .damage
+                                        .get(&damage_type)
+                                        .map(|(min, max)| (min + max) * 0.5)
+                                        .unwrap_or_default()
+                                } else {
+                                    weapon_specs
+                                        .damage
+                                        .values()
+                                        .map(|(min, max)| (min + max) * 0.5)
+                                        .sum()
+                                }
+                            }
+                            (ItemStatsSource::Armor, _, Some(armor_specs)) => armor_specs.armor,
+                            _ => 0.0,
+                        }
+                    } else {
+                        0.0
+                    };
+
+                    if factor > 0.0 {
+                        Some(modifier_effect.factor * factor)
+                    } else {
+                        None
+                    }
+                })
+                .flat_map(|factor| {
+                    modifier_effect
+                        .effects
+                        .iter()
+                        .map(move |effect| StatEffect {
+                            stat: effect.stat,
+                            modifier: effect.modifier,
+                            value: effect.value * factor,
+                        })
+                }),
+        })
+}
+
+pub fn compute_skill_specs_effect<'a>(
     skill_type: SkillType,
     skill_effect: &mut SkillEffect,
-    effects: I,
-) where
-    I: IntoIterator<Item = &'a StatEffect> + Clone,
-{
+    effects: impl Iterator<Item = &'a StatEffect> + Clone,
+) {
     if let SkillEffectType::ApplyStatus { statuses, .. } = &mut skill_effect.effect_type {
         for status_effect in statuses.iter_mut() {
             if let StatusSpecs::Trigger(ref mut trigger_specs) = status_effect.status_type {

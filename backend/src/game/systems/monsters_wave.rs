@@ -173,7 +173,7 @@ fn generate_monster_specs(
             + (CHAMPION_INC_CHANCES
                 * (area_state.area_level - area_state.last_champion_spawn) as f64);
         if rng::random_range(0.0..1.0).unwrap_or(1.0) <= gem_chances {
-            area_state.last_champion_spawn = area_state.area_level;
+            // area_state.last_champion_spawn = area_state.area_level;
             monster_specs.rarity = MonsterRarity::Champion;
             monster_level += CHAMPION_LEVEL_INC;
         }
@@ -200,11 +200,14 @@ fn generate_monster_specs(
     }];
     for skill_specs in monster_specs.skill_specs.iter_mut() {
         if skill_specs.base.upgrade_effects.is_empty() {
-            skills_updater::update_skill_specs(skill_specs, &effects);
+            skills_updater::update_skill_specs(skill_specs, effects.iter(), None);
         } else {
             skills_updater::update_skill_specs(
                 skill_specs,
-                &skills_updater::compute_skill_upgrade_effects(skill_specs, monster_level),
+                skills_updater::compute_skill_upgrade_effects(skill_specs, monster_level)
+                    .collect::<Vec<_>>()
+                    .iter(),
+                None,
             );
         }
     }

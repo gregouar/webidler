@@ -66,6 +66,6 @@ pub fn update_monster_specs(
     monster_specs.skill_specs = base_specs.skill_specs.clone();
 
     for skill_specs in monster_specs.skill_specs.iter_mut() {
-        skills_updater::apply_effects_to_skill_specs(skill_specs, &effects);
+        skills_updater::apply_effects_to_skill_specs(skill_specs, effects.iter());
     }
 }

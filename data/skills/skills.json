@@ -343,8 +343,8 @@
                                     "damage_type": "Poison"
                                   }
                                 },
-                                "min_value": 2,
-                                "max_value": 3
+                                "min_value": 3,
+                                "max_value": 5
                               }
                             ]
                           }
@@ -392,7 +392,7 @@
   },
   "meditate": {
     "name": "Meditate",
-    "description": "Focus your mind to recover mana, replenishing your magical energy for continued spellcasting.",
+    "description": "Focus your mind to recover mana, replenishing your magical energy.",
     "icon": "skills/meditate.svg",
     "skill_type": "Spell",
     "cooldown": 20,
@@ -435,6 +435,33 @@
         },
         "modifier": "Multiplier",
         "value": 0.2
+      }
+    ],
+    "modifier_effects": [
+      {
+        "effects": [
+          {
+            "stat": {
+              "MinDamage": { "damage_type": "Physical" }
+            },
+            "modifier": "Flat",
+            "value": 1
+          },
+          {
+            "stat": {
+              "MaxDamage": { "damage_type": "Physical" }
+            },
+            "modifier": "Flat",
+            "value": 2
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Shield",
+            "item_stats": "Armor"
+          }
+        },
+        "factor": 0.1
       }
     ],
     "triggers": [

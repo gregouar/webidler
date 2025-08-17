@@ -91,7 +91,7 @@ pub fn apply_trigger_effects(
                     skills_updater::compute_skill_specs_effect(
                         skill_type,
                         &mut effect,
-                        &effects_modifiers,
+                        effects_modifiers.iter(),
                     );
                     skills_controller::apply_skill_effect(
                         events_queue,

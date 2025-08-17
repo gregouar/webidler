@@ -107,6 +107,10 @@
       "weight": 2000
     },
     {
+      "item_id": "hunting_bow_unique",
+      "weight": 5
+    },
+    {
       "item_id": "wand",
       "weight": 2000
     },

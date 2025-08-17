@@ -196,18 +196,17 @@ pub fn init_item_skills(
     player_state: &mut PlayerState,
 ) -> bool {
     let mut found_skill = false;
-    for equipped in player_inventory.equipped.values() {
-        if let EquippedSlot::MainSlot(item_specs) = equipped {
-            if let Some(ref weapon_specs) = item_specs.weapon_specs {
-                equip_weapon(
-                    player_specs,
-                    player_state,
-                    item_specs.base.slot,
-                    item_specs.level,
-                    weapon_specs,
-                );
-                found_skill = true;
-            }
+
+    for (_, item_specs) in player_inventory.equipped_items() {
+        if let Some(ref weapon_specs) = item_specs.weapon_specs {
+            equip_weapon(
+                player_specs,
+                player_state,
+                item_specs.base.slot,
+                item_specs.level,
+                weapon_specs,
+            );
+            found_skill = true;
         }
     }
     found_skill
