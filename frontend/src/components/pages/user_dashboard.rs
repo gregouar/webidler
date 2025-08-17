@@ -222,13 +222,18 @@ fn CharacterSlot(
         let navigate = use_navigate();
         let (_, set_character_id_storage, _) =
             storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
+        let (_, set_area_id_storage, _) =
+            storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
         let character_activity = character.activity.clone();
 
         move |_| {
             set_character_id_storage.set(character.character_id);
             match character_activity {
                 UserCharacterActivity::Rusting => navigate("/town", Default::default()),
-                UserCharacterActivity::Grinding(_, _) => navigate("/game", Default::default()),
+                UserCharacterActivity::Grinding(area_id, _) => {
+                    set_area_id_storage.set(Some(area_id));
+                    navigate("/game", Default::default())
+                }
             }
         }
     };
