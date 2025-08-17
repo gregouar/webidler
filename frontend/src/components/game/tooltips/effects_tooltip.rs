@@ -9,7 +9,7 @@ use shared::data::{
     stat_effect::{Modifier, StatEffect, StatStatusType, StatType},
 };
 
-use crate::components::ui::number::format_number;
+use crate::components::{game::tooltips::skill_tooltip::skill_type_str, ui::number::format_number};
 
 pub fn format_effect_value(effect: &StatEffect) -> String {
     match effect.modifier {
@@ -33,14 +33,6 @@ pub fn optional_damage_type_str(damage_type: Option<DamageType>) -> &'static str
         Some(DamageType::Physical) => "Physical ",
         Some(DamageType::Fire) => "Fire ",
         Some(DamageType::Poison) => "Poison ",
-        None => "",
-    }
-}
-
-fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
-    match skill_type {
-        Some(SkillType::Attack) => "Attack ",
-        Some(SkillType::Spell) => "Spell ",
         None => "",
     }
 }

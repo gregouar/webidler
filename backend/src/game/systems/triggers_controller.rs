@@ -1,9 +1,7 @@
 use shared::data::{
     area::AreaLevel,
     character::CharacterId,
-    item::SkillRange,
     passive::StatEffect,
-    skill::SkillType,
     trigger::{TriggerEffectModifierSource, TriggerTarget, TriggeredEffect},
 };
 
@@ -83,21 +81,20 @@ pub fn apply_trigger_effects(
                 })
                 .collect();
 
-            let skill_type = SkillType::Spell; // TODO
             if let (Some(specs), Some(state)) = target {
                 let mut target = (target_id, (specs, state));
                 let mut targets = vec![&mut target];
                 for mut effect in trigger_context.trigger.effects.iter().cloned() {
                     skills_updater::compute_skill_specs_effect(
-                        skill_type,
+                        trigger_context.trigger.skill_type,
                         &mut effect,
                         effects_modifiers.iter(),
                     );
                     skills_controller::apply_skill_effect(
                         events_queue,
                         trigger_context.source,
-                        skill_type,
-                        SkillRange::Any, // TODO
+                        trigger_context.trigger.skill_type,
+                        trigger_context.trigger.skill_range,
                         &effect,
                         &mut targets,
                     );

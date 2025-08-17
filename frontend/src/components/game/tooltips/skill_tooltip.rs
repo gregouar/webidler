@@ -11,6 +11,7 @@ use shared::data::skill::ModifierEffect;
 use shared::data::skill::ModifierEffectSource;
 use shared::data::skill::RestoreType;
 use shared::data::skill::SkillTargetsGroup;
+use shared::data::skill::SkillType;
 use shared::data::skill::TargetType;
 use shared::data::skill::{SkillEffect, SkillEffectType, SkillRange, SkillShape, SkillSpecs};
 use shared::data::trigger::TriggerSpecs;
@@ -20,6 +21,14 @@ use crate::components::game::tooltips::effects_tooltip::formatted_effects_list;
 use crate::components::ui::number::format_number;
 
 use super::effects_tooltip::optional_damage_type_str;
+
+pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
+    match skill_type {
+        Some(SkillType::Attack) => "Attack ",
+        Some(SkillType::Spell) => "Spell ",
+        None => "",
+    }
+}
 
 #[component]
 pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
@@ -56,6 +65,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
             <hr class="border-t border-gray-700" />
 
             <p class="text-sm text-gray-400 leading-snug">
+                {skill_type_str(Some(skill_specs.base.skill_type))} "| "
                 {if skill_specs.cooldown > 0.0 {
                     view! {
                         "Cooldown: "

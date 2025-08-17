@@ -58,6 +58,11 @@ pub struct TriggeredEffect {
     pub target: TriggerTarget,
     #[serde(default)]
     pub modifiers: Vec<TriggerEffectModifier>,
+
+    #[serde(default)]
+    pub skill_range: SkillRange,
+    #[serde(default)]
+    pub skill_type: SkillType,
     pub effects: Vec<SkillEffect>,
 }
 

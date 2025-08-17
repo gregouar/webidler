@@ -3,10 +3,11 @@ use std::{iter, time::Duration};
 use shared::data::{
     character::CharacterId,
     character_status::StatusSpecs,
+    item::SkillRange,
     item_affix::AffixEffectScope,
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{EquippedSlot, PlayerInventory, PlayerSpecs, PlayerState},
-    skill::{RestoreType, SkillEffect, SkillEffectType},
+    skill::{RestoreType, SkillEffect, SkillEffectType, SkillType},
     stat_effect::{ApplyStatModifier, EffectsMap, Modifier, StatType},
     trigger::{EventTrigger, TriggerTarget, TriggeredEffect},
 };
@@ -152,6 +153,8 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
                     player_specs.triggers.push(TriggeredEffect {
                         trigger: EventTrigger::OnHit(hit_trigger),
                         target: TriggerTarget::Source,
+                        skill_range: SkillRange::Any,
+                        skill_type: SkillType::Attack,
                         modifiers: Vec::new(),
                         effects: vec![SkillEffect {
                             failure_chances: 0.0,

@@ -468,6 +468,7 @@
       {
         "trigger_id": "retaliate",
         "description": "Trigger on block:",
+        "skill_type": "Attack",
         "OnTakeHit": {
           "is_blocked": true
         },
