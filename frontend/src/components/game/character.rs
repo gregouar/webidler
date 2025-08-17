@@ -214,11 +214,11 @@ pub fn CharacterPortrait(
 #[component]
 fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
     let (icon_uri, alt) = match status_type {
-        StatusId::Stun => ("statuses/stunned.svg", "Stunned"),
+        StatusId::Stun => ("statuses/stunned.svg".to_string(), "Stunned"),
         StatusId::DamageOverTime { damage_type, .. } => match damage_type {
-            DamageType::Physical => ("statuses/bleed.svg", "Bleeding"),
-            DamageType::Fire => ("statuses/burning.svg", "Burning"),
-            DamageType::Poison => ("statuses/poison.svg", "Poisoned"),
+            DamageType::Physical => ("statuses/bleed.svg".to_string(), "Bleeding"),
+            DamageType::Fire => ("statuses/burning.svg".to_string(), "Burning"),
+            DamageType::Poison => ("statuses/poison.svg".to_string(), "Poisoned"),
         },
         // TODO: More buff types
         StatusId::StatModifier {
@@ -229,20 +229,29 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
             StatType::Damage {
                 skill_type: Some(SkillType::Attack),
                 ..
-            } => ("statuses/buff_attack_damage.svg", "Increased Attack Damage"),
-            _ => ("statuses/buff.svg", "Buffed"),
+            } => (
+                "statuses/buff_attack_damage.svg".to_string(),
+                "Increased Attack Damage",
+            ),
+            _ => ("statuses/buff.svg".to_string(), "Buffed"),
         },
         StatusId::StatModifier {
             stat, debuff: true, ..
         } => match stat {
-            StatType::Armor(DamageType::Physical) => ("statuses/debuff_armor.svg", "Broken Armor"),
-            _ => ("statuses/debuff.svg", "Debuffed"),
+            StatType::Armor(DamageType::Physical) => {
+                ("statuses/debuff_armor.svg".to_string(), "Broken Armor")
+            }
+            _ => ("statuses/debuff.svg".to_string(), "Debuffed"),
         },
-        StatusId::Trigger(_) => ("statuses/buff.svg", "Buffed"),
+        StatusId::Trigger(trigger_id) => (trigger_id, "Buffed"),
     };
     view! {
         <div class="relative h-[15%] aspect-square p-1">
-            <img src=img_asset(icon_uri) alt=alt class="w-full h-full drop-shadow-md bg-black/40" />
+            <img
+                src=img_asset(&icon_uri)
+                alt=alt
+                class="w-full h-full drop-shadow-md bg-black/40"
+            />
             <Show when=move || { stack.get() > 1 }>
                 <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/20 rounded leading-tight px-1 m-2">
                     {move || stack.get().to_string()}
