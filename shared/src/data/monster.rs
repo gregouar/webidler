@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 pub use super::character::{CharacterSpecs, CharacterState};
 use super::skill::{SkillSpecs, SkillState};
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub enum MonsterRarity {
     #[default]
     Normal,
