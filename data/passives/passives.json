@@ -814,7 +814,7 @@
         "triggers": [
           {
             "trigger_id": "enrage",
-            "description": "Taking a hit grants +20% Attack Speed for 2s and stacks +20% Attack Damage for 2s.",
+            "description": "Taking a hit grants +20% Attack Speed for 2s and stacks +50% Attack Damage for 2s.",
             "OnTakeHit": { "is_hurt": true },
             "effects": [
               {
@@ -829,8 +829,8 @@
                         }
                       },
                       "cumulate": true,
-                      "min_value": 0.2,
-                      "max_value": 0.2
+                      "min_value": 0.5,
+                      "max_value": 0.5
                     },
                     {
                       "status_type": {

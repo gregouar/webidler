@@ -87,6 +87,10 @@
       "weight": 2000
     },
     {
+      "item_id": "leather_gloves_unique",
+      "weight": 5
+    },
+    {
       "item_id": "leather_boots",
       "weight": 2000
     },

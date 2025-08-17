@@ -257,7 +257,7 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 {armor_info}
                 {weapon_info}
             </ul>
-            {(!local_affixes.is_empty() || !global_affixes.is_empty())
+            {(!trigger_lines.is_empty() || !local_affixes.is_empty() || !global_affixes.is_empty())
                 .then(|| {
                     view! {
                         <hr class="border-t border-gray-700 my-1" />

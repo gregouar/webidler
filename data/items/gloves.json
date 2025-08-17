@@ -3,7 +3,7 @@
     "name": "Cloth Wraps",
     "icon": "items/cloth_wraps.webp",
     "slot": "Gloves",
-    "categories": ["Armor","Gloves"],
+    "categories": ["Armor", "Gloves"],
     "armor_specs": {
       "armor": 10
     }
@@ -12,10 +12,87 @@
     "name": "Leather Gloves",
     "icon": "items/leather_gloves.webp",
     "slot": "Gloves",
-    "categories": ["Armor","Gloves"],
+    "categories": ["Armor", "Gloves"],
     "armor_specs": {
       "armor": 20
     },
     "min_area_level": 40
+  },
+  "leather_gloves_unique": {
+    "name": "Fangbreaker",
+    "description": "When steel is taken from you, bare hands become the fangs of survival.",
+    "icon": "items/fangbreaker.webp",
+    "slot": "Gloves",
+    "extra_slots": ["Weapon"],
+    "categories": [
+      "Armor",
+      "Gloves",
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "armor_specs": {
+      "armor": 20
+    },
+    "weapon_specs": {
+      "range": "Melee",
+      "cooldown": 1.5,
+      "damage": {
+        "Physical": [4, 7]
+      },
+      "crit_chances": 0.1,
+      "crit_damage": 1
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "min": 40,
+        "max": 60
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "min": 40,
+        "max": 60
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "fangbreaker",
+        "description": "Cannot equip Weapon and On Hit gain:",
+        "OnHit": { "skill_type": "Attack" },
+        "target": "Source",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "min_duration": 5,
+              "max_duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "damage_type": "Physical",
+                          "skill_type": "Attack"
+                        }
+                      }
+                    }
+                  },
+                  "min_value": 0.3,
+                  "max_value": 0.3,
+                  "cumulate": true
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 50
   }
 }

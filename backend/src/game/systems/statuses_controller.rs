@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
     character_status::{StatusMap, StatusSpecs, StatusState},
@@ -75,25 +75,52 @@ fn update_status(
     !remove_status
 }
 
+// pub fn generate_effects_map_from_statuses(statuses: &StatusMap) -> EffectsMap {
+//     EffectsMap(
+//         statuses
+//             .iter()
+//             .filter_map(|(status_specs, status_state)| match status_specs {
+//                 StatusSpecs::StatModifier {
+//                     stat,
+//                     modifier,
+//                     debuff,
+//                 } => Some((
+//                     (*stat, *modifier),
+//                     if *debuff {
+//                         -status_state.value
+//                     } else {
+//                         status_state.value
+//                     },
+//                 )),
+//                 _ => None,
+//             })
+//             .collect(),
+//     )
+// }
+
 pub fn generate_effects_map_from_statuses(statuses: &StatusMap) -> EffectsMap {
-    EffectsMap(
-        statuses
-            .iter()
-            .filter_map(|(status_specs, status_state)| match status_specs {
-                StatusSpecs::StatModifier {
-                    stat,
-                    modifier,
-                    debuff,
-                } => Some((
-                    (*stat, *modifier),
-                    if *debuff {
-                        -status_state.value
-                    } else {
-                        status_state.value
-                    },
-                )),
-                _ => None,
-            })
-            .collect(),
-    )
+    statuses
+        .iter()
+        .filter_map(|(status_specs, status_state)| match status_specs {
+            StatusSpecs::StatModifier {
+                stat,
+                modifier,
+                debuff,
+            } => Some((
+                (*stat, *modifier),
+                if *debuff {
+                    -status_state.value
+                } else {
+                    status_state.value
+                },
+            )),
+            _ => None,
+        })
+        .fold(
+            EffectsMap(HashMap::new()),
+            |mut effects_map, (key, value)| {
+                *effects_map.0.entry(key).or_default() += value;
+                effects_map
+            },
+        )
 }

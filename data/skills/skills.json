@@ -308,7 +308,9 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": {
+          "Damage": {}
+        },
         "modifier": "Multiplier",
         "value": 0.2
       }

@@ -120,6 +120,21 @@ impl From<&EffectsMap> for Vec<StatEffect> {
     }
 }
 
+// impl From<Vec<StatEffect>> for EffectsMap {
+//     fn from(value: Vec<StatEffect>) -> Self {
+//         value.iter().fold(
+//             EffectsMap(HashMap::new()),
+//             |mut effects_map, stat_effect| {
+//                 *effects_map
+//                     .0
+//                     .entry((stat_effect.stat, stat_effect.modifier))
+//                     .or_default() += stat_effect.value;
+//                 effects_map
+//             },
+//         )
+//     }
+// }
+
 impl EffectsMap {
     pub fn combine_all(maps: impl Iterator<Item = EffectsMap>) -> Self {
         EffectsMap(maps.flat_map(|m| m.0.into_iter()).fold(

@@ -33,9 +33,9 @@ pub fn apply_trigger_effects(
     let _ = master_store; // TODO: Remove
     for trigger_context in trigger_contexts {
         {
-            let target_id = match trigger_context.trigger.target {
-                TriggerTarget::SameTarget => trigger_context.target,
-                TriggerTarget::Source => trigger_context.source,
+            let (target_id, attacker) = match trigger_context.trigger.target {
+                TriggerTarget::SameTarget => (trigger_context.target, trigger_context.source),
+                TriggerTarget::Source => (trigger_context.source, trigger_context.target),
             };
             // TODO: Multi targets
             let target = match target_id {
@@ -92,7 +92,7 @@ pub fn apply_trigger_effects(
                     );
                     skills_controller::apply_skill_effect(
                         events_queue,
-                        trigger_context.source,
+                        attacker,
                         trigger_context.trigger.skill_type,
                         trigger_context.trigger.skill_range,
                         &effect,
