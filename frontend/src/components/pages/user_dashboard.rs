@@ -228,10 +228,10 @@ fn CharacterSlot(
 
         move |_| {
             set_character_id_storage.set(character.character_id);
-            match character_activity {
+            match &character_activity {
                 UserCharacterActivity::Rusting => navigate("/town", Default::default()),
                 UserCharacterActivity::Grinding(area_id, _) => {
-                    set_area_id_storage.set(Some(area_id));
+                    set_area_id_storage.set(Some(area_id.clone()));
                     navigate("/game", Default::default())
                 }
             }
