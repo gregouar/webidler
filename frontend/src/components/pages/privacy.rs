@@ -2,17 +2,17 @@ use leptos::{html::*, prelude::*};
 #[component]
 pub fn PrivacyPage() -> impl IntoView {
     view! {
-        <main class="bg-zinc-950 min-h-screen max-h-screen my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
-            <div class="max-w-3xl mx-auto">
-                <div class="flex items-center justify-between p-4 border-b border-zinc-700">
-                    <h2 class="text-xl font-bold text-amber-200">"Privacy Notice"</h2>
-                </div>
+        <main class="bg-zinc-950 h-screen w-full my-0 mx-auto max-w-3xl flex flex-col">
+            <div class="flex items-center justify-between p-4 border-b border-zinc-700 flex-shrink-0">
+                <h2 class="text-xl font-bold text-amber-200">"Privacy Notice"</h2>
+            </div>
 
-                <div class="p-6 overflow-y-auto">
-                    <PrivacyContent />
-                </div>
+            <div class="flex-1 overflow-y-auto p-6">
+                <PrivacyContent />
+            </div>
 
-                <a href="/" class="text-amber-400 mt-4 mb-4">
+            <div class="p-4 border-t border-zinc-700 flex-shrink-0">
+                <a href="/" class="text-amber-400">
                     "Back to Home"
                 </a>
             </div>
