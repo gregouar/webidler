@@ -1,7 +1,10 @@
 use leptos::{html::*, prelude::*};
 use leptos_router::hooks::use_navigate;
 
-use crate::components::{backend_client::BackendClient, ui::buttons::MenuButton};
+use crate::components::{
+    backend_client::BackendClient,
+    ui::{buttons::MenuButton, number::format_datetime},
+};
 
 #[component]
 pub fn LeaderboardPage() -> impl IntoView {
@@ -82,8 +85,7 @@ pub fn LeaderboardPanel() -> impl IntoView {
                                                 <span class="font-semibold text-white">{entry.area_level}</span>
                                             </div>
                                             <div class="text-sm text-zinc-300">
-
-                                                { format!("{}", entry.created_at.format("%Y-%m-%d %H:%M"))}
+                                                {format_datetime(entry.created_at)}
                                             //     "Time played: " <span class="font-semibold text-white">
                                             //         {format_duration(entry.time_played)}
                                             //     </span>

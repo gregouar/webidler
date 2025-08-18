@@ -1,6 +1,7 @@
+use chrono::{DateTime, Utc};
 use std::time::Duration;
 
-use leptos::prelude::*;
+use leptos::{prelude::*, wasm_bindgen::JsValue, web_sys::js_sys::Date};
 
 #[component]
 pub fn Number(value: Signal<f64>) -> impl IntoView {
@@ -46,6 +47,13 @@ pub fn format_duration(duration: Duration) -> String {
     let minutes = (secs % 3600) / 60;
     let seconds = secs % 60;
     format!("{hours:02}:{minutes:02}:{seconds:02}")
+}
+
+pub fn format_datetime(dt: DateTime<Utc>) -> String {
+    let date = Date::new(&JsValue::from_str(&dt.to_rfc3339()));
+    date.to_locale_string("default", &JsValue::UNDEFINED)
+        .as_string()
+        .unwrap_or_default()
 }
 
 #[cfg(test)]
