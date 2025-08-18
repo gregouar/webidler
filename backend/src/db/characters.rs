@@ -209,14 +209,14 @@ pub async fn update_character_progress(
         "INSERT INTO character_area_completed (character_id, area_id, max_area_level) VALUES ($1, $2, $3)
          ON CONFLICT(character_id, area_id) DO UPDATE 
          SET max_area_level = CASE
-            WHEN character_area_completed.max_area_level > EXCLUDED.max_area_level
-            THEN character_area_completed.max_area_level
-            ELSE EXCLUDED.max_area_level
+            WHEN EXCLUDED.max_area_level > character_area_completed.max_area_level
+            THEN EXCLUDED.max_area_level
+            ELSE character_area_completed.max_area_level
         END,
         updated_at = CASE
-            WHEN character_area_completed.max_area_level > EXCLUDED.max_area_level
-            THEN character_area_completed.updated_at
-            ELSE CURRENT_TIMESTAMP
+            WHEN EXCLUDED.max_area_level > character_area_completed.max_area_level
+            THEN CURRENT_TIMESTAMP
+            ELSE character_area_completed.updated_at
         END;",
         character_id,
         area_id,
