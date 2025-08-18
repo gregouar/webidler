@@ -50,8 +50,8 @@ pub fn format_duration(duration: Duration) -> String {
 }
 
 pub fn format_datetime(dt: DateTime<Utc>) -> String {
-    let date = Date::new(&JsValue::from_str(&dt.to_rfc3339()));
-    date.to_locale_string("default", &JsValue::UNDEFINED)
+    Date::new(&JsValue::from_str(&dt.to_rfc3339()))
+        .to_locale_string("default", &JsValue::UNDEFINED)
         .as_string()
         .unwrap_or_default()
 }
