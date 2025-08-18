@@ -1,7 +1,9 @@
 mod game;
 mod leaderboard;
 mod main_menu;
+pub mod privacy;
 mod signup;
+pub mod terms;
 mod town;
 mod user_dashboard;
 

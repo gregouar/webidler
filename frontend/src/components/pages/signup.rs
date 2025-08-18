@@ -8,6 +8,7 @@ use shared::http::client::SignUpRequest;
 use crate::components::{
     backend_client::BackendClient,
     captcha::Captcha,
+    pages::{privacy::PrivacyContent, terms::TermsContent},
     ui::{
         buttons::MenuButton,
         input::{Input, ValidatedInput},
@@ -89,6 +90,9 @@ pub fn SignUpPage() -> impl IntoView {
         }
     };
 
+    let show_terms = RwSignal::new(false);
+    let show_privacy = RwSignal::new(false);
+
     view! {
         <main class="my-0 mx-auto max-w-2xl text-center flex flex-col justify-center p-6">
             <h1 class="text-amber-200 text-4xl font-extrabold mb-6">"Create Account"</h1>
@@ -138,21 +142,21 @@ pub fn SignUpPage() -> impl IntoView {
                     />
                     <label for="terms" class="text-sm text-gray-300">
                         "I agree to the "
-                        <a
-                            href="/terms"
-                            class="text-amber-300 underline hover:text-amber-200"
-                            target="_blank"
+                        <button
+                            type="button"
+                            class="text-amber-400 underline hover:text-amber-300"
+                            on:click=move |_| show_terms.set(true)
                         >
-                            "Terms and Conditions"
-                        </a>
+                            "Terms & Conditions"
+                        </button>
                         " and "
-                        <a
-                            href="/privacy"
-                            class="text-amber-300 underline hover:text-amber-200"
-                            target="_blank"
+                        <button
+                            type="button"
+                            class="text-amber-400 underline hover:text-amber-300"
+                            on:click=move |_| show_privacy.set(true)
                         >
                             "Privacy Policy"
-                        </a>
+                        </button>
                         "."
                     </label>
                 </div>
@@ -170,6 +174,48 @@ pub fn SignUpPage() -> impl IntoView {
             <div>
                 <MenuButton on:click=navigate_to_menu>"Back"</MenuButton>
             </div>
+
+            <Show when=move || show_terms.get()>
+                <div class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+                    <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl max-w-2xl w-full max-h-[80vh] flex flex-col">
+
+                        <div class="flex items-center justify-between p-4 border-b border-zinc-700">
+                            <h2 class="text-xl font-bold text-amber-200">"Terms and Conditions"</h2>
+                            <button
+                                class="text-gray-400 hover:text-white text-xl"
+                                on:click=move |_| show_terms.set(false)
+                            >
+                                "✕"
+                            </button>
+                        </div>
+
+                        <div class="p-6 overflow-y-auto">
+                            <TermsContent />
+                        </div>
+                    </div>
+                </div>
+            </Show>
+
+            <Show when=move || show_privacy.get()>
+                <div class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+                    <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl max-w-2xl w-full max-h-[80vh] flex flex-col">
+
+                        <div class="flex items-center justify-between p-4 border-b border-zinc-700">
+                            <h2 class="text-xl font-bold text-amber-200">"Privacy Notice"</h2>
+                            <button
+                                class="text-gray-400 hover:text-white text-xl"
+                                on:click=move |_| show_privacy.set(false)
+                            >
+                                "✕"
+                            </button>
+                        </div>
+
+                        <div class="p-6 overflow-y-auto">
+                            <PrivacyContent />
+                        </div>
+                    </div>
+                </div>
+            </Show>
         </main>
     }
 }

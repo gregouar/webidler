@@ -7,7 +7,7 @@ use url::Url;
 
 use crate::components::backend_client::BackendClient;
 use crate::components::pages;
-use crate::components::ui::confirm::{ConfirmationModal, provide_confirm_context};
+use crate::components::ui::confirm::{provide_confirm_context, ConfirmationModal};
 
 // TODO: localization https://crates.io/crates/fluent-templates
 
@@ -36,6 +36,8 @@ pub fn App() -> impl IntoView {
         <Router base=base_uri>
             <Routes fallback=|| "Page not found.">
                 <Route path=path!("/") view=pages::MainMenuPage />
+                <Route path=path!("/terms") view=pages::terms::TermsPage />
+                <Route path=path!("/privacy") view=pages::privacy::PrivacyPage />
                 <Route path=path!("/game") view=pages::GamePage />
                 // <Route path=path!("/game/:characterid") view=pages::GamePage />
                 <Route path=path!("/leaderboard") view=pages::LeaderboardPage />

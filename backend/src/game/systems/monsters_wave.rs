@@ -192,7 +192,7 @@ fn generate_monster_specs(
     monster_specs.reward_factor *= reward_factor;
     monster_specs.character_specs.max_life *= exp_factor;
 
-    let effects = vec![StatEffect {
+    let effects = [StatEffect {
         stat: StatType::Damage {
             skill_type: None,
             damage_type: None,
