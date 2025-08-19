@@ -13,7 +13,7 @@ pub fn TermsPage() -> impl IntoView {
             </div>
 
             <div class="p-4 border-t border-zinc-700 flex-shrink-0">
-                <a href="/" class="text-amber-400">
+                <a href="" class="text-amber-400">
                     "Back to Home"
                 </a>
             </div>

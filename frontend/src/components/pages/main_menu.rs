@@ -178,10 +178,10 @@ pub fn MainMenuPage() -> impl IntoView {
                 </div>
 
                 <div class="flex justify-center gap-6 pt-2 border-t border-zinc-700">
-                    <a href="/terms" class="text-amber-300 underline hover:text-amber-200">
+                    <a href="terms" class="text-amber-300 underline hover:text-amber-200">
                         "Terms & Conditions"
                     </a>
-                    <a href="/privacy" class="text-amber-300 underline hover:text-amber-200">
+                    <a href="privacy" class="text-amber-300 underline hover:text-amber-200">
                         "Privacy Notice"
                     </a>
                 </div>
