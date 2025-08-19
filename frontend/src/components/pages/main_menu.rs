@@ -116,10 +116,9 @@ pub fn MainMenuPage() -> impl IntoView {
                             placeholder="Enter your username"
                             bind=username
                             on:keydown=move |ev: leptos::ev::KeyboardEvent| {
-                                if ev.key() == "Enter"
-                                    && let Some(pw) = password_ref.get() {
-                                        pw.focus().unwrap();
-                                    }
+                                if ev.key() == "Enter" && let Some(pw) = password_ref.get() {
+                                    pw.focus().unwrap();
+                                }
                             }
                         />
                     </div>
@@ -151,31 +150,43 @@ pub fn MainMenuPage() -> impl IntoView {
                 </div>
             </div>
 
-            <div class="bg-gray-800 text-gray-200 text-sm p-4 rounded-xl border border-gray-700 shadow-inner">
-                <h2 class="text-lg font-semibold mb-2">Disclaimer</h2>
-                <p>
-                    "2D artworks featured in this app are generated using AI tools, with DALL·E 3 (free version via "
-                    <a
-                        href="https://chatgpt.com"
-                        class="text-amber-300 underline hover:text-amber-200"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        "chatgpt.com"
-                    </a>")."
-                </p>
-                <p class="mt-2">
-                    "Musics are created with the help of Suno's generative AI tools (free version via "
-                    <a
-                        href="https://suno.com"
-                        class="text-amber-300 underline hover:text-amber-200"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        "suno.com"
-                    </a>")."
-                </p>
+            <div class="bg-gray-800 text-gray-200 text-sm p-4 rounded-xl border border-gray-700 shadow-inner space-y-4">
+                <div>
+                    <h2 class="text-lg font-semibold mb-2">"Disclaimer"</h2>
+                    <p>
+                        "2D artworks featured in this app are generated using AI tools, with DALL·E 3 (free version via "
+                        <a
+                            href="https://chatgpt.com"
+                            class="text-amber-300 underline hover:text-amber-200"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            "chatgpt.com"
+                        </a>")."
+                    </p>
+                    <p class="mt-2">
+                        "Musics are created with the help of Suno's generative AI tools (free version via "
+                        <a
+                            href="https://suno.com"
+                            class="text-amber-300 underline hover:text-amber-200"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            "suno.com"
+                        </a>")."
+                    </p>
+                </div>
+
+                <div class="flex justify-center gap-6 pt-2 border-t border-zinc-700">
+                    <a href="/terms" class="text-amber-300 underline hover:text-amber-200">
+                        "Terms & Conditions"
+                    </a>
+                    <a href="/privacy" class="text-amber-300 underline hover:text-amber-200">
+                        "Privacy Notice"
+                    </a>
+                </div>
             </div>
+
         </main>
     }
 }

@@ -82,7 +82,7 @@ pub fn TermsContent() -> impl IntoView {
             <ul>
                 <li>
                     "Personal data is processed in accordance with our "
-                    <a href="/privacy" class="text-amber-400 underline">
+                    <a href="privacy" class="text-amber-400 underline">
                         "Privacy Notice"
                     </a>"."
                 </li>
