@@ -9,7 +9,7 @@ use super::{pool::DbPool, utc_datetime::UtcDateTime};
 pub struct UserEntry {
     pub user_id: UserId,
     pub username: Option<String>,
-    pub email: Option<String>,
+    pub email_crypt: Option<Vec<u8>>,
     pub terms_accepted_at: UtcDateTime,
     pub is_admin: bool,
     pub max_characters: i16,
@@ -22,7 +22,8 @@ pub struct UserEntry {
 pub async fn create_user(
     db_pool: &DbPool,
     username: &str,
-    email: Option<&str>,
+    email_crypt: Option<&[u8]>,
+    email_hash: Option<&[u8]>,
     password_hash: &str,
     terms_accepted_at: &DateTime<Utc>,
     max_characters: i16,
@@ -31,12 +32,13 @@ pub async fn create_user(
 
     let res = sqlx::query!(
         r#"
-        INSERT INTO users (user_id, username, email, password_hash, terms_accepted_at, max_characters)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO users (user_id, username, email_crypt, email_hash, password_hash, terms_accepted_at, max_characters)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         "#,
         user_id,
         username,
-        email,
+        email_crypt,
+        email_hash,
         password_hash,
         terms_accepted_at,
         max_characters
@@ -61,7 +63,7 @@ pub async fn read_user(
         SELECT 
             user_id as "user_id: UserId", 
             username,
-            email, 
+            email_crypt, 
             terms_accepted_at, 
             is_admin, 
             max_characters as "max_characters!: i16", 

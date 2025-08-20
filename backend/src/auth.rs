@@ -17,6 +17,7 @@ use headers::{authorization::Bearer, Authorization};
 use jsonwebtoken::{decode, encode, Header, TokenData, Validation};
 use rand::RngCore;
 use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
 
 use shared::data::user::{User, UserId};
 
@@ -121,9 +122,7 @@ fn encode_jwt(app_settings: &AppSettings, sub: UserId) -> anyhow::Result<String>
 }
 
 pub fn hash_password(password: &str) -> anyhow::Result<String> {
-    let salt = SaltString::generate(&mut OsRng);
-    let argon2 = Argon2::default();
-    match argon2.hash_password(password.as_ref(), &salt) {
+    match Argon2::default().hash_password(password.as_ref(), &SaltString::generate(&mut OsRng)) {
         Ok(password_hash) => Ok(password_hash.to_string()),
         Err(e) => Err(anyhow!("failed to hash password: {e}")),
     }
@@ -174,4 +173,11 @@ pub fn decrypt_email(app_settings: &AppSettings, data: &[u8]) -> anyhow::Result<
             .decrypt(Nonce::from_slice(nonce_bytes), ciphertext)
             .map_err(|_| anyhow!("failed to decrypt"))?,
     )?)
+}
+
+pub fn hash_email(app_settings: &AppSettings, email: &str) -> Vec<u8> {
+    let mut hasher = Sha256::new();
+    hasher.update(&app_settings.hash_key);
+    hasher.update(email.as_bytes());
+    hasher.finalize().to_vec()
 }

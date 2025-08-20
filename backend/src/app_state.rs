@@ -22,6 +22,7 @@ pub struct AppSettings {
     pub jwt_encoding_key: EncodingKey,
     pub jwt_decoding_key: DecodingKey,
     pub aes_key: Aes256Gcm,
+    pub hash_key: String,
 }
 
 impl AppSettings {
@@ -41,6 +42,7 @@ impl AppSettings {
             jwt_encoding_key: EncodingKey::from_secret(jwt_secret.as_ref()),
             jwt_decoding_key: DecodingKey::from_secret(jwt_secret.as_ref()),
             aes_key: Aes256Gcm::new_from_slice(&aes_key_str).expect("failed to create AES key"),
+            hash_key: env::var("HASH_KEY").expect("HASH_KEY must be set"),
         }
     }
 }

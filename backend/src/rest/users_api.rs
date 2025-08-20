@@ -35,6 +35,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
 }
 
 async fn post_sign_up(
+    State(app_settings): State<AppSettings>,
     State(db_pool): State<db::DbPool>,
     Json(payload): Json<SignUpRequest>,
 ) -> Result<Json<SignUpResponse>, AppError> {
@@ -45,10 +46,20 @@ async fn post_sign_up(
         return Err(AppError::Forbidden);
     }
 
+    let (email_crypt, email_hash) = match payload.email.as_deref() {
+        Some(email) => {
+            let crypt = Some(auth::encrypt_email(&app_settings, email)?);
+            let hash = Some(auth::hash_email(&app_settings, email));
+            (crypt, hash)
+        }
+        None => (None, None),
+    };
+
     match db::users::create_user(
         &db_pool,
         &payload.username,
-        payload.email.as_deref().map(String::as_str),
+        email_crypt.as_deref(),
+        email_hash.as_deref(),
         &auth::hash_password(&payload.password)?,
         &Utc::now(),
         constants::DEFAULT_MAX_CHARACTERS as i16,

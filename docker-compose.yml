@@ -32,6 +32,7 @@ services:
       TURNSTILE_SECRET: ${TURNSTILE_SECRET}
       JWT_SECRET: ${JWT_SECRET}
       AES_KEY: ${AES_KEY}
+      HASH_KEY: ${HASH_KEY}
       DATABASE_URL: postgres://webidler_user:${POSTGRES_PASSWORD}@database/webidler
       CORS_FRONTEND_URL: https://gregouar.github.io
       RUST_LOG: DEBUG
