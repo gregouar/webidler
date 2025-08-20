@@ -1,3 +1,5 @@
+use aes_gcm::aead::Aead;
+use aes_gcm::Nonce;
 use anyhow::anyhow;
 use argon2::{
     password_hash::{rand_core::OsRng, PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
@@ -13,6 +15,7 @@ use axum_extra::TypedHeader;
 use chrono::{Duration, Utc};
 use headers::{authorization::Bearer, Authorization};
 use jsonwebtoken::{decode, encode, Header, TokenData, Validation};
+use rand::RngCore;
 use serde::{Deserialize, Serialize};
 
 use shared::data::user::{User, UserId};
@@ -144,4 +147,31 @@ impl From<db::users::UserEntry> for User {
             max_characters: val.max_characters as u8,
         }
     }
+}
+
+pub fn encrypt_email(app_settings: &AppSettings, email: &str) -> anyhow::Result<Vec<u8>> {
+    let mut nonce = [0u8; 12];
+    rand::rng().fill_bytes(&mut nonce);
+
+    let ciphertext = app_settings
+        .aes_key
+        .encrypt(Nonce::from_slice(&nonce), email.as_bytes())
+        .map_err(|_| anyhow!("failed to encrypt"))?;
+
+    let mut combined = Vec::with_capacity(nonce.len() + ciphertext.len());
+    combined.extend_from_slice(&nonce);
+    combined.extend_from_slice(&ciphertext);
+
+    Ok(combined)
+}
+
+pub fn decrypt_email(app_settings: &AppSettings, data: &[u8]) -> anyhow::Result<String> {
+    let (nonce_bytes, ciphertext) = data.split_at_checked(12).ok_or(anyhow!("invalid data"))?;
+
+    Ok(String::from_utf8(
+        app_settings
+            .aes_key
+            .decrypt(Nonce::from_slice(nonce_bytes), ciphertext)
+            .map_err(|_| anyhow!("failed to decrypt"))?,
+    )?)
 }
