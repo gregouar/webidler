@@ -799,7 +799,7 @@
           {
             "stat": "Mana",
             "modifier": "Multiplier",
-            "value": 1.0
+            "value": 0.5
           }
         ]
       },

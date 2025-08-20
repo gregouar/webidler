@@ -404,7 +404,12 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 2
+        "value": 1
+      },
+      {
+        "stat": { "Speed": "Spell" },
+        "modifier": "Flat",
+        "value": -1
       }
     ],
     "targets": [
