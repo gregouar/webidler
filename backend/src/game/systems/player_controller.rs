@@ -307,6 +307,10 @@ pub fn sell_item(
     player_resources: &mut PlayerResources,
     item_specs: &ItemSpecs,
 ) {
+    if item_specs.old_game {
+        return;
+    }
+
     player_resources.gold +=
         10.0 * match item_specs.rarity {
             shared::data::item::ItemRarity::Normal => 1.0,

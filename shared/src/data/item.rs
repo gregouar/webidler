@@ -105,6 +105,9 @@ pub struct ItemSpecs {
 
     pub affixes: Vec<ItemAffix>,
     pub triggers: Vec<TriggerSpecs>,
+
+    #[serde(default)] // TODO: Remove later, only for save backward comp
+    pub old_game: bool, // To indicate it comes from old game and not dropped during current one
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]

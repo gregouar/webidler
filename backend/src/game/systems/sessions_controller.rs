@@ -133,7 +133,11 @@ async fn new_game_instance(
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
     let player_inventory = match character_data {
-        Some(inventory) => {
+        Some(mut inventory) => {
+            for item_specs in inventory.all_items_mut() {
+                item_specs.old_game = true;
+            }
+
             if !player_controller::init_item_skills(
                 &mut player_specs,
                 &inventory,
@@ -157,7 +161,7 @@ async fn new_game_instance(
                     loot_generator::roll_item(
                         base_weapon,
                         ItemRarity::Normal,
-                        1,
+                        0,
                         &master_store.item_affixes_table,
                         &master_store.item_adjectives_table,
                         &master_store.item_nouns_table,

@@ -117,6 +117,7 @@ pub fn roll_item(
             armor_specs: None,
             weapon_specs: None,
             affixes,
+            old_game: false,
         },
         adjectives_table,
         nouns_table,
