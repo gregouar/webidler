@@ -97,19 +97,11 @@ pub fn update_player_specs(
             )),
     );
 
-    compute_player_specs(player_specs, player_inventory);
-
     player_specs.triggers = passives_tree_state
         .purchased_nodes
         .iter()
         .filter_map(|node_id| passives_tree_specs.nodes.get(node_id))
         .flat_map(|node| node.triggers.iter())
-        .chain(
-            player_specs
-                .skills_specs
-                .iter()
-                .flat_map(|skill_specs| skill_specs.triggers.iter()),
-        )
         .chain(
             player_state
                 .character_state
@@ -134,7 +126,16 @@ pub fn update_player_specs(
         )
         .collect();
 
-    // TODO: Collect item triggers and effects to triggers
+    compute_player_specs(player_specs, player_inventory);
+
+    // We only add skills trigger after because their were already increased by skill update
+    player_specs.triggers.extend(
+        player_specs
+            .skills_specs
+            .iter()
+            .flat_map(|skill_specs| skill_specs.triggers.iter())
+            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
+    );
 }
 
 fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &PlayerInventory) {
@@ -198,5 +199,15 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
 
     for skill_specs in player_specs.skills_specs.iter_mut() {
         skills_updater::update_skill_specs(skill_specs, effects.iter(), Some(player_inventory));
+    }
+
+    for trigger_effect in player_specs.triggers.iter_mut() {
+        for effect in trigger_effect.effects.iter_mut() {
+            skills_updater::compute_skill_specs_effect(
+                trigger_effect.skill_type,
+                effect,
+                effects.iter(),
+            )
+        }
     }
 }
