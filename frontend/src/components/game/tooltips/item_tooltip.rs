@@ -262,7 +262,7 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     view! {
                         <hr class="border-t border-gray-700 my-1" />
                         <ul class="list-none space-y-1">
-                            {trigger_lines}{local_affixes}{global_affixes}
+                            {local_affixes}{global_affixes}{trigger_lines}
                         </ul>
                     }
                 })}
