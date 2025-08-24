@@ -38,7 +38,9 @@ pub fn TownPage() -> impl IntoView {
                     town_context.character.set(response.character);
                     town_context.areas.set(response.areas);
                 }
-                Err(BackendError::Unauthorized(_)) => use_navigate()("/", Default::default()),
+                Err(BackendError::Unauthorized(_) | BackendError::NotFound) => {
+                    use_navigate()("/", Default::default())
+                }
                 _ => {} // TODO: Toast error ?
             }
         }

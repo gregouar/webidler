@@ -147,6 +147,9 @@ impl BackendClient {
     where
         T: serde::de::DeserializeOwned,
     {
+        if token.is_empty() {
+            return Err(BackendError::Unauthorized("missing token".to_string()));
+        }
         check_error(
             reqwest::Client::new()
                 .get(format!("{}/{}", self.http_url, endpoint))
@@ -184,6 +187,9 @@ impl BackendClient {
         T: serde::de::DeserializeOwned,
         P: serde::ser::Serialize,
     {
+        if token.is_empty() {
+            return Err(BackendError::Unauthorized("missing token".to_string()));
+        }
         check_error(
             reqwest::Client::new()
                 .post(format!("{}/{}", self.http_url, endpoint))
@@ -200,6 +206,9 @@ impl BackendClient {
     where
         T: serde::de::DeserializeOwned,
     {
+        if token.is_empty() {
+            return Err(BackendError::Unauthorized("missing token".to_string()));
+        }
         check_error(
             reqwest::Client::new()
                 .delete(format!("{}/{}", self.http_url, endpoint))

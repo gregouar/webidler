@@ -199,7 +199,7 @@ fn CharacterSlot(
                     Err(e) => {
                         show_toast(
                             toaster,
-                            format!("Failed to delete character: {e:?}"),
+                            format!("Failed to delete character: {e}"),
                             ToastVariant::Error,
                         );
                     }
@@ -371,7 +371,7 @@ pub fn CreateCharacterPanel(
                         Err(e) => {
                             show_toast(
                                 toaster,
-                                format!("Character creation error: {e:?}"),
+                                format!("Character creation error: {e}"),
                                 ToastVariant::Error,
                             );
                             processing.set(false);

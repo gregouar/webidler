@@ -70,7 +70,7 @@ pub fn MainMenuPage() -> impl IntoView {
                         Err(e) => {
                             show_toast(
                                 toaster,
-                                format!("Authentication error: {e:?}"),
+                                format!("Authentication error: {e}"),
                                 ToastVariant::Error,
                             );
                             connecting.set(false);

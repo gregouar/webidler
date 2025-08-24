@@ -79,7 +79,7 @@ pub fn SignUpPage() -> impl IntoView {
                         Err(e) => {
                             show_toast(
                                 toaster,
-                                format!("Registration error: {e:?}"),
+                                format!("Registration error: {e}"),
                                 ToastVariant::Error,
                             );
                             processing.set(false);
