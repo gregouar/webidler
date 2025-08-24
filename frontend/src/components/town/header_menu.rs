@@ -1,7 +1,5 @@
 use leptos::{html::*, prelude::*};
 
-use shared::data::user::UserCharacter;
-
 use crate::{
     assets::img_asset,
     components::{
@@ -15,9 +13,11 @@ use crate::{
 };
 
 #[component]
-pub fn HeaderMenu(character: UserCharacter) -> impl IntoView {
-    let gems = Signal::derive(move || character.resource_gems);
-    let shards = Signal::derive(move || character.resource_shards);
+pub fn HeaderMenu() -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+
+    let gems = Signal::derive(move || town_context.character.read().resource_gems);
+    let shards = Signal::derive(move || town_context.character.read().resource_shards);
 
     let navigate_quit = {
         let navigate = leptos_router::hooks::use_navigate();
@@ -27,8 +27,6 @@ pub fn HeaderMenu(character: UserCharacter) -> impl IntoView {
     };
 
     let disable_buttons = Signal::derive(|| true);
-
-    let town_context = expect_context::<TownContext>();
 
     view! {
         <div class="relative z-50 w-full flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">

@@ -9,7 +9,7 @@ use crate::data::{
     user::{User, UserCharacter, UserCharacterId, UserGrindArea, UserId},
 };
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct ErrorResponse {
     pub error: String,
 }
