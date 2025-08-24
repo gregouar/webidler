@@ -5,7 +5,7 @@ use shared::data::user::UserCharacter;
 use crate::{
     assets::img_asset,
     components::{
-        town::{town_context, TownContext},
+        town::TownContext,
         ui::{
             buttons::MenuButton,
             number::Number,
@@ -50,8 +50,8 @@ pub fn HeaderMenu(character: UserCharacter) -> impl IntoView {
                 <MenuButton on:click=|_| {} disabled=disable_buttons>
                     "Market"
                 </MenuButton>
-                <MenuButton on:click=|_| {
-                    town_context.set(!town_context.get())
+                <MenuButton on:click=move |_| {
+                    town_context.open_ascend.set(!town_context.open_ascend.get())
                 }>"Ascend"</MenuButton>
                 <MenuButton on:click=|_| {} disabled=disable_buttons>
                     "Forge"
