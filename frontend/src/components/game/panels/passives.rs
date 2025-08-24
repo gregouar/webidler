@@ -1,6 +1,7 @@
-use leptos::{html::*, prelude::*, web_sys};
+use leptos::{html::*, prelude::*};
 use shared::data::item_affix::AffixEffectScope;
 
+use std::collections::HashMap;
 use std::sync::Arc;
 
 use shared::data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassiveNodeType};
@@ -12,16 +13,30 @@ use crate::components::{
     ui::{
         buttons::CloseButton,
         menu_panel::MenuPanel,
+        pannable::Pannable,
         tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
     },
     websocket::WebsocketContext,
 };
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-enum NodeStatus {
+pub enum PurchaseStatus {
     Inactive,
     Purchaseable,
     Purchased,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum MetaStatus {
+    Normal,
+    Locked,
+    Ascended,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct NodeStatus {
+    purchase_status: PurchaseStatus,
+    meta_status: MetaStatus,
 }
 
 #[component]
@@ -45,126 +60,62 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
 }
 
 #[component]
-pub fn PassiveSkillTree() -> impl IntoView {
+fn PassiveSkillTree() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
-
-    let offset = RwSignal::new((0.0, 0.0)); // for panning
-    let dragging = RwSignal::new(None::<(f64, f64)>);
-    let zoom = RwSignal::new(1.0f64);
-
-    let on_mouse_down = move |ev: web_sys::MouseEvent| {
-        dragging.set(Some((ev.client_x() as f64, ev.client_y() as f64)));
-    };
-
-    let on_mouse_up = move |_| dragging.set(None);
-
-    let on_mouse_move = {
-        move |ev: web_sys::MouseEvent| {
-            if let Some((last_x, last_y)) = dragging.get() {
-                let dx = ev.client_x() as f64 - last_x;
-                let dy = ev.client_y() as f64 - last_y;
-                offset.update(|(x, y)| {
-                    *x += dx;
-                    *y += dy;
-                });
-                dragging.set(Some((ev.client_x() as f64, ev.client_y() as f64)));
-            }
-        }
-    };
-
-    let on_wheel = move |ev: web_sys::WheelEvent| {
-        ev.prevent_default();
-        zoom.set((zoom.get() * if ev.delta_y() < 0.0 { 1.1 } else { 0.9 }).clamp(0.5, 3.0));
-    };
 
     let points_available =
         Memo::new(move |_| game_context.player_resources.read().passive_points > 0);
 
+    let nodes_specs = Arc::new(
+        game_context
+            .passives_tree_specs
+            .read_untracked()
+            .nodes
+            .clone(),
+    );
+
     view! {
-        <div
-            on:wheel=on_wheel
-            on:mousedown=on_mouse_down
-            on:mouseup=on_mouse_up
-            on:mousemove=on_mouse_move
-            class="w-full aspect-[5/2] overflow-hidden bg-neutral-900"
-        >
-            // style="filter: drop-shadow(0 2px 4px black);"
-            <svg
-                width="100%"
-                height="100%"
-                viewBox="-500 -500 1000 1000"
-                preserveAspectRatio="xMidYMid meet"
+        <Pannable>
+            <For
+                each=move || {
+                    game_context.passives_tree_specs.read().connections.clone().into_iter()
+                }
+                key=|conn| (conn.from.clone(), conn.to.clone())
+                let(conn)
             >
-                <defs>
-                    <radialGradient id="node-inner-gradient" cx="50%" cy="50%" r="50%">
-                        <stop offset="20%" stop-color="black" stop-opacity=0 />
-                        <stop offset="70%" stop-color="black" stop-opacity=0.5 />
-                        <stop offset="100%" stop-color="black" stop-opacity=0.8 />
-                    </radialGradient>
-                </defs>
-                <g
-                    transform=move || {
-                        let (x, y) = offset.get();
-                        format!("translate({x},{y}),scale({})", zoom.get())
-                    }
-                    filter="drop-shadow(0 2px 4px black)"
-                >
-                    <For
-                        each=move || {
-                            game_context.passives_tree_specs.read().connections.clone().into_iter()
-                        }
-                        key=|conn| (conn.from.clone(), conn.to.clone())
-                        let(conn)
-                    >
-                        <Connection connection=conn />
-                    </For>
-                    <For
-                        each=move || {
-                            game_context.passives_tree_specs.read().nodes.clone().into_iter()
-                        }
-                        key=|(id, _)| id.clone()
-                        let((id, node))
-                    >
-                        <Node node_id=id node_specs=node points_available=points_available />
-                    </For>
-                </g>
-            </svg>
-        </div>
+                <InGameConnection connection=conn nodes_specs=nodes_specs.clone() />
+            </For>
+            <For
+                each=move || { game_context.passives_tree_specs.read().nodes.clone().into_iter() }
+                key=|(id, _)| id.clone()
+                let((id, node))
+            >
+                <InGameNode node_id=id node_specs=node points_available=points_available />
+            </For>
+        </Pannable>
     }
 }
 
 #[component]
-fn Node(
+fn InGameNode(
     node_id: PassiveNodeId,
     node_specs: PassiveNodeSpecs,
     points_available: Memo<bool>,
 ) -> impl IntoView {
-    let fill = match node_specs.node_type {
-        PassiveNodeType::Attack => "#8b1e1e",
-        PassiveNodeType::Life => "#386641",
-        PassiveNodeType::Spell => "#533ea9",
-        PassiveNodeType::Armor => "#5e5e5e",
-        PassiveNodeType::Critical => "#ea6110",
-        PassiveNodeType::Mana => "#3e5ba9",
-        PassiveNodeType::Gold => "goldenrod",
-        PassiveNodeType::Physical => "#2e2929ff",
-        PassiveNodeType::Poison => "#98bb1bff",
-        PassiveNodeType::Fire => "#da5011ff",
-        PassiveNodeType::Status => "#3ea9a4ff",
-    };
+    // TODO: bool memo locked, use also in tooltip
 
     let node_status = Memo::new({
         let game_context = expect_context::<GameContext>();
         let node_id = node_id.clone();
 
         move |_| {
-            if game_context
+            let purchase_status = if game_context
                 .passives_tree_state
                 .read()
                 .purchased_nodes
                 .contains(&node_id)
             {
-                NodeStatus::Purchased
+                PurchaseStatus::Purchased
             } else if points_available.get()
                 && (node_specs.initial_node
                     || game_context
@@ -186,12 +137,100 @@ fn Node(
                         })
                         .any(|connection| connection.from == node_id || connection.to == node_id))
             {
-                NodeStatus::Purchaseable
+                PurchaseStatus::Purchaseable
             } else {
-                NodeStatus::Inactive
+                PurchaseStatus::Inactive
+            };
+
+            let meta_status = if game_context
+                .passives_tree_state
+                .read()
+                .ascended_nodes
+                .contains_key(&node_id)
+            {
+                MetaStatus::Ascended
+            } else if node_specs.locked {
+                MetaStatus::Locked
+            } else {
+                MetaStatus::Normal
+            };
+
+            NodeStatus {
+                purchase_status,
+                meta_status,
             }
         }
     });
+
+    let purchase = {
+        let conn = expect_context::<WebsocketContext>();
+        move || {
+            conn.send(
+                &PurchasePassiveMessage {
+                    node_id: node_id.clone(),
+                }
+                .into(),
+            );
+        }
+    };
+
+    view! { <Node node_specs node_status on_click=purchase /> }
+}
+
+#[component]
+fn InGameConnection(
+    connection: PassiveConnection,
+    nodes_specs: Arc<HashMap<String, PassiveNodeSpecs>>,
+) -> impl IntoView {
+    let amount_connections = Memo::new({
+        let game_context = expect_context::<GameContext>();
+        let connection_from = connection.from.clone();
+        let connection_to = connection.to.clone();
+
+        move |_| {
+            game_context
+                .passives_tree_state
+                .read()
+                .purchased_nodes
+                .contains(&connection_from) as usize
+                + game_context
+                    .passives_tree_state
+                    .read()
+                    .purchased_nodes
+                    .contains(&connection_to) as usize
+        }
+    });
+
+    view! {
+        <Connection
+            connection=connection
+            nodes_specs=nodes_specs
+            amount_connections=amount_connections
+        />
+    }
+}
+
+#[component]
+pub fn Node(
+    node_specs: PassiveNodeSpecs,
+    node_status: Memo<NodeStatus>,
+    on_click: impl Fn() + Send + Sync + 'static,
+) -> impl IntoView {
+    let fill = match node_specs.node_type {
+        PassiveNodeType::Attack => "#8b1e1e",
+        PassiveNodeType::Life => "#386641",
+        PassiveNodeType::Spell => "#533ea9",
+        PassiveNodeType::Armor => "#5e5e5e",
+        PassiveNodeType::Critical => "#ea6110",
+        PassiveNodeType::Mana => "#3e5ba9",
+        PassiveNodeType::Gold => "goldenrod",
+        PassiveNodeType::Physical => "#2e2929ff",
+        PassiveNodeType::Poison => "#98bb1bff",
+        PassiveNodeType::Fire => "#da5011ff",
+        PassiveNodeType::Status => "#3ea9a4ff",
+    };
+
+    // TODO: bool memo locked, use also in tooltip
 
     let node_specs = Arc::new(node_specs);
 
@@ -215,30 +254,72 @@ fn Node(
         move |_| tooltip_context.hide()
     };
 
-    let purchase = {
-        let conn = expect_context::<WebsocketContext>();
-        move || {
-            conn.send(
-                &PurchasePassiveMessage {
-                    node_id: node_id.clone(),
-                }
-                .into(),
-            );
+    let icon_asset = img_asset(&node_specs.icon);
+
+    let stroke = move || {
+        let status = node_status.get();
+        match (status.purchase_status, status.meta_status) {
+            (PurchaseStatus::Inactive, MetaStatus::Normal) => "gray",
+            (PurchaseStatus::Purchaseable, MetaStatus::Normal) => "darkgoldenrod",
+            (PurchaseStatus::Purchased, MetaStatus::Normal) => "gold",
+
+            (PurchaseStatus::Inactive, MetaStatus::Ascended) => "cyan",
+            (PurchaseStatus::Purchaseable, MetaStatus::Ascended) => "cyan",
+            (PurchaseStatus::Purchased, MetaStatus::Ascended) => "cyan",
+
+            (_, MetaStatus::Locked) => "red",
         }
     };
 
-    let icon_asset = img_asset(&node_specs.icon);
+    let filter = move || {
+        let status = node_status.get();
+        match (status.purchase_status, status.meta_status) {
+            (PurchaseStatus::Inactive, MetaStatus::Normal) => "",
+            (PurchaseStatus::Purchaseable, MetaStatus::Normal) => {
+                "drop-shadow(0 0 2px darkgoldenrod)"
+            }
+            (PurchaseStatus::Purchased, MetaStatus::Normal) => "drop-shadow(0 0 4px gold)",
 
-    let stroke = move || match node_status.get() {
-        NodeStatus::Inactive => "gray",
-        NodeStatus::Purchaseable => "darkgoldenrod",
-        NodeStatus::Purchased => "gold",
+            (PurchaseStatus::Inactive, MetaStatus::Ascended) => "drop-shadow(0 0 2px cyan)",
+            (PurchaseStatus::Purchaseable, MetaStatus::Ascended) => "drop-shadow(0 0 4px cyan)",
+            (PurchaseStatus::Purchased, MetaStatus::Ascended) => "drop-shadow(0 0 6px cyan)",
+
+            (_, MetaStatus::Locked) => "drop-shadow(0 0 2px red)",
+        }
     };
 
-    let filter = move || match node_status.get() {
-        NodeStatus::Inactive => "",
-        NodeStatus::Purchaseable => "",
-        NodeStatus::Purchased => "drop-shadow(0 0 4px gold)",
+    let pointer_style = move || {
+        let status = node_status.get();
+        match (status.purchase_status, status.meta_status) {
+            (PurchaseStatus::Purchaseable, MetaStatus::Normal) => "cursor: pointer;",
+            _ => "",
+        }
+    };
+
+    let class_style = move || {
+        let status = node_status.get();
+        match (status.purchase_status, status.meta_status) {
+            (_, MetaStatus::Locked) => "saturate-50 brightness-50",
+            (PurchaseStatus::Inactive, _) => "saturate-50 brightness-50",
+            (PurchaseStatus::Purchaseable, _) => "saturate-50",
+            _ => "",
+        }
+    };
+
+    let icon_filter = move || {
+        let status = node_status.get();
+        match status.meta_status {
+            MetaStatus::Locked => "brightness(0.3) saturate(0.5)",
+            _ => "drop-shadow(2px 2px 2px black)",
+        }
+    };
+
+    let icon_tint = move || {
+        let status = node_status.get();
+        match status.meta_status {
+            MetaStatus::Locked => "grayscale(80%) contrast(50%)",
+            _ => "",
+        }
     };
 
     view! {
@@ -247,24 +328,15 @@ fn Node(
             on:mouseenter=show_tooltip
             on:mouseleave=hide_tooltip
             on:click=move |_| {
-                if let NodeStatus::Purchaseable = node_status.get() {
-                    purchase();
+                let status = node_status.get();
+                if status.meta_status != MetaStatus::Locked
+                    && status.purchase_status == PurchaseStatus::Purchaseable
+                {
+                    on_click();
                 }
             }
-            style=move || {
-                match node_status.get() {
-                    NodeStatus::Inactive => "",
-                    NodeStatus::Purchaseable => "cursor: pointer; ",
-                    NodeStatus::Purchased => "",
-                }
-            }
-            class=move || {
-                match node_status.get() {
-                    NodeStatus::Inactive => "saturate-50 brightness-50",
-                    NodeStatus::Purchaseable => "saturate-50",
-                    NodeStatus::Purchased => "",
-                }
-            }
+            style=pointer_style
+            class=class_style
         >
             <circle
                 r=20 + node_specs.size * 10
@@ -283,64 +355,35 @@ fn Node(
                 y=-(24 + node_specs.size as i32 * 20) / 2
                 width=24 + node_specs.size * 20
                 height=24 + node_specs.size * 20
-                style="pointer-events: none"
+                style=move || {
+                    format!("pointer-events: none; filter: {} {}", icon_filter(), icon_tint())
+                }
             />
         </g>
     }
 }
 
 #[component]
-fn Connection(connection: PassiveConnection) -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
-
-    let from_node = game_context
-        .passives_tree_specs
-        .read_untracked()
-        .nodes
-        .get(&connection.from)
-        .cloned();
-    let to_node = game_context
-        .passives_tree_specs
-        .read_untracked()
-        .nodes
-        .get(&connection.to)
-        .cloned();
+pub fn Connection(
+    connection: PassiveConnection,
+    nodes_specs: Arc<HashMap<String, PassiveNodeSpecs>>,
+    amount_connections: Memo<usize>,
+) -> impl IntoView {
+    let from_node = nodes_specs.get(&connection.from).cloned();
+    let to_node = nodes_specs.get(&connection.to).cloned();
 
     view! {
         {if let (Some(from), Some(to)) = (from_node, to_node) {
-            let amount_connections = {
-                let game_context = expect_context::<GameContext>();
-                move || {
-                    game_context
-                        .passives_tree_state
-                        .read()
-                        .purchased_nodes
-                        .contains(&connection.from) as usize
-                        + game_context
-                            .passives_tree_state
-                            .read()
-                            .purchased_nodes
-                            .contains(&connection.to) as usize
-                }
-            };
             let stroke_color = {
-                let amount_connections = amount_connections.clone();
-                move || match amount_connections() {
+                move || match amount_connections.get() {
                     2 => "gold",
                     1 => "darkgoldenrod",
                     _ => "gray",
                 }
             };
-            let dasharray = {
-                let amount_connections = amount_connections.clone();
-                move || if amount_connections() == 2 { "none" } else { "4 3" }
-            };
-            let width = {
-                let amount_connections = amount_connections.clone();
-                move || if amount_connections() == 2 { "3" } else { "2" }
-            };
+            let dasharray = move || if amount_connections.get() == 2 { "none" } else { "4 3" };
+            let width = move || if amount_connections.get() == 2 { "3" } else { "2" };
             Some(
-
                 view! {
                     <line
                         x1=from.x * 10.0
@@ -348,7 +391,11 @@ fn Connection(connection: PassiveConnection) -> impl IntoView {
                         x2=to.x * 10.0
                         y2=-to.y * 10.0
                         filter=move || {
-                            if amount_connections() == 2 { "drop-shadow(0 0 2px gold)" } else { "" }
+                            if amount_connections.get() == 2 {
+                                "drop-shadow(0 0 2px gold)"
+                            } else {
+                                ""
+                            }
                         }
                         stroke=stroke_color
                         stroke-dasharray=dasharray

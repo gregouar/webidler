@@ -9,10 +9,10 @@ use shared::messages::server::{ErrorType, InitGameMessage, ServerMessage, SyncGa
 use crate::components::ui::{toast::*, tooltip::DynamicTooltip};
 use crate::components::websocket::WebsocketContext;
 
-use super::GameContext;
 use super::battle_scene::BattleScene;
 use super::header_menu::HeaderMenu;
 use super::panels::{InventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel};
+use super::GameContext;
 
 #[component]
 pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {

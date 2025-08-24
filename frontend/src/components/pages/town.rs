@@ -7,7 +7,9 @@ use shared::data::user::UserCharacterId;
 
 use crate::components::{
     backend_client::BackendClient,
-    town::{header_menu::HeaderMenu, town_scene::TownScene},
+    town::{
+        header_menu::HeaderMenu, panels::ascend::AscendPanel, town_scene::TownScene, TownContext,
+    },
     ui::tooltip::DynamicTooltip,
 };
 
@@ -43,20 +45,15 @@ pub fn TownPage() -> impl IntoView {
     Effect::new(move |_| {
         character_and_areas.with(|data| {
             if let Some(send_wrapper) = data {
-                if let Some((character, _)) = send_wrapper.as_ref() {
-                    let _ = character;
-                    // TODO: update state and menu if not in town, disable stuff, need to trigger some polling refresh?
-                    // if let UserCharacterActivity::Grinding(_, _) = character.activity {
-                    //     // If character in game, we redirect to game
-                    //     use_navigate()("/game", Default::default());
-                    // }
-                } else {
-                    // If no character, we redirect to main menu
+                if send_wrapper.is_none() {
                     use_navigate()("/", Default::default());
                 }
             }
         });
     });
+
+    let town_context = TownContext::new();
+    provide_context(town_context.clone());
 
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
@@ -73,8 +70,8 @@ pub fn TownPage() -> impl IntoView {
                             <HeaderMenu character=character.clone() />
                             <div class="relative flex-1">
                                 <TownScene character=character areas=areas />
-                            // <MarketPanel open=town_context.open_market />
-                            // <AscendPanel open=town_context.open_ascend />
+                                // <MarketPanel open=town_context.open_market />
+                                <AscendPanel open=town_context.open_ascend />
                             // <ForgePanel open=town_context.open_forge />
                             </div>
                         }

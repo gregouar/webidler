@@ -32,6 +32,8 @@ pub struct PassivesTreeSpecs {
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct PassivesTreeState {
     pub purchased_nodes: HashSet<PassiveNodeId>,
+    // TODO: Should we have 3 layers? Blueprint, Specs & State?
+    pub ascended_nodes: HashMap<PassiveNodeId, u8>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -54,6 +56,9 @@ pub struct PassiveNodeSpecs {
     pub effects: Vec<StatEffect>,
     #[serde(default)]
     pub triggers: Vec<TriggerSpecs>,
+
+    #[serde(default)]
+    pub locked: bool,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]

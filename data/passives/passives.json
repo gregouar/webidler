@@ -681,7 +681,8 @@
               }
             ]
           }
-        ]
+        ],
+        "locked": true
       },
 
       "healing_aura": {
@@ -715,7 +716,8 @@
               }
             ]
           }
-        ]
+        ],
+        "locked": true
       },
 
       "bleeding_crit": {
@@ -759,7 +761,8 @@
               }
             ]
           }
-        ]
+        ],
+        "locked": true
       },
 
       "spell_crit": {
@@ -780,7 +783,8 @@
             "modifier": "Flat",
             "value": 1
           }
-        ]
+        ],
+        "locked": true
       },
 
       "mana_shield": {
@@ -801,7 +805,8 @@
             "modifier": "Multiplier",
             "value": 0.5
           }
-        ]
+        ],
+        "locked": true
       },
 
       "enrage": {
@@ -846,7 +851,8 @@
               }
             ]
           }
-        ]
+        ],
+        "locked": true
       },
 
       "gold_init_2": {
@@ -863,7 +869,8 @@
             "modifier": "Multiplier",
             "value": -1.0
           }
-        ]
+        ],
+        "locked": true
       },
 
       "physical_damage_1": {

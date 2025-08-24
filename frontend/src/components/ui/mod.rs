@@ -4,6 +4,7 @@ pub mod dropdown;
 pub mod input;
 pub mod menu_panel;
 pub mod number;
+pub mod pannable;
 pub mod progress_bars;
 pub mod toast;
 pub mod tooltip;

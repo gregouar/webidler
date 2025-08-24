@@ -4,10 +4,13 @@ use shared::data::user::UserCharacter;
 
 use crate::{
     assets::img_asset,
-    components::ui::{
-        buttons::MenuButton,
-        number::Number,
-        tooltip::{StaticTooltip, StaticTooltipPosition},
+    components::{
+        town::{town_context, TownContext},
+        ui::{
+            buttons::MenuButton,
+            number::Number,
+            tooltip::{StaticTooltip, StaticTooltipPosition},
+        },
     },
 };
 
@@ -24,6 +27,8 @@ pub fn HeaderMenu(character: UserCharacter) -> impl IntoView {
     };
 
     let disable_buttons = Signal::derive(|| true);
+
+    let town_context = expect_context::<TownContext>();
 
     view! {
         <div class="relative z-50 w-full flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
@@ -45,9 +50,9 @@ pub fn HeaderMenu(character: UserCharacter) -> impl IntoView {
                 <MenuButton on:click=|_| {} disabled=disable_buttons>
                     "Market"
                 </MenuButton>
-                <MenuButton on:click=|_| {} disabled=disable_buttons>
-                    "Ascend"
-                </MenuButton>
+                <MenuButton on:click=|_| {
+                    town_context.set(!town_context.get())
+                }>"Ascend"</MenuButton>
                 <MenuButton on:click=|_| {} disabled=disable_buttons>
                     "Forge"
                 </MenuButton>
