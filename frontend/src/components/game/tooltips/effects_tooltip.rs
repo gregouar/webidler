@@ -280,7 +280,7 @@ fn format_flat_stat(stat: StatType, value: f64) -> String {
             optional_damage_type_str(damage_type),
             to_skill_type_str(skill_type)
         ),
-        StatType::SpellPower => format!("Adds {value:.0} Power to Spells"),
+        StatType::SpellPower => format!("Adds {value:.2} Power to Spells"),
         StatType::CritChances(skill_type) => format!(
             "Adds {:.2}% Critical Hit Chances{}",
             value * 100.0,
@@ -292,8 +292,8 @@ fn format_flat_stat(stat: StatType, value: f64) -> String {
             to_skill_type_str(skill_type)
         ),
         StatType::StatusPower(status_type) => format!(
-            "Adds {:.0} Power to {}",
-            value * 100.0,
+            "Adds {:.2} Power to {}",
+            value,
             status_type_str(status_type)
         ),
         StatType::StatusDuration(status_type) => format!(
@@ -301,7 +301,19 @@ fn format_flat_stat(stat: StatType, value: f64) -> String {
             status_type_str(status_type)
         ),
         StatType::Speed(skill_type) => {
-            format!("-{:.2}s Cooldown{}", value, to_skill_type_str(skill_type))
+            if value > 0.0 {
+                format!(
+                    "Removes {:.2}s Cooldown{}",
+                    value,
+                    to_skill_type_str(skill_type)
+                )
+            } else {
+                format!(
+                    "Adds {:.2}s Cooldown{}",
+                    -value,
+                    to_skill_type_str(skill_type)
+                )
+            }
         }
         StatType::MovementSpeed => format!("-{value:.2}s Movement Cooldown"),
         StatType::GoldFind => format!("Adds {value:.0} Gold per Kill"),

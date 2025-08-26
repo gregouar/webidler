@@ -109,13 +109,20 @@ fn InGameNode(
         let node_id = node_id.clone();
 
         move |_| {
-            let meta_status = if game_context
+            let ascend_level = game_context
                 .passives_tree_state
                 .read()
                 .ascended_nodes
-                .contains_key(&node_id)
-            {
-                MetaStatus::Ascended
+                .get(&node_id)
+                .cloned()
+                .unwrap_or_default();
+
+            let meta_status = if ascend_level > 0 {
+                if node_specs.locked && ascend_level == 1 {
+                    MetaStatus::Normal
+                } else {
+                    MetaStatus::Ascended
+                }
             } else if node_specs.locked {
                 MetaStatus::Locked
             } else {
@@ -264,8 +271,8 @@ pub fn Node(
             (PurchaseStatus::Purchaseable, MetaStatus::Normal) => "darkgoldenrod",
             (PurchaseStatus::Purchased, MetaStatus::Normal) => "gold",
 
-            (PurchaseStatus::Inactive, MetaStatus::Ascended) => "cyan",
-            (PurchaseStatus::Purchaseable, MetaStatus::Ascended) => "cyan",
+            (PurchaseStatus::Inactive, MetaStatus::Ascended) => "teal",
+            (PurchaseStatus::Purchaseable, MetaStatus::Ascended) => "darkcyan",
             (PurchaseStatus::Purchased, MetaStatus::Ascended) => "cyan",
 
             (_, MetaStatus::Locked) => "red",
@@ -300,26 +307,19 @@ pub fn Node(
     let class_style = move || {
         let status = node_status.get();
         match (status.purchase_status, status.meta_status) {
+            (PurchaseStatus::Purchaseable, _) => "saturate-50",
             (_, MetaStatus::Locked) => "saturate-50 brightness-50",
             (PurchaseStatus::Inactive, _) => "saturate-50 brightness-50",
-            (PurchaseStatus::Purchaseable, _) => "saturate-50",
             _ => "",
         }
     };
 
     let icon_filter = move || {
         let status = node_status.get();
-        match status.meta_status {
-            MetaStatus::Locked => "brightness(0.3) saturate(0.5)",
+        match (status.purchase_status, status.meta_status) {
+            (PurchaseStatus::Purchaseable, _) => "",
+            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5)",
             _ => "drop-shadow(2px 2px 2px black)",
-        }
-    };
-
-    let icon_tint = move || {
-        let status = node_status.get();
-        match status.meta_status {
-            MetaStatus::Locked => "grayscale(80%) contrast(50%)",
-            _ => "",
         }
     };
 
@@ -354,9 +354,7 @@ pub fn Node(
                 y=-(24 + node_specs.size as i32 * 20) / 2
                 width=24 + node_specs.size * 20
                 height=24 + node_specs.size * 20
-                style=move || {
-                    format!("pointer-events: none; filter: {} {}", icon_filter(), icon_tint())
-                }
+                style=move || { format!("pointer-events: none; filter: {}", icon_filter()) }
             />
         </g>
     }

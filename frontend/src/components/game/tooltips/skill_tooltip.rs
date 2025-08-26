@@ -62,6 +62,17 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
             <strong class="text-lg font-bold text-purple-300">
                 {skill_specs.base.name.clone()}
             </strong>
+
+            {(!skill_specs.base.description.is_empty())
+                .then(|| {
+                    view! {
+                        <hr class="border-t border-gray-700" />
+                        <p class="text-sm italic text-gray-300 leading-snug">
+                            {skill_specs.base.description.clone()}
+                        </p>
+                    }
+                })}
+
             <hr class="border-t border-gray-700" />
 
             <p class="text-sm text-gray-400 leading-snug">
@@ -86,16 +97,6 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
             <ul class="list-none space-y-1">{targets_lines}{trigger_lines}{modifier_lines}</ul>
 
-            {(!skill_specs.base.description.is_empty())
-                .then(|| {
-                    view! {
-                        <hr class="border-t border-gray-700" />
-                        <p class="text-sm italic text-gray-300 leading-snug">
-                            {skill_specs.base.description.clone()}
-                        </p>
-                    }
-                })}
-
             {(skill_specs.next_upgrade_cost > 0.0)
                 .then(|| {
                     view! {
@@ -107,6 +108,19 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                                 {format_number(skill_specs.next_upgrade_cost)}" Gold"
                             </span>
                         </p>
+                        <hr class="border-t border-gray-700" />
+
+                        <ul>
+                            <li>
+                                <span class="text-sm text-gray-400 leading-snug">
+                                    "Next upgrade:"
+                                </span>
+                            </li>
+                            {effects_tooltip::formatted_effects_list(
+                                skill_specs.base.upgrade_effects.clone(),
+                                AffixEffectScope::Local,
+                            )}
+                        </ul>
                     }
                 })}
         </div>

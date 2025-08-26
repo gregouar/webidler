@@ -295,7 +295,10 @@ fn CharacterSlot(
                     <MenuButton class:flex-grow on:click=play_character.clone()>
                         "Play"
                     </MenuButton>
-                    <MenuButton on:click=try_delete_character>"❌"</MenuButton>
+                    <MenuButton on:click=move |ev: leptos::ev::MouseEvent| {
+                        ev.stop_propagation();
+                        try_delete_character(ev);
+                    }>"❌"</MenuButton>
                 </div>
             </div>
         </div>

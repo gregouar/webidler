@@ -83,13 +83,20 @@ fn AscendNode(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl Into
         move |_| {
             let purchase_status = PurchaseStatus::Purchaseable;
 
-            let meta_status = if town_context
+            let ascend_level = town_context
                 .passives_tree_state
                 .read()
                 .ascended_nodes
-                .contains_key(&node_id)
-            {
-                MetaStatus::Ascended
+                .get(&node_id)
+                .cloned()
+                .unwrap_or_default();
+
+            let meta_status = if ascend_level > 0 {
+                if node_specs.locked && ascend_level == 1 {
+                    MetaStatus::Normal
+                } else {
+                    MetaStatus::Ascended
+                }
             } else if node_specs.locked {
                 MetaStatus::Locked
             } else {

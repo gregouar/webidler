@@ -9,7 +9,7 @@
     "upgrade_cost": 20,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "Damage": {} },
         "modifier": "Multiplier",
         "value": 0.2
       }
@@ -39,7 +39,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "Damage": {} },
         "modifier": "Multiplier",
         "value": 0.2
       }
@@ -70,7 +70,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "Damage": {} },
         "modifier": "Multiplier",
         "value": 0.2
       }
@@ -118,7 +118,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "Damage": {} },
         "modifier": "Multiplier",
         "value": 0.2
       }
@@ -308,9 +308,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": {
-          "Damage": {}
-        },
+        "stat": { "Damage": {} },
         "modifier": "Multiplier",
         "value": 0.2
       }
