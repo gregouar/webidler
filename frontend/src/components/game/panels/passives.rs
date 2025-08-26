@@ -8,6 +8,7 @@ use shared::data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs, 
 use shared::messages::client::PurchasePassiveMessage;
 
 use crate::assets::img_asset;
+use crate::components::game::tooltips::effects_tooltip;
 use crate::components::{
     game::{game_context::GameContext, tooltips::effects_tooltip::formatted_effects_list},
     ui::{
@@ -102,23 +103,28 @@ fn InGameNode(
     node_specs: PassiveNodeSpecs,
     points_available: Memo<bool>,
 ) -> impl IntoView {
-    // TODO: bool memo locked, use also in tooltip
+    let node_level = Memo::new({
+        let game_context = expect_context::<GameContext>();
+        let node_id = node_id.clone();
+
+        move |_| {
+            game_context
+                .passives_tree_state
+                .read()
+                .ascended_nodes
+                .get(&node_id)
+                .cloned()
+                .unwrap_or_default()
+        }
+    });
 
     let node_status = Memo::new({
         let game_context = expect_context::<GameContext>();
         let node_id = node_id.clone();
 
         move |_| {
-            let ascend_level = game_context
-                .passives_tree_state
-                .read()
-                .ascended_nodes
-                .get(&node_id)
-                .cloned()
-                .unwrap_or_default();
-
-            let meta_status = if ascend_level > 0 {
-                if node_specs.locked && ascend_level == 1 {
+            let meta_status = if node_level.get() > 0 {
+                if node_specs.locked && node_level.get() == 1 {
                     MetaStatus::Normal
                 } else {
                     MetaStatus::Ascended
@@ -182,7 +188,7 @@ fn InGameNode(
         }
     };
 
-    view! { <Node node_specs node_status on_click=purchase /> }
+    view! { <Node node_specs node_status node_level on_click=purchase /> }
 }
 
 #[component]
@@ -222,6 +228,7 @@ fn InGameConnection(
 pub fn Node(
     node_specs: PassiveNodeSpecs,
     node_status: Memo<NodeStatus>,
+    node_level: Memo<u8>,
     on_click: impl Fn() + Send + Sync + 'static,
 ) -> impl IntoView {
     let fill = match node_specs.node_type {
@@ -250,7 +257,7 @@ pub fn Node(
             tooltip_context.set_content(
                 move || {
                     let node_specs = node_specs.clone();
-                    view! { <NodeTooltip node_specs=node_specs /> }.into_any()
+                    view! { <NodeTooltip node_specs=node_specs node_status node_level=node_level /> }.into_any()
                 },
                 DynamicTooltipPosition::Auto,
             );
@@ -408,7 +415,11 @@ pub fn Connection(
 }
 
 #[component]
-pub fn NodeTooltip(node_specs: Arc<PassiveNodeSpecs>) -> impl IntoView {
+fn NodeTooltip(
+    node_specs: Arc<PassiveNodeSpecs>,
+    node_status: Memo<NodeStatus>,
+    node_level: Memo<u8>,
+) -> impl IntoView {
     let effects = formatted_effects_list(node_specs.effects.clone(), AffixEffectScope::Global);
     let triggers: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
 
@@ -420,6 +431,29 @@ pub fn NodeTooltip(node_specs: Arc<PassiveNodeSpecs>) -> impl IntoView {
             <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
             <hr class="border-t border-gray-700" />
             <ul class="list-none space-y-1">{triggers}{effects}</ul>
+            {(!node_specs.upgrade_effects.is_empty())
+                .then(move || {
+                    view! {
+                        <hr class="border-t border-gray-700" />
+                        <p class="text-sm text-gray-400 leading-snug">
+                            "Level: " <span class="text-white">move || {node_level.get()}</span>
+                            " | Ascend Cost: " <span class="text-white">"1 Power Shard"</span>
+                        </p>
+                        <hr class="border-t border-gray-700" />
+
+                        <ul>
+                            <li>
+                                <span class="text-sm text-gray-400 leading-snug">
+                                    "Next ascension:"
+                                </span>
+                            </li>
+                            {effects_tooltip::formatted_effects_list(
+                                node_specs.upgrade_effects.clone(),
+                                AffixEffectScope::Global,
+                            )}
+                        </ul>
+                    }
+                })}
         </div>
     }
 }

@@ -78,21 +78,26 @@ fn PassiveSkillTree() -> impl IntoView {
 fn AscendNode(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
-    let node_status = Memo::new({
+    let node_level = Memo::new({
         let node_id = node_id.clone();
-        move |_| {
-            let purchase_status = PurchaseStatus::Purchaseable;
 
-            let ascend_level = town_context
+        move |_| {
+            town_context
                 .passives_tree_state
                 .read()
                 .ascended_nodes
                 .get(&node_id)
                 .cloned()
-                .unwrap_or_default();
+                .unwrap_or_default()
+        }
+    });
 
-            let meta_status = if ascend_level > 0 {
-                if node_specs.locked && ascend_level == 1 {
+    let node_status = Memo::new({
+        move |_| {
+            let purchase_status = PurchaseStatus::Purchaseable;
+
+            let meta_status = if node_level.get() > 0 {
+                if node_specs.locked && node_level.get() == 1 {
                     MetaStatus::Normal
                 } else {
                     MetaStatus::Ascended
@@ -125,5 +130,5 @@ fn AscendNode(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl Into
         }
     };
 
-    view! { <Node node_specs node_status on_click=purchase /> }
+    view! { <Node node_specs node_status node_level on_click=purchase /> }
 }

@@ -59,6 +59,8 @@ pub struct PassiveNodeSpecs {
 
     #[serde(default)]
     pub locked: bool,
+    #[serde(default)]
+    pub upgrade_effects: Vec<StatEffect>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
