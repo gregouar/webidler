@@ -86,7 +86,7 @@ pub fn CharacterPortrait() -> impl IntoView {
                     )
                 >
                     <img
-                        src=move || image_uri()
+                        src=image_uri
                         alt="portrait"
                         class="object-cover h-full w-full transition-all duration-[5s]"
                     />

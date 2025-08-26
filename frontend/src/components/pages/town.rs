@@ -16,7 +16,7 @@ use crate::components::{
 #[component]
 pub fn TownPage() -> impl IntoView {
     let town_context = TownContext::new();
-    provide_context(town_context.clone());
+    provide_context(town_context);
 
     let (get_character_id_storage, _, _) =
         storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
@@ -36,9 +36,6 @@ pub fn TownPage() -> impl IntoView {
 
     let fetch_data = {
         let backend = use_context::<BackendClient>().unwrap();
-        let get_jwt_storage = get_jwt_storage.clone();
-        let get_character_id_storage = get_character_id_storage.clone();
-        let town_context = town_context.clone();
 
         move || async move {
             match backend
@@ -60,10 +57,7 @@ pub fn TownPage() -> impl IntoView {
         }
     };
 
-    let initial_load = LocalResource::new({
-        let fetch_data = fetch_data.clone();
-        move || fetch_data()
-    });
+    let initial_load = LocalResource::new({ move || fetch_data() });
 
     use_interval_fn(move || spawn_local(fetch_data()), 5_000);
 
