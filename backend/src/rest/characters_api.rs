@@ -7,6 +7,7 @@ use axum::{
 use shared::{
     data::{
         area::AreaLevel,
+        passive::PassivesTreeState,
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId},
     },
     http::{
@@ -105,6 +106,7 @@ async fn get_character_details(
                     .unwrap_or_default(),
             })
             .collect(),
+        passives_tree_state: PassivesTreeState::default(),
     }))
 }
 

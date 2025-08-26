@@ -23,6 +23,17 @@ pub fn TownPage() -> impl IntoView {
 
     let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
 
+    let passives_tree_specs = LocalResource::new({
+        let backend = use_context::<BackendClient>().unwrap();
+        move || async move {
+            backend
+                .get_passives()
+                .await
+                .map(|response| response.passives_tree_specs)
+                .unwrap_or_default()
+        }
+    });
+
     let fetch_data = {
         let backend = use_context::<BackendClient>().unwrap();
         let get_jwt_storage = get_jwt_storage.clone();
@@ -37,6 +48,9 @@ pub fn TownPage() -> impl IntoView {
                 Ok(response) => {
                     town_context.character.set(response.character);
                     town_context.areas.set(response.areas);
+                    town_context
+                        .passives_tree_state
+                        .set(response.passives_tree_state);
                 }
                 Err(BackendError::Unauthorized(_) | BackendError::NotFound) => {
                     use_navigate()("/", Default::default())
@@ -62,6 +76,7 @@ pub fn TownPage() -> impl IntoView {
             }>
                 {move || Suspend::new(async move {
                     initial_load.await;
+                    town_context.passives_tree_specs.set(passives_tree_specs.await);
                     view! {
                         <HeaderMenu />
                         <div class="relative flex-1">

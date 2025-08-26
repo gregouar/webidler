@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     area::{AreaLevel, AreaSpecs},
+    passive::{PassivesTreeSpecs, PassivesTreeState},
     skill::SkillSpecs,
     user::{User, UserCharacter, UserCharacterId, UserGrindArea, UserId},
 };
@@ -76,6 +77,7 @@ pub struct GetUserCharactersResponse {
 pub struct GetCharacterDetailsResponse {
     pub character: UserCharacter,
     pub areas: Vec<UserGrindArea>,
+    pub passives_tree_state: PassivesTreeState,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -91,4 +93,9 @@ pub struct GetAreasResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GetSkillsResponse {
     pub skills: HashMap<String, SkillSpecs>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetPassivesResponse {
+    pub passives_tree_specs: PassivesTreeSpecs,
 }

@@ -35,8 +35,8 @@ pub enum MetaStatus {
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct NodeStatus {
-    purchase_status: PurchaseStatus,
-    meta_status: MetaStatus,
+    pub purchase_status: PurchaseStatus,
+    pub meta_status: MetaStatus,
 }
 
 #[component]
@@ -109,6 +109,19 @@ fn InGameNode(
         let node_id = node_id.clone();
 
         move |_| {
+            let meta_status = if game_context
+                .passives_tree_state
+                .read()
+                .ascended_nodes
+                .contains_key(&node_id)
+            {
+                MetaStatus::Ascended
+            } else if node_specs.locked {
+                MetaStatus::Locked
+            } else {
+                MetaStatus::Normal
+            };
+
             let purchase_status = if game_context
                 .passives_tree_state
                 .read()
@@ -116,7 +129,8 @@ fn InGameNode(
                 .contains(&node_id)
             {
                 PurchaseStatus::Purchased
-            } else if points_available.get()
+            } else if meta_status != MetaStatus::Locked
+                && points_available.get()
                 && (node_specs.initial_node
                     || game_context
                         .passives_tree_specs
@@ -140,19 +154,6 @@ fn InGameNode(
                 PurchaseStatus::Purchaseable
             } else {
                 PurchaseStatus::Inactive
-            };
-
-            let meta_status = if game_context
-                .passives_tree_state
-                .read()
-                .ascended_nodes
-                .contains_key(&node_id)
-            {
-                MetaStatus::Ascended
-            } else if node_specs.locked {
-                MetaStatus::Locked
-            } else {
-                MetaStatus::Normal
             };
 
             NodeStatus {
@@ -291,7 +292,7 @@ pub fn Node(
     let pointer_style = move || {
         let status = node_status.get();
         match (status.purchase_status, status.meta_status) {
-            (PurchaseStatus::Purchaseable, MetaStatus::Normal) => "cursor: pointer;",
+            (PurchaseStatus::Purchaseable, _) => "cursor: pointer;",
             _ => "",
         }
     };
@@ -329,9 +330,7 @@ pub fn Node(
             on:mouseleave=hide_tooltip
             on:click=move |_| {
                 let status = node_status.get();
-                if status.meta_status != MetaStatus::Locked
-                    && status.purchase_status == PurchaseStatus::Purchaseable
-                {
+                if status.purchase_status == PurchaseStatus::Purchaseable {
                     on_click();
                 }
             }

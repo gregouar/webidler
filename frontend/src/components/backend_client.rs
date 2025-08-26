@@ -7,9 +7,9 @@ use shared::{
         client::{CreateCharacterRequest, SignInRequest, SignUpRequest},
         server::{
             CreateCharacterResponse, DeleteCharacterResponse, ErrorResponse, GetAreasResponse,
-            GetCharacterDetailsResponse, GetSkillsResponse, GetUserCharactersResponse,
-            GetUserResponse, LeaderboardResponse, PlayersCountResponse, SignInResponse,
-            SignUpResponse,
+            GetCharacterDetailsResponse, GetPassivesResponse, GetSkillsResponse,
+            GetUserCharactersResponse, GetUserResponse, LeaderboardResponse, PlayersCountResponse,
+            SignInResponse, SignUpResponse,
         },
     },
 };
@@ -73,6 +73,10 @@ impl BackendClient {
 
     pub async fn get_skills(&self) -> Result<GetSkillsResponse, BackendError> {
         self.get("game/skills").await
+    }
+
+    pub async fn get_passives(&self) -> Result<GetPassivesResponse, BackendError> {
+        self.get("game/passives").await
     }
 
     // Auth
