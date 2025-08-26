@@ -188,7 +188,7 @@ fn InGameNode(
         }
     };
 
-    view! { <Node node_specs node_status node_level on_click=purchase /> }
+    view! { <Node node_specs node_status node_level on_click=purchase show_upgrade=false /> }
 }
 
 #[component]
@@ -229,6 +229,7 @@ pub fn Node(
     node_specs: PassiveNodeSpecs,
     node_status: Memo<NodeStatus>,
     node_level: Memo<u8>,
+    show_upgrade: bool,
     on_click: impl Fn() + Send + Sync + 'static,
 ) -> impl IntoView {
     let fill = match node_specs.node_type {
@@ -257,7 +258,7 @@ pub fn Node(
             tooltip_context.set_content(
                 move || {
                     let node_specs = node_specs.clone();
-                    view! { <NodeTooltip node_specs=node_specs node_status node_level=node_level /> }.into_any()
+                    view! { <NodeTooltip node_specs node_level show_upgrade /> }.into_any()
                 },
                 DynamicTooltipPosition::Auto,
             );
@@ -417,11 +418,69 @@ pub fn Connection(
 #[component]
 fn NodeTooltip(
     node_specs: Arc<PassiveNodeSpecs>,
-    node_status: Memo<NodeStatus>,
     node_level: Memo<u8>,
+    show_upgrade: bool,
 ) -> impl IntoView {
     let effects = formatted_effects_list(node_specs.effects.clone(), AffixEffectScope::Global);
     let triggers: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
+
+    let node_specs_locked = node_specs.locked;
+    let is_locked = move || node_specs_locked && node_level.get() == 0;
+
+    let locked_text = move || {
+        is_locked().then(|| {
+            view! {
+                <hr class="border-t border-gray-700" />
+                <ul class="list-none space-y-1">
+                    <li class="text-blue-400 text-sm leading-snug text-red-500">"Locked"</li>
+                </ul>
+            }
+        })
+    };
+
+    let upgrade_text = {
+        let upgrade_effects = node_specs.upgrade_effects.clone();
+        move || {
+            if !show_upgrade {
+                None
+            } else if is_locked() {
+                Some(
+                    view! {
+                        <hr class="border-t border-gray-700" />
+                        <ul>
+                            <li>
+                                <span class="text-sm text-gray-400 leading-snug">
+                                    "Ascend for 1 Power Shard to Unlock"
+                                </span>
+                            </li>
+                        </ul>
+                    }
+                    .into_any(),
+                )
+            } else if !upgrade_effects.is_empty() {
+                Some(view! {
+                    <hr class="border-t border-gray-700" />
+                    <p class="text-sm text-gray-400 leading-snug">
+                        "Level: " <span class="text-white">{node_level}</span> " | Ascend Cost: "
+                        <span class="text-white">"1 Power Shard"</span>
+                    </p>
+                    <hr class="border-t border-gray-700" />
+
+                    <ul>
+                        <li>
+                            <span class="text-sm text-gray-400 leading-snug">"Ascend to get:"</span>
+                        </li>
+                        {effects_tooltip::formatted_effects_list(
+                            upgrade_effects.clone(),
+                            AffixEffectScope::Global,
+                        )}
+                    </ul>
+                }.into_any())
+            } else {
+                None
+            }
+        }
+    };
 
     view! {
         <div class="
@@ -431,29 +490,8 @@ fn NodeTooltip(
             <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
             <hr class="border-t border-gray-700" />
             <ul class="list-none space-y-1">{triggers}{effects}</ul>
-            {(!node_specs.upgrade_effects.is_empty())
-                .then(move || {
-                    view! {
-                        <hr class="border-t border-gray-700" />
-                        <p class="text-sm text-gray-400 leading-snug">
-                            "Level: " <span class="text-white">move || {node_level.get()}</span>
-                            " | Ascend Cost: " <span class="text-white">"1 Power Shard"</span>
-                        </p>
-                        <hr class="border-t border-gray-700" />
-
-                        <ul>
-                            <li>
-                                <span class="text-sm text-gray-400 leading-snug">
-                                    "Next ascension:"
-                                </span>
-                            </li>
-                            {effects_tooltip::formatted_effects_list(
-                                node_specs.upgrade_effects.clone(),
-                                AffixEffectScope::Global,
-                            )}
-                        </ul>
-                    }
-                })}
+            {locked_text}
+            {upgrade_text}
         </div>
     }
 }

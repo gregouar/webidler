@@ -15,6 +15,13 @@
             "modifier": "Multiplier",
             "value": 0.5
           }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
         ]
       },
 

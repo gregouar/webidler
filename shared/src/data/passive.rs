@@ -61,6 +61,7 @@ pub struct PassiveNodeSpecs {
     pub locked: bool,
     #[serde(default)]
     pub upgrade_effects: Vec<StatEffect>,
+    // TODO: unlocked & ascend costs?
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]

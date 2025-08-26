@@ -34,8 +34,7 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
 fn PassiveSkillTree() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
-    // let points_available =
-    //     Memo::new(move |_| game_context.player_resources.read().passive_points > 0);
+    let points_available = Memo::new(move |_| town_context.character.read().resource_shards);
 
     let nodes_specs = Arc::new(
         town_context
@@ -68,14 +67,18 @@ fn PassiveSkillTree() -> impl IntoView {
                 key=|(id, _)| id.clone()
                 let((id, node))
             >
-                <AscendNode node_id=id node_specs=node />
+                <AscendNode node_id=id node_specs=node points_available=points_available />
             </For>
         </Pannable>
     }
 }
 
 #[component]
-fn AscendNode(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl IntoView {
+fn AscendNode(
+    node_id: PassiveNodeId,
+    node_specs: PassiveNodeSpecs,
+    points_available: Memo<f64>,
+) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     let node_level = Memo::new({
@@ -93,8 +96,15 @@ fn AscendNode(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl Into
     });
 
     let node_status = Memo::new({
+        let upgradable = !node_specs.upgrade_effects.is_empty();
         move |_| {
-            let purchase_status = PurchaseStatus::Purchaseable;
+            let purchase_status = if points_available.get() > 0.0
+                && (upgradable || (node_specs.locked && node_level.get() == 0))
+            {
+                PurchaseStatus::Purchaseable
+            } else {
+                PurchaseStatus::Inactive
+            };
 
             let meta_status = if node_level.get() > 0 {
                 if node_specs.locked && node_level.get() == 1 {
@@ -130,5 +140,5 @@ fn AscendNode(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl Into
         }
     };
 
-    view! { <Node node_specs node_status node_level on_click=purchase /> }
+    view! { <Node node_specs node_status node_level on_click=purchase show_upgrade=true /> }
 }

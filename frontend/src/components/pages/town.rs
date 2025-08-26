@@ -57,7 +57,7 @@ pub fn TownPage() -> impl IntoView {
         }
     };
 
-    let initial_load = LocalResource::new({ move || fetch_data() });
+    let initial_load = LocalResource::new(move || fetch_data());
 
     use_interval_fn(move || spawn_local(fetch_data()), 5_000);
 
