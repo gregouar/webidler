@@ -877,6 +877,13 @@
             "value": -1.0
           }
         ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ],
         "locked": true
       },
 

@@ -2,16 +2,37 @@ use leptos::{html::*, prelude::*};
 
 use std::sync::Arc;
 
-use shared::data::passive::{PassiveNodeId, PassiveNodeSpecs};
+use shared::data::passive::{PassiveNodeId, PassiveNodeSpecs, PassivesTreeState};
 
 use crate::components::{
     game::panels::passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
     town::TownContext,
-    ui::{buttons::CloseButton, menu_panel::MenuPanel, pannable::Pannable},
+    ui::{
+        buttons::{CloseButton, MenuButton},
+        confirm::ConfirmContext,
+        menu_panel::MenuPanel,
+        pannable::Pannable,
+    },
 };
 
 #[component]
 pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+
+    let ascension_cost = RwSignal::new(0.0);
+    let passives_tree_state = RwSignal::new(PassivesTreeState::default());
+
+    let reset = move || {
+        ascension_cost.set(0.0);
+        passives_tree_state.set(town_context.passives_tree_state.get_untracked());
+    };
+    // Reset temporary ascension on opening
+    Effect::new(move || {
+        if open.get() {
+            reset();
+        }
+    });
+
     view! {
         <MenuPanel open=open>
             <div class="w-full p-4">
@@ -20,10 +41,24 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
                         <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
                             "Passive Skills "
                         </span>
-                        <CloseButton on:click=move |_| open.set(false) />
+
+                        <div class="flex items-center gap-2">
+                            <ResetButton />
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <MenuButton
+                                on:click=move |_| reset()
+                                disabled=Signal::derive(move || ascension_cost.get() == 0.0)
+                            >
+                                "Cancel"
+                            </MenuButton>
+                            <ConfirmButton passives_tree_state ascension_cost open />
+                            <CloseButton on:click=move |_| open.set(false) />
+                        </div>
                     </div>
 
-                    <PassiveSkillTree />
+                    <PassiveSkillTree passives_tree_state ascension_cost />
                 </div>
             </div>
         </MenuPanel>
@@ -31,10 +66,54 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
 }
 
 #[component]
-fn PassiveSkillTree() -> impl IntoView {
+fn ConfirmButton(
+    passives_tree_state: RwSignal<PassivesTreeState>,
+    ascension_cost: RwSignal<f64>,
+    open: RwSignal<bool>,
+) -> impl IntoView {
+    let confirm_context = expect_context::<ConfirmContext>();
+
+    let ascend = Arc::new(move || open.set(false));
+
+    let try_ascend = move |_| {
+        (confirm_context.confirm)(
+            format! {"Do you confirm Ascension for {} Power Shards?",ascension_cost.get() },
+            ascend.clone(),
+        );
+    };
+
+    let disabled = Signal::derive(move || ascension_cost.get() == 0.0);
+
+    view! {
+        <MenuButton on:click=try_ascend disabled=disabled>
+            "Confirm Ascension"
+        </MenuButton>
+    }
+}
+
+#[component]
+fn ResetButton() -> impl IntoView {
+    let confirm_context = expect_context::<ConfirmContext>();
+
+    let reset = Arc::new(move || {});
+
+    let try_reset = move |_| {
+        (confirm_context.confirm)("Fully Respec Ascension?".to_string(), reset.clone());
+    };
+
+    view! { <MenuButton on:click=try_reset>"Respec Ascension"</MenuButton> }
+}
+
+#[component]
+fn PassiveSkillTree(
+    passives_tree_state: RwSignal<PassivesTreeState>,
+    ascension_cost: RwSignal<f64>,
+) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
-    let points_available = Memo::new(move |_| town_context.character.read().resource_shards);
+    let points_available = Memo::new(move |_| {
+        (town_context.character.read().resource_shards - ascension_cost.get()).round()
+    });
 
     let nodes_specs = Arc::new(
         town_context
@@ -45,7 +124,7 @@ fn PassiveSkillTree() -> impl IntoView {
     );
 
     // Fake amount of connections to have neatly rendered skill tree
-    let amount_connections = Memo::new(|_| 1);
+    let amount_connections = Memo::new(|_| 0);
 
     view! {
         <Pannable>
@@ -67,7 +146,13 @@ fn PassiveSkillTree() -> impl IntoView {
                 key=|(id, _)| id.clone()
                 let((id, node))
             >
-                <AscendNode node_id=id node_specs=node points_available=points_available />
+                <AscendNode
+                    node_id=id
+                    node_specs=node
+                    points_available
+                    ascension_cost
+                    passives_tree_state
+                />
             </For>
         </Pannable>
     }
@@ -78,15 +163,14 @@ fn AscendNode(
     node_id: PassiveNodeId,
     node_specs: PassiveNodeSpecs,
     points_available: Memo<f64>,
+    ascension_cost: RwSignal<f64>,
+    passives_tree_state: RwSignal<PassivesTreeState>,
 ) -> impl IntoView {
-    let town_context = expect_context::<TownContext>();
-
     let node_level = Memo::new({
         let node_id = node_id.clone();
 
         move |_| {
-            town_context
-                .passives_tree_state
+            passives_tree_state
                 .read()
                 .ascended_nodes
                 .get(&node_id)
@@ -128,15 +212,14 @@ fn AscendNode(
     let purchase = {
         let node_id = node_id.clone();
         move || {
-            town_context
-                .passives_tree_state
-                .update(|passives_tree_state| {
-                    let entry = passives_tree_state
-                        .ascended_nodes
-                        .entry(node_id.clone())
-                        .or_default();
-                    *entry = entry.saturating_add(1);
-                });
+            passives_tree_state.update(|passives_tree_state| {
+                let entry = passives_tree_state
+                    .ascended_nodes
+                    .entry(node_id.clone())
+                    .or_default();
+                *entry = entry.saturating_add(1);
+            });
+            ascension_cost.update(|ascension_cost| *ascension_cost += 1.0); // TODO: Ascend cost?
         }
     };
 

@@ -421,8 +421,8 @@ fn NodeTooltip(
     node_level: Memo<u8>,
     show_upgrade: bool,
 ) -> impl IntoView {
-    let effects = formatted_effects_list(node_specs.effects.clone(), AffixEffectScope::Global);
-    let triggers: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
+    let effects_text = formatted_effects_list(node_specs.effects.clone(), AffixEffectScope::Global);
+    let triggers_text: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
 
     let node_specs_locked = node_specs.locked;
     let is_locked = move || node_specs_locked && node_level.get() == 0;
@@ -489,7 +489,7 @@ fn NodeTooltip(
         ">
             <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
             <hr class="border-t border-gray-700" />
-            <ul class="list-none space-y-1">{triggers}{effects}</ul>
+            <ul class="list-none space-y-1">{triggers_text}{effects_text}</ul>
             {locked_text}
             {upgrade_text}
         </div>
