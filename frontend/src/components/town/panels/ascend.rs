@@ -42,9 +42,9 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
                             "Passive Skills "
                         </span>
 
-                        <div class="flex items-center gap-2">
-                            <ResetButton />
-                        </div>
+                        <span class="text-gray-300 text-sm">
+                            "Ascension Cost: "{ascension_cost}" Power Shards"
+                        </span>
 
                         <div class="flex items-center gap-2">
                             <MenuButton
@@ -59,6 +59,14 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
                     </div>
 
                     <PassiveSkillTree passives_tree_state ascension_cost />
+
+                    <div class="px-4 relative z-10 flex items-center justify-between">
+
+                        <div class="flex items-center gap-2">
+                            <ResetButton />
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </MenuPanel>
