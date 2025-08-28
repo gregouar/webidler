@@ -1,12 +1,12 @@
-use sqlx::FromRow;
+use sqlx::{Executor, FromRow};
 
 use shared::data::{
     passive::PassivesTreeAscension, player::PlayerInventory, user::UserCharacterId,
 };
 
-use crate::constants::CHARACTER_DATA_VERSION;
+use crate::{constants::CHARACTER_DATA_VERSION, db::pool::Database};
 
-use super::{pool::DbPool, utc_datetime::UtcDateTime};
+use super::utc_datetime::UtcDateTime;
 
 #[derive(Debug, FromRow)]
 #[allow(dead_code)]
@@ -21,22 +21,28 @@ struct CharacterDataEntry {
     pub updated_at: UtcDateTime,
 }
 
-pub async fn save_character_inventory(
-    db_pool: &DbPool,
+pub async fn save_character_inventory<'c, E>(
+    executor: E,
     character_id: &UserCharacterId,
     inventory: &PlayerInventory,
-) -> anyhow::Result<()> {
+) -> anyhow::Result<()>
+where
+    E: Executor<'c, Database = Database>,
+{
     Ok(
-        upsert_character_inventory_data(db_pool, character_id, rmp_serde::to_vec(inventory)?)
+        upsert_character_inventory_data(executor, character_id, rmp_serde::to_vec(inventory)?)
             .await?,
     )
 }
 
-async fn upsert_character_inventory_data(
-    db_pool: &DbPool,
+async fn upsert_character_inventory_data<'c, E>(
+    executor: E,
     character_id: &UserCharacterId,
     inventory_data: Vec<u8>,
-) -> Result<(), sqlx::Error> {
+) -> Result<(), sqlx::Error>
+where
+    E: Executor<'c, Database = Database>,
+{
     sqlx::query!(
         "INSERT INTO characters_data (character_id, data_version, inventory_data) VALUES ($1, $2, $3)
          ON CONFLICT(character_id) DO UPDATE SET 
@@ -47,25 +53,34 @@ async fn upsert_character_inventory_data(
         CHARACTER_DATA_VERSION,
         inventory_data
     )
-    .execute(db_pool)
+    .execute(executor)
     .await?;
 
     Ok(())
 }
 
-pub async fn save_character_passives(
-    db_pool: &DbPool,
+pub async fn save_character_passives<'c, E>(
+    executor: E,
     character_id: &UserCharacterId,
     passives: &PassivesTreeAscension,
-) -> anyhow::Result<()> {
-    Ok(upsert_character_passives_data(db_pool, character_id, rmp_serde::to_vec(passives)?).await?)
+) -> anyhow::Result<()>
+where
+    E: Executor<'c, Database = Database>,
+{
+    Ok(
+        upsert_character_passives_data(executor, character_id, rmp_serde::to_vec(passives)?)
+            .await?,
+    )
 }
 
-async fn upsert_character_passives_data(
-    db_pool: &DbPool,
+async fn upsert_character_passives_data<'c, E>(
+    executor: E,
     character_id: &UserCharacterId,
     passives_data: Vec<u8>,
-) -> Result<(), sqlx::Error> {
+) -> Result<(), sqlx::Error>
+where
+    E: Executor<'c, Database = Database>,
+{
     sqlx::query!(
         "INSERT INTO characters_data (character_id, data_version, passives_data) VALUES ($1, $2, $3)
          ON CONFLICT(character_id) DO UPDATE SET 
@@ -76,17 +91,20 @@ async fn upsert_character_passives_data(
         CHARACTER_DATA_VERSION,
         passives_data
     )
-    .execute(db_pool)
+    .execute(executor)
     .await?;
 
     Ok(())
 }
 
-pub async fn load_character_data(
-    db_pool: &DbPool,
+pub async fn load_character_data<'c, E>(
+    executor: E,
     character_id: &UserCharacterId,
-) -> anyhow::Result<Option<(PlayerInventory, PassivesTreeAscension)>> {
-    let character_data = read_character_data(db_pool, character_id).await?;
+) -> anyhow::Result<Option<(PlayerInventory, PassivesTreeAscension)>>
+where
+    E: Executor<'c, Database = Database>,
+{
+    let character_data = read_character_data(executor, character_id).await?;
     if let Some(character_data) = character_data {
         Ok(Some((
             rmp_serde::from_slice::<PlayerInventory>(&character_data.inventory_data)?,
@@ -103,10 +121,13 @@ pub async fn load_character_data(
     }
 }
 
-async fn read_character_data(
-    db_pool: &DbPool,
+async fn read_character_data<'c, E>(
+    executor: E,
     character_id: &UserCharacterId,
-) -> Result<Option<CharacterDataEntry>, sqlx::Error> {
+) -> Result<Option<CharacterDataEntry>, sqlx::Error>
+where
+    E: Executor<'c, Database = Database>,
+{
     sqlx::query_as!(
         CharacterDataEntry,
         r#"
@@ -121,6 +142,6 @@ async fn read_character_data(
          "#,
         character_id
     )
-    .fetch_optional(db_pool)
+    .fetch_optional(executor)
     .await
 }

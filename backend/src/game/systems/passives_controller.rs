@@ -1,5 +1,7 @@
+use std::u8;
+
 use shared::data::{
-    passive::{PassiveNodeId, PassivesTreeSpecs, PassivesTreeState},
+    passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
     player::PlayerResources,
     stat_effect::EffectsMap,
 };
@@ -52,4 +54,34 @@ pub fn generate_effects_map_from_passives<'a>(
                 )
             })
         })
+}
+
+pub fn compute_ascension_cost(passive_tree_ascension: &PassivesTreeAscension) -> f64 {
+    passive_tree_ascension
+        .ascended_nodes
+        .values()
+        .map(|v| *v as f64)
+        .sum()
+}
+
+pub fn validate_ascension(
+    passives_tree_specs: &PassivesTreeSpecs,
+    passive_tree_ascension: &PassivesTreeAscension,
+) -> anyhow::Result<f64> {
+    let mut cost = 0.0;
+
+    for (node_id, level) in passive_tree_ascension.ascended_nodes.iter() {
+        if *level
+            > passives_tree_specs
+                .nodes
+                .get(node_id)
+                .map(|node_specs| node_specs.max_upgrade_level.unwrap_or(u8::MAX))
+                .unwrap_or_default()
+        {
+            return Err(anyhow::anyhow!("invalid ascension"));
+        }
+
+        cost += (*level) as f64;
+    }
+    Ok(cost)
 }
