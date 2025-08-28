@@ -4,6 +4,14 @@ use shared::data::{
     passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
     player::PlayerResources,
     stat_effect::EffectsMap,
+    user::UserCharacterId,
+};
+use sqlx::Transaction;
+
+use crate::{
+    app_state::MasterStore,
+    db::{self, pool::Database},
+    rest::AppError,
 };
 
 pub fn purchase_node(
@@ -54,6 +62,44 @@ pub fn generate_effects_map_from_passives<'a>(
                 )
             })
         })
+}
+
+pub async fn update_ascension(
+    tx: &mut Transaction<'_, Database>,
+    master_store: &MasterStore,
+    character_id: &UserCharacterId,
+    resource_shards: f64,
+    resource_gems: f64,
+    passives_tree_ascension: &PassivesTreeAscension,
+) -> Result<(), AppError> {
+    let (_, prev_ascension) = db::characters_data::load_character_data(&mut **tx, &character_id)
+        .await?
+        .unwrap_or_default();
+
+    let cost = validate_ascension(
+        master_store
+            .passives_store
+            .get("default")
+            .ok_or(anyhow::anyhow!("passives tree not found"))?,
+        &passives_tree_ascension,
+    )? - compute_ascension_cost(&prev_ascension);
+
+    if cost as f64 > resource_shards {
+        return Err(AppError::UserError("not enough power shards".to_string()));
+    }
+
+    db::characters::update_character_resources(
+        &mut **tx,
+        &character_id,
+        resource_gems,
+        resource_shards - cost,
+    )
+    .await?;
+
+    db::characters_data::save_character_passives(&mut **tx, character_id, passives_tree_ascension)
+        .await?;
+
+    Ok(())
 }
 
 pub fn compute_ascension_cost(passive_tree_ascension: &PassivesTreeAscension) -> f64 {

@@ -97,34 +97,12 @@ pub async fn post_ascend_passives(
         return Err(AppError::UserError("character is grinding".to_string()));
     }
 
-    let (_, prev_ascension) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .unwrap_or_default();
-
-    let cost = passives_controller::validate_ascension(
-        master_store
-            .passives_store
-            .get("default")
-            .ok_or(anyhow::anyhow!("passives tree not found"))?,
-        &payload.passives_tree_ascension,
-    )? - passives_controller::compute_ascension_cost(&prev_ascension);
-
-    if cost as f64 > character.resource_shards {
-        return Err(AppError::UserError("not enough power shards".to_string()));
-    }
-
-    db::characters::update_character_resources(
-        &mut *tx,
-        &character.character_id,
+    passives_controller::update_ascension(
+        &mut tx,
+        &master_store,
+        &payload.character_id,
+        character.resource_shards,
         character.resource_gems,
-        character.resource_shards - cost,
-    )
-    .await?;
-
-    db::characters_data::save_character_passives(
-        &mut *tx,
-        &character.character_id,
         &payload.passives_tree_ascension,
     )
     .await?;
