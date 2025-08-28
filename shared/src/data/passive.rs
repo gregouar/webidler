@@ -61,6 +61,8 @@ pub struct PassiveNodeSpecs {
     pub locked: bool,
     #[serde(default)]
     pub upgrade_effects: Vec<StatEffect>,
+    #[serde(default)]
+    pub max_upgrade_level: Option<u8>,
     // TODO: unlocked & ascend costs?
 }
 

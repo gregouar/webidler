@@ -6,6 +6,7 @@ use shared::data::{
 
 #[derive(Clone, Copy)]
 pub struct TownContext {
+    pub token: RwSignal<String>,
     pub character: RwSignal<UserCharacter>,
     pub areas: RwSignal<Vec<UserGrindArea>>,
     // TODO: Add inventory, ascendance, etc?
@@ -26,6 +27,7 @@ impl Default for TownContext {
 impl TownContext {
     pub fn new() -> Self {
         TownContext {
+            token: RwSignal::new(Default::default()),
             character: RwSignal::new(Default::default()),
             areas: RwSignal::new(Vec::new()),
             passives_tree_specs: RwSignal::new(Default::default()),

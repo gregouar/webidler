@@ -4,12 +4,12 @@ use std::time::Duration;
 use shared::{
     data::user::{UserCharacterId, UserId},
     http::{
-        client::{CreateCharacterRequest, SignInRequest, SignUpRequest},
+        client::{AscendPassivesRequest, CreateCharacterRequest, SignInRequest, SignUpRequest},
         server::{
-            CreateCharacterResponse, DeleteCharacterResponse, ErrorResponse, GetAreasResponse,
-            GetCharacterDetailsResponse, GetPassivesResponse, GetSkillsResponse,
-            GetUserCharactersResponse, GetUserResponse, LeaderboardResponse, PlayersCountResponse,
-            SignInResponse, SignUpResponse,
+            AscendPassivesResponse, CreateCharacterResponse, DeleteCharacterResponse,
+            ErrorResponse, GetAreasResponse, GetCharacterDetailsResponse, GetPassivesResponse,
+            GetSkillsResponse, GetUserCharactersResponse, GetUserResponse, LeaderboardResponse,
+            PlayersCountResponse, SignInResponse, SignUpResponse,
         },
     },
 };
@@ -77,6 +77,14 @@ impl BackendClient {
 
     pub async fn get_passives(&self) -> Result<GetPassivesResponse, BackendError> {
         self.get("game/passives").await
+    }
+
+    pub async fn post_ascend_passives(
+        &self,
+        token: &str,
+        request: &AscendPassivesRequest,
+    ) -> Result<AscendPassivesResponse, BackendError> {
+        self.post_auth("game/passives", token, request).await
     }
 
     // Auth

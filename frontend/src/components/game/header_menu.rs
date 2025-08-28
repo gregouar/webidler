@@ -85,12 +85,14 @@ pub fn HeaderMenu() -> impl IntoView {
                     value=gold
                 />
                 <ResourceCounter
+                    class:text-violet-200
                     icon="ui/gems.webp"
                     name="Gems"
                     description="To buy items in the market between grinds."
                     value=gems
                 />
                 <ResourceCounter
+                    class:text-cyan-200
                     icon="ui/power_shard.webp"
                     name="Power Shards"
                     description="To permanently increase power of passive skills."

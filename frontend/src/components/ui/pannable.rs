@@ -7,12 +7,22 @@ pub fn Pannable(children: Children) -> impl IntoView {
     let zoom = RwSignal::new(1.0f64);
 
     let on_mouse_down = move |ev: web_sys::MouseEvent| {
+        ev.stop_propagation();
         dragging.set(Some((ev.client_x() as f64, ev.client_y() as f64)));
     };
 
-    let on_mouse_up = move |_| dragging.set(None);
+    // let on_mouse_up = move |_| dragging.set(None);
 
-    let on_mouse_move = {
+    window_event_listener(leptos::ev::mouseup, {
+        let dragging = dragging.clone();
+        move |_| {
+            dragging.set(None);
+        }
+    });
+
+    window_event_listener(leptos::ev::mousemove, {
+        let offset = offset.clone();
+        let dragging = dragging.clone();
         move |ev: web_sys::MouseEvent| {
             if let Some((last_x, last_y)) = dragging.get() {
                 let dx = ev.client_x() as f64 - last_x;
@@ -24,7 +34,21 @@ pub fn Pannable(children: Children) -> impl IntoView {
                 dragging.set(Some((ev.client_x() as f64, ev.client_y() as f64)));
             }
         }
-    };
+    });
+
+    // let on_mouse_move = {
+    //     move |ev: web_sys::MouseEvent| {
+    //         if let Some((last_x, last_y)) = dragging.get() {
+    //             let dx = ev.client_x() as f64 - last_x;
+    //             let dy = ev.client_y() as f64 - last_y;
+    //             offset.update(|(x, y)| {
+    //                 *x += dx;
+    //                 *y += dy;
+    //             });
+    //             dragging.set(Some((ev.client_x() as f64, ev.client_y() as f64)));
+    //         }
+    //     }
+    // };
 
     let on_wheel = {
         move |ev: web_sys::WheelEvent| {
@@ -44,8 +68,8 @@ pub fn Pannable(children: Children) -> impl IntoView {
         <div
             on:wheel=on_wheel
             on:mousedown=on_mouse_down
-            on:mouseup=on_mouse_up
-            on:mousemove=on_mouse_move
+            // on:mouseup=on_mouse_up
+            // on:mousemove=on_mouse_move
             class="w-full aspect-[5/2] overflow-hidden bg-neutral-900"
         >
             <svg

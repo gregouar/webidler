@@ -99,3 +99,6 @@ pub struct GetSkillsResponse {
 pub struct GetPassivesResponse {
     pub passives_tree_specs: PassivesTreeSpecs,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct AscendPassivesResponse {}

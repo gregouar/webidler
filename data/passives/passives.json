@@ -22,7 +22,8 @@
             "modifier": "Multiplier",
             "value": 0.25
           }
-        ]
+        ],
+        "max_upgrade_level": 5
       },
 
       "gold_l_1": {
@@ -37,7 +38,15 @@
             "modifier": "Multiplier",
             "value": 0.25
           }
-        ]
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ],
+        "max_upgrade_level": 1
       },
       "gold_r_1": {
         "name": "Gold",

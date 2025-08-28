@@ -246,8 +246,6 @@ pub fn Node(
         PassiveNodeType::Status => "#3ea9a4ff",
     };
 
-    // TODO: bool memo locked, use also in tooltip
-
     let node_specs = Arc::new(node_specs);
 
     let show_tooltip = {
@@ -421,13 +419,20 @@ fn NodeTooltip(
     node_level: Memo<u8>,
     show_upgrade: bool,
 ) -> impl IntoView {
-    let effects_text = formatted_effects_list(
-        (&node_specs.aggregate_effects(node_level.get_untracked())).into(),
-        AffixEffectScope::Global,
-    );
-    let triggers_text: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
+    let effects_text = {
+        let node_specs = node_specs.clone();
+        move || {
+            formatted_effects_list(
+                (&node_specs.aggregate_effects(node_level.get())).into(),
+                AffixEffectScope::Global,
+            )
+        }
+    };
 
     let node_specs_locked = node_specs.locked;
+    let max_upgrade_level = node_specs.max_upgrade_level.clone();
+    let triggers_text: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
+
     let is_locked = move || node_specs_locked && node_level.get() == 0;
 
     let locked_text = move || {
@@ -453,7 +458,7 @@ fn NodeTooltip(
                         <ul>
                             <li>
                                 <span class="text-sm text-gray-400 leading-snug">
-                                    "Ascend for 1 Power Shard to Unlock"
+                                    "Ascend to Unlock"
                                 </span>
                             </li>
                         </ul>
@@ -464,7 +469,10 @@ fn NodeTooltip(
                 Some(view! {
                     <hr class="border-t border-gray-700" />
                     <p class="text-sm text-gray-400 leading-snug">
-                        "Level: " <span class="text-white">{node_level}</span> " | Ascend Cost: "
+                        "Level: " <span class="text-white">{node_level}</span>
+                        {max_upgrade_level
+                            .map(|max_upgrade_level| format!("/{}", max_upgrade_level))
+                            .unwrap_or_default()} " | Ascend Cost: "
                         <span class="text-white">"1 Power Shard"</span>
                     </p>
                     <hr class="border-t border-gray-700" />

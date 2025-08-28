@@ -62,17 +62,6 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
             <strong class="text-lg font-bold text-purple-300">
                 {skill_specs.base.name.clone()}
             </strong>
-
-            {(!skill_specs.base.description.is_empty())
-                .then(|| {
-                    view! {
-                        <hr class="border-t border-gray-700" />
-                        <p class="text-sm italic text-gray-300 leading-snug">
-                            {skill_specs.base.description.clone()}
-                        </p>
-                    }
-                })}
-
             <hr class="border-t border-gray-700" />
 
             <p class="text-sm text-gray-400 leading-snug">
@@ -101,15 +90,6 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                 .then(|| {
                     view! {
                         <hr class="border-t border-gray-700" />
-                        <p class="text-sm text-gray-400 leading-snug">
-                            "Level: " <span class="text-white">{skill_specs.upgrade_level}</span>
-                            " | Upgrade Cost: "
-                            <span class="text-white">
-                                {format_number(skill_specs.next_upgrade_cost)}" Gold"
-                            </span>
-                        </p>
-                        <hr class="border-t border-gray-700" />
-
                         <ul>
                             <li>
                                 <span class="text-sm text-gray-400 leading-snug">
@@ -121,6 +101,25 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                                 AffixEffectScope::Local,
                             )}
                         </ul>
+
+                        <hr class="border-t border-gray-700" />
+                        <p class="text-sm text-gray-400 leading-snug">
+                            "Level: " <span class="text-white">{skill_specs.upgrade_level}</span>
+                            " | Upgrade Cost: "
+                            <span class="text-white">
+                                {format_number(skill_specs.next_upgrade_cost)}" Gold"
+                            </span>
+                        </p>
+                    }
+                })}
+
+            {(!skill_specs.base.description.is_empty())
+                .then(|| {
+                    view! {
+                        <hr class="border-t border-gray-700" />
+                        <p class="text-sm italic text-gray-300 leading-snug">
+                            {skill_specs.base.description.clone()}
+                        </p>
                     }
                 })}
         </div>

@@ -1,10 +1,14 @@
-use leptos::{html::*, prelude::*};
+use leptos::{html::*, prelude::*, task::spawn_local};
 
 use std::sync::Arc;
 
-use shared::data::passive::{PassiveNodeId, PassiveNodeSpecs, PassivesTreeState};
+use shared::{
+    data::passive::{PassiveNodeId, PassiveNodeSpecs, PassivesTreeState},
+    http::client::AscendPassivesRequest,
+};
 
 use crate::components::{
+    backend_client::BackendClient,
     game::panels::passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
     town::TownContext,
     ui::{
@@ -42,8 +46,9 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
                             "Passive Skills "
                         </span>
 
-                        <span class="text-gray-300 text-sm">
-                            "Ascension Cost: "{ascension_cost}" Power Shards"
+                        <span class="text-gray-300">
+                            "Ascension Cost: "
+                            <span class="text-cyan-200">{ascension_cost}" Power Shards"</span>
                         </span>
 
                         <div class="flex items-center gap-2">
@@ -81,7 +86,25 @@ fn ConfirmButton(
 ) -> impl IntoView {
     let confirm_context = expect_context::<ConfirmContext>();
 
-    let ascend = Arc::new(move || open.set(false));
+    let backend = expect_context::<BackendClient>();
+    let town_context = expect_context::<TownContext>();
+    let ascend = Arc::new(move || {
+        spawn_local({
+            async move {
+                // TODO:Toast error
+                let _ = backend
+                    .post_ascend_passives(
+                        &town_context.token.get(),
+                        &AscendPassivesRequest {
+                            character_id: town_context.character.read().character_id.clone(),
+                            passives_tree_state: passives_tree_state.get(),
+                        },
+                    )
+                    .await;
+            }
+        });
+        open.set(false);
+    });
 
     let try_ascend = move |_| {
         (confirm_context.confirm)(
@@ -187,9 +210,16 @@ fn AscendNode(
         }
     });
 
+    let max_upgrade_level = if node_specs.upgrade_effects.is_empty() {
+        0
+    } else {
+        node_specs.max_upgrade_level.unwrap_or(u8::MAX)
+    };
+
     let node_status = Memo::new({
-        let upgradable = !node_specs.upgrade_effects.is_empty();
         move |_| {
+            let upgradable = max_upgrade_level > node_level.get();
+
             let purchase_status = if points_available.get() > 0.0
                 && (upgradable || (node_specs.locked && node_level.get() == 0))
             {

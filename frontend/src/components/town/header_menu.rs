@@ -32,12 +32,14 @@ pub fn HeaderMenu() -> impl IntoView {
         <div class="relative z-50 w-full flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
                 <ResourceCounter
+                    class:text-violet-200
                     icon="ui/gems.webp"
                     name="Gems"
                     description="To buy items in the market between grinds."
                     value=gems
                 />
                 <ResourceCounter
+                    class:text-cyan-200
                     icon="ui/power_shard.webp"
                     name="Power Shards"
                     description="To permanently increase power of passive skills."
