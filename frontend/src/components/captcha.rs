@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use leptos::wasm_bindgen::{JsCast, JsValue, closure::Closure};
+use leptos::wasm_bindgen::{closure::Closure, JsCast, JsValue};
 use leptos::web_sys::{js_sys, window};
 use leptos::*;
 

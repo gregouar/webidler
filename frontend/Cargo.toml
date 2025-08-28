@@ -28,3 +28,4 @@ getrandom = { version = "0.3", features = ["wasm_js"] }
 uuid = { version = "1.17.0", features = ["serde"] }
 serde_plain = "1.0.2"
 chrono = "0.4.41"
+

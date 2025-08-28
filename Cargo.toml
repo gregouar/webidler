@@ -8,8 +8,9 @@ members = [
 resolver = "3"
 
 [profile.dev]
-opt-level = 1        # Better compilation time than 2 or 3, but still some optimization
+opt-level = 0
 incremental = true
+split-debuginfo = "unpacked"
 codegen-units = 16   # More units = faster compilation
 debug = 1            # Line tables only
 
