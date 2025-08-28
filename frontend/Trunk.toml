@@ -1,6 +1,4 @@
 [build]
-# This target gives better performance for wasm
-target = "wasm32-unknown-unknown"
 # Enable a small amount of optimization in debug mode
 rustflags = ["-C", "opt-level=1"]
 # Clean cargo output which can help with rebuilds
@@ -8,4 +6,4 @@ clean-dist = true
 
 [watch]
 # Ignore output files and target directory to prevent unnecessary rebuilds
-ignore = ["target", "dist"]
+ignore = ["dist"]
