@@ -466,27 +466,49 @@ fn NodeTooltip(
                     .into_any(),
                 )
             } else if !upgrade_effects.is_empty() {
-                Some(view! {
-                    <hr class="border-t border-gray-700" />
-                    <p class="text-sm text-gray-400 leading-snug">
-                        "Level: " <span class="text-white">{node_level}</span>
-                        {max_upgrade_level
-                            .map(|max_upgrade_level| format!("/{}", max_upgrade_level))
-                            .unwrap_or_default()} " | Ascend Cost: "
-                        <span class="text-white">"1 Power Shard"</span>
-                    </p>
-                    <hr class="border-t border-gray-700" />
-
-                    <ul>
-                        <li>
-                            <span class="text-sm text-gray-400 leading-snug">"Ascend to get:"</span>
-                        </li>
-                        {effects_tooltip::formatted_effects_list(
-                            upgrade_effects.clone(),
-                            AffixEffectScope::Global,
-                        )}
-                    </ul>
-                }.into_any())
+                let max_level = node_level.get() >= max_upgrade_level.unwrap_or_default();
+                Some(
+                    view! {
+                        <hr class="border-t border-gray-700" />
+                        <p class="text-sm text-gray-400 leading-snug">
+                            "Level: " <span class="text-white">{node_level}</span>
+                            {max_upgrade_level
+                                .map(|max_upgrade_level| format!("/{}", max_upgrade_level))
+                                .unwrap_or_default()}
+                            {if max_level {
+                                view! {
+                                    " | "
+                                    <span class="text-cyan-200">"Ascended"</span>
+                                }
+                                    .into_any()
+                            } else {
+                                view! {
+                                    " | Ascend Cost: "
+                                    <span class="text-cyan-200">"1 Power Shard"</span>
+                                }
+                                    .into_any()
+                            }}
+                        </p>
+                        {(!max_level)
+                            .then(|| {
+                                view! {
+                                    <hr class="border-t border-gray-700" />
+                                    <ul>
+                                        <li>
+                                            <span class="text-sm text-gray-400 leading-snug">
+                                                "Ascend to get:"
+                                            </span>
+                                        </li>
+                                        {effects_tooltip::formatted_effects_list(
+                                            upgrade_effects.clone(),
+                                            AffixEffectScope::Global,
+                                        )}
+                                    </ul>
+                                }
+                            })}
+                    }
+                    .into_any(),
+                )
             } else {
                 None
             }

@@ -219,8 +219,11 @@ fn AscendNode(
     let node_status = Memo::new({
         move |_| {
             let upgradable = max_upgrade_level > node_level.get();
+            let maxed = node_level.get() >= max_upgrade_level && node_level.get() > 0;
 
-            let purchase_status = if points_available.get() > 0.0
+            let purchase_status = if maxed {
+                PurchaseStatus::Purchased
+            } else if points_available.get() > 0.0
                 && (upgradable || (node_specs.locked && node_level.get() == 0))
             {
                 PurchaseStatus::Purchaseable
@@ -229,11 +232,12 @@ fn AscendNode(
             };
 
             let meta_status = if node_level.get() > 0 {
-                if node_specs.locked && node_level.get() == 1 {
-                    MetaStatus::Normal
-                } else {
-                    MetaStatus::Ascended
-                }
+                // if node_specs.locked && node_level.get() == 1 {
+                //     MetaStatus::Normal
+                // } else {
+                //     MetaStatus::Ascended
+                // }
+                MetaStatus::Ascended
             } else if node_specs.locked {
                 MetaStatus::Locked
             } else {
