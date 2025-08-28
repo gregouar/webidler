@@ -1,4 +1,6 @@
+use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*, task::spawn_local};
+use leptos_use::storage;
 
 use std::sync::Arc;
 
@@ -16,6 +18,7 @@ use crate::components::{
         confirm::ConfirmContext,
         menu_panel::MenuPanel,
         pannable::Pannable,
+        toast::*,
     },
 };
 
@@ -88,22 +91,31 @@ fn ConfirmButton(
 
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
+    let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
+    let toaster = expect_context::<Toasts>();
     let ascend = Arc::new(move || {
         spawn_local({
             async move {
                 // TODO:Toast error
-                let _ = backend
+                match backend
                     .post_ascend_passives(
-                        &town_context.token.get(),
+                        &get_jwt_storage.get(),
                         &AscendPassivesRequest {
                             character_id: town_context.character.read().character_id.clone(),
                             passives_tree_ascension: passives_tree_ascension.get(),
                         },
                     )
-                    .await;
+                    .await
+                {
+                    Ok(_) => open.set(false),
+                    Err(e) => show_toast(
+                        toaster,
+                        format!("failed to ascend: {e}"),
+                        ToastVariant::Error,
+                    ),
+                }
             }
         });
-        open.set(false);
     });
 
     let try_ascend = move |_| {

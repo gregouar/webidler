@@ -82,11 +82,11 @@ where
     E: Executor<'c, Database = Database>,
 {
     sqlx::query!(
-        "INSERT INTO characters_data (character_id, data_version, passives_data) VALUES ($1, $2, $3)
-         ON CONFLICT(character_id) DO UPDATE SET 
+        "UPDATE characters_data SET
             data_version = $2,
-            passives_data = EXCLUDED.passives_data, 
-            updated_at = CURRENT_TIMESTAMP",
+            passives_data = $3, 
+            updated_at = CURRENT_TIMESTAMP
+        WHERE character_id = $1",
         character_id,
         CHARACTER_DATA_VERSION,
         passives_data

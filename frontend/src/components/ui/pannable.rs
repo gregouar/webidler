@@ -13,14 +13,15 @@ pub fn Pannable(children: Children) -> impl IntoView {
 
     // let on_mouse_up = move |_| dragging.set(None);
 
-    window_event_listener(leptos::ev::mouseup, {
+    let handle = window_event_listener(leptos::ev::mouseup, {
         let dragging = dragging.clone();
         move |_| {
             dragging.set(None);
         }
     });
+    on_cleanup(move || handle.remove());
 
-    window_event_listener(leptos::ev::mousemove, {
+    let handle = window_event_listener(leptos::ev::mousemove, {
         let offset = offset.clone();
         let dragging = dragging.clone();
         move |ev: web_sys::MouseEvent| {
@@ -35,6 +36,7 @@ pub fn Pannable(children: Children) -> impl IntoView {
             }
         }
     });
+    on_cleanup(move || handle.remove());
 
     // let on_mouse_move = {
     //     move |ev: web_sys::MouseEvent| {
@@ -98,3 +100,5 @@ pub fn Pannable(children: Children) -> impl IntoView {
         </div>
     }
 }
+
+// At frontend\src\components\ui\pannable.rs:27:54, you tried to access a reactive value which was defined at frontend\src\components\ui\pannable.rs:6:20, but it has already been disposed.
