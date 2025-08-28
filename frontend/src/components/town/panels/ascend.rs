@@ -3,7 +3,7 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 use std::sync::Arc;
 
 use shared::{
-    data::passive::{PassiveNodeId, PassiveNodeSpecs, PassivesTreeState},
+    data::passive::{PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension},
     http::client::AscendPassivesRequest,
 };
 
@@ -24,11 +24,11 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     let ascension_cost = RwSignal::new(0.0);
-    let passives_tree_state = RwSignal::new(PassivesTreeState::default());
+    let passives_tree_ascension = RwSignal::new(PassivesTreeAscension::default());
 
     let reset = move || {
         ascension_cost.set(0.0);
-        passives_tree_state.set(town_context.passives_tree_state.get_untracked());
+        passives_tree_ascension.set(town_context.passives_tree_ascension.get_untracked());
     };
     // Reset temporary ascension on opening
     Effect::new(move || {
@@ -58,12 +58,12 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
                             >
                                 "Cancel"
                             </MenuButton>
-                            <ConfirmButton passives_tree_state ascension_cost open />
+                            <ConfirmButton passives_tree_ascension ascension_cost open />
                             <CloseButton on:click=move |_| open.set(false) />
                         </div>
                     </div>
 
-                    <PassiveSkillTree passives_tree_state ascension_cost />
+                    <PassiveSkillTree passives_tree_ascension ascension_cost />
 
                     <div class="px-4 relative z-10 flex items-center justify-between">
 
@@ -80,7 +80,7 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
 
 #[component]
 fn ConfirmButton(
-    passives_tree_state: RwSignal<PassivesTreeState>,
+    passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     ascension_cost: RwSignal<f64>,
     open: RwSignal<bool>,
 ) -> impl IntoView {
@@ -97,7 +97,7 @@ fn ConfirmButton(
                         &town_context.token.get(),
                         &AscendPassivesRequest {
                             character_id: town_context.character.read().character_id.clone(),
-                            passives_tree_state: passives_tree_state.get(),
+                            passives_tree_ascension: passives_tree_ascension.get(),
                         },
                     )
                     .await;
@@ -137,7 +137,7 @@ fn ResetButton() -> impl IntoView {
 
 #[component]
 fn PassiveSkillTree(
-    passives_tree_state: RwSignal<PassivesTreeState>,
+    passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     ascension_cost: RwSignal<f64>,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
@@ -182,7 +182,7 @@ fn PassiveSkillTree(
                     node_specs=node
                     points_available
                     ascension_cost
-                    passives_tree_state
+                    passives_tree_ascension
                 />
             </For>
         </Pannable>
@@ -195,13 +195,13 @@ fn AscendNode(
     node_specs: PassiveNodeSpecs,
     points_available: Memo<f64>,
     ascension_cost: RwSignal<f64>,
-    passives_tree_state: RwSignal<PassivesTreeState>,
+    passives_tree_ascension: RwSignal<PassivesTreeAscension>,
 ) -> impl IntoView {
     let node_level = Memo::new({
         let node_id = node_id.clone();
 
         move |_| {
-            passives_tree_state
+            passives_tree_ascension
                 .read()
                 .ascended_nodes
                 .get(&node_id)
@@ -254,8 +254,8 @@ fn AscendNode(
     let purchase = {
         let node_id = node_id.clone();
         move || {
-            passives_tree_state.update(|passives_tree_state| {
-                let entry = passives_tree_state
+            passives_tree_ascension.update(|passives_tree_ascension| {
+                let entry = passives_tree_ascension
                     .ascended_nodes
                     .entry(node_id.clone())
                     .or_default();

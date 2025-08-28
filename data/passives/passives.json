@@ -669,7 +669,7 @@
       },
 
       "stunning_block": {
-        "name": "Boinks Back",
+        "name": "Shield Bash",
         "icon": "passives/shield_reflect.svg",
         "x": -40,
         "y": 20,
@@ -678,14 +678,14 @@
         "triggers": [
           {
             "trigger_id": "stunning_block",
-            "description": "Blocked Attacks inflict Stun for 3 seconds",
+            "description": "Blocked Attacks inflict Stun for 1-2 seconds",
             "OnTakeHit": { "skill_type": "Attack", "is_blocked": true },
             "target": "Source",
             "effects": [
               {
                 "ApplyStatus": {
-                  "min_duration": 3,
-                  "max_duration": 3,
+                  "min_duration": 1,
+                  "max_duration": 2,
                   "statuses": [
                     {
                       "status_type": "Stun",

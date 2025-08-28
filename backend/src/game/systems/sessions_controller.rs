@@ -6,6 +6,7 @@ use shared::data::{
     area::AreaLevel,
     character::CharacterSize,
     item::ItemRarity,
+    passive::PassivesTreeState,
     player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     user::UserCharacterId,
 };
@@ -132,8 +133,8 @@ async fn new_game_instance(
 
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
-    let player_inventory = match character_data {
-        Some(mut inventory) => {
+    let (player_inventory, passives_tree_state) = match character_data {
+        Some((mut inventory, ascension)) => {
             for item_specs in inventory.all_items_mut() {
                 item_specs.old_game = true;
             }
@@ -145,7 +146,8 @@ async fn new_game_instance(
             ) {
                 player_specs.buy_skill_cost = 0.0;
             }
-            inventory
+
+            (inventory, PassivesTreeState::init(ascension))
         }
         None => {
             let mut player_inventory = PlayerInventory {
@@ -169,7 +171,7 @@ async fn new_game_instance(
                 );
             }
 
-            player_inventory
+            (player_inventory, PassivesTreeState::default())
         }
     };
 
@@ -178,7 +180,7 @@ async fn new_game_instance(
         area_id,
         None,
         "default",
-        None,
+        passives_tree_state,
         player_resources,
         player_specs,
         player_inventory,

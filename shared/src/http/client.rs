@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    data::{passive::PassivesTreeState, user::UserCharacterId},
+    data::{passive::PassivesTreeAscension, user::UserCharacterId},
     types::{AssetName, Email, Password, Username},
 };
 
@@ -32,5 +32,5 @@ pub struct CreateCharacterRequest {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct AscendPassivesRequest {
     pub character_id: UserCharacterId,
-    pub passives_tree_state: PassivesTreeState,
+    pub passives_tree_ascension: PassivesTreeAscension,
 }

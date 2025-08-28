@@ -111,6 +111,7 @@ fn InGameNode(
             game_context
                 .passives_tree_state
                 .read()
+                .ascension
                 .ascended_nodes
                 .get(&node_id)
                 .cloned()

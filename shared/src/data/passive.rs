@@ -30,10 +30,14 @@ pub struct PassivesTreeSpecs {
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
+pub struct PassivesTreeAscension {
+    pub ascended_nodes: HashMap<PassiveNodeId, u8>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct PassivesTreeState {
     pub purchased_nodes: HashSet<PassiveNodeId>,
-    // TODO: Should we have 3 layers? Blueprint, Specs & State?
-    pub ascended_nodes: HashMap<PassiveNodeId, u8>,
+    pub ascension: PassivesTreeAscension,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]

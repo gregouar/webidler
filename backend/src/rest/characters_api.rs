@@ -7,7 +7,6 @@ use axum::{
 use shared::{
     data::{
         area::AreaLevel,
-        passive::PassivesTreeState,
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId},
     },
     http::{
@@ -91,6 +90,10 @@ async fn get_character_details(
     let areas_completed =
         db::characters::read_character_areas_completed(&db_pool, &character_id).await?;
 
+    let (inventory, ascension) = db::characters_data::load_character_data(&db_pool, &character_id)
+        .await?
+        .unwrap_or_default();
+
     let available_areas = master_store.area_blueprints_store.iter();
 
     Ok(Json(GetCharacterDetailsResponse {
@@ -106,7 +109,8 @@ async fn get_character_details(
                     .unwrap_or_default(),
             })
             .collect(),
-        passives_tree_state: PassivesTreeState::default(),
+        inventory,
+        ascension: ascension,
     }))
 }
 

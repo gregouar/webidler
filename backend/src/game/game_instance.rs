@@ -127,7 +127,7 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn end_quest(&self) -> Result<()> {
-        db::characters_data::save_character_data(
+        db::characters_data::save_character_inventory(
             &self.db_pool,
             self.character_id,
             self.game_data.player_inventory.read(),

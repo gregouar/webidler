@@ -45,9 +45,7 @@ pub fn TownPage() -> impl IntoView {
                 Ok(response) => {
                     town_context.character.set(response.character);
                     town_context.areas.set(response.areas);
-                    town_context
-                        .passives_tree_state
-                        .set(response.passives_tree_state);
+                    town_context.passives_tree_ascension.set(response.ascension);
                 }
                 Err(BackendError::Unauthorized(_) | BackendError::NotFound) => {
                     use_navigate()("/", Default::default())
