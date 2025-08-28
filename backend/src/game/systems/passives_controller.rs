@@ -41,16 +41,14 @@ pub fn generate_effects_map_from_passives<'a>(
         .purchased_nodes
         .iter()
         .filter_map(|node_id| {
-            passives_tree_specs
-                .nodes
-                .get(node_id)
-                .map(|node| -> EffectsMap {
-                    EffectsMap(
-                        node.effects
-                            .iter()
-                            .map(|effect| ((effect.stat, effect.modifier), effect.value))
-                            .collect(),
-                    )
-                })
+            passives_tree_specs.nodes.get(node_id).map(|node| {
+                node.aggregate_effects(
+                    passives_tree_state
+                        .ascended_nodes
+                        .get(node_id)
+                        .cloned()
+                        .unwrap_or_default(),
+                )
+            })
         })
 }

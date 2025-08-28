@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
 
-use crate::data::trigger::TriggerSpecs;
+use crate::data::{stat_effect::EffectsMap, trigger::TriggerSpecs};
 
 pub use super::stat_effect::StatEffect;
 
@@ -68,4 +68,29 @@ pub struct PassiveNodeSpecs {
 pub struct PassiveConnection {
     pub from: PassiveNodeId,
     pub to: PassiveNodeId,
+}
+
+impl PassiveNodeSpecs {
+    pub fn aggregate_effects(&self, level: u8) -> EffectsMap {
+        let effects_map =
+            self.effects
+                .iter()
+                .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
+                    *effects_map
+                        .0
+                        .entry((effect.stat, effect.modifier))
+                        .or_default() += effect.value;
+                    effects_map
+                });
+
+        self.upgrade_effects
+            .iter()
+            .fold(effects_map, |mut effects_map, effect| {
+                *effects_map
+                    .0
+                    .entry((effect.stat, effect.modifier))
+                    .or_default() += effect.value * level as f64;
+                effects_map
+            })
+    }
 }

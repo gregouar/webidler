@@ -421,7 +421,10 @@ fn NodeTooltip(
     node_level: Memo<u8>,
     show_upgrade: bool,
 ) -> impl IntoView {
-    let effects_text = formatted_effects_list(node_specs.effects.clone(), AffixEffectScope::Global);
+    let effects_text = formatted_effects_list(
+        (&node_specs.aggregate_effects(node_level.get_untracked())).into(),
+        AffixEffectScope::Global,
+    );
     let triggers_text: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
 
     let node_specs_locked = node_specs.locked;
