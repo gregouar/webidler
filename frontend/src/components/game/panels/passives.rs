@@ -404,7 +404,7 @@ pub fn Connection(
 
     view! {
         {if let (Some(from), Some(to)) = (from_node, to_node) {
-            let (from_level, to_level) = node_levels.get();
+            let (from_level, to_level) = node_levels.get_untracked();
             let from_status = node_meta_status(from_level, from.locked);
             let to_status = node_meta_status(to_level, to.locked);
             let stroke_color = {
@@ -463,7 +463,7 @@ pub fn Connection(
                             "rotate({}) translate({},{})",
                             (to.y - from.y).atan2(to.x - from.x).to_degrees(),
                             from.x * 10.0,
-                            from.y * 10.0,
+                            -from.y * 10.0,
                         )
                         stroke=stroke_color
                         stroke-dasharray=dasharray

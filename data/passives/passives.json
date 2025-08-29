@@ -817,7 +817,7 @@
           {
             "stat": { "Damage": { "skill_type": "Attack" } },
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 0.2
           }
         ],
         "upgrade_effects": [
@@ -1254,7 +1254,7 @@
             "value": 0.25
           }
         ],
-        "max_upgrade_level": 4,
+        "max_upgrade_level": 5,
         "locked": true
       },
 

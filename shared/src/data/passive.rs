@@ -89,6 +89,12 @@ impl PassiveNodeSpecs {
                     effects_map
                 });
 
+        let level = if self.locked {
+            level.saturating_sub(1)
+        } else {
+            level
+        };
+
         self.upgrade_effects
             .iter()
             .fold(effects_map, |mut effects_map, effect| {
