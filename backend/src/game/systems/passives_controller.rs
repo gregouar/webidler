@@ -1,5 +1,3 @@
-use std::u8;
-
 use shared::data::{
     passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
     player::PlayerResources,
