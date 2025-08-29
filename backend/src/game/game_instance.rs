@@ -10,7 +10,6 @@ use super::{
 
 use crate::{
     db::{self, DbPool},
-    rest::AppError,
     websocket::WebSocketConnection,
 };
 
@@ -161,8 +160,6 @@ async fn auto_save_impl(
         &character_id,
         &game_data.area_id,
         game_data.area_state.read().max_area_level_completed as i32,
-        game_data.player_resources.read().gems,
-        game_data.player_resources.read().shards,
     )
     .await?;
     db::game_instances::save_game_instance_data(&mut *tx, &character_id, game_data).await?;

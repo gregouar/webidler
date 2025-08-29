@@ -102,7 +102,6 @@ pub async fn post_ascend_passives(
         &master_store,
         &payload.character_id,
         character.resource_shards,
-        character.resource_gems,
         &payload.passives_tree_ascension,
     )
     .await?;

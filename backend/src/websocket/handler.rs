@@ -96,9 +96,7 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
 
     match game.run().await {
         Ok(()) => {
-            if let Err(e) =
-                handle_disconnect(&app_state.db_pool, &app_state.sessions_store, session).await
-            {
+            if let Err(e) = handle_disconnect(&app_state.sessions_store, session).await {
                 tracing::error!("error handling disconnect for '{addr}': {e}")
             }
         }
@@ -161,11 +159,7 @@ async fn handle_connect(
     Ok(session)
 }
 
-async fn handle_disconnect(
-    db_pool: &DbPool,
-    sessions_store: &SessionsStore,
-    mut session: Session,
-) -> Result<()> {
+async fn handle_disconnect(sessions_store: &SessionsStore, mut session: Session) -> Result<()> {
     let end_quest = session.game_data.area_state.read().end_quest;
 
     session.last_active = Instant::now();

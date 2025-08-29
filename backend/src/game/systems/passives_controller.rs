@@ -69,7 +69,6 @@ pub async fn update_ascension(
     master_store: &MasterStore,
     character_id: &UserCharacterId,
     resource_shards: f64,
-    resource_gems: f64,
     passives_tree_ascension: &PassivesTreeAscension,
 ) -> Result<(), AppError> {
     let (_, prev_ascension) = db::characters_data::load_character_data(&mut **tx, &character_id)
