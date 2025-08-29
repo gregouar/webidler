@@ -459,6 +459,10 @@ pub fn Connection(
                                 ""
                             }
                         }
+                        gradientTransform=format!(
+                            "rotate({})",
+                            ((to.y - from.y).atan2(to.x - from.x).to_degrees()),
+                        )
                         stroke=stroke_color
                         stroke-dasharray=dasharray
                         stroke-linecap="round"
