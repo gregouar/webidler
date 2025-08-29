@@ -250,6 +250,20 @@ pub fn node_meta_status(node_level: u8, locked: bool) -> MetaStatus {
     }
 }
 
+fn status_color(purchase_status: PurchaseStatus, meta_status: MetaStatus) -> &'static str {
+    match (purchase_status, meta_status) {
+        (PurchaseStatus::Inactive, MetaStatus::Normal) => "gray",
+        (PurchaseStatus::Purchaseable, MetaStatus::Normal) => "darkgoldenrod",
+        (PurchaseStatus::Purchased, MetaStatus::Normal) => "gold",
+
+        (PurchaseStatus::Inactive, MetaStatus::Ascended) => "teal",
+        (PurchaseStatus::Purchaseable, MetaStatus::Ascended) => "darkcyan",
+        (PurchaseStatus::Purchased, MetaStatus::Ascended) => "cyan",
+
+        (_, MetaStatus::Locked) => "red",
+    }
+}
+
 #[component]
 pub fn Node(
     node_specs: PassiveNodeSpecs,
@@ -298,17 +312,7 @@ pub fn Node(
 
     let stroke = move || {
         let status = node_status.get();
-        match (status.purchase_status, status.meta_status) {
-            (PurchaseStatus::Inactive, MetaStatus::Normal) => "gray",
-            (PurchaseStatus::Purchaseable, MetaStatus::Normal) => "darkgoldenrod",
-            (PurchaseStatus::Purchased, MetaStatus::Normal) => "gold",
-
-            (PurchaseStatus::Inactive, MetaStatus::Ascended) => "teal",
-            (PurchaseStatus::Purchaseable, MetaStatus::Ascended) => "darkcyan",
-            (PurchaseStatus::Purchased, MetaStatus::Ascended) => "cyan",
-
-            (_, MetaStatus::Locked) => "red",
-        }
+        status_color(status.purchase_status, status.meta_status)
     };
 
     let filter = move || {
@@ -407,41 +411,36 @@ pub fn Connection(
             let (from_level, to_level) = node_levels.get_untracked();
             let from_status = node_meta_status(from_level, from.locked);
             let to_status = node_meta_status(to_level, to.locked);
-            let stroke_color = {
-                move || match amount_connections.get() {
-                    2 => {
-                        match (from_status, to_status) {
-                            (MetaStatus::Ascended, MetaStatus::Ascended) => "cyan",
-                            (MetaStatus::Ascended, MetaStatus::Normal) => {
-                                "url(#from-ascension-gradient-2)"
-                            }
-                            (MetaStatus::Normal, MetaStatus::Ascended) => {
-                                "url(#to-ascension-gradient-2)"
-                            }
-                            _ => "gold",
-                        }
-                    }
-                    1 => {
-                        match (from_status, to_status) {
-                            (MetaStatus::Locked, _) | (_, MetaStatus::Locked) => "darkred",
-                            (MetaStatus::Ascended, MetaStatus::Ascended) => "darkcyan",
-                            (MetaStatus::Ascended, MetaStatus::Normal) => {
-                                "url(#from-ascension-gradient-1)"
-                            }
-                            (MetaStatus::Normal, MetaStatus::Ascended) => {
-                                "url(#to-ascension-gradient-1)"
-                            }
-                            _ => "darkgoldenrod",
-                        }
-                    }
-                    _ => "gray",
+            let purchase_status = move || match amount_connections.get() {
+                2 => PurchaseStatus::Purchased,
+                1 => PurchaseStatus::Purchaseable,
+                _ => PurchaseStatus::Inactive,
+            };
+            let color = move |status| {
+                match purchase_status() {
+                    PurchaseStatus::Inactive => "gray",
+                    x => status_color(x, status),
                 }
             };
+            let from_color = move || { color(from_status) };
+            let to_color = move || { color(to_status) };
             let dasharray = move || if amount_connections.get() == 2 { "none" } else { "4 3" };
             let width = move || if amount_connections.get() == 2 { "3" } else { "2" };
+            let gradient_id = format!("{}-{}", connection.from, connection.to);
             Some(
 
                 view! {
+                    <linearGradient
+                        id=gradient_id.clone()
+                        gradientUnits="userSpaceOnUse"
+                        x1=from.x * 10.0
+                        y1=-from.y * 10.0
+                        x2=to.x * 10.0
+                        y2=-to.y * 10.0
+                    >
+                        <stop offset="0%" stop-color=from_color />
+                        <stop offset="100%" stop-color=to_color />
+                    </linearGradient>
                     <line
                         x1=from.x * 10.0
                         y1=-from.y * 10.0
@@ -459,13 +458,7 @@ pub fn Connection(
                                 ""
                             }
                         }
-                        gradientTransform=format!(
-                            "rotate({}) translate({},{})",
-                            (to.y - from.y).atan2(to.x - from.x).to_degrees(),
-                            from.x * 10.0,
-                            -from.y * 10.0,
-                        )
-                        stroke=stroke_color
+                        stroke=format!("url(#{gradient_id})")
                         stroke-dasharray=dasharray
                         stroke-linecap="round"
                         stroke-width=width
