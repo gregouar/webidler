@@ -169,10 +169,11 @@ async fn new_game_instance(
         }
     };
 
-    let mut game_data = GameInstanceData::init_from_store(
+    let game_data = GameInstanceData::init_from_store(
         master_store,
         area_id,
         None,
+        area_level_completed as AreaLevel,
         "default",
         passives_tree_state,
         player_resources,
@@ -181,8 +182,6 @@ async fn new_game_instance(
         None,
         None,
     )?;
-
-    game_data.area_state.mutate().max_area_level_completed = area_level_completed as AreaLevel;
 
     db::game_instances::save_game_instance_data(
         db_pool,

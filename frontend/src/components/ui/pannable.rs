@@ -84,14 +84,6 @@ pub fn Pannable(children: Children) -> impl IntoView {
                         <stop offset="70%" stop-color="black" stop-opacity=0.5 />
                         <stop offset="100%" stop-color="black" stop-opacity=0.8 />
                     </radialGradient>
-                    <linearGradient id="to-ascension-gradient-1" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color: gold; stop-opacity: 1;" />
-                        <stop offset="100%" style="stop-color: cyan; stop-opacity: 1;" />
-                    </linearGradient>
-                    <linearGradient id="to-ascension-gradient-2" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color: darkgoldenrod; stop-opacity: 1;" />
-                        <stop offset="100%" style="stop-color: darkcyan; stop-opacity: 1;" />
-                    </linearGradient>
                     <linearGradient
                         id="from-ascension-gradient-1"
                         x1="0%"
@@ -99,8 +91,8 @@ pub fn Pannable(children: Children) -> impl IntoView {
                         x2="100%"
                         y2="0%"
                     >
-                        <stop offset="0%" style="stop-color: cyan; stop-opacity: 1;" />
-                        <stop offset="100%" style="stop-color: gold; stop-opacity: 1;" />
+                        <stop offset="0%" style="stop-color: darkgoldenrod; stop-opacity: 1;" />
+                        <stop offset="100%" style="stop-color: darkcyan; stop-opacity: 1;" />
                     </linearGradient>
                     <linearGradient
                         id="from-ascension-gradient-2"
@@ -109,8 +101,16 @@ pub fn Pannable(children: Children) -> impl IntoView {
                         x2="100%"
                         y2="0%"
                     >
+                        <stop offset="0%" style="stop-color: gold; stop-opacity: 1;" />
+                        <stop offset="100%" style="stop-color: cyan; stop-opacity: 1;" />
+                    </linearGradient>
+                    <linearGradient id="to-ascension-gradient-1" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" style="stop-color: darkcyan; stop-opacity: 1;" />
                         <stop offset="100%" style="stop-color: darkgoldenrod; stop-opacity: 1;" />
+                    </linearGradient>
+                    <linearGradient id="to-ascension-gradient-2" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color: cyan; stop-opacity: 1;" />
+                        <stop offset="100%" style="stop-color: gold; stop-opacity: 1;" />
                     </linearGradient>
                 </defs>
                 <g

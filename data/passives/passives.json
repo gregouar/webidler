@@ -249,7 +249,15 @@
             "modifier": "Multiplier",
             "value": 0.1
           }
-        ]
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": 0.05
+          }
+        ],
+        "max_upgrade_level": 3
       },
       "life_max_2": {
         "name": "Maximum Life",

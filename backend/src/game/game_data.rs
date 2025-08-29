@@ -54,6 +54,7 @@ pub struct GameInstanceData {
 pub struct SavedGameData {
     pub area_id: String,
     pub area_level: AreaLevel,
+    pub max_area_level_completed: AreaLevel,
     pub passives_tree_id: String,
     pub passives_tree_state: PassivesTreeState,
     pub player_resources: PlayerResources,
@@ -69,6 +70,7 @@ impl GameInstanceData {
         area_id: String,
         area_blueprint: AreaBlueprint,
         area_level: Option<AreaLevel>,
+        max_area_level_completed: AreaLevel,
         passives_tree_id: String,
         passives_tree_specs: PassivesTreeSpecs,
         passives_tree_state: PassivesTreeState,
@@ -82,6 +84,7 @@ impl GameInstanceData {
         if let Some(area_level) = area_level {
             area_state.area_level = area_level;
         }
+        area_state.max_area_level_completed = max_area_level_completed;
 
         let mut game_data = Self {
             area_id,
@@ -128,6 +131,7 @@ impl GameInstanceData {
         master_store: &master_store::MasterStore,
         area_id: &str,
         area_level: Option<AreaLevel>,
+        max_area_level_completed: AreaLevel,
         passives_tree_id: &str,
         passives_tree_state: PassivesTreeState,
         player_resources: PlayerResources,
@@ -152,6 +156,7 @@ impl GameInstanceData {
             area_id.to_string(),
             area_blueprint,
             area_level,
+            max_area_level_completed,
             passives_tree_id.to_string(),
             passives_tree_specs,
             passives_tree_state,
@@ -167,6 +172,7 @@ impl GameInstanceData {
         Ok(rmp_serde::to_vec(&SavedGameData {
             area_id: self.area_id,
             area_level: self.area_state.read().area_level,
+            max_area_level_completed: self.area_state.read().max_area_level_completed,
             passives_tree_id: self.passives_tree_id,
             passives_tree_state: self.passives_tree_state.unwrap(),
             player_resources: self.player_resources.unwrap(),
@@ -181,6 +187,7 @@ impl GameInstanceData {
         let SavedGameData {
             area_id,
             area_level,
+            max_area_level_completed,
             passives_tree_id,
             passives_tree_state,
             player_resources,
@@ -194,6 +201,7 @@ impl GameInstanceData {
             master_store,
             &area_id,
             Some(area_level),
+            max_area_level_completed,
             &passives_tree_id,
             passives_tree_state,
             player_resources,

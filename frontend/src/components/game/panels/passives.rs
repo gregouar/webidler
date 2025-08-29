@@ -406,31 +406,30 @@ pub fn Connection(
         {if let (Some(from), Some(to)) = (from_node, to_node) {
             let (from_level, to_level) = node_levels.get();
             let from_status = node_meta_status(from_level, from.locked);
-            let to_status = node_meta_status(to_level, from.locked);
+            let to_status = node_meta_status(to_level, to.locked);
             let stroke_color = {
                 move || match amount_connections.get() {
                     2 => {
                         match (from_status, to_status) {
                             (MetaStatus::Ascended, MetaStatus::Ascended) => "cyan",
                             (MetaStatus::Ascended, MetaStatus::Normal) => {
-                                "#url(from-ascension-gradient-2)"
+                                "url(#from-ascension-gradient-2)"
                             }
                             (MetaStatus::Normal, MetaStatus::Ascended) => {
-                                "#url(to-ascension-gradient-2)"
+                                "url(#to-ascension-gradient-2)"
                             }
                             _ => "gold",
                         }
                     }
                     1 => {
                         match (from_status, to_status) {
-                            (MetaStatus::Locked, _) => "darkred",
-                            (_, MetaStatus::Locked) => "darkred",
+                            (MetaStatus::Locked, _) | (_, MetaStatus::Locked) => "darkred",
                             (MetaStatus::Ascended, MetaStatus::Ascended) => "darkcyan",
                             (MetaStatus::Ascended, MetaStatus::Normal) => {
-                                "#url(from-ascension-gradient-1)"
+                                "url(#from-ascension-gradient-1)"
                             }
                             (MetaStatus::Normal, MetaStatus::Ascended) => {
-                                "#url(to-ascension-gradient-1)"
+                                "url(#to-ascension-gradient-1)"
                             }
                             _ => "darkgoldenrod",
                         }

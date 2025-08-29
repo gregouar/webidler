@@ -120,6 +120,51 @@ fn ConfirmButton(
         }
     });
 
+    // let backend = expect_context::<BackendClient>();
+    // let town_context = expect_context::<TownContext>();
+    // let auth_context = expect_context::<AuthContext>();
+    // let toaster = expect_context::<Toasts>();
+    // let do_ascend = {
+    //     let action = create_action(move |_| {
+    //         let backend = backend.clone();
+    //         let town_context = town_context.clone();
+    //         let auth_context = auth_context.clone();
+    //         let toaster = toaster.clone();
+    //         let passives_tree_ascension = passives_tree_ascension.get();
+    //         let open = open.clone();
+    //         let character_id = town_context.character.read_untracked().character_id.clone();
+
+    //         async move {
+    //             match backend
+    //                 .post_ascend_passives(
+    //                     &auth_context.token(),
+    //                     &AscendPassivesRequest {
+    //                         character_id,
+    //                         passives_tree_ascension,
+    //                     },
+    //                 )
+    //                 .await
+    //             {
+    //                 Ok(response) => {
+    //                     town_context.character.set(response.character);
+    //                     town_context.passives_tree_ascension.set(response.ascension);
+    //                     open.set(false);
+    //                 }
+    //                 Err(e) => show_toast(
+    //                     toaster,
+    //                     format!("failed to ascend: {e}"),
+    //                     ToastVariant::Error,
+    //                 ),
+    //             }
+    //         }
+    //     });
+
+    //     // Wrap the dispatch call inside Arc<dyn Fn() + Send + Sync>
+    //     Arc::new(move || {
+    //         action.dispatch(());
+    //     }) as Arc<dyn Fn() + Send + Sync>
+    // };
+
     let try_ascend = {
         let confirm_context = expect_context::<ConfirmContext>();
         move |_| {
