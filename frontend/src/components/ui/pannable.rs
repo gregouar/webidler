@@ -77,12 +77,41 @@ pub fn Pannable(children: Children) -> impl IntoView {
                 viewBox="-500 -500 1000 1000"
                 preserveAspectRatio="xMidYMid meet"
             >
+                // TODO: Find way to make this generic
                 <defs>
                     <radialGradient id="node-inner-gradient" cx="50%" cy="50%" r="50%">
                         <stop offset="20%" stop-color="black" stop-opacity=0 />
                         <stop offset="70%" stop-color="black" stop-opacity=0.5 />
                         <stop offset="100%" stop-color="black" stop-opacity=0.8 />
                     </radialGradient>
+                    <linearGradient id="to-ascension-gradient-1" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color: gold; stop-opacity: 1;" />
+                        <stop offset="100%" style="stop-color: cyan; stop-opacity: 1;" />
+                    </linearGradient>
+                    <linearGradient id="to-ascension-gradient-2" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color: darkgoldenrod; stop-opacity: 1;" />
+                        <stop offset="100%" style="stop-color: darkcyan; stop-opacity: 1;" />
+                    </linearGradient>
+                    <linearGradient
+                        id="from-ascension-gradient-1"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                    >
+                        <stop offset="0%" style="stop-color: cyan; stop-opacity: 1;" />
+                        <stop offset="100%" style="stop-color: gold; stop-opacity: 1;" />
+                    </linearGradient>
+                    <linearGradient
+                        id="from-ascension-gradient-2"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                    >
+                        <stop offset="0%" style="stop-color: darkcyan; stop-opacity: 1;" />
+                        <stop offset="100%" style="stop-color: darkgoldenrod; stop-opacity: 1;" />
+                    </linearGradient>
                 </defs>
                 <g
                     transform=move || {

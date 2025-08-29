@@ -22,8 +22,7 @@
             "modifier": "Multiplier",
             "value": 0.25
           }
-        ],
-        "max_upgrade_level": 5
+        ]
       },
 
       "gold_l_1": {
@@ -45,8 +44,7 @@
             "modifier": "Multiplier",
             "value": 0.25
           }
-        ],
-        "max_upgrade_level": 1
+        ]
       },
       "gold_r_1": {
         "name": "Gold",
@@ -55,6 +53,13 @@
         "y": 0,
         "node_type": "Gold",
         "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ],
+        "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
@@ -74,6 +79,13 @@
             "modifier": "Multiplier",
             "value": 0.25
           }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
         ]
       },
       "gold_d_1": {
@@ -83,6 +95,13 @@
         "y": -10,
         "node_type": "Gold",
         "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.25
+          }
+        ],
+        "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
@@ -103,6 +122,13 @@
             "modifier": "Multiplier",
             "value": 0.5
           }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
         ]
       },
       "gold_dr_1": {
@@ -112,6 +138,13 @@
         "y": -14.5,
         "node_type": "Gold",
         "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ],
+        "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
@@ -131,6 +164,13 @@
             "modifier": "Multiplier",
             "value": 0.5
           }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
         ]
       },
       "gold_ur_1": {
@@ -140,6 +180,13 @@
         "y": 14.5,
         "node_type": "Gold",
         "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ],
+        "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
@@ -159,6 +206,13 @@
             "modifier": "Multiplier",
             "value": 0.5
           }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
         ]
       },
       "gold_d_2": {
@@ -168,6 +222,13 @@
         "y": -30,
         "node_type": "Gold",
         "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 0.5
+          }
+        ],
+        "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",

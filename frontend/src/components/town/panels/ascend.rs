@@ -70,7 +70,7 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
                     <div class="px-4 relative z-10 flex items-center justify-between">
 
                         <div class="flex items-center gap-2">
-                            <ResetButton />
+                            <ResetButton passives_tree_ascension ascension_cost />
                         </div>
 
                     </div>
@@ -86,20 +86,20 @@ fn ConfirmButton(
     ascension_cost: RwSignal<f64>,
     open: RwSignal<bool>,
 ) -> impl IntoView {
-    let do_ascend = {
+    let do_ascend = Arc::new({
         let backend = expect_context::<BackendClient>();
         let town_context = expect_context::<TownContext>();
         let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
-        Arc::new(move || {
+        move || {
             spawn_local({
                 async move {
                     match backend
                         .post_ascend_passives(
                             &auth_context.token(),
                             &AscendPassivesRequest {
-                                character_id: town_context.character.read().character_id,
-                                passives_tree_ascension: passives_tree_ascension.get(),
+                                character_id: town_context.character.read_untracked().character_id,
+                                passives_tree_ascension: passives_tree_ascension.get_untracked(),
                             },
                         )
                         .await
@@ -117,8 +117,8 @@ fn ConfirmButton(
                     }
                 }
             });
-        })
-    };
+        }
+    });
 
     let try_ascend = {
         let confirm_context = expect_context::<ConfirmContext>();
@@ -140,26 +140,31 @@ fn ConfirmButton(
 }
 
 #[component]
-fn ResetButton() -> impl IntoView {
-    let do_reset = {
+fn ResetButton(
+    passives_tree_ascension: RwSignal<PassivesTreeAscension>,
+    ascension_cost: RwSignal<f64>,
+) -> impl IntoView {
+    let do_reset = Arc::new({
         let backend = expect_context::<BackendClient>();
         let town_context = expect_context::<TownContext>();
         let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
-        Arc::new(move || {
+        move || {
             spawn_local({
                 async move {
                     match backend
                         .post_ascend_passives(
                             &auth_context.token(),
                             &AscendPassivesRequest {
-                                character_id: town_context.character.read().character_id,
+                                character_id: town_context.character.read_untracked().character_id,
                                 passives_tree_ascension: PassivesTreeAscension::default(),
                             },
                         )
                         .await
                     {
                         Ok(response) => {
+                            passives_tree_ascension.set(response.ascension.clone());
+                            ascension_cost.set(0.0);
                             town_context.character.set(response.character);
                             town_context.passives_tree_ascension.set(response.ascension);
                         }
@@ -171,8 +176,8 @@ fn ResetButton() -> impl IntoView {
                     }
                 }
             });
-        })
-    };
+        }
+    });
 
     let try_reset = {
         let confirm_context = expect_context::<ConfirmContext>();
@@ -203,8 +208,10 @@ fn PassiveSkillTree(
             .clone(),
     );
 
-    // Fake amount of connections to have neatly rendered skill tree
+    // Fake amount of connections & ascended to have neatly rendered skill tree
     let amount_connections = Memo::new(|_| 0);
+    // TODO: Should get actual levels?
+    let node_levels = Memo::new(|_| (0, 0));
 
     view! {
         <Pannable>
@@ -218,7 +225,8 @@ fn PassiveSkillTree(
                 <Connection
                     connection=conn
                     nodes_specs=nodes_specs.clone()
-                    amount_connections=amount_connections
+                    amount_connections
+                    node_levels
                 />
             </For>
             <For
@@ -268,11 +276,13 @@ fn AscendNode(
     let node_status = Memo::new({
         move |_| {
             let upgradable = max_upgrade_level > node_level.get();
-            let maxed = node_level.get() >= max_upgrade_level && node_level.get() > 0;
+            // let maxed = node_level.get() >= max_upgrade_level && node_level.get() > 0;
 
-            let purchase_status = if maxed {
-                PurchaseStatus::Purchased
-            } else if points_available.get() > 0.0
+            let purchase_status =
+            //  if maxed {
+            //     PurchaseStatus::Inactive
+            // } else 
+            if points_available.get() > 0.0
                 && (upgradable || (node_specs.locked && node_level.get() == 0))
             {
                 PurchaseStatus::Purchaseable

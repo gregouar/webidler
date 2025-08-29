@@ -124,17 +124,7 @@ fn InGameNode(
         let node_id = node_id.clone();
 
         move |_| {
-            let meta_status = if node_level.get() > 0 {
-                if node_specs.locked && node_level.get() == 1 {
-                    MetaStatus::Normal
-                } else {
-                    MetaStatus::Ascended
-                }
-            } else if node_specs.locked {
-                MetaStatus::Locked
-            } else {
-                MetaStatus::Normal
-            };
+            let meta_status = node_meta_status(node_level.get(), node_specs.locked);
 
             let purchase_status = if game_context
                 .passives_tree_state
@@ -216,12 +206,47 @@ fn InGameConnection(
         }
     });
 
-    view! {
-        <Connection
-            connection=connection
-            nodes_specs=nodes_specs
-            amount_connections=amount_connections
-        />
+    let node_levels = Memo::new({
+        let game_context = expect_context::<GameContext>();
+        let connection_from = connection.from.clone();
+        let connection_to = connection.to.clone();
+
+        move |_| {
+            (
+                game_context
+                    .passives_tree_state
+                    .read()
+                    .ascension
+                    .ascended_nodes
+                    .get(&connection_from)
+                    .cloned()
+                    .unwrap_or_default(),
+                game_context
+                    .passives_tree_state
+                    .read()
+                    .ascension
+                    .ascended_nodes
+                    .get(&connection_to)
+                    .cloned()
+                    .unwrap_or_default(),
+            )
+        }
+    });
+
+    view! { <Connection connection nodes_specs amount_connections node_levels /> }
+}
+
+pub fn node_meta_status(node_level: u8, locked: bool) -> MetaStatus {
+    if node_level > 0 {
+        if locked && node_level == 1 {
+            MetaStatus::Normal
+        } else {
+            MetaStatus::Ascended
+        }
+    } else if locked {
+        MetaStatus::Locked
+    } else {
+        MetaStatus::Normal
     }
 }
 
@@ -372,22 +397,51 @@ pub fn Connection(
     connection: PassiveConnection,
     nodes_specs: Arc<HashMap<String, PassiveNodeSpecs>>,
     amount_connections: Memo<usize>,
+    node_levels: Memo<(u8, u8)>,
 ) -> impl IntoView {
     let from_node = nodes_specs.get(&connection.from).cloned();
     let to_node = nodes_specs.get(&connection.to).cloned();
 
     view! {
         {if let (Some(from), Some(to)) = (from_node, to_node) {
+            let (from_level, to_level) = node_levels.get();
+            let from_status = node_meta_status(from_level, from.locked);
+            let to_status = node_meta_status(to_level, from.locked);
             let stroke_color = {
                 move || match amount_connections.get() {
-                    2 => "gold",
-                    1 => "darkgoldenrod",
+                    2 => {
+                        match (from_status, to_status) {
+                            (MetaStatus::Ascended, MetaStatus::Ascended) => "cyan",
+                            (MetaStatus::Ascended, MetaStatus::Normal) => {
+                                "#url(from-ascension-gradient-2)"
+                            }
+                            (MetaStatus::Normal, MetaStatus::Ascended) => {
+                                "#url(to-ascension-gradient-2)"
+                            }
+                            _ => "gold",
+                        }
+                    }
+                    1 => {
+                        match (from_status, to_status) {
+                            (MetaStatus::Locked, _) => "darkred",
+                            (_, MetaStatus::Locked) => "darkred",
+                            (MetaStatus::Ascended, MetaStatus::Ascended) => "darkcyan",
+                            (MetaStatus::Ascended, MetaStatus::Normal) => {
+                                "#url(from-ascension-gradient-1)"
+                            }
+                            (MetaStatus::Normal, MetaStatus::Ascended) => {
+                                "#url(to-ascension-gradient-1)"
+                            }
+                            _ => "darkgoldenrod",
+                        }
+                    }
                     _ => "gray",
                 }
             };
             let dasharray = move || if amount_connections.get() == 2 { "none" } else { "4 3" };
             let width = move || if amount_connections.get() == 2 { "3" } else { "2" };
             Some(
+
                 view! {
                     <line
                         x1=from.x * 10.0
@@ -396,7 +450,12 @@ pub fn Connection(
                         y2=-to.y * 10.0
                         filter=move || {
                             if amount_connections.get() == 2 {
-                                "drop-shadow(0 0 2px gold)"
+                                match (from_status, to_status) {
+                                    (MetaStatus::Ascended, MetaStatus::Ascended) => {
+                                        "drop-shadow(0 0 2px cyan)"
+                                    }
+                                    _ => "drop-shadow(0 0 2px gold)",
+                                }
                             } else {
                                 ""
                             }
@@ -467,7 +526,7 @@ fn NodeTooltip(
                     .into_any(),
                 )
             } else if !upgrade_effects.is_empty() {
-                let max_level = node_level.get() >= max_upgrade_level.unwrap_or_default();
+                let max_level = node_level.get() >= max_upgrade_level.unwrap_or(u8::MAX);
                 Some(
                     view! {
                         <hr class="border-t border-gray-700" />
