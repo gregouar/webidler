@@ -1,5 +1,5 @@
 use anyhow::Result;
-use shared::data::user::UserCharacterId;
+use shared::{data::user::UserCharacterId, messages::server::DisconnectMessage};
 
 use super::{
     data::{event::EventsQueue, master_store::MasterStore},
@@ -10,6 +10,7 @@ use super::{
 
 use crate::{
     db::{self, DbPool},
+    rest::AppError,
     websocket::WebSocketConnection,
 };
 
@@ -82,9 +83,14 @@ impl<'a> GameInstance<'a> {
             game_timer.wait_tick().await;
         }
 
-        if self.game_data.area_state.read().end_quest {
+        let end_quest = self.game_data.area_state.read().end_quest;
+        if end_quest {
             self.end_quest().await?;
         }
+
+        self.client_conn
+            .send(&DisconnectMessage { end_quest }.into())
+            .await?;
 
         tracing::debug!("game session '{}' ended ", self.character_id);
         Ok(())
@@ -97,28 +103,11 @@ impl<'a> GameInstance<'a> {
             self.game_data.clone(), // TODO: Do something else, like only copy the necessary data
         );
         tokio::spawn(async move {
-            db::characters::update_character_progress(
-                &db_pool,
-                &character_id,
-                &game_data.area_id,
-                game_data.area_state.read().max_area_level_completed as i32,
-                game_data.player_resources.read().gems,
-                game_data.player_resources.read().shards,
-            )
-            .await
-            .unwrap_or_else(|e| {
-                tracing::error!(
-                    "failed to save character progress '{}': {}",
-                    character_id,
-                    e
-                )
-            });
-
-            db::game_instances::save_game_instance_data(&db_pool, &character_id, game_data)
+            auto_save_impl(db_pool, character_id, game_data)
                 .await
                 .unwrap_or_else(|e| {
                     tracing::error!(
-                        "failed to save game instance for character '{}': {}",
+                        "failed to save character progress '{}': {}",
                         character_id,
                         e
                     )
@@ -127,24 +116,58 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn end_quest(&self) -> Result<()> {
+        let mut tx = self.db_pool.begin().await?;
+
         db::characters_data::save_character_inventory(
-            &self.db_pool,
+            &mut *tx,
             self.character_id,
             self.game_data.player_inventory.read(),
         )
         .await?;
-        db::characters::update_character_progress(
-            &self.db_pool,
+
+        db::characters::update_character_resources(
+            &mut *tx,
             self.character_id,
-            &self.game_data.area_id,
-            self.game_data.area_state.read().max_area_level_completed as i32,
             self.game_data.player_resources.read().gems,
             self.game_data.player_resources.read().shards,
         )
         .await?;
 
-        db::game_instances::delete_game_instance_data(&self.db_pool, self.character_id).await?;
+        db::characters::update_character_progress(
+            &mut tx,
+            self.character_id,
+            &self.game_data.area_id,
+            self.game_data.area_state.read().max_area_level_completed as i32,
+        )
+        .await?;
+
+        db::game_instances::delete_game_instance_data(&mut *tx, self.character_id).await?;
+
+        tx.commit().await?;
 
         Ok(())
     }
+}
+
+async fn auto_save_impl(
+    db_pool: DbPool,
+    character_id: UserCharacterId,
+    game_data: GameInstanceData,
+) -> Result<()> {
+    let mut tx = db_pool.begin().await?;
+
+    db::characters::update_character_progress(
+        &mut tx,
+        &character_id,
+        &game_data.area_id,
+        game_data.area_state.read().max_area_level_completed as i32,
+        game_data.player_resources.read().gems,
+        game_data.player_resources.read().shards,
+    )
+    .await?;
+    db::game_instances::save_game_instance_data(&mut *tx, &character_id, game_data).await?;
+
+    tx.commit().await?;
+
+    Ok(())
 }

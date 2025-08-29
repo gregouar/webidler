@@ -18,6 +18,7 @@ impl_into_message! {
         Error(ErrorMessage),
         InitGame(InitGameMessage),
         UpdateGame(SyncGameStateMessage),
+        Disconnect(DisconnectMessage),
     }
 }
 
@@ -59,4 +60,9 @@ pub struct SyncGameStateMessage {
     pub monster_states: Vec<MonsterState>,
     pub queued_loot: Option<Vec<QueuedLoot>>,
     pub game_stats: GameStats,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct DisconnectMessage {
+    pub end_quest: bool,
 }

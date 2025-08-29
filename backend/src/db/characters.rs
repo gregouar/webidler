@@ -1,4 +1,4 @@
-use sqlx::{Executor, FromRow};
+use sqlx::{Executor, FromRow, Transaction};
 
 use shared::data::user::{UserCharacterId, UserId};
 
@@ -196,6 +196,7 @@ where
     .await
 }
 
+/// Add/remove resources to character
 pub async fn update_character_resources<'c, E>(
     executor: E,
     character_id: &UserCharacterId,
@@ -209,8 +210,8 @@ where
         r#"
         UPDATE characters
         SET 
-            resource_gems = $2,
-            resource_shards = $3,
+            resource_gems =  resource_gems + $2,
+            resource_shards = resource_shards + $3,
             updated_at = CURRENT_TIMESTAMP 
         WHERE character_id = $1
         "#,
@@ -224,33 +225,31 @@ where
     Ok(())
 }
 
-pub async fn update_character_progress<'c, E>(
-    executor: E,
+pub async fn update_character_progress<'c>(
+    executor: &mut Transaction<'c, Database>,
+    // pub async fn update_character_progress<'a, A>(
+    //     connection: A,
     character_id: &UserCharacterId,
     area_id: &str,
     max_area_level: i32,
-    resource_gems: f64,
-    resource_shards: f64,
 ) -> Result<(), sqlx::Error>
-where
-    E: Executor<'c, Database = Database> + std::marker::Copy,
+// where
+    //     A: Acquire<'a, Database = Database>,
 {
+    // let mut executor = connection.acquire().await?;
+
     sqlx::query!(
         r#"
         UPDATE characters
         SET 
             max_area_level = CASE WHEN max_area_level > $2 THEN max_area_level ELSE $2 END,
-            resource_gems = $3,
-            resource_shards = $4,
             updated_at = CURRENT_TIMESTAMP 
         WHERE character_id = $1
         "#,
         character_id,
         max_area_level,
-        resource_gems,
-        resource_shards,
     )
-    .execute(executor)
+    .execute(&mut **executor)
     .await?;
 
     if max_area_level > 0 {
@@ -271,7 +270,7 @@ where
         area_id,
         max_area_level
     )
-    .execute(executor)
+    .execute(&mut **executor)
     .await?;
     }
 

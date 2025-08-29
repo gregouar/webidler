@@ -114,13 +114,7 @@ async fn new_game_instance(
         damage_resistance: HashMap::new(),
     });
 
-    let player_resources = PlayerResources {
-        experience: 0.0,
-        passive_points: 0,
-        gold: 0.0,
-        gems: character.resource_gems,
-        shards: character.resource_shards,
-    };
+    let player_resources = PlayerResources::default();
 
     let character_data =
         db::characters_data::load_character_data(db_pool, &character.character_id).await?;

@@ -88,13 +88,7 @@ pub async fn update_ascension(
         return Err(AppError::UserError("not enough power shards".to_string()));
     }
 
-    db::characters::update_character_resources(
-        &mut **tx,
-        &character_id,
-        resource_gems,
-        resource_shards - cost,
-    )
-    .await?;
+    db::characters::update_character_resources(&mut **tx, &character_id, 0.0, -cost).await?;
 
     db::characters_data::save_character_passives(&mut **tx, character_id, passives_tree_ascension)
         .await?;

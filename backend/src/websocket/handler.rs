@@ -170,18 +170,7 @@ async fn handle_disconnect(
 
     session.last_active = Instant::now();
 
-    if end_quest {
-        db::characters::update_character_progress(
-            db_pool,
-            &session.character_id,
-            &session.game_data.area_id,
-            session.game_data.area_state.read().max_area_level_completed as i32,
-            session.game_data.player_resources.read().gems,
-            session.game_data.player_resources.read().shards,
-        )
-        .await?;
-        db::game_instances::delete_game_instance_data(db_pool, &session.character_id).await?;
-    } else {
+    if !end_quest {
         sessions_store
             .sessions
             .lock()

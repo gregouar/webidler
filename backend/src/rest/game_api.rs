@@ -109,14 +109,6 @@ pub async fn post_ascend_passives(
 
     tx.commit().await?;
 
-    // let character = db::characters::read_character(&db_pool, &payload.character_id)
-    //     .await?
-    //     .ok_or(AppError::NotFound)?;
-
-    // let (_, ascension) = db::characters_data::load_character_data(&db_pool, &payload.character_id)
-    //     .await?
-    //     .unwrap_or_default();
-
     let (character, character_data) = tokio::join!(
         db::characters::read_character(&db_pool, &payload.character_id),
         db::characters_data::load_character_data(&db_pool, &payload.character_id)

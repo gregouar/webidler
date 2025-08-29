@@ -5,6 +5,8 @@ use std::str::FromStr;
 pub use sqlx::SqlitePool as DbPool;
 #[cfg(feature = "sqlite")]
 pub type Database = sqlx::Sqlite;
+#[cfg(feature = "sqlite")]
+pub use sqlx::SqliteExecutor as DbExecutor;
 
 #[cfg(feature = "postgres")]
 pub use sqlx::PgPool as DbPool;

@@ -23,11 +23,8 @@ use super::GameContext;
 pub fn HeaderMenu() -> impl IntoView {
     let do_abandon_quest = Arc::new({
         let conn = expect_context::<WebsocketContext>();
-        let navigate = leptos_router::hooks::use_navigate();
         move || {
             conn.send(&ClientMessage::EndQuest);
-            // TODO: Bring to summary page...
-            navigate("/town", Default::default());
         }
     });
 
