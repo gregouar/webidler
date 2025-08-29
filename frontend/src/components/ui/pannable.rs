@@ -14,7 +14,6 @@ pub fn Pannable(children: Children) -> impl IntoView {
     // let on_mouse_up = move |_| dragging.set(None);
 
     let handle = window_event_listener(leptos::ev::mouseup, {
-        let dragging = dragging.clone();
         move |_| {
             dragging.set(None);
         }
@@ -22,8 +21,6 @@ pub fn Pannable(children: Children) -> impl IntoView {
     on_cleanup(move || handle.remove());
 
     let handle = window_event_listener(leptos::ev::mousemove, {
-        let offset = offset.clone();
-        let dragging = dragging.clone();
         move |ev: web_sys::MouseEvent| {
             if let Some((last_x, last_y)) = dragging.get() {
                 let dx = ev.client_x() as f64 - last_x;

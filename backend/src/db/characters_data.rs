@@ -110,10 +110,9 @@ where
             rmp_serde::from_slice::<PlayerInventory>(&character_data.inventory_data)?,
             character_data
                 .passives_data
-                .map(|passives_data| {
+                .and_then(|passives_data| {
                     rmp_serde::from_slice::<PassivesTreeAscension>(&passives_data).ok()
                 })
-                .flatten()
                 .unwrap_or_default(),
         )))
     } else {

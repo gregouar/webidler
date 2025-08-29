@@ -25,7 +25,7 @@ use shared::messages::{
 use crate::{
     app_state::AppState,
     auth,
-    db::{self, DbPool},
+    db::{self},
     game::{
         sessions::{Session, SessionsStore},
         systems::sessions_controller,

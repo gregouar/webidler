@@ -98,7 +98,7 @@ fn ConfirmButton(
                         .post_ascend_passives(
                             &auth_context.token(),
                             &AscendPassivesRequest {
-                                character_id: town_context.character.read().character_id.clone(),
+                                character_id: town_context.character.read().character_id,
                                 passives_tree_ascension: passives_tree_ascension.get(),
                             },
                         )
@@ -153,7 +153,7 @@ fn ResetButton() -> impl IntoView {
                         .post_ascend_passives(
                             &auth_context.token(),
                             &AscendPassivesRequest {
-                                character_id: town_context.character.read().character_id.clone(),
+                                character_id: town_context.character.read().character_id,
                                 passives_tree_ascension: PassivesTreeAscension::default(),
                             },
                         )

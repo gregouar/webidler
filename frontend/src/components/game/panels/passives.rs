@@ -431,7 +431,7 @@ fn NodeTooltip(
     };
 
     let node_specs_locked = node_specs.locked;
-    let max_upgrade_level = node_specs.max_upgrade_level.clone();
+    let max_upgrade_level = node_specs.max_upgrade_level;
     let triggers_text: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
 
     let is_locked = move || node_specs_locked && node_level.get() == 0;
