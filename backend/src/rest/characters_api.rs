@@ -82,22 +82,20 @@ async fn get_character_details(
     State(master_store): State<MasterStore>,
     Path(character_id): Path<UserId>,
 ) -> Result<Json<GetCharacterDetailsResponse>, AppError> {
-    let character = match db::characters::read_character(&db_pool, &character_id).await? {
-        Some(character) => character,
-        None => return Err(AppError::NotFound),
-    };
+    let (character, areas_completed, character_data) = tokio::join!(
+        db::characters::read_character(&db_pool, &character_id),
+        db::characters::read_character_areas_completed(&db_pool, &character_id),
+        db::characters_data::load_character_data(&db_pool, &character_id)
+    );
 
-    let areas_completed =
-        db::characters::read_character_areas_completed(&db_pool, &character_id).await?;
-
-    let (inventory, ascension) = db::characters_data::load_character_data(&db_pool, &character_id)
-        .await?
-        .unwrap_or_default();
+    let character = character?.ok_or(AppError::NotFound)?.into();
+    let areas_completed = areas_completed?;
+    let (inventory, ascension) = character_data?.unwrap_or_default();
 
     let available_areas = master_store.area_blueprints_store.iter();
 
     Ok(Json(GetCharacterDetailsResponse {
-        character: character.into(),
+        character,
         areas: available_areas
             .map(|(area_id, available_area)| UserGrindArea {
                 area_id: area_id.clone(),
@@ -110,7 +108,7 @@ async fn get_character_details(
             })
             .collect(),
         inventory,
-        ascension: ascension,
+        ascension,
     }))
 }
 
@@ -142,7 +140,6 @@ impl From<db::characters::CharacterEntry> for UserCharacter {
             resource_shards: val.resource_shards,
             max_area_level: val.max_area_level as AreaLevel,
             activity: if let (Some(area_id), Some(area_level)) = (val.area_id, val.area_level) {
-                // TODO: find a way to switch somewhere to area_name
                 UserCharacterActivity::Grinding(area_id, area_level as AreaLevel)
             } else {
                 UserCharacterActivity::Rusting

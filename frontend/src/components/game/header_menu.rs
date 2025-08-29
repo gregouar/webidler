@@ -21,11 +21,12 @@ use super::GameContext;
 
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
-    let abandon_quest = Arc::new({
+    let do_abandon_quest = Arc::new({
         let conn = expect_context::<WebsocketContext>();
         let navigate = leptos_router::hooks::use_navigate();
         move || {
             conn.send(&ClientMessage::EndQuest);
+            // TODO: Bring to summary page...
             navigate("/town", Default::default());
         }
     });
@@ -35,7 +36,7 @@ pub fn HeaderMenu() -> impl IntoView {
         move |_| {
             (confirm_context.confirm)(
                 "Abandoning the grind will reset the area level, player level and gold, you will only keep items, gems and power shards. Are you sure?".to_string(),
-                abandon_quest.clone(),
+                do_abandon_quest.clone(),
             );
         }
     };

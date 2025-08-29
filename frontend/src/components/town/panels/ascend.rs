@@ -1,6 +1,4 @@
-use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*, task::spawn_local};
-use leptos_use::storage;
 
 use std::sync::Arc;
 
@@ -10,6 +8,7 @@ use shared::{
 };
 
 use crate::components::{
+    auth::AuthContext,
     backend_client::BackendClient,
     game::panels::passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
     town::TownContext,
@@ -87,42 +86,48 @@ fn ConfirmButton(
     ascension_cost: RwSignal<f64>,
     open: RwSignal<bool>,
 ) -> impl IntoView {
-    let confirm_context = expect_context::<ConfirmContext>();
-
-    let backend = expect_context::<BackendClient>();
-    let town_context = expect_context::<TownContext>();
-    let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
-    let toaster = expect_context::<Toasts>();
-    let ascend = Arc::new(move || {
-        spawn_local({
-            async move {
-                // TODO:Toast error
-                match backend
-                    .post_ascend_passives(
-                        &get_jwt_storage.get(),
-                        &AscendPassivesRequest {
-                            character_id: town_context.character.read().character_id.clone(),
-                            passives_tree_ascension: passives_tree_ascension.get(),
-                        },
-                    )
-                    .await
-                {
-                    Ok(_) => open.set(false),
-                    Err(e) => show_toast(
-                        toaster,
-                        format!("failed to ascend: {e}"),
-                        ToastVariant::Error,
-                    ),
+    let do_ascend = {
+        let backend = expect_context::<BackendClient>();
+        let town_context = expect_context::<TownContext>();
+        let auth_context = expect_context::<AuthContext>();
+        let toaster = expect_context::<Toasts>();
+        Arc::new(move || {
+            spawn_local({
+                async move {
+                    match backend
+                        .post_ascend_passives(
+                            &auth_context.token(),
+                            &AscendPassivesRequest {
+                                character_id: town_context.character.read().character_id.clone(),
+                                passives_tree_ascension: passives_tree_ascension.get(),
+                            },
+                        )
+                        .await
+                    {
+                        Ok(response) => {
+                            town_context.character.set(response.character);
+                            town_context.passives_tree_ascension.set(response.ascension);
+                            open.set(false);
+                        }
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("failed to ascend: {e}"),
+                            ToastVariant::Error,
+                        ),
+                    }
                 }
-            }
-        });
-    });
+            });
+        })
+    };
 
-    let try_ascend = move |_| {
-        (confirm_context.confirm)(
-            format! {"Do you confirm Ascension for {} Power Shards?",ascension_cost.get() },
-            ascend.clone(),
-        );
+    let try_ascend = {
+        let confirm_context = expect_context::<ConfirmContext>();
+        move |_| {
+            (confirm_context.confirm)(
+                format! {"Do you confirm Ascension for {} Power Shards?",ascension_cost.get() },
+                do_ascend.clone(),
+            );
+        }
     };
 
     let disabled = Signal::derive(move || ascension_cost.get() == 0.0);
@@ -136,12 +141,44 @@ fn ConfirmButton(
 
 #[component]
 fn ResetButton() -> impl IntoView {
-    let confirm_context = expect_context::<ConfirmContext>();
+    let do_reset = {
+        let backend = expect_context::<BackendClient>();
+        let town_context = expect_context::<TownContext>();
+        let auth_context = expect_context::<AuthContext>();
+        let toaster = expect_context::<Toasts>();
+        Arc::new(move || {
+            spawn_local({
+                async move {
+                    match backend
+                        .post_ascend_passives(
+                            &auth_context.token(),
+                            &AscendPassivesRequest {
+                                character_id: town_context.character.read().character_id.clone(),
+                                passives_tree_ascension: PassivesTreeAscension::default(),
+                            },
+                        )
+                        .await
+                    {
+                        Ok(response) => {
+                            town_context.character.set(response.character);
+                            town_context.passives_tree_ascension.set(response.ascension);
+                        }
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("failed to respec: {e}"),
+                            ToastVariant::Error,
+                        ),
+                    }
+                }
+            });
+        })
+    };
 
-    let reset = Arc::new(move || {});
-
-    let try_reset = move |_| {
-        (confirm_context.confirm)("Fully Respec Ascension?".to_string(), reset.clone());
+    let try_reset = {
+        let confirm_context = expect_context::<ConfirmContext>();
+        move |_| {
+            (confirm_context.confirm)("Fully Respec Ascension?".to_string(), do_reset.clone());
+        }
     };
 
     view! { <MenuButton on:click=try_reset>"Respec Ascension"</MenuButton> }

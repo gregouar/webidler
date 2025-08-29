@@ -209,8 +209,8 @@ where
         r#"
         UPDATE characters
         SET 
-            resource_gems = $3,
-            resource_shards = $4,
+            resource_gems = $2,
+            resource_shards = $3,
             updated_at = CURRENT_TIMESTAMP 
         WHERE character_id = $1
         "#,

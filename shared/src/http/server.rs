@@ -103,4 +103,7 @@ pub struct GetPassivesResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct AscendPassivesResponse {}
+pub struct AscendPassivesResponse {
+    pub character: UserCharacter,
+    pub ascension: PassivesTreeAscension,
+}

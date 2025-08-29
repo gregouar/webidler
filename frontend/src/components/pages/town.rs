@@ -1,11 +1,12 @@
 use codee::string::JsonSerdeCodec;
-use leptos::{prelude::*, task::spawn_local};
+use leptos::prelude::*;
 use leptos_router::hooks::use_navigate;
-use leptos_use::{storage, use_interval_fn};
+use leptos_use::storage;
 
 use shared::data::user::UserCharacterId;
 
 use crate::components::{
+    auth::AuthContext,
     backend_client::{BackendClient, BackendError},
     town::{
         header_menu::HeaderMenu, panels::ascend::AscendPanel, town_scene::TownScene, TownContext,
@@ -21,10 +22,8 @@ pub fn TownPage() -> impl IntoView {
     let (get_character_id_storage, _, _) =
         storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
 
-    let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
-
     let passives_tree_specs = LocalResource::new({
-        let backend = use_context::<BackendClient>().unwrap();
+        let backend = expect_context::<BackendClient>();
         move || async move {
             backend
                 .get_passives()
@@ -35,11 +34,12 @@ pub fn TownPage() -> impl IntoView {
     });
 
     let fetch_data = {
-        let backend = use_context::<BackendClient>().unwrap();
+        let backend = expect_context::<BackendClient>();
+        let auth_context = expect_context::<AuthContext>();
 
         move || async move {
             match backend
-                .get_character_details(&get_jwt_storage.get(), &get_character_id_storage.get())
+                .get_character_details(&auth_context.token(), &get_character_id_storage.get())
                 .await
             {
                 Ok(response) => {
@@ -57,7 +57,7 @@ pub fn TownPage() -> impl IntoView {
 
     let initial_load = LocalResource::new(move || fetch_data());
 
-    use_interval_fn(move || spawn_local(fetch_data()), 5_000);
+    // use_interval_fn(move || spawn_local(fetch_data()), 5_000);
 
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">

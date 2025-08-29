@@ -1,13 +1,18 @@
 use leptos::prelude::*;
 use leptos_meta::*;
-use leptos_router::components::{Route, Router, Routes};
-use leptos_router::path;
+use leptos_router::{
+    components::{Route, Router, Routes},
+    path,
+};
 use leptos_toaster::*;
 use url::Url;
 
-use crate::components::backend_client::BackendClient;
-use crate::components::pages;
-use crate::components::ui::confirm::{provide_confirm_context, ConfirmationModal};
+use crate::components::{
+    auth::provide_auth_context,
+    backend_client::BackendClient,
+    pages,
+    ui::confirm::{provide_confirm_context, ConfirmationModal},
+};
 
 // TODO: localization https://crates.io/crates/fluent-templates
 
@@ -27,6 +32,8 @@ pub fn App() -> impl IntoView {
         option_env!("BACKEND_HTTP_URL").unwrap_or("http://localhost:4200"),
         option_env!("BACKEND_WS_URL").unwrap_or("ws://localhost:4200"),
     ));
+
+    provide_auth_context();
 
     let confirm_state = provide_confirm_context();
 
