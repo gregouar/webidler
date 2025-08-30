@@ -91,6 +91,8 @@ fn ConfirmButton(
         let town_context = expect_context::<TownContext>();
         let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
+
+        let character_id = town_context.character.read_untracked().character_id.clone();
         move || {
             spawn_local({
                 async move {
@@ -98,7 +100,7 @@ fn ConfirmButton(
                         .post_ascend_passives(
                             &auth_context.token(),
                             &AscendPassivesRequest {
-                                character_id: town_context.character.read_untracked().character_id,
+                                character_id,
                                 passives_tree_ascension: passives_tree_ascension.get_untracked(),
                             },
                         )
@@ -194,6 +196,7 @@ fn ResetButton(
         let town_context = expect_context::<TownContext>();
         let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
+        let character_id = town_context.character.read_untracked().character_id.clone();
         move || {
             spawn_local({
                 async move {
@@ -201,7 +204,7 @@ fn ResetButton(
                         .post_ascend_passives(
                             &auth_context.token(),
                             &AscendPassivesRequest {
-                                character_id: town_context.character.read_untracked().character_id,
+                                character_id,
                                 passives_tree_ascension: PassivesTreeAscension::default(),
                             },
                         )
