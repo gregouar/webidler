@@ -1,5 +1,3 @@
 [build]
 release = true
-
-[tools]
-wasm_opt = "-Oz --enable-bulk-memory"
+rustflags = ["-C", "target-feature=+bulk-memory"]
