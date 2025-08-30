@@ -92,7 +92,7 @@ fn ConfirmButton(
         let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
 
-        let character_id = town_context.character.read_untracked().character_id.clone();
+        let character_id = town_context.character.read_untracked().character_id;
         move || {
             spawn_local({
                 async move {
@@ -151,7 +151,7 @@ fn ResetButton(
         let town_context = expect_context::<TownContext>();
         let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
-        let character_id = town_context.character.read_untracked().character_id.clone();
+        let character_id = town_context.character.read_untracked().character_id;
         move || {
             spawn_local({
                 async move {
