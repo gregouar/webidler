@@ -18,7 +18,5 @@ debug = 1            # Line tables only
 opt-level = 0
 
 [profile.release]
-# lto = "thin"         # Enable Link Time Optimization
-# opt-level = 's'      # Optimize for size
-# codegen-units = 1    # Maximize optimization
-# strip = true         # Strip symbols from binary
+lto = "thin"         # Enable Link Time Optimization
+codegen-units = 1    # Maximize optimization
