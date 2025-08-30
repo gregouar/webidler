@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*};
 use shared::messages::client::ClientMessage;
 
 use crate::{
-    assets::{img_asset, music_asset},
+    assets::img_asset,
     components::{
         ui::{
             buttons::{MenuButton, MenuButtonRed},
@@ -42,19 +42,6 @@ pub fn HeaderMenu() -> impl IntoView {
         let navigate = leptos_router::hooks::use_navigate();
         move |_| {
             navigate("/user-dashboard", Default::default());
-        }
-    };
-
-    let musics = {
-        let game_context = expect_context::<GameContext>();
-        move || {
-            game_context
-                .area_specs
-                .read()
-                .musics
-                .iter()
-                .map(|m| music_asset(m))
-                .collect::<Vec<_>>()
         }
     };
 
@@ -98,17 +85,6 @@ pub fn HeaderMenu() -> impl IntoView {
                 />
             </div>
             <div class="flex justify-end space-x-2  w-full">
-                <audio autoplay loop controls>
-                    {move || {
-                        musics()
-                            .into_iter()
-                            .map(|src| {
-                                view! { <source src=src /> }
-                            })
-                            .collect_view()
-                    }}
-                </audio>
-
                 <MenuButton on:click=move |_| {
                     game_context.open_inventory.set(!game_context.open_inventory.get());
                     game_context.open_statistics.set(false);

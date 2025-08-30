@@ -164,17 +164,6 @@ pub fn MainMenuPage() -> impl IntoView {
                             "chatgpt.com"
                         </a>")."
                     </p>
-                    <p class="mt-2">
-                        "Musics are created with the help of Suno's generative AI tools (free version via "
-                        <a
-                            href="https://suno.com"
-                            class="text-amber-300 underline hover:text-amber-200"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            "suno.com"
-                        </a>")."
-                    </p>
                 </div>
 
                 <div class="flex justify-center gap-6 pt-2 border-t border-zinc-700">

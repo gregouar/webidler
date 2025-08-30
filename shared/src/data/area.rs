@@ -6,7 +6,6 @@ pub type AreaLevel = u16;
 pub struct AreaSpecs {
     pub name: String,
     pub starting_level: AreaLevel,
-    pub musics: Vec<String>,
     pub header_background: String,
     pub footer_background: String,
 }
