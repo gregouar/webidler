@@ -9,7 +9,7 @@ TRUNCATE TABLE character_area_completed;
 TRUNCATE TABLE saved_game_instances;
 
 UPDATE
-    TABLE characters
+    characters
 SET
     resource_gems = 0,
     resource_shards = 0;
