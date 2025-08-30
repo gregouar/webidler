@@ -11,7 +11,7 @@
       {
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": 0.2
+        "value": 0.5
       }
     ],
     "targets": [
@@ -41,7 +41,7 @@
       {
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": 0.2
+        "value": 0.5
       }
     ],
     "targets": [
@@ -72,7 +72,7 @@
       {
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": 0.2
+        "value": 0.5
       }
     ],
     "targets": [
@@ -120,7 +120,7 @@
       {
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": 0.2
+        "value": 0.5
       }
     ],
     "targets": [
@@ -161,7 +161,7 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 0.01
+        "value": 0.02
       }
     ],
     "targets": [
@@ -209,7 +209,7 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 0.1
+        "value": 0.2
       }
     ],
     "targets": [
@@ -268,7 +268,7 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 0.01
+        "value": 0.02
       }
     ],
     "targets": [
@@ -321,7 +321,7 @@
       {
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": 0.2
+        "value": 0.5
       }
     ],
     "targets": [
@@ -383,7 +383,7 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 5
+        "value": 10
       }
     ],
     "targets": [
@@ -413,12 +413,12 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 1
+        "value": 5
       },
       {
         "stat": { "Speed": "Spell" },
         "modifier": "Flat",
-        "value": -1
+        "value": -2
       }
     ],
     "targets": [
@@ -450,7 +450,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.2
+        "value": 0.5
       }
     ],
     "modifier_effects": [

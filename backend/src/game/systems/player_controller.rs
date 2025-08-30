@@ -10,7 +10,7 @@ use shared::data::{
 };
 
 use crate::{
-    constants::{SKILL_BASE_COST, SKILL_COST_FACTOR},
+    constants::{MONSTER_INCREASE_FACTOR, SKILL_BASE_COST, SKILL_COST_FACTOR, XP_INCREASE_FACTOR},
     game::{
         data::{event::EventsQueue, master_store::SkillsStore, DataInit},
         utils::increase_factors,
@@ -133,10 +133,7 @@ pub fn level_up(
     player_resources.passive_points += 1;
     player_resources.experience -= player_specs.experience_needed;
     player_specs.experience_needed = (20.0
-        * increase_factors::exponential(
-            player_specs.level as AreaLevel,
-            increase_factors::XP_INCREASE_FACTOR,
-        ))
+        * increase_factors::exponential(player_specs.level as AreaLevel, XP_INCREASE_FACTOR))
     .round();
 
     player_state.character_state.life += 10.0;
@@ -318,10 +315,7 @@ pub fn sell_item(
             shared::data::item::ItemRarity::Rare => 4.0,
             shared::data::item::ItemRarity::Unique => 8.0,
         } * player_specs.gold_find
-            * increase_factors::exponential(
-                item_specs.level,
-                increase_factors::MONSTER_INCREASE_FACTOR,
-            );
+            * increase_factors::exponential(item_specs.level, MONSTER_INCREASE_FACTOR);
 }
 
 fn unequip_weapon(

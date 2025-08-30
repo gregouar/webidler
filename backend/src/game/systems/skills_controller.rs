@@ -9,11 +9,14 @@ use shared::data::{
     skill::{SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType, TargetType},
 };
 
-use crate::game::{
-    data::event::EventsQueue,
-    utils::{
-        increase_factors,
-        rng::{self, flip_coin},
+use crate::{
+    constants::SKILL_COST_INCREASE_FACTOR,
+    game::{
+        data::event::EventsQueue,
+        utils::{
+            increase_factors,
+            rng::{self, flip_coin},
+        },
     },
 };
 
@@ -273,9 +276,6 @@ pub fn level_up_skill(skill_specs: &mut SkillSpecs, player_resources: &mut Playe
 
     skill_specs.upgrade_level += 1;
     skill_specs.next_upgrade_cost += (10.0
-        * increase_factors::exponential(
-            skill_specs.upgrade_level,
-            increase_factors::MONSTER_INCREASE_FACTOR,
-        ))
+        * increase_factors::exponential(skill_specs.upgrade_level, SKILL_COST_INCREASE_FACTOR))
     .round();
 }

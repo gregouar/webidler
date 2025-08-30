@@ -7,9 +7,12 @@ use shared::data::{
     skill::{DamageType, RestoreType, SkillType},
 };
 
-use crate::game::{
-    data::event::{EventsQueue, GameEvent, HitEvent},
-    utils::{increase_factors, rng},
+use crate::{
+    constants::ARMOR_FACTOR,
+    game::{
+        data::event::{EventsQueue, GameEvent, HitEvent},
+        utils::{increase_factors, rng},
+    },
 };
 
 pub type Target<'a> = (CharacterId, (&'a CharacterSpecs, &'a mut CharacterState));
@@ -195,22 +198,13 @@ fn decrease_damage_from_armor(
     amount
         * match damage_type {
             DamageType::Physical => {
-                1.0 - increase_factors::diminishing(
-                    target_specs.armor,
-                    increase_factors::ARMOR_FACTOR,
-                )
+                1.0 - increase_factors::diminishing(target_specs.armor, ARMOR_FACTOR)
             }
             DamageType::Fire => {
-                1.0 - increase_factors::diminishing(
-                    target_specs.fire_armor,
-                    increase_factors::ARMOR_FACTOR,
-                )
+                1.0 - increase_factors::diminishing(target_specs.fire_armor, ARMOR_FACTOR)
             }
             DamageType::Poison => {
-                1.0 - increase_factors::diminishing(
-                    target_specs.poison_armor,
-                    increase_factors::ARMOR_FACTOR,
-                )
+                1.0 - increase_factors::diminishing(target_specs.poison_armor, ARMOR_FACTOR)
             }
         }
 }

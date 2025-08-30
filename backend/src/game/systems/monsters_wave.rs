@@ -8,7 +8,9 @@ use shared::data::{
 };
 
 use crate::{
-    constants::{CHAMPION_BASE_CHANCES, CHAMPION_INC_CHANCES, CHAMPION_LEVEL_INC},
+    constants::{
+        CHAMPION_BASE_CHANCES, CHAMPION_INC_CHANCES, CHAMPION_LEVEL_INC, MONSTER_INCREASE_FACTOR,
+    },
     game::{
         data::{
             area::{AreaBlueprint, BossBlueprint, MonsterWaveBlueprint, MonsterWaveSpawnBlueprint},
@@ -181,11 +183,10 @@ fn generate_monster_specs(
         }
     };
 
-    let exp_factor =
-        increase_factors::exponential(monster_level, increase_factors::MONSTER_INCREASE_FACTOR);
+    let exp_factor = increase_factors::exponential(monster_level, MONSTER_INCREASE_FACTOR);
     let reward_factor = increase_factors::exponential(
         monster_level - area_blueprint.specs.starting_level + 1,
-        increase_factors::MONSTER_INCREASE_FACTOR,
+        MONSTER_INCREASE_FACTOR,
     );
 
     monster_specs.power_factor *= exp_factor;
