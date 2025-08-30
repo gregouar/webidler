@@ -1,85 +1,84 @@
 use codee::string::JsonSerdeCodec;
 use leptos::prelude::*;
 use leptos_router::hooks::use_navigate;
-use leptos_use::{storage, use_interval_fn};
+use leptos_use::storage;
 
 use shared::data::user::UserCharacterId;
 
 use crate::components::{
-    backend_client::BackendClient,
-    town::{header_menu::HeaderMenu, town_scene::TownScene},
+    auth::AuthContext,
+    backend_client::{BackendClient, BackendError},
+    town::{
+        header_menu::HeaderMenu, panels::ascend::AscendPanel, town_scene::TownScene, TownContext,
+    },
     ui::tooltip::DynamicTooltip,
 };
 
 #[component]
 pub fn TownPage() -> impl IntoView {
+    let town_context = TownContext::new();
+    provide_context(town_context);
+
     let (get_character_id_storage, _, _) =
         storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
 
-    let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
-
-    let refresh_trigger = RwSignal::new(0u64);
-
-    let character_and_areas = LocalResource::new({
-        let backend = use_context::<BackendClient>().unwrap();
+    let passives_tree_specs = LocalResource::new({
+        let backend = expect_context::<BackendClient>();
         move || async move {
-            let _ = refresh_trigger.read();
-
             backend
-                .get_character_details(&get_jwt_storage.get(), &get_character_id_storage.get())
+                .get_passives()
                 .await
-                .map(|response| (response.character, response.areas))
-                .ok()
+                .map(|response| response.passives_tree_specs)
+                .unwrap_or_default()
         }
     });
 
-    let _ = use_interval_fn(
-        move || {
-            refresh_trigger.update(|n| *n += 1);
-        },
-        5_000,
-    );
+    let fetch_data = {
+        let backend = expect_context::<BackendClient>();
+        let auth_context = expect_context::<AuthContext>();
 
-    Effect::new(move |_| {
-        character_and_areas.with(|data| {
-            if let Some(send_wrapper) = data {
-                if let Some((character, _)) = send_wrapper.as_ref() {
-                    let _ = character;
-                    // TODO: update state and menu if not in town, disable stuff, need to trigger some polling refresh?
-                    // if let UserCharacterActivity::Grinding(_, _) = character.activity {
-                    //     // If character in game, we redirect to game
-                    //     use_navigate()("/game", Default::default());
-                    // }
-                } else {
-                    // If no character, we redirect to main menu
-                    use_navigate()("/", Default::default());
+        move || async move {
+            match backend
+                .get_character_details(&auth_context.token(), &get_character_id_storage.get())
+                .await
+            {
+                Ok(response) => {
+                    town_context.character.set(response.character);
+                    town_context.areas.set(response.areas);
+                    town_context.passives_tree_ascension.set(response.ascension);
                 }
+                Err(BackendError::Unauthorized(_) | BackendError::NotFound) => {
+                    use_navigate()("/", Default::default())
+                }
+                _ => {} // TODO: Toast error ?
             }
-        });
-    });
+        }
+    };
+
+    let initial_load = LocalResource::new(fetch_data);
+
+    // use_interval_fn(move || spawn_local(fetch_data()), 5_000);
 
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <DynamicTooltip />
+
             <Transition fallback=move || {
                 view! { <p class="text-gray-400">"Loading..."</p> }
             }>
-                {move || {
-                    Suspend::new(async move {
-                        let (character, areas) = character_and_areas.await.unwrap_or_default();
-                        // TODO: arc it
-
-                        view! {
-                            <HeaderMenu character=character.clone() />
-                            <div class="relative flex-1">
-                                <TownScene character=character areas=areas />
+                {move || Suspend::new(async move {
+                    initial_load.await;
+                    town_context.passives_tree_specs.set(passives_tree_specs.await);
+                    view! {
+                        <HeaderMenu />
+                        <div class="relative flex-1">
+                            <TownScene />
                             // <MarketPanel open=town_context.open_market />
-                            // <AscendPanel open=town_context.open_ascend />
-                            // <ForgePanel open=town_context.open_forge />
-                            </div>
-                        }
-                    })
-                }}
+                            <AscendPanel open=town_context.open_ascend />
+                        // <ForgePanel open=town_context.open_forge />
+                        </div>
+                    }
+                })}
             </Transition>
 
         </main>

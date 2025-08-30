@@ -49,7 +49,7 @@ pub fn SignUpPage() -> impl IntoView {
 
     let on_submit = {
         let toaster = expect_context::<Toasts>();
-        let backend = use_context::<BackendClient>().unwrap();
+        let backend = expect_context::<BackendClient>();
         let navigate = use_navigate();
         move |_| {
             if disable_submit.get() {
@@ -79,7 +79,7 @@ pub fn SignUpPage() -> impl IntoView {
                         Err(e) => {
                             show_toast(
                                 toaster,
-                                format!("Registration error: {e:?}"),
+                                format!("Registration error: {e}"),
                                 ToastVariant::Error,
                             );
                             processing.set(false);

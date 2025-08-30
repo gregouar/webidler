@@ -81,14 +81,14 @@ impl PlayerInventory {
     }
 
     pub fn all_items(&self) -> impl Iterator<Item = &ItemSpecs> + Clone {
-        return self.bag.iter().chain(
+        self.bag.iter().chain(
             self.equipped_items()
                 .map(|(_, item_specs)| item_specs.as_ref()),
-        );
+        )
     }
 
     pub fn all_items_mut(&mut self) -> impl Iterator<Item = &mut ItemSpecs> {
-        return self.bag.iter_mut().chain(
+        self.bag.iter_mut().chain(
             self.equipped
                 .iter_mut()
                 .filter_map(|(slot, equipped_slot)| match equipped_slot {
@@ -96,6 +96,6 @@ impl PlayerInventory {
                     EquippedSlot::ExtraSlot(_) => None,
                 })
                 .map(|(_, item_specs)| item_specs.as_mut()),
-        );
+        )
     }
 }

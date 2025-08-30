@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*};
 use shared::messages::client::ClientMessage;
 
 use crate::{
-    assets::{img_asset, music_asset},
+    assets::img_asset,
     components::{
         ui::{
             buttons::{MenuButton, MenuButtonRed},
@@ -21,12 +21,10 @@ use super::GameContext;
 
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
-    let abandon_quest = Arc::new({
+    let do_abandon_quest = Arc::new({
         let conn = expect_context::<WebsocketContext>();
-        let navigate = leptos_router::hooks::use_navigate();
         move || {
             conn.send(&ClientMessage::EndQuest);
-            navigate("/town", Default::default());
         }
     });
 
@@ -35,7 +33,7 @@ pub fn HeaderMenu() -> impl IntoView {
         move |_| {
             (confirm_context.confirm)(
                 "Abandoning the grind will reset the area level, player level and gold, you will only keep items, gems and power shards. Are you sure?".to_string(),
-                abandon_quest.clone(),
+                do_abandon_quest.clone(),
             );
         }
     };
@@ -44,19 +42,6 @@ pub fn HeaderMenu() -> impl IntoView {
         let navigate = leptos_router::hooks::use_navigate();
         move |_| {
             navigate("/user-dashboard", Default::default());
-        }
-    };
-
-    let musics = {
-        let game_context = expect_context::<GameContext>();
-        move || {
-            game_context
-                .area_specs
-                .read()
-                .musics
-                .iter()
-                .map(|m| music_asset(m))
-                .collect::<Vec<_>>()
         }
     };
 
@@ -85,12 +70,14 @@ pub fn HeaderMenu() -> impl IntoView {
                     value=gold
                 />
                 <ResourceCounter
+                    class:text-violet-200
                     icon="ui/gems.webp"
                     name="Gems"
                     description="To buy items in the market between grinds."
                     value=gems
                 />
                 <ResourceCounter
+                    class:text-cyan-200
                     icon="ui/power_shard.webp"
                     name="Power Shards"
                     description="To permanently increase power of passive skills."
@@ -98,17 +85,6 @@ pub fn HeaderMenu() -> impl IntoView {
                 />
             </div>
             <div class="flex justify-end space-x-2  w-full">
-                <audio autoplay loop controls>
-                    {move || {
-                        musics()
-                            .into_iter()
-                            .map(|src| {
-                                view! { <source src=src /> }
-                            })
-                            .collect_view()
-                    }}
-                </audio>
-
                 <MenuButton on:click=move |_| {
                     game_context.open_inventory.set(!game_context.open_inventory.get());
                     game_context.open_statistics.set(false);

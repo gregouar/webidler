@@ -1,5 +1,4 @@
 [workspace]
-
 members = [
     "backend",
     "frontend", 
@@ -7,3 +6,19 @@ members = [
 ]
 
 resolver = "3"
+
+[profile.dev]
+opt-level = 0
+incremental = true
+split-debuginfo = "unpacked"
+codegen-units = 16   # More units = faster compilation
+debug = 1            # Line tables only
+
+[profile.dev.package."*"]
+opt-level = 0
+
+[profile.release]
+lto = "thin"         # Enable Link Time Optimization
+opt-level = 's'      # Optimize for size
+codegen-units = 1    # Maximize optimization
+strip = true         # Strip symbols from binary

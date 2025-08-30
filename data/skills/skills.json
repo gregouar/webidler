@@ -9,7 +9,7 @@
     "upgrade_cost": 20,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "Damage": {} },
         "modifier": "Multiplier",
         "value": 0.2
       }
@@ -39,7 +39,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "Damage": {} },
         "modifier": "Multiplier",
         "value": 0.2
       }
@@ -70,7 +70,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "Damage": {} },
         "modifier": "Multiplier",
         "value": 0.2
       }
@@ -118,7 +118,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "Damage": {} },
         "modifier": "Multiplier",
         "value": 0.2
       }
@@ -199,7 +199,7 @@
   },
   "curse_weakness": {
     "name": "Curse of Weakness",
-    "description": "A debilitating curse that reduces enemies' damage output.",
+    "description": "A debilitating curse that reduces enemies' damage output and slow them.",
     "icon": "skills/curse_weakness.svg",
     "skill_type": "Spell",
     "cooldown": 10,
@@ -237,6 +237,17 @@
                   },
                   "min_value": 0.5,
                   "max_value": 0.5
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": { "Speed": null },
+                      "modifier": "Multiplier",
+                      "debuff": true
+                    }
+                  },
+                  "min_value": 0.3,
+                  "max_value": 0.3
                 }
               ]
             }
@@ -308,9 +319,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": {
-          "Damage": {}
-        },
+        "stat": { "Damage": {} },
         "modifier": "Multiplier",
         "value": 0.2
       }

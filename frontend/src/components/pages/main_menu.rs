@@ -6,6 +6,7 @@ use leptos_use::storage;
 use shared::http::client::SignInRequest;
 
 use crate::components::{
+    auth::AuthContext,
     backend_client::BackendClient,
     captcha::*,
     ui::{buttons::MenuButton, input::Input, toast::*},
@@ -14,7 +15,7 @@ use crate::components::{
 #[component]
 pub fn MainMenuPage() -> impl IntoView {
     let players_count = LocalResource::new({
-        let backend = use_context::<BackendClient>().unwrap();
+        let backend = expect_context::<BackendClient>();
         move || async move {
             backend
                 .get_players_count()
@@ -31,8 +32,6 @@ pub fn MainMenuPage() -> impl IntoView {
     let password = RwSignal::new(None);
     let captcha_token = RwSignal::new(None);
 
-    let (_, set_jwt_storage, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
-
     let connecting = RwSignal::new(false);
     let disable_connect = Signal::derive(move || {
         username.read().is_none()
@@ -43,7 +42,8 @@ pub fn MainMenuPage() -> impl IntoView {
 
     let signin = {
         let toaster = expect_context::<Toasts>();
-        let backend = use_context::<BackendClient>().unwrap();
+        let backend = expect_context::<BackendClient>();
+        let auth_context = expect_context::<AuthContext>();
         let navigate = use_navigate();
         move || {
             if disable_connect.get() {
@@ -63,14 +63,14 @@ pub fn MainMenuPage() -> impl IntoView {
                         .await
                     {
                         Ok(response) => {
-                            set_jwt_storage.set(response.jwt);
+                            auth_context.sign_in(response.jwt);
                             set_username_storage.set(username.get());
                             navigate("user-dashboard", Default::default());
                         }
                         Err(e) => {
                             show_toast(
                                 toaster,
-                                format!("Authentication error: {e:?}"),
+                                format!("Authentication error: {e}"),
                                 ToastVariant::Error,
                             );
                             connecting.set(false);
@@ -162,17 +162,6 @@ pub fn MainMenuPage() -> impl IntoView {
                             rel="noopener noreferrer"
                         >
                             "chatgpt.com"
-                        </a>")."
-                    </p>
-                    <p class="mt-2">
-                        "Musics are created with the help of Suno's generative AI tools (free version via "
-                        <a
-                            href="https://suno.com"
-                            class="text-amber-300 underline hover:text-amber-200"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            "suno.com"
                         </a>")."
                     </p>
                 </div>

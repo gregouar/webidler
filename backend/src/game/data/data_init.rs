@@ -5,6 +5,7 @@ use shared::data::{
     character::{CharacterSpecs, CharacterState},
     character_status::StatusMap,
     monster::{MonsterSpecs, MonsterState},
+    passive::{PassivesTreeAscension, PassivesTreeState},
     player::{PlayerSpecs, PlayerState},
     skill::{BaseSkillSpecs, SkillSpecs, SkillState},
     stat_effect::EffectsMap,
@@ -110,6 +111,15 @@ impl DataInit<&SkillSpecs> for SkillState {
             elapsed_cooldown: 0.0,
             is_ready: false,
             just_triggered: false,
+        }
+    }
+}
+
+impl DataInit<PassivesTreeAscension> for PassivesTreeState {
+    fn init(ascension: PassivesTreeAscension) -> Self {
+        Self {
+            purchased_nodes: Default::default(),
+            ascension,
         }
     }
 }

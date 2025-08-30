@@ -11,7 +11,7 @@ use crate::components::websocket::Websocket;
 #[component]
 pub fn GamePage() -> impl IntoView {
     // let params = use_params_map();
-    let backend_client = use_context::<backend_client::BackendClient>().unwrap();
+    let backend_client = expect_context::<backend_client::BackendClient>();
 
     // let character_id = {
     //     params

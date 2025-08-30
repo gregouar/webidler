@@ -17,6 +17,7 @@ use shared::{
 use crate::{
     assets::img_asset,
     components::{
+        auth::AuthContext,
         backend_client::BackendClient,
         ui::{
             buttons::{MenuButton, MenuButtonRed},
@@ -30,13 +31,11 @@ use crate::{
 
 #[component]
 pub fn UserDashboardPage() -> impl IntoView {
-    let (get_jwt_storage, set_jwt_storage, _) =
-        storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
-
     let refresh_trigger = RwSignal::new(0u64);
 
     let async_data = LocalResource::new({
-        let backend = use_context::<BackendClient>().unwrap();
+        let backend = expect_context::<BackendClient>();
+        let auth_context = expect_context::<AuthContext>();
         move || async move {
             let _ = refresh_trigger.read();
 
@@ -47,7 +46,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                 .unwrap_or_default();
 
             let user = backend
-                .get_me(&get_jwt_storage.get())
+                .get_me(&auth_context.token())
                 .await
                 .map(|r| r.user)
                 .ok();
@@ -55,7 +54,7 @@ pub fn UserDashboardPage() -> impl IntoView {
             match user {
                 Some(user) => {
                     let characters = backend
-                        .get_user_characters(&get_jwt_storage.get(), &user.user_id)
+                        .get_user_characters(&auth_context.token(), &user.user_id)
                         .await
                         .map(|r| r.characters)
                         .unwrap_or_default();
@@ -75,10 +74,11 @@ pub fn UserDashboardPage() -> impl IntoView {
         }
     });
 
-    let logout = {
+    let sign_out = {
         let navigate = use_navigate();
+        let auth_context = expect_context::<AuthContext>();
         move |_| {
-            set_jwt_storage.set("".to_string());
+            auth_context.sign_out();
             navigate("/", Default::default());
         }
     };
@@ -91,7 +91,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                 view! { <p class="text-gray-400">"Loading..."</p> }
             }>
                 {move || {
-                    let logout = logout.clone();
+                    let logout = sign_out.clone();
                     Suspend::new(async move {
                         let (areas, user, characters) = async_data.await.unwrap_or_default();
                         let areas = Arc::new(areas);
@@ -177,15 +177,15 @@ fn CharacterSlot(
     areas: Arc<HashMap<String, AreaSpecs>>,
 ) -> impl IntoView {
     let delete_character = Arc::new({
-        let backend = use_context::<BackendClient>().unwrap();
-        let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
+        let backend = expect_context::<BackendClient>();
+        let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
         let character_id = character.character_id;
 
         move || {
             spawn_local(async move {
                 match backend
-                    .delete_character(&get_jwt_storage.get(), &character_id)
+                    .delete_character(&auth_context.token(), &character_id)
                     .await
                 {
                     Ok(_) => {
@@ -199,7 +199,7 @@ fn CharacterSlot(
                     Err(e) => {
                         show_toast(
                             toaster,
-                            format!("Failed to delete character: {e:?}"),
+                            format!("Failed to delete character: {e}"),
                             ToastVariant::Error,
                         );
                     }
@@ -295,7 +295,10 @@ fn CharacterSlot(
                     <MenuButton class:flex-grow on:click=play_character.clone()>
                         "Play"
                     </MenuButton>
-                    <MenuButton on:click=try_delete_character>"❌"</MenuButton>
+                    <MenuButton on:click=move |ev: leptos::ev::MouseEvent| {
+                        ev.stop_propagation();
+                        try_delete_character(ev);
+                    }>"❌"</MenuButton>
                 </div>
             </div>
         </div>
@@ -340,9 +343,9 @@ pub fn CreateCharacterPanel(
         Signal::derive(move || name.read().is_none() || selected_portrait.read().is_none());
 
     let on_submit = {
-        let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
+        let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
-        let backend = use_context::<BackendClient>().unwrap();
+        let backend = expect_context::<BackendClient>();
 
         move |_| {
             if disable_submit.get() {
@@ -354,7 +357,7 @@ pub fn CreateCharacterPanel(
                 async move {
                     match backend
                         .post_create_character(
-                            &get_jwt_storage.get(),
+                            &auth_context.token(),
                             &user_id,
                             &CreateCharacterRequest {
                                 name: name.get().unwrap(),
@@ -371,7 +374,7 @@ pub fn CreateCharacterPanel(
                         Err(e) => {
                             show_toast(
                                 toaster,
-                                format!("Character creation error: {e:?}"),
+                                format!("Character creation error: {e}"),
                                 ToastVariant::Error,
                             );
                             processing.set(false);

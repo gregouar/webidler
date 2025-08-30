@@ -3,20 +3,17 @@ use leptos::prelude::*;
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
-use shared::data::{
-    area::AreaLevel,
-    user::{UserCharacter, UserGrindArea},
-};
+use shared::data::user::UserGrindArea;
 
-use crate::assets::img_asset;
+use crate::{assets::img_asset, components::town::TownContext};
 
 #[component]
-pub fn TownScene(character: UserCharacter, areas: Vec<UserGrindArea>) -> impl IntoView {
-    let mut areas = areas;
-    areas.sort_by_key(|area| area.area_specs.starting_level);
+pub fn TownScene() -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+
     view! {
         <div class="w-full grid grid-cols-3                                                                                                                      gap-4 p-4 ">
-            <PlayerCard character=character class:col-span-1 class:justify-self-end />
+            <PlayerCard class:col-span-1 class:justify-self-end />
 
             <div class="w-full col-span-2 justify-self-start">
 
@@ -32,7 +29,11 @@ pub fn TownScene(character: UserCharacter, areas: Vec<UserGrindArea>) -> impl In
                     h-full
                     bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                         <For
-                            each=move || areas.clone()
+                            each=move || {
+                                let mut areas = town_context.areas.get();
+                                areas.sort_by_key(|area| area.area_specs.starting_level);
+                                areas
+                            }
                             key=|area| area.area_id.clone()
                             children=move |area| view! { <GrindingAreaCard area=area.clone() /> }
                         />
@@ -45,7 +46,7 @@ pub fn TownScene(character: UserCharacter, areas: Vec<UserGrindArea>) -> impl In
 }
 
 #[component]
-fn PlayerCard(character: UserCharacter) -> impl IntoView {
+fn PlayerCard() -> impl IntoView {
     view! {
         <div class="
         w-full h-full flex flex-col gap-2 p-2 
@@ -54,12 +55,12 @@ fn PlayerCard(character: UserCharacter) -> impl IntoView {
         rounded-md shadow-md 
         ">
             <div>
-                <PlayerName character_name=character.name max_area_level=character.max_area_level />
+                <PlayerName />
             </div>
 
             <div class="flex flex-col gap-2">
                 <div class="flex gap-2">
-                    <CharacterPortrait image_uri=character.portrait />
+                    <CharacterPortrait />
                 </div>
 
             </div>
@@ -68,7 +69,11 @@ fn PlayerCard(character: UserCharacter) -> impl IntoView {
 }
 
 #[component]
-pub fn CharacterPortrait(image_uri: String) -> impl IntoView {
+pub fn CharacterPortrait() -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+
+    let image_uri = move || img_asset(&town_context.character.read().portrait);
+
     view! {
         <div class="flex items-center justify-center h-full w-full relative overflow-hidden">
 
@@ -81,7 +86,7 @@ pub fn CharacterPortrait(image_uri: String) -> impl IntoView {
                     )
                 >
                     <img
-                        src=img_asset(&image_uri)
+                        src=image_uri
                         alt="portrait"
                         class="object-cover h-full w-full transition-all duration-[5s]"
                     />
@@ -95,15 +100,22 @@ pub fn CharacterPortrait(image_uri: String) -> impl IntoView {
 }
 
 #[component]
-pub fn PlayerName(character_name: String, max_area_level: AreaLevel) -> impl IntoView {
+pub fn PlayerName() -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+
+    let character_name = move || town_context.character.read().name.clone();
+    let max_area_level = move || town_context.character.read().max_area_level;
+
     view! {
         <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
             <span class="font-bold">{character_name}</span>
             " — "
-            {if max_area_level > 0 {
-                format!("Max Area Level: {max_area_level}")
-            } else {
-                "Newbie".to_string()
+            {move || {
+                if max_area_level() > 0 {
+                    format!("Max Area Level: {}", max_area_level())
+                } else {
+                    "Newbie".to_string()
+                }
             }}
         </p>
     }

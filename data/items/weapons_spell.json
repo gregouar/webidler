@@ -9,8 +9,8 @@
         "scope": "Global",
         "stat": "SpellPower",
         "modifier": "Multiplier",
-        "min": 0.20,
-        "max": 0.20
+        "min": 0.2,
+        "max": 0.2
       }
     ]
   },
@@ -24,10 +24,111 @@
         "scope": "Global",
         "stat": "SpellPower",
         "modifier": "Multiplier",
-        "min": 0.40,
-        "max": 0.40
+        "min": 0.4,
+        "max": 0.4
       }
     ],
     "min_area_level": 40
+  },
+  "wand_unique": {
+    "name": "Baguette du Fromage",
+    "description": "An artisan's folly turned arcane marvel; its aroma is divine, its sting utterly vile.",
+    "icon": "items/baguette_fromage.webp",
+    "slot": "Weapon",
+    "categories": ["SpellWeapon"],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "SpellPower",
+        "modifier": "Multiplier",
+        "min": 0.4,
+        "max": 0.4
+      },
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "min": 0.4,
+        "max": 0.6
+      },
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "min": 0.2,
+        "max": 0.4
+      },
+      {
+        "scope": "Global",
+        "stat": {"Speed":"Spell"},
+        "modifier": "Multiplier",
+        "min": 0.08,
+        "max": 0.12
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "baguette_fromage",
+        "description": "Hitting an Enemy with Physical Spell Damage cover them in Melted Cheese:",
+        "OnHit": { "skill_type": "Spell", "damage_type": "Physical" },
+        "effects": [
+          {
+            "ApplyStatus": {
+              "min_duration": 3,
+              "max_duration": 3,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "DamageResistance": {
+                          "skill_type": null,
+                          "damage_type": "Fire"
+                        }
+                      },
+                      "modifier": "Flat",
+                      "debuff": true
+                    }
+                  },
+                  "min_value": 1.0,
+                  "max_value": 1.0
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "DamageResistance": {
+                          "skill_type": null,
+                          "damage_type": "Poison"
+                        }
+                      },
+                      "modifier": "Flat",
+                      "debuff": true
+                    }
+                  },
+                  "min_value": 1.0,
+                  "max_value": 1.0
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Speed": null
+                      },
+                      "modifier": "Multiplier",
+                      "debuff": true
+                    }
+                  },
+                  "min_value": 0.33,
+                  "max_value": 0.33
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 50
   }
 }

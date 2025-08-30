@@ -119,6 +119,10 @@
       "weight": 2000
     },
     {
+      "item_id": "wand_unique",
+      "weight": 5
+    },
+    {
       "item_id": "small_round_shield",
       "weight": 2000
     },

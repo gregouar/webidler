@@ -6,21 +6,23 @@ use shared::data::user::UserCharacterId;
 use shared::messages::client::ClientConnectMessage;
 use shared::messages::server::{ErrorType, InitGameMessage, ServerMessage, SyncGameStateMessage};
 
+use crate::components::auth::AuthContext;
 use crate::components::ui::{toast::*, tooltip::DynamicTooltip};
 use crate::components::websocket::WebsocketContext;
 
-use super::GameContext;
 use super::battle_scene::BattleScene;
 use super::header_menu::HeaderMenu;
 use super::panels::{InventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel};
+use super::GameContext;
 
 #[component]
 pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
     let game_context = GameContext::new();
     provide_context(game_context.clone());
 
-    let (get_jwt_storage, _, _) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
+    let auth_context = expect_context::<AuthContext>();
 
+    // TODO: CharacterContext ? With character_id and area_id
     let (get_area_id_storage, _, _) =
         storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
 
@@ -30,7 +32,7 @@ pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
             if conn.connected.get() {
                 conn.send(
                     &ClientConnectMessage {
-                        jwt: get_jwt_storage.get(),
+                        jwt: auth_context.token(),
                         character_id,
                         area_id: get_area_id_storage.get_untracked(),
                     }
@@ -89,6 +91,11 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
                     ErrorType::Game => ToastVariant::Warning,
                 },
             );
+        }
+        ServerMessage::Disconnect(_) => {
+            let navigate = leptos_router::hooks::use_navigate();
+            // TODO: Bring to summary page on end_quest...
+            navigate("/town", Default::default());
         }
     }
 }

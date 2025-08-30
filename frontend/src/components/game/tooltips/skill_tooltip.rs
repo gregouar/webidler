@@ -86,19 +86,22 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
             <ul class="list-none space-y-1">{targets_lines}{trigger_lines}{modifier_lines}</ul>
 
-            {(!skill_specs.base.description.is_empty())
-                .then(|| {
-                    view! {
-                        <hr class="border-t border-gray-700" />
-                        <p class="text-sm italic text-gray-300 leading-snug">
-                            {skill_specs.base.description.clone()}
-                        </p>
-                    }
-                })}
-
             {(skill_specs.next_upgrade_cost > 0.0)
                 .then(|| {
                     view! {
+                        <hr class="border-t border-gray-700" />
+                        <ul>
+                            <li>
+                                <span class="text-sm text-gray-400 leading-snug">
+                                    "Next upgrade:"
+                                </span>
+                            </li>
+                            {effects_tooltip::formatted_effects_list(
+                                skill_specs.base.upgrade_effects.clone(),
+                                AffixEffectScope::Local,
+                            )}
+                        </ul>
+
                         <hr class="border-t border-gray-700" />
                         <p class="text-sm text-gray-400 leading-snug">
                             "Level: " <span class="text-white">{skill_specs.upgrade_level}</span>
@@ -106,6 +109,16 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                             <span class="text-white">
                                 {format_number(skill_specs.next_upgrade_cost)}" Gold"
                             </span>
+                        </p>
+                    }
+                })}
+
+            {(!skill_specs.base.description.is_empty())
+                .then(|| {
+                    view! {
+                        <hr class="border-t border-gray-700" />
+                        <p class="text-sm italic text-gray-300 leading-snug">
+                            {skill_specs.base.description.clone()}
                         </p>
                     }
                 })}

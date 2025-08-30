@@ -6,7 +6,7 @@ pub const XP_INCREASE_FACTOR: f64 = 0.4;
 pub const ARMOR_FACTOR: f64 = 100.0;
 
 pub fn exponential(level: AreaLevel, factor: f64) -> f64 {
-    10f64.powf((level - 1) as f64 * factor)
+    10f64.powf(level.saturating_sub(1) as f64 * factor)
 }
 
 // for armor physical damage decrease

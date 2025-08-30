@@ -2,7 +2,6 @@
   "specs": {
     "name": "Inn Basement",
     "starting_level": 1,
-    "musics": ["ambient1.mp3"],
     "header_background": "areas/inn_header.webp",
     "footer_background": "areas/inn_footer.webp"
   },

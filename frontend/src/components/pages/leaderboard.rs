@@ -35,7 +35,7 @@ pub fn LeaderboardPage() -> impl IntoView {
 #[component]
 pub fn LeaderboardPanel() -> impl IntoView {
     let leaderboard_and_areas = LocalResource::new({
-        let backend = use_context::<BackendClient>().unwrap();
+        let backend = expect_context::<BackendClient>();
         move || async move {
             (
                 backend.get_leaderboard().await.unwrap_or_default(),

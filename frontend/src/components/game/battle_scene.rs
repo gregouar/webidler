@@ -6,10 +6,10 @@ use shared::messages::client::{GoBackLevelMessage, SetAutoProgressMessage};
 use crate::assets::img_asset;
 use crate::components::websocket::WebsocketContext;
 
-use super::GameContext;
 use super::loot_queue::LootQueue;
 use super::monsters_grid::MonstersGrid;
 use super::player_card::PlayerCard;
+use super::GameContext;
 
 #[component]
 pub fn BattleScene() -> impl IntoView {
@@ -90,7 +90,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
             </div>
 
             <div class="flex-1 text-center">
-                <p class="relative z-10 text-shadow text-amber-200 text-2xl font-bold">
+                <p class="relative z-10 text-shadow text-amber-200 text-l sm:text-xl md:text-2xl font-bold">
                     <span class="[font-variant:small-caps]">
                         {move || game_context.area_specs.read().name.clone()}
                     </span>
@@ -134,7 +134,7 @@ pub fn BattleSceneFooter() -> impl IntoView {
             style=footer_background
         >
             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
-            <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-2xl font-bold">
+            <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-l sm:text-xl md:text-2xl font-bold">
                 {move || {
                     if game_context.area_state.read().is_boss {
                         "Boss".to_string()

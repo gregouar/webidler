@@ -54,7 +54,7 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
     };
 
     let skills_response = LocalResource::new({
-        let backend = use_context::<BackendClient>().unwrap();
+        let backend = expect_context::<BackendClient>();
         move || async move { backend.get_skills().await.unwrap_or_default() }
     });
 

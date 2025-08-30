@@ -6,6 +6,7 @@ use shared::data::{
     area::AreaLevel,
     character::CharacterSize,
     item::ItemRarity,
+    passive::PassivesTreeState,
     player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     user::UserCharacterId,
 };
@@ -113,13 +114,7 @@ async fn new_game_instance(
         damage_resistance: HashMap::new(),
     });
 
-    let player_resources = PlayerResources {
-        experience: 0.0,
-        passive_points: 0,
-        gold: 0.0,
-        gems: character.resource_gems,
-        shards: character.resource_shards,
-    };
+    let player_resources = PlayerResources::default();
 
     let character_data =
         db::characters_data::load_character_data(db_pool, &character.character_id).await?;
@@ -132,8 +127,8 @@ async fn new_game_instance(
 
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
-    let player_inventory = match character_data {
-        Some(mut inventory) => {
+    let (player_inventory, passives_tree_state) = match character_data {
+        Some((mut inventory, ascension)) => {
             for item_specs in inventory.all_items_mut() {
                 item_specs.old_game = true;
             }
@@ -145,7 +140,8 @@ async fn new_game_instance(
             ) {
                 player_specs.buy_skill_cost = 0.0;
             }
-            inventory
+
+            (inventory, PassivesTreeState::init(ascension))
         }
         None => {
             let mut player_inventory = PlayerInventory {
@@ -169,24 +165,23 @@ async fn new_game_instance(
                 );
             }
 
-            player_inventory
+            (player_inventory, PassivesTreeState::default())
         }
     };
 
-    let mut game_data = GameInstanceData::init_from_store(
+    let game_data = GameInstanceData::init_from_store(
         master_store,
         area_id,
         None,
+        area_level_completed as AreaLevel,
         "default",
-        None,
+        passives_tree_state,
         player_resources,
         player_specs,
         player_inventory,
         None,
         None,
     )?;
-
-    game_data.area_state.mutate().max_area_level_completed = area_level_completed as AreaLevel;
 
     db::game_instances::save_game_instance_data(
         db_pool,

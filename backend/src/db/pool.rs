@@ -3,9 +3,15 @@ use std::str::FromStr;
 
 #[cfg(feature = "sqlite")]
 pub use sqlx::SqlitePool as DbPool;
+#[cfg(feature = "sqlite")]
+pub type Database = sqlx::Sqlite;
+#[cfg(feature = "sqlite")]
+pub use sqlx::SqliteExecutor as DbExecutor;
 
 #[cfg(feature = "postgres")]
 pub use sqlx::PgPool as DbPool;
+#[cfg(feature = "postgres")]
+pub type Database = sqlx::Postgres;
 
 #[cfg(feature = "sqlite")]
 pub async fn create_pool(database_url: &str) -> Result<DbPool, sqlx::Error> {

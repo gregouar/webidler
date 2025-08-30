@@ -1,5 +1,5 @@
 mod inventory;
-mod passives;
+pub mod passives;
 mod skills;
 mod statistics;
 
