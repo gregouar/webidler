@@ -193,37 +193,41 @@ pub fn PlayerCard() -> impl IntoView {
             </div>
 
             <div class="flex flex-col gap-2">
-                <div class="flex gap-2">
-                    <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Right>
-                        <VerticalProgressBar
-                            class:w-3
-                            class:md:w-6
-                            bar_color="bg-gradient-to-l from-red-500 to-red-700"
-                            value=health_percent
+                <div class="flex flex-col sm:flex-row gap-2 items-center">
+                    <div class="flex gap-2 w-full sm:w-auto justify-center">
+                        <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Right>
+                            <VerticalProgressBar
+                                class:w-2
+                                class:sm:w-3
+                                class:md:w-6
+                                bar_color="bg-gradient-to-l from-red-500 to-red-700"
+                                value=health_percent
+                            />
+                        </StaticTooltip>
+                        <CharacterPortrait
+                            image_uri=game_context
+                                .player_specs
+                                .read_untracked()
+                                .character_specs
+                                .portrait
+                                .clone()
+                            character_name="player".to_string()
+                            just_hurt=just_hurt
+                            just_hurt_crit=just_hurt_crit
+                            just_blocked=just_blocked
+                            is_dead=is_dead
+                            statuses=statuses
                         />
-                    </StaticTooltip>
-                    <CharacterPortrait
-                        image_uri=game_context
-                            .player_specs
-                            .read_untracked()
-                            .character_specs
-                            .portrait
-                            .clone()
-                        character_name="player".to_string()
-                        just_hurt=just_hurt
-                        just_hurt_crit=just_hurt_crit
-                        just_blocked=just_blocked
-                        is_dead=is_dead
-                        statuses=statuses
-                    />
-                    <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
-                        <VerticalProgressBar
-                            class:w-3
-                            class:md:w-6
-                            bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
-                            value=mana_percent
-                        />
-                    </StaticTooltip>
+                        <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
+                            <VerticalProgressBar
+                                class:w-2
+                                class:sm:w-3
+                                class:md:w-6
+                                bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
+                                value=mana_percent
+                            />
+                        </StaticTooltip>
+                    </div>
                 </div>
                 <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
                     <HorizontalProgressBar

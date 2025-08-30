@@ -171,10 +171,12 @@ where
             <div class=format!(
                 "
                 absolute hidden group-hover:block
-                px-3 py-1 text-sm text-white
+                px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm text-white
                 bg-zinc-800 border border-neutral-900
                 rounded shadow-lg whitespace-nowrap z-50
                 select-none
+                max-w-[90vw] sm:max-w-[80vw] md:max-w-[60vw] lg:max-w-none
+                overflow-auto
                 {}",
                 position_classes,
             )>{move || tooltip()}</div>

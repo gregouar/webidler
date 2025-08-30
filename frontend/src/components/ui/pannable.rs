@@ -69,7 +69,7 @@ pub fn Pannable(children: Children) -> impl IntoView {
             on:mousedown=on_mouse_down
             // on:mouseup=on_mouse_up
             // on:mousemove=on_mouse_move
-            class="w-full aspect-[5/2] overflow-hidden bg-neutral-900"
+            class="w-full aspect-[4/3] sm:aspect-[3/2] md:aspect-[5/2] overflow-hidden bg-neutral-900"
         >
             <svg
                 width="100%"
