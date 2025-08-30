@@ -1,3 +1,2 @@
 [build]
 release = true
-rustflags = ["-C", "target-feature=+bulk-memory"]
