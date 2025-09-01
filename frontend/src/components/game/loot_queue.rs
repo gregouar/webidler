@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use leptos::{html::*, prelude::*};
 
 use shared::data::loot::LootState;
@@ -113,7 +115,7 @@ pub fn LootQueue() -> impl IntoView {
                             }
                         >
                             <ItemCard
-                                item_specs=loot.item_specs
+                                item_specs=Arc::new(loot.item_specs)
                                 tooltip_position=DynamicTooltipPosition::TopLeft
                                 class:shadow-lg
                             />

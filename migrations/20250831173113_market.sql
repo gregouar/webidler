@@ -4,6 +4,7 @@ CREATE TABLE market (
     character_id TEXT NOT NULL,
     -- 'private_sale' means only one player can see it
     private_sale TEXT,
+    rejected BIT,
     price FLOAT NOT NULL,
     --
     item_name TEXT NOT NULL,
@@ -32,3 +33,10 @@ CREATE INDEX idx_market_character_id ON market (character_id, deleted_at);
 CREATE INDEX idx_market_private_sale ON market (private_sale, deleted_at);
 
 CREATE INDEX idx_market_deleted ON market (deleted_at);
+
+-- Unique character name to find character by name
+
+ALTER TABLE
+    characters
+ADD
+    CONSTRAINT uc_characters_character_name UNIQUE (character_name);

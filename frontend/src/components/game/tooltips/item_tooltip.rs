@@ -15,24 +15,104 @@ use super::effects_tooltip;
 
 #[component]
 pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
-    let item_slot = match &item_specs.base.slot {
-        ItemSlot::Amulet => "Amulet",
-        ItemSlot::Body => "Body Armor",
-        ItemSlot::Boots => "Boots",
-        ItemSlot::Gloves => "Gloves",
-        ItemSlot::Helmet => "Helmet",
-        ItemSlot::Ring => "Ring",
-        ItemSlot::Shield => "Shield",
-        ItemSlot::Accessory => "Accessory",
-        ItemSlot::Weapon => {
-            if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
-                "Two-Handed Weapon"
-            } else {
-                "One-Handed Weapon"
-            }
-        }
+    let (border_color, ring_color, shadow_color) = match item_specs.rarity {
+        ItemRarity::Normal => ("border-gray-600", "ring-gray-700", "shadow-gray-800"),
+        ItemRarity::Magic => ("border-blue-500", "ring-blue-400", "shadow-blue-700"),
+        ItemRarity::Rare => ("border-yellow-400", "ring-yellow-300", "shadow-yellow-600"),
+        ItemRarity::Unique => ("border-amber-700", "ring-amber-600", "shadow-amber-700"),
     };
-    let armor_info = item_specs
+
+    view! {
+        <div class=format!(
+            "max-w-xs p-4 rounded-xl border {} ring-2 {} shadow-md {} bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2",
+            border_color,
+            ring_color,
+            shadow_color,
+        )>
+            <ItemTooltipContent item_specs />
+        </div>
+    }
+}
+
+#[component]
+pub fn ItemTooltipContent(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    let local_affixes = effects_tooltip::formatted_effects_list(
+        (&item_specs.aggregate_effects(AffixEffectScope::Local)).into(),
+        AffixEffectScope::Local,
+    );
+    let global_affixes = effects_tooltip::formatted_effects_list(
+        (&item_specs.aggregate_effects(AffixEffectScope::Global)).into(),
+        AffixEffectScope::Global,
+    );
+
+    let trigger_lines = item_specs
+        .triggers
+        .clone()
+        .into_iter()
+        .map(format_trigger)
+        .collect::<Vec<_>>();
+
+    let name_color = name_color_rarity(item_specs.rarity);
+
+    view! {
+        <strong class=format!("text-lg font-bold {}", name_color)>
+            <ul class="list-none space-y-1">
+                <li class="leading-snug whitespace-pre-line">{item_specs.name.clone()}</li>
+                {match item_specs.rarity {
+                    ItemRarity::Rare => {
+                        Some(view! { <li class="leading-snug">{item_specs.base.name.clone()}</li> })
+                    }
+                    _ => None,
+                }}
+
+            </ul>
+        </strong>
+        <hr class="border-t border-gray-700" />
+        <ul class="list-none space-y-1">
+            <ItemSlotTooltip item_specs=item_specs.clone() />
+            <ArmorTooltip item_specs=item_specs.clone() />
+            <WeaponTooltip item_specs=item_specs.clone() />
+        </ul>
+        {(!trigger_lines.is_empty() || !local_affixes.is_empty() || !global_affixes.is_empty())
+            .then(|| {
+                view! {
+                    <hr class="border-t border-gray-700 my-1" />
+                    <ul class="list-none space-y-1">
+                        {local_affixes}{global_affixes}{trigger_lines}
+                    </ul>
+                }
+            })}
+        <hr class="border-t border-gray-700" />
+        <p class="text-sm text-gray-400 leading-snug">
+            "Item Level: " <span class="text-white">{item_specs.level}</span>
+        </p>
+        {item_specs
+            .base
+            .description
+            .clone()
+            .map(|description| {
+                view! {
+                    <hr class="border-t border-gray-700" />
+                    <p class="text-sm italic text-gray-300 leading-snug whitespace-pre-line">
+                        {description}
+                    </p>
+                }
+            })}
+    }
+}
+
+pub fn name_color_rarity(item_rarity: ItemRarity) -> &'static str {
+    match item_rarity {
+        ItemRarity::Normal => "text-white",
+        ItemRarity::Magic => "text-blue-400",
+        ItemRarity::Rare => "text-yellow-400",
+        ItemRarity::Unique => "text-amber-700",
+    }
+}
+
+#[component]
+pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    item_specs
         .armor_specs
         .as_ref()
         .zip(item_specs.base.armor_specs.as_ref())
@@ -81,9 +161,12 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     None
                 }}
             }
-        });
+        })
+}
 
-    let weapon_info = item_specs
+#[component]
+pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    item_specs
         .weapon_specs
         .as_ref()
         .zip(item_specs.base.weapon_specs.as_ref())
@@ -183,105 +266,28 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     )>{format!("{:.2}s", specs.cooldown)}</span>
                 </li>
             }
-        });
+        })
+}
 
-    let local_affixes = effects_tooltip::formatted_effects_list(
-        (&item_specs.aggregate_effects(AffixEffectScope::Local)).into(),
-        AffixEffectScope::Local,
-    );
-    let global_affixes = effects_tooltip::formatted_effects_list(
-        (&item_specs.aggregate_effects(AffixEffectScope::Global)).into(),
-        AffixEffectScope::Global,
-    );
-
-    let trigger_lines = item_specs
-        .triggers
-        .clone()
-        .into_iter()
-        .map(format_trigger)
-        .collect::<Vec<_>>();
-
-    let (name_color, border_color, ring_color, shadow_color) = match item_specs.rarity {
-        ItemRarity::Normal => (
-            "text-white",
-            "border-gray-600",
-            "ring-gray-700",
-            "shadow-gray-800",
-        ),
-        ItemRarity::Magic => (
-            "text-blue-400",
-            "border-blue-500",
-            "ring-blue-400",
-            "shadow-blue-700",
-        ),
-        ItemRarity::Rare => (
-            "text-yellow-400",
-            "border-yellow-400",
-            "ring-yellow-300",
-            "shadow-yellow-600",
-        ),
-        ItemRarity::Unique => (
-            "text-amber-700",
-            "border-amber-700",
-            "ring-amber-600",
-            "shadow-amber-700",
-        ),
+#[component]
+pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    let item_slot = match &item_specs.base.slot {
+        ItemSlot::Amulet => "Amulet",
+        ItemSlot::Body => "Body Armor",
+        ItemSlot::Boots => "Boots",
+        ItemSlot::Gloves => "Gloves",
+        ItemSlot::Helmet => "Helmet",
+        ItemSlot::Ring => "Ring",
+        ItemSlot::Shield => "Shield",
+        ItemSlot::Accessory => "Accessory",
+        ItemSlot::Weapon => {
+            if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
+                "Two-Handed Weapon"
+            } else {
+                "One-Handed Weapon"
+            }
+        }
     };
 
-    view! {
-        <div class=format!(
-            "max-w-xs p-4 rounded-xl border {} ring-2 {} shadow-md {} bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2",
-            border_color,
-            ring_color,
-            shadow_color,
-        )>
-            <strong class=format!("text-lg font-bold {}", name_color)>
-                <ul class="list-none space-y-1">
-                    <li class="leading-snug whitespace-pre-line">{item_specs.name.clone()}</li>
-                    {match item_specs.rarity {
-                        ItemRarity::Rare => {
-                            Some(
-                                view! {
-                                    <li class="leading-snug">{item_specs.base.name.clone()}</li>
-                                },
-                            )
-                        }
-                        _ => None,
-                    }}
-
-                </ul>
-            </strong>
-            <hr class="border-t border-gray-700" />
-            <ul class="list-none space-y-1">
-                <li class="text-gray-400 text-sm leading-snug">{item_slot}</li>
-                {armor_info}
-                {weapon_info}
-            </ul>
-            {(!trigger_lines.is_empty() || !local_affixes.is_empty() || !global_affixes.is_empty())
-                .then(|| {
-                    view! {
-                        <hr class="border-t border-gray-700 my-1" />
-                        <ul class="list-none space-y-1">
-                            {local_affixes}{global_affixes}{trigger_lines}
-                        </ul>
-                    }
-                })}
-            <hr class="border-t border-gray-700" />
-            <p class="text-sm text-gray-400 leading-snug">
-                "Item Level: " <span class="text-white">{item_specs.level}</span>
-            </p>
-            {item_specs
-                .base
-                .description
-                .clone()
-                .map(|description| {
-                    view! {
-                        <hr class="border-t border-gray-700" />
-                        <p class="text-sm italic text-gray-300 leading-snug whitespace-pre-line">
-                            {description}
-                        </p>
-                    }
-                })}
-        </div>
-    }
+    view! { <li class="text-gray-400 text-sm leading-snug">{item_slot}</li> }
 }

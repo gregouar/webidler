@@ -128,7 +128,7 @@ fn EquippedItem(
                     view! {
                         <div class="relative w-full h-full overflow-visible">
                             <ItemCard
-                                item_specs=*item_specs
+                                item_specs=rc_item_specs.clone()
                                 on:click=move |_| show_menu.set(true)
                                 tooltip_position=DynamicTooltipPosition::Auto
                             />
@@ -328,7 +328,7 @@ fn BagItem(item_index: usize) -> impl IntoView {
                         view! {
                             <div class="relative w-full h-full overflow-visible">
                                 <ItemCard
-                                    item_specs=item_specs.clone()
+                                    item_specs=rc_item_specs.clone()
                                     on:click=move |_| show_menu.set(true)
                                     tooltip_position=DynamicTooltipPosition::Auto
                                 />

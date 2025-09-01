@@ -18,7 +18,13 @@ use crate::{
         game::{
             item_card::ItemCard,
             panels::passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
-            tooltips::ItemTooltip,
+            tooltips::{
+                item_tooltip::{
+                    name_color_rarity, ArmorTooltip, ItemSlotTooltip, ItemTooltipContent,
+                    WeaponTooltip,
+                },
+                ItemTooltip,
+            },
         },
         town::TownContext,
         ui::{
@@ -55,7 +61,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                             "Market"
                         </span>
 
-                        <div class="flex-1 flex justify-center gap-4 w-full max-w-md mx-auto">
+                        <div class="flex-1 flex flex-row-reverse justify-center gap-4 w-full max-w-md mx-auto">
                             <TabButton
                                 is_active=Signal::derive(move || {
                                     active_tab.get() == MarketTab::Filters
@@ -96,12 +102,19 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                     </div>
 
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="w-full aspect-[4/3] overflow-auto bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                        <div class="w-full aspect-[4/3] overflow-auto bg-neutral-900 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                             <ItemsBrowser selected_item />
                         </div>
 
                         <div class="w-full h-full overflow-auto bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                            <ItemDetails selected_item />
+                            {move || {
+                                match active_tab.get() {
+                                    MarketTab::Filters => todo!(),
+                                    MarketTab::Buy => view! { <BuyDetails selected_item /> },
+                                    MarketTab::Sell => todo!(),
+                                    MarketTab::Listings => todo!(),
+                                }
+                            }}
                         </div>
                     </div>
 
@@ -137,57 +150,83 @@ pub fn ItemsBrowser(selected_item: RwSignal<Option<ItemSpecs>>) -> impl IntoView
 
 #[component]
 pub fn ItemRow(item_specs: ItemSpecs, price: f64) -> impl IntoView {
+    let item_specs = Arc::new(item_specs);
     view! {
-        <div class="flex items-center justify-between p-3 bg-neutral-800
+        <div class="flex w-full items-center justify-between p-3 bg-neutral-800
         hover:bg-neutral-700 rounded-lg  ring-1 ring-zinc-950 
+        gap-2
         cursor-pointer mb-2 shadow-sm transition-colors duration-150">
-            <div class="flex items-center gap-4">
-                <div class="relative h-32 aspect-[2/3] flex-shrink-0">
-                    <ItemCard item_specs=item_specs.clone() />
-                </div>
-
-                <div class="flex flex-col">
-                    <span class="font-bold text-white text-sm">{item_specs.base.name.clone()}</span>
-                    <span class="text-gray-400 text-xs">
-                        {format!(
-                            "Armor: {:.0}",
-                            item_specs.armor_specs.as_ref().map(|a| a.armor).unwrap_or(0.0),
-                        )} {" • "}
-                        {format!(
-                            "Damage: {}",
-                            item_specs
-                                .weapon_specs
-                                .as_ref()
-                                .map(|w| total_damage_range(w))
-                                .unwrap_or("-".into()),
-                        )} {" • "} {format!("Lvl {}", item_specs.level)}
-                    </span>
-                </div>
+            <div class="relative h-32 aspect-[2/3] flex-shrink-0">
+                <ItemCard item_specs=item_specs.clone() />
             </div>
 
-            <div class="flex items-center gap-1 text-violet-300 font-semibold">
-                <span>{(price > 0.0).then(|| format!("{:.0}", price))}</span>
-                <img src=img_asset("ui/gems.webp") alt="Gems" class="h-[2em] aspect-square" />
+            <div class="flex flex-col w-full">
+                // <strong class=format!("text-lg font-bold {}", name_color_rarity(item_specs.rarity))>
+                // <ul class="list-none space-y-1">
+                // <li class="leading-snug whitespace-pre-line">{item_specs.name.clone()}</li>
+                // {match item_specs.rarity {
+                // ItemRarity::Rare => {
+                // Some(
+                // view! {
+                // <li class="leading-snug">{item_specs.base.name.clone()}</li>
+                // },
+                // )
+                // }
+                // _ => None,
+                // }}
+                // </ul>
+                // </strong>
+                // <hr class="border-t border-gray-700" />
+                // <ul class="list-none space-y-1">
+                // <ItemSlotTooltip item_specs=item_specs.clone() />
+                // <ArmorTooltip item_specs=item_specs.clone() />
+                // <WeaponTooltip item_specs=item_specs.clone() />
+                // </ul>
+                // <hr class="border-t border-gray-700" />
+                // <p class="text-sm text-gray-400 leading-snug">
+                // "Item Level: " <span class="text-white">{item_specs.level}</span>
+                // </p>
+                <ItemTooltipContent item_specs />
             </div>
+
+            {(price > 0.0)
+                .then(|| {
+                    view! {
+                        <div class="flex items-center gap-1 text-violet-300 font-semibold">
+                            <span>{format!("{:.0}", price)}</span>
+                            <img
+                                src=img_asset("ui/gems.webp")
+                                alt="Gems"
+                                class="h-[2em] aspect-square mr-1"
+                            />
+                        </div>
+                    }
+                })}
         </div>
     }
 }
 
-fn total_damage_range(w: &WeaponSpecs) -> String {
-    let (mut min, mut max) = (0.0, 0.0);
-    for (_, (lo, hi)) in &w.damage {
-        min += lo;
-        max += hi;
+#[component]
+pub fn BuyDetails(selected_item: RwSignal<Option<ItemSpecs>>) -> impl IntoView {
+    view! {
+        <div>
+            <span class="flex text-shadow-md shadow-gray-950 text-amber-200 text-l ">"Buy"</span>
+            <ItemDetails selected_item />
+        </div>
     }
-    format!("{:.0}-{:.0}", min, max)
 }
 
 #[component]
 pub fn ItemDetails(selected_item: RwSignal<Option<ItemSpecs>>) -> impl IntoView {
-    match selected_item.get() {
-        Some(_) => view! {}.into_any(),
-        None => view! { <p>"No item selected"</p> }.into_any(),
-    }
+    let item_details = move || match selected_item.get() {
+        Some(item_specs) => {
+            let item_specs = Arc::new(item_specs);
+            view! { <ItemTooltip item_specs /> }.into_any()
+        }
+        None => view! { <p class="h-full text-center">"No item selected"</p> }.into_any(),
+    };
+
+    view! { <div class="w-full h-full flex items-center">{item_details}</div> }
 }
 
 // #[component]

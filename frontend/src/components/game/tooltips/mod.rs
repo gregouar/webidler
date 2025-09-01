@@ -1,5 +1,5 @@
 pub mod effects_tooltip;
-mod item_tooltip;
+pub mod item_tooltip;
 mod skill_tooltip;
 
 pub use item_tooltip::ItemTooltip;
