@@ -19,12 +19,12 @@ url = "2.5.4"
 
 serde = { version = "1.0.219", features = ["derive"] }
 serde_json = "1.0.140"
+serde_plain = "1.0.2"
 codee = { version = "0.3.0", features = ["msgpack_serde"] }
 strum = "0.27"
 
 rand = "0.9.0"
 getrandom = { version = "0.3", features = ["wasm_js"] }
 
-serde_plain = "1.0.2"
 chrono = "0.4.41"
 

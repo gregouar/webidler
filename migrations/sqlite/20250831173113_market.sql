@@ -6,7 +6,7 @@ CREATE TABLE market (
     -- 'private_sale' means only one player can see it
     private_sale TEXT,
     -- 'rejected' means the private_sale target refused
-    rejected BOOLEAN,
+    rejected BOOLEAN NOT NULL DEFAULT 0,
     price FLOAT NOT NULL,
     --
     -- TODO: Replace later by json search? Might need to drop the sqlite compatibility
@@ -16,8 +16,9 @@ CREATE TABLE market (
     item_armor FLOAT,
     item_block FLOAT,
     item_damages FLOAT,
-    --
-    item_data JSONB NOT NULL,
+    -- 
+    item_data BLOB NOT NULL,
+    --JSONB
     --
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

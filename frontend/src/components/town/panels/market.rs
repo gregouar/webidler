@@ -127,7 +127,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                                     MarketTab::Filters => {
                                         let _: () = view! {};
                                         ().into_any()
-                                    },
+                                    }
                                     MarketTab::Buy => {
                                         view! { <BuyDetails selected_item /> }.into_any()
                                     }
@@ -159,7 +159,7 @@ pub struct SelectedItem {
 impl From<MarketItem> for SelectedItem {
     fn from(value: MarketItem) -> Self {
         Self {
-            index: value.index,
+            index: value.item_id,
             item_specs: Arc::new(value.item_specs),
             price: value.price,
         }
@@ -254,13 +254,11 @@ fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
             let character_id = town_context.character.read().character_id;
             async move {
                 let response = backend
-                    .get_market_items(
-                        &GetMarketItemsRequest {
-                            character_id,
-                            skip: 0,
-                            limit: PaginationLimit::try_new(20).unwrap_or_default(),
-                        },
-                    )
+                    .get_market_items(&GetMarketItemsRequest {
+                        character_id,
+                        skip: 0,
+                        limit: PaginationLimit::try_new(20).unwrap_or_default(),
+                    })
                     .await
                     .unwrap_or_default();
                 items_list
