@@ -5,6 +5,7 @@ pub mod game_stats;
 pub mod item;
 pub mod item_affix;
 pub mod loot;
+pub mod market;
 pub mod monster;
 pub mod passive;
 pub mod player;

@@ -6,13 +6,16 @@ use shared::{
     data::{
         area::AreaLevel,
         item::{ItemCategory, ItemRarity, ItemSpecs},
+        market::MarketItem,
     },
-    types::{ItemName, ItemPrice, Username},
+    http::client::GetMarketItemsRequest,
+    types::{ItemName, ItemPrice, PaginationLimit, Username},
 };
 
 use crate::{
     assets::img_asset,
     components::{
+        backend_client::BackendClient,
         game::{
             item_card::ItemCard, panels::inventory::loot_filter_category_to_str,
             tooltips::item_tooltip::ItemTooltipContent,
@@ -150,6 +153,16 @@ pub struct SelectedItem {
     pub price: f64,
 }
 
+impl From<MarketItem> for SelectedItem {
+    fn from(value: MarketItem) -> Self {
+        Self {
+            index: value.index,
+            item_specs: Arc::new(value.item_specs),
+            price: value.price,
+        }
+    }
+}
+
 pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
     match item_rarity {
         None => "Any",
@@ -184,7 +197,7 @@ fn Filters() -> impl IntoView {
     // TODO: MORE
 
     view! {
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
             <div class="flex flex-col gap-4">
                 <ValidatedInput
                     id="item_name"
@@ -212,13 +225,13 @@ fn Filters() -> impl IntoView {
             </div>
 
             <div class="flex flex-col gap-4">
-                <div class="flex items-center gap-2">
-                    <span class="text-gray-400 text-sm">"Item Category:"</span>
+                <div class="flex items-center justify-between text-gray-300 text-sm">
+                    <span>"Item Category:"</span>
                     <DropdownMenu options=item_category_options chosen_option=item_category />
                 </div>
 
-                <div class="flex items-center gap-2">
-                    <span class="text-gray-400 text-sm">"Item Rarity:"</span>
+                <div class="flex items-center justify-between text-gray-300 text-sm">
+                    <span>"Item Rarity:"</span>
                     <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
                 </div>
             </div>
@@ -228,8 +241,43 @@ fn Filters() -> impl IntoView {
 
 #[component]
 fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
-    let items_list = Signal::derive(move || vec![]);
-    view! { <ItemsBrowser selected_item items_list /> }
+    let items_list = RwSignal::new(Vec::new());
+
+    let load_list = LocalResource::new({
+        let backend = expect_context::<BackendClient>();
+        let town_context = expect_context::<TownContext>();
+
+        move || {
+            let character_id = town_context.character.read().character_id.clone();
+            async move {
+                let response = backend
+                    .get_market_items(
+                        &GetMarketItemsRequest {
+                            character_id,
+                            skip: 0,
+                            limit: PaginationLimit::try_new(20).unwrap_or_default(),
+                        }
+                        .into(),
+                    )
+                    .await
+                    .unwrap_or_default();
+                items_list
+                    .write()
+                    .extend(response.items.into_iter().map(Into::into));
+            }
+        }
+    });
+
+    view! {
+        <Transition fallback=move || {
+            view! { <p class="text-gray-400">"Loading..."</p> }
+        }>
+            {move || Suspend::new(async move {
+                load_list.await;
+                view! { <ItemsBrowser selected_item items_list /> }
+            })}
+        </Transition>
+    }
 }
 
 #[component]
@@ -264,20 +312,23 @@ fn ListingsBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
 #[component]
 pub fn ItemsBrowser(
     selected_item: RwSignal<Option<SelectedItem>>,
-    items_list: Signal<Vec<SelectedItem>>,
+    #[prop(into)] items_list: Signal<Vec<SelectedItem>>,
 ) -> impl IntoView {
     view! {
-        <div class="p-2 gap-2 overflow-auto">
-            {move || {
-                if items_list.read().is_empty() {
-                    view! {
-                        <div class="h-full w-full flex justify-center align-center">
+        {move || {
+            if items_list.read().is_empty() {
+                view! {
+                    <div class="w-full h-full flex items-center justify-center">
+                        <div class="flex flex-col items-center text-center gap-1">
                             <span class="text-gray-400">"No Item Found"</span>
+                            <span class="text-gray-400">"Maybe try other filters?"</span>
                         </div>
-                    }
-                        .into_any()
-                } else {
-                    view! {
+                    </div>
+                }
+                    .into_any()
+            } else {
+                view! {
+                    <div class="p-2 gap-2 overflow-auto">
                         <For
                             each=move || items_list.get().into_iter()
                             key=|item| item.index
@@ -290,12 +341,11 @@ pub fn ItemsBrowser(
                                 highlight=move || selected_item.read().as_ref().map(|selected_item| selected_item.index==item.index).unwrap_or_default()
                             />
                         </For>
-                    }
-                        .into_any()
-                }
-            }}
-
         </div>
+                }
+                    .into_any()
+            }
+        }}
     }
 }
 

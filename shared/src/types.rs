@@ -103,3 +103,10 @@ fn validate_item_name(s: &str) -> anyhow::Result<()> {
     derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
 )]
 pub struct ItemName(String);
+
+#[nutype(
+    validate(less = 100),
+    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Copy, Deref, Default),
+    default = 20
+)]
+pub struct PaginationLimit(u64);

@@ -4,12 +4,16 @@ use std::time::Duration;
 use shared::{
     data::user::{UserCharacterId, UserId},
     http::{
-        client::{AscendPassivesRequest, CreateCharacterRequest, SignInRequest, SignUpRequest},
+        client::{
+            AscendPassivesRequest, BuyMarketItemRequest, CreateCharacterRequest,
+            GetMarketItemsRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
+        },
         server::{
-            AscendPassivesResponse, CreateCharacterResponse, DeleteCharacterResponse,
-            ErrorResponse, GetAreasResponse, GetCharacterDetailsResponse, GetPassivesResponse,
-            GetSkillsResponse, GetUserCharactersResponse, GetUserResponse, LeaderboardResponse,
-            PlayersCountResponse, SignInResponse, SignUpResponse,
+            AscendPassivesResponse, BuyMarketItemResponse, CreateCharacterResponse,
+            DeleteCharacterResponse, ErrorResponse, GetAreasResponse, GetCharacterDetailsResponse,
+            GetMarketItemsResponse, GetPassivesResponse, GetSkillsResponse,
+            GetUserCharactersResponse, GetUserResponse, LeaderboardResponse, PlayersCountResponse,
+            SellMarketItemResponse, SignInResponse, SignUpResponse,
         },
     },
 };
@@ -144,6 +148,32 @@ impl BackendClient {
     ) -> Result<DeleteCharacterResponse, BackendError> {
         self.del_auth(&format!("characters/{character_id}"), token)
             .await
+    }
+
+    // Market
+
+    pub async fn get_market_items(
+        &self,
+        request: &GetMarketItemsRequest,
+    ) -> Result<GetMarketItemsResponse, BackendError> {
+        self.post(&format!("market"), request).await
+    }
+
+    pub async fn sell_market_item(
+        &self,
+        token: &str,
+        request: &SellMarketItemRequest,
+    ) -> Result<SellMarketItemResponse, BackendError> {
+        self.post_auth(&format!("market/sell"), token, request)
+            .await
+    }
+
+    pub async fn buy_market_item(
+        &self,
+        token: &str,
+        request: &BuyMarketItemRequest,
+    ) -> Result<BuyMarketItemResponse, BackendError> {
+        self.post_auth(&format!("market/buy"), token, request).await
     }
 
     // Protected

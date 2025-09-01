@@ -16,7 +16,7 @@
     "categories": ["Armor", "Shield"],
     "armor_specs": {
       "armor": 50,
-      "block": 0.2
+      "block": 0.17
     },
     "min_area_level": 40
   }
