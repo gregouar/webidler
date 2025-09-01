@@ -50,7 +50,7 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
 
                         <span class="text-gray-300">
                             "Ascension Cost: "
-                            <span class="text-cyan-200">{ascension_cost}" Power Shards"</span>
+                            <span class="text-cyan-300">{ascension_cost}" Power Shards"</span>
                         </span>
 
                         <div class="flex items-center gap-2">

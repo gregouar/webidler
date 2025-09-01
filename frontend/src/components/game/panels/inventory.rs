@@ -1,32 +1,33 @@
-use std::collections::{HashMap, HashSet};
-use std::sync::Arc;
-use std::time::Duration;
+use std::{collections::HashSet, sync::Arc, time::Duration};
 use strum::IntoEnumIterator;
 
 use leptos::{html::*, prelude::*};
 use leptos_use::on_click_outside;
 
-use shared::data::{
-    item::{ItemCategory, ItemSlot},
-    player::EquippedSlot,
-};
-use shared::messages::client::{
-    EquipItemMessage, FilterLootMessage, SellItemsMessage, UnequipItemMessage,
-};
-
-use crate::components::{
-    ui::{
-        buttons::{CloseButton, MenuButton},
-        confirm::ConfirmContext,
-        menu_panel::MenuPanel,
-        tooltip::DynamicTooltipPosition,
+use shared::{
+    data::{
+        item::{ItemCategory, ItemSlot},
+        player::EquippedSlot,
     },
-    websocket::WebsocketContext,
+    messages::client::{EquipItemMessage, FilterLootMessage, SellItemsMessage, UnequipItemMessage},
 };
-use crate::{assets::img_asset, components::ui::dropdown::DropdownMenu};
 
-use crate::components::game::{
-    game_context::GameContext, item_card::ItemCard, player_card::PlayerName, tooltips::ItemTooltip,
+use crate::{
+    assets::img_asset,
+    components::ui::dropdown::DropdownMenu,
+    components::{
+        game::{
+            game_context::GameContext, item_card::ItemCard, player_card::PlayerName,
+            tooltips::ItemTooltip,
+        },
+        ui::{
+            buttons::{CloseButton, MenuButton},
+            confirm::ConfirmContext,
+            menu_panel::MenuPanel,
+            tooltip::DynamicTooltipPosition,
+        },
+        websocket::WebsocketContext,
+    },
 };
 
 #[derive(Clone, Default)]
