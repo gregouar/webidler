@@ -156,7 +156,7 @@ impl BackendClient {
         &self,
         request: &GetMarketItemsRequest,
     ) -> Result<GetMarketItemsResponse, BackendError> {
-        self.post(&format!("market"), request).await
+        self.post(&"market".to_string(), request).await
     }
 
     pub async fn sell_market_item(
@@ -164,7 +164,7 @@ impl BackendClient {
         token: &str,
         request: &SellMarketItemRequest,
     ) -> Result<SellMarketItemResponse, BackendError> {
-        self.post_auth(&format!("market/sell"), token, request)
+        self.post_auth(&"market/sell".to_string(), token, request)
             .await
     }
 
@@ -173,7 +173,7 @@ impl BackendClient {
         token: &str,
         request: &BuyMarketItemRequest,
     ) -> Result<BuyMarketItemResponse, BackendError> {
-        self.post_auth(&format!("market/buy"), token, request).await
+        self.post_auth(&"market/buy".to_string(), token, request).await
     }
 
     // Protected

@@ -124,7 +124,10 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                         <div class="w-full aspect-[4/3] overflow-auto bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                             {move || {
                                 match active_tab.get() {
-                                    MarketTab::Filters => view! {}.into_any(),
+                                    MarketTab::Filters => {
+                                        let _: () = view! {};
+                                        ().into_any()
+                                    },
                                     MarketTab::Buy => {
                                         view! { <BuyDetails selected_item /> }.into_any()
                                     }
@@ -248,7 +251,7 @@ fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
         let town_context = expect_context::<TownContext>();
 
         move || {
-            let character_id = town_context.character.read().character_id.clone();
+            let character_id = town_context.character.read().character_id;
             async move {
                 let response = backend
                     .get_market_items(
@@ -256,8 +259,7 @@ fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
                             character_id,
                             skip: 0,
                             limit: PaginationLimit::try_new(20).unwrap_or_default(),
-                        }
-                        .into(),
+                        },
                     )
                     .await
                     .unwrap_or_default();
@@ -305,7 +307,7 @@ fn SellBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
 
 #[component]
 fn ListingsBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
-    let items_list = Signal::derive(move || vec![]);
+    let items_list = Signal::derive(std::vec::Vec::new);
     view! { <ItemsBrowser selected_item items_list /> }
 }
 
