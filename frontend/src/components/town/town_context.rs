@@ -15,6 +15,7 @@ pub struct TownContext {
     // TODO: Is this really the correct place? Should we have a UI context?
     // TODO: enum ?
     pub open_ascend: RwSignal<bool>,
+    pub open_market: RwSignal<bool>,
 }
 
 impl Default for TownContext {
@@ -31,6 +32,7 @@ impl TownContext {
             passives_tree_specs: RwSignal::new(Default::default()),
             passives_tree_ascension: RwSignal::new(Default::default()),
             open_ascend: RwSignal::new(false),
+            open_market: RwSignal::new(false),
         }
     }
 }

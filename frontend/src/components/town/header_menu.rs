@@ -47,11 +47,13 @@ pub fn HeaderMenu() -> impl IntoView {
                 />
             </div>
             <div class="flex justify-end space-x-2  w-full">
-                <MenuButton on:click=|_| {} disabled=disable_buttons>
-                    "Market"
-                </MenuButton>
                 <MenuButton on:click=move |_| {
-                    town_context.open_ascend.set(!town_context.open_ascend.get())
+                    town_context.open_market.set(!town_context.open_market.get());
+                    town_context.open_ascend.set(false);
+                }>"Market"</MenuButton>
+                <MenuButton on:click=move |_| {
+                    town_context.open_ascend.set(!town_context.open_ascend.get());
+                    town_context.open_market.set(false);
                 }>"Ascend"</MenuButton>
                 <MenuButton on:click=|_| {} disabled=disable_buttons>
                     "Forge"

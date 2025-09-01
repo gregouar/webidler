@@ -9,7 +9,10 @@ use crate::components::{
     auth::AuthContext,
     backend_client::{BackendClient, BackendError},
     town::{
-        header_menu::HeaderMenu, panels::ascend::AscendPanel, town_scene::TownScene, TownContext,
+        header_menu::HeaderMenu,
+        panels::{ascend::AscendPanel, market::MarketPanel},
+        town_scene::TownScene,
+        TownContext,
     },
     ui::tooltip::DynamicTooltip,
 };
@@ -73,7 +76,7 @@ pub fn TownPage() -> impl IntoView {
                         <HeaderMenu />
                         <div class="relative flex-1">
                             <TownScene />
-                            // <MarketPanel open=town_context.open_market />
+                            <MarketPanel open=town_context.open_market />
                             <AscendPanel open=town_context.open_ascend />
                         // <ForgePanel open=town_context.open_forge />
                         </div>

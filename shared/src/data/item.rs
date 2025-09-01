@@ -81,9 +81,6 @@ pub struct ItemBase {
     #[serde(default)]
     pub triggers: Vec<TriggerSpecs>,
 
-    // TODO:
-    // #[serde(default)]
-    // pub skills: Vec<BaseSkillSpecs>,s
     #[serde(default)]
     pub weapon_specs: Option<WeaponSpecs>,
     #[serde(default)]
@@ -98,8 +95,6 @@ pub struct ItemSpecs {
     pub rarity: ItemRarity,
     pub level: AreaLevel,
 
-    // TODO
-    // pub skills: Vec<BaseSkillSpecs>,
     pub weapon_specs: Option<WeaponSpecs>,
     pub armor_specs: Option<ArmorSpecs>,
 

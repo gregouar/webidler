@@ -136,6 +136,54 @@ pub fn Toggle(
 }
 
 #[component]
+pub fn TabButton(children: Children, #[prop(into)] is_active: Signal<bool>) -> impl IntoView {
+    // let active_class = move || {
+    //     if checked.get() {
+    //         "shadow-md text-white"
+    //         // "ring-2 ring-amber-600/20 shadow-md text-white "
+    //     } else {
+    //         "opacity-60 shadow-none text-zinc-400"
+    //     }
+    // };
+
+    let active_class = |active| {
+        if active {
+            "bg-gradient-to-t from-zinc-900 to-zinc-950 pointer"
+        } else {
+            "
+            bg-gradient-to-t from-zinc-900 to-zinc-800 
+            hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
+            active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950
+            "
+        }
+    };
+
+    view! {
+        <button
+            class=move || {
+                format!(
+                    "
+                    flex-1
+                    px-2 md:px-3 py-2 
+                    text-sm sm:text-base 
+                    font-bold text-shadow
+                    border-t border-l border-r border-neutral-950 rounded-t-md 
+                    transition-all duration-200
+                    relative
+                    group
+                    {}
+                    ",
+                    active_class(is_active.get()),
+                )
+            }
+            disabled=is_active
+        >
+            {children()}
+        </button>
+    }
+}
+
+#[component]
 pub fn CloseButton() -> impl IntoView {
     view! {
         <button class="ml-2 text-white hover:text-gray-400 transition-colors">

@@ -1,0 +1,34 @@
+CREATE TABLE market (
+    item_id INTEGER NOT NULL PRIMARY KEY,
+    --
+    character_id TEXT NOT NULL,
+    -- 'private_sale' means only one player can see it
+    private_sale TEXT,
+    price FLOAT NOT NULL,
+    --
+    item_name TEXT NOT NULL,
+    item_rarity TEXT NOT NULL,
+    item_slot TEXT NOT NULL,
+    item_categories TEXT NOT NULL,
+    item_level INT NOT NULL,
+    item_armor FLOAT,
+    item_damages FLOAT,
+    -- MORE
+    --
+    item_data BLOB NOT NULL,
+    --
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP,
+    --
+    FOREIGN KEY(character_id) REFERENCES characters(character_id) ON DELETE CASCADE,
+    FOREIGN KEY(private_sale) REFERENCES characters(character_id) ON DELETE
+    SET
+        NULL
+);
+
+CREATE INDEX idx_market_character_id ON market (character_id, deleted_at);
+
+CREATE INDEX idx_market_private_sale ON market (private_sale, deleted_at);
+
+CREATE INDEX idx_market_deleted ON market (deleted_at);
