@@ -140,7 +140,7 @@ pub fn SignUpPage() -> impl IntoView {
                             accepted_terms.set(event_target_checked(&ev));
                         }
                     />
-                    <label for="terms" class="text-sm text-gray-300">
+                    <label for="terms" class="text-sm text-gray-400">
                         "I agree to the "
                         <button
                             type="button"

@@ -48,7 +48,7 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
                             "Ascend Passive Skills"
                         </span>
 
-                        <span class="text-gray-300">
+                        <span class="text-gray-400">
                             "Ascension Cost: "
                             <span class="text-cyan-300">{ascension_cost}" Power Shards"</span>
                         </span>

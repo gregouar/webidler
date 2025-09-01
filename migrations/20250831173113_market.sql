@@ -4,17 +4,19 @@ CREATE TABLE market (
     character_id TEXT NOT NULL,
     -- 'private_sale' means only one player can see it
     private_sale TEXT,
+    -- 'rejected' means the private_sale target refused
     rejected BIT,
     price FLOAT NOT NULL,
     --
+    -- TODO: Replace later by json search? Might need to drop the sqlite compatibility
     item_name TEXT NOT NULL,
     item_rarity TEXT NOT NULL,
     item_slot TEXT NOT NULL,
     item_categories TEXT NOT NULL,
     item_level INT NOT NULL,
     item_armor FLOAT,
+    item_block FLOAT,
     item_damages FLOAT,
-    -- MORE
     --
     item_data BLOB NOT NULL,
     --

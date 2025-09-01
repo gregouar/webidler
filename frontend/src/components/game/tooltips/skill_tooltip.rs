@@ -117,7 +117,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                 .then(|| {
                     view! {
                         <hr class="border-t border-gray-700" />
-                        <p class="text-sm italic text-gray-300 leading-snug">
+                        <p class="text-sm italic text-gray-400 leading-snug">
                             {skill_specs.base.description.clone()}
                         </p>
                     }

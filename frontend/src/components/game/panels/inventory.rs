@@ -273,7 +273,7 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="text-gray-300 text-sm">"Loot Preference:"</span>
+                    <span class="text-gray-400 text-sm">"Loot Preference:"</span>
                     <LootFilterDropdown />
                 </div>
 
@@ -560,7 +560,7 @@ pub fn LootFilterDropdown() -> impl IntoView {
     view! { <DropdownMenu options chosen_option=game_context.loot_preference /> }
 }
 
-fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
+pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
     match opt {
         Some(item_category) => match item_category {
             ItemCategory::Armor => "Any Armor",

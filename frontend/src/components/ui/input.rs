@@ -64,7 +64,7 @@ where
                 .then(|| {
                     view! {
                         <div class="flex justify-between items-center mb-1">
-                            <label for=id class="text-sm font-medium text-gray-300">
+                            <label for=id class="text-sm font-medium text-gray-400">
                                 {label}
                             </label>
                             <span class="text-red-500 text-xs">

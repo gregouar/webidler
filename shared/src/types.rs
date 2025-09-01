@@ -83,7 +83,23 @@ pub struct Password(String);
 pub struct AssetName(String);
 
 #[nutype(
+    sanitize(with=|v| v.round()),
     validate(greater_or_equal = 0.0, less = 1000000000.0),
     derive(Deserialize, Serialize, Debug, PartialEq, Clone, Copy, Deref)
 )]
 pub struct ItemPrice(f64);
+
+fn validate_item_name(s: &str) -> anyhow::Result<()> {
+    is_not_empty(s)?;
+    is_not_too_long(s, 100)?;
+    is_alphanumeric(s)?;
+
+    Ok(())
+}
+
+#[nutype(
+    sanitize(trim),
+    validate(with = validate_item_name, error = anyhow::Error),
+    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
+)]
+pub struct ItemName(String);

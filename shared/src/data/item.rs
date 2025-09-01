@@ -12,7 +12,20 @@ use super::{
     stat_effect::{DamageMap, EffectsMap},
 };
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Default)]
+#[derive(
+    Serialize,
+    Deserialize,
+    Debug,
+    Clone,
+    Copy,
+    PartialEq,
+    PartialOrd,
+    Eq,
+    Ord,
+    Default,
+    Hash,
+    EnumIter,
+)]
 pub enum ItemRarity {
     #[default]
     Normal,
@@ -21,7 +34,7 @@ pub enum ItemRarity {
     Unique,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter)]
 pub enum ItemSlot {
     Accessory,
     Amulet,

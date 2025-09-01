@@ -98,7 +98,7 @@ pub fn ItemTooltipContent(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 .map(|description| {
                     view! {
                         <hr class="border-t border-gray-700" />
-                        <p class="text-sm italic text-gray-300 leading-snug whitespace-pre-line">
+                        <p class="text-sm italic text-gray-400 leading-snug whitespace-pre-line">
                             {description}
                         </p>
                     }
