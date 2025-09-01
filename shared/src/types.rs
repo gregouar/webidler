@@ -81,3 +81,9 @@ pub struct Password(String);
     derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
 )]
 pub struct AssetName(String);
+
+#[nutype(
+    validate(greater_or_equal = 0.0, less = 1000000000.0),
+    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Copy, Deref)
+)]
+pub struct ItemPrice(f64);

@@ -144,7 +144,7 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
             active:scale-95 active:border-amber-500"
             on:click=play_area
         >
-            <div class="h-20 w-full relative">
+            <div class="h-16 w-full relative">
                 <img
                     src=img_asset(&area.area_specs.header_background)
                     class="object-cover w-full h-full"
@@ -165,7 +165,7 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
                 </div>
 
             </div>
-            <div class="h-12 w-full relative">
+            <div class="h-16 w-full relative">
                 <img
                     src=img_asset(&area.area_specs.footer_background)
                     class="object-cover w-full h-full"

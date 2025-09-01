@@ -52,6 +52,12 @@ where
     let validation_error = RwSignal::new(None);
     let is_invalid = Memo::new(move |_| validation_error.read().is_some());
 
+    // err
+    //     .to_string()
+    //     .split(" Expected valid")
+    //     .next()
+    //     .unwrap_or_default()
+    //     .to_string(),
     view! {
         <div class="flex flex-col">
             {(!label.is_empty())
@@ -96,12 +102,30 @@ where
                         validation_error
                             .set(
                                 Some(
-                                    err
-                                        .to_string()
-                                        .split(" Expected valid")
-                                        .next()
-                                        .unwrap_or_default()
-                                        .to_string(),
+                                    match err {
+                                        serde_plain::Error::ImpossibleSerialization(_)
+                                        | serde_plain::Error::ImpossibleDeserialization(_) => {
+                                            "Invalid input.".to_string()
+                                        }
+                                        serde_plain::Error::Parse(x, y) => {
+                                            if y.starts_with("Expected valid") {
+                                                x.to_string()
+                                                    .split(" Expected valid")
+                                                    .next()
+                                                    .unwrap_or_default()
+                                                    .to_string()
+                                            } else {
+                                                "Invalid input.".to_string()
+                                            }
+                                        }
+                                        serde_plain::Error::Message(m) => {
+                                            m.to_string()
+                                                .split(" Expected valid")
+                                                .next()
+                                                .unwrap_or_default()
+                                                .to_string()
+                                        }
+                                    },
                                 ),
                             );
                     }
