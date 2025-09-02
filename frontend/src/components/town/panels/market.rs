@@ -254,6 +254,7 @@ fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
 
     let extend_list = RwSignal::new(0u32);
     let reached_end_of_list = RwSignal::new(false);
+    let has_more = RwSignal::new(true);
 
     Effect::new(move || {
         if selected_item.read().is_none() {
@@ -263,46 +264,47 @@ fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
     });
 
     Effect::new(move || {
-        if reached_end_of_list.get() && max_list.get() > items_list.read().len() {
+        if reached_end_of_list.get() && max_list.get_untracked() > items_list.read_untracked().len()
+        {
             (*extend_list.write()) += items_per_page.into_inner() as u32;
         }
     });
 
-    let extend_list = LocalResource::new({
+    Effect::new({
         let backend = expect_context::<BackendClient>();
         let town_context = expect_context::<TownContext>();
 
         move || {
             let character_id = town_context.character.read().character_id;
-            async move {
+            let skip = extend_list.get();
+            spawn_local(async move {
                 let response = backend
                     .browse_market_items(&BrowseMarketItemsRequest {
                         character_id,
-                        skip: extend_list.get(),
+                        skip,
                         limit: items_per_page,
                     })
                     .await
                     .unwrap_or_default();
 
                 max_list.set(response.max_items);
-                items_list
-                    .write()
-                    .extend(response.items.into_iter().map(Into::into));
-                reached_end_of_list.set(false);
-            }
+                items_list.try_write().map(|mut items_list| {
+                    items_list.extend(response.items.into_iter().map(Into::into))
+                });
+                reached_end_of_list.try_set(false);
+
+                if items_list
+                    .try_read_untracked()
+                    .map(|items_list| items_list.len())
+                    .unwrap_or_default()
+                    >= response.max_items
+                {
+                    has_more.try_set(false);
+                }
+            });
         }
     });
-
-    view! {
-        <Transition fallback=move || {
-            view! { <p class="text-gray-400">"Loading..."</p> }
-        }>
-            {move || Suspend::new(async move {
-                extend_list.await;
-                view! { <ItemsBrowser selected_item items_list reached_end_of_list /> }
-            })}
-        </Transition>
-    }
+    view! { <ItemsBrowser selected_item items_list reached_end_of_list has_more /> }
 }
 
 #[component]
@@ -339,6 +341,7 @@ pub fn ItemsBrowser(
     selected_item: RwSignal<Option<SelectedItem>>,
     #[prop(into)] items_list: Signal<Vec<SelectedItem>>,
     #[prop(optional)] reached_end_of_list: Option<RwSignal<bool>>,
+    #[prop(optional)] has_more: Option<RwSignal<bool>>,
 ) -> impl IntoView {
     let el = NodeRef::<Div>::new();
     if let Some(reached_end_of_list) = reached_end_of_list {
@@ -366,66 +369,25 @@ pub fn ItemsBrowser(
                     highlight=move || selected_item.read().as_ref().map(|selected_item| selected_item.index==item.index).unwrap_or_default()
                 />
             </For>
-            {move || items_list.read().is_empty().then(|| view!{
-                // <div class="w-full h-full flex items-center justify-center">
+            {move || (items_list.read().is_empty() && !has_more.map(|has_more| has_more.get()).unwrap_or_default()).then(|| view!{
+                <div class="w-full h-full flex items-center justify-center">
                     <div class="flex flex-col items-center text-center gap-1">
                         <span class="text-gray-400">"No Item Found"</span>
                         <span class="text-gray-400">"Maybe try other filters?"</span>
                     </div>
-                // </div>
+                </div>
             })}
             {
-                move || reached_end_of_list.and_then(|reached_end_of_list| (reached_end_of_list.get()).then(|| view!{"Loading..."}))
+                move || {
+                    reached_end_of_list.and_then(|reached_end_of_list| {
+                        (reached_end_of_list.get()
+                            && has_more.map(|has_more| has_more.get()).unwrap_or_default())
+                        .then(|| view! { <span class="text-gray-400">"Loading..."</span> })
+                    })
+                }
             }
         </div>
     }
-
-    // let is_empty = Memo::new(move |_| items_list.read().is_empty());
-    // view! {
-    //     // {move ||
-    //     {if is_empty.get() {
-    //         view! {
-    //             <div class="w-full h-full flex items-center justify-center">
-    //                 <div class="flex flex-col items-center text-center gap-1">
-    //                     <span class="text-gray-400">"No Item Found"</span>
-    //                     <span class="text-gray-400">"Maybe try other filters?"</span>
-    //                 </div>
-    //             </div>
-    //         }
-    //             .into_any()
-    //     } else {
-    //         let el = NodeRef::<Div>::new();
-    //         if let Some(reached_end_of_list) = reached_end_of_list {
-    //             use_infinite_scroll_with_options(
-    //                 el,
-    //                 move |_| async move {
-    //                     if !reached_end_of_list.get() {
-    //                         reached_end_of_list.set(true)
-    //                     }
-    //                 },
-    //                 UseInfiniteScrollOptions::default().distance(10.0),
-    //             );
-    //         }
-    //         view! {
-    //             <div node_ref=el class="p-2 gap-2 overflow-y-auto h-full">
-    //                     <For
-    //                         each=move || items_list.get().into_iter()
-    //                         key=|item| item.index
-    //                         let:(item)
-    //                     >
-    //                         <ItemRow
-    //                             item_specs=item.item_specs.clone()
-    //                             on:click=move |_| selected_item.set(Some(item.clone()))
-    //                             price=item.price
-    //                             highlight=move || selected_item.read().as_ref().map(|selected_item| selected_item.index==item.index).unwrap_or_default()
-    //                         />
-    //                     </For>
-    //                     // {move || loading.get().then(|| view!{"Loading..."}) }
-    //     </div>
-    //         }
-    //             .into_any()
-    //     }}
-    // }
 }
 
 #[component]
@@ -576,6 +538,8 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
         let character_id = town_context.character.read_untracked().character_id;
         move |_| {
             if let Some(item) = selected_item.get() {
+                let private_offer = private_offer.get().unwrap_or_default();
+                let price = price.get().unwrap().into_inner();
                 spawn_local({
                     async move {
                         match backend
@@ -583,9 +547,9 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
                                 &auth_context.token(),
                                 &SellMarketItemRequest {
                                     character_id,
-                                    private_offer: private_offer.get().unwrap_or_default(),
+                                    private_offer,
                                     item_index: item.index,
-                                    price: price.get().unwrap().into_inner(),
+                                    price,
                                 },
                             )
                             .await

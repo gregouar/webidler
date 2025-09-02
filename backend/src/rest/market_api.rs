@@ -50,9 +50,6 @@ pub async fn post_browse_market(
     )
     .await?;
 
-    // TODO: REMOVE !!!!!!!!!!!!!!!!!!!
-    tokio::time::sleep(Duration::from_secs(5)).await;
-
     Ok(Json(BrowseMarketItemsResponse {
         items: items
             .into_iter()
