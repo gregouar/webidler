@@ -107,8 +107,7 @@ where
                                         }
                                         serde_plain::Error::Parse(x, y) => {
                                             if y.starts_with("Expected valid") {
-                                                x.to_string()
-                                                    .split(" Expected valid")
+                                                x.split(" Expected valid")
                                                     .next()
                                                     .unwrap_or_default()
                                                     .to_string()
@@ -117,8 +116,7 @@ where
                                             }
                                         }
                                         serde_plain::Error::Message(m) => {
-                                            m.to_string()
-                                                .split(" Expected valid")
+                                            m.split(" Expected valid")
                                                 .next()
                                                 .unwrap_or_default()
                                                 .to_string()

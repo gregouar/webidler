@@ -127,10 +127,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                         <div class="w-full aspect-[4/3] bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                             {move || {
                                 match active_tab.get() {
-                                    MarketTab::Filters => {
-                                        let _: () = view! {};
-                                        ().into_any()
-                                    }
+                                    MarketTab::Filters => view! {}.into_any(),
                                     MarketTab::Buy => {
                                         view! { <BuyDetails selected_item /> }.into_any()
                                     }
@@ -288,7 +285,9 @@ fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
                     .unwrap_or_default();
 
                 max_list.set(response.max_items);
-                if let Some(mut items_list) = items_list.try_write() { items_list.extend(response.items.into_iter().map(Into::into)) }
+                if let Some(mut items_list) = items_list.try_write() {
+                    items_list.extend(response.items.into_iter().map(Into::into))
+                }
                 reached_end_of_list.try_set(false);
 
                 if items_list
