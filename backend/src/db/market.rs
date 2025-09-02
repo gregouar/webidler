@@ -158,6 +158,7 @@ async fn read_market_items<'c>(
             updated_at
         FROM market 
         WHERE deleted_at IS NULL
+        ORDER BY price ASC
         LIMIT $2
         OFFSET $1
         ",
