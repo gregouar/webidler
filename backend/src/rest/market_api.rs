@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use anyhow::{anyhow, Result};
 
 use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
@@ -47,6 +49,9 @@ pub async fn post_browse_market(
         payload.limit.into_inner() as i64,
     )
     .await?;
+
+    // TODO: REMOVE !!!!!!!!!!!!!!!!!!!
+    tokio::time::sleep(Duration::from_secs(5)).await;
 
     Ok(Json(BrowseMarketItemsResponse {
         items: items
@@ -114,6 +119,14 @@ pub async fn post_buy_market_item(
     if character_resources.resource_gems < 0.0 {
         return Err(AppError::UserError("not enough gems".into()));
     }
+
+    db::characters::update_character_resources(
+        &mut *tx,
+        &item_bought.character_id,
+        item_bought.price,
+        0.0,
+    )
+    .await?;
 
     inventory.bag.push(
         items_controller::init_item_specs_from_store(
