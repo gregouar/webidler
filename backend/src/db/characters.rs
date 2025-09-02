@@ -60,6 +60,23 @@ pub async fn create_character<'c>(
     Ok(character_id)
 }
 
+pub async fn get_character_by_name<'c>(
+    executor: impl DbExecutor<'c>,
+    character_name: &str,
+) -> Result<Option<UserCharacterId>, sqlx::Error> {
+    sqlx::query_scalar!(
+        r#"
+        SELECT 
+            character_id as "character_id: UserCharacterId"
+        FROM characters
+        WHERE character_name = $1
+        "#,
+        character_name
+    )
+    .fetch_optional(executor)
+    .await
+}
+
 pub async fn read_character<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,

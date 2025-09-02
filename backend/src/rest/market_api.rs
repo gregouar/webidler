@@ -1,0 +1,142 @@
+use anyhow::{anyhow, Result};
+
+use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
+
+use shared::{
+    data::market::MarketItem,
+    http::{
+        client::{BrowseMarketItemsRequest, BuyMarketItemRequest, SellMarketItemRequest},
+        server::{BrowseMarketItemsResponse, BuyMarketItemResponse, SellMarketItemResponse},
+    },
+};
+
+use crate::{
+    app_state::{AppState, MasterStore},
+    auth::{self, CurrentUser},
+    db,
+    game::systems::items_controller,
+    rest::utils::{
+        inventory_data_to_player_inventory, verify_character_in_town, verify_character_user,
+    },
+};
+
+use super::AppError;
+
+pub fn routes(app_state: AppState) -> Router<AppState> {
+    let auth_routes = Router::new()
+        .route("/market/buy", post(post_buy_market_item))
+        .route("/market/sell", post(post_sell_market_item))
+        .layer(middleware::from_fn_with_state(
+            app_state,
+            auth::authorization_middleware,
+        ));
+
+    Router::new()
+        .route("/market", post(post_browse_market))
+        .merge(auth_routes)
+}
+
+pub async fn post_browse_market(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Json(payload): Json<BrowseMarketItemsRequest>,
+) -> Result<Json<BrowseMarketItemsResponse>, AppError> {
+    let (items, max_items) = db::market::load_market_items(
+        &db_pool,
+        payload.skip as i64,
+        payload.limit.into_inner() as i64,
+    )
+    .await?;
+
+    Ok(Json(BrowseMarketItemsResponse {
+        items: items
+            .into_iter()
+            .filter_map(|market_item_entry| {
+                Some(MarketItem {
+                    item_specs: items_controller::init_item_specs_from_store(
+                        &master_store.items_store,
+                        market_item_entry.item_modifiers,
+                    )?,
+                    item_id: market_item_entry.item_id,
+                    price: market_item_entry.price,
+                })
+            })
+            .collect(),
+        max_items: max_items as usize,
+    }))
+}
+
+pub async fn post_buy_market_item(
+    State(db_pool): State<db::DbPool>,
+    Extension(current_user): Extension<CurrentUser>,
+    Json(payload): Json<BuyMarketItemRequest>,
+) -> Result<Json<BuyMarketItemResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    tx.commit().await?;
+
+    Ok(Json(BuyMarketItemResponse {
+        character: todo!(),
+        inventory: todo!(),
+    }))
+}
+
+pub async fn post_sell_market_item(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Extension(current_user): Extension<CurrentUser>,
+    Json(payload): Json<SellMarketItemRequest>,
+) -> Result<Json<SellMarketItemResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    // TODO: MAX ITEMS ON SALE
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, &current_user)?;
+    verify_character_in_town(&character)?;
+
+    let (inventory_data, _) =
+        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
+            .await?
+            .ok_or(anyhow!("inventory not found"))?;
+
+    let mut inventory =
+        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+
+    let item_specs = (payload.market_item.item_id < inventory.bag.len())
+        .then(|| inventory.bag.remove(payload.market_item.item_id))
+        .ok_or(AppError::NotFound)?;
+
+    let private_sale = if let Some(username) = payload.private_offer {
+        let username = username.into_inner();
+        Some(
+            db::characters::get_character_by_name(&mut *tx, &username)
+                .await?
+                .ok_or(AppError::UserError(format!(
+                    "character '{}' not found",
+                    username
+                )))?,
+        )
+    } else {
+        None
+    };
+
+    db::market::sell_item(
+        &mut tx,
+        &payload.character_id,
+        private_sale,
+        payload.market_item.price,
+        &item_specs,
+    )
+    .await?;
+
+    db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
+        .await?;
+
+    tx.commit().await?;
+
+    Ok(Json(SellMarketItemResponse { inventory }))
+}

@@ -5,11 +5,12 @@ use sqlx::{FromRow, Transaction};
 use shared::data::{
     area::AreaLevel,
     item::{ItemModifiers, ItemSpecs},
+    item_affix::AffixEffectScope,
     user::UserCharacterId,
 };
 
 use crate::db::{
-    pool::{Database, DbExecutor},
+    pool::{Database, DbPool},
     utc_datetime::UtcDateTime,
 };
 
@@ -71,6 +72,15 @@ pub async fn sell_item<'c>(
             .iter()
             .filter_map(|category| serde_plain::to_string(&category).ok())
             .collect(),
+        item.modifiers
+            .aggregate_effects(AffixEffectScope::Local)
+            .0
+            .into_iter()
+            .filter_map(|(stat_type, stat_value)| {
+                Some((serde_plain::to_string(&stat_type).ok()?, stat_value))
+            })
+            .collect(),
+        item.modifiers.base_item_id.clone(),
         item.base.name.clone(),
         serde_plain::to_string(&item.modifiers.rarity)?,
         item.modifiers.level,
@@ -92,6 +102,8 @@ async fn create_market_item<'c>(
     private_sale: Option<UserCharacterId>,
     price: f64,
     item_categories: HashSet<String>,
+    item_stats: Vec<(String, f64)>,
+    base_item_id: String,
     item_name: String,
     item_rarity: String,
     item_level: AreaLevel,
@@ -102,13 +114,26 @@ async fn create_market_item<'c>(
 ) -> Result<(), sqlx::Error> {
     let market_id = sqlx::query_scalar!(
         "
-        INSERT INTO market (character_id, private_sale, price, item_name, item_rarity, item_level, item_armor, item_block, item_damages, item_data)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+        INSERT INTO market (
+            character_id, 
+            private_sale, 
+            price, 
+            base_item_id, 
+            item_name, 
+            item_rarity, 
+            item_level, 
+            item_armor, 
+            item_block, 
+            item_damages, 
+            item_data
+        )
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
         RETURNING market_id
         ",
         character_id,
         private_sale,
         price,
+        base_item_id,
         item_name,
         item_rarity,
         item_level,
@@ -133,63 +158,94 @@ async fn create_market_item<'c>(
         .await?;
     }
 
-    // TODO: item stats
+    for (item_stat, stat_value) in item_stats {
+        sqlx::query!(
+            "
+        INSERT INTO market_stats (market_id, item_stat, stat_value)
+        VALUES ($1,$2,$3)
+        ",
+            market_id,
+            item_stat,
+            stat_value,
+        )
+        .execute(&mut **executor)
+        .await?;
+    }
 
     Ok(())
 }
 
 // TODO: filters
-pub async fn load_market_items<'c>(
-    executor: impl DbExecutor<'c>,
+pub async fn load_market_items(
+    executor: &DbPool,
     // character_id: &UserCharacterId,
     skip: i64,
     limit: i64,
-) -> anyhow::Result<Vec<MarketItemEntry>> {
-    Ok(read_market_items(executor, skip, limit)
-        .await?
-        .into_iter()
-        .filter_map(|market_entry| {
-            Some(MarketItemEntry {
-                item_id: market_entry.market_id as usize,
-                item_modifiers: serde_json::from_slice(&market_entry.item_data).ok()?,
-                price: market_entry.price,
-                character_id: market_entry.character_id,
-                private_sale: market_entry.private_sale,
-                rejected: market_entry.rejected,
-                created_at: market_entry.created_at,
-                updated_at: market_entry.updated_at,
+) -> anyhow::Result<(Vec<MarketItemEntry>, i64)> {
+    let results = read_market_items(executor, skip, limit).await?;
+
+    Ok((
+        results
+            .0
+            .into_iter()
+            .filter_map(|market_entry| {
+                Some(MarketItemEntry {
+                    item_id: market_entry.market_id as usize,
+                    item_modifiers: serde_json::from_slice(&market_entry.item_data).ok()?,
+                    price: market_entry.price,
+                    character_id: market_entry.character_id,
+                    private_sale: market_entry.private_sale,
+                    rejected: market_entry.rejected,
+                    created_at: market_entry.created_at,
+                    updated_at: market_entry.updated_at,
+                })
             })
-        })
-        .collect())
+            .collect(),
+        results.1,
+    ))
 }
 
-async fn read_market_items<'c>(
-    executor: impl DbExecutor<'c>,
+async fn read_market_items(
+    executor: &DbPool,
     // character_id: &UserCharacterId,
     skip: i64,
     limit: i64,
-) -> Result<Vec<MarketEntry>, sqlx::Error> {
-    sqlx::query_as!(
-        MarketEntry,
-        "
-        SELECT 
-            market_id as 'market_id: MarketId', 
-            character_id as 'character_id: UserCharacterId', 
-            private_sale as 'private_sale?: UserCharacterId', 
-            rejected,
-            price as 'price: f64',
-            item_data,
-            created_at,
-            updated_at
-        FROM market 
-        WHERE deleted_at IS NULL
-        ORDER BY price ASC
-        LIMIT $2
-        OFFSET $1
-        ",
-        skip,
-        limit,
+) -> Result<(Vec<MarketEntry>, i64), sqlx::Error> {
+    tokio::try_join!(
+        sqlx::query_as!(
+            MarketEntry,
+            "
+            SELECT 
+                market_id as 'market_id: MarketId', 
+                character_id as 'character_id: UserCharacterId', 
+                private_sale as 'private_sale?: UserCharacterId', 
+                rejected,
+                price as 'price: f64',
+                item_data,
+                created_at,
+                updated_at
+            FROM market 
+            WHERE deleted_at IS NULL
+            ORDER BY price ASC
+            LIMIT $2
+            OFFSET $1
+            ",
+            skip,
+            limit,
+        )
+        .fetch_all(executor),
+        sqlx::query_scalar!(
+            "
+            SELECT 
+            COUNT(*)
+            FROM market 
+            WHERE deleted_at IS NULL
+            "
+        )
+        .fetch_one(executor),
     )
-    .fetch_all(executor)
-    .await
 }
+
+// TODO: delete/sell item => also cascade delete categories & stats
+// TODO: update (reject + price)
+// WARNING: to avoid cheat, edit price should create a new entry and delete old one (and error if old one deleted before)

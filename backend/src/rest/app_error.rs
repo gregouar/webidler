@@ -70,6 +70,10 @@ impl IntoResponse for AppError {
             error: self.to_string(),
         });
 
+        if code == StatusCode::INTERNAL_SERVER_ERROR {
+            tracing::error!(?self, "responding with error");
+        }
+
         (code, body).into_response()
     }
 }

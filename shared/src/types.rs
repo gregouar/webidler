@@ -105,8 +105,8 @@ fn validate_item_name(s: &str) -> anyhow::Result<()> {
 pub struct ItemName(String);
 
 #[nutype(
-    validate(less = 100),
+    validate(greater_or_equal = 1, less = 100),
     derive(Deserialize, Serialize, Debug, PartialEq, Clone, Copy, Deref, Default),
     default = 20
 )]
-pub struct PaginationLimit(u64);
+pub struct PaginationLimit(i64);

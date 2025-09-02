@@ -6,8 +6,10 @@ mod app_error;
 mod characters_api;
 mod game_api;
 mod leaderboard_api;
+mod market_api;
 mod stats_api;
 mod users_api;
+pub mod utils;
 
 pub use app_error::AppError;
 
@@ -18,4 +20,5 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .merge(leaderboard_api::routes())
         .merge(stats_api::routes())
         .merge(users_api::routes(app_state.clone()))
+        .merge(market_api::routes(app_state.clone()))
 }

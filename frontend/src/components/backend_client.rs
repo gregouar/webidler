@@ -5,13 +5,13 @@ use shared::{
     data::user::{UserCharacterId, UserId},
     http::{
         client::{
-            AscendPassivesRequest, BuyMarketItemRequest, CreateCharacterRequest,
-            GetMarketItemsRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
+            AscendPassivesRequest, BrowseMarketItemsRequest, BuyMarketItemRequest,
+            CreateCharacterRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
         },
         server::{
-            AscendPassivesResponse, BuyMarketItemResponse, CreateCharacterResponse,
-            DeleteCharacterResponse, ErrorResponse, GetAreasResponse, GetCharacterDetailsResponse,
-            GetMarketItemsResponse, GetPassivesResponse, GetSkillsResponse,
+            AscendPassivesResponse, BrowseMarketItemsResponse, BuyMarketItemResponse,
+            CreateCharacterResponse, DeleteCharacterResponse, ErrorResponse, GetAreasResponse,
+            GetCharacterDetailsResponse, GetPassivesResponse, GetSkillsResponse,
             GetUserCharactersResponse, GetUserResponse, LeaderboardResponse, PlayersCountResponse,
             SellMarketItemResponse, SignInResponse, SignUpResponse,
         },
@@ -152,10 +152,10 @@ impl BackendClient {
 
     // Market
 
-    pub async fn get_market_items(
+    pub async fn browse_market_items(
         &self,
-        request: &GetMarketItemsRequest,
-    ) -> Result<GetMarketItemsResponse, BackendError> {
+        request: &BrowseMarketItemsRequest,
+    ) -> Result<BrowseMarketItemsResponse, BackendError> {
         self.post(&"market".to_string(), request).await
     }
 
@@ -173,7 +173,8 @@ impl BackendClient {
         token: &str,
         request: &BuyMarketItemRequest,
     ) -> Result<BuyMarketItemResponse, BackendError> {
-        self.post_auth(&"market/buy".to_string(), token, request).await
+        self.post_auth(&"market/buy".to_string(), token, request)
+            .await
     }
 
     // Protected

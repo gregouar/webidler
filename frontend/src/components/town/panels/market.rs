@@ -1,4 +1,4 @@
-use leptos::{html::*, prelude::*};
+use leptos::{html::*, prelude::*, task::spawn_local};
 use std::sync::Arc;
 use strum::IntoEnumIterator;
 
@@ -8,13 +8,14 @@ use shared::{
         item::{ItemCategory, ItemRarity, ItemSpecs},
         market::MarketItem,
     },
-    http::client::GetMarketItemsRequest,
+    http::client::{BrowseMarketItemsRequest, SellMarketItemRequest},
     types::{ItemName, ItemPrice, PaginationLimit, Username},
 };
 
 use crate::{
     assets::img_asset,
     components::{
+        auth::AuthContext,
         backend_client::BackendClient,
         game::{
             item_card::ItemCard, panels::inventory::loot_filter_category_to_str,
@@ -26,6 +27,7 @@ use crate::{
             dropdown::DropdownMenu,
             input::ValidatedInput,
             menu_panel::MenuPanel,
+            toast::*,
         },
     },
 };
@@ -166,6 +168,16 @@ impl From<MarketItem> for SelectedItem {
     }
 }
 
+impl From<SelectedItem> for MarketItem {
+    fn from(value: SelectedItem) -> Self {
+        Self {
+            item_id: value.index,
+            item_specs: (*value.item_specs).clone(),
+            price: value.price,
+        }
+    }
+}
+
 pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
     match item_rarity {
         None => "Any",
@@ -254,7 +266,7 @@ fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
             let character_id = town_context.character.read().character_id;
             async move {
                 let response = backend
-                    .get_market_items(&GetMarketItemsRequest {
+                    .browse_market_items(&BrowseMarketItemsRequest {
                         character_id,
                         skip: 0,
                         limit: PaginationLimit::try_new(20).unwrap_or_default(),
@@ -438,11 +450,48 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
 #[component]
 pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
     let price = RwSignal::new(None::<ItemPrice>);
-    let private_offer = RwSignal::new(None::<Option<Username>>);
+    let private_offer = RwSignal::new(Some(None::<Username>));
 
     let disabled = Signal::derive(move || {
         selected_item.read().is_none() || price.read().is_none() || private_offer.read().is_none()
     });
+
+    let do_sell = {
+        let backend = expect_context::<BackendClient>();
+        let town_context = expect_context::<TownContext>();
+        let auth_context = expect_context::<AuthContext>();
+        let toaster = expect_context::<Toasts>();
+        let character_id = town_context.character.read_untracked().character_id;
+        move |_| {
+            if let Some(item) = selected_item.get() {
+                spawn_local({
+                    async move {
+                        match backend
+                            .sell_market_item(
+                                &auth_context.token(),
+                                &SellMarketItemRequest {
+                                    character_id,
+                                    private_offer: private_offer.get().unwrap_or_default(),
+                                    market_item: item.into(),
+                                },
+                            )
+                            .await
+                        {
+                            Ok(response) => {
+                                town_context.inventory.set(response.inventory);
+                                selected_item.set(None);
+                            }
+                            Err(e) => show_toast(
+                                toaster,
+                                format!("failed to post item for sell: {e}"),
+                                ToastVariant::Error,
+                            ),
+                        }
+                    }
+                });
+            }
+        }
+    };
 
     view! {
         <div class="w-full h-full flex flex-col p-4 text-white relative justify-between">
@@ -479,7 +528,7 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
                     />
                 </div>
 
-                <MenuButton on:click=move |_| {} disabled=disabled>
+                <MenuButton on:click=do_sell disabled=disabled>
                     "Sell Selected Item"
                 </MenuButton>
             </div>

@@ -112,7 +112,7 @@ pub struct AscendPassivesResponse {
 // Market
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetMarketItemsResponse {
+pub struct BrowseMarketItemsResponse {
     pub items: Vec<MarketItem>,
     pub max_items: usize,
 }
