@@ -8,7 +8,7 @@ use shared::{
         item::{ItemCategory, ItemRarity, ItemSpecs},
         market::MarketItem,
     },
-    http::client::{BrowseMarketItemsRequest, SellMarketItemRequest},
+    http::client::{BrowseMarketItemsRequest, BuyMarketItemRequest, SellMarketItemRequest},
     types::{ItemName, ItemPrice, PaginationLimit, Username},
 };
 
@@ -168,16 +168,6 @@ impl From<MarketItem> for SelectedItem {
     }
 }
 
-impl From<SelectedItem> for MarketItem {
-    fn from(value: SelectedItem) -> Self {
-        Self {
-            item_id: value.index,
-            item_specs: (*value.item_specs).clone(),
-            price: value.price,
-        }
-    }
-}
-
 pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
     match item_rarity {
         None => "Any",
@@ -256,9 +246,41 @@ fn Filters() -> impl IntoView {
 
 #[component]
 fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
+    let items_per_page = PaginationLimit::try_new(20).unwrap_or_default();
+
     let items_list = RwSignal::new(Vec::new());
 
-    let load_list = LocalResource::new({
+    let extend_list = RwSignal::new(0u32);
+    let refresh_list = RwSignal::new(0usize);
+
+    Effect::new(move || {
+        if selected_item.read().is_none() {
+            (*refresh_list.write()) += 1;
+        }
+    });
+
+    let refresh_list = LocalResource::new({
+        let backend = expect_context::<BackendClient>();
+        let town_context = expect_context::<TownContext>();
+
+        move || {
+            let _ = refresh_list.get();
+            let character_id = town_context.character.read().character_id;
+            async move {
+                let response = backend
+                    .browse_market_items(&BrowseMarketItemsRequest {
+                        character_id,
+                        skip: 0,
+                        limit: items_per_page,
+                    })
+                    .await
+                    .unwrap_or_default();
+                items_list.set(response.items.into_iter().map(Into::into).collect());
+            }
+        }
+    });
+
+    let extend_list = LocalResource::new({
         let backend = expect_context::<BackendClient>();
         let town_context = expect_context::<TownContext>();
 
@@ -268,8 +290,8 @@ fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
                 let response = backend
                     .browse_market_items(&BrowseMarketItemsRequest {
                         character_id,
-                        skip: 0,
-                        limit: PaginationLimit::try_new(20).unwrap_or_default(),
+                        skip: extend_list.get(),
+                        limit: items_per_page,
                     })
                     .await
                     .unwrap_or_default();
@@ -285,7 +307,7 @@ fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
             view! { <p class="text-gray-400">"Loading..."</p> }
         }>
             {move || Suspend::new(async move {
-                load_list.await;
+                refresh_list.await;
                 view! { <ItemsBrowser selected_item items_list /> }
             })}
         </Transition>
@@ -405,8 +427,15 @@ pub fn ItemRow(
 
 #[component]
 pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
-    // TODO: disable if price too high
-    let disabled = Signal::derive(move || selected_item.read().is_none());
+    let disabled = Signal::derive({
+        let town_context = expect_context::<TownContext>();
+        move || match selected_item.read().as_ref() {
+            Some(selected_item) => {
+                selected_item.price > town_context.character.read().resource_gems
+            }
+            None => true,
+        }
+    });
 
     let price = move || {
         selected_item
@@ -414,6 +443,44 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
             .as_ref()
             .map(|selected_item| selected_item.price)
             .unwrap_or_default()
+    };
+
+    let do_buy = {
+        let backend = expect_context::<BackendClient>();
+        let town_context = expect_context::<TownContext>();
+        let auth_context = expect_context::<AuthContext>();
+        let toaster = expect_context::<Toasts>();
+        let character_id = town_context.character.read_untracked().character_id;
+        move |_| {
+            if let Some(item) = selected_item.get() {
+                spawn_local({
+                    async move {
+                        match backend
+                            .buy_market_item(
+                                &auth_context.token(),
+                                &BuyMarketItemRequest {
+                                    character_id,
+                                    item_index: item.index as u32,
+                                },
+                            )
+                            .await
+                        {
+                            Ok(response) => {
+                                town_context.inventory.set(response.inventory);
+                                town_context.character.write().resource_gems =
+                                    response.resource_gems;
+                                selected_item.set(None);
+                            }
+                            Err(e) => show_toast(
+                                toaster,
+                                format!("failed to post item for sell: {e}"),
+                                ToastVariant::Error,
+                            ),
+                        }
+                    }
+                });
+            }
+        }
     };
 
     view! {
@@ -438,7 +505,7 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
                 </div>
 
                 <div>
-                    <MenuButton on:click=move |_| {} disabled=disabled>
+                    <MenuButton on:click=do_buy disabled=disabled>
                         "Buy Selected Item"
                     </MenuButton>
                 </div>
@@ -472,7 +539,8 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
                                 &SellMarketItemRequest {
                                     character_id,
                                     private_offer: private_offer.get().unwrap_or_default(),
-                                    market_item: item.into(),
+                                    item_index: item.index,
+                                    price: price.get().unwrap().into_inner(),
                                 },
                             )
                             .await

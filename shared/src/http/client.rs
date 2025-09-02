@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    data::{market::MarketItem, passive::PassivesTreeAscension, user::UserCharacterId},
+    data::{passive::PassivesTreeAscension, user::UserCharacterId},
     types::{AssetName, Email, PaginationLimit, Password, Username},
 };
 
@@ -48,11 +48,12 @@ pub struct BrowseMarketItemsRequest {
 pub struct SellMarketItemRequest {
     pub character_id: UserCharacterId,
     pub private_offer: Option<Username>,
-    pub market_item: MarketItem,
+    pub item_index: usize,
+    pub price: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BuyMarketItemRequest {
     pub character_id: UserCharacterId,
-    pub item_index: usize,
+    pub item_index: u32,
 }

@@ -68,28 +68,11 @@ pub async fn post_browse_market(
 
 pub async fn post_buy_market_item(
     State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
     Extension(current_user): Extension<CurrentUser>,
     Json(payload): Json<BuyMarketItemRequest>,
 ) -> Result<Json<BuyMarketItemResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
-
-    tx.commit().await?;
-
-    Ok(Json(BuyMarketItemResponse {
-        character: todo!(),
-        inventory: todo!(),
-    }))
-}
-
-pub async fn post_sell_market_item(
-    State(db_pool): State<db::DbPool>,
-    State(master_store): State<MasterStore>,
-    Extension(current_user): Extension<CurrentUser>,
-    Json(payload): Json<SellMarketItemRequest>,
-) -> Result<Json<SellMarketItemResponse>, AppError> {
-    let mut tx = db_pool.begin().await?;
-
-    // TODO: MAX ITEMS ON SALE
 
     let character = db::characters::read_character(&mut *tx, &payload.character_id)
         .await?
@@ -106,8 +89,78 @@ pub async fn post_sell_market_item(
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
 
-    let item_specs = (payload.market_item.item_id < inventory.bag.len())
-        .then(|| inventory.bag.remove(payload.market_item.item_id))
+    if inventory.bag.len() >= inventory.max_bag_size as usize {
+        return Err(AppError::UserError("not enough space".into()));
+    }
+
+    let item_bought = db::market::buy_item(&mut tx, payload.item_index as i64)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    if let Some(private_sale) = item_bought.private_sale {
+        if private_sale != character.character_id {
+            return Err(AppError::Forbidden);
+        }
+    }
+
+    let character_resources = db::characters::update_character_resources(
+        &mut *tx,
+        &payload.character_id,
+        item_bought.price,
+        0.0,
+    )
+    .await?;
+
+    if character_resources.resource_gems < 0.0 {
+        return Err(AppError::UserError("not enough gems".into()));
+    }
+
+    inventory.bag.push(
+        items_controller::init_item_specs_from_store(
+            &master_store.items_store,
+            item_bought.item_modifiers,
+        )
+        .ok_or(anyhow!("base item not found"))?,
+    );
+
+    db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
+        .await?;
+
+    tx.commit().await?;
+
+    Ok(Json(BuyMarketItemResponse {
+        resource_gems: character_resources.resource_gems,
+        inventory,
+    }))
+}
+
+pub async fn post_sell_market_item(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Extension(current_user): Extension<CurrentUser>,
+    Json(payload): Json<SellMarketItemRequest>,
+) -> Result<Json<SellMarketItemResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, &current_user)?;
+    verify_character_in_town(&character)?;
+
+    // TODO: MAX ITEMS ON SALE
+
+    let (inventory_data, _) =
+        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
+            .await?
+            .ok_or(anyhow!("inventory not found"))?;
+
+    let mut inventory =
+        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+
+    let item_specs = (payload.item_index < inventory.bag.len())
+        .then(|| inventory.bag.remove(payload.item_index))
         .ok_or(AppError::NotFound)?;
 
     let private_sale = if let Some(username) = payload.private_offer {
@@ -128,7 +181,7 @@ pub async fn post_sell_market_item(
         &mut tx,
         &payload.character_id,
         private_sale,
-        payload.market_item.price,
+        payload.price,
         &item_specs,
     )
     .await?;

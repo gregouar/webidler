@@ -73,7 +73,7 @@ pub async fn sell_item<'c>(
             .filter_map(|category| serde_plain::to_string(&category).ok())
             .collect(),
         item.modifiers
-            .aggregate_effects(AffixEffectScope::Local)
+            .aggregate_effects(AffixEffectScope::Global)
             .0
             .into_iter()
             .filter_map(|(stat_type, stat_value)| {
@@ -226,7 +226,7 @@ async fn read_market_items(
                 updated_at
             FROM market 
             WHERE deleted_at IS NULL
-            ORDER BY price ASC
+            ORDER BY private_sale ASC, price ASC
             LIMIT $2
             OFFSET $1
             ",
@@ -246,6 +246,69 @@ async fn read_market_items(
     )
 }
 
-// TODO: delete/sell item => also cascade delete categories & stats
 // TODO: update (reject + price)
 // WARNING: to avoid cheat, edit price should create a new entry and delete old one (and error if old one deleted before)
+
+pub async fn buy_item<'c>(
+    executor: &mut Transaction<'c, Database>,
+    market_id: MarketId,
+) -> anyhow::Result<Option<MarketItemEntry>> {
+    Ok(delete_market_item(executor, market_id)
+        .await?
+        .and_then(|market_entry| {
+            Some(MarketItemEntry {
+                item_id: market_entry.market_id as usize,
+                item_modifiers: serde_json::from_slice(&market_entry.item_data).ok()?,
+                price: market_entry.price,
+                character_id: market_entry.character_id,
+                private_sale: market_entry.private_sale,
+                rejected: market_entry.rejected,
+                created_at: market_entry.created_at,
+                updated_at: market_entry.updated_at,
+            })
+        }))
+}
+
+async fn delete_market_item<'c>(
+    executor: &mut Transaction<'c, Database>,
+    market_id: MarketId,
+) -> Result<Option<MarketEntry>, sqlx::Error> {
+    sqlx::query!(
+        "UPDATE market_categories SET deleted_at = CURRENT_TIMESTAMP WHERE market_id = $1",
+        market_id
+    )
+    .execute(&mut **executor)
+    .await?;
+
+    sqlx::query!(
+        "UPDATE market_stats SET deleted_at = CURRENT_TIMESTAMP WHERE market_id = $1",
+        market_id
+    )
+    .execute(&mut **executor)
+    .await?;
+
+    sqlx::query_as!(
+        MarketEntry,
+        "
+        UPDATE 
+            market
+        SET 
+            deleted_at = CURRENT_TIMESTAMP
+        WHERE 
+            market_id = $1
+            AND deleted_at is NULL
+        RETURNING
+            market_id as 'market_id: MarketId', 
+            character_id as 'character_id: UserCharacterId', 
+            private_sale as 'private_sale?: UserCharacterId', 
+            rejected,
+            price as 'price: f64',
+            item_data,
+            created_at,
+            updated_at
+        ",
+        market_id
+    )
+    .fetch_optional(&mut **executor)
+    .await
+}

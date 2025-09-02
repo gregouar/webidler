@@ -27,6 +27,12 @@ pub struct CharacterEntry {
 }
 
 #[derive(Debug, FromRow)]
+pub struct CharacterResources {
+    pub resource_gems: f64,
+    pub resource_shards: f64,
+}
+
+#[derive(Debug, FromRow)]
 pub struct CharacterAreaEntry {
     pub character_id: UserCharacterId,
     pub area_id: String,
@@ -206,8 +212,9 @@ pub async fn update_character_resources<'c>(
     character_id: &UserCharacterId,
     resource_gems: f64,
     resource_shards: f64,
-) -> Result<(), sqlx::Error> {
-    sqlx::query!(
+) -> Result<CharacterResources, sqlx::Error> {
+    sqlx::query_as!(
+        CharacterResources,
         r#"
         UPDATE characters
         SET 
@@ -215,15 +222,14 @@ pub async fn update_character_resources<'c>(
             resource_shards = resource_shards + $3,
             updated_at = CURRENT_TIMESTAMP 
         WHERE character_id = $1
+        RETURNING resource_gems, resource_shards
         "#,
         character_id,
         resource_gems,
         resource_shards,
     )
-    .execute(executor)
-    .await?;
-
-    Ok(())
+    .fetch_one(executor)
+    .await
 }
 
 pub async fn update_character_progress<'c>(
