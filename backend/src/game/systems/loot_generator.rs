@@ -113,7 +113,7 @@ pub fn roll_item(
     items_controller::create_item_specs(
         base,
         ItemModifiers {
-            base_item_id: base_item_id,
+            base_item_id,
             name,
             rarity,
             level,

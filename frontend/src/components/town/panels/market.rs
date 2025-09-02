@@ -288,9 +288,7 @@ fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
                     .unwrap_or_default();
 
                 max_list.set(response.max_items);
-                items_list.try_write().map(|mut items_list| {
-                    items_list.extend(response.items.into_iter().map(Into::into))
-                });
+                if let Some(mut items_list) = items_list.try_write() { items_list.extend(response.items.into_iter().map(Into::into)) }
                 reached_end_of_list.try_set(false);
 
                 if items_list

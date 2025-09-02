@@ -155,7 +155,7 @@ async fn stop_all_grinds<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()
 async fn read_old_character_data<'c>(
     executor: impl DbExecutor<'c>,
 ) -> Result<Vec<CharacterDataEntry>, sqlx::Error> {
-    Ok(sqlx::query_as!(
+    sqlx::query_as!(
         CharacterDataEntry,
         r#"
         SELECT
@@ -170,5 +170,5 @@ async fn read_old_character_data<'c>(
          "#
     )
     .fetch_all(executor)
-    .await?)
+    .await
 }

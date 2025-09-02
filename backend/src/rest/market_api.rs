@@ -44,7 +44,7 @@ pub async fn post_browse_market(
     let (items, max_items) = db::market::load_market_items(
         &db_pool,
         payload.skip as i64,
-        payload.limit.into_inner() as i64,
+        payload.limit.into_inner(),
     )
     .await?;
 
