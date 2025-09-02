@@ -2,7 +2,7 @@ use std::vec;
 
 use shared::data::{
     character_status::StatusSpecs,
-    item::{ArmorSpecs, ItemSpecs, WeaponSpecs},
+    item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSpecs, WeaponSpecs},
     item_affix::AffixEffectScope,
     skill::{
         ApplyStatusEffect, BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType,
@@ -11,39 +11,43 @@ use shared::data::{
     stat_effect::{ApplyStatModifier, Modifier, StatEffect, StatType},
 };
 
-use crate::game::data::items_store::{ItemAdjectivesTable, ItemNounsTable};
-
-use super::loot_generator::generate_name;
+use crate::game::data::items_store::ItemsStore;
 
 const WEAPON_POISON_DAMAGE_DURATION: f64 = 3.0;
 
-pub fn update_item_specs(
-    mut item_specs: ItemSpecs,
-    adjectives: &ItemAdjectivesTable,
-    nouns: &ItemNounsTable,
-) -> ItemSpecs {
-    let name = generate_name(&item_specs, adjectives, nouns);
-    item_specs.name = name;
+pub fn init_item_specs_from_store(
+    items_store: &ItemsStore,
+    item_modifiers: ItemModifiers,
+) -> Option<ItemSpecs> {
+    items_store
+        .get(&item_modifiers.base_item_id)
+        .map(|base| create_item_specs(base.clone(), item_modifiers, true))
+}
 
+pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers, old_game: bool) -> ItemSpecs {
     let mut effects: Vec<StatEffect> =
-        (&item_specs.aggregate_effects(AffixEffectScope::Local)).into();
+        (&modifiers.aggregate_effects(AffixEffectScope::Local)).into();
 
     effects.sort_by_key(|e| match e.modifier {
         Modifier::Flat => 0,
         Modifier::Multiplier => 1,
     });
 
-    if let Some(ref armor_specs) = item_specs.base.armor_specs {
-        item_specs.armor_specs = Some(compute_armor_specs(armor_specs.clone(), &effects));
-    }
-
-    if let Some(ref weapon_specs) = item_specs.base.weapon_specs {
-        item_specs.weapon_specs = Some(compute_weapon_specs(weapon_specs.clone(), &effects));
-    }
-
     // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
 
-    item_specs
+    ItemSpecs {
+        weapon_specs: base
+            .weapon_specs
+            .as_ref()
+            .map(|weapon_specs| compute_weapon_specs(weapon_specs.clone(), &effects)),
+        armor_specs: base
+            .armor_specs
+            .as_ref()
+            .map(|armor_specs| compute_armor_specs(armor_specs.clone(), &effects)),
+        base,
+        modifiers,
+        old_game,
+    }
 }
 
 fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -> WeaponSpecs {

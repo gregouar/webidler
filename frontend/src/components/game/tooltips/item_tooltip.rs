@@ -15,7 +15,7 @@ use super::effects_tooltip;
 
 #[component]
 pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
-    let (border_color, ring_color, shadow_color) = match item_specs.rarity {
+    let (border_color, ring_color, shadow_color) = match item_specs.modifiers.rarity {
         ItemRarity::Normal => ("border-gray-600", "ring-gray-700", "shadow-gray-800"),
         ItemRarity::Magic => ("border-blue-500", "ring-blue-400", "shadow-blue-700"),
         ItemRarity::Rare => ("border-yellow-400", "ring-yellow-300", "shadow-yellow-600"),
@@ -37,11 +37,17 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 #[component]
 pub fn ItemTooltipContent(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     let local_affixes = effects_tooltip::formatted_effects_list(
-        (&item_specs.aggregate_effects(AffixEffectScope::Local)).into(),
+        (&item_specs
+            .modifiers
+            .aggregate_effects(AffixEffectScope::Local))
+            .into(),
         AffixEffectScope::Local,
     );
     let global_affixes = effects_tooltip::formatted_effects_list(
-        (&item_specs.aggregate_effects(AffixEffectScope::Global)).into(),
+        (&item_specs
+            .modifiers
+            .aggregate_effects(AffixEffectScope::Global))
+            .into(),
         AffixEffectScope::Global,
     );
 
@@ -53,14 +59,16 @@ pub fn ItemTooltipContent(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         .map(format_trigger)
         .collect::<Vec<_>>();
 
-    let name_color = name_color_rarity(item_specs.rarity);
+    let name_color = name_color_rarity(item_specs.modifiers.rarity);
 
     view! {
         <div class="space-y-2">
             <strong class=format!("text-lg font-bold {}", name_color)>
                 <ul class="list-none space-y-1">
-                    <li class="leading-snug whitespace-pre-line">{item_specs.name.clone()}</li>
-                    {match item_specs.rarity {
+                    <li class="leading-snug whitespace-pre-line">
+                        {item_specs.modifiers.name.clone()}
+                    </li>
+                    {match item_specs.modifiers.rarity {
                         ItemRarity::Rare => {
                             Some(
                                 view! {
@@ -90,7 +98,7 @@ pub fn ItemTooltipContent(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 })}
             <hr class="border-t border-gray-700" />
             <p class="text-sm text-gray-400 leading-snug">
-                "Item Level: " <span class="text-white">{item_specs.level}</span>
+                "Item Level: " <span class="text-white">{item_specs.modifiers.level}</span>
             </p>
             {item_specs
                 .base

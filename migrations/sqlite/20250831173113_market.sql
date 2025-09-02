@@ -1,21 +1,21 @@
 -- Market table
 CREATE TABLE market (
-    item_id INTEGER NOT NULL PRIMARY KEY,
+    market_id INTEGER NOT NULL PRIMARY KEY,
     --
     character_id TEXT NOT NULL,
-    -- 'private_sale' means only one player can see it
     private_sale TEXT,
-    -- 'rejected' means the private_sale target refused
     rejected BOOLEAN NOT NULL DEFAULT 0,
-    price FLOAT NOT NULL,
+    --
+    price REAL NOT NULL,
     --
     -- TODO: Replace later by json search? Might need to drop the sqlite compatibility
+    base_item_id TEXT NOT NULL,
     item_name TEXT NOT NULL,
     item_rarity TEXT NOT NULL,
     item_level INT NOT NULL,
-    item_armor FLOAT,
-    item_block FLOAT,
-    item_damages FLOAT,
+    item_armor REAL,
+    item_block REAL,
+    item_damages REAL,
     -- 
     item_data BLOB NOT NULL,
     --JSONB
@@ -37,6 +37,10 @@ CREATE INDEX idx_market_private_sale ON market (private_sale, deleted_at);
 CREATE INDEX idx_market_deleted ON market (deleted_at);
 
 CREATE INDEX idx_market_price ON market (price)
+WHERE
+    deleted_at IS NULL;
+
+CREATE INDEX idx_market_base_item_id ON market (base_item_id)
 WHERE
     deleted_at IS NULL;
 
@@ -66,12 +70,32 @@ WHERE
 
 -- Item categories
 CREATE TABLE market_categories (
-    item_id INTEGER NOT NULL,
+    market_id INTEGER NOT NULL,
     category TEXT NOT NULL,
-    FOREIGN KEY (item_id) REFERENCES market(item_id) ON DELETE CASCADE
+    deleted_at TIMESTAMP,
+    FOREIGN KEY (market_id) REFERENCES market(market_id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_market_categories_category ON market_categories (category);
+CREATE INDEX idx_market_categories_market_id ON market_categories (market_id);
+
+CREATE INDEX idx_market_categories_category ON market_categories (category)
+WHERE
+    deleted_at IS NULL;
+
+-- Item stats
+CREATE TABLE market_stats (
+    market_id INTEGER NOT NULL,
+    item_stat TEXT NOT NULL,
+    stat_value REAL NOT NULL,
+    deleted_at TIMESTAMP,
+    FOREIGN KEY (market_id) REFERENCES market(market_id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_market_stats_market_id ON market_stats (market_id);
+
+CREATE INDEX idx_market_stats_item_stat ON market_stats (item_stat, stat_value)
+WHERE
+    deleted_at IS NULL;
 
 -- Unique character name to find character by name
 -- ALTER TABLE

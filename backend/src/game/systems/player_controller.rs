@@ -3,7 +3,7 @@ use anyhow::{anyhow, Result};
 use shared::data::{
     area::{AreaLevel, AreaState},
     character::CharacterId,
-    item::{ItemCategory, ItemSlot, ItemSpecs, WeaponSpecs},
+    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
     monster::{MonsterRarity, MonsterSpecs},
     player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     skill::{BaseSkillSpecs, SkillSpecs, SkillState},
@@ -187,28 +187,6 @@ pub fn unequip_item_to_bag(
     true
 }
 
-pub fn init_item_skills(
-    player_specs: &mut PlayerSpecs,
-    player_inventory: &PlayerInventory,
-    player_state: &mut PlayerState,
-) -> bool {
-    let mut found_skill = false;
-
-    for (_, item_specs) in player_inventory.equipped_items() {
-        if let Some(ref weapon_specs) = item_specs.weapon_specs {
-            equip_weapon(
-                player_specs,
-                player_state,
-                item_specs.base.slot,
-                item_specs.level,
-                weapon_specs,
-            );
-            found_skill = true;
-        }
-    }
-    found_skill
-}
-
 /// Equip new item and return old equipped item
 pub fn equip_item(
     player_specs: &mut PlayerSpecs,
@@ -241,7 +219,7 @@ pub fn equip_item(
             player_specs,
             player_state,
             item_specs.base.slot,
-            item_specs.level,
+            item_specs.modifiers.level,
             weapon_specs,
         );
     }
@@ -309,13 +287,13 @@ pub fn sell_item(
     }
 
     player_resources.gold +=
-        10.0 * match item_specs.rarity {
-            shared::data::item::ItemRarity::Normal => 1.0,
-            shared::data::item::ItemRarity::Magic => 2.0,
-            shared::data::item::ItemRarity::Rare => 4.0,
-            shared::data::item::ItemRarity::Unique => 8.0,
+        10.0 * match item_specs.modifiers.rarity {
+            ItemRarity::Normal => 1.0,
+            ItemRarity::Magic => 2.0,
+            ItemRarity::Rare => 4.0,
+            ItemRarity::Unique => 8.0,
         } * player_specs.gold_find
-            * increase_factors::exponential(item_specs.level, MONSTER_INCREASE_FACTOR);
+            * increase_factors::exponential(item_specs.modifiers.level, MONSTER_INCREASE_FACTOR);
 }
 
 fn unequip_weapon(

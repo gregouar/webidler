@@ -101,20 +101,26 @@ pub struct ItemBase {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ItemSpecs {
+pub struct ItemModifiers {
+    pub base_item_id: String,
     pub name: String,
 
-    pub base: ItemBase,
     pub rarity: ItemRarity,
     pub level: AreaLevel,
+
+    pub affixes: Vec<ItemAffix>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ItemSpecs {
+    pub base: ItemBase,
+    pub modifiers: ItemModifiers,
 
     pub weapon_specs: Option<WeaponSpecs>,
     pub armor_specs: Option<ArmorSpecs>,
 
-    pub affixes: Vec<ItemAffix>,
-    // pub triggers: Vec<TriggerSpecs>,
-    #[serde(default)] // TODO: Remove later, only for save backward comp
-    pub old_game: bool, // To indicate it comes from old game and not dropped during current one
+    // To indicate it comes from old game and not dropped during current one
+    pub old_game: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
@@ -141,7 +147,7 @@ pub struct ArmorSpecs {
     pub block: f32,
 }
 
-impl ItemSpecs {
+impl ItemModifiers {
     pub fn aggregate_effects(&self, scope: AffixEffectScope) -> EffectsMap {
         self.affixes
             .iter()

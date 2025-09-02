@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemBase, ItemRarity, ItemSpecs},
+    item::{ItemBase, ItemModifiers, ItemRarity, ItemSpecs},
     item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
     stat_effect::StatEffect,
 };
@@ -42,9 +42,10 @@ pub fn generate_loot(
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) -> Option<ItemSpecs> {
-    roll_base_item(loot_table, items_store, level).map(|base| {
+    roll_base_item(loot_table, items_store, level).map(|(base_item_id, base)| {
         let rarity = roll_rarity(&RarityWeights::default()).max(base.rarity);
         roll_item(
+            base_item_id,
             base,
             rarity,
             level,
@@ -64,6 +65,7 @@ fn roll_rarity(weights: &RarityWeights) -> ItemRarity {
 }
 
 pub fn roll_item(
+    base_item_id: String,
     base: ItemBase,
     rarity: ItemRarity,
     level: AreaLevel,
@@ -107,19 +109,17 @@ pub fn roll_item(
         .collect();
     affixes.extend(suffixes);
 
-    items_controller::update_item_specs(
-        ItemSpecs {
-            name: base.name.clone(),
-            base,
+    let name = generate_name(&base, rarity, &affixes, adjectives_table, nouns_table);
+    items_controller::create_item_specs(
+        base,
+        ItemModifiers {
+            base_item_id: base_item_id,
+            name,
             rarity,
             level,
-            armor_specs: None,
-            weapon_specs: None,
             affixes,
-            old_game: false,
         },
-        adjectives_table,
-        nouns_table,
+        false,
     )
 }
 
@@ -127,7 +127,7 @@ fn roll_base_item(
     loot_table: &LootTable,
     items_store: &ItemsStore,
     area_level: AreaLevel,
-) -> Option<ItemBase> {
+) -> Option<(String, ItemBase)> {
     let items_available: Vec<_> = loot_table
         .entries
         .iter()
@@ -147,8 +147,12 @@ fn roll_base_item(
         tracing::warn!("No base items available for level {}", area_level);
     }
 
-    rng::random_weighted_pick(&items_available)
-        .and_then(|loot_entry| items_store.get(&loot_entry.item_id).cloned())
+    rng::random_weighted_pick(&items_available).and_then(|loot_entry| {
+        items_store
+            .get(&loot_entry.item_id)
+            .cloned()
+            .map(|item_base| (loot_entry.item_id.clone(), item_base))
+    })
 }
 
 fn roll_unique_affixes(base_item: &ItemBase) -> Vec<ItemAffix> {
@@ -238,22 +242,23 @@ fn roll_affix_effect(effect_blueprint: &AffixEffectBlueprint) -> AffixEffect {
 }
 
 pub fn generate_name(
-    item_specs: &ItemSpecs,
+    base: &ItemBase,
+    rarity: ItemRarity,
+    affixes: &[ItemAffix],
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) -> String {
-    match item_specs.rarity {
-        ItemRarity::Magic => generate_magic_name(item_specs),
-        ItemRarity::Rare => generate_rare_name(item_specs, adjectives_table, nouns_table),
-        _ => item_specs.base.name.clone(),
+    match rarity {
+        ItemRarity::Magic => generate_magic_name(base, affixes),
+        ItemRarity::Rare => generate_rare_name(base, affixes, adjectives_table, nouns_table),
+        _ => base.name.clone(),
     }
 }
 
-fn generate_magic_name(item_specs: &ItemSpecs) -> String {
-    let mut name = item_specs.base.name.clone();
+fn generate_magic_name(base: &ItemBase, affixes: &[ItemAffix]) -> String {
+    let mut name = base.name.clone();
 
-    let prefixes: Vec<_> = item_specs
-        .affixes
+    let prefixes: Vec<_> = affixes
         .iter()
         .filter(|a| a.affix_type == AffixType::Prefix)
         .collect();
@@ -262,8 +267,7 @@ fn generate_magic_name(item_specs: &ItemSpecs) -> String {
         name = format!("{} {}", prefixes[0].name, name);
     }
 
-    let suffixes: Vec<_> = item_specs
-        .affixes
+    let suffixes: Vec<_> = affixes
         .iter()
         .filter(|a| a.affix_type == AffixType::Suffix)
         .collect();
@@ -287,15 +291,12 @@ impl rng::RandomWeighted for WeightedNamePart<'_> {
 }
 
 fn generate_rare_name(
-    item_specs: &ItemSpecs,
+    base: &ItemBase,
+    affixes: &[ItemAffix],
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) -> String {
-    let tags: HashSet<_> = item_specs
-        .affixes
-        .iter()
-        .flat_map(|a| a.tags.iter())
-        .collect();
+    let tags: HashSet<_> = affixes.iter().flat_map(|a| a.tags.iter()).collect();
 
     let available_adjectives: Vec<_> = adjectives_table
         .iter()
@@ -312,7 +313,7 @@ fn generate_rare_name(
             weight: part
                 .restrictions
                 .iter()
-                .filter(|t| item_specs.base.categories.contains(t))
+                .filter(|t| base.categories.contains(t))
                 .count() as u64,
         })
         .collect();

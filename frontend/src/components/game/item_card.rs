@@ -14,7 +14,7 @@ pub fn ItemCard(
     item_specs: Arc<ItemSpecs>,
     #[prop(default=DynamicTooltipPosition::Auto)] tooltip_position: DynamicTooltipPosition,
 ) -> impl IntoView {
-    let (border_color, ring_color, shadow_color, gradient) = match item_specs.rarity {
+    let (border_color, ring_color, shadow_color, gradient) = match item_specs.modifiers.rarity {
         ItemRarity::Normal => (
             "border-gray-600/70",
             "ring-gray-600/20",

@@ -7,6 +7,7 @@ use axum::{
 use shared::{
     data::{
         area::AreaLevel,
+        player::{EquippedSlot, PlayerInventory},
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId},
     },
     http::{
@@ -22,6 +23,7 @@ use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
     db,
+    game::systems::items_controller,
 };
 
 use super::AppError;
@@ -90,23 +92,52 @@ async fn get_character_details(
 
     let character = character?.ok_or(AppError::NotFound)?.into();
     let areas_completed = areas_completed?;
-    let (inventory, ascension) = character_data?.unwrap_or_default();
+    let (inventory_data, ascension) = character_data?.unwrap_or_default();
 
-    let available_areas = master_store.area_blueprints_store.iter();
+    let areas = master_store
+        .area_blueprints_store
+        .iter()
+        .map(|(area_id, available_area)| UserGrindArea {
+            area_id: area_id.clone(),
+            area_specs: available_area.specs.clone(),
+            max_level_reached: areas_completed
+                .iter()
+                .find(|area_completed| area_completed.area_id.eq(area_id))
+                .map(|area_completed| area_completed.max_area_level as AreaLevel)
+                .unwrap_or_default(),
+        })
+        .collect();
+
+    let inventory = PlayerInventory {
+        equipped: inventory_data
+            .equipped
+            .into_iter()
+            .filter_map(|(item_slot, item_modifiers)| {
+                Some((
+                    item_slot,
+                    EquippedSlot::MainSlot(Box::new(items_controller::init_item_specs_from_store(
+                        &master_store.items_store,
+                        item_modifiers,
+                    )?)),
+                ))
+            })
+            .collect(),
+        bag: inventory_data
+            .bag
+            .into_iter()
+            .filter_map(|item_modifiers| {
+                items_controller::init_item_specs_from_store(
+                    &master_store.items_store,
+                    item_modifiers,
+                )
+            })
+            .collect(),
+        max_bag_size: inventory_data.max_bag_size,
+    };
 
     Ok(Json(GetCharacterDetailsResponse {
         character,
-        areas: available_areas
-            .map(|(area_id, available_area)| UserGrindArea {
-                area_id: area_id.clone(),
-                area_specs: available_area.specs.clone(),
-                max_level_reached: areas_completed
-                    .iter()
-                    .find(|area_completed| area_completed.area_id.eq(area_id))
-                    .map(|area_completed| area_completed.max_area_level as AreaLevel)
-                    .unwrap_or_default(),
-            })
-            .collect(),
+        areas,
         inventory,
         ascension,
     }))

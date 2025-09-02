@@ -2,18 +2,22 @@ use std::collections::HashSet;
 
 use sqlx::{FromRow, Transaction};
 
-use shared::data::{area::AreaLevel, item::ItemSpecs, market::MarketItem, user::UserCharacterId};
+use shared::data::{
+    area::AreaLevel,
+    item::{ItemModifiers, ItemSpecs},
+    user::UserCharacterId,
+};
 
 use crate::db::{
     pool::{Database, DbExecutor},
     utc_datetime::UtcDateTime,
 };
 
-pub type ItemId = i64;
+pub type MarketId = i64;
 
 #[derive(Debug, FromRow)]
-pub struct MarketEntry {
-    pub item_id: ItemId,
+struct MarketEntry {
+    pub market_id: MarketId,
 
     pub character_id: UserCharacterId, // TODO: replace or add character name
     pub private_sale: Option<UserCharacterId>, // For private offers
@@ -22,6 +26,19 @@ pub struct MarketEntry {
     pub price: f64,
 
     pub item_data: Vec<u8>,
+
+    pub created_at: UtcDateTime,
+    pub updated_at: UtcDateTime,
+}
+
+pub struct MarketItemEntry {
+    pub item_id: usize,
+    pub item_modifiers: ItemModifiers,
+    pub price: f64,
+
+    pub character_id: UserCharacterId, // TODO: replace or add character name
+    pub private_sale: Option<UserCharacterId>, // For private offers
+    pub rejected: bool,
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
@@ -54,9 +71,9 @@ pub async fn sell_item<'c>(
             .iter()
             .filter_map(|category| serde_plain::to_string(&category).ok())
             .collect(),
-        item.name.clone(),
-        serde_plain::to_string(&item.rarity)?,
-        item.level,
+        item.base.name.clone(),
+        serde_plain::to_string(&item.modifiers.rarity)?,
+        item.modifiers.level,
         item.armor_specs
             .as_ref()
             .map(|armor_specs| armor_specs.armor),
@@ -64,7 +81,7 @@ pub async fn sell_item<'c>(
             .as_ref()
             .map(|armor_specs| armor_specs.block as f64),
         item_damages,
-        serde_json::to_vec(item)?,
+        serde_json::to_vec(&item.modifiers)?,
     )
     .await?)
 }
@@ -83,11 +100,11 @@ async fn create_market_item<'c>(
     item_damages: Option<f64>,
     item_data: Vec<u8>,
 ) -> Result<(), sqlx::Error> {
-    let item_id = sqlx::query_scalar!(
+    let market_id = sqlx::query_scalar!(
         "
         INSERT INTO market (character_id, private_sale, price, item_name, item_rarity, item_level, item_armor, item_block, item_damages, item_data)
         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-        RETURNING item_id
+        RETURNING market_id
         ",
         character_id,
         private_sale,
@@ -106,15 +123,18 @@ async fn create_market_item<'c>(
     for item_category in item_categories {
         sqlx::query!(
             "
-        INSERT INTO market_categories (item_id, category)
+        INSERT INTO market_categories (market_id, category)
         VALUES ($1,$2)
         ",
-            item_id,
+            market_id,
             item_category,
         )
         .execute(&mut **executor)
         .await?;
     }
+
+    // TODO: item stats
+
     Ok(())
 }
 
@@ -124,15 +144,20 @@ pub async fn load_market_items<'c>(
     // character_id: &UserCharacterId,
     skip: i64,
     limit: i64,
-) -> anyhow::Result<Vec<MarketItem>> {
+) -> anyhow::Result<Vec<MarketItemEntry>> {
     Ok(read_market_items(executor, skip, limit)
         .await?
-        .iter()
-        .filter_map(|item_entry| {
-            Some(MarketItem {
-                item_id: item_entry.item_id as usize,
-                item_specs: serde_json::from_slice(&item_entry.item_data).ok()?,
-                price: item_entry.price,
+        .into_iter()
+        .filter_map(|market_entry| {
+            Some(MarketItemEntry {
+                item_id: market_entry.market_id as usize,
+                item_modifiers: serde_json::from_slice(&market_entry.item_data).ok()?,
+                price: market_entry.price,
+                character_id: market_entry.character_id,
+                private_sale: market_entry.private_sale,
+                rejected: market_entry.rejected,
+                created_at: market_entry.created_at,
+                updated_at: market_entry.updated_at,
             })
         })
         .collect())
@@ -148,7 +173,7 @@ async fn read_market_items<'c>(
         MarketEntry,
         "
         SELECT 
-            item_id as 'item_id: ItemId', 
+            market_id as 'market_id: MarketId', 
             character_id as 'character_id: UserCharacterId', 
             private_sale as 'private_sale?: UserCharacterId', 
             rejected,
