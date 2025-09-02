@@ -14,3 +14,6 @@ pub const MONSTER_INCREASE_FACTOR: f64 = 0.125;
 pub const SKILL_COST_INCREASE_FACTOR: f64 = 0.31;
 pub const XP_INCREASE_FACTOR: f64 = 0.4;
 pub const ARMOR_FACTOR: f64 = 100.0;
+
+pub const MAX_MARKET_ENTRIES: usize = 100;
+pub const MAX_MARKET_PRIVATE: usize = 10;

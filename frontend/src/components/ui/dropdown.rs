@@ -1,10 +1,9 @@
-use std::collections::HashMap;
-
+use indexmap::IndexMap;
 use leptos::prelude::*;
 use leptos_use::on_click_outside;
 
 #[component]
-pub fn DropdownMenu<T>(options: HashMap<T, String>, chosen_option: RwSignal<T>) -> impl IntoView
+pub fn DropdownMenu<T>(options: IndexMap<T, String>, chosen_option: RwSignal<T>) -> impl IntoView
 where
     T: Clone + std::hash::Hash + Eq + Send + Sync + 'static,
 {
