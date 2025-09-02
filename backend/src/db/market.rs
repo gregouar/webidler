@@ -77,7 +77,7 @@ pub async fn sell_item<'c>(
             .0
             .into_iter()
             .filter_map(|(stat_type, stat_value)| {
-                Some((serde_plain::to_string(&stat_type).ok()?, stat_value))
+                Some((serde_json::to_vec(&stat_type).ok()?, stat_value))
             })
             .collect(),
         item.modifiers.base_item_id.clone(),
@@ -102,7 +102,7 @@ async fn create_market_item<'c>(
     private_sale: Option<UserCharacterId>,
     price: f64,
     item_categories: HashSet<String>,
-    item_stats: Vec<(String, f64)>,
+    item_stats: Vec<(Vec<u8>, f64)>,
     base_item_id: String,
     item_name: String,
     item_rarity: String,

@@ -106,7 +106,7 @@ pub async fn post_buy_market_item(
     let character_resources = db::characters::update_character_resources(
         &mut *tx,
         &payload.character_id,
-        item_bought.price,
+        -item_bought.price,
         0.0,
     )
     .await?;

@@ -246,7 +246,7 @@ fn Filters() -> impl IntoView {
 
 #[component]
 fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
-    let items_per_page = PaginationLimit::try_new(20).unwrap_or_default();
+    let items_per_page = PaginationLimit::try_new(10).unwrap_or_default();
 
     let items_list = RwSignal::new(Vec::new());
 
