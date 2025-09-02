@@ -46,6 +46,7 @@ pub fn ItemTooltipContent(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     );
 
     let trigger_lines = item_specs
+        .base
         .triggers
         .clone()
         .into_iter()

@@ -112,8 +112,7 @@ pub struct ItemSpecs {
     pub armor_specs: Option<ArmorSpecs>,
 
     pub affixes: Vec<ItemAffix>,
-    pub triggers: Vec<TriggerSpecs>,
-
+    // pub triggers: Vec<TriggerSpecs>,
     #[serde(default)] // TODO: Remove later, only for save backward comp
     pub old_game: bool, // To indicate it comes from old game and not dropped during current one
 }

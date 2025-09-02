@@ -6,7 +6,7 @@ use shared::data::{
     item::SkillRange,
     item_affix::AffixEffectScope,
     passive::{PassivesTreeSpecs, PassivesTreeState},
-    player::{EquippedSlot, PlayerInventory, PlayerSpecs, PlayerState},
+    player::{PlayerInventory, PlayerSpecs, PlayerState},
     skill::{RestoreType, SkillEffect, SkillEffectType, SkillType},
     stat_effect::{ApplyStatModifier, EffectsMap, Modifier, StatType},
     trigger::{EventTrigger, TriggerTarget, TriggeredEffect},
@@ -115,13 +115,8 @@ pub fn update_player_specs(
         .map(|trigger_specs| trigger_specs.triggered_effect.clone())
         .chain(
             player_inventory
-                .equipped
-                .values()
-                .filter_map(|equipped| match equipped {
-                    EquippedSlot::MainSlot(item_specs) => Some(&item_specs.triggers),
-                    EquippedSlot::ExtraSlot(_) => None,
-                })
-                .flat_map(|triggers| triggers.iter())
+                .equipped_items()
+                .flat_map(|(_, item_specs)| item_specs.base.triggers.iter())
                 .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
         )
         .collect();
