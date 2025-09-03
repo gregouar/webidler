@@ -281,21 +281,21 @@ pub async fn read_market_items<'c>(
         LIMIT $1
         OFFSET $2
         "#,
-        limit_more,
-        skip,
+        limit_more, // $1
+        skip,       // $2
         character_id,
         own_listings,
-        no_filter_by_name,
+        no_filter_by_name, // $5
         item_name,
         item_level,
         price,
         item_rarity,
-        item_category,
+        item_category, // $10
         no_filter_item_damages,
         item_damages,
         no_filter_item_armor,
         item_armor,
-        no_filter_item_block,
+        no_filter_item_block, // $15
         item_block
     )
     .fetch_all(executor)
