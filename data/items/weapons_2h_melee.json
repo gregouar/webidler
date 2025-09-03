@@ -12,8 +12,8 @@
       "damage": {
         "Physical": [4, 10]
       },
-      "crit_chances": 0.05,
-      "crit_damage": 2
+      "crit_chances": 5,
+      "crit_damage": 200
     }
   },
   "woodcutter_axe": {
@@ -29,8 +29,8 @@
       "damage": {
         "Physical": [6, 18]
       },
-      "crit_chances": 0.05,
-      "crit_damage": 2
+      "crit_chances": 5,
+      "crit_damage": 200
     },
     "min_area_level": 40
   },
@@ -48,8 +48,8 @@
       "damage": {
         "Physical": [6, 18]
       },
-      "crit_chances": 0.05,
-      "crit_damage": 2
+      "crit_chances": 5,
+      "crit_damage": 200
     },
     "rarity": "Unique",
     "affixes": [

@@ -233,7 +233,7 @@ pub fn compute_skill_specs_effect<'a>(
                     _ => {}
                 }
 
-                *crit_chances = crit_chances.clamp(0.0, 1.0);
+                *crit_chances = crit_chances.clamp(0.0, 100.0);
                 damage.retain(|_, (min, max)| {
                     *min = min.clamp(0.0, *max);
                     *max > 0.0
@@ -289,11 +289,23 @@ pub fn compute_skill_specs_effect<'a>(
                             }
                             _ => {}
                         },
-                        StatusSpecs::StatModifier { .. } => {
+                        StatusSpecs::StatModifier { modifier, .. } => {
                             if StatType::SpellPower == effect.stat && skill_type == SkillType::Spell
                             {
-                                status_effect.min_value.apply_effect(effect);
-                                status_effect.max_value.apply_effect(effect);
+                                if modifier == Modifier::Multiplier
+                                    && effect.modifier == Modifier::Flat
+                                {
+                                    let effect = StatEffect {
+                                        value: effect.value / 100.0,
+                                        ..*effect
+                                    };
+
+                                    status_effect.min_value.apply_effect(&effect);
+                                    status_effect.max_value.apply_effect(&effect);
+                                } else {
+                                    status_effect.min_value.apply_effect(effect);
+                                    status_effect.max_value.apply_effect(effect);
+                                }
                             }
                         }
                         StatusSpecs::Trigger(_) => {}

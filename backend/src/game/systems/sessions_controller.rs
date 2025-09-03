@@ -17,6 +17,7 @@ use crate::{
         data::{master_store::MasterStore, DataInit},
         game_data::GameInstanceData,
         sessions::{Session, SessionsStore},
+        systems::items_controller,
     },
     rest::AppError,
 };
@@ -128,20 +129,45 @@ async fn new_game_instance(
     let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
 
     let (player_inventory, passives_tree_state) = match character_data {
-        Some((mut inventory, ascension)) => {
-            for item_specs in inventory.all_items_mut() {
-                item_specs.old_game = true;
+        Some((inventory_data, ascension)) => {
+            let mut player_inventory = PlayerInventory {
+                equipped: Default::default(),
+                bag: inventory_data
+                    .bag
+                    .into_iter()
+                    .filter_map(|item_modifiers| {
+                        items_controller::init_item_specs_from_store(
+                            &master_store.items_store,
+                            item_modifiers,
+                        )
+                    })
+                    .collect(),
+                max_bag_size: inventory_data.max_bag_size,
+            };
+
+            for item_specs in inventory_data
+                .equipped
+                .into_values()
+                .filter_map(|item_modifiers| {
+                    items_controller::init_item_specs_from_store(
+                        &master_store.items_store,
+                        item_modifiers,
+                    )
+                })
+            {
+                let _ = player_controller::equip_item(
+                    &mut player_specs,
+                    &mut player_inventory,
+                    &mut player_state,
+                    item_specs,
+                );
             }
 
-            if !player_controller::init_item_skills(
-                &mut player_specs,
-                &inventory,
-                &mut player_state,
-            ) {
+            if player_specs.skills_specs.is_empty() {
                 player_specs.buy_skill_cost = 0.0;
             }
 
-            (inventory, PassivesTreeState::init(ascension))
+            (player_inventory, PassivesTreeState::init(ascension))
         }
         None => {
             let mut player_inventory = PlayerInventory {
@@ -149,12 +175,14 @@ async fn new_game_instance(
                 ..Default::default()
             };
 
-            if let Some(base_weapon) = master_store.items_store.get("dagger").cloned() {
+            let base_weapon_id = "dagger".to_string();
+            if let Some(base_weapon) = master_store.items_store.get(&base_weapon_id).cloned() {
                 let _ = player_controller::equip_item(
                     &mut player_specs,
                     &mut player_inventory,
                     &mut player_state,
                     loot_generator::roll_item(
+                        base_weapon_id,
                         base_weapon,
                         ItemRarity::Normal,
                         0,

@@ -1,6 +1,6 @@
 use anyhow;
 
-use sqlx::{Executor, FromRow};
+use sqlx::FromRow;
 
 use shared::data::user::UserCharacterId;
 
@@ -10,7 +10,7 @@ use crate::{
     game::{data::master_store, game_data::GameInstanceData},
 };
 
-use super::pool::Database;
+use super::pool::DbExecutor;
 
 #[derive(Debug, FromRow)]
 pub struct SavedGameInstance {
@@ -24,14 +24,11 @@ pub struct SavedGameInstance {
     pub game_data: Vec<u8>, // Assuming game_data is stored as a binary blob
 }
 
-pub async fn save_game_instance_data<'c, E>(
-    executor: E,
+pub async fn save_game_instance_data<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     game_instance_data: GameInstanceData,
-) -> anyhow::Result<()>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> anyhow::Result<()> {
     Ok(upsert_saved_game_instance(
         executor,
         character_id,
@@ -42,16 +39,13 @@ where
     .await?)
 }
 
-async fn upsert_saved_game_instance<'c, E>(
-    executor: E,
+async fn upsert_saved_game_instance<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     area_id: &str,
     area_level: i32,
     game_data: Vec<u8>,
-) -> Result<(), sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> Result<(), sqlx::Error> {
     sqlx::query!(
         "INSERT INTO saved_game_instances 
             (character_id, area_id, area_level, data_version, game_data) 
@@ -74,14 +68,11 @@ where
     Ok(())
 }
 
-pub async fn load_game_instance_data<'c, E>(
-    executor: E,
+pub async fn load_game_instance_data<'c>(
+    executor: impl DbExecutor<'c>,
     master_store: &master_store::MasterStore,
     character_id: &UserCharacterId,
-) -> anyhow::Result<Option<GameInstanceData>>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> anyhow::Result<Option<GameInstanceData>> {
     let saved_game_instance = load_saved_game_instance(executor, character_id).await?;
     if let Some(instance) = saved_game_instance {
         Ok(Some(GameInstanceData::from_bytes(
@@ -93,13 +84,10 @@ where
     }
 }
 
-async fn load_saved_game_instance<'c, E>(
-    executor: E,
+async fn load_saved_game_instance<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
-) -> Result<Option<SavedGameInstance>, sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> Result<Option<SavedGameInstance>, sqlx::Error> {
     let instance = sqlx::query_as!(
         SavedGameInstance,
         r#"SELECT 
@@ -119,13 +107,10 @@ where
     Ok(instance)
 }
 
-pub async fn delete_game_instance_data<'c, E>(
-    executor: E,
+pub async fn delete_game_instance_data<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
-) -> Result<(), sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> Result<(), sqlx::Error> {
     sqlx::query!(
         "DELETE FROM saved_game_instances WHERE character_id = $1",
         character_id

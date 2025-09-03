@@ -22,6 +22,7 @@ use crate::{
     auth::{self, CurrentUser},
     db,
     game::{data::DataInit, systems::passives_controller},
+    rest::utils::{verify_character_in_town, verify_character_user},
 };
 
 use super::AppError;
@@ -89,13 +90,8 @@ pub async fn post_ascend_passives(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    if character.user_id != current_user.user.user_id {
-        return Err(AppError::Forbidden);
-    }
-
-    if character.area_id.is_some() {
-        return Err(AppError::UserError("character is grinding".to_string()));
-    }
+    verify_character_user(&character, &current_user)?;
+    verify_character_in_town(&character)?;
 
     passives_controller::update_ascension(
         &mut tx,

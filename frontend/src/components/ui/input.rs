@@ -18,10 +18,9 @@ where
             id=id
             type=input_type
             placeholder=placeholder
-            value=bind
-                .get_untracked()
-                .map(|value| serde_plain::to_string(&value).ok())
-                .unwrap_or_default()
+            value=move || {
+                bind.get().map(|value| serde_plain::to_string(&value).ok()).unwrap_or_default()
+            }
             on:input:target=move |ev| bind.set(serde_plain::from_str(&ev.target().value()).ok())
             class=move || {
                 format!(
@@ -58,7 +57,7 @@ where
                 .then(|| {
                     view! {
                         <div class="flex justify-between items-center mb-1">
-                            <label for=id class="text-sm font-medium text-gray-300">
+                            <label for=id class="text-sm font-medium text-gray-400">
                                 {label}
                             </label>
                             <span class="text-red-500 text-xs">
@@ -82,10 +81,9 @@ where
                     )
                 }
                 placeholder=placeholder
-                value=bind
-                    .get_untracked()
-                    .map(|value| serde_plain::to_string(&value).ok())
-                    .unwrap_or_default()
+                value=move || {
+                    bind.get().map(|value| serde_plain::to_string(&value).ok()).unwrap_or_default()
+                }
                 on:input:target=move |ev| match serde_plain::from_str(&ev.target().value()) {
                     Ok(v) => {
                         bind.set(Some(v));
@@ -96,12 +94,28 @@ where
                         validation_error
                             .set(
                                 Some(
-                                    err
-                                        .to_string()
-                                        .split(" Expected valid")
-                                        .next()
-                                        .unwrap_or_default()
-                                        .to_string(),
+                                    match err {
+                                        serde_plain::Error::ImpossibleSerialization(_)
+                                        | serde_plain::Error::ImpossibleDeserialization(_) => {
+                                            "Invalid input.".to_string()
+                                        }
+                                        serde_plain::Error::Parse(x, y) => {
+                                            if y.starts_with("Expected valid") {
+                                                x.split(" Expected valid")
+                                                    .next()
+                                                    .unwrap_or_default()
+                                                    .to_string()
+                                            } else {
+                                                "Invalid input.".to_string()
+                                            }
+                                        }
+                                        serde_plain::Error::Message(m) => {
+                                            m.split(" Expected valid")
+                                                .next()
+                                                .unwrap_or_default()
+                                                .to_string()
+                                        }
+                                    },
                                 ),
                             );
                     }

@@ -8,6 +8,40 @@
       "armor": 10
     }
   },
+  "cloth_wraps_unique": {
+    "name": "Baker's Embrace",
+    "description": "Forged in hearthfire and kneaded by ancient hands, these mitts can withstand more than just the heat of an oven— they cradle the fury of molten magic.",
+    "icon": "items/oven_mitts.webp",
+    "slot": "Gloves",
+    "categories": ["Armor", "Gloves"],
+    "armor_specs": {
+      "armor": 10
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Fire" } },
+        "modifier": "Multiplier",
+        "min": 0.4,
+        "max": 0.6
+      },
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Flat",
+        "min": 20,
+        "max": 40
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "min": 100,
+        "max": 150
+      }
+    ]
+  },
   "leather_gloves": {
     "name": "Leather Gloves",
     "icon": "items/leather_gloves.webp",
@@ -40,8 +74,8 @@
       "damage": {
         "Physical": [4, 7]
       },
-      "crit_chances": 0.1,
-      "crit_damage": 1
+      "crit_chances": 10,
+      "crit_damage": 100
     },
     "rarity": "Unique",
     "affixes": [

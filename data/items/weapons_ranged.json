@@ -12,8 +12,8 @@
       "damage": {
         "Physical": [3, 7]
       },
-      "crit_chances": 0.08,
-      "crit_damage": 1
+      "crit_chances": 8,
+      "crit_damage": 100
     }
   },
   "hunting_bow": {
@@ -29,8 +29,8 @@
       "damage": {
         "Physical": [8, 12]
       },
-      "crit_chances": 0.08,
-      "crit_damage": 1
+      "crit_chances": 8,
+      "crit_damage": 100
     },
     "min_area_level": 40
   },
@@ -48,8 +48,8 @@
       "damage": {
         "Physical": [8, 12]
       },
-      "crit_chances": 0.08,
-      "crit_damage": 1
+      "crit_chances": 8,
+      "crit_damage": 100
     },
     "rarity": "Unique",
     "affixes": [

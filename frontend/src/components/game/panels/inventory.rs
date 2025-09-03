@@ -1,32 +1,33 @@
-use std::collections::HashSet;
-use std::sync::Arc;
-use std::time::Duration;
+use std::{collections::HashSet, sync::Arc, time::Duration};
 use strum::IntoEnumIterator;
 
 use leptos::{html::*, prelude::*};
 use leptos_use::on_click_outside;
 
-use shared::data::{
-    item::{ItemCategory, ItemSlot},
-    player::EquippedSlot,
-};
-use shared::messages::client::{
-    EquipItemMessage, FilterLootMessage, SellItemsMessage, UnequipItemMessage,
-};
-
-use crate::assets::img_asset;
-use crate::components::{
-    ui::{
-        buttons::{CloseButton, MenuButton},
-        confirm::ConfirmContext,
-        menu_panel::MenuPanel,
-        tooltip::DynamicTooltipPosition,
+use shared::{
+    data::{
+        item::{ItemCategory, ItemSlot},
+        player::EquippedSlot,
     },
-    websocket::WebsocketContext,
+    messages::client::{EquipItemMessage, FilterLootMessage, SellItemsMessage, UnequipItemMessage},
 };
 
-use crate::components::game::{
-    game_context::GameContext, item_card::ItemCard, player_card::PlayerName, tooltips::ItemTooltip,
+use crate::{
+    assets::img_asset,
+    components::ui::dropdown::DropdownMenu,
+    components::{
+        game::{
+            game_context::GameContext, item_card::ItemCard, player_card::PlayerName,
+            tooltips::ItemTooltip,
+        },
+        ui::{
+            buttons::{CloseButton, MenuButton},
+            confirm::ConfirmContext,
+            menu_panel::MenuPanel,
+            tooltip::DynamicTooltipPosition,
+        },
+        websocket::WebsocketContext,
+    },
 };
 
 #[derive(Clone, Default)]
@@ -127,7 +128,7 @@ fn EquippedItem(
                     view! {
                         <div class="relative w-full h-full overflow-visible">
                             <ItemCard
-                                item_specs=*item_specs
+                                item_specs=rc_item_specs.clone()
                                 on:click=move |_| show_menu.set(true)
                                 tooltip_position=DynamicTooltipPosition::Auto
                             />
@@ -272,7 +273,7 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="text-gray-300 text-sm">"Loot Preference:"</span>
+                    <span class="text-gray-400 text-sm">"Loot Preference:"</span>
                     <LootFilterDropdown />
                 </div>
 
@@ -327,7 +328,7 @@ fn BagItem(item_index: usize) -> impl IntoView {
                         view! {
                             <div class="relative w-full h-full overflow-visible">
                                 <ItemCard
-                                    item_specs=item_specs.clone()
+                                    item_specs=rc_item_specs.clone()
                                     on:click=move |_| show_menu.set(true)
                                     tooltip_position=DynamicTooltipPosition::Auto
                                 />
@@ -537,121 +538,29 @@ fn SellAllButton() -> impl IntoView {
 
 #[component]
 pub fn LootFilterDropdown() -> impl IntoView {
-    let node_ref = NodeRef::new();
-
     let options = std::iter::once(None)
         .chain(ItemCategory::iter().map(Some))
-        .collect::<Vec<_>>();
+        .map(|category| (category, loot_filter_category_to_str(category).into()))
+        .collect();
 
-    let is_open = RwSignal::new(false);
-
-    let toggle = move |_| {
-        is_open.update(|open| *open = !*open);
-    };
-
-    let _ = on_click_outside(node_ref, move |_| {
-        is_open.set(false);
-    });
-
-    let select_option = {
+    Effect::new({
         let conn = expect_context::<WebsocketContext>();
         let game_context = expect_context::<GameContext>();
-
-        move |opt| {
-            game_context.loot_preference.set(opt);
-            is_open.set(false);
+        move || {
             conn.send(
                 &FilterLootMessage {
-                    preferred_loot: opt,
+                    preferred_loot: game_context.loot_preference.get(),
                 }
                 .into(),
             );
         }
-    };
+    });
 
     let game_context = expect_context::<GameContext>();
-    view! {
-        <style>
-            ".dropdown-transition {
-            opacity: 0;
-            transform: scaleY(0.5);
-            transform-origin: top;
-            transition: all 150ms ease-out;
-            pointer-events: none;
-            }
-            
-            .dropdown-transition.open {
-            opacity: 1;
-            transform: scaleY(1);
-            pointer-events: auto;
-            }
-            
-            ul::-webkit-scrollbar {
-            width: 8px;
-            }
-            
-            ul::-webkit-scrollbar-track {
-            background: #1f1f1f;
-            border-radius: 4px;
-            }
-            
-            ul::-webkit-scrollbar-thumb {
-            background-color: #525252;
-            border-radius: 4px;
-            border: 2px solid #1f1f1f;
-            }
-            
-            ul {
-            scrollbar-width: thin;
-            scrollbar-color: #525252 #1f1f1f;
-            }
-            
-            ul::-webkit-scrollbar-thumb:hover {
-            background-color: #737373;
-            }
-            "
-        </style>
-        <div class="relative w-60 z-20">
-            <button
-                on:click=toggle
-                class="w-full text-left px-4 py-2 rounded-md text-white bg-gradient-to-t from-zinc-900 to-zinc-800 shadow-md border border-zinc-950 hover:from-zinc-800 hover:to-zinc-700 focus:outline-none"
-            >
-                {move || loot_filter_category_to_str(game_context.loot_preference.get())}
-                <span class="float-right">"▼"</span>
-            </button>
-
-            <ul
-                class=move || {
-                    format!(
-                        "dropdown-transition absolute mt-1 w-full rounded-md bg-zinc-800 border border-zinc-950 shadow-lg max-h-80 overflow-auto {}",
-                        if is_open.get() { "open" } else { "" },
-                    )
-                }
-                node_ref=node_ref
-            >
-                {options
-                    .iter()
-                    .cloned()
-                    .map(|opt| {
-                        view! {
-                            <li
-                                on:click={
-                                    let select_option = select_option.clone();
-                                    move |_| select_option(opt)
-                                }
-                                class="cursor-pointer px-4 py-2 hover:bg-zinc-700 text-white"
-                            >
-                                {loot_filter_category_to_str(opt)}
-                            </li>
-                        }
-                    })
-                    .collect::<Vec<_>>()}
-            </ul>
-        </div>
-    }
+    view! { <DropdownMenu options chosen_option=game_context.loot_preference /> }
 }
 
-fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
+pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
     match opt {
         Some(item_category) => match item_category {
             ItemCategory::Armor => "Any Armor",

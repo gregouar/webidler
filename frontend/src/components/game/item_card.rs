@@ -10,8 +10,11 @@ use crate::components::ui::tooltip::{DynamicTooltipContext, DynamicTooltipPositi
 use super::tooltips::ItemTooltip;
 
 #[component]
-pub fn ItemCard(item_specs: ItemSpecs, tooltip_position: DynamicTooltipPosition) -> impl IntoView {
-    let (border_color, ring_color, shadow_color, gradient) = match item_specs.rarity {
+pub fn ItemCard(
+    item_specs: Arc<ItemSpecs>,
+    #[prop(default=DynamicTooltipPosition::Auto)] tooltip_position: DynamicTooltipPosition,
+) -> impl IntoView {
+    let (border_color, ring_color, shadow_color, gradient) = match item_specs.modifiers.rarity {
         ItemRarity::Normal => (
             "border-gray-600/70",
             "ring-gray-600/20",
@@ -41,10 +44,9 @@ pub fn ItemCard(item_specs: ItemSpecs, tooltip_position: DynamicTooltipPosition)
     let icon_asset = img_asset(&item_specs.base.icon);
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let rc_item_specs = Arc::new(item_specs.clone());
 
     let show_tooltip = move |_| {
-        let item_specs = rc_item_specs.clone();
+        let item_specs = item_specs.clone();
         tooltip_context.set_content(
             move || {
                 let item_specs = item_specs.clone();

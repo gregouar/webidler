@@ -28,6 +28,10 @@ use backend::{
 async fn main() {
     let _ = dotenvy::dotenv();
 
+    let master_store = MasterStore::load_from_folder("data")
+        .await
+        .expect("couldn't load master game data");
+
     // TODO: depending on environment, only install necessary
     sqlx::any::install_default_drivers();
 
@@ -39,6 +43,10 @@ async fn main() {
     pool::migrate(&db_pool)
         .await
         .expect("failed to migrate database");
+
+    db::migrations::migration_0_1_0_to_0_1_1::migrate(&db_pool, &master_store)
+        .await
+        .expect("failed to migrate data version 0.1.0 to 0.1.1");
 
     db::game_sessions::clean_all_sessions(&db_pool)
         .await
@@ -63,10 +71,6 @@ async fn main() {
             .unwrap()])
         .allow_methods([Method::GET, Method::POST, Method::DELETE])
         .allow_headers([CONTENT_TYPE, AUTHORIZATION]);
-
-    let master_store = MasterStore::load_from_folder("data")
-        .await
-        .expect("couldn't load master game data");
 
     let sessions_store = SessionsStore::new();
 

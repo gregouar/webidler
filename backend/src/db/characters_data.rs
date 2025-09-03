@@ -1,10 +1,16 @@
-use sqlx::{Executor, FromRow};
+use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
 
 use shared::data::{
-    passive::PassivesTreeAscension, player::PlayerInventory, user::UserCharacterId,
+    item::{ItemModifiers, ItemSlot},
+    passive::PassivesTreeAscension,
+    player::PlayerInventory,
+    user::UserCharacterId,
 };
 
-use crate::{constants::CHARACTER_DATA_VERSION, db::pool::Database};
+use crate::{constants::CHARACTER_DATA_VERSION, db::pool::DbExecutor};
 
 use super::utc_datetime::UtcDateTime;
 
@@ -21,28 +27,46 @@ struct CharacterDataEntry {
     pub updated_at: UtcDateTime,
 }
 
-pub async fn save_character_inventory<'c, E>(
-    executor: E,
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct InventoryData {
+    pub equipped: HashMap<ItemSlot, ItemModifiers>,
+    pub bag: Vec<ItemModifiers>,
+    pub max_bag_size: u8,
+}
+
+pub async fn save_character_inventory<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     inventory: &PlayerInventory,
-) -> anyhow::Result<()>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> anyhow::Result<()> {
+    let inventory_data = InventoryData {
+        equipped: inventory
+            .equipped_items()
+            .map(|(item_slot, item_specs)| (item_slot, item_specs.modifiers.clone()))
+            .collect(),
+        bag: inventory
+            .bag
+            .iter()
+            .map(|item_specs| item_specs.modifiers.clone())
+            .collect(),
+        max_bag_size: inventory.max_bag_size,
+    };
+
     Ok(
-        upsert_character_inventory_data(executor, character_id, rmp_serde::to_vec(inventory)?)
-            .await?,
+        upsert_character_inventory_data(
+            executor,
+            character_id,
+            rmp_serde::to_vec(&inventory_data)?,
+        )
+        .await?,
     )
 }
 
-async fn upsert_character_inventory_data<'c, E>(
-    executor: E,
+async fn upsert_character_inventory_data<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     inventory_data: Vec<u8>,
-) -> Result<(), sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> Result<(), sqlx::Error> {
     sqlx::query!(
         "INSERT INTO characters_data (character_id, data_version, inventory_data) VALUES ($1, $2, $3)
          ON CONFLICT(character_id) DO UPDATE SET 
@@ -59,28 +83,22 @@ where
     Ok(())
 }
 
-pub async fn save_character_passives<'c, E>(
-    executor: E,
+pub async fn save_character_passives<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     passives: &PassivesTreeAscension,
-) -> anyhow::Result<()>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> anyhow::Result<()> {
     Ok(
         upsert_character_passives_data(executor, character_id, rmp_serde::to_vec(passives)?)
             .await?,
     )
 }
 
-async fn upsert_character_passives_data<'c, E>(
-    executor: E,
+async fn upsert_character_passives_data<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     passives_data: Vec<u8>,
-) -> Result<(), sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> Result<(), sqlx::Error> {
     sqlx::query!(
         "UPDATE characters_data SET
             data_version = $2,
@@ -97,17 +115,14 @@ where
     Ok(())
 }
 
-pub async fn load_character_data<'c, E>(
-    executor: E,
+pub async fn load_character_data<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
-) -> anyhow::Result<Option<(PlayerInventory, PassivesTreeAscension)>>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> anyhow::Result<Option<(InventoryData, PassivesTreeAscension)>> {
     let character_data = read_character_data(executor, character_id).await?;
     if let Some(character_data) = character_data {
         Ok(Some((
-            rmp_serde::from_slice::<PlayerInventory>(&character_data.inventory_data)?,
+            rmp_serde::from_slice(&character_data.inventory_data)?,
             character_data
                 .passives_data
                 .and_then(|passives_data| {
@@ -120,13 +135,10 @@ where
     }
 }
 
-async fn read_character_data<'c, E>(
-    executor: E,
+async fn read_character_data<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
-) -> Result<Option<CharacterDataEntry>, sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> Result<Option<CharacterDataEntry>, sqlx::Error> {
     sqlx::query_as!(
         CharacterDataEntry,
         r#"

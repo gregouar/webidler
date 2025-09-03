@@ -536,13 +536,13 @@ fn NodeTooltip(
                             {if max_level {
                                 view! {
                                     " | "
-                                    <span class="text-cyan-200">"Ascended"</span>
+                                    <span class="text-cyan-300">"Ascended"</span>
                                 }
                                     .into_any()
                             } else {
                                 view! {
                                     " | Ascend Cost: "
-                                    <span class="text-cyan-200">"1 Power Shard"</span>
+                                    <span class="text-cyan-300">"1 Power Shard"</span>
                                 }
                                     .into_any()
                             }}

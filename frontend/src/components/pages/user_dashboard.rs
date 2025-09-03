@@ -411,7 +411,7 @@ pub fn CreateCharacterPanel(
                     />
 
                     <div>
-                        <span class="block text-sm font-medium text-gray-300 mb-2">
+                        <span class="block text-sm font-medium text-gray-400 mb-2">
                             "Choose a Portrait"
                         </span>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">

@@ -1,8 +1,10 @@
-use sqlx::{Executor, FromRow, Transaction};
+use sqlx::{FromRow, Transaction};
 
 use shared::data::user::{UserCharacterId, UserId};
 
-use super::{pool::Database, utc_datetime::UtcDateTime};
+use crate::db::pool::Database;
+
+use super::{pool::DbExecutor, utc_datetime::UtcDateTime};
 
 #[derive(Debug, FromRow)]
 pub struct CharacterEntry {
@@ -25,6 +27,12 @@ pub struct CharacterEntry {
 }
 
 #[derive(Debug, FromRow)]
+pub struct CharacterResources {
+    pub resource_gems: f64,
+    pub resource_shards: f64,
+}
+
+#[derive(Debug, FromRow)]
 pub struct CharacterAreaEntry {
     pub character_id: UserCharacterId,
     pub area_id: String,
@@ -34,15 +42,12 @@ pub struct CharacterAreaEntry {
     pub updated_at: UtcDateTime,
 }
 
-pub async fn create_character<'c, E>(
-    executor: E,
+pub async fn create_character<'c>(
+    executor: impl DbExecutor<'c>,
     user_id: &UserId,
     name: &str,
     portrait: &str,
-) -> Result<UserCharacterId, sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> Result<UserCharacterId, sqlx::Error> {
     let character_id = uuid::Uuid::new_v4();
 
     sqlx::query!(
@@ -61,13 +66,27 @@ where
     Ok(character_id)
 }
 
-pub async fn read_character<'c, E>(
-    executor: E,
+pub async fn get_character_by_name<'c>(
+    executor: impl DbExecutor<'c>,
+    character_name: &str,
+) -> Result<Option<UserCharacterId>, sqlx::Error> {
+    sqlx::query_scalar!(
+        r#"
+        SELECT 
+            character_id as "character_id: UserCharacterId"
+        FROM characters
+        WHERE character_name = $1
+        "#,
+        character_name
+    )
+    .fetch_optional(executor)
+    .await
+}
+
+pub async fn read_character<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
-) -> Result<Option<CharacterEntry>, sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> Result<Option<CharacterEntry>, sqlx::Error> {
     sqlx::query_as!(
         CharacterEntry,
         r#"
@@ -95,14 +114,11 @@ where
     .await
 }
 
-pub async fn read_character_area_completed<'c, E>(
-    executor: E,
+pub async fn read_character_area_completed<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     area_id: &str,
-) -> Result<Option<CharacterAreaEntry>, sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> Result<Option<CharacterAreaEntry>, sqlx::Error> {
     sqlx::query_as!(
         CharacterAreaEntry,
         r#"
@@ -122,13 +138,10 @@ where
     .await
 }
 
-pub async fn read_character_areas_completed<'c, E>(
-    executor: E,
+pub async fn read_character_areas_completed<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
-) -> Result<Vec<CharacterAreaEntry>, sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> Result<Vec<CharacterAreaEntry>, sqlx::Error> {
     sqlx::query_as!(
         CharacterAreaEntry,
         r#"
@@ -146,13 +159,10 @@ where
     .await
 }
 
-pub async fn read_all_user_characters<'c, E>(
-    executor: E,
+pub async fn read_all_user_characters<'c>(
+    executor: impl DbExecutor<'c>,
     user_id: &UserId,
-) -> Result<Vec<CharacterEntry>, sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> Result<Vec<CharacterEntry>, sqlx::Error> {
     sqlx::query_as!(
         CharacterEntry,
         r#"
@@ -180,10 +190,10 @@ where
     .await
 }
 
-pub async fn count_user_characters<'c, E>(executor: E, user_id: &UserId) -> Result<i64, sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
+pub async fn count_user_characters<'c>(
+    executor: impl DbExecutor<'c>,
+    user_id: &UserId,
+) -> Result<i64, sqlx::Error> {
     sqlx::query_scalar!(
         r#"
         SELECT
@@ -197,16 +207,14 @@ where
 }
 
 /// Add/remove resources to character
-pub async fn update_character_resources<'c, E>(
-    executor: E,
+pub async fn update_character_resources<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     resource_gems: f64,
     resource_shards: f64,
-) -> Result<(), sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
-    sqlx::query!(
+) -> Result<CharacterResources, sqlx::Error> {
+    sqlx::query_as!(
+        CharacterResources,
         r#"
         UPDATE characters
         SET 
@@ -214,15 +222,14 @@ where
             resource_shards = resource_shards + $3,
             updated_at = CURRENT_TIMESTAMP 
         WHERE character_id = $1
+        RETURNING resource_gems, resource_shards
         "#,
         character_id,
         resource_gems,
         resource_shards,
     )
-    .execute(executor)
-    .await?;
-
-    Ok(())
+    .fetch_one(executor)
+    .await
 }
 
 pub async fn update_character_progress<'c>(
@@ -277,13 +284,10 @@ pub async fn update_character_progress<'c>(
     Ok(())
 }
 
-pub async fn delete_character<'c, E>(
-    executor: E,
+pub async fn delete_character<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
-) -> Result<(), sqlx::Error>
-where
-    E: Executor<'c, Database = Database>,
-{
+) -> Result<(), sqlx::Error> {
     sqlx::query!(
         r#"
         UPDATE characters

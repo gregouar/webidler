@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     area::{AreaLevel, AreaSpecs},
+    market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs},
     player::PlayerInventory,
     skill::SkillSpecs,
@@ -107,3 +108,28 @@ pub struct AscendPassivesResponse {
     pub character: UserCharacter,
     pub ascension: PassivesTreeAscension,
 }
+
+// Market
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct BrowseMarketItemsResponse {
+    pub items: Vec<MarketItem>,
+    pub has_more: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SellMarketItemResponse {
+    pub inventory: PlayerInventory,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct EditMarketItemResponse {}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct BuyMarketItemResponse {
+    pub resource_gems: f64,
+    pub inventory: PlayerInventory,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct RejectMarketItemResponse {}

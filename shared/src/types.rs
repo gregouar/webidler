@@ -3,7 +3,7 @@ use nutype::nutype;
 use regex::Regex;
 
 lazy_static::lazy_static! {
-    static ref ALPHANUMERIC_RE: Regex = Regex::new(r"^[a-zA-Z0-9_]+$").unwrap();
+    static ref ALPHANUMERIC_RE: Regex = Regex::new(r"^[a-zA-Z0-9_ ]+$").unwrap();
 }
 
 lazy_static::lazy_static! {
@@ -15,6 +15,14 @@ fn is_alphanumeric(s: &str) -> anyhow::Result<()> {
         return Err(anyhow!(
             "Only alphanumeric characters and underscores are allowed."
         ));
+    }
+
+    Ok(())
+}
+
+fn has_no_whitespace(s: &str) -> anyhow::Result<()> {
+    if s.contains(" ") {
+        return Err(anyhow!("Whitespace is not allowed."));
     }
 
     Ok(())
@@ -48,6 +56,7 @@ fn is_email(s: &str) -> anyhow::Result<()> {
 
 fn validate_username(s: &str) -> anyhow::Result<()> {
     is_not_empty(s)?;
+    has_no_whitespace(s)?;
     is_not_too_long(s, 20)?;
     is_alphanumeric(s)?;
 
@@ -81,3 +90,32 @@ pub struct Password(String);
     derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
 )]
 pub struct AssetName(String);
+
+#[nutype(
+    sanitize(with=|v| v.round()),
+    validate(greater_or_equal = 0.0, less = 1000000000.0),
+    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Copy, Deref)
+)]
+pub struct ItemPrice(f64);
+
+fn validate_item_name(s: &str) -> anyhow::Result<()> {
+    is_not_empty(s)?;
+    is_not_too_long(s, 100)?;
+    is_alphanumeric(s)?;
+
+    Ok(())
+}
+
+#[nutype(
+    sanitize(trim),
+    validate(with = validate_item_name, error = anyhow::Error),
+    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
+)]
+pub struct ItemName(String);
+
+#[nutype(
+    validate(greater_or_equal = 1, less = 100),
+    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Copy, Deref, Default),
+    default = 20
+)]
+pub struct PaginationLimit(i64);

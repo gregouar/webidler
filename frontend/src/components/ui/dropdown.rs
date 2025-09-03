@@ -1,10 +1,9 @@
-use std::collections::HashMap;
-
+use indexmap::IndexMap;
 use leptos::prelude::*;
 use leptos_use::on_click_outside;
 
 #[component]
-pub fn DropdownMenu<T>(options: HashMap<T, String>, chosen_option: RwSignal<T>) -> impl IntoView
+pub fn DropdownMenu<T>(options: IndexMap<T, String>, chosen_option: RwSignal<T>) -> impl IntoView
 where
     T: Clone + std::hash::Hash + Eq + Send + Sync + 'static,
 {
@@ -60,7 +59,7 @@ where
             "
         </style>
 
-        <div class="relative z-30 font-sans text-sm" node_ref=node_ref>
+        <div class="relative w-60" node_ref=node_ref>
             <button
                 on:click=toggle
                 class="w-full text-left px-4 py-2 rounded-md text-white bg-gradient-to-t from-zinc-900 to-zinc-800 shadow-md border border-zinc-950 hover:from-zinc-800 hover:to-zinc-700 focus:outline-none"
@@ -79,7 +78,7 @@ where
 
             <ul class=move || {
                 format!(
-                    "dropdown-transition absolute mt-1 w-full rounded-md bg-zinc-800 border border-zinc-950 shadow-lg max-h-80 overflow-auto {}",
+                    "dropdown-transition absolute mt-1 w-full rounded-md bg-zinc-800 border border-zinc-950 shadow-lg max-h-80 overflow-auto {}  z-20",
                     if is_open.get() { "open" } else { "" },
                 )
             }>

@@ -36,7 +36,7 @@ pub fn attack_character(
         .sum();
 
     let is_blocked = skill_type == SkillType::Attack
-        && rng::random_range(0.0..=1.0).unwrap_or(1.0) <= target_specs.block;
+        && rng::random_range(0.0..=100.0).unwrap_or(100.0) <= target_specs.block;
 
     let is_hurt = amount > 0.0 && !is_blocked;
 

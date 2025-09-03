@@ -270,7 +270,7 @@ fn format_flat_stat(stat: StatType, value: f64) -> String {
             "{:.0}% of Damage taken from Mana before Life",
             value * 100.0
         ),
-        StatType::Block => format!("Adds {:.0}% Block Chances", value * 100.0),
+        StatType::Block => format!("Adds {:.0}% Block Chances", value),
         StatType::Damage {
             skill_type,
             damage_type,
@@ -280,15 +280,15 @@ fn format_flat_stat(stat: StatType, value: f64) -> String {
             optional_damage_type_str(damage_type),
             to_skill_type_str(skill_type)
         ),
-        StatType::SpellPower => format!("Adds {value:.2} Power to Spells"),
+        StatType::SpellPower => format!("Adds {value:.0} Power to Spells"),
         StatType::CritChances(skill_type) => format!(
             "Adds {:.2}% Critical Hit Chances{}",
-            value * 100.0,
+            value,
             to_skill_type_str(skill_type)
         ),
         StatType::CritDamage(skill_type) => format!(
             "Adds {:.0}% Critical Hit Damage{}",
-            value * 100.0,
+            value,
             to_skill_type_str(skill_type)
         ),
         StatType::StatusPower(status_type) => format!(

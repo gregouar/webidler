@@ -3,20 +3,23 @@ use leptos::prelude::*;
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
-use shared::data::user::UserCharacterId;
+use shared::{data::user::UserCharacterId, http::server::GetCharacterDetailsResponse};
 
 use crate::components::{
     auth::AuthContext,
     backend_client::{BackendClient, BackendError},
     town::{
-        header_menu::HeaderMenu, panels::ascend::AscendPanel, town_scene::TownScene, TownContext,
+        header_menu::HeaderMenu,
+        panels::{ascend::AscendPanel, market::MarketPanel},
+        town_scene::TownScene,
+        TownContext,
     },
     ui::tooltip::DynamicTooltip,
 };
 
 #[component]
 pub fn TownPage() -> impl IntoView {
-    let town_context = TownContext::new();
+    let town_context = TownContext::default();
     provide_context(town_context);
 
     let (get_character_id_storage, _, _) =
@@ -42,10 +45,16 @@ pub fn TownPage() -> impl IntoView {
                 .get_character_details(&auth_context.token(), &get_character_id_storage.get())
                 .await
             {
-                Ok(response) => {
-                    town_context.character.set(response.character);
-                    town_context.areas.set(response.areas);
-                    town_context.passives_tree_ascension.set(response.ascension);
+                Ok(GetCharacterDetailsResponse {
+                    character,
+                    areas,
+                    inventory,
+                    ascension,
+                }) => {
+                    town_context.character.set(character);
+                    town_context.areas.set(areas);
+                    town_context.inventory.set(inventory);
+                    town_context.passives_tree_ascension.set(ascension);
                 }
                 Err(BackendError::Unauthorized(_) | BackendError::NotFound) => {
                     use_navigate()("/", Default::default())
@@ -73,7 +82,7 @@ pub fn TownPage() -> impl IntoView {
                         <HeaderMenu />
                         <div class="relative flex-1">
                             <TownScene />
-                            // <MarketPanel open=town_context.open_market />
+                            <MarketPanel open=town_context.open_market />
                             <AscendPanel open=town_context.open_ascend />
                         // <ForgePanel open=town_context.open_forge />
                         </div>

@@ -2,16 +2,18 @@ use sqlx::migrate::Migrator;
 use std::str::FromStr;
 
 #[cfg(feature = "sqlite")]
-pub use sqlx::SqlitePool as DbPool;
-#[cfg(feature = "sqlite")]
-pub type Database = sqlx::Sqlite;
+pub use sqlx::Sqlite as Database;
 #[cfg(feature = "sqlite")]
 pub use sqlx::SqliteExecutor as DbExecutor;
+#[cfg(feature = "sqlite")]
+pub use sqlx::SqlitePool as DbPool;
 
+#[cfg(feature = "postgres")]
+pub use sqlx::PgExecutor as DbExecutor;
 #[cfg(feature = "postgres")]
 pub use sqlx::PgPool as DbPool;
 #[cfg(feature = "postgres")]
-pub type Database = sqlx::Postgres;
+pub use sqlx::Postgres as Database;
 
 #[cfg(feature = "sqlite")]
 pub async fn create_pool(database_url: &str) -> Result<DbPool, sqlx::Error> {

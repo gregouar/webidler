@@ -32,14 +32,14 @@ pub fn HeaderMenu() -> impl IntoView {
         <div class="relative z-50 w-full flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
                 <ResourceCounter
-                    class:text-violet-200
+                    class:text-violet-300
                     icon="ui/gems.webp"
                     name="Gems"
                     description="To buy items in the market between grinds."
                     value=gems
                 />
                 <ResourceCounter
-                    class:text-cyan-200
+                    class:text-cyan-300
                     icon="ui/power_shard.webp"
                     name="Power Shards"
                     description="To permanently increase power of passive skills."
@@ -47,11 +47,13 @@ pub fn HeaderMenu() -> impl IntoView {
                 />
             </div>
             <div class="flex justify-end space-x-2  w-full">
-                <MenuButton on:click=|_| {} disabled=disable_buttons>
-                    "Market"
-                </MenuButton>
                 <MenuButton on:click=move |_| {
-                    town_context.open_ascend.set(!town_context.open_ascend.get())
+                    town_context.open_market.set(!town_context.open_market.get());
+                    town_context.open_ascend.set(false);
+                }>"Market"</MenuButton>
+                <MenuButton on:click=move |_| {
+                    town_context.open_ascend.set(!town_context.open_ascend.get());
+                    town_context.open_market.set(false);
                 }>"Ascend"</MenuButton>
                 <MenuButton on:click=|_| {} disabled=disable_buttons>
                     "Forge"

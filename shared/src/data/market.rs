@@ -1,0 +1,42 @@
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+
+use crate::{
+    data::{
+        area::AreaLevel,
+        item::{ItemCategory, ItemRarity, ItemSpecs},
+        user::UserCharacterId,
+    },
+    types::{ItemName, ItemPrice},
+};
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct MarketItem {
+    pub item_id: usize,
+
+    pub owner_id: UserCharacterId,
+    pub owner_name: String,
+
+    pub recipient: Option<(UserCharacterId, String)>,
+    pub rejected: bool,
+
+    pub price: f64,
+
+    pub item_specs: ItemSpecs,
+
+    pub created_at: DateTime<Utc>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct MarketFilters {
+    pub item_name: Option<ItemName>,
+    pub item_level: Option<AreaLevel>,
+    pub price: Option<ItemPrice>,
+
+    pub item_rarity: Option<ItemRarity>,
+    pub item_category: Option<ItemCategory>,
+
+    pub item_damages: Option<f64>,
+    pub item_armor: Option<f64>,
+    pub item_block: Option<f64>,
+}
