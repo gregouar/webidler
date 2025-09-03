@@ -17,7 +17,7 @@ CREATE TABLE market (
     item_block REAL,
     item_damages REAL,
     -- 
-    item_data BLOB NOT NULL,
+    item_data TEXT NOT NULL,
     --JSONB
     --
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -36,10 +36,6 @@ CREATE INDEX idx_market_recipient_id ON market (recipient_id, deleted_at);
 
 CREATE INDEX idx_market_deleted ON market (deleted_at);
 
-CREATE INDEX idx_market_price ON market (price)
-WHERE
-    deleted_at IS NULL;
-
 CREATE INDEX idx_market_base_item_id ON market (base_item_id)
 WHERE
     deleted_at IS NULL;
@@ -48,23 +44,11 @@ CREATE INDEX idx_market_name ON market (item_name)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_market_rarity ON market (item_rarity)
+CREATE INDEX idx_market_main_filters ON market (price, item_rarity, item_level)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_market_level ON market (item_level)
-WHERE
-    deleted_at IS NULL;
-
-CREATE INDEX idx_market_armor ON market (item_armor)
-WHERE
-    deleted_at IS NULL;
-
-CREATE INDEX idx_market_block ON market (item_block)
-WHERE
-    deleted_at IS NULL;
-
-CREATE INDEX idx_market_damages ON market (item_damages)
+CREATE INDEX idx_market_extra_filters ON market (item_armor, item_block, item_damages)
 WHERE
     deleted_at IS NULL;
 
