@@ -200,7 +200,11 @@ pub async fn read_market_items<'c>(
 ) -> anyhow::Result<(Vec<MarketEntry>, bool)> {
     let limit_more = limit + 1;
 
-    let item_name = filters.item_name.map(|x| format!("%{}%", x.to_uppercase()));
+    let dont_filter_by_name = filters.item_name.is_none();
+    let item_name = filters
+        .item_name
+        .map(|x| format!("%{}%", x.to_uppercase()))
+        .unwrap_or_default();
 
     let item_level = filters.item_level;
     let price = filters.price.map(|x| x.into_inner());
@@ -249,20 +253,20 @@ pub async fn read_market_items<'c>(
                     AND market.character_id = $3
                 )
             )
-            AND ($5 IS NULL OR UPPER(market.item_name) LIKE $5)
-            AND ($6 IS NULL OR market.item_level <= $6)
-            AND ($7 IS NULL OR market.price <= $7)
-            AND ($8 IS NULL OR market.item_rarity = $8)
-            AND ($9 IS NULL OR 
+            AND ($5 OR UPPER(market.item_name) LIKE $6)
+            AND ($7 IS NULL OR market.item_level <= $7)
+            AND ($8 IS NULL OR market.price <= $8)
+            AND ($9 IS NULL OR market.item_rarity = $9)
+            AND ($10 IS NULL OR 
                     (
                     SELECT COUNT(*)
                     FROM market_categories mc
                     WHERE mc.market_id = market.market_id
-                    AND mc.category = $9
+                    AND mc.category = $10
                     ) > 0)
-            AND ($10 IS NULL OR market.item_damages >= $10)
-            AND ($11 IS NULL OR market.item_armor >= $11)
-            AND ($12 IS NULL OR market.item_block >= $12)
+            AND ($11 IS NULL OR market.item_damages >= $11)
+            AND ($12 IS NULL OR market.item_armor >= $12)
+            AND ($13 IS NULL OR market.item_block >= $13)
         ORDER BY 
             rejected DESC, 
             recipient_id DESC, 
@@ -274,6 +278,7 @@ pub async fn read_market_items<'c>(
         skip,
         character_id,
         own_listings,
+        dont_filter_by_name,
         item_name,
         item_level,
         price,
