@@ -84,8 +84,3 @@ CREATE INDEX idx_market_stats_item_stat ON market_stats (item_stat, stat_modifie
 WHERE
     deleted_at IS NULL;
 
--- Unique character name to find character by name
-ALTER TABLE
-    characters
-ADD
-    CONSTRAINT uc_characters_character_name UNIQUE (character_name);
