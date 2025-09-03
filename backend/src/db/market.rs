@@ -222,6 +222,9 @@ pub async fn read_market_items<'c>(
     let item_name = filters.item_name.map(|x| x.into_inner());
     let item_level = filters.item_level;
     let price = filters.price.map(|x| x.into_inner());
+    let item_damages = filters.item_damages;
+    let item_armor = filters.item_armor;
+    let item_block = filters.item_block;
 
     let item_rarity = filters
         .item_rarity
@@ -275,6 +278,9 @@ pub async fn read_market_items<'c>(
                     WHERE mc.market_id = market.market_id
                     AND mc.category = $9
                     ) > 0)
+            AND ($10 IS NULL OR market.item_damages >= $10)
+            AND ($11 IS NULL OR market.item_armor >= $11)
+            AND ($12 IS NULL OR market.item_block >= $12)
         ORDER BY 
             rejected DESC, 
             recipient_id DESC, 
@@ -291,6 +297,9 @@ pub async fn read_market_items<'c>(
         price,
         item_rarity,
         item_category,
+        item_damages,
+        item_armor,
+        item_block
     )
     .fetch_all(executor)
     .await?;

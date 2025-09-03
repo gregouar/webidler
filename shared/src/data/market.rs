@@ -35,4 +35,8 @@ pub struct MarketFilters {
 
     pub item_rarity: Option<ItemRarity>,
     pub item_category: Option<ItemCategory>,
+
+    pub item_damages: Option<f64>,
+    pub item_armor: Option<f64>,
+    pub item_block: Option<f64>,
 }

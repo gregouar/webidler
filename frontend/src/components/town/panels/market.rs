@@ -117,7 +117,9 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                         <div class="w-full aspect-[4/3] bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                             {move || {
                                 match active_tab.get() {
-                                    MarketTab::Filters => view! { <Filters filters /> }.into_any(),
+                                    MarketTab::Filters => {
+                                        view! { <MainFilters filters /> }.into_any()
+                                    }
                                     MarketTab::Buy => {
                                         view! {
                                             <MarketBrowser selected_item filters own_listings=false />
@@ -141,8 +143,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                             {move || {
                                 match active_tab.get() {
                                     MarketTab::Filters => {
-                                        let _: () = view! {};
-                                        ().into_any()
+                                        view! { <StatsFilters filters /> }.into_any()
                                     }
                                     MarketTab::Buy => {
                                         view! { <BuyDetails selected_item /> }.into_any()
@@ -203,14 +204,28 @@ pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
 }
 
 #[component]
-fn Filters(filters: RwSignal<MarketFilters>) -> impl IntoView {
+fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
+    // Inputs
+
     let item_name = RwSignal::new(Some(filters.get_untracked().item_name));
     Effect::new(move || filters.write().item_name = item_name.get().unwrap_or_default());
 
     let item_level = RwSignal::new(Some(filters.get_untracked().item_level));
     Effect::new(move || filters.write().item_level = item_level.get().unwrap_or_default());
+
     let price = RwSignal::new(Some(filters.get_untracked().price));
     Effect::new(move || filters.write().price = price.get().unwrap_or_default());
+
+    let item_damages = RwSignal::new(Some(filters.get_untracked().item_damages));
+    Effect::new(move || filters.write().item_damages = item_damages.get().unwrap_or_default());
+
+    let item_armor = RwSignal::new(Some(filters.get_untracked().item_armor));
+    Effect::new(move || filters.write().item_armor = item_armor.get().unwrap_or_default());
+
+    let item_block = RwSignal::new(Some(filters.get_untracked().item_block));
+    Effect::new(move || filters.write().item_block = item_block.get().unwrap_or_default());
+
+    // Dropdowns
 
     let item_rarity = RwSignal::new(filters.get_untracked().item_rarity);
     Effect::new(move || filters.write().item_rarity = item_rarity.get());
@@ -229,42 +244,92 @@ fn Filters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     // TODO: MORE?
 
     view! {
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
-            <div class="flex flex-col gap-4">
-                <ValidatedInput
-                    id="item_name"
-                    label="Item Name:"
-                    input_type="text"
-                    placeholder="Enter item name"
-                    bind=item_name
-                />
+        <div class="w-full h-full flex flex-col justify-between p-4 relative">
+            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
+                "Main Filters"
+            </span>
 
-                <ValidatedInput
-                    id="item_level"
-                    label="Max Item Level:"
-                    input_type="number"
-                    placeholder="Enter max item level"
-                    bind=item_level
-                />
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
+                <div class="flex flex-col gap-4">
+                    <ValidatedInput
+                        id="item_name"
+                        label="Item Name:"
+                        input_type="text"
+                        placeholder="Enter item name"
+                        bind=item_name
+                    />
 
-                <ValidatedInput
-                    id="price"
-                    label="Max Price:"
-                    input_type="number"
-                    placeholder="Enter max price"
-                    bind=price
-                />
-            </div>
+                    <ValidatedInput
+                        id="item_level"
+                        label="Max Item Level:"
+                        input_type="number"
+                        placeholder="Enter max item level"
+                        bind=item_level
+                    />
 
-            <div class="flex flex-col gap-4">
-                <div class="flex items-center justify-between text-gray-300 text-sm">
-                    <span>"Item Category:"</span>
-                    <DropdownMenu options=item_category_options chosen_option=item_category />
+                    <ValidatedInput
+                        id="price"
+                        label="Max Price:"
+                        input_type="number"
+                        placeholder="Enter max price"
+                        bind=price
+                    />
                 </div>
 
-                <div class="flex items-center justify-between text-gray-300 text-sm">
-                    <span>"Item Rarity:"</span>
-                    <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center justify-between text-gray-300 text-sm">
+                        <span>"Item Category:"</span>
+                        <DropdownMenu options=item_category_options chosen_option=item_category />
+                    </div>
+
+                    <div class="flex items-center justify-between text-gray-300 text-sm">
+                        <span>"Item Rarity:"</span>
+                        <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <ValidatedInput
+                        id="item_damages"
+                        label="Min Damages:"
+                        input_type="number"
+                        placeholder="Minimum Damages per second"
+                        bind=item_damages
+                    />
+                    <ValidatedInput
+                        id="item_armor"
+                        label="Min Armor:"
+                        input_type="number"
+                        placeholder="Minimum Armor"
+                        bind=item_armor
+                    />
+                    <ValidatedInput
+                        id="item_block"
+                        label="Min Block %:"
+                        input_type="number"
+                        placeholder="Minimum Block Percent Chances"
+                        bind=item_block
+                    />
+                </div>
+            </div>
+        </div>
+    }
+}
+
+#[component]
+fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
+    // TODO
+
+    let _ = filters;
+
+    view! {
+        <div class="w-full h-full flex flex-col justify-between p-4 relative">
+            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
+                "Stats Filters"
+            </span>
+            <div class="w-full h-full flex items-center justify-center">
+                <div class="flex flex-col items-center text-center gap-1">
+                    <span class="text-gray-400">"Coming soon..."</span>
                 </div>
             </div>
         </div>
