@@ -4,7 +4,7 @@ CREATE TABLE market (
     --
     character_id UUID NOT NULL,
     recipient_id UUID,
-    rejected BOOLEAN NOT NULL DEFAULT 0,
+    rejected BOOLEAN NOT NULL DEFAULT False,
     --
     price DOUBLE PRECISION NOT NULL,
     --
