@@ -88,6 +88,7 @@ pub async fn sell_item<'c>(
     .await?)
 }
 
+#[allow(clippy::too_many_arguments)]
 async fn create_market_item<'c>(
     executor: &mut Transaction<'c, Database>,
     character_id: &UserCharacterId,
