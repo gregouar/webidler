@@ -242,7 +242,7 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
         .collect();
 
     view! {
-        <div class="w-full h-full flex flex-col justify-between p-4 relative">
+        <div class="w-full h-full flex flex-col p-4 relative">
             <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
                 "Main Filters"
             </span>
