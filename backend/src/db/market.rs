@@ -206,7 +206,7 @@ pub async fn read_market_items<'c>(
         .map(|x| format!("%{}%", x.to_uppercase()))
         .unwrap_or_default();
 
-    let item_level = filters.item_level;
+    let item_level = filters.item_level.map(|x| x as i32);
     let price = filters.price.map(|x| x.into_inner());
     let item_damages = filters.item_damages;
     let item_armor = filters.item_armor;
