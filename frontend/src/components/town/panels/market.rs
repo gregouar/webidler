@@ -60,7 +60,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
 
     let filters = RwSignal::new(MarketFilters {
         item_level: Some(town_context.character.read_untracked().max_area_level),
-        price: ItemPrice::try_new(town_context.character.read_untracked().resource_gems).ok(),
+        // price: ItemPrice::try_new(town_context.character.read_untracked().resource_gems).ok(),
         ..Default::default()
     });
 

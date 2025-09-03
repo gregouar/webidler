@@ -66,7 +66,7 @@ pub async fn sell_item<'c>(
             .into_iter()
             .filter_map(|((stat_type, modifier), stat_value)| {
                 Some((
-                    serde_json::to_value(&stat_type).ok()?.into(),
+                    serde_json::to_value(&stat_type).ok()?,
                     serde_plain::to_string(&modifier).ok()?,
                     stat_value,
                 ))
@@ -83,7 +83,7 @@ pub async fn sell_item<'c>(
             .as_ref()
             .map(|armor_specs| armor_specs.block as f64),
         item_damages,
-        serde_json::to_value(&item.modifiers)?.into(),
+        serde_json::to_value(&item.modifiers)?,
         // serde_json::to_vec(&item.modifiers)?.into(),
     )
     .await?)
@@ -229,7 +229,7 @@ pub async fn read_market_items<'c>(
             rejected,
             price as "price: f64",
             item_level as "item_level: AreaLevel",
-            item_data,
+            item_data as "item_data: JsonValue",
             market.created_at,
             market.updated_at
         FROM 
@@ -359,7 +359,7 @@ pub async fn buy_item<'c>(
             rejected,
             price as "price: f64",
             item_level as "item_level: AreaLevel",
-            item_data,
+            item_data as "item_data: JsonValue",
             created_at,
             updated_at
         "#,
