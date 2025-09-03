@@ -238,7 +238,7 @@ pub async fn read_market_items<'c>(
         MarketEntry,
         "
         SELECT 
-            market_id as 'market_id: MarketId', 
+            market_id, 
             owner.character_id as 'character_id: UserCharacterId', 
             owner.character_name,
             recipient_id as 'recipient_id?: UserCharacterId', 
@@ -407,7 +407,7 @@ async fn delete_market_item<'c>(
             market_id = $1
             AND deleted_at is NULL
         RETURNING
-            market_id as 'market_id: MarketId', 
+            market_id, 
             character_id as 'character_id: UserCharacterId', 
             'owner' as 'character_name!: String',
             recipient_id as 'recipient_id?: UserCharacterId', 
