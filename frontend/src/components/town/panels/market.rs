@@ -707,7 +707,13 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
                 </div>
 
                 <MenuButton on:click=do_sell disabled=disabled>
-                    "Sell Item"
+                    {move || {
+                        if price.get().map(|price| price.into_inner()).unwrap_or(1.0) > 0.0 {
+                            "Sell Item"
+                        } else {
+                            "Give Item"
+                        }
+                    }}
                 </MenuButton>
             </div>
         </div>
