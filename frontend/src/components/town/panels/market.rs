@@ -8,6 +8,7 @@ use shared::{
         area::AreaLevel,
         item::{ItemCategory, ItemRarity, ItemSpecs},
         market::MarketItem,
+        user::UserCharacterId,
     },
     http::client::{BrowseMarketItemsRequest, BuyMarketItemRequest, SellMarketItemRequest},
     types::{ItemName, ItemPrice, PaginationLimit, Username},
@@ -112,13 +113,15 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                                 match active_tab.get() {
                                     MarketTab::Filters => view! { <Filters /> }.into_any(),
                                     MarketTab::Buy => {
-                                        view! { <BuyBrowser selected_item /> }.into_any()
+                                        view! { <MarketBrowser selected_item own_listings=false /> }
+                                            .into_any()
                                     }
                                     MarketTab::Sell => {
-                                        view! { <SellBrowser selected_item /> }.into_any()
+                                        view! { <InventoryBrowser selected_item /> }.into_any()
                                     }
                                     MarketTab::Listings => {
-                                        view! { <ListingsBrowser selected_item /> }.into_any()
+                                        view! { <MarketBrowser selected_item own_listings=true /> }
+                                            .into_any()
                                     }
                                 }
                             }}
@@ -127,7 +130,10 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                         <div class="w-full aspect-[4/3] bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                             {move || {
                                 match active_tab.get() {
-                                    MarketTab::Filters => view! {}.into_any(),
+                                    MarketTab::Filters => {
+                                        let _: () = view! {};
+                                        ().into_any()
+                                    }
                                     MarketTab::Buy => {
                                         view! { <BuyDetails selected_item /> }.into_any()
                                     }
@@ -154,6 +160,7 @@ pub struct SelectedItem {
     pub index: usize,
     pub item_specs: Arc<ItemSpecs>,
     pub price: f64,
+    pub private_sale: Option<UserCharacterId>,
 }
 
 impl From<MarketItem> for SelectedItem {
@@ -162,6 +169,7 @@ impl From<MarketItem> for SelectedItem {
             index: value.item_id,
             item_specs: Arc::new(value.item_specs),
             price: value.price,
+            private_sale: value.private_sale,
         }
     }
 }
@@ -243,11 +251,13 @@ fn Filters() -> impl IntoView {
 }
 
 #[component]
-fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
-    let items_per_page = PaginationLimit::try_new(6).unwrap_or_default();
+fn MarketBrowser(
+    selected_item: RwSignal<Option<SelectedItem>>,
+    own_listings: bool,
+) -> impl IntoView {
+    let items_per_page = PaginationLimit::try_new(20).unwrap_or_default();
 
     let items_list = RwSignal::new(Vec::new());
-    let max_list = RwSignal::new(0);
 
     let extend_list = RwSignal::new(0u32);
     let reached_end_of_list = RwSignal::new(false);
@@ -261,8 +271,7 @@ fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
     });
 
     Effect::new(move || {
-        if reached_end_of_list.get() && max_list.get_untracked() > items_list.read_untracked().len()
-        {
+        if reached_end_of_list.get() && has_more.get_untracked() {
             (*extend_list.write()) += items_per_page.into_inner() as u32;
         }
     });
@@ -280,24 +289,16 @@ fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
                         character_id,
                         skip,
                         limit: items_per_page,
+                        own_listings,
                     })
                     .await
                     .unwrap_or_default();
 
-                max_list.set(response.max_items);
                 if let Some(mut items_list) = items_list.try_write() {
                     items_list.extend(response.items.into_iter().map(Into::into))
                 }
                 reached_end_of_list.try_set(false);
-
-                if items_list
-                    .try_read_untracked()
-                    .map(|items_list| items_list.len())
-                    .unwrap_or_default()
-                    >= response.max_items
-                {
-                    has_more.try_set(false);
-                }
+                has_more.try_set(response.has_more);
             });
         }
     });
@@ -305,7 +306,7 @@ fn BuyBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
 }
 
 #[component]
-fn SellBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
+fn InventoryBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
     let items_list = Signal::derive({
         let town_context = expect_context::<TownContext>();
         move || {
@@ -319,17 +320,12 @@ fn SellBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
                     index,
                     item_specs: Arc::new(item.clone()),
                     price: 0.0,
+                    private_sale: None,
                 })
                 .collect::<Vec<_>>()
         }
     });
 
-    view! { <ItemsBrowser selected_item items_list /> }
-}
-
-#[component]
-fn ListingsBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
-    let items_list = Signal::derive(std::vec::Vec::new);
     view! { <ItemsBrowser selected_item items_list /> }
 }
 
@@ -402,7 +398,7 @@ pub fn ItemRow(
             )
         }>
             <div class="relative h-32 aspect-[2/3] flex-shrink-0">
-                <ItemCard item_specs=item_specs.clone() />
+                <ItemCard item_specs=item_specs.clone() class:pointer-events-none />
             </div>
 
             <div class="flex flex-col w-full">
@@ -626,9 +622,23 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                 "Remove from Market"
             </span>
 
+            <div>
+                {move || {
+                    selected_item
+                        .read()
+                        .as_ref()
+                        .map(|selected_item| {
+                            selected_item
+                                .private_sale
+                                .map(|private_sale| private_sale.to_string())
+                                .unwrap_or_default()
+                        })
+                }}
+            </div>
+
             <ItemDetails selected_item />
 
-            <div class="flex justify-between p-4">
+            <div class="flex justify-between">
                 <div class="flex items-center gap-1 text-lg text-gray-400 ">
                     <ValidatedInput
                         id="price"
@@ -647,11 +657,9 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                     </MenuButton>
                 </div>
 
-                <div>
-                    <MenuButton on:click=move |_| {} disabled=disabled>
-                        "Remove Selected Item"
-                    </MenuButton>
-                </div>
+                <MenuButton on:click=move |_| {} disabled=disabled>
+                    "Remove Selected Item"
+                </MenuButton>
             </div>
         </div>
     }
@@ -664,11 +672,17 @@ pub fn ItemDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
             Some(selected_item) => {
                 view! {
                     <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
-                        <ItemCard item_specs=selected_item.item_specs.clone() />
+                        <ItemCard
+                            item_specs=selected_item.item_specs.clone()
+                            class:pointer-events-none
+                        />
                     </div>
 
                     <div class="flex-1 w-full">
-                        <ItemTooltipContent item_specs=selected_item.item_specs.clone() />
+                        <ItemTooltipContent
+                            item_specs=selected_item.item_specs.clone()
+                            class:select-text
+                        />
                     </div>
                 }
                 .into_any()

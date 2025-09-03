@@ -178,16 +178,52 @@ async fn create_market_item<'c>(
 // TODO: filters
 pub async fn load_market_items(
     executor: &DbPool,
-    // character_id: &UserCharacterId,
+    character_id: &UserCharacterId,
+    own_listings: bool,
     skip: i64,
     limit: i64,
-) -> anyhow::Result<(Vec<MarketItemEntry>, i64)> {
-    let results = read_market_items(executor, skip, limit).await?;
+) -> anyhow::Result<(Vec<MarketItemEntry>, bool)> {
+    let limit_more = limit + 1;
+    let raw_items = sqlx::query_as!(
+        MarketEntry,
+        "
+            SELECT 
+                market_id as 'market_id: MarketId', 
+                character_id as 'character_id: UserCharacterId', 
+                private_sale as 'private_sale?: UserCharacterId', 
+                rejected,
+                price as 'price: f64',
+                item_data,
+                created_at,
+                updated_at
+            FROM 
+                market 
+            WHERE 
+                deleted_at IS NULL 
+                AND (
+                    (NOT $4 AND character_id != $3)
+                    OR ($4 AND character_id = $3)
+                )
+            ORDER BY 
+                private_sale ASC, 
+                price ASC
+            LIMIT $1
+            OFFSET $2
+            ",
+        limit_more,
+        skip,
+        character_id,
+        own_listings,
+    )
+    .fetch_all(executor)
+    .await?;
+
+    let has_more = raw_items.len() as i64 == limit_more;
 
     Ok((
-        results
-            .0
+        raw_items
             .into_iter()
+            .take(limit as usize)
             .filter_map(|market_entry| {
                 Some(MarketItemEntry {
                     item_id: market_entry.market_id as usize,
@@ -201,49 +237,8 @@ pub async fn load_market_items(
                 })
             })
             .collect(),
-        results.1,
+        has_more,
     ))
-}
-
-async fn read_market_items(
-    executor: &DbPool,
-    // character_id: &UserCharacterId,
-    skip: i64,
-    limit: i64,
-) -> Result<(Vec<MarketEntry>, i64), sqlx::Error> {
-    tokio::try_join!(
-        sqlx::query_as!(
-            MarketEntry,
-            "
-            SELECT 
-                market_id as 'market_id: MarketId', 
-                character_id as 'character_id: UserCharacterId', 
-                private_sale as 'private_sale?: UserCharacterId', 
-                rejected,
-                price as 'price: f64',
-                item_data,
-                created_at,
-                updated_at
-            FROM market 
-            WHERE deleted_at IS NULL
-            ORDER BY private_sale ASC, price ASC
-            LIMIT $2
-            OFFSET $1
-            ",
-            skip,
-            limit,
-        )
-        .fetch_all(executor),
-        sqlx::query_scalar!(
-            "
-            SELECT 
-            COUNT(*)
-            FROM market 
-            WHERE deleted_at IS NULL
-            "
-        )
-        .fetch_one(executor),
-    )
 }
 
 // TODO: update (reject + price)

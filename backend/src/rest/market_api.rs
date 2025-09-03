@@ -41,8 +41,10 @@ pub async fn post_browse_market(
     State(master_store): State<MasterStore>,
     Json(payload): Json<BrowseMarketItemsRequest>,
 ) -> Result<Json<BrowseMarketItemsResponse>, AppError> {
-    let (items, max_items) = db::market::load_market_items(
+    let (items, has_more) = db::market::load_market_items(
         &db_pool,
+        &payload.character_id,
+        payload.own_listings,
         payload.skip as i64,
         payload.limit.into_inner(),
     )
@@ -53,16 +55,20 @@ pub async fn post_browse_market(
             .into_iter()
             .filter_map(|market_item_entry| {
                 Some(MarketItem {
+                    item_id: market_item_entry.item_id,
+                    private_sale: market_item_entry.private_sale,
+                    price: market_item_entry.price,
+
                     item_specs: items_controller::init_item_specs_from_store(
                         &master_store.items_store,
                         market_item_entry.item_modifiers,
                     )?,
-                    item_id: market_item_entry.item_id,
-                    price: market_item_entry.price,
+
+                    created_at: market_item_entry.created_at.into(),
                 })
             })
             .collect(),
-        max_items: max_items as usize,
+        has_more,
     }))
 }
 
@@ -114,6 +120,8 @@ pub async fn post_buy_market_item(
     if character_resources.resource_gems < 0.0 {
         return Err(AppError::UserError("not enough gems".into()));
     }
+
+    // TODO: VERIFY CHARACTER LEVEL
 
     db::characters::update_character_resources(
         &mut *tx,

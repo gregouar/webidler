@@ -114,7 +114,7 @@ pub struct AscendPassivesResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BrowseMarketItemsResponse {
     pub items: Vec<MarketItem>,
-    pub max_items: usize,
+    pub has_more: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

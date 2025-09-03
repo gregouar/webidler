@@ -38,7 +38,10 @@ pub struct AscendPassivesRequest {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BrowseMarketItemsRequest {
     pub character_id: UserCharacterId,
+    pub own_listings: bool,
+
     // TODO filters, order by etc
+
     // Pagination
     pub skip: u32,
     pub limit: PaginationLimit,
