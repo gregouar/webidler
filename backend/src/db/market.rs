@@ -256,7 +256,7 @@ pub async fn read_market_items<'c>(
             AND ($5 OR UPPER(market.item_name) LIKE $6)
             AND (market.item_level <= $7)
             AND (market.price <= $8)
-            AND (market.item_rarity = $9)
+            AND ($9 IS NULL OR market.item_rarity = $9)
             AND ($10 IS NULL OR EXISTS (
                 SELECT 1
                 FROM market_categories mc
