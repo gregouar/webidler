@@ -196,12 +196,10 @@ pub async fn post_sell_market_item(
                 "too many public listings (max {MAX_MARKET_PUBLIC_LISTINGS})"
             )));
         }
-    } else {
-        if private_listings >= MAX_MARKET_PRIVATE_LISTINGS {
-            return Err(AppError::UserError(format!(
-                "too many private offers (max {MAX_MARKET_PRIVATE_LISTINGS})"
-            )));
-        }
+    } else if private_listings >= MAX_MARKET_PRIVATE_LISTINGS {
+        return Err(AppError::UserError(format!(
+            "too many private offers (max {MAX_MARKET_PRIVATE_LISTINGS})"
+        )));
     }
 
     let (inventory_data, _) =

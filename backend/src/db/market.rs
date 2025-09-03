@@ -65,7 +65,7 @@ pub async fn sell_item<'c>(
             .into_iter()
             .filter_map(|((stat_type, modifier), stat_value)| {
                 Some((
-                    serde_json::to_value(&stat_type).ok()?,
+                    serde_json::to_value(stat_type).ok()?,
                     serde_plain::to_string(&modifier).ok()?,
                     stat_value,
                 ))

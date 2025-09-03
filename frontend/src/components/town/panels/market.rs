@@ -646,12 +646,12 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
 
             <div class="flex flex-col">
                 <span class="text-pink-400 p-2 font-bold">
-                    {move || private_offer().then(|| "Private Offer")}
+                    {move || private_offer().then_some("Private Offer")}
                 </span>
                 <ItemDetails selected_item />
                 <div class="flex justify-between items-center text-sm text-gray-400 p-2">
                     <span>"Listed by: "{move || seller_name()}</span>
-                    <span>{move || listed_at().map(|listed_at| format_datetime(listed_at))}</span>
+                    <span>{move || listed_at().map(format_datetime)}</span>
                 </div>
             </div>
 
@@ -946,7 +946,7 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                 <ItemDetails selected_item />
                 <div class="flex justify-between items-center text-sm text-gray-400 p-2">
                     <span>"Listed by: "{move || seller_name()}</span>
-                    <span>{move || listed_at().map(|listed_at| format_datetime(listed_at))}</span>
+                    <span>{move || listed_at().map(format_datetime)}</span>
                 </div>
             </div>
 
