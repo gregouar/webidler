@@ -254,7 +254,7 @@ pub async fn read_market_items<'c>(
                     AND market.character_id = $3
                 )
             )
-            AND ($5 IS NULL OR UPPER(market.item_name) LIKE '%' || UPPER($5) || '%')
+            AND ($5 IS NULL OR UPPER(market.item_name) LIKE '%' || UPPER(CAST($5 AS TEXT)) || '%')
             AND ($6 IS NULL OR market.item_level <= $6)
             AND ($7 IS NULL OR market.price <= $7)
             AND ($8 IS NULL OR market.item_rarity = $8)
