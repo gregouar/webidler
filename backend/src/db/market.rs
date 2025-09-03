@@ -80,7 +80,11 @@ pub async fn sell_item<'c>(
             .0
             .into_iter()
             .filter_map(|((stat_type, modifier), stat_value)| {
-                Some((serde_json::to_vec(&stat_type).ok()?, stat_value))
+                Some((
+                    serde_json::to_vec(&stat_type).ok()?,
+                    serde_plain::to_string(&modifier).ok()?,
+                    stat_value,
+                ))
                 // TODO: Add modifier column
             })
             .collect(),
@@ -106,7 +110,7 @@ async fn create_market_item<'c>(
     private_sale: Option<UserCharacterId>,
     price: f64,
     item_categories: HashSet<String>,
-    item_stats: Vec<(Vec<u8>, f64)>,
+    item_stats: Vec<(Vec<u8>, String, f64)>,
     base_item_id: String,
     item_name: String,
     item_rarity: String,
@@ -162,14 +166,15 @@ async fn create_market_item<'c>(
         .await?;
     }
 
-    for (item_stat, stat_value) in item_stats {
+    for (item_stat, stat_modifier, stat_value) in item_stats {
         sqlx::query!(
             "
-        INSERT INTO market_stats (market_id, item_stat, stat_value)
-        VALUES ($1,$2,$3)
+        INSERT INTO market_stats (market_id, item_stat, stat_modifier, stat_value)
+        VALUES ($1,$2,$3,$4)
         ",
             market_id,
             item_stat,
+            stat_modifier,
             stat_value,
         )
         .execute(&mut **executor)

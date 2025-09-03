@@ -86,6 +86,7 @@ WHERE
 CREATE TABLE market_stats (
     market_id INTEGER NOT NULL,
     item_stat TEXT NOT NULL,
+    stat_modifier TEXT NOT NULL,
     stat_value REAL NOT NULL,
     deleted_at TIMESTAMP,
     FOREIGN KEY (market_id) REFERENCES market(market_id) ON DELETE CASCADE
@@ -93,7 +94,7 @@ CREATE TABLE market_stats (
 
 CREATE INDEX idx_market_stats_market_id ON market_stats (market_id);
 
-CREATE INDEX idx_market_stats_item_stat ON market_stats (item_stat, stat_value)
+CREATE INDEX idx_market_stats_item_stat ON market_stats (item_stat, stat_modifier, stat_value)
 WHERE
     deleted_at IS NULL;
 
