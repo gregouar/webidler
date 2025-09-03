@@ -1,13 +1,9 @@
 use std::collections::HashSet;
 
-use sqlx::{types::Json, FromRow, Transaction};
+use sqlx::{types::JsonValue, FromRow, Transaction};
 
 use shared::data::{
-    area::AreaLevel,
-    item::{ItemModifiers, ItemSpecs},
-    item_affix::AffixEffectScope,
-    market::MarketFilters,
-    stat_effect::StatType,
+    area::AreaLevel, item::ItemSpecs, item_affix::AffixEffectScope, market::MarketFilters,
     user::UserCharacterId,
 };
 
@@ -31,7 +27,7 @@ pub struct MarketEntry {
     pub price: f64,
 
     pub item_level: AreaLevel,
-    pub item_data: Json<ItemModifiers>,
+    pub item_data: JsonValue,
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
@@ -70,7 +66,7 @@ pub async fn sell_item<'c>(
             .into_iter()
             .filter_map(|((stat_type, modifier), stat_value)| {
                 Some((
-                    stat_type.clone().into(),
+                    serde_json::to_value(&stat_type).ok()?.into(),
                     serde_plain::to_string(&modifier).ok()?,
                     stat_value,
                 ))
@@ -87,7 +83,7 @@ pub async fn sell_item<'c>(
             .as_ref()
             .map(|armor_specs| armor_specs.block as f64),
         item_damages,
-        item.modifiers.clone().into(),
+        serde_json::to_value(&item.modifiers)?.into(),
         // serde_json::to_vec(&item.modifiers)?.into(),
     )
     .await?)
@@ -99,7 +95,7 @@ async fn create_market_item<'c>(
     recipient_id: Option<UserCharacterId>,
     price: f64,
     item_categories: HashSet<String>,
-    item_stats: Vec<(Json<StatType>, String, f64)>,
+    item_stats: Vec<(JsonValue, String, f64)>,
     base_item_id: String,
     item_name: String,
     item_rarity: String,
@@ -107,7 +103,7 @@ async fn create_market_item<'c>(
     item_armor: Option<f64>,
     item_block: Option<f64>,
     item_damages: Option<f64>,
-    item_data: Json<ItemModifiers>,
+    item_data: JsonValue,
 ) -> Result<(), sqlx::Error> {
     let item_level = item_level as i32;
     let market_id = sqlx::query_scalar!(
@@ -233,7 +229,7 @@ pub async fn read_market_items<'c>(
             rejected,
             price as "price: f64",
             item_level as "item_level: AreaLevel",
-            item_data as "item_data: Json<ItemModifiers>",
+            item_data,
             market.created_at,
             market.updated_at
         FROM 
@@ -363,7 +359,7 @@ pub async fn buy_item<'c>(
             rejected,
             price as "price: f64",
             item_level as "item_level: AreaLevel",
-            item_data as "item_data: Json<ItemModifiers>",
+            item_data,
             created_at,
             updated_at
         "#,

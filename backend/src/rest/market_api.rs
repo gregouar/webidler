@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, Context, Result};
 
 use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
 
@@ -138,7 +138,7 @@ pub async fn post_buy_market_item(
     inventory.bag.push(
         items_controller::init_item_specs_from_store(
             &master_store.items_store,
-            item_bought.item_data.0,
+            serde_json::from_value(item_bought.item_data).context("invalid data")?,
         )
         .ok_or(anyhow!("base item not found"))?,
     );
@@ -281,7 +281,7 @@ pub async fn post_edit_market_item(
         payload.price,
         &items_controller::init_item_specs_from_store(
             &master_store.items_store,
-            item_bought.item_data.0,
+            serde_json::from_value(item_bought.item_data).context("invalid data")?,
         )
         .ok_or(anyhow!("base item not found"))?,
     )
@@ -308,7 +308,7 @@ fn into_market_item(items_store: &ItemsStore, market_entry: MarketEntry) -> Opti
 
         item_specs: items_controller::init_item_specs_from_store(
             items_store,
-            market_entry.item_data.0,
+            serde_json::from_value(market_entry.item_data).ok()?,
         )?,
 
         created_at: market_entry.created_at.into(),
