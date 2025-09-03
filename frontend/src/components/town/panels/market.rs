@@ -366,7 +366,7 @@ pub fn ItemsBrowser(
         <div node_ref=el class="p-2 gap-2 overflow-y-auto h-full">
             <For
                 each=move || items_list.get().into_iter()
-                key=|item| item.index
+                key=|item| (item.index,item.created_at)
                 let:(item)
             >
                 <ItemRow
@@ -469,7 +469,6 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
             .read()
             .as_ref()
             .map(|selected_item| selected_item.price)
-            .unwrap_or_default()
     };
 
     let private_offer = move || {
@@ -485,7 +484,6 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
             .read()
             .as_ref()
             .map(|selected_item| selected_item.seller.to_string())
-            .unwrap_or_default()
     };
 
     let listed_at = move || {
@@ -493,7 +491,6 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
             .read()
             .as_ref()
             .map(|selected_item| selected_item.created_at)
-            .unwrap_or_default()
     };
 
     let do_buy = {
@@ -575,30 +572,33 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
                 <ItemDetails selected_item />
                 <div class="flex justify-between items-center text-sm text-gray-400 p-2">
                     <span>"Listed by: "{move || seller_name()}</span>
-                    <span>{move || format_datetime(listed_at())}</span>
+                    <span>{move || listed_at().map(|listed_at| format_datetime(listed_at))}</span>
                 </div>
             </div>
 
             <div class="flex justify-between items-center p-4 border-t border-zinc-700">
                 <div class="flex items-center gap-1 text-lg text-gray-400">
                     {move || {
-                        if price() > 0.0 {
-                            view! {
-                                "Price: "
-                                <span class="text-violet-300 font-bold">
-                                    {format!("{:.0}", price())}
-                                </span>
-                                <img
-                                    src=img_asset("ui/gems.webp")
-                                    alt="Gems"
-                                    class="h-[2em] aspect-square mr-1"
-                                />
-                            }
-                                .into_any()
-                        } else {
-                            view! { <span class="text-violet-300 font-bold">"Free"</span> }
-                                .into_any()
-                        }
+                        price()
+                            .map(|price| {
+                                if price > 0.0 {
+                                    view! {
+                                        "Price: "
+                                        <span class="text-violet-300 font-bold">
+                                            {format!("{:.0}", price)}
+                                        </span>
+                                        <img
+                                            src=img_asset("ui/gems.webp")
+                                            alt="Gems"
+                                            class="h-[2em] aspect-square mr-1"
+                                        />
+                                    }
+                                        .into_any()
+                                } else {
+                                    view! { <span class="text-violet-300 font-bold">"Free"</span> }
+                                        .into_any()
+                                }
+                            })
                     }}
                 </div>
 
@@ -610,7 +610,7 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
                 }}
 
                 <MenuButton on:click=do_buy disabled=disabled>
-                    {move || if price() > 0.0 { "Buy Item" } else { "Take Item" }}
+                    {move || if price().unwrap_or(1.0) > 0.0 { "Buy Item" } else { "Take Item" }}
                 </MenuButton>
             </div>
         </div>
@@ -757,7 +757,6 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
             .read()
             .as_ref()
             .map(|selected_item| selected_item.seller.to_string())
-            .unwrap_or_default()
     };
 
     let listed_at = move || {
@@ -765,7 +764,6 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
             .read()
             .as_ref()
             .map(|selected_item| selected_item.created_at)
-            .unwrap_or_default()
     };
 
     let do_edit = {
@@ -862,7 +860,7 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                 <ItemDetails selected_item />
                 <div class="flex justify-between items-center text-sm text-gray-400 p-2">
                     <span>"Listed by: "{move || seller_name()}</span>
-                    <span>{move || format_datetime(listed_at())}</span>
+                    <span>{move || listed_at().map(|listed_at| format_datetime(listed_at))}</span>
                 </div>
             </div>
 
