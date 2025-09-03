@@ -10,7 +10,7 @@ use shared::data::{
 };
 
 use crate::db::{
-    pool::{Database, DbExecutor, DbPool},
+    pool::{Database, DbExecutor},
     utc_datetime::UtcDateTime,
 };
 
@@ -183,9 +183,30 @@ async fn create_market_item<'c>(
     Ok(())
 }
 
+pub async fn count_market_items<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+) -> anyhow::Result<(i64, i64)> {
+    let row = sqlx::query!(
+        r#"
+        SELECT
+            COUNT(CASE WHEN private_sale IS NULL THEN 1 END) AS public_items,
+            COUNT(CASE WHEN private_sale IS NOT NULL THEN 1 END) AS private_items
+        FROM market
+        WHERE deleted_at IS NULL
+          AND character_id = $1
+        "#,
+        character_id
+    )
+    .fetch_one(executor)
+    .await?;
+
+    Ok((row.public_items, row.private_items))
+}
+
 // TODO: filters
-pub async fn load_market_items(
-    executor: &DbPool,
+pub async fn read_market_items<'c>(
+    executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     own_listings: bool,
     skip: i64,

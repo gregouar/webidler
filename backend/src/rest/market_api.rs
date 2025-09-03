@@ -19,6 +19,7 @@ use shared::{
 use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
+    constants::{MAX_MARKET_PRIVATE_LISTINGS, MAX_MARKET_PUBLIC_LISTINGS},
     db,
     game::systems::items_controller,
     rest::utils::{
@@ -49,7 +50,7 @@ pub async fn post_browse_market(
     State(master_store): State<MasterStore>,
     Json(payload): Json<BrowseMarketItemsRequest>,
 ) -> Result<Json<BrowseMarketItemsResponse>, AppError> {
-    let (items, has_more) = db::market::load_market_items(
+    let (items, has_more) = db::market::read_market_items(
         &db_pool,
         &payload.character_id,
         payload.own_listings,
@@ -198,7 +199,22 @@ pub async fn post_sell_market_item(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    // TODO: MAX ITEMS ON SALE
+    let (public_listings, private_listings) =
+        db::market::count_market_items(&mut *tx, &payload.character_id).await?;
+
+    if payload.private_offer.is_none() {
+        if public_listings >= MAX_MARKET_PUBLIC_LISTINGS {
+            return Err(AppError::UserError(format!(
+                "too many public listings (max {MAX_MARKET_PUBLIC_LISTINGS})"
+            )));
+        }
+    } else {
+        if private_listings >= MAX_MARKET_PRIVATE_LISTINGS {
+            return Err(AppError::UserError(format!(
+                "too many private offers (max {MAX_MARKET_PRIVATE_LISTINGS})"
+            )));
+        }
+    }
 
     let (inventory_data, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
