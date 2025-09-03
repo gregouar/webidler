@@ -247,7 +247,7 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                 "Main Filters"
             </span>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 border-b border-zinc-700">
                 <div class="flex flex-col gap-4">
                     <ValidatedInput
                         id="item_name"
@@ -285,7 +285,9 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
                     </div>
                 </div>
+            </div>
 
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
                 <div class="flex flex-col gap-4">
                     <ValidatedInput
                         id="item_damages"
