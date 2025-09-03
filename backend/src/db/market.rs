@@ -206,10 +206,13 @@ pub async fn load_market_items(
                 deleted_at IS NULL 
                 AND (
                     (NOT $4 
-                        AND (character_id != $3 )
+                        AND character_id != $3 
                         AND (private_sale = $3 OR private_sale IS NULL)
+                        AND NOT rejected
                     )
-                    OR ($4 AND character_id = $3)
+                    OR ($4 
+                        AND character_id = $3
+                    )
                 )
             ORDER BY 
                 private_sale DESC, 

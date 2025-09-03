@@ -56,6 +56,7 @@ pub async fn post_browse_market(
             .filter_map(|market_item_entry| {
                 Some(MarketItem {
                     item_id: market_item_entry.item_id,
+                    seller: market_item_entry.character_id,
                     private_sale: market_item_entry.private_sale,
                     price: market_item_entry.price,
 

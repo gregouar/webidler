@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_use::{use_infinite_scroll_with_options, UseInfiniteScrollOptions};
 use std::sync::Arc;
@@ -25,10 +26,11 @@ use crate::{
         },
         town::TownContext,
         ui::{
-            buttons::{CloseButton, MenuButton, TabButton},
+            buttons::{CloseButton, MenuButton, MenuButtonRed, TabButton},
             dropdown::DropdownMenu,
             input::ValidatedInput,
             menu_panel::MenuPanel,
+            number::format_datetime,
             toast::*,
         },
     },
@@ -127,7 +129,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                             }}
                         </div>
 
-                        <div class="w-full aspect-[4/3] bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                        <div class="w-full aspect-[4/3] bg-neutral-900 overflow-y-auto shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                             {move || {
                                 match active_tab.get() {
                                     MarketTab::Filters => {
@@ -161,6 +163,8 @@ pub struct SelectedItem {
     pub item_specs: Arc<ItemSpecs>,
     pub price: f64,
     pub private_sale: Option<UserCharacterId>,
+    pub seller: UserCharacterId,
+    pub created_at: DateTime<Utc>,
 }
 
 impl From<MarketItem> for SelectedItem {
@@ -170,6 +174,8 @@ impl From<MarketItem> for SelectedItem {
             item_specs: Arc::new(value.item_specs),
             price: value.price,
             private_sale: value.private_sale,
+            seller: value.seller,
+            created_at: value.created_at,
         }
     }
 }
@@ -318,9 +324,11 @@ fn InventoryBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoV
                 .enumerate()
                 .map(|(index, item)| SelectedItem {
                     index,
+                    seller: town_context.character.read_untracked().character_id,
+                    private_sale: None,
                     item_specs: Arc::new(item.clone()),
                     price: 0.0,
-                    private_sale: None,
+                    created_at: Utc::now(),
                 })
                 .collect::<Vec<_>>()
         }
@@ -459,6 +467,22 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
             .unwrap_or_default()
     };
 
+    let seller_name = move || {
+        selected_item
+            .read()
+            .as_ref()
+            .map(|selected_item| selected_item.seller.to_string())
+            .unwrap_or_default()
+    };
+
+    let listed_at = move || {
+        selected_item
+            .read()
+            .as_ref()
+            .map(|selected_item| selected_item.created_at)
+            .unwrap_or_default()
+    };
+
     let do_buy = {
         let backend = expect_context::<BackendClient>();
         let town_context = expect_context::<TownContext>();
@@ -497,24 +521,34 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
         }
     };
 
+    let do_reject = move |_| {};
+
     view! {
-        <div class="w-full h-full flex flex-col p-4 text-white relative">
-            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center">
+        <div class="w-full h-full flex flex-col justify-between p-4 relative">
+
+            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
                 "Buy from Market"
             </span>
 
-            <div>{move || { (private_offer()).then(|| "Private Offer") }}</div>
+            <div class="flex flex-col">
+                <span class="text-pink-400 p-2 font-bold">
+                    {move || private_offer().then(|| "Private Offer")}
+                </span>
+                <ItemDetails selected_item />
+                <div class="flex justify-between items-center text-sm text-gray-400 p-2">
+                    <span>"Listed by: "{move || seller_name()}</span>
+                    <span>{move || format_datetime(listed_at())}</span>
+                </div>
+            </div>
 
-            <ItemDetails selected_item />
-
-            <div class="flex justify-between items-center p-4">
-                <div class="flex items-center gap-1 text-lg text-gray-400 ">
+            <div class="flex justify-between items-center p-4 border-t border-zinc-700">
+                <div class="flex items-center gap-1 text-lg text-gray-400">
                     {move || {
                         if price() > 0.0 {
                             view! {
                                 "Price: "
                                 <span class="text-violet-300 font-bold">
-                                    {move || format!("{:.0}", price())}
+                                    {format!("{:.0}", price())}
                                 </span>
                                 <img
                                     src=img_asset("ui/gems.webp")
@@ -529,6 +563,13 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
                         }
                     }}
                 </div>
+
+                {move || {
+                    (private_offer())
+                        .then(|| {
+                            view! { <MenuButtonRed on:click=do_reject>"Reject"</MenuButtonRed> }
+                        })
+                }}
 
                 <MenuButton on:click=do_buy disabled=disabled>
                     {move || if price() > 0.0 { "Buy Item" } else { "Take Item" }}
@@ -588,7 +629,7 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
     };
 
     view! {
-        <div class="w-full h-full flex flex-col p-4 text-white relative justify-between">
+        <div class="w-full h-full flex flex-col justify-between p-4 relative">
             <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center">
                 "Sell from Bag"
             </span>
@@ -605,9 +646,8 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
 
             <ItemDetails selected_item />
 
-            <div class="flex justify-between items-end">
-                <div class="flex items-center gap-1 text-lg text-gray-400 ">
-                    // <span class="text-violet-300 font-bold">{format!("{:.0}", price)}</span>
+            <div class="flex justify-between items-end p-4 border-t border-zinc-700">
+                <div class="flex items-end gap-1 text-lg text-gray-400 ">
                     <ValidatedInput
                         id="price"
                         label="Price:"
@@ -625,7 +665,7 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
                 </div>
 
                 <MenuButton on:click=do_sell disabled=disabled>
-                    "Sell Selected Item"
+                    "Sell Item"
                 </MenuButton>
             </div>
         </div>
@@ -642,29 +682,60 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
             .and_then(|selected_item| ItemPrice::try_new(selected_item.price).ok()),
     );
 
+    let private_offer = move || {
+        selected_item
+            .read()
+            .as_ref()
+            .map(|selected_item| {
+                selected_item
+                    .private_sale
+                    .map(|private_sale| private_sale.to_string())
+            })
+            .unwrap_or_default()
+    };
+
+    let seller_name = move || {
+        selected_item
+            .read()
+            .as_ref()
+            .map(|selected_item| selected_item.seller.to_string())
+            .unwrap_or_default()
+    };
+
+    let listed_at = move || {
+        selected_item
+            .read()
+            .as_ref()
+            .map(|selected_item| selected_item.created_at)
+            .unwrap_or_default()
+    };
+
     view! {
-        <div class="w-full h-full flex flex-col p-4 text-white relative">
+        <div class="w-full h-full flex flex-col justify-between p-4 relative">
             <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center">
                 "Remove from Market"
             </span>
 
-            <div>
-                {move || {
-                    selected_item
-                        .read()
-                        .as_ref()
-                        .map(|selected_item| {
-                            selected_item
-                                .private_sale
-                                .map(|private_sale| private_sale.to_string())
-                                .unwrap_or_default()
-                        })
-                }}
+            <div class="flex flex-col">
+                <span class="p-2">
+                    {move || {
+                        private_offer()
+                            .map(|private_offer| {
+                                view! {
+                                    <span class="text-pink-400 font-bold">"Private Offer: "</span>
+                                    {private_offer}
+                                }
+                            })
+                    }}
+                </span>
+                <ItemDetails selected_item />
+                <div class="flex justify-between items-center text-sm text-gray-400 p-2">
+                    <span>"Listed by: "{move || seller_name()}</span>
+                    <span>{move || format_datetime(listed_at())}</span>
+                </div>
             </div>
 
-            <ItemDetails selected_item />
-
-            <div class="flex justify-between items-end">
+            <div class="flex justify-between items-end p-4 border-t border-zinc-700">
                 <div class="flex items-end gap-1 text-lg text-gray-400 ">
                     <ValidatedInput
                         id="price"
@@ -686,7 +757,7 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                 </div>
 
                 <MenuButton on:click=move |_| {} disabled=disabled>
-                    "Remove Selected Item"
+                    "Remove Item"
                 </MenuButton>
             </div>
         </div>
