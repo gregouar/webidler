@@ -50,7 +50,7 @@ pub struct BrowseMarketItemsRequest {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SellMarketItemRequest {
     pub character_id: UserCharacterId,
-    pub private_offer: Option<Username>,
+    pub recipient_name: Option<Username>,
     pub item_index: usize,
     pub price: f64,
 }

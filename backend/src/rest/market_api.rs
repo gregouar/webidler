@@ -65,8 +65,9 @@ pub async fn post_browse_market(
             .filter_map(|market_item_entry| {
                 Some(MarketItem {
                     item_id: market_item_entry.item_id,
-                    seller: market_item_entry.character_id,
-                    private_sale: market_item_entry.private_sale,
+                    owner_id: market_item_entry.character_id,
+                    owner_name: market_item_entry.character_name,
+                    recipient: market_item_entry.recipient,
                     rejected: market_item_entry.rejected,
                     price: market_item_entry.price,
 
@@ -114,8 +115,8 @@ pub async fn post_buy_market_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    if let Some(private_sale) = item_bought.private_sale {
-        if private_sale != character.character_id
+    if let Some((recipient_id, _)) = item_bought.recipient {
+        if recipient_id != character.character_id
             && character.character_id != item_bought.character_id
         // Allow seller to remove own listing
         {
@@ -202,7 +203,7 @@ pub async fn post_sell_market_item(
     let (public_listings, private_listings) =
         db::market::count_market_items(&mut *tx, &payload.character_id).await?;
 
-    if payload.private_offer.is_none() {
+    if payload.recipient_name.is_none() {
         if public_listings >= MAX_MARKET_PUBLIC_LISTINGS {
             return Err(AppError::UserError(format!(
                 "too many public listings (max {MAX_MARKET_PUBLIC_LISTINGS})"
@@ -228,7 +229,7 @@ pub async fn post_sell_market_item(
         .then(|| inventory.bag.remove(payload.item_index))
         .ok_or(AppError::NotFound)?;
 
-    let private_sale = if let Some(username) = payload.private_offer {
+    let recipient_id = if let Some(username) = payload.recipient_name {
         let username = username.into_inner();
         Some(
             db::characters::get_character_by_name(&mut *tx, &username)
@@ -242,10 +243,14 @@ pub async fn post_sell_market_item(
         None
     };
 
+    if recipient_id.unwrap_or_default() == character.character_id {
+        return Err(AppError::UserError("cannot offer to yourself".into()));
+    }
+
     db::market::sell_item(
         &mut tx,
         &payload.character_id,
-        private_sale,
+        recipient_id,
         payload.price,
         &item_specs,
     )
@@ -285,7 +290,7 @@ pub async fn post_edit_market_item(
     db::market::sell_item(
         &mut tx,
         &payload.character_id,
-        item_bought.private_sale,
+        item_bought.recipient.map(|(recipient_id, _)| recipient_id),
         payload.price,
         &items_controller::init_item_specs_from_store(
             &master_store.items_store,

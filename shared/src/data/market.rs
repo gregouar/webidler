@@ -7,8 +7,10 @@ use crate::data::{item::ItemSpecs, user::UserCharacterId};
 pub struct MarketItem {
     pub item_id: usize,
 
-    pub seller: UserCharacterId,
-    pub private_sale: Option<UserCharacterId>,
+    pub owner_id: UserCharacterId,
+    pub owner_name: String,
+
+    pub recipient: Option<(UserCharacterId, String)>,
     pub rejected: bool,
 
     pub price: f64,

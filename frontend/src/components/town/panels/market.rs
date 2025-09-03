@@ -165,8 +165,9 @@ pub struct SelectedItem {
     pub index: usize,
     pub item_specs: Arc<ItemSpecs>,
     pub price: f64,
-    pub private_sale: Option<UserCharacterId>,
-    pub seller: UserCharacterId,
+    pub owner_id: UserCharacterId,
+    pub owner_name: String,
+    pub recipient: Option<(UserCharacterId, String)>,
     pub rejected: bool,
     pub created_at: DateTime<Utc>,
 }
@@ -177,8 +178,9 @@ impl From<MarketItem> for SelectedItem {
             index: value.item_id,
             item_specs: Arc::new(value.item_specs),
             price: value.price,
-            private_sale: value.private_sale,
-            seller: value.seller,
+            owner_id: value.owner_id,
+            owner_name: value.owner_name,
+            recipient: value.recipient,
             rejected: value.rejected,
             created_at: value.created_at,
         }
@@ -329,8 +331,9 @@ fn InventoryBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoV
                 .enumerate()
                 .map(|(index, item)| SelectedItem {
                     index,
-                    seller: town_context.character.read_untracked().character_id,
-                    private_sale: None,
+                    owner_id: town_context.character.read_untracked().character_id,
+                    owner_name: town_context.character.read_untracked().name.clone(),
+                    recipient: None,
                     item_specs: Arc::new(item.clone()),
                     price: 0.0,
                     rejected: false,
@@ -374,7 +377,7 @@ pub fn ItemsBrowser(
                     on:click=move |_| selected_item.set(Some(item.clone()))
                     price=item.price
                     highlight=move || selected_item.read().as_ref().map(|selected_item| selected_item.index==item.index).unwrap_or_default()
-                    special_offer=item.private_sale.is_some()
+                    special_offer=item.recipient.is_some()
                     rejected=item.rejected
                 />
             </For>
@@ -475,7 +478,7 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
         selected_item
             .read()
             .as_ref()
-            .map(|selected_item| selected_item.private_sale.is_some())
+            .map(|selected_item| selected_item.recipient.is_some())
             .unwrap_or_default()
     };
 
@@ -483,7 +486,7 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
         selected_item
             .read()
             .as_ref()
-            .map(|selected_item| selected_item.seller.to_string())
+            .map(|selected_item| selected_item.owner_name.to_string())
     };
 
     let listed_at = move || {
@@ -625,17 +628,17 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
     let toaster = expect_context::<Toasts>();
 
     let price = RwSignal::new(None::<ItemPrice>);
-    let private_offer = RwSignal::new(Some(None::<Username>));
+    let recipient_name = RwSignal::new(Some(None::<Username>));
 
     let disabled = Signal::derive(move || {
-        selected_item.read().is_none() || price.read().is_none() || private_offer.read().is_none()
+        selected_item.read().is_none() || price.read().is_none() || recipient_name.read().is_none()
     });
 
     let do_sell = {
         let character_id = town_context.character.read_untracked().character_id;
         move |_| {
             if let Some(item) = selected_item.get() {
-                let private_offer = private_offer.get().unwrap_or_default();
+                let recipient_name = recipient_name.get().unwrap_or_default();
                 let price = price.get().unwrap().into_inner();
                 spawn_local({
                     async move {
@@ -644,7 +647,7 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
                                 &auth_context.token(),
                                 &SellMarketItemRequest {
                                     character_id,
-                                    private_offer,
+                                    recipient_name,
                                     item_index: item.index,
                                     price,
                                 },
@@ -679,7 +682,7 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
                     label="Private Offer:"
                     input_type="text"
                     placeholder="Enter Character Name"
-                    bind=private_offer
+                    bind=recipient_name
                 />
             </div>
 
@@ -732,14 +735,15 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
         );
     });
 
-    let private_offer = move || {
+    let recipient_name = move || {
         selected_item
             .read()
             .as_ref()
             .map(|selected_item| {
                 selected_item
-                    .private_sale
-                    .map(|private_sale| private_sale.to_string())
+                    .recipient
+                    .as_ref()
+                    .map(|(_, recipient_name)| recipient_name.clone())
             })
             .unwrap_or_default()
     };
@@ -756,7 +760,7 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
         selected_item
             .read()
             .as_ref()
-            .map(|selected_item| selected_item.seller.to_string())
+            .map(|selected_item| selected_item.owner_name.to_string())
     };
 
     let listed_at = move || {
@@ -848,7 +852,7 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                             })
                     }}
                     {move || {
-                        private_offer()
+                        recipient_name()
                             .map(|private_offer| {
                                 view! {
                                     <span class="text-pink-400 font-bold">"Private Offer: "</span>

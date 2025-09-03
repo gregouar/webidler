@@ -3,7 +3,7 @@ CREATE TABLE market (
     market_id INTEGER NOT NULL PRIMARY KEY,
     --
     character_id TEXT NOT NULL,
-    private_sale TEXT,
+    recipient_id TEXT,
     rejected BOOLEAN NOT NULL DEFAULT 0,
     --
     price REAL NOT NULL,
@@ -25,14 +25,14 @@ CREATE TABLE market (
     deleted_at TIMESTAMP,
     --
     FOREIGN KEY(character_id) REFERENCES characters(character_id) ON DELETE CASCADE,
-    FOREIGN KEY(private_sale) REFERENCES characters(character_id) ON DELETE
+    FOREIGN KEY(recipient_id) REFERENCES characters(character_id) ON DELETE
     SET
         NULL
 );
 
 CREATE INDEX idx_market_character_id ON market (character_id, deleted_at);
 
-CREATE INDEX idx_market_private_sale ON market (private_sale, deleted_at);
+CREATE INDEX idx_market_recipient_id ON market (recipient_id, deleted_at);
 
 CREATE INDEX idx_market_deleted ON market (deleted_at);
 

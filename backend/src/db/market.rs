@@ -20,8 +20,10 @@ pub type MarketId = i64;
 struct MarketEntry {
     pub market_id: MarketId,
 
-    pub character_id: UserCharacterId, // TODO: replace or add character name
-    pub private_sale: Option<UserCharacterId>, // For private offers
+    pub character_id: UserCharacterId,
+    pub character_name: String,
+    pub recipient_id: Option<UserCharacterId>, // For private offers
+    pub recipient_name: Option<String>,        // For private offers
     pub rejected: bool,
 
     pub price: f64,
@@ -37,8 +39,9 @@ pub struct MarketItemEntry {
     pub item_id: usize,
     pub price: f64,
 
-    pub character_id: UserCharacterId, // TODO: replace or add character name
-    pub private_sale: Option<UserCharacterId>, // For private offers
+    pub character_id: UserCharacterId,
+    pub character_name: String,
+    pub recipient: Option<(UserCharacterId, String)>, // For private offers
     pub rejected: bool,
 
     pub item_level: AreaLevel,
@@ -51,7 +54,7 @@ pub struct MarketItemEntry {
 pub async fn sell_item<'c>(
     executor: &mut Transaction<'c, Database>,
     character_id: &UserCharacterId,
-    private_sale: Option<UserCharacterId>,
+    recipient_id: Option<UserCharacterId>,
     price: f64,
     item: &ItemSpecs,
 ) -> anyhow::Result<()> {
@@ -68,7 +71,7 @@ pub async fn sell_item<'c>(
     Ok(create_market_item(
         executor,
         character_id,
-        private_sale,
+        recipient_id,
         price,
         item.base
             .categories
@@ -106,7 +109,7 @@ pub async fn sell_item<'c>(
 async fn create_market_item<'c>(
     executor: &mut Transaction<'c, Database>,
     character_id: &UserCharacterId,
-    private_sale: Option<UserCharacterId>,
+    recipient_id: Option<UserCharacterId>,
     price: f64,
     item_categories: HashSet<String>,
     item_stats: Vec<(Vec<u8>, String, f64)>,
@@ -123,7 +126,7 @@ async fn create_market_item<'c>(
         "
         INSERT INTO market (
             character_id, 
-            private_sale, 
+            recipient_id, 
             price, 
             base_item_id, 
             item_name, 
@@ -138,7 +141,7 @@ async fn create_market_item<'c>(
         RETURNING market_id
         ",
         character_id,
-        private_sale,
+        recipient_id,
         price,
         base_item_id,
         item_name,
@@ -190,8 +193,8 @@ pub async fn count_market_items<'c>(
     let row = sqlx::query!(
         r#"
         SELECT
-            COUNT(CASE WHEN private_sale IS NULL THEN 1 END) AS public_items,
-            COUNT(CASE WHEN private_sale IS NOT NULL THEN 1 END) AS private_items
+            COUNT(CASE WHEN recipient_id IS NULL THEN 1 END) AS public_items,
+            COUNT(CASE WHEN recipient_id IS NOT NULL THEN 1 END) AS private_items
         FROM market
         WHERE deleted_at IS NULL
           AND character_id = $1
@@ -218,31 +221,37 @@ pub async fn read_market_items<'c>(
         "
         SELECT 
             market_id as 'market_id: MarketId', 
-            character_id as 'character_id: UserCharacterId', 
-            private_sale as 'private_sale?: UserCharacterId', 
+            owner.character_id as 'character_id: UserCharacterId', 
+            owner.character_name,
+            recipient_id as 'recipient_id?: UserCharacterId', 
+            recipient.character_name as 'recipient_name?',
             rejected,
             price as 'price: f64',
             item_level as 'item_level: AreaLevel',
             item_data,
-            created_at,
-            updated_at
+            market.created_at,
+            market.updated_at
         FROM 
             market 
+        INNER JOIN
+            characters AS owner ON owner.character_id = market.character_id
+        LEFT JOIN
+            characters AS recipient ON recipient.character_id = market.recipient_id
         WHERE 
-            deleted_at IS NULL 
+            market.deleted_at IS NULL 
             AND (
                 (NOT $4 
-                    AND character_id != $3 
-                    AND (private_sale = $3 OR private_sale IS NULL)
+                    AND market.character_id != $3 
+                    AND (recipient_id = $3 OR recipient_id IS NULL)
                     AND NOT rejected
                 )
                 OR ($4 
-                    AND character_id = $3
+                    AND market.character_id = $3
                 )
             )
         ORDER BY 
             rejected DESC, 
-            private_sale DESC, 
+            recipient_id DESC, 
             price ASC
         LIMIT $1
         OFFSET $2
@@ -266,7 +275,8 @@ pub async fn read_market_items<'c>(
                     item_id: market_entry.market_id as usize,
                     price: market_entry.price,
                     character_id: market_entry.character_id,
-                    private_sale: market_entry.private_sale,
+                    character_name: market_entry.character_name,
+                    recipient: market_entry.recipient_id.zip(market_entry.recipient_name),
                     rejected: market_entry.rejected,
                     item_modifiers: serde_json::from_slice(&market_entry.item_data).ok()?,
                     item_level: market_entry.item_level,
@@ -278,9 +288,6 @@ pub async fn read_market_items<'c>(
         has_more,
     ))
 }
-
-// TODO: update (reject + price)
-// WARNING: to avoid cheat, edit price should create a new entry and delete old one (and error if old one deleted before)
 
 pub async fn reject_item<'c>(
     executor: impl DbExecutor<'c>,
@@ -296,7 +303,7 @@ pub async fn reject_item<'c>(
             updated_at = CURRENT_TIMESTAMP
         WHERE
             market_id = $1 
-            AND private_sale = $2
+            AND recipient_id = $2
             AND deleted_at IS NULL
         RETURNING 
             market_id
@@ -320,7 +327,8 @@ pub async fn buy_item<'c>(
                 item_id: market_entry.market_id as usize,
                 price: market_entry.price,
                 character_id: market_entry.character_id,
-                private_sale: market_entry.private_sale,
+                character_name: market_entry.character_name,
+                recipient: market_entry.recipient_id.zip(market_entry.recipient_name),
                 rejected: market_entry.rejected,
                 item_modifiers: serde_json::from_slice(&market_entry.item_data).ok()?,
                 item_level: market_entry.item_level,
@@ -361,7 +369,9 @@ async fn delete_market_item<'c>(
         RETURNING
             market_id as 'market_id: MarketId', 
             character_id as 'character_id: UserCharacterId', 
-            private_sale as 'private_sale?: UserCharacterId', 
+            'owner' as 'character_name!: String',
+            recipient_id as 'recipient_id?: UserCharacterId', 
+            NULL as 'recipient_name?: String',
             rejected,
             price as 'price: f64',
             item_level as 'item_level: AreaLevel',
