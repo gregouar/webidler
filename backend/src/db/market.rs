@@ -3,8 +3,7 @@ use std::collections::HashSet;
 use sqlx::{types::JsonValue, FromRow, Transaction};
 
 use shared::data::{
-    area::AreaLevel, item::ItemSpecs, item_affix::AffixEffectScope, market::MarketFilters,
-    user::UserCharacterId,
+    item::ItemSpecs, item_affix::AffixEffectScope, market::MarketFilters, user::UserCharacterId,
 };
 
 use crate::db::{
@@ -26,7 +25,7 @@ pub struct MarketEntry {
 
     pub price: f64,
 
-    pub item_level: AreaLevel,
+    pub item_level: i32,
     pub item_data: JsonValue,
 
     pub created_at: UtcDateTime,
@@ -75,7 +74,7 @@ pub async fn sell_item<'c>(
         item.modifiers.base_item_id.clone(),
         item.base.name.clone(),
         serde_plain::to_string(&item.modifiers.rarity)?,
-        item.modifiers.level,
+        item.modifiers.level as i32,
         item.armor_specs
             .as_ref()
             .map(|armor_specs| armor_specs.armor),
@@ -99,13 +98,12 @@ async fn create_market_item<'c>(
     base_item_id: String,
     item_name: String,
     item_rarity: String,
-    item_level: AreaLevel,
+    item_level: i32,
     item_armor: Option<f64>,
     item_block: Option<f64>,
     item_damages: Option<f64>,
     item_data: JsonValue,
 ) -> Result<(), sqlx::Error> {
-    let item_level = item_level as i32;
     let market_id = sqlx::query_scalar!(
         r#"
         INSERT INTO market (
@@ -229,7 +227,7 @@ pub async fn read_market_items<'c>(
             recipient.character_name as "recipient_name?",
             rejected,
             price as "price: f64",
-            item_level as "item_level: AreaLevel",
+            item_level as "item_level!: i32",
             item_data as "item_data: JsonValue",
             market.created_at,
             market.updated_at
@@ -359,7 +357,7 @@ pub async fn buy_item<'c>(
             NULL as "recipient_name?: String",
             rejected,
             price as "price: f64",
-            item_level as "item_level: AreaLevel",
+            item_level as "item_level!: i32",
             item_data as "item_data: JsonValue",
             created_at,
             updated_at
