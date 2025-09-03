@@ -202,7 +202,7 @@ pub async fn read_market_items<'c>(
 ) -> anyhow::Result<(Vec<MarketEntry>, bool)> {
     let limit_more = limit + 1;
 
-    let item_name: Option<String> = filters.item_name.map(|x| x.into_inner());
+    let item_name = filters.item_name.map(|x| format!("%{}%", x.to_uppercase()));
 
     let item_level = filters.item_level;
     let price = filters.price.map(|x| x.into_inner());
@@ -251,7 +251,7 @@ pub async fn read_market_items<'c>(
                     AND market.character_id = $3
                 )
             )
-            AND ($5 IS NULL OR UPPER(market.item_name) LIKE '%' || UPPER($5) || '%')
+            AND ($5 IS NULL OR UPPER(market.item_name) LIKE $5)
             AND ($6 IS NULL OR market.item_level <= $6)
             AND ($7 IS NULL OR market.price <= $7)
             AND ($8 IS NULL OR market.item_rarity = $8)
