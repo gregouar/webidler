@@ -123,8 +123,9 @@ async fn create_market_item<'c>(
     item_damages: Option<f64>,
     item_data: Vec<u8>,
 ) -> Result<(), sqlx::Error> {
+    let item_level = item_level as i32;
     let market_id = sqlx::query_scalar!(
-        "
+        r#"
         INSERT INTO market (
             character_id, 
             recipient_id, 
@@ -140,7 +141,7 @@ async fn create_market_item<'c>(
         )
         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
         RETURNING market_id
-        ",
+        "#,
         character_id,
         recipient_id,
         price,
@@ -236,16 +237,16 @@ pub async fn read_market_items<'c>(
 
     let raw_items = sqlx::query_as!(
         MarketEntry,
-        "
+        r#"
         SELECT 
             market_id, 
-            owner.character_id as 'character_id: UserCharacterId', 
+            owner.character_id as "character_id: UserCharacterId", 
             owner.character_name,
-            recipient_id as 'recipient_id?: UserCharacterId', 
-            recipient.character_name as 'recipient_name?',
+            recipient_id as "recipient_id?: UserCharacterId", 
+            recipient.character_name as "recipient_name?",
             rejected,
-            price as 'price: f64',
-            item_level as 'item_level: AreaLevel',
+            price as "price: f64",
+            item_level as "item_level: AreaLevel",
             item_data,
             market.created_at,
             market.updated_at
@@ -287,7 +288,7 @@ pub async fn read_market_items<'c>(
             price ASC
         LIMIT $1
         OFFSET $2
-        ",
+        "#,
         limit_more,
         skip,
         character_id,
@@ -335,7 +336,7 @@ pub async fn reject_item<'c>(
     character_id: &UserCharacterId,
 ) -> anyhow::Result<bool> {
     Ok(sqlx::query_scalar!(
-        "
+        r#"
         UPDATE
             market
         SET
@@ -347,7 +348,7 @@ pub async fn reject_item<'c>(
             AND deleted_at IS NULL
         RETURNING 
             market_id
-        ",
+        "#,
         market_id,
         character_id
     )
@@ -398,7 +399,7 @@ async fn delete_market_item<'c>(
 
     sqlx::query_as!(
         MarketEntry,
-        "
+        r#"
         UPDATE 
             market
         SET 
@@ -408,17 +409,17 @@ async fn delete_market_item<'c>(
             AND deleted_at is NULL
         RETURNING
             market_id, 
-            character_id as 'character_id: UserCharacterId', 
-            'owner' as 'character_name!: String',
-            recipient_id as 'recipient_id?: UserCharacterId', 
-            NULL as 'recipient_name?: String',
+            character_id as "character_id: UserCharacterId", 
+            'owner' as "character_name!: String",
+            recipient_id as "recipient_id?: UserCharacterId", 
+            NULL as "recipient_name?: String",
             rejected,
-            price as 'price: f64',
-            item_level as 'item_level: AreaLevel',
+            price as "price: f64",
+            item_level as "item_level: AreaLevel",
             item_data,
             created_at,
             updated_at
-        ",
+        "#,
         market_id
     )
     .fetch_optional(&mut **executor)
