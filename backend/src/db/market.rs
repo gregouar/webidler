@@ -208,19 +208,27 @@ pub async fn count_market_items<'c>(
     Ok((row.public_items, row.private_items))
 }
 
-// TODO: filters
+// TODO: stats filters
 pub async fn read_market_items<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     own_listings: bool,
-    filters: &MarketFilters,
+    filters: MarketFilters,
     skip: i64,
     limit: i64,
 ) -> anyhow::Result<(Vec<MarketItemEntry>, bool)> {
     let limit_more = limit + 1;
 
+    let item_name = filters.item_name.map(|x| x.into_inner());
+    let item_level = filters.item_level;
+    let price = filters.price.map(|x| x.into_inner());
+
     let item_rarity = filters
         .item_rarity
+        .and_then(|x| serde_plain::to_string(&x).ok());
+
+    let item_category = filters
+        .item_category
         .and_then(|x| serde_plain::to_string(&x).ok());
 
     let raw_items = sqlx::query_as!(
@@ -256,7 +264,17 @@ pub async fn read_market_items<'c>(
                     AND market.character_id = $3
                 )
             )
-            AND (market.item_rarity = $5 OR $5 IS NULL)
+            AND ($5 IS NULL OR market.item_name = $5)
+            AND ($6 IS NULL OR market.item_level <= $6)
+            AND ($7 IS NULL OR market.price <= $7)
+            AND ($8 IS NULL OR market.item_rarity = $8)
+            AND ($9 IS NULL OR 
+                    (
+                    SELECT COUNT(*)
+                    FROM market_categories mc
+                    WHERE mc.market_id = market.market_id
+                    AND mc.category = $9
+                    ) > 0)
         ORDER BY 
             rejected DESC, 
             recipient_id DESC, 
@@ -268,7 +286,11 @@ pub async fn read_market_items<'c>(
         skip,
         character_id,
         own_listings,
+        item_name,
+        item_level,
+        price,
         item_rarity,
+        item_category,
     )
     .fetch_all(executor)
     .await?;

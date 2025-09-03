@@ -17,6 +17,11 @@
       "weight": 1000
     },
     {
+      "item_id": "cloth_wraps_unique",
+      "weight": 5,
+      "min_area_level": 5
+    },
+    {
       "item_id": "cloth_shoes",
       "weight": 1000
     },

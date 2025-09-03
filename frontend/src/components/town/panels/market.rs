@@ -6,7 +6,6 @@ use strum::IntoEnumIterator;
 
 use shared::{
     data::{
-        area::AreaLevel,
         item::{ItemCategory, ItemRarity, ItemSpecs},
         market::{MarketFilters, MarketItem},
         user::UserCharacterId,
@@ -15,7 +14,7 @@ use shared::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
         RejectMarketItemRequest, SellMarketItemRequest,
     },
-    types::{ItemName, ItemPrice, PaginationLimit, Username},
+    types::{ItemPrice, PaginationLimit, Username},
 };
 
 use crate::{
@@ -57,8 +56,13 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
         active_tab.set(new_tab);
     };
 
-    // TODO: Default to character max level
-    let filters = RwSignal::new(MarketFilters { item_rarity: None });
+    let town_context: TownContext = expect_context();
+
+    let filters = RwSignal::new(MarketFilters {
+        item_level: Some(town_context.character.read_untracked().max_area_level),
+        price: ItemPrice::try_new(town_context.character.read_untracked().resource_gems).ok(),
+        ..Default::default()
+    });
 
     view! {
         <MenuPanel open=open>
@@ -200,11 +204,13 @@ pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
 
 #[component]
 fn Filters(filters: RwSignal<MarketFilters>) -> impl IntoView {
-    let item_name = RwSignal::new(None::<ItemName>);
+    let item_name = RwSignal::new(Some(filters.get_untracked().item_name));
+    Effect::new(move || filters.write().item_name = item_name.get().unwrap_or_default());
 
-    // TODO: MORE
-
-    let item_level = RwSignal::new(Some(None::<AreaLevel>));
+    let item_level = RwSignal::new(Some(filters.get_untracked().item_level));
+    Effect::new(move || filters.write().item_level = item_level.get().unwrap_or_default());
+    let price = RwSignal::new(Some(filters.get_untracked().price));
+    Effect::new(move || filters.write().price = price.get().unwrap_or_default());
 
     let item_rarity = RwSignal::new(filters.get_untracked().item_rarity);
     Effect::new(move || filters.write().item_rarity = item_rarity.get());
@@ -213,13 +219,14 @@ fn Filters(filters: RwSignal<MarketFilters>) -> impl IntoView {
         .map(|rarity| (rarity, item_rarity_str(rarity).into()))
         .collect();
 
-    let item_category = RwSignal::new(None);
+    let item_category = RwSignal::new(filters.get_untracked().item_category);
+    Effect::new(move || filters.write().item_category = item_category.get());
     let item_category_options = std::iter::once(None)
         .chain(ItemCategory::iter().map(Some))
         .map(|category| (category, loot_filter_category_to_str(category).into()))
         .collect();
 
-    let item_price = RwSignal::new(Some(None::<ItemPrice>));
+    // TODO: MORE?
 
     view! {
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
@@ -241,11 +248,11 @@ fn Filters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                 />
 
                 <ValidatedInput
-                    id="item_price"
+                    id="price"
                     label="Max Price:"
                     input_type="number"
                     placeholder="Enter max price"
-                    bind=item_price
+                    bind=price
                 />
             </div>
 

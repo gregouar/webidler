@@ -51,12 +51,6 @@ where
     let validation_error = RwSignal::new(None);
     let is_invalid = Memo::new(move |_| validation_error.read().is_some());
 
-    // err
-    //     .to_string()
-    //     .split(" Expected valid")
-    //     .next()
-    //     .unwrap_or_default()
-    //     .to_string(),
     view! {
         <div class="flex flex-col">
             {(!label.is_empty())
