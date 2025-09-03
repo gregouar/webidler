@@ -90,7 +90,7 @@ pub async fn post_buy_market_item(
     let (inventory_data, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
-            .ok_or(anyhow!("inventory not found"))?;
+            .ok_or(AppError::UserError("newbies can't buy items".into()))?;
 
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
@@ -107,6 +107,10 @@ pub async fn post_buy_market_item(
         if private_sale != character.character_id {
             return Err(AppError::Forbidden);
         }
+    }
+
+    if character.max_area_level < item_bought.item_level as i32 {
+        return Err(AppError::UserError("character level too low".to_string()));
     }
 
     let character_resources = db::characters::update_character_resources(

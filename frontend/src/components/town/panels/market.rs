@@ -360,6 +360,7 @@ pub fn ItemsBrowser(
                     on:click=move |_| selected_item.set(Some(item.clone()))
                     price=item.price
                     highlight=move || selected_item.read().as_ref().map(|selected_item| selected_item.index==item.index).unwrap_or_default()
+                    special_offer=item.private_sale.is_some()
                 />
             </For>
             {move || (items_list.read().is_empty() && !has_more.map(|has_more| has_more.get()).unwrap_or_default()).then(|| view!{
@@ -388,13 +389,16 @@ pub fn ItemRow(
     item_specs: Arc<ItemSpecs>,
     price: f64,
     highlight: impl Fn() -> bool + Send + Sync + 'static,
+    #[prop(default = false)] special_offer: bool,
 ) -> impl IntoView {
     view! {
         <div class=move || {
             format!(
                 "relative flex w-full items-center justify-between p-3 gap-2 cursor-pointer mb-2 shadow-sm transition-colors duration-150 rounded-lg
-                bg-neutral-800 hover:bg-neutral-700 {}",
+                bg-neutral-800 hover:bg-neutral-700 {}
+                {}",
                 if highlight() { "ring-2 ring-amber-400" } else { "ring-1 ring-zinc-950" },
+                if special_offer { "border-2 border-pink-500" } else { "" },
             )
         }>
             <div class="relative h-32 aspect-[2/3] flex-shrink-0">
@@ -408,8 +412,8 @@ pub fn ItemRow(
             {(price > 0.0)
                 .then(|| {
                     view! {
-                        <div class="absolute flex bottom-2 right-2 gap-1 items-center ">
-                            <span class="text-gray-400">"Price :"</span>
+                        <div class="absolute flex bottom-2 right-2 gap-1 items-center">
+                            <span class="text-gray-400">"Price:"</span>
                             <span class="text-violet-300 font-semibold">
                                 {format!("{:.0}", price)}
                             </span>
@@ -432,6 +436,8 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
         move || match selected_item.read().as_ref() {
             Some(selected_item) => {
                 selected_item.price > town_context.character.read().resource_gems
+                    || selected_item.item_specs.modifiers.level
+                        > town_context.character.read().max_area_level
             }
             None => true,
         }
@@ -442,6 +448,14 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
             .read()
             .as_ref()
             .map(|selected_item| selected_item.price)
+            .unwrap_or_default()
+    };
+
+    let private_offer = move || {
+        selected_item
+            .read()
+            .as_ref()
+            .map(|selected_item| selected_item.private_sale.is_some())
             .unwrap_or_default()
     };
 
@@ -489,26 +503,36 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
                 "Buy from Market"
             </span>
 
+            <div>{move || { (private_offer()).then(|| "Private Offer") }}</div>
+
             <ItemDetails selected_item />
 
-            <div class="flex justify-between p-4">
+            <div class="flex justify-between items-center p-4">
                 <div class="flex items-center gap-1 text-lg text-gray-400 ">
-                    "Price: "
-                    <span class="text-violet-300 font-bold">
-                        {move || format!("{:.0}", price())}
-                    </span>
-                    <img
-                        src=img_asset("ui/gems.webp")
-                        alt="Gems"
-                        class="h-[2em] aspect-square mr-1"
-                    />
+                    {move || {
+                        if price() > 0.0 {
+                            view! {
+                                "Price: "
+                                <span class="text-violet-300 font-bold">
+                                    {move || format!("{:.0}", price())}
+                                </span>
+                                <img
+                                    src=img_asset("ui/gems.webp")
+                                    alt="Gems"
+                                    class="h-[2em] aspect-square mr-1"
+                                />
+                            }
+                                .into_any()
+                        } else {
+                            view! { <span class="text-violet-300 font-bold">"Free"</span> }
+                                .into_any()
+                        }
+                    }}
                 </div>
 
-                <div>
-                    <MenuButton on:click=do_buy disabled=disabled>
-                        "Buy Selected Item"
-                    </MenuButton>
-                </div>
+                <MenuButton on:click=do_buy disabled=disabled>
+                    {move || if price() > 0.0 { "Buy Item" } else { "Take Item" }}
+                </MenuButton>
             </div>
         </div>
     }
@@ -581,7 +605,7 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
 
             <ItemDetails selected_item />
 
-            <div class="flex justify-between">
+            <div class="flex justify-between items-end">
                 <div class="flex items-center gap-1 text-lg text-gray-400 ">
                     // <span class="text-violet-300 font-bold">{format!("{:.0}", price)}</span>
                     <ValidatedInput
@@ -591,11 +615,13 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
                         placeholder="Enter Price"
                         bind=price
                     />
-                    <img
-                        src=img_asset("ui/gems.webp")
-                        alt="Gems"
-                        class="h-[2em] aspect-square mr-1"
-                    />
+                    <div class="flex items-center">
+                        <img
+                            src=img_asset("ui/gems.webp")
+                            alt="Gems"
+                            class="h-[2em] aspect-square mr-1"
+                        />
+                    </div>
                 </div>
 
                 <MenuButton on:click=do_sell disabled=disabled>
@@ -638,8 +664,8 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
 
             <ItemDetails selected_item />
 
-            <div class="flex justify-between">
-                <div class="flex items-center gap-1 text-lg text-gray-400 ">
+            <div class="flex justify-between items-end">
+                <div class="flex items-end gap-1 text-lg text-gray-400 ">
                     <ValidatedInput
                         id="price"
                         label="Price:"
@@ -647,11 +673,13 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                         placeholder="Enter Price"
                         bind=price
                     />
-                    <img
-                        src=img_asset("ui/gems.webp")
-                        alt="Gems"
-                        class="h-[2em] aspect-square mr-1"
-                    />
+                    <div class="flex items-center">
+                        <img
+                            src=img_asset("ui/gems.webp")
+                            alt="Gems"
+                            class="h-[2em] aspect-square mr-1"
+                        />
+                    </div>
                     <MenuButton on:click=move |_| {} disabled=disabled>
                         "Edit Price"
                     </MenuButton>

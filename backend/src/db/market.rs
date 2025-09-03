@@ -26,6 +26,7 @@ struct MarketEntry {
 
     pub price: f64,
 
+    pub item_level: AreaLevel,
     pub item_data: Vec<u8>,
 
     pub created_at: UtcDateTime,
@@ -34,12 +35,14 @@ struct MarketEntry {
 
 pub struct MarketItemEntry {
     pub item_id: usize,
-    pub item_modifiers: ItemModifiers,
     pub price: f64,
 
     pub character_id: UserCharacterId, // TODO: replace or add character name
     pub private_sale: Option<UserCharacterId>, // For private offers
     pub rejected: bool,
+
+    pub item_level: AreaLevel,
+    pub item_modifiers: ItemModifiers,
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
@@ -193,6 +196,7 @@ pub async fn load_market_items(
                 private_sale as 'private_sale?: UserCharacterId', 
                 rejected,
                 price as 'price: f64',
+                item_level as 'item_level: AreaLevel',
                 item_data,
                 created_at,
                 updated_at
@@ -201,11 +205,14 @@ pub async fn load_market_items(
             WHERE 
                 deleted_at IS NULL 
                 AND (
-                    (NOT $4 AND character_id != $3)
+                    (NOT $4 
+                        AND (character_id != $3 )
+                        AND (private_sale = $3 OR private_sale IS NULL)
+                    )
                     OR ($4 AND character_id = $3)
                 )
             ORDER BY 
-                private_sale ASC, 
+                private_sale DESC, 
                 price ASC
             LIMIT $1
             OFFSET $2
@@ -227,11 +234,12 @@ pub async fn load_market_items(
             .filter_map(|market_entry| {
                 Some(MarketItemEntry {
                     item_id: market_entry.market_id as usize,
-                    item_modifiers: serde_json::from_slice(&market_entry.item_data).ok()?,
                     price: market_entry.price,
                     character_id: market_entry.character_id,
                     private_sale: market_entry.private_sale,
                     rejected: market_entry.rejected,
+                    item_modifiers: serde_json::from_slice(&market_entry.item_data).ok()?,
+                    item_level: market_entry.item_level,
                     created_at: market_entry.created_at,
                     updated_at: market_entry.updated_at,
                 })
@@ -253,11 +261,12 @@ pub async fn buy_item<'c>(
         .and_then(|market_entry| {
             Some(MarketItemEntry {
                 item_id: market_entry.market_id as usize,
-                item_modifiers: serde_json::from_slice(&market_entry.item_data).ok()?,
                 price: market_entry.price,
                 character_id: market_entry.character_id,
                 private_sale: market_entry.private_sale,
                 rejected: market_entry.rejected,
+                item_modifiers: serde_json::from_slice(&market_entry.item_data).ok()?,
+                item_level: market_entry.item_level,
                 created_at: market_entry.created_at,
                 updated_at: market_entry.updated_at,
             })
@@ -298,6 +307,7 @@ async fn delete_market_item<'c>(
             private_sale as 'private_sale?: UserCharacterId', 
             rejected,
             price as 'price: f64',
+            item_level as 'item_level: AreaLevel',
             item_data,
             created_at,
             updated_at
