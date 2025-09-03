@@ -208,9 +208,9 @@ pub async fn read_market_items<'c>(
 
     let item_level = filters.item_level.map(|x| x as i32).unwrap_or(i32::MAX);
     let price = filters.price.map(|x| x.into_inner()).unwrap_or(f64::MAX);
-    let item_damages = filters.item_damages.unwrap_or(0.0);
-    let item_armor = filters.item_armor.unwrap_or(0.0);
-    let item_block = filters.item_block.unwrap_or(0.0);
+    let item_damages = filters.item_damages.unwrap_or(-999.0);
+    let item_armor = filters.item_armor.unwrap_or(-999.0);
+    let item_block = filters.item_block.unwrap_or(-999.0);
 
     let item_rarity = filters
         .item_rarity
@@ -265,9 +265,9 @@ pub async fn read_market_items<'c>(
                 WHERE mc.market_id = market.market_id
                 AND mc.category = $10
             ))
-            AND ($11 = 0 OR market.item_damages >= $11)
-            AND ($12 = 0 OR market.item_armor >= $12)
-            AND ($13 = 0 OR market.item_block >= $13)
+            AND ($11 = -999 OR market.item_damages >= $11)
+            AND ($12 = -999 OR market.item_armor >= $12)
+            AND ($13 = -999 OR market.item_block >= $13)
         ORDER BY 
             rejected DESC, 
             recipient_id DESC, 
