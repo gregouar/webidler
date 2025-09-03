@@ -206,11 +206,11 @@ pub async fn read_market_items<'c>(
         .map(|x| format!("%{}%", x.to_uppercase()))
         .unwrap_or_default();
 
-    let item_level = filters.item_level.map(|x| x as i32);
-    let price = filters.price.map(|x| x.into_inner());
-    let item_damages = filters.item_damages;
-    let item_armor = filters.item_armor;
-    let item_block = filters.item_block;
+    let item_level = filters.item_level.map(|x| x as i32).unwrap_or(i32::MAX);
+    let price = filters.price.map(|x| x.into_inner()).unwrap_or(f64::MAX);
+    let item_damages = filters.item_damages.unwrap_or(0.0);
+    let item_armor = filters.item_armor.unwrap_or(0.0);
+    let item_block = filters.item_block.unwrap_or(0.0);
 
     let item_rarity = filters
         .item_rarity
@@ -254,19 +254,18 @@ pub async fn read_market_items<'c>(
                 )
             )
             AND ($5 OR UPPER(market.item_name) LIKE $6)
-            AND ($7 IS NULL OR market.item_level <= $7)
-            AND ($8 IS NULL OR market.price <= $8)
-            AND ($9 IS NULL OR market.item_rarity = $9)
-            AND ($10 IS NULL OR 
-                    (
-                    SELECT COUNT(*)
-                    FROM market_categories mc
-                    WHERE mc.market_id = market.market_id
-                    AND mc.category = $10
-                    ) > 0)
-            AND ($11 IS NULL OR market.item_damages >= $11)
-            AND ($12 IS NULL OR market.item_armor >= $12)
-            AND ($13 IS NULL OR market.item_block >= $13)
+            AND (market.item_level <= $7)
+            AND (market.price <= $8)
+            AND (market.item_rarity = $9)
+            AND ($10 IS NULL OR EXISTS (
+                SELECT 1
+                FROM market_categories mc
+                WHERE mc.market_id = market.market_id
+                AND mc.category = $10
+            ))
+            AND (market.item_damages >= $11)
+            AND (market.item_armor >= $12)
+            AND (market.item_block >= $13)
         ORDER BY 
             rejected DESC, 
             recipient_id DESC, 
