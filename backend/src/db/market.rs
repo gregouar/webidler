@@ -10,7 +10,7 @@ use shared::data::{
 };
 
 use crate::db::{
-    pool::{Database, DbPool},
+    pool::{Database, DbExecutor, DbPool},
     utc_datetime::UtcDateTime,
 };
 
@@ -79,8 +79,9 @@ pub async fn sell_item<'c>(
             .aggregate_effects(AffixEffectScope::Global)
             .0
             .into_iter()
-            .filter_map(|(stat_type, stat_value)| {
+            .filter_map(|((stat_type, modifier), stat_value)| {
                 Some((serde_json::to_vec(&stat_type).ok()?, stat_value))
+                // TODO: Add modifier column
             })
             .collect(),
         item.modifiers.base_item_id.clone(),
@@ -190,36 +191,37 @@ pub async fn load_market_items(
     let raw_items = sqlx::query_as!(
         MarketEntry,
         "
-            SELECT 
-                market_id as 'market_id: MarketId', 
-                character_id as 'character_id: UserCharacterId', 
-                private_sale as 'private_sale?: UserCharacterId', 
-                rejected,
-                price as 'price: f64',
-                item_level as 'item_level: AreaLevel',
-                item_data,
-                created_at,
-                updated_at
-            FROM 
-                market 
-            WHERE 
-                deleted_at IS NULL 
-                AND (
-                    (NOT $4 
-                        AND character_id != $3 
-                        AND (private_sale = $3 OR private_sale IS NULL)
-                        AND NOT rejected
-                    )
-                    OR ($4 
-                        AND character_id = $3
-                    )
+        SELECT 
+            market_id as 'market_id: MarketId', 
+            character_id as 'character_id: UserCharacterId', 
+            private_sale as 'private_sale?: UserCharacterId', 
+            rejected,
+            price as 'price: f64',
+            item_level as 'item_level: AreaLevel',
+            item_data,
+            created_at,
+            updated_at
+        FROM 
+            market 
+        WHERE 
+            deleted_at IS NULL 
+            AND (
+                (NOT $4 
+                    AND character_id != $3 
+                    AND (private_sale = $3 OR private_sale IS NULL)
+                    AND NOT rejected
                 )
-            ORDER BY 
-                private_sale DESC, 
-                price ASC
-            LIMIT $1
-            OFFSET $2
-            ",
+                OR ($4 
+                    AND character_id = $3
+                )
+            )
+        ORDER BY 
+            rejected DESC, 
+            private_sale DESC, 
+            price ASC
+        LIMIT $1
+        OFFSET $2
+        ",
         limit_more,
         skip,
         character_id,
@@ -254,6 +256,33 @@ pub async fn load_market_items(
 
 // TODO: update (reject + price)
 // WARNING: to avoid cheat, edit price should create a new entry and delete old one (and error if old one deleted before)
+
+pub async fn reject_item<'c>(
+    executor: impl DbExecutor<'c>,
+    market_id: MarketId,
+    character_id: &UserCharacterId,
+) -> anyhow::Result<bool> {
+    Ok(sqlx::query_scalar!(
+        "
+        UPDATE
+            market
+        SET
+            rejected = 1,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE
+            market_id = $1 
+            AND private_sale = $2
+            AND deleted_at IS NULL
+        RETURNING 
+            market_id
+        ",
+        market_id,
+        character_id
+    )
+    .fetch_optional(executor)
+    .await?
+    .is_some())
+}
 
 pub async fn buy_item<'c>(
     executor: &mut Transaction<'c, Database>,

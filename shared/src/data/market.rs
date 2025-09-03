@@ -9,6 +9,7 @@ pub struct MarketItem {
 
     pub seller: UserCharacterId,
     pub private_sale: Option<UserCharacterId>,
+    pub rejected: bool,
 
     pub price: f64,
 

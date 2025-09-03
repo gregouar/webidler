@@ -11,7 +11,10 @@ use shared::{
         market::MarketItem,
         user::UserCharacterId,
     },
-    http::client::{BrowseMarketItemsRequest, BuyMarketItemRequest, SellMarketItemRequest},
+    http::client::{
+        BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
+        RejectMarketItemRequest, SellMarketItemRequest,
+    },
     types::{ItemName, ItemPrice, PaginationLimit, Username},
 };
 
@@ -164,6 +167,7 @@ pub struct SelectedItem {
     pub price: f64,
     pub private_sale: Option<UserCharacterId>,
     pub seller: UserCharacterId,
+    pub rejected: bool,
     pub created_at: DateTime<Utc>,
 }
 
@@ -175,6 +179,7 @@ impl From<MarketItem> for SelectedItem {
             price: value.price,
             private_sale: value.private_sale,
             seller: value.seller,
+            rejected: value.rejected,
             created_at: value.created_at,
         }
     }
@@ -328,6 +333,7 @@ fn InventoryBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoV
                     private_sale: None,
                     item_specs: Arc::new(item.clone()),
                     price: 0.0,
+                    rejected: false,
                     created_at: Utc::now(),
                 })
                 .collect::<Vec<_>>()
@@ -369,6 +375,7 @@ pub fn ItemsBrowser(
                     price=item.price
                     highlight=move || selected_item.read().as_ref().map(|selected_item| selected_item.index==item.index).unwrap_or_default()
                     special_offer=item.private_sale.is_some()
+                    rejected=item.rejected
                 />
             </For>
             {move || (items_list.read().is_empty() && !has_more.map(|has_more| has_more.get()).unwrap_or_default()).then(|| view!{
@@ -398,15 +405,16 @@ pub fn ItemRow(
     price: f64,
     highlight: impl Fn() -> bool + Send + Sync + 'static,
     #[prop(default = false)] special_offer: bool,
+    #[prop(default = false)] rejected: bool,
 ) -> impl IntoView {
     view! {
         <div class=move || {
             format!(
                 "relative flex w-full items-center justify-between p-3 gap-2 cursor-pointer mb-2 shadow-sm transition-colors duration-150 rounded-lg
-                bg-neutral-800 hover:bg-neutral-700 {}
-                {}",
+                bg-neutral-800 hover:bg-neutral-700 {} {} {}",
                 if highlight() { "ring-2 ring-amber-400" } else { "ring-1 ring-zinc-950" },
-                if special_offer { "border-2 border-pink-500" } else { "" },
+                if special_offer { "border-2 border-pink-400" } else { "" },
+                if rejected { "border-2 border-red-500" } else { "" },
             )
         }>
             <div class="relative h-32 aspect-[2/3] flex-shrink-0">
@@ -439,6 +447,11 @@ pub fn ItemRow(
 
 #[component]
 pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
+    let backend = expect_context::<BackendClient>();
+    let town_context = expect_context::<TownContext>();
+    let auth_context = expect_context::<AuthContext>();
+    let toaster = expect_context::<Toasts>();
+
     let disabled = Signal::derive({
         let town_context = expect_context::<TownContext>();
         move || match selected_item.read().as_ref() {
@@ -484,10 +497,6 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
     };
 
     let do_buy = {
-        let backend = expect_context::<BackendClient>();
-        let town_context = expect_context::<TownContext>();
-        let auth_context = expect_context::<AuthContext>();
-        let toaster = expect_context::<Toasts>();
         let character_id = town_context.character.read_untracked().character_id;
         move |_| {
             if let Some(item) = selected_item.get() {
@@ -511,7 +520,7 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
                             }
                             Err(e) => show_toast(
                                 toaster,
-                                format!("failed to post item for sell: {e}"),
+                                format!("Failed to buy item: {e}"),
                                 ToastVariant::Error,
                             ),
                         }
@@ -521,7 +530,36 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
         }
     };
 
-    let do_reject = move |_| {};
+    let do_reject = {
+        let character_id = town_context.character.read_untracked().character_id;
+        move |_| {
+            if let Some(item) = selected_item.get() {
+                spawn_local({
+                    async move {
+                        match backend
+                            .reject_market_item(
+                                &auth_context.token(),
+                                &RejectMarketItemRequest {
+                                    character_id,
+                                    item_index: item.index as u32,
+                                },
+                            )
+                            .await
+                        {
+                            Ok(_) => {
+                                selected_item.set(None);
+                            }
+                            Err(e) => show_toast(
+                                toaster,
+                                format!("Failed to reject: {e}"),
+                                ToastVariant::Error,
+                            ),
+                        }
+                    }
+                });
+            }
+        }
+    };
 
     view! {
         <div class="w-full h-full flex flex-col justify-between p-4 relative">
@@ -581,6 +619,11 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
 
 #[component]
 pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
+    let backend = expect_context::<BackendClient>();
+    let town_context = expect_context::<TownContext>();
+    let auth_context = expect_context::<AuthContext>();
+    let toaster = expect_context::<Toasts>();
+
     let price = RwSignal::new(None::<ItemPrice>);
     let private_offer = RwSignal::new(Some(None::<Username>));
 
@@ -589,10 +632,6 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
     });
 
     let do_sell = {
-        let backend = expect_context::<BackendClient>();
-        let town_context = expect_context::<TownContext>();
-        let auth_context = expect_context::<AuthContext>();
-        let toaster = expect_context::<Toasts>();
         let character_id = town_context.character.read_untracked().character_id;
         move |_| {
             if let Some(item) = selected_item.get() {
@@ -618,7 +657,7 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
                             }
                             Err(e) => show_toast(
                                 toaster,
-                                format!("failed to post item for sell: {e}"),
+                                format!("Failed to list item: {e}"),
                                 ToastVariant::Error,
                             ),
                         }
@@ -674,13 +713,24 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
 
 #[component]
 pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
+    let backend = expect_context::<BackendClient>();
+    let town_context = expect_context::<TownContext>();
+    let auth_context = expect_context::<AuthContext>();
+    let toaster = expect_context::<Toasts>();
+
     let disabled = Signal::derive(move || selected_item.read().is_none());
-    let price = RwSignal::new(
-        selected_item
-            .read_untracked()
-            .as_ref()
-            .and_then(|selected_item| ItemPrice::try_new(selected_item.price).ok()),
-    );
+
+    let price = RwSignal::new(ItemPrice::try_new(0.0).ok());
+
+    Effect::new(move || {
+        price.set(
+            ItemPrice::try_new(match selected_item.read().as_ref() {
+                Some(selected_item) => selected_item.price,
+                None => 0.0,
+            })
+            .ok(),
+        );
+    });
 
     let private_offer = move || {
         selected_item
@@ -691,6 +741,14 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                     .private_sale
                     .map(|private_sale| private_sale.to_string())
             })
+            .unwrap_or_default()
+    };
+
+    let rejected = move || {
+        selected_item
+            .read()
+            .as_ref()
+            .map(|selected_item| selected_item.rejected)
             .unwrap_or_default()
     };
 
@@ -710,6 +768,73 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
             .unwrap_or_default()
     };
 
+    let do_edit = {
+        let character_id = town_context.character.read_untracked().character_id;
+        move |_| {
+            if let Some(item) = selected_item.get() {
+                let price = price.get().unwrap().into_inner();
+                spawn_local({
+                    async move {
+                        match backend
+                            .edit_market_item(
+                                &auth_context.token(),
+                                &EditMarketItemRequest {
+                                    character_id,
+                                    item_index: item.index as u32,
+                                    price,
+                                },
+                            )
+                            .await
+                        {
+                            Ok(_) => {
+                                selected_item.set(None);
+                            }
+                            Err(e) => show_toast(
+                                toaster,
+                                format!("Failed to edit listing: {e}"),
+                                ToastVariant::Error,
+                            ),
+                        }
+                    }
+                });
+            }
+        }
+    };
+
+    let do_remove = {
+        let character_id = town_context.character.read_untracked().character_id;
+        move |_| {
+            if let Some(item) = selected_item.get() {
+                spawn_local({
+                    async move {
+                        match backend
+                            .buy_market_item(
+                                &auth_context.token(),
+                                &BuyMarketItemRequest {
+                                    character_id,
+                                    item_index: item.index as u32,
+                                },
+                            )
+                            .await
+                        {
+                            Ok(response) => {
+                                town_context.inventory.set(response.inventory);
+                                town_context.character.write().resource_gems =
+                                    response.resource_gems;
+                                selected_item.set(None);
+                            }
+                            Err(e) => show_toast(
+                                toaster,
+                                format!("Failed to remove listing: {e}"),
+                                ToastVariant::Error,
+                            ),
+                        }
+                    }
+                });
+            }
+        }
+    };
+
     view! {
         <div class="w-full h-full flex flex-col justify-between p-4 relative">
             <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center">
@@ -718,6 +843,12 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
 
             <div class="flex flex-col">
                 <span class="p-2">
+                    {move || {
+                        rejected()
+                            .then(|| {
+                                view! { <span class="text-red-500 font-bold">"[Rejected] "</span> }
+                            })
+                    }}
                     {move || {
                         private_offer()
                             .map(|private_offer| {
@@ -751,12 +882,12 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                             class="h-[2em] aspect-square mr-1"
                         />
                     </div>
-                    <MenuButton on:click=move |_| {} disabled=disabled>
+                    <MenuButton on:click=do_edit disabled=disabled>
                         "Edit Price"
                     </MenuButton>
                 </div>
 
-                <MenuButton on:click=move |_| {} disabled=disabled>
+                <MenuButton on:click=do_remove disabled=disabled>
                     "Remove Item"
                 </MenuButton>
             </div>

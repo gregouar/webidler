@@ -6,14 +6,16 @@ use shared::{
     http::{
         client::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BuyMarketItemRequest,
-            CreateCharacterRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
+            CreateCharacterRequest, EditMarketItemRequest, RejectMarketItemRequest,
+            SellMarketItemRequest, SignInRequest, SignUpRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BuyMarketItemResponse,
-            CreateCharacterResponse, DeleteCharacterResponse, ErrorResponse, GetAreasResponse,
-            GetCharacterDetailsResponse, GetPassivesResponse, GetSkillsResponse,
-            GetUserCharactersResponse, GetUserResponse, LeaderboardResponse, PlayersCountResponse,
-            SellMarketItemResponse, SignInResponse, SignUpResponse,
+            CreateCharacterResponse, DeleteCharacterResponse, EditMarketItemResponse,
+            ErrorResponse, GetAreasResponse, GetCharacterDetailsResponse, GetPassivesResponse,
+            GetSkillsResponse, GetUserCharactersResponse, GetUserResponse, LeaderboardResponse,
+            PlayersCountResponse, RejectMarketItemResponse, SellMarketItemResponse, SignInResponse,
+            SignUpResponse,
         },
     },
 };
@@ -35,7 +37,7 @@ impl std::fmt::Display for BackendError {
             BackendError::NotFound => write!(f, "Not found"),
             BackendError::Unauthorized(reason) => write!(f, "Unauthorized: {reason}"),
             BackendError::Forbidden => write!(f, "Forbidden"),
-            BackendError::UserError(reason) => write!(f, "Error: {reason}"),
+            BackendError::UserError(reason) => write!(f, "{reason}"),
             BackendError::ServerError(reason) => write!(f, "Server error: {reason}"),
             BackendError::ServerNotResponding => write!(f, "Server not responding"),
             BackendError::OtherError => write!(f, "Unknown error"),
@@ -159,22 +161,36 @@ impl BackendClient {
         self.post("market", request).await
     }
 
-    pub async fn sell_market_item(
-        &self,
-        token: &str,
-        request: &SellMarketItemRequest,
-    ) -> Result<SellMarketItemResponse, BackendError> {
-        self.post_auth("market/sell", token, request)
-            .await
-    }
-
     pub async fn buy_market_item(
         &self,
         token: &str,
         request: &BuyMarketItemRequest,
     ) -> Result<BuyMarketItemResponse, BackendError> {
-        self.post_auth("market/buy", token, request)
-            .await
+        self.post_auth("market/buy", token, request).await
+    }
+
+    pub async fn reject_market_item(
+        &self,
+        token: &str,
+        request: &RejectMarketItemRequest,
+    ) -> Result<RejectMarketItemResponse, BackendError> {
+        self.post_auth("market/reject", token, request).await
+    }
+
+    pub async fn sell_market_item(
+        &self,
+        token: &str,
+        request: &SellMarketItemRequest,
+    ) -> Result<SellMarketItemResponse, BackendError> {
+        self.post_auth("market/sell", token, request).await
+    }
+
+    pub async fn edit_market_item(
+        &self,
+        token: &str,
+        request: &EditMarketItemRequest,
+    ) -> Result<EditMarketItemResponse, BackendError> {
+        self.post_auth("market/edit", token, request).await
     }
 
     // Protected

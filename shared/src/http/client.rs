@@ -56,7 +56,20 @@ pub struct SellMarketItemRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct EditMarketItemRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: u32,
+    pub price: f64,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BuyMarketItemRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct RejectMarketItemRequest {
     pub character_id: UserCharacterId,
     pub item_index: u32,
 }
