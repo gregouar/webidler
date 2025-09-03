@@ -241,8 +241,6 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
         .map(|category| (category, loot_filter_category_to_str(category).into()))
         .collect();
 
-    // TODO: MORE?
-
     view! {
         <div class="w-full h-full flex flex-col justify-between p-4 relative">
             <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
