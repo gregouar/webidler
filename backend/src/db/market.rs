@@ -339,7 +339,7 @@ pub async fn reject_item<'c>(
         UPDATE
             market
         SET
-            rejected = 1,
+            rejected = TRUE,
             updated_at = CURRENT_TIMESTAMP
         WHERE
             market_id = $1 

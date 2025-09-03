@@ -4,7 +4,7 @@ CREATE TABLE market (
     --
     character_id UUID NOT NULL,
     recipient_id UUID,
-    rejected BOOLEAN NOT NULL DEFAULT False,
+    rejected BOOLEAN NOT NULL DEFAULT FALSE,
     --
     price DOUBLE PRECISION NOT NULL,
     --
@@ -46,7 +46,7 @@ CREATE INDEX idx_market_main_filters ON market (price, item_rarity, item_level)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_market_extra_filters ON market (item_armor,item_block,item_damages)
+CREATE INDEX idx_market_extra_filters ON market (item_armor, item_block, item_damages)
 WHERE
     deleted_at IS NULL;
 
