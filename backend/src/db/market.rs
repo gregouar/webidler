@@ -57,7 +57,7 @@ pub async fn sell_item<'c>(
 ) -> anyhow::Result<()> {
     let item_damages = item.weapon_specs.as_ref().map(|weapon_specs| {
         1.0 / (weapon_specs.cooldown as f64)
-            * (1.0 + weapon_specs.crit_damage * weapon_specs.crit_chances as f64)
+            * (1.0 + weapon_specs.crit_damage * weapon_specs.crit_chances as f64 * 0.0001)
             * weapon_specs
                 .damage
                 .values()
@@ -85,7 +85,6 @@ pub async fn sell_item<'c>(
                     serde_plain::to_string(&modifier).ok()?,
                     stat_value,
                 ))
-                // TODO: Add modifier column
             })
             .collect(),
         item.modifiers.base_item_id.clone(),

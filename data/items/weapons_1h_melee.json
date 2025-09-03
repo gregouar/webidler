@@ -10,8 +10,8 @@
       "damage": {
         "Physical": [2, 4]
       },
-      "crit_chances": 0.05,
-      "crit_damage": 1
+      "crit_chances": 5,
+      "crit_damage": 100
     }
   },
   "dagger_unique": {
@@ -26,8 +26,8 @@
       "damage": {
         "Physical": [2, 4]
       },
-      "crit_chances": 0.05,
-      "crit_damage": 1
+      "crit_chances": 5,
+      "crit_damage": 100
     },
     "rarity": "Unique",
     "affixes": [
@@ -58,8 +58,8 @@
       "damage": {
         "Physical": [4, 7]
       },
-      "crit_chances": 0.05,
-      "crit_damage": 1
+      "crit_chances": 5,
+      "crit_damage": 100
     },
     "min_area_level": 40
   },
@@ -75,8 +75,8 @@
       "damage": {
         "Physical": [4, 7]
       },
-      "crit_chances": 0.05,
-      "crit_damage": 1
+      "crit_chances": 5,
+      "crit_damage": 100
     },
     "rarity": "Unique",
     "affixes": [
@@ -100,8 +100,8 @@
           "CritChances": null
         },
         "modifier": "Flat",
-        "min": 0.04,
-        "max": 0.06
+        "min": 4,
+        "max": 6
       }
     ],
     "triggers": [

@@ -168,7 +168,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                                 <span class=format!(
                                     "{} font-semibold",
                                     block_color,
-                                )>{format!("{:.0}%", specs.block * 100.0)}</span>
+                                )>{format!("{:.0}%", specs.block)}</span>
                             </li>
                         },
                     )
@@ -264,14 +264,14 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     <span class=format!(
                         "{} font-semibold",
                         crit_chances_color,
-                    )>{format!("{:.2}%", specs.crit_chances * 100.0)}</span>
+                    )>{format!("{:.2}%", specs.crit_chances)}</span>
                 </li>
                 <li class="text-gray-400 text-sm leading-snug">
                     "Critical damage: "
                     <span class=format!(
                         "{} font-semibold",
                         crit_damage_color,
-                    )>{format!("+{:.0}%", specs.crit_damage * 100.0)}</span>
+                    )>{format!("+{:.0}%", specs.crit_damage)}</span>
                 </li>
                 <li class="text-gray-400 text-sm leading-snug">
                     "Cooldown: "

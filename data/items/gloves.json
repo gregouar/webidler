@@ -40,8 +40,8 @@
       "damage": {
         "Physical": [4, 7]
       },
-      "crit_chances": 0.1,
-      "crit_damage": 1
+      "crit_chances": 10,
+      "crit_damage": 100
     },
     "rarity": "Unique",
     "affixes": [

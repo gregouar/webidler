@@ -161,7 +161,7 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 0.02
+        "value": 2
       }
     ],
     "targets": [
@@ -209,7 +209,7 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 0.2
+        "value": 20
       }
     ],
     "targets": [
@@ -268,7 +268,7 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 0.02
+        "value": 2
       }
     ],
     "targets": [
@@ -495,8 +495,8 @@
               "damage": {
                 "Physical": [5, 10]
               },
-              "crit_chances": 0.05,
-              "crit_damage": 1
+              "crit_chances": 5,
+              "crit_damage": 100
             }
           }
         ]

@@ -199,8 +199,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 value=move || {
                                     format!(
                                         "+{:.0}%",
-                                        effect(StatType::CritChances(None), Modifier::Multiplier)
-                                            * 100.0,
+                                        effect(StatType::CritChances(None), Modifier::Multiplier),
                                     )
                                 }
                             />
@@ -210,8 +209,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     format!(
                                         "+{}%",
                                         format_number(
-                                            effect(StatType::CritDamage(None), Modifier::Multiplier)
-                                                * 100.0,
+                                            effect(StatType::CritDamage(None), Modifier::Multiplier),
                                         ),
                                     )
                                 }
@@ -255,8 +253,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 value=move || {
                                     format!(
                                         "{:.0}%",
-                                        game_context.player_specs.read().character_specs.block
-                                            * 100.0,
+                                        game_context.player_specs.read().character_specs.block,
                                     )
                                 }
                             />

@@ -453,14 +453,14 @@
           {
             "stat": "Block",
             "modifier": "Flat",
-            "value": 0.02
+            "value": 2
           }
         ],
         "upgrade_effects": [
           {
             "stat": "Block",
             "modifier": "Flat",
-            "value": 0.01
+            "value": 1
           }
         ],
         "max_upgrade_level": 3
@@ -475,14 +475,14 @@
           {
             "stat": "Block",
             "modifier": "Flat",
-            "value": 0.02
+            "value": 2
           }
         ],
         "upgrade_effects": [
           {
             "stat": "Block",
             "modifier": "Flat",
-            "value": 0.01
+            "value": 1
           }
         ],
         "max_upgrade_level": 3
@@ -498,7 +498,7 @@
           {
             "stat": "Block",
             "modifier": "Flat",
-            "value": 0.02
+            "value": 2
           },
           {
             "stat": { "Armor": "Physical" },
@@ -520,7 +520,7 @@
           {
             "stat": "Block",
             "modifier": "Flat",
-            "value": 0.01
+            "value": 1
           },
           {
             "stat": { "Armor": "Physical" },
@@ -1153,12 +1153,12 @@
           {
             "stat": { "CritChances": "Spell" },
             "modifier": "Flat",
-            "value": 0.05
+            "value": 5
           },
           {
             "stat": { "CritDamage": "Spell" },
             "modifier": "Flat",
-            "value": 1
+            "value": 100
           }
         ],
         "locked": true

@@ -195,15 +195,11 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                     view! {
                         <EffectLi>
                             "Critical chances: "
-                            <span class="font-semibold">
-                                {format!("{:.2}%", crit_chances * 100.0)}
-                            </span>
+                            <span class="font-semibold">{format!("{:.2}%", crit_chances)}</span>
                         </EffectLi>
                         <EffectLi>
                             "Critical damage: "
-                            <span class="font-semibold">
-                                {format!("+{:.0}%", crit_damage * 100.0)}
-                            </span>
+                            <span class="font-semibold">{format!("+{:.0}%", crit_damage)}</span>
                         </EffectLi>
                     },
                 )

@@ -115,7 +115,7 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -
     }
 
     weapon_specs.cooldown = weapon_specs.cooldown.max(0.0);
-    weapon_specs.crit_chances = weapon_specs.crit_chances.clamp(0.0, 1.0);
+    weapon_specs.crit_chances = weapon_specs.crit_chances.clamp(0.0, 100.0);
     weapon_specs.damage.retain(|_, (min, max)| {
         *min = min.clamp(0.0, *max);
         *max > 0.0

@@ -199,7 +199,7 @@ pub fn apply_skill_effect(
             crit_chances,
             crit_damage,
         } => {
-            let is_crit = rng::random_range(0.0..=1.0).unwrap_or(1.0) <= *crit_chances;
+            let is_crit = rng::random_range(0.0..=100.0).unwrap_or(100.0) <= *crit_chances;
 
             let damage: HashMap<_, _> = damage
                 .iter()
@@ -207,7 +207,11 @@ pub fn apply_skill_effect(
                     (
                         *damage_type,
                         rng::random_range(*min..=*max).unwrap_or(*max)
-                            * (if is_crit { 1.0 + crit_damage } else { 1.0 }),
+                            * (if is_crit {
+                                1.0 + crit_damage * 0.01
+                            } else {
+                                1.0
+                            }),
                     )
                 })
                 .collect();
