@@ -54,6 +54,7 @@ pub async fn post_browse_market(
         &db_pool,
         &payload.character_id,
         payload.own_listings,
+        &payload.filters,
         payload.skip as i64,
         payload.limit.into_inner(),
     )

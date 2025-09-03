@@ -1,7 +1,10 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-use crate::data::{item::ItemSpecs, user::UserCharacterId};
+use crate::data::{
+    item::{ItemRarity, ItemSpecs},
+    user::UserCharacterId,
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MarketItem {
@@ -18,4 +21,9 @@ pub struct MarketItem {
     pub item_specs: ItemSpecs,
 
     pub created_at: DateTime<Utc>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct MarketFilters {
+    pub item_rarity: Option<ItemRarity>,
 }

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    data::{passive::PassivesTreeAscension, user::UserCharacterId},
+    data::{market::MarketFilters, passive::PassivesTreeAscension, user::UserCharacterId},
     types::{AssetName, Email, PaginationLimit, Password, Username},
 };
 
@@ -40,9 +40,8 @@ pub struct BrowseMarketItemsRequest {
     pub character_id: UserCharacterId,
     pub own_listings: bool,
 
-    // TODO filters, order by etc
+    pub filters: MarketFilters,
 
-    // Pagination
     pub skip: u32,
     pub limit: PaginationLimit,
 }

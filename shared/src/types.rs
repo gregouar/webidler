@@ -3,7 +3,7 @@ use nutype::nutype;
 use regex::Regex;
 
 lazy_static::lazy_static! {
-    static ref ALPHANUMERIC_RE: Regex = Regex::new(r"^[a-zA-Z0-9_]+$").unwrap();
+    static ref ALPHANUMERIC_RE: Regex = Regex::new(r"^[a-zA-Z0-9_ ]+$").unwrap();
 }
 
 lazy_static::lazy_static! {
@@ -15,6 +15,14 @@ fn is_alphanumeric(s: &str) -> anyhow::Result<()> {
         return Err(anyhow!(
             "Only alphanumeric characters and underscores are allowed."
         ));
+    }
+
+    Ok(())
+}
+
+fn has_no_whitespace(s: &str) -> anyhow::Result<()> {
+    if s.contains(" ") {
+        return Err(anyhow!("Whitespace is not allowed."));
     }
 
     Ok(())
@@ -48,6 +56,7 @@ fn is_email(s: &str) -> anyhow::Result<()> {
 
 fn validate_username(s: &str) -> anyhow::Result<()> {
     is_not_empty(s)?;
+    has_no_whitespace(s)?;
     is_not_too_long(s, 20)?;
     is_alphanumeric(s)?;
 

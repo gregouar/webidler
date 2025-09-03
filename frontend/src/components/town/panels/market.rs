@@ -8,7 +8,7 @@ use shared::{
     data::{
         area::AreaLevel,
         item::{ItemCategory, ItemRarity, ItemSpecs},
-        market::MarketItem,
+        market::{MarketFilters, MarketItem},
         user::UserCharacterId,
     },
     http::client::{
@@ -47,12 +47,6 @@ enum MarketTab {
     Listings,
 }
 
-// TODO: move to share for easy http query
-#[derive(Clone)]
-pub struct MarketFilters {
-    pub item_rarity: Option<ItemRarity>,
-}
-
 #[component]
 pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
     let active_tab = RwSignal::new(MarketTab::Buy); // TODO: Start on filters?
@@ -62,6 +56,9 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
         selected_item.set(None);
         active_tab.set(new_tab);
     };
+
+    // TODO: Default to character max level
+    let filters = RwSignal::new(MarketFilters { item_rarity: None });
 
     view! {
         <MenuPanel open=open>
@@ -116,16 +113,20 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                         <div class="w-full aspect-[4/3] bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                             {move || {
                                 match active_tab.get() {
-                                    MarketTab::Filters => view! { <Filters /> }.into_any(),
+                                    MarketTab::Filters => view! { <Filters filters /> }.into_any(),
                                     MarketTab::Buy => {
-                                        view! { <MarketBrowser selected_item own_listings=false /> }
+                                        view! {
+                                            <MarketBrowser selected_item filters own_listings=false />
+                                        }
                                             .into_any()
                                     }
                                     MarketTab::Sell => {
                                         view! { <InventoryBrowser selected_item /> }.into_any()
                                     }
                                     MarketTab::Listings => {
-                                        view! { <MarketBrowser selected_item own_listings=true /> }
+                                        view! {
+                                            <MarketBrowser selected_item filters own_listings=true />
+                                        }
                                             .into_any()
                                     }
                                 }
@@ -198,13 +199,15 @@ pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
 }
 
 #[component]
-fn Filters() -> impl IntoView {
+fn Filters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     let item_name = RwSignal::new(None::<ItemName>);
 
-    // TODO: Default to character max level
+    // TODO: MORE
+
     let item_level = RwSignal::new(Some(None::<AreaLevel>));
 
-    let item_rarity = RwSignal::new(None);
+    let item_rarity = RwSignal::new(filters.get_untracked().item_rarity);
+    Effect::new(move || filters.write().item_rarity = item_rarity.get());
     let item_rarity_options = std::iter::once(None)
         .chain(ItemRarity::iter().map(Some))
         .map(|rarity| (rarity, item_rarity_str(rarity).into()))
@@ -217,8 +220,6 @@ fn Filters() -> impl IntoView {
         .collect();
 
     let item_price = RwSignal::new(Some(None::<ItemPrice>));
-
-    // TODO: MORE
 
     view! {
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
@@ -266,6 +267,7 @@ fn Filters() -> impl IntoView {
 #[component]
 fn MarketBrowser(
     selected_item: RwSignal<Option<SelectedItem>>,
+    filters: RwSignal<MarketFilters>,
     own_listings: bool,
 ) -> impl IntoView {
     let items_per_page = PaginationLimit::try_new(20).unwrap_or_default();
@@ -296,12 +298,14 @@ fn MarketBrowser(
         move || {
             let character_id = town_context.character.read().character_id;
             let skip = extend_list.get();
+            let filters = filters.get();
             spawn_local(async move {
                 let response = backend
                     .browse_market_items(&BrowseMarketItemsRequest {
                         character_id,
                         skip,
                         limit: items_per_page,
+                        filters,
                         own_listings,
                     })
                     .await

@@ -6,6 +6,7 @@ use shared::data::{
     area::AreaLevel,
     item::{ItemModifiers, ItemSpecs},
     item_affix::AffixEffectScope,
+    market::MarketFilters,
     user::UserCharacterId,
 };
 
@@ -212,10 +213,16 @@ pub async fn read_market_items<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     own_listings: bool,
+    filters: &MarketFilters,
     skip: i64,
     limit: i64,
 ) -> anyhow::Result<(Vec<MarketItemEntry>, bool)> {
     let limit_more = limit + 1;
+
+    let item_rarity = filters
+        .item_rarity
+        .and_then(|x| serde_plain::to_string(&x).ok());
+
     let raw_items = sqlx::query_as!(
         MarketEntry,
         "
@@ -249,6 +256,7 @@ pub async fn read_market_items<'c>(
                     AND market.character_id = $3
                 )
             )
+            AND (market.item_rarity = $5 OR $5 IS NULL)
         ORDER BY 
             rejected DESC, 
             recipient_id DESC, 
@@ -260,6 +268,7 @@ pub async fn read_market_items<'c>(
         skip,
         character_id,
         own_listings,
+        item_rarity,
     )
     .fetch_all(executor)
     .await?;
