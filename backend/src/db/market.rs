@@ -214,11 +214,13 @@ pub async fn read_market_items<'c>(
 
     let item_rarity = filters
         .item_rarity
-        .and_then(|x| serde_plain::to_string(&x).ok());
+        .and_then(|x| serde_plain::to_string(&x).ok())
+        .unwrap_or_default();
 
     let item_category = filters
         .item_category
-        .and_then(|x| serde_plain::to_string(&x).ok());
+        .and_then(|x| serde_plain::to_string(&x).ok())
+        .unwrap_or_default();
 
     let raw_items = sqlx::query_as!(
         MarketEntry,
@@ -256,16 +258,16 @@ pub async fn read_market_items<'c>(
             AND ($5 OR UPPER(market.item_name) LIKE $6)
             AND (market.item_level <= $7)
             AND (market.price <= $8)
-            AND ($9 IS NULL OR market.item_rarity = $9)
-            AND ($10 IS NULL OR EXISTS (
+            AND ($9 = '' OR market.item_rarity = $9)
+            AND ($10 = '' OR EXISTS (
                 SELECT 1
                 FROM market_categories mc
                 WHERE mc.market_id = market.market_id
                 AND mc.category = $10
             ))
-            AND (market.item_damages >= $11)
-            AND (market.item_armor >= $12)
-            AND (market.item_block >= $13)
+            AND ($11 = 0 OR market.item_damages >= $11)
+            AND ($12 = 0 OR market.item_armor >= $12)
+            AND ($13 = 0 OR market.item_block >= $13)
         ORDER BY 
             rejected DESC, 
             recipient_id DESC, 
