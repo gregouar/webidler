@@ -1,12 +1,13 @@
 use std::collections::HashSet;
 
-use sqlx::{FromRow, Transaction};
+use sqlx::{types::Json, FromRow, Transaction};
 
 use shared::data::{
     area::AreaLevel,
     item::{ItemModifiers, ItemSpecs},
     item_affix::AffixEffectScope,
     market::MarketFilters,
+    stat_effect::StatType,
     user::UserCharacterId,
 };
 
@@ -18,7 +19,7 @@ use crate::db::{
 pub type MarketId = i64;
 
 #[derive(Debug, FromRow)]
-struct MarketEntry {
+pub struct MarketEntry {
     pub market_id: MarketId,
 
     pub character_id: UserCharacterId,
@@ -30,23 +31,7 @@ struct MarketEntry {
     pub price: f64,
 
     pub item_level: AreaLevel,
-    pub item_data: Vec<u8>,
-
-    pub created_at: UtcDateTime,
-    pub updated_at: UtcDateTime,
-}
-
-pub struct MarketItemEntry {
-    pub item_id: usize,
-    pub price: f64,
-
-    pub character_id: UserCharacterId,
-    pub character_name: String,
-    pub recipient: Option<(UserCharacterId, String)>, // For private offers
-    pub rejected: bool,
-
-    pub item_level: AreaLevel,
-    pub item_modifiers: ItemModifiers,
+    pub item_data: Json<ItemModifiers>,
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
@@ -85,7 +70,7 @@ pub async fn sell_item<'c>(
             .into_iter()
             .filter_map(|((stat_type, modifier), stat_value)| {
                 Some((
-                    serde_json::to_vec(&stat_type).ok()?,
+                    stat_type.clone().into(),
                     serde_plain::to_string(&modifier).ok()?,
                     stat_value,
                 ))
@@ -102,7 +87,8 @@ pub async fn sell_item<'c>(
             .as_ref()
             .map(|armor_specs| armor_specs.block as f64),
         item_damages,
-        serde_json::to_vec(&item.modifiers)?,
+        item.modifiers.clone().into(),
+        // serde_json::to_vec(&item.modifiers)?.into(),
     )
     .await?)
 }
@@ -113,7 +99,7 @@ async fn create_market_item<'c>(
     recipient_id: Option<UserCharacterId>,
     price: f64,
     item_categories: HashSet<String>,
-    item_stats: Vec<(Vec<u8>, String, f64)>,
+    item_stats: Vec<(Json<StatType>, String, f64)>,
     base_item_id: String,
     item_name: String,
     item_rarity: String,
@@ -121,7 +107,7 @@ async fn create_market_item<'c>(
     item_armor: Option<f64>,
     item_block: Option<f64>,
     item_damages: Option<f64>,
-    item_data: Vec<u8>,
+    item_data: Json<ItemModifiers>,
 ) -> Result<(), sqlx::Error> {
     let item_level = item_level as i32;
     let market_id = sqlx::query_scalar!(
@@ -195,8 +181,8 @@ pub async fn count_market_items<'c>(
     let row = sqlx::query!(
         r#"
         SELECT
-            COUNT(CASE WHEN recipient_id IS NULL THEN 1 END) AS public_items,
-            COUNT(CASE WHEN recipient_id IS NOT NULL THEN 1 END) AS private_items
+            COUNT(CASE WHEN recipient_id IS NULL THEN 1 END) AS "public_items!",
+            COUNT(CASE WHEN recipient_id IS NOT NULL THEN 1 END) AS "private_items!"
         FROM market
         WHERE deleted_at IS NULL
           AND character_id = $1
@@ -217,7 +203,7 @@ pub async fn read_market_items<'c>(
     filters: MarketFilters,
     skip: i64,
     limit: i64,
-) -> anyhow::Result<(Vec<MarketItemEntry>, bool)> {
+) -> anyhow::Result<(Vec<MarketEntry>, bool)> {
     let limit_more = limit + 1;
 
     let item_name = filters.item_name.map(|x| x.into_inner());
@@ -247,7 +233,7 @@ pub async fn read_market_items<'c>(
             rejected,
             price as "price: f64",
             item_level as "item_level: AreaLevel",
-            item_data,
+            item_data as "item_data: Json<ItemModifiers>",
             market.created_at,
             market.updated_at
         FROM 
@@ -308,24 +294,7 @@ pub async fn read_market_items<'c>(
     let has_more = raw_items.len() as i64 == limit_more;
 
     Ok((
-        raw_items
-            .into_iter()
-            .take(limit as usize)
-            .filter_map(|market_entry| {
-                Some(MarketItemEntry {
-                    item_id: market_entry.market_id as usize,
-                    price: market_entry.price,
-                    character_id: market_entry.character_id,
-                    character_name: market_entry.character_name,
-                    recipient: market_entry.recipient_id.zip(market_entry.recipient_name),
-                    rejected: market_entry.rejected,
-                    item_modifiers: serde_json::from_slice(&market_entry.item_data).ok()?,
-                    item_level: market_entry.item_level,
-                    created_at: market_entry.created_at,
-                    updated_at: market_entry.updated_at,
-                })
-            })
-            .collect(),
+        raw_items.into_iter().take(limit as usize).collect(),
         has_more,
     ))
 }
@@ -358,28 +327,6 @@ pub async fn reject_item<'c>(
 }
 
 pub async fn buy_item<'c>(
-    executor: &mut Transaction<'c, Database>,
-    market_id: MarketId,
-) -> anyhow::Result<Option<MarketItemEntry>> {
-    Ok(delete_market_item(executor, market_id)
-        .await?
-        .and_then(|market_entry| {
-            Some(MarketItemEntry {
-                item_id: market_entry.market_id as usize,
-                price: market_entry.price,
-                character_id: market_entry.character_id,
-                character_name: market_entry.character_name,
-                recipient: market_entry.recipient_id.zip(market_entry.recipient_name),
-                rejected: market_entry.rejected,
-                item_modifiers: serde_json::from_slice(&market_entry.item_data).ok()?,
-                item_level: market_entry.item_level,
-                created_at: market_entry.created_at,
-                updated_at: market_entry.updated_at,
-            })
-        }))
-}
-
-async fn delete_market_item<'c>(
     executor: &mut Transaction<'c, Database>,
     market_id: MarketId,
 ) -> Result<Option<MarketEntry>, sqlx::Error> {
@@ -416,7 +363,7 @@ async fn delete_market_item<'c>(
             rejected,
             price as "price: f64",
             item_level as "item_level: AreaLevel",
-            item_data,
+            item_data as "item_data: Json<ItemModifiers>",
             created_at,
             updated_at
         "#,

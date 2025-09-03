@@ -20,8 +20,8 @@ use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
     constants::{MAX_MARKET_PRIVATE_LISTINGS, MAX_MARKET_PUBLIC_LISTINGS},
-    db,
-    game::systems::items_controller,
+    db::{self, market::MarketEntry},
+    game::{data::items_store::ItemsStore, systems::items_controller},
     rest::utils::{
         inventory_data_to_player_inventory, verify_character_in_town, verify_character_user,
     },
@@ -64,21 +64,7 @@ pub async fn post_browse_market(
         items: items
             .into_iter()
             .filter_map(|market_item_entry| {
-                Some(MarketItem {
-                    item_id: market_item_entry.item_id,
-                    owner_id: market_item_entry.character_id,
-                    owner_name: market_item_entry.character_name,
-                    recipient: market_item_entry.recipient,
-                    rejected: market_item_entry.rejected,
-                    price: market_item_entry.price,
-
-                    item_specs: items_controller::init_item_specs_from_store(
-                        &master_store.items_store,
-                        market_item_entry.item_modifiers,
-                    )?,
-
-                    created_at: market_item_entry.created_at.into(),
-                })
+                into_market_item(&master_store.items_store, market_item_entry)
             })
             .collect(),
         has_more,
@@ -116,7 +102,7 @@ pub async fn post_buy_market_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    if let Some((recipient_id, _)) = item_bought.recipient {
+    if let Some(recipient_id) = item_bought.recipient_id {
         if recipient_id != character.character_id
             && character.character_id != item_bought.character_id
         // Allow seller to remove own listing
@@ -152,7 +138,7 @@ pub async fn post_buy_market_item(
     inventory.bag.push(
         items_controller::init_item_specs_from_store(
             &master_store.items_store,
-            item_bought.item_modifiers,
+            item_bought.item_data.0,
         )
         .ok_or(anyhow!("base item not found"))?,
     );
@@ -291,11 +277,11 @@ pub async fn post_edit_market_item(
     db::market::sell_item(
         &mut tx,
         &payload.character_id,
-        item_bought.recipient.map(|(recipient_id, _)| recipient_id),
+        item_bought.recipient_id,
         payload.price,
         &items_controller::init_item_specs_from_store(
             &master_store.items_store,
-            item_bought.item_modifiers,
+            item_bought.item_data.0,
         )
         .ok_or(anyhow!("base item not found"))?,
     )
@@ -304,4 +290,27 @@ pub async fn post_edit_market_item(
     tx.commit().await?;
 
     Ok(Json(EditMarketItemResponse {}))
+}
+
+fn into_market_item(items_store: &ItemsStore, market_entry: MarketEntry) -> Option<MarketItem> {
+    Some(MarketItem {
+        item_id: market_entry.market_id as usize,
+        owner_id: market_entry.character_id,
+        owner_name: market_entry.character_name,
+        recipient: market_entry.recipient_id.map(|recipient_id| {
+            (
+                recipient_id,
+                market_entry.recipient_name.unwrap_or_default(),
+            )
+        }),
+        rejected: market_entry.rejected,
+        price: market_entry.price,
+
+        item_specs: items_controller::init_item_specs_from_store(
+            items_store,
+            market_entry.item_data.0,
+        )?,
+
+        created_at: market_entry.created_at.into(),
+    })
 }
