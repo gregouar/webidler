@@ -200,7 +200,7 @@ pub async fn read_market_items<'c>(
 ) -> anyhow::Result<(Vec<MarketEntry>, bool)> {
     let limit_more = limit + 1;
 
-    let dont_filter_by_name = filters.item_name.is_none();
+    let no_filter_by_name = filters.item_name.is_none();
     let item_name = filters
         .item_name
         .map(|x| format!("%{}%", x.to_uppercase()))
@@ -208,9 +208,15 @@ pub async fn read_market_items<'c>(
 
     let item_level = filters.item_level.map(|x| x as i32).unwrap_or(i32::MAX);
     let price = filters.price.map(|x| x.into_inner()).unwrap_or(f64::MAX);
-    let item_damages = filters.item_damages.unwrap_or(-999.9);
-    let item_armor = filters.item_armor.unwrap_or(-999.9);
-    let item_block = filters.item_block.unwrap_or(-999.9);
+
+    let no_filter_item_damages = filters.item_damages.is_none();
+    let item_damages = filters.item_damages.unwrap_or_default();
+
+    let no_filter_item_armor = filters.item_armor.is_none();
+    let item_armor = filters.item_armor.unwrap_or_default();
+
+    let no_filter_item_block = filters.item_block.is_none();
+    let item_block = filters.item_block.unwrap_or_default();
 
     let item_rarity = filters
         .item_rarity
@@ -265,9 +271,9 @@ pub async fn read_market_items<'c>(
                 WHERE mc.market_id = market.market_id
                 AND mc.category = $10
             ))
-            AND ($11 = -999.9 OR market.item_damages >= $11)
-            AND ($12 = -999.9 OR market.item_armor >= $12)
-            AND ($13 = -999.9 OR market.item_block >= $13)
+            AND ($11 OR market.item_damages >= $12)
+            AND ($13 OR market.item_armor >= $14)
+            AND ($15 OR market.item_block >= $16)
         ORDER BY 
             rejected DESC, 
             recipient_id DESC, 
@@ -279,14 +285,17 @@ pub async fn read_market_items<'c>(
         skip,
         character_id,
         own_listings,
-        dont_filter_by_name,
+        no_filter_by_name,
         item_name,
         item_level,
         price,
         item_rarity,
         item_category,
+        no_filter_item_damages,
         item_damages,
+        no_filter_item_armor,
         item_armor,
+        no_filter_item_block,
         item_block
     )
     .fetch_all(executor)
