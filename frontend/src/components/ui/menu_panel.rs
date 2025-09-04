@@ -56,7 +56,7 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
 
         <Show when=move || is_visible.get()>
             <div
-                class="absolute inset-0 bg-black/70 z-40 flex"
+                class="absolute inset-0 bg-black/70 z-40 flex p-2 md:p-4"
                 class:animate-fade-in=open
                 style=move || {
                     if open.get() {

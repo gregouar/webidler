@@ -41,7 +41,7 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <div class="w-full h-full p-2 md:p-4">
+            <div class="w-full h-full">
                 <div class="bg-zinc-800 rounded-md p-1 md:p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-1 md:gap-2 max-h-full">
                     <div class="px-2 md:px-4 flex items-center justify-between">
                         <PanelTitle>"Ascend Passive Skills"</PanelTitle>
@@ -63,9 +63,7 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
                         </div>
                     </div>
 
-                    <div class="flex-1 overflow-hidden">
-                        <PassiveSkillTree passives_tree_ascension ascension_cost />
-                    </div>
+                    <PassiveSkillTree passives_tree_ascension ascension_cost />
 
                     <div class="px-2 md:px-4 relative z-10 flex items-center justify-between">
                         <div class="flex items-center gap-2">

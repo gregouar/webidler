@@ -4,30 +4,43 @@ use leptos::{html::*, prelude::*, web_sys};
 pub fn Pannable(children: Children) -> impl IntoView {
     let offset = RwSignal::new((0.0, 0.0));
     let dragging = RwSignal::new(None::<(f64, f64)>);
-    let zoom = RwSignal::new(1.0f64);
+    let zoom = RwSignal::new(0.75f64);
 
-    let on_mouse_down = move |ev: web_sys::MouseEvent| {
-        ev.stop_propagation();
-        dragging.set(Some((ev.client_x() as f64, ev.client_y() as f64)));
+    let svg_ref = NodeRef::new();
+
+    let screen_to_svg = move |ev: &web_sys::MouseEvent| -> (f64, f64) {
+        let svg: web_sys::SvgElement = svg_ref.get().expect("SVG node should exist");
+
+        let rect = svg.get_bounding_client_rect();
+        let x = (ev.client_x() as f64 - rect.left()) * 1000.0 / rect.width() - 500.0;
+        let y = (ev.client_y() as f64 - rect.top()) * 1000.0 / rect.height() - 500.0;
+        (x, y)
     };
 
-    let handle = window_event_listener(leptos::ev::mouseup, {
-        move |_| {
-            dragging.set(None);
+    let on_mouse_down = {
+        let screen_to_svg = screen_to_svg.clone();
+        move |ev: web_sys::MouseEvent| {
+            ev.stop_propagation();
+            dragging.set(Some(screen_to_svg(&ev)));
         }
-    });
+    };
+
+    let handle = window_event_listener(leptos::ev::mouseup, move |_| dragging.set(None));
     on_cleanup(move || handle.remove());
 
     let handle = window_event_listener(leptos::ev::mousemove, {
+        let screen_to_svg = screen_to_svg.clone();
         move |ev: web_sys::MouseEvent| {
             if let Some((last_x, last_y)) = dragging.get() {
-                let dx = ev.client_x() as f64 - last_x;
-                let dy = ev.client_y() as f64 - last_y;
+                ev.stop_propagation();
+                let (cur_x, cur_y) = screen_to_svg(&ev);
+                let dx = cur_x - last_x;
+                let dy = cur_y - last_y;
                 offset.update(|(x, y)| {
                     *x += dx;
                     *y += dy;
                 });
-                dragging.set(Some((ev.client_x() as f64, ev.client_y() as f64)));
+                dragging.set(Some((cur_x, cur_y)));
             }
         }
     });
@@ -38,10 +51,14 @@ pub fn Pannable(children: Children) -> impl IntoView {
             ev.prevent_default();
             let zoom_factor = if ev.delta_y() < 0.0 { 1.1 } else { 0.9 };
             let old_zoom = zoom.get();
-            let new_zoom = (old_zoom * zoom_factor).clamp(0.5, 3.0);
+            let new_zoom = (old_zoom * zoom_factor).clamp(0.25, 2.0);
 
-            let (old_x, old_y) = offset.get();
-            offset.set((old_x * (new_zoom / old_zoom), old_y * (new_zoom / old_zoom)));
+            let (x, y) = screen_to_svg(&ev);
+            let (ox, oy) = offset.get();
+            offset.set((
+                x - (x - ox) * (new_zoom / old_zoom),
+                y - (y - oy) * (new_zoom / old_zoom),
+            ));
 
             zoom.set(new_zoom);
         }
@@ -51,16 +68,15 @@ pub fn Pannable(children: Children) -> impl IntoView {
         <div
             on:wheel=on_wheel
             on:mousedown=on_mouse_down
-            class="w-full overflow-hidden bg-neutral-900"
+            class="flex items-center justify-center w-full h-full overflow-hidden bg-neutral-900"
         >
-            // aspect-[3/1] sm:aspect-[2/1] md:aspect-[5/2]
             <svg
+                node_ref=svg_ref
                 width="100%"
                 height="100%"
                 viewBox="-500 -500 1000 1000"
                 preserveAspectRatio="xMidYMid meet"
             >
-                // TODO: Find way to make this generic
                 <defs>
                     <radialGradient id="node-inner-gradient" cx="50%" cy="50%" r="50%">
                         <stop offset="20%" stop-color="black" stop-opacity=0 />
@@ -71,7 +87,7 @@ pub fn Pannable(children: Children) -> impl IntoView {
                 <g
                     transform=move || {
                         let (x, y) = offset.get();
-                        format!("translate({x},{y}),scale({})", zoom.get())
+                        format!("translate({x},{y}) scale({})", zoom.get())
                     }
                     filter="drop-shadow(0 2px 4px black)"
                 >

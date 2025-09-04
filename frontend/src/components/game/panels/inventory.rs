@@ -46,7 +46,7 @@ pub fn InventoryPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <div class="grid grid-cols-7 justify-items-stretch flex items-start gap-4 p-4">
+            <div class="grid grid-cols-7 justify-items-stretch flex items-start gap-2 md:gap-4">
                 <EquippedItemsCard class:col-span-2 class:justify-self-end />
                 <BagCard open=open class:col-span-5 class:justify-self-start />
             </div>

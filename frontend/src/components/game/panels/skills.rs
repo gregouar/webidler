@@ -23,7 +23,7 @@ use crate::{
 pub fn SkillsPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open=open>
-            <div class="w-full p-4">
+            <div class="w-full">
                 <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-2">
                     <div class="px-4 relative z-10 flex items-center justify-between">
                         <PanelTitle>"Buy New Skill "</PanelTitle>

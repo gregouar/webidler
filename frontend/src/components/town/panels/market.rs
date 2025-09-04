@@ -66,7 +66,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <div class="w-full p-4">
+            <div class="w-full">
                 <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col">
                     <div class="px-4 relative z-10 flex items-center justify-between">
                         <PanelTitle>"Market"</PanelTitle>
@@ -505,7 +505,7 @@ pub fn ItemRow(
             {(price > 0.0)
                 .then(|| {
                     view! {
-                        <div class="absolute flex bottom-2 right-2 gap-1 items-center">
+                        <div class="absolute flex bottom-2 left-2 gap-1 items-center">
                             <span class="text-gray-400">"Price:"</span>
                             <span class="text-violet-300 font-semibold">
                                 {format!("{:.0}", price)}
