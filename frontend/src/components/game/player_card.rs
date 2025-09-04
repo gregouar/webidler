@@ -473,8 +473,8 @@ fn PlayerSkill(index: usize) -> impl IntoView {
 
             <div class="flex justify-around">
                 <Toggle toggle_callback=set_auto_skill initial=initial_auto_use>
-                    <span class="inline md:hidden">A</span>
-                    <span class="hidden md:inline font-variant:small-caps">Auto</span>
+                    <span class="inline lg:hidden">"A"</span>
+                    <span class="hidden lg:inline font-variant:small-caps">"Auto"</span>
                 </Toggle>
                 <StaticTooltip tooltip=cost_tooltip position=StaticTooltipPosition::Top>
                     <FancyButton disabled=disable_level_up on:click=level_up>
