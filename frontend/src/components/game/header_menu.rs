@@ -60,7 +60,7 @@ pub fn HeaderMenu() -> impl IntoView {
 
     let game_context = expect_context::<GameContext>();
     view! {
-        <div class="relative z-50 flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
+        <div class="relative z-50 flex justify-between items-center p-1 md:p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
                 <ResourceCounter
                     class:text-amber-200

@@ -11,7 +11,7 @@ pub fn MenuButton(
             class="
             text-white font-bold text-shadow shadow-neutral-950
             py-1 md:py-2 px-2 md:px-4 rounded shadow-md
-            text-sm sm:text-base
+            text-xs sm:text-sm md:text-base 
             border border-neutral-950
             bg-gradient-to-t from-zinc-900 to-zinc-800 
             overflow-hidden

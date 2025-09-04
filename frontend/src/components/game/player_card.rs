@@ -175,7 +175,7 @@ pub fn PlayerCard() -> impl IntoView {
         </style>
         // <div class="overflow-hidden">
         <div class="
-        w-full h-full flex flex-col gap-2 p-2 
+        w-full h-full flex flex-col gap-1 md:gap-2 p-1 p:gap-2
         bg-zinc-800 
         ring-1 ring-zinc-950
         rounded-md shadow-md 
@@ -192,9 +192,9 @@ pub fn PlayerCard() -> impl IntoView {
                 <PlayerName />
             </div>
 
-            <div class="flex flex-col gap-2">
-                <div class="flex flex-col sm:flex-row gap-2 items-center">
-                    <div class="flex gap-2 w-full sm:w-auto justify-center">
+            <div class="flex flex-col gap-1 md:gap-2">
+                <div class="flex flex-col sm:flex-row gap-1 md:gap-2 items-center">
+                    <div class="flex gap-1 md:gap-2 w-full sm:w-auto justify-center">
                         <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Right>
                             <VerticalProgressBar
                                 class:w-4
@@ -247,7 +247,7 @@ pub fn PlayerCard() -> impl IntoView {
 
             </div>
 
-            <div class="grid grid-cols-4 gap-2">
+            <div class="grid grid-cols-4 gap-1 md:gap-2">
                 <For
                     each=move || {
                         0..game_context
