@@ -79,7 +79,7 @@ pub async fn get_character_by_name<'c>(
         SELECT 
             character_id as "character_id: UserCharacterId"
         FROM characters
-        WHERE character_name = $1 AND deleted_at IS NULL
+        WHERE LOWER(character_name) = LOWER($1) AND deleted_at IS NULL
         "#,
         character_name
     )

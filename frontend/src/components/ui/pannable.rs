@@ -18,7 +18,6 @@ pub fn Pannable(children: Children) -> impl IntoView {
     };
 
     let on_mouse_down = {
-        let screen_to_svg = screen_to_svg.clone();
         move |ev: web_sys::MouseEvent| {
             ev.stop_propagation();
             dragging.set(Some(screen_to_svg(&ev)));
@@ -29,7 +28,6 @@ pub fn Pannable(children: Children) -> impl IntoView {
     on_cleanup(move || handle.remove());
 
     let handle = window_event_listener(leptos::ev::mousemove, {
-        let screen_to_svg = screen_to_svg.clone();
         move |ev: web_sys::MouseEvent| {
             if let Some((last_x, last_y)) = dragging.get() {
                 ev.stop_propagation();
