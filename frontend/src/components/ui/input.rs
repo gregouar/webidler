@@ -25,6 +25,7 @@ where
             class=move || {
                 format!(
                     "w-full px-4 py-2 rounded-xl border bg-gray-800 text-white placeholder-gray-400
+                    text-sm md:text-base
                         focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md {}",
                     if invalid.map(|invalid| invalid.get()).unwrap_or_default() {
                         "border-red-500 focus:ring-red-500"
@@ -57,7 +58,7 @@ where
                 .then(|| {
                     view! {
                         <div class="flex justify-between items-center mb-1">
-                            <label for=id class="text-sm font-medium text-gray-400">
+                            <label for=id class="text-xs md:text-sm font-medium text-gray-400">
                                 {label}
                             </label>
                             <span class="text-red-500 text-xs">
@@ -71,7 +72,8 @@ where
                 type=input_type
                 class=move || {
                     format!(
-                        "w-full px-4 py-2 rounded-xl border bg-gray-800 text-white placeholder-gray-400
+                        "w-full px-2 md:px-4 py-1 md:py-2 rounded-xl border bg-gray-800 text-white placeholder-gray-400
+                        text-sm md:text-base
                         focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md {}",
                         if is_invalid.get() {
                             "border-red-500 focus:ring-red-500"

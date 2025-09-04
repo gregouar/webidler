@@ -51,8 +51,9 @@ pub fn Pannable(children: Children) -> impl IntoView {
         <div
             on:wheel=on_wheel
             on:mousedown=on_mouse_down
-            class="w-full aspect-[3/1] sm:aspect-[2/1] md:aspect-[5/2] overflow-hidden bg-neutral-900"
+            class="w-full overflow-hidden bg-neutral-900"
         >
+            // aspect-[3/1] sm:aspect-[2/1] md:aspect-[5/2]
             <svg
                 width="100%"
                 height="100%"

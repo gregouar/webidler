@@ -56,7 +56,7 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
 
         <Show when=move || is_visible.get()>
             <div
-                class="absolute h-full inset-0 bg-black/70 z-40"
+                class="absolute inset-0 bg-black/70 z-40 flex"
                 class:animate-fade-in=open
                 style=move || {
                     if open.get() {
@@ -70,7 +70,7 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
                 tabindex="0"
             >
                 <div
-                    class="w-full z-41"
+                    class="w-full z-41 max-h-full flex flex-col"
                     style=move || {
                         if open.get() {
                             "animation: dropDown 0.3s ease-out forwards;"
@@ -91,6 +91,6 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
 pub fn PanelTitle(children: Children) -> impl IntoView {
     view! {
         <span class="text-shadow-md shadow-gray-950 text-amber-200 font-semibold
-         text-xs sm:text-sm md:text-base lg:text-xl">{children()}</span>
+        text-xs sm:text-sm md:text-base lg:text-xl">{children()}</span>
     }
 }

@@ -45,14 +45,16 @@ pub struct NodeStatus {
 pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open=open>
-            <div class="w-full p-4">
-                <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-2">
-                    <div class="px-4 relative z-10 flex items-center justify-between">
-                        <PanelTitle>"Passive Skills "</PanelTitle>
+            <div class="w-full h-full p-4">
+                <div class="bg-zinc-800 rounded-md p-1 md:p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-1 md:gap-2 max-h-full">
+                    <div class="px-2 md:px-4 flex items-center justify-between">
+                        <PanelTitle>"Passive Skills"</PanelTitle>
                         <CloseButton on:click=move |_| open.set(false) />
                     </div>
 
-                    <PassiveSkillTree />
+                    <div class="flex-1 overflow-hidden">
+                        <PassiveSkillTree />
+                    </div>
                 </div>
             </div>
         </MenuPanel>

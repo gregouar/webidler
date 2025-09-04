@@ -1,15 +1,7 @@
 use leptos::{html::*, prelude::*};
 
-use crate::{
-    assets::img_asset,
-    components::{
-        town::TownContext,
-        ui::{
-            buttons::MenuButton,
-            number::Number,
-            tooltip::{StaticTooltip, StaticTooltipPosition},
-        },
-    },
+use crate::components::{
+    game::header_menu::ResourceCounter, town::TownContext, ui::buttons::MenuButton,
 };
 
 #[component]
@@ -29,7 +21,7 @@ pub fn HeaderMenu() -> impl IntoView {
     let disable_buttons = Signal::derive(|| true);
 
     view! {
-        <div class="relative z-50 w-full flex justify-between items-center p-2 bg-zinc-800 shadow-md h-auto">
+        <div class="relative z-50 w-full flex justify-between items-center p-1 md:p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
                 <ResourceCounter
                     class:text-violet-300
@@ -46,7 +38,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     value=shards
                 />
             </div>
-            <div class="flex justify-end space-x-2  w-full">
+            <div class="flex justify-end space-x-1 md:space-x-2 w-full">
                 <MenuButton on:click=move |_| {
                     town_context.open_market.set(!town_context.open_market.get());
                     town_context.open_ascend.set(false);
@@ -60,33 +52,6 @@ pub fn HeaderMenu() -> impl IntoView {
                 </MenuButton>
                 <MenuButton on:click=navigate_quit>"Quit"</MenuButton>
             </div>
-        </div>
-    }
-}
-
-#[component]
-fn ResourceCounter(
-    icon: &'static str,
-    name: &'static str,
-    description: &'static str,
-    value: Signal<f64>,
-) -> impl IntoView {
-    let tooltip = move || {
-        view! {
-            <div class="flex flex-col space-y-1">
-                <div class="font-semibold text-white">{name}</div>
-                <div class="text-sm text-zinc-300 max-w-xs">{description}</div>
-            </div>
-        }
-    };
-    view! {
-        <div class="flex-1 text-shadow-md shadow-gray-950 text-xl flex justify-center items-center space-x-1">
-            <div class="font-mono tabular-nums w-[8ch] text-right">
-                <Number value=value />
-            </div>
-            <StaticTooltip tooltip=tooltip position=StaticTooltipPosition::Bottom>
-                <img src=img_asset(icon) alt=name class="h-[2em] aspect-square" />
-            </StaticTooltip>
         </div>
     }
 }

@@ -84,7 +84,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     value=shards
                 />
             </div>
-            <div class="flex justify-end space-x-2  w-full">
+            <div class="flex justify-end space-x-1 md:space-x-2 w-full">
                 <MenuButton on:click=move |_| {
                     game_context.open_inventory.set(!game_context.open_inventory.get());
                     game_context.open_statistics.set(false);
@@ -114,7 +114,7 @@ pub fn HeaderMenu() -> impl IntoView {
 }
 
 #[component]
-fn ResourceCounter(
+pub fn ResourceCounter(
     icon: &'static str,
     name: &'static str,
     description: &'static str,
@@ -129,16 +129,14 @@ fn ResourceCounter(
         }
     };
     view! {
-        <div class="flex-1 text-shadow-md shadow-gray-950 text-xl flex justify-center items-center space-x-1">
-            <div class="font-mono tabular-nums w-[8ch] text-right text-xs sm:text-sm md:text-base">
+        <div class="flex-1 text-shadow-md shadow-gray-950
+        text-xs sm:text-sm md:text-lg lg:text-xl 
+        flex justify-center items-center space-x-1">
+            <div class="font-mono tabular-nums w-[8ch] text-right ">
                 <Number value=value />
             </div>
             <StaticTooltip tooltip=tooltip position=StaticTooltipPosition::Bottom>
-                <img
-                    src=img_asset(icon)
-                    alt=name
-                    class="h-[1em] sm:h-[1.5em] md:h-[2em] aspect-square"
-                />
+                <img src=img_asset(icon) alt=name class="h-[2em] aspect-square" />
             </StaticTooltip>
         </div>
     }

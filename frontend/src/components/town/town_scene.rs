@@ -12,22 +12,23 @@ pub fn TownScene() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     view! {
-        <div class="w-full grid grid-cols-3                                                                                                                      gap-4 p-4 ">
+        <div class="w-full grid grid-cols-3 gap-2 md:gap-4 p-2 md:p-4 ">
             <PlayerCard class:col-span-1 class:justify-self-end />
 
             <div class="w-full col-span-2 justify-self-start">
 
-                <div class="rounded-md shadow-md  bg-zinc-800 ring-1 ring-zinc-950 h-full w-full gap-2 p-2 shadow-lg relative flex flex-col">
+                <div class="rounded-md shadow-md  bg-zinc-800 ring-1 ring-zinc-950 h-full w-full
+                gap-1 md:gap-2 p-1 md:p-2 
+                shadow-lg relative flex flex-col">
 
-                    <div class="px-4 relative z-10 flex items-center justify-between gap-2 flex-wrap">
-                        <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
+                    <div class="px-2 md:px-4 relative z-10 flex items-center justify-between gap-1 md:gap-2 flex-wrap">
+                        <span class="text-shadow-md shadow-gray-950 text-amber-200 text-base sm:text-lg md:text-xl font-semibold">
                             "Choose your grind"
                         </span>
                     </div>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 p-4
-                    h-full
-                    bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 sm:gap-2 md:gap-3 p-1 sm:p-2 md:p-4
+                    h-full bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                         <For
                             each=move || {
                                 let mut areas = town_context.areas.get();
@@ -49,20 +50,18 @@ pub fn TownScene() -> impl IntoView {
 fn PlayerCard() -> impl IntoView {
     view! {
         <div class="
-        w-full h-full flex flex-col gap-2 p-2 
-        bg-zinc-800 
-        ring-1 ring-zinc-950
-        rounded-md shadow-md 
+        w-full h-full flex flex-col 
+        gap-1 md:gap-2 p-1 md:p-2 
+        bg-zinc-800 ring-1 ring-zinc-950 rounded-md shadow-md 
         ">
             <div>
                 <PlayerName />
             </div>
 
-            <div class="flex flex-col gap-2">
-                <div class="flex gap-2">
+            <div class="flex flex-col gap-1 md:gap-2">
+                <div class="flex gap-1 md:gap-2">
                     <CharacterPortrait />
                 </div>
-
             </div>
         </div>
     }
@@ -77,7 +76,7 @@ pub fn CharacterPortrait() -> impl IntoView {
     view! {
         <div class="flex items-center justify-center h-full w-full relative overflow-hidden">
 
-            <div class="border-8 border-double border-stone-500  h-full w-full">
+            <div class="border-6 md:border-8 border-double border-stone-500 h-full w-full">
                 <div
                     class="h-full w-full"
                     style=format!(
@@ -98,7 +97,6 @@ pub fn CharacterPortrait() -> impl IntoView {
         </div>
     }
 }
-
 #[component]
 pub fn PlayerName() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
@@ -107,7 +105,7 @@ pub fn PlayerName() -> impl IntoView {
     let max_area_level = move || town_context.character.read().max_area_level;
 
     view! {
-        <p class="text-shadow-md shadow-gray-950 text-amber-200 text-xl">
+        <p class="text-shadow-md shadow-gray-950 text-amber-200 text-base sm:text-l md:text-xl">
             <span class="font-bold">{character_name}</span>
             " — "
             {move || {
@@ -120,7 +118,6 @@ pub fn PlayerName() -> impl IntoView {
         </p>
     }
 }
-
 #[component]
 fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
     let play_area = {
@@ -144,19 +141,21 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
             active:scale-95 active:border-amber-500"
             on:click=play_area
         >
-            <div class="h-16 w-full relative">
+            <div class="h-8 sm:h-10 md:h-12 lg:h-16 w-full relative">
                 <img
                     src=img_asset(&area.area_specs.header_background)
                     class="object-cover w-full h-full"
                 />
                 <div class="absolute inset-0 bg-black/30"></div>
             </div>
-            <div class="p-4 space-y-2">
-                <div class="text-lg font-semibold text-amber-200">{area.area_specs.name}</div>
-                <div class="text-sm text-gray-400">
+            <div class="p-2 md:p-4 space-y-1 md:space-y-2">
+                <div class="text-sm sm:text-base md:text-lg font-semibold text-amber-200">
+                    {area.area_specs.name}
+                </div>
+                <div class="text-xs md:text-sm text-gray-400">
                     "Starting Level: "{area.area_specs.starting_level}
                 </div>
-                <div class="text-sm text-gray-400">
+                <div class="text-xs md:text-sm text-gray-400">
                     {if area.max_level_reached > 0 {
                         format!("Level Reached: {}", area.max_level_reached)
                     } else {
@@ -165,7 +164,7 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
                 </div>
 
             </div>
-            <div class="h-16 w-full relative">
+            <div class="h-8 sm:h-10 md:h-12 lg:h-16 w-full relative">
                 <img
                     src=img_asset(&area.area_specs.footer_background)
                     class="object-cover w-full h-full"
