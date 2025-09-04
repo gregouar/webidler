@@ -2,7 +2,7 @@
 ALTER TABLE
     users DROP CONSTRAINT users_username_key;
 
-CREATE UNIQUE INDEX uc_users_username_ci ON characters (LOWER(username))
+CREATE UNIQUE INDEX uc_users_username_ci ON users (LOWER(username))
 WHERE
     deleted_at IS NULL;
     
