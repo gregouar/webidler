@@ -31,7 +31,7 @@ use crate::{
             buttons::{CloseButton, MenuButton, MenuButtonRed, TabButton},
             dropdown::DropdownMenu,
             input::ValidatedInput,
-            menu_panel::MenuPanel,
+            menu_panel::{MenuPanel, PanelTitle},
             number::format_datetime,
             toast::*,
         },
@@ -69,9 +69,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
             <div class="w-full p-4">
                 <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col">
                     <div class="px-4 relative z-10 flex items-center justify-between">
-                        <span class="flex text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold mb-2 mr-6">
-                            "Market"
-                        </span>
+                        <PanelTitle>"Market"</PanelTitle>
 
                         <div class="flex-1 flex justify-center gap-4 w-full max-w-md mx-auto">
                             <TabButton

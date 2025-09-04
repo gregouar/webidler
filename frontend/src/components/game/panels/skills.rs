@@ -11,7 +11,7 @@ use crate::{
         game::{game_context::GameContext, tooltips::SkillTooltip},
         ui::{
             buttons::{CloseButton, FancyButton},
-            menu_panel::MenuPanel,
+            menu_panel::{MenuPanel, PanelTitle},
             number::format_number,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
         },
@@ -26,9 +26,7 @@ pub fn SkillsPanel(open: RwSignal<bool>) -> impl IntoView {
             <div class="w-full p-4">
                 <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-2">
                     <div class="px-4 relative z-10 flex items-center justify-between">
-                        <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
-                            "Buy New Skill "
-                        </span>
+                        <PanelTitle>"Buy New Skill "</PanelTitle>
                         <CloseButton on:click=move |_| open.set(false) />
                     </div>
                     <SkillShop open=open />

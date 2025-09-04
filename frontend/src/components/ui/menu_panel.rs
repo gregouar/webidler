@@ -86,3 +86,11 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
         </Show>
     }
 }
+
+#[component]
+pub fn PanelTitle(children: Children) -> impl IntoView {
+    view! {
+        <span class="text-shadow-md shadow-gray-950 text-amber-200 font-semibold
+         text-xs sm:text-sm md:text-base lg:text-xl">{children()}</span>
+    }
+}

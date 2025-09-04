@@ -106,7 +106,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     game_context.open_passives.set(false);
                     game_context.open_statistics.set(!game_context.open_statistics.get());
                 }>"Stats"</MenuButton>
-                <MenuButtonRed on:click=try_abandon_quest>"Stop Grind"</MenuButtonRed>
+                <MenuButtonRed on:click=try_abandon_quest>"Stop"</MenuButtonRed>
                 <MenuButton on:click=quit>"Quit"</MenuButton>
             </div>
         </div>
@@ -130,11 +130,15 @@ fn ResourceCounter(
     };
     view! {
         <div class="flex-1 text-shadow-md shadow-gray-950 text-xl flex justify-center items-center space-x-1">
-            <div class="font-mono tabular-nums w-[8ch] text-right">
+            <div class="font-mono tabular-nums w-[8ch] text-right text-xs sm:text-sm md:text-base">
                 <Number value=value />
             </div>
             <StaticTooltip tooltip=tooltip position=StaticTooltipPosition::Bottom>
-                <img src=img_asset(icon) alt=name class="h-[2em] aspect-square" />
+                <img
+                    src=img_asset(icon)
+                    alt=name
+                    class="h-[1em] sm:h-[1.5em] md:h-[2em] aspect-square"
+                />
             </StaticTooltip>
         </div>
     }

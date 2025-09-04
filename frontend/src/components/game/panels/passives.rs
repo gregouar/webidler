@@ -9,6 +9,7 @@ use shared::messages::client::PurchasePassiveMessage;
 
 use crate::assets::img_asset;
 use crate::components::game::tooltips::effects_tooltip;
+use crate::components::ui::menu_panel::PanelTitle;
 use crate::components::{
     game::{game_context::GameContext, tooltips::effects_tooltip::formatted_effects_list},
     ui::{
@@ -47,9 +48,7 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
             <div class="w-full p-4">
                 <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-2">
                     <div class="px-4 relative z-10 flex items-center justify-between">
-                        <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
-                            "Passive Skills "
-                        </span>
+                        <PanelTitle>"Passive Skills "</PanelTitle>
                         <CloseButton on:click=move |_| open.set(false) />
                     </div>
 

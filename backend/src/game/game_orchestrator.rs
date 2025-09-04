@@ -165,6 +165,10 @@ async fn update_entities(
     game_data: &mut GameInstanceData,
     elapsed_time: Duration,
 ) {
+    if !game_data.player_state.character_state.is_alive {
+        return;
+    }
+
     player_updater::update_player_state(
         events_queue,
         elapsed_time,

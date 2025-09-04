@@ -197,8 +197,8 @@ pub fn PlayerCard() -> impl IntoView {
                     <div class="flex gap-2 w-full sm:w-auto justify-center">
                         <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Right>
                             <VerticalProgressBar
-                                class:w-2
-                                class:sm:w-3
+                                class:w-4
+                                class:sm:w-5
                                 class:md:w-6
                                 bar_color="bg-gradient-to-l from-red-500 to-red-700"
                                 value=health_percent
@@ -220,8 +220,8 @@ pub fn PlayerCard() -> impl IntoView {
                         />
                         <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
                             <VerticalProgressBar
-                                class:w-2
-                                class:sm:w-3
+                                class:w-4
+                                class:sm:w-5
                                 class:md:w-6
                                 bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
                                 value=mana_percent
@@ -231,8 +231,9 @@ pub fn PlayerCard() -> impl IntoView {
                 </div>
                 <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
                     <HorizontalProgressBar
-                        class:h-2
-                        class:sm:h-4
+                        class:h-1
+                        class:sm:h-2
+                        class:md:h-4
                         bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
                         value=xp_percent
                         reset=just_leveled_up
@@ -241,7 +242,7 @@ pub fn PlayerCard() -> impl IntoView {
                     </HorizontalProgressBar>
                 </StaticTooltip>
                 <FancyButton disabled=disable_level_up on:click=level_up>
-                    <span class="text-lg">"Level Up"</span>
+                    <span class="text-base md:text-lg">"Level Up"</span>
                 </FancyButton>
 
             </div>
@@ -471,14 +472,13 @@ fn PlayerSkill(index: usize) -> impl IntoView {
             </button>
 
             <div class="flex justify-around">
-                <Toggle
-                    toggle_callback=set_auto_skill
-                    initial=initial_auto_use
-                    label="auto".to_string()
-                />
+                <Toggle toggle_callback=set_auto_skill initial=initial_auto_use>
+                    <span class="inline md:hidden">A</span>
+                    <span class="hidden md:inline font-variant:small-caps">Auto</span>
+                </Toggle>
                 <StaticTooltip tooltip=cost_tooltip position=StaticTooltipPosition::Top>
                     <FancyButton disabled=disable_level_up on:click=level_up>
-                        <span class="text-2xl">"+"</span>
+                        <span class="text-sm sm:text-base md:text-xl lg:text-2xl">"+"</span>
                     </FancyButton>
                 </StaticTooltip>
             </div>

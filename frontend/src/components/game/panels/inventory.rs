@@ -14,7 +14,6 @@ use shared::{
 
 use crate::{
     assets::img_asset,
-    components::ui::dropdown::DropdownMenu,
     components::{
         game::{
             game_context::GameContext, item_card::ItemCard, player_card::PlayerName,
@@ -23,7 +22,8 @@ use crate::{
         ui::{
             buttons::{CloseButton, MenuButton},
             confirm::ConfirmContext,
-            menu_panel::MenuPanel,
+            dropdown::DropdownMenu,
+            menu_panel::{MenuPanel, PanelTitle},
             tooltip::DynamicTooltipPosition,
         },
         websocket::WebsocketContext,
@@ -258,9 +258,7 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
         <div class="bg-zinc-800 rounded-md h-full w-full gap-2 p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
             <div class="px-4 relative z-10 flex items-center justify-between gap-2 flex-wrap">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                    <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
-                        "Inventory"
-                    </span>
+                    <PanelTitle>"Inventory"</PanelTitle>
                     <span class="text-shadow-md shadow-gray-950 text-gray-400 text-md font-medium">
                         {move || {
                             format!(

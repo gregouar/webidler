@@ -10,7 +10,7 @@ pub fn MenuButton(
         <button
             class="
             text-white font-bold text-shadow shadow-neutral-950
-            py-1 md:py-2 px-3 md:px-4 rounded shadow-md
+            py-1 md:py-2 px-2 md:px-4 rounded shadow-md
             text-sm sm:text-base
             border border-neutral-950
             bg-gradient-to-t from-zinc-900 to-zinc-800 
@@ -38,8 +38,8 @@ pub fn MenuButtonRed(
         <button
             class="
             text-red-300 font-bold text-shadow shadow-neutral-950
-            py-1 md:py-2 px-3 md:px-4 rounded shadow-md
-            text-sm sm:text-base
+            py-1 md:py-2 px-2 md:px-4 rounded shadow-md
+            text-xs sm:text-sm md:text-base 
             border border-red-800
             bg-gradient-to-t from-red-900 to-red-800
             overflow-hidden
@@ -66,8 +66,8 @@ pub fn FancyButton(
         <button
             class="
             text-white font-bold text-shadow shadow-neutral-950
-            px-2 md:px-3 rounded shadow-md
-            text-sm sm:text-base
+            px-1 md:px-3 rounded shadow-md
+            text-xs sm:text-sm md:text-base 
             border border-neutral-950
             bg-gradient-to-t from-zinc-900 to-zinc-800 
             overflow-hidden
@@ -87,9 +87,9 @@ pub fn FancyButton(
 
 #[component]
 pub fn Toggle(
-    #[prop(default = "".to_string())] label: String,
     #[prop(default = false)] initial: bool,
     mut toggle_callback: impl FnMut(bool) + 'static,
+    children: Children,
 ) -> impl IntoView {
     let checked: RwSignal<bool> = RwSignal::new(initial);
     let switch_value = move |_| {
@@ -113,8 +113,8 @@ pub fn Toggle(
             class=move || {
                 format!(
                     "
-                    px-2 md:px-3
-                    text-sm sm:text-base 
+                    px-1 md:px-3
+                    text-xs sm:text-sm md:text-base 
                     font-bold text-shadow shadow-neutral-950
                     border border-neutral-950 rounded 
                     bg-gradient-to-t from-zinc-900 to-zinc-800 
@@ -123,14 +123,13 @@ pub fn Toggle(
                     transition-all duration-200
                     relative
                     group
-                    [font-variant:small-caps]
                     {}
                     ",
                     toggle_class(),
                 )
             }
         >
-            {label}
+            {children()}
         </button>
     }
 }
@@ -164,8 +163,8 @@ pub fn TabButton(children: Children, #[prop(into)] is_active: Signal<bool>) -> i
                 format!(
                     "
                     flex-1
-                    px-2 md:px-3 py-2 
-                    text-sm sm:text-base 
+                    px-1 md:px-3 py-2 
+                    text-xs sm:text-sm md:text-base 
                     font-bold text-shadow
                     border-t border-l border-r border-neutral-950 rounded-t-md 
                     transition-all duration-200
