@@ -15,8 +15,8 @@ use super::GameContext;
 pub fn BattleScene() -> impl IntoView {
     view! {
         <div class="w-full grid grid-cols-3 justify-items-stretch flex items-start
-         gap-1 sm:gap-2 md:gap-3 lg:gap-4 
-         p-1 sm:p-2 md:p-3 lg:p-4 ">
+        gap-1 md:gap-2 lg:gap-4 
+        p-1 md:p-2 lg:p-4 ">
             <PlayerCard class:col-span-1 class:justify-self-end />
 
             <div class="shadow-lg rounded-md overflow-hidden  w-full col-span-2 justify-self-start">
@@ -73,7 +73,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
     view! {
         <div
             class="relative overflow-hidden w-full
-            h-8 sm:h-10 md:h-12 lg:h-16 
+            h-6 sm:h-8 md:h-12 lg:h-16 
             bg-center bg-repeat-x flex items-center justify-between px-4"
             style=header_background
         >
@@ -131,7 +131,7 @@ pub fn BattleSceneFooter() -> impl IntoView {
     view! {
         <div
             class="relative overflow-hidden z-10 w-full
-            h-8 sm:h-10 md:h-12 lg:h-16 
+            h-6 sm:h-8 md:h-12 lg:h-16 
             bg-center bg-repeat-x flex items-center justify-center"
             style=footer_background
         >

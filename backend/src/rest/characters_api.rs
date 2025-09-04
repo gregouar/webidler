@@ -55,15 +55,12 @@ async fn post_create_character(
         return Err(AppError::Forbidden);
     }
 
-    Ok(Json(CreateCharacterResponse {
-        character_id: db::characters::create_character(
-            &db_pool,
-            &user_id,
-            &payload.name,
-            &format!("adventurers/{}.webp", payload.portrait.into_inner()),
-        )
-        .await?,
-    }))
+    match db::characters::create_character(&db_pool, &user_id, &payload.name, &payload.portrait)
+        .await?
+    {
+        Some(character_id) => Ok(Json(CreateCharacterResponse { character_id })),
+        None => Err(AppError::UserError("name already taken".to_string())),
+    }
 }
 
 async fn get_user_characters(

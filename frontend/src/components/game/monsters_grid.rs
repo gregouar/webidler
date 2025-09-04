@@ -42,7 +42,7 @@ pub fn MonstersGrid() -> impl IntoView {
     // TODO: double buffering to allow in and out at the same time
     view! {
         <div class="
-        grid grid-rows-2 grid-cols-3 p-2 gap-2 
+        grid grid-rows-2 grid-cols-3 p-1 md:p-2 gap-1 md:gap-2 
         items-center
         w-full aspect-[12/7]
         bg-stone-800
@@ -286,7 +286,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             "
         </style>
         <div class="grid grid-cols-4 h-full bg-zinc-800 shadow-md rounded-md gap-1 md:gap-2 p-1 md:p-2 ring-1 ring-zinc-950">
-            <div class="relative flex flex-col gap-2 col-span-3 h-full">
+            <div class="relative flex flex-col gap-1 md:gap-2 col-span-3 h-full">
                 <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Bottom>
                     <HorizontalProgressBar
                         class=if is_big { "h-2 md:h4 sm:h-6" } else { "h-2 sm:h-3 md:h-4" }

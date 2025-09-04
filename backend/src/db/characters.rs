@@ -47,10 +47,10 @@ pub async fn create_character<'c>(
     user_id: &UserId,
     name: &str,
     portrait: &str,
-) -> Result<UserCharacterId, sqlx::Error> {
+) -> Result<Option<UserCharacterId>, sqlx::Error> {
     let character_id = uuid::Uuid::new_v4();
 
-    sqlx::query!(
+    let res = sqlx::query!(
         r#"
         INSERT INTO characters (character_id,user_id, character_name, portrait)
         VALUES ($1, $2, $3, $4)
@@ -61,9 +61,13 @@ pub async fn create_character<'c>(
         portrait
     )
     .execute(executor)
-    .await?;
+    .await;
 
-    Ok(character_id)
+    match res {
+        Ok(_) => Ok(Some(character_id)),
+        Err(sqlx::Error::Database(db_err)) if db_err.is_unique_violation() => Ok(None),
+        Err(e) => Err(e),
+    }
 }
 
 pub async fn get_character_by_name<'c>(
@@ -75,7 +79,7 @@ pub async fn get_character_by_name<'c>(
         SELECT 
             character_id as "character_id: UserCharacterId"
         FROM characters
-        WHERE character_name = $1
+        WHERE character_name = $1 AND deleted_at IS NULL
         "#,
         character_name
     )
