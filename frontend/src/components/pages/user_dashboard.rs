@@ -86,7 +86,7 @@ pub fn UserDashboardPage() -> impl IntoView {
     let open_create_character = RwSignal::new(false);
 
     view! {
-        <main class="my-0 mx-auto w-full max-w-6xl px-4 sm:px-8 text-center overflow-x-hidden flex flex-col  justify-around min-h-screen">
+        <main class="my-0 mx-auto w-full max-w-6xl px-4 lg:px-8 text-center overflow-x-hidden flex flex-col  justify-around min-h-screen">
             <Transition fallback=move || {
                 view! { <p class="text-gray-400">"Loading..."</p> }
             }>
@@ -108,8 +108,8 @@ pub fn UserDashboardPage() -> impl IntoView {
                                 "Welcome, " {user.username}
                             </h1>
 
-                            <div class="bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner px-6 py-6 sm:px-8 sm:py-8 text-left space-y-8">
-                                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                            <div class="bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner px-4 py-4 lg:px-8 lg:py-8 text-left space-y-8">
+                                <div class="flex flex-row justify-between items-center gap-1 lg:gap-2">
                                     // <h2 class="text-2xl font-bold text-white">"Your Characters"</h2>
                                     <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
                                         "Your Characters"

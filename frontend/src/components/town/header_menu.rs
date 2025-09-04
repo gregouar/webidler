@@ -21,7 +21,7 @@ pub fn HeaderMenu() -> impl IntoView {
     let disable_buttons = Signal::derive(|| true);
 
     view! {
-        <div class="relative z-50 w-full flex justify-between items-center p-1 md:p-2 bg-zinc-800 shadow-md h-auto">
+        <div class="relative z-50 w-full flex justify-between items-center p-1 lg:p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
                 <ResourceCounter
                     class:text-violet-300
@@ -38,7 +38,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     value=shards
                 />
             </div>
-            <div class="flex justify-end space-x-1 md:space-x-2 w-full">
+            <div class="flex justify-end space-x-1 lg:space-x-2 w-full">
                 <MenuButton on:click=move |_| {
                     town_context.open_market.set(!town_context.open_market.get());
                     town_context.open_ascend.set(false);

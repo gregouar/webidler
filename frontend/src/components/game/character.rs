@@ -90,13 +90,13 @@ pub fn CharacterPortrait(
     };
 
     let (border_class, shimmer_effect) = match rarity {
-        MonsterRarity::Normal => ("border-6 md:border-8 border-double border-stone-500", ""),
+        MonsterRarity::Normal => ("border-6 lg:border-8 border-double border-stone-500", ""),
         MonsterRarity::Champion => (
-            "border-6 md:border-8 border-double border-indigo-700",
+            "border-6 lg:border-8 border-double border-indigo-700",
             "champion-shimmer",
         ),
         MonsterRarity::Boss => (
-            "border-8 md:border-12 border-double border-red-700",
+            "border-8 lg:border-12 border-double border-red-700",
             "boss-shimmer",
         ),
     };

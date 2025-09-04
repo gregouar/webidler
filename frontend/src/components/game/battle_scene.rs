@@ -15,8 +15,8 @@ use super::GameContext;
 pub fn BattleScene() -> impl IntoView {
     view! {
         <div class="w-full grid grid-cols-3 justify-items-stretch flex items-start
-        gap-1 md:gap-2 lg:gap-4 
-        p-1 md:p-2 lg:p-4 ">
+        gap-1 lg:gap-4 
+        p-1 lg:p-4 ">
             <PlayerCard class:col-span-1 class:justify-self-end />
 
             <div class="shadow-lg rounded-md overflow-hidden  w-full col-span-2 justify-self-start">
@@ -73,7 +73,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
     view! {
         <div
             class="relative overflow-hidden w-full
-            h-6 sm:h-8 md:h-12 lg:h-16 
+            h-8 lg:h-16 
             bg-center bg-repeat-x flex items-center justify-between px-4"
             style=header_background
         >
@@ -81,7 +81,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
 
             <div class="w-12 flex justify-start">
                 <button
-                    class="text-2xl md:text-4xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
+                    class="text-2xl lg:text-4xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
                     hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
                     active:scale-90 active:brightness-125 transition"
                     title="Go Back One Level"
@@ -92,7 +92,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
             </div>
 
             <div class="flex-1 text-center">
-                <p class="relative z-10 text-shadow text-amber-200 text-base sm:text-lg md:text-xl lg:text-2xl font-bold">
+                <p class="relative z-10 text-shadow text-amber-200 text-lg lg:text-2xl font-bold">
                     <span class="[font-variant:small-caps]">
                         {move || game_context.area_specs.read().name.clone()}
                     </span>
@@ -104,7 +104,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
 
             <div class="w-12 flex justify-end">
                 <button
-                    class="text-xl md:text-3xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
+                    class="text-xl lg:text-3xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
                     hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
                     active:scale-90 active:brightness-125 transition"
                     title="Toggle Auto Progress"
@@ -131,12 +131,12 @@ pub fn BattleSceneFooter() -> impl IntoView {
     view! {
         <div
             class="relative overflow-hidden z-10 w-full
-            h-6 sm:h-8 md:h-12 lg:h-16 
+            h-8 lg:h-16 
             bg-center bg-repeat-x flex items-center justify-center"
             style=footer_background
         >
             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
-            <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-base sm:text-lg md:text-xl lg:text-2xl font-bold">
+            <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-base lg:text-2xl font-bold">
                 {move || {
                     if game_context.area_state.read().is_boss {
                         "Boss".to_string()

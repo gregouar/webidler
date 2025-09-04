@@ -59,12 +59,12 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         max-w-xs p-4 rounded-xl border border-purple-700 ring-2 ring-purple-500 
         shadow-md shadow-purple-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
         ">
-            <strong class="text-base md:text-lg font-bold text-purple-300">
+            <strong class="text-base lg:text-lg font-bold text-purple-300">
                 {skill_specs.base.name.clone()}
             </strong>
             <hr class="border-t border-gray-700" />
 
-            <p class="text-xs md:text-sm text-gray-400 leading-snug">
+            <p class="text-xs lg:text-sm text-gray-400 leading-snug">
                 {skill_type_str(Some(skill_specs.base.skill_type))} "| "
                 {if skill_specs.cooldown > 0.0 {
                     view! {
@@ -92,7 +92,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                         <hr class="border-t border-gray-700" />
                         <ul>
                             <li>
-                                <span class="text-xs md:text-sm text-gray-400 leading-snug">
+                                <span class="text-xs lg:text-sm text-gray-400 leading-snug">
                                     "Next upgrade:"
                                 </span>
                             </li>
@@ -103,7 +103,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                         </ul>
 
                         <hr class="border-t border-gray-700" />
-                        <p class="text-xs md:text-sm text-gray-400 leading-snug">
+                        <p class="text-xs lg:text-sm text-gray-400 leading-snug">
                             "Level: " <span class="text-white">{skill_specs.upgrade_level}</span>
                             " | Upgrade Cost: "
                             <span class="text-white">
@@ -117,7 +117,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                 .then(|| {
                     view! {
                         <hr class="border-t border-gray-700" />
-                        <p class="text-xs md:text-sm italic text-gray-400 leading-snug">
+                        <p class="text-xs lg:text-sm italic text-gray-400 leading-snug">
                             {skill_specs.base.description.clone()}
                         </p>
                     }
@@ -356,7 +356,7 @@ fn format_min_max(min: f64, max: f64) -> String {
 #[component]
 fn EffectLi(children: Children) -> impl IntoView {
     view! {
-        <li class="text-xs md:text-sm text-purple-200 leading-snug whitespace-pre-line">
+        <li class="text-xs lg:text-sm text-purple-200 leading-snug whitespace-pre-line">
             {children()}
         </li>
     }

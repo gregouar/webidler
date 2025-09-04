@@ -39,7 +39,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         <CloseButton on:click=move |_| open.set(false) />
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 overflow-y-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-4 overflow-y-auto">
 
                         <StatCategory title="Game">
                             <Stat
@@ -347,8 +347,8 @@ fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
             "
         </style>
         <div class="bg-neutral-900 rounded-lg shadow-[inset_0_0_24px_rgba(0,0,0,0.6)]
-        py-2 md:py-4 ring-1 ring-zinc-900">
-            <h2 class="text-amber-300 text-sm md:text-base font-bold mb-1 md:mb-2 tracking-wide">
+        py-2 lg:py-4 ring-1 ring-zinc-900">
+            <h2 class="text-amber-300 text-sm lg:text-base font-bold mb-1 lg:mb-2 tracking-wide">
                 {title}
             </h2>
             <div class="flex flex-col gap-1 stat-list">{children()}</div>
@@ -359,7 +359,7 @@ fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
 #[component]
 fn Stat(label: &'static str, value: impl Fn() -> String + 'static) -> impl IntoView {
     view! {
-        <div class="flex justify-between px-6 text-sm md:text-base">
+        <div class="flex justify-between px-6 text-sm lg:text-base">
             <span class="text-gray-400">{label}</span>
             <span class="text-amber-100 font-medium">{value()}</span>
         </div>

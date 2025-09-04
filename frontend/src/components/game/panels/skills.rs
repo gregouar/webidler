@@ -84,9 +84,9 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
 
     let game_context = expect_context::<GameContext>();
     view! {
-        <div class="flex flex-col gap-4 p-4">
-            <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-4
-            bg-neutral-900 p-4 rounded-md shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] flex-1 overflow-auto max-h-[65vh]">
+        <div class="flex flex-col gap-2 lg:gap-4 p-2 lg:p-4">
+            <div class="grid grid-cols-6 lg:grid-cols-10 gap-2 lg:gap-4
+            bg-neutral-900 p-2 lg:p-4 rounded-md shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] flex-1 overflow-auto max-h-[65vh]">
 
                 <Suspense fallback=move || {
                     view! { "Loading..." }

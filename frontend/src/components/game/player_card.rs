@@ -175,7 +175,7 @@ pub fn PlayerCard() -> impl IntoView {
         </style>
         // <div class="overflow-hidden">
         <div class="
-        w-full h-full flex flex-col gap-1 md:gap-2 p-1 p:gap-2
+        w-full h-full flex flex-col gap-1 lg:gap-2 p-1 lg:gap-2
         bg-zinc-800 
         ring-1 ring-zinc-950
         rounded-md shadow-md 
@@ -192,14 +192,13 @@ pub fn PlayerCard() -> impl IntoView {
                 <PlayerName />
             </div>
 
-            <div class="flex flex-col gap-1 md:gap-2">
-                <div class="flex flex-col sm:flex-row gap-1 md:gap-2 items-center">
-                    <div class="flex gap-1 md:gap-2 w-full sm:w-auto justify-center">
+            <div class="flex flex-col gap-1 lg:gap-2">
+                <div class="flex flex-col gap-1 lg:gap-2 items-center">
+                    <div class="flex gap-1 lg:gap-2 w-full justify-center">
                         <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Right>
                             <VerticalProgressBar
                                 class:w-4
-                                class:sm:w-5
-                                class:md:w-6
+                                class:lg:w-6
                                 bar_color="bg-gradient-to-l from-red-500 to-red-700"
                                 value=health_percent
                             />
@@ -221,8 +220,7 @@ pub fn PlayerCard() -> impl IntoView {
                         <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
                             <VerticalProgressBar
                                 class:w-4
-                                class:sm:w-5
-                                class:md:w-6
+                                class:lg:w-6
                                 bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
                                 value=mana_percent
                             />
@@ -231,9 +229,8 @@ pub fn PlayerCard() -> impl IntoView {
                 </div>
                 <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
                     <HorizontalProgressBar
-                        class:h-1
-                        class:sm:h-2
-                        class:md:h-4
+                        class:h-2
+                        class:lg:h-4
                         bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
                         value=xp_percent
                         reset=just_leveled_up
@@ -242,12 +239,12 @@ pub fn PlayerCard() -> impl IntoView {
                     </HorizontalProgressBar>
                 </StaticTooltip>
                 <FancyButton disabled=disable_level_up on:click=level_up>
-                    <span class="text-base md:text-lg">"Level Up"</span>
+                    <span class="text-base lg:text-lg">"Level Up"</span>
                 </FancyButton>
 
             </div>
 
-            <div class="grid grid-cols-4 gap-1 md:gap-2">
+            <div class="grid grid-cols-4 gap-1 lg:gap-2">
                 <For
                     each=move || {
                         0..game_context
@@ -300,7 +297,7 @@ pub fn PlayerName() -> impl IntoView {
     });
 
     view! {
-        <p class="text-shadow-md shadow-gray-950 text-amber-200 text-base sm:text-l md:text-xl">
+        <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l lg:text-xl">
             <span class="font-bold">{player_name}</span>
             {move || format!(" — Level: {}", game_context.player_specs.read().level)}
         </p>
@@ -478,7 +475,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
                 </Toggle>
                 <StaticTooltip tooltip=cost_tooltip position=StaticTooltipPosition::Top>
                     <FancyButton disabled=disable_level_up on:click=level_up>
-                        <span class="text-sm sm:text-base md:text-xl lg:text-2xl">"+"</span>
+                        <span class="text-base lg:text-2xl">"+"</span>
                     </FancyButton>
                 </StaticTooltip>
             </div>

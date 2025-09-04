@@ -24,7 +24,7 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
     view! {
         <div class=format!(
-            "max-w-xs p-2 md:p-4 rounded-xl border {} ring-2 {} shadow-md {} bg-gradient-to-br from-gray-800 via-gray-900 to-black",
+            "max-w-xs p-2 lg:p-4 rounded-xl border {} ring-2 {} shadow-md {} bg-gradient-to-br from-gray-800 via-gray-900 to-black",
             border_color,
             ring_color,
             shadow_color,
@@ -66,7 +66,7 @@ pub fn ItemTooltipContent(
 
     view! {
         <div class="space-y-2">
-            <strong class=format!("text-base md:text-lg font-bold {}", name_color)>
+            <strong class=format!("text-base lg:text-lg font-bold {}", name_color)>
                 <ul class="list-none space-y-1">
                     <li class="leading-snug whitespace-pre-line">
                         {item_specs.modifiers.name.clone()}
@@ -100,7 +100,7 @@ pub fn ItemTooltipContent(
                     }
                 })}
             <hr class="border-t border-gray-700" />
-            <p class="text-xs md:text-sm text-gray-400 leading-snug">
+            <p class="text-xs lg:text-sm text-gray-400 leading-snug">
                 "Item Level: " <span class="text-white">{item_specs.modifiers.level}</span>
             </p>
             {(!hide_description)
@@ -112,7 +112,7 @@ pub fn ItemTooltipContent(
                         .map(|description| {
                             view! {
                                 <hr class="border-t border-gray-700" />
-                                <p class="text-xs md:text-sm italic text-gray-400 leading-snug whitespace-pre-line">
+                                <p class="text-xs lg:text-sm italic text-gray-400 leading-snug whitespace-pre-line">
                                     {description}
                                 </p>
                             }
@@ -154,7 +154,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 {if specs.armor > 0.0 {
                     Some(
                         view! {
-                            <li class="text-gray-400 text-xs md:text-sm leading-snug">
+                            <li class="text-gray-400 text-xs lg:text-sm leading-snug">
                                 "Armor: "
                                 <span class=format!(
                                     "{} font-semibold",
@@ -169,7 +169,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 {if specs.block > 0.0 {
                     Some(
                         view! {
-                            <li class="text-gray-400 text-xs md:text-sm leading-snug">
+                            <li class="text-gray-400 text-xs lg:text-sm leading-snug">
                                 "Block chances: "
                                 <span class=format!(
                                     "{} font-semibold",
@@ -217,7 +217,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
                 if spec_min > 0.0 || spec_max > 0.0 {
                     damage_lines.push(view! {
-                        <li class="text-gray-400 text-xs md:text-sm leading-snug">
+                        <li class="text-gray-400 text-xs lg:text-sm leading-snug">
                             {effects_tooltip::optional_damage_type_str(Some(damage_type))}
                             "Damage: "
                             <span class=format!(
@@ -263,23 +263,23 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             };
 
             view! {
-                <li class="text-gray-400 text-xs md:text-sm leading-snug">{range} {shape}</li>
+                <li class="text-gray-400 text-xs lg:text-sm leading-snug">{range} {shape}</li>
                 {damage_lines}
-                <li class="text-gray-400 text-xs md:text-sm leading-snug">
+                <li class="text-gray-400 text-xs lg:text-sm leading-snug">
                     "Critical chances: "
                     <span class=format!(
                         "{} font-semibold",
                         crit_chances_color,
                     )>{format!("{:.2}%", specs.crit_chances)}</span>
                 </li>
-                <li class="text-gray-400 text-xs md:text-sm leading-snug">
+                <li class="text-gray-400 text-xs lg:text-sm leading-snug">
                     "Critical damage: "
                     <span class=format!(
                         "{} font-semibold",
                         crit_damage_color,
                     )>{format!("+{:.0}%", specs.crit_damage)}</span>
                 </li>
-                <li class="text-gray-400 text-xs md:text-sm leading-snug">
+                <li class="text-gray-400 text-xs lg:text-sm leading-snug">
                     "Cooldown: "
                     <span class=format!(
                         "{} font-semibold",
@@ -310,5 +310,5 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         }
     };
 
-    view! { <li class="text-gray-400 text-xs md:text-sm leading-snug">{item_slot}</li> }
+    view! { <li class="text-gray-400 text-xs lg:text-sm leading-snug">{item_slot}</li> }
 }

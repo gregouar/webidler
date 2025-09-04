@@ -70,7 +70,7 @@ fn status_type_str(status_type: Option<StatStatusType>) -> String {
 // }
 
 fn effect_li(text: String) -> impl IntoView {
-    view! { <li class="text-blue-400 text-xs md:text-sm leading-snug">{text}</li> }
+    view! { <li class="text-blue-400 text-xs lg:text-sm leading-snug">{text}</li> }
 }
 
 pub fn formatted_effects_list(

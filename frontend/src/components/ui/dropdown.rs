@@ -59,10 +59,10 @@ where
             "
         </style>
 
-        <div class="relative w-60 text-xs sm:text-sm md:text-base text-white" node_ref=node_ref>
+        <div class="relative w-60 text-sm lg:text-base text-white" node_ref=node_ref>
             <button
                 on:click=toggle
-                class="w-full text-left px-1 sm:px-2 md:px-3 px-4 py-1 md:py-2 rounded-md
+                class="w-full text-left px-1 lg:px-3 py-1 lg:py-2 rounded-md
                 bg-gradient-to-t from-zinc-900 to-zinc-800 shadow-md border border-zinc-950 
                 hover:from-zinc-800 hover:to-zinc-700 focus:outline-none"
             >
