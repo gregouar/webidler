@@ -42,9 +42,23 @@ pub fn MainMenuPage() -> impl IntoView {
 
     let go_fullscreen = move || {
         let window = web_sys::window().unwrap();
-        let document = window.document().unwrap();
-        let html = document.document_element().unwrap();
-        html.request_fullscreen().unwrap();
+        let navigator = window.navigator();
+
+        if navigator.user_agent().unwrap_or_default().contains("Mobi") {
+            let document = window.document().unwrap();
+            if let Some(elem) = document.document_element() {
+                let _ = elem.request_fullscreen();
+            }
+        }
+
+        // if let Some(win) = web_sys::window() {
+        //     if let Some(screen) = win.screen() {
+        //         // screen is a getter returning Option<Screen>
+        //         if let Some(orientation) = screen.orientation() {
+        //             let _ = orientation.lock("landscape"); // returns a Promise
+        //         }
+        //     }
+        // }
     };
 
     let signin = {

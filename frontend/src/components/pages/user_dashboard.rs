@@ -1,7 +1,7 @@
 use std::{collections::HashMap, sync::Arc};
 
 use codee::string::JsonSerdeCodec;
-use leptos::{html::*, prelude::*, task::spawn_local};
+use leptos::{html::*, prelude::*, task::spawn_local, web_sys};
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
@@ -74,10 +74,19 @@ pub fn UserDashboardPage() -> impl IntoView {
         }
     });
 
+    let exit_fullscreen = move || {
+        if let Some(doc) = web_sys::window().and_then(|w| w.document()) {
+            if doc.fullscreen_element().is_some() {
+                let _ = doc.exit_fullscreen();
+            }
+        }
+    };
+
     let sign_out = {
         let navigate = use_navigate();
         let auth_context = expect_context::<AuthContext>();
         move |_| {
+            exit_fullscreen();
             auth_context.sign_out();
             navigate("/", Default::default());
         }
