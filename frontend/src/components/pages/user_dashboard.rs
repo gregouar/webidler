@@ -117,7 +117,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                 "Welcome, " {user.username}
                             </h1>
 
-                            <div class="bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner px-4 py-4 lg:px-8 lg:py-8 text-left space-y-8">
+                            <div class="bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner p-2 lg:p-4 text-left space-y-2 lg:space-y-4">
                                 <div class="flex flex-row justify-between items-center gap-1 lg:gap-2">
                                     // <h2 class="text-2xl font-bold text-white">"Your Characters"</h2>
                                     <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
@@ -249,7 +249,7 @@ fn CharacterSlot(
 
     view! {
         <div
-            class="bg-zinc-800 rounded-xl border border-zinc-700 shadow-md overflow-hidden
+            class="bg-neutral-800 rounded-xl border border-neutral-700 shadow-md overflow-hidden
             flex flex-col 
             min-h-[20rem] w-40 sm:w-48 md:w-56 flex-shrink-0
             transition group cursor-pointer
