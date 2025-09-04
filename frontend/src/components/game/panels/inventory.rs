@@ -271,7 +271,7 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="text-gray-400 text-sm">"Loot Preference:"</span>
+                    <span class="text-gray-400 text-sm inline md:hidden">"Loot Preference:"</span>
                     <LootFilterDropdown />
                 </div>
 
@@ -529,7 +529,8 @@ fn SellAllButton() -> impl IntoView {
 
     view! {
         <MenuButton on:click=sell disabled=disabled>
-            "Sell all marked items"
+            <span class="inline md:hidden">"Sell all"</span>
+            <span class="hidden md:inline font-variant:small-caps">"Sell all marked items"</span>
         </MenuButton>
     }
 }

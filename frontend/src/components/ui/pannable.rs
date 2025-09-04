@@ -11,8 +11,6 @@ pub fn Pannable(children: Children) -> impl IntoView {
         dragging.set(Some((ev.client_x() as f64, ev.client_y() as f64)));
     };
 
-    // let on_mouse_up = move |_| dragging.set(None);
-
     let handle = window_event_listener(leptos::ev::mouseup, {
         move |_| {
             dragging.set(None);
@@ -35,20 +33,6 @@ pub fn Pannable(children: Children) -> impl IntoView {
     });
     on_cleanup(move || handle.remove());
 
-    // let on_mouse_move = {
-    //     move |ev: web_sys::MouseEvent| {
-    //         if let Some((last_x, last_y)) = dragging.get() {
-    //             let dx = ev.client_x() as f64 - last_x;
-    //             let dy = ev.client_y() as f64 - last_y;
-    //             offset.update(|(x, y)| {
-    //                 *x += dx;
-    //                 *y += dy;
-    //             });
-    //             dragging.set(Some((ev.client_x() as f64, ev.client_y() as f64)));
-    //         }
-    //     }
-    // };
-
     let on_wheel = {
         move |ev: web_sys::WheelEvent| {
             ev.prevent_default();
@@ -67,9 +51,7 @@ pub fn Pannable(children: Children) -> impl IntoView {
         <div
             on:wheel=on_wheel
             on:mousedown=on_mouse_down
-            // on:mouseup=on_mouse_up
-            // on:mousemove=on_mouse_move
-            class="w-full aspect-[4/3] sm:aspect-[3/2] md:aspect-[5/2] overflow-hidden bg-neutral-900"
+            class="w-full aspect-[3/1] sm:aspect-[2/1] md:aspect-[5/2] overflow-hidden bg-neutral-900"
         >
             <svg
                 width="100%"

@@ -146,7 +146,7 @@ fn old_item_specs_to_item_specs(
 }
 
 async fn stop_all_grinds<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()> {
-    sqlx::query!("DELETE FROM saved_game_instances")
+    sqlx::query!("DELETE FROM saved_game_instances WHERE data_version = '0.1.0'")
         .execute(executor)
         .await?;
     Ok(())
