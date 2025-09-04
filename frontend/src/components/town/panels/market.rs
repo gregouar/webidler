@@ -499,7 +499,7 @@ pub fn ItemRow(
             </div>
 
             <div class="flex flex-col w-full">
-                <ItemTooltipContent item_specs />
+                <ItemTooltipContent item_specs hide_description=true />
             </div>
 
             {(price > 0.0)
