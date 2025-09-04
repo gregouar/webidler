@@ -71,7 +71,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                     <div class="px-4 relative z-10 flex items-center justify-between">
                         <PanelTitle>"Market"</PanelTitle>
 
-                        <div class="flex-1 flex justify-center gap-4 w-full max-w-md mx-auto">
+                        <div class="flex-1 flex justify-center ml-2 md:ml-4 gap-2 md:gap-4 w-full max-w-md mx-auto">
                             <TabButton
                                 is_active=Signal::derive(move || {
                                     active_tab.get() == MarketTab::Filters

@@ -1,12 +1,12 @@
 use std::{collections::HashSet, sync::Arc, time::Duration};
 use strum::IntoEnumIterator;
 
-use leptos::{html::*, prelude::*};
+use leptos::{portal::Portal, prelude::*, web_sys};
 use leptos_use::on_click_outside;
 
 use shared::{
     data::{
-        item::{ItemCategory, ItemSlot},
+        item::{ItemCategory, ItemSlot, ItemSpecs},
         player::EquippedSlot,
     },
     messages::client::{EquipItemMessage, FilterLootMessage, SellItemsMessage, UnequipItemMessage},
@@ -123,34 +123,8 @@ fn EquippedItem(
         <div class="relative group w-full aspect-[2/3]">
             {move || match equipped_item() {
                 Some(EquippedSlot::MainSlot(item_specs)) => {
-                    let rc_item_specs = Arc::new(*item_specs.clone());
-                    let is_being_unequipped = RwSignal::new(false);
-                    view! {
-                        <div class="relative w-full h-full overflow-visible">
-                            <ItemCard
-                                item_specs=rc_item_specs.clone()
-                                on:click=move |_| show_menu.set(true)
-                                tooltip_position=DynamicTooltipPosition::Auto
-                            />
-
-                            <Show when=move || is_being_unequipped.get()>
-                                <div class="absolute inset-0 z-30 w-full rounded-md
-                                bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black"></div>
-                            </Show>
-
-                            <Show when=move || show_menu.get()>
-                                <EquippedItemContextMenu
-                                    item_slot=item_slot
-                                    is_being_unequipped=is_being_unequipped
-                                    on_close=Callback::new(move |_| show_menu.set(false))
-                                />
-                                <div class="absolute top-0 right-0 translate-x-full pl-2 whitespace-nowrap z-20 transition-opacity duration-150">
-                                    <ItemTooltip item_specs=rc_item_specs.clone() />
-                                </div>
-                            </Show>
-                        </div>
-                    }
-                        .into_any()
+                    let item_specs = Arc::new(*item_specs.clone());
+                    view! { <EquippedItemEquippedSlot item_slot item_specs show_menu /> }.into_any()
                 }
                 Some(EquippedSlot::ExtraSlot(main_slot)) => {
                     if let Some(EquippedSlot::MainSlot(item_specs)) = game_context
@@ -176,6 +150,94 @@ fn EquippedItem(
                 }
                 None => render_fallback(),
             }}
+        </div>
+    }
+}
+
+#[component]
+fn EquippedItemEquippedSlot(
+    item_slot: ItemSlot,
+    item_specs: Arc<ItemSpecs>,
+    show_menu: RwSignal<bool>,
+) -> impl IntoView {
+    let item_ref = NodeRef::new();
+
+    let is_being_unequipped = RwSignal::new(false);
+    view! {
+        <div node_ref=item_ref class="relative w-full h-full overflow-visible">
+            <ItemCard
+                item_specs=item_specs.clone()
+                on:click=move |_| show_menu.set(true)
+                tooltip_position=DynamicTooltipPosition::Auto
+            />
+
+            <Show when=move || is_being_unequipped.get()>
+                <div class="absolute inset-0 z-30 w-full rounded-md
+                bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black"></div>
+            </Show>
+
+            <Show when=move || show_menu.get()>
+                <EquippedItemContextMenu
+                    item_slot=item_slot
+                    is_being_unequipped=is_being_unequipped
+                    on_close=Callback::new(move |_| show_menu.set(false))
+                />
+                {
+                    let item_specs = item_specs.clone();
+                    view! {
+                        <Portal>
+                            {
+                                let item_ref = item_ref.clone();
+                                let tooltip_ref = NodeRef::new();
+                                let tooltip_size = Memo::new(move |_| {
+                                    let tooltip_div: Option<web_sys::HtmlDivElement> = tooltip_ref
+                                        .get();
+                                    tooltip_div
+                                        .map(|tooltip_div| {
+                                            let rect = tooltip_div.get_bounding_client_rect();
+                                            (rect.width(), rect.height())
+                                        })
+                                        .unwrap_or_default()
+                                });
+                                let tooltip_pos = move || {
+                                    let item_div: web_sys::HtmlDivElement = item_ref.get().unwrap();
+                                    let item_rect = item_div.get_bounding_client_rect();
+                                    let (tooltip_width, tooltip_height) = tooltip_size.get();
+                                    let window_height = web_sys::window()
+                                        .unwrap()
+                                        .inner_height()
+                                        .unwrap()
+                                        .as_f64()
+                                        .unwrap();
+                                    let window_width = web_sys::window()
+                                        .unwrap()
+                                        .inner_width()
+                                        .unwrap()
+                                        .as_f64()
+                                        .unwrap();
+                                    (
+                                        item_rect.right().min(window_width - tooltip_width),
+                                        item_rect.top().min(window_height - tooltip_height),
+                                    )
+                                };
+
+                                view! {
+                                    <div
+                                        node_ref=tooltip_ref
+                                        class="fixed whitespace-nowrap z-50 transition-opacity duration-150 text-center px-2"
+                                        style=move || {
+                                            let (x, y) = tooltip_pos();
+                                            format!("left:{}px; top:{}px;", x, y)
+                                        }
+                                    >
+                                        <ItemTooltip item_specs=item_specs.clone() />
+                                    </div>
+                                }
+                            }
+                        </Portal>
+                    }
+                }
+            </Show>
         </div>
     }
 }
@@ -234,14 +296,14 @@ pub fn EquippedItemContextMenu(
     view! {
         <ContextMenu on_close=on_close>
             <button
-                class="w-full text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-2"
+                class="w-full text-sm md:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40 py-1 md:py-2"
                 on:click=try_unequip
             >
                 "Unequip"
             </button>
 
             <button
-                class="w-full text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-4"
+                class="w-full text-sm md:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 md:py-4"
                 on:click=move |_| on_close.run(())
             >
                 "Cancel"
@@ -280,8 +342,8 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
                     <CloseButton on:click=move |_| open.set(false) />
                 </div>
             </div>
-            // overflow-y-auto
-            <div class="relative flex-1 overflow-x-visible max-h-[80vh]">
+
+            <div class="relative flex-1 max-h-[80vh] overflow-y-auto">
                 <div class="grid grid-cols-7 sm:grid-cols-8 md:grid-cols-9 lg:grid-cols-10
                 gap-1 md:gap-3 p-2 md:p-4 relative
                 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
@@ -312,22 +374,55 @@ fn BagItem(item_index: usize) -> impl IntoView {
             .bag
             .get(item_index)
             .cloned()
+            .map(Arc::new)
     };
 
     let sell_queue = expect_context::<SellQueue>();
     let is_queued_for_sale = move || sell_queue.0.read().contains(&item_index);
 
     let show_menu = RwSignal::new(false);
+
+    let item_ref = NodeRef::new();
+    let tooltip_ref = NodeRef::new();
+
+    let tooltip_size = Memo::new(move |_| {
+        let tooltip_div: Option<web_sys::HtmlDivElement> = tooltip_ref.get();
+        tooltip_div
+            .map(|tooltip_div| {
+                let rect = tooltip_div.get_bounding_client_rect();
+                (rect.width(), rect.height())
+            })
+            .unwrap_or_default()
+    });
+
+    let tooltip_pos = move || {
+        let item_div: web_sys::HtmlDivElement = item_ref.get().unwrap();
+        let item_rect = item_div.get_bounding_client_rect();
+
+        let (tooltip_width, tooltip_height) = tooltip_size.get();
+
+        let window_height = web_sys::window()
+            .unwrap()
+            .inner_height()
+            .unwrap()
+            .as_f64()
+            .unwrap();
+
+        (
+            (item_rect.left() - tooltip_width).max(0.0),
+            item_rect.top().min(window_height - tooltip_height),
+        )
+    };
+
     view! {
-        <div class="relative group w-full aspect-[2/3]">
+        <div node_ref=item_ref class="relative group w-full aspect-[2/3]">
             {move || {
                 match maybe_item() {
                     Some(item_specs) => {
-                        let rc_item_specs = Arc::new(item_specs.clone());
                         view! {
                             <div class="relative w-full h-full overflow-visible">
                                 <ItemCard
-                                    item_specs=rc_item_specs.clone()
+                                    item_specs=item_specs.clone()
                                     on:click=move |_| show_menu.set(true)
                                     tooltip_position=DynamicTooltipPosition::Auto
                                 />
@@ -349,9 +444,19 @@ fn BagItem(item_index: usize) -> impl IntoView {
                                         on_close=Callback::new(move |_| show_menu.set(false))
                                         is_being_equipped=is_being_equipped
                                     />
-                                    <div class="absolute top-0 left-0 -translate-x-full pr-2 whitespace-nowrap z-20 transition-opacity duration-150">
-                                        <ItemTooltip item_specs=rc_item_specs.clone() />
-                                    </div>
+
+                                    <Portal>
+                                        <div
+                                            node_ref=tooltip_ref
+                                            class="fixed whitespace-nowrap z-50 transition-opacity duration-150 text-center px-2"
+                                            style=move || {
+                                                let (x, y) = tooltip_pos();
+                                                format!("left:{}px; top:{}px;", x, y)
+                                            }
+                                        >
+                                            <ItemTooltip item_specs=maybe_item().unwrap().clone() />
+                                        </div>
+                                    </Portal>
                                 </Show>
                             </div>
                         }
@@ -441,21 +546,21 @@ pub fn BagItemContextMenu(
     view! {
         <ContextMenu on_close=on_close>
             <button
-                class="w-full text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-2"
+                class="w-full text-sm md:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 md:py-2"
                 on:click=try_equip
             >
                 "Equip"
             </button>
 
             <button
-                class="w-full text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-2"
+                class="w-full text-sm md:text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-1 md:py-2"
                 on:click=move |_| toggle_sell_mark()
             >
                 {move || if sell_queue.0.get().contains(&item_index) { "Unsell" } else { "Sell" }}
             </button>
 
             <button
-                class="w-full text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-4"
+                class="w-full text-sm md:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 md:py-4"
                 on:click=move |_| on_close.run(())
             >
                 "Cancel"
