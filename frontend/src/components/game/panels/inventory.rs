@@ -69,11 +69,11 @@ pub fn EquippedItemsCard() -> impl IntoView {
     ];
 
     view! {
-        <div class="w-full flex flex-col gap-2 p-2 bg-zinc-800 rounded-md h-full shadow-xl ring-1 ring-zinc-950">
+        <div class="w-full flex flex-col gap-1 md:gap-2 p-1 md:p-2 bg-zinc-800 rounded-md h-full shadow-xl ring-1 ring-zinc-950">
             <div>
                 <PlayerName />
             </div>
-            <div class="grid grid-rows-3 grid-cols-3 gap-3 p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+            <div class="grid grid-rows-3 grid-cols-3 gap-1 md:gap-3 p-2 md:p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                 {EQUIPPED_SLOTS
                     .iter()
                     .map(|(slot, asset, alt)| {
@@ -255,11 +255,11 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     view! {
-        <div class="bg-zinc-800 rounded-md h-full w-full gap-2 p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
-            <div class="px-4 relative z-10 flex items-center justify-between gap-2 flex-wrap">
-                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+        <div class="bg-zinc-800 rounded-md h-full w-full gap-1 md:gap-2 p-1 md:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
+            <div class="px-4 relative z-10 flex items-center justify-between gap-2">
+                <div class="flex flex-row items-center gap-1 md:gap-2">
                     <PanelTitle>"Inventory"</PanelTitle>
-                    <span class="text-shadow-md shadow-gray-950 text-gray-400 text-md font-medium">
+                    <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs md:text-base font-medium">
                         {move || {
                             format!(
                                 "({} / {})",
@@ -271,18 +271,19 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="text-gray-400 text-sm inline md:hidden">"Loot Preference:"</span>
+                    <span class="hidden md:inline text-gray-400 text-sm">"Loot Preference:"</span>
                     <LootFilterDropdown />
                 </div>
 
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1 md:gap-2">
                     <SellAllButton />
                     <CloseButton on:click=move |_| open.set(false) />
                 </div>
             </div>
             // overflow-y-auto
             <div class="relative flex-1 overflow-x-visible max-h-[80vh]">
-                <div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 p-4 relative
+                <div class="grid grid-cols-7 sm:grid-cols-8 md:grid-cols-9 lg:grid-cols-10
+                gap-1 md:gap-3 p-2 md:p-4 relative
                 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                     <For
                         each=move || 0..game_context.player_inventory.read().max_bag_size as usize
