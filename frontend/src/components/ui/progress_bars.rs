@@ -148,16 +148,15 @@ pub fn CircularProgressBar(
     Effect::new(move |_| {
         if reset.get() {
             reset_bar_animation
-                .set("animation: circular-progress-bar-fade-out 0.3s ease-out; animation-fill-mode: both;");
-            reset_icon_animation.set(
-                "animation: circular-progress-bar-glow 0.3s ease-out; animation-fill-mode: both;",
-            );
+                .set("animation: circular-progress-bar-fade-out 0.5s ease-out; animation-fill-mode: both;");
+            reset_icon_animation
+                .set("animation: circular-progress-bar-glow 0.5s ease; animation-fill-mode: both;");
             set_timeout(
                 move || {
                     reset_bar_animation.set("opacity: 0;");
                     reset_icon_animation.set("");
                 },
-                std::time::Duration::from_millis(300),
+                std::time::Duration::from_millis(500),
             );
         }
     });
@@ -172,25 +171,15 @@ pub fn CircularProgressBar(
                  100% { opacity: 0; filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
                 }
                 @keyframes circular-progress-bar-glow {
-                 0% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
-                 50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746)); }
+                 0% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  }
+                 50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746));  transform: translate(-50%, -50%) scale(1.2); }
                  100% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
                 }
                 "
             </style>
-            <div class="relative drop-shadow-lg">
+            <div class="relative">
                 <svg class="size-full overflow-visible" viewBox="0 0 180 180">
                     <defs>
-                        <filter
-                            id="blur"
-                            filterUnits="userSpaceOnUse"
-                            x="-90"
-                            y="-90"
-                            width="180"
-                            height="180"
-                        >
-                            <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
-                        </filter>
                         <clipPath id="ring" clip-rule="evenodd">
                             <path d="M0-81A81 81 0 0 1 0 81A81 81 0 0 1 0-81z
                             M0-63A63 63 0 0 1 0 63A63 63 0 0 1 0-63z" />
@@ -203,15 +192,12 @@ pub fn CircularProgressBar(
 
                     <g transform="translate(90,90)">
                         <g clip-path="url(#ring)">
-                            // stroke="none"
                             <circle
                                 class="stroke-current text-stone-900"
                                 cx="0"
                                 cy="2.5"
                                 r="72"
                                 stroke-width=bar_width
-                                // fill="none"
-                                filter="url(#blur)"
                             />
                         </g>
                         <circle cx="0" cy="0" r="63" fill="url(#inner-gradient)" />
