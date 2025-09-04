@@ -55,8 +55,13 @@ async fn post_create_character(
         return Err(AppError::Forbidden);
     }
 
-    match db::characters::create_character(&db_pool, &user_id, &payload.name, &payload.portrait)
-        .await?
+    match db::characters::create_character(
+        &db_pool,
+        &user_id,
+        &payload.name,
+        &format!("adventurers/{}.webp", payload.portrait.into_inner()),
+    )
+    .await?
     {
         Some(character_id) => Ok(Json(CreateCharacterResponse { character_id })),
         None => Err(AppError::UserError("name already taken".to_string())),

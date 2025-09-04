@@ -52,7 +52,7 @@ pub async fn create_character<'c>(
 
     let res = sqlx::query!(
         r#"
-        INSERT INTO characters (character_id,user_id, character_name, portrait)
+        INSERT INTO characters (character_id, user_id, character_name, portrait)
         VALUES ($1, $2, $3, $4)
         "#,
         character_id,
