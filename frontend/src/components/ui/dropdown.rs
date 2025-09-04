@@ -59,11 +59,11 @@ where
             "
         </style>
 
-        <div class="relative w-60" node_ref=node_ref>
+        <div class="relative w-60 text-xs sm:text-sm md:text-base text-white" node_ref=node_ref>
             <button
                 on:click=toggle
                 class="w-full text-left px-1 sm:px-2 md:px-3 px-4 py-1 md:py-2 rounded-md
-                text-white bg-gradient-to-t from-zinc-900 to-zinc-800 shadow-md border border-zinc-950 
+                bg-gradient-to-t from-zinc-900 to-zinc-800 shadow-md border border-zinc-950 
                 hover:from-zinc-800 hover:to-zinc-700 focus:outline-none"
             >
                 {
@@ -90,7 +90,7 @@ where
                         view! {
                             <li
                                 on:click=move |_| select_option(opt.clone())
-                                class="cursor-pointer px-4 py-2 hover:bg-zinc-700 text-white"
+                                class="cursor-pointer px-4 py-2 hover:bg-zinc-700"
                             >
                                 {text}
                             </li>

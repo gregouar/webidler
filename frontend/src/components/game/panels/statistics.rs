@@ -32,14 +32,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <div class="w-full">
-                <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-2">
+            <div class="w-full  h-full">
+                <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-2 max-h-full">
                     <div class="px-4 relative z-10 flex items-center justify-between">
                         <PanelTitle>"Statistics "</PanelTitle>
                         <CloseButton on:click=move |_| open.set(false) />
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 overflow-y-auto">
 
                         <StatCategory title="Game">
                             <Stat
@@ -346,8 +346,11 @@ fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
             }
             "
         </style>
-        <div class="bg-neutral-900 rounded-lg shadow-[inset_0_0_24px_rgba(0,0,0,0.6)]  py-4 ring-1 ring-zinc-900">
-            <h2 class="text-amber-300 text-md font-bold mb-2 tracking-wide">{title}</h2>
+        <div class="bg-neutral-900 rounded-lg shadow-[inset_0_0_24px_rgba(0,0,0,0.6)]
+        py-2 md:py-4 ring-1 ring-zinc-900">
+            <h2 class="text-amber-300 text-sm md:text-base font-bold mb-1 md:mb-2 tracking-wide">
+                {title}
+            </h2>
             <div class="flex flex-col gap-1 stat-list">{children()}</div>
         </div>
     }
@@ -356,7 +359,7 @@ fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
 #[component]
 fn Stat(label: &'static str, value: impl Fn() -> String + 'static) -> impl IntoView {
     view! {
-        <div class="flex justify-between px-6">
+        <div class="flex justify-between px-6 text-sm md:text-base">
             <span class="text-gray-400">{label}</span>
             <span class="text-amber-100 font-medium">{value()}</span>
         </div>
