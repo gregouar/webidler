@@ -35,7 +35,10 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 }
 
 #[component]
-pub fn ItemTooltipContent(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+pub fn ItemTooltipContent(
+    item_specs: Arc<ItemSpecs>,
+    #[prop(default = false)] hide_description: bool,
+) -> impl IntoView {
     let local_affixes = effects_tooltip::formatted_effects_list(
         (&item_specs
             .modifiers
@@ -100,17 +103,20 @@ pub fn ItemTooltipContent(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             <p class="text-sm text-gray-400 leading-snug">
                 "Item Level: " <span class="text-white">{item_specs.modifiers.level}</span>
             </p>
-            {item_specs
-                .base
-                .description
-                .clone()
-                .map(|description| {
-                    view! {
-                        <hr class="border-t border-gray-700" />
-                        <p class="text-sm italic text-gray-400 leading-snug whitespace-pre-line">
-                            {description}
-                        </p>
-                    }
+            {(!hide_description)
+                .then(|| {
+                    item_specs
+                        .base
+                        .description
+                        .clone()
+                        .map(|description| {
+                            view! {
+                                <hr class="border-t border-gray-700" />
+                                <p class="text-sm italic text-gray-400 leading-snug whitespace-pre-line">
+                                    {description}
+                                </p>
+                            }
+                        })
                 })}
         </div>
     }

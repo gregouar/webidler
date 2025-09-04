@@ -505,7 +505,7 @@ pub fn ItemRow(
             {(price > 0.0)
                 .then(|| {
                     view! {
-                        <div class="absolute flex bottom-2 left-2 gap-1 items-center">
+                        <div class="absolute flex bottom-2 right-2 gap-1 items-center">
                             <span class="text-gray-400">"Price:"</span>
                             <span class="text-violet-300 font-semibold">
                                 {format!("{:.0}", price)}
