@@ -39,7 +39,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         <CloseButton on:click=move |_| open.set(false) />
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-4 overflow-y-auto">
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-4 overflow-y-auto">
 
                         <StatCategory title="Game">
                             <Stat
