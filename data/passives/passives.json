@@ -1175,7 +1175,7 @@
           {
             "stat": "TakeFromManaBeforeLife",
             "modifier": "Flat",
-            "value": 1
+            "value": 100
           },
           {
             "stat": "Mana",

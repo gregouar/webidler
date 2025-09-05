@@ -190,7 +190,6 @@ pub async fn count_market_items<'c>(
     Ok((row.public_items, row.private_items))
 }
 
-// TODO: stats filters
 pub async fn read_market_items<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
@@ -230,6 +229,18 @@ pub async fn read_market_items<'c>(
         .unwrap_or_default();
 
     let order_by = serde_plain::to_string(&filters.order_by).unwrap_or_default();
+
+    let stats_filters = filters.stats_filters.map(|stat_filter| {
+        stat_filter
+            .and_then(|stat_filter| {
+                Some((
+                    serde_json::to_value(stat_filter.stat).ok()?,
+                    serde_plain::to_string(&stat_filter.modifier).ok()?,
+                    stat_filter.value,
+                ))
+            })
+            .unwrap_or_default()
+    });
 
     let raw_items = sqlx::query_as!(
         MarketEntry,
@@ -277,6 +288,14 @@ pub async fn read_market_items<'c>(
             AND ($11 OR market.item_damages >= $12)
             AND ($13 OR market.item_armor >= $14)
             AND ($15 OR market.item_block >= $16)
+            AND ($19 = '' OR EXISTS (
+                SELECT 1
+                FROM market_stats ms
+                WHERE ms.market_id = market.market_id
+                AND ms.item_stat = $18
+                AND ms.stat_modifier = $19
+                AND ms.stat_value >= $20
+            ))
         ORDER BY 
             rejected DESC, 
             recipient_id DESC, 
@@ -308,7 +327,10 @@ pub async fn read_market_items<'c>(
         item_armor,
         no_filter_item_block, // $15
         item_block,
-        order_by
+        order_by,
+        stats_filters[0].0,
+        stats_filters[0].1,
+        stats_filters[0].2 // $20
     )
     .fetch_all(executor)
     .await?;

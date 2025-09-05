@@ -6,6 +6,7 @@ use crate::{
     data::{
         area::AreaLevel,
         item::{ItemCategory, ItemRarity, ItemSpecs},
+        passive::StatEffect,
         user::UserCharacterId,
     },
     types::{ItemName, ItemPrice},
@@ -28,6 +29,8 @@ pub struct MarketItem {
     pub created_at: DateTime<Utc>,
 }
 
+pub const STATS_FILTERS_AMOUNT: usize = 2;
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct MarketFilters {
     pub order_by: MarketOrderBy,
@@ -42,6 +45,8 @@ pub struct MarketFilters {
     pub item_damages: Option<f64>,
     pub item_armor: Option<f64>,
     pub item_block: Option<f64>,
+
+    pub stats_filters: [Option<StatEffect>; STATS_FILTERS_AMOUNT],
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, EnumIter, Hash, PartialEq, Eq)]

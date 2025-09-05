@@ -115,7 +115,7 @@ pub fn formatted_effects_list(
                     max_damage.insert((skill_type, damage_type, effect.value > 0.0), effect.value);
                 }
                 //
-                stat => merged.push(format_flat_stat(stat, effect.value)),
+                stat => merged.push(format_flat_stat(stat, Some(effect.value))),
             },
         }
     }
@@ -180,7 +180,7 @@ pub fn formatted_effects_list(
     merged.into_iter().rev().map(effect_li).collect()
 }
 
-fn format_multiplier_stat_name(stat: StatType) -> String {
+pub fn format_multiplier_stat_name(stat: StatType) -> String {
     match stat {
         StatType::Life => "Maximum Life".to_string(),
         StatType::LifeRegen => "Life Regeneration".to_string(),
@@ -251,101 +251,127 @@ fn format_multiplier_stat_name(stat: StatType) -> String {
     }
 }
 
-fn format_flat_stat(stat: StatType, value: f64) -> String {
+pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
     match stat {
         StatType::MinDamage { .. } | StatType::MaxDamage { .. } => "".to_string(),
-        StatType::Life => format!("Adds {value:.0} Maximum Life"),
-        StatType::LifeRegen => format!("Adds {value:.2}% Life Regeneration per second"),
-        StatType::Mana => format!("Adds {value:.0} Maximum Mana"),
-        StatType::ManaRegen => format!("Adds {value:.2}% Mana Regeneration per second"),
+        StatType::Life => format!("Adds {} Maximum Life", format_flat_number(value, false)),
+        StatType::LifeRegen => format!(
+            "Adds {}% Life Regeneration per second",
+            format_flat_number(value, true)
+        ),
+        StatType::Mana => format!("Adds {} Maximum Mana", format_flat_number(value, false)),
+        StatType::ManaRegen => format!(
+            "Adds {}% Mana Regeneration per second",
+            format_flat_number(value, true)
+        ),
         StatType::Armor(armor_type) => format!(
-            "Adds {:.0} {}",
-            value,
+            "Adds {} {}",
+            format_flat_number(value, false),
             match armor_type {
                 DamageType::Physical => "Armor".to_string(),
                 _ => format!("{}Resistance", optional_damage_type_str(Some(armor_type))),
             }
         ),
-        StatType::TakeFromManaBeforeLife => format!(
-            "{:.0}% of Damage taken from Mana before Life",
-            value * 100.0
-        ),
-        StatType::Block => format!("Adds {:.0}% Block Chances", value),
+        StatType::TakeFromManaBeforeLife => {
+            format!(
+                "{}% of Damage taken from Mana before Life",
+                format_flat_number(value, false)
+            )
+        }
+        StatType::Block => format!("Adds {}% Block Chances", format_flat_number(value, false)),
         StatType::Damage {
             skill_type,
             damage_type,
         } => format!(
-            "Adds {:.0} {}Damage{}",
-            value,
+            "Adds {} {}Damage{}",
+            format_flat_number(value, false),
             optional_damage_type_str(damage_type),
             to_skill_type_str(skill_type)
         ),
-        StatType::SpellPower => format!("Adds {value:.0} Power to Spells"),
+        StatType::SpellPower => {
+            format!("Adds {} Power to Spells", format_flat_number(value, false))
+        }
         StatType::CritChances(skill_type) => format!(
-            "Adds {:.2}% Critical Hit Chances{}",
-            value,
+            "Adds {}% Critical Hit Chances{}",
+            format_flat_number(value, true),
             to_skill_type_str(skill_type)
         ),
         StatType::CritDamage(skill_type) => format!(
-            "Adds {:.0}% Critical Hit Damage{}",
-            value,
+            "Adds {}% Critical Hit Damage{}",
+            format_flat_number(value, false),
             to_skill_type_str(skill_type)
         ),
         StatType::StatusPower(status_type) => format!(
-            "Adds {:.2} Power to {}",
-            value,
+            "Adds {} Power to {}",
+            format_flat_number(value, false),
             status_type_str(status_type)
         ),
         StatType::StatusDuration(status_type) => format!(
-            "Adds {value:.2} seconds duration to {}",
+            "Adds {} seconds duration to {}",
+            format_flat_number(value, true),
             status_type_str(status_type)
         ),
         StatType::Speed(skill_type) => {
-            if value > 0.0 {
+            if value.unwrap_or_default() >= 0.0 {
                 format!(
-                    "Removes {:.2}s Cooldown{}",
-                    value,
+                    "Removes {}s Cooldown{}",
+                    format_flat_number(value, true),
                     to_skill_type_str(skill_type)
                 )
             } else {
                 format!(
                     "Adds {:.2}s Cooldown{}",
-                    -value,
+                    format_flat_number(value.map(|v| -v), true),
                     to_skill_type_str(skill_type)
                 )
             }
         }
-        StatType::MovementSpeed => format!("-{value:.2}s Movement Cooldown"),
-        StatType::GoldFind => format!("Adds {value:.0} Gold per Kill"),
+        StatType::MovementSpeed => {
+            format!("-{}s Movement Cooldown", format_flat_number(value, true))
+        }
+        StatType::GoldFind => format!("Adds {} Gold per Kill", format_flat_number(value, false)),
         StatType::LifeOnHit(hit_trigger) => format!(
-            "Gain {:.0} Life on {}Hit",
-            value,
+            "Gain {} Life on {}Hit",
+            format_flat_number(value, false),
             skill_type_str(hit_trigger.skill_type)
         ),
         StatType::ManaOnHit(hit_trigger) => format!(
-            "Gain {:.0} Mana on {}Hit",
-            value,
+            "Gain {} Mana on {}Hit",
+            format_flat_number(value, false),
             skill_type_str(hit_trigger.skill_type)
         ),
         StatType::DamageResistance {
             skill_type,
             damage_type,
         } => {
-            if value > 0.0 {
+            if value.unwrap_or_default() >= 0.0 {
                 format!(
-                    "Resist {:.0}% of {}{}Damage",
-                    value * 100.0,
+                    "Resist {}% of {}{}Damage",
+                    format_flat_number(value, false),
                     optional_damage_type_str(damage_type),
                     skill_type_str(skill_type)
                 )
             } else {
                 format!(
-                    "Takes {:.0}% Increased {}{}Damage",
-                    -value * 100.0,
+                    "Takes {}% Increased {}{}Damage",
+                    format_flat_number(value.map(|v| -v), false),
                     optional_damage_type_str(damage_type),
                     skill_type_str(skill_type)
                 )
             }
         }
+    }
+}
+
+fn format_flat_number(value: Option<f64>, precise: bool) -> String {
+    match value {
+        Some(value) => {
+            if precise {
+                format!("{:.2}", value)
+            } else {
+                format!("{:.0}", value)
+            }
+        }
+        None => "X".to_string(),
     }
 }
