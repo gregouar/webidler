@@ -187,7 +187,6 @@ fn EquippedItemEquippedSlot(
                     view! {
                         <Portal>
                             {
-                                let item_ref = item_ref.clone();
                                 let tooltip_ref = NodeRef::new();
                                 let tooltip_size = Memo::new(move |_| {
                                     let tooltip_div: Option<web_sys::HtmlDivElement> = tooltip_ref

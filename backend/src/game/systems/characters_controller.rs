@@ -80,8 +80,8 @@ pub fn damage_character(
         return;
     }
 
-    let take_from_mana =
-        mana.min(amount * (character_specs.take_from_mana_before_life as f64).clamp(0.0, 1.0));
+    let take_from_mana = mana
+        .min(amount * (character_specs.take_from_mana_before_life as f64 * 0.01).clamp(0.0, 1.0));
     let take_from_life = amount - take_from_mana;
 
     *mana -= take_from_mana;
@@ -179,8 +179,9 @@ pub fn compute_damage(
             .damage_resistance
             .get(&(skill_type, damage_type))
             .cloned()
-            .unwrap_or(0.0))
-    .max(0.0)
+            .unwrap_or(0.0)
+            * 0.01)
+        .max(0.0)
         * amount;
 
     if ignore_armor {

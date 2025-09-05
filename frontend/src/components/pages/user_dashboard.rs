@@ -75,11 +75,10 @@ pub fn UserDashboardPage() -> impl IntoView {
     });
 
     let exit_fullscreen = move || {
-        if let Some(doc) = web_sys::window().and_then(|w| w.document()) {
-            if doc.fullscreen_element().is_some() {
-                let _ = doc.exit_fullscreen();
+        if let Some(doc) = web_sys::window().and_then(|w| w.document())
+            && doc.fullscreen_element().is_some() {
+                doc.exit_fullscreen();
             }
-        }
     };
 
     let sign_out = {

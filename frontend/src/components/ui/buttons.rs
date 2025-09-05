@@ -163,7 +163,7 @@ pub fn TabButton(children: Children, #[prop(into)] is_active: Signal<bool>) -> i
                 format!(
                     "
                     flex-1
-                    px-1 lg:px-3 py-2 
+                    px-1 lg:px-3 py-1 lg:py-2 
                     text-sm lg:text-base 
                     font-bold text-shadow
                     border-t border-l border-r border-neutral-950 rounded-t-md 

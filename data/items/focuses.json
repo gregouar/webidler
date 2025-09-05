@@ -56,8 +56,8 @@
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "min": 0.3,
-        "max": 0.5
+        "min": 3,
+        "max": 5
       }
     ],
     "triggers": [
