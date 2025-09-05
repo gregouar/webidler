@@ -836,7 +836,10 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                 <div class="flex flex-col gap-4">
                     <div class="flex items-center justify-between text-gray-300 text-sm">
                         <span>"Item Category:"</span>
-                        <DropdownMenu options=item_category_options chosen_option=item_category />
+                        <SearchableDropdownMenu
+                            options=item_category_options
+                            chosen_option=item_category
+                        />
                     </div>
 
                     <div class="flex items-center justify-between text-gray-300 text-sm">
