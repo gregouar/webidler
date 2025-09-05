@@ -29,7 +29,7 @@ pub struct MarketItem {
     pub created_at: DateTime<Utc>,
 }
 
-pub const STAT_FILTERS_AMOUNT: usize = 4;
+pub const STAT_FILTERS_AMOUNT: usize = 5;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct MarketFilters {

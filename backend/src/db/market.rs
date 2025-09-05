@@ -324,6 +324,14 @@ pub async fn read_market_items<'c>(
                 AND ms.stat_modifier = $28
                 AND ms.stat_value >= $29
             ))
+            AND ($31 = '' OR EXISTS (
+                SELECT 1
+                FROM market_stats ms
+                WHERE ms.market_id = market.market_id
+                AND ms.item_stat = $30
+                AND ms.stat_modifier = $31
+                AND ms.stat_value >= $32
+            ))
         ORDER BY 
             rejected DESC, 
             recipient_id DESC, 
@@ -368,6 +376,9 @@ pub async fn read_market_items<'c>(
         stat_filters[3].0,
         stat_filters[3].1,
         stat_filters[3].2,
+        stat_filters[4].0, // $30
+        stat_filters[4].1,
+        stat_filters[4].2,
     )
     .fetch_all(executor)
     .await?;
