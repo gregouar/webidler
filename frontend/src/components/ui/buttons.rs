@@ -136,15 +136,6 @@ pub fn Toggle(
 
 #[component]
 pub fn TabButton(children: Children, #[prop(into)] is_active: Signal<bool>) -> impl IntoView {
-    // let active_class = move || {
-    //     if checked.get() {
-    //         "shadow-md text-white"
-    //         // "ring-2 ring-amber-600/20 shadow-md text-white "
-    //     } else {
-    //         "opacity-60 shadow-none text-zinc-400"
-    //     }
-    // };
-
     let active_class = |active| {
         if active {
             "bg-gradient-to-t from-zinc-900 to-zinc-950 pointer"

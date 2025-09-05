@@ -34,7 +34,7 @@ use crate::{
         },
         ui::{
             buttons::{CloseButton, MenuButton, MenuButtonRed, TabButton},
-            dropdown::DropdownMenu,
+            dropdown::{DropdownMenu, SearchableDropdownMenu},
             input::{Input, ValidatedInput},
             menu_panel::{MenuPanel, PanelTitle},
             number::format_datetime,
@@ -882,16 +882,20 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
 #[component]
 fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
-    let stats_filters = filters.get_untracked().stats_filters;
-    let stat_types = stats_filters.clone().map(|stat_effect| {
-        RwSignal::new(stat_effect.map(|stat_effect| (stat_effect.stat, stat_effect.modifier)))
+    let stat_filters = filters.get_untracked().stat_filters.map(|stat_effect| {
+        (
+            RwSignal::new(
+                stat_effect
+                    .as_ref()
+                    .map(|stat_effect| (stat_effect.stat, stat_effect.modifier)),
+            ),
+            RwSignal::new(stat_effect.as_ref().map(|stat_effect| stat_effect.value)),
+        )
     });
-    let stat_values = stats_filters
-        .map(|stat_effect| RwSignal::new(stat_effect.map(|stat_effect| stat_effect.value)));
 
     Effect::new(move || {
-        for (i, (stat_type, stat_value)) in stat_types.iter().zip(stat_values.iter()).enumerate() {
-            filters.write().stats_filters[i] = stat_type.get().map(|(stat, modifier)| StatEffect {
+        for (i, (stat_type, stat_value)) in stat_filters.iter().enumerate() {
+            filters.write().stat_filters[i] = stat_type.get().map(|(stat, modifier)| StatEffect {
                 stat,
                 modifier,
                 value: stat_value.get().unwrap_or_default(),
@@ -902,27 +906,36 @@ fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     view! {
         <div class="w-full h-full flex flex-col p-4 relative">
             <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
-                "Stats Filters"
+                "Stat Filters"
             </span>
 
-            <div class="flex gap-4 p-4 border-b border-zinc-700">
-                <div class="flex-1 flex flex-col gap-4">
-                    {stat_types.map(|stat_type| view! { <StatDropdown chosen_option=stat_type /> })}
-                </div>
-
-                <div class="w-36 flex flex-col gap-4">
-                    {stat_values
-                        .map(|stat_value| {
-                            view! {
-                                <Input
-                                    id="stat_value_1"
-                                    input_type="number"
-                                    placeholder="Min"
-                                    bind=stat_value
-                                />
-                            }
-                        })}
-                </div>
+            <div class="flex flex-col gap-2 lg:gap-4 p-2 lg:p-4 border-b border-zinc-700">
+                {stat_filters
+                    .map(|(stat_type, stat_value)| {
+                        view! {
+                            <div class="flex gap-2 lg:gap-4 items-center">
+                                <MenuButton
+                                    class:flex-none
+                                    on:click=move |_| {
+                                        stat_type.set(None);
+                                        stat_value.set(None);
+                                    }
+                                    disabled=Signal::derive(move || stat_type.read().is_none())
+                                >
+                                    "❌"
+                                </MenuButton>
+                                <StatDropdown chosen_option=stat_type />
+                                <div class="w-36">
+                                    <Input
+                                        id="stat_value_1"
+                                        input_type="number"
+                                        placeholder="Min"
+                                        bind=stat_value
+                                    />
+                                </div>
+                            </div>
+                        }
+                    })}
             </div>
         </div>
     }
@@ -1018,16 +1031,24 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         ),
     ];
 
-    let options = std::iter::once((None, "No Filter Selected".to_string()))
-        .chain(available_stats.into_iter().map(|(stat_type, modifier)| {
+    let options = available_stats
+        .into_iter()
+        .map(|(stat_type, modifier)| {
             (
                 Some((stat_type, modifier)),
                 format_stat_filter(stat_type, modifier),
             )
-        }))
+        })
         .collect();
 
-    view! { <DropdownMenu options chosen_option class:w-full /> }
+    view! {
+        <SearchableDropdownMenu
+            options
+            chosen_option
+            class:w-full
+            missing_text="Add a Stat Filter"
+        />
+    }
 }
 
 fn format_stat_filter(stat_type: StatType, modifier: Modifier) -> String {

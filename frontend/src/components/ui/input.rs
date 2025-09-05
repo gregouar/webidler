@@ -19,12 +19,12 @@ where
             type=input_type
             placeholder=placeholder
             value=move || {
-                bind.get().map(|value| serde_plain::to_string(&value).ok()).unwrap_or_default()
+                bind.get().and_then(|value| serde_plain::to_string(&value).ok()).unwrap_or_default()
             }
             on:input:target=move |ev| bind.set(serde_plain::from_str(&ev.target().value()).ok())
             class=move || {
                 format!(
-                    "w-full px-4 py-2 rounded-xl border bg-gray-800 text-white placeholder-gray-400
+                    "w-full px-2 lg:px-4 py-1 lg:py-2 rounded-xl border bg-gray-800 text-white placeholder-gray-400
                     text-sm lg:text-base
                         focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md {}",
                     if invalid.map(|invalid| invalid.get()).unwrap_or_default() {
@@ -38,6 +38,7 @@ where
         />
     }
 }
+
 #[component]
 pub fn ValidatedInput<T>(
     id: &'static str,
@@ -84,7 +85,9 @@ where
                 }
                 placeholder=placeholder
                 value=move || {
-                    bind.get().map(|value| serde_plain::to_string(&value).ok()).unwrap_or_default()
+                    bind.get()
+                        .and_then(|value| serde_plain::to_string(&value).ok())
+                        .unwrap_or_default()
                 }
                 on:input:target=move |ev| match serde_plain::from_str(&ev.target().value()) {
                     Ok(v) => {

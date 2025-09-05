@@ -4,7 +4,7 @@ use leptos::{html::*, prelude::*, web_sys};
 pub fn Pannable(children: Children) -> impl IntoView {
     let offset = RwSignal::new((0.0, 0.0));
     let dragging = RwSignal::new(None::<(f64, f64)>);
-    let zoom = RwSignal::new(0.75f64);
+    let zoom = RwSignal::new(0.5f64);
 
     let svg_ref = NodeRef::new();
 

@@ -29,7 +29,7 @@ pub struct MarketItem {
     pub created_at: DateTime<Utc>,
 }
 
-pub const STATS_FILTERS_AMOUNT: usize = 4;
+pub const stat_fILTERS_AMOUNT: usize = 4;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct MarketFilters {
@@ -46,7 +46,7 @@ pub struct MarketFilters {
     pub item_armor: Option<f64>,
     pub item_block: Option<f64>,
 
-    pub stats_filters: [Option<StatEffect>; STATS_FILTERS_AMOUNT],
+    pub stat_filters: [Option<StatEffect>; stat_fILTERS_AMOUNT],
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, EnumIter, Hash, PartialEq, Eq)]

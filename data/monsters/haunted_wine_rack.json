@@ -46,6 +46,7 @@
     {
       "name": "Boiling Vintage Spray",
       "icon": "skills/fireball.svg",
+      "skill_type": "Spell",
       "cooldown": 5.0,
       "targets": [
         {

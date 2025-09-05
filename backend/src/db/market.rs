@@ -230,7 +230,7 @@ pub async fn read_market_items<'c>(
 
     let order_by = serde_plain::to_string(&filters.order_by).unwrap_or_default();
 
-    let stats_filters = filters.stats_filters.map(|stat_filter| {
+    let stat_filters = filters.stat_filters.map(|stat_filter| {
         stat_filter
             .and_then(|stat_filter| {
                 Some((
@@ -356,18 +356,18 @@ pub async fn read_market_items<'c>(
         no_filter_item_block, // $15
         item_block,
         order_by,
-        stats_filters[0].0,
-        stats_filters[0].1,
-        stats_filters[0].2, // $20
-        stats_filters[1].0,
-        stats_filters[1].1,
-        stats_filters[1].2,
-        stats_filters[2].0,
-        stats_filters[2].1, // $25
-        stats_filters[2].2,
-        stats_filters[3].0,
-        stats_filters[3].1,
-        stats_filters[3].2,
+        stat_filters[0].0,
+        stat_filters[0].1,
+        stat_filters[0].2, // $20
+        stat_filters[1].0,
+        stat_filters[1].1,
+        stat_filters[1].2,
+        stat_filters[2].0,
+        stat_filters[2].1, // $25
+        stat_filters[2].2,
+        stat_filters[3].0,
+        stat_filters[3].1,
+        stat_filters[3].2,
     )
     .fetch_all(executor)
     .await?;

@@ -3,7 +3,11 @@ use leptos::prelude::*;
 use leptos_use::on_click_outside;
 
 #[component]
-pub fn DropdownMenu<T>(options: IndexMap<T, String>, chosen_option: RwSignal<T>) -> impl IntoView
+pub fn DropdownMenu<T>(
+    options: IndexMap<T, String>,
+    chosen_option: RwSignal<T>,
+    #[prop(default = "Select an option")] missing_text: &'static str,
+) -> impl IntoView
 where
     T: Clone + std::hash::Hash + Eq + Send + Sync + 'static,
 {
@@ -62,25 +66,37 @@ where
         <div class="relative w-60 text-sm lg:text-base text-white" node_ref=node_ref>
             <button
                 on:click=toggle
-                class="w-full text-left px-1 lg:px-3 py-1 lg:py-2 rounded-md
-                bg-gradient-to-t from-zinc-900 to-zinc-800 shadow-md border border-zinc-950 
-                hover:from-zinc-800 hover:to-zinc-700 focus:outline-none"
-            >
-                {
-                    let options = options.clone();
-                    move || {
-                        options
-                            .get(&chosen_option.get())
-                            .cloned()
-                            .unwrap_or("Select an option".to_string())
-                    }
+                class=move || {
+                    format!(
+                        "w-full flex items-center justify-between gap-2
+                        px-1 lg:px-3 py-1 lg:py-2 rounded-md
+                        shadow-md border border-zinc-950 focus:outline-none {}",
+                        if is_open.get() {
+                            "bg-gradient-to-t from-zinc-900 to-zinc-950 "
+                        } else {
+                            "bg-gradient-to-t from-zinc-900 to-zinc-800 hover:from-zinc-800 hover:to-zinc-700"
+                        },
+                    )
                 }
-                <span class="float-right">"▼"</span>
+            >
+                <span class="truncate min-w-0">
+                    {
+                        let options = options.clone();
+                        move || {
+                            options
+                                .get(&chosen_option.get())
+                                .cloned()
+                                .unwrap_or(missing_text.to_string())
+                        }
+                    }
+                </span>
+                <span class="shrink-0">"▼"</span>
             </button>
 
             <ul class=move || {
                 format!(
-                    "dropdown-transition absolute mt-1 w-full rounded-md bg-zinc-800 border border-zinc-950 shadow-lg max-h-80 overflow-auto {}  z-20",
+                    "dropdown-transition absolute mt-1 w-full rounded-md bg-zinc-800 border border-zinc-950
+                    shadow-lg max-h-80 overflow-auto z-20 {}",
                     if is_open.get() { "open" } else { "" },
                 )
             }>
@@ -98,6 +114,151 @@ where
                     })
                     .collect::<Vec<_>>()}
             </ul>
+        </div>
+    }
+}
+
+#[component]
+pub fn SearchableDropdownMenu<T>(
+    options: IndexMap<T, String>,
+    chosen_option: RwSignal<T>,
+    #[prop(default = "Select an option")] missing_text: &'static str,
+) -> impl IntoView
+where
+    T: Clone + std::hash::Hash + Eq + Send + Sync + 'static,
+{
+    let node_ref = NodeRef::new();
+    let is_open = RwSignal::new(false);
+    let search = RwSignal::new(String::new());
+
+    let toggle = move |_| {
+        is_open.update(|open| {
+            *open = !*open;
+            if *open {
+                search.set("".to_string()); // clear search when opening
+            }
+        })
+    };
+    let _ = on_click_outside(node_ref, move |_| is_open.set(false));
+
+    let select_option = move |opt| {
+        is_open.set(false);
+        chosen_option.set(opt);
+    };
+
+    // A derived signal that filters the options by the search term
+    let filtered_options = Signal::derive({
+        let options = options.clone();
+        move || {
+            let term = search.get().to_lowercase();
+            options
+                .iter()
+                .filter(move |(_, text)| term.is_empty() || text.to_lowercase().contains(&term))
+                .map(|(k, v)| (k.clone(), v.clone()))
+                .collect::<Vec<_>>()
+        }
+    });
+
+    let search_ref = NodeRef::<leptos::html::Input>::new();
+    Effect::new({
+        let search_ref = search_ref.clone();
+        move |_| {
+            if is_open.get() {
+                if let Some(input) = search_ref.get() {
+                    input.focus().unwrap();
+                }
+            }
+        }
+    });
+
+    view! {
+        <style>
+            ".dropdown-transition {
+                opacity: 0;
+                transform: scaleY(0.5);
+                transform-origin: top;
+                transition: all 150ms ease-out;
+                pointer-events: none;
+            }
+            .dropdown-transition.open {
+                opacity: 1;
+                transform: scaleY(1);
+                pointer-events: auto;
+            }
+            ul::-webkit-scrollbar { width: 8px; }
+            ul::-webkit-scrollbar-track { background: #1f1f1f; border-radius: 4px; }
+            ul::-webkit-scrollbar-thumb { background-color: #525252; border-radius: 4px; border: 2px solid #1f1f1f; }
+            ul { scrollbar-width: thin; scrollbar-color: #525252 #1f1f1f; }
+            ul::-webkit-scrollbar-thumb:hover { background-color: #737373; }
+            "
+        </style>
+
+        <div class="relative w-60 text-sm lg:text-base text-white" node_ref=node_ref>
+            <button
+                on:click=toggle
+                class=move || {
+                    format!(
+                        "w-full flex items-center justify-between gap-2
+                        px-1 lg:px-3 py-1 lg:py-2 rounded-md
+                        shadow-md border border-zinc-950 focus:outline-none {}",
+                        if is_open.get() {
+                            "bg-gradient-to-t from-zinc-900 to-zinc-950 "
+                        } else {
+                            "bg-gradient-to-t from-zinc-900 to-zinc-800 hover:from-zinc-800 hover:to-zinc-700"
+                        },
+                    )
+                }
+            >
+                <span class="truncate min-w-0">
+                    {
+                        let options = options.clone();
+                        move || {
+                            options
+                                .get(&chosen_option.get())
+                                .cloned()
+                                .unwrap_or(missing_text.to_string())
+                        }
+                    }
+                </span>
+                <span class="shrink-0">"▼"</span>
+            </button>
+
+            <div class=move || {
+                format!(
+                    "dropdown-transition absolute mt-1 w-full rounded-md bg-zinc-800 border border-zinc-950
+                    shadow-lg z-20 {}",
+                    if is_open.get() { "open" } else { "" },
+                )
+            }>
+                <div class="px-1 lg:px-3 py-1 lg:py-2 border-b border-zinc-700 bg-gray-800">
+                    <input
+                        node_ref=search_ref
+                        class="w-full bg-gray-800 focus:outline-none"
+                        placeholder="Search..."
+                        prop:value=move || search.get()
+                        on:input=move |ev| search.set(event_target_value(&ev))
+                    />
+                </div>
+
+                <ul class="max-h-80 overflow-auto">
+                    {move || {
+                        filtered_options
+                            .get()
+                            .into_iter()
+                            .map(|(opt, text)| {
+                                view! {
+                                    <li
+                                        on:click=move |_| select_option(opt.clone())
+                                        class="cursor-pointer px-4 py-2 hover:bg-zinc-700"
+                                    >
+                                        {text}
+                                    </li>
+                                }
+                            })
+                            .collect::<Vec<_>>()
+                    }}
+                </ul>
+            </div>
         </div>
     }
 }

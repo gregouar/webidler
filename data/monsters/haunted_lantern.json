@@ -9,6 +9,7 @@
     {
       "name": "Flame Throw",
       "icon": "skills/fireball.svg",
+      "skill_type": "Spell",
       "cooldown": 2.0,
       "targets": [
         {
