@@ -79,7 +79,7 @@ where
                     )
                 }
             >
-                <span class="truncate min-w-0">
+                <span class="truncate flex-1 min-w-0">
                     {
                         let options = options.clone();
                         move || {
@@ -128,6 +128,8 @@ where
     T: Clone + std::hash::Hash + Eq + Send + Sync + 'static,
 {
     let node_ref = NodeRef::new();
+    let search_ref = NodeRef::<leptos::html::Input>::new();
+
     let is_open = RwSignal::new(false);
     let search = RwSignal::new(String::new());
 
@@ -135,7 +137,10 @@ where
         is_open.update(|open| {
             *open = !*open;
             if *open {
-                search.set("".to_string()); // clear search when opening
+                if let Some(input) = search_ref.get() {
+                    input.focus().unwrap();
+                }
+                //     search.set("".to_string());
             }
         })
     };
@@ -146,7 +151,6 @@ where
         chosen_option.set(opt);
     };
 
-    // A derived signal that filters the options by the search term
     let filtered_options = Signal::derive({
         let options = options.clone();
         move || {
@@ -156,18 +160,6 @@ where
                 .filter(move |(_, text)| term.is_empty() || text.to_lowercase().contains(&term))
                 .map(|(k, v)| (k.clone(), v.clone()))
                 .collect::<Vec<_>>()
-        }
-    });
-
-    let search_ref = NodeRef::<leptos::html::Input>::new();
-    Effect::new({
-        let search_ref = search_ref.clone();
-        move |_| {
-            if is_open.get() {
-                if let Some(input) = search_ref.get() {
-                    input.focus().unwrap();
-                }
-            }
         }
     });
 
@@ -209,7 +201,7 @@ where
                     )
                 }
             >
-                <span class="truncate min-w-0">
+                <span class="truncate flex-1 min-w-0">
                     {
                         let options = options.clone();
                         move || {
@@ -240,7 +232,7 @@ where
                     />
                 </div>
 
-                <ul class="max-h-80 overflow-auto">
+                <ul class="max-h-80 overflow-auto text-left">
                     {move || {
                         filtered_options
                             .get()

@@ -914,25 +914,51 @@ fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     .map(|(stat_type, stat_value)| {
                         view! {
                             <div class="flex gap-2 lg:gap-4 items-center">
-                                <MenuButton
-                                    class:flex-none
-                                    on:click=move |_| {
-                                        stat_type.set(None);
-                                        stat_value.set(None);
+                                {move || {
+                                    stat_type
+                                        .read()
+                                        .is_some()
+                                        .then(|| {
+                                            view! {
+                                                <MenuButton
+                                                    class:flex-none
+                                                    on:click=move |_| {
+                                                        stat_type.set(None);
+                                                        stat_value.set(None);
+                                                    }
+                                                >
+                                                    "❌"
+                                                </MenuButton>
+                                            }
+                                        })
+                                }}
+                                <span class=move || {
+                                    if stat_type.read().is_none() {
+                                        "flex-1 text-center"
+                                    } else {
+                                        "flex-1"
                                     }
-                                    disabled=Signal::derive(move || stat_type.read().is_none())
-                                >
-                                    "❌"
-                                </MenuButton>
-                                <StatDropdown chosen_option=stat_type />
-                                <div class="w-36">
-                                    <Input
-                                        id="stat_value_1"
-                                        input_type="number"
-                                        placeholder="Min"
-                                        bind=stat_value
-                                    />
-                                </div>
+                                }>
+                                    <StatDropdown chosen_option=stat_type />
+                                </span>
+                                {move || {
+                                    stat_type
+                                        .read()
+                                        .is_some()
+                                        .then(|| {
+                                            view! {
+                                                <div class="w-36">
+                                                    <Input
+                                                        id="stat_value_1"
+                                                        input_type="number"
+                                                        placeholder="Min"
+                                                        bind=stat_value
+                                                    />
+                                                </div>
+                                            }
+                                        })
+                                }}
+
                             </div>
                         }
                     })}
@@ -1046,7 +1072,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             options
             chosen_option
             class:w-full
-            missing_text="Add a Stat Filter"
+            missing_text="+ Add Stat Filter"
         />
     }
 }
