@@ -8,8 +8,9 @@ use shared::{
         item::{ItemCategory, ItemRarity},
         market::{MarketFilters, MarketItem, MarketOrderBy},
         passive::StatEffect,
-        skill::DamageType,
+        skill::{DamageType, SkillType},
         stat_effect::{Modifier, StatType},
+        trigger::HitTrigger,
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
@@ -941,44 +942,84 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         (StatType::ManaRegen, Modifier::Flat),
         (StatType::Armor(DamageType::Fire), Modifier::Flat),
         (StatType::Armor(DamageType::Poison), Modifier::Flat),
+        (
+            StatType::Damage {
+                skill_type: None,
+                damage_type: None,
+            },
+            Modifier::Multiplier,
+        ),
+        (
+            StatType::Damage {
+                skill_type: Some(SkillType::Attack),
+                damage_type: None,
+            },
+            Modifier::Multiplier,
+        ),
+        (
+            StatType::Damage {
+                skill_type: Some(SkillType::Spell),
+                damage_type: None,
+            },
+            Modifier::Multiplier,
+        ),
+        (
+            StatType::Damage {
+                skill_type: None,
+                damage_type: Some(DamageType::Physical),
+            },
+            Modifier::Multiplier,
+        ),
+        (
+            StatType::Damage {
+                skill_type: None,
+                damage_type: Some(DamageType::Fire),
+            },
+            Modifier::Multiplier,
+        ),
+        (
+            StatType::Damage {
+                skill_type: None,
+                damage_type: Some(DamageType::Poison),
+            },
+            Modifier::Multiplier,
+        ),
+        (StatType::CritChances(None), Modifier::Multiplier),
+        (StatType::CritDamage(None), Modifier::Multiplier),
+        (StatType::StatusPower(None), Modifier::Multiplier),
+        (StatType::StatusDuration(None), Modifier::Multiplier),
+        (StatType::Speed(None), Modifier::Multiplier),
+        (
+            StatType::Speed(Some(SkillType::Attack)),
+            Modifier::Multiplier,
+        ),
+        (
+            StatType::Speed(Some(SkillType::Spell)),
+            Modifier::Multiplier,
+        ),
+        (StatType::MovementSpeed, Modifier::Multiplier),
+        (StatType::GoldFind, Modifier::Multiplier),
+        (
+            StatType::LifeOnHit(HitTrigger {
+                skill_type: Some(SkillType::Attack),
+                range: None,
+                is_crit: None,
+                is_blocked: None,
+                is_hurt: Some(true),
+            }),
+            Modifier::Flat,
+        ),
+        (
+            StatType::ManaOnHit(HitTrigger {
+                skill_type: Some(SkillType::Attack),
+                range: None,
+                is_crit: None,
+                is_blocked: None,
+                is_hurt: Some(true),
+            }),
+            Modifier::Flat,
+        ),
     ];
-
-    // TakeFromManaBeforeLife,
-    // Block,
-    // Damage {
-    //     #[serde(default)]
-    //     skill_type: Option<SkillType>,
-    //     #[serde(default)]
-    //     damage_type: Option<DamageType>,
-    // },
-    // MinDamage {
-    //     #[serde(default)]
-    //     skill_type: Option<SkillType>,
-    //     #[serde(default)]
-    //     damage_type: Option<DamageType>,
-    // },
-    // MaxDamage {
-    //     #[serde(default)]
-    //     skill_type: Option<SkillType>,
-    //     #[serde(default)]
-    //     damage_type: Option<DamageType>,
-    // },
-    // SpellPower,
-    // CritChances(#[serde(default)] Option<SkillType>),
-    // CritDamage(#[serde(default)] Option<SkillType>),
-    // StatusPower(#[serde(default)] Option<StatStatusType>),
-    // StatusDuration(#[serde(default)] Option<StatStatusType>),
-    // Speed(#[serde(default)] Option<SkillType>),
-    // MovementSpeed,
-    // GoldFind,
-    // LifeOnHit(#[serde(default)] HitTrigger),
-    // ManaOnHit(#[serde(default)] HitTrigger),
-    // DamageResistance {
-    //     #[serde(default)]
-    //     skill_type: Option<SkillType>,
-    //     #[serde(default)]
-    //     damage_type: Option<DamageType>,
-    // },
 
     let options = std::iter::once((None, "No Filter Selected".to_string()))
         .chain(available_stats.into_iter().map(|(stat_type, modifier)| {
