@@ -18,9 +18,7 @@ where
             id=id
             type=input_type
             placeholder=placeholder
-            value=move || {
-                bind.get().and_then(|value| serde_plain::to_string(&value).ok()).unwrap_or_default()
-            }
+            prop:value=move || { bind.get().and_then(|value| serde_plain::to_string(&value).ok()) }
             on:input:target=move |ev| bind.set(serde_plain::from_str(&ev.target().value()).ok())
             class=move || {
                 format!(
@@ -84,10 +82,8 @@ where
                     )
                 }
                 placeholder=placeholder
-                value=move || {
-                    bind.get()
-                        .and_then(|value| serde_plain::to_string(&value).ok())
-                        .unwrap_or_default()
+                prop:value=move || {
+                    bind.get().and_then(|value| serde_plain::to_string(&value).ok())
                 }
                 on:input:target=move |ev| match serde_plain::from_str(&ev.target().value()) {
                     Ok(v) => {
