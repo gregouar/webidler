@@ -8,6 +8,7 @@ use shared::{
         item::{ItemCategory, ItemRarity},
         market::{MarketFilters, MarketItem, MarketOrderBy},
         passive::StatEffect,
+        skill::DamageType,
         stat_effect::{Modifier, StatType},
     },
     http::client::{
@@ -934,7 +935,50 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
     let available_stats = vec![
         (StatType::Life, Modifier::Multiplier),
         (StatType::Life, Modifier::Flat),
+        (StatType::LifeRegen, Modifier::Flat),
+        (StatType::Mana, Modifier::Multiplier),
+        (StatType::Mana, Modifier::Flat),
+        (StatType::ManaRegen, Modifier::Flat),
+        (StatType::Armor(DamageType::Fire), Modifier::Flat),
+        (StatType::Armor(DamageType::Poison), Modifier::Flat),
     ];
+
+    // TakeFromManaBeforeLife,
+    // Block,
+    // Damage {
+    //     #[serde(default)]
+    //     skill_type: Option<SkillType>,
+    //     #[serde(default)]
+    //     damage_type: Option<DamageType>,
+    // },
+    // MinDamage {
+    //     #[serde(default)]
+    //     skill_type: Option<SkillType>,
+    //     #[serde(default)]
+    //     damage_type: Option<DamageType>,
+    // },
+    // MaxDamage {
+    //     #[serde(default)]
+    //     skill_type: Option<SkillType>,
+    //     #[serde(default)]
+    //     damage_type: Option<DamageType>,
+    // },
+    // SpellPower,
+    // CritChances(#[serde(default)] Option<SkillType>),
+    // CritDamage(#[serde(default)] Option<SkillType>),
+    // StatusPower(#[serde(default)] Option<StatStatusType>),
+    // StatusDuration(#[serde(default)] Option<StatStatusType>),
+    // Speed(#[serde(default)] Option<SkillType>),
+    // MovementSpeed,
+    // GoldFind,
+    // LifeOnHit(#[serde(default)] HitTrigger),
+    // ManaOnHit(#[serde(default)] HitTrigger),
+    // DamageResistance {
+    //     #[serde(default)]
+    //     skill_type: Option<SkillType>,
+    //     #[serde(default)]
+    //     damage_type: Option<DamageType>,
+    // },
 
     let options = std::iter::once((None, "No Filter Selected".to_string()))
         .chain(available_stats.into_iter().map(|(stat_type, modifier)| {
