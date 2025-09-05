@@ -141,12 +141,11 @@ where
     let toggle = move |_| {
         is_open.update(|open| {
             *open = !*open;
-            if *open {
-                if let Some(input) = search_ref.get() {
+            if *open
+                && let Some(input) = search_ref.get() {
                     input.focus().unwrap();
                 }
                 //     search.set("".to_string());
-            }
         })
     };
     let _ = on_click_outside(node_ref, move |_| is_open.set(false));
