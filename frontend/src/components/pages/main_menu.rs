@@ -77,16 +77,16 @@ pub fn MainMenuPage() -> impl IntoView {
                 async move {
                     match backend
                         .post_signin(&SignInRequest {
-                            captcha_token: captcha_token.get().unwrap_or_default(),
-                            username: username.get().unwrap(), // TODO: better error?
-                            password: password.get().unwrap(),
+                            captcha_token: captcha_token.get_untracked().unwrap_or_default(),
+                            username: username.get_untracked().unwrap(), // TODO: better error?
+                            password: password.get_untracked().unwrap(),
                         })
                         .await
                     {
                         Ok(response) => {
                             go_fullscreen();
                             auth_context.sign_in(response.jwt);
-                            set_username_storage.set(username.get());
+                            set_username_storage.set(username.get_untracked());
                             navigate("user-dashboard", Default::default());
                         }
                         Err(e) => {

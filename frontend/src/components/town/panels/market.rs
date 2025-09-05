@@ -7,7 +7,7 @@ use strum::IntoEnumIterator;
 use shared::{
     data::{
         item::{ItemCategory, ItemRarity, ItemSpecs},
-        market::{MarketFilters, MarketItem},
+        market::{MarketFilters, MarketItem, MarketOrderBy},
         user::UserCharacterId,
     },
     http::client::{
@@ -239,6 +239,24 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
         .map(|category| (category, loot_filter_category_to_str(category).into()))
         .collect();
 
+    let order_by = RwSignal::new(filters.get_untracked().order_by);
+    Effect::new(move || filters.write().order_by = order_by.get());
+    let order_by_options = MarketOrderBy::iter()
+        .map(|category| {
+            (
+                category,
+                match category {
+                    MarketOrderBy::Price => "Lowest Price",
+                    MarketOrderBy::Level => "Lowest Level",
+                    MarketOrderBy::Damages => "Highest Damages",
+                    MarketOrderBy::Armor => "Highest Armor",
+                    MarketOrderBy::Block => "Highest Block Chances",
+                }
+                .into(),
+            )
+        })
+        .collect();
+
     view! {
         <div class="w-full h-full flex flex-col p-4 relative">
             <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
@@ -281,6 +299,11 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     <div class="flex items-center justify-between text-gray-300 text-sm">
                         <span>"Item Rarity:"</span>
                         <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
+                    </div>
+
+                    <div class="flex items-center justify-between text-gray-300 text-sm">
+                        <span>"Order by:"</span>
+                        <DropdownMenu options=order_by_options chosen_option=order_by />
                     </div>
                 </div>
             </div>
@@ -340,7 +363,7 @@ fn MarketBrowser(
     filters: RwSignal<MarketFilters>,
     own_listings: bool,
 ) -> impl IntoView {
-    let items_per_page = PaginationLimit::try_new(20).unwrap_or_default();
+    let items_per_page = PaginationLimit::try_new(10).unwrap_or_default();
 
     let items_list = RwSignal::new(Vec::new());
 
@@ -348,10 +371,19 @@ fn MarketBrowser(
     let reached_end_of_list = RwSignal::new(false);
     let has_more = RwSignal::new(true);
 
+    let refresh_list = move || {
+        items_list.write().drain(..);
+        extend_list.set(0);
+    };
+
+    Effect::new(move || {
+        let _ = filters.read();
+        refresh_list()
+    });
+
     Effect::new(move || {
         if selected_item.read().is_none() {
-            items_list.write().drain(..);
-            extend_list.set(0);
+            refresh_list();
         }
     });
 

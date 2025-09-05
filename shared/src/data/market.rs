@@ -1,5 +1,6 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use strum_macros::EnumIter;
 
 use crate::{
     data::{
@@ -29,6 +30,8 @@ pub struct MarketItem {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct MarketFilters {
+    pub order_by: MarketOrderBy,
+
     pub item_name: Option<ItemName>,
     pub item_level: Option<AreaLevel>,
     pub price: Option<ItemPrice>,
@@ -39,4 +42,14 @@ pub struct MarketFilters {
     pub item_damages: Option<f64>,
     pub item_armor: Option<f64>,
     pub item_block: Option<f64>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, EnumIter, Hash, PartialEq, Eq)]
+pub enum MarketOrderBy {
+    #[default]
+    Price,
+    Level,
+    Damages,
+    Armor,
+    Block,
 }

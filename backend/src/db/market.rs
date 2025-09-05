@@ -229,6 +229,8 @@ pub async fn read_market_items<'c>(
         .and_then(|x| serde_plain::to_string(&x).ok())
         .unwrap_or_default();
 
+    let order_by = serde_plain::to_string(&filters.order_by).unwrap_or_default();
+
     let raw_items = sqlx::query_as!(
         MarketEntry,
         r#"
@@ -278,7 +280,15 @@ pub async fn read_market_items<'c>(
         ORDER BY 
             rejected DESC, 
             recipient_id DESC, 
-            price ASC
+            CASE
+                WHEN  $17 = 'Level' THEN market.item_level
+            END ASC,
+            CASE
+                WHEN  $17 = 'Damages' THEN  market.item_damages
+                WHEN  $17 = 'Armor' THEN  market.item_armor
+                WHEN  $17 = 'Block' THEN  market.item_block
+            END DESC,
+            market.price ASC
         LIMIT $1
         OFFSET $2
         "#,
@@ -297,7 +307,8 @@ pub async fn read_market_items<'c>(
         no_filter_item_armor,
         item_armor,
         no_filter_item_block, // $15
-        item_block
+        item_block,
+        order_by
     )
     .fetch_all(executor)
     .await?;
