@@ -300,6 +300,30 @@ pub async fn read_market_items<'c>(
                 AND ms.stat_modifier = $19
                 AND ms.stat_value >= $20
             ))
+            AND ($22 = '' OR EXISTS (
+                SELECT 1
+                FROM market_stats ms
+                WHERE ms.market_id = market.market_id
+                AND ms.item_stat = $21
+                AND ms.stat_modifier = $22
+                AND ms.stat_value >= $23
+            ))
+            AND ($25 = '' OR EXISTS (
+                SELECT 1
+                FROM market_stats ms
+                WHERE ms.market_id = market.market_id
+                AND ms.item_stat = $24
+                AND ms.stat_modifier = $25
+                AND ms.stat_value >= $26
+            ))
+            AND ($28 = '' OR EXISTS (
+                SELECT 1
+                FROM market_stats ms
+                WHERE ms.market_id = market.market_id
+                AND ms.item_stat = $27
+                AND ms.stat_modifier = $28
+                AND ms.stat_value >= $29
+            ))
         ORDER BY 
             rejected DESC, 
             recipient_id DESC, 
@@ -334,7 +358,16 @@ pub async fn read_market_items<'c>(
         order_by,
         stats_filters[0].0,
         stats_filters[0].1,
-        stats_filters[0].2 // $20
+        stats_filters[0].2, // $20
+        stats_filters[1].0,
+        stats_filters[1].1,
+        stats_filters[1].2,
+        stats_filters[2].0,
+        stats_filters[2].1, // $25
+        stats_filters[2].2,
+        stats_filters[3].0,
+        stats_filters[3].1,
+        stats_filters[3].2,
     )
     .fetch_all(executor)
     .await?;

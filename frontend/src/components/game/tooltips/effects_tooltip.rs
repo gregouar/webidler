@@ -372,6 +372,6 @@ fn format_flat_number(value: Option<f64>, precise: bool) -> String {
                 format!("{:.0}", value)
             }
         }
-        None => if precise { ".X" } else { "X" }.to_string(),
+        None => if precise { ".#" } else { "#" }.to_string(),
     }
 }

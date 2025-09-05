@@ -117,7 +117,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                     </div>
 
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="w-full aspect-[4/3] bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                        <div class="w-full aspect-[4/3] bg-neutral-900 overflow-y-auto ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                             {move || {
                                 match active_tab.get() {
                                     MarketTab::Filters => {
@@ -905,24 +905,21 @@ fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                 "Stats Filters"
             </span>
 
-            <div class="grid grid-cols-2 gap-4 p-4 border-b border-zinc-700">
-                <div class="flex flex-col gap-4">
+            <div class="flex gap-4 p-4 border-b border-zinc-700">
+                <div class="flex-1 flex flex-col gap-4">
                     {stat_types.map(|stat_type| view! { <StatDropdown chosen_option=stat_type /> })}
                 </div>
 
-                <div class="flex flex-col gap-4">
+                <div class="w-36 flex flex-col gap-4">
                     {stat_values
                         .map(|stat_value| {
                             view! {
-                                <div class="flex items-center justify-between text-gray-300 text-sm">
-                                    <span>"Min:"</span>
-                                    <Input
-                                        id="stat_value_1"
-                                        input_type="number"
-                                        placeholder="Min value"
-                                        bind=stat_value
-                                    />
-                                </div>
+                                <Input
+                                    id="stat_value_1"
+                                    input_type="number"
+                                    placeholder="Min"
+                                    bind=stat_value
+                                />
                             }
                         })}
                 </div>
@@ -1035,7 +1032,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
 
 fn format_stat_filter(stat_type: StatType, modifier: Modifier) -> String {
     match modifier {
-        Modifier::Multiplier => format!("X% Increased {}", format_multiplier_stat_name(stat_type)),
+        Modifier::Multiplier => format!("#% Increased {}", format_multiplier_stat_name(stat_type)),
         Modifier::Flat => format_flat_stat(stat_type, None),
     }
 }
