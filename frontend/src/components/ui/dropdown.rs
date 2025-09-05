@@ -90,7 +90,12 @@ where
                         }
                     }
                 </span>
-                <span class="shrink-0">"▼"</span>
+                <span class=move || {
+                    format!(
+                        "shrink-0 transition-transform duration-200 {}",
+                        if is_open.get() { "rotate-180" } else { "rotate-0" },
+                    )
+                }>"▼"</span>
             </button>
 
             <ul class=move || {
@@ -212,7 +217,12 @@ where
                         }
                     }
                 </span>
-                <span class="shrink-0">"▼"</span>
+                <span class=move || {
+                    format!(
+                        "shrink-0 transition-transform duration-200 {}",
+                        if is_open.get() { "rotate-180" } else { "rotate-0" },
+                    )
+                }>"▼"</span>
             </button>
 
             <div class=move || {
