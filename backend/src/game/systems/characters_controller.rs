@@ -174,7 +174,7 @@ pub fn compute_damage(
     skill_type: SkillType,
     ignore_armor: bool,
 ) -> f64 {
-    let amount = (100.0
+    let amount = (1.0
         - target_specs
             .damage_resistance
             .get(&(skill_type, damage_type))

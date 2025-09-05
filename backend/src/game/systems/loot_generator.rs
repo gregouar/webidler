@@ -4,7 +4,7 @@ use shared::data::{
     area::AreaLevel,
     item::{ItemBase, ItemModifiers, ItemRarity, ItemSpecs},
     item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
-    stat_effect::StatEffect,
+    stat_effect::{Modifier, StatEffect},
 };
 
 use crate::game::{
@@ -230,12 +230,15 @@ fn roll_affix(
 }
 
 fn roll_affix_effect(effect_blueprint: &AffixEffectBlueprint) -> AffixEffect {
+    let value = rng::random_range(effect_blueprint.min..=effect_blueprint.max).unwrap_or_default();
     AffixEffect {
         stat_effect: StatEffect {
             stat: effect_blueprint.stat,
             modifier: effect_blueprint.modifier,
-            value: rng::random_range(effect_blueprint.min..=effect_blueprint.max)
-                .unwrap_or_default(),
+            value: match effect_blueprint.modifier {
+                Modifier::Multiplier => (value * 100.0).round() * 0.01,
+                Modifier::Flat => value.round(),
+            },
         },
         scope: effect_blueprint.scope,
     }

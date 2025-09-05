@@ -13,8 +13,8 @@
         "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "min": 0.1,
-        "max": 0.29
+        "min": 1,
+        "max": 2
       }
     ]
   },
@@ -32,8 +32,8 @@
         "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "min": 0.3,
-        "max": 0.49
+        "min": 3,
+        "max": 4
       }
     ]
   }

@@ -293,7 +293,7 @@ pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
         }
         StatType::CritChances(skill_type) => format!(
             "Adds {}% Critical Hit Chances{}",
-            format_flat_number(value, true),
+            format_flat_number(value, false),
             to_skill_type_str(skill_type)
         ),
         StatType::CritDamage(skill_type) => format!(
@@ -320,7 +320,7 @@ pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
                 )
             } else {
                 format!(
-                    "Adds {:.2}s Cooldown{}",
+                    "Adds {}s Cooldown{}",
                     format_flat_number(value.map(|v| -v), true),
                     to_skill_type_str(skill_type)
                 )
@@ -367,11 +367,11 @@ fn format_flat_number(value: Option<f64>, precise: bool) -> String {
     match value {
         Some(value) => {
             if precise {
-                format!("{:.2}", value)
+                format!("{:.1}", value * 0.1)
             } else {
                 format!("{:.0}", value)
             }
         }
-        None => "X".to_string(),
+        None => if precise { ".X" } else { "X" }.to_string(),
     }
 }

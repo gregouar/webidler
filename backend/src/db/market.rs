@@ -236,7 +236,11 @@ pub async fn read_market_items<'c>(
                 Some((
                     serde_json::to_value(stat_filter.stat).ok()?,
                     serde_plain::to_string(&stat_filter.modifier).ok()?,
-                    stat_filter.value,
+                    stat_filter.value
+                        * match stat_filter.modifier {
+                            shared::data::stat_effect::Modifier::Multiplier => 0.01,
+                            shared::data::stat_effect::Modifier::Flat => 1.0,
+                        },
                 ))
             })
             .unwrap_or_default()

@@ -27,12 +27,12 @@ pub fn update_character_state(
 
     character_state.life = character_specs.max_life.min(
         character_state.life
-            + (elapsed_time_f64 * character_specs.life_regen * character_specs.max_life / 100.0),
+            + (elapsed_time_f64 * character_specs.life_regen * character_specs.max_life * 0.001),
     );
 
     character_state.mana = character_specs.max_mana.min(
         character_state.mana
-            + (elapsed_time_f64 * character_specs.mana_regen * character_specs.max_mana / 100.0),
+            + (elapsed_time_f64 * character_specs.mana_regen * character_specs.max_mana * 0.001),
     );
 
     statuses_controller::update_character_statuses(character_specs, character_state, elapsed_time);

@@ -53,7 +53,7 @@
         "stat": "Life",
         "modifier": "Multiplier",
         "min": 0.02,
-        "max": 0.039
+        "max": 0.04
       }
     ]
   },
@@ -71,8 +71,8 @@
         "scope": "Global",
         "stat": "Life",
         "modifier": "Multiplier",
-        "min": 0.04,
-        "max": 0.059
+        "min": 0.05,
+        "max": 0.06
       }
     ]
   }
