@@ -141,11 +141,10 @@ where
     let toggle = move |_| {
         is_open.update(|open| {
             *open = !*open;
-            if *open
-                && let Some(input) = search_ref.get() {
-                    input.focus().unwrap();
-                }
-                //     search.set("".to_string());
+            if *open && let Some(input) = search_ref.get() {
+                input.focus().unwrap();
+            }
+            //     search.set("".to_string());
         })
     };
     let _ = on_click_outside(node_ref, move |_| is_open.set(false));
@@ -257,6 +256,14 @@ where
                                 }
                             })
                             .collect::<Vec<_>>()
+                    }}
+                    {move || {
+                        filtered_options
+                            .read()
+                            .is_empty()
+                            .then(|| {
+                                view! { <li class="px-4 py-2">"No elements found."</li> }
+                            })
                     }}
                 </ul>
             </div>
