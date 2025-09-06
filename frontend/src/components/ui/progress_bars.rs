@@ -318,8 +318,7 @@ pub fn CircularProgressBar(
                     ></div>
 
                     // <div class="absolute inset-3 rounded-full bg-radial from-stone-600 to-zinc-950"></div>
-                    <div class="absolute inset-4 rounded-full bg-zinc-950"></div>
-                    <div class="absolute w-full h-full bg-radial from-pink-400 from-40% to-fuchsia-700"></div>
+                    <div class="absolute inset-4 rounded-full bg-radial from-stone-600 to-zinc-950"></div>
 
                     // <span id="progress-label" class="relative text-lg font-bold text-gray-800">
                     //     0%

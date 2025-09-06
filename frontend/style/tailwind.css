@@ -1,3 +1,48 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@source "./src/**/*.rs";
+
+
+/* Custom utilities (replaces theme.extend + plugins)
+@utility text-shadow-sm {
+  text-shadow: 0 1px 2px var(--tw-shadow-color);
+}
+@utility text-shadow {
+  text-shadow: 0 2px 4px var(--tw-shadow-color);
+}
+@utility text-shadow-lg {
+  text-shadow: 0 8px 16px var(--tw-shadow-color);
+}
+
+@theme {
+  --tw-shadow-color: currentColor;
+} */
+ 
+/* @theme {  --text-shadow-lg: 0 8px 16px var(--tw-shadow-color); } */
+@theme {  --text-shadow-lg: 0 35px 35px rgb(0, 0, 0 / 0.25);  }
+
+
+
+/* Safelist replacements */
+@layer utilities {
+  .duration-100 {}
+  .duration-1000 {}
+  .col-span-1 {}
+  .col-span-2 {}
+  .col-span-3 {}
+  .row-span-1 {}
+  .row-span-2 {}
+  .col-start-1 {}
+  .col-start-2 {}
+  .col-start-3 {}
+  .row-start-1 {}
+  .row-start-2 {}
+  .aspect-\[4\/3\] {}
+  .aspect-\[8\/3\] {}
+  .aspect-\[8\/6\] {}
+  .aspect-\[12\/6\] {}
+  .grayscale-80 {}
+  .border-red-500 {}
+  .focus\:ring-red-500 {}
+  .inset-4 {}
+}

@@ -125,7 +125,7 @@ pub fn MainMenuPage() -> impl IntoView {
                 {move || players_count.get().map(|x| x.take()).unwrap_or_default()}
             </div>
             <div>
-                <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">
+                <h1 class="text-shadow-lg/30 shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">
                     "Grind to Rust!"
                 </h1>
                 <div class="flex flex-col space-y-2">
