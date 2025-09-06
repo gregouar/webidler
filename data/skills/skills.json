@@ -187,8 +187,8 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 0.3,
-                  "max_value": 0.3
+                  "min_value": 30,
+                  "max_value": 30
                 }
               ]
             }
