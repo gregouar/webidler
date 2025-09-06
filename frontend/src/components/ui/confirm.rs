@@ -50,7 +50,7 @@ pub fn ConfirmationModal(state: RwSignal<Option<(String, ArcFn)>>) -> impl IntoV
                 "
             </style>
 
-            <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                 <div
                     node_ref=node_ref
                     class="bg-gradient-to-br from-gray-800/90 via-gray-900/90 to-black

@@ -441,7 +441,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     view! {
         <div class="flex flex-col">
             <button
-                class="active:brightness-50 active:sepia p-1"
+                class="active:brightness-50 active:sepia p-1 disabled:pointer-events-none"
                 on:mouseenter=show_tooltip
                 on:mouseleave=hide_tooltip
                 on:click=use_skill
