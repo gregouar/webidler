@@ -106,13 +106,13 @@ pub fn formatted_effects_list(
                     skill_type,
                     damage_type,
                 } => {
-                    min_damage.insert((skill_type, damage_type, effect.value > 0.0), effect.value);
+                    min_damage.insert((skill_type, damage_type, effect.value >= 0.0), effect.value);
                 }
                 MaxDamage {
                     skill_type,
                     damage_type,
                 } => {
-                    max_damage.insert((skill_type, damage_type, effect.value > 0.0), effect.value);
+                    max_damage.insert((skill_type, damage_type, effect.value >= 0.0), effect.value);
                 }
                 //
                 stat => merged.push(format_flat_stat(stat, Some(effect.value))),

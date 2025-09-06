@@ -7,3 +7,6 @@ release = false
 
 [watch]
 ignore = ["dist"]
+
+[tools]
+tailwindcss = "4.1.4"

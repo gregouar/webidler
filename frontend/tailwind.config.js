@@ -27,7 +27,8 @@ module.exports = {
       "aspect-[12/6]",
       "grayscale-80",
       "border-red-500",
-      "focus:ring-red-500"
+      "focus:ring-red-500",
+      "inset-4",
     ],
     theme: {
       extend: {

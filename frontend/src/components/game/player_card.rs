@@ -454,8 +454,8 @@ fn PlayerSkill(index: usize) -> impl IntoView {
                 disabled=move || !is_ready.get()
             >
                 <CircularProgressBar
-                    bar_width=4
-                    bar_color="text-amber-700"
+                    // bar_width=4
+                    bar_color="oklch(55.5% 0.163 48.998)"
                     value=skill_cooldown
                     reset=just_triggered
                 >
