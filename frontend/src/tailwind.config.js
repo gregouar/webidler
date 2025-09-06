@@ -1,0 +1,28 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ['./src/**/*.{js,ts,jsx,tsx,html}'],
+  safelist: [
+    'duration-100',
+    'duration-1000',
+    'col-span-1',
+    'col-span-2',
+    'col-span-3',
+    'row-span-1',
+    'row-span-2',
+    'col-start-1',
+    'col-start-2',
+    'col-start-3',
+    'row-start-1',
+    'row-start-2',
+    'aspect-[4/3]',
+    'aspect-[8/3]',
+    'aspect-[8/6]',
+    'aspect-[12/6]',
+    'grayscale-80',
+    'border-red-500',
+    'focus:ring-red-500',
+    'inset-2',
+    'inset-3',
+    'inset-4',
+  ],
+};

@@ -418,6 +418,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
             bar_color="oklch(55.5% 0.163 48.998)"
             value=skill_cooldown
             reset=just_triggered
+            bar_width=2
 
             on:mouseenter=show_tooltip
             on:mouseleave=hide_tooltip

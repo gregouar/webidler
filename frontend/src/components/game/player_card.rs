@@ -458,6 +458,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
                     bar_color="oklch(55.5% 0.163 48.998)"
                     value=skill_cooldown
                     reset=just_triggered
+                    bar_width=4
                 >
                     <img
                         src=icon_asset

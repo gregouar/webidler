@@ -66,6 +66,7 @@ pub fn ItemCard(
             class=format!(
                 "relative group flex items-center justify-center w-full aspect-[2/3]
                 rounded-md p-1 bg-gradient-to-br {} border-4 {} ring-2 {} shadow-md {}
+                cursor-pointer
                 ",
                 gradient,
                 border_color,

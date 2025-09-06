@@ -18,6 +18,7 @@ pub fn MenuButton(
             hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
             active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
             w-auto
+            cursor-pointer
             disabled:from-zinc-700 disabled:to-zinc-600
             disabled:text-zinc-400 disabled:pointer-events-none
             disabled:opacity-60 disabled:shadow-none
@@ -45,7 +46,7 @@ pub fn MenuButtonRed(
             overflow-hidden
             hover:bg-gradient-to-tr hover:from-red-800 hover:to-red-700
             active:bg-gradient-to-t active:from-red-900 active:to-red-950
-            
+            cursor-pointer
             disabled:from-zinc-700 disabled:to-zinc-600
             disabled:text-zinc-400 disabled:pointer-events-none
             disabled:opacity-60 disabled:shadow-none
@@ -71,6 +72,7 @@ pub fn FancyButton(
             border border-neutral-950
             bg-gradient-to-t from-zinc-900 to-zinc-800 
             overflow-hidden
+            cursor-pointer
             hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
             active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
             disabled:from-zinc-700 disabled:to-zinc-600
@@ -118,6 +120,7 @@ pub fn Toggle(
                     font-bold text-shadow shadow-neutral-950
                     border border-neutral-950 rounded 
                     bg-gradient-to-t from-zinc-900 to-zinc-800 
+                    cursor-pointer
                     hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
                     active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950
                     transition-all duration-200
@@ -138,9 +141,10 @@ pub fn Toggle(
 pub fn TabButton(children: Children, #[prop(into)] is_active: Signal<bool>) -> impl IntoView {
     let active_class = |active| {
         if active {
-            "bg-gradient-to-t from-zinc-900 to-zinc-950 pointer"
+            "bg-gradient-to-t from-zinc-900 to-zinc-950"
         } else {
             "
+            cursor-pointer
             bg-gradient-to-t from-zinc-900 to-zinc-800 
             hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
             active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950

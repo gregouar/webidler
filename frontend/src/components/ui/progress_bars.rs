@@ -241,6 +241,7 @@ pub fn CircularProgressBar(
     // Percent value, must be between 0 and 100.
     #[prop(into)] value: Signal<f32>,
     bar_color: &'static str,
+    bar_width: u8,
     // Instant reset
     #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
     // Inside the circular bar
@@ -292,7 +293,7 @@ pub fn CircularProgressBar(
                 }
                 @keyframes circular-progress-bar-glow {
                  0% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  }
-                 50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746));  transform: translate(-50%, -50%) scale(1.2); }
+                 50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746));  transform: scale(1.2); }
                  100% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
                 }
 
@@ -309,20 +310,22 @@ pub fn CircularProgressBar(
                         class="progress-ring absolute inset-0 rounded-full transition-(--progress) duration-200 ease-linear"
                         style=move || format!("
                             background: conic-gradient(
-                                {bar_color} calc(var(--progress) - 0.5%),
+                                {bar_color} var(--progress),
                                 transparent var(--progress) 100%
                             );
                             {}
                         ",transition())
+                        //  style=move || format!("
+                        //     background: conic-gradient(
+                        //         {bar_color} calc(var(--progress) - 5.0%),
+                        //         transparent var(--progress) 100%
+                        //     );
+                        //     {}
+                        // ",transition())
                         style:--progress=move || format!("{}%", set_value())
                     ></div>
 
-                    // <div class="absolute inset-3 rounded-full bg-radial from-stone-600 to-zinc-950"></div>
-                    <div class="absolute inset-4 rounded-full bg-radial from-stone-600 to-zinc-950"></div>
-
-                    // <span id="progress-label" class="relative text-lg font-bold text-gray-800">
-                    //     0%
-                    // </span>
+                    <div class=format!("absolute inset-{bar_width} rounded-full bg-radial from-stone-600 to-zinc-950")></div>
                 </div>
 
                 // <svg class="size-full overflow-visible" viewBox="0 0 180 180">
