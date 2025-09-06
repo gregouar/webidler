@@ -441,23 +441,18 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     view! {
         <div class="flex flex-col">
             <button
-                class=move || {
-                    if is_ready.get() {
-                        "active:brightness-50 active:sepia p-1"
-                    } else {
-                        "brightness-80 sepia-0 p-1"
-                    }
-                }
+                class="active:brightness-50 active:sepia p-1 disabled:pointer-events-none"
                 on:mouseenter=show_tooltip
                 on:mouseleave=hide_tooltip
                 on:click=use_skill
                 disabled=move || !is_ready.get()
             >
                 <CircularProgressBar
-                    bar_width=4
-                    bar_color="text-amber-700"
+                    // bar_width=4
+                    bar_color="oklch(55.5% 0.163 48.998)"
                     value=skill_cooldown
                     reset=just_triggered
+                    bar_width=4
                 >
                     <img
                         src=icon_asset

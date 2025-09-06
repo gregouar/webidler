@@ -331,18 +331,10 @@ pub fn Node(
         }
     };
 
-    let pointer_style = move || {
-        let status = node_status.get();
-        match (status.purchase_status, status.meta_status) {
-            (PurchaseStatus::Purchaseable, _) => "cursor: pointer;",
-            _ => "",
-        }
-    };
-
     let class_style = move || {
         let status = node_status.get();
         match (status.purchase_status, status.meta_status) {
-            (PurchaseStatus::Purchaseable, _) => "saturate-50",
+            (PurchaseStatus::Purchaseable, _) => "saturate-50 cursor-pointer",
             (_, MetaStatus::Locked) => "saturate-50 brightness-50",
             (PurchaseStatus::Inactive, _) => "saturate-50 brightness-50",
             _ => "",
@@ -369,7 +361,6 @@ pub fn Node(
                     on_click();
                 }
             }
-            style=pointer_style
             class=class_style
         >
             <circle

@@ -339,7 +339,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 </Show>
             </div>
 
-            <div class="flex flex-col justify-evenly w-full min-w-16">
+            <div class="flex flex-col justify-evenly w-full">
                 <For
                     each=move || { specs.skill_specs.clone().into_iter().enumerate() }
                     key=|(i, _)| *i
@@ -414,10 +414,10 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
 
     view! {
         <CircularProgressBar
-            bar_width=4
-            bar_color="text-amber-700"
+            bar_color="oklch(55.5% 0.163 48.998)"
             value=skill_cooldown
             reset=just_triggered
+            bar_width=2
 
             on:mouseenter=show_tooltip
             on:mouseleave=hide_tooltip

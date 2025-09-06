@@ -117,31 +117,21 @@ pub fn VerticalProgressBar(
 pub fn CircularProgressBar(
     // Percent value, must be between 0 and 100.
     #[prop(into)] value: Signal<f32>,
-    // Bar color, must be of format "text-XXXX-NNN"
     bar_color: &'static str,
-    // Width of the progress bar
-    #[prop(default = 2)] bar_width: u16,
+    bar_width: u8,
     // Instant reset
     #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
     // Inside the circular bar
     children: Children,
 ) -> impl IntoView {
-    let bar_width = bar_width * 5;
     let set_value = move || {
         if reset.get() {
-            452.389
+            0.0
         } else {
-            452.389 - value.get().clamp(0.0, 100.0) * 452.389 / 100.0
+            value.get().clamp(0.0, 100.0)
         }
     };
 
-    let transition = move || {
-        if reset.get() {
-            "transition-none"
-        } else {
-            "transition-all ease-linear duration-200 "
-        }
-    };
     // Trick to reset animation by removing it when ended
     let reset_bar_animation = RwSignal::new("opacity: 0;");
     let reset_icon_animation = RwSignal::new("");
@@ -161,6 +151,14 @@ pub fn CircularProgressBar(
         }
     });
 
+    let transition = move || {
+        if reset.get() {
+            ""
+        } else {
+            "transition: --progress 0.2s linear;"
+        }
+    };
+
     view! {
         <div class="circular-progress-bar">
             <style>
@@ -172,59 +170,44 @@ pub fn CircularProgressBar(
                 }
                 @keyframes circular-progress-bar-glow {
                  0% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  }
-                 50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746));  transform: translate(-50%, -50%) scale(1.2); }
+                 50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746));  transform: scale(1.2); }
                  100% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
+                }
+
+                @property --progress {
+                    syntax: '<percentage>';
+                    inherits: false;
+                    initial-value: 0%;
                 }
                 "
             </style>
             <div class="relative">
-                <svg class="size-full overflow-visible" viewBox="0 0 180 180">
-                    <defs>
-                        <clipPath id="ring" clip-rule="evenodd">
-                            <path d="M0-81A81 81 0 0 1 0 81A81 81 0 0 1 0-81z
-                            M0-63A63 63 0 0 1 0 63A63 63 0 0 1 0-63z" />
-                        </clipPath>
-                        <radialGradient id="inner-gradient" cx="50%" cy="50%" r="50%">
-                            <stop offset="0%" stop-color="oklch(44.4% 0.011 73.639)" />
-                            <stop offset="100%" stop-color="oklch(14.1% 0.005 285.823)" />
-                        </radialGradient>
-                    </defs>
+                <div class="relative w-full h-full aspect-square rounded-full flex items-center justify-center bg-stone-900">
+                    <div
+                        class="absolute inset-0 rounded-full"
+                        style=move || format!("
+                            background: conic-gradient(
+                                {bar_color} var(--progress),
+                                transparent var(--progress) 100%
+                            );
+                            {}
+                        ",transition())
+                        style:--progress=move || format!("{}%", set_value())
+                    ></div>
 
-                    <g transform="translate(90,90)">
-                        <g clip-path="url(#ring)">
-                            <circle
-                                class="stroke-current text-stone-900"
-                                cx="0"
-                                cy="2.5"
-                                r="72"
-                                stroke-width=bar_width
-                            />
-                        </g>
-                        <circle cx="0" cy="0" r="63" fill="url(#inner-gradient)" />
-                        <path
-                            class=move || {
-                                format!("main-arc stroke-current {} {}", transition(), bar_color)
-                            }
-                            stroke-dashoffset=set_value
-                            stroke-dasharray="452.389"
-                            d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
-                            fill="transparent"
-                            stroke-width=bar_width
-                            stroke-linecap="round"
-                        />
+                    // For nice fade out during reset
+                    <div
+                        class="absolute inset-0 rounded-full"
+                        style=move || format!("
+                            background: {bar_color};
+                            {}
+                        ",reset_bar_animation.get())
+                    ></div>
 
-                        // For nice fade out during reset
-                        <path
-                            class=move || { format!("main-arc stroke-current {bar_color}") }
-                            style=reset_bar_animation
-                            stroke-dasharray="452.389"
-                            d="M 0 -72 A 72 72 0 1 1 -4.52 -71.86"
-                            fill="transparent"
-                            stroke-width=bar_width
-                            stroke-linecap="round"
-                        />
-                    </g>
-                </svg>
+                    <div class=format!("absolute inset-{} lg:inset-{bar_width} rounded-full
+                            bg-radial from-stone-600 to-zinc-950 to-70%", bar_width/2)></div>
+                </div>
+
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2"
                     style=reset_icon_animation

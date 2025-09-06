@@ -88,7 +88,7 @@ pub async fn auth_user(
         SELECT 
             user_id as "user_id: UserId", 
             password_hash 
-        FROM users WHERE username = $1
+        FROM users WHERE LOWER(username) = LOWER($1)
         "#,
         username
     )
