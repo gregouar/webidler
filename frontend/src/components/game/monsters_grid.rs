@@ -415,7 +415,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
     view! {
         <CircularProgressBar
             // bar_width=4
-            bar_color="oklch(55.5% 0.163 48.998)"
+            bar_color="oklch(66.6% 0.179 58.318)"
             value=skill_cooldown
             reset=just_triggered
             bar_width=2

@@ -21,8 +21,10 @@ module.exports = {
     'grayscale-80',
     'border-red-500',
     'focus:ring-red-500',
+    'inset-1',
     'inset-2',
+    'lg:inset-2',
     'inset-3',
-    'inset-4',
+    'lg:inset-4',
   ],
 };

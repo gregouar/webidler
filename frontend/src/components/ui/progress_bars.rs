@@ -307,7 +307,7 @@ pub fn CircularProgressBar(
             <div class="relative">
                 <div class="relative w-full h-full aspect-square rounded-full flex items-center justify-center bg-stone-900">
                     <div
-                        class="progress-ring absolute inset-0 rounded-full transition-(--progress) duration-200 ease-linear"
+                        class="absolute inset-0 rounded-full"
                         style=move || format!("
                             background: conic-gradient(
                                 {bar_color} var(--progress),
@@ -315,17 +315,20 @@ pub fn CircularProgressBar(
                             );
                             {}
                         ",transition())
-                        //  style=move || format!("
-                        //     background: conic-gradient(
-                        //         {bar_color} calc(var(--progress) - 5.0%),
-                        //         transparent var(--progress) 100%
-                        //     );
-                        //     {}
-                        // ",transition())
                         style:--progress=move || format!("{}%", set_value())
                     ></div>
 
-                    <div class=format!("absolute inset-{bar_width} rounded-full bg-radial from-stone-600 to-zinc-950")></div>
+                    // For nice fade out during reset
+                    <div
+                        class="absolute inset-0 rounded-full"
+                        style=move || format!("
+                            background: {bar_color};
+                            {}
+                        ",reset_bar_animation.get())
+                    ></div>
+
+                    <div class=format!("absolute inset-{} lg:inset-{bar_width} rounded-full
+                            bg-radial from-stone-600 to-zinc-950 to-70%", bar_width/2)></div>
                 </div>
 
                 // <svg class="size-full overflow-visible" viewBox="0 0 180 180">

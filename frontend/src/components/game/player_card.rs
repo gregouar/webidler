@@ -441,13 +441,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     view! {
         <div class="flex flex-col">
             <button
-                class=move || {
-                    if is_ready.get() {
-                        "active:brightness-50 active:sepia p-1"
-                    } else {
-                        "brightness-80 sepia-0 p-1"
-                    }
-                }
+                class="active:brightness-50 active:sepia p-1"
                 on:mouseenter=show_tooltip
                 on:mouseleave=hide_tooltip
                 on:click=use_skill
@@ -455,7 +449,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
             >
                 <CircularProgressBar
                     // bar_width=4
-                    bar_color="oklch(55.5% 0.163 48.998)"
+                    bar_color="oklch(66.6% 0.179 58.318)"
                     value=skill_cooldown
                     reset=just_triggered
                     bar_width=4
