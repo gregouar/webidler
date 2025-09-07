@@ -327,14 +327,20 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     });
 
     let skill_cooldown = Signal::derive(move || {
-        (game_context
+        (1.0 - (game_context
             .player_state
             .read()
             .skills_states
             .get(index)
             .map(|x| x.elapsed_cooldown)
-            .unwrap_or_default()
-            * 100.0) as f32
+            .unwrap_or_default()) as f32)
+            * game_context
+                .player_specs
+                .read()
+                .skills_specs
+                .get(index)
+                .map(|x| x.cooldown)
+                .unwrap_or_default()
     });
 
     // TODO: Make dynamic in case of reset?
@@ -441,7 +447,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     view! {
         <div class="flex flex-col">
             <button
-                class="active:brightness-50 active:sepia p-1 disabled:pointer-events-none"
+                class="active:brightness-50 active:sepia p-1 disabled:cursor-auto"
                 on:mouseenter=show_tooltip
                 on:mouseleave=hide_tooltip
                 on:click=use_skill

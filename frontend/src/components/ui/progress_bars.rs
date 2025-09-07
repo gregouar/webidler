@@ -124,14 +124,6 @@ pub fn CircularProgressBar(
     // Inside the circular bar
     children: Children,
 ) -> impl IntoView {
-    let set_value = move || {
-        if reset.get() {
-            0.0
-        } else {
-            value.get().clamp(0.0, 100.0)
-        }
-    };
-
     // Trick to reset animation by removing it when ended
     let reset_bar_animation = RwSignal::new("opacity: 0;");
     let reset_icon_animation = RwSignal::new("");
@@ -152,10 +144,10 @@ pub fn CircularProgressBar(
     });
 
     let transition = move || {
-        if reset.get() {
-            ""
+        if reset.get() || value.get() == 0.0 {
+            "".to_string()
         } else {
-            "transition: --progress 0.2s linear;"
+            format!("transition: --progress {}s linear;", value.get())
         }
     };
 
@@ -177,7 +169,7 @@ pub fn CircularProgressBar(
                 @property --progress {
                     syntax: '<percentage>';
                     inherits: false;
-                    initial-value: 0%;
+                    initial-value: 100%;
                 }
                 "
             </style>
@@ -192,7 +184,7 @@ pub fn CircularProgressBar(
                             );
                             {}
                         ",transition())
-                        style:--progress=move || format!("{}%", set_value())
+                        style:--progress=move || format!("{}%", if reset.get() {0.0} else {100.0})
                     ></div>
 
                     // For nice fade out during reset
