@@ -1,4 +1,5 @@
 use leptos::{html::*, prelude::*};
+use leptos_use::use_interval_fn;
 
 #[component]
 pub fn HorizontalProgressBar(
@@ -116,7 +117,7 @@ pub fn VerticalProgressBar(
 #[component]
 pub fn CircularProgressBar(
     // Percent value, must be between 0 and 100.
-    #[prop(into)] value: Signal<f32>,
+    #[prop(into)] remaining_time: Signal<f32>,
     bar_color: &'static str,
     bar_width: u8,
     // Instant reset
@@ -124,11 +125,14 @@ pub fn CircularProgressBar(
     // Inside the circular bar
     children: Children,
 ) -> impl IntoView {
+    let progress_value = RwSignal::new(0.0);
+
     // Trick to reset animation by removing it when ended
     let reset_bar_animation = RwSignal::new("opacity: 0;");
     let reset_icon_animation = RwSignal::new("");
     Effect::new(move |_| {
         if reset.get() {
+            progress_value.set(0.0);
             reset_bar_animation
                 .set("animation: circular-progress-bar-fade-out 0.5s ease-out; animation-fill-mode: both;");
             reset_icon_animation
@@ -144,12 +148,36 @@ pub fn CircularProgressBar(
     });
 
     let transition = move || {
-        if reset.get() || value.get() == 0.0 {
-            "".to_string()
+        if reset.get() {
+            ""
         } else {
-            format!("transition: --progress {}s linear;", value.get())
+            "transition: --progress 0.300s linear;"
         }
     };
+
+    let rate = RwSignal::new(0.0);
+
+    Effect::new(move || {
+        let remaining_time = remaining_time.get();
+        if remaining_time > 0.0 {
+            rate.set((1.0 - progress_value.get_untracked()) / remaining_time);
+        }
+    });
+
+    use_interval_fn(
+        move || {
+            progress_value.update(|progress_value| {
+                // let remaining_time = remaining_time.get();
+                // let rate = if remaining_time > 0.0 {
+                //     (1.0 - *progress_value) / remaining_time
+                // } else {
+                //     1.0
+                // };
+                *progress_value = (*progress_value + (rate.get_untracked() * 0.2)).clamp(0.0, 1.0);
+            });
+        },
+        200,
+    );
 
     view! {
         <div class="circular-progress-bar">
@@ -169,7 +197,7 @@ pub fn CircularProgressBar(
                 @property --progress {
                     syntax: '<percentage>';
                     inherits: false;
-                    initial-value: 100%;
+                    initial-value: 0%;
                 }
                 "
             </style>
@@ -184,7 +212,7 @@ pub fn CircularProgressBar(
                             );
                             {}
                         ",transition())
-                        style:--progress=move || format!("{}%", if reset.get() {0.0} else {100.0})
+                        style:--progress=move || format!("{}%", progress_value.get() * 100.0)
                     ></div>
 
                     // For nice fade out during reset
