@@ -423,6 +423,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
             bar_color="oklch(55.5% 0.163 48.998)"
             remaining_time=skill_cooldown
             reset=just_triggered
+            disabled=is_dead
             bar_width=2
 
             on:mouseenter=show_tooltip
