@@ -342,7 +342,7 @@ pub async fn read_market_items<'c>(
                 WHEN  $17 = 'Damages' THEN  market.item_damages
                 WHEN  $17 = 'Armor' THEN  market.item_armor
                 WHEN  $17 = 'Block' THEN  market.item_block
-            END DESC,
+            END DESC NULLS LAST, 
             market.price ASC
         LIMIT $1
         OFFSET $2
