@@ -26,5 +26,7 @@ module.exports = {
     'lg:inset-2',
     'inset-3',
     'lg:inset-4',
+    'opacity-0',
+    'opacity-100'
   ],
 };
