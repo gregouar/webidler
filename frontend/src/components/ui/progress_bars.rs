@@ -151,7 +151,7 @@ pub fn CircularProgressBar(
         if reset.get() {
             ""
         } else {
-            "transition: --progress 0.300s linear;"
+            "transition: --progress 0.250s linear;"
         }
     };
 
@@ -167,12 +167,6 @@ pub fn CircularProgressBar(
     use_interval_fn(
         move || {
             progress_value.update(|progress_value| {
-                // let remaining_time = remaining_time.get();
-                // let rate = if remaining_time > 0.0 {
-                //     (1.0 - *progress_value) / remaining_time
-                // } else {
-                //     1.0
-                // };
                 *progress_value = (*progress_value + (rate.get_untracked() * 0.2)).clamp(0.0, 1.0);
             });
         },
