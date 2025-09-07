@@ -9,7 +9,7 @@
 }
 
 @layer components {
-  button {
-    @apply cursor-pointer disabled:cursor-auto;
+  .btn {
+    @apply cursor-pointer disabled:cursor-auto disabled:pointer-events-none;
   }
 }

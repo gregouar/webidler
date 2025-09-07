@@ -68,7 +68,7 @@ where
                 on:click=toggle
                 class=move || {
                     format!(
-                        "w-full flex items-center justify-between gap-2
+                        "btn w-full flex items-center justify-between gap-2
                         px-1 lg:px-3 py-1 lg:py-2 rounded-md
                         shadow-md border border-zinc-950 focus:outline-none {}",
                         if is_open.get() {
@@ -193,7 +193,7 @@ where
                 on:click=toggle
                 class=move || {
                     format!(
-                        "w-full flex items-center justify-between gap-2
+                        "btn w-full flex items-center justify-between gap-2
                         px-1 lg:px-3 py-1 lg:py-2 rounded-md
                         shadow-md border border-zinc-950 focus:outline-none {}",
                         if is_open.get() {

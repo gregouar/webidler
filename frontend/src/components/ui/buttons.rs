@@ -8,7 +8,7 @@ pub fn MenuButton(
 ) -> impl IntoView {
     view! {
         <button
-            class="
+            class="btn
             text-white font-bold text-shadow shadow-neutral-950
             py-1 lg:py-2 px-2 lg:px-4 rounded shadow-md
             text-sm lg:text-base 
@@ -18,7 +18,6 @@ pub fn MenuButton(
             hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
             active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
             w-auto
-            cursor-pointer
             disabled:from-zinc-700 disabled:to-zinc-600
             disabled:text-zinc-400
             disabled:opacity-60 disabled:shadow-none
@@ -30,6 +29,7 @@ pub fn MenuButton(
         </button>
     }
 }
+
 #[component]
 pub fn MenuButtonRed(
     #[prop(optional)] disabled: Option<Signal<bool>>,
@@ -37,7 +37,7 @@ pub fn MenuButtonRed(
 ) -> impl IntoView {
     view! {
         <button
-            class="
+            class="btn
             text-red-300 font-bold text-shadow shadow-neutral-950
             py-1 lg:py-2 px-2 lg:px-4 rounded shadow-md
             text-sm lg:text-base 
@@ -46,7 +46,6 @@ pub fn MenuButtonRed(
             overflow-hidden
             hover:bg-gradient-to-tr hover:from-red-800 hover:to-red-700
             active:bg-gradient-to-t active:from-red-900 active:to-red-950
-            cursor-pointer
             disabled:from-zinc-700 disabled:to-zinc-600
             disabled:text-zinc-400
             disabled:opacity-60 disabled:shadow-none
@@ -65,14 +64,13 @@ pub fn FancyButton(
 ) -> impl IntoView {
     view! {
         <button
-            class="
+            class="btn
             text-white font-bold text-shadow shadow-neutral-950
             px-2 lg:px-3 rounded shadow-md
             text-sm lg:text-base 
             border border-neutral-950
             bg-gradient-to-t from-zinc-900 to-zinc-800 
             overflow-hidden
-            cursor-pointer
             hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
             active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
             disabled:from-zinc-700 disabled:to-zinc-600
@@ -114,13 +112,12 @@ pub fn Toggle(
             on:click=switch_value
             class=move || {
                 format!(
-                    "
+                    "btn
                     px-2 lg:px-3
                     text-sm lg:text-base 
                     font-bold text-shadow shadow-neutral-950
                     border border-neutral-950 rounded 
                     bg-gradient-to-t from-zinc-900 to-zinc-800 
-                    cursor-pointer
                     hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
                     active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950
                     transition-all duration-200
@@ -156,7 +153,7 @@ pub fn TabButton(children: Children, #[prop(into)] is_active: Signal<bool>) -> i
         <button
             class=move || {
                 format!(
-                    "
+                    "btn
                     flex-1
                     px-1 lg:px-3 py-1 lg:py-2 
                     text-sm lg:text-base 
@@ -180,7 +177,7 @@ pub fn TabButton(children: Children, #[prop(into)] is_active: Signal<bool>) -> i
 #[component]
 pub fn CloseButton() -> impl IntoView {
     view! {
-        <button class="ml-2 text-white hover:text-gray-400 transition-colors">
+        <button class="btn ml-2 text-white hover:text-gray-400 transition-colors">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"

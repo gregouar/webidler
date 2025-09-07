@@ -65,7 +65,7 @@ pub fn ConfirmationModal(state: RwSignal<Option<(String, ArcFn)>>) -> impl IntoV
 
                     <div class="flex justify-center gap-4">
                         <button
-                            class="confirm-btn text-green-300 hover:text-green-100 hover:bg-green-800/40 p-2"
+                            class="btn confirm-btn text-green-300 hover:text-green-100 hover:bg-green-800/40 p-2"
                             on:click=move |_| {
                                 if let Some((_, cb)) = state.get() {
                                     state.set(None);
@@ -77,7 +77,7 @@ pub fn ConfirmationModal(state: RwSignal<Option<(String, ArcFn)>>) -> impl IntoV
                         </button>
 
                         <button
-                            class="confirm-btn text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 p-2"
+                            class="btn confirm-btn text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 p-2"
                             on:click=move |_| state.set(None)
                         >
                             "Cancel"

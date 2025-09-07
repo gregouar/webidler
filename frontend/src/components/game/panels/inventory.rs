@@ -295,14 +295,14 @@ pub fn EquippedItemContextMenu(
     view! {
         <ContextMenu on_close=on_close>
             <button
-                class="w-full text-sm lg:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40 py-1 lg:py-2"
+                class="btn w-full text-sm lg:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40 py-1 lg:py-2"
                 on:click=try_unequip
             >
                 "Unequip"
             </button>
 
             <button
-                class="w-full text-sm lg:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 lg:py-4"
+                class="btn w-full text-sm lg:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 lg:py-4"
                 on:click=move |_| on_close.run(())
             >
                 "Cancel"
@@ -545,21 +545,21 @@ pub fn BagItemContextMenu(
     view! {
         <ContextMenu on_close=on_close>
             <button
-                class="w-full text-sm lg:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 lg:py-2"
+                class="btn w-full text-sm lg:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 lg:py-2"
                 on:click=try_equip
             >
                 "Equip"
             </button>
 
             <button
-                class="w-full text-sm lg:text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-1 lg:py-2"
+                class="btn w-full text-sm lg:text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-1 lg:py-2"
                 on:click=move |_| toggle_sell_mark()
             >
                 {move || if sell_queue.0.get().contains(&item_index) { "Unsell" } else { "Sell" }}
             </button>
 
             <button
-                class="w-full text-sm lg:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 lg:py-4"
+                class="btn w-full text-sm lg:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 lg:py-4"
                 on:click=move |_| on_close.run(())
             >
                 "Cancel"

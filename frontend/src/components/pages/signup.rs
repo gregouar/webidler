@@ -144,7 +144,7 @@ pub fn SignUpPage() -> impl IntoView {
                         "I agree to the "
                         <button
                             type="button"
-                            class="text-amber-400 underline hover:text-amber-300"
+                            class="btn text-amber-400 underline hover:text-amber-300"
                             on:click=move |_| show_terms.set(true)
                         >
                             "Terms & Conditions"
@@ -152,7 +152,7 @@ pub fn SignUpPage() -> impl IntoView {
                         " and "
                         <button
                             type="button"
-                            class="text-amber-400 underline hover:text-amber-300"
+                            class="btn text-amber-400 underline hover:text-amber-300"
                             on:click=move |_| show_privacy.set(true)
                         >
                             "Privacy Policy"
@@ -182,7 +182,7 @@ pub fn SignUpPage() -> impl IntoView {
                         <div class="flex items-center justify-between p-4 border-b border-zinc-700">
                             <h2 class="text-xl font-bold text-amber-200">"Terms and Conditions"</h2>
                             <button
-                                class="text-gray-400 hover:text-white text-xl"
+                                class="btn text-gray-400 hover:text-white text-xl"
                                 on:click=move |_| show_terms.set(false)
                             >
                                 "✕"
@@ -203,7 +203,7 @@ pub fn SignUpPage() -> impl IntoView {
                         <div class="flex items-center justify-between p-4 border-b border-zinc-700">
                             <h2 class="text-xl font-bold text-amber-200">"Privacy Notice"</h2>
                             <button
-                                class="text-gray-400 hover:text-white text-xl"
+                                class="btn text-gray-400 hover:text-white text-xl"
                                 on:click=move |_| show_privacy.set(false)
                             >
                                 "✕"

@@ -81,7 +81,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
 
             <div class="w-12 flex justify-start">
                 <button
-                    class="text-2xl lg:text-4xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
+                    class="btn text-2xl lg:text-4xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
                     hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
                     active:scale-90 active:brightness-125 transition"
                     title="Go Back One Level"
@@ -104,7 +104,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
 
             <div class="w-12 flex justify-end">
                 <button
-                    class="text-xl lg:text-3xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
+                    class="btn text-xl lg:text-3xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
                     hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
                     active:scale-90 active:brightness-125 transition"
                     title="Toggle Auto Progress"
