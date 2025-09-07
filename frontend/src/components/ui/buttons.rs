@@ -20,7 +20,7 @@ pub fn MenuButton(
             w-auto
             cursor-pointer
             disabled:from-zinc-700 disabled:to-zinc-600
-            disabled:text-zinc-400 disabled:pointer-events-none
+            disabled:text-zinc-400
             disabled:opacity-60 disabled:shadow-none
             "
             type=button_type
@@ -48,7 +48,7 @@ pub fn MenuButtonRed(
             active:bg-gradient-to-t active:from-red-900 active:to-red-950
             cursor-pointer
             disabled:from-zinc-700 disabled:to-zinc-600
-            disabled:text-zinc-400 disabled:pointer-events-none
+            disabled:text-zinc-400
             disabled:opacity-60 disabled:shadow-none
             "
             disabled=disabled
@@ -76,7 +76,7 @@ pub fn FancyButton(
             hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
             active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
             disabled:from-zinc-700 disabled:to-zinc-600
-            disabled:text-zinc-400 disabled:pointer-events-none
+            disabled:text-zinc-400
             disabled:opacity-60 disabled:shadow-none
             "
             disabled=disabled
