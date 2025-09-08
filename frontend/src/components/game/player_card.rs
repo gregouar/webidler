@@ -446,29 +446,28 @@ fn PlayerSkill(index: usize) -> impl IntoView {
 
     view! {
         <div class="flex flex-col">
-            <button
-                class="btn p-1
-                active:brightness-50 active:sepia"
-                on:mouseenter=show_tooltip
-                on:mouseleave=hide_tooltip
-                on:click=use_skill
-                disabled=move || !is_ready.get()
-            >
-                <CircularProgressBar
-                    // bar_width=4
-                    bar_color="oklch(55.5% 0.163 48.998)"
-                    remaining_time=skill_cooldown
-                    reset=just_triggered
-                    bar_width=4
+            <div on:mouseenter=show_tooltip on:mouseleave=hide_tooltip>
+                <button
+                    class="btn p-1
+                    active:brightness-50 active:sepia"
+                    on:click=use_skill
+                    disabled=move || !is_ready.get()
                 >
-                    <img
-                        src=icon_asset
-                        alt=skill_name
-                        class="w-full h-full flex-no-shrink fill-current
-                        drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
-                    />
-                </CircularProgressBar>
-            </button>
+                    <CircularProgressBar
+                        bar_color="oklch(55.5% 0.163 48.998)"
+                        remaining_time=skill_cooldown
+                        reset=just_triggered
+                        bar_width=4
+                    >
+                        <img
+                            src=icon_asset
+                            alt=skill_name
+                            class="w-full h-full flex-no-shrink fill-current
+                            drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
+                        />
+                    </CircularProgressBar>
+                </button>
+            </div>
 
             <div class="flex justify-around">
                 <Toggle toggle_callback=set_auto_skill initial=initial_auto_use>
