@@ -3,14 +3,22 @@
     "name": "Shortbow",
     "icon": "items/shortbow.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
-      "cooldown": 3.0,
+      "cooldown": 2.5,
       "damage": {
-        "Physical": [3, 7]
+        "Physical": [
+          3,
+          7
+        ]
       },
       "crit_chances": 8,
       "crit_damage": 100
@@ -20,14 +28,22 @@
     "name": "Hunting Bow",
     "icon": "items/hunting_bow.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
-      "cooldown": 3.0,
+      "cooldown": 2.5,
       "damage": {
-        "Physical": [8, 12]
+        "Physical": [
+          7,
+          11
+        ]
       },
       "crit_chances": 8,
       "crit_damage": 100
@@ -39,14 +55,22 @@
     "description": "It drinks deep of crimson under moonlight, never sated, never silent.",
     "icon": "items/bloodspiller.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 3.0,
       "damage": {
-        "Physical": [8, 12]
+        "Physical": [
+          8,
+          12
+        ]
       },
       "crit_chances": 8,
       "crit_damage": 100
@@ -83,7 +107,10 @@
       {
         "scope": "Global",
         "stat": {
-          "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
+          "LifeOnHit": {
+            "is_hurt": true,
+            "skill_type": "Attack"
+          }
         },
         "modifier": "Flat",
         "min": 4,
@@ -94,7 +121,9 @@
       {
         "trigger_id": "vile_codex",
         "description": "On Killing a Bleeding Enemy:",
-        "OnKill": { "is_damaged_over_time": "Physical" },
+        "OnKill": {
+          "is_damaged_over_time": "Physical"
+        },
         "target": "Source",
         "effects": [
           {

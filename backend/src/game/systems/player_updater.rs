@@ -69,7 +69,7 @@ pub fn update_player_specs(
     player_specs.character_specs.mana_regen = 10.0;
     player_specs.character_specs.damage_resistance.clear();
     player_specs.gold_find = 1.0;
-    player_specs.movement_cooldown = 2.0;
+    player_specs.movement_cooldown = 3.0;
     player_specs.triggers.clear();
 
     let (total_armor, total_block) = player_inventory

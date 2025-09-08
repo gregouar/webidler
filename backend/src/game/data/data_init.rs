@@ -59,7 +59,7 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             bought_skills: HashSet::new(),
             level: 1,
             experience_needed: 20.0,
-            movement_cooldown: 2.0,
+            movement_cooldown: 3.0,
             gold_find: 1.0,
             effects: EffectsMap::default(),
             triggers: Vec::new(),
