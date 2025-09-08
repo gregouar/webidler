@@ -203,20 +203,25 @@ pub fn PlayerCard() -> impl IntoView {
                                 value=health_percent
                             />
                         </StaticTooltip>
-                        <CharacterPortrait
-                            image_uri=game_context
-                                .player_specs
-                                .read_untracked()
-                                .character_specs
-                                .portrait
-                                .clone()
-                            character_name="player".to_string()
-                            just_hurt=just_hurt
-                            just_hurt_crit=just_hurt_crit
-                            just_blocked=just_blocked
-                            is_dead=is_dead
-                            statuses=statuses
-                        />
+                        <div class="flex flex-col gap-1 lg:gap-2">
+                            <CharacterPortrait
+                                image_uri=game_context
+                                    .player_specs
+                                    .read_untracked()
+                                    .character_specs
+                                    .portrait
+                                    .clone()
+                                character_name="player".to_string()
+                                just_hurt=just_hurt
+                                just_hurt_crit=just_hurt_crit
+                                just_blocked=just_blocked
+                                is_dead=is_dead
+                                statuses=statuses
+                            />
+                            <FancyButton disabled=disable_level_up on:click=level_up>
+                                <span class="text-base lg:text-lg">"Level Up"</span>
+                            </FancyButton>
+                        </div>
                         <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
                             <VerticalProgressBar
                                 class:w-4
@@ -238,13 +243,12 @@ pub fn PlayerCard() -> impl IntoView {
                         {}
                     </HorizontalProgressBar>
                 </StaticTooltip>
-                <FancyButton disabled=disable_level_up on:click=level_up>
-                    <span class="text-base lg:text-lg">"Level Up"</span>
-                </FancyButton>
-
+            // <FancyButton disabled=disable_level_up on:click=level_up>
+            // <span class="text-base lg:text-lg">"Level Up"</span>
+            // </FancyButton>
             </div>
 
-            <div class="grid grid-cols-4 gap-1 lg:gap-2">
+            <div class="flex-1 items-center grid grid-cols-4 gap-1 lg:gap-2">
                 <For
                     each=move || {
                         0..game_context
