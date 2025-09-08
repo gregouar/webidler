@@ -89,7 +89,8 @@ impl<'a> GameInstance<'a> {
 
         self.client_conn
             .send(&DisconnectMessage { end_quest }.into())
-            .await?;
+            .await
+            .unwrap_or_else(|_| tracing::warn!("failed to send disconnection message"));
 
         tracing::debug!("game session '{}' ended ", self.character_id);
         Ok(())
