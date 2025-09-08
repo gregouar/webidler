@@ -1,13 +1,9 @@
 Next things to do:
 
-- auth
-- multi characters
-- gem looting
-- choose area
-- market
-- shard looting
-- ascend
-- last login, activity log, etc
+- auto connect if jwt (and kicked out if expired, also kicked out of game instance if correct error)
+- storm damage & utility tree (movement speed first?, then restoration power, status duration, life leech, mana cost?)
+- market notification on sold item
 
+- last login, activity log, etc
 - dual wield
 - spider boss & minions
