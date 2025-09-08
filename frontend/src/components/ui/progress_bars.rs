@@ -165,8 +165,7 @@ pub fn CircularProgressBar(
             if !disabled.get() {
                 transition.set("transition: opacity 0.5s linear, --progress 0.250s linear;");
                 progress_value.update(|progress_value| {
-                    *progress_value =
-                        (*progress_value + (rate.get_untracked() * 0.2)).clamp(0.0, 1.0);
+                    *progress_value = (*progress_value + (rate.get_untracked() * 0.2));
                 });
             }
         },
