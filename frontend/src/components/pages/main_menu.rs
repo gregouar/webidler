@@ -1,6 +1,6 @@
 use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*, task::spawn_local, web_sys};
-use leptos_router::hooks::use_navigate;
+use leptos_router::{components::Redirect, hooks::use_navigate};
 use leptos_use::storage;
 
 use shared::http::client::SignInRequest;
@@ -14,6 +14,16 @@ use crate::components::{
 
 #[component]
 pub fn MainMenuPage() -> impl IntoView {
+    let auth_context = expect_context::<AuthContext>();
+    if !auth_context.token().is_empty() {
+        view! { <Redirect path="user-dashboard" /> }.into_any()
+    } else {
+        view! { <MainMenu /> }.into_any()
+    }
+}
+
+#[component]
+fn MainMenu() -> impl IntoView {
     let players_count = LocalResource::new({
         let backend = expect_context::<BackendClient>();
         move || async move {

@@ -88,6 +88,7 @@ pub fn FancyButton(
 #[component]
 pub fn Toggle(
     #[prop(default = false)] initial: bool,
+    #[prop(optional, into)] disabled: Option<Signal<bool>>,
     mut toggle_callback: impl FnMut(bool) + 'static,
     children: Children,
 ) -> impl IntoView {
@@ -128,6 +129,7 @@ pub fn Toggle(
                     toggle_class(),
                 )
             }
+            disabled=disabled
         >
             {children()}
         </button>

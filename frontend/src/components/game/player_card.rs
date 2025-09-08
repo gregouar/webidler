@@ -416,6 +416,17 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     let disable_level_up =
         Memo::new(move |_| level_up_cost.get() > game_context.player_resources.read().gold);
 
+    let disabled_auto = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .skills_specs
+            .get(index)
+            .map(|x| x.cooldown)
+            .unwrap_or_default()
+            == 0.0
+    });
+
     let cost_tooltip = move || {
         view! {
             <div class="flex flex-col space-y-1 text-sm max-w-xs">
@@ -470,7 +481,11 @@ fn PlayerSkill(index: usize) -> impl IntoView {
             </div>
 
             <div class="flex justify-around">
-                <Toggle toggle_callback=set_auto_skill initial=initial_auto_use>
+                <Toggle
+                    toggle_callback=set_auto_skill
+                    initial=initial_auto_use
+                    disabled=disabled_auto
+                >
                     <span class="inline xl:hidden">"A"</span>
                     <span class="hidden xl:inline font-variant:small-caps">"Auto"</span>
                 </Toggle>

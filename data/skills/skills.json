@@ -348,7 +348,7 @@
     "triggers": [
       {
         "trigger_id": "skills/poison_coating.svg",
-        "description": "On Attack Hits inflict:",
+        "description": "Attack Hits:",
         "OnHit": {
           "skill_type": "Attack",
           "is_hurt": true

@@ -83,7 +83,7 @@ pub fn HorizontalProgressBar(
                     style=reset_bar_animation
                 ></div>
             </div>
-            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-sm pointer-events-none overflow-hidden">
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs lg:text-sm pointer-events-none overflow-hidden">
                 {children()}
             </div>
 
