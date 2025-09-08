@@ -121,6 +121,9 @@ pub fn Toggle(
                     bg-gradient-to-t from-zinc-900 to-zinc-800 
                     hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
                     active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950
+                    disabled:from-zinc-700 disabled:to-zinc-600
+                    disabled:text-zinc-400
+                    disabled:opacity-60 disabled:shadow-none
                     transition-all duration-200
                     relative
                     group
