@@ -448,7 +448,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         <div class="flex flex-col">
             <div on:mouseenter=show_tooltip on:mouseleave=hide_tooltip>
                 <button
-                    class="btn p-1
+                    class="btn p-1 w-full h-full
                     active:brightness-50 active:sepia"
                     on:click=use_skill
                     disabled=move || !is_ready.get()
