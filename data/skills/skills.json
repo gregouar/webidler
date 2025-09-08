@@ -9,7 +9,9 @@
     "upgrade_cost": 20,
     "upgrade_effects": [
       {
-        "stat": { "Damage": {} },
+        "stat": {
+          "Damage": {}
+        },
         "modifier": "Multiplier",
         "value": 0.5
       }
@@ -21,7 +23,10 @@
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [4, 8]
+                "Physical": [
+                  4,
+                  8
+                ]
               }
             }
           }
@@ -39,7 +44,9 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "Damage": {} },
+        "stat": {
+          "Damage": {}
+        },
         "modifier": "Multiplier",
         "value": 0.5
       }
@@ -52,7 +59,10 @@
           {
             "FlatDamage": {
               "damage": {
-                "Fire": [4, 12]
+                "Fire": [
+                  4,
+                  12
+                ]
               }
             }
           }
@@ -70,7 +80,9 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "Damage": {} },
+        "stat": {
+          "Damage": {}
+        },
         "modifier": "Multiplier",
         "value": 0.5
       }
@@ -83,7 +95,10 @@
           {
             "FlatDamage": {
               "damage": {
-                "Fire": [2, 5]
+                "Fire": [
+                  2,
+                  5
+                ]
               }
             }
           },
@@ -118,7 +133,9 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "Damage": {} },
+        "stat": {
+          "Damage": {}
+        },
         "modifier": "Multiplier",
         "value": 0.5
       }
@@ -241,7 +258,9 @@
                 {
                   "status_type": {
                     "StatModifier": {
-                      "stat": { "Speed": null },
+                      "stat": {
+                        "Speed": null
+                      },
                       "modifier": "Multiplier",
                       "debuff": true
                     }
@@ -319,50 +338,35 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "Damage": {} },
+        "stat": {
+          "Damage": {}
+        },
         "modifier": "Multiplier",
         "value": 0.5
       }
     ],
-    "targets": [
+    "triggers": [
       {
-        "target_type": "Me",
+        "trigger_id": "skills/poison_coating.svg",
+        "description": "On Attack Hits inflict:",
+        "OnHit": {
+          "skill_type": "Attack",
+          "is_hurt": true
+        },
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 5,
-              "max_duration": 5,
+              "min_duration": 3,
+              "max_duration": 3,
               "statuses": [
                 {
                   "status_type": {
-                    "Trigger": {
-                      "trigger_id": "skills/poison_coating.svg",
-                      "description": "On Attack Hits inflict:",
-                      "OnHit": {
-                        "skill_type": "Attack",
-                        "is_hurt": true
-                      },
-                      "effects": [
-                        {
-                          "ApplyStatus": {
-                            "min_duration": 3,
-                            "max_duration": 3,
-                            "statuses": [
-                              {
-                                "status_type": {
-                                  "DamageOverTime": {
-                                    "damage_type": "Poison"
-                                  }
-                                },
-                                "min_value": 3,
-                                "max_value": 5
-                              }
-                            ]
-                          }
-                        }
-                      ]
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
                     }
-                  }
+                  },
+                  "min_value": 3,
+                  "max_value": 5
                 }
               ]
             }
@@ -416,7 +420,9 @@
         "value": 5
       },
       {
-        "stat": { "Speed": "Spell" },
+        "stat": {
+          "Speed": "Spell"
+        },
         "modifier": "Flat",
         "value": -2
       }
@@ -458,14 +464,18 @@
         "effects": [
           {
             "stat": {
-              "MinDamage": { "damage_type": "Physical" }
+              "MinDamage": {
+                "damage_type": "Physical"
+              }
             },
             "modifier": "Flat",
             "value": 1
           },
           {
             "stat": {
-              "MaxDamage": { "damage_type": "Physical" }
+              "MaxDamage": {
+                "damage_type": "Physical"
+              }
             },
             "modifier": "Flat",
             "value": 2
@@ -493,7 +503,10 @@
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [5, 10]
+                "Physical": [
+                  5,
+                  10
+                ]
               },
               "crit_chances": 5,
               "crit_damage": 100
