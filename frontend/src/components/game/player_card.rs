@@ -173,82 +173,69 @@ pub fn PlayerCard() -> impl IntoView {
             }
             "
         </style>
-        // <div class="overflow-hidden">
-        <div class="
-        w-full h-full flex flex-col gap-1 lg:gap-2 p-1 lg:gap-2
+        <div class="max-h-full w-1/3
+        flex flex-col gap-1 lg:gap-2 p-1 lg:p-2
         bg-zinc-800 
         ring-1 ring-zinc-950
         rounded-md shadow-md 
         ">
 
-            // style=move || {
-            // if is_dead.get() {
-            // "animation: player-fade-out 3s ease-in; animation-fill-mode: both;"
-            // } else {
-            // "animation: player-fade-in 1s ease-out; animation-fill-mode: both;"
-            // }
-            // }
-            <div>
-                <PlayerName />
-            </div>
+            <PlayerName />
 
-            <div class="flex flex-col gap-1 lg:gap-2">
-                <div class="flex flex-col gap-1 lg:gap-2 items-center">
-                    <div class="flex gap-1 lg:gap-2 w-full justify-center">
-                        <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Right>
-                            <VerticalProgressBar
-                                class:w-4
-                                class:lg:w-6
-                                bar_color="bg-gradient-to-l from-red-500 to-red-700"
-                                value=health_percent
-                            />
-                        </StaticTooltip>
-                        <div class="flex flex-col gap-1 lg:gap-2">
-                            <CharacterPortrait
-                                image_uri=game_context
-                                    .player_specs
-                                    .read_untracked()
-                                    .character_specs
-                                    .portrait
-                                    .clone()
-                                character_name="player".to_string()
-                                just_hurt=just_hurt
-                                just_hurt_crit=just_hurt_crit
-                                just_blocked=just_blocked
-                                is_dead=is_dead
-                                statuses=statuses
-                            />
-                            <FancyButton disabled=disable_level_up on:click=level_up>
-                                <span class="text-base lg:text-lg">"Level Up"</span>
-                            </FancyButton>
-                        </div>
-                        <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
-                            <VerticalProgressBar
-                                class:w-4
-                                class:lg:w-6
-                                bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
-                                value=mana_percent
-                            />
-                        </StaticTooltip>
-                    </div>
-                </div>
-                <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
-                    <HorizontalProgressBar
-                        class:h-2
-                        class:lg:h-4
-                        bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
-                        value=xp_percent
-                        reset=just_leveled_up
-                    >
-                        {}
-                    </HorizontalProgressBar>
+            <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 lg:gap-2">
+                <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Right>
+                    <VerticalProgressBar
+                        class:w-6
+                        class:lg:w-8
+                        bar_color="bg-gradient-to-l from-red-500 to-red-700"
+                        value=health_percent
+                    />
                 </StaticTooltip>
-            // <FancyButton disabled=disable_level_up on:click=level_up>
-            // <span class="text-base lg:text-lg">"Level Up"</span>
-            // </FancyButton>
+                <div class="flex flex-col gap-1 lg:gap-2">
+                    <div class="flex-1 min-h-0">
+                        <CharacterPortrait
+                            image_uri=game_context
+                                .player_specs
+                                .read_untracked()
+                                .character_specs
+                                .portrait
+                                .clone()
+                            character_name="player".to_string()
+                            just_hurt=just_hurt
+                            just_hurt_crit=just_hurt_crit
+                            just_blocked=just_blocked
+                            is_dead=is_dead
+                            statuses=statuses
+                        />
+                    </div>
+                    <FancyButton disabled=disable_level_up on:click=level_up>
+                        <span class="text-base lg:text-lg">"Level Up"</span>
+                    </FancyButton>
+                </div>
+
+                <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
+                    <VerticalProgressBar
+                        class:w-6
+                        class:lg:w-8
+                        bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
+                        value=mana_percent
+                    />
+                </StaticTooltip>
             </div>
 
-            <div class="flex-1 items-center grid grid-cols-4 gap-1 lg:gap-2">
+            <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
+                <HorizontalProgressBar
+                    class:h-2
+                    class:lg:h-4
+                    bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
+                    value=xp_percent
+                    reset=just_leveled_up
+                >
+                    {}
+                </HorizontalProgressBar>
+            </StaticTooltip>
+
+            <div class="flex-none items-center grid grid-cols-4 gap-1 lg:gap-2">
                 <For
                     each=move || {
                         0..game_context

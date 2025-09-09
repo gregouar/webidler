@@ -46,9 +46,14 @@ pub fn InventoryPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <div class="grid grid-cols-7 justify-items-stretch flex items-start gap-2 lg:gap-4">
-                <EquippedItemsCard class:col-span-2 class:justify-self-end />
-                <BagCard open=open class:col-span-5 class:justify-self-start />
+            // <div class="grid grid-cols-7 justify-items-stretch flex items-start gap-2 lg:gap-4">
+            // <EquippedItemsCard class:col-span-2 class:justify-self-end />
+            // <BagCard open=open class:col-span-5 class:justify-self-start />
+            // </div>
+
+            <div class="relative w-full max-h-full flex justify-between gap-2 lg:gap-4 ">
+                <EquippedItemsCard class:justify-self-end />
+                <BagCard open=open class:justify-self-start />
             </div>
         </MenuPanel>
     }
@@ -69,11 +74,11 @@ pub fn EquippedItemsCard() -> impl IntoView {
     ];
 
     view! {
-        <div class="w-full flex flex-col gap-1 lg:gap-2 p-1 lg:p-2 bg-zinc-800 rounded-md h-full shadow-xl ring-1 ring-zinc-950">
+        <div class="w-[30%] max-h-full flex flex-col gap-1 lg:gap-2 p-1 lg:p-2 bg-zinc-800 rounded-md shadow-xl ring-1 ring-zinc-950">
             <div>
                 <PlayerName />
             </div>
-            <div class="grid grid-rows-3 grid-cols-3 gap-1 lg:gap-3 p-2 lg:p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+            <div class="max-h-full overflow-auto grid grid-rows-3 grid-cols-3 gap-1 lg:gap-3 p-2 lg:p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                 {EQUIPPED_SLOTS
                     .iter()
                     .map(|(slot, asset, alt)| {
@@ -316,7 +321,7 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     view! {
-        <div class="bg-zinc-800 rounded-md h-full w-full gap-1 lg:gap-2 p-1 lg:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
+        <div class="bg-zinc-800 rounded-md h-full w-[70%] gap-1 lg:gap-2 p-1 lg:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
             <div class="px-4 relative z-10 flex items-center justify-between gap-2">
                 <div class="flex flex-row items-center gap-1 lg:gap-2">
                     <PanelTitle>"Inventory"</PanelTitle>

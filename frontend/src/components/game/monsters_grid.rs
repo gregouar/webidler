@@ -40,11 +40,12 @@ pub fn MonstersGrid() -> impl IntoView {
     });
 
     // TODO: double buffering to allow in and out at the same time
+    // flex-1 min-h-0 aspect-[12/7]
     view! {
         <div class="
+        flex-1 min-h-0
         grid grid-rows-2 grid-cols-3 p-1 lg:p-2 gap-1 lg:gap-2 
         items-center
-        w-full aspect-[12/7]
         bg-stone-800
         overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]
         ">
@@ -286,7 +287,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             "
         </style>
         <div class="grid grid-cols-4 h-full bg-zinc-800 shadow-md rounded-md gap-1 lg:gap-2 p-1 lg:p-2 ring-1 ring-zinc-950">
-            <div class="relative flex flex-col gap-1 lg:gap-2 col-span-3 h-full">
+            <div class="relative flex flex-col gap-1 lg:gap-2 col-span-3 h-full min-h-0">
                 <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Bottom>
                     <HorizontalProgressBar
                         class=if is_big { "h-5 lg:h-8" } else { "h-4 lg:h-5" }
@@ -297,16 +298,18 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     </HorizontalProgressBar>
                 </StaticTooltip>
 
-                <CharacterPortrait
-                    image_uri=specs.character_specs.portrait.clone()
-                    character_name=specs.character_specs.name.clone()
-                    rarity=specs.rarity
-                    just_hurt=just_hurt
-                    just_hurt_crit=just_hurt_crit
-                    just_blocked=just_blocked
-                    is_dead=is_dead
-                    statuses=statuses
-                />
+                <div class="flex-1 min-h-0">
+                    <CharacterPortrait
+                        image_uri=specs.character_specs.portrait.clone()
+                        character_name=specs.character_specs.name.clone()
+                        rarity=specs.rarity
+                        just_hurt=just_hurt
+                        just_hurt_crit=just_hurt_crit
+                        just_blocked=just_blocked
+                        is_dead=is_dead
+                        statuses=statuses
+                    />
+                </div>
 
                 <Show when=move || { gold_reward.get() > 0.0 }>
                     <div class="
