@@ -74,19 +74,25 @@ pub fn EquippedItemsCard() -> impl IntoView {
     ];
 
     view! {
-        <div class="w-[30%] max-h-full flex flex-col gap-1 lg:gap-2 p-1 lg:p-2 bg-zinc-800 rounded-md shadow-xl ring-1 ring-zinc-950">
-            <div>
-                <PlayerName />
-            </div>
-            <div class="h-full overflow-auto grid grid-rows-3 grid-cols-3 gap-1 lg:gap-3 p-2 lg:p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                {EQUIPPED_SLOTS
-                    .iter()
-                    .map(|(slot, asset, alt)| {
-                        view! {
-                            <EquippedItem item_slot=*slot fallback_asset=*asset fallback_alt=*alt />
-                        }
-                    })
-                    .collect::<Vec<_>>()}
+        <div class="w-[30%] h-full flex flex-col gap-1 lg:gap-2 p-1 lg:p-2 bg-zinc-800 rounded-md shadow-xl ring-1 ring-zinc-950">
+
+            <PlayerName />
+
+            <div class="relative min-h-0 flex-1  overflow-y-auto">
+                <div class="grid grid-rows-3 grid-cols-3 gap-1 lg:gap-3 p-2 lg:p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                    {EQUIPPED_SLOTS
+                        .iter()
+                        .map(|(slot, asset, alt)| {
+                            view! {
+                                <EquippedItem
+                                    item_slot=*slot
+                                    fallback_asset=*asset
+                                    fallback_alt=*alt
+                                />
+                            }
+                        })
+                        .collect::<Vec<_>>()}
+                </div>
             </div>
         </div>
     }
@@ -347,7 +353,7 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
                 </div>
             </div>
 
-            <div class="relative flex-1 max-h-[80vh] overflow-y-auto">
+            <div class="relative min-h-0 flex-1  overflow-y-auto">
                 <div class="grid grid-cols-8 lg:grid-cols-10
                 gap-1 lg:gap-3 p-2 lg:p-4 relative
                 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
