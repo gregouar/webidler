@@ -18,8 +18,7 @@ impl AuthContext {
     }
 
     pub fn sign_out(&self) {
-        let (_, _, del_jwt) = storage::use_local_storage::<String, JsonSerdeCodec>("jwt");
-        del_jwt();
+        self.set_jwt.set("".into());
     }
 }
 
