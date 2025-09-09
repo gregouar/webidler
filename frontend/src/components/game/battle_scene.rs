@@ -27,18 +27,20 @@ pub fn BattleScene() -> impl IntoView {
         // </div>
 
         // </div>
-        <div class="absolute inset-0 p-2 lg:p-4 gap-2 lg:gap-4 flex justify-between items-stretch">
-            <div class="shrink flex flex-col items-center justify-center">
+        <div class="absolute inset-0 p-2 lg:p-4">
+            <div class="relative w-full max-h-full flex justify-between gap-2 lg:gap-4 ">
+                // <div class="shrink flex flex-col items-center justify-center">
                 <PlayerCard />
-            </div>
+                // </div>
 
-            <div class="shrink flex flex-col items-center justify-center">
+                // <div class="shrink flex flex-col items-center justify-center">
                 <div class="flex flex-col aspect-[12/8] shadow-lg rounded-md overflow-hidden">
                     <BattleSceneHeader />
                     <MonstersGrid />
                     <LootQueue />
                     <BattleSceneFooter />
                 </div>
+            // </div>
             </div>
         </div>
     }

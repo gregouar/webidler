@@ -298,16 +298,18 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     </HorizontalProgressBar>
                 </StaticTooltip>
 
-                <CharacterPortrait
-                    image_uri=specs.character_specs.portrait.clone()
-                    character_name=specs.character_specs.name.clone()
-                    rarity=specs.rarity
-                    just_hurt=just_hurt
-                    just_hurt_crit=just_hurt_crit
-                    just_blocked=just_blocked
-                    is_dead=is_dead
-                    statuses=statuses
-                />
+                <div class="flex-1 min-h-0">
+                    <CharacterPortrait
+                        image_uri=specs.character_specs.portrait.clone()
+                        character_name=specs.character_specs.name.clone()
+                        rarity=specs.rarity
+                        just_hurt=just_hurt
+                        just_hurt_crit=just_hurt_crit
+                        just_blocked=just_blocked
+                        is_dead=is_dead
+                        statuses=statuses
+                    />
+                </div>
 
                 <Show when=move || { gold_reward.get() > 0.0 }>
                     <div class="
