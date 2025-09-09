@@ -14,18 +14,31 @@ use super::GameContext;
 #[component]
 pub fn BattleScene() -> impl IntoView {
     view! {
-        <div class="w-full grid grid-cols-3 justify-items-stretch flex items-start
-        gap-1 lg:gap-4 
-        p-1 lg:p-4 ">
-            <PlayerCard class:col-span-1 class:justify-self-end />
+        // <div class="w-full grid grid-cols-3 justify-items-stretch flex items-start
+        // gap-1 lg:gap-4
+        // p-1 lg:p-4 ">
+        // <PlayerCard class:col-span-1 class:justify-self-end />
 
-            <div class="shadow-lg rounded-md overflow-hidden  w-full col-span-2 justify-self-start">
-                <BattleSceneHeader />
-                <MonstersGrid />
-                <LootQueue />
-                <BattleSceneFooter />
+        // <div class="shadow-lg rounded-md overflow-hidden  w-full col-span-2 justify-self-start">
+        // <BattleSceneHeader />
+        // <MonstersGrid />
+        // <LootQueue />
+        // <BattleSceneFooter />
+        // </div>
+
+        // </div>
+        <div class="absolute inset-0 flex p-2 lg:p-4 justify-between items-stretch">
+            <div class="flex flex-col items-center justify-center">
+                <PlayerCard />
             </div>
 
+            <div class="flex flex-col items-center justify-center">
+                <div class="flex flex-col h-full aspect-[12/10]">
+                    <div class="flex-none h-16 bg-red-500"></div>
+                    <div class="flex-grow bg-blue-500"></div>
+                    <div class="flex-none h-16 bg-green-500"></div>
+                </div>
+            </div>
         </div>
     }
 }
@@ -72,8 +85,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
 
     view! {
         <div
-            class="relative overflow-hidden w-full
-            h-8 lg:h-16 
+            class="h-8 lg:h-16 relative overflow-hidden w-full
             bg-center bg-repeat-x flex items-center justify-between px-4"
             style=header_background
         >
@@ -129,9 +141,9 @@ pub fn BattleSceneFooter() -> impl IntoView {
     };
 
     view! {
+        // h-8 lg:h-16
         <div
-            class="relative overflow-hidden z-10 w-full
-            h-8 lg:h-16 
+            class="h-8 lg:h-16 relative overflow-hidden z-10 w-full
             bg-center bg-repeat-x flex items-center justify-center"
             style=footer_background
         >
