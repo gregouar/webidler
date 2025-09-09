@@ -173,7 +173,7 @@ pub fn PlayerCard() -> impl IntoView {
             }
             "
         </style>
-        <div class="h-full aspect-[6/8]
+        <div class="max-h-full
         flex flex-col gap-1 lg:gap-2 p-1 lg:p-2
         bg-zinc-800 
         ring-1 ring-zinc-950
