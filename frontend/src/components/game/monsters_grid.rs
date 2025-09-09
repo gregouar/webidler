@@ -40,9 +40,10 @@ pub fn MonstersGrid() -> impl IntoView {
     });
 
     // TODO: double buffering to allow in and out at the same time
+    // flex-1 min-h-0 aspect-[12/7]
     view! {
         <div class="
-        flex-1 min-h-0 aspect-[12/7]
+        flex-1 min-h-0
         grid grid-rows-2 grid-cols-3 p-1 lg:p-2 gap-1 lg:gap-2 
         items-center
         bg-stone-800
