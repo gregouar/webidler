@@ -65,31 +65,32 @@ pub fn UserDashboardPage() -> impl IntoView {
         }
     });
 
-    Effect::new({
-        let navigate = use_navigate();
-        move || {
-            if async_data.get().map(|x| x.is_none()).unwrap_or_default() {
-                navigate("/", Default::default());
-            }
-        }
-    });
-
     let exit_fullscreen = move || {
         if let Some(doc) = web_sys::window().and_then(|w| w.document())
-            && doc.fullscreen_element().is_some() {
-                doc.exit_fullscreen();
-            }
+            && doc.fullscreen_element().is_some()
+        {
+            doc.exit_fullscreen();
+        }
     };
 
     let sign_out = {
         let navigate = use_navigate();
         let auth_context = expect_context::<AuthContext>();
-        move |_| {
+        move || {
             exit_fullscreen();
             auth_context.sign_out();
             navigate("/", Default::default());
         }
     };
+
+    Effect::new({
+        let sign_out = sign_out.clone();
+        move || {
+            if async_data.get().map(|x| x.is_none()).unwrap_or_default() {
+                sign_out()
+            }
+        }
+    });
 
     let open_create_character = RwSignal::new(false);
 
@@ -168,7 +169,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                 >
                                     "Account Settings"
                                 </a>
-                                <MenuButtonRed on:click=logout>"Logout"</MenuButtonRed>
+                                <MenuButtonRed on:click=move |_| logout()>"Logout"</MenuButtonRed>
                             </div>
                         }
                     })

@@ -78,7 +78,7 @@ pub fn EquippedItemsCard() -> impl IntoView {
             <div>
                 <PlayerName />
             </div>
-            <div class="max-h-full overflow-auto grid grid-rows-3 grid-cols-3 gap-1 lg:gap-3 p-2 lg:p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+            <div class="h-full overflow-auto grid grid-rows-3 grid-cols-3 gap-1 lg:gap-3 p-2 lg:p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                 {EQUIPPED_SLOTS
                     .iter()
                     .map(|(slot, asset, alt)| {
