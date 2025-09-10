@@ -312,11 +312,23 @@ pub fn compute_skill_specs_effect<'a>(
                     }
                 }
             }
-            SkillEffectType::Restore { min, max, .. } => {
-                if effect.stat == StatType::SpellPower {
+            SkillEffectType::Restore {
+                restore_type,
+                min,
+                max,
+            } => {
+                if match effect.stat {
+                    StatType::SpellPower => true,
+                    StatType::Restore(restore_type_2)
+                        if restore_type_2.unwrap_or(*restore_type) == *restore_type =>
+                    {
+                        true
+                    }
+                    _ => false,
+                } {
                     min.apply_effect(effect);
                     max.apply_effect(effect);
-                }
+                };
             }
             SkillEffectType::Resurrect => {}
         }

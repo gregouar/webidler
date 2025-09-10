@@ -189,6 +189,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
             StatType::Damage { .. }
             | StatType::MinDamage { .. }
             | StatType::MaxDamage { .. }
+            | StatType::Restore(_)
             | StatType::SpellPower
             | StatType::CritChances(_)
             | StatType::CritDamage(_)

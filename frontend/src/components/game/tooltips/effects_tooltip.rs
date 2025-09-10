@@ -9,7 +9,10 @@ use shared::data::{
     stat_effect::{Modifier, StatEffect, StatStatusType, StatType},
 };
 
-use crate::components::{game::tooltips::skill_tooltip::skill_type_str, ui::number::format_number};
+use crate::components::{
+    game::tooltips::skill_tooltip::{restore_type_str, skill_type_str},
+    ui::number::format_number,
+};
 
 pub fn format_effect_value(effect: &StatEffect) -> String {
     match effect.modifier {
@@ -221,6 +224,9 @@ pub fn format_multiplier_stat_name(stat: StatType) -> String {
             optional_damage_type_str(damage_type),
             skill_type_str(skill_type),
         ),
+        StatType::Restore(restore_type) => {
+            format!("Restore{} Power", restore_type_str(restore_type))
+        }
         StatType::SpellPower => "Spell Power".to_string(),
         StatType::CritChances(skill_type) => {
             format!("{}Critical Hit Chances", skill_type_str(skill_type))
@@ -303,6 +309,13 @@ pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
             optional_damage_type_str(damage_type),
             to_skill_type_str(skill_type)
         ),
+        StatType::Restore(restore_type) => {
+            format!(
+                "Restore {} more{}",
+                format_flat_number(value, false),
+                restore_type_str(restore_type)
+            )
+        }
         StatType::SpellPower => {
             format!("Adds {} Power to Spells", format_flat_number(value, false))
         }

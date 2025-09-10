@@ -126,6 +126,7 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             StatType::Damage { .. }
             | StatType::MinDamage { .. }
             | StatType::MaxDamage { .. }
+            | StatType::Restore(_)
             | StatType::SpellPower
             | StatType::CritChances(_)
             | StatType::CritDamage(_)

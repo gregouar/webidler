@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::trigger::HitTrigger;
+use crate::data::{skill::RestoreType, trigger::HitTrigger};
 
 use super::skill::SkillType;
 
@@ -47,6 +47,12 @@ pub enum StatType {
     Mana,
     ManaRegen,
     Armor(DamageType),
+    DamageResistance {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
     TakeFromManaBeforeLife,
     Block,
     BlockSpell,
@@ -69,6 +75,9 @@ pub enum StatType {
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
+    LifeOnHit(#[serde(default)] HitTrigger),
+    ManaOnHit(#[serde(default)] HitTrigger),
+    Restore(#[serde(default)] Option<RestoreType>),
     SpellPower,
     CritChances(#[serde(default)] Option<SkillType>),
     CritDamage(#[serde(default)] Option<SkillType>),
@@ -77,14 +86,6 @@ pub enum StatType {
     Speed(#[serde(default)] Option<SkillType>),
     MovementSpeed,
     GoldFind,
-    LifeOnHit(#[serde(default)] HitTrigger),
-    ManaOnHit(#[serde(default)] HitTrigger),
-    DamageResistance {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
-        #[serde(default)]
-        damage_type: Option<DamageType>,
-    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]

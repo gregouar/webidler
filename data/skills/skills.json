@@ -437,7 +437,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": {"Restore": "Life"},
         "modifier": "Flat",
         "value": 5
       }
@@ -467,7 +467,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": {"Restore": "Mana"},
         "modifier": "Flat",
         "value": 5
       },

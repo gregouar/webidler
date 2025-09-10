@@ -32,6 +32,14 @@ pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     }
 }
 
+pub fn restore_type_str(restore_tyoe: Option<RestoreType>) -> &'static str {
+    match restore_tyoe {
+        Some(RestoreType::Life) => " Life",
+        Some(RestoreType::Mana) => " Mana",
+        None => "",
+    }
+}
+
 #[component]
 pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
     let targets_lines = skill_specs
@@ -357,11 +365,8 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
         } => view! {
             <EffectLi>
                 {success_chances}"Restore "
-                <span class="font-semibold">{format_min_max(min, max)}</span>" "
-                {match restore_type {
-                    RestoreType::Life => "Life",
-                    RestoreType::Mana => "Mana",
-                }}
+                <span class="font-semibold">{format_min_max(min, max)}</span>
+                {restore_type_str(Some(restore_type))}
             </EffectLi>
         }
         .into_any(),

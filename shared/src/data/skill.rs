@@ -207,7 +207,7 @@ pub enum SkillShape {
     All,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum RestoreType {
     Life,
     Mana,

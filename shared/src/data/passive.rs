@@ -20,7 +20,9 @@ pub enum PassiveNodeType {
     Physical,
     Poison,
     Fire,
+    Storm,
     Status,
+    Utility,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
