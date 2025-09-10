@@ -106,11 +106,13 @@ fn find_targets<'a, 'b>(
     me_position: (u8, u8),
     pre_targets: &'b mut [Target<'a>],
 ) -> Vec<&'b mut Target<'a>> {
+    // Filter by alive status
     let target_specs = pre_targets
         .iter()
         .filter(|(_, (_, state))| targets_group.target_dead != state.is_alive)
         .map(|(_, (specs, _))| specs);
 
+    // Pick closest/furthest target
     let available_positions = target_specs
         .clone()
         .map(|specs| specs.position_x.abs_diff(me_position.0));
@@ -126,7 +128,16 @@ fn find_targets<'a, 'b>(
             .clone()
             .filter(|specs| specs.position_x.abs_diff(me_position.0) == distance)
             .choose(&mut rand::rng())
-            .map(|specs| (specs.position_x as i32, specs.position_y as i32))
+            .map(|specs| {
+                let (x_size, y_size) = specs.size.get_xy_size();
+                let dx = rng::random_range(1..x_size)
+                    .and_then(|v| v.checked_sub(1))
+                    .unwrap_or(0) as i32;
+                let dy = rng::random_range(1..y_size)
+                    .and_then(|v| v.checked_sub(1))
+                    .unwrap_or(0) as i32;
+                (specs.position_x as i32 + dx, specs.position_y as i32 + dy)
+            })
     });
 
     let main_target_pos = match main_target_pos {
@@ -146,6 +157,7 @@ fn find_targets<'a, 'b>(
         }
     };
 
+    // Check if the position is in AoE of skill
     let is_target_in_range = |pos: (i32, i32)| -> bool {
         match targets_group.shape {
             SkillShape::Single => pos == main_target_pos,
@@ -168,6 +180,7 @@ fn find_targets<'a, 'b>(
         }
     };
 
+    // All targets touching the skill area of effect
     pre_targets
         .iter_mut()
         .filter(|(_, (specs, _))| {

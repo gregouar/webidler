@@ -106,7 +106,7 @@ pub fn VerticalProgressBar(
             shadow-md
             ">
             <div
-                class={format!("{bar_color} rounded-lg overflow-hidden transition-all ease duration-300")}
+                class={format!("{bar_color} rounded-lg overflow-hidden -all ease duration-300")}
                 style:height=move || format!("{}%", value.get().clamp(0.0,100.0).round())
                 style:-webkit-mask="linear-gradient(#fff 0 0)"
             ></div>
@@ -204,6 +204,7 @@ pub fn CircularProgressBar(
                                 {bar_color} var(--progress),
                                 transparent var(--progress) 100%
                             );
+                            will-change: --progress;
                             {}
                         ",transition.get())
                         style:--progress=move || format!("{}%", progress_value.get() * 100.0)
