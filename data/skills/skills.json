@@ -34,6 +34,54 @@
       }
     ]
   },
+  "chain_lightning": {
+    "name": "Chain Lightning",
+    "description": "A power spell that hit randomly multiple enemies, with a possibility to stun them.",
+    "icon": "skills/magic_missile.svg",
+    "skill_type": "Spell",
+    "cooldown": 5,
+    "mana_cost": 15,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "Multiplier",
+        "value": 0.5
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "repeat": 3,
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Physical": [
+                  0,
+                  20
+                ]
+              }
+            }
+          },
+          {
+            "failure_chances": 0.7,
+            "ApplyStatus": {
+              "min_duration": 3,
+              "max_duration": 3,
+              "statuses": [
+                {
+                  "status_type": "Stun"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
   "fireball": {
     "name": "Fireball",
     "description": "THurl a blazing fireball that explodes on impact, scorching multiple enemies within its area.",
@@ -387,7 +435,7 @@
       {
         "stat": "SpellPower",
         "modifier": "Flat",
-        "value": 10
+        "value": 5
       }
     ],
     "targets": [
