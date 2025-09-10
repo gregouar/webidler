@@ -373,7 +373,7 @@ pub fn buy_skill(
             player_specs,
             player_state,
             base_skill_specs.clone(),
-            false,
+            true,
             None,
         );
         player_resources.gold -= player_specs.buy_skill_cost;
