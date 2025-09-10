@@ -9,7 +9,10 @@ use shared::data::{
     stat_effect::{Modifier, StatEffect, StatStatusType, StatType},
 };
 
-use crate::components::{game::tooltips::skill_tooltip::skill_type_str, ui::number::format_number};
+use crate::components::{
+    game::tooltips::skill_tooltip::{restore_type_str, skill_type_str},
+    ui::number::format_number,
+};
 
 pub fn format_effect_value(effect: &StatEffect) -> String {
     match effect.modifier {
@@ -30,9 +33,12 @@ pub fn format_effect_value(effect: &StatEffect) -> String {
 
 pub fn optional_damage_type_str(damage_type: Option<DamageType>) -> &'static str {
     match damage_type {
-        Some(DamageType::Physical) => "Physical ",
-        Some(DamageType::Fire) => "Fire ",
-        Some(DamageType::Poison) => "Poison ",
+        Some(damage_type) => match damage_type {
+            DamageType::Physical => "Physical ",
+            DamageType::Fire => "Fire ",
+            DamageType::Poison => "Poison ",
+            DamageType::Storm => "Storm ",
+        },
         None => "",
     }
 }
@@ -192,6 +198,8 @@ pub fn format_multiplier_stat_name(stat: StatType) -> String {
         },
         StatType::TakeFromManaBeforeLife => "Damage taken from Mana before Life".to_string(),
         StatType::Block => "Block Chances".to_string(),
+        StatType::BlockSpell => "Block Chances applied to Spells".to_string(),
+        StatType::BlockDamageTaken => "Blocked Damage Taken".to_string(),
         StatType::Damage {
             skill_type,
             damage_type,
@@ -216,6 +224,9 @@ pub fn format_multiplier_stat_name(stat: StatType) -> String {
             optional_damage_type_str(damage_type),
             skill_type_str(skill_type),
         ),
+        StatType::Restore(restore_type) => {
+            format!("Restore{} Power", restore_type_str(restore_type))
+        }
         StatType::SpellPower => "Spell Power".to_string(),
         StatType::CritChances(skill_type) => {
             format!("{}Critical Hit Chances", skill_type_str(skill_type))
@@ -279,6 +290,16 @@ pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
             )
         }
         StatType::Block => format!("Adds {}% Block Chances", format_flat_number(value, false)),
+        StatType::BlockSpell => format!(
+            "Adds {}% of Block Chances to Spells",
+            format_flat_number(value, false)
+        ),
+        StatType::BlockDamageTaken => {
+            format!(
+                "Takes {}% of Blocked Damages",
+                format_flat_number(value, false)
+            )
+        }
         StatType::Damage {
             skill_type,
             damage_type,
@@ -288,6 +309,13 @@ pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
             optional_damage_type_str(damage_type),
             to_skill_type_str(skill_type)
         ),
+        StatType::Restore(restore_type) => {
+            format!(
+                "Restore {} more{}",
+                format_flat_number(value, false),
+                restore_type_str(restore_type)
+            )
+        }
         StatType::SpellPower => {
             format!("Adds {} Power to Spells", format_flat_number(value, false))
         }

@@ -10,7 +10,7 @@ use crate::data::{
 use super::character_status::StatusMap;
 pub use super::skill::{SkillSpecs, SkillState};
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum CharacterId {
     Player,
     Monster(usize),
@@ -65,13 +65,13 @@ pub struct CharacterSpecs {
     pub take_from_mana_before_life: f32,
 
     #[serde(default)]
-    pub armor: f64,
-    #[serde(default)]
-    pub fire_armor: f64,
-    #[serde(default)]
-    pub poison_armor: f64,
+    pub armor: HashMap<DamageType, f64>,
     #[serde(default)]
     pub block: f32,
+    #[serde(default)]
+    pub block_spell: f32,
+    #[serde(default)]
+    pub block_damage: f32,
 
     #[serde(default)]
     pub damage_resistance: HashMap<(SkillType, DamageType), f64>,

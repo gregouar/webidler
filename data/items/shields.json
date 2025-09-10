@@ -19,5 +19,67 @@
       "block": 17
     },
     "min_area_level": 40
+  },
+  "small_round_shield_unique": {
+    "name": "Thunderclap Bulwark",
+    "description": "When struck, it roars like the heavens, felling foes as if lightning kissed their skulls.",
+    "icon": "items/thunderclap_bulwark.webp",
+    "slot": "Shield",
+    "categories": ["Armor", "Shield"],
+    "armor_specs": {
+      "armor": 50,
+      "block": 17
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "min": 40,
+        "max": 60
+      },
+      {
+        "scope": "Local",
+        "stat": "Block",
+        "modifier": "Multiplier",
+        "min": 0.2,
+        "max": 0.4
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Multiplier",
+        "min": 0.4,
+        "max": 0.6
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "stunning_block",
+        "description": "Blocked Hits inflict:",
+        "OnTakeHit": { "is_blocked": true },
+        "target": "Source",
+        "effects": [
+          {
+            "failure_chances": 0.5,
+            "ApplyStatus": {
+              "min_duration": 1,
+              "max_duration": 3,
+              "statuses": [
+                {
+                  "status_type": "Stun",
+                  "min_value": 0,
+                  "max_value": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 50
   }
 }

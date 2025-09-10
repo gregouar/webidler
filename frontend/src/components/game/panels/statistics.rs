@@ -195,6 +195,23 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
+                                label="Increased Storm Damage"
+                                value=move || {
+                                    format!(
+                                        "+{}%",
+                                        format_number(
+                                            effect(
+                                                StatType::Damage {
+                                                    skill_type: None,
+                                                    damage_type: Some(DamageType::Storm),
+                                                },
+                                                Modifier::Multiplier,
+                                            ) * 100.0,
+                                        ),
+                                    )
+                                }
+                            />
+                            <Stat
                                 label="Increased Critical Chances"
                                 value=move || {
                                     format!(
@@ -224,7 +241,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 value=move || {
                                     format!(
                                         "{:.0}",
-                                        game_context.player_specs.read().character_specs.armor,
+                                        game_context
+                                            .player_specs
+                                            .read()
+                                            .character_specs
+                                            .armor
+                                            .get(&DamageType::Physical)
+                                            .cloned()
+                                            .unwrap_or_default(),
                                     )
                                 }
                             />
@@ -233,7 +257,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 value=move || {
                                     format!(
                                         "{:.0}",
-                                        game_context.player_specs.read().character_specs.fire_armor,
+                                        game_context
+                                            .player_specs
+                                            .read()
+                                            .character_specs
+                                            .armor
+                                            .get(&DamageType::Fire)
+                                            .cloned()
+                                            .unwrap_or_default(),
                                     )
                                 }
                             />
@@ -246,7 +277,26 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                             .player_specs
                                             .read()
                                             .character_specs
-                                            .poison_armor,
+                                            .armor
+                                            .get(&DamageType::Poison)
+                                            .cloned()
+                                            .unwrap_or_default(),
+                                    )
+                                }
+                            />
+                            <Stat
+                                label="Storm Resistance"
+                                value=move || {
+                                    format!(
+                                        "{:.0}",
+                                        game_context
+                                            .player_specs
+                                            .read()
+                                            .character_specs
+                                            .armor
+                                            .get(&DamageType::Storm)
+                                            .cloned()
+                                            .unwrap_or_default(),
                                     )
                                 }
                             />

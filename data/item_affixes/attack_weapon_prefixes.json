@@ -196,5 +196,45 @@
         "max": 4
       }
     ]
+  },
+
+  
+  {
+    "name": "Shocking",
+    "family": "add_storm_damage",
+    "tags": ["Storm", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "modifier": "Flat",
+        "min": 4,
+        "max": 8
+      }
+    ]
+  },
+  {
+    "name": "Electrifying",
+    "family": "add_storm_damage",
+    "tags": ["Storm", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "modifier": "Flat",
+        "min": 8,
+        "max": 13
+      }
+    ]
   }
 ]

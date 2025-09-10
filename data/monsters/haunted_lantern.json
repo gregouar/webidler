@@ -4,7 +4,7 @@
   "max_life": 5,
   "power_factor": 2.0,
   "max_initiative": 0.5,
-  "fire_armor": 100,
+  "armor": { "Fire": 100 },
   "skills": [
     {
       "name": "Flame Throw",

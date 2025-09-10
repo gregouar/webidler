@@ -1,6 +1,6 @@
 use shared::data::area::AreaLevel;
 
-pub const CHARACTER_DATA_VERSION: &str = "0.1.1";
+pub const CHARACTER_DATA_VERSION: &str = "0.1.2";
 
 // TODO: put in some game config file
 pub const DEFAULT_MAX_CHARACTERS: u8 = 5;

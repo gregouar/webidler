@@ -380,6 +380,11 @@
             "stat": { "Armor": "Poison" },
             "modifier": "Multiplier",
             "value": 0.2
+          },
+          {
+            "stat": { "Armor": "Storm" },
+            "modifier": "Multiplier",
+            "value": 0.2
           }
         ],
         "upgrade_effects": [
@@ -395,6 +400,11 @@
           },
           {
             "stat": { "Armor": "Poison" },
+            "modifier": "Multiplier",
+            "value": 0.1
+          },
+          {
+            "stat": { "Armor": "Storm" },
             "modifier": "Multiplier",
             "value": 0.1
           }
@@ -422,6 +432,11 @@
             "stat": { "Armor": "Poison" },
             "modifier": "Multiplier",
             "value": 0.2
+          },
+          {
+            "stat": { "Armor": "Storm" },
+            "modifier": "Multiplier",
+            "value": 0.2
           }
         ],
         "upgrade_effects": [
@@ -437,6 +452,11 @@
           },
           {
             "stat": { "Armor": "Poison" },
+            "modifier": "Multiplier",
+            "value": 0.1
+          },
+          {
+            "stat": { "Armor": "Storm" },
             "modifier": "Multiplier",
             "value": 0.1
           }
@@ -514,6 +534,11 @@
             "stat": { "Armor": "Poison" },
             "modifier": "Multiplier",
             "value": 0.2
+          },
+          {
+            "stat": { "Armor": "Storm" },
+            "modifier": "Multiplier",
+            "value": 0.2
           }
         ],
         "upgrade_effects": [
@@ -534,6 +559,11 @@
           },
           {
             "stat": { "Armor": "Poison" },
+            "modifier": "Multiplier",
+            "value": 0.1
+          },
+          {
+            "stat": { "Armor": "Storm" },
             "modifier": "Multiplier",
             "value": 0.1
           }
@@ -1029,34 +1059,29 @@
         "max_upgrade_level": 3
       },
 
-      "stunning_block": {
-        "name": "Shield Bash",
-        "icon": "passives/shield_reflect.svg",
+      "arcane_bastion": {
+        "initial_node": true,
+        "name": "Arcane Bastion",
+        "icon": "passives/rosa_shield.svg",
         "x": -40,
         "y": 20,
         "node_type": "Armor",
         "size": 1,
-        "triggers": [
+        "effects": [
           {
-            "trigger_id": "stunning_block",
-            "description": "Blocked Attacks inflict Stun for 1-2 seconds",
-            "OnTakeHit": { "skill_type": "Attack", "is_blocked": true },
-            "target": "Source",
-            "effects": [
-              {
-                "ApplyStatus": {
-                  "min_duration": 1,
-                  "max_duration": 2,
-                  "statuses": [
-                    {
-                      "status_type": "Stun",
-                      "min_value": 0,
-                      "max_value": 0
-                    }
-                  ]
-                }
-              }
-            ]
+            "stat": "Block",
+            "modifier": "Multiplier",
+            "value": 0.3
+          },
+          {
+            "stat": "BlockSpell",
+            "modifier": "Flat",
+            "value": 50
+          },
+          {
+            "stat": "BlockDamageTaken",
+            "modifier": "Flat",
+            "value": 50
           }
         ],
         "locked": true
@@ -1462,69 +1487,69 @@
         "max_upgrade_level": 3
       },
 
-      "status_duration_1": {
-        "name": "Effects Duration",
-        "icon": "passives/duration.svg",
+      "storm_damage_1": {
+        "name": "Storm Damage",
+        "icon": "passives/storm_damage.svg",
         "x": 96,
         "y": -8,
-        "node_type": "Status",
+        "node_type": "Storm",
         "effects": [
           {
-            "stat": { "StatusDuration": null },
-            "modifier": "Multiplier",
-            "value": 0.1
-          }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": { "StatusDuration": null },
-            "modifier": "Multiplier",
-            "value": 0.05
-          }
-        ],
-        "max_upgrade_level": 3
-      },
-      "status_duration_2": {
-        "name": "Effects Duration",
-        "icon": "passives/duration.svg",
-        "x": 96,
-        "y": -18,
-        "node_type": "Status",
-        "effects": [
-          {
-            "stat": { "StatusDuration": null },
-            "modifier": "Multiplier",
-            "value": 0.1
-          }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": { "StatusDuration": null },
-            "modifier": "Multiplier",
-            "value": 0.05
-          }
-        ],
-        "max_upgrade_level": 3
-      },
-      "status_duration_3": {
-        "name": "Effects Duration",
-        "icon": "passives/duration.svg",
-        "x": 90,
-        "y": -26,
-        "size": 1,
-        "node_type": "Status",
-        "effects": [
-          {
-            "stat": { "StatusDuration": null },
+            "stat": { "Damage": { "damage_type": "Storm" } },
             "modifier": "Multiplier",
             "value": 0.2
           }
         ],
         "upgrade_effects": [
           {
-            "stat": { "StatusDuration": null },
+            "stat": { "Damage": { "damage_type": "Storm" } },
             "modifier": "Multiplier",
             "value": 0.1
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "storm_damage_2": {
+        "name": "Effects Duration",
+        "icon": "passives/storm_damage.svg",
+        "x": 96,
+        "y": -18,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": { "Damage": { "damage_type": "Storm" } },
+            "modifier": "Multiplier",
+            "value": 0.2
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": { "Damage": { "damage_type": "Storm" } },
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "storm_damage_3": {
+        "name": "Effects Duration",
+        "icon": "passives/storm_damage.svg",
+        "x": 90,
+        "y": -26,
+        "size": 1,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": { "Damage": { "damage_type": "Storm" } },
+            "modifier": "Multiplier",
+            "value": 0.4
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": { "Damage": { "damage_type": "Storm" } },
+            "modifier": "Multiplier",
+            "value": 0.2
           }
         ],
         "max_upgrade_level": 3
@@ -1596,6 +1621,160 @@
           }
         ],
         "max_upgrade_level": 3
+      },
+
+      "movement_init": {
+        "name": "Tactical Start",
+        "icon": "passives/sprint.svg",
+        "initial_node": true,
+        "x": -70,
+        "y": 0,
+        "size": 1,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": "MovementSpeed",
+            "modifier": "Multiplier",
+            "value": 0.2
+          }
+        ],
+        "locked": true
+      },
+
+      "restoration_1": {
+        "name": "Restoration",
+        "icon": "passives/regeneration.svg",
+        "x": -70,
+        "y": 10,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": { "Restore": null },
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": { "Restore": null },
+            "modifier": "Multiplier",
+            "value": 0.05
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "restoration_2": {
+        "name": "Restoration",
+        "icon": "passives/regeneration.svg",
+        "x": -70,
+        "y": 20,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": { "Restore": null },
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": { "Restore": null },
+            "modifier": "Multiplier",
+            "value": 0.05
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "restoration_3": {
+        "name": "Restoration",
+        "icon": "passives/regeneration.svg",
+        "x": -70,
+        "y": 30,
+        "size": 1,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": { "Restore": null },
+            "modifier": "Multiplier",
+            "value": 0.2
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": { "Restore": null },
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+
+      "status_duration_1": {
+        "name": "Effects Duration",
+        "icon": "passives/duration.svg",
+        "x": -70,
+        "y": -10,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": { "StatusDuration": null },
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": { "StatusDuration": null },
+            "modifier": "Multiplier",
+            "value": 0.05
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "status_duration_2": {
+        "name": "Effects Duration",
+        "icon": "passives/duration.svg",
+        "x": -70,
+        "y": -20,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": { "StatusDuration": null },
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": { "StatusDuration": null },
+            "modifier": "Multiplier",
+            "value": 0.05
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "status_duration_3": {
+        "name": "Effects Duration",
+        "icon": "passives/duration.svg",
+        "x": -70,
+        "y": -30,
+        "size": 1,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": { "StatusDuration": null },
+            "modifier": "Multiplier",
+            "value": 0.2
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": { "StatusDuration": null },
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ],
+        "max_upgrade_level": 3
       }
     },
     "connections": [
@@ -1647,7 +1826,7 @@
       { "from": "mana_regen_2", "to": "mana_max_and_regen_1" },
 
       { "from": "gold_ul_1", "to": "block_2" },
-      { "from": "gold_ul_1", "to": "stunning_block" },
+      { "from": "gold_ul_1", "to": "arcane_bastion" },
       { "from": "gold_ul_1", "to": "attack_damage_2" },
 
       { "from": "gold_ur_1", "to": "crit_chances_2" },
@@ -1674,7 +1853,7 @@
       { "from": "gold_init_2", "to": "poison_damage_1" },
       { "from": "gold_init_2", "to": "fire_damage_1" },
       { "from": "gold_init_2", "to": "damage_over_time_1" },
-      { "from": "gold_init_2", "to": "status_duration_1" },
+      { "from": "gold_init_2", "to": "storm_damage_1" },
 
       { "from": "physical_damage_1", "to": "physical_damage_2" },
       { "from": "physical_damage_2", "to": "physical_damage_3" },
@@ -1688,8 +1867,17 @@
       { "from": "damage_over_time_1", "to": "damage_over_time_2" },
       { "from": "damage_over_time_2", "to": "damage_over_time_3" },
 
+      { "from": "storm_damage_1", "to": "storm_damage_2" },
+      { "from": "storm_damage_2", "to": "storm_damage_3" },
+
+      { "from": "movement_init", "to": "status_duration_1" },
+      { "from": "movement_init", "to": "restoration_1" },
+
       { "from": "status_duration_1", "to": "status_duration_2" },
-      { "from": "status_duration_2", "to": "status_duration_3" }
+      { "from": "status_duration_2", "to": "status_duration_3" },
+
+      { "from": "restoration_1", "to": "restoration_2" },
+      { "from": "restoration_2", "to": "restoration_3" }
     ]
   }
 }

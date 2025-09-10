@@ -28,17 +28,25 @@ pub fn attack_character(
 ) {
     let (target_id, (target_specs, target_state)) = target;
 
-    let amount: f64 = damage
+    let mut amount: f64 = damage
         .iter()
         .map(|(damage_type, amount)| {
             compute_damage(target_specs, *amount, *damage_type, skill_type, false)
         })
         .sum();
 
-    let is_blocked = skill_type == SkillType::Attack
-        && rng::random_range(0.0..=100.0).unwrap_or(100.0) <= target_specs.block;
+    let is_blocked = rng::random_range(0.0..=100.0).unwrap_or(100.0)
+        <= target_specs.block
+            * match skill_type {
+                SkillType::Attack => 1.0,
+                SkillType::Spell => target_specs.block_spell * 0.01,
+            };
 
-    let is_hurt = amount > 0.0 && !is_blocked;
+    if is_blocked {
+        amount *= target_specs.block_damage as f64 * 0.01;
+    }
+
+    let is_hurt = amount > 0.0;
 
     if is_blocked {
         target_state.just_blocked = true;
@@ -197,15 +205,13 @@ fn decrease_damage_from_armor(
     damage_type: DamageType,
 ) -> f64 {
     amount
-        * match damage_type {
-            DamageType::Physical => {
-                1.0 - increase_factors::diminishing(target_specs.armor, ARMOR_FACTOR)
-            }
-            DamageType::Fire => {
-                1.0 - increase_factors::diminishing(target_specs.fire_armor, ARMOR_FACTOR)
-            }
-            DamageType::Poison => {
-                1.0 - increase_factors::diminishing(target_specs.poison_armor, ARMOR_FACTOR)
-            }
-        }
+        * (1.0
+            - increase_factors::diminishing(
+                target_specs
+                    .armor
+                    .get(&damage_type)
+                    .cloned()
+                    .unwrap_or_default(),
+                ARMOR_FACTOR,
+            ))
 }

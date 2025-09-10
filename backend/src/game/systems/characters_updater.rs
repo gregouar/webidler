@@ -82,15 +82,17 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             StatType::LifeRegen => character_specs.life_regen.apply_effect(effect),
             StatType::Mana => character_specs.max_mana.apply_effect(effect),
             StatType::ManaRegen => character_specs.mana_regen.apply_effect(effect),
-            StatType::Armor(armor_type) => match armor_type {
-                DamageType::Physical => character_specs.armor.apply_effect(effect),
-                DamageType::Fire => character_specs.fire_armor.apply_effect(effect),
-                DamageType::Poison => character_specs.poison_armor.apply_effect(effect),
-            },
+            StatType::Armor(damage_type) => character_specs
+                .armor
+                .entry(damage_type)
+                .or_default()
+                .apply_effect(effect),
             StatType::TakeFromManaBeforeLife => character_specs
                 .take_from_mana_before_life
                 .apply_effect(effect),
             StatType::Block => character_specs.block.apply_effect(effect),
+            StatType::BlockSpell => character_specs.block_spell.apply_effect(effect),
+            StatType::BlockDamageTaken => character_specs.block_damage.apply_effect(effect),
             StatType::DamageResistance {
                 skill_type,
                 damage_type,
@@ -124,6 +126,7 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             StatType::Damage { .. }
             | StatType::MinDamage { .. }
             | StatType::MaxDamage { .. }
+            | StatType::Restore(_)
             | StatType::SpellPower
             | StatType::CritChances(_)
             | StatType::CritDamage(_)
@@ -132,4 +135,8 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             | StatType::Speed(_) => {}
         }
     }
+
+    character_specs.block = character_specs.block.clamp(0.0, 100.0);
+    character_specs.block_spell = character_specs.block_spell.clamp(0.0, 100.0);
+    character_specs.block_damage = character_specs.block_damage.clamp(0.0, 100.0);
 }

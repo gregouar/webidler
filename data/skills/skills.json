@@ -23,11 +23,57 @@
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [
-                  4,
-                  8
-                ]
+                "Physical": [4, 8]
               }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "chain_lightning": {
+    "name": "Chain Lightning",
+    "description": "A power spell that hit randomly multiple enemies, with a possibility to stun them.",
+    "icon": "skills/chain_lightning.svg",
+    "skill_type": "Spell",
+    "cooldown": 5,
+    "mana_cost": 15,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "Multiplier",
+        "value": 0.5
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "repeat": {
+          "min": 3,
+          "max": 3,
+          "target": "Different"
+        },
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Storm": [0, 20]
+              }
+            }
+          },
+          {
+            "failure_chances": 0.7,
+            "ApplyStatus": {
+              "min_duration": 3,
+              "max_duration": 3,
+              "statuses": [
+                {
+                  "status_type": "Stun"
+                }
+              ]
             }
           }
         ]
@@ -59,10 +105,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Fire": [
-                  4,
-                  12
-                ]
+                "Fire": [4, 12]
               }
             }
           }
@@ -95,10 +138,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Fire": [
-                  2,
-                  5
-                ]
+                "Fire": [2, 5]
               }
             }
           },
@@ -176,9 +216,9 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "StatusPower": null },
         "modifier": "Flat",
-        "value": 2
+        "value": 3
       }
     ],
     "targets": [
@@ -224,9 +264,9 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "StatusPower": null },
         "modifier": "Flat",
-        "value": 20
+        "value": 10
       }
     ],
     "targets": [
@@ -285,7 +325,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "StatusPower": null },
         "modifier": "Flat",
         "value": 2
       }
@@ -385,9 +425,9 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "Restore": "Life" },
         "modifier": "Flat",
-        "value": 10
+        "value": 5
       }
     ],
     "targets": [
@@ -415,7 +455,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "Restore": "Mana" },
         "modifier": "Flat",
         "value": 5
       },
@@ -503,10 +543,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [
-                  5,
-                  10
-                ]
+                "Physical": [5, 10]
               },
               "crit_chances": 5,
               "crit_damage": 100

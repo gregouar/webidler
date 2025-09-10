@@ -7,7 +7,7 @@ use shared::data::{
     item_affix::AffixEffectScope,
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerSpecs, PlayerState},
-    skill::{RestoreType, SkillEffect, SkillEffectType, SkillType},
+    skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
     stat_effect::{ApplyStatModifier, EffectsMap, Modifier, StatType},
     trigger::{EventTrigger, TriggerTarget, TriggeredEffect},
 };
@@ -59,10 +59,10 @@ pub fn update_player_specs(
     passives_tree_state: &PassivesTreeState,
 ) {
     // TODO: Reset player_specs
-    player_specs.character_specs.armor = 0.0;
-    player_specs.character_specs.fire_armor = 0.0;
-    player_specs.character_specs.poison_armor = 0.0;
+    player_specs.character_specs.armor.clear();
     player_specs.character_specs.block = 0.0;
+    player_specs.character_specs.block_spell = 0.0;
+    player_specs.character_specs.block_damage = 0.0;
     player_specs.character_specs.max_life = 90.0 + 10.0 * player_specs.level as f64;
     player_specs.character_specs.life_regen = 10.0;
     player_specs.character_specs.max_mana = 100.0;
@@ -79,7 +79,11 @@ pub fn update_player_specs(
         .map(|spec| (spec.armor, spec.block))
         .fold((0.0, 0.0), |(a_sum, b_sum), (a, b)| (a_sum + a, b_sum + b));
 
-    player_specs.character_specs.armor += total_armor;
+    (*player_specs
+        .character_specs
+        .armor
+        .entry(DamageType::Physical)
+        .or_default()) += total_armor;
     player_specs.character_specs.block += total_block;
 
     player_specs.effects = EffectsMap::combine_all(
@@ -178,11 +182,14 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
             | StatType::Armor(_)
             | StatType::TakeFromManaBeforeLife
             | StatType::Block
+            | StatType::BlockSpell
+            | StatType::BlockDamageTaken
             | StatType::DamageResistance { .. } => {}
             // Delegate to skills
             StatType::Damage { .. }
             | StatType::MinDamage { .. }
             | StatType::MaxDamage { .. }
+            | StatType::Restore(_)
             | StatType::SpellPower
             | StatType::CritChances(_)
             | StatType::CritDamage(_)

@@ -1,9 +1,9 @@
 Next things to do:
 
-- storm damage & utility tree (movement speed first?, then restoration power, status duration, life leech, mana cost?)
+- failure chances stat effect
 - market notification on sold item
+- spider boss & minions
 
+- dual wield
 - redirect if authorization issue in game page
 - last login, activity log, etc
-- dual wield
-- spider boss & minions

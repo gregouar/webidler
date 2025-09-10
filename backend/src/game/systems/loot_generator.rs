@@ -57,7 +57,7 @@ pub fn generate_loot(
 }
 
 fn roll_rarity(weights: &RarityWeights) -> ItemRarity {
-    match rng::random_range(0..(weights.normal + weights.magic + weights.rare)).unwrap_or(0) {
+    match rng::random_range(0..=(weights.normal + weights.magic + weights.rare)).unwrap_or(0) {
         r if r < weights.normal => ItemRarity::Normal,
         r if r < weights.normal + weights.magic => ItemRarity::Magic,
         _ => ItemRarity::Rare,

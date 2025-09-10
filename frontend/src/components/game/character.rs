@@ -222,6 +222,7 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
             DamageType::Physical => ("statuses/bleed.svg".to_string(), "Bleeding"),
             DamageType::Fire => ("statuses/burning.svg".to_string(), "Burning"),
             DamageType::Poison => ("statuses/poison.svg".to_string(), "Poisoned"),
+            DamageType::Storm => ("statuses/storm.svg".to_string(), "Electrocuted"),
         },
         // TODO: More buff types
         StatusId::StatModifier {

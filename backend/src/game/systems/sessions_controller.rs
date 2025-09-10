@@ -1,4 +1,4 @@
-use std::{collections::HashMap, time::Instant};
+use std::time::Instant;
 
 use anyhow::Result;
 
@@ -107,12 +107,7 @@ async fn new_game_instance(
         life_regen: 10.0,
         max_mana: 100.0,
         mana_regen: 10.0,
-        armor: 0.0,
-        fire_armor: 0.0,
-        poison_armor: 0.0,
-        block: 0.0,
-        take_from_mana_before_life: 0.0,
-        damage_resistance: HashMap::new(),
+        ..Default::default()
     });
 
     let player_resources = PlayerResources::default();

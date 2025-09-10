@@ -372,7 +372,17 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
     });
 
     let skill_cooldown = Signal::derive(move || {
-        if !is_dead.get() {
+        if is_dead.get() {
+            0.0
+        } else if game_context
+            .monster_states
+            .read()
+            .get(monster_index)
+            .map(|monster_state| monster_state.character_state.is_stunned())
+            .unwrap_or_default()
+        {
+            f32::MAX
+        } else {
             (1.0 - game_context
                 .monster_states
                 .read()
@@ -387,8 +397,6 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                     .and_then(|m| m.skill_specs.get(index))
                     .map(|s| s.cooldown)
                     .unwrap_or(0.0) as f32
-        } else {
-            0.0
         }
     });
 

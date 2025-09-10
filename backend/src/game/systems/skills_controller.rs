@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use rand::{self, seq::IteratorRandom};
 
@@ -6,7 +6,9 @@ use shared::data::{
     character::{CharacterId, SkillSpecs, SkillState},
     item::{SkillRange, SkillShape},
     player::PlayerResources,
-    skill::{SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType, TargetType},
+    skill::{
+        SkillEffect, SkillEffectType, SkillRepeatTarget, SkillTargetsGroup, SkillType, TargetType,
+    },
 };
 
 use crate::{
@@ -65,27 +67,59 @@ fn apply_skill_on_targets<'a>(
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
 ) -> bool {
+    let repeat_amount =
+        rng::random_range(targets_group.repeat.min..=targets_group.repeat.max).unwrap_or(1);
+
+    let mut already_hit = HashSet::new();
+
+    for _ in 0..repeat_amount {
+        match apply_repeated_skill_on_targets(
+            events_queue,
+            skill_type,
+            targets_group,
+            me,
+            friends,
+            enemies,
+            &already_hit,
+        ) {
+            Some(id) => {
+                already_hit.insert(id);
+            }
+            None => break,
+        }
+    }
+
+    !already_hit.is_empty()
+}
+
+fn apply_repeated_skill_on_targets<'a>(
+    events_queue: &mut EventsQueue,
+    skill_type: SkillType,
+    targets_group: &SkillTargetsGroup,
+    me: &mut Target<'a>,
+    friends: &mut [Target<'a>],
+    enemies: &mut [Target<'a>],
+    already_hit: &HashSet<CharacterId>,
+) -> Option<CharacterId> {
     let attacker = me.0;
 
-    let mut targets = {
+    let (main_target_id, mut targets) = {
         match targets_group.target_type {
             TargetType::Enemy => find_targets(
                 targets_group,
                 (me.1 .0.position_x, me.1 .0.position_y),
                 enemies,
+                already_hit,
             ),
             TargetType::Friend => find_targets(
                 targets_group,
                 (me.1 .0.position_x, me.1 .0.position_y),
                 friends,
+                already_hit,
             ),
-            TargetType::Me => vec![me],
+            TargetType::Me => Some((me.0, vec![me])),
         }
-    };
-
-    if targets.is_empty() {
-        return false;
-    }
+    }?;
 
     for skill_effect in targets_group.effects.iter() {
         apply_skill_effect(
@@ -98,52 +132,17 @@ fn apply_skill_on_targets<'a>(
         );
     }
 
-    true
+    Some(main_target_id)
 }
 
 fn find_targets<'a, 'b>(
     targets_group: &SkillTargetsGroup,
     me_position: (u8, u8),
     pre_targets: &'b mut [Target<'a>],
-) -> Vec<&'b mut Target<'a>> {
-    // Filter by alive status
-    let target_specs = pre_targets
-        .iter()
-        .filter(|(_, (_, state))| targets_group.target_dead != state.is_alive)
-        .map(|(_, (specs, _))| specs);
-
-    // Pick closest/furthest target
-    let available_positions = target_specs
-        .clone()
-        .map(|specs| specs.position_x.abs_diff(me_position.0));
-
-    let main_target_distance = match targets_group.range {
-        SkillRange::Melee => available_positions.min(),
-        SkillRange::Distance => available_positions.max(),
-        SkillRange::Any => available_positions.choose(&mut rand::rng()),
-    };
-
-    let main_target_pos = main_target_distance.and_then(|distance| {
-        target_specs
-            .clone()
-            .filter(|specs| specs.position_x.abs_diff(me_position.0) == distance)
-            .choose(&mut rand::rng())
-            .map(|specs| {
-                let (x_size, y_size) = specs.size.get_xy_size();
-                let dx = rng::random_range(1..x_size)
-                    .and_then(|v| v.checked_sub(1))
-                    .unwrap_or(0) as i32;
-                let dy = rng::random_range(1..y_size)
-                    .and_then(|v| v.checked_sub(1))
-                    .unwrap_or(0) as i32;
-                (specs.position_x as i32 + dx, specs.position_y as i32 + dy)
-            })
-    });
-
-    let main_target_pos = match main_target_pos {
-        Some(p) => p,
-        None => return vec![],
-    };
+    already_hit: &HashSet<CharacterId>,
+) -> Option<(CharacterId, Vec<&'b mut Target<'a>>)> {
+    let (main_target_id, main_target_pos) =
+        find_main_target(targets_group, me_position, pre_targets, already_hit)?;
 
     let dx = match targets_group.range {
         SkillRange::Melee => 1,
@@ -180,18 +179,73 @@ fn find_targets<'a, 'b>(
         }
     };
 
-    // All targets touching the skill area of effect
-    pre_targets
-        .iter_mut()
-        .filter(|(_, (specs, _))| {
-            let (x_size, y_size) = specs.size.get_xy_size();
-            (0..x_size as i32)
-                .flat_map(|x| (0..y_size as i32).map(move |y| (x, y)))
-                .any(|(x, y)| {
-                    is_target_in_range((specs.position_x as i32 + x, specs.position_y as i32 + y))
-                })
+    Some((
+        main_target_id,
+        // All targets touching the skill area of effect
+        pre_targets
+            .iter_mut()
+            .filter(|(_, (specs, _))| {
+                let (x_size, y_size) = specs.size.get_xy_size();
+                (0..x_size as i32)
+                    .flat_map(|x| (0..y_size as i32).map(move |y| (x, y)))
+                    .any(|(x, y)| {
+                        is_target_in_range((
+                            specs.position_x as i32 + x,
+                            specs.position_y as i32 + y,
+                        ))
+                    })
+            })
+            .collect(),
+    ))
+}
+
+fn find_main_target<'a, 'b>(
+    targets_group: &SkillTargetsGroup,
+    me_position: (u8, u8),
+    pre_targets: &'b mut [Target<'a>],
+    already_hit: &HashSet<CharacterId>,
+) -> Option<(CharacterId, (i32, i32))> {
+    // Filter by alive status & already hit targets depending on repeat type
+    let target_specs = pre_targets
+        .iter()
+        .filter(|(_, (_, state))| targets_group.target_dead != state.is_alive)
+        .filter(|(id, _)| match targets_group.repeat.target {
+            SkillRepeatTarget::Any => true,
+            SkillRepeatTarget::Same => already_hit.is_empty() || already_hit.contains(id),
+            SkillRepeatTarget::Different => !already_hit.contains(id),
         })
-        .collect()
+        .map(|(id, (specs, _))| (id, specs));
+
+    // Pick closest/furthest target
+    let available_positions = target_specs
+        .clone()
+        .map(|(_, specs)| specs.position_x.abs_diff(me_position.0));
+
+    let main_target_distance = match targets_group.range {
+        SkillRange::Melee => available_positions.min(),
+        SkillRange::Distance => available_positions.max(),
+        SkillRange::Any => available_positions.choose(&mut rand::rng()),
+    };
+
+    main_target_distance.and_then(|distance| {
+        target_specs
+            .clone()
+            .filter(|(_, specs)| specs.position_x.abs_diff(me_position.0) == distance)
+            .choose(&mut rand::rng())
+            .map(|(id, specs)| {
+                let (x_size, y_size) = specs.size.get_xy_size();
+                let dx = rng::random_range(1..=x_size)
+                    .and_then(|v| v.checked_sub(1))
+                    .unwrap_or(0) as i32;
+                let dy = rng::random_range(1..=y_size)
+                    .and_then(|v| v.checked_sub(1))
+                    .unwrap_or(0) as i32;
+                (
+                    *id,
+                    (specs.position_x as i32 + dx, specs.position_y as i32 + dy),
+                )
+            })
+    })
 }
 
 pub fn apply_skill_effect(

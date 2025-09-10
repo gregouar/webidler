@@ -44,9 +44,9 @@ async fn main() {
         .await
         .expect("failed to migrate database");
 
-    db::migrations::migration_0_1_0_to_0_1_1::migrate(&db_pool, &master_store)
+    migrate_data(&db_pool, &master_store)
         .await
-        .expect("failed to migrate data version 0.1.0 to 0.1.1");
+        .expect("failed to migrate data");
 
     db::game_sessions::clean_all_sessions(&db_pool)
         .await
@@ -116,6 +116,12 @@ async fn main() {
     }
 
     tracing::debug!("server has been shut down");
+}
+
+async fn migrate_data(db_pool: &db::DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
+    db::migrations::migration_0_1_0_to_0_1_1::migrate(db_pool, master_store).await?;
+    db::migrations::migration_0_1_1_to_0_1_2::migrate(db_pool).await?;
+    Ok(())
 }
 
 #[cfg(test)]

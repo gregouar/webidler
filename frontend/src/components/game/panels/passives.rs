@@ -282,7 +282,9 @@ pub fn Node(
         PassiveNodeType::Physical => "#2e2929ff",
         PassiveNodeType::Poison => "#98bb1bff",
         PassiveNodeType::Fire => "#da5011ff",
+        PassiveNodeType::Storm => "#dac611ff",
         PassiveNodeType::Status => "#3ea9a4ff",
+        PassiveNodeType::Utility => "#973ea9ff",
     };
 
     let node_specs = Arc::new(node_specs);

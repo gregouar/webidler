@@ -193,6 +193,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             target_type: TargetType::Enemy,
             shape: weapon_specs.shape,
             target_dead: false,
+            repeat: Default::default(),
             effects,
         }],
         triggers: vec![],

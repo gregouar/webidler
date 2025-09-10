@@ -176,7 +176,7 @@ fn generate_monster_specs(
         let gem_chances = CHAMPION_BASE_CHANCES
             + (CHAMPION_INC_CHANCES
                 * (area_state.area_level - area_state.last_champion_spawn) as f64);
-        if rng::random_range(0.0..1.0).unwrap_or(1.0) <= gem_chances {
+        if rng::random_range(0.0..=1.0).unwrap_or(1.0) <= gem_chances {
             // area_state.last_champion_spawn = area_state.area_level;
             monster_specs.rarity = MonsterRarity::Champion;
             monster_level += CHAMPION_LEVEL_INC;
