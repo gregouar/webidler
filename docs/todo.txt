@@ -1,6 +1,5 @@
 Next things to do:
 
-- storm damage & utility tree (movement speed first?, then restoration power, status duration, life leech, mana cost?)
 - market notification on sold item
 
 - redirect if authorization issue in game page

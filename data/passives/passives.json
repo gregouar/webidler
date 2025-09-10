@@ -1627,7 +1627,7 @@
         "name": "Tactical Start",
         "icon": "passives/sprint.svg",
         "initial_node": true,
-        "x": -90,
+        "x": -70,
         "y": 0,
         "size": 1,
         "node_type": "Utility",
@@ -1644,8 +1644,8 @@
       "restoration_1": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": -84,
-        "y": -8,
+        "x": -70,
+        "y": 10,
         "node_type": "Utility",
         "effects": [
           {
@@ -1663,12 +1663,57 @@
         ],
         "max_upgrade_level": 3
       },
+      "restoration_2": {
+        "name": "Restoration",
+        "icon": "passives/regeneration.svg",
+        "x": -70,
+        "y": 20,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": { "Restore": null },
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": { "Restore": null },
+            "modifier": "Multiplier",
+            "value": 0.05
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "restoration_3": {
+        "name": "Restoration",
+        "icon": "passives/regeneration.svg",
+        "x": -70,
+        "y": 30,
+        "size": 1,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": { "Restore": null },
+            "modifier": "Multiplier",
+            "value": 0.2
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": { "Restore": null },
+            "modifier": "Multiplier",
+            "value": 0.1
+          }
+        ],
+        "max_upgrade_level": 3
+      },
 
       "status_duration_1": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -96,
-        "y": -8,
+        "x": -70,
+        "y": -10,
         "node_type": "Status",
         "effects": [
           {
@@ -1689,8 +1734,8 @@
       "status_duration_2": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -96,
-        "y": -18,
+        "x": -70,
+        "y": -20,
         "node_type": "Status",
         "effects": [
           {
@@ -1711,8 +1756,8 @@
       "status_duration_3": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -90,
-        "y": -26,
+        "x": -70,
+        "y": -30,
         "size": 1,
         "node_type": "Status",
         "effects": [
@@ -1829,7 +1874,10 @@
       { "from": "movement_init", "to": "restoration_1" },
 
       { "from": "status_duration_1", "to": "status_duration_2" },
-      { "from": "status_duration_2", "to": "status_duration_3" }
+      { "from": "status_duration_2", "to": "status_duration_3" },
+
+      { "from": "restoration_1", "to": "restoration_2" },
+      { "from": "restoration_2", "to": "restoration_3" }
     ]
   }
 }
