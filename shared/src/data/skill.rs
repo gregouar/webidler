@@ -105,8 +105,34 @@ pub struct SkillTargetsGroup {
     pub shape: SkillShape,
     #[serde(default)]
     pub target_dead: bool,
+    #[serde(default)]
+    pub repeat: SkillRepeat,
 
     pub effects: Vec<SkillEffect>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SkillRepeat {
+    pub min: u8,
+    pub max: u8,
+    pub target: SkillRepeatTarget,
+}
+
+impl Default for SkillRepeat {
+    fn default() -> Self {
+        Self {
+            min: 1,
+            max: 1,
+            target: SkillRepeatTarget::Any,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub enum SkillRepeatTarget {
+    Any,
+    Same,
+    Different,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

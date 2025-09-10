@@ -54,14 +54,18 @@
     "targets": [
       {
         "range": "Any",
-        "repeat": 3,
+        "repeat": {
+          "min": 3,
+          "max": 3,
+          "target": "Different"
+        },
         "effects": [
           {
             "FlatDamage": {
               "damage": {
                 "Physical": [
-                  0,
-                  20
+                  1,
+                  1
                 ]
               }
             }

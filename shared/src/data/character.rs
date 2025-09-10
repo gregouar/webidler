@@ -10,7 +10,7 @@ use crate::data::{
 use super::character_status::StatusMap;
 pub use super::skill::{SkillSpecs, SkillState};
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum CharacterId {
     Player,
     Monster(usize),
