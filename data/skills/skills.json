@@ -23,10 +23,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [
-                  4,
-                  8
-                ]
+                "Physical": [4, 8]
               }
             }
           }
@@ -63,10 +60,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Storm": [
-                  0,
-                  20
-                ]
+                "Storm": [0, 20]
               }
             }
           },
@@ -111,10 +105,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Fire": [
-                  4,
-                  12
-                ]
+                "Fire": [4, 12]
               }
             }
           }
@@ -147,10 +138,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Fire": [
-                  2,
-                  5
-                ]
+                "Fire": [2, 5]
               }
             }
           },
@@ -228,9 +216,9 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "StatusPower": null },
         "modifier": "Flat",
-        "value": 2
+        "value": 3
       }
     ],
     "targets": [
@@ -276,9 +264,9 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "StatusPower": null },
         "modifier": "Flat",
-        "value": 20
+        "value": 10
       }
     ],
     "targets": [
@@ -337,7 +325,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": "SpellPower",
+        "stat": { "StatusPower": null },
         "modifier": "Flat",
         "value": 2
       }
@@ -437,7 +425,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": {"Restore": "Life"},
+        "stat": { "Restore": "Life" },
         "modifier": "Flat",
         "value": 5
       }
@@ -467,7 +455,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": {"Restore": "Mana"},
+        "stat": { "Restore": "Mana" },
         "modifier": "Flat",
         "value": 5
       },
@@ -555,10 +543,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [
-                  5,
-                  10
-                ]
+                "Physical": [5, 10]
               },
               "crit_chances": 5,
               "crit_damage": 100
