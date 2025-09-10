@@ -211,8 +211,8 @@ fn find_main_target<'a, 'b>(
         .filter(|(_, (_, state))| targets_group.target_dead != state.is_alive)
         .filter(|(id, _)| match targets_group.repeat.target {
             SkillRepeatTarget::Any => true,
-            SkillRepeatTarget::Same => already_hit.is_empty() || already_hit.contains(&id),
-            SkillRepeatTarget::Different => !already_hit.contains(&id),
+            SkillRepeatTarget::Same => already_hit.is_empty() || already_hit.contains(id),
+            SkillRepeatTarget::Different => !already_hit.contains(id),
         })
         .map(|(id, (specs, _))| (id, specs));
 
