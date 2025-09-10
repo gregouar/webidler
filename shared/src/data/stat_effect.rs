@@ -26,6 +26,7 @@ pub enum DamageType {
     Physical,
     Fire,
     Poison,
+    Storm,
 }
 
 pub type DamageMap = HashMap<DamageType, (f64, f64)>;

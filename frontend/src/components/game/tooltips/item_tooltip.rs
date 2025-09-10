@@ -213,6 +213,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     }
                     DamageType::Fire => "text-red-400",
                     DamageType::Poison => "text-lime-400",
+                    DamageType::Storm => "text-amber-400",
                 };
 
                 if spec_min > 0.0 || spec_max > 0.0 {

@@ -5,7 +5,7 @@
   "power_factor": 3.0,
   "min_initiative": 3.0,
   "max_initiative": 5.0,
-  "armor": 50,
+  "armor": { "Physical": 50 },
   "skills": [
     {
       "name": "Hungry Kiss",
@@ -17,7 +17,7 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [4, 6]
+                  "Physical": [3, 5]
                 }
               }
             }
@@ -35,7 +35,7 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [3, 5]
+                  "Physical": [2, 4]
                 }
               }
             }

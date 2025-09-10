@@ -18,6 +18,13 @@
         "modifier": "Flat",
         "min": 15,
         "max": 15
+      },
+      {
+        "scope": "Global",
+        "stat": {"Armor":"Storm"},
+        "modifier": "Flat",
+        "min": 15,
+        "max": 15
       }
     ]
   },
@@ -37,6 +44,13 @@
       {
         "scope": "Global",
         "stat": {"Armor":"Poison"},
+        "modifier": "Flat",
+        "min": 30,
+        "max": 30
+      },
+      {
+        "scope": "Global",
+        "stat": {"Armor":"Storm"},
         "modifier": "Flat",
         "min": 30,
         "max": 30

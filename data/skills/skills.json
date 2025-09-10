@@ -37,7 +37,7 @@
   "chain_lightning": {
     "name": "Chain Lightning",
     "description": "A power spell that hit randomly multiple enemies, with a possibility to stun them.",
-    "icon": "skills/magic_missile.svg",
+    "icon": "skills/chain_lightning.svg",
     "skill_type": "Spell",
     "cooldown": 5,
     "mana_cost": 15,
@@ -63,9 +63,9 @@
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [
-                  1,
-                  1
+                "Storm": [
+                  0,
+                  20
                 ]
               }
             }

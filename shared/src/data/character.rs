@@ -65,11 +65,7 @@ pub struct CharacterSpecs {
     pub take_from_mana_before_life: f32,
 
     #[serde(default)]
-    pub armor: f64,
-    #[serde(default)]
-    pub fire_armor: f64,
-    #[serde(default)]
-    pub poison_armor: f64,
+    pub armor: HashMap<DamageType, f64>,
     #[serde(default)]
     pub block: f32,
 

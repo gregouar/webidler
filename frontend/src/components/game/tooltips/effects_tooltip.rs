@@ -30,9 +30,12 @@ pub fn format_effect_value(effect: &StatEffect) -> String {
 
 pub fn optional_damage_type_str(damage_type: Option<DamageType>) -> &'static str {
     match damage_type {
-        Some(DamageType::Physical) => "Physical ",
-        Some(DamageType::Fire) => "Fire ",
-        Some(DamageType::Poison) => "Poison ",
+        Some(damage_type) => match damage_type {
+            DamageType::Physical => "Physical ",
+            DamageType::Fire => "Fire ",
+            DamageType::Poison => "Poison ",
+            DamageType::Storm => "Storm ",
+        },
         None => "",
     }
 }

@@ -380,6 +380,11 @@
             "stat": { "Armor": "Poison" },
             "modifier": "Multiplier",
             "value": 0.2
+          },
+          {
+            "stat": { "Armor": "Storm" },
+            "modifier": "Multiplier",
+            "value": 0.2
           }
         ],
         "upgrade_effects": [
@@ -395,6 +400,11 @@
           },
           {
             "stat": { "Armor": "Poison" },
+            "modifier": "Multiplier",
+            "value": 0.1
+          },
+          {
+            "stat": { "Armor": "Storm" },
             "modifier": "Multiplier",
             "value": 0.1
           }
@@ -422,6 +432,11 @@
             "stat": { "Armor": "Poison" },
             "modifier": "Multiplier",
             "value": 0.2
+          },
+          {
+            "stat": { "Armor": "Storm" },
+            "modifier": "Multiplier",
+            "value": 0.2
           }
         ],
         "upgrade_effects": [
@@ -437,6 +452,11 @@
           },
           {
             "stat": { "Armor": "Poison" },
+            "modifier": "Multiplier",
+            "value": 0.1
+          },
+          {
+            "stat": { "Armor": "Storm" },
             "modifier": "Multiplier",
             "value": 0.1
           }
@@ -514,6 +534,11 @@
             "stat": { "Armor": "Poison" },
             "modifier": "Multiplier",
             "value": 0.2
+          },
+          {
+            "stat": { "Armor": "Storm" },
+            "modifier": "Multiplier",
+            "value": 0.2
           }
         ],
         "upgrade_effects": [
@@ -534,6 +559,11 @@
           },
           {
             "stat": { "Armor": "Poison" },
+            "modifier": "Multiplier",
+            "value": 0.1
+          },
+          {
+            "stat": { "Armor": "Storm" },
             "modifier": "Multiplier",
             "value": 0.1
           }

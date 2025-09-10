@@ -6,10 +6,12 @@ use shared::data::character_status::StatusSpecs;
 use shared::data::item::ItemSlot;
 use shared::data::item_affix::AffixEffectScope;
 use shared::data::passive::StatEffect;
+use shared::data::skill::DamageType;
 use shared::data::skill::ItemStatsSource;
 use shared::data::skill::ModifierEffect;
 use shared::data::skill::ModifierEffectSource;
 use shared::data::skill::RestoreType;
+use shared::data::skill::SkillRepeatTarget;
 use shared::data::skill::SkillTargetsGroup;
 use shared::data::skill::SkillType;
 use shared::data::skill::TargetType;
@@ -128,12 +130,12 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
 fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
     let shape = match targets_group.shape {
-        SkillShape::Single => "",
-        SkillShape::Vertical2 => ", 2x1 area",
-        SkillShape::Horizontal2 => ", 1x2 area",
-        SkillShape::Horizontal3 => ", 1x3 area",
-        SkillShape::Square4 => ", 2x2 area",
-        SkillShape::All => ", all",
+        SkillShape::Single => ", Single",
+        SkillShape::Vertical2 => ", Area 2x1",
+        SkillShape::Horizontal2 => ", Area 1x2",
+        SkillShape::Horizontal3 => ", Area 1x3",
+        SkillShape::Square4 => ", Area 2x2",
+        SkillShape::All => ", All",
     };
 
     let range = match targets_group.range {
@@ -148,6 +150,23 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
         SkillRange::Any => "Any",
     };
 
+    let repeat = if targets_group.repeat.max > 1 {
+        format!(
+            ", {} {}",
+            match targets_group.repeat.target {
+                SkillRepeatTarget::Any => "Repeat",
+                SkillRepeatTarget::Same => "Multi-Hit",
+                SkillRepeatTarget::Different => "Chain",
+            },
+            format_min_max(
+                targets_group.repeat.min as f64,
+                targets_group.repeat.max as f64
+            ),
+        )
+    } else {
+        "".into()
+    };
+
     let effects = targets_group
         .effects
         .into_iter()
@@ -156,7 +175,7 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
 
     view! {
         <hr class="border-t border-gray-700" />
-        <EffectLi>{range}{shape}</EffectLi>
+        <EffectLi>{range}{shape}{repeat}</EffectLi>
         {effects}
     }
 }
@@ -181,10 +200,14 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                 .into_iter()
                 .map(|(damage_type, (min, max))| {
                     let success_chances = success_chances.clone();
+                    let damage_color = damage_color(damage_type);
+
                     view! {
                         <EffectLi>
                             {success_chances}"Deal "
-                            <span class="font-semibold">{format_min_max(min, max)}</span> " "
+                            <span class=format!(
+                                "font-semibold {damage_color}",
+                            )>{format_min_max(min, max)}</span> " "
                             {optional_damage_type_str(Some(damage_type))} "Damage"
                         </EffectLi>
                     }
@@ -232,10 +255,13 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                     }
                     StatusSpecs::DamageOverTime { damage_type, .. } => {
                         let success_chances = success_chances.clone();
+                        let damage_color = damage_color(damage_type);
                         view! {
                             <EffectLi>
                                 {success_chances}"Deal "
-                                <span class="font-semibold">
+                                <span class=format!(
+                                    "font-semibold {damage_color}",
+                                )>
                                     {format_min_max(
                                         status_effect.min_value,
                                         status_effect.max_value,
@@ -342,6 +368,15 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
         SkillEffectType::Resurrect => {
             view! { <EffectLi>{success_chances}"Resurrect"</EffectLi> }.into_any()
         }
+    }
+}
+
+fn damage_color(damage_type: DamageType) -> &'static str {
+    match damage_type {
+        DamageType::Physical => "text-white",
+        DamageType::Fire => "text-red-400",
+        DamageType::Poison => "text-lime-400",
+        DamageType::Storm => "text-amber-400",
     }
 }
 

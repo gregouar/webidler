@@ -92,5 +92,26 @@
   { "text": "Fangtouched", "tags": ["Poison", "Attack"] },
   { "text": "Slimebound", "tags": ["Poison", "Armor"] },
   { "text": "Sporeclouded", "tags": ["Poison", "Spell"] },
-  { "text": "Taintwoven", "tags": ["Poison", "Spell"] }
+  { "text": "Taintwoven", "tags": ["Poison", "Spell"] },
+  
+  { "text": "Stormcharged", "tags": ["Storm"] },
+  { "text": "Thunderous", "tags": ["Storm"] },
+  { "text": "Tempestuous", "tags": ["Storm"] },
+  { "text": "Electrified", "tags": ["Storm"] },
+  { "text": "Shockwoven", "tags": ["Storm", "Spell"] },
+  { "text": "Rainlashed", "tags": ["Storm"] },
+  { "text": "Hailborn", "tags": ["Storm"] },
+  { "text": "Cyclonic", "tags": ["Storm"] },
+  { "text": "Squalling", "tags": ["Storm"] },
+  { "text": "Gustborne", "tags": ["Storm"] },
+  { "text": "Voltstruck", "tags": ["Storm", "Attack"] },
+  { "text": "Crackling", "tags": ["Storm", "Attack"] },
+  { "text": "Lightningkissed", "tags": ["Storm", "Attack"] },
+  { "text": "Stormforged", "tags": ["Storm", "Armor"] },
+  { "text": "Tempestforged", "tags": ["Storm", "Armor"] },
+  { "text": "Thundercalled", "tags": ["Storm", "Spell"] },
+  { "text": "Skyshattered", "tags": ["Storm", "Spell", "Attack"] },
+  { "text": "Cloudpiercer", "tags": ["Storm", "Attack"] },
+  { "text": "Staticcharged", "tags": ["Storm"] },
+  { "text": "Boltforged", "tags": ["Storm", "Armor", "Attack"] }
 ]

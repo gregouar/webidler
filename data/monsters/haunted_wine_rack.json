@@ -6,9 +6,7 @@
   "size": "Huge",
   "power_factor": 50,
   "max_initiative": 2,
-  "armor": 50,
-  "fire_armor": 50,
-  "poison_armor": 50,
+  "armor": { "Physical": 50, "Fire": 50, "Poison": 50, "Storm": 50 },
   "skills": [
     {
       "name": "Corkscrew Crush",
@@ -68,18 +66,10 @@
               }
             },
             {
-              "ApplyStatus": {
-                "min_duration": 4,
-                "max_duration": 4,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": { "damage_type": "Poison" }
-                    },
-                    "min_value": 1,
-                    "max_value": 3
-                  }
-                ]
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [0, 15]
+                }
               }
             }
           ]

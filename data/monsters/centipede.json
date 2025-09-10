@@ -5,7 +5,7 @@
   "size": "Large",
   "power_factor": 3.0,
   "max_initiative": 2.0,
-  "armor": 20,
+  "armor": { "Physical": 20, "Storm": 20 },
   "skills": [
     {
       "name": "Venom Lash",

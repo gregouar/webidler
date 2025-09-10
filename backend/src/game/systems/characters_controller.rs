@@ -197,15 +197,13 @@ fn decrease_damage_from_armor(
     damage_type: DamageType,
 ) -> f64 {
     amount
-        * match damage_type {
-            DamageType::Physical => {
-                1.0 - increase_factors::diminishing(target_specs.armor, ARMOR_FACTOR)
-            }
-            DamageType::Fire => {
-                1.0 - increase_factors::diminishing(target_specs.fire_armor, ARMOR_FACTOR)
-            }
-            DamageType::Poison => {
-                1.0 - increase_factors::diminishing(target_specs.poison_armor, ARMOR_FACTOR)
-            }
-        }
+        * (1.0
+            - increase_factors::diminishing(
+                target_specs
+                    .armor
+                    .get(&damage_type)
+                    .cloned()
+                    .unwrap_or_default(),
+                ARMOR_FACTOR,
+            ))
 }
