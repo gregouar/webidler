@@ -39,11 +39,11 @@ pub fn attack_character(
         <= target_specs.block
             * match skill_type {
                 SkillType::Attack => 1.0,
-                SkillType::Spell => target_specs.block_spell,
+                SkillType::Spell => target_specs.block_spell * 0.01,
             };
 
     if is_blocked {
-        amount *= target_specs.block_damage as f64;
+        amount *= target_specs.block_damage as f64 * 0.01;
     }
 
     let is_hurt = amount > 0.0;

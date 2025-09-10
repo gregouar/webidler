@@ -134,4 +134,8 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             | StatType::Speed(_) => {}
         }
     }
+
+    character_specs.block = character_specs.block.clamp(0.0, 100.0);
+    character_specs.block_spell = character_specs.block_spell.clamp(0.0, 100.0);
+    character_specs.block_damage = character_specs.block_damage.clamp(0.0, 100.0);
 }
