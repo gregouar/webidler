@@ -195,6 +195,8 @@ pub fn format_multiplier_stat_name(stat: StatType) -> String {
         },
         StatType::TakeFromManaBeforeLife => "Damage taken from Mana before Life".to_string(),
         StatType::Block => "Block Chances".to_string(),
+        StatType::BlockSpell => "Block Chances applied to Spells".to_string(),
+        StatType::BlockDamageTaken => "Blocked Damage Taken".to_string(),
         StatType::Damage {
             skill_type,
             damage_type,
@@ -282,6 +284,16 @@ pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
             )
         }
         StatType::Block => format!("Adds {}% Block Chances", format_flat_number(value, false)),
+        StatType::BlockSpell => format!(
+            "Adds {}% of Block Chances to Spells",
+            format_flat_number(value, false)
+        ),
+        StatType::BlockDamageTaken => {
+            format!(
+                "Takes {}% of Blocked Damages",
+                format_flat_number(value, false)
+            )
+        }
         StatType::Damage {
             skill_type,
             damage_type,

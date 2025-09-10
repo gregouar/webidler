@@ -91,6 +91,8 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                 .take_from_mana_before_life
                 .apply_effect(effect),
             StatType::Block => character_specs.block.apply_effect(effect),
+            StatType::BlockSpell => character_specs.block_spell.apply_effect(effect),
+            StatType::BlockDamageTaken => character_specs.block_damage.apply_effect(effect),
             StatType::DamageResistance {
                 skill_type,
                 damage_type,

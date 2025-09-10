@@ -1059,34 +1059,29 @@
         "max_upgrade_level": 3
       },
 
-      "stunning_block": {
-        "name": "Shield Bash",
-        "icon": "passives/shield_reflect.svg",
+      "arcane_bastion": {
+        "initial_node": true,
+        "name": "Arcane Bastion",
+        "icon": "passives/rosa_shield.svg",
         "x": -40,
         "y": 20,
         "node_type": "Armor",
         "size": 1,
-        "triggers": [
+        "effects": [
           {
-            "trigger_id": "stunning_block",
-            "description": "Blocked Attacks inflict Stun for 1-2 seconds",
-            "OnTakeHit": { "skill_type": "Attack", "is_blocked": true },
-            "target": "Source",
-            "effects": [
-              {
-                "ApplyStatus": {
-                  "min_duration": 1,
-                  "max_duration": 2,
-                  "statuses": [
-                    {
-                      "status_type": "Stun",
-                      "min_value": 0,
-                      "max_value": 0
-                    }
-                  ]
-                }
-              }
-            ]
+            "stat": "Block",
+            "modifier": "Multiplier",
+            "value": 0.3
+          },
+          {
+            "stat": "BlockSpell",
+            "modifier": "Flat",
+            "value": 50
+          },
+          {
+            "stat": "BlockDamageTaken",
+            "modifier": "Flat",
+            "value": 50
           }
         ],
         "locked": true
@@ -1677,7 +1672,7 @@
       { "from": "mana_regen_2", "to": "mana_max_and_regen_1" },
 
       { "from": "gold_ul_1", "to": "block_2" },
-      { "from": "gold_ul_1", "to": "stunning_block" },
+      { "from": "gold_ul_1", "to": "arcane_bastion" },
       { "from": "gold_ul_1", "to": "attack_damage_2" },
 
       { "from": "gold_ur_1", "to": "crit_chances_2" },

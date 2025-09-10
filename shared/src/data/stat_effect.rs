@@ -49,6 +49,8 @@ pub enum StatType {
     Armor(DamageType),
     TakeFromManaBeforeLife,
     Block,
+    BlockSpell,
+    BlockDamageTaken,
     Damage {
         #[serde(default)]
         skill_type: Option<SkillType>,

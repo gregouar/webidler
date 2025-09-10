@@ -59,8 +59,10 @@ pub fn update_player_specs(
     passives_tree_state: &PassivesTreeState,
 ) {
     // TODO: Reset player_specs
-    player_specs.character_specs.armor = Default::default();
+    player_specs.character_specs.armor.clear();
     player_specs.character_specs.block = 0.0;
+    player_specs.character_specs.block_spell = 0.0;
+    player_specs.character_specs.block_damage = 0.0;
     player_specs.character_specs.max_life = 90.0 + 10.0 * player_specs.level as f64;
     player_specs.character_specs.life_regen = 10.0;
     player_specs.character_specs.max_mana = 100.0;
@@ -180,6 +182,8 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
             | StatType::Armor(_)
             | StatType::TakeFromManaBeforeLife
             | StatType::Block
+            | StatType::BlockSpell
+            | StatType::BlockDamageTaken
             | StatType::DamageResistance { .. } => {}
             // Delegate to skills
             StatType::Damage { .. }

@@ -68,6 +68,10 @@ pub struct CharacterSpecs {
     pub armor: HashMap<DamageType, f64>,
     #[serde(default)]
     pub block: f32,
+    #[serde(default)]
+    pub block_spell: f32,
+    #[serde(default)]
+    pub block_damage: f32,
 
     #[serde(default)]
     pub damage_resistance: HashMap<(SkillType, DamageType), f64>,
