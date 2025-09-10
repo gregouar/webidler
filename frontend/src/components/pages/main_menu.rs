@@ -141,7 +141,9 @@ fn MainMenu() -> impl IntoView {
                 <div class="flex flex-col space-y-2">
                     // <form>
                     <div class="w-full mx-auto text-left">
-                        <label class="block mb-2 text-sm font-medium text-gray-400">"Login:"</label>
+                        <label class="block mb-2 text-sm font-medium text-gray-400">
+                            "Sign In:"
+                        </label>
                         <Input
                             id="username"
                             input_type="text"

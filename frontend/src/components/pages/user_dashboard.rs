@@ -100,7 +100,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                 view! { <p class="text-gray-400">"Loading..."</p> }
             }>
                 {move || {
-                    let logout = sign_out.clone();
+                    let sign_out = sign_out.clone();
                     Suspend::new(async move {
                         let (areas, user, characters) = async_data.await.unwrap_or_default();
                         let areas = Arc::new(areas);
@@ -169,7 +169,9 @@ pub fn UserDashboardPage() -> impl IntoView {
                                 >
                                     "Account Settings"
                                 </a>
-                                <MenuButtonRed on:click=move |_| logout()>"Logout"</MenuButtonRed>
+                                <MenuButtonRed on:click=move |_| sign_out()>
+                                    "Sign Out"
+                                </MenuButtonRed>
                             </div>
                         }
                     })
