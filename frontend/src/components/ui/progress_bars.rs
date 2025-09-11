@@ -131,20 +131,37 @@ pub fn CircularProgressBar(
     let reset_bar_animation = RwSignal::new("opacity: 0;");
     let reset_icon_animation = RwSignal::new("");
     let transition = RwSignal::new("transition: opacity 0.5s linear, --progress 0.250s linear;");
+
     Effect::new(move |_| {
         if reset.get() {
             progress_value.set(0.0);
             transition.set("");
-            reset_bar_animation
-                .set("animation: circular-progress-bar-fade-out 0.5s ease-out; animation-fill-mode: both;");
-            reset_icon_animation
-                .set("animation: circular-progress-bar-glow 0.5s ease; animation-fill-mode: both;");
 
-            // Trick to reset animation by removing it when ended
+            if !disabled.get_untracked() {
+                reset_bar_animation
+                .set("animation: circular-progress-bar-fade-out 0.5s ease-out; animation-fill-mode: both;");
+                reset_icon_animation.set(
+                    "animation: circular-progress-bar-glow 0.5s ease; animation-fill-mode: both;",
+                );
+
+                // Trick to reset animation by removing it when ended
+                set_timeout(
+                    move || {
+                        reset_bar_animation.set("opacity: 0;");
+                        reset_icon_animation.set("");
+                    },
+                    std::time::Duration::from_millis(500),
+                );
+            }
+        }
+    });
+
+    Effect::new(move |_| {
+        if disabled.get() {
             set_timeout(
                 move || {
-                    reset_bar_animation.set("opacity: 0;");
-                    reset_icon_animation.set("");
+                    progress_value.set(0.0);
+                    transition.set("");
                 },
                 std::time::Duration::from_millis(500),
             );

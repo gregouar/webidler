@@ -248,7 +248,7 @@ pub fn PlayerCard() -> impl IntoView {
                     key=|i| *i
                     let(i)
                 >
-                    <PlayerSkill index=i />
+                    <PlayerSkill index=i is_dead />
                 </For>
                 <Show when=move || {
                     game_context.player_specs.read().skills_specs.len()
@@ -296,7 +296,7 @@ pub fn PlayerName() -> impl IntoView {
 }
 
 #[component]
-fn PlayerSkill(index: usize) -> impl IntoView {
+fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let icon_asset = Memo::new(move |_| {
@@ -459,6 +459,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
                         bar_color="oklch(55.5% 0.163 48.998)"
                         remaining_time=skill_cooldown
                         reset=just_triggered
+                        disabled=is_dead
                         bar_width=4
                     >
                         <img
