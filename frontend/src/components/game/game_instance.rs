@@ -91,6 +91,10 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
                     ErrorType::Game => ToastVariant::Warning,
                 },
             );
+            if error_message.must_disconnect {
+                let navigate = leptos_router::hooks::use_navigate();
+                navigate("/", Default::default());
+            }
         }
         ServerMessage::Disconnect(_) => {
             let navigate = leptos_router::hooks::use_navigate();

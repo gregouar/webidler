@@ -1,4 +1,4 @@
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
 use anyhow::Result;
 
@@ -34,10 +34,26 @@ pub async fn create_session(
     let character_id = character.character_id;
     tracing::debug!("create new session for player '{character_id}'...");
 
-    if db::game_sessions::create_session(db_pool, &character_id)
-        .await?
-        .is_none()
-    {
+    let mut first_try = true;
+    let mut session_id = None;
+    for _ in 0..50 {
+        session_id = db::game_sessions::create_session(db_pool, &character_id).await?;
+        match session_id {
+            Some(_) => break,
+            None => {
+                if first_try {
+                    sessions_store
+                        .sessions_stealing
+                        .lock()
+                        .unwrap()
+                        .insert(character_id);
+                }
+                first_try = false;
+                tokio::time::sleep(Duration::from_millis(200)).await;
+            }
+        }
+    }
+    if session_id.is_none() {
         return Err(AppError::UserError("character already in session".to_string()).into());
     }
 

@@ -106,6 +106,7 @@ fn handle_client_message(
                 return Some(ErrorMessage {
                     error_type: ErrorType::Game,
                     message: "Not enough item slots available, please unequip first!".to_string(),
+                    must_disconnect: false,
                 });
             }
         }
@@ -119,6 +120,7 @@ fn handle_client_message(
                 return Some(ErrorMessage {
                     error_type: ErrorType::Game,
                     message: "Your bag is full!".to_string(),
+                    must_disconnect: false,
                 });
             }
         }
@@ -147,6 +149,7 @@ fn handle_client_message(
                 return Some(ErrorMessage {
                     error_type: ErrorType::Game,
                     message: "Your bag is full!".to_string(),
+                    must_disconnect: false,
                 });
             }
         }
@@ -167,6 +170,7 @@ fn handle_client_message(
             return Some(ErrorMessage {
                 error_type: ErrorType::Server,
                 message: "unexpected message received from client".to_string(),
+                must_disconnect: true,
             });
         }
     }

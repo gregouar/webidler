@@ -73,6 +73,7 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
                 &ErrorMessage {
                     error_type: ErrorType::Server,
                     message: e.to_string(),
+                    must_disconnect: true,
                 }
                 .into(),
             )
@@ -90,6 +91,7 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
         &mut session.game_data,
         app_state.db_pool.clone(),
         app_state.master_store,
+        app_state.sessions_store.clone(),
     );
 
     let character_id = session.character_id;

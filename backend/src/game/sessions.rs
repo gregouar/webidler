@@ -1,5 +1,5 @@
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     sync::{Arc, Mutex},
     time::Instant,
 };
@@ -11,6 +11,7 @@ use super::game_data::GameInstanceData;
 #[derive(Debug, Clone)]
 pub struct SessionsStore {
     pub sessions: Arc<Mutex<HashMap<UserCharacterId, Session>>>,
+    pub sessions_stealing: Arc<Mutex<HashSet<UserCharacterId>>>,
 }
 
 #[derive(Debug, Clone)]
@@ -31,6 +32,7 @@ impl SessionsStore {
     pub fn new() -> Self {
         Self {
             sessions: Arc::new(Mutex::new(HashMap::new())),
+            sessions_stealing: Default::default(),
         }
     }
 }

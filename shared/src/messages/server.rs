@@ -29,6 +29,7 @@ pub struct ConnectMessage {}
 pub struct ErrorMessage {
     pub error_type: ErrorType,
     pub message: String,
+    pub must_disconnect: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]

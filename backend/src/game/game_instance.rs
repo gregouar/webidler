@@ -1,5 +1,8 @@
 use anyhow::Result;
-use shared::{data::user::UserCharacterId, messages::server::DisconnectMessage};
+use shared::{
+    data::user::UserCharacterId,
+    messages::server::{DisconnectMessage, ErrorMessage, ErrorType},
+};
 
 use super::{
     data::{event::EventsQueue, master_store::MasterStore},
@@ -9,6 +12,7 @@ use super::{
 };
 
 use crate::{
+    app_state::SessionsStore,
     db::{self, DbPool},
     websocket::WebSocketConnection,
 };
@@ -17,6 +21,7 @@ pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
     db_pool: DbPool,
     master_store: MasterStore,
+    sessions_store: SessionsStore,
     character_id: &'a UserCharacterId,
     game_data: &'a mut GameInstanceData,
     events_queue: EventsQueue,
@@ -29,12 +34,14 @@ impl<'a> GameInstance<'a> {
         game_data: &'a mut GameInstanceData,
         db_pool: DbPool,
         master_store: MasterStore,
+        sessions_store: SessionsStore,
     ) -> Self {
         GameInstance {
             client_conn,
             character_id,
             db_pool,
             master_store,
+            sessions_store,
             game_data,
 
             events_queue: EventsQueue::new(),
@@ -76,6 +83,28 @@ impl<'a> GameInstance<'a> {
             }
 
             if self.game_data.area_state.read().end_quest {
+                break;
+            }
+
+            if self
+                .sessions_store
+                .sessions_stealing
+                .lock()
+                .unwrap()
+                .take(self.character_id)
+                .is_some()
+            {
+                self.client_conn
+                    .send(
+                        &ErrorMessage {
+                            error_type: ErrorType::Server,
+                            message: "kicked out of game session".into(),
+                            must_disconnect: true,
+                        }
+                        .into(),
+                    )
+                    .await
+                    .unwrap_or_else(|_| tracing::warn!("failed to send disconnection message"));
                 break;
             }
 
