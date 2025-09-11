@@ -5,5 +5,4 @@ Next things to do:
 - spider boss & minions
 
 - dual wield
-- redirect if authorization issue in game page
 - last login, activity log, etc

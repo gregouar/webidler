@@ -256,8 +256,23 @@ pub fn compute_skill_specs_effect<'a>(
                 for status_effect in statuses.iter_mut() {
                     if let StatType::StatusPower(status_type) = effect.stat {
                         if compare_status_types(status_type, &status_effect.status_type) {
-                            status_effect.min_value.apply_effect(effect);
-                            status_effect.max_value.apply_effect(effect);
+                            let effect = match (&status_effect.status_type, effect.modifier) {
+                                // Correct because flat is in percent but multiplier in decimals
+                                (
+                                    StatusSpecs::StatModifier {
+                                        modifier: Modifier::Multiplier,
+                                        ..
+                                    },
+                                    Modifier::Flat,
+                                ) => StatEffect {
+                                    value: effect.value * 0.01,
+                                    ..*effect
+                                },
+                                _ => effect.clone(),
+                            };
+
+                            status_effect.min_value.apply_effect(&effect);
+                            status_effect.max_value.apply_effect(&effect);
                         }
                     }
 

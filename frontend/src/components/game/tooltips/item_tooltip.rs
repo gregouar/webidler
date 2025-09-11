@@ -67,7 +67,7 @@ pub fn ItemTooltipContent(
     view! {
         <div class="space-y-2">
             <strong class=format!("text-base lg:text-lg font-bold {}", name_color)>
-                <ul class="list-none space-y-1">
+                <ul class="list-none space-y-1 md-2">
                     <li class="leading-snug whitespace-pre-line">
                         {item_specs.modifiers.name.clone()}
                     </li>
