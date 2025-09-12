@@ -266,7 +266,7 @@
       {
         "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
         "modifier": "Flat",
-        "value": 5
+        "value": 3
       }
     ],
     "targets": [
@@ -287,19 +287,6 @@
                           "skill_type": null,
                           "damage_type": null
                         }
-                      },
-                      "modifier": "Multiplier",
-                      "debuff": true
-                    }
-                  },
-                  "min_value": 0.33,
-                  "max_value": 0.33
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Speed": null
                       },
                       "modifier": "Multiplier",
                       "debuff": true
