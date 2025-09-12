@@ -192,14 +192,9 @@ where
     view! {
         <div
             class="relative group inline-block"
-            on:touchstart=move |ev| {
-                ev.prevent_default();
-                is_open.set(true)
-            }
-            on:touchend=move |ev| {
-                ev.prevent_default();
-                is_open.set(false)
-            }
+            on:touchstart=move |_| { is_open.set(true) }
+            on:touchend=move |_| { is_open.set(false) }
+            on:touchcancel=move |_| { is_open.set(false) }
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
@@ -214,7 +209,7 @@ where
                 px-2 py-1 xl:px-3 xl:py-1 text-xs xl:text-sm text-white
                 bg-zinc-900 border border-neutral-950
                 rounded shadow-lg whitespace-nowrap z-50 select-none
-                max-w-[80vw] xl:max-w-none
+                max-w-[60vw] xl:max-w-none
                 overflow-auto
                 {} {}
                 ",

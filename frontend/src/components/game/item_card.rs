@@ -73,16 +73,11 @@ pub fn ItemCard(
                 ring_color,
                 shadow_color,
             )
-            on:mouseenter={
-                let show_tooltip = show_tooltip.clone();
-                move |_| show_tooltip()
-            }
-            on:mouseleave={
-                let hide_tooltip = hide_tooltip.clone();
-                move |_| hide_tooltip()
-            }
 
-            on:touchstart=move |_| { show_tooltip() }
+            on:touchstart={
+                let show_tooltip = show_tooltip.clone();
+                move |_| { show_tooltip() }
+            }
             on:touchend={
                 let hide_tooltip = hide_tooltip.clone();
                 move |_| hide_tooltip()

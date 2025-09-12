@@ -15,6 +15,7 @@ use shared::{
 use crate::{
     assets::img_asset,
     components::{
+        accessibility::AccessibilityContext,
         game::{
             game_context::GameContext, item_card::ItemCard, player_card::PlayerName,
             tooltips::ItemTooltip,
@@ -30,8 +31,7 @@ use crate::{
     },
 };
 
-#[derive(Clone, Default)]
-struct SellQueue(RwSignal<HashSet<usize>>);
+type SellQueue = RwSignal<HashSet<usize>>;
 
 #[component]
 pub fn InventoryPanel(open: RwSignal<bool>) -> impl IntoView {
@@ -40,7 +40,7 @@ pub fn InventoryPanel(open: RwSignal<bool>) -> impl IntoView {
 
     Effect::new(move || {
         if !open.get() {
-            sell_queue.0.write().drain();
+            sell_queue.write().drain();
         }
     });
 
@@ -390,7 +390,7 @@ fn BagItem(item_index: usize) -> impl IntoView {
     };
 
     let sell_queue = expect_context::<SellQueue>();
-    let is_queued_for_sale = move || sell_queue.0.read().contains(&item_index);
+    let is_queued_for_sale = move || sell_queue.read().contains(&item_index);
 
     let show_menu = RwSignal::new(false);
 
@@ -437,15 +437,19 @@ fn BagItem(item_index: usize) -> impl IntoView {
                                     item_specs=item_specs.clone()
                                     on:click=move |_| show_menu.set(true)
                                     // Ignore if Mobile:
-                                    on:contextmenu=move |ev| {
-                                        ev.prevent_default();
-                                        sell_queue
-                                            .0
-                                            .update(|set| {
-                                                if !set.remove(&item_index) {
-                                                    set.insert(item_index);
-                                                }
-                                            });
+                                    on:contextmenu={
+                                        let accessibility: AccessibilityContext = expect_context();
+                                        move |ev| {
+                                            ev.prevent_default();
+                                            if !accessibility.is_on_mobile() {
+                                                sell_queue
+                                                    .update(|set| {
+                                                        if !set.remove(&item_index) {
+                                                            set.insert(item_index);
+                                                        }
+                                                    });
+                                            }
+                                        }
                                     }
                                     tooltip_position=DynamicTooltipPosition::Auto
                                 />
@@ -504,7 +508,7 @@ pub fn BagItemContextMenu(
     let equip = Arc::new({
         let conn = expect_context::<WebsocketContext>();
         move || {
-            sell_queue.0.write().remove(&item_index);
+            sell_queue.write().remove(&item_index);
             conn.send(
                 &EquipItemMessage {
                     item_index: item_index as u8,
@@ -557,7 +561,7 @@ pub fn BagItemContextMenu(
 
     let toggle_sell_mark = {
         move || {
-            sell_queue.0.update(|set| {
+            sell_queue.update(|set| {
                 if !set.remove(&item_index) {
                     set.insert(item_index);
                 }
@@ -579,7 +583,7 @@ pub fn BagItemContextMenu(
                 class="btn w-full text-sm xl:text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-1 xl:py-2"
                 on:click=move |_| toggle_sell_mark()
             >
-                {move || if sell_queue.0.get().contains(&item_index) { "Unsell" } else { "Sell" }}
+                {move || if sell_queue.get().contains(&item_index) { "Unsell" } else { "Sell" }}
             </button>
 
             <button
@@ -644,7 +648,7 @@ fn SellAllButton() -> impl IntoView {
         move |_| {
             conn.send(
                 &SellItemsMessage {
-                    item_indexes: sell_queue.0.write().drain().map(|x| x as u8).collect(),
+                    item_indexes: sell_queue.write().drain().map(|x| x as u8).collect(),
                 }
                 .into(),
             );
@@ -653,7 +657,7 @@ fn SellAllButton() -> impl IntoView {
 
     let disabled = Signal::derive({
         let sell_queue = expect_context::<SellQueue>();
-        move || sell_queue.0.read().is_empty()
+        move || sell_queue.read().is_empty()
     });
 
     view! {

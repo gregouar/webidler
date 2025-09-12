@@ -362,26 +362,25 @@ pub fn Node(
                     on_click();
                 }
             }
-            on:mouseenter={
+
+            on:touchstart={
                 let show_tooltip = show_tooltip.clone();
-                move |_| show_tooltip()
+                move |_| { show_tooltip() }
             }
-            on:mouseleave={
+            on:touchend={
                 let hide_tooltip = hide_tooltip.clone();
                 move |_| hide_tooltip()
             }
-
-            on:touchstart=move |ev| {
-                ev.prevent_default();
-                show_tooltip()
-            }
-            on:touchend=move |ev| {
-                ev.prevent_default();
-                hide_tooltip()
+            on:touchcancel={
+                let hide_tooltip = hide_tooltip.clone();
+                move |_| hide_tooltip()
             }
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
+
+            on:mouseenter=move |_| show_tooltip()
+            on:mouseleave=move |_| hide_tooltip()
 
             class=class_style
         >

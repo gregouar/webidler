@@ -8,6 +8,7 @@ use leptos_toaster::*;
 use url::Url;
 
 use crate::components::{
+    accessibility::provide_accessibility_context,
     auth::provide_auth_context,
     backend_client::BackendClient,
     pages,
@@ -34,6 +35,7 @@ pub fn App() -> impl IntoView {
     ));
 
     provide_auth_context();
+    provide_accessibility_context();
 
     let confirm_state = provide_confirm_context();
 

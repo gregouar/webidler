@@ -429,7 +429,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     };
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let show_tooltip = move |_| {
+    let show_tooltip = move || {
         if let Some(skill_specs) = game_context.player_specs.read().skills_specs.get(index) {
             let skill_specs = Arc::new(skill_specs.clone());
             tooltip_context.set_content(
@@ -443,11 +443,29 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     };
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let hide_tooltip = move |_| tooltip_context.hide();
+    let hide_tooltip = move || tooltip_context.hide();
 
     view! {
         <div class="flex flex-col">
-            <div on:mouseenter=show_tooltip on:mouseleave=hide_tooltip>
+            <div
+                on:touchstart={
+                    let show_tooltip = show_tooltip.clone();
+                    move |_| { show_tooltip() }
+                }
+                on:touchend={
+                    let hide_tooltip = hide_tooltip.clone();
+                    move |_| hide_tooltip()
+                }
+                on:touchcancel={
+                    let hide_tooltip = hide_tooltip.clone();
+                    move |_| hide_tooltip()
+                }
+                on:contextmenu=move |ev| {
+                    ev.prevent_default();
+                }
+                on:mouseenter=move |_| show_tooltip()
+                on:mouseleave=move |_| hide_tooltip()
+            >
                 <button
                     class="btn p-1 w-full h-full
                     active:brightness-50 active:sepia"
