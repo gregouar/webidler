@@ -159,27 +159,41 @@ where
     F: Fn() -> IV + Send + Sync + 'static,
     IV: IntoView + 'static,
 {
+    let is_open = RwSignal::new(false);
+
+    let container_ref = NodeRef::new();
+    let _ = leptos_use::on_click_outside(container_ref, move |_| is_open.set(false));
+
     let position_classes = match position {
         StaticTooltipPosition::Top => "bottom-full left-1/2 -translate-x-1/2 mb-2",
         StaticTooltipPosition::Bottom => "top-full left-1/2 -translate-x-1/2 mt-2",
         StaticTooltipPosition::Left => "right-full top-1/2 -translate-y-1/2 mr-2",
         StaticTooltipPosition::Right => "left-full top-1/2 -translate-y-1/2 ml-2",
     };
+
     view! {
-        <div class="relative group inline-block">
+        <div
+            class="relative group inline-block"
+            on:touchend=move |_| is_open.update(|v| *v = !*v)
+            node_ref=container_ref
+        >
             {children()}
-            <div class=format!(
-                "
-                absolute hidden group-hover:block
+
+            <div class=move || {
+                format!(
+                    "
+                absolute
                 px-2 py-1 xl:px-3 xl:py-1 text-xs xl:text-sm text-white
                 bg-zinc-800 border border-neutral-900
-                rounded shadow-lg whitespace-nowrap z-50
-                select-none
-                max-w-[80vw] xl:max-w-[60vw] xl:max-w-none
+                rounded shadow-lg whitespace-nowrap z-50 select-none
+                max-w-[80vw] xl:max-w-none
                 overflow-auto
-                {}",
-                position_classes,
-            )>{move || tooltip()}</div>
+                {} {}
+                ",
+                    position_classes,
+                    if is_open.get() { "block" } else { "hidden group-hover:block" },
+                )
+            }>{move || tooltip()}</div>
         </div>
     }
 }
