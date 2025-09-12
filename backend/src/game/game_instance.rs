@@ -185,13 +185,13 @@ async fn auto_save_impl(
 ) -> Result<()> {
     let mut tx = db_pool.begin().await?;
 
-    db::characters::update_character_progress(
-        &mut tx,
-        &character_id,
-        &game_data.area_id,
-        game_data.area_state.read().max_area_level_completed as i32,
-    )
-    .await?;
+    // db::characters::update_character_progress(
+    //     &mut tx,
+    //     &character_id,
+    //     &game_data.area_id,
+    //     game_data.area_state.read().max_area_level_completed as i32,
+    // )
+    // .await?;
     db::game_instances::save_game_instance_data(&mut *tx, &character_id, game_data).await?;
 
     tx.commit().await?;
