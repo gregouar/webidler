@@ -8,19 +8,23 @@ pub fn Pannable(children: Children) -> impl IntoView {
 
     let svg_ref = NodeRef::new();
 
-    let screen_to_svg = move |ev: &web_sys::MouseEvent| -> (f64, f64) {
+    let screen_to_svg = move |x: f64, y: f64| -> (f64, f64) {
         let svg: web_sys::SvgElement = svg_ref.get().expect("SVG node should exist");
 
         let rect = svg.get_bounding_client_rect();
-        let x = (ev.client_x() as f64 - rect.left()) * 1000.0 / rect.width() - 500.0;
-        let y = (ev.client_y() as f64 - rect.top()) * 1000.0 / rect.height() - 500.0;
+        let x = (x - rect.left()) * 1000.0 / rect.width() - 500.0;
+        let y = (y - rect.top()) * 1000.0 / rect.height() - 500.0;
         (x, y)
     };
 
+    // --- Mouse handling ---
     let on_mouse_down = {
         move |ev: web_sys::MouseEvent| {
             ev.stop_propagation();
-            dragging.set(Some(screen_to_svg(&ev)));
+            dragging.set(Some(screen_to_svg(
+                ev.client_x() as f64,
+                ev.client_y() as f64,
+            )));
         }
     };
 
@@ -31,7 +35,7 @@ pub fn Pannable(children: Children) -> impl IntoView {
         move |ev: web_sys::MouseEvent| {
             if let Some((last_x, last_y)) = dragging.get() {
                 ev.stop_propagation();
-                let (cur_x, cur_y) = screen_to_svg(&ev);
+                let (cur_x, cur_y) = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
                 let dx = cur_x - last_x;
                 let dy = cur_y - last_y;
                 offset.update(|(x, y)| {
@@ -51,7 +55,7 @@ pub fn Pannable(children: Children) -> impl IntoView {
             let old_zoom = zoom.get();
             let new_zoom = (old_zoom * zoom_factor).clamp(0.25, 2.0);
 
-            let (x, y) = screen_to_svg(&ev);
+            let (x, y) = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
             let (ox, oy) = offset.get();
             offset.set((
                 x - (x - ox) * (new_zoom / old_zoom),
@@ -62,10 +66,72 @@ pub fn Pannable(children: Children) -> impl IntoView {
         }
     };
 
+    // --- Touch handling ---
+    let last_pinch_distance = RwSignal::new(None::<f64>);
+
+    let on_touch_start = {
+        let screen_to_svg = screen_to_svg.clone();
+        move |ev: web_sys::TouchEvent| {
+            if ev.touches().length() == 1 {
+                let touch = ev.touches().item(0).unwrap();
+                let (x, y) = screen_to_svg(touch.client_x() as f64, touch.client_y() as f64);
+                dragging.set(Some((x, y)));
+            } else if ev.touches().length() == 2 {
+                // pinch start
+                let t1 = ev.touches().item(0).unwrap();
+                let t2 = ev.touches().item(1).unwrap();
+                let dx = (t1.client_x() as f64 - t2.client_x() as f64).abs();
+                let dy = (t1.client_y() as f64 - t2.client_y() as f64).abs();
+                last_pinch_distance.set(Some((dx.powi(2) + dy.powi(2)).sqrt()));
+            }
+        }
+    };
+
+    let on_touch_move = {
+        let screen_to_svg = screen_to_svg.clone();
+        move |ev: web_sys::TouchEvent| {
+            if ev.touches().length() == 1 {
+                if let Some((last_x, last_y)) = dragging.get() {
+                    let touch = ev.touches().item(0).unwrap();
+                    let (cur_x, cur_y) =
+                        screen_to_svg(touch.client_x() as f64, touch.client_y() as f64);
+                    offset.update(|(x, y)| {
+                        *x += cur_x - last_x;
+                        *y += cur_y - last_y;
+                    });
+                    dragging.set(Some((cur_x, cur_y)));
+                }
+            } else if ev.touches().length() == 2 {
+                // pinch zoom
+                let t1 = ev.touches().item(0).unwrap();
+                let t2 = ev.touches().item(1).unwrap();
+                let dx = (t1.client_x() as f64 - t2.client_x() as f64).abs();
+                let dy = (t1.client_y() as f64 - t2.client_y() as f64).abs();
+                let dist = (dx.powi(2) + dy.powi(2)).sqrt();
+
+                if let Some(last) = last_pinch_distance.get() {
+                    let factor = dist / last;
+                    let old_zoom = zoom.get();
+                    let new_zoom = (old_zoom * factor).clamp(0.25, 2.0);
+                    zoom.set(new_zoom);
+                }
+                last_pinch_distance.set(Some(dist));
+            }
+        }
+    };
+
+    let on_touch_end = move |_ev: web_sys::TouchEvent| {
+        dragging.set(None);
+        last_pinch_distance.set(None);
+    };
+
     view! {
         <div
             on:wheel=on_wheel
             on:mousedown=on_mouse_down
+            on:touchstart=on_touch_start
+            on:touchmove=on_touch_move
+            on:touchend=on_touch_end
             class="flex items-center justify-center w-full h-full overflow-hidden bg-neutral-900"
         >
             <svg
