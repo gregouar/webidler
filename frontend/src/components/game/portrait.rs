@@ -181,7 +181,7 @@ pub fn CharacterPortrait(
                     />
                 </div>
 
-                <div class="absolute inset-0 flex place-items-start p-2">
+                <div class="absolute inset-0 flex place-items-start p-1 xl:p-2">
                     <For each=move || active_statuses.get() key=|k| k.clone() let(k)>
                         <StatusIcon
                             status_type=k.clone()
@@ -257,7 +257,7 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
                 class="w-full h-full drop-shadow-md bg-white/40 invert"
             />
             <Show when=move || { stack.get() > 1 }>
-                <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/20 rounded leading-tight px-1 m-2">
+                <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/20 rounded leading-tight px-1 m-1 xl:m-2">
                     {move || stack.get().to_string()}
                 </div>
             </Show>

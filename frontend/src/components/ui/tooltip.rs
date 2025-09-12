@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use leptos::{html::*, prelude::*};
+use leptos::{html::*, prelude::*, web_sys};
 use leptos_use::{use_mouse, use_window_size};
 
 #[derive(Clone, Debug)]
@@ -79,6 +79,20 @@ pub fn DynamicTooltip() -> impl IntoView {
             x => x,
         };
 
+        let window_height = web_sys::window()
+            .unwrap()
+            .inner_height()
+            .unwrap()
+            .as_f64()
+            .unwrap();
+
+        let window_width = web_sys::window()
+            .unwrap()
+            .inner_width()
+            .unwrap()
+            .as_f64()
+            .unwrap();
+
         let (left, top) = match position {
             DynamicTooltipPosition::BottomLeft => (mouse_x - width, mouse_y),
             DynamicTooltipPosition::BottomRight => (mouse_x, mouse_y),
@@ -86,6 +100,9 @@ pub fn DynamicTooltip() -> impl IntoView {
             DynamicTooltipPosition::TopRight => (mouse_x, mouse_y - height),
             _ => (0.0, 0.0),
         };
+
+        let left = left.clamp(0.0, (window_width - width).max(0.0));
+        let top = top.clamp(0.0, (window_height - height).max(0.0));
 
         format!("top: {top}px; left: {left}px;")
     };
@@ -95,8 +112,9 @@ pub fn DynamicTooltip() -> impl IntoView {
             {move || {
                 view! {
                     <div
-                        class="fixed z-50 pointer-events-none transition-opacity duration-150 p-2 {}"
+                        class="fixed z-60 pointer-events-none transition-opacity duration-150 p-2 {}"
 
+                        on:touchend=move |_| tooltip_context.content.set(None)
                         node_ref=tooltip_ref
                         style=style
                     >
@@ -184,7 +202,7 @@ where
                     "
                 absolute
                 px-2 py-1 xl:px-3 xl:py-1 text-xs xl:text-sm text-white
-                bg-zinc-800 border border-neutral-900
+                bg-zinc-900 border border-neutral-950
                 rounded shadow-lg whitespace-nowrap z-50 select-none
                 max-w-[80vw] xl:max-w-none
                 overflow-auto

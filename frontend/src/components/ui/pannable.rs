@@ -114,6 +114,17 @@ pub fn Pannable(children: Children) -> impl IntoView {
                     let factor = dist / last;
                     let old_zoom = zoom.get();
                     let new_zoom = (old_zoom * factor).clamp(0.25, 2.0);
+
+                    let (x, y) = screen_to_svg(
+                        (t1.client_x() + t2.client_x()) as f64 * 0.5,
+                        (t1.client_y() + t2.client_y()) as f64 * 0.5,
+                    );
+                    let (ox, oy) = offset.get();
+                    offset.set((
+                        x - (x - ox) * (new_zoom / old_zoom),
+                        y - (y - oy) * (new_zoom / old_zoom),
+                    ));
+
                     zoom.set(new_zoom);
                 }
                 last_pinch_distance.set(Some(dist));

@@ -20,7 +20,7 @@ use crate::components::{
     websocket::WebsocketContext,
 };
 
-use super::character::CharacterPortrait;
+use super::portrait::CharacterPortrait;
 use super::tooltips::SkillTooltip;
 use super::GameContext;
 
@@ -253,7 +253,7 @@ pub fn PlayerCard() -> impl IntoView {
                     game_context.player_specs.read().skills_specs.len()
                         < game_context.player_specs.read().max_skills as usize
                 }>
-                    <div class="flex items-center justify-center">
+                    <div class="flex flex-col items-center justify-center">
                         <StaticTooltip
                             tooltip=buy_skill_cost_tooltip
                             position=StaticTooltipPosition::Top

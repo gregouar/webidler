@@ -19,7 +19,7 @@ use crate::components::{
     },
 };
 
-use super::character::CharacterPortrait;
+use super::portrait::CharacterPortrait;
 use super::GameContext;
 
 #[component]
