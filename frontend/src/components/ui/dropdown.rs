@@ -1,5 +1,5 @@
 use indexmap::IndexMap;
-use leptos::prelude::*;
+use leptos::{prelude::*, web_sys};
 use leptos_use::on_click_outside;
 
 #[component]
@@ -213,6 +213,16 @@ where
                         placeholder="Search..."
                         prop:value=move || search.get()
                         on:input=move |ev| search.set(event_target_value(&ev))
+
+                        on:keydown=move |ev| {
+                            if ev.key() == "Enter" {
+                                ev.prevent_default();
+                                if let Some(el) = search_ref.get() {
+                                    let input: web_sys::HtmlInputElement = el.into();
+                                    let _ = input.blur();
+                                }
+                            }
+                        }
                     />
 
                 </div>
