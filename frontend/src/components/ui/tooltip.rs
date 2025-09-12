@@ -192,7 +192,11 @@ where
     view! {
         <div
             class="relative group inline-block"
-            on:touchend=move |_| is_open.update(|v| *v = !*v)
+            on:touchstart=move |_| is_open.set(true)
+            on:touchend=move |_| is_open.set(false)
+            on:contextmenu=move |ev| {
+                ev.prevent_default();
+            }
             node_ref=container_ref
         >
             {children()}

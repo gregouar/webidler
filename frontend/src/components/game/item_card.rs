@@ -45,7 +45,7 @@ pub fn ItemCard(
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
 
-    let show_tooltip = move |_| {
+    let show_tooltip = move || {
         let item_specs = item_specs.clone();
         tooltip_context.set_content(
             move || {
@@ -58,7 +58,7 @@ pub fn ItemCard(
 
     let hide_tooltip = {
         let tooltip_context = expect_context::<DynamicTooltipContext>();
-        move |_| tooltip_context.hide()
+        move || tooltip_context.hide()
     };
 
     view! {
@@ -73,8 +73,20 @@ pub fn ItemCard(
                 ring_color,
                 shadow_color,
             )
-            on:mouseenter=show_tooltip
-            on:mouseleave=hide_tooltip
+            on:mouseenter={
+                let show_tooltip = show_tooltip.clone();
+                move |_| show_tooltip()
+            }
+            on:mouseleave={
+                let hide_tooltip = hide_tooltip.clone();
+                move |_| hide_tooltip()
+            }
+
+            on:touchstart=move |_| show_tooltip()
+            on:touchend=move |_| hide_tooltip()
+            on:contextmenu=move |ev| {
+                ev.prevent_default();
+            }
         >
             <img
                 src=icon_asset
