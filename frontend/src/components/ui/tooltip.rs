@@ -3,7 +3,7 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*, web_sys};
 use leptos_use::{use_mouse, use_window_size};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Copy)]
 pub struct DynamicTooltipContext {
     content: RwSignal<Option<ChildrenFn>>,
     position: RwSignal<DynamicTooltipPosition>,

@@ -133,7 +133,7 @@ fn SkillCard(
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let show_tooltip = {
         let skill_specs = Arc::new(skill_specs.clone());
-        move |_| {
+        move || {
             let skill_specs = skill_specs.clone();
             tooltip_context.set_content(
                 move || view! { <SkillTooltip skill_specs=skill_specs.clone() /> }.into_any(),
@@ -143,7 +143,7 @@ fn SkillCard(
     };
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let hide_tooltip = move |_| tooltip_context.hide();
+    let hide_tooltip = move || tooltip_context.hide();
 
     view! {
         <div
@@ -159,8 +159,25 @@ fn SkillCard(
                 )
             }
             on:click=move |_| selected.set(Some(skill_id.clone()))
-            on:mouseenter=show_tooltip
-            on:mouseleave=hide_tooltip
+
+            on:touchstart={
+                let show_tooltip = show_tooltip.clone();
+                move |_| { show_tooltip() }
+            }
+            on:touchend={
+                let hide_tooltip = hide_tooltip.clone();
+                move |_| hide_tooltip()
+            }
+            on:touchcancel={
+                let hide_tooltip = hide_tooltip.clone();
+                move |_| hide_tooltip()
+            }
+            on:contextmenu=move |ev| {
+                ev.prevent_default();
+            }
+
+            on:mouseenter=move |_| show_tooltip()
+            on:mouseleave=move |_| hide_tooltip()
         >
             <div class="w-full h-auto aspect-square">
                 <img
