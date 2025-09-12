@@ -336,7 +336,9 @@ pub fn Node(
     let class_style = move || {
         let status = node_status.get();
         match (status.purchase_status, status.meta_status) {
-            (PurchaseStatus::Purchaseable, _) => "saturate-50 cursor-pointer",
+            (PurchaseStatus::Purchaseable, _) => {
+                "saturate-50 cursor-pointer group active:brightness-50"
+            }
             (_, MetaStatus::Locked) => "saturate-50 brightness-50",
             (PurchaseStatus::Inactive, _) => "saturate-50 brightness-50",
             _ => "",
@@ -362,6 +364,8 @@ pub fn Node(
                     on_click();
                 }
             }
+
+            on:mousedown=|ev| ev.stop_propagation()
 
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();
@@ -401,6 +405,7 @@ pub fn Node(
                 y=-(24 + node_specs.size as i32 * 20) / 2
                 width=24 + node_specs.size * 20
                 height=24 + node_specs.size * 20
+                class="group-active:scale-90 group-active:brightness-90"
                 style=move || { format!("pointer-events: none; filter: {}", icon_filter()) }
             />
         </g>
