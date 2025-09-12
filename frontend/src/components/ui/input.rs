@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{prelude::*, web_sys};
 use serde_plain;
 
 #[component]
@@ -20,6 +20,17 @@ where
             placeholder=placeholder
             value=move || { bind.get().and_then(|value| serde_plain::to_string(&value).ok()) }
             on:input:target=move |ev| bind.set(serde_plain::from_str(&ev.target().value()).ok())
+
+            on:keydown=move |ev| {
+                if ev.key() == "Enter" {
+                    ev.prevent_default();
+                    if let Some(el) = node_ref.get() {
+                        let input: web_sys::HtmlInputElement = el.into();
+                        let _ = input.blur();
+                    }
+                }
+            }
+
             class=move || {
                 format!(
                     "w-full px-2 xl:px-4 py-1 xl:py-2 rounded-xl border bg-gray-800 text-white placeholder-gray-400
@@ -48,6 +59,7 @@ pub fn ValidatedInput<T>(
 where
     T: serde::de::DeserializeOwned + serde::ser::Serialize + Clone + Send + Sync + 'static,
 {
+    let node_ref = NodeRef::<leptos::html::Input>::new();
     let validation_error = RwSignal::new(None);
     let is_invalid = Memo::new(move |_| validation_error.read().is_some());
 
@@ -119,6 +131,18 @@ where
                             );
                     }
                 }
+
+                on:keydown=move |ev| {
+                    if ev.key() == "Enter" {
+                        ev.prevent_default();
+                        if let Some(el) = node_ref.get() {
+                            let input: web_sys::HtmlInputElement = el.into();
+                            let _ = input.blur();
+                        }
+                    }
+                }
+
+                node_ref=node_ref
             />
         </div>
     }

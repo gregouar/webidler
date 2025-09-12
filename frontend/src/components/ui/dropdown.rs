@@ -214,6 +214,7 @@ where
                         prop:value=move || search.get()
                         on:input=move |ev| search.set(event_target_value(&ev))
                     />
+
                 </div>
 
                 <ul class="max-h-80 overflow-auto text-left">
