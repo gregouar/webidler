@@ -991,14 +991,14 @@
           {
             "stat": { "CritChances": null },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 0.1
           }
         ],
         "upgrade_effects": [
           {
             "stat": { "CritChances": null },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.05
           }
         ],
         "max_upgrade_level": 3
@@ -1013,14 +1013,14 @@
           {
             "stat": { "CritChances": null },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 0.1
           }
         ],
         "upgrade_effects": [
           {
             "stat": { "CritChances": null },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.05
           }
         ],
         "max_upgrade_level": 3
@@ -1036,7 +1036,7 @@
           {
             "stat": { "CritChances": null },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 0.1
           },
           {
             "stat": { "CritDamage": null },
@@ -1048,7 +1048,7 @@
           {
             "stat": { "CritChances": null },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.05
           },
           {
             "stat": { "CritDamage": null },
