@@ -112,6 +112,7 @@ fn EquippedItem(
         view! {
             <EmptySlot>
                 <img
+                    draggable="false"
                     src=img_asset(fallback_asset)
                     alt=fallback_alt
                     class="object-contain max-w-full max-h-full opacity-20"
@@ -148,6 +149,7 @@ fn EquippedItem(
                         view! {
                             <EmptySlot>
                                 <img
+                                    draggable="false"
                                     src=img_asset(&item_specs.base.icon)
                                     alt=fallback_alt
                                     class="object-contain max-w-full max-h-full opacity-50"

@@ -263,6 +263,7 @@ fn CharacterSlot(
                 style=format!("background-image: url('{}');", img_asset("ui/paper_background.webp"))
             >
                 <img
+                    draggable="false"
                     src=img_asset(&character.portrait)
                     alt="Portrait"
                     class="object-cover w-full h-full"
@@ -451,6 +452,7 @@ pub fn CreateCharacterPanel(
                                             }
                                         >
                                             <img
+                                                draggable="false"
                                                 src=img_asset(&format!("adventurers/{src}.webp"))
                                                 alt="Portrait"
                                                 class="object-cover w-full h-28 sm:h-32"

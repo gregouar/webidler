@@ -462,6 +462,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                         bar_width=4
                     >
                         <img
+                            draggable="false"
                             src=icon_asset
                             alt=skill_name
                             class="w-full h-full flex-no-shrink fill-current

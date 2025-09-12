@@ -164,6 +164,7 @@ fn SkillCard(
         >
             <div class="w-full h-auto aspect-square">
                 <img
+                    draggable="false"
                     src=img_asset(&skill_specs.base.icon)
                     alt=skill_specs.base.name.clone()
                     class="w-full h-full flex-no-shrink fill-current

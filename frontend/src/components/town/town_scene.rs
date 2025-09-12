@@ -85,6 +85,7 @@ pub fn CharacterPortrait() -> impl IntoView {
                     )
                 >
                     <img
+                        draggable="false"
                         src=image_uri
                         alt="portrait"
                         class="object-cover h-full w-full transition-all duration-[5s]"
@@ -143,6 +144,7 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
         >
             <div class="h-10 xl:h-16 w-full relative">
                 <img
+                    draggable="false"
                     src=img_asset(&area.area_specs.header_background)
                     class="object-cover w-full h-full"
                 />
@@ -166,6 +168,7 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
             </div>
             <div class="h-10 xl:h-16 w-full relative">
                 <img
+                    draggable="false"
                     src=img_asset(&area.area_specs.footer_background)
                     class="object-cover w-full h-full"
                 />

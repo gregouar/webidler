@@ -432,6 +432,7 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
                                             {format!("{:.0}", price)}
                                         </span>
                                         <img
+                                            draggable="false"
                                             src=img_asset("ui/gems.webp")
                                             alt="Gems"
                                             class="h-[2em] aspect-square mr-1"
@@ -540,6 +541,7 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
                     />
                     <div class="flex items-center">
                         <img
+                            draggable="false"
                             src=img_asset("ui/gems.webp")
                             alt="Gems"
                             class="h-[2em] aspect-square mr-1"
@@ -726,6 +728,7 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                     />
                     <div class="flex items-center">
                         <img
+                            draggable="false"
                             src=img_asset("ui/gems.webp")
                             alt="Gems"
                             class="h-[2em] aspect-square mr-1"

@@ -136,7 +136,7 @@ pub fn ResourceCounter(
                 <Number value=value />
             </div>
             <StaticTooltip tooltip=tooltip position=StaticTooltipPosition::Bottom>
-                <img src=img_asset(icon) alt=name class="h-[2em] aspect-square" />
+                <img draggable="false" src=img_asset(icon) alt=name class="h-[2em] aspect-square" />
             </StaticTooltip>
         </div>
     }

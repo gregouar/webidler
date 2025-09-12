@@ -170,6 +170,7 @@ pub fn CharacterPortrait(
                     )
                 >
                     <img
+                        draggable="false"
                         src=img_asset(&image_uri)
                         alt=character_name
                         class=move || {
@@ -199,6 +200,7 @@ pub fn CharacterPortrait(
                     Some(
                         view! {
                             <img
+                                draggable="false"
                                 src=img_asset("effects/block.svg")
                                 class="absolute inset-0 w-object-contain pointer-events-none"
                                 on:animationend=move |_| show_block_effect.set(false)
@@ -252,6 +254,7 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
     view! {
         <div class="relative h-[15%] aspect-square p-1">
             <img
+                draggable="false"
                 src=img_asset(&icon_uri)
                 alt=alt
                 class="w-full h-full drop-shadow-md bg-white/40 invert"

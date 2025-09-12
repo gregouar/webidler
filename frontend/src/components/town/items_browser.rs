@@ -113,6 +113,7 @@ pub fn ItemRow(
                                 {format!("{:.0}", price)}
                             </span>
                             <img
+                                draggable="false"
                                 src=img_asset("ui/gems.webp")
                                 alt="Gems"
                                 class="h-[2em] aspect-square mr-1"

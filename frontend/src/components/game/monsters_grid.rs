@@ -321,6 +321,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     ">
                         <span>+{format_number(gold_reward.get())}</span>
                         <img
+                            draggable="false"
                             src=img_asset("ui/gold.webp")
                             alt="Gold"
                             class="h-[2em] aspect-square"
@@ -336,6 +337,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     ">
                         <span>+{format_number(gems_reward.get())}</span>
                         <img
+                            draggable="false"
                             src=img_asset("ui/gems.webp")
                             alt="Gems"
                             class="h-[1.2em] aspect-square"
@@ -443,6 +445,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
             on:mouseleave=hide_tooltip
         >
             <img
+                draggable="false"
                 src=icon_asset
                 alt=skill_name
                 class="w-full h-full flex-no-shrink fill-current

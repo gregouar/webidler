@@ -96,6 +96,7 @@ pub fn ItemCard(
             }
         >
             <img
+                draggable="false"
                 src=icon_asset
                 class="object-contain max-w-full max-h-full transition-all duration-50 ease-in-out
                 group-hover:scale-105 group-hover:brightness-110
