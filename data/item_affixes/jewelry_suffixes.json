@@ -45,7 +45,7 @@
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
     "item_level": 1,
     "effects": [
       {
@@ -64,7 +64,7 @@
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
     "item_level": 50,
     "effects": [
       {

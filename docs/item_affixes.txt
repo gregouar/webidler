@@ -29,10 +29,10 @@ Amulet:
         inc_crit_chances
         inc_crit_damage
         inc_gold_2
-    suf:
         inc_fire_damage
         inc_poison_damage
         inc_storm_damage
+    suf:
         inc_gold
         inc_attack_damage
         inc_spell_damage
@@ -61,15 +61,15 @@ Spell Weapon:
     pre:
         add_mana
         inc_mana
-        inc_spell_damage
         inc_spell_power
-    suf:
         inc_fire_damage
         inc_poison_damage
         inc_storm_damage
+    suf:
         add_mana_regen
         inc_spell_speed
         inc_spell_crit_chances
+        inc_spell_damage
 
 
 Body:
@@ -106,11 +106,10 @@ Focus:
         inc_status_power
         add_mana
         inc_mana
-        inc_spell_damage
-    suf:
         inc_fire_damage
         inc_poison_damage
         inc_storm_damage
+    suf:
         inc_status_duration
         add_mana_regen
         add_fire_res
@@ -118,6 +117,7 @@ Focus:
         add_storm_res
         inc_spell_speed
         inc_spell_crit_chances
+        inc_spell_damage
 
 
 Gloves:
@@ -157,10 +157,10 @@ Ring:
         inc_crit_chances
         inc_crit_damage
         inc_gold_2
-    suf:
         inc_fire_damage
         inc_poison_damage
         inc_storm_damage
+    suf:
         inc_gold
         inc_attack_damage
         inc_spell_damage

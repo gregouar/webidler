@@ -1,0 +1,142 @@
+[
+  {
+    "name": "Warm",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Fire"
+          }
+        },
+        "modifier": "Multiplier",
+        "min": 0.25,
+        "max": 0.49
+      }
+    ]
+  },
+  {
+    "name": "Hot",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Fire"
+          }
+        },
+        "modifier": "Multiplier",
+        "min": 0.5,
+        "max": 0.74
+      }
+    ]
+  },
+
+  {
+    "name": "Sick",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Poison"
+          }
+        },
+        "modifier": "Multiplier",
+        "min": 0.25,
+        "max": 0.49
+      }
+    ]
+  },
+  {
+    "name": "Ill",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Poison"
+          }
+        },
+        "modifier": "Multiplier",
+        "min": 0.5,
+        "max": 0.74
+      }
+    ]
+  },
+
+  {
+    "name": "Charged",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Storm"
+          }
+        },
+        "modifier": "Multiplier",
+        "min": 0.25,
+        "max": 0.49
+      }
+    ]
+  },
+  {
+    "name": "Fused",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Storm"
+          }
+        },
+        "modifier": "Multiplier",
+        "min": 0.5,
+        "max": 0.74
+      }
+    ]
+  }
+]
