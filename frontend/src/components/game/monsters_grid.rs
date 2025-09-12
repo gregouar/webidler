@@ -290,7 +290,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         bg-zinc-800 shadow-lg/30 rounded-md ring-1 ring-zinc-950
         gap-1 xl:gap-2 p-1 xl:p-2">
             <div class="relative flex flex-col gap-1 xl:gap-2 col-span-3 h-full min-h-0">
-                <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Bottom>
+                <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Top>
                     <HorizontalProgressBar
                         class=if is_big { "h-5 xl:h-8" } else { "h-4 xl:h-5" }
                         bar_color="bg-gradient-to-b from-red-500 to-red-700"
