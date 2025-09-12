@@ -126,8 +126,8 @@
           "CritChances": null
         },
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.39
+        "min": 0.1,
+        "max": 0.19
       }
     ]
   },
@@ -152,61 +152,8 @@
           "CritChances": null
         },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.59
-      }
-    ]
-  },
-
-  {
-    "name": "of Force",
-    "family": "add_crit_damage",
-    "tags": [
-      "Attack",
-      "Critical"
-    ],
-    "affix_type": "Suffix",
-    "tier": 1,
-    "weight": 1000,
-    "restrictions": [
-      "AttackWeapon"
-    ],
-    "item_level": 1,
-    "effects": [
-      {
-        "scope": "Local",
-        "stat": {
-          "CritDamage": null
-        },
-        "modifier": "Flat",
-        "min": 25,
-        "max": 49
-      }
-    ]
-  },
-  {
-    "name": "of Impact",
-    "family": "add_crit_damage",
-    "tags": [
-      "Attack",
-      "Critical"
-    ],
-    "affix_type": "Suffix",
-    "tier": 2,
-    "weight": 1000,
-    "restrictions": [
-      "AttackWeapon"
-    ],
-    "item_level": 50,
-    "effects": [
-      {
-        "scope": "Local",
-        "stat": {
-          "CritDamage": null
-        },
-        "modifier": "Flat",
-        "min": 50,
-        "max": 74
+        "min": 0.2,
+        "max": 0.29
       }
     ]
   },
