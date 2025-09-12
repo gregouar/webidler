@@ -76,7 +76,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                     <div class="px-4 relative z-10 flex items-center justify-between">
                         <PanelTitle>"Market"</PanelTitle>
 
-                        <div class="flex-1 flex justify-center ml-2 lg:ml-4 gap-2 lg:gap-4 w-full max-w-md mx-auto">
+                        <div class="flex-1 flex justify-center ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto">
                             <TabButton
                                 is_active=Signal::derive(move || {
                                     active_tab.get() == MarketTab::Filters
@@ -806,7 +806,7 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                 "Main Filters"
             </span>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 border-b border-zinc-700">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4 border-b border-zinc-700">
                 <div class="flex flex-col gap-4">
                     <ValidatedInput
                         id="item_name"
@@ -854,7 +854,7 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4">
                 <div class="flex flex-col gap-4">
                     <ValidatedInput
                         id="item_damages"
@@ -912,11 +912,11 @@ fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                 "Stat Filters"
             </span>
 
-            <div class="flex flex-col gap-2 lg:gap-4 p-2 lg:p-4 border-b border-zinc-700">
+            <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4 border-b border-zinc-700">
                 {stat_filters
                     .map(|(stat_type, stat_value)| {
                         view! {
-                            <div class="flex gap-2 lg:gap-4 items-center">
+                            <div class="flex gap-2 xl:gap-4 items-center">
                                 {move || {
                                     stat_type
                                         .read()

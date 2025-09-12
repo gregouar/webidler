@@ -18,7 +18,7 @@ pub fn LeaderboardPage() -> impl IntoView {
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
             <div>
-                <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">
+                <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
                     "Leaderboard"
                 </h1>
                 <div class="flex flex-col space-y-2">

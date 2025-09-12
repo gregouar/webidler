@@ -83,7 +83,7 @@ pub fn HorizontalProgressBar(
                     style=reset_bar_animation
                 ></div>
             </div>
-            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs lg:text-sm pointer-events-none overflow-hidden">
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none overflow-hidden">
                 {children()}
             </div>
 
@@ -236,7 +236,7 @@ pub fn CircularProgressBar(
                         ",reset_bar_animation.get())
                     ></div>
 
-                    <div class=format!("absolute inset-{} lg:inset-{bar_width} rounded-full
+                    <div class=format!("absolute inset-{} xl:inset-{bar_width} rounded-full
                             bg-radial from-stone-600 to-zinc-950 to-70%", bar_width/2)></div>
                 </div>
 

@@ -46,12 +46,12 @@ pub fn InventoryPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            // <div class="grid grid-cols-7 justify-items-stretch flex items-start gap-2 lg:gap-4">
+            // <div class="grid grid-cols-7 justify-items-stretch flex items-start gap-2 xl:gap-4">
             // <EquippedItemsCard class:col-span-2 class:justify-self-end />
             // <BagCard open=open class:col-span-5 class:justify-self-start />
             // </div>
 
-            <div class="relative w-full max-h-full flex justify-between gap-2 lg:gap-4 ">
+            <div class="relative w-full max-h-full flex justify-between gap-2 xl:gap-4 ">
                 <EquippedItemsCard class:justify-self-end />
                 <BagCard open=open class:justify-self-start />
             </div>
@@ -74,12 +74,12 @@ pub fn EquippedItemsCard() -> impl IntoView {
     ];
 
     view! {
-        <div class="w-[30%] h-full flex flex-col gap-1 lg:gap-2 p-1 lg:p-2 bg-zinc-800 rounded-md shadow-xl ring-1 ring-zinc-950">
+        <div class="w-[30%] h-full flex flex-col gap-1 xl:gap-2 p-1 xl:p-2 bg-zinc-800 rounded-md shadow-xl ring-1 ring-zinc-950">
 
             <PlayerName />
 
             <div class="relative min-h-0 flex-1  overflow-y-auto">
-                <div class="grid grid-rows-3 grid-cols-3 gap-1 lg:gap-3 p-2 lg:p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                <div class="grid grid-rows-3 grid-cols-3 gap-1 xl:gap-3 p-2 xl:p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                     {EQUIPPED_SLOTS
                         .iter()
                         .map(|(slot, asset, alt)| {
@@ -306,14 +306,14 @@ pub fn EquippedItemContextMenu(
     view! {
         <ContextMenu on_close=on_close>
             <button
-                class="btn w-full text-sm lg:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40 py-1 lg:py-2"
+                class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40 py-1 xl:py-2"
                 on:click=try_unequip
             >
                 "Unequip"
             </button>
 
             <button
-                class="btn w-full text-sm lg:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 lg:py-4"
+                class="btn w-full text-sm xl:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 xl:py-4"
                 on:click=move |_| on_close.run(())
             >
                 "Cancel"
@@ -327,11 +327,11 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     view! {
-        <div class="bg-zinc-800 rounded-md h-full w-[70%] gap-1 lg:gap-2 p-1 lg:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
+        <div class="bg-zinc-800 rounded-md h-full w-[70%] gap-1 xl:gap-2 p-1 xl:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
             <div class="px-4 relative z-10 flex items-center justify-between gap-2">
-                <div class="flex flex-row items-center gap-1 lg:gap-2">
+                <div class="flex flex-row items-center gap-1 xl:gap-2">
                     <PanelTitle>"Inventory"</PanelTitle>
-                    <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs lg:text-base font-medium">
+                    <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
                         {move || {
                             format!(
                                 "({} / {})",
@@ -343,19 +343,19 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <span class="hidden lg:inline text-gray-400 text-sm">"Loot Preference:"</span>
+                    <span class="hidden xl:inline text-gray-400 text-sm">"Loot Preference:"</span>
                     <LootFilterDropdown />
                 </div>
 
-                <div class="flex items-center gap-1 lg:gap-2">
+                <div class="flex items-center gap-1 xl:gap-2">
                     <SellAllButton />
                     <CloseButton on:click=move |_| open.set(false) />
                 </div>
             </div>
 
             <div class="relative min-h-0 flex-1  overflow-y-auto">
-                <div class="grid grid-cols-8 lg:grid-cols-10
-                gap-1 lg:gap-3 p-2 lg:p-4 relative
+                <div class="grid grid-cols-8 xl:grid-cols-10
+                gap-1 xl:gap-3 p-2 xl:p-4 relative
                 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                     <For
                         each=move || 0..game_context.player_inventory.read().max_bag_size as usize
@@ -556,21 +556,21 @@ pub fn BagItemContextMenu(
     view! {
         <ContextMenu on_close=on_close>
             <button
-                class="btn w-full text-sm lg:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 lg:py-2"
+                class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 xl:py-2"
                 on:click=try_equip
             >
                 "Equip"
             </button>
 
             <button
-                class="btn w-full text-sm lg:text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-1 lg:py-2"
+                class="btn w-full text-sm xl:text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-1 xl:py-2"
                 on:click=move |_| toggle_sell_mark()
             >
                 {move || if sell_queue.0.get().contains(&item_index) { "Unsell" } else { "Sell" }}
             </button>
 
             <button
-                class="btn w-full text-sm lg:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 lg:py-4"
+                class="btn w-full text-sm xl:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 xl:py-4"
                 on:click=move |_| on_close.run(())
             >
                 "Cancel"
@@ -645,8 +645,8 @@ fn SellAllButton() -> impl IntoView {
 
     view! {
         <MenuButton on:click=sell disabled=disabled>
-            <span class="inline lg:hidden">"Sell all"</span>
-            <span class="hidden lg:inline font-variant:small-caps">"Sell all marked items"</span>
+            <span class="inline xl:hidden">"Sell all"</span>
+            <span class="hidden xl:inline font-variant:small-caps">"Sell all marked items"</span>
         </MenuButton>
     }
 }

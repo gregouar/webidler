@@ -174,7 +174,7 @@ pub fn PlayerCard() -> impl IntoView {
             "
         </style>
         <div class="max-h-full w-1/3
-        flex flex-col gap-1 lg:gap-2 p-1 lg:p-2
+        flex flex-col gap-1 xl:gap-2 p-1 xl:p-2
         bg-zinc-800 
         ring-1 ring-zinc-950
         rounded-md shadow-md 
@@ -182,16 +182,16 @@ pub fn PlayerCard() -> impl IntoView {
 
             <PlayerName />
 
-            <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 lg:gap-2">
+            <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
                 <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Right>
                     <VerticalProgressBar
                         class:w-6
-                        class:lg:w-8
+                        class:xl:w-8
                         bar_color="bg-gradient-to-l from-red-500 to-red-700"
                         value=health_percent
                     />
                 </StaticTooltip>
-                <div class="flex flex-col gap-1 lg:gap-2">
+                <div class="flex flex-col gap-1 xl:gap-2">
                     <div class="flex-1 min-h-0">
                         <CharacterPortrait
                             image_uri=game_context
@@ -209,14 +209,14 @@ pub fn PlayerCard() -> impl IntoView {
                         />
                     </div>
                     <FancyButton disabled=disable_level_up on:click=level_up>
-                        <span class="text-base lg:text-lg">"Level Up"</span>
+                        <span class="text-base xl:text-lg">"Level Up"</span>
                     </FancyButton>
                 </div>
 
                 <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
                     <VerticalProgressBar
                         class:w-6
-                        class:lg:w-8
+                        class:xl:w-8
                         bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
                         value=mana_percent
                     />
@@ -226,7 +226,7 @@ pub fn PlayerCard() -> impl IntoView {
             <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
                 <HorizontalProgressBar
                     class:h-2
-                    class:lg:h-4
+                    class:xl:h-4
                     bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
                     value=xp_percent
                     reset=just_leveled_up
@@ -235,7 +235,7 @@ pub fn PlayerCard() -> impl IntoView {
                 </HorizontalProgressBar>
             </StaticTooltip>
 
-            <div class="flex-none items-center grid grid-cols-4 gap-1 lg:gap-2">
+            <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2">
                 <For
                     each=move || {
                         0..game_context
@@ -288,7 +288,7 @@ pub fn PlayerName() -> impl IntoView {
     });
 
     view! {
-        <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l lg:text-xl">
+        <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl">
             <span class="font-bold">{player_name}</span>
             {move || format!(" — Level: {}", game_context.player_specs.read().level)}
         </p>
@@ -483,7 +483,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                 </Toggle>
                 <StaticTooltip tooltip=cost_tooltip position=StaticTooltipPosition::Top>
                     <FancyButton disabled=disable_level_up on:click=level_up>
-                        <span class="text-base lg:text-2xl">"+"</span>
+                        <span class="text-base xl:text-2xl">"+"</span>
                     </FancyButton>
                 </StaticTooltip>
             </div>

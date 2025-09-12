@@ -46,8 +46,8 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open=open>
             <div class="w-full h-full">
-                <div class="bg-zinc-800 rounded-md p-1 lg:p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-1 lg:gap-2 max-h-full">
-                    <div class="px-2 lg:px-4 flex items-center justify-between">
+                <div class="bg-zinc-800 rounded-md p-1 xl:p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-1 xl:gap-2 max-h-full">
+                    <div class="px-2 xl:px-4 flex items-center justify-between">
                         <PanelTitle>"Passive Skills"</PanelTitle>
                         <CloseButton on:click=move |_| open.set(false) />
                     </div>

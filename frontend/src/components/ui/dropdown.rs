@@ -63,13 +63,13 @@ where
             "
         </style>
 
-        <div class="relative w-60 text-sm lg:text-base text-white" node_ref=node_ref>
+        <div class="relative w-60 text-sm xl:text-base text-white" node_ref=node_ref>
             <button
                 on:click=toggle
                 class=move || {
                     format!(
                         "btn w-full flex items-center justify-between gap-2
-                        px-1 lg:px-3 py-1 lg:py-2 rounded-md
+                        px-1 xl:px-3 py-1 xl:py-2 rounded-md
                         shadow-md border border-zinc-950 focus:outline-none {}",
                         if is_open.get() {
                             "bg-gradient-to-t from-zinc-900 to-zinc-950 "
@@ -188,13 +188,13 @@ where
             "
         </style>
 
-        <div class="relative w-60 text-sm lg:text-base text-white" node_ref=node_ref>
+        <div class="relative w-60 text-sm xl:text-base text-white" node_ref=node_ref>
             <button
                 on:click=toggle
                 class=move || {
                     format!(
                         "btn w-full flex items-center justify-between gap-2
-                        px-1 lg:px-3 py-1 lg:py-2 rounded-md
+                        px-1 xl:px-3 py-1 xl:py-2 rounded-md
                         shadow-md border border-zinc-950 focus:outline-none {}",
                         if is_open.get() {
                             "bg-gradient-to-t from-zinc-900 to-zinc-950 "
@@ -230,7 +230,7 @@ where
                     if is_open.get() { "open" } else { "" },
                 )
             }>
-                <div class="px-1 lg:px-3 py-1 lg:py-2 border-b border-zinc-700 bg-gray-800">
+                <div class="px-1 xl:px-3 py-1 xl:py-2 border-b border-zinc-700 bg-gray-800">
                     <input
                         node_ref=search_ref
                         class="w-full bg-gray-800 focus:outline-none"

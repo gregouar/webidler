@@ -10,8 +10,8 @@ pub fn MenuButton(
         <button
             class="btn
             text-white font-bold text-shadow shadow-neutral-950
-            py-1 lg:py-2 px-2 lg:px-4 rounded shadow-md
-            text-sm lg:text-base 
+            py-1 xl:py-2 px-2 xl:px-4 rounded shadow-md
+            text-sm xl:text-base 
             border border-neutral-950
             bg-gradient-to-t from-zinc-900 to-zinc-800 
             overflow-hidden
@@ -39,8 +39,8 @@ pub fn MenuButtonRed(
         <button
             class="btn
             text-red-300 font-bold text-shadow shadow-neutral-950
-            py-1 lg:py-2 px-2 lg:px-4 rounded shadow-md
-            text-sm lg:text-base 
+            py-1 xl:py-2 px-2 xl:px-4 rounded shadow-md
+            text-sm xl:text-base 
             border border-red-800
             bg-gradient-to-t from-red-900 to-red-800
             overflow-hidden
@@ -66,8 +66,8 @@ pub fn FancyButton(
         <button
             class="btn
             text-white font-bold text-shadow shadow-neutral-950
-            px-2 lg:px-3 rounded shadow-md
-            text-sm lg:text-base 
+            px-2 xl:px-3 rounded shadow-md
+            text-sm xl:text-base 
             border border-neutral-950
             bg-gradient-to-t from-zinc-900 to-zinc-800 
             overflow-hidden
@@ -114,8 +114,8 @@ pub fn Toggle(
             class=move || {
                 format!(
                     "btn
-                    px-2 lg:px-3
-                    text-sm lg:text-base 
+                    px-2 xl:px-3
+                    text-sm xl:text-base 
                     font-bold text-shadow shadow-neutral-950
                     border border-neutral-950 rounded 
                     bg-gradient-to-t from-zinc-900 to-zinc-800 
@@ -160,8 +160,8 @@ pub fn TabButton(children: Children, #[prop(into)] is_active: Signal<bool>) -> i
                 format!(
                     "btn
                     flex-1
-                    px-1 lg:px-3 py-1 lg:py-2 
-                    text-sm lg:text-base 
+                    px-1 xl:px-3 py-1 xl:py-2 
+                    text-sm xl:text-base 
                     font-bold text-shadow
                     border-t border-l border-r border-neutral-950 rounded-t-md 
                     transition-all duration-200

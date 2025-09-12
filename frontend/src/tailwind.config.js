@@ -23,9 +23,9 @@ module.exports = {
     'focus:ring-red-500',
     'inset-1',
     'inset-2',
-    'lg:inset-2',
+    'xl:inset-2',
     'inset-3',
-    'lg:inset-4',
+    'xl:inset-4',
     'opacity-0',
     'opacity-100'
   ],

@@ -95,7 +95,7 @@ pub fn UserDashboardPage() -> impl IntoView {
     let open_create_character = RwSignal::new(false);
 
     view! {
-        <main class="my-0 mx-auto w-full max-w-6xl px-4 lg:px-8 text-center overflow-x-hidden flex flex-col  justify-around min-h-screen">
+        <main class="my-0 mx-auto w-full max-w-6xl px-4 xl:px-8 text-center overflow-x-hidden flex flex-col  justify-around min-h-screen">
             <Transition fallback=move || {
                 view! { <p class="text-gray-400">"Loading..."</p> }
             }>
@@ -113,12 +113,12 @@ pub fn UserDashboardPage() -> impl IntoView {
                                 refresh_trigger=refresh_trigger
                             />
 
-                            <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl lg:text-6xl font-extrabold leading-none tracking-tight">
+                            <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
                                 "Welcome, " {user.username}
                             </h1>
 
-                            <div class="bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner p-2 lg:p-4 text-left space-y-2 lg:space-y-4">
-                                <div class="flex flex-row justify-between items-center gap-1 lg:gap-2">
+                            <div class="bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner p-2 xl:p-4 text-left space-y-2 xl:space-y-4">
+                                <div class="flex flex-row justify-between items-center gap-1 xl:gap-2">
                                     // <h2 class="text-2xl font-bold text-white">"Your Characters"</h2>
                                     <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
                                         "Your Characters"

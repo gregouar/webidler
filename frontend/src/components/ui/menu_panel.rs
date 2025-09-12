@@ -56,7 +56,7 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
 
         <Show when=move || is_visible.get()>
             <div
-                class="absolute inset-0 bg-black/70 z-40 flex flex-col p-2 lg:p-4"
+                class="absolute inset-0 bg-black/70 z-40 flex flex-col p-2 xl:p-4"
                 class:animate-fade-in=open
                 style=move || {
                     if open.get() {
@@ -91,6 +91,6 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
 pub fn PanelTitle(children: Children) -> impl IntoView {
     view! {
         <span class="text-shadow-md shadow-gray-950 text-amber-200 font-semibold
-        text-sm lg:text-base lg:text-xl">{children()}</span>
+        text-sm xl:text-base xl:text-xl">{children()}</span>
     }
 }
