@@ -232,7 +232,7 @@
           "LifeOnHit": {"is_hurt": true, "skill_type": "Attack"}
         },
         "modifier": "Flat",
-        "min": 1,
+        "min": 2,
         "max": 4
       }
     ]

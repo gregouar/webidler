@@ -6,7 +6,7 @@
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus", "Jewelry"],
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
     "item_level": 1,
     "effects": [
       {
@@ -29,7 +29,7 @@
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus", "Jewelry"],
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
     "item_level": 50,
     "effects": [
       {
@@ -53,7 +53,7 @@
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus", "Jewelry"],
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
     "item_level": 1,
     "effects": [
       {
@@ -76,7 +76,7 @@
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus", "Jewelry"],
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
     "item_level": 50,
     "effects": [
       {
@@ -100,7 +100,7 @@
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus", "Jewelry"],
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
     "item_level": 1,
     "effects": [
       {
@@ -123,7 +123,7 @@
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus", "Jewelry"],
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
     "item_level": 50,
     "effects": [
       {

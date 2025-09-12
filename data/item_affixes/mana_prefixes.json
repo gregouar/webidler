@@ -2,16 +2,11 @@
   {
     "name": "Thoughtful",
     "family": "add_mana",
-    "tags": [
-      "Mana"
-    ],
+    "tags": ["Mana"],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": [
-      "SpellWeapon",
-      "Focus"
-    ],
+    "restrictions": ["SpellWeapon", "Focus"],
     "item_level": 1,
     "effects": [
       {
@@ -26,16 +21,11 @@
   {
     "name": "Analytical",
     "family": "add_mana",
-    "tags": [
-      "Mana"
-    ],
+    "tags": ["Mana"],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": [
-      "SpellWeapon",
-      "Focus"
-    ],
+    "restrictions": ["SpellWeapon", "Focus"],
     "item_level": 50,
     "effects": [
       {
@@ -50,48 +40,38 @@
   {
     "name": "Cultivated",
     "family": "inc_mana",
-    "tags": [
-      "Mana"
-    ],
+    "tags": ["Mana"],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": [
-      "SpellWeapon",
-      "Focus"
-    ],
+    "restrictions": ["SpellWeapon", "Focus"],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.39
+        "min": 0.1,
+        "max": 0.19
       }
     ]
   },
   {
     "name": "Enlightened",
     "family": "inc_mana",
-    "tags": [
-      "Mana"
-    ],
+    "tags": ["Mana"],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": [
-      "SpellWeapon",
-      "Focus"
-    ],
+    "restrictions": ["SpellWeapon", "Focus"],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.59
+        "min": 0.2,
+        "max": 0.29
       }
     ]
   }

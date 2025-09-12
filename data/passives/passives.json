@@ -247,14 +247,14 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.06
           }
         ],
         "upgrade_effects": [
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 0.03
           }
         ],
         "max_upgrade_level": 3
@@ -269,14 +269,14 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.06
           }
         ],
         "upgrade_effects": [
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 0.03
           }
         ],
         "max_upgrade_level": 3
@@ -336,7 +336,7 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.06
           },
           {
             "stat": "LifeRegen",
@@ -348,7 +348,7 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 0.03
           },
           {
             "stat": "LifeRegen",
@@ -1565,14 +1565,14 @@
           {
             "stat": { "StatusPower": { "DamageOverTime": {} } },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.2
           }
         ],
         "upgrade_effects": [
           {
             "stat": { "StatusPower": { "DamageOverTime": {} } },
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 0.1
           }
         ],
         "max_upgrade_level": 3
@@ -1587,14 +1587,14 @@
           {
             "stat": { "StatusPower": { "DamageOverTime": {} } },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.2
           }
         ],
         "upgrade_effects": [
           {
             "stat": { "StatusPower": { "DamageOverTime": {} } },
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 0.1
           }
         ],
         "max_upgrade_level": 3
@@ -1610,14 +1610,14 @@
           {
             "stat": { "StatusPower": { "DamageOverTime": {} } },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 0.4
           }
         ],
         "upgrade_effects": [
           {
             "stat": { "StatusPower": { "DamageOverTime": {} } },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.2
           }
         ],
         "max_upgrade_level": 3

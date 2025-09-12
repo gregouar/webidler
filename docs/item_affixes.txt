@@ -2,6 +2,9 @@ Cloak:
     Pre:
         inc_attack_speed
         inc_spell_speed
+        inc_fire_damage
+        inc_poison_damage
+        inc_storm_damage
     Suf:
         inc_gold
         add_fire_res
