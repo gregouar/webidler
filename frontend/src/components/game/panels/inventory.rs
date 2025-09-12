@@ -434,6 +434,16 @@ fn BagItem(item_index: usize) -> impl IntoView {
                                 <ItemCard
                                     item_specs=item_specs.clone()
                                     on:click=move |_| show_menu.set(true)
+                                    on:contextmenu=move |ev| {
+                                        ev.prevent_default();
+                                        sell_queue
+                                            .0
+                                            .update(|set| {
+                                                if !set.remove(&item_index) {
+                                                    set.insert(item_index);
+                                                }
+                                            });
+                                    }
                                     tooltip_position=DynamicTooltipPosition::Auto
                                 />
 
