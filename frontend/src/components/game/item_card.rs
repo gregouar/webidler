@@ -83,9 +83,13 @@ pub fn ItemCard(
             }
 
             on:touchstart=move |_| { show_tooltip() }
-            on:touchend=move |ev| {
-                ev.prevent_default();
-                hide_tooltip()
+            on:touchend={
+                let hide_tooltip = hide_tooltip.clone();
+                move |_| hide_tooltip()
+            }
+            on:touchcancel={
+                let hide_tooltip = hide_tooltip.clone();
+                move |_| hide_tooltip()
             }
             on:contextmenu=move |ev| {
                 ev.prevent_default();

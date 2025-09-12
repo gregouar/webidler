@@ -434,6 +434,7 @@ fn BagItem(item_index: usize) -> impl IntoView {
                                 <ItemCard
                                     item_specs=item_specs.clone()
                                     on:click=move |_| show_menu.set(true)
+                                    // Ignore if Mobile:
                                     on:contextmenu=move |ev| {
                                         ev.prevent_default();
                                         sell_queue
