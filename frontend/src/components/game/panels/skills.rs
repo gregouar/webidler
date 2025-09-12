@@ -164,14 +164,8 @@ fn SkillCard(
                 let show_tooltip = show_tooltip.clone();
                 move |_| { show_tooltip() }
             }
-            on:touchend={
-                let hide_tooltip = hide_tooltip.clone();
-                move |_| hide_tooltip()
-            }
-            on:touchcancel={
-                let hide_tooltip = hide_tooltip.clone();
-                move |_| hide_tooltip()
-            }
+            on:touchend=move |_| hide_tooltip()
+            on:touchcancel=move |_| hide_tooltip()
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }

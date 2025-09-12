@@ -25,7 +25,7 @@ where
                 if ev.key() == "Enter" {
                     ev.prevent_default();
                     if let Some(el) = node_ref.get() {
-                        let input: web_sys::HtmlInputElement = el.into();
+                        let input: web_sys::HtmlInputElement = el;
                         let _ = input.blur();
                     }
                 }
@@ -136,7 +136,7 @@ where
                     if ev.key() == "Enter" {
                         ev.prevent_default();
                         if let Some(el) = node_ref.get() {
-                            let input: web_sys::HtmlInputElement = el.into();
+                            let input: web_sys::HtmlInputElement = el;
                             let _ = input.blur();
                         }
                     }

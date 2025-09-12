@@ -39,12 +39,9 @@ pub fn DynamicTooltip() -> impl IntoView {
         content: RwSignal::new(None),
         position: RwSignal::new(DynamicTooltipPosition::BottomRight),
     };
-    provide_context(tooltip_context.clone());
+    provide_context(tooltip_context);
 
-    let show_tooltip = {
-        let tooltip_context = tooltip_context.clone();
-        move || tooltip_context.content.read().is_some()
-    };
+    let show_tooltip = { move || tooltip_context.content.read().is_some() };
 
     let tooltip_size = RwSignal::new((0.0, 0.0));
     let tooltip_ref: NodeRef<Div> = NodeRef::new();

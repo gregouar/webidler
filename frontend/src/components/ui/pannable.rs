@@ -70,7 +70,6 @@ pub fn Pannable(children: Children) -> impl IntoView {
     let last_pinch_distance = RwSignal::new(None::<f64>);
 
     let on_touch_start = {
-        let screen_to_svg = screen_to_svg.clone();
         move |ev: web_sys::TouchEvent| {
             if ev.touches().length() == 1 {
                 let touch = ev.touches().item(0).unwrap();
@@ -88,7 +87,7 @@ pub fn Pannable(children: Children) -> impl IntoView {
     };
 
     let on_touch_move = {
-        let screen_to_svg = screen_to_svg.clone();
+        let screen_to_svg = screen_to_svg;
         move |ev: web_sys::TouchEvent| {
             ev.prevent_default();
             if ev.touches().length() == 1 {

@@ -36,7 +36,7 @@ type SellQueue = RwSignal<HashSet<usize>>;
 #[component]
 pub fn InventoryPanel(open: RwSignal<bool>) -> impl IntoView {
     let sell_queue = SellQueue::default();
-    provide_context(sell_queue.clone());
+    provide_context(sell_queue);
 
     Effect::new(move || {
         if !open.get() {

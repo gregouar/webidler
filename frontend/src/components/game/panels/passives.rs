@@ -358,14 +358,11 @@ pub fn Node(
         <g
             transform=format!("translate({}, {})", node_specs.x * 10.0, -node_specs.y * 10.0)
 
-            on:click={
-                let hide_tooltip = hide_tooltip.clone();
-                move |_| {
-                    let status = node_status.get();
-                    if status.purchase_status == PurchaseStatus::Purchaseable {
-                        on_click();
-                        hide_tooltip()
-                    }
+            on:click=move |_| {
+                let status = node_status.get();
+                if status.purchase_status == PurchaseStatus::Purchaseable {
+                    on_click();
+                    hide_tooltip()
                 }
             }
 
@@ -375,14 +372,8 @@ pub fn Node(
                 let show_tooltip = show_tooltip.clone();
                 move |_| { show_tooltip() }
             }
-            on:touchend={
-                let hide_tooltip = hide_tooltip.clone();
-                move |_| hide_tooltip()
-            }
-            on:touchcancel={
-                let hide_tooltip = hide_tooltip.clone();
-                move |_| hide_tooltip()
-            }
+            on:touchend=move |_| hide_tooltip()
+            on:touchcancel=move |_| hide_tooltip()
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
