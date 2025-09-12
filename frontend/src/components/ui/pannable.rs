@@ -87,7 +87,6 @@ pub fn Pannable(children: Children) -> impl IntoView {
     };
 
     let on_touch_move = {
-        let screen_to_svg = screen_to_svg;
         move |ev: web_sys::TouchEvent| {
             ev.prevent_default();
             if ev.touches().length() == 1 {
