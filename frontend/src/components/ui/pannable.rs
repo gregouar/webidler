@@ -90,6 +90,7 @@ pub fn Pannable(children: Children) -> impl IntoView {
     let on_touch_move = {
         let screen_to_svg = screen_to_svg.clone();
         move |ev: web_sys::TouchEvent| {
+            ev.prevent_default();
             if ev.touches().length() == 1 {
                 if let Some((last_x, last_y)) = dragging.get() {
                     let touch = ev.touches().item(0).unwrap();
@@ -132,7 +133,7 @@ pub fn Pannable(children: Children) -> impl IntoView {
             on:touchstart=on_touch_start
             on:touchmove=on_touch_move
             on:touchend=on_touch_end
-            class="flex items-center justify-center w-full h-full overflow-hidden bg-neutral-900"
+            class="flex items-center justify-center w-full h-full touch-none overflow-hidden bg-neutral-900"
         >
             <svg
                 node_ref=svg_ref
