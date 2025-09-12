@@ -1,7 +1,7 @@
 {
   "magic_missile": {
     "name": "Magic Missile",
-    "description": "A quick and reliable spell that fires a bolt of energy at any enemy. Ideal for consistent damage spamming.",
+    "description": "A quick spell that fires a bolt of energy at a random enemy.",
     "icon": "skills/magic_missile.svg",
     "skill_type": "Spell",
     "cooldown": 2,
@@ -23,7 +23,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [4, 8]
+                "Storm": [0, 12]
               }
             }
           }
