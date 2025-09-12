@@ -3,7 +3,7 @@
   "portrait": "monsters/snake.webp",
   "max_life": 15,
   "size": "Large",
-  "power_factor": 4.0,
+  "power_factor": 3.0,
   "max_initiative": 2.0,
   "skills": [
     {
