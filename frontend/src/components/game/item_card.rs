@@ -82,11 +82,11 @@ pub fn ItemCard(
                 move |_| hide_tooltip()
             }
 
-            on:touchstart=move |_| {
+            on:touchstart=move |ev| {
                 ev.prevent_default();
                 show_tooltip()
             }
-            on:touchend=move |_| {
+            on:touchend=move |ev| {
                 ev.prevent_default();
                 hide_tooltip()
             }

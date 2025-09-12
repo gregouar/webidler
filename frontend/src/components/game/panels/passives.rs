@@ -292,7 +292,7 @@ pub fn Node(
     let show_tooltip = {
         let tooltip_context = expect_context::<DynamicTooltipContext>();
         let node_specs = node_specs.clone();
-        move |_| {
+        move || {
             let node_specs = node_specs.clone();
             tooltip_context.set_content(
                 move || {
@@ -306,7 +306,7 @@ pub fn Node(
 
     let hide_tooltip = {
         let tooltip_context = expect_context::<DynamicTooltipContext>();
-        move |_| tooltip_context.hide()
+        move || tooltip_context.hide()
     };
 
     let icon_asset = img_asset(&node_specs.icon);
@@ -355,14 +355,34 @@ pub fn Node(
     view! {
         <g
             transform=format!("translate({}, {})", node_specs.x * 10.0, -node_specs.y * 10.0)
-            on:mouseenter=show_tooltip
-            on:mouseleave=hide_tooltip
+
             on:click=move |_| {
                 let status = node_status.get();
                 if status.purchase_status == PurchaseStatus::Purchaseable {
                     on_click();
                 }
             }
+            on:mouseenter={
+                let show_tooltip = show_tooltip.clone();
+                move |_| show_tooltip()
+            }
+            on:mouseleave={
+                let hide_tooltip = hide_tooltip.clone();
+                move |_| hide_tooltip()
+            }
+
+            on:touchstart=move |ev| {
+                ev.prevent_default();
+                show_tooltip()
+            }
+            on:touchend=move |ev| {
+                ev.prevent_default();
+                hide_tooltip()
+            }
+            on:contextmenu=move |ev| {
+                ev.prevent_default();
+            }
+
             class=class_style
         >
             <circle
