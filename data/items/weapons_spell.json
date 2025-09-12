@@ -61,7 +61,7 @@
       },
       {
         "scope": "Global",
-        "stat": {"Speed":"Spell"},
+        "stat": { "Speed": "Spell" },
         "modifier": "Multiplier",
         "min": 0.08,
         "max": 0.12
@@ -70,8 +70,8 @@
     "triggers": [
       {
         "trigger_id": "baguette_fromage",
-        "description": "Hitting an Enemy with Physical Spell Damage cover them in Melted Cheese:",
-        "OnHit": { "skill_type": "Spell", "damage_type": "Physical" },
+        "description": "Hitting an Enemy with Fire Spell Damage cover them in Melted Cheese:",
+        "OnHit": { "skill_type": "Spell", "damage_type": "Fire" },
         "effects": [
           {
             "ApplyStatus": {
@@ -84,7 +84,7 @@
                       "stat": {
                         "DamageResistance": {
                           "skill_type": null,
-                          "damage_type": "Fire"
+                          "damage_type": "Physical"
                         }
                       },
                       "modifier": "Flat",
@@ -101,6 +101,22 @@
                         "DamageResistance": {
                           "skill_type": null,
                           "damage_type": "Poison"
+                        }
+                      },
+                      "modifier": "Flat",
+                      "debuff": true
+                    }
+                  },
+                  "min_value": 100.0,
+                  "max_value": 100.0
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "DamageResistance": {
+                          "skill_type": null,
+                          "damage_type": "Storm"
                         }
                       },
                       "modifier": "Flat",

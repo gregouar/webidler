@@ -149,7 +149,7 @@ fn SkillCard(
         <div
             class=move || {
                 format!(
-                    "relative group bg-zinc-800 border rounded-md p-4 flex flex-col items-center
+                    "relative group bg-neutral-800 border rounded-md p-4 flex flex-col items-center
                 transition-all shadow cursor-pointer hover:ring-2 hover:ring-amber-400 {}",
                     if is_selected.get() {
                         "border-amber-400 ring-2 ring-amber-500"
@@ -162,12 +162,14 @@ fn SkillCard(
             on:mouseenter=show_tooltip
             on:mouseleave=hide_tooltip
         >
-            <img
-                src=img_asset(&skill_specs.base.icon)
-                alt=skill_specs.base.name.clone()
-                class="w-full h-full flex-no-shrink fill-current
-                drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
-            />
+            <div class="w-full h-auto aspect-square">
+                <img
+                    src=img_asset(&skill_specs.base.icon)
+                    alt=skill_specs.base.name.clone()
+                    class="w-full h-full flex-no-shrink fill-current
+                    drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
+                />
+            </div>
             <div class="mt-2 text-lg font-bold text-white text-center">
                 {skill_specs.base.name.clone()}
             </div>
