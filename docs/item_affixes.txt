@@ -1,0 +1,169 @@
+Cloak:
+    Pre:
+        inc_attack_speed
+        inc_spell_speed
+    Suf:
+        inc_gold
+        add_fire_res
+        add_poison_res
+        add_storm_res
+
+
+Head:
+    pre:
+        add_armor
+        inc_armor
+        add_life
+        inc_life
+    suf:
+        inc_gold
+        add_life_regen
+        add_mana_regen
+        add_fire_res
+        add_poison_res
+        add_storm_res
+
+
+Amulet:
+    pre:
+        inc_crit_chances
+        inc_crit_damage
+        inc_gold_2
+    suf:
+        inc_fire_damage
+        inc_poison_damage
+        inc_storm_damage
+        inc_gold
+        inc_attack_damage
+        inc_spell_damage
+        add_fire_res
+        add_poison_res
+        add_storm_res
+
+
+Attack Weapon:
+    pre:
+        inc_damage
+        add_physical_damage
+        add_fire_damage
+        add_poison_damage
+        add_storm_damage
+    suf:
+        inc_speed
+        add_crit_chances
+        inc_crit_chances
+        inc_crit_damage
+        life_leech
+        mana_leech
+
+
+Spell Weapon:
+    pre:
+        add_mana
+        inc_mana
+        inc_spell_damage
+        inc_spell_power
+    suf:
+        inc_fire_damage
+        inc_poison_damage
+        inc_storm_damage
+        add_mana_regen
+        inc_spell_speed
+        inc_spell_crit_chances
+
+
+Body:
+    pre:
+        add_armor
+        inc_armor
+        add_life
+        inc_life
+    suf:
+        add_life_regen
+        add_mana_regen
+        add_fire_res
+        add_poison_res
+        add_storm_res
+
+
+Shield:
+    pre:
+        add_armor
+        inc_armor
+        add_life
+        inc_life
+    suf:
+        add_life_regen
+        add_fire_res
+        add_poison_res
+        add_storm_res
+        add_block
+        inc_block
+
+
+Focus:
+    pre:
+        inc_status_power
+        add_mana
+        inc_mana
+        inc_spell_damage
+    suf:
+        inc_fire_damage
+        inc_poison_damage
+        inc_storm_damage
+        inc_status_duration
+        add_mana_regen
+        add_fire_res
+        add_poison_res
+        add_storm_res
+        inc_spell_speed
+        inc_spell_crit_chances
+
+
+Gloves:
+    pre:
+        add_armor
+        inc_armor
+        add_life
+        inc_life
+    suf:
+        inc_action_speed
+        inc_gold
+        add_life_regen
+        add_mana_regen
+        add_fire_res
+        add_poison_res
+        add_storm_res
+
+
+Boots:
+    pre:
+        add_armor
+        inc_armor
+        inc_movement_speed
+        add_life
+        inc_life
+    suf:
+        inc_gold
+        add_life_regen
+        add_mana_regen
+        add_fire_res
+        add_poison_res
+        add_storm_res
+
+
+Ring:
+    pre:
+        inc_crit_chances
+        inc_crit_damage
+        inc_gold_2
+    suf:
+        inc_fire_damage
+        inc_poison_damage
+        inc_storm_damage
+        inc_gold
+        inc_attack_damage
+        inc_spell_damage
+        add_fire_res
+        add_poison_res
+        add_storm_res

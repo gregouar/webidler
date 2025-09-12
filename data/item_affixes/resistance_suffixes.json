@@ -2,16 +2,27 @@
   {
     "name": "of Emberguard",
     "family": "add_fire_res",
-    "tags": ["Fire", "Armor"],
+    "tags": [
+      "Fire",
+      "Armor"
+    ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus"],
+    "restrictions": [
+      "Armor",
+      "Accessory",
+      "Jewelry",
+      "Focus",
+      "Shield"
+    ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Armor": "Fire" },
+        "stat": {
+          "Armor": "Fire"
+        },
         "modifier": "Flat",
         "min": 25,
         "max": 49
@@ -21,36 +32,57 @@
   {
     "name": "of Embershield",
     "family": "add_fire_res",
-    "tags": ["Fire", "Armor"],
+    "tags": [
+      "Fire",
+      "Armor"
+    ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus"],
+    "restrictions": [
+      "Armor",
+      "Accessory",
+      "Jewelry",
+      "Focus",
+      "Shield"
+    ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Armor": "Fire" },
+        "stat": {
+          "Armor": "Fire"
+        },
         "modifier": "Flat",
         "min": 50,
         "max": 74
       }
     ]
   },
-
   {
     "name": "of Venomguard",
     "family": "add_poison_res",
-    "tags": ["Poison", "Armor"],
+    "tags": [
+      "Poison",
+      "Armor"
+    ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus"],
+    "restrictions": [
+      "Armor",
+      "Accessory",
+      "Jewelry",
+      "Focus",
+      "Shield"
+    ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Armor": "Poison" },
+        "stat": {
+          "Armor": "Poison"
+        },
         "modifier": "Flat",
         "min": 25,
         "max": 49
@@ -60,36 +92,57 @@
   {
     "name": "of Venomshield",
     "family": "add_poison_res",
-    "tags": ["Poison", "Armor"],
+    "tags": [
+      "Poison",
+      "Armor"
+    ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus"],
+    "restrictions": [
+      "Armor",
+      "Accessory",
+      "Jewelry",
+      "Focus",
+      "Shield"
+    ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Armor": "Poison" },
+        "stat": {
+          "Armor": "Poison"
+        },
         "modifier": "Flat",
         "min": 50,
         "max": 74
       }
     ]
   },
-
   {
     "name": "of Tempestguard",
     "family": "add_storm_res",
-    "tags": ["Storm", "Armor"],
+    "tags": [
+      "Storm",
+      "Armor"
+    ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus"],
+    "restrictions": [
+      "Armor",
+      "Accessory",
+      "Jewelry",
+      "Focus",
+      "Shield"
+    ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Armor": "Storm" },
+        "stat": {
+          "Armor": "Storm"
+        },
         "modifier": "Flat",
         "min": 25,
         "max": 49
@@ -99,16 +152,27 @@
   {
     "name": "of Tempestshield",
     "family": "add_storm_res",
-    "tags": ["Storm", "Armor"],
+    "tags": [
+      "Storm",
+      "Armor"
+    ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus"],
+    "restrictions": [
+      "Armor",
+      "Accessory",
+      "Jewelry",
+      "Focus",
+      "Shield"
+    ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Armor": "Storm" },
+        "stat": {
+          "Armor": "Storm"
+        },
         "modifier": "Flat",
         "min": 50,
         "max": 74

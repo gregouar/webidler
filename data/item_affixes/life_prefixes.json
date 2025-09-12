@@ -2,11 +2,16 @@
   {
     "name": "Lively",
     "family": "add_life",
-    "tags": ["Life"],
+    "tags": [
+      "Life"
+    ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor"],
+    "restrictions": [
+      "Armor",
+      "Shield"
+    ],
     "item_level": 1,
     "effects": [
       {
@@ -21,11 +26,16 @@
   {
     "name": "Healthy",
     "family": "add_life",
-    "tags": ["Life"],
+    "tags": [
+      "Life"
+    ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Armor"],
+    "restrictions": [
+      "Armor",
+      "Shield"
+    ],
     "item_level": 50,
     "effects": [
       {
@@ -37,15 +47,19 @@
       }
     ]
   },
-
   {
     "name": "Hefty",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [
+      "Life"
+    ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor"],
+    "restrictions": [
+      "Armor",
+      "Shield"
+    ],
     "item_level": 1,
     "effects": [
       {
@@ -60,11 +74,16 @@
   {
     "name": "Robust",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [
+      "Life"
+    ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Armor"],
+    "restrictions": [
+      "Armor",
+      "Shield"
+    ],
     "item_level": 50,
     "effects": [
       {

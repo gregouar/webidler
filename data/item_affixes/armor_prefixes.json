@@ -10,7 +10,8 @@
     "tier": 1,
     "weight": 1000,
     "restrictions": [
-      "Armor"
+      "Armor",
+      "Shield"
     ],
     "item_level": 1,
     "effects": [
@@ -36,7 +37,8 @@
     "tier": 2,
     "weight": 1000,
     "restrictions": [
-      "Armor"
+      "Armor",
+      "Shield"
     ],
     "item_level": 50,
     "effects": [
@@ -62,7 +64,8 @@
     "tier": 1,
     "weight": 1000,
     "restrictions": [
-      "Armor"
+      "Armor",
+      "Shield"
     ],
     "item_level": 1,
     "effects": [
@@ -88,7 +91,8 @@
     "tier": 2,
     "weight": 1000,
     "restrictions": [
-      "Armor"
+      "Armor",
+      "Shield"
     ],
     "item_level": 50,
     "effects": [
