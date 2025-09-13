@@ -18,7 +18,10 @@
       "rat.json",
       "snake.json",
       "soot_imp.json",
-      "soot_imp_2.json"
+      "soot_imp_2.json",
+      "witch.json",
+      "witch_child_1.json",
+      "witch_child_2.json"
     ]
   }
 }

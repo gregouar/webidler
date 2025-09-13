@@ -1,0 +1,27 @@
+{
+  "name": "Witch's Child",
+  "portrait": "monsters/witch_child_2.webp",
+  "max_life": 10,
+  "power_factor": 1.0,
+  "max_initiative": 0.5,
+  "skills": [
+    {
+      "name": "Angry Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [1, 3]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

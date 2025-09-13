@@ -3,6 +3,6 @@
     "enabled": true
   },
   "resources": {
-    "areas": ["inn_basement.json", "forest.json"]
+    "areas": ["inn_basement.json", "forest.json", "witch_lair.json"]
   }
 }

@@ -135,6 +135,7 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
     view! {
         <div
             class="
+            flex flex-col
             bg-zinc-800 rounded-xl border border-zinc-700 shadow-md overflow-hidden 
             aspect-square
             transition cursor-pointer 
