@@ -362,8 +362,8 @@ pub fn Node(
                 let status = node_status.get();
                 if status.purchase_status == PurchaseStatus::Purchaseable {
                     on_click();
-                    hide_tooltip()
                 }
+                hide_tooltip()
             }
 
             on:mousedown=|ev| ev.stop_propagation()

@@ -456,6 +456,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                 }
                 on:mouseenter=move |_| show_tooltip()
                 on:mouseleave=move |_| hide_tooltip()
+                on:click=move |_| hide_tooltip()
             >
                 <button
                     class="btn p-1 w-full h-full

@@ -158,7 +158,10 @@ fn SkillCard(
                     },
                 )
             }
-            on:click=move |_| selected.set(Some(skill_id.clone()))
+            on:click=move |_| {
+                hide_tooltip();
+                selected.set(Some(skill_id.clone()))
+            }
 
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();

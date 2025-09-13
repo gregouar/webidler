@@ -83,6 +83,9 @@ pub fn ItemCard(
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
+
+            on:mouseenter=move |_| show_tooltip()
+            on:mouseleave=move |_| hide_tooltip()
         >
             <img
                 draggable="false"
