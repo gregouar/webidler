@@ -400,7 +400,7 @@ pub fn Node(
                 y=-(24 + node_specs.size as i32 * 20) / 2
                 width=24 + node_specs.size * 20
                 height=24 + node_specs.size * 20
-                class="group-active:scale-90 group-active:brightness-90"
+                class="group-active:scale-90 group-active:brightness-100"
                 style=move || { format!("pointer-events: none; filter: {}", icon_filter()) }
             />
         </g>

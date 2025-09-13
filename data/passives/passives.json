@@ -1060,7 +1060,6 @@
       },
 
       "arcane_bastion": {
-        "initial_node": true,
         "name": "Arcane Bastion",
         "icon": "passives/rosa_shield.svg",
         "x": -40,
