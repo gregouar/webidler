@@ -11,7 +11,23 @@ use crate::{
 };
 
 #[derive(Clone)]
-pub struct SelectedItem {
+pub enum SelectedItem {
+    None,
+    InMarket(SelectedMarketItem),
+    Removed(usize),
+}
+
+impl SelectedItem {
+    pub fn is_empty(&self) -> bool {
+        match self {
+            SelectedItem::InMarket(_) => false,
+            _ => true,
+        }
+    }
+}
+
+#[derive(Clone)]
+pub struct SelectedMarketItem {
     pub index: usize,
     pub item_specs: Arc<ItemSpecs>,
     pub price: f64,
@@ -24,8 +40,8 @@ pub struct SelectedItem {
 
 #[component]
 pub fn ItemsBrowser(
-    selected_item: RwSignal<Option<SelectedItem>>,
-    #[prop(into)] items_list: Signal<Vec<SelectedItem>>,
+    selected_item: RwSignal<SelectedItem>,
+    #[prop(into)] items_list: Signal<Vec<SelectedMarketItem>>,
     #[prop(optional)] reached_end_of_list: Option<RwSignal<bool>>,
     #[prop(optional)] has_more: Option<RwSignal<bool>>,
 ) -> impl IntoView {
@@ -50,9 +66,12 @@ pub fn ItemsBrowser(
             >
                 <ItemRow
                     item_specs=item.item_specs.clone()
-                    on:click=move |_| selected_item.set(Some(item.clone()))
+                    on:click=move |_| selected_item.set(SelectedItem::InMarket(item.clone()))
                     price=item.price
-                    highlight=move || selected_item.read().as_ref().map(|selected_item| selected_item.index==item.index).unwrap_or_default()
+                    highlight=move || selected_item.with(|selected_item| match selected_item {
+                        SelectedItem::InMarket(selected_market_item) if selected_market_item.index == item.index => true,
+                        _ => false,
+                    })
                     special_offer=item.recipient.is_some()
                     rejected=item.rejected
                 />
@@ -126,10 +145,10 @@ pub fn ItemRow(
 }
 
 #[component]
-pub fn ItemDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
+pub fn ItemDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let item_details = move || {
         match selected_item.get() {
-            Some(selected_item) => {
+            SelectedItem::InMarket(selected_item) => {
                 view! {
                     <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
                         <ItemCard
@@ -147,7 +166,7 @@ pub fn ItemDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
                 }
                 .into_any()
             }
-            None => {
+           SelectedItem:: None | SelectedItem::Removed(_) => {
                 view! {
                     <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
                         <div class="
