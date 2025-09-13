@@ -392,8 +392,8 @@
                       "damage_type": "Poison"
                     }
                   },
-                  "min_value": 3,
-                  "max_value": 5
+                  "min_value": 4,
+                  "max_value": 8
                 }
               ]
             }
