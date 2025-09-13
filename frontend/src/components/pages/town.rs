@@ -3,7 +3,10 @@ use leptos::prelude::*;
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
-use shared::{data::user::UserCharacterId, http::server::GetCharacterDetailsResponse};
+use shared::{
+    data::user::{UserCharacterActivity, UserCharacterId},
+    http::server::GetCharacterDetailsResponse,
+};
 
 use crate::components::{
     auth::AuthContext,
@@ -51,6 +54,9 @@ pub fn TownPage() -> impl IntoView {
                     inventory,
                     ascension,
                 }) => {
+                    if let UserCharacterActivity::Grinding(_, _) = character.activity {
+                        use_navigate()("/game", Default::default())
+                    }
                     town_context.character.set(character);
                     town_context.areas.set(areas);
                     town_context.inventory.set(inventory);
