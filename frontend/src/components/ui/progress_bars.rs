@@ -51,14 +51,14 @@ pub fn HorizontalProgressBar(
             @keyframes horizontal-progress-bar-fade-out {
                 0% {
                     opacity: 1;
-                    box-shadow: 0 0 0px rgba(59, 130, 246, 0);
+                    filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  
                 }
                 50% {
-                    box-shadow: 0 0 25px 10px oklch(92.4% 0.12 95.746);
+                    filter: drop-shadow( 0 0 25px oklch(92.4% 0.12 95.746));  
                 }
                 100% {
                     opacity: 0;
-                    box-shadow: 0 0 0px rgba(59, 130, 246, 0);
+                    filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  
                 }
             }
             "
@@ -200,7 +200,10 @@ pub fn CircularProgressBar(
                 }
                 @keyframes circular-progress-bar-glow {
                  0% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  }
-                 50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746));  transform: scale(1.2); }
+                 50% { 
+                    filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746));  
+                    transform: scale(1.2); 
+                 }
                  100% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
                 }
 
@@ -214,14 +217,13 @@ pub fn CircularProgressBar(
             <div class="relative">
                 <div class="relative w-full h-full aspect-square rounded-full flex items-center justify-center bg-stone-900">
                     <div
-                      class="absolute inset-0 rounded-full"
+                      class="absolute inset-0 rounded-full will-change-(--progress)"
                       class:opacity-0=move || disabled.get()
                         style=move || format!("
                             background: conic-gradient(
                                 {bar_color} var(--progress),
                                 transparent var(--progress) 100%
                             );
-                            will-change: --progress;
                             {}
                         ",transition.get())
                         style:--progress=move || format!("{}%", progress_value.get() * 100.0)
@@ -229,7 +231,7 @@ pub fn CircularProgressBar(
 
                     // For nice fade out during reset
                     <div
-                        class="absolute inset-0 rounded-full"
+                        class="absolute inset-0 rounded-full will-change-[filter]"
                         style=move || format!("
                             background: {bar_color};
                             {}
@@ -241,8 +243,10 @@ pub fn CircularProgressBar(
                 </div>
 
                 <div
-                    class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2"
+                    class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
+                            will-change-[filter,transform] transition duration-500"
                     style=reset_icon_animation
+                    class:brightness-50=move || disabled.get()
                 >
                     {children()}
                 </div>
