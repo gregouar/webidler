@@ -334,7 +334,7 @@ pub async fn read_market_items<'c>(
             ))
         ORDER BY 
             rejected DESC, 
-            recipient_id DESC, 
+            recipient_id ASC, 
             CASE
                 WHEN  $17 = 'Level' THEN market.item_level
             END ASC,
