@@ -44,6 +44,9 @@ pub fn BattleSceneHeader() -> impl IntoView {
         let conn = expect_context::<WebsocketContext>();
         move |_| {
             conn.send(&GoBackLevelMessage { amount: 1 }.into());
+            game_context.area_state.update(|area_state| {
+                area_state.going_back = area_state.going_back.saturating_add(1);
+            });
         }
     };
 
@@ -94,7 +97,17 @@ pub fn BattleSceneHeader() -> impl IntoView {
                         {move || game_context.area_specs.read().name.clone()}
                     </span>
                     {move || {
-                        format!(" — Area Level: {}", game_context.area_state.read().area_level)
+                        format!(
+                            " — Area Level: {}",
+                            game_context
+                                .area_state
+                                .with(|area_state| {
+                                    area_state
+                                        .area_level
+                                        .saturating_sub(area_state.going_back)
+                                        .max(game_context.area_specs.read().starting_level)
+                                }),
+                        )
                     }}
                 </p>
             </div>

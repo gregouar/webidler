@@ -121,8 +121,7 @@ async fn control_entities(
                 > Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown)
             {
                 if game_data.area_state.read().going_back > 0 {
-                    let area_state: &mut shared::data::area::AreaState =
-                        game_data.area_state.mutate();
+                    let area_state = game_data.area_state.mutate();
                     let amount = area_state.going_back;
                     area_controller::decrease_area_level(
                         &game_data.area_blueprint.specs,

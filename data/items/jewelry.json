@@ -85,6 +85,15 @@
       {
         "scope": "Global",
         "stat": {
+          "StatusPower": { "DamageOverTime": { "damage_type": "Fire" } }
+        },
+        "modifier": "Multiplier",
+        "min": 0.5,
+        "max": 1.0
+      },
+      {
+        "scope": "Global",
+        "stat": {
           "StatusDuration": { "DamageOverTime": { "damage_type": "Fire" } }
         },
         "modifier": "Multiplier",
