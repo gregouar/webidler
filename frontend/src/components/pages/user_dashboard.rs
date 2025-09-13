@@ -408,7 +408,7 @@ pub fn CreateCharacterPanel(
 
     view! {
         <MenuPanel open=open>
-            <div class="flex items-center justify-center p-4 min-h-screen">
+            <div class="flex items-center justify-center p-4 max-h-full">
                 <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl p-6 sm:p-8 space-y-8 w-full max-w-lg mx-auto">
                     <h2 class="text-2xl font-bold text-amber-300 text-center">
                         "Create Character"
