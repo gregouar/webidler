@@ -29,7 +29,7 @@ use crate::{
             tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
         },
         town::{
-            items_browser::{ItemDetails, ItemsBrowser, SelectedItem},
+            items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
             TownContext,
         },
         ui::{
@@ -53,11 +53,11 @@ enum MarketTab {
 
 #[component]
 pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
-    let active_tab = RwSignal::new(MarketTab::Buy); // TODO: Start on filters?
-    let selected_item = RwSignal::new(None::<SelectedItem>);
+    let active_tab = RwSignal::new(MarketTab::Buy);
+    let selected_item = RwSignal::new(SelectedItem::None);
 
     let switch_tab = move |new_tab| {
-        selected_item.set(None);
+        selected_item.set(SelectedItem::None);
         active_tab.set(new_tab);
     };
 
@@ -169,7 +169,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
     }
 }
 
-impl From<MarketItem> for SelectedItem {
+impl From<MarketItem> for SelectedMarketItem {
     fn from(value: MarketItem) -> Self {
         Self {
             index: value.item_id,
@@ -196,7 +196,7 @@ pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
 
 #[component]
 fn MarketBrowser(
-    selected_item: RwSignal<Option<SelectedItem>>,
+    selected_item: RwSignal<SelectedItem>,
     filters: RwSignal<MarketFilters>,
     own_listings: bool,
 ) -> impl IntoView {
@@ -219,10 +219,25 @@ fn MarketBrowser(
     });
 
     Effect::new(move || {
-        if selected_item.read().is_none() {
-            refresh_list();
-        }
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::None => refresh_list(),
+            SelectedItem::InMarket(_) => {}
+            SelectedItem::Removed(index) => {
+                items_list.update(|items_list| {
+                    items_list
+                        .iter()
+                        .position(|item: &SelectedMarketItem| item.index == *index)
+                        .map(|i| items_list.remove(i));
+                });
+            }
+        })
     });
+
+    // Effect::new(move || {
+    //     if selected_item.read().is_none() {
+    //         refresh_list();
+    //     }
+    // });
 
     Effect::new(move || {
         if reached_end_of_list.get() && has_more.get_untracked() {
@@ -262,7 +277,7 @@ fn MarketBrowser(
 }
 
 #[component]
-fn InventoryBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
+fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let items_list = Signal::derive({
         let town_context = expect_context::<TownContext>();
         move || {
@@ -272,7 +287,7 @@ fn InventoryBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoV
                 .bag
                 .iter()
                 .enumerate()
-                .map(|(index, item)| SelectedItem {
+                .map(|(index, item)| SelectedMarketItem {
                     index,
                     owner_id: town_context.character.read_untracked().character_id,
                     owner_name: town_context.character.read_untracked().name.clone(),
@@ -290,7 +305,7 @@ fn InventoryBrowser(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoV
 }
 
 #[component]
-pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
+pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
     let auth_context = expect_context::<AuthContext>();
@@ -298,49 +313,50 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
 
     let disabled = Signal::derive({
         let town_context = expect_context::<TownContext>();
-        move || match selected_item.read().as_ref() {
-            Some(selected_item) => {
-                selected_item.price > town_context.character.read().resource_gems
-                    || selected_item.item_specs.modifiers.level
-                        > town_context.character.read().max_area_level
-            }
-            None => true,
+        move || {
+            selected_item.with(|selected_item| match selected_item {
+                SelectedItem::InMarket(selected_item) => {
+                    selected_item.price > town_context.character.read().resource_gems
+                        || selected_item.item_specs.modifiers.level
+                            > town_context.character.read().max_area_level
+                }
+                _ => true,
+            })
         }
     });
 
     let price = move || {
-        selected_item
-            .read()
-            .as_ref()
-            .map(|selected_item| selected_item.price)
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => Some(selected_item.price),
+            _ => None,
+        })
     };
 
     let private_offer = move || {
-        selected_item
-            .read()
-            .as_ref()
-            .map(|selected_item| selected_item.recipient.is_some())
-            .unwrap_or_default()
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => selected_item.recipient.is_some(),
+            _ => false,
+        })
     };
 
     let seller_name = move || {
-        selected_item
-            .read()
-            .as_ref()
-            .map(|selected_item| selected_item.owner_name.to_string())
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => selected_item.owner_name.to_string(),
+            _ => "".into(),
+        })
     };
 
     let listed_at = move || {
-        selected_item
-            .read()
-            .as_ref()
-            .map(|selected_item| selected_item.created_at)
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => Some(selected_item.created_at),
+            _ => None,
+        })
     };
 
     let do_buy = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| {
-            if let Some(item) = selected_item.get() {
+        move |_| match selected_item.get() {
+            SelectedItem::InMarket(item) => {
                 spawn_local({
                     async move {
                         match backend
@@ -357,7 +373,7 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
                                 town_context.inventory.set(response.inventory);
                                 town_context.character.write().resource_gems =
                                     response.resource_gems;
-                                selected_item.set(None);
+                                selected_item.set(SelectedItem::Removed(item.index));
                             }
                             Err(e) => show_toast(
                                 toaster,
@@ -368,13 +384,14 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
                     }
                 });
             }
+            _ => {}
         }
     };
 
     let do_reject = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| {
-            if let Some(item) = selected_item.get() {
+        move |_| match selected_item.get() {
+            SelectedItem::InMarket(item) => {
                 spawn_local({
                     async move {
                         match backend
@@ -388,7 +405,7 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
                             .await
                         {
                             Ok(_) => {
-                                selected_item.set(None);
+                                selected_item.set(SelectedItem::Removed(item.index));
                             }
                             Err(e) => show_toast(
                                 toaster,
@@ -399,6 +416,7 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
                     }
                 });
             }
+            _ => {}
         }
     };
 
@@ -463,7 +481,7 @@ pub fn BuyDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVie
 }
 
 #[component]
-pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
+pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
     let auth_context = expect_context::<AuthContext>();
@@ -473,13 +491,13 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
     let recipient_name = RwSignal::new(Some(None::<Username>));
 
     let disabled = Signal::derive(move || {
-        selected_item.read().is_none() || price.read().is_none() || recipient_name.read().is_none()
+        selected_item.read().is_empty() || price.read().is_none() || recipient_name.read().is_none()
     });
 
     let do_sell = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| {
-            if let Some(item) = selected_item.get() {
+        move |_| match selected_item.get() {
+            SelectedItem::InMarket(item) => {
                 let recipient_name = recipient_name.get().unwrap_or_default();
                 let price = price.get().unwrap().into_inner();
                 spawn_local({
@@ -498,7 +516,7 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
                         {
                             Ok(response) => {
                                 town_context.inventory.set(response.inventory);
-                                selected_item.set(None);
+                                selected_item.set(SelectedItem::Removed(item.index));
                             }
                             Err(e) => show_toast(
                                 toaster,
@@ -509,6 +527,7 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
                     }
                 });
             }
+            _ => {}
         }
     };
 
@@ -564,65 +583,61 @@ pub fn SellDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoVi
 }
 
 #[component]
-pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl IntoView {
+pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
     let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
-    let disabled = Signal::derive(move || selected_item.read().is_none());
+    let disabled = Signal::derive(move || selected_item.read().is_empty());
 
     let price = RwSignal::new(ItemPrice::try_new(0.0).ok());
 
     Effect::new(move || {
         price.set(
-            ItemPrice::try_new(match selected_item.read().as_ref() {
-                Some(selected_item) => selected_item.price,
-                None => 0.0,
-            })
+            ItemPrice::try_new(selected_item.with(|selected_item| match selected_item {
+                SelectedItem::InMarket(selected_item) => selected_item.price,
+                _ => 0.0,
+            }))
             .ok(),
         );
     });
 
     let recipient_name = move || {
-        selected_item
-            .read()
-            .as_ref()
-            .map(|selected_item| {
-                selected_item
-                    .recipient
-                    .as_ref()
-                    .map(|(_, recipient_name)| recipient_name.clone())
-            })
-            .unwrap_or_default()
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => selected_item
+                .recipient
+                .as_ref()
+                .map(|(_, recipient_name)| recipient_name.clone()),
+            _ => None,
+        })
     };
 
     let rejected = move || {
-        selected_item
-            .read()
-            .as_ref()
-            .map(|selected_item| selected_item.rejected)
-            .unwrap_or_default()
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => selected_item.rejected,
+            _ => false,
+        })
     };
 
     let seller_name = move || {
-        selected_item
-            .read()
-            .as_ref()
-            .map(|selected_item| selected_item.owner_name.to_string())
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => selected_item.owner_name.to_string(),
+            _ => "".into(),
+        })
     };
 
     let listed_at = move || {
-        selected_item
-            .read()
-            .as_ref()
-            .map(|selected_item| selected_item.created_at)
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => Some(selected_item.created_at),
+            _ => None,
+        })
     };
 
     let do_edit = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| {
-            if let Some(item) = selected_item.get() {
+        move |_| match selected_item.get() {
+            SelectedItem::InMarket(item) => {
                 let price = price.get().unwrap().into_inner();
                 spawn_local({
                     async move {
@@ -638,7 +653,8 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                             .await
                         {
                             Ok(_) => {
-                                selected_item.set(None);
+                                // To trigger full refresh
+                                selected_item.set(SelectedItem::None);
                             }
                             Err(e) => show_toast(
                                 toaster,
@@ -649,13 +665,14 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                     }
                 });
             }
+            _ => {}
         }
     };
 
     let do_remove = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| {
-            if let Some(item) = selected_item.get() {
+        move |_| match selected_item.get() {
+            SelectedItem::InMarket(item) => {
                 spawn_local({
                     async move {
                         match backend
@@ -672,7 +689,7 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                                 town_context.inventory.set(response.inventory);
                                 town_context.character.write().resource_gems =
                                     response.resource_gems;
-                                selected_item.set(None);
+                                selected_item.set(SelectedItem::Removed(item.index));
                             }
                             Err(e) => show_toast(
                                 toaster,
@@ -683,6 +700,7 @@ pub fn ListingDetails(selected_item: RwSignal<Option<SelectedItem>>) -> impl Int
                     }
                 });
             }
+            _ => {}
         }
     };
 
