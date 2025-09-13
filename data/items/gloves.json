@@ -72,7 +72,7 @@
       "range": "Melee",
       "cooldown": 1.5,
       "damage": {
-        "Physical": [4, 7]
+        "Physical": [4, 10]
       },
       "crit_chances": 10,
       "crit_damage": 100
@@ -92,6 +92,13 @@
         "modifier": "Flat",
         "min": 40,
         "max": 60
+      },
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "min": 4,
+        "max": 6
       }
     ],
     "triggers": [

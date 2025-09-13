@@ -58,6 +58,13 @@
         "modifier": "Flat",
         "min": 3,
         "max": 5
+      },
+      {
+        "scope": "Global",
+        "stat": {"Armor": "Poison"},
+        "modifier": "Flat",
+        "min": 40,
+        "max": 60
       }
     ],
     "triggers": [

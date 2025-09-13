@@ -45,7 +45,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Armor": "Poison" },
+        "stat": { "Armor": "Storm" },
         "modifier": "Flat",
         "min": 40,
         "max": 60
