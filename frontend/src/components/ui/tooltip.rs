@@ -196,12 +196,20 @@ where
         StaticTooltipPosition::Right => "left-full top-1/2 -translate-y-1/2 ml-2",
     };
 
+    let handle = window_event_listener(ev::touchend, {
+        move |ev| {
+            if ev.touches().length() == 0 {
+                is_open.set(false)
+            }
+        }
+    });
+
+    on_cleanup(move || handle.remove());
+
     view! {
         <div
             class="relative group inline-block"
             on:touchstart=move |_| { is_open.set(true) }
-            on:touchend=move |_| { is_open.set(false) }
-            on:touchcancel=move |_| { is_open.set(false) }
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
