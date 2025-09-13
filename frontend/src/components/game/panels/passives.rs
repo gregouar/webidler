@@ -363,7 +363,6 @@ pub fn Node(
                 if status.purchase_status == PurchaseStatus::Purchaseable {
                     on_click();
                 }
-                hide_tooltip()
             }
 
             on:mousedown=|ev| ev.stop_propagation()
@@ -372,8 +371,6 @@ pub fn Node(
                 let show_tooltip = show_tooltip.clone();
                 move |_| { show_tooltip() }
             }
-            on:touchend=move |_| hide_tooltip()
-            on:touchcancel=move |_| hide_tooltip()
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
