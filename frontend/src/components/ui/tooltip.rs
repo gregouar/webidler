@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use leptos::{html::*, prelude::*, web_sys};
+use leptos::{ev, html::*, prelude::*, web_sys};
 use leptos_use::{use_mouse, use_window_size};
 
 #[derive(Clone, Debug, Copy)]
@@ -103,6 +103,16 @@ pub fn DynamicTooltip() -> impl IntoView {
 
         format!("top: {top}px; left: {left}px;")
     };
+
+    let handle = window_event_listener(ev::touchend, {
+        move |ev| {
+            if ev.touches().length() == 0 {
+                tooltip_context.content.set(None)
+            }
+        }
+    });
+
+    on_cleanup(move || handle.remove());
 
     view! {
         <Show when=show_tooltip>
