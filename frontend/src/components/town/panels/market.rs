@@ -205,11 +205,13 @@ fn MarketBrowser(
 
     let extend_list = RwSignal::new(0u32);
     let reached_end_of_list = RwSignal::new(false);
-    let has_more = RwSignal::new(false);
+    let has_more = RwSignal::new(true);
 
     let refresh_list = move || {
         items_list.write().drain(..);
         extend_list.set(0);
+        has_more.set(true);
+        reached_end_of_list.set(true);
     };
 
     Effect::new(move || {
@@ -227,43 +229,39 @@ fn MarketBrowser(
         })
     });
 
-    Effect::new(move || {
-        if reached_end_of_list.get() && has_more.get_untracked() {
-            (*extend_list.write()) += items_per_page.into_inner() as u32;
-        }
-    });
-
     Effect::new({
         let backend = expect_context::<BackendClient>();
         let town_context = expect_context::<TownContext>();
-
         move || {
-            let character_id = town_context.character.read_untracked().character_id;
-            let skip = extend_list
-                .get()
-                .saturating_sub(items_per_page.into_inner() as u32);
-            let filters = filters.get_untracked();
+            if reached_end_of_list.get() && has_more.get_untracked() {
+                let skip = extend_list.get_untracked();
+                (*extend_list.write()) += items_per_page.into_inner() as u32;
 
-            spawn_local(async move {
-                let response = backend
-                    .browse_market_items(&BrowseMarketItemsRequest {
-                        character_id,
-                        skip,
-                        limit: items_per_page,
-                        filters,
-                        own_listings,
-                    })
-                    .await
-                    .unwrap_or_default();
+                let character_id = town_context.character.read_untracked().character_id;
+                let filters = filters.get_untracked();
 
-                if let Some(mut items_list) = items_list.try_write() {
-                    items_list.extend(response.items.into_iter().map(Into::into))
-                }
-                reached_end_of_list.try_set(false);
-                has_more.try_set(response.has_more);
-            });
+                spawn_local(async move {
+                    let response = backend
+                        .browse_market_items(&BrowseMarketItemsRequest {
+                            character_id,
+                            skip,
+                            limit: items_per_page,
+                            filters,
+                            own_listings,
+                        })
+                        .await
+                        .unwrap_or_default();
+
+                    if let Some(mut items_list) = items_list.try_write() {
+                        items_list.extend(response.items.into_iter().map(Into::into))
+                    }
+                    reached_end_of_list.try_set(false);
+                    has_more.try_set(response.has_more);
+                });
+            }
         }
     });
+
     view! { <ItemsBrowser selected_item items_list reached_end_of_list has_more /> }
 }
 
