@@ -187,6 +187,7 @@ pub async fn read_all_user_characters<'c>(
         LEFT OUTER JOIN saved_game_instances
         ON characters.character_id = saved_game_instances.character_id
         WHERE user_id = $1 AND deleted_at IS NULL
+        ORDER BY created_at ASC
         "#,
         user_id
     )
