@@ -17,6 +17,7 @@ pub struct TownContext {
     // TODO: enum ?
     pub open_ascend: RwSignal<bool>,
     pub open_market: RwSignal<bool>,
+    pub open_forge: RwSignal<bool>,
 }
 
 // impl Default for TownContext {

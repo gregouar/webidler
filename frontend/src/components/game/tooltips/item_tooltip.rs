@@ -19,7 +19,12 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         ItemRarity::Normal => ("border-gray-600", "ring-gray-700", "shadow-gray-800"),
         ItemRarity::Magic => ("border-blue-500", "ring-blue-400", "shadow-blue-700"),
         ItemRarity::Rare => ("border-yellow-400", "ring-yellow-300", "shadow-yellow-600"),
-        ItemRarity::Unique => ("border-amber-700", "ring-amber-600", "shadow-amber-700"),
+        ItemRarity::Masterwork => (
+            "border-emerald-400",
+            "ring-emerald-300",
+            "shadow-emerald-600",
+        ),
+        ItemRarity::Unique => ("border-orange-700", "ring-orange-600", "shadow-orange-700"),
     };
 
     view! {
@@ -67,12 +72,12 @@ pub fn ItemTooltipContent(
     view! {
         <div class="space-y-2">
             <strong class=format!("text-base xl:text-lg font-bold {}", name_color)>
-                <ul class="list-none space-y-1 md-2">
+                <ul class="list-none space-y-1 mb-2">
                     <li class="leading-snug whitespace-pre-line">
                         {item_specs.modifiers.name.clone()}
                     </li>
                     {match item_specs.modifiers.rarity {
-                        ItemRarity::Rare => {
+                        ItemRarity::Rare | ItemRarity::Masterwork => {
                             Some(
                                 view! {
                                     <li class="leading-snug">{item_specs.base.name.clone()}</li>
@@ -87,6 +92,7 @@ pub fn ItemTooltipContent(
             <hr class="border-t border-gray-700" />
             <ul class="list-none space-y-1">
                 <ItemSlotTooltip item_specs=item_specs.clone() />
+                <QualityTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
             </ul>
@@ -127,7 +133,8 @@ pub fn name_color_rarity(item_rarity: ItemRarity) -> &'static str {
         ItemRarity::Normal => "text-white",
         ItemRarity::Magic => "text-blue-400",
         ItemRarity::Rare => "text-yellow-400",
-        ItemRarity::Unique => "text-amber-700",
+        ItemRarity::Masterwork => "text-emerald-400",
+        ItemRarity::Unique => "text-orange-700",
     }
 }
 
@@ -205,7 +212,9 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
                 let damage_color = match damage_type {
                     DamageType::Physical => {
-                        if spec_min != base_min || spec_max != base_max {
+                        if spec_min.round() != base_min.round()
+                            || spec_max.round() != base_max.round()
+                        {
                             "text-blue-400"
                         } else {
                             "text-white"
@@ -257,7 +266,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 "text-white"
             };
 
-            let crit_damage_color = if specs.crit_damage != base_specs.crit_damage {
+            let crit_damage_color = if specs.crit_damage.round() != base_specs.crit_damage.round() {
                 "text-blue-400"
             } else {
                 "text-white"
@@ -312,4 +321,16 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     };
 
     view! { <li class="text-gray-400 text-xs xl:text-sm leading-snug">{item_slot}</li> }
+}
+
+#[component]
+pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    view! {
+        <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+            "Quality: "
+            <span class="text-white font-semibold">
+                {format!("+{:.0}%", item_specs.modifiers.quality)}
+            </span>
+        </li>
+    }
 }

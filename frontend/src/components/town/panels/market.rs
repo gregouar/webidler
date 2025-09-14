@@ -19,27 +19,25 @@ use shared::{
     types::{ItemPrice, PaginationLimit, Username},
 };
 
-use crate::{
-    assets::img_asset,
-    components::{
-        auth::AuthContext,
-        backend_client::BackendClient,
-        game::{
-            panels::inventory::loot_filter_category_to_str,
-            tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
-        },
-        town::{
-            items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
-            TownContext,
-        },
-        ui::{
-            buttons::{CloseButton, MenuButton, MenuButtonRed, TabButton},
-            dropdown::{DropdownMenu, SearchableDropdownMenu},
-            input::{Input, ValidatedInput},
-            menu_panel::{MenuPanel, PanelTitle},
-            number::format_datetime,
-            toast::*,
-        },
+use crate::components::{
+    auth::AuthContext,
+    backend_client::BackendClient,
+    game::{
+        panels::inventory::loot_filter_category_to_str,
+        resources::GemsIcon,
+        tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
+    },
+    town::{
+        items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        TownContext,
+    },
+    ui::{
+        buttons::{CloseButton, MenuButton, MenuButtonRed, TabButton},
+        dropdown::{DropdownMenu, SearchableDropdownMenu},
+        input::{Input, ValidatedInput},
+        menu_panel::{MenuPanel, PanelTitle},
+        number::format_datetime,
+        toast::*,
     },
 };
 
@@ -190,6 +188,7 @@ pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
         Some(ItemRarity::Normal) => "Common",
         Some(ItemRarity::Magic) => "Magical",
         Some(ItemRarity::Rare) => "Rare",
+        Some(ItemRarity::Masterwork) => "Masterwork",
         Some(ItemRarity::Unique) => "Unique",
     }
 }
@@ -355,8 +354,8 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     let do_buy = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| match selected_item.get() {
-            SelectedItem::InMarket(item) => {
+        move |_| {
+            if let SelectedItem::InMarket(item) = selected_item.get() {
                 spawn_local({
                     async move {
                         match backend
@@ -384,14 +383,13 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     }
                 });
             }
-            _ => {}
         }
     };
 
     let do_reject = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| match selected_item.get() {
-            SelectedItem::InMarket(item) => {
+        move |_| {
+            if let SelectedItem::InMarket(item) = selected_item.get() {
                 spawn_local({
                     async move {
                         match backend
@@ -416,7 +414,6 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     }
                 });
             }
-            _ => {}
         }
     };
 
@@ -449,12 +446,7 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                                         <span class="text-violet-300 font-bold">
                                             {format!("{:.0}", price)}
                                         </span>
-                                        <img
-                                            draggable="false"
-                                            src=img_asset("ui/gems.webp")
-                                            alt="Gems"
-                                            class="h-[2em] aspect-square mr-1"
-                                        />
+                                        <GemsIcon />
                                     }
                                         .into_any()
                                 } else {
@@ -496,8 +488,8 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     let do_sell = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| match selected_item.get() {
-            SelectedItem::InMarket(item) => {
+        move |_| {
+            if let SelectedItem::InMarket(item) = selected_item.get() {
                 let recipient_name = recipient_name.get().unwrap_or_default();
                 let price = price.get().unwrap().into_inner();
                 spawn_local({
@@ -527,7 +519,6 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     }
                 });
             }
-            _ => {}
         }
     };
 
@@ -559,12 +550,7 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                         bind=price
                     />
                     <div class="flex items-center">
-                        <img
-                            draggable="false"
-                            src=img_asset("ui/gems.webp")
-                            alt="Gems"
-                            class="h-[2em] aspect-square mr-1"
-                        />
+                        <GemsIcon />
                     </div>
                 </div>
 
@@ -636,8 +622,8 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     let do_edit = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| match selected_item.get() {
-            SelectedItem::InMarket(item) => {
+        move |_| {
+            if let SelectedItem::InMarket(item) = selected_item.get() {
                 let price = price.get().unwrap().into_inner();
                 spawn_local({
                     async move {
@@ -665,14 +651,13 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     }
                 });
             }
-            _ => {}
         }
     };
 
     let do_remove = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| match selected_item.get() {
-            SelectedItem::InMarket(item) => {
+        move |_| {
+            if let SelectedItem::InMarket(item) = selected_item.get() {
                 spawn_local({
                     async move {
                         match backend
@@ -700,7 +685,6 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     }
                 });
             }
-            _ => {}
         }
     };
 
@@ -745,12 +729,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                         bind=price
                     />
                     <div class="flex items-center">
-                        <img
-                            draggable="false"
-                            src=img_asset("ui/gems.webp")
-                            alt="Gems"
-                            class="h-[2em] aspect-square mr-1"
-                        />
+                        <GemsIcon />
                     </div>
                     <MenuButton on:click=do_edit disabled=disabled>
                         "Edit Price"

@@ -108,6 +108,7 @@ pub struct FilterLootMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PickUpLootMessage {
     pub loot_identifier: u32,
+    pub sell: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

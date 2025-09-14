@@ -16,6 +16,17 @@ pub fn drop_loot(
     drop_loot_impl(player_controller, queued_loot, item_specs, true)
 }
 
+pub fn take_loot(queued_loot: &mut [QueuedLoot], loot_identifier: u32) -> Option<ItemSpecs> {
+    if let Some(loot) = queued_loot
+        .iter_mut()
+        .find(|x| x.identifier == loot_identifier && x.state != LootState::HasDisappeared)
+    {
+        loot.state = LootState::HasDisappeared;
+        return Some(loot.item_specs.clone());
+    }
+    None
+}
+
 pub fn pickup_loot(
     player_controller: &PlayerController,
     player_inventory: &mut PlayerInventory,
@@ -139,7 +150,7 @@ fn item_score(player_controller: &PlayerController, item: &ItemSpecs) -> usize {
     }
 
     score += match item.modifiers.rarity {
-        ItemRarity::Normal | ItemRarity::Magic | ItemRarity::Rare => 0,
+        ItemRarity::Normal | ItemRarity::Magic | ItemRarity::Rare | ItemRarity::Masterwork => 0,
         ItemRarity::Unique => 1_500_000,
     };
 
@@ -151,7 +162,9 @@ fn item_score(player_controller: &PlayerController, item: &ItemSpecs) -> usize {
         .sum::<usize>()
         * 10_000;
 
-    score += item.base.min_area_level as usize * 1_000;
+    score += item.modifiers.quality as usize * 1_000;
+
+    // score += item.base.min_area_level as usize * 1_000;
 
     score
 }

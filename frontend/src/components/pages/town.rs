@@ -13,7 +13,7 @@ use crate::components::{
     backend_client::{BackendClient, BackendError},
     town::{
         header_menu::HeaderMenu,
-        panels::{ascend::AscendPanel, market::MarketPanel},
+        panels::{ascend::AscendPanel, forge::ForgePanel, market::MarketPanel},
         town_scene::TownScene,
         TownContext,
     },
@@ -90,7 +90,7 @@ pub fn TownPage() -> impl IntoView {
                             <TownScene />
                             <MarketPanel open=town_context.open_market />
                             <AscendPanel open=town_context.open_ascend />
-                        // <ForgePanel open=town_context.open_forge />
+                            <ForgePanel open=town_context.open_forge />
                         </div>
                     }
                 })}

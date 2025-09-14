@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::trigger::TriggerSpecs;
+use crate::data::{item_affix::AffixType, trigger::TriggerSpecs};
 
 pub use super::skill::{SkillRange, SkillShape};
 use super::{
@@ -31,20 +31,58 @@ pub enum ItemRarity {
     Normal,
     Magic,
     Rare,
+    Masterwork,
     Unique,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter)]
 pub enum ItemSlot {
     Accessory,
-    Amulet,
-    Body,
-    Boots,
-    Gloves,
     Helmet,
-    Ring,
-    Shield,
+    Amulet,
     Weapon,
+    Body,
+    Shield,
+    Gloves,
+    Boots,
+    Ring,
+}
+
+impl TryFrom<usize> for ItemSlot {
+    type Error = anyhow::Error;
+
+    fn try_from(value: usize) -> Result<Self, Self::Error> {
+        use ItemSlot::*;
+        Ok(match value {
+            0 => Accessory,
+            1 => Amulet,
+            2 => Body,
+            3 => Boots,
+            4 => Gloves,
+            5 => Helmet,
+            6 => Ring,
+            7 => Shield,
+            8 => Weapon,
+            _ => return Err(anyhow::anyhow!("invalid slot")),
+        })
+    }
+}
+
+impl From<ItemSlot> for usize {
+    fn from(value: ItemSlot) -> Self {
+        use ItemSlot::*;
+        match value {
+            Accessory => 0,
+            Amulet => 1,
+            Body => 2,
+            Boots => 3,
+            Gloves => 4,
+            Helmet => 5,
+            Ring => 6,
+            Shield => 7,
+            Weapon => 8,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter)]
@@ -109,6 +147,9 @@ pub struct ItemModifiers {
     pub level: AreaLevel,
 
     pub affixes: Vec<ItemAffix>,
+
+    #[serde(default)]
+    pub quality: f32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -160,5 +201,26 @@ impl ItemModifiers {
                     .or_default() += effect.stat_effect.value;
                 effects_map
             })
+    }
+
+    pub fn count_affixes(&self, affix_type: AffixType) -> usize {
+        self.affixes
+            .iter()
+            .filter(|affix| affix_type == affix.affix_type)
+            .count()
+    }
+
+    pub fn count_nonunique_affixes(&self) -> usize {
+        self.affixes
+            .iter()
+            .filter(|affix| affix.affix_type != AffixType::Unique)
+            .count()
+    }
+
+    pub fn get_families(&self) -> HashSet<String> {
+        self.affixes
+            .iter()
+            .map(|affix| affix.family.clone())
+            .collect()
     }
 }

@@ -6,16 +6,16 @@ use shared::{
     http::{
         client::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BuyMarketItemRequest,
-            CreateCharacterRequest, EditMarketItemRequest, RejectMarketItemRequest,
-            SellMarketItemRequest, SignInRequest, SignUpRequest,
+            CreateCharacterRequest, EditMarketItemRequest, ForgeAddAffixRequest,
+            RejectMarketItemRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BuyMarketItemResponse,
             CreateCharacterResponse, DeleteCharacterResponse, EditMarketItemResponse,
-            ErrorResponse, GetAreasResponse, GetCharacterDetailsResponse, GetPassivesResponse,
-            GetSkillsResponse, GetUserCharactersResponse, GetUserResponse, LeaderboardResponse,
-            PlayersCountResponse, RejectMarketItemResponse, SellMarketItemResponse, SignInResponse,
-            SignUpResponse,
+            ErrorResponse, ForgeAddAffixResponse, GetAreasResponse, GetCharacterDetailsResponse,
+            GetPassivesResponse, GetSkillsResponse, GetUserCharactersResponse, GetUserResponse,
+            LeaderboardResponse, PlayersCountResponse, RejectMarketItemResponse,
+            SellMarketItemResponse, SignInResponse, SignUpResponse,
         },
     },
 };
@@ -191,6 +191,16 @@ impl BackendClient {
         request: &EditMarketItemRequest,
     ) -> Result<EditMarketItemResponse, BackendError> {
         self.post_auth("market/edit", token, request).await
+    }
+
+    // Forge
+
+    pub async fn forge_add_affix(
+        &self,
+        token: &str,
+        request: &ForgeAddAffixRequest,
+    ) -> Result<ForgeAddAffixResponse, BackendError> {
+        self.post_auth("forge/add_affix", token, request).await
     }
 
     // Protected

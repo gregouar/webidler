@@ -36,21 +36,28 @@ pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers, old_game: boo
     // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
 
     ItemSpecs {
-        weapon_specs: base
-            .weapon_specs
-            .as_ref()
-            .map(|weapon_specs| compute_weapon_specs(weapon_specs.clone(), &effects)),
-        armor_specs: base
-            .armor_specs
-            .as_ref()
-            .map(|armor_specs| compute_armor_specs(armor_specs.clone(), &effects)),
+        weapon_specs: base.weapon_specs.as_ref().map(|weapon_specs| {
+            compute_weapon_specs(weapon_specs.clone(), modifiers.quality, &effects)
+        }),
+        armor_specs: base.armor_specs.as_ref().map(|armor_specs| {
+            compute_armor_specs(armor_specs.clone(), modifiers.quality, &effects)
+        }),
         base,
         modifiers,
         old_game,
     }
 }
 
-fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -> WeaponSpecs {
+fn compute_weapon_specs(
+    mut weapon_specs: WeaponSpecs,
+    quality: f32,
+    effects: &[StatEffect],
+) -> WeaponSpecs {
+    weapon_specs.damage.values_mut().for_each(|(min, max)| {
+        *min *= 1.0 + quality as f64 * 0.01;
+        *max *= 1.0 + quality as f64 * 0.01;
+    });
+
     for effect in effects {
         match effect.stat {
             StatType::Speed(Some(SkillType::Attack) | None) => {
@@ -124,7 +131,12 @@ fn compute_weapon_specs(mut weapon_specs: WeaponSpecs, effects: &[StatEffect]) -
     weapon_specs
 }
 
-fn compute_armor_specs(mut armor_specs: ArmorSpecs, effects: &[StatEffect]) -> ArmorSpecs {
+fn compute_armor_specs(
+    mut armor_specs: ArmorSpecs,
+    quality: f32,
+    effects: &[StatEffect],
+) -> ArmorSpecs {
+    armor_specs.armor *= 1.0 + quality as f64 * 0.01;
     for effect in effects {
         match effect.stat {
             StatType::Armor(DamageType::Physical) => armor_specs.armor.apply_effect(effect),
