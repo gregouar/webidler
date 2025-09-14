@@ -3,7 +3,7 @@
 // Add suffix/prefix: 2,6,10
 
 use chrono::Utc;
-use leptos::{prelude::*, task::spawn_local};
+use leptos::prelude::*;
 use std::sync::Arc;
 
 use crate::components::{
@@ -151,10 +151,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             <div class="flex flex-col gap-2">
                 <MenuButton
                     on:click=add_affix
-                    disabled=Signal::derive({
-                        let affix_price = affix_price.clone();
-                        move || affix_price().is_none()
-                    })
+                    disabled=Signal::derive({ move || affix_price().is_none() })
                     class:mb-2
                 >
                     <div class="w-full flex justify-center items-center gap-1 text-lg text-gray-400">
@@ -173,10 +170,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 </MenuButton>
                 <MenuButton
                     on:click=add_affix
-                    disabled=Signal::derive({
-                        let prefix_price = prefix_price.clone();
-                        move || prefix_price().is_none()
-                    })
+                    disabled=Signal::derive({ move || prefix_price().is_none() })
                 >
                     <div class="w-full flex justify-center items-center gap-1 text-lg text-gray-400">
                         "Add" <span class="text-white font-bold">"Prefix"</span>
@@ -194,10 +188,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 </MenuButton>
                 <MenuButton
                     on:click=add_affix
-                    disabled=Signal::derive({
-                        let suffix_price = suffix_price.clone();
-                        move || suffix_price().is_none()
-                    })
+                    disabled=Signal::derive({ move || suffix_price().is_none() })
                 >
                     <div class="w-full flex justify-center items-center gap-1 text-lg text-gray-400">
                         "Add" <span class="text-white font-bold">"Suffix"</span>

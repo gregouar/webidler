@@ -353,68 +353,62 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     let do_buy = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| match selected_item.get() {
-            SelectedItem::InMarket(item) => {
-                spawn_local({
-                    async move {
-                        match backend
-                            .buy_market_item(
-                                &auth_context.token(),
-                                &BuyMarketItemRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                },
-                            )
-                            .await
-                        {
-                            Ok(response) => {
-                                town_context.inventory.set(response.inventory);
-                                town_context.character.write().resource_gems =
-                                    response.resource_gems;
-                                selected_item.set(SelectedItem::Removed(item.index));
-                            }
-                            Err(e) => show_toast(
-                                toaster,
-                                format!("Failed to buy item: {e}"),
-                                ToastVariant::Error,
-                            ),
+        move |_| if let SelectedItem::InMarket(item) = selected_item.get() {
+            spawn_local({
+                async move {
+                    match backend
+                        .buy_market_item(
+                            &auth_context.token(),
+                            &BuyMarketItemRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                            },
+                        )
+                        .await
+                    {
+                        Ok(response) => {
+                            town_context.inventory.set(response.inventory);
+                            town_context.character.write().resource_gems =
+                                response.resource_gems;
+                            selected_item.set(SelectedItem::Removed(item.index));
                         }
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("Failed to buy item: {e}"),
+                            ToastVariant::Error,
+                        ),
                     }
-                });
-            }
-            _ => {}
+                }
+            });
         }
     };
 
     let do_reject = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| match selected_item.get() {
-            SelectedItem::InMarket(item) => {
-                spawn_local({
-                    async move {
-                        match backend
-                            .reject_market_item(
-                                &auth_context.token(),
-                                &RejectMarketItemRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                },
-                            )
-                            .await
-                        {
-                            Ok(_) => {
-                                selected_item.set(SelectedItem::Removed(item.index));
-                            }
-                            Err(e) => show_toast(
-                                toaster,
-                                format!("Failed to reject: {e}"),
-                                ToastVariant::Error,
-                            ),
+        move |_| if let SelectedItem::InMarket(item) = selected_item.get() {
+            spawn_local({
+                async move {
+                    match backend
+                        .reject_market_item(
+                            &auth_context.token(),
+                            &RejectMarketItemRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                            },
+                        )
+                        .await
+                    {
+                        Ok(_) => {
+                            selected_item.set(SelectedItem::Removed(item.index));
                         }
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("Failed to reject: {e}"),
+                            ToastVariant::Error,
+                        ),
                     }
-                });
-            }
-            _ => {}
+                }
+            });
         }
     };
 
@@ -489,38 +483,35 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     let do_sell = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| match selected_item.get() {
-            SelectedItem::InMarket(item) => {
-                let recipient_name = recipient_name.get().unwrap_or_default();
-                let price = price.get().unwrap().into_inner();
-                spawn_local({
-                    async move {
-                        match backend
-                            .sell_market_item(
-                                &auth_context.token(),
-                                &SellMarketItemRequest {
-                                    character_id,
-                                    recipient_name,
-                                    item_index: item.index,
-                                    price,
-                                },
-                            )
-                            .await
-                        {
-                            Ok(response) => {
-                                town_context.inventory.set(response.inventory);
-                                selected_item.set(SelectedItem::Removed(item.index));
-                            }
-                            Err(e) => show_toast(
-                                toaster,
-                                format!("Failed to list item: {e}"),
-                                ToastVariant::Error,
-                            ),
+        move |_| if let SelectedItem::InMarket(item) = selected_item.get() {
+            let recipient_name = recipient_name.get().unwrap_or_default();
+            let price = price.get().unwrap().into_inner();
+            spawn_local({
+                async move {
+                    match backend
+                        .sell_market_item(
+                            &auth_context.token(),
+                            &SellMarketItemRequest {
+                                character_id,
+                                recipient_name,
+                                item_index: item.index,
+                                price,
+                            },
+                        )
+                        .await
+                    {
+                        Ok(response) => {
+                            town_context.inventory.set(response.inventory);
+                            selected_item.set(SelectedItem::Removed(item.index));
                         }
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("Failed to list item: {e}"),
+                            ToastVariant::Error,
+                        ),
                     }
-                });
-            }
-            _ => {}
+                }
+            });
         }
     };
 
@@ -624,71 +615,65 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     let do_edit = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| match selected_item.get() {
-            SelectedItem::InMarket(item) => {
-                let price = price.get().unwrap().into_inner();
-                spawn_local({
-                    async move {
-                        match backend
-                            .edit_market_item(
-                                &auth_context.token(),
-                                &EditMarketItemRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                    price,
-                                },
-                            )
-                            .await
-                        {
-                            Ok(_) => {
-                                // To trigger full refresh
-                                selected_item.set(SelectedItem::None);
-                            }
-                            Err(e) => show_toast(
-                                toaster,
-                                format!("Failed to edit listing: {e}"),
-                                ToastVariant::Error,
-                            ),
+        move |_| if let SelectedItem::InMarket(item) = selected_item.get() {
+            let price = price.get().unwrap().into_inner();
+            spawn_local({
+                async move {
+                    match backend
+                        .edit_market_item(
+                            &auth_context.token(),
+                            &EditMarketItemRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                                price,
+                            },
+                        )
+                        .await
+                    {
+                        Ok(_) => {
+                            // To trigger full refresh
+                            selected_item.set(SelectedItem::None);
                         }
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("Failed to edit listing: {e}"),
+                            ToastVariant::Error,
+                        ),
                     }
-                });
-            }
-            _ => {}
+                }
+            });
         }
     };
 
     let do_remove = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |_| match selected_item.get() {
-            SelectedItem::InMarket(item) => {
-                spawn_local({
-                    async move {
-                        match backend
-                            .buy_market_item(
-                                &auth_context.token(),
-                                &BuyMarketItemRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                },
-                            )
-                            .await
-                        {
-                            Ok(response) => {
-                                town_context.inventory.set(response.inventory);
-                                town_context.character.write().resource_gems =
-                                    response.resource_gems;
-                                selected_item.set(SelectedItem::Removed(item.index));
-                            }
-                            Err(e) => show_toast(
-                                toaster,
-                                format!("Failed to remove listing: {e}"),
-                                ToastVariant::Error,
-                            ),
+        move |_| if let SelectedItem::InMarket(item) = selected_item.get() {
+            spawn_local({
+                async move {
+                    match backend
+                        .buy_market_item(
+                            &auth_context.token(),
+                            &BuyMarketItemRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                            },
+                        )
+                        .await
+                    {
+                        Ok(response) => {
+                            town_context.inventory.set(response.inventory);
+                            town_context.character.write().resource_gems =
+                                response.resource_gems;
+                            selected_item.set(SelectedItem::Removed(item.index));
                         }
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("Failed to remove listing: {e}"),
+                            ToastVariant::Error,
+                        ),
                     }
-                });
-            }
-            _ => {}
+                }
+            });
         }
     };
 
