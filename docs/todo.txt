@@ -1,8 +1,14 @@
 Next things to do:
 
+- forge
+- item quality (up to 25% base item stats upgrade, 0.5% per area level above min) 
+
 - failure chances stat effect
 - market notification on sold item
 - spider boss & minions
+
+- conductive stun: storm damage is lucky on stunned enemy ?
+- intense toxins: double poison damage, half duration
 
 - dual wield
 - last login, activity log, etc
