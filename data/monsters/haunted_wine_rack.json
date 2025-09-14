@@ -24,8 +24,8 @@
             },
             {
               "ApplyStatus": {
-                "min_duration": 2,
-                "max_duration": 2,
+                "min_duration": 3,
+                "max_duration": 3,
                 "statuses": [
                   {
                     "status_type": {

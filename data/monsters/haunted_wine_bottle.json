@@ -13,11 +13,25 @@
         {
           "effects": [
             {
+              "ApplyStatus": {
+                "min_duration": 5,
+                "max_duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Poison" }
+                    },
+                    "min_value": 1,
+                    "max_value": 1
+                  }
+                ]
+              }
+            },
+            {
               "FlatDamage": {
                 "damage": {
                   "Physical": [1, 2],
-                  "Fire": [1, 2],
-                  "Poison": [1, 2]
+                  "Fire": [1, 2]
                 }
               }
             }
