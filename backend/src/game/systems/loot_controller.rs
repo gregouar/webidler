@@ -139,7 +139,7 @@ fn item_score(player_controller: &PlayerController, item: &ItemSpecs) -> usize {
     }
 
     score += match item.modifiers.rarity {
-        ItemRarity::Normal | ItemRarity::Magic | ItemRarity::Rare => 0,
+        ItemRarity::Normal | ItemRarity::Magic | ItemRarity::Rare | ItemRarity::Masterwork => 0,
         ItemRarity::Unique => 1_500_000,
     };
 

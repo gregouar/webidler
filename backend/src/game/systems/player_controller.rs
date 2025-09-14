@@ -292,6 +292,7 @@ pub fn sell_item(
             ItemRarity::Magic => 2.0,
             ItemRarity::Rare => 4.0,
             ItemRarity::Unique => 8.0,
+            ItemRarity::Masterwork => 8.0,
         } * player_specs.gold_find
             * increase_factors::exponential(item_specs.modifiers.level, MONSTER_INCREASE_FACTOR);
 }

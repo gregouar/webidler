@@ -1,3 +1,4 @@
+pub const MAX_AFFIXES: usize = 5;
 pub const PREFIX_PRICE_FACTOR: f64 = 2.0;
 pub const SUFFIX_PRICE_FACTOR: f64 = 2.0;
 

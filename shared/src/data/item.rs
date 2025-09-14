@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::trigger::TriggerSpecs;
+use crate::data::{item_affix::AffixType, trigger::TriggerSpecs};
 
 pub use super::skill::{SkillRange, SkillShape};
 use super::{
@@ -31,6 +31,7 @@ pub enum ItemRarity {
     Normal,
     Magic,
     Rare,
+    Masterwork,
     Unique,
 }
 
@@ -160,5 +161,26 @@ impl ItemModifiers {
                     .or_default() += effect.stat_effect.value;
                 effects_map
             })
+    }
+
+    pub fn count_affixes(&self, affix_type: AffixType) -> usize {
+        self.affixes
+            .iter()
+            .filter(|affix| affix_type == affix.affix_type)
+            .count()
+    }
+
+    pub fn count_nonunique_affixes(&self) -> usize {
+        self.affixes
+            .iter()
+            .filter(|affix| affix.affix_type != AffixType::Unique)
+            .count()
+    }
+
+    pub fn get_families(&self) -> HashSet<String> {
+        self.affixes
+            .iter()
+            .map(|affix| affix.family.clone())
+            .collect()
     }
 }
