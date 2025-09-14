@@ -30,7 +30,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
             <div class="w-full">
                 <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col">
                     <div class="px-4 relative z-10 flex items-center justify-between">
-                        <PanelTitle>"Forge"</PanelTitle>
+                        <PanelTitle class:mb-2>"Forge"</PanelTitle>
 
                         <div class="flex-1"></div>
 
