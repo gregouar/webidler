@@ -6,13 +6,13 @@ use shared::{
     http::{
         client::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BuyMarketItemRequest,
-            CreateCharacterRequest, EditMarketItemRequest, ForgeItemRequest,
+            CreateCharacterRequest, EditMarketItemRequest, ForgeAddAffixRequest,
             RejectMarketItemRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BuyMarketItemResponse,
             CreateCharacterResponse, DeleteCharacterResponse, EditMarketItemResponse,
-            ErrorResponse, ForgeItemResponse, GetAreasResponse, GetCharacterDetailsResponse,
+            ErrorResponse, ForgeAddAffixResponse, GetAreasResponse, GetCharacterDetailsResponse,
             GetPassivesResponse, GetSkillsResponse, GetUserCharactersResponse, GetUserResponse,
             LeaderboardResponse, PlayersCountResponse, RejectMarketItemResponse,
             SellMarketItemResponse, SignInResponse, SignUpResponse,
@@ -195,12 +195,12 @@ impl BackendClient {
 
     // Forge
 
-    pub async fn forge_item(
+    pub async fn forge_add_affix(
         &self,
         token: &str,
-        request: &ForgeItemRequest,
-    ) -> Result<ForgeItemResponse, BackendError> {
-        self.post_auth("forge", token, request).await
+        request: &ForgeAddAffixRequest,
+    ) -> Result<ForgeAddAffixResponse, BackendError> {
+        self.post_auth("forge/add_affix", token, request).await
     }
 
     // Protected

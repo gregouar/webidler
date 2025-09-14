@@ -2,7 +2,7 @@ use chrono::Utc;
 use leptos::{prelude::*, task::spawn_local};
 use shared::{
     data::{forge, item::ItemRarity, item_affix::AffixType},
-    http::client::ForgeItemRequest,
+    http::client::ForgeAddAffixRequest,
 };
 use std::sync::Arc;
 
@@ -64,9 +64,8 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             town_context.inventory.with(|inventory| {
                 inventory
                     .equipped_items()
-                    .enumerate()
-                    .map(|(index, (_, item))| SelectedMarketItem {
-                        index,
+                    .map(|(slot, item)| SelectedMarketItem {
+                        index: slot.into(),
                         owner_id: town_context.character.read_untracked().character_id,
                         owner_name: town_context.character.read_untracked().name.clone(),
                         recipient: Some((
@@ -114,9 +113,9 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 spawn_local({
                     async move {
                         match backend
-                            .forge_item(
+                            .forge_add_affix(
                                 &auth_context.token(),
-                                &ForgeItemRequest {
+                                &ForgeAddAffixRequest {
                                     character_id,
                                     item_index: item.index as u32,
                                     affix_type,

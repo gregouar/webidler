@@ -48,6 +48,43 @@ pub enum ItemSlot {
     Weapon,
 }
 
+impl TryFrom<usize> for ItemSlot {
+    type Error = anyhow::Error;
+
+    fn try_from(value: usize) -> Result<Self, Self::Error> {
+        use ItemSlot::*;
+        Ok(match value {
+            0 => Accessory,
+            1 => Amulet,
+            2 => Body,
+            3 => Boots,
+            4 => Gloves,
+            5 => Helmet,
+            6 => Ring,
+            7 => Shield,
+            8 => Weapon,
+            _ => return Err(anyhow::anyhow!("invalid slot")),
+        })
+    }
+}
+
+impl From<ItemSlot> for usize {
+    fn from(value: ItemSlot) -> Self {
+        use ItemSlot::*;
+        match value {
+            Accessory => 0,
+            Amulet => 1,
+            Body => 2,
+            Boots => 3,
+            Gloves => 4,
+            Helmet => 5,
+            Ring => 6,
+            Shield => 7,
+            Weapon => 8,
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter)]
 // TODO: add others
 pub enum ItemCategory {

@@ -77,7 +77,7 @@ pub struct RejectMarketItemRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ForgeItemRequest {
+pub struct ForgeAddAffixRequest {
     pub character_id: UserCharacterId,
     pub item_index: u32,
     pub affix_type: Option<AffixType>,

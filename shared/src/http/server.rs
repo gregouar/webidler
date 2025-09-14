@@ -137,7 +137,7 @@ pub struct RejectMarketItemResponse {}
 // Forge
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ForgeItemResponse {
+pub struct ForgeAddAffixResponse {
     pub resource_gems: f64,
     pub inventory: PlayerInventory,
 }
