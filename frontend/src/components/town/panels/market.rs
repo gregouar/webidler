@@ -205,17 +205,12 @@ fn MarketBrowser(
 
     let extend_list = RwSignal::new(0u32);
     let reached_end_of_list = RwSignal::new(false);
-    let has_more = RwSignal::new(true);
+    let has_more = RwSignal::new(false);
 
     let refresh_list = move || {
         items_list.write().drain(..);
         extend_list.set(0);
     };
-
-    Effect::new(move || {
-        let _ = filters.read();
-        refresh_list()
-    });
 
     Effect::new(move || {
         selected_item.with(|selected_item| match selected_item {
@@ -232,12 +227,6 @@ fn MarketBrowser(
         })
     });
 
-    // Effect::new(move || {
-    //     if selected_item.read().is_none() {
-    //         refresh_list();
-    //     }
-    // });
-
     Effect::new(move || {
         if reached_end_of_list.get() && has_more.get_untracked() {
             (*extend_list.write()) += items_per_page.into_inner() as u32;
@@ -249,9 +238,12 @@ fn MarketBrowser(
         let town_context = expect_context::<TownContext>();
 
         move || {
-            let character_id = town_context.character.read().character_id;
-            let skip = extend_list.get();
-            let filters = filters.get();
+            let character_id = town_context.character.read_untracked().character_id;
+            let skip = extend_list
+                .get()
+                .saturating_sub(items_per_page.into_inner() as u32);
+            let filters = filters.get_untracked();
+
             spawn_local(async move {
                 let response = backend
                     .browse_market_items(&BrowseMarketItemsRequest {
