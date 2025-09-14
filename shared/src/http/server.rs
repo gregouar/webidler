@@ -133,3 +133,11 @@ pub struct BuyMarketItemResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RejectMarketItemResponse {}
+
+// Forge
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeItemResponse {
+    pub resource_gems: f64,
+    pub inventory: PlayerInventory,
+}

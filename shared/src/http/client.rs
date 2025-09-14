@@ -1,7 +1,10 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    data::{market::MarketFilters, passive::PassivesTreeAscension, user::UserCharacterId},
+    data::{
+        item_affix::AffixType, market::MarketFilters, passive::PassivesTreeAscension,
+        user::UserCharacterId,
+    },
     types::{AssetName, Email, PaginationLimit, Password, Username},
 };
 
