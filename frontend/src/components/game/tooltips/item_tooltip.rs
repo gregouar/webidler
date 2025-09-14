@@ -92,6 +92,7 @@ pub fn ItemTooltipContent(
             <hr class="border-t border-gray-700" />
             <ul class="list-none space-y-1">
                 <ItemSlotTooltip item_specs=item_specs.clone() />
+                <QualityTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
             </ul>
@@ -318,4 +319,16 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     };
 
     view! { <li class="text-gray-400 text-xs xl:text-sm leading-snug">{item_slot}</li> }
+}
+
+#[component]
+pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    view! {
+        <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+            "Quality: "
+            <span class="text-white font-semibold">
+                {format!("+{:.0}%", item_specs.modifiers.quality)}
+            </span>
+        </li>
+    }
 }

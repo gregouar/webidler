@@ -9,15 +9,18 @@ use shared::data::{
 };
 
 use crate::game::{
-    data::items_store::{ItemAdjectivesTable, ItemNounsTable},
-    utils::rng,
-};
-use crate::game::{
     data::{
         items_store::{ItemAffixesTable, ItemsStore},
         loot_table::{LootTable, LootTableEntry, RarityWeights},
     },
     utils::rng::RandomWeighted,
+};
+use crate::{
+    constants::{MAX_ITEM_QUALITY, MAX_ITEM_QUALITY_PER_LEVEL},
+    game::{
+        data::items_store::{ItemAdjectivesTable, ItemNounsTable},
+        utils::rng,
+    },
 };
 
 use super::items_controller;
@@ -74,6 +77,8 @@ pub fn roll_item(
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) -> ItemSpecs {
+    let quality = roll_quality(base.min_area_level, level);
+
     let mut modifiers = ItemModifiers {
         base_item_id,
         name: base.name.clone(),
@@ -82,8 +87,15 @@ pub fn roll_item(
             _ => ItemRarity::Normal,
         },
         level,
+        quality,
         affixes: roll_unique_affixes(&base),
     };
+
+    modifiers
+        .affixes
+        .iter_mut()
+        .flat_map(|affix| affix.effects.iter_mut())
+        .for_each(|effect| effect.stat_effect.value *= 1.0 + quality as f64 * 0.01);
 
     let affixes_amount = match rarity {
         ItemRarity::Magic => rng::random_range(1..=2).unwrap_or(1),
@@ -103,6 +115,12 @@ pub fn roll_item(
     }
 
     items_controller::create_item_specs(base, modifiers, false)
+}
+
+fn roll_quality(min_item_level: AreaLevel, item_level: AreaLevel) -> f32 {
+    (rng::random_range(0..=item_level.saturating_sub(min_item_level)).unwrap_or_default() as f32
+        * MAX_ITEM_QUALITY_PER_LEVEL)
+        .min(MAX_ITEM_QUALITY)
 }
 
 fn roll_base_item(

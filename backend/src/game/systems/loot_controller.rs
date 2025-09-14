@@ -151,7 +151,9 @@ fn item_score(player_controller: &PlayerController, item: &ItemSpecs) -> usize {
         .sum::<usize>()
         * 10_000;
 
-    score += item.base.min_area_level as usize * 1_000;
+    score += item.modifiers.quality as usize * 1_000;
+
+    // score += item.base.min_area_level as usize * 1_000;
 
     score
 }

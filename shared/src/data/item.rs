@@ -147,6 +147,9 @@ pub struct ItemModifiers {
     pub level: AreaLevel,
 
     pub affixes: Vec<ItemAffix>,
+
+    #[serde(default)]
+    pub quality: f32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
