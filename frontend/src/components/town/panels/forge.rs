@@ -1,7 +1,7 @@
 use chrono::Utc;
 use leptos::{prelude::*, task::spawn_local};
 use shared::{
-    data::{forge, item::ItemRarity, item_affix::AffixType},
+    data::{forge, item::ItemRarity, item_affix::AffixType, player::EquippedSlot},
     http::client::ForgeAddAffixRequest,
 };
 use std::sync::Arc;
@@ -124,6 +124,34 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                             .await
                         {
                             Ok(response) => {
+                                let updated_item_specs = if item.index < 9 {
+                                    response
+                                        .inventory
+                                        .equipped
+                                        .get(&(item.index as usize).try_into().unwrap())
+                                        .cloned()
+                                        .and_then(|equipped_item| match equipped_item {
+                                            EquippedSlot::MainSlot(item_specs) => Some(*item_specs),
+                                            _ => None,
+                                        })
+                                } else {
+                                    response
+                                        .inventory
+                                        .bag
+                                        .get(item.index.saturating_sub(9))
+                                        .as_deref()
+                                        .cloned()
+                                };
+
+                                if let Some(updated_item_specs) = updated_item_specs {
+                                    selected_item.try_set(SelectedItem::InMarket(
+                                        SelectedMarketItem {
+                                            item_specs: Arc::new(updated_item_specs),
+                                            ..item
+                                        },
+                                    ));
+                                }
+
                                 town_context.inventory.set(response.inventory);
                                 town_context.character.write().resource_gems =
                                     response.resource_gems;

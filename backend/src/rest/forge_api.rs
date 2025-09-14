@@ -64,7 +64,9 @@ pub async fn post_add_affix(
                 _ => None,
             })
     } else {
-        inventory.bag.get_mut(payload.item_index as usize)
+        inventory
+            .bag
+            .get_mut(payload.item_index.saturating_sub(9) as usize)
     }
     .ok_or(AppError::NotFound)?;
 
