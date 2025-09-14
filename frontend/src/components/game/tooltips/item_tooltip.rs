@@ -212,7 +212,9 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
                 let damage_color = match damage_type {
                     DamageType::Physical => {
-                        if spec_min != base_min || spec_max != base_max {
+                        if spec_min.round() != base_min.round()
+                            || spec_max.round() != base_max.round()
+                        {
                             "text-blue-400"
                         } else {
                             "text-white"
@@ -264,7 +266,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 "text-white"
             };
 
-            let crit_damage_color = if specs.crit_damage != base_specs.crit_damage {
+            let crit_damage_color = if specs.crit_damage.round() != base_specs.crit_damage.round() {
                 "text-blue-400"
             } else {
                 "text-white"

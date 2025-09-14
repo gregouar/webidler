@@ -5,6 +5,7 @@ use leptos::{html::*, prelude::*};
 use shared::data::loot::LootState;
 use shared::messages::client::PickUpLootMessage;
 
+use crate::components::accessibility::AccessibilityContext;
 use crate::components::game::GameContext;
 use crate::components::ui::tooltip::DynamicTooltipPosition;
 use crate::components::websocket::WebsocketContext;
@@ -13,9 +14,30 @@ use super::item_card::ItemCard;
 
 #[component]
 pub fn LootQueue() -> impl IntoView {
-    let conn = expect_context::<WebsocketContext>();
-    let pickup_loot = move |loot_identifier| {
-        conn.send(&PickUpLootMessage { loot_identifier }.into());
+    let conn: WebsocketContext = expect_context();
+    let accessibility: AccessibilityContext = expect_context();
+
+    let pickup_loot = {
+        let conn = conn.clone();
+        move |loot_identifier| {
+            conn.send(
+                &PickUpLootMessage {
+                    loot_identifier,
+                    sell: false,
+                }
+                .into(),
+            );
+        }
+    };
+
+    let sell_loot = move |loot_identifier| {
+        conn.send(
+            &PickUpLootMessage {
+                loot_identifier,
+                sell: true,
+            }
+            .into(),
+        );
     };
 
     let game_context = expect_context::<GameContext>();
@@ -112,6 +134,15 @@ pub fn LootQueue() -> impl IntoView {
                             on:click={
                                 let pickup_loot = pickup_loot.clone();
                                 move |_| pickup_loot(loot.identifier)
+                            }
+
+                            on:contextmenu={
+                                let sell_loot = sell_loot.clone();
+                                move |_| {
+                                    if !accessibility.is_on_mobile() {
+                                        sell_loot(loot.identifier);
+                                    }
+                                }
                             }
                         >
                             <ItemCard
