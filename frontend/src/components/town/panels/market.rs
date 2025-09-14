@@ -19,27 +19,25 @@ use shared::{
     types::{ItemPrice, PaginationLimit, Username},
 };
 
-use crate::{
-    assets::img_asset,
-    components::{
-        auth::AuthContext,
-        backend_client::BackendClient,
-        game::{
-            panels::inventory::loot_filter_category_to_str,
-            tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
-        },
-        town::{
-            items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
-            TownContext,
-        },
-        ui::{
-            buttons::{CloseButton, MenuButton, MenuButtonRed, TabButton},
-            dropdown::{DropdownMenu, SearchableDropdownMenu},
-            input::{Input, ValidatedInput},
-            menu_panel::{MenuPanel, PanelTitle},
-            number::format_datetime,
-            toast::*,
-        },
+use crate::components::{
+    auth::AuthContext,
+    backend_client::BackendClient,
+    game::{
+        panels::inventory::loot_filter_category_to_str,
+        resources::GemsIcon,
+        tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
+    },
+    town::{
+        items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        TownContext,
+    },
+    ui::{
+        buttons::{CloseButton, MenuButton, MenuButtonRed, TabButton},
+        dropdown::{DropdownMenu, SearchableDropdownMenu},
+        input::{Input, ValidatedInput},
+        menu_panel::{MenuPanel, PanelTitle},
+        number::format_datetime,
+        toast::*,
     },
 };
 
@@ -449,12 +447,7 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                                         <span class="text-violet-300 font-bold">
                                             {format!("{:.0}", price)}
                                         </span>
-                                        <img
-                                            draggable="false"
-                                            src=img_asset("ui/gems.webp")
-                                            alt="Gems"
-                                            class="h-[2em] aspect-square mr-1"
-                                        />
+                                        <GemsIcon />
                                     }
                                         .into_any()
                                 } else {
@@ -559,12 +552,7 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                         bind=price
                     />
                     <div class="flex items-center">
-                        <img
-                            draggable="false"
-                            src=img_asset("ui/gems.webp")
-                            alt="Gems"
-                            class="h-[2em] aspect-square mr-1"
-                        />
+                        <GemsIcon />
                     </div>
                 </div>
 
@@ -745,12 +733,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                         bind=price
                     />
                     <div class="flex items-center">
-                        <img
-                            draggable="false"
-                            src=img_asset("ui/gems.webp")
-                            alt="Gems"
-                            class="h-[2em] aspect-square mr-1"
-                        />
+                        <GemsIcon />
                     </div>
                     <MenuButton on:click=do_edit disabled=disabled>
                         "Edit Price"

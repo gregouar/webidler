@@ -7,6 +7,7 @@ pub mod monsters_grid;
 pub mod panels;
 pub mod player_card;
 pub mod portrait;
+pub mod resources;
 pub mod tooltips;
 
 mod game_context;
