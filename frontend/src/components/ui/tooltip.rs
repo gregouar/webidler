@@ -114,14 +114,22 @@ pub fn DynamicTooltip() -> impl IntoView {
 
     on_cleanup(move || handle.remove());
 
+    let handle = window_event_listener(ev::touchcancel, {
+        move |ev| {
+            if ev.touches().length() == 0 {
+                tooltip_context.content.set(None)
+            }
+        }
+    });
+
+    on_cleanup(move || handle.remove());
+
     view! {
         <Show when=show_tooltip>
             {move || {
                 view! {
                     <div
                         class="fixed z-60 pointer-events-none transition-opacity duration-150 p-2 {}"
-
-                        on:touchend=move |_| tooltip_context.content.set(None)
                         node_ref=tooltip_ref
                         style=style
                     >
