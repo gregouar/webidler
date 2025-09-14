@@ -209,12 +209,10 @@ pub fn add_affix(
                 AffixType::Prefix
             } else if suffixes_amount < prefixes_amount {
                 AffixType::Suffix
+            } else if rng::flip_coin() {
+                AffixType::Prefix
             } else {
-                if rng::flip_coin() {
-                    AffixType::Prefix
-                } else {
-                    AffixType::Suffix
-                }
+                AffixType::Suffix
             }
         }
     };

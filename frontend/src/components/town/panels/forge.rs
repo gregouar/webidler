@@ -128,7 +128,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                                     response
                                         .inventory
                                         .equipped
-                                        .get(&(item.index as usize).try_into().unwrap())
+                                        .get(&item.index.try_into().unwrap())
                                         .cloned()
                                         .and_then(|equipped_item| match equipped_item {
                                             EquippedSlot::MainSlot(item_specs) => Some(*item_specs),
@@ -139,7 +139,6 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                                         .inventory
                                         .bag
                                         .get(item.index.saturating_sub(9))
-                                        .as_deref()
                                         .cloned()
                                 };
 
