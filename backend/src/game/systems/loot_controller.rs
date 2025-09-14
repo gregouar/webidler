@@ -16,7 +16,7 @@ pub fn drop_loot(
     drop_loot_impl(player_controller, queued_loot, item_specs, true)
 }
 
-pub fn take_loot(queued_loot: &mut Vec<QueuedLoot>, loot_identifier: u32) -> Option<ItemSpecs> {
+pub fn take_loot(queued_loot: &mut [QueuedLoot], loot_identifier: u32) -> Option<ItemSpecs> {
     if let Some(loot) = queued_loot
         .iter_mut()
         .find(|x| x.identifier == loot_identifier && x.state != LootState::HasDisappeared)

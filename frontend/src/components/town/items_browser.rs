@@ -19,10 +19,7 @@ pub enum SelectedItem {
 
 impl SelectedItem {
     pub fn is_empty(&self) -> bool {
-        match self {
-            SelectedItem::InMarket(_) => false,
-            _ => true,
-        }
+        !matches!(self, SelectedItem::InMarket(_))
     }
 }
 
@@ -68,10 +65,7 @@ pub fn ItemsBrowser(
                     item_specs=item.item_specs.clone()
                     on:click=move |_| selected_item.set(SelectedItem::InMarket(item.clone()))
                     price=item.price
-                    highlight=move || selected_item.with(|selected_item| match selected_item {
-                        SelectedItem::InMarket(selected_market_item) if selected_market_item.index == item.index => true,
-                        _ => false,
-                    })
+                    highlight=move || selected_item.with(|selected_item| matches!(selected_item, SelectedItem::InMarket(selected_market_item) if selected_market_item.index == item.index))
                     special_offer=item.recipient.is_some()
                     rejected=item.rejected
                 />
