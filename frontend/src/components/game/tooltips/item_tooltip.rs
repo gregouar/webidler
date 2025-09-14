@@ -24,7 +24,7 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             "ring-emerald-300",
             "shadow-emerald-600",
         ),
-        ItemRarity::Unique => ("border-amber-700", "ring-amber-600", "shadow-amber-700"),
+        ItemRarity::Unique => ("border-orange-700", "ring-orange-600", "shadow-orange-700"),
     };
 
     view! {
@@ -72,12 +72,12 @@ pub fn ItemTooltipContent(
     view! {
         <div class="space-y-2">
             <strong class=format!("text-base xl:text-lg font-bold {}", name_color)>
-                <ul class="list-none space-y-1 md-2">
+                <ul class="list-none space-y-1 mb-2">
                     <li class="leading-snug whitespace-pre-line">
                         {item_specs.modifiers.name.clone()}
                     </li>
                     {match item_specs.modifiers.rarity {
-                        ItemRarity::Rare => {
+                        ItemRarity::Rare | ItemRarity::Masterwork => {
                             Some(
                                 view! {
                                     <li class="leading-snug">{item_specs.base.name.clone()}</li>
@@ -133,7 +133,7 @@ pub fn name_color_rarity(item_rarity: ItemRarity) -> &'static str {
         ItemRarity::Magic => "text-blue-400",
         ItemRarity::Rare => "text-yellow-400",
         ItemRarity::Masterwork => "text-emerald-400",
-        ItemRarity::Unique => "text-amber-700",
+        ItemRarity::Unique => "text-orange-700",
     }
 }
 

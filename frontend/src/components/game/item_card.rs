@@ -40,10 +40,10 @@ pub fn ItemCard(
             "from-emerald-900/80 to-gray-950",
         ),
         ItemRarity::Unique => (
-            "border-amber-700/70",
-            "ring-amber-600/30",
-            "shadow-amber-700/30",
-            "from-amber-900/80 to-gray-950",
+            "border-orange-700/70",
+            "ring-orange-600/30",
+            "shadow-orange-700/30",
+            "from-orange-900/80 to-gray-950",
         ),
     };
 

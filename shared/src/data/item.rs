@@ -38,14 +38,14 @@ pub enum ItemRarity {
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter)]
 pub enum ItemSlot {
     Accessory,
-    Amulet,
-    Body,
-    Boots,
-    Gloves,
     Helmet,
-    Ring,
-    Shield,
+    Amulet,
     Weapon,
+    Body,
+    Shield,
+    Gloves,
+    Boots,
+    Ring,
 }
 
 impl TryFrom<usize> for ItemSlot {
