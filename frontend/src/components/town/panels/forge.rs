@@ -3,7 +3,11 @@
 // Add suffix/prefix: 2,6,10
 
 use chrono::Utc;
-use leptos::prelude::*;
+use leptos::{prelude::*, task::spawn_local};
+use shared::{
+    data::{forge, item_affix::AffixType},
+    http::client::ForgeItemRequest,
+};
 use std::sync::Arc;
 
 use crate::components::{
@@ -105,7 +109,39 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
-    let add_affix = move |_| {};
+    let do_add_affix = {
+        let character_id = town_context.character.read_untracked().character_id;
+        move |affix_type| {
+            if let SelectedItem::InMarket(item) = selected_item.get() {
+                spawn_local({
+                    async move {
+                        match backend
+                            .forge_item(
+                                &auth_context.token(),
+                                &ForgeItemRequest {
+                                    character_id,
+                                    item_index: item.index as u32,
+                                    affix_type,
+                                },
+                            )
+                            .await
+                        {
+                            Ok(response) => {
+                                town_context.inventory.set(response.inventory);
+                                town_context.character.write().resource_gems =
+                                    response.resource_gems;
+                            }
+                            Err(e) => show_toast(
+                                toaster,
+                                format!("Failed to forge item: {e}"),
+                                ToastVariant::Error,
+                            ),
+                        }
+                    }
+                });
+            }
+        }
+    };
 
     let is_equipped = move || {
         selected_item.with(|selected_item| match selected_item {
@@ -116,21 +152,31 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     let affix_price = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(selected_market_item) => Some(1.0),
+            SelectedItem::InMarket(item) => {
+                forge::affix_price(item.item_specs.modifiers.affixes.len())
+            }
             _ => None,
         })
     };
 
     let prefix_price = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(selected_market_item) => Some(2.0),
+            SelectedItem::InMarket(item) => {
+                // TODO: check not too many prefix
+                forge::affix_price(item.item_specs.modifiers.affixes.len())
+                    .map(|price| price * forge::PREFIX_PRICE_FACTOR)
+            }
             _ => None,
         })
     };
 
     let suffix_price = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(selected_market_item) => Some(2.0),
+            SelectedItem::InMarket(item) => {
+                // TODO: check not too many suffix
+                forge::affix_price(item.item_specs.modifiers.affixes.len())
+                    .map(|price| price * forge::SUFFIX_PRICE_FACTOR)
+            }
             _ => None,
         })
     };
@@ -150,7 +196,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
             <div class="flex flex-col gap-2">
                 <MenuButton
-                    on:click=add_affix
+                    on:click=move |_| do_add_affix(None)
                     disabled=Signal::derive({ move || affix_price().is_none() })
                     class:mb-2
                 >
@@ -169,7 +215,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     </div>
                 </MenuButton>
                 <MenuButton
-                    on:click=add_affix
+                    on:click=move |_| do_add_affix(Some(AffixType::Prefix))
                     disabled=Signal::derive({ move || prefix_price().is_none() })
                 >
                     <div class="w-full flex justify-center items-center gap-1 text-lg text-gray-400">
@@ -187,7 +233,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     </div>
                 </MenuButton>
                 <MenuButton
-                    on:click=add_affix
+                    on:click=move |_| do_add_affix(Some(AffixType::Suffix))
                     disabled=Signal::derive({ move || suffix_price().is_none() })
                 >
                     <div class="w-full flex justify-center items-center gap-1 text-lg text-gray-400">

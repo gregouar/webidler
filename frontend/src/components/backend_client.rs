@@ -6,16 +6,16 @@ use shared::{
     http::{
         client::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BuyMarketItemRequest,
-            CreateCharacterRequest, EditMarketItemRequest, RejectMarketItemRequest,
-            SellMarketItemRequest, SignInRequest, SignUpRequest,
+            CreateCharacterRequest, EditMarketItemRequest, ForgeItemRequest,
+            RejectMarketItemRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BuyMarketItemResponse,
             CreateCharacterResponse, DeleteCharacterResponse, EditMarketItemResponse,
-            ErrorResponse, GetAreasResponse, GetCharacterDetailsResponse, GetPassivesResponse,
-            GetSkillsResponse, GetUserCharactersResponse, GetUserResponse, LeaderboardResponse,
-            PlayersCountResponse, RejectMarketItemResponse, SellMarketItemResponse, SignInResponse,
-            SignUpResponse,
+            ErrorResponse, ForgeItemResponse, GetAreasResponse, GetCharacterDetailsResponse,
+            GetPassivesResponse, GetSkillsResponse, GetUserCharactersResponse, GetUserResponse,
+            LeaderboardResponse, PlayersCountResponse, RejectMarketItemResponse,
+            SellMarketItemResponse, SignInResponse, SignUpResponse,
         },
     },
 };
@@ -191,6 +191,16 @@ impl BackendClient {
         request: &EditMarketItemRequest,
     ) -> Result<EditMarketItemResponse, BackendError> {
         self.post_auth("market/edit", token, request).await
+    }
+
+    // Forge
+
+    pub async fn forge_item(
+        &self,
+        token: &str,
+        request: &ForgeItemRequest,
+    ) -> Result<ForgeItemResponse, BackendError> {
+        self.post_auth("forge", token, request).await
     }
 
     // Protected
