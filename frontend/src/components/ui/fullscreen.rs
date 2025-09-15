@@ -18,32 +18,16 @@ pub fn FullscreenButton() -> impl IntoView {
                             accessibility.go_fullscreen();
                         }
                     }>
-                        // <div
-                        // class="
-                        // flex flex-col items-center justify-center cursor-pointer
-                        // hover:border-amber-400 hover:shadow-lg active:scale-95 active:border-amber-500
-                        // p-1
-                        // mx-1
-                        // transition group
-                        // "
-                        // on:click=move |_| {
-                        // if accessibility.is_fullscreen() {
-                        // accessibility.exit_fullscreen();
-                        // } else {
-                        // accessibility.go_fullscreen();
-                        // }
-                        // }
-                        // >
-                        {match accessibility.is_fullscreen() {
+                        {move || match accessibility.is_fullscreen() {
                             true => {
                                 view! {
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         class="h-[2em] aspect-square text-white group-hover:scale-110 transition-transform"
-                                        fill="none"
+                                        fill="currentColor"
                                         viewBox="0 0 384.97 384.97"
                                         stroke="currentColor"
-                                        stroke-width="2"
+                                        stroke-width="1"
                                     >
                                         <g id="Fullscreen_1_">
                                             <path d="M372.939,216.545c-6.123,0-12.03,5.269-12.03,12.03v132.333H24.061V24.061h132.333c6.388,0,12.03-5.642,12.03-12.03
@@ -65,7 +49,7 @@ pub fn FullscreenButton() -> impl IntoView {
                                         fill="currentColor"
                                         viewBox="0 0 1920 1920"
                                         stroke="currentColor"
-                                        stroke-width="2"
+                                        stroke-width="1"
                                     >
                                         <path
                                             d="M876.612 1043.388v710.171H761.27v-513.28L81.663 1920 0 1838.337l679.72-679.606H166.442v-115.343h710.171ZM1838.394 0l81.548 81.548-679.605 679.72h513.28v115.344h-710.172V166.441h115.344v513.164L1838.394 0Z"
@@ -76,7 +60,6 @@ pub fn FullscreenButton() -> impl IntoView {
                                     .into_any()
                             }
                         }}
-                    // </div>
                     </MenuButton>
                 }
             })}

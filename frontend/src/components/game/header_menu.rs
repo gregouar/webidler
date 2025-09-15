@@ -9,6 +9,7 @@ use crate::components::{
     ui::{
         buttons::{MenuButton, MenuButtonRed},
         confirm::ConfirmContext,
+        fullscreen::FullscreenButton,
     },
     websocket::WebsocketContext,
 };
@@ -63,6 +64,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 <ShardsCounter value=shards />
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
+                <FullscreenButton />
                 <MenuButton on:click=move |_| {
                     game_context.open_inventory.set(!game_context.open_inventory.get());
                     game_context.open_statistics.set(false);
