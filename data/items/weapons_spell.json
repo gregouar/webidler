@@ -146,5 +146,21 @@
       }
     ],
     "min_area_level": 50
+  },
+  "bone_wand": {
+    "name": "Bone Wand",
+    "icon": "items/bone_wand.webp",
+    "slot": "Weapon",
+    "categories": ["SpellWeapon"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "SpellPower",
+        "modifier": "Multiplier",
+        "min": 0.6,
+        "max": 0.6
+      }
+    ],
+    "min_area_level": 90
   }
 }

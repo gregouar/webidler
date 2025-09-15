@@ -19,7 +19,7 @@
     ]
   },
   {
-    "name": "of Fury",
+    "name": "of Rage",
     "family": "inc_attack_damage",
     "tags": ["Attack"],
     "affix_type": "Suffix",
@@ -34,6 +34,25 @@
         "modifier": "Multiplier",
         "min": 0.5,
         "max": 0.74
+      }
+    ]
+  },
+  {
+    "name": "of Fury",
+    "family": "inc_attack_damage",
+    "tags": ["Attack"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Jewelry"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "min": 0.75,
+        "max": 0.99
       }
     ]
   },
@@ -58,7 +77,7 @@
     ]
   },
   {
-    "name": "of Sorcery",
+    "name": "of Wizardry",
     "family": "inc_spell_damage",
     "tags": ["Spell"],
     "affix_type": "Suffix",
@@ -73,6 +92,25 @@
         "modifier": "Multiplier",
         "min": 0.5,
         "max": 0.74
+      }
+    ]
+  },
+  {
+    "name": "of Sorcery",
+    "family": "inc_spell_damage",
+    "tags": ["Spell"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "min": 0.75,
+        "max": 0.99
       }
     ]
   }

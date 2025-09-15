@@ -27,7 +27,7 @@
     ]
   },
   {
-    "name": "of the Spellsinger",
+    "name": "of the Caroler",
     "family": "inc_spell_speed",
     "tags": [
       "Spell",
@@ -53,6 +53,34 @@
       }
     ]
   },
+  {
+    "name": "of the Singer",
+    "family": "inc_spell_speed",
+    "tags": [
+      "Spell",
+      "Speed"
+    ],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": [
+      "SpellWeapon",
+      "Focus"
+    ],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Speed": "Spell"
+        },
+        "modifier": "Multiplier",
+        "min": 0.15,
+        "max": 0.19
+      }
+    ]
+  },
+
   {
     "name": "of Fluctuation",
     "family": "inc_spell_crit_chances",
@@ -81,7 +109,7 @@
     ]
   },
   {
-    "name": "of Instability",
+    "name": "of Mutability",
     "family": "inc_spell_crit_chances",
     "tags": [
       "Spell",
@@ -104,6 +132,33 @@
         "modifier": "Multiplier",
         "min": 0.3,
         "max": 0.39
+      }
+    ]
+  },
+  {
+    "name": "of Instability",
+    "family": "inc_spell_crit_chances",
+    "tags": [
+      "Spell",
+      "Critical"
+    ],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 500,
+    "restrictions": [
+      "SpellWeapon",
+      "Focus"
+    ],
+    "item_level": 1000,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "CritChances": "Spell"
+        },
+        "modifier": "Multiplier",
+        "min": 0.4,
+        "max": 0.49
       }
     ]
   }

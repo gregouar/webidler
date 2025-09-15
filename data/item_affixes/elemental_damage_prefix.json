@@ -45,6 +45,29 @@
       }
     ]
   },
+  {
+    "name": "Molten",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Fire"
+          }
+        },
+        "modifier": "Multiplier",
+        "min": 0.75,
+        "max": 0.99
+      }
+    ]
+  },
 
   {
     "name": "Sick",
@@ -92,6 +115,29 @@
       }
     ]
   },
+  {
+    "name": "Plagued",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Poison"
+          }
+        },
+        "modifier": "Multiplier",
+        "min": 0.75,
+        "max": 0.99
+      }
+    ]
+  },
 
   {
     "name": "Charged",
@@ -136,6 +182,29 @@
         "modifier": "Multiplier",
         "min": 0.5,
         "max": 0.74
+      }
+    ]
+  },
+  {
+    "name": "Conductive",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Storm"
+          }
+        },
+        "modifier": "Multiplier",
+        "min": 0.75,
+        "max": 0.99
       }
     ]
   }

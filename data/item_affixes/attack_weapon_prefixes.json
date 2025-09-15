@@ -37,6 +37,25 @@
       }
     ]
   },
+  {
+    "name": "Severe",
+    "family": "inc_damage",
+    "tags": ["Attack"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Damage": {} },
+        "modifier": "Multiplier",
+        "min": 0.6,
+        "max": 0.79
+      }
+    ]
+  },
 
   {
     "name": "Sharp",
@@ -90,14 +109,40 @@
       }
     ]
   },
+  {
+    "name": "Mighty",
+    "family": "add_physical_damage",
+    "tags": ["Physical", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "min": 3,
+        "max": 5
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "min": 6,
+        "max": 8
+      }
+    ]
+  },
 
   {
-    "name": "Burning",
+    "name": "Smouldering",
     "family": "add_fire_damage",
     "tags": ["Fire", "Attack"],
     "affix_type": "Prefix",
     "tier": 1,
-    "weight": 500,
+    "weight": 1000,
     "restrictions": ["AttackWeapon"],
     "item_level": 1,
     "effects": [
@@ -118,12 +163,12 @@
     ]
   },
   {
-    "name": "Scorching",
+    "name": "Burning",
     "family": "add_fire_damage",
     "tags": ["Fire", "Attack"],
     "affix_type": "Prefix",
     "tier": 2,
-    "weight": 500,
+    "weight": 1000,
     "restrictions": ["AttackWeapon"],
     "item_level": 50,
     "effects": [
@@ -143,15 +188,41 @@
       }
     ]
   },
+  {
+    "name": "Scorching",
+    "family": "add_fire_damage",
+    "tags": ["Fire", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "modifier": "Flat",
+        "min": 4,
+        "max": 7
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "modifier": "Flat",
+        "min": 8,
+        "max": 11
+      }
+    ]
+  },
 
 
   {
-    "name": "Noxious",
+    "name": "Nauseous",
     "family": "add_poison_damage",
     "tags": ["Poison", "Attack"],
     "affix_type": "Prefix",
     "tier": 1,
-    "weight": 500,
+    "weight": 1000,
     "restrictions": ["AttackWeapon"],
     "item_level": 1,
     "effects": [
@@ -172,12 +243,12 @@
     ]
   },
   {
-    "name": "Foul",
+    "name": "Noxious",
     "family": "add_poison_damage",
     "tags": ["Poison", "Attack"],
     "affix_type": "Prefix",
     "tier": 2,
-    "weight": 500,
+    "weight": 1000,
     "restrictions": ["AttackWeapon"],
     "item_level": 50,
     "effects": [
@@ -197,15 +268,41 @@
       }
     ]
   },
+  {
+    "name": "Foul",
+    "family": "add_poison_damage",
+    "tags": ["Poison", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "modifier": "Flat",
+        "min": 2,
+        "max": 3
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "modifier": "Flat",
+        "min": 4,
+        "max": 5
+      }
+    ]
+  },
 
   
   {
-    "name": "Shocking",
+    "name": "Crackling",
     "family": "add_storm_damage",
     "tags": ["Storm", "Attack"],
     "affix_type": "Prefix",
     "tier": 1,
-    "weight": 500,
+    "weight": 1000,
     "restrictions": ["AttackWeapon"],
     "item_level": 1,
     "effects": [
@@ -214,17 +311,17 @@
         "stat": { "MaxDamage": { "damage_type": "Storm" } },
         "modifier": "Flat",
         "min": 4,
-        "max": 8
+        "max": 7
       }
     ]
   },
   {
-    "name": "Electrifying",
+    "name": "Shocking",
     "family": "add_storm_damage",
     "tags": ["Storm", "Attack"],
     "affix_type": "Prefix",
     "tier": 2,
-    "weight": 500,
+    "weight": 1000,
     "restrictions": ["AttackWeapon"],
     "item_level": 50,
     "effects": [
@@ -233,7 +330,26 @@
         "stat": { "MaxDamage": { "damage_type": "Storm" } },
         "modifier": "Flat",
         "min": 8,
-        "max": 13
+        "max": 12
+      }
+    ]
+  },
+  {
+    "name": "Electrifying",
+    "family": "add_storm_damage",
+    "tags": ["Storm", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "modifier": "Flat",
+        "min": 13,
+        "max": 18
       }
     ]
   }

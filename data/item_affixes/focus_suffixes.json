@@ -1,6 +1,6 @@
 [
   {
-    "name": "of Whispering",
+    "name": "of Whispers",
     "family": "inc_status_duration",
     "tags": ["Spell", "Status"],
     "affix_type": "Suffix",
@@ -19,7 +19,7 @@
     ]
   },
   {
-    "name": "of Hexcraft",
+    "name": "of Defamation",
     "family": "inc_status_duration",
     "tags": ["Spell", "Status"],
     "affix_type": "Suffix",
@@ -34,6 +34,25 @@
         "modifier": "Multiplier",
         "min": 0.2,
         "max": 0.29
+      }
+    ]
+  },
+  {
+    "name": "of Hexcraft",
+    "family": "inc_status_duration",
+    "tags": ["Spell", "Status"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Focus"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "StatusDuration": null },
+        "modifier": "Multiplier",
+        "min": 0.3,
+        "max": 0.39
       }
     ]
   }

@@ -14,9 +14,9 @@
       }
     ]
   },
-  "gold_ring": {
-    "name": "Gold Ring",
-    "icon": "items/gold_ring.webp",
+  "silver_ring": {
+    "name": "Silver Ring",
+    "icon": "items/silver_ring.webp",
     "slot": "Ring",
     "categories": ["Jewelry", "Ring"],
     "affixes": [
@@ -29,6 +29,22 @@
       }
     ],
     "min_area_level": 40
+  },
+  "gold_ring": {
+    "name": "Gold Ring",
+    "icon": "items/gold_ring.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "min": 0.6,
+        "max": 0.6
+      }
+    ],
+    "min_area_level": 90
   },
 
   "wooden_beads": {
@@ -117,5 +133,21 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique"
+  },
+  "silver_chain": {
+    "name": "Silver Chain",
+    "icon": "items/silver_chain.webp",
+    "slot": "Amulet",
+    "categories": ["Jewelry", "Amulet"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "min": 0.6,
+        "max": 0.6
+      }
+    ],
+    "min_area_level": 90
   }
 }

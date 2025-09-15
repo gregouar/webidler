@@ -60,6 +60,37 @@
     ]
   },
   {
+    "name": "of Emberward",
+    "family": "add_fire_res",
+    "tags": [
+      "Fire",
+      "Armor"
+    ],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": [
+      "Armor",
+      "Accessory",
+      "Jewelry",
+      "Focus",
+      "Shield"
+    ],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Fire"
+        },
+        "modifier": "Flat",
+        "min": 75,
+        "max": 99
+      }
+    ]
+  },
+
+  {
     "name": "of Venomguard",
     "family": "add_poison_res",
     "tags": [
@@ -120,6 +151,37 @@
     ]
   },
   {
+    "name": "of Venomward",
+    "family": "add_poison_res",
+    "tags": [
+      "Poison",
+      "Armor"
+    ],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": [
+      "Armor",
+      "Accessory",
+      "Jewelry",
+      "Focus",
+      "Shield"
+    ],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Poison"
+        },
+        "modifier": "Flat",
+        "min": 75,
+        "max": 99
+      }
+    ]
+  },
+
+  {
     "name": "of Tempestguard",
     "family": "add_storm_res",
     "tags": [
@@ -176,6 +238,36 @@
         "modifier": "Flat",
         "min": 50,
         "max": 74
+      }
+    ]
+  },
+  {
+    "name": "of Tempestward",
+    "family": "add_storm_res",
+    "tags": [
+      "Storm",
+      "Armor"
+    ],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": [
+      "Armor",
+      "Accessory",
+      "Jewelry",
+      "Focus",
+      "Shield"
+    ],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Storm"
+        },
+        "modifier": "Flat",
+        "min": 75,
+        "max": 99
       }
     ]
   }

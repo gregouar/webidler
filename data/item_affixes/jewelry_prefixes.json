@@ -19,7 +19,7 @@
     ]
   },
   {
-    "name": "Glistening",
+    "name": "Gleaming",
     "family": "inc_gold_2",
     "tags": ["Gold"],
     "affix_type": "Prefix",
@@ -34,6 +34,25 @@
         "modifier": "Multiplier",
         "min": 0.5,
         "max": 0.74
+      }
+    ]
+  },
+  {
+    "name": "Glistening",
+    "family": "inc_gold_2",
+    "tags": ["Gold"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Jewelry"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "min": 0.75,
+        "max": 0.99
       }
     ]
   }

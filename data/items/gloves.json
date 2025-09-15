@@ -135,5 +135,15 @@
       }
     ],
     "min_area_level": 50
+  },
+  "studded_gloves": {
+    "name": "Studded Gloves",
+    "icon": "items/studded_gloves.webp",
+    "slot": "Gloves",
+    "categories": ["Armor", "Gloves"],
+    "armor_specs": {
+      "armor": 30
+    },
+    "min_area_level": 90
   }
 }

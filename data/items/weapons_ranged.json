@@ -18,7 +18,7 @@
   },
   "hunting_bow": {
     "name": "Hunting Bow",
-    "icon": "items/hunting_bow.webp",
+    "icon": "items/longbow.webp",
     "slot": "Weapon",
     "extra_slots": ["Shield"],
     "categories": ["AttackWeapon", "RangedWeapon"],
@@ -113,5 +113,23 @@
       }
     ],
     "min_area_level": 50
+  },
+  "decorated_bow": {
+    "name": "Decorated Bow",
+    "icon": "items/decorated_bow.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "RangedWeapon"],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [11, 15]
+      },
+      "crit_chances": 8,
+      "crit_damage": 100
+    },
+    "min_area_level": 90
   }
 }

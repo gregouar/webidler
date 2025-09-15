@@ -36,5 +36,24 @@
         "max": 0.29
       }
     ]
+  },
+  {
+    "name": "Puissant",
+    "family": "inc_spell_power",
+    "tags": ["Spell"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "SpellPower",
+        "modifier": "Multiplier",
+        "min": 0.3,
+        "max": 0.39
+      }
+    ]
   }
 ]

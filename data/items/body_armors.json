@@ -17,5 +17,15 @@
       "armor": 40
     },
     "min_area_level": 40
+  },
+  "chain_shirt": {
+    "name": "Chain Shirt",
+    "icon": "items/chain_shirt.webp",
+    "slot": "Body",
+    "categories": ["Armor", "Body"],
+    "armor_specs": {
+      "armor": 60
+    },
+    "min_area_level": 90
   }
 }

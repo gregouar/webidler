@@ -19,7 +19,7 @@
     ]
   },
   {
-    "name": "Analytical",
+    "name": "Cognitive",
     "family": "add_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -37,6 +37,26 @@
       }
     ]
   },
+  {
+    "name": "Analytical",
+    "family": "add_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "min": 60,
+        "max": 79
+      }
+    ]
+  },
+
   {
     "name": "Cultivated",
     "family": "inc_mana",
@@ -57,7 +77,7 @@
     ]
   },
   {
-    "name": "Enlightened",
+    "name": "Educated",
     "family": "inc_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -72,6 +92,25 @@
         "modifier": "Multiplier",
         "min": 0.2,
         "max": 0.29
+      }
+    ]
+  },
+  {
+    "name": "Enlightened",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "min": 0.3,
+        "max": 0.39
       }
     ]
   }

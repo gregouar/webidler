@@ -57,5 +57,35 @@
       }
     ],
     "min_area_level": 40
+  },
+  "heavy_cloak": {
+    "name": "Heavy Cloak",
+    "icon": "items/heavy_cloak.webp",
+    "slot": "Accessory",
+    "categories": ["Accessory", "Cloak"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {"Armor":"Fire"},
+        "modifier": "Flat",
+        "min": 50,
+        "max": 50
+      },
+      {
+        "scope": "Global",
+        "stat": {"Armor":"Poison"},
+        "modifier": "Flat",
+        "min": 50,
+        "max": 50
+      },
+      {
+        "scope": "Global",
+        "stat": {"Armor":"Storm"},
+        "modifier": "Flat",
+        "min": 50,
+        "max": 50
+      }
+    ],
+    "min_area_level": 90
   }
 }

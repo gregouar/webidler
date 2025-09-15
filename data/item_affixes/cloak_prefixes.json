@@ -19,7 +19,7 @@
     ]
   },
   {
-    "name": "Swift",
+    "name": "Cunning",
     "family": "inc_attack_speed",
     "tags": ["Attack", "Speed"],
     "affix_type": "Prefix",
@@ -34,6 +34,25 @@
         "modifier": "Multiplier",
         "min": 0.1,
         "max": 0.14
+      }
+    ]
+  },
+  {
+    "name": "Swift",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Cloak"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "min": 0.15,
+        "max": 0.19
       }
     ]
   },
@@ -73,6 +92,25 @@
         "modifier": "Multiplier",
         "min": 0.1,
         "max": 0.14
+      }
+    ]
+  },
+  {
+    "name": "Brisk",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Cloak"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "min": 0.15,
+        "max": 0.19
       }
     ]
   }

@@ -81,5 +81,16 @@
       }
     ],
     "min_area_level": 50
+  },
+  "iron_buckler": {
+    "name": "Iron Buckler",
+    "icon": "items/iron_buckler.webp",
+    "slot": "Shield",
+    "categories": ["Shield"],
+    "armor_specs": {
+      "armor": 75,
+      "block": 19
+    },
+    "min_area_level": 90
   }
 }

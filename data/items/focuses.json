@@ -9,8 +9,8 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "min": 30.0,
-        "max": 30.0
+        "min": 20.0,
+        "max": 20.0
       }
     ]
   },
@@ -24,8 +24,8 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "min": 50.0,
-        "max": 50.0
+        "min": 35.0,
+        "max": 35.0
       }
     ],
     "min_area_level": 40
@@ -42,8 +42,8 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "min": 50.0,
-        "max": 50.0
+        "min": 35.0,
+        "max": 35.0
       },
       {
         "scope": "Global",
@@ -95,5 +95,21 @@
       }
     ],
     "min_area_level": 50
+  },
+  "focus_stone": {
+    "name": "Focus Stone",
+    "icon": "items/focus_stone.webp",
+    "slot": "Shield",
+    "categories": ["Focus"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "min": 50.0,
+        "max": 50.0
+      }
+    ],
+    "min_area_level": 90
   }
 }

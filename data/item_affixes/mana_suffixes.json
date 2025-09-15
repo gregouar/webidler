@@ -36,5 +36,24 @@
         "max": 6
       }
     ]
+  },
+  {
+    "name": "of Stream",
+    "family": "add_mana_regen",
+    "tags": ["Mana"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Armor"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "min": 7,
+        "max": 9
+      }
+    ]
   }
 ]

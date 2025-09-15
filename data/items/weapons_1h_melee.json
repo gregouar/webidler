@@ -154,5 +154,21 @@
       }
     ],
     "min_area_level": 50
+  },
+  "hand_axe": {
+    "name": "Hand Axe",
+    "icon": "items/hand_axe.webp",
+    "slot": "Weapon",
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [6, 10]
+      },
+      "crit_chances": 5,
+      "crit_damage": 100
+    },
+    "min_area_level": 90
   }
 }
