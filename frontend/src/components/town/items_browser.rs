@@ -122,7 +122,7 @@ pub fn ItemRow(
                     view! {
                         <div class="absolute flex bottom-2 right-2 gap-1 items-center">
                             <span class="text-gray-400">"Price:"</span>
-                            <span class="text-violet-300 font-semibold">
+                            <span class="text-fuchsia-300 font-semibold">
                                 {format!("{:.0}", price)}
                             </span>
                             <img

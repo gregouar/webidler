@@ -256,7 +256,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                                 .map(|price| {
                                     view! {
                                         "for "
-                                        <span class="text-violet-300 font-bold">{price}</span>
+                                        <span class="text-fuchsia-300 font-bold">{price}</span>
                                         <GemsIcon />
                                     }
                                 })
@@ -276,7 +276,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                                 .map(|price| {
                                     view! {
                                         "for "
-                                        <span class="text-violet-300 font-bold">{price}</span>
+                                        <span class="text-fuchsia-300 font-bold">{price}</span>
                                         <GemsIcon />
                                     }
                                 })
@@ -296,7 +296,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                                 .map(|price| {
                                     view! {
                                         "for "
-                                        <span class="text-violet-300 font-bold">{price}</span>
+                                        <span class="text-fuchsia-300 font-bold">{price}</span>
                                         <GemsIcon />
                                     }
                                 })

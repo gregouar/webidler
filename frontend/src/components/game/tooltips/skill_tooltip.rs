@@ -66,10 +66,10 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
     view! {
         <div class="
-        max-w-xs p-4 rounded-xl border border-purple-700 ring-2 ring-purple-500 
-        shadow-md shadow-purple-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
+        max-w-xs p-4 rounded-xl border border-violet-700 ring-2 ring-violet-500 
+        shadow-md shadow-violet-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
         ">
-            <strong class="text-base xl:text-lg font-bold text-purple-300">
+            <strong class="text-base xl:text-lg font-bold text-violet-300">
                 {skill_specs.base.name.clone()}
             </strong>
             <hr class="border-t border-gray-700" />
@@ -396,7 +396,7 @@ fn format_min_max(min: f64, max: f64) -> String {
 #[component]
 fn EffectLi(children: Children) -> impl IntoView {
     view! {
-        <li class="text-xs xl:text-sm text-purple-200 leading-snug whitespace-pre-line">
+        <li class="text-xs xl:text-sm text-violet-200 leading-snug whitespace-pre-line">
             {children()}
         </li>
     }

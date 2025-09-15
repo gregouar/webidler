@@ -19,11 +19,7 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         ItemRarity::Normal => ("border-gray-600", "ring-gray-700", "shadow-gray-800"),
         ItemRarity::Magic => ("border-blue-500", "ring-blue-400", "shadow-blue-700"),
         ItemRarity::Rare => ("border-yellow-400", "ring-yellow-300", "shadow-yellow-600"),
-        ItemRarity::Masterwork => (
-            "border-emerald-400",
-            "ring-emerald-300",
-            "shadow-emerald-600",
-        ),
+        ItemRarity::Masterwork => ("border-fuchsia-400", "ring-fuchsia-300", "shadow-fuchsia-600"),
         ItemRarity::Unique => ("border-orange-700", "ring-orange-600", "shadow-orange-700"),
     };
 
@@ -133,7 +129,7 @@ pub fn name_color_rarity(item_rarity: ItemRarity) -> &'static str {
         ItemRarity::Normal => "text-white",
         ItemRarity::Magic => "text-blue-400",
         ItemRarity::Rare => "text-yellow-400",
-        ItemRarity::Masterwork => "text-emerald-400",
+        ItemRarity::Masterwork => "text-fuchsia-400",
         ItemRarity::Unique => "text-orange-700",
     }
 }

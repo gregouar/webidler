@@ -433,14 +433,14 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                                 if price > 0.0 {
                                     view! {
                                         "Price: "
-                                        <span class="text-violet-300 font-bold">
+                                        <span class="text-fuchsia-300 font-bold">
                                             {format!("{:.0}", price)}
                                         </span>
                                         <GemsIcon />
                                     }
                                         .into_any()
                                 } else {
-                                    view! { <span class="text-violet-300 font-bold">"Free"</span> }
+                                    view! { <span class="text-fuchsia-300 font-bold">"Free"</span> }
                                         .into_any()
                                 }
                             })

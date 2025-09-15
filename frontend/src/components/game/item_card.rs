@@ -34,10 +34,10 @@ pub fn ItemCard(
             "from-yellow-900/80 to-gray-950",
         ),
         ItemRarity::Masterwork => (
-            "border-emerald-400/70",
-            "ring-emerald-300/20",
-            "shadow-emerald-600/20",
-            "from-emerald-900/80 to-gray-950",
+            "border-fuchsia-400/70",
+            "ring-fuchsia-300/20",
+            "shadow-fuchsia-600/20",
+            "from-fuchsia-900/80 to-gray-950",
         ),
         ItemRarity::Unique => (
             "border-orange-700/70",

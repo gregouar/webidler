@@ -85,7 +85,7 @@ pub fn GemsIcon() -> impl IntoView {
 pub fn GemsCounter(value: Signal<f64>) -> impl IntoView {
     view! {
         <ResourceCounter
-            class:text-violet-300
+            class:text-fuchsia-300
             icon="ui/gems.webp"
             name="Gems"
             description="To buy items in the market between grinds."
