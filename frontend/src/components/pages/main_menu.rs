@@ -1,5 +1,5 @@
 use codee::string::JsonSerdeCodec;
-use leptos::{html::*, prelude::*, task::spawn_local, web_sys};
+use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::{components::Redirect, hooks::use_navigate};
 use leptos_use::storage;
 
@@ -50,27 +50,6 @@ fn MainMenu() -> impl IntoView {
             || connecting.get()
     });
 
-    let go_fullscreen = move || {
-        let window = web_sys::window().unwrap();
-        let navigator = window.navigator();
-
-        if navigator.user_agent().unwrap_or_default().contains("Mobi") {
-            let document = window.document().unwrap();
-            if let Some(elem) = document.document_element() {
-                let _ = elem.request_fullscreen();
-            }
-        }
-
-        // if let Some(win) = web_sys::window() {
-        //     if let Some(screen) = win.screen() {
-        //         // screen is a getter returning Option<Screen>
-        //         if let Some(orientation) = screen.orientation() {
-        //             let _ = orientation.lock("landscape"); // returns a Promise
-        //         }
-        //     }
-        // }
-    };
-
     let signin = {
         let toaster = expect_context::<Toasts>();
         let backend = expect_context::<BackendClient>();
@@ -94,7 +73,6 @@ fn MainMenu() -> impl IntoView {
                         .await
                     {
                         Ok(response) => {
-                            go_fullscreen();
                             auth_context.sign_in(response.jwt);
                             set_username_storage.set(username.get_untracked());
                             navigate("user-dashboard", Default::default());

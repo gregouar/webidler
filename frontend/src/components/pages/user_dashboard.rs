@@ -17,6 +17,7 @@ use shared::{
 use crate::{
     assets::img_asset,
     components::{
+        accessibility::AccessibilityContext,
         auth::AuthContext,
         backend_client::BackendClient,
         ui::{
@@ -236,8 +237,10 @@ fn CharacterSlot(
         let (_, set_area_id_storage, _) =
             storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
         let character_activity = character.activity.clone();
+        let accessibility: AccessibilityContext = expect_context();
 
         move |_| {
+            accessibility.go_fullscreen();
             set_character_id_storage.set(character.character_id);
             match &character_activity {
                 UserCharacterActivity::Rusting => navigate("/town", Default::default()),

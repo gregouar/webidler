@@ -3,7 +3,7 @@ use leptos::{html::*, prelude::*};
 use crate::components::{
     game::resources::{GemsCounter, ShardsCounter},
     town::TownContext,
-    ui::buttons::MenuButton,
+    ui::{buttons::MenuButton, fullscreen::FullscreenButton},
 };
 
 #[component]
@@ -27,6 +27,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 <ShardsCounter value=shards />
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
+                <FullscreenButton />
                 <MenuButton on:click=move |_| {
                     town_context.open_market.set(!town_context.open_market.get());
                     town_context.open_ascend.set(false);

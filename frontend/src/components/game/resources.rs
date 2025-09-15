@@ -77,7 +77,7 @@ pub fn GemsIcon() -> impl IntoView {
         <ResourceIcon
             icon="ui/gems.webp"
             name="Gems"
-            description="To buy items in the market between grinds."
+            description="To exchange items in the market or craft items at the forge, between grinds."
         />
     }
 }
@@ -88,7 +88,7 @@ pub fn GemsCounter(value: Signal<f64>) -> impl IntoView {
             class:text-fuchsia-300
             icon="ui/gems.webp"
             name="Gems"
-            description="To buy items in the market between grinds."
+            description="To exchange items in the market or craft items at the forge, between grinds."
             value
         />
     }
@@ -101,7 +101,7 @@ pub fn ShardsCounter(value: Signal<f64>) -> impl IntoView {
             class:text-cyan-300
             icon="ui/power_shard.webp"
             name="Power Shards"
-            description="To permanently increase power of passive skills."
+            description="To permanently increase power of passive skills, between grinds."
             value
         />
     }
