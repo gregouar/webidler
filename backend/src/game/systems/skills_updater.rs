@@ -48,7 +48,7 @@ pub fn update_skill_specs<'a>(
     let default_inventory = PlayerInventory::default();
     let inventory = inventory.unwrap_or(&default_inventory);
 
-    let all_effects: Vec<_> = effects
+    let mut all_effects: Vec<_> = effects
         .cloned()
         .chain(compute_skill_upgrade_effects(
             skill_specs,
@@ -56,6 +56,11 @@ pub fn update_skill_specs<'a>(
         ))
         .chain(compute_skill_modifier_effects(skill_specs, inventory))
         .collect();
+
+    all_effects.sort_by_key(|e| match e.modifier {
+        Modifier::Flat => 0,
+        Modifier::Multiplier => 1,
+    });
 
     apply_effects_to_skill_specs(skill_specs, all_effects.iter());
 }
