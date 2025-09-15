@@ -19,7 +19,7 @@ pub fn FullscreenButton() -> impl IntoView {
                         }
                     }>
                         {move || match accessibility.is_fullscreen() {
-                            true => {
+                            false => {
                                 view! {
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +41,7 @@ pub fn FullscreenButton() -> impl IntoView {
                                 }
                                     .into_any()
                             }
-                            false => {
+                            true => {
                                 view! {
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
