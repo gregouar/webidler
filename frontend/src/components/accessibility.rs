@@ -55,7 +55,6 @@ pub fn provide_accessibility_context() {
     let is_fullscreen = RwSignal::new(document.fullscreen_element().is_some());
 
     let closure = web_sys::wasm_bindgen::prelude::Closure::<dyn FnMut(_)>::wrap(Box::new({
-        let is_fullscreen = is_fullscreen.clone();
         move |_ev: web_sys::Event| {
             is_fullscreen.set(document.fullscreen_element().is_some());
         }
