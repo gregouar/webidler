@@ -189,7 +189,7 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
 fn format_effect(effect: SkillEffect) -> impl IntoView {
     let success_chances = if effect.failure_chances > 0.0 {
         Some(format!(
-            "{:.0}% chances to ",
+            "{:.0}% chance to ",
             (1.0 - effect.failure_chances) * 100.0
         ))
     } else {
@@ -223,7 +223,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                 Some(
                     view! {
                         <EffectLi>
-                            "Critical chances: "
+                            "Critical chance: "
                             <span class="font-semibold">{format!("{:.2}%", crit_chances)}</span>
                         </EffectLi>
                         <EffectLi>
