@@ -212,7 +212,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Increased Critical Chances"
+                                label="Increased Critical Chance"
                                 value=move || {
                                     format!(
                                         "+{:.0}%",
@@ -301,7 +301,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Block Chances"
+                                label="Block Chance"
                                 value=move || {
                                     format!(
                                         "{:.0}%",
