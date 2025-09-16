@@ -211,15 +211,12 @@ async fn new_game_instance(
     let game_data = GameInstanceData::init_from_store(
         master_store,
         area_id,
-        None,
         area_level_completed as AreaLevel,
         "default",
         passives_tree_state,
         player_resources,
         player_specs,
         player_inventory,
-        None,
-        None,
     )?;
 
     db::game_instances::save_game_instance_data(
