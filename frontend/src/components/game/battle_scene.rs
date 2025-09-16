@@ -82,7 +82,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
             bg-center bg-repeat-x flex items-center justify-between px-4"
             style=header_background
         >
-            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
+            // <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
 
             <div class="w-12 flex justify-start">
                 <button
@@ -96,23 +96,22 @@ pub fn BattleSceneHeader() -> impl IntoView {
                 </button>
             </div>
 
-            <div class="flex-1 text-center">
-                <p class="relative z-10 text-shadow text-amber-200 text-lg xl:text-2xl font-bold">
+            <div class="flex-1 text-center relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
+                <p class="relative z-10 text-shadow/30 text-amber-200 text-lg xl:text-2xl font-bold">
                     <span class="[font-variant:small-caps]">
                         {move || game_context.area_specs.read().name.clone()}
                     </span>
+                    " — "
                     {move || {
-                        format!(
-                            " — Area Level: {}",
-                            game_context
-                                .area_state
-                                .with(|area_state| {
-                                    area_state
-                                        .area_level
-                                        .saturating_sub(area_state.going_back)
-                                        .max(game_context.area_specs.read().starting_level)
-                                }),
-                        )
+                        game_context
+                            .area_state
+                            .with(|area_state| {
+                                area_state
+                                    .area_level
+                                    .saturating_sub(area_state.going_back)
+                                    .max(game_context.area_specs.read().starting_level)
+                            })
                     }}
                 </p>
             </div>
@@ -143,27 +142,40 @@ pub fn BattleSceneFooter() -> impl IntoView {
         )
     };
 
+    let wave_info = move || {
+        if game_context.area_state.read().is_boss {
+            "Boss".to_string()
+        } else {
+            format!(
+                "Wave: {}/{}",
+                game_context.area_state.read().waves_done,
+                WAVES_PER_AREA_LEVEL,
+            )
+        }
+    };
+
+    let threat_info = move || format!("Threat Level: {}", 3);
+
     view! {
         // h-8 xl:h-16
         <div
-            class="h-8 xl:h-16 relative overflow-hidden z-10 w-full
-            bg-center bg-repeat-x flex items-center justify-center"
+            class="h-8 xl:h-16 overflow-hidden z-10 w-full
+            bg-center bg-repeat-x flex items-center justify-around"
             style=footer_background
         >
-            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
-            <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold">
-                {move || {
-                    if game_context.area_state.read().is_boss {
-                        "Boss".to_string()
-                    } else {
-                        format!(
-                            "Wave: {}/{}",
-                            game_context.area_state.read().waves_done,
-                            WAVES_PER_AREA_LEVEL,
-                        )
-                    }
-                }}
-            </p>
+            <div class="relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
+                <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold">
+                    {wave_info}
+                </p>
+            </div>
+
+            <div class="relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
+                <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold">
+                    {threat_info}
+                </p>
+            </div>
         </div>
     }
 }
