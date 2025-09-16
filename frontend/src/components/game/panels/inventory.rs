@@ -16,10 +16,8 @@ use crate::{
     assets::img_asset,
     components::{
         accessibility::AccessibilityContext,
-        game::{
-            game_context::GameContext, item_card::ItemCard, player_card::PlayerName,
-            tooltips::ItemTooltip,
-        },
+        game::{game_context::GameContext, player_card::PlayerName},
+        shared::{item_card::ItemCard, tooltips::ItemTooltip},
         ui::{
             buttons::{CloseButton, MenuButton},
             confirm::ConfirmContext,

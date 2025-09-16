@@ -11,6 +11,7 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::{BackendClient, BackendError},
+    shared::player_count::PlayerCount,
     town::{
         header_menu::HeaderMenu,
         panels::{ascend::AscendPanel, forge::ForgePanel, market::MarketPanel},
@@ -77,6 +78,7 @@ pub fn TownPage() -> impl IntoView {
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <DynamicTooltip />
+            <PlayerCount />
 
             <Transition fallback=move || {
                 view! { <p class="text-gray-400">"Loading..."</p> }

@@ -22,8 +22,8 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
-    game::{
-        panels::inventory::loot_filter_category_to_str,
+    game::panels::inventory::loot_filter_category_to_str,
+    shared::{
         resources::GemsIcon,
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },

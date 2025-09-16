@@ -4,21 +4,25 @@ use shared::data::item_affix::AffixEffectScope;
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use shared::data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassiveNodeType};
-use shared::messages::client::PurchasePassiveMessage;
+use shared::{
+    data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassiveNodeType},
+    messages::client::PurchasePassiveMessage,
+};
 
-use crate::assets::img_asset;
-use crate::components::game::tooltips::effects_tooltip;
-use crate::components::ui::menu_panel::PanelTitle;
-use crate::components::{
-    game::{game_context::GameContext, tooltips::effects_tooltip::formatted_effects_list},
-    ui::{
-        buttons::CloseButton,
-        menu_panel::MenuPanel,
-        pannable::Pannable,
-        tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
+use crate::{
+    assets::img_asset,
+    components::shared::tooltips::effects_tooltip::formatted_effects_list,
+    components::{
+        game::game_context::GameContext,
+        shared::tooltips::effects_tooltip,
+        ui::{
+            buttons::CloseButton,
+            menu_panel::{MenuPanel, PanelTitle},
+            pannable::Pannable,
+            tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
+        },
+        websocket::WebsocketContext,
     },
-    websocket::WebsocketContext,
 };
 
 #[derive(Debug, Clone, Copy, PartialEq)]

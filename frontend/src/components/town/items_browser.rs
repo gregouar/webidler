@@ -7,7 +7,7 @@ use shared::data::{item::ItemSpecs, user::UserCharacterId};
 
 use crate::{
     assets::img_asset,
-    components::game::{item_card::ItemCard, tooltips::item_tooltip::ItemTooltipContent},
+    components::shared::{item_card::ItemCard, tooltips::item_tooltip::ItemTooltipContent},
 };
 
 #[derive(Clone)]

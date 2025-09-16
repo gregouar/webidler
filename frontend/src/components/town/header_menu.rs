@@ -1,7 +1,7 @@
 use leptos::{html::*, prelude::*};
 
 use crate::components::{
-    game::resources::{GemsCounter, ShardsCounter},
+    shared::resources::{GemsCounter, ShardsCounter},
     town::TownContext,
     ui::{buttons::MenuButton, fullscreen::FullscreenButton},
 };

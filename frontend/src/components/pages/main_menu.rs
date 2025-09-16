@@ -9,6 +9,7 @@ use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
     captcha::*,
+    shared::player_count::PlayerCount,
     ui::{buttons::MenuButton, input::Input, toast::*},
 };
 
@@ -24,17 +25,6 @@ pub fn MainMenuPage() -> impl IntoView {
 
 #[component]
 fn MainMenu() -> impl IntoView {
-    let players_count = LocalResource::new({
-        let backend = expect_context::<BackendClient>();
-        move || async move {
-            backend
-                .get_players_count()
-                .await
-                .map(|r| r.value)
-                .unwrap_or_default()
-        }
-    });
-
     let (get_username_storage, set_username_storage, _) =
         storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
 
@@ -108,10 +98,7 @@ fn MainMenu() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
-            <div class="fixed bottom-2 right-2 bg-black/70 text-amber-300 px-3 py-1 rounded-lg text-sm shadow-lg font-semibold backdrop-blur-sm border border-gray-700 z-50">
-                "Players online: "
-                {move || players_count.get().map(|x| x.take()).unwrap_or_default()}
-            </div>
+            <PlayerCount />
             <div>
                 <h1 class="text-shadow-lg mb-4 text-amber-200 text-4xl  md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
                     "Grind to Rust!"

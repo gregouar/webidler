@@ -2,25 +2,23 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use shared::data::character_status::StatusSpecs;
-use shared::data::item::ItemSlot;
-use shared::data::item_affix::AffixEffectScope;
-use shared::data::passive::StatEffect;
-use shared::data::skill::DamageType;
-use shared::data::skill::ItemStatsSource;
-use shared::data::skill::ModifierEffect;
-use shared::data::skill::ModifierEffectSource;
-use shared::data::skill::RestoreType;
-use shared::data::skill::SkillRepeatTarget;
-use shared::data::skill::SkillTargetsGroup;
-use shared::data::skill::SkillType;
-use shared::data::skill::TargetType;
-use shared::data::skill::{SkillEffect, SkillEffectType, SkillRange, SkillShape, SkillSpecs};
-use shared::data::trigger::TriggerSpecs;
+use shared::data::{
+    character_status::StatusSpecs,
+    item::{ItemSlot, SkillRange, SkillShape},
+    item_affix::AffixEffectScope,
+    passive::StatEffect,
+    skill::{
+        DamageType, ItemStatsSource, ModifierEffect, ModifierEffectSource, RestoreType,
+        SkillEffect, SkillEffectType, SkillRepeatTarget, SkillSpecs, SkillTargetsGroup, SkillType,
+        TargetType,
+    },
+    trigger::TriggerSpecs,
+};
 
-use crate::components::game::tooltips::effects_tooltip;
-use crate::components::game::tooltips::effects_tooltip::formatted_effects_list;
-use crate::components::ui::number::format_number;
+use crate::components::{
+    shared::tooltips::effects_tooltip::{self, formatted_effects_list},
+    ui::number::format_number,
+};
 
 use super::effects_tooltip::optional_damage_type_str;
 

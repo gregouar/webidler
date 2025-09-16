@@ -6,23 +6,24 @@ use shared::messages::client::{
     LevelUpPlayerMessage, LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage,
 };
 
-use crate::assets::img_asset;
-use crate::components::{
-    ui::{
-        buttons::{FancyButton, Toggle},
-        number::format_number,
-        progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
-        toast::*,
-        tooltip::{
-            DynamicTooltipContext, DynamicTooltipPosition, StaticTooltip, StaticTooltipPosition,
+use crate::{
+    assets::img_asset,
+    components::{
+        shared::tooltips::SkillTooltip,
+        ui::{
+            buttons::{FancyButton, Toggle},
+            number::format_number,
+            progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
+            toast::*,
+            tooltip::{
+                DynamicTooltipContext, DynamicTooltipPosition, StaticTooltip, StaticTooltipPosition,
+            },
         },
+        websocket::WebsocketContext,
     },
-    websocket::WebsocketContext,
 };
 
-use super::portrait::CharacterPortrait;
-use super::tooltips::SkillTooltip;
-use super::GameContext;
+use super::{portrait::CharacterPortrait, GameContext};
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {

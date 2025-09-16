@@ -9,7 +9,7 @@ use std::sync::Arc;
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
-    game::resources::GemsIcon,
+    shared::resources::GemsIcon,
     town::{
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
         TownContext,

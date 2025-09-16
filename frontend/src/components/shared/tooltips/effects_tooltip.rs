@@ -10,7 +10,7 @@ use shared::data::{
 };
 
 use crate::components::{
-    game::tooltips::skill_tooltip::{restore_type_str, skill_type_str},
+    shared::tooltips::skill_tooltip::{restore_type_str, skill_type_str},
     ui::number::format_number,
 };
 

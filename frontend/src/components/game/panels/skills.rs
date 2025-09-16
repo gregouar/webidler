@@ -8,7 +8,8 @@ use crate::{
     assets::img_asset,
     components::{
         backend_client::BackendClient,
-        game::{game_context::GameContext, tooltips::SkillTooltip},
+        game::game_context::GameContext,
+        shared::tooltips::SkillTooltip,
         ui::{
             buttons::{CloseButton, FancyButton},
             menu_panel::{MenuPanel, PanelTitle},

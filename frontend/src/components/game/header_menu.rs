@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*};
 use shared::messages::client::ClientMessage;
 
 use crate::components::{
-    game::resources::{GemsCounter, GoldCounter, ShardsCounter},
+    shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
     ui::{
         buttons::{MenuButton, MenuButtonRed},
         confirm::ConfirmContext,

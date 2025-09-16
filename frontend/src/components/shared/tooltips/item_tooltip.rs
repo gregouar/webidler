@@ -9,7 +9,7 @@ use shared::data::{
     skill::DamageType,
 };
 
-use crate::components::game::tooltips::skill_tooltip::format_trigger;
+use super::skill_tooltip::format_trigger;
 
 use super::effects_tooltip;
 
@@ -19,7 +19,11 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         ItemRarity::Normal => ("border-gray-600", "ring-gray-700", "shadow-gray-800"),
         ItemRarity::Magic => ("border-blue-500", "ring-blue-400", "shadow-blue-700"),
         ItemRarity::Rare => ("border-yellow-400", "ring-yellow-300", "shadow-yellow-600"),
-        ItemRarity::Masterwork => ("border-fuchsia-400", "ring-fuchsia-300", "shadow-fuchsia-600"),
+        ItemRarity::Masterwork => (
+            "border-fuchsia-400",
+            "ring-fuchsia-300",
+            "shadow-fuchsia-600",
+        ),
         ItemRarity::Unique => ("border-orange-700", "ring-orange-600", "shadow-orange-700"),
     };
 

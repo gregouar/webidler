@@ -9,7 +9,7 @@ use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::Skill
 
 use crate::assets::img_asset;
 use crate::components::{
-    game::tooltips::SkillTooltip,
+    shared::tooltips::SkillTooltip,
     ui::{
         number::format_number,
         progress_bars::{CircularProgressBar, HorizontalProgressBar},

@@ -2,15 +2,12 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use shared::data::loot::LootState;
-use shared::messages::client::PickUpLootMessage;
+use shared::{data::loot::LootState, messages::client::PickUpLootMessage};
 
-use crate::components::accessibility::AccessibilityContext;
-use crate::components::game::GameContext;
-use crate::components::ui::tooltip::DynamicTooltipPosition;
-use crate::components::websocket::WebsocketContext;
-
-use super::item_card::ItemCard;
+use crate::components::{
+    accessibility::AccessibilityContext, game::GameContext, shared::item_card::ItemCard,
+    ui::tooltip::DynamicTooltipPosition, websocket::WebsocketContext,
+};
 
 #[component]
 pub fn LootQueue() -> impl IntoView {
