@@ -68,7 +68,7 @@ pub fn HorizontalProgressBar(
             relative flex w-full
             rounded-lg
             bg-stone-900 border border-neutral-950 
-            shadow-md
+            shadow-[inset_0_0_8px_rgba(0,0,0,0.4)]
             {}
             ",
             class.unwrap_or_default(),
@@ -103,7 +103,7 @@ pub fn VerticalProgressBar(
             flex flex-col flex-nowrap justify-end h-full
             rounded-lg overflow-hidden
             bg-stone-900 border border-neutral-950
-            shadow-md
+            shadow-[inset_0_0_8px_rgba(0,0,0,0.4)]
             ">
             <div
                 class={format!("{bar_color} rounded-lg overflow-hidden -all ease duration-300")}

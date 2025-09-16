@@ -4,6 +4,7 @@ use shared::constants::WAVES_PER_AREA_LEVEL;
 use shared::messages::client::{GoBackLevelMessage, SetAutoProgressMessage};
 
 use crate::assets::img_asset;
+use crate::components::ui::progress_bars::VerticalProgressBar;
 use crate::components::websocket::WebsocketContext;
 
 use super::loot_queue::LootQueue;
@@ -19,7 +20,11 @@ pub fn BattleScene() -> impl IntoView {
                 <PlayerCard />
                 <div class="w-2/3 aspect-[12/8] flex flex-col shadow-xl/30 rounded-md overflow-hidden">
                     <BattleSceneHeader />
-                    <MonstersGrid />
+                    <div class="flex w-full flex-1 min-h-0
+                    bg-stone-800 overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                        <MonstersGrid />
+                        <ThreatMeter />
+                    </div>
                     <LootQueue />
                     <BattleSceneFooter />
                 </div>
@@ -159,6 +164,22 @@ pub fn BattleSceneFooter() -> impl IntoView {
                     }
                 }}
             </p>
+        </div>
+    }
+}
+
+#[component]
+pub fn ThreatMeter() -> impl IntoView {
+    let value = Signal::derive(move || 50.0);
+    view! {
+        <div class="h-full p-1">
+            <VerticalProgressBar
+                class:z-2
+                class:w-4
+                class:xl:w-8
+                value
+                bar_color="bg-gradient-to-l from-yellow-500 to-yellow-700"
+            />
         </div>
     }
 }

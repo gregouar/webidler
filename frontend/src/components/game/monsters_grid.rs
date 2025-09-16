@@ -46,8 +46,6 @@ pub fn MonstersGrid() -> impl IntoView {
         flex-1 min-h-0
         grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2 
         items-center
-        bg-stone-800
-        overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]
         ">
             <style>
                 "
