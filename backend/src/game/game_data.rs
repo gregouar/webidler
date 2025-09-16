@@ -62,10 +62,7 @@ pub struct SavedGameData {
     pub player_inventory: PlayerInventory,
     pub queued_loot: Vec<QueuedLoot>,
     pub game_stats: GameStats,
-
-    #[serde(default)]
     pub last_champion_spawn: AreaLevel,
-    #[serde(default)]
     pub auto_progress: bool,
 }
 
