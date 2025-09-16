@@ -160,7 +160,7 @@ pub fn BattleSceneFooter() -> impl IntoView {
         // h-8 xl:h-16
         <div
             class="h-8 xl:h-16 overflow-hidden z-10 w-full
-            bg-center bg-repeat-x flex items-center justify-around"
+            bg-center bg-repeat-x flex items-center justify-between"
             style=footer_background
         >
             <div class="relative px-8 py-2">
