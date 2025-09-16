@@ -163,16 +163,20 @@ pub fn BattleSceneFooter() -> impl IntoView {
             bg-center bg-repeat-x flex items-center justify-around"
             style=footer_background
         >
-            <div class="relative">
-                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
-                <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold">
+            <div class="relative px-8 py-2">
+                <div class="absolute inset-0 blur-lg
+                bg-gradient-to-r from-transparent via-zinc-950 via-[percentage:10%_90%] to-transparent
+                "></div>
+                <p class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold">
                     {wave_info}
                 </p>
             </div>
 
-            <div class="relative">
-                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
-                <p class="relative text-shadow-sm shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold">
+            <div class="relative px-8 py-2">
+                <div class="absolute inset-0 blur-lg
+                bg-gradient-to-r from-transparent via-zinc-950 via-[percentage:10%_90%] to-transparent
+                "></div>
+                <p class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold">
                     {threat_info}
                 </p>
             </div>
