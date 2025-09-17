@@ -10,6 +10,7 @@
       "name": "Burning Throw",
       "icon": "skills/fireball.svg",
       "cooldown": 2.0,
+      "skill_type": "Spell",
       "targets": [
         {
           "range": "Distance",

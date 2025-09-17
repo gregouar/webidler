@@ -1,7 +1,7 @@
 {
   "name": "Barrel Mimic",
   "portrait": "monsters/barrel_mimic.webp",
-  "max_life": 20,
+  "max_life": 15,
   "power_factor": 3.0,
   "min_initiative": 3.0,
   "max_initiative": 5.0,
