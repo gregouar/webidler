@@ -70,7 +70,7 @@ pub fn LootQueue() -> impl IntoView {
 
     let game_context = expect_context::<GameContext>();
     view! {
-        <div class="relative w-full z-0">
+        <div class="relative w-full z-0 pr-4">
             <style>
                 "
                 @keyframes loot-drop {

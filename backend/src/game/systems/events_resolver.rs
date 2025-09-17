@@ -3,18 +3,25 @@ use std::collections::HashSet;
 use shared::{
     constants::WAVES_PER_AREA_LEVEL,
     data::{
-        area::AreaLevel, character::CharacterId, character_status::StatusSpecs,
+        area::{AreaLevel, ThreatLevel},
+        character::CharacterId,
+        character_status::StatusSpecs,
+        skill::SkillType,
+        stat_effect::{Modifier, StatType},
         trigger::EventTrigger,
     },
 };
 
-use crate::game::{
-    data::{
-        event::{EventsQueue, GameEvent, HitEvent},
-        master_store::MasterStore,
+use crate::{
+    constants::THREAT_EFFECT,
+    game::{
+        data::{
+            event::{EventsQueue, GameEvent, HitEvent},
+            master_store::MasterStore,
+        },
+        game_data::GameInstanceData,
+        systems::{characters_controller, triggers_controller},
     },
-    game_data::GameInstanceData,
-    systems::triggers_controller,
 };
 
 use super::{
@@ -46,6 +53,9 @@ pub async fn resolve_events(
                 game_data,
                 *area_level,
             ),
+            GameEvent::ThreatIncreased(threat_level) => {
+                handle_threat_increased_event(&mut trigger_effects, game_data, *threat_level)
+            }
         }
     }
 
@@ -86,7 +96,7 @@ fn handle_hit_event<'a>(
                 source: hit_event.source,
                 target: hit_event.target,
                 hit_context: Some(hit_event),
-                area_level: game_data.area_state.read().area_level,
+                level: game_data.area_state.read().area_level as usize,
             });
         }
     }
@@ -143,7 +153,7 @@ fn handle_kill_event(
                                     source: CharacterId::Player,
                                     target,
                                     hit_context: None,
-                                    area_level: game_data.area_state.read().area_level,
+                                    level: game_data.area_state.read().area_level as usize,
                                 });
                             }
                         }
@@ -215,6 +225,8 @@ fn handle_wave_completed_event(
     game_data: &mut GameInstanceData,
     area_level: AreaLevel,
 ) {
+    game_data.area_threat.cooldown = 0.0;
+
     let area_state = game_data.area_state.mutate();
 
     if !area_state.is_boss {
@@ -232,7 +244,54 @@ fn handle_wave_completed_event(
                 source: CharacterId::Player,
                 target: CharacterId::Player,
                 hit_context: None,
-                area_level: game_data.area_state.read().area_level,
+                level: area_level as usize,
+            });
+        }
+    }
+}
+
+fn handle_threat_increased_event(
+    trigger_effects: &mut Vec<TriggerContext>,
+    game_data: &mut GameInstanceData,
+    threat_level: ThreatLevel,
+) {
+    for (i, (monster_specs, monster_state)) in game_data
+        .monster_specs
+        .iter()
+        .zip(game_data.monster_states.iter_mut())
+        .enumerate()
+    {
+        characters_controller::apply_status(
+            &mut (
+                CharacterId::Monster(i),
+                (
+                    &monster_specs.character_specs,
+                    &mut monster_state.character_state,
+                ),
+            ),
+            &StatusSpecs::StatModifier {
+                stat: StatType::Damage {
+                    skill_type: None,
+                    damage_type: None,
+                },
+                modifier: Modifier::Multiplier,
+                debuff: false,
+            },
+            SkillType::Spell,
+            THREAT_EFFECT,
+            f64::MAX,
+            true,
+        );
+    }
+
+    for triggered_effects in game_data.player_specs.read().triggers.iter() {
+        if let EventTrigger::OnThreatIncreased = triggered_effects.trigger {
+            trigger_effects.push(TriggerContext {
+                trigger: triggered_effects.clone(),
+                source: CharacterId::Player,
+                target: CharacterId::Player,
+                hit_context: None,
+                level: threat_level as usize,
             });
         }
     }

@@ -20,3 +20,7 @@ pub const MAX_ITEM_QUALITY: f32 = 25.0;
 
 pub const MAX_MARKET_PUBLIC_LISTINGS: i64 = 100;
 pub const MAX_MARKET_PRIVATE_LISTINGS: i64 = 10;
+
+pub const THREAT_COOLDOWN: f32 = 20.0;
+pub const THREAT_BOSS_COOLDOWN: f32 = 60.0;
+pub const THREAT_EFFECT: f64 = 0.5;

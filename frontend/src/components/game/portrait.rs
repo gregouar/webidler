@@ -252,15 +252,15 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
         StatusId::Trigger(trigger_id) => (trigger_id, "Buffed"),
     };
     view! {
-        <div class="relative h-[25%] xl:h-[15%] aspect-square p-1">
+        <div class="relative h-[25%] xl:h-[15%] aspect-square bg-black/40 p-1">
             <img
                 draggable="false"
                 src=img_asset(&icon_uri)
                 alt=alt
-                class="w-full h-full drop-shadow-md bg-white/40 invert"
+                class="w-full h-full drop-shadow-md invert"
             />
             <Show when=move || { stack.get() > 1 }>
-                <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/20 rounded leading-tight px-1 m-1 xl:m-2">
+                <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/50 rounded leading-tight px-1">
                     {move || stack.get().to_string()}
                 </div>
             </Show>

@@ -1,7 +1,7 @@
 use leptos::prelude::*;
 
 use shared::data::{
-    area::{AreaSpecs, AreaState},
+    area::{AreaSpecs, AreaState, AreaThreat},
     game_stats::GameStats,
     item::ItemCategory,
     loot::QueuedLoot,
@@ -16,6 +16,7 @@ pub struct GameContext {
 
     pub area_specs: RwSignal<AreaSpecs>,
     pub area_state: RwSignal<AreaState>,
+    pub area_threat: RwSignal<AreaThreat>,
 
     pub passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     pub passives_tree_state: RwSignal<PassivesTreeState>,
@@ -56,6 +57,7 @@ impl GameContext {
 
             area_specs: RwSignal::new(AreaSpecs::default()),
             area_state: RwSignal::new(AreaState::default()),
+            area_threat: RwSignal::new(AreaThreat::default()),
 
             passives_tree_specs: RwSignal::new(PassivesTreeSpecs::default()),
             passives_tree_state: RwSignal::new(PassivesTreeState::default()),

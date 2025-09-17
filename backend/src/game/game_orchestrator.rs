@@ -1,7 +1,9 @@
 use anyhow::Result;
 use std::time::{Duration, Instant};
 
-use shared::data::{character::CharacterId, player::PlayerState};
+use shared::data::{area::AreaThreat, character::CharacterId, player::PlayerState};
+
+use crate::constants::{THREAT_BOSS_COOLDOWN, THREAT_COOLDOWN};
 
 use super::{
     data::{
@@ -30,6 +32,8 @@ pub async fn tick(
     master_store: &MasterStore,
     elapsed_time: Duration,
 ) -> Result<()> {
+    update_threat(events_queue, game_data, elapsed_time);
+
     // If client input altered the player specs (equip item, ...), we need to recompute the currents specs
     if game_data.player_specs.need_to_sync()
         || game_data.player_inventory.need_to_sync()
@@ -142,6 +146,17 @@ async fn control_entities(
                 game_data.monster_states = monster_states;
                 game_data.area_state.mutate().is_boss = is_boss;
 
+                game_data.area_threat = AreaThreat {
+                    threat_level: 0,
+                    cooldown: if is_boss {
+                        THREAT_BOSS_COOLDOWN
+                    } else {
+                        THREAT_COOLDOWN
+                    },
+                    elapsed_cooldown: 0.0,
+                    just_increased: false,
+                };
+
                 game_data.wave_completed = false;
             }
         } else {
@@ -157,6 +172,27 @@ async fn control_entities(
     }
 
     Ok(())
+}
+
+pub fn update_threat(
+    events_queue: &mut EventsQueue,
+    game_data: &mut GameInstanceData,
+    elapsed_time: Duration,
+) {
+    game_data.area_threat.just_increased = false;
+    if game_data.area_threat.cooldown > 0.0 {
+        game_data.area_threat.elapsed_cooldown +=
+            elapsed_time.as_secs_f32() / game_data.area_threat.cooldown;
+        if game_data.area_threat.elapsed_cooldown >= 1.0 {
+            game_data.area_threat.elapsed_cooldown -= 1.0;
+            game_data.area_threat.threat_level =
+                game_data.area_threat.threat_level.saturating_add(1);
+            game_data.area_threat.just_increased = true;
+            events_queue.register_event(GameEvent::ThreatIncreased(
+                game_data.area_threat.threat_level,
+            ));
+        }
+    }
 }
 
 async fn update_entities(

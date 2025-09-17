@@ -9,7 +9,7 @@ use super::systems::player_controller::PlayerController;
 use super::{data::area::AreaBlueprint, utils::LazySyncer};
 
 use serde::{Deserialize, Serialize};
-use shared::data::area::AreaLevel;
+use shared::data::area::{AreaLevel, AreaThreat};
 use shared::data::game_stats::GameStats;
 use shared::data::passive::{PassivesTreeSpecs, PassivesTreeState};
 use shared::data::{
@@ -24,6 +24,7 @@ pub struct GameInstanceData {
     pub area_id: String,
     pub area_blueprint: AreaBlueprint,
     pub area_state: LazySyncer<AreaState>,
+    pub area_threat: AreaThreat,
 
     pub passives_tree_id: String,
     pub passives_tree_specs: PassivesTreeSpecs,
@@ -86,6 +87,7 @@ impl GameInstanceData {
             area_id,
             area_state: LazySyncer::new(area_state),
             area_blueprint,
+            area_threat: AreaThreat::default(),
 
             passives_tree_id,
             passives_tree_specs,

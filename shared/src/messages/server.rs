@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    area::{AreaSpecs, AreaState},
+    area::{AreaSpecs, AreaState, AreaThreat},
     game_stats::GameStats,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
@@ -52,6 +52,7 @@ pub struct InitGameMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SyncGameStateMessage {
     pub area_state: Option<AreaState>,
+    pub area_threat: AreaThreat,
     pub passives_tree_state: Option<PassivesTreeState>,
     pub player_specs: Option<PlayerSpecs>,
     pub player_inventory: Option<PlayerInventory>,

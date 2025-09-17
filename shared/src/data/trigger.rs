@@ -11,6 +11,7 @@ pub enum EventTrigger {
     OnTakeHit(HitTrigger),
     OnKill(KillTrigger),
     OnWaveCompleted,
+    OnThreatIncreased,
 }
 
 // TODO: replace by simple tag system?

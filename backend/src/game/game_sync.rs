@@ -35,6 +35,7 @@ pub async fn sync_update_game(
         .send(
             &SyncGameStateMessage {
                 area_state: game_data.area_state.sync(),
+                area_threat: game_data.area_threat.clone(),
                 passives_tree_state: game_data.passives_tree_state.sync(),
                 player_specs: game_data.player_specs.sync(),
                 player_inventory: game_data.player_inventory.sync(),

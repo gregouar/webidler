@@ -23,7 +23,7 @@ pub fn FullscreenButton() -> impl IntoView {
                                 view! {
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        class="h-[2em] aspect-square text-white group-hover:scale-110 transition-transform"
+                                        class="h-[1em] aspect-square text-white"
                                         fill="currentColor"
                                         viewBox="0 0 384.97 384.97"
                                         stroke="currentColor"
@@ -45,7 +45,7 @@ pub fn FullscreenButton() -> impl IntoView {
                                 view! {
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        class="h-[2em] aspect-square text-white group-hover:scale-110 transition-transform"
+                                        class="h-[1em] aspect-square text-white"
                                         fill="currentColor"
                                         viewBox="0 0 1920 1920"
                                         stroke="currentColor"
