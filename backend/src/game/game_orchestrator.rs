@@ -85,6 +85,7 @@ async fn control_entities(
     master_store: &MasterStore,
 ) -> Result<()> {
     if !game_data.player_state.character_state.is_alive {
+        game_data.area_threat.cooldown = 0.0;
         if game_data.player_respawn_delay.elapsed() > PLAYER_RESPAWN_PERIOD {
             respawn_player(game_data);
         }
@@ -114,6 +115,7 @@ async fn control_entities(
 
         let wave_completed = monsters_still_alive.is_empty();
         if wave_completed || game_data.area_state.read().going_back > 0 {
+            game_data.area_threat.cooldown = 0.0;
             if wave_completed && !game_data.wave_completed {
                 game_data.wave_completed = true;
                 events_queue.register_event(GameEvent::WaveCompleted(

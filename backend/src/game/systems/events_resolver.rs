@@ -225,8 +225,6 @@ fn handle_wave_completed_event(
     game_data: &mut GameInstanceData,
     area_level: AreaLevel,
 ) {
-    game_data.area_threat.cooldown = 0.0;
-
     let area_state = game_data.area_state.mutate();
 
     if !area_state.is_boss {
