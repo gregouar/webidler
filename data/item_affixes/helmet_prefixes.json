@@ -1,1 +1,59 @@
-[]
+[
+  {
+    "name": "Sneaky",
+    "family": "dec_threat",
+    "tags": ["Stealth"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Helmet"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "min": -0.19,
+        "max": -0.1
+      }
+    ]
+  },
+  {
+    "name": "Furtive",
+    "family": "dec_threat",
+    "tags": ["Stealth"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Helmet"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "min": -0.29,
+        "max": -0.2
+      }
+    ]
+  },
+  {
+    "name": "Stealthy",
+    "family": "dec_threat",
+    "tags": ["Stealth"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Helmet"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "min": -0.39,
+        "max": -0.3
+      }
+    ]
+  }
+]

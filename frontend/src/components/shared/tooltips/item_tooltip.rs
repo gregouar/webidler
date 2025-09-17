@@ -145,7 +145,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         .as_ref()
         .zip(item_specs.base.armor_specs.as_ref())
         .map(|(specs, base_specs)| {
-            let armor_color = if specs.armor != base_specs.armor {
+            let armor_color = if specs.armor.round() != base_specs.armor.round() {
                 "text-blue-400"
             } else {
                 "text-white"

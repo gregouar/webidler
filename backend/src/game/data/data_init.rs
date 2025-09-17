@@ -61,6 +61,7 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             experience_needed: 20.0,
             movement_cooldown: 3.0,
             gold_find: 1.0,
+            threat_gain: 100.0,
             effects: EffectsMap::default(),
             triggers: Vec::new(),
         }

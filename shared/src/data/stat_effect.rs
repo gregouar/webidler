@@ -86,6 +86,7 @@ pub enum StatType {
     Speed(#[serde(default)] Option<SkillType>),
     MovementSpeed,
     GoldFind,
+    ThreatGain,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]

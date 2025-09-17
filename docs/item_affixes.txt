@@ -18,6 +18,7 @@ Head:
         inc_armor
         add_life
         inc_life
+        dec_threat
     suf:
         inc_gold
         add_life_regen

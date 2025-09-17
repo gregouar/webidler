@@ -259,6 +259,7 @@ pub fn format_multiplier_stat_name(stat: StatType) -> String {
             optional_damage_type_str(damage_type),
             skill_type_str(skill_type)
         ),
+        StatType::ThreatGain => "Threat Gain".into(),
     }
 }
 
@@ -358,6 +359,16 @@ pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
             format!("-{}s Movement Cooldown", format_flat_number(value, true))
         }
         StatType::GoldFind => format!("Adds {} Gold per Kill", format_flat_number(value, false)),
+        StatType::ThreatGain => {
+            if value.unwrap_or_default() >= 0.0 {
+                format!("Gain {}% Extra Threat ", format_flat_number(value, false))
+            } else {
+                format!(
+                    "Gain {}% Less Threat",
+                    format_flat_number(value.map(|v| -v), false)
+                )
+            }
+        }
         StatType::LifeOnHit(hit_trigger) => format!(
             "Gain {} Life on {}Hit",
             format_flat_number(value, false),
@@ -381,7 +392,7 @@ pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
                 )
             } else {
                 format!(
-                    "Takes {}% Increased {}{}Damage",
+                    "Take {}% Increased {}{}Damage",
                     format_flat_number(value.map(|v| -v), false),
                     optional_damage_type_str(damage_type),
                     skill_type_str(skill_type)

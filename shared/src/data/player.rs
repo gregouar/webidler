@@ -27,8 +27,9 @@ pub struct PlayerSpecs {
     // Should move to a DerivedPlayerSpecs
     pub movement_cooldown: f32,
     pub gold_find: f64,
-    pub effects: EffectsMap,
+    pub threat_gain: f32,
 
+    pub effects: EffectsMap,
     pub triggers: Vec<TriggeredEffect>,
 }
 

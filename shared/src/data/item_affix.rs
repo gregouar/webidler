@@ -28,6 +28,7 @@ pub enum AffixTag {
     Speed,
     Spell,
     Status,
+    Stealth,
     Storm,
     // TODO: add others
 }

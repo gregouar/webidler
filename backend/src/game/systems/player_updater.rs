@@ -69,6 +69,7 @@ pub fn update_player_specs(
     player_specs.character_specs.mana_regen = 10.0;
     player_specs.character_specs.damage_resistance.clear();
     player_specs.gold_find = 1.0;
+    player_specs.threat_gain = 100.0;
     player_specs.movement_cooldown = 3.0;
     player_specs.triggers.clear();
 
@@ -147,6 +148,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
         match effect.stat {
             StatType::MovementSpeed => player_specs.movement_cooldown.apply_negative_effect(effect),
             StatType::GoldFind => player_specs.gold_find.apply_effect(effect),
+            StatType::ThreatGain => player_specs.threat_gain.apply_effect(effect),
             // TODO: Move the character specs
             StatType::LifeOnHit(hit_trigger) | StatType::ManaOnHit(hit_trigger) => {
                 if let Modifier::Flat = effect.modifier {
