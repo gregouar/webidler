@@ -78,13 +78,13 @@ pub fn PlayerCount() -> impl IntoView {
                                                     view! {
                                                         <div class="flex justify-between items-center px-1 py-0.5 rounded">
                                                             <span class="">
-                                                                {entry.character_name}" ("{entry.username}")"
+                                                                {entry.character_name}<br />"("{entry.username}")"
                                                             </span>
                                                             <span class="text-amber-400">
                                                                 {areas
                                                                     .get(&entry.area_id)
                                                                     .map(|area| area.name.clone())
-                                                                    .unwrap_or("Somewhere".into())} " - "{entry.area_level}
+                                                                    .unwrap_or("Somewhere".into())}<br />{entry.area_level}
                                                             </span>
                                                         </div>
                                                     }
