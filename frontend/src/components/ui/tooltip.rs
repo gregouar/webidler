@@ -232,9 +232,6 @@ where
                 px-2 py-1 xl:px-3 xl:py-1 text-xs xl:text-sm text-white
                 bg-zinc-900 border border-neutral-950
                 rounded shadow-lg whitespace-nowrap z-50 select-none
-                max-w-[60vw] xl:max-w-none
-                text-wrap
-                overflow-auto
                 {} {}
                 ",
                     position_classes,
