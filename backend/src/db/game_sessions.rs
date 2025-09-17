@@ -1,6 +1,6 @@
 use sqlx::FromRow;
 
-use shared::data::user::UserCharacterId;
+use shared::data::user::{UserCharacterId, UserId};
 
 use crate::db::utc_datetime::UtcDateTime;
 
@@ -16,6 +16,17 @@ pub struct SessionEntry {
 
     pub created_at: UtcDateTime,
     pub ended_at: UtcDateTime,
+}
+
+#[derive(Debug, FromRow)]
+pub struct SessionGlimpse {
+    pub user_id: UserId,
+    pub username: Option<String>,
+    pub character_id: UserCharacterId,
+    pub character_name: String,
+    pub created_at: UtcDateTime,
+    pub area_id: String,
+    pub area_level: i32,
 }
 
 /// Return Ok(None) if session already exist
@@ -50,6 +61,34 @@ pub async fn count_active_sessions(db_pool: &DbPool) -> Result<i64, sqlx::Error>
         "#,
     )
     .fetch_one(db_pool)
+    .await
+}
+
+pub async fn glimpse_active_sessions(
+    db_pool: &DbPool,
+    limit: i64,
+) -> Result<Vec<SessionGlimpse>, sqlx::Error> {
+    sqlx::query_as!(
+        SessionGlimpse,
+        r#"
+        SELECT
+            users.user_id as "user_id: UserId",
+            users.username,
+            characters.character_id as "character_id: UserCharacterId",
+            characters.character_name,
+            game_sessions.created_at,
+            area_id,
+            area_level as "area_level: i32"
+        FROM game_sessions
+        INNER JOIN characters ON characters.character_id = game_sessions.character_id
+        INNER JOIN users ON characters.user_id = users.user_id
+        INNER JOIN saved_game_instances ON saved_game_instances.character_id = game_sessions.character_id
+        WHERE ended_at = '9999-01-01 23:59:59'
+        LIMIT $1
+        "#,
+        limit
+    )
+    .fetch_all(db_pool)
     .await
 }
 

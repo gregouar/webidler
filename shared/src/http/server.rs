@@ -26,16 +26,6 @@ impl fmt::Display for ErrorResponse {
 // Stats
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct PlayersCountResponse {
-    pub value: i64,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct LeaderboardResponse {
-    pub entries: Vec<LeaderboardEntry>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct LeaderboardEntry {
     pub user_id: UserId,
     pub username: String,
@@ -46,6 +36,17 @@ pub struct LeaderboardEntry {
     pub area_level: AreaLevel,
     pub created_at: DateTime<Utc>,
     pub comments: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct PlayersCountResponse {
+    pub value: i64,
+    pub glimpse: Vec<LeaderboardEntry>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct LeaderboardResponse {
+    pub entries: Vec<LeaderboardEntry>,
 }
 
 // Users
