@@ -1,5 +1,4 @@
 use shared::data::{
-    area::AreaLevel,
     character::CharacterId,
     passive::StatEffect,
     trigger::{TriggerEffectModifierSource, TriggerTarget, TriggeredEffect},
@@ -21,7 +20,7 @@ pub struct TriggerContext<'a> {
     pub source: CharacterId,
     pub target: CharacterId,
     pub hit_context: Option<&'a HitEvent>,
-    pub area_level: AreaLevel,
+    pub level: usize,
 }
 
 pub fn apply_trigger_effects(
@@ -74,9 +73,7 @@ pub fn apply_trigger_effects(
                                 .as_ref()
                                 .map(|hit| hit.damage.values().sum())
                                 .unwrap_or_default(),
-                            TriggerEffectModifierSource::AreaLevel => {
-                                trigger_context.area_level as f64
-                            }
+                            TriggerEffectModifierSource::AreaLevel => trigger_context.level as f64,
                         },
                 })
                 .collect();

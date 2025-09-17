@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use shared::data::{
-    area::AreaLevel,
+    area::{AreaLevel, ThreatLevel},
     character::CharacterId,
     skill::{DamageType, SkillRange, SkillType},
 };
@@ -12,6 +12,7 @@ pub enum GameEvent {
     Kill { target: CharacterId },
     AreaCompleted(AreaLevel),
     WaveCompleted(AreaLevel),
+    ThreatIncreased(ThreatLevel),
 }
 
 #[derive(Debug, Clone)]

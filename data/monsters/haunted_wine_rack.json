@@ -2,7 +2,7 @@
   "name": " Vintorus, the Corkscrewed Warden",
   "portrait": "monsters/haunted_wine_rack.webp",
   "rarity": "Boss",
-  "max_life": 300,
+  "max_life": 200,
   "size": "Huge",
   "power_factor": 50,
   "max_initiative": 2,

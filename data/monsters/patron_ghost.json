@@ -8,6 +8,7 @@
     {
       "name": "Drunken Cheers",
       "icon": "skills/attack.svg",
+      "skill_type": "Spell",
       "cooldown": 3.0,
       "targets": [
         {

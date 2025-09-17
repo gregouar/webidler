@@ -11,6 +11,8 @@ use crate::{assets::img_asset, components::town::TownContext};
 pub fn TownScene() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
+    let max_area_level = move || town_context.character.read().max_area_level;
+
     view! {
         <div class="w-full grid grid-cols-3 gap-2 xl:gap-4 p-2 xl:p-4 ">
             <PlayerCard class:col-span-1 class:justify-self-end />
@@ -21,10 +23,22 @@ pub fn TownScene() -> impl IntoView {
                 gap-1 xl:gap-2 p-1 xl:p-2 
                 shadow-lg relative flex flex-col">
 
-                    <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between gap-1 xl:gap-2 flex-wrap">
+                    <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between gap-1 xl:gap-2 flex-wrap
+                    justify-between">
                         <span class="text-shadow-md shadow-gray-950 text-amber-200 text-lg xl:text-xl font-semibold">
                             "Choose your grind"
                         </span>
+                        {move || {
+                            (max_area_level() > 0)
+                                .then(|| {
+                                    view! {
+                                        <span class="text-shadow-md shadow-gray-950 text-amber-200 text-base xl:text-lg">
+                                            "Max Area Level: "
+                                            <span class="font-semibold">{max_area_level()}</span>
+                                        </span>
+                                    }
+                                })
+                        }}
                     </div>
 
                     <div class="grid grid-cols-3 xl:grid-cols-5 gap-1 xl:gap-2 p-2 xl:p-4
@@ -103,19 +117,9 @@ pub fn PlayerName() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     let character_name = move || town_context.character.read().name.clone();
-    let max_area_level = move || town_context.character.read().max_area_level;
-
     view! {
         <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl">
             <span class="font-bold">{character_name}</span>
-            " — "
-            {move || {
-                if max_area_level() > 0 {
-                    format!("Max Area Level: {}", max_area_level())
-                } else {
-                    "Newbie".to_string()
-                }
-            }}
         </p>
     }
 }

@@ -126,6 +126,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
 fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     let SyncGameStateMessage {
         area_state,
+        area_threat,
         passives_tree_state,
         player_specs,
         player_inventory,
@@ -140,6 +141,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     if let Some(area_state) = area_state {
         game_context.area_state.set(area_state);
     }
+    game_context.area_threat.set(area_threat);
     if let Some(passives_tree_state) = passives_tree_state {
         game_context.passives_tree_state.set(passives_tree_state);
     }
