@@ -212,7 +212,7 @@ pub fn ThreatMeter() -> impl IntoView {
                 time_remaining
                     .get()
                     .map(|time_remaining| {
-                        format!("Remaining time before next Threat Level: {:.0}s.", time_remaining)
+                        format!("Time remaining before next Threat Level: {:.0}s.", time_remaining)
                     })
                     .unwrap_or("No Threat".to_string())
             }
