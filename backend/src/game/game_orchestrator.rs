@@ -235,9 +235,11 @@ fn respawn_player(game_data: &mut GameInstanceData) {
 
     game_data.player_state = PlayerState::init(game_data.player_specs.read());
 
-    area_controller::decrease_area_level(
-        &game_data.area_blueprint.specs,
-        game_data.area_state.mutate(),
-        1,
-    );
+    if game_data.area_state.read().auto_progress {
+        area_controller::decrease_area_level(
+            &game_data.area_blueprint.specs,
+            game_data.area_state.mutate(),
+            1,
+        );
+    }
 }

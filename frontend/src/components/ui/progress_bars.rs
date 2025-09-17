@@ -86,7 +86,6 @@ pub fn HorizontalProgressBar(
             <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none overflow-hidden">
                 {children()}
             </div>
-
         </div>
     }
 }
@@ -97,19 +96,87 @@ pub fn VerticalProgressBar(
     #[prop(into)] value: Signal<f32>,
     // Bar color, must be of format "bg-XXXX-NNN"
     bar_color: &'static str,
+    // Instant reset
+    #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
 ) -> impl IntoView {
+    let set_value = move || {
+        if reset.get() {
+            0.0
+        } else {
+            value.get().clamp(0.0, 100.0).round()
+        }
+    };
+
+    let transition = move || {
+        if reset.get() {
+            "transition-none"
+        } else {
+            "transition-all ease-linear duration-300 "
+        }
+    };
+
+    // Trick to reset animation by removing it when ended
+    let reset_bar_animation = RwSignal::new("opacity: 0;");
+    Effect::new(move |_| {
+        if reset.get() {
+            reset_bar_animation
+                .set("animation: horizontal-progress-bar-fade-out 0.5s ease-out; animation-fill-mode: both;");
+            set_timeout(
+                move || {
+                    reset_bar_animation.set("opacity: 0;");
+                },
+                std::time::Duration::from_millis(500),
+            );
+        }
+    });
+
     view! {
+        <style>
+            "
+            @keyframes vertical-progress-bar-fade-out {
+                0% {
+                    opacity: 1;
+                    filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  
+                }
+                50% {
+                    filter: drop-shadow( 0 0 25px oklch(92.4% 0.12 95.746));  
+                }
+                100% {
+                    opacity: 0;
+                    filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  
+                }
+            }
+            "
+        </style>
+        // <div class="
+        // flex flex-col flex-nowrap justify-end h-full
+        // rounded-lg overflow-hidden
+        // bg-stone-900 border border-neutral-950
+        // shadow-[inset_0_0_8px_rgba(0,0,0,0.4)]
+        // ">
+        // <div
+        // class={format!("{bar_color} rounded-lg overflow-hidden -all ease duration-300")}
+        // style:height=move || format!("{}%", value.get().clamp(0.0,100.0).round())
+        // style:-webkit-mask="linear-gradient(#fff 0 0)"
+        // ></div>
+        // </div>
+
         <div class="
-            flex flex-col flex-nowrap justify-end h-full
-            rounded-lg overflow-hidden
-            bg-stone-900 border border-neutral-950
-            shadow-[inset_0_0_8px_rgba(0,0,0,0.4)]
-            ">
+        relative flex flex-col justify-end h-full
+        rounded-lg
+        bg-stone-900 border border-neutral-950 
+        shadow-[inset_0_0_8px_rgba(0,0,0,0.4)]
+        ">
             <div
-                class={format!("{bar_color} rounded-lg overflow-hidden -all ease duration-300")}
-                style:height=move || format!("{}%", value.get().clamp(0.0,100.0).round())
-                style:-webkit-mask="linear-gradient(#fff 0 0)"
-            ></div>
+                class=move || format!("flex flex-col {} rounded-lg {}", bar_color, transition())
+                style:height=move || format!("{}%", set_value())
+            >
+                // Fake copy for glow effect on reset
+                <div
+                    class=format!("absolute inset-0 z-1 rounded-lg {}", bar_color)
+                    style=reset_bar_animation
+                ></div>
+            </div>
         </div>
     }
 }
