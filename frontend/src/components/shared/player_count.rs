@@ -61,39 +61,41 @@ pub fn PlayerCount() -> impl IntoView {
                                 .unwrap_or_default();
 
                             view! {
-                                <div class="absolute bottom-full right-0 mb-2 overflow-auto
-                                bg-zinc-900 text-white text-xs rounded-lg border border-zinc-700 shadow-lg p-2 space-y-1 z-50">
-                                    {if glimpse.is_empty() {
-                                        view! {
+                                {if glimpse.is_empty() {
+                                    view! {
+                                        <div class="absolute bottom-full right-0 mb-2 overflow-auto
+                                        bg-zinc-900 text-white text-xs rounded-lg border border-zinc-700 shadow-lg p-2 space-y-1 z-50">
                                             <div class="text-gray-400 text-center">
                                                 "No players grinding"
                                             </div>
-                                        }
-                                            .into_any()
-                                    } else {
-                                        view! {
+                                        </div>
+                                    }
+                                        .into_any()
+                                } else {
+                                    view! {
+                                        <div class="absolute w-full bottom-full right-0 mb-2 overflow-auto
+                                        bg-zinc-900 text-white text-xs rounded-lg border border-zinc-700 shadow-lg p-2 space-y-1 z-50
+                                        grid grid-cols-2">
                                             {glimpse
                                                 .into_iter()
                                                 .map(|entry| {
                                                     view! {
-                                                        <div class="flex justify-between items-center px-1 py-0.5 rounded">
-                                                            <p class="">
-                                                                {entry.character_name}<br />"("{entry.username}")"
-                                                            </p>
-                                                            <p class="text-amber-400">
-                                                                {areas
-                                                                    .get(&entry.area_id)
-                                                                    .map(|area| area.name.clone())
-                                                                    .unwrap_or("Somewhere".into())}<br />{entry.area_level}
-                                                            </p>
-                                                        </div>
+                                                        <p class="">
+                                                            {entry.character_name}<br />"("{entry.username}")"
+                                                        </p>
+                                                        <p class="text-amber-400">
+                                                            {areas
+                                                                .get(&entry.area_id)
+                                                                .map(|area| area.name.clone())
+                                                                .unwrap_or("Somewhere".into())}<br />{entry.area_level}
+                                                        </p>
                                                     }
                                                 })
                                                 .collect::<Vec<_>>()}
-                                        }
-                                            .into_any()
-                                    }}
-                                </div>
+                                        </div>
+                                    }
+                                        .into_any()
+                                }}
                             }
                         })
                 }}
