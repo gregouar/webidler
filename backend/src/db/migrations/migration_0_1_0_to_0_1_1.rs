@@ -143,6 +143,7 @@ fn old_item_specs_to_item_specs(
         weapon_specs: old_item_specs.weapon_specs,
         armor_specs: old_item_specs.armor_specs,
         old_game: old_item_specs.old_game,
+        required_level: 0,
     }
 }
 

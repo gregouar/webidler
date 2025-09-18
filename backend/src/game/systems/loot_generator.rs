@@ -117,8 +117,8 @@ pub fn roll_item(
     items_controller::create_item_specs(base, modifiers, false)
 }
 
-fn roll_quality(min_item_level: AreaLevel, item_level: AreaLevel) -> f32 {
-    (rng::random_range(0..=item_level.saturating_sub(min_item_level)).unwrap_or_default() as f32
+fn roll_quality(min_item_level: AreaLevel, level: AreaLevel) -> f32 {
+    (rng::random_range(0..=level.saturating_sub(min_item_level)).unwrap_or_default() as f32
         * MAX_ITEM_QUALITY_PER_LEVEL)
         .min(MAX_ITEM_QUALITY)
 }
@@ -165,6 +165,7 @@ fn roll_unique_affixes(base_item: &ItemBase) -> Vec<ItemAffix> {
             tags: HashSet::new(),
             affix_type: AffixType::Unique,
             tier: 1,
+            item_level: base_item.min_area_level,
             effects: vec![roll_affix_effect(e)],
         })
         .collect()
@@ -284,6 +285,7 @@ fn roll_affix(
             tags: a.tags.clone(),
             affix_type,
             tier: a.tier,
+            item_level: a.item_level,
             effects: a.effects.iter().map(roll_affix_effect).collect(),
         }
     })

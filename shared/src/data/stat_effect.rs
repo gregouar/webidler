@@ -177,11 +177,7 @@ pub trait ApplyStatModifier {
                     effect.value
                 } else {
                     let div = (1.0 - effect.value).max(0.0);
-                    if div != 0.0 {
-                        effect.value / div
-                    } else {
-                        0.0
-                    }
+                    if div != 0.0 { effect.value / div } else { 0.0 }
                 }
             }
         };

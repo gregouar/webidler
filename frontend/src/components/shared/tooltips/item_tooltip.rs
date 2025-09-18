@@ -106,9 +106,14 @@ pub fn ItemTooltipContent(
                     }
                 })}
             <hr class="border-t border-gray-700" />
-            <p class="text-xs xl:text-sm text-gray-400 leading-snug">
-                "Item Level: " <span class="text-white">{item_specs.modifiers.level}</span>
-            </p>
+            <ul class="list-none space-y-1">
+                <li class="text-blue-400 text-xs xl:text-sm text-gray-400 leading-snug">
+                    "Required Area Level: " <span class="text-white">{item_specs.required_level}</span>
+                </li>
+                <li class="text-blue-400 text-xs xl:text-sm text-gray-400 leading-snug">
+                    "Item Level: " <span class="text-white">{item_specs.modifiers.level}</span>
+                </li>
+            </ul>
             {(!hide_description)
                 .then(|| {
                     item_specs

@@ -11,8 +11,8 @@ use crate::components::{
     backend_client::BackendClient,
     shared::resources::GemsIcon,
     town::{
-        items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
         TownContext,
+        items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
     },
     ui::{
         buttons::{CloseButton, MenuButton},

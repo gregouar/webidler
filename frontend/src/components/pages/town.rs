@@ -13,10 +13,10 @@ use crate::components::{
     backend_client::{BackendClient, BackendError},
     shared::player_count::PlayerCount,
     town::{
+        TownContext,
         header_menu::HeaderMenu,
         panels::{ascend::AscendPanel, forge::ForgePanel, market::MarketPanel},
         town_scene::TownScene,
-        TownContext,
     },
     ui::tooltip::DynamicTooltip,
 };

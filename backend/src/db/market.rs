@@ -74,7 +74,7 @@ pub async fn sell_item<'c>(
         item.modifiers.base_item_id.clone(),
         item.base.name.clone(),
         serde_plain::to_string(&item.modifiers.rarity)?,
-        item.modifiers.level as i32,
+        item.required_level as i32,
         item.armor_specs
             .as_ref()
             .map(|armor_specs| armor_specs.armor),

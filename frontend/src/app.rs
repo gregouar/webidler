@@ -12,7 +12,7 @@ use crate::components::{
     auth::provide_auth_context,
     backend_client::BackendClient,
     pages,
-    ui::confirm::{provide_confirm_context, ConfirmationModal},
+    ui::confirm::{ConfirmationModal, provide_confirm_context},
 };
 
 // TODO: localization https://crates.io/crates/fluent-templates

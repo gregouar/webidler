@@ -162,6 +162,9 @@ pub struct ItemSpecs {
 
     // To indicate it comes from old game and not dropped during current one
     pub old_game: bool,
+
+    #[serde(default)]
+    pub required_level: AreaLevel,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]

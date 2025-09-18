@@ -261,17 +261,17 @@ pub fn CircularProgressBar(
             <style>
                 "
                 @keyframes circular-progress-bar-fade-out {
-                 0% { opacity: 1; filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
-                 50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746)); }
-                 100% { opacity: 0; filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
+                 0% { opacity: 1; /*filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));*/ }
+                 /*50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746)); }*/
+                 100% { opacity: 0; /*filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));*/ }
                 }
                 @keyframes circular-progress-bar-glow {
-                 0% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  }
+                 /*0% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }*/
                  50% { 
-                    filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746));  
+                  /*  filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746));  */
                     transform: scale(1.2); 
                  }
-                 100% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }
+                 /*100% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }*/
                 }
 
                 @property --progress {

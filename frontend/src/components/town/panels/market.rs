@@ -28,8 +28,8 @@ use crate::components::{
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
     town::{
-        items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
         TownContext,
+        items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
     },
     ui::{
         buttons::{CloseButton, MenuButton, MenuButtonRed, TabButton},
@@ -306,7 +306,7 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             selected_item.with(|selected_item| match selected_item {
                 SelectedItem::InMarket(selected_item) => {
                     selected_item.price > town_context.character.read().resource_gems
-                        || selected_item.item_specs.modifiers.level
+                        || selected_item.item_specs.required_level
                             > town_context.character.read().max_area_level
                 }
                 _ => true,
@@ -780,7 +780,7 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                 category,
                 match category {
                     MarketOrderBy::Price => "Lowest Price",
-                    MarketOrderBy::Level => "Lowest Level",
+                    MarketOrderBy::Level => "Lowest Required Level",
                     MarketOrderBy::Damages => "Highest Damages",
                     MarketOrderBy::Armor => "Highest Armor",
                     MarketOrderBy::Block => "Highest Block Chances",
@@ -808,9 +808,9 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
                     <ValidatedInput
                         id="item_level"
-                        label="Max Item Level:"
+                        label="Max Required Level:"
                         input_type="number"
-                        placeholder="Enter max item level"
+                        placeholder="Enter max required level"
                         bind=item_level
                     />
 

@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 use leptos::{html::*, prelude::*};
-use leptos_use::{use_infinite_scroll_with_options, UseInfiniteScrollOptions};
+use leptos_use::{UseInfiniteScrollOptions, use_infinite_scroll_with_options};
 use std::sync::Arc;
 
 use shared::data::{item::ItemSpecs, user::UserCharacterId};

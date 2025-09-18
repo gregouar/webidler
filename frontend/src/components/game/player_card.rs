@@ -23,7 +23,7 @@ use crate::{
     },
 };
 
-use super::{portrait::CharacterPortrait, GameContext};
+use super::{GameContext, portrait::CharacterPortrait};
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {

@@ -36,6 +36,14 @@ pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers, old_game: boo
     // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
 
     ItemSpecs {
+        required_level: base.min_area_level.max(
+            modifiers
+                .affixes
+                .iter()
+                .map(|affix| affix.item_level)
+                .max()
+                .unwrap_or_default(),
+        ).max(1),
         weapon_specs: base.weapon_specs.as_ref().map(|weapon_specs| {
             compute_weapon_specs(weapon_specs.clone(), modifiers.quality, &effects)
         }),

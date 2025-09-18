@@ -78,6 +78,8 @@ pub struct ItemAffix {
     pub tier: u8,
 
     pub effects: Vec<AffixEffect>,
+    #[serde(default)] // For retro compatibility
+    pub item_level: AreaLevel,
     // pub triggers: Vec<TriggeredEffect>, // TODO
 }
 
