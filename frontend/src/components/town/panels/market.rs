@@ -1024,7 +1024,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         (StatType::CritChances(None), Modifier::Multiplier),
         (StatType::CritDamage(None), Modifier::Multiplier),
         (StatType::SpellPower, Modifier::Multiplier),
-        (StatType::StatusPower(None), Modifier::Multiplier),
+        // (StatType::StatusPower(None), Modifier::Multiplier),
         (StatType::StatusDuration(None), Modifier::Multiplier),
         (StatType::Speed(None), Modifier::Multiplier),
         (
