@@ -36,14 +36,17 @@ pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers, old_game: boo
     // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
 
     ItemSpecs {
-        required_level: base.min_area_level.max(
-            modifiers
-                .affixes
-                .iter()
-                .map(|affix| affix.item_level)
-                .max()
-                .unwrap_or_default(),
-        ).max(1),
+        required_level: base
+            .min_area_level
+            .max(
+                modifiers
+                    .affixes
+                    .iter()
+                    .map(|affix| affix.item_level)
+                    .max()
+                    .unwrap_or_default(),
+            )
+            .max(1),
         weapon_specs: base.weapon_specs.as_ref().map(|weapon_specs| {
             compute_weapon_specs(weapon_specs.clone(), modifiers.quality, &effects)
         }),
@@ -170,6 +173,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             crit_damage: weapon_specs.crit_damage,
         },
         failure_chances: 0.0,
+        ignore_stat_effects: Default::default(),
     }];
 
     if let Some(&(min_value, max_value)) = weapon_specs.damage.get(&DamageType::Poison) {
@@ -188,6 +192,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                 }],
             },
             failure_chances: 0.0,
+            ignore_stat_effects: Default::default(),
         });
     }
 

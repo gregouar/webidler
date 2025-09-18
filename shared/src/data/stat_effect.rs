@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::{skill::RestoreType, trigger::HitTrigger};
+use crate::data::{character_status::StatusSpecs, skill::RestoreType, trigger::HitTrigger};
 
 use super::skill::SkillType;
 
@@ -89,6 +89,75 @@ pub enum StatType {
     ThreatGain,
 }
 
+fn compare_options<T: PartialEq>(first: &Option<T>, second: &Option<T>) -> bool {
+    first.is_none() || second.is_none() || first == second
+}
+
+impl StatType {
+    pub fn is_match(&self, stat_type: &StatType) -> bool {
+        if self == stat_type {
+            return true;
+        }
+
+        use StatType::*;
+        match (self, stat_type) {
+            (
+                DamageResistance {
+                    skill_type,
+                    damage_type,
+                },
+                DamageResistance {
+                    skill_type: skill_type_2,
+                    damage_type: damage_type_2,
+                },
+            )
+            | (
+                Damage {
+                    skill_type,
+                    damage_type,
+                },
+                Damage {
+                    skill_type: skill_type_2,
+                    damage_type: damage_type_2,
+                },
+            )
+            | (
+                MinDamage {
+                    skill_type,
+                    damage_type,
+                },
+                MinDamage {
+                    skill_type: skill_type_2,
+                    damage_type: damage_type_2,
+                },
+            )
+            | (
+                MaxDamage {
+                    skill_type,
+                    damage_type,
+                },
+                MaxDamage {
+                    skill_type: skill_type_2,
+                    damage_type: damage_type_2,
+                },
+            ) => {
+                compare_options(skill_type, skill_type_2)
+                    && compare_options(damage_type, damage_type_2)
+            }
+            (Restore(first), Restore(second)) => compare_options(first, second),
+            (CritChances(first), CritChances(second))
+            | (CritDamage(first), CritDamage(second))
+            | (Speed(first), Speed(second)) => compare_options(first, second),
+            (StatusPower(first), StatusPower(second))
+            | (StatusDuration(first), StatusDuration(second)) => match (first, second) {
+                (Some(first), Some(second)) => first.is_match(second),
+                _ => true,
+            },
+            _ => false,
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatStatusType {
     Stun,
@@ -100,6 +169,45 @@ pub enum StatStatusType {
         #[serde(default)]
         debuff: Option<bool>,
     },
+}
+
+impl StatStatusType {
+    pub fn is_match(&self, status_type: &StatStatusType) -> bool {
+        if self == status_type {
+            return true;
+        }
+
+        use StatStatusType::*;
+        match (self, status_type) {
+            (
+                DamageOverTime { damage_type },
+                DamageOverTime {
+                    damage_type: damage_type_2,
+                },
+            ) => compare_options(damage_type, damage_type_2),
+            (StatModifier { debuff }, StatModifier { debuff: debuff_2 }) => {
+                compare_options(debuff, debuff_2)
+            }
+            _ => false,
+        }
+    }
+}
+
+impl From<&StatusSpecs> for Option<StatStatusType> {
+    fn from(value: &StatusSpecs) -> Self {
+        match value {
+            StatusSpecs::Stun => Some(StatStatusType::Stun),
+            StatusSpecs::DamageOverTime { damage_type, .. } => {
+                Some(StatStatusType::DamageOverTime {
+                    damage_type: Some(*damage_type),
+                })
+            }
+            StatusSpecs::StatModifier { debuff, .. } => Some(StatStatusType::StatModifier {
+                debuff: Some(*debuff),
+            }),
+            StatusSpecs::Trigger(_) => None,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -177,7 +285,11 @@ pub trait ApplyStatModifier {
                     effect.value
                 } else {
                     let div = (1.0 - effect.value).max(0.0);
-                    if div != 0.0 { effect.value / div } else { 0.0 }
+                    if div != 0.0 {
+                        effect.value / div
+                    } else {
+                        0.0
+                    }
                 }
             }
         };

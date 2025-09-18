@@ -128,7 +128,7 @@ pub fn update_player_specs(
 
     compute_player_specs(player_specs, player_inventory);
 
-    // We only add skills trigger after because their were already increased by skill update
+    // We only add skills trigger after because they were already increased by skill update
     player_specs.triggers.extend(
         player_specs
             .skills_specs
@@ -169,6 +169,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
                                 min: effect.value,
                                 max: effect.value,
                             },
+                            ignore_stat_effects: Default::default(),
                         }],
                     });
                 }

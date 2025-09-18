@@ -3,14 +3,23 @@
     "name": "Quarterstaff",
     "icon": "items/quarterstaff.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
       "cooldown": 3.5,
       "damage": {
-        "Physical": [4, 10]
+        "Physical": [
+          4,
+          10
+        ]
       },
       "crit_chances": 5,
       "crit_damage": 200
@@ -20,14 +29,23 @@
     "name": "Woodcutter's Axe",
     "icon": "items/woodcutter_axe.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
       "cooldown": 3.5,
       "damage": {
-        "Physical": [6, 18]
+        "Physical": [
+          6,
+          18
+        ]
       },
       "crit_chances": 5,
       "crit_damage": 200
@@ -39,14 +57,23 @@
     "description": "Ash feeds ash.",
     "icon": "items/sootreaver.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
       "cooldown": 3.5,
       "damage": {
-        "Physical": [6, 18]
+        "Physical": [
+          6,
+          18
+        ]
       },
       "crit_chances": 5,
       "crit_damage": 200
@@ -55,35 +82,55 @@
     "affixes": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": {
+          "MinDamage": {
+            "damage_type": "Physical"
+          }
+        },
         "modifier": "Flat",
         "min": -6.0,
         "max": -6.0
       },
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "stat": {
+          "MinDamage": {
+            "damage_type": "Fire"
+          }
+        },
         "modifier": "Flat",
         "min": 6.0,
         "max": 6.0
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": {
+          "MaxDamage": {
+            "damage_type": "Physical"
+          }
+        },
         "modifier": "Flat",
         "min": -18.0,
         "max": -18.0
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "stat": {
+          "MaxDamage": {
+            "damage_type": "Fire"
+          }
+        },
         "modifier": "Flat",
         "min": 18.0,
         "max": 18.0
       },
       {
         "scope": "Local",
-        "stat": { "Damage": { "damage_type": "Fire" } },
+        "stat": {
+          "Damage": {
+            "damage_type": "Fire"
+          }
+        },
         "modifier": "Multiplier",
         "min": 0.5,
         "max": 1.0
@@ -93,7 +140,9 @@
       {
         "trigger_id": "sootreaver_burn",
         "description": "50% chances to inflict 100% of Fire Damage as extra Fire Damage over Time per second for 4 seconds.",
-        "OnHit": { "skill_type": "Attack" },
+        "OnHit": {
+          "skill_type": "Attack"
+        },
         "effects": [
           {
             "failure_chances": 0.5,
@@ -112,15 +161,39 @@
                   "max_value": 1
                 }
               ]
-            }
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": "Attack",
+                  "damage_type": "Fire"
+                }
+              },
+              {
+                "MinDamage": {
+                  "skill_type": "Attack",
+                  "damage_type": "Fire"
+                }
+              },
+              {
+                "MaxDamage": {
+                  "skill_type": "Attack",
+                  "damage_type": "Fire"
+                }
+              }
+            ]
           }
         ],
         "modifiers": [
           {
-            "stat": { "Damage": {} },
+            "stat": {
+              "Damage": {}
+            },
             "modifier": "Multiplier",
             "factor": 1.0,
-            "source": { "HitDamage": "Fire" }
+            "source": {
+              "HitDamage": "Fire"
+            }
           }
         ]
       }
@@ -131,14 +204,23 @@
     "name": "Glaive",
     "icon": "items/glaive.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
       "cooldown": 3.5,
       "damage": {
-        "Physical": [8, 26]
+        "Physical": [
+          8,
+          26
+        ]
       },
       "crit_chances": 5,
       "crit_damage": 200

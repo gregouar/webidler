@@ -1,6 +1,8 @@
+use std::collections::HashSet;
+
 use serde::{Deserialize, Serialize};
 
-use crate::data::trigger::TriggerSpecs;
+use crate::data::{stat_effect::StatType, trigger::TriggerSpecs};
 
 pub use super::stat_effect::DamageType;
 use super::{
@@ -142,6 +144,9 @@ pub struct SkillEffect {
 
     #[serde(flatten)]
     pub effect_type: SkillEffectType,
+
+    #[serde(default)]
+    pub ignore_stat_effects: HashSet<StatType>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
