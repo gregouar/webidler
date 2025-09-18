@@ -109,6 +109,7 @@ pub fn compute_skill_upgrade_effects(
                 Modifier::Multiplier => (1.0 + effect.value).powf(level) - 1.0,
                 Modifier::Flat => effect.value * level,
             },
+            bypass_ignore: true,
         })
 }
 
@@ -167,6 +168,7 @@ fn compute_skill_modifier_effects<'a>(
                             stat: effect.stat,
                             modifier: effect.modifier,
                             value: effect.value * factor,
+                            bypass_ignore: true,
                         })
                 }),
         })
@@ -188,10 +190,11 @@ pub fn compute_skill_specs_effect<'a>(
     }
 
     for effect in effects.clone() {
-        if skill_effect
-            .ignore_stat_effects
-            .iter()
-            .any(|ignore| effect.stat.is_match(ignore))
+        if !effect.bypass_ignore
+            && skill_effect
+                .ignore_stat_effects
+                .iter()
+                .any(|ignore| effect.stat.is_match(ignore))
         {
             continue;
         }

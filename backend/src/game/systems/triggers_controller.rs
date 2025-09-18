@@ -75,6 +75,7 @@ pub fn apply_trigger_effects(
                                 .unwrap_or_default(),
                             TriggerEffectModifierSource::AreaLevel => trigger_context.level as f64,
                         },
+                    bypass_ignore: true,
                 })
                 .collect();
 
