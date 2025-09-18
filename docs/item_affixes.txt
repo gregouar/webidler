@@ -2,6 +2,7 @@ Cloak:
     Pre:
         inc_attack_speed
         inc_spell_speed
+        inc_phys_damage
         inc_fire_damage
         inc_poison_damage
         inc_storm_damage
@@ -33,6 +34,7 @@ Amulet:
         inc_crit_chances
         inc_crit_damage
         inc_gold_2
+        inc_phys_damage
         inc_fire_damage
         inc_poison_damage
         inc_storm_damage
@@ -161,6 +163,7 @@ Ring:
         inc_crit_chances
         inc_crit_damage
         inc_gold_2
+        inc_phys_damage
         inc_fire_damage
         inc_poison_damage
         inc_storm_damage

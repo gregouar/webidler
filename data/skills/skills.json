@@ -266,7 +266,7 @@
       {
         "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
         "modifier": "Flat",
-        "value": 3
+        "value": 1
       }
     ],
     "targets": [
