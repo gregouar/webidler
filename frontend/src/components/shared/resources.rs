@@ -16,7 +16,7 @@ pub fn ResourceIcon(
 ) -> impl IntoView {
     let tooltip = move || {
         view! {
-            <div class="flex flex-col space-y-1 max-w-xs  whitespace-normal">
+            <div class="flex flex-col space-y-1 w-[20vw] whitespace-normal">
                 <div class="font-semibold text-white">{name}</div>
                 <div class="text-sm text-zinc-300">{description}</div>
             </div>
@@ -36,14 +36,6 @@ pub fn ResourceCounter(
     description: &'static str,
     value: Signal<f64>,
 ) -> impl IntoView {
-    let tooltip = move || {
-        view! {
-            <div class="flex flex-col space-y-1">
-                <div class="font-semibold text-white">{name}</div>
-                <div class="text-sm text-zinc-300 max-w-xs">{description}</div>
-            </div>
-        }
-    };
     view! {
         <div class="flex-1 text-shadow-md shadow-gray-950
         text-sm xl:text-xl 
@@ -51,9 +43,7 @@ pub fn ResourceCounter(
             <div class="font-mono tabular-nums w-[8ch] text-right ">
                 <Number value=value />
             </div>
-            <StaticTooltip tooltip=tooltip position=StaticTooltipPosition::Bottom>
-                <img draggable="false" src=img_asset(icon) alt=name class="h-[2em] aspect-square" />
-            </StaticTooltip>
+            <ResourceIcon icon name description />
         </div>
     }
 }
