@@ -70,14 +70,11 @@ pub fn apply_effects_to_skill_specs<'a>(
     effects: impl Iterator<Item = &'a StatEffect> + Clone,
 ) {
     for effect in effects.clone() {
-        match effect.stat {
-            StatType::Speed(skill_type)
-                if skill_specs.base.skill_type
-                    == skill_type.unwrap_or(skill_specs.base.skill_type) =>
-            {
-                skill_specs.cooldown.apply_negative_effect(effect);
-            }
-            _ => {}
+        if effect
+            .stat
+            .is_match(&StatType::Speed(Some(skill_specs.base.skill_type)))
+        {
+            skill_specs.cooldown.apply_negative_effect(effect);
         }
     }
 
