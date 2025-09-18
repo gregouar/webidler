@@ -3,11 +3,17 @@
     "name": "Wooden Rod",
     "icon": "items/wooden_rod.webp",
     "slot": "Weapon",
-    "categories": ["SpellWeapon"],
+    "categories": [
+      "SpellWeapon"
+    ],
     "affixes": [
       {
         "scope": "Global",
-        "stat": "SpellPower",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
         "modifier": "Multiplier",
         "min": 0.2,
         "max": 0.2
@@ -18,11 +24,17 @@
     "name": "Wand",
     "icon": "items/wand.webp",
     "slot": "Weapon",
-    "categories": ["SpellWeapon"],
+    "categories": [
+      "SpellWeapon"
+    ],
     "affixes": [
       {
         "scope": "Global",
-        "stat": "SpellPower",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
         "modifier": "Multiplier",
         "min": 0.4,
         "max": 0.4
@@ -35,19 +47,29 @@
     "description": "An artisan's folly turned arcane marvel; its aroma is divine, its sting utterly vile.",
     "icon": "items/baguette_fromage.webp",
     "slot": "Weapon",
-    "categories": ["SpellWeapon"],
+    "categories": [
+      "SpellWeapon"
+    ],
     "rarity": "Unique",
     "affixes": [
       {
         "scope": "Global",
-        "stat": "SpellPower",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
         "modifier": "Multiplier",
         "min": 0.4,
         "max": 0.4
       },
       {
         "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Spell" } },
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
         "modifier": "Multiplier",
         "min": 0.4,
         "max": 0.6
@@ -61,7 +83,9 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": {
+          "Speed": "Spell"
+        },
         "modifier": "Multiplier",
         "min": 0.08,
         "max": 0.12
@@ -71,7 +95,10 @@
       {
         "trigger_id": "baguette_fromage",
         "description": "Hitting an Enemy with Fire Spell Damage cover them in Melted Cheese:",
-        "OnHit": { "skill_type": "Spell", "damage_type": "Fire" },
+        "OnHit": {
+          "skill_type": "Spell",
+          "damage_type": "Fire"
+        },
         "effects": [
           {
             "ApplyStatus": {
@@ -151,11 +178,17 @@
     "name": "Bone Wand",
     "icon": "items/bone_wand.webp",
     "slot": "Weapon",
-    "categories": ["SpellWeapon"],
+    "categories": [
+      "SpellWeapon"
+    ],
     "affixes": [
       {
         "scope": "Global",
-        "stat": "SpellPower",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
         "modifier": "Multiplier",
         "min": 0.6,
         "max": 0.6

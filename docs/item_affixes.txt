@@ -67,7 +67,6 @@ Spell Weapon:
     pre:
         add_mana
         inc_mana
-        inc_spell_power
         inc_fire_damage
         inc_poison_damage
         inc_storm_damage
@@ -84,6 +83,7 @@ Body:
         inc_armor
         add_life
         inc_life
+        inc_restore
     suf:
         add_life_regen
         add_mana_regen

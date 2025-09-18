@@ -1110,7 +1110,7 @@
             ],
             "modifiers": [
               {
-                "stat": "SpellPower",
+                "stat": {"Restore": null},
                 "modifier": "Multiplier",
                 "factor": 1,
                 "source": "AreaLevel"
