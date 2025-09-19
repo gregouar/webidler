@@ -292,6 +292,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                             } else {
                                 status_effect.min_value
                             },
+                            bypass_ignore: false,
                         });
                         if status_effect.min_value != status_effect.max_value {
                             max_stat_effects.push(StatEffect {
@@ -302,6 +303,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                                 } else {
                                     status_effect.min_value
                                 },
+                                bypass_ignore: false,
                             });
                         }
                         ().into_any()

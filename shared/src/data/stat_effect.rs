@@ -215,6 +215,9 @@ pub struct StatEffect {
     pub stat: StatType,
     pub modifier: Modifier,
     pub value: f64,
+
+    #[serde(default)]
+    pub bypass_ignore: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -228,6 +231,7 @@ impl From<&EffectsMap> for Vec<StatEffect> {
                 stat: *stat,
                 modifier: *effect_type,
                 value: *value,
+                bypass_ignore: false,
             })
             .collect()
     }
@@ -263,6 +267,7 @@ impl EffectsMap {
                                 stat: target,
                                 modifier,
                                 value,
+                                bypass_ignore: false,
                             });
                             *entry = new_entry - 1.0;
                         }
@@ -301,6 +306,7 @@ pub trait ApplyStatModifier {
             stat: effect.stat,
             modifier: effect.modifier,
             value: -effect.value,
+            bypass_ignore: effect.bypass_ignore,
         })
     }
 }

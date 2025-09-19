@@ -28,8 +28,8 @@ use crate::components::{
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
     town::{
-        TownContext,
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        TownContext,
     },
     ui::{
         buttons::{CloseButton, MenuButton, MenuButtonRed, TabButton},
@@ -892,6 +892,7 @@ fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                 stat,
                 modifier,
                 value: stat_value.get().unwrap_or_default(),
+                bypass_ignore: false,
             })
         }
     });
@@ -1023,9 +1024,10 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         ),
         (StatType::CritChances(None), Modifier::Multiplier),
         (StatType::CritDamage(None), Modifier::Multiplier),
-        (StatType::SpellPower, Modifier::Multiplier),
-        // (StatType::StatusPower(None), Modifier::Multiplier),
+        // (StatType::SpellPower, Modifier::Multiplier),
+        (StatType::StatusPower(None), Modifier::Multiplier),
         (StatType::StatusDuration(None), Modifier::Multiplier),
+        (StatType::Restore(None), Modifier::Multiplier),
         (StatType::Speed(None), Modifier::Multiplier),
         (
             StatType::Speed(Some(SkillType::Attack)),

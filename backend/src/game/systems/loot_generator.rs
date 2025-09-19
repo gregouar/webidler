@@ -301,6 +301,7 @@ fn roll_affix_effect(effect_blueprint: &AffixEffectBlueprint) -> AffixEffect {
                 Modifier::Multiplier => (value * 100.0).round() * 0.01,
                 Modifier::Flat => value.round(),
             },
+            bypass_ignore: false,
         },
         scope: effect_blueprint.scope,
     }

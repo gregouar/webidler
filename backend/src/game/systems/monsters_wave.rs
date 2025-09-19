@@ -200,6 +200,7 @@ fn generate_monster_specs(
         },
         modifier: Modifier::Multiplier,
         value: (monster_level as f64 - 1.0) / 10.0,
+        bypass_ignore: true,
     }];
     for skill_specs in monster_specs.skill_specs.iter_mut() {
         if skill_specs.base.upgrade_effects.is_empty() {

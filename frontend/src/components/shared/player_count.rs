@@ -11,8 +11,6 @@ pub fn PlayerCount() -> impl IntoView {
     let show_glimpse = RwSignal::new(false);
 
     LocalResource::new({
-        let backend = backend.clone();
-        let areas_and_players_data = areas_and_players_data.clone();
         move || async move {
             let areas = backend
                 .get_areas()
@@ -40,7 +38,7 @@ pub fn PlayerCount() -> impl IntoView {
                     let value = areas_and_players_data
                         .read()
                         .as_ref()
-                        .and_then(|d| Some(d.1.value))
+                        .map(|d| d.1.value)
                         .unwrap_or_default();
                     format!("Players currently grinding: {}", value)
                 }}
