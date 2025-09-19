@@ -22,6 +22,24 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Ouch!",
+      "icon": "skills/claw.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [1, 1]
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
