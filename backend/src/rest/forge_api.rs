@@ -86,6 +86,9 @@ pub async fn post_add_affix(
         return Err(AppError::UserError("not enough gems".into()));
     }
 
+    // Decrease item level to match with player
+    item.modifiers.level = item.modifiers.level.min(character.max_area_level as u16);
+
     if !add_affix(
         &item.base,
         &mut item.modifiers,
