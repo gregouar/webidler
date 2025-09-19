@@ -277,7 +277,7 @@ fn handle_threat_increased_event(
             },
             SkillType::Spell,
             THREAT_EFFECT,
-            f64::MAX,
+            None,
             true,
         );
     }

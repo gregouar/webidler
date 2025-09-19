@@ -313,7 +313,7 @@ pub fn apply_skill_effect(
                         &status_effect.status_type,
                         skill_type,
                         value,
-                        duration,
+                        Some(duration),
                         status_effect.cumulate,
                     )
                 }

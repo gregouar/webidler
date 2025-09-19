@@ -92,6 +92,6 @@ pub enum StatModifierType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StatusState {
     pub value: f64,
-    pub duration: f64,
+    pub duration: Option<f64>,
     pub cumulate: bool,
 }

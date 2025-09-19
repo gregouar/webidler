@@ -115,6 +115,15 @@ pub fn resuscitate_character(target: &mut Target) {
     let (_, (target_specs, target_state)) = target;
     target_state.is_alive = true;
     target_state.life = target_specs.max_life;
+
+    target_state
+        .statuses
+        .unique_statuses
+        .retain(|_, (_, status_state)| status_state.duration.is_none());
+    target_state
+        .statuses
+        .cumulative_statuses
+        .retain(|(_, status_state)| status_state.duration.is_none());
 }
 
 pub fn apply_status(
@@ -122,12 +131,12 @@ pub fn apply_status(
     status_specs: &StatusSpecs,
     skill_type: SkillType,
     value: f64,
-    duration: f64,
+    duration: Option<f64>,
     cumulate: bool,
 ) {
     let (_, (target_specs, target_state)) = target;
 
-    if duration <= 0.0 || !target_state.is_alive {
+    if duration.unwrap_or(1.0) <= 0.0 {
         return;
     }
 
@@ -154,7 +163,9 @@ pub fn apply_status(
             .unique_statuses
             .entry(status_specs.into())
             .and_modify(|(cur_status_specs, cur_status_state)| {
-                if value * duration > cur_status_state.value * cur_status_state.duration {
+                if value * duration.unwrap_or(1.0)
+                    > cur_status_state.value * cur_status_state.duration.unwrap_or(1.0)
+                {
                     cur_status_state.value = value;
                     cur_status_state.duration = duration;
                     *cur_status_specs = status_specs.clone();

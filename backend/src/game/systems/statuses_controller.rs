@@ -60,12 +60,16 @@ fn update_status(
             character_specs,
             character_life,
             character_mana,
-            status_state.value * elapsed_time_f64.min(status_state.duration),
+            status_state.value
+                * elapsed_time_f64.min(status_state.duration.unwrap_or(elapsed_time_f64)),
         );
     }
 
-    status_state.duration -= elapsed_time_f64;
-    let remove_status = status_state.duration <= 0.0;
+    status_state
+        .duration
+        .as_mut()
+        .map(|duration| *duration -= elapsed_time_f64);
+    let remove_status = status_state.duration.unwrap_or(1.0) <= 0.0;
 
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger(_) = status_specs {
         if remove_status {
