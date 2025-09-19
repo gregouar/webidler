@@ -252,7 +252,7 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
         StatusId::Trigger(trigger_id) => (trigger_id, "Buffed"),
     };
     view! {
-        <div class="relative h-[25%] xl:h-[15%] aspect-square bg-black/40 p-1">
+        <div class="relative h-6 xl:h-12 aspect-square bg-black/40 p-1">
             <img
                 draggable="false"
                 src=img_asset(&icon_uri)

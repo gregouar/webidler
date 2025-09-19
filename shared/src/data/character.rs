@@ -21,6 +21,7 @@ pub enum CharacterSize {
     #[default]
     Small, // 1x1
     Large,      // 1x2
+    Tall,       // 2x1
     Huge,       // 2x2
     Gargantuan, // 2x3
 }
@@ -30,6 +31,7 @@ impl CharacterSize {
         match self {
             CharacterSize::Small => (1, 1),
             CharacterSize::Large => (2, 1),
+            CharacterSize::Tall => (1, 2),
             CharacterSize::Huge => (2, 2),
             CharacterSize::Gargantuan => (3, 2),
         }

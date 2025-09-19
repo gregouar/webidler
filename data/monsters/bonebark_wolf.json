@@ -1,0 +1,59 @@
+{
+  "name": "Bonebark Wolf",
+  "portrait": "monsters/bonebark_wolf.webp",
+  "max_life": 8,
+  "power_factor": 2.0,
+  "max_initiative": 1.0,
+  "skills": [
+    {
+      "name": "Haunting Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [2, 8]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Call of the Pack",
+      "icon": "skills/haste.svg",
+      "cooldown": 10.0,
+      "targets": [
+        {
+          "target_type": "Friend",
+          "range": "Melee",
+          "shape": "Square4",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "min_duration": 5,
+                "max_duration": 10,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "Damage": { "skill_type": "Attack" } }
+                      }
+                    },
+                    "min_value": 0.3,
+                    "max_value": 0.3,
+                    "cumulate": true
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
