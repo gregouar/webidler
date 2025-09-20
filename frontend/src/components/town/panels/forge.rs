@@ -11,8 +11,8 @@ use crate::components::{
     backend_client::BackendClient,
     shared::resources::GemsIcon,
     town::{
-        TownContext,
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        TownContext,
     },
     ui::{
         buttons::{CloseButton, MenuButton},
@@ -238,7 +238,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 <span class="text-pink-400 p-2 font-bold">
                     {move || is_equipped().then_some("Equipped Item")}
                 </span>
-                <ItemDetails selected_item />
+                <ItemDetails selected_item show_affixes=true />
             </div>
 
             <div class="flex flex-col gap-2">

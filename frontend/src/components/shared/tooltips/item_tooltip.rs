@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     item::{ItemRarity, ItemSlot, ItemSpecs, SkillRange, SkillShape},
-    item_affix::AffixEffectScope,
+    item_affix::{AffixEffectScope, AffixType, ItemAffix},
     skill::DamageType,
 };
 
@@ -42,22 +42,62 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 #[component]
 pub fn ItemTooltipContent(
     item_specs: Arc<ItemSpecs>,
+    #[prop(default = false)] show_affixes: bool,
     #[prop(default = false)] hide_description: bool,
 ) -> impl IntoView {
-    let local_affixes = effects_tooltip::formatted_effects_list(
-        (&item_specs
-            .modifiers
-            .aggregate_effects(AffixEffectScope::Local))
-            .into(),
-        AffixEffectScope::Local,
-    );
-    let global_affixes = effects_tooltip::formatted_effects_list(
-        (&item_specs
-            .modifiers
-            .aggregate_effects(AffixEffectScope::Global))
-            .into(),
-        AffixEffectScope::Global,
-    );
+    let (has_effects, effects) = if show_affixes {
+        let base_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Unique);
+        let prefixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Prefix);
+        let suffixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Suffix);
+        // let effects = formatted_affixes_list(&item_specs.modifiers.affixes);
+        (
+            (!base_affixes.is_empty() || !prefixes.is_empty() || !suffixes.is_empty()),
+            view! {
+                {(!base_affixes.is_empty())
+                    .then(|| {
+                        view! {
+                            <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                                "Base affixes:"
+                            </li>
+                            {base_affixes}
+                        }
+                    })}
+                {(!prefixes.is_empty())
+                    .then(|| {
+                        view! {
+                            <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                                "Prefixes:"
+                            </li>
+                            {prefixes}
+                        }
+                    })}
+                {(!suffixes.is_empty())
+                    .then(|| {
+                        view! {
+                            <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                                "Suffixes:"
+                            </li>
+                            {suffixes}
+                        }
+                    })}
+            }
+            .into_any(),
+        )
+    } else {
+        let mut effects = effects_tooltip::formatted_effects_list(
+            (&item_specs
+                .modifiers
+                .aggregate_effects(AffixEffectScope::Local))
+                .into(),
+        );
+        effects.extend(effects_tooltip::formatted_effects_list(
+            (&item_specs
+                .modifiers
+                .aggregate_effects(AffixEffectScope::Global))
+                .into(),
+        ));
+        (!effects.is_empty(), view! { {effects} }.into_any())
+    };
 
     let trigger_lines = item_specs
         .base
@@ -96,19 +136,18 @@ pub fn ItemTooltipContent(
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
             </ul>
-            {(!trigger_lines.is_empty() || !local_affixes.is_empty() || !global_affixes.is_empty())
+            {(!trigger_lines.is_empty() || has_effects)
                 .then(|| {
                     view! {
                         <hr class="border-t border-gray-700 my-1" />
-                        <ul class="list-none space-y-1">
-                            {local_affixes}{global_affixes}{trigger_lines}
-                        </ul>
+                        <ul class="list-none space-y-1">{effects}{trigger_lines}</ul>
                     }
                 })}
             <hr class="border-t border-gray-700" />
             <ul class="list-none space-y-1">
                 <li class="text-blue-400 text-xs xl:text-sm text-gray-400 leading-snug">
-                    "Required Area Level: " <span class="text-white">{item_specs.required_level}</span>
+                    "Required Area Level: "
+                    <span class="text-white">{item_specs.required_level}</span>
                 </li>
                 <li class="text-blue-400 text-xs xl:text-sm text-gray-400 leading-snug">
                     "Item Level: " <span class="text-white">{item_specs.modifiers.level}</span>
@@ -339,3 +378,35 @@ pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         </li>
     }
 }
+
+pub fn formatted_affixes_list(
+    affixes: &[ItemAffix],
+    affix_type: AffixType,
+) -> Vec<impl IntoView + use<>> {
+    affixes
+        .iter()
+        .filter(|affix| affix.affix_type == affix_type)
+        .map(|affix| {
+            view! {
+                // <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                // {affix_type_str(affix.affix_type)}":"
+                // </li>
+                {effects_tooltip::formatted_effects_list(
+                    affix
+                        .effects
+                        .iter()
+                        .map(|affix_effect| affix_effect.stat_effect.clone())
+                        .collect(),
+                )}
+            }
+        })
+        .collect()
+}
+
+// fn affix_type_str(affix_type: AffixType) -> &'static str {
+//     match affix_type {
+//         AffixType::Prefix => "Prefix",
+//         AffixType::Suffix => "Suffix",
+//         AffixType::Unique => "Base affix",
+//     }
+// }

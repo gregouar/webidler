@@ -5,7 +5,6 @@ use leptos::{html::*, prelude::*};
 use shared::data::{
     character_status::StatusSpecs,
     item::{ItemSlot, SkillRange, SkillShape},
-    item_affix::AffixEffectScope,
     passive::StatEffect,
     skill::{
         DamageType, ItemStatsSource, ModifierEffect, ModifierEffectSource, RestoreType,
@@ -106,7 +105,6 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                             </li>
                             {effects_tooltip::formatted_effects_list(
                                 skill_specs.base.upgrade_effects.clone(),
-                                AffixEffectScope::Local,
                             )}
                         </ul>
 
@@ -328,22 +326,14 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                         <EffectLi>
                             {success_chances}"Apply the following status for "
                             {format_min_max(min_duration, max_duration)} " seconds:"
-                            <ul>
-                                {effects_tooltip::formatted_effects_list(
-                                    stat_effects,
-                                    AffixEffectScope::Global,
-                                )}
-                            </ul>
+                            <ul>{effects_tooltip::formatted_effects_list(stat_effects)}</ul>
                         </EffectLi>
                         {(!max_stat_effects.is_empty())
                             .then(|| {
                                 view! {
                                     "to"
                                     <ul>
-                                        {effects_tooltip::formatted_effects_list(
-                                            max_stat_effects,
-                                            AffixEffectScope::Global,
-                                        )}
+                                        {effects_tooltip::formatted_effects_list(max_stat_effects)}
                                     </ul>
                                 }
                                     .into_any()
@@ -448,7 +438,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
             )
         }
     };
-    let effects = formatted_effects_list(skill_modifier.effects, AffixEffectScope::Local);
+    let effects = formatted_effects_list(skill_modifier.effects);
 
     view! {
         <EffectLi>{source_description}</EffectLi>

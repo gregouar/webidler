@@ -4,7 +4,6 @@ use strum::IntoEnumIterator;
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
-    item_affix::AffixEffectScope,
     skill::{DamageType, SkillType},
     stat_effect::{Modifier, StatEffect, StatStatusType, StatType},
 };
@@ -81,12 +80,12 @@ fn effect_li(text: String) -> impl IntoView {
 
 pub fn formatted_effects_list(
     mut affix_effects: Vec<StatEffect>,
-    scope: AffixEffectScope,
+    // scope: AffixEffectScope,
 ) -> Vec<impl IntoView> {
     use Modifier::*;
     use StatType::*;
 
-    let _ = scope; // TODO: maybe later display scope for some effects like armor
+    // let _ = scope; // TODO: maybe later display scope for some effects like armor
 
     affix_effects.sort_by_key(|effect| (effect.stat, effect.modifier));
 

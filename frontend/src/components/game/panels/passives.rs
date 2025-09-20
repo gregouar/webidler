@@ -1,5 +1,4 @@
 use leptos::{html::*, prelude::*};
-use shared::data::item_affix::AffixEffectScope;
 
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -491,12 +490,7 @@ fn NodeTooltip(
 ) -> impl IntoView {
     let effects_text = {
         let node_specs = node_specs.clone();
-        move || {
-            formatted_effects_list(
-                (&node_specs.aggregate_effects(node_level.get())).into(),
-                AffixEffectScope::Global,
-            )
-        }
+        move || formatted_effects_list((&node_specs.aggregate_effects(node_level.get())).into())
     };
 
     let node_specs_locked = node_specs.locked;
@@ -571,7 +565,6 @@ fn NodeTooltip(
                                         </li>
                                         {effects_tooltip::formatted_effects_list(
                                             upgrade_effects.clone(),
-                                            AffixEffectScope::Global,
                                         )}
                                     </ul>
                                 }

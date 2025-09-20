@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 use leptos::{html::*, prelude::*};
-use leptos_use::{UseInfiniteScrollOptions, use_infinite_scroll_with_options};
+use leptos_use::{use_infinite_scroll_with_options, UseInfiniteScrollOptions};
 use std::sync::Arc;
 
 use shared::data::{item::ItemSpecs, user::UserCharacterId};
@@ -139,7 +139,10 @@ pub fn ItemRow(
 }
 
 #[component]
-pub fn ItemDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+pub fn ItemDetails(
+    selected_item: RwSignal<SelectedItem>,
+    #[prop(default = false)] show_affixes: bool,
+) -> impl IntoView {
     let item_details = move || {
         match selected_item.get() {
             SelectedItem::InMarket(selected_item) => {
@@ -155,6 +158,7 @@ pub fn ItemDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                         <ItemTooltipContent
                             item_specs=selected_item.item_specs.clone()
                             class:select-text
+                            show_affixes
                         />
                     </div>
                 }
