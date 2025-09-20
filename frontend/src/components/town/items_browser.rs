@@ -154,7 +154,7 @@ pub fn ItemDetails(
                         />
                     </div>
 
-                    <div class="flex-1 w-full">
+                    <div class="flex-1 w-full max-h-full overflow-y-auto">
                         <ItemTooltipContent
                             item_specs=selected_item.item_specs.clone()
                             class:select-text
@@ -181,7 +181,8 @@ pub fn ItemDetails(
 
     view! {
         <div class="w-full h-full flex items-center justify-center">
-            <div class="flex flex-row gap-6 items-center w-full
+            <div class="flex flex-row gap-6 items-center
+            w-full h-auto aspect-5/2 overflow-y-auto
             bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2">{item_details}</div>
         </div>
     }
