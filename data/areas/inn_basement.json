@@ -60,23 +60,28 @@
       "weight": 1000,
       "spawns": [
         {
-          "monster": "centipede.json",
-          "min_quantity": 1,
-          "max_quantity": 2
-        },
-        {
           "monster": "bat.json",
-          "min_quantity": 1,
-          "max_quantity": 2
+          "min_quantity": 0,
+          "max_quantity": 1
         },
         {
           "monster": "centipede.json",
           "min_quantity": 1,
-          "max_quantity": 2
+          "max_quantity": 1
         },
         {
           "monster": "bat.json",
+          "min_quantity": 0,
+          "max_quantity": 1
+        },
+        {
+          "monster": "centipede.json",
           "min_quantity": 1,
+          "max_quantity": 1
+        },
+        {
+          "monster": "bat.json",
+          "min_quantity": 2,
           "max_quantity": 2
         }
       ]
