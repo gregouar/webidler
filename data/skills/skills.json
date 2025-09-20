@@ -404,7 +404,7 @@
   },
   "heal": {
     "name": "Heal",
-    "description": "Restore a portion of your health with this simple yet effective healing spell.",
+    "description": "Restore a portion of your life with this simple yet effective healing spell.",
     "icon": "skills/heal.svg",
     "skill_type": "Spell",
     "cooldown": 20,

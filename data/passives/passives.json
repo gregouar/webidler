@@ -1230,7 +1230,7 @@
         "triggers": [
           {
             "trigger_id": "healing_aura",
-            "description": "Restore Area Level x 3 Health at the end of each wave.",
+            "description": "Restore Area Level x 3 Life at the end of each wave.",
             "OnWaveCompleted": {},
             "target": "Source",
             "effects": [

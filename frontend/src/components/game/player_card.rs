@@ -23,28 +23,28 @@ use crate::{
     },
 };
 
-use super::{GameContext, portrait::CharacterPortrait};
+use super::{portrait::CharacterPortrait, GameContext};
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let max_health = Memo::new(move |_| game_context.player_specs.read().character_specs.max_life);
-    let health = Signal::derive(move || game_context.player_state.read().character_state.life);
+    let max_life = Memo::new(move |_| game_context.player_specs.read().character_specs.max_life);
+    let life = Signal::derive(move || game_context.player_state.read().character_state.life);
 
-    let health_tooltip = move || {
+    let life_tooltip = move || {
         view! {
-            "Health: "
-            {format_number(health.get())}
+            "Life: "
+            {format_number(life.get())}
             "/"
             {format_number(game_context.player_specs.read().character_specs.max_life)}
         }
     };
 
-    let health_percent = Signal::derive(move || {
-        let max_health = max_health.get();
-        if max_health > 0.0 {
-            (health.get() / max_health * 100.0) as f32
+    let life_percent = Signal::derive(move || {
+        let max_life = max_life.get();
+        if max_life > 0.0 {
+            (life.get() / max_life * 100.0) as f32
         } else {
             0.0
         }
@@ -183,12 +183,12 @@ pub fn PlayerCard() -> impl IntoView {
             <PlayerName />
 
             <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
-                <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Right>
+                <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Right>
                     <VerticalProgressBar
                         class:w-6
                         class:xl:w-8
                         bar_color="bg-gradient-to-l from-red-500 to-red-700"
-                        value=health_percent
+                        value=life_percent
                     />
                 </StaticTooltip>
                 <div class="flex flex-col gap-1 xl:gap-2">

@@ -19,8 +19,8 @@ use crate::components::{
     },
 };
 
-use super::GameContext;
 use super::portrait::CharacterPortrait;
+use super::GameContext;
 
 #[component]
 pub fn MonstersGrid() -> impl IntoView {
@@ -125,7 +125,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         CharacterSize::Huge | CharacterSize::Gargantuan => true,
     };
 
-    let health = Memo::new(move |_| {
+    let life = Memo::new(move |_| {
         game_context
             .monster_states
             .read()
@@ -134,19 +134,19 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .unwrap_or_default()
     });
 
-    let health_tooltip = move || {
+    let life_tooltip = move || {
         view! {
-            "Health: "
-            {format_number(health.get())}
+            "Life: "
+            {format_number(life.get())}
             "/"
             {format_number(specs.character_specs.max_life)}
         }
     };
 
-    let health_percent = Memo::new(move |_| {
-        let max_health = specs.character_specs.max_life;
-        if max_health > 0.0 {
-            (health.get() / specs.character_specs.max_life * 100.0) as f32
+    let life_percent = Memo::new(move |_| {
+        let max_life = specs.character_specs.max_life;
+        if max_life > 0.0 {
+            (life.get() / specs.character_specs.max_life * 100.0) as f32
         } else {
             0.0
         }
@@ -288,11 +288,11 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         bg-zinc-800 shadow-lg/30 rounded-md ring-1 ring-zinc-950
         gap-1 xl:gap-2 p-1 xl:p-2">
             <div class="relative flex flex-col gap-1 xl:gap-2 col-span-3 h-full min-h-0">
-                <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Bottom>
+                <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Bottom>
                     <HorizontalProgressBar
                         class=if is_big { "h-5 xl:h-8" } else { "h-4 xl:h-5" }
                         bar_color="bg-gradient-to-b from-red-500 to-red-700"
-                        value=health_percent
+                        value=life_percent
                     >
                         <span class=title_style>{monster_name}</span>
                     </HorizontalProgressBar>
