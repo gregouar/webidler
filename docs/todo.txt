@@ -1,14 +1,18 @@
 Next things to do:
 
-- forest
-- add at least basic attack/spell to all monsters to trigger retaliate effects
+- add at least basic attack/spell to all monsters to trigger retaliate effects?
+  OR block dot?
 
 - failure chances stat effect
-- market notification on sold item
+- market notification on sold item/ OR logs
 - spider boss & minions
 
-- conductive stun: storm damage is lucky on stunned enemy ?
+- conductive stun: storm damage is lucky on stunned enemy ? or just storm damage is lucky in general
 - intense toxins: double poison damage, half duration
+- burning fire: add a % chances to inflict fire dot on fire damage (cumul, short dur)
+- overwhelming strikes: no crit chance, convert percent of crit damage to attack damage
+
+=> find a way to combo multi skills/multi elements
 
 - dual wield
 - last login, activity log, etc
