@@ -6,7 +6,29 @@
     "footer_background": "areas/forest_footer.webp"
   },
   "loot_tables": ["tier_1.json", "tier_2.json", "tier_3.json"],
-  "bosses": [],
+  "bosses": [
+    {
+      "level": 60,
+      "interval": 50,
+      "spawns": [
+        {
+          "monster": "hound_fire.json",
+          "min_quantity": 1,
+          "max_quantity": 1
+        },
+        {
+          "monster": "hound_storm.json",
+          "min_quantity": 1,
+          "max_quantity": 1
+        },
+        {
+          "monster": "hunter.json",
+          "min_quantity": 1,
+          "max_quantity": 1
+        }
+      ]
+    }
+  ],
   "waves": [
     {
       "min_level": 10,
@@ -138,8 +160,23 @@
       "spawns": [
         {
           "monster": "thunder_stag.json",
-          "min_quantity": 4,
-          "max_quantity": 6
+          "min_quantity": 1,
+          "max_quantity": 2
+        },
+        {
+          "monster": "stormwraith.json",
+          "min_quantity": 1,
+          "max_quantity": 2
+        },
+        {
+          "monster": "thunder_stag.json",
+          "min_quantity": 1,
+          "max_quantity": 2
+        },
+        {
+          "monster": "stormwraith.json",
+          "min_quantity": 1,
+          "max_quantity": 2
         },
         {
           "monster": "moth_mourning.json",
