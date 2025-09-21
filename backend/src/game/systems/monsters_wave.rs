@@ -62,7 +62,8 @@ fn generate_monsters_wave_specs(
         .iter()
         .filter(|b| {
             area_state.area_level >= b.level
-                && (area_state.area_level - b.level) % b.interval.unwrap_or(AreaLevel::MAX) == 0
+                && (area_state.area_level - b.level)
+                    .is_multiple_of(b.interval.unwrap_or(AreaLevel::MAX))
         })
         .collect();
 

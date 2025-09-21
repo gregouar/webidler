@@ -65,10 +65,10 @@ fn update_status(
         );
     }
 
-    status_state
-        .duration
-        .as_mut()
-        .map(|duration| *duration -= elapsed_time_f64);
+    if let Some(duration) = status_state.duration.as_mut() {
+        *duration -= elapsed_time_f64
+    }
+
     let remove_status = status_state.duration.unwrap_or(1.0) <= 0.0;
 
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger(_) = status_specs {
