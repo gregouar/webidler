@@ -1,12 +1,12 @@
 {
   "name": "Restless Patron",
-  "portrait": "monsters/inn_ghost.webp",
+  "portrait": "monsters/moth_mourning.webp",
   "max_life": 7,
   "power_factor": 2.0,
   "max_initiative": 0.5,
   "skills": [
     {
-      "name": "Drunken Cheers",
+      "name": "Lamenting Cry",
       "icon": "skills/curse_frailty.svg",
       "skill_type": "Spell",
       "cooldown": 3.0,

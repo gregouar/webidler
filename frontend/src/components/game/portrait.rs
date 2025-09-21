@@ -112,9 +112,9 @@ pub fn CharacterPortrait(
                     rgba(59,130,246,0.35) 60%,
                     rgba(255,255,255,0) 70%
                 );
-                background-size: 300% 100%;
+                background-size: 500% 100%;
                 background-repeat: repeat;
-                animation: shimmerMove 5s infinite linear;
+                animation: shimmerMove 8s infinite linear;
                 pointer-events: none;
             }
             
@@ -126,15 +126,15 @@ pub fn CharacterPortrait(
                     rgba(139,0,0,0.4) 60%,
                     rgba(255,255,255,0) 70%
                 );
-                background-size: 300% 100%;
+                background-size: 500% 100%;
                 background-repeat: repeat;
-                animation: shimmerMove 7s infinite linear;
+                animation: shimmerMove 12s infinite linear;
                 pointer-events: none;
             }
             
             @keyframes shimmerMove {
                 0%   { background-position: -100% 0; }
-                100% { background-position: 200% 0; }
+                100% { background-position: 400% 0; }
             }        
             
             .just_hurt_effect {
@@ -252,7 +252,7 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
         StatusId::Trigger(trigger_id) => (trigger_id, "Buffed"),
     };
     view! {
-        <div class="relative h-[25%] xl:h-[15%] aspect-square bg-black/40 p-1">
+        <div class="relative h-6 xl:h-12 aspect-square bg-black/40 p-1">
             <img
                 draggable="false"
                 src=img_asset(&icon_uri)

@@ -1,22 +1,24 @@
 {
-  "name": "Restless Patron",
-  "portrait": "monsters/inn_ghost.webp",
-  "max_life": 7,
-  "power_factor": 2.0,
+  "name": "Thorn Sprite",
+  "portrait": "monsters/thorn_sprite_2.webp",
+  "max_life": 5,
+  "power_factor": 1.5,
   "max_initiative": 0.5,
+  "armor": { "Poison": 50 },
   "skills": [
     {
-      "name": "Drunken Cheers",
-      "icon": "skills/curse_frailty.svg",
-      "skill_type": "Spell",
-      "cooldown": 3.0,
+      "name": "Spiked Ball",
+      "icon": "skills/magic_missile.svg",
+      "cooldown": 2.0,
+      "skill_type": "Attack",
       "targets": [
         {
+          "range": "Distance",
           "effects": [
             {
               "FlatDamage": {
                 "damage": {
-                  "Storm": [0, 10]
+                  "Physical": [1, 3]
                 }
               }
             },
@@ -27,13 +29,10 @@
                 "statuses": [
                   {
                     "status_type": {
-                      "StatModifier": {
-                        "stat": { "Armor": "Physical" },
-                        "debuff": true
-                      }
+                      "DamageOverTime": { "damage_type": "Physical" }
                     },
-                    "min_value": 0.5,
-                    "max_value": 0.5
+                    "min_value": 3,
+                    "max_value": 3
                   }
                 ]
               }

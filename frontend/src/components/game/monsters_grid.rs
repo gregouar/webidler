@@ -121,7 +121,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
     let monster_name = specs.character_specs.name.clone();
     let is_big = match specs.character_specs.size {
-        CharacterSize::Small | CharacterSize::Large => false,
+        CharacterSize::Small | CharacterSize::Large | CharacterSize::Tall => false,
         CharacterSize::Huge | CharacterSize::Gargantuan => true,
     };
 
