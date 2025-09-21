@@ -93,6 +93,7 @@ fn handle_hit_event<'a>(
         {
             trigger_effects.push(TriggerContext {
                 trigger: triggered_effects.clone(),
+                owner: CharacterId::Player,
                 source: hit_event.source,
                 target: hit_event.target,
                 hit_context: Some(hit_event),
@@ -150,11 +151,35 @@ fn handle_kill_event(
                             {
                                 trigger_effects.push(TriggerContext {
                                     trigger: triggered_effects.clone(),
+                                    owner: CharacterId::Player,
                                     source: CharacterId::Player,
                                     target,
                                     hit_context: None,
                                     level: game_data.area_state.read().area_level as usize,
                                 });
+                            }
+                        }
+                    }
+
+                    for (idx, monster_specs) in game_data.monster_specs.iter().enumerate() {
+                        for triggered_effects in &monster_specs.triggers {
+                            if let EventTrigger::OnKill(kill_trigger) = triggered_effects.trigger {
+                                if kill_trigger.is_stunned.unwrap_or(is_stunned) == is_stunned
+                                    && kill_trigger.is_debuffed.unwrap_or(is_debuffed)
+                                        == is_debuffed
+                                    && kill_trigger
+                                        .is_damaged_over_time
+                                        .is_none_or(|dt| is_damaged_over_time.contains(&dt))
+                                {
+                                    trigger_effects.push(TriggerContext {
+                                        trigger: triggered_effects.clone(),
+                                        owner: CharacterId::Monster(idx),
+                                        source: CharacterId::Player,
+                                        target,
+                                        hit_context: None,
+                                        level: game_data.area_state.read().area_level as usize,
+                                    });
+                                }
                             }
                         }
                     }
@@ -239,6 +264,7 @@ fn handle_wave_completed_event(
         if let EventTrigger::OnWaveCompleted = triggered_effects.trigger {
             trigger_effects.push(TriggerContext {
                 trigger: triggered_effects.clone(),
+                owner: CharacterId::Player,
                 source: CharacterId::Player,
                 target: CharacterId::Player,
                 hit_context: None,
@@ -286,6 +312,7 @@ fn handle_threat_increased_event(
         if let EventTrigger::OnThreatIncreased = triggered_effects.trigger {
             trigger_effects.push(TriggerContext {
                 trigger: triggered_effects.clone(),
+                owner: CharacterId::Player,
                 source: CharacterId::Player,
                 target: CharacterId::Player,
                 hit_context: None,

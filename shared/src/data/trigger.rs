@@ -86,5 +86,6 @@ pub enum TriggerTarget {
     #[default]
     SameTarget,
     Source,
+    Me,
     // TODO: others?
 }

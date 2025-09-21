@@ -75,6 +75,44 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Lost of a Friend",
+      "icon": "skills/heal.svg",
+      "skill_type": "Spell",
+      "cooldown": 0.0,
+      "triggers": [
+        {
+          "trigger_id": "hunter_vengeance",
+          "description": "On Fidel Hound death:",
+          "skill_type": "Spell",
+          "OnKill": {},
+          "target": "Me",
+          "effects": [
+            {
+              "Resurrect": null
+            },
+            {
+              "ApplyStatus": {
+                "min_duration": 300,
+                "max_duration": 300,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "Damage": {} }
+                      }
+                    },
+                    "cumulate": true,
+                    "min_value": 1.0,
+                    "max_value": 1.0
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

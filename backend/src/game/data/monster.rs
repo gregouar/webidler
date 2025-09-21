@@ -34,6 +34,7 @@ impl DataInit<BaseMonsterSpecs> for MonsterSpecs {
             max_initiative: specs.max_initiative,
             power_factor: specs.power_factor,
             reward_factor: specs.power_factor,
+            triggers: Default::default(),
         }
     }
 }

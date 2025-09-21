@@ -17,6 +17,7 @@ use super::{skills_controller, skills_updater};
 pub struct TriggerContext<'a> {
     pub trigger: TriggeredEffect,
 
+    pub owner: CharacterId,
     pub source: CharacterId,
     pub target: CharacterId,
     pub hit_context: Option<&'a HitEvent>,
@@ -35,6 +36,7 @@ pub fn apply_trigger_effects(
             let (target_id, attacker) = match trigger_context.trigger.target {
                 TriggerTarget::SameTarget => (trigger_context.target, trigger_context.source),
                 TriggerTarget::Source => (trigger_context.source, trigger_context.target),
+                TriggerTarget::Me => (trigger_context.owner, trigger_context.owner),
             };
             // TODO: Multi targets
             let target = match target_id {

@@ -68,4 +68,11 @@ pub fn update_monster_specs(
     for skill_specs in monster_specs.skill_specs.iter_mut() {
         skills_updater::apply_effects_to_skill_specs(skill_specs, effects.iter());
     }
+
+    monster_specs.triggers = monster_specs
+        .skill_specs
+        .iter()
+        .flat_map(|skill_specs| skill_specs.triggers.iter())
+        .map(|trigger_specs| trigger_specs.triggered_effect.clone())
+        .collect();
 }
