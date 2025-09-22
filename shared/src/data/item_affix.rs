@@ -14,22 +14,27 @@ pub enum AffixType {
     Unique,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq, Hash)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq, Hash, PartialOrd, Ord)]
 pub enum AffixTag {
-    Attack,
+    Speed,
+
     Armor,
+    Attack,
+    Spell,
+
     Critical,
-    Fire,
-    Gold,
+    Stealth,
+    Status,
+
     Life,
     Mana,
+
     Physical,
+    Fire,
     Poison,
-    Speed,
-    Spell,
-    Status,
-    Stealth,
     Storm,
+
+    Gold,
     // TODO: add others
 }
 

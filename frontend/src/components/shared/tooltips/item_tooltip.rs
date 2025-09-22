@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     item::{ItemRarity, ItemSlot, ItemSpecs, SkillRange, SkillShape},
-    item_affix::{AffixEffectScope, AffixType, ItemAffix},
+    item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix},
     skill::DamageType,
 };
 
@@ -56,27 +56,27 @@ pub fn ItemTooltipContent(
                 {(!base_affixes.is_empty())
                     .then(|| {
                         view! {
-                            <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                                "Base affixes:"
-                            </li>
+                            // <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            // "Base affixes:"
+                            // </li>
                             {base_affixes}
                         }
                     })}
                 {(!prefixes.is_empty())
                     .then(|| {
                         view! {
-                            <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                                "Prefixes:"
-                            </li>
+                            // <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            // "Prefixes:"
+                            // </li>
                             {prefixes}
                         }
                     })}
                 {(!suffixes.is_empty())
                     .then(|| {
                         view! {
-                            <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                                "Suffixes:"
-                            </li>
+                            // <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            // "Suffixes:"
+                            // </li>
                             {suffixes}
                         }
                     })}
@@ -99,13 +99,33 @@ pub fn ItemTooltipContent(
         (!effects.is_empty(), view! { {effects} }.into_any())
     };
 
-    let trigger_lines = item_specs
-        .base
-        .triggers
-        .clone()
-        .into_iter()
-        .map(format_trigger)
-        .collect::<Vec<_>>();
+    let (has_triggers, triggers) = {
+        let trigger_lines = item_specs
+            .base
+            .triggers
+            .clone()
+            .into_iter()
+            .map(format_trigger)
+            .collect::<Vec<_>>();
+
+        (
+            !trigger_lines.is_empty(),
+            if show_affixes {
+                view! {
+                    {(!trigger_lines.is_empty())
+                        .then(|| {
+                            view! {
+                                <li class="text-gray-400 text-xs leading-snug">"Triggers:"</li>
+                                {trigger_lines}
+                            }
+                        })}
+                }
+                .into_any()
+            } else {
+                view! { {trigger_lines} }.into_any()
+            },
+        )
+    };
 
     let name_color = name_color_rarity(item_specs.modifiers.rarity);
 
@@ -136,11 +156,11 @@ pub fn ItemTooltipContent(
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
             </ul>
-            {(!trigger_lines.is_empty() || has_effects)
+            {(has_triggers || has_effects)
                 .then(|| {
                     view! {
                         <hr class="border-t border-gray-700 my-1" />
-                        <ul class="list-none space-y-1">{effects}{trigger_lines}</ul>
+                        <ul class="list-none space-y-1">{effects}{triggers}</ul>
                     }
                 })}
             <hr class="border-t border-gray-700" />
@@ -387,10 +407,30 @@ pub fn formatted_affixes_list(
         .iter()
         .filter(|affix| affix.affix_type == affix_type)
         .map(|affix| {
+            let affix_meta = match affix_type {
+                AffixType::Unique => {
+                    view! { <li class="text-gray-400 text-xs leading-snug">"Implicit affix"</li> }
+                        .into_any()
+                }
+                _ => {
+                    let mut tags: Vec<_> = affix.tags.iter().collect();
+                    tags.sort();
+                    let tags: Vec<_> = tags
+                        .into_iter()
+                        .map(|tag| affix_tag_str(*tag).to_string())
+                        .collect();
+
+                    view! {
+                        <li class="text-gray-400 text-xs leading-snug">
+                            {affix_type_str(affix.affix_type)}" \""{affix.name.clone()}
+                            "\"  (Tier: " {affix.tier}") – " {tags.join(", ")}
+                        </li>
+                    }
+                    .into_any()
+                }
+            };
             view! {
-                // <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                // {affix_type_str(affix.affix_type)}":"
-                // </li>
+                {affix_meta}
                 {effects_tooltip::formatted_effects_list(
                     affix
                         .effects
@@ -403,10 +443,29 @@ pub fn formatted_affixes_list(
         .collect()
 }
 
-// fn affix_type_str(affix_type: AffixType) -> &'static str {
-//     match affix_type {
-//         AffixType::Prefix => "Prefix",
-//         AffixType::Suffix => "Suffix",
-//         AffixType::Unique => "Base affix",
-//     }
-// }
+fn affix_type_str(affix_type: AffixType) -> &'static str {
+    match affix_type {
+        AffixType::Prefix => "Prefix",
+        AffixType::Suffix => "Suffix",
+        AffixType::Unique => "Base affix",
+    }
+}
+
+fn affix_tag_str(affix_tag: AffixTag) -> &'static str {
+    match affix_tag {
+        AffixTag::Attack => "Attack",
+        AffixTag::Armor => "Defense",
+        AffixTag::Critical => "Critical",
+        AffixTag::Fire => "Fire",
+        AffixTag::Gold => "Gold",
+        AffixTag::Life => "Life",
+        AffixTag::Mana => "Mana",
+        AffixTag::Physical => "Physical",
+        AffixTag::Poison => "Poison",
+        AffixTag::Speed => "Speed",
+        AffixTag::Spell => "Spell",
+        AffixTag::Status => "Status",
+        AffixTag::Stealth => "Stealth",
+        AffixTag::Storm => "Storm",
+    }
+}

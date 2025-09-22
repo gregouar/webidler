@@ -1,5 +1,5 @@
 {
-  "name": "Thorn Wall",
+  "name": "Wall of Thorns",
   "portrait": "monsters/thorn_wall.webp",
   "max_life": 20,
   "power_factor": 2,
