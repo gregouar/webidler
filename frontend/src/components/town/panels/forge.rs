@@ -229,27 +229,28 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     };
 
     view! {
-        <div class="w-full h-full flex flex-col justify-between p-4 relative">
-            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center">
+        <div class="w-full h-full flex flex-col justify-between p-1 xl:p-4 gap-1 xl:gap-2 relative">
+            <span class="text-base xl:text-xl font-semibold text-amber-200 text-shadow-md text-center">
                 "Forge Item"
             </span>
 
             <div class="flex flex-col">
-                <span class="text-pink-400 p-2 font-bold">
+                <span class="text-pink-400 font-bold text-sm xl:text-base">
                     {move || is_equipped().then_some("Equipped Item")}
                 </span>
                 <ItemDetails selected_item show_affixes=true />
             </div>
 
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-1 xl:gap-2">
                 <MenuButton
                     on:click=move |_| do_add_affix(None)
                     disabled=Signal::derive({
                         move || affix_price().map(|price| price > user_gems()).unwrap_or(true)
                     })
-                    class:mb-2
+                    class:mb-1
+                    class:xl:mb-2
                 >
-                    <div class="w-full flex justify-center items-center gap-1 text-lg text-gray-400 h-[2em]">
+                    <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
                         "Add" <span class="text-white font-bold">"Affix"</span>
                         {move || {
                             affix_price()
@@ -269,7 +270,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                         move || prefix_price().map(|price| price > user_gems()).unwrap_or(true)
                     })
                 >
-                    <div class="w-full flex justify-center items-center gap-1 text-lg text-gray-400 h-[2em]">
+                    <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
                         "Add" <span class="text-white font-bold">"Prefix"</span>
                         {move || {
                             prefix_price()
@@ -289,7 +290,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                         move || suffix_price().map(|price| price > user_gems()).unwrap_or(true)
                     })
                 >
-                    <div class="w-full flex justify-center items-center gap-1 text-lg text-gray-400 h-[2em]">
+                    <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
                         "Add" <span class="text-white font-bold">"Suffix"</span>
                         {move || {
                             suffix_price()
