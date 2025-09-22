@@ -36,23 +36,18 @@
       "weight": 1000,
       "spawns": [
         {
-          "monster": "snake.json",
-          "min_quantity": 1,
-          "max_quantity": 2
-        },
-        {
           "monster": "rat.json",
-          "min_quantity": 1,
+          "min_quantity": 0,
           "max_quantity": 2
         },
         {
           "monster": "snake.json",
-          "min_quantity": 1,
+          "min_quantity": 2,
           "max_quantity": 2
         },
         {
           "monster": "rat.json",
-          "min_quantity": 1,
+          "min_quantity": 2,
           "max_quantity": 2
         }
       ]
