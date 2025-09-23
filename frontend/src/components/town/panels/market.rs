@@ -198,6 +198,7 @@ fn MarketBrowser(
     selected_item: RwSignal<SelectedItem>,
     filters: RwSignal<MarketFilters>,
     own_listings: bool,
+    is_deleted: bool,
 ) -> impl IntoView {
     let items_per_page = PaginationLimit::try_new(10).unwrap_or_default();
 
@@ -248,6 +249,7 @@ fn MarketBrowser(
                             limit: items_per_page,
                             filters,
                             own_listings,
+                            is_deleted,
                         })
                         .await
                         .unwrap_or_default();
@@ -796,6 +798,7 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     MarketOrderBy::CritDamage => "Highest Critical Damage",
                     MarketOrderBy::Armor => "Highest Armor",
                     MarketOrderBy::Block => "Highest Block Chances",
+                    MarketOrderBy::Time => "Most Recent",
                 }
                 .into(),
             )

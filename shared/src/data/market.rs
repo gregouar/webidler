@@ -61,4 +61,5 @@ pub enum MarketOrderBy {
     CritDamage,
     Armor,
     Block,
+    Time,
 }

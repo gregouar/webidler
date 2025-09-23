@@ -54,6 +54,7 @@ pub async fn post_browse_market(
         &db_pool,
         &payload.character_id,
         payload.own_listings,
+        payload.is_deleted,
         payload.filters,
         payload.skip as i64,
         payload.limit.into_inner(),
@@ -98,9 +99,13 @@ pub async fn post_buy_market_item(
         return Err(AppError::UserError("not enough space".into()));
     }
 
-    let item_bought = db::market::buy_item(&mut tx, payload.item_index as i64)
-        .await?
-        .ok_or(AppError::NotFound)?;
+    let item_bought = db::market::buy_item(
+        &mut tx,
+        payload.item_index as i64,
+        Some(payload.character_id),
+    )
+    .await?
+    .ok_or(AppError::NotFound)?;
 
     if let Some(recipient_id) = item_bought.recipient_id {
         if recipient_id != character.character_id
@@ -264,7 +269,7 @@ pub async fn post_edit_market_item(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let item_bought = db::market::buy_item(&mut tx, payload.item_index as i64)
+    let item_bought = db::market::buy_item(&mut tx, payload.item_index as i64, None)
         .await?
         .ok_or(AppError::NotFound)?;
 
