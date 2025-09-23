@@ -47,6 +47,7 @@ enum MarketTab {
     Buy,
     Sell,
     Listings,
+    Logs,
 }
 
 #[component]
@@ -105,6 +106,14 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                             >
                                 "Listings"
                             </TabButton>
+                            <TabButton
+                                is_active=Signal::derive(move || {
+                                    active_tab.get() == MarketTab::Logs
+                                })
+                                on:click=move |_| { switch_tab(MarketTab::Logs) }
+                            >
+                                "Logs"
+                            </TabButton>
                         </div>
 
                         <div class="flex-1"></div>
@@ -123,7 +132,12 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                     MarketTab::Buy => {
                                         view! {
-                                            <MarketBrowser selected_item filters own_listings=false />
+                                            <MarketBrowser
+                                                selected_item
+                                                filters
+                                                own_listings=false
+                                                is_deleted=false
+                                            />
                                         }
                                             .into_any()
                                     }
@@ -132,7 +146,26 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                     MarketTab::Listings => {
                                         view! {
-                                            <MarketBrowser selected_item filters own_listings=true />
+                                            <MarketBrowser
+                                                selected_item
+                                                filters
+                                                own_listings=true
+                                                is_deleted=false
+                                            />
+                                        }
+                                            .into_any()
+                                    }
+                                    MarketTab::Logs => {
+                                        view! {
+                                            <MarketBrowser
+                                                selected_item
+                                                filters=Signal::derive(|| MarketFilters {
+                                                    order_by: MarketOrderBy::Time,
+                                                    ..Default::default()
+                                                })
+                                                own_listings=true
+                                                is_deleted=true
+                                            />
                                         }
                                             .into_any()
                                     }
@@ -154,6 +187,11 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                     MarketTab::Listings => {
                                         view! { <ListingDetails selected_item /> }.into_any()
+                                    }
+                                    MarketTab::Logs => {
+                                        // TODO
+                                        view! { <ListingDetails selected_item /> }
+                                            .into_any()
                                     }
                                 }
                             }}
@@ -178,6 +216,8 @@ impl From<MarketItem> for SelectedMarketItem {
             recipient: value.recipient,
             rejected: value.rejected,
             created_at: value.created_at,
+            deleted_at: value.deleted_at,
+            deleted_by: value.deleted_by,
         }
     }
 }
@@ -196,7 +236,7 @@ pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
 #[component]
 fn MarketBrowser(
     selected_item: RwSignal<SelectedItem>,
-    filters: RwSignal<MarketFilters>,
+    #[prop(into)] filters: Signal<MarketFilters>,
     own_listings: bool,
     is_deleted: bool,
 ) -> impl IntoView {
@@ -287,6 +327,8 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     price: 0.0,
                     rejected: false,
                     created_at: Utc::now(),
+                    deleted_at: None,
+                    deleted_by: None,
                 })
                 .collect::<Vec<_>>()
         }
@@ -731,6 +773,75 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 <MenuButton on:click=do_remove disabled=disabled>
                     "Remove Item"
                 </MenuButton>
+            </div>
+        </div>
+    }
+}
+
+#[component]
+pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+    let price = move || {
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => Some(selected_item.price),
+            _ => None,
+        })
+    };
+
+    let buyer_name = move || {
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => selected_item
+                .deleted_by
+                .as_ref()
+                .map(|(_, deleted_by_name)| deleted_by_name.clone())
+                .unwrap_or_default(),
+            _ => "".into(),
+        })
+    };
+
+    let bought_at = move || {
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => {
+                Some(selected_item.deleted_at.unwrap_or_default())
+            }
+            _ => None,
+        })
+    };
+
+    view! {
+        <div class="w-full h-full flex flex-col justify-between p-4 relative">
+            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center">
+                "Remove from Market"
+            </span>
+
+            <div class="flex flex-col">
+                <ItemDetails selected_item />
+                <div class="flex justify-between items-center text-sm text-gray-400 p-2">
+                    <span>"Bought by: "{move || buyer_name()}</span>
+                    <span>{move || bought_at().map(format_datetime)}</span>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-end p-4 border-t border-zinc-700">
+                <div class="flex items-center gap-1 text-lg text-gray-400">
+                    {move || {
+                        price()
+                            .map(|price| {
+                                if price > 0.0 {
+                                    view! {
+                                        "Price: "
+                                        <span class="text-fuchsia-300 font-bold">
+                                            {format!("{:.0}", price)}
+                                        </span>
+                                        <GemsIcon />
+                                    }
+                                        .into_any()
+                                } else {
+                                    view! { <span class="text-fuchsia-300 font-bold">"Free"</span> }
+                                        .into_any()
+                                }
+                            })
+                    }}
+                </div>
             </div>
         </div>
     }

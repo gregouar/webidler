@@ -315,5 +315,13 @@ fn into_market_item(items_store: &ItemsStore, market_entry: MarketEntry) -> Opti
         )?,
 
         created_at: market_entry.created_at.into(),
+
+        deleted_at: market_entry.deleted_at.map(Into::into),
+        deleted_by: market_entry.deleted_by_id.map(|deleted_by_id| {
+            (
+                deleted_by_id,
+                market_entry.deleted_by_name.unwrap_or_default(),
+            )
+        }),
     })
 }

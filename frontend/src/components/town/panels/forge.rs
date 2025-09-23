@@ -76,6 +76,8 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                         price: 0.0,
                         rejected: false,
                         created_at: Utc::now(),
+                        deleted_at: None,
+                        deleted_by: None,
                     })
                     .chain(inventory.bag.iter().enumerate().map(|(index, item)| {
                         SelectedMarketItem {
@@ -87,6 +89,8 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                             price: 0.0,
                             rejected: false,
                             created_at: Utc::now(),
+                            deleted_at: None,
+                            deleted_by: None,
                         }
                     }))
                     .collect::<Vec<_>>()

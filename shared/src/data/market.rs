@@ -27,6 +27,9 @@ pub struct MarketItem {
     pub item_specs: ItemSpecs,
 
     pub created_at: DateTime<Utc>,
+
+    pub deleted_at: Option<DateTime<Utc>>,
+    pub deleted_by: Option<(UserCharacterId, String)>,
 }
 
 pub const STAT_FILTERS_AMOUNT: usize = 5;
