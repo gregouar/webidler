@@ -83,11 +83,12 @@ pub async fn sell_item<'c>(
             .map(|armor_specs| armor_specs.block as f64),
         item_damages,
         item.weapon_specs
+            .as_ref()
             .map(|weapon_specs| weapon_specs.crit_chances as f64),
         item.weapon_specs
+            .as_ref()
             .map(|weapon_specs| weapon_specs.crit_damage),
         serde_json::to_value(&item.modifiers)?,
-        // serde_json::to_vec(&item.modifiers)?.into(),
     )
     .await?)
 }
@@ -128,7 +129,7 @@ async fn create_market_item<'c>(
             item_crit_damage,
             item_data
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12$13)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
         RETURNING market_id
         "#,
         character_id,
@@ -222,6 +223,12 @@ pub async fn read_market_items<'c>(
     let no_filter_item_damages = filters.item_damages.is_none();
     let item_damages = filters.item_damages.unwrap_or_default();
 
+    let no_filter_item_crit_chance = filters.item_crit_chance.is_none();
+    let item_crit_chance = filters.item_crit_chance.unwrap_or_default();
+
+    let no_filter_item_crit_damage = filters.item_crit_damage.is_none();
+    let item_crit_damage = filters.item_crit_damage.unwrap_or_default();
+
     let no_filter_item_armor = filters.item_armor.is_none();
     let item_armor = filters.item_armor.unwrap_or_default();
 
@@ -300,6 +307,8 @@ pub async fn read_market_items<'c>(
                 AND mc.category = $10
             ))
             AND ($11 OR market.item_damages >= $12)
+            AND ($33 OR market.item_crit_chance >= $34)
+            AND ($35 OR market.item_crit_damage >= $36)
             AND ($13 OR market.item_armor >= $14)
             AND ($15 OR market.item_block >= $16)
             AND ($19 = '' OR EXISTS (
@@ -350,6 +359,8 @@ pub async fn read_market_items<'c>(
             END ASC,
             CASE
                 WHEN  $17 = 'Damages' THEN  market.item_damages
+                WHEN  $17 = 'CritChance' THEN  market.item_crit_chance
+                WHEN  $17 = 'CritDamage' THEN  market.item_crit_damage
                 WHEN  $17 = 'Armor' THEN  market.item_armor
                 WHEN  $17 = 'Block' THEN  market.item_block
             END DESC NULLS LAST, 
@@ -389,6 +400,10 @@ pub async fn read_market_items<'c>(
         stat_filters[4].0, // $30
         stat_filters[4].1,
         stat_filters[4].2,
+        no_filter_item_crit_chance,
+        item_crit_chance,
+        no_filter_item_crit_damage, // $35
+        item_crit_damage,
     )
     .fetch_all(executor)
     .await?;

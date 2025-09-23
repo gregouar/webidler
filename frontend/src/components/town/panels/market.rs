@@ -869,16 +869,18 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         id="item_damages"
                         label="Min Critical Chance:"
                         input_type="number"
-                        placeholder="Minimum Critical Chance"
+                        placeholder="Minimum Critical Percent Chance"
                         bind=item_crit_chance
                     />
                     <ValidatedInput
                         id="item_damages"
                         label="Min Critical Damage:"
                         input_type="number"
-                        placeholder="Minimum extra Critical Damage percent"
+                        placeholder="Minimum extra Critical Percent Damage"
                         bind=item_crit_damage
                     />
+                </div>
+                <div class="flex flex-col gap-4">
                     <ValidatedInput
                         id="item_armor"
                         label="Min Armor:"
