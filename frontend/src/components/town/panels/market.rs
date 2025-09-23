@@ -750,6 +750,16 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     let item_damages = RwSignal::new(Some(filters.get_untracked().item_damages));
     Effect::new(move || filters.write().item_damages = item_damages.get().unwrap_or_default());
 
+    let item_crit_chance = RwSignal::new(Some(filters.get_untracked().item_crit_chance));
+    Effect::new(move || {
+        filters.write().item_crit_chance = item_crit_chance.get().unwrap_or_default()
+    });
+
+    let item_crit_damage = RwSignal::new(Some(filters.get_untracked().item_crit_damage));
+    Effect::new(move || {
+        filters.write().item_crit_damage = item_crit_damage.get().unwrap_or_default()
+    });
+
     let item_armor = RwSignal::new(Some(filters.get_untracked().item_armor));
     Effect::new(move || filters.write().item_armor = item_armor.get().unwrap_or_default());
 
@@ -782,6 +792,8 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     MarketOrderBy::Price => "Lowest Price",
                     MarketOrderBy::Level => "Lowest Required Level",
                     MarketOrderBy::Damages => "Highest Damages",
+                    MarketOrderBy::CritChance => "Highest Critical Chance",
+                    MarketOrderBy::CritDamage => "Highest Critical Damage",
                     MarketOrderBy::Armor => "Highest Armor",
                     MarketOrderBy::Block => "Highest Block Chances",
                 }
@@ -852,6 +864,20 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         input_type="number"
                         placeholder="Minimum Damages per second"
                         bind=item_damages
+                    />
+                    <ValidatedInput
+                        id="item_damages"
+                        label="Min Critical Chance:"
+                        input_type="number"
+                        placeholder="Minimum Critical Chance"
+                        bind=item_crit_chance
+                    />
+                    <ValidatedInput
+                        id="item_damages"
+                        label="Min Critical Damage:"
+                        input_type="number"
+                        placeholder="Minimum extra Critical Damage percent"
+                        bind=item_crit_damage
                     />
                     <ValidatedInput
                         id="item_armor"

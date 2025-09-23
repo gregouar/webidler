@@ -82,6 +82,10 @@ pub async fn sell_item<'c>(
             .as_ref()
             .map(|armor_specs| armor_specs.block as f64),
         item_damages,
+        item.weapon_specs
+            .map(|weapon_specs| weapon_specs.crit_chances as f64),
+        item.weapon_specs
+            .map(|weapon_specs| weapon_specs.crit_damage),
         serde_json::to_value(&item.modifiers)?,
         // serde_json::to_vec(&item.modifiers)?.into(),
     )
@@ -103,6 +107,8 @@ async fn create_market_item<'c>(
     item_armor: Option<f64>,
     item_block: Option<f64>,
     item_damages: Option<f64>,
+    item_crit_chance: Option<f64>,
+    item_crit_damage: Option<f64>,
     item_data: JsonValue,
 ) -> Result<(), sqlx::Error> {
     let market_id = sqlx::query_scalar!(
@@ -118,9 +124,11 @@ async fn create_market_item<'c>(
             item_armor, 
             item_block, 
             item_damages, 
+            item_crit_chance,
+            item_crit_damage,
             item_data
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12$13)
         RETURNING market_id
         "#,
         character_id,
@@ -133,6 +141,8 @@ async fn create_market_item<'c>(
         item_armor,
         item_block,
         item_damages,
+        item_crit_chance,
+        item_crit_damage,
         item_data,
     )
     .fetch_one(&mut **executor)

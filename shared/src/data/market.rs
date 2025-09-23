@@ -43,6 +43,8 @@ pub struct MarketFilters {
     pub item_category: Option<ItemCategory>,
 
     pub item_damages: Option<f64>,
+    pub item_crit_chance: Option<f64>,
+    pub item_crit_damage: Option<f64>,
     pub item_armor: Option<f64>,
     pub item_block: Option<f64>,
 
@@ -55,6 +57,8 @@ pub enum MarketOrderBy {
     Price,
     Level,
     Damages,
+    CritChance,
+    CritDamage,
     Armor,
     Block,
 }
