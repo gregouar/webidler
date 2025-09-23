@@ -189,9 +189,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                                         view! { <ListingDetails selected_item /> }.into_any()
                                     }
                                     MarketTab::Logs => {
-                                        // TODO
-                                        view! { <ListingDetails selected_item /> }
-                                            .into_any()
+                                        view! { <LogsDetails selected_item /> }.into_any()
                                     }
                                 }
                             }}
