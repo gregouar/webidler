@@ -161,7 +161,12 @@ fn handle_kill_event(
                         }
                     }
 
-                    for (idx, monster_specs) in game_data.monster_specs.iter().enumerate() {
+                    for (idx, (monster_specs, monster_state)) in game_data
+                        .monster_specs
+                        .iter()
+                        .zip(game_data.monster_states.iter())
+                        .enumerate()
+                    {
                         let event_target_type = match target {
                             CharacterId::Player => TargetType::Enemy,
                             CharacterId::Monster(event_target_idx) => {
@@ -174,7 +179,10 @@ fn handle_kill_event(
                         };
                         for triggered_effects in &monster_specs.triggers {
                             if let EventTrigger::OnDeath(target_type) = triggered_effects.trigger {
-                                if target_type == event_target_type {
+                                if target_type == event_target_type
+                                    && (monster_state.character_state.is_alive
+                                        || target_type == TargetType::Me)
+                                {
                                     trigger_effects.push(TriggerContext {
                                         trigger: triggered_effects.clone(),
                                         owner: CharacterId::Monster(idx),
