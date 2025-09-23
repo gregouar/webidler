@@ -168,6 +168,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
                                 },
                                 min: effect.value,
                                 max: effect.value,
+                                modifier: Modifier::Flat,
                             },
                             ignore_stat_effects: Default::default(),
                         }],

@@ -6,7 +6,10 @@
   "size": "Tall",
   "power_factor": 30,
   "max_initiative": 3,
-  "armor": { "Physical": 50, "Poison": 100 },
+  "armor": {
+    "Physical": 50,
+    "Poison": 100
+  },
   "skills": [
     {
       "name": "Piercing Shot",
@@ -18,7 +21,10 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [2, 4]
+                  "Physical": [
+                    2,
+                    4
+                  ]
                 }
               }
             },
@@ -29,7 +35,9 @@
                 "statuses": [
                   {
                     "status_type": {
-                      "DamageOverTime": { "damage_type": "Physical" }
+                      "DamageOverTime": {
+                        "damage_type": "Physical"
+                      }
                     },
                     "min_value": 1,
                     "max_value": 2
@@ -57,7 +65,9 @@
                 "statuses": [
                   {
                     "status_type": {
-                      "DamageOverTime": { "damage_type": "Poison" }
+                      "DamageOverTime": {
+                        "damage_type": "Poison"
+                      }
                     },
                     "min_value": 5,
                     "max_value": 5
@@ -68,7 +78,10 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [4, 8]
+                  "Physical": [
+                    4,
+                    8
+                  ]
                 }
               }
             }
@@ -90,7 +103,12 @@
           "target": "Me",
           "effects": [
             {
-              "Resurrect": null
+              "Restore": {
+                "restore_type": "Life",
+                "min": 100,
+                "max": 100,
+                "modifier": "Multiplier"
+              }
             },
             {
               "ApplyStatus": {
@@ -100,7 +118,9 @@
                   {
                     "status_type": {
                       "StatModifier": {
-                        "stat": { "Damage": {} }
+                        "stat": {
+                          "Damage": {}
+                        }
                       }
                     },
                     "cumulate": true,

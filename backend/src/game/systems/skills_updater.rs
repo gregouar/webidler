@@ -352,6 +352,7 @@ pub fn compute_skill_specs_effect<'a>(
                 restore_type,
                 min,
                 max,
+                ..
             } => {
                 if match effect.stat {
                     StatType::SpellPower => true,

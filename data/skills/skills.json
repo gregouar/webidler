@@ -425,7 +425,8 @@
             "Restore": {
               "restore_type": "Life",
               "min": 25,
-              "max": 25
+              "max": 25,
+              "modifier": "Flat"
             }
           }
         ]
@@ -462,7 +463,8 @@
             "Restore": {
               "restore_type": "Mana",
               "min": 10,
-              "max": 10
+              "max": 10,
+              "modifier": "Flat"
             }
           }
         ]

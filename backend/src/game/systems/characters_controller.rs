@@ -5,6 +5,7 @@ use shared::data::{
     character_status::{StatusSpecs, StatusState},
     item::SkillRange,
     skill::{DamageType, RestoreType, SkillType},
+    stat_effect::Modifier,
 };
 
 use crate::{
@@ -96,17 +97,30 @@ pub fn damage_character(
     *life -= take_from_life;
 }
 
-pub fn restore_character(target: &mut Target, restore_type: RestoreType, amount: f64) {
-    let (_, (_, target_state)) = target;
+pub fn restore_character(
+    target: &mut Target,
+    restore_type: RestoreType,
+    amount: f64,
+    modifier: Modifier,
+) {
+    let (_, (target_specs, target_state)) = target;
 
     if amount <= 0.0 {
         return;
     }
 
+    let factor = match modifier {
+        Modifier::Multiplier => match restore_type {
+            RestoreType::Life => target_specs.max_life * 0.01,
+            RestoreType::Mana => target_specs.max_mana * 0.01,
+        },
+        Modifier::Flat => 1.0,
+    };
+
     if target_state.is_alive {
         match restore_type {
-            RestoreType::Life => target_state.life += amount,
-            RestoreType::Mana => target_state.mana += amount,
+            RestoreType::Life => target_state.life += amount * factor,
+            RestoreType::Mana => target_state.mana += amount * factor,
         }
     }
 }

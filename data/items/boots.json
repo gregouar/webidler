@@ -68,8 +68,9 @@
           {
             "Restore": {
               "restore_type": "Mana",
-              "min": 10,
-              "max": 20
+              "min": 5,
+              "max": 10,
+              "modifier": "Multiplier"
             }
           }
         ]

@@ -1238,7 +1238,8 @@
                 "Restore": {
                   "restore_type": "Life",
                   "min": 3,
-                  "max": 3
+                  "max": 3,
+                  "modifier": "Flat"
                 }
               }
             ],

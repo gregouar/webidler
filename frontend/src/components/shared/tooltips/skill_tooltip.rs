@@ -11,6 +11,7 @@ use shared::data::{
         SkillEffect, SkillEffectType, SkillRepeatTarget, SkillSpecs, SkillTargetsGroup, SkillType,
         TargetType,
     },
+    stat_effect::Modifier,
     trigger::TriggerSpecs,
 };
 
@@ -352,11 +353,17 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
             restore_type,
             min,
             max,
+            modifier,
         } => view! {
             <EffectLi>
                 {success_chances}"Restore "
-                <span class="font-semibold">{format_min_max(min, max)}</span>
-                {restore_type_str(Some(restore_type))}
+                <span class="font-semibold">
+                    {format_min_max(min, max)}
+                    {match modifier {
+                        Modifier::Multiplier => "%",
+                        Modifier::Flat => "",
+                    }}
+                </span> {restore_type_str(Some(restore_type))}
             </EffectLi>
         }
         .into_any(),

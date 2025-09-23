@@ -2,7 +2,10 @@ use std::collections::HashSet;
 
 use serde::{Deserialize, Serialize};
 
-use crate::data::{stat_effect::StatType, trigger::TriggerSpecs};
+use crate::data::{
+    stat_effect::{Modifier, StatType},
+    trigger::TriggerSpecs,
+};
 
 pub use super::stat_effect::DamageType;
 use super::{
@@ -168,6 +171,9 @@ pub enum SkillEffectType {
         // TODO: Flat vs Multiplier (=percent?)
         min: f64,
         max: f64,
+
+        #[serde(default)]
+        modifier: Modifier,
     },
     Resurrect,
 }
