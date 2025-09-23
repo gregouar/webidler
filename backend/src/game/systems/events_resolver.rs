@@ -6,7 +6,7 @@ use shared::{
         area::{AreaLevel, ThreatLevel},
         character::CharacterId,
         character_status::StatusSpecs,
-        skill::SkillType,
+        skill::{SkillType, TargetType},
         stat_effect::{Modifier, StatType},
         trigger::EventTrigger,
     },
@@ -162,15 +162,19 @@ fn handle_kill_event(
                     }
 
                     for (idx, monster_specs) in game_data.monster_specs.iter().enumerate() {
+                        let event_target_type = match target {
+                            CharacterId::Player => TargetType::Enemy,
+                            CharacterId::Monster(event_target_idx) => {
+                                if event_target_idx == idx {
+                                    TargetType::Me
+                                } else {
+                                    TargetType::Friend
+                                }
+                            }
+                        };
                         for triggered_effects in &monster_specs.triggers {
-                            if let EventTrigger::OnKill(kill_trigger) = triggered_effects.trigger {
-                                if kill_trigger.is_stunned.unwrap_or(is_stunned) == is_stunned
-                                    && kill_trigger.is_debuffed.unwrap_or(is_debuffed)
-                                        == is_debuffed
-                                    && kill_trigger
-                                        .is_damaged_over_time
-                                        .is_none_or(|dt| is_damaged_over_time.contains(&dt))
-                                {
+                            if let EventTrigger::OnDeath(target_type) = triggered_effects.trigger {
+                                if target_type == event_target_type {
                                     trigger_effects.push(TriggerContext {
                                         trigger: triggered_effects.clone(),
                                         owner: CharacterId::Monster(idx),

@@ -183,7 +183,7 @@ pub struct ApplyStatusEffect {
     pub cumulate: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, Hash)]
 pub enum TargetType {
     #[default]
     Enemy,

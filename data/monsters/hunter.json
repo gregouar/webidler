@@ -86,7 +86,7 @@
           "trigger_id": "hunter_vengeance",
           "description": "On Fidel Hound death:",
           "skill_type": "Spell",
-          "OnKill": {},
+          "OnDeath": "Friend",
           "target": "Me",
           "effects": [
             {

@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::data::skill::TargetType;
+
 use super::{
     skill::{DamageType, SkillEffect, SkillRange, SkillType},
     stat_effect::{Modifier, StatType},
@@ -12,6 +14,7 @@ pub enum EventTrigger {
     OnKill(KillTrigger),
     OnWaveCompleted,
     OnThreatIncreased,
+    OnDeath(TargetType),
 }
 
 // TODO: replace by simple tag system?
