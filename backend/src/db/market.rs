@@ -295,7 +295,10 @@ pub async fn read_market_items<'c>(
         LEFT JOIN
             characters AS buyer ON buyer.character_id = market.deleted_by
         WHERE 
-            ((NOT $37 AND market.deleted_at IS NULL) OR ($37 AND market.deleted_at IS NOT NULL))
+            (
+                (NOT $37 AND market.deleted_at IS NULL) 
+                OR ($37 AND market.deleted_at IS NOT NULL AND market.deleted_by != $3)
+            )
             AND (
                 (NOT $4 
                     AND market.character_id != $3 

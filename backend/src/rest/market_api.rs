@@ -269,9 +269,13 @@ pub async fn post_edit_market_item(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let item_bought = db::market::buy_item(&mut tx, payload.item_index as i64, None)
-        .await?
-        .ok_or(AppError::NotFound)?;
+    let item_bought = db::market::buy_item(
+        &mut tx,
+        payload.item_index as i64,
+        Some(character.character_id),
+    )
+    .await?
+    .ok_or(AppError::NotFound)?;
 
     if item_bought.character_id != character.character_id {
         return Err(AppError::Forbidden);

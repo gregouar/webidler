@@ -778,10 +778,25 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
 #[component]
 pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+
     let price = move || {
         selected_item.with(|selected_item| match selected_item {
             SelectedItem::InMarket(selected_item) => Some(selected_item.price),
             _ => None,
+        })
+    };
+
+    let removed = move || {
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => selected_item
+                .deleted_by
+                .as_ref()
+                .map(|(deleted_by_id, _)| {
+                    *deleted_by_id == town_context.character.read().character_id
+                })
+                .unwrap_or_default(),
+            _ => false,
         })
     };
 
@@ -814,8 +829,15 @@ pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             <div class="flex flex-col">
                 <ItemDetails selected_item />
                 <div class="flex justify-between items-center text-sm text-gray-400 p-2">
-                    <span>"Bought by: "{move || buyer_name()}</span>
-                    <span>{move || bought_at().map(format_datetime)}</span>
+                    {if removed() {
+                        view! { <span>"Removed"</span> }.into_any()
+                    } else {
+                        view! {
+                            <span>"Bought by: "{move || buyer_name()}</span>
+                            <span>{move || bought_at().map(format_datetime)}</span>
+                        }
+                            .into_any()
+                    }}
                 </div>
             </div>
 
