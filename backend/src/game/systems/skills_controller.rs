@@ -144,58 +144,14 @@ fn find_targets<'a, 'b>(
     let (main_target_id, main_target_pos) =
         find_main_target(targets_group, me_position, pre_targets, already_hit)?;
 
-    let dx = match targets_group.range {
-        SkillRange::Melee => 1,
-        SkillRange::Distance => -1,
-        SkillRange::Any => {
-            if flip_coin() {
-                1
-            } else {
-                -1
-            }
-        }
-    };
-
-    // Check if the position is in AoE of skill
-    let is_target_in_range = |pos: (i32, i32)| -> bool {
-        match targets_group.shape {
-            SkillShape::Single => pos == main_target_pos,
-            SkillShape::Vertical2 => pos.0 == main_target_pos.0 && (pos.1 == 1 || pos.1 == 2),
-            SkillShape::Horizontal2 => {
-                (pos.0 == main_target_pos.0 || pos.0 == main_target_pos.0 + dx)
-                    && pos.1 == main_target_pos.1
-            }
-            SkillShape::Horizontal3 => {
-                (pos.0 == main_target_pos.0
-                    || pos.0 == main_target_pos.0 + dx
-                    || pos.0 == main_target_pos.0 + 2 * dx)
-                    && pos.1 == main_target_pos.1
-            }
-            SkillShape::Square4 => {
-                (pos.0 == main_target_pos.0 || pos.0 == main_target_pos.0 + dx)
-                    && (pos.1 == 1 || pos.1 == 2)
-            }
-            SkillShape::All => true,
-        }
-    };
-
     Some((
         main_target_id,
-        // All targets touching the skill area of effect
-        pre_targets
-            .iter_mut()
-            .filter(|(_, (specs, _))| {
-                let (x_size, y_size) = specs.size.get_xy_size();
-                (0..x_size as i32)
-                    .flat_map(|x| (0..y_size as i32).map(move |y| (x, y)))
-                    .any(|(x, y)| {
-                        is_target_in_range((
-                            specs.position_x as i32 + x,
-                            specs.position_y as i32 + y,
-                        ))
-                    })
-            })
-            .collect(),
+        find_sub_targets(
+            targets_group.range,
+            targets_group.shape,
+            main_target_pos,
+            pre_targets,
+        ),
     ))
 }
 
@@ -204,7 +160,7 @@ fn find_main_target<'a, 'b>(
     me_position: (u8, u8),
     pre_targets: &'b mut [Target<'a>],
     already_hit: &HashSet<CharacterId>,
-) -> Option<(CharacterId, (i32, i32))> {
+) -> Option<(CharacterId, (u8, u8))> {
     // Filter by alive status & already hit targets depending on repeat type
     let target_specs = pre_targets
         .iter()
@@ -236,16 +192,68 @@ fn find_main_target<'a, 'b>(
                 let (x_size, y_size) = specs.size.get_xy_size();
                 let dx = rng::random_range(1..=x_size)
                     .and_then(|v| v.checked_sub(1))
-                    .unwrap_or(0) as i32;
+                    .unwrap_or(0) as u8;
                 let dy = rng::random_range(1..=y_size)
                     .and_then(|v| v.checked_sub(1))
-                    .unwrap_or(0) as i32;
-                (
-                    *id,
-                    (specs.position_x as i32 + dx, specs.position_y as i32 + dy),
-                )
+                    .unwrap_or(0) as u8;
+                (*id, (specs.position_x + dx, specs.position_y + dy))
             })
     })
+}
+
+pub fn find_sub_targets<'a, 'b>(
+    skill_range: SkillRange,
+    skill_shape: SkillShape,
+    skill_position: (u8, u8),
+    pre_targets: &'b mut [Target<'a>],
+) -> Vec<&'b mut Target<'a>> {
+    let skill_position = (skill_position.0 as i32, skill_position.1 as i32);
+    let dx = match skill_range {
+        SkillRange::Melee => 1,
+        SkillRange::Distance => -1,
+        SkillRange::Any => {
+            if flip_coin() {
+                1
+            } else {
+                -1
+            }
+        }
+    };
+
+    // Check if the position is in AoE of skill
+    let is_target_in_range = |pos: (i32, i32)| -> bool {
+        match skill_shape {
+            SkillShape::Single => pos == skill_position,
+            SkillShape::Vertical2 => pos.0 == skill_position.0 && (pos.1 == 1 || pos.1 == 2),
+            SkillShape::Horizontal2 => {
+                (pos.0 == skill_position.0 || pos.0 == skill_position.0 + dx)
+                    && pos.1 == skill_position.1
+            }
+            SkillShape::Horizontal3 => {
+                (pos.0 == skill_position.0
+                    || pos.0 == skill_position.0 + dx
+                    || pos.0 == skill_position.0 + 2 * dx)
+                    && pos.1 == skill_position.1
+            }
+            SkillShape::Square4 => {
+                (pos.0 == skill_position.0 || pos.0 == skill_position.0 + dx)
+                    && (pos.1 == 1 || pos.1 == 2)
+            }
+            SkillShape::All => true,
+        }
+    };
+
+    pre_targets
+        .iter_mut()
+        .filter(|(_, (specs, _))| {
+            let (x_size, y_size) = specs.size.get_xy_size();
+            (0..x_size as i32)
+                .flat_map(|x| (0..y_size as i32).map(move |y| (x, y)))
+                .any(|(x, y)| {
+                    is_target_in_range((specs.position_x as i32 + x, specs.position_y as i32 + y))
+                })
+        })
+        .collect()
 }
 
 pub fn apply_skill_effect(

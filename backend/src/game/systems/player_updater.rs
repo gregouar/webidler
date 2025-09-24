@@ -3,7 +3,7 @@ use std::{iter, time::Duration};
 use shared::data::{
     character::CharacterId,
     character_status::StatusSpecs,
-    item::SkillRange,
+    item::{SkillRange, SkillShape},
     item_affix::AffixEffectScope,
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerSpecs, PlayerState},
@@ -157,6 +157,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
                         target: TriggerTarget::Source,
                         skill_range: SkillRange::Any,
                         skill_type: SkillType::Attack,
+                        skill_shape: SkillShape::Single,
                         modifiers: Vec::new(),
                         effects: vec![SkillEffect {
                             failure_chances: 0.0,

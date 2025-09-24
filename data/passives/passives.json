@@ -1200,7 +1200,7 @@
         "x": -40,
         "y": 20,
         "node_type": "Armor",
-        "size": 1,
+        "size": 2,
         "effects": [
           {
             "stat": "Block",
@@ -1226,7 +1226,7 @@
         "x": 40,
         "y": -20,
         "node_type": "Life",
-        "size": 1,
+        "size": 2,
         "triggers": [
           {
             "trigger_id": "healing_aura",
@@ -1263,7 +1263,7 @@
         "x": 40,
         "y": 20,
         "node_type": "Critical",
-        "size": 1,
+        "size": 2,
         "triggers": [
           {
             "trigger_id": "bleeding_crit",
@@ -1334,7 +1334,7 @@
         "x": 0,
         "y": -40,
         "node_type": "Spell",
-        "size": 1,
+        "size": 2,
         "effects": [
           {
             "stat": {
@@ -1359,7 +1359,7 @@
         "x": -40,
         "y": -20,
         "node_type": "Mana",
-        "size": 1,
+        "size": 2,
         "effects": [
           {
             "stat": "TakeFromManaBeforeLife",
@@ -1380,7 +1380,7 @@
         "x": 0,
         "y": 40,
         "node_type": "Attack",
-        "size": 1,
+        "size": 2,
         "triggers": [
           {
             "trigger_id": "enrage",
@@ -1901,6 +1901,310 @@
             },
             "modifier": "Multiplier",
             "value": 0.2
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "damage_over_time_spread": {
+        "initial_node": true,
+        "name": "Spread Destruction",
+        "icon": "passives/spread.svg",
+        "x": 60,
+        "y": 0,
+        "size": 2,
+        "node_type": "Status",
+        "effects": [],
+        "upgrade_effects": [],
+        "triggers": [
+          {
+            "trigger_id": "fire_spread",
+            "description": "Damage over Time effects spread to nearby enemies on Kill, for their remaining Duration.",
+            "OnKill": {
+              "is_damaged_over_time": "Fire"
+            },
+            "target": "SameTarget",
+            "skill_range": "Melee",
+            "skill_shape": "Square4",
+            "effects": [
+              {
+                "ApplyStatus": {
+                  "min_duration": 0,
+                  "max_duration": 0,
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Physical",
+                          "ignore_armor": true
+                        }
+                      },
+                      "min_value": 0,
+                      "max_value": 0
+                    }
+                  ]
+                },
+                "ignore_stat_effects": [
+                  {
+                    "Damage": {}
+                  },
+                  {
+                    "MinDamage": {}
+                  },
+                  {
+                    "MaxDamage": {}
+                  },
+                  {
+                    "StatusDuration": null
+                  },
+                  {
+                    "StatusPower": null
+                  }
+                ]
+              },
+              {
+                "ApplyStatus": {
+                  "min_duration": 0,
+                  "max_duration": 0,
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Fire",
+                          "ignore_armor": true
+                        }
+                      },
+                      "min_value": 0,
+                      "max_value": 0
+                    }
+                  ]
+                },
+                "ignore_stat_effects": [
+                  {
+                    "Damage": {}
+                  },
+                  {
+                    "MinDamage": {}
+                  },
+                  {
+                    "MaxDamage": {}
+                  },
+                  {
+                    "StatusDuration": null
+                  },
+                  {
+                    "StatusPower": null
+                  }
+                ]
+              },
+              {
+                "ApplyStatus": {
+                  "min_duration": 0,
+                  "max_duration": 0,
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Poison",
+                          "ignore_armor": true
+                        }
+                      },
+                      "min_value": 0,
+                      "max_value": 0
+                    }
+                  ]
+                },
+                "ignore_stat_effects": [
+                  {
+                    "Damage": {}
+                  },
+                  {
+                    "MinDamage": {}
+                  },
+                  {
+                    "MaxDamage": {}
+                  },
+                  {
+                    "StatusDuration": null
+                  },
+                  {
+                    "StatusPower": null
+                  }
+                ]
+              },
+              {
+                "ApplyStatus": {
+                  "min_duration": 0,
+                  "max_duration": 0,
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Storm",
+                          "ignore_armor": true
+                        }
+                      },
+                      "min_value": 0,
+                      "max_value": 0
+                    }
+                  ]
+                },
+                "ignore_stat_effects": [
+                  {
+                    "Damage": {}
+                  },
+                  {
+                    "MinDamage": {}
+                  },
+                  {
+                    "MaxDamage": {}
+                  },
+                  {
+                    "StatusDuration": null
+                  },
+                  {
+                    "StatusPower": null
+                  }
+                ]
+              }
+            ],
+            "modifiers": [
+              {
+                "stat": {
+                  "Damage": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusValue": {
+                    "DamageOverTime": {
+                      "damage_type": "Physical"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Physical"
+                    }
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Physical"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "Damage": {
+                    "damage_type": "Fire"
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusValue": {
+                    "DamageOverTime": {
+                      "damage_type": "Fire"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Fire"
+                    }
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Fire"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "Damage": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusValue": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "Damage": {
+                    "damage_type": "Storm"
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusValue": {
+                    "DamageOverTime": {
+                      "damage_type": "Storm"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Storm"
+                    }
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Storm"
+                    }
+                  }
+                }
+              }
+            ]
           }
         ],
         "max_upgrade_level": 3

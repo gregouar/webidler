@@ -384,22 +384,22 @@ pub fn Node(
             class=class_style
         >
             <circle
-                r=20 + node_specs.size * 10
+                r=20 + node_specs.size * 5
                 fill=fill
                 stroke=stroke
                 stroke-width="3"
                 filter=filter
             />
 
-            <circle r=20 + node_specs.size * 10 fill="url(#node-inner-gradient)" />
+            <circle r=20 + node_specs.size * 5 fill="url(#node-inner-gradient)" />
 
             <image
                 filter="drop-shadow(2px 2px 2px black)"
                 href=icon_asset
-                x=-(24 + node_specs.size as i32 * 20) / 2
-                y=-(24 + node_specs.size as i32 * 20) / 2
-                width=24 + node_specs.size * 20
-                height=24 + node_specs.size * 20
+                x=-(24 + node_specs.size as i32 * 10) / 2
+                y=-(24 + node_specs.size as i32 * 10) / 2
+                width=24 + node_specs.size * 10
+                height=24 + node_specs.size * 10
                 class="group-active:scale-90 group-active:brightness-100"
                 style=move || { format!("pointer-events: none; filter: {}", icon_filter()) }
             />

@@ -33,42 +33,37 @@ pub async fn resolve_events(
     game_data: &mut GameInstanceData,
     master_store: &MasterStore,
 ) {
-    let mut trigger_effects = Vec::new();
+    let mut trigger_contexts = Vec::new();
 
     let events = events_queue.consume_events();
     for event in events.iter() {
         match event {
             GameEvent::Hit(hit_event) => {
-                handle_hit_event(&mut trigger_effects, game_data, hit_event)
+                handle_hit_event(&mut trigger_contexts, game_data, hit_event)
             }
             GameEvent::Kill { target } => {
-                handle_kill_event(&mut trigger_effects, game_data, *target)
+                handle_kill_event(&mut trigger_contexts, game_data, *target)
             }
             GameEvent::AreaCompleted(area_level) => {
                 handle_area_completed_event(game_data, master_store, *area_level)
             }
             GameEvent::WaveCompleted(area_level) => handle_wave_completed_event(
-                &mut trigger_effects,
+                &mut trigger_contexts,
                 events_queue,
                 game_data,
                 *area_level,
             ),
             GameEvent::ThreatIncreased(threat_level) => {
-                handle_threat_increased_event(&mut trigger_effects, game_data, *threat_level)
+                handle_threat_increased_event(&mut trigger_contexts, game_data, *threat_level)
             }
         }
     }
 
-    triggers_controller::apply_trigger_effects(
-        events_queue,
-        game_data,
-        master_store,
-        trigger_effects,
-    );
+    triggers_controller::apply_trigger_effects(events_queue, game_data, trigger_contexts);
 }
 
 fn handle_hit_event<'a>(
-    trigger_effects: &mut Vec<TriggerContext<'a>>,
+    trigger_contexts: &mut Vec<TriggerContext<'a>>,
     game_data: &mut GameInstanceData,
     hit_event: &'a HitEvent,
 ) {
@@ -91,7 +86,7 @@ fn handle_hit_event<'a>(
             && hit_trigger.is_blocked.unwrap_or(hit_event.is_blocked) == hit_event.is_blocked
             && hit_trigger.is_hurt.unwrap_or(hit_event.is_hurt) == hit_event.is_hurt
         {
-            trigger_effects.push(TriggerContext {
+            trigger_contexts.push(TriggerContext {
                 trigger: triggered_effects.clone(),
                 owner: CharacterId::Player,
                 source: hit_event.source,
@@ -104,7 +99,7 @@ fn handle_hit_event<'a>(
 }
 
 fn handle_kill_event(
-    trigger_effects: &mut Vec<TriggerContext>,
+    trigger_contexts: &mut Vec<TriggerContext>,
     game_data: &mut GameInstanceData,
     target: CharacterId,
 ) {
@@ -149,7 +144,7 @@ fn handle_kill_event(
                                     .is_damaged_over_time
                                     .is_none_or(|dt| is_damaged_over_time.contains(&dt))
                             {
-                                trigger_effects.push(TriggerContext {
+                                trigger_contexts.push(TriggerContext {
                                     trigger: triggered_effects.clone(),
                                     owner: CharacterId::Player,
                                     source: CharacterId::Player,
@@ -183,7 +178,7 @@ fn handle_kill_event(
                                     && (monster_state.character_state.is_alive
                                         || target_type == TargetType::Me)
                                 {
-                                    trigger_effects.push(TriggerContext {
+                                    trigger_contexts.push(TriggerContext {
                                         trigger: triggered_effects.clone(),
                                         owner: CharacterId::Monster(idx),
                                         source: CharacterId::Player,
@@ -257,7 +252,7 @@ fn handle_area_completed_event(
 }
 
 fn handle_wave_completed_event(
-    trigger_effects: &mut Vec<TriggerContext>,
+    trigger_contexts: &mut Vec<TriggerContext>,
     events_queue: &mut EventsQueue,
     game_data: &mut GameInstanceData,
     area_level: AreaLevel,
@@ -274,7 +269,7 @@ fn handle_wave_completed_event(
 
     for triggered_effects in game_data.player_specs.read().triggers.iter() {
         if let EventTrigger::OnWaveCompleted = triggered_effects.trigger {
-            trigger_effects.push(TriggerContext {
+            trigger_contexts.push(TriggerContext {
                 trigger: triggered_effects.clone(),
                 owner: CharacterId::Player,
                 source: CharacterId::Player,
@@ -287,7 +282,7 @@ fn handle_wave_completed_event(
 }
 
 fn handle_threat_increased_event(
-    trigger_effects: &mut Vec<TriggerContext>,
+    trigger_contexts: &mut Vec<TriggerContext>,
     game_data: &mut GameInstanceData,
     threat_level: ThreatLevel,
 ) {
@@ -322,7 +317,7 @@ fn handle_threat_increased_event(
 
     for triggered_effects in game_data.player_specs.read().triggers.iter() {
         if let EventTrigger::OnThreatIncreased = triggered_effects.trigger {
-            trigger_effects.push(TriggerContext {
+            trigger_contexts.push(TriggerContext {
                 trigger: triggered_effects.clone(),
                 owner: CharacterId::Player,
                 source: CharacterId::Player,
