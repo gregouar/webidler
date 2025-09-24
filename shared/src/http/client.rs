@@ -42,6 +42,7 @@ pub struct AscendPassivesRequest {
 pub struct BrowseMarketItemsRequest {
     pub character_id: UserCharacterId,
     pub own_listings: bool,
+    pub is_deleted: bool,
 
     pub filters: MarketFilters,
 

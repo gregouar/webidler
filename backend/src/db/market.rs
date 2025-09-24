@@ -30,6 +30,10 @@ pub struct MarketEntry {
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
+
+    pub deleted_at: Option<UtcDateTime>,
+    pub deleted_by_id: Option<UserCharacterId>,
+    pub deleted_by_name: Option<String>,
 }
 
 pub async fn sell_item<'c>(
@@ -82,8 +86,13 @@ pub async fn sell_item<'c>(
             .as_ref()
             .map(|armor_specs| armor_specs.block as f64),
         item_damages,
+        item.weapon_specs
+            .as_ref()
+            .map(|weapon_specs| weapon_specs.crit_chances as f64),
+        item.weapon_specs
+            .as_ref()
+            .map(|weapon_specs| weapon_specs.crit_damage),
         serde_json::to_value(&item.modifiers)?,
-        // serde_json::to_vec(&item.modifiers)?.into(),
     )
     .await?)
 }
@@ -103,6 +112,8 @@ async fn create_market_item<'c>(
     item_armor: Option<f64>,
     item_block: Option<f64>,
     item_damages: Option<f64>,
+    item_crit_chance: Option<f64>,
+    item_crit_damage: Option<f64>,
     item_data: JsonValue,
 ) -> Result<(), sqlx::Error> {
     let market_id = sqlx::query_scalar!(
@@ -118,9 +129,11 @@ async fn create_market_item<'c>(
             item_armor, 
             item_block, 
             item_damages, 
+            item_crit_chance,
+            item_crit_damage,
             item_data
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
         RETURNING market_id
         "#,
         character_id,
@@ -133,6 +146,8 @@ async fn create_market_item<'c>(
         item_armor,
         item_block,
         item_damages,
+        item_crit_chance,
+        item_crit_damage,
         item_data,
     )
     .fetch_one(&mut **executor)
@@ -194,6 +209,7 @@ pub async fn read_market_items<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     own_listings: bool,
+    is_deleted: bool,
     filters: MarketFilters,
     skip: i64,
     limit: i64,
@@ -211,6 +227,12 @@ pub async fn read_market_items<'c>(
 
     let no_filter_item_damages = filters.item_damages.is_none();
     let item_damages = filters.item_damages.unwrap_or_default();
+
+    let no_filter_item_crit_chance = filters.item_crit_chance.is_none();
+    let item_crit_chance = filters.item_crit_chance.unwrap_or_default();
+
+    let no_filter_item_crit_damage = filters.item_crit_damage.is_none();
+    let item_crit_damage = filters.item_crit_damage.unwrap_or_default();
 
     let no_filter_item_armor = filters.item_armor.is_none();
     let item_armor = filters.item_armor.unwrap_or_default();
@@ -260,15 +282,23 @@ pub async fn read_market_items<'c>(
             item_level as "item_level!: i32",
             item_data as "item_data: JsonValue",
             market.created_at,
-            market.updated_at
+            market.updated_at,
+            market.deleted_at as "deleted_at?: UtcDateTime",
+            deleted_by as "deleted_by_id?: UserCharacterId", 
+            buyer.character_name as "deleted_by_name?"
         FROM 
             market 
         INNER JOIN
             characters AS owner ON owner.character_id = market.character_id
         LEFT JOIN
             characters AS recipient ON recipient.character_id = market.recipient_id
+        LEFT JOIN
+            characters AS buyer ON buyer.character_id = market.deleted_by
         WHERE 
-            market.deleted_at IS NULL 
+            (
+                (NOT $37 AND market.deleted_at IS NULL) 
+                OR ($37 AND market.deleted_at IS NOT NULL AND market.deleted_by != $3)
+            )
             AND (
                 (NOT $4 
                     AND market.character_id != $3 
@@ -290,6 +320,8 @@ pub async fn read_market_items<'c>(
                 AND mc.category = $10
             ))
             AND ($11 OR market.item_damages >= $12)
+            AND ($33 OR market.item_crit_chance >= $34)
+            AND ($35 OR market.item_crit_damage >= $36)
             AND ($13 OR market.item_armor >= $14)
             AND ($15 OR market.item_block >= $16)
             AND ($19 = '' OR EXISTS (
@@ -340,10 +372,17 @@ pub async fn read_market_items<'c>(
             END ASC,
             CASE
                 WHEN  $17 = 'Damages' THEN  market.item_damages
+                WHEN  $17 = 'CritChance' THEN  market.item_crit_chance
+                WHEN  $17 = 'CritDamage' THEN  market.item_crit_damage
                 WHEN  $17 = 'Armor' THEN  market.item_armor
                 WHEN  $17 = 'Block' THEN  market.item_block
             END DESC NULLS LAST, 
-            market.price ASC
+            CASE 
+                WHEN $17 = 'Time' THEN market.updated_at
+            END DESC,
+            CASE
+                WHEN $17 != 'Time' THEN market.price 
+            END ASC
         LIMIT $1
         OFFSET $2
         "#,
@@ -379,6 +418,11 @@ pub async fn read_market_items<'c>(
         stat_filters[4].0, // $30
         stat_filters[4].1,
         stat_filters[4].2,
+        no_filter_item_crit_chance,
+        item_crit_chance,
+        no_filter_item_crit_damage, // $35
+        item_crit_damage,
+        is_deleted,
     )
     .fetch_all(executor)
     .await?;
@@ -421,6 +465,7 @@ pub async fn reject_item<'c>(
 pub async fn buy_item<'c>(
     executor: &mut Transaction<'c, Database>,
     market_id: MarketId,
+    buyer: Option<UserCharacterId>,
 ) -> Result<Option<MarketEntry>, sqlx::Error> {
     sqlx::query!(
         "UPDATE market_categories SET deleted_at = CURRENT_TIMESTAMP WHERE market_id = $1",
@@ -442,7 +487,9 @@ pub async fn buy_item<'c>(
         UPDATE 
             market
         SET 
-            deleted_at = CURRENT_TIMESTAMP
+            updated_at = CURRENT_TIMESTAMP,
+            deleted_at = CURRENT_TIMESTAMP,
+            deleted_by = $2
         WHERE 
             market_id = $1
             AND deleted_at is NULL
@@ -457,9 +504,13 @@ pub async fn buy_item<'c>(
             item_level as "item_level!: i32",
             item_data as "item_data: JsonValue",
             created_at,
-            updated_at
+            updated_at,
+            deleted_at as "deleted_at?: UtcDateTime",
+            NULL as "deleted_by_id?: UserCharacterId",
+            NULL as "deleted_by_name?: String"
         "#,
-        market_id
+        market_id,
+        buyer
     )
     .fetch_optional(&mut **executor)
     .await
