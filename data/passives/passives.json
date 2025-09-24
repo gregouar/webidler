@@ -1917,10 +1917,10 @@
         "upgrade_effects": [],
         "triggers": [
           {
-            "trigger_id": "fire_spread",
+            "trigger_id": "dot_spread",
             "description": "Damage over Time effects spread to nearby enemies on Kill, for their remaining Duration.",
             "OnKill": {
-              "is_damaged_over_time": "Fire"
+              "is_damaged_over_time": null
             },
             "target": "SameTarget",
             "skill_range": "Melee",
