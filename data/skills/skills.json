@@ -52,8 +52,7 @@
       {
         "range": "Any",
         "repeat": {
-          "min": 3,
-          "max": 3,
+          "value": 3,
           "target": "Different"
         },
         "effects": [
@@ -67,8 +66,7 @@
           {
             "failure_chance": 0.7,
             "ApplyStatus": {
-              "min_duration": 3,
-              "max_duration": 3,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": "Stun"
@@ -144,8 +142,7 @@
           },
           {
             "ApplyStatus": {
-              "min_duration": 3,
-              "max_duration": 3,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -153,8 +150,7 @@
                       "damage_type": "Fire"
                     }
                   },
-                  "min_value": 1,
-                  "max_value": 2
+                  "value": [1,2]
                 }
               ]
             }
@@ -187,8 +183,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 5,
-              "max_duration": 5,
+              "duration": 5,
               "statuses": [
                 {
                   "status_type": {
@@ -196,8 +191,7 @@
                       "damage_type": "Poison"
                     }
                   },
-                  "min_value": 2,
-                  "max_value": 3
+                  "value":[ 2,3]
                 }
               ]
             }
@@ -228,8 +222,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 5,
-              "max_duration": 5,
+              "duration": 5,
               "statuses": [
                 {
                   "status_type": {
@@ -244,8 +237,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 30,
-                  "max_value": 30
+                  "value": 30
                 }
               ]
             }
@@ -276,8 +268,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 5,
-              "max_duration": 5,
+              "duration": 5,
               "statuses": [
                 {
                   "status_type": {
@@ -292,8 +283,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 0.17,
-                  "max_value": 0.17
+                  "value": 0.17
                 }
               ]
             }
@@ -323,8 +313,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 5,
-              "max_duration": 5,
+              "duration": 5,
               "statuses": [
                 {
                   "status_type": {
@@ -335,8 +324,7 @@
                       "modifier": "Multiplier"
                     }
                   },
-                  "min_value": 0.2,
-                  "max_value": 0.2
+                  "value": 0.2
                 },
                 {
                   "status_type": {
@@ -345,8 +333,7 @@
                       "modifier": "Multiplier"
                     }
                   },
-                  "min_value": 0.2,
-                  "max_value": 0.2
+                  "value": 0.2
                 }
               ]
             }
@@ -383,8 +370,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 3,
-              "max_duration": 3,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -392,8 +378,7 @@
                       "damage_type": "Poison"
                     }
                   },
-                  "min_value": 4,
-                  "max_value": 8
+                  "value": [4,8]
                 }
               ]
             }
@@ -424,8 +409,7 @@
           {
             "Restore": {
               "restore_type": "Life",
-              "min": 25,
-              "max": 25,
+              "value": 25,
               "modifier": "Flat"
             }
           }
@@ -462,8 +446,7 @@
           {
             "Restore": {
               "restore_type": "Mana",
-              "min": 10,
-              "max": 10,
+              "value": 10,
               "modifier": "Flat"
             }
           }

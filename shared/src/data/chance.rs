@@ -1,6 +1,6 @@
 use serde::{Deserialize, Deserializer, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
+#[derive(Serialize, Debug, Clone, Copy, PartialEq, Default)]
 pub struct Chance {
     pub value: f32,
 
@@ -28,7 +28,29 @@ pub struct QuantityChance {
 
 #[derive(Deserialize)]
 #[serde(untagged)]
-enum ChanceDef<T> {
+enum ChanceDef {
+    Single(f32),
+    Full(Chance),
+}
+
+impl<'de> Deserialize<'de> for Chance {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        Ok(match ChanceDef::deserialize(deserializer)? {
+            ChanceDef::Single(value) => Self {
+                value,
+                lucky_chance: 0.0,
+            },
+            ChanceDef::Full(chance) => chance,
+        })
+    }
+}
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+enum RangeChanceDef<T> {
     Single(T),
     Range([T; 2]),
     Full {
@@ -44,18 +66,18 @@ impl<'de> Deserialize<'de> for ValueChance {
     where
         D: Deserializer<'de>,
     {
-        Ok(match ChanceDef::deserialize(deserializer)? {
-            ChanceDef::Single(value) => Self {
+        Ok(match RangeChanceDef::deserialize(deserializer)? {
+            RangeChanceDef::Single(value) => Self {
                 min: value,
                 max: value,
                 lucky_chance: 0.0,
             },
-            ChanceDef::Range([min, max]) => Self {
+            RangeChanceDef::Range([min, max]) => Self {
                 min,
                 max,
                 lucky_chance: 0.0,
             },
-            ChanceDef::Full {
+            RangeChanceDef::Full {
                 min,
                 max,
                 lucky_chance,
@@ -73,18 +95,18 @@ impl<'de> Deserialize<'de> for QuantityChance {
     where
         D: Deserializer<'de>,
     {
-        Ok(match ChanceDef::deserialize(deserializer)? {
-            ChanceDef::Single(value) => Self {
+        Ok(match RangeChanceDef::deserialize(deserializer)? {
+            RangeChanceDef::Single(value) => Self {
                 min: value,
                 max: value,
                 lucky_chance: 0.0,
             },
-            ChanceDef::Range([min, max]) => Self {
+            RangeChanceDef::Range([min, max]) => Self {
                 min,
                 max,
                 lucky_chance: 0.0,
             },
-            ChanceDef::Full {
+            RangeChanceDef::Full {
                 min,
                 max,
                 lucky_chance,
