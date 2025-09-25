@@ -17,15 +17,27 @@ pub fn format_effect_value(effect: &StatEffect) -> String {
     match effect.modifier {
         Modifier::Flat => format_number(effect.value),
         Modifier::Multiplier => {
-            if effect.value >= 0.0 {
-                format!("{}% Increased", format_number(effect.value * 100.0))
+            let (number, word) = if effect.value >= 0.0 {
+                (
+                    format_number(effect.value * 100.0),
+                    if effect.stat.is_multiplicative() {
+                        "More"
+                    } else {
+                        "Increased"
+                    },
+                )
             } else {
                 let div = (1.0 - effect.value).max(0.0);
-                format!(
-                    "{}% Reduced",
-                    format_number(-(if div != 0.0 { effect.value / div } else { 0.0 }) * 100.0)
+                (
+                    format_number(-(if div != 0.0 { effect.value / div } else { 0.0 }) * 100.0),
+                    if effect.stat.is_multiplicative() {
+                        "Less"
+                    } else {
+                        "Reduced"
+                    },
                 )
-            }
+            };
+            format!("{number}% {word}")
         }
     }
 }

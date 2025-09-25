@@ -13,8 +13,8 @@
         "scope": "Global",
         "stat": { "CritChances": null },
         "modifier": "Multiplier",
-        "min": 0.1,
-        "max": 0.19
+        "min": 0.15,
+        "max": 0.24
       }
     ]
   },
@@ -32,8 +32,8 @@
         "scope": "Global",
         "stat": { "CritChances": null },
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.29
+        "min": 0.25,
+        "max": 0.39
       }
     ]
   },
@@ -51,8 +51,8 @@
         "scope": "Global",
         "stat": { "CritChances": null },
         "modifier": "Multiplier",
-        "min": 0.3,
-        "max": 0.39
+        "min": 0.4,
+        "max": 0.54
       }
     ]
   },

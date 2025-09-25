@@ -156,6 +156,20 @@ impl StatType {
             _ => false,
         }
     }
+
+    pub fn is_multiplicative(&self) -> bool {
+        use StatType::*;
+        match self {
+            Armor(_)
+            | Damage { .. }
+            | MinDamage { .. }
+            | MaxDamage { .. }
+            | CritDamage(_)
+            | StatusPower(_)
+            | GoldFind => true,
+            _ => false,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -260,8 +274,7 @@ impl EffectsMap {
                 result
                     .entry((target, modifier))
                     .and_modify(|entry| match modifier {
-                        Modifier::Flat => *entry += value,
-                        Modifier::Multiplier => {
+                        Modifier::Multiplier if target.is_multiplicative() => {
                             let mut new_entry = *entry + 1.0;
                             new_entry.apply_effect(&StatEffect {
                                 stat: target,
@@ -271,6 +284,7 @@ impl EffectsMap {
                             });
                             *entry = new_entry - 1.0;
                         }
+                        _ => *entry += value,
                     })
                     .or_insert(value);
                 result
@@ -303,10 +317,8 @@ pub trait ApplyStatModifier {
 
     fn apply_negative_effect(&mut self, effect: &StatEffect) {
         self.apply_effect(&StatEffect {
-            stat: effect.stat,
-            modifier: effect.modifier,
             value: -effect.value,
-            bypass_ignore: effect.bypass_ignore,
+            ..*effect
         })
     }
 }

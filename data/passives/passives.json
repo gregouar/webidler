@@ -1113,7 +1113,7 @@
               "CritChances": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.2
           }
         ],
         "upgrade_effects": [
@@ -1122,7 +1122,7 @@
               "CritChances": null
             },
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 0.1
           }
         ],
         "max_upgrade_level": 3
@@ -1139,7 +1139,7 @@
               "CritChances": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.2
           }
         ],
         "upgrade_effects": [
@@ -1148,7 +1148,7 @@
               "CritChances": null
             },
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 0.1
           }
         ],
         "max_upgrade_level": 3
@@ -1166,7 +1166,7 @@
               "CritChances": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 0.2
           },
           {
             "stat": {
@@ -1182,7 +1182,7 @@
               "CritChances": null
             },
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 0.1
           },
           {
             "stat": {
