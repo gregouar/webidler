@@ -239,8 +239,8 @@ pub fn format_multiplier_stat_name(stat: StatType) -> String {
             format!("Restore{} Power", restore_type_str(restore_type))
         }
         StatType::SpellPower => "Spell Power".to_string(),
-        StatType::CritChances(skill_type) => {
-            format!("{}Critical Hit Chances", skill_type_str(skill_type))
+        StatType::CritChance(skill_type) => {
+            format!("{}Critical Hit Chance", skill_type_str(skill_type))
         }
         StatType::CritDamage(skill_type) => {
             format!("{}Critical Hit Damages", skill_type_str(skill_type))
@@ -301,7 +301,7 @@ pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
                 format_flat_number(value, false)
             )
         }
-        StatType::Block => format!("Adds {}% Block Chances", format_flat_number(value, false)),
+        StatType::Block => format!("Adds {}% Block Chance", format_flat_number(value, false)),
         StatType::BlockSpell => format!(
             "Adds {}% of Block Chance to Spells",
             format_flat_number(value, false)
@@ -331,7 +331,7 @@ pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
         StatType::SpellPower => {
             format!("Adds {} Power to Spells", format_flat_number(value, false))
         }
-        StatType::CritChances(skill_type) => format!(
+        StatType::CritChance(skill_type) => format!(
             "Adds {}% Critical Hit Chance{}",
             format_flat_number(value, false),
             to_skill_type_str(skill_type)

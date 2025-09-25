@@ -364,28 +364,7 @@
         "effects": [
           {
             "stat": {
-              "Armor": "Physical"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Fire"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Poison"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Storm"
+              "Armor": null
             },
             "modifier": "Multiplier",
             "value": 0.2
@@ -394,28 +373,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Armor": "Physical"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Fire"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Poison"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Storm"
+              "Armor": null
             },
             "modifier": "Multiplier",
             "value": 0.1
@@ -432,28 +390,7 @@
         "effects": [
           {
             "stat": {
-              "Armor": "Physical"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Fire"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Poison"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Storm"
+              "Armor": null
             },
             "modifier": "Multiplier",
             "value": 0.2
@@ -462,28 +399,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Armor": "Physical"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Fire"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Poison"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Storm"
+              "Armor": null
             },
             "modifier": "Multiplier",
             "value": 0.1
@@ -550,28 +466,7 @@
           },
           {
             "stat": {
-              "Armor": "Physical"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Fire"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Poison"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Storm"
+              "Armor": null
             },
             "modifier": "Multiplier",
             "value": 0.2
@@ -585,28 +480,7 @@
           },
           {
             "stat": {
-              "Armor": "Physical"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Fire"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Poison"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Storm"
+              "Armor": null
             },
             "modifier": "Multiplier",
             "value": 0.1
@@ -1101,8 +975,8 @@
         ],
         "max_upgrade_level": 3
       },
-      "crit_chances_1": {
-        "name": "Critical Hit Chances",
+      "crit_chance_1": {
+        "name": "Critical Hit Chance",
         "icon": "passives/critical.svg",
         "x": 10,
         "y": 12.5,
@@ -1110,7 +984,7 @@
         "effects": [
           {
             "stat": {
-              "CritChances": null
+              "CritChance": null
             },
             "modifier": "Multiplier",
             "value": 0.2
@@ -1119,7 +993,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "CritChances": null
+              "CritChance": null
             },
             "modifier": "Multiplier",
             "value": 0.1
@@ -1127,8 +1001,8 @@
         ],
         "max_upgrade_level": 3
       },
-      "crit_chances_2": {
-        "name": "Critical Hit Chances",
+      "crit_chance_2": {
+        "name": "Critical Hit Chance",
         "icon": "passives/critical.svg",
         "x": 20,
         "y": 20,
@@ -1136,7 +1010,7 @@
         "effects": [
           {
             "stat": {
-              "CritChances": null
+              "CritChance": null
             },
             "modifier": "Multiplier",
             "value": 0.2
@@ -1145,7 +1019,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "CritChances": null
+              "CritChance": null
             },
             "modifier": "Multiplier",
             "value": 0.1
@@ -1153,7 +1027,7 @@
         ],
         "max_upgrade_level": 3
       },
-      "crit_damage_and_chances_1": {
+      "crit_damage_and_chance_1": {
         "name": "Sadism",
         "icon": "passives/critical.svg",
         "x": 25,
@@ -1163,7 +1037,7 @@
         "effects": [
           {
             "stat": {
-              "CritChances": null
+              "CritChance": null
             },
             "modifier": "Multiplier",
             "value": 0.2
@@ -1179,7 +1053,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "CritChances": null
+              "CritChance": null
             },
             "modifier": "Multiplier",
             "value": 0.1
@@ -1338,7 +1212,7 @@
         "effects": [
           {
             "stat": {
-              "CritChances": "Spell"
+              "CritChance": "Spell"
             },
             "modifier": "Flat",
             "value": 5
@@ -1814,6 +1688,27 @@
         ],
         "max_upgrade_level": 3
       },
+      "storm_lucky": {
+        "name": "Lightning Never Strike Twice",
+        "icon": "passives/lightning_double.svg",
+        "x": 81,
+        "y": -29,
+        "size": 2,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": {
+              "Lucky": {
+                "Damage": {
+                  "damage_type": "Storm"
+                }
+              }
+            },
+            "modifier": "Flat",
+            "value": 1.0
+          }
+        ]
+      },
       "damage_over_time_1": {
         "name": "Damage over Time",
         "icon": "passives/damage_over_time.svg",
@@ -2206,8 +2101,7 @@
               }
             ]
           }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "movement_init": {
         "name": "Tactical Start",
@@ -2480,23 +2374,23 @@
       },
       {
         "from": "gold_u_1",
-        "to": "crit_chances_1"
+        "to": "crit_chance_1"
       },
       {
         "from": "crit_damage_1",
         "to": "crit_damage_2"
       },
       {
-        "from": "crit_chances_1",
-        "to": "crit_chances_2"
+        "from": "crit_chance_1",
+        "to": "crit_chance_2"
       },
       {
         "from": "crit_damage_2",
-        "to": "crit_damage_and_chances_1"
+        "to": "crit_damage_and_chance_1"
       },
       {
-        "from": "crit_chances_2",
-        "to": "crit_damage_and_chances_1"
+        "from": "crit_chance_2",
+        "to": "crit_damage_and_chance_1"
       },
       {
         "from": "gold_d_1",
@@ -2560,7 +2454,7 @@
       },
       {
         "from": "gold_ur_1",
-        "to": "crit_chances_2"
+        "to": "crit_chance_2"
       },
       {
         "from": "gold_ur_1",
@@ -2671,12 +2565,20 @@
         "to": "damage_over_time_3"
       },
       {
+        "from": "damage_over_time_3",
+        "to": "damage_over_time_spread"
+      },
+      {
         "from": "storm_damage_1",
         "to": "storm_damage_2"
       },
       {
         "from": "storm_damage_2",
         "to": "storm_damage_3"
+      },
+      {
+        "from": "storm_damage_3",
+        "to": "storm_lucky"
       },
       {
         "from": "movement_init",

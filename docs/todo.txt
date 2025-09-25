@@ -4,11 +4,11 @@ Next things to do:
 
 - lightning always strikes twice: storm damage is lucky
 - rapid toxins: double poison damage, half duration
-- blazing fire: add a % chances to inflict fire dot on fire damage (cumul, short dur)
+- blazing fire: add a % chance to inflict fire dot on fire damage (cumul, short dur)
 - overwhelming force: no crit chance, convert percent of crit damage to attack damage
 - spread destruction: dot spread on enemy death
 
-- failure chances stat effect
+- failure chance stat effect
 - threat damage passives
 - spider boss & minions
 

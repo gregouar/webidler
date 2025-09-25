@@ -8,10 +8,10 @@ use shared::data::{
         ApplyStatusEffect, BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{ApplyStatModifier, Modifier, StatEffect, StatType},
+    stat_effect::{ApplyStatModifier, LuckyRollType, Modifier, StatEffect, StatType},
 };
 
-use crate::game::data::items_store::ItemsStore;
+use crate::game::{data::items_store::ItemsStore, utils::rng::Rollable};
 
 const WEAPON_POISON_DAMAGE_DURATION: f64 = 2.0;
 
@@ -64,9 +64,9 @@ fn compute_weapon_specs(
     quality: f32,
     effects: &[StatEffect],
 ) -> WeaponSpecs {
-    weapon_specs.damage.values_mut().for_each(|(min, max)| {
-        *min *= 1.0 + quality as f64 * 0.01;
-        *max *= 1.0 + quality as f64 * 0.01;
+    weapon_specs.damage.values_mut().for_each(|value| {
+        value.min *= 1.0 + quality as f64 * 0.01;
+        value.max *= 1.0 + quality as f64 * 0.01;
     });
 
     for effect in effects {
@@ -79,14 +79,14 @@ fn compute_weapon_specs(
                 damage_type,
             } => match damage_type {
                 Some(damage_type) => {
-                    let (min, max) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
-                    min.apply_effect(effect);
-                    max.apply_effect(effect);
+                    let value = weapon_specs.damage.entry(damage_type).or_default();
+                    value.min.apply_effect(effect);
+                    value.max.apply_effect(effect);
                 }
                 None => {
-                    for (min, max) in weapon_specs.damage.values_mut() {
-                        min.apply_effect(effect);
-                        max.apply_effect(effect);
+                    for value in weapon_specs.damage.values_mut() {
+                        value.min.apply_effect(effect);
+                        value.max.apply_effect(effect);
                     }
                 }
             },
@@ -96,12 +96,12 @@ fn compute_weapon_specs(
             } => {
                 match damage_type {
                     Some(damage_type) => {
-                        let (min, _) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
-                        min.apply_effect(effect);
+                        let value = weapon_specs.damage.entry(damage_type).or_default();
+                        value.min.apply_effect(effect);
                     }
                     None => {
-                        for (min, _) in weapon_specs.damage.values_mut() {
-                            min.apply_effect(effect);
+                        for value in weapon_specs.damage.values_mut() {
+                            value.min.apply_effect(effect);
                         }
                     }
                 };
@@ -112,31 +112,55 @@ fn compute_weapon_specs(
             } => {
                 match damage_type {
                     Some(damage_type) => {
-                        let (_, max) = weapon_specs.damage.entry(damage_type).or_insert((0.0, 0.0));
-                        max.apply_effect(effect);
+                        let value = weapon_specs.damage.entry(damage_type).or_default();
+                        value.max.apply_effect(effect);
                     }
                     None => {
-                        for (_, max) in weapon_specs.damage.values_mut() {
-                            max.apply_effect(effect);
+                        for value in weapon_specs.damage.values_mut() {
+                            value.max.apply_effect(effect);
                         }
                     }
                 };
             }
-            StatType::CritChances(Some(SkillType::Attack) | None) => {
-                weapon_specs.crit_chances.apply_effect(effect)
+            StatType::CritChance(Some(SkillType::Attack) | None) => {
+                weapon_specs.crit_chance.value.apply_effect(effect)
             }
             StatType::CritDamage(Some(SkillType::Attack) | None) => {
                 weapon_specs.crit_damage.apply_effect(effect)
+            }
+            StatType::Lucky {
+                roll_type: LuckyRollType::CritChance,
+                ..
+            } => weapon_specs.crit_chance.lucky_chance.apply_effect(effect),
+
+            StatType::Lucky {
+                roll_type: LuckyRollType::Damage { damage_type },
+                ..
+            } => {
+                match damage_type {
+                    Some(damage_type) => {
+                        let value = weapon_specs.damage.entry(damage_type).or_default();
+                        value.lucky_chance.apply_effect(effect);
+                    }
+                    None => {
+                        for value in weapon_specs.damage.values_mut() {
+                            value.lucky_chance.apply_effect(effect);
+                        }
+                    }
+                };
             }
             _ => {}
         }
     }
 
     weapon_specs.cooldown = weapon_specs.cooldown.max(0.0);
-    weapon_specs.crit_chances = weapon_specs.crit_chances.clamp(0.0, 100.0);
-    weapon_specs.damage.retain(|_, (min, max)| {
-        *min = min.clamp(0.0, *max);
-        *max > 0.0
+    weapon_specs.crit_chance.clamp();
+    weapon_specs.damage.retain(|_, value| {
+        value.max = value.max.max(0.0);
+        value.min = value.min.max(0.0);
+        value.clamp();
+
+        value.min > 0.0
     });
 
     weapon_specs
@@ -169,10 +193,10 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                 .filter(|(k, _)| **k != DamageType::Poison)
                 .map(|(&k, &v)| (k, v))
                 .collect(),
-            crit_chances: weapon_specs.crit_chances,
+            crit_chance: weapon_specs.crit_chance,
             crit_damage: weapon_specs.crit_damage,
         },
-        failure_chances: 0.0,
+        failure_chance: 0.0,
         ignore_stat_effects: Default::default(),
     }];
 
@@ -191,7 +215,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                     cumulate: true,
                 }],
             },
-            failure_chances: 0.0,
+            failure_chance: 0.0,
             ignore_stat_effects: Default::default(),
         });
     }

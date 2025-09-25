@@ -216,7 +216,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 value=move || {
                                     format!(
                                         "+{:.0}%",
-                                        effect(StatType::CritChances(None), Modifier::Multiplier)
+                                        effect(StatType::CritChance(None), Modifier::Multiplier)
                                             * 100.0,
                                     )
                                 }

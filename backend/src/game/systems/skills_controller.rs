@@ -264,17 +264,17 @@ pub fn apply_skill_effect(
     skill_effect: &SkillEffect,
     targets: &mut [&mut Target],
 ) {
-    if rng::random_range(0.0..=1.0).unwrap_or(1.0) <= skill_effect.failure_chances {
+    if rng::random_range(0.0..=1.0).unwrap_or(1.0) <= skill_effect.failure_chance {
         return;
     }
 
     match &skill_effect.effect_type {
         SkillEffectType::FlatDamage {
             damage,
-            crit_chances,
+            crit_chance: crit_chance,
             crit_damage,
         } => {
-            let is_crit = rng::random_range(0.0..=100.0).unwrap_or(100.0) <= *crit_chances;
+            let is_crit = rng::random_range(0.0..=100.0).unwrap_or(100.0) <= *crit_chance;
 
             let damage: HashMap<_, _> = damage
                 .iter()

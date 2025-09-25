@@ -52,7 +52,7 @@ pub struct ItemAffixBlueprint {
 
     pub affix_type: AffixType,
     pub tier: u8,
-    pub weight: u64, // Bigger weight means more chances to have affix
+    pub weight: u64, // Bigger weight means more chance to have affix
 
     #[serde(default)]
     pub restrictions: Option<HashSet<ItemCategory>>,

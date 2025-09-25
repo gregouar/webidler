@@ -160,7 +160,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
                         skill_shape: SkillShape::Single,
                         modifiers: Vec::new(),
                         effects: vec![SkillEffect {
-                            failure_chances: 0.0,
+                            failure_chance: 0.0,
                             effect_type: SkillEffectType::Restore {
                                 restore_type: if let StatType::LifeOnHit(_) = effect.stat {
                                     RestoreType::Life
@@ -196,7 +196,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
             | StatType::MaxDamage { .. }
             | StatType::Restore(_)
             | StatType::SpellPower
-            | StatType::CritChances(_)
+            | StatType::CritChance(_)
             | StatType::CritDamage(_)
             | StatType::StatusDuration { .. }
             | StatType::StatusPower { .. }

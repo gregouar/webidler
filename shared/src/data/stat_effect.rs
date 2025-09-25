@@ -3,7 +3,9 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::{character_status::StatusSpecs, skill::RestoreType, trigger::HitTrigger};
+use crate::data::{
+    chance::ValueChance, character_status::StatusSpecs, skill::RestoreType, trigger::HitTrigger,
+};
 
 use super::skill::SkillType;
 
@@ -29,7 +31,7 @@ pub enum DamageType {
     Storm,
 }
 
-pub type DamageMap = HashMap<DamageType, (f64, f64)>;
+pub type DamageMap = HashMap<DamageType, ValueChance>;
 
 #[derive(
     Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,
@@ -46,7 +48,7 @@ pub enum StatType {
     LifeRegen,
     Mana,
     ManaRegen,
-    Armor(DamageType),
+    Armor(Option<DamageType>),
     DamageResistance {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -79,7 +81,7 @@ pub enum StatType {
     ManaOnHit(#[serde(default)] HitTrigger),
     Restore(#[serde(default)] Option<RestoreType>),
     SpellPower,
-    CritChances(#[serde(default)] Option<SkillType>),
+    CritChance(#[serde(default)] Option<SkillType>),
     CritDamage(#[serde(default)] Option<SkillType>),
     StatusPower(#[serde(default)] Option<StatStatusType>),
     StatusDuration(#[serde(default)] Option<StatStatusType>),
@@ -87,6 +89,11 @@ pub enum StatType {
     MovementSpeed,
     GoldFind,
     ThreatGain,
+    Lucky {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        roll_type: LuckyRollType,
+    },
 }
 
 fn compare_options<T: PartialEq>(first: &Option<T>, second: &Option<T>) -> bool {
@@ -145,7 +152,7 @@ impl StatType {
                     && compare_options(damage_type, damage_type_2)
             }
             (Restore(first), Restore(second)) => compare_options(first, second),
-            (CritChances(first), CritChances(second))
+            (CritChance(first), CritChance(second))
             | (CritDamage(first), CritDamage(second))
             | (Speed(first), Speed(second)) => compare_options(first, second),
             (StatusPower(first), StatusPower(second))
@@ -222,6 +229,21 @@ impl From<&StatusSpecs> for Option<StatStatusType> {
             StatusSpecs::Trigger(_) => None,
         }
     }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum LuckyRollType {
+    Damage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
+    Block,
+    CritChance,
+    // FailureChance,
+    // Restore,
+    // StatusDuration,
+    // StatusValue,
+    // TODO: could add others
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

@@ -1,7 +1,7 @@
 [
   {
     "name": "Keen",
-    "family": "inc_crit_chances",
+    "family": "inc_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Prefix",
     "tier": 1,
@@ -11,7 +11,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChances": null },
+        "stat": { "CritChance": null },
         "modifier": "Multiplier",
         "min": 0.15,
         "max": 0.24
@@ -20,7 +20,7 @@
   },
   {
     "name": "Grim",
-    "family": "inc_crit_chances",
+    "family": "inc_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Prefix",
     "tier": 2,
@@ -30,7 +30,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChances": null },
+        "stat": { "CritChance": null },
         "modifier": "Multiplier",
         "min": 0.25,
         "max": 0.39
@@ -39,7 +39,7 @@
   },
   {
     "name": "Fierce",
-    "family": "inc_crit_chances",
+    "family": "inc_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Prefix",
     "tier": 3,
@@ -49,7 +49,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChances": null },
+        "stat": { "CritChance": null },
         "modifier": "Multiplier",
         "min": 0.4,
         "max": 0.54

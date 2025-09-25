@@ -83,7 +83,7 @@
 
   {
     "name": "of Fluctuation",
-    "family": "inc_spell_crit_chances",
+    "family": "inc_spell_crit_chance",
     "tags": [
       "Spell",
       "Critical"
@@ -100,7 +100,7 @@
       {
         "scope": "Global",
         "stat": {
-          "CritChances": "Spell"
+          "CritChance": "Spell"
         },
         "modifier": "Multiplier",
         "min": 0.2,
@@ -110,7 +110,7 @@
   },
   {
     "name": "of Mutability",
-    "family": "inc_spell_crit_chances",
+    "family": "inc_spell_crit_chance",
     "tags": [
       "Spell",
       "Critical"
@@ -127,7 +127,7 @@
       {
         "scope": "Global",
         "stat": {
-          "CritChances": "Spell"
+          "CritChance": "Spell"
         },
         "modifier": "Multiplier",
         "min": 0.3,
@@ -137,7 +137,7 @@
   },
   {
     "name": "of Instability",
-    "family": "inc_spell_crit_chances",
+    "family": "inc_spell_crit_chance",
     "tags": [
       "Spell",
       "Critical"
@@ -154,7 +154,7 @@
       {
         "scope": "Global",
         "stat": {
-          "CritChances": "Spell"
+          "CritChance": "Spell"
         },
         "modifier": "Multiplier",
         "min": 0.4,

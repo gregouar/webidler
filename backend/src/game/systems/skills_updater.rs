@@ -202,7 +202,7 @@ pub fn compute_skill_specs_effect<'a>(
         match &mut skill_effect.effect_type {
             SkillEffectType::FlatDamage {
                 damage,
-                crit_chances,
+                crit_chance: crit_chance,
                 crit_damage,
             } => {
                 // TODO: remove with SPellPower
@@ -237,9 +237,9 @@ pub fn compute_skill_specs_effect<'a>(
 
                 if effect
                     .stat
-                    .is_match(&StatType::CritChances(Some(skill_type)))
+                    .is_match(&StatType::CritChance(Some(skill_type)))
                 {
-                    crit_chances.apply_effect(effect);
+                    crit_chance.apply_effect(effect);
                 }
 
                 if effect
@@ -249,7 +249,7 @@ pub fn compute_skill_specs_effect<'a>(
                     crit_damage.apply_effect(effect);
                 }
 
-                *crit_chances = crit_chances.clamp(0.0, 100.0);
+                *crit_chance = crit_chance.clamp(0.0, 100.0);
                 damage.retain(|_, (min, max)| {
                     *min = min.clamp(0.0, *max);
                     *max > 0.0

@@ -80,7 +80,7 @@
 
   {
     "name": "of Aim",
-    "family": "add_crit_chances",
+    "family": "add_crit_chance",
     "tags": [
       "Attack",
       "Critical"
@@ -96,7 +96,7 @@
       {
         "scope": "Local",
         "stat": {
-          "CritChances": null
+          "CritChance": null
         },
         "modifier": "Flat",
         "min": 1,
@@ -106,7 +106,7 @@
   },
   {
     "name": "of Accuracy",
-    "family": "add_crit_chances",
+    "family": "add_crit_chance",
     "tags": [
       "Attack",
       "Critical"
@@ -122,7 +122,7 @@
       {
         "scope": "Local",
         "stat": {
-          "CritChances": null
+          "CritChance": null
         },
         "modifier": "Flat",
         "min": 2,
@@ -132,7 +132,7 @@
   },
   {
     "name": "of Precision",
-    "family": "add_crit_chances",
+    "family": "add_crit_chance",
     "tags": [
       "Attack",
       "Critical"
@@ -148,7 +148,7 @@
       {
         "scope": "Local",
         "stat": {
-          "CritChances": null
+          "CritChance": null
         },
         "modifier": "Flat",
         "min": 3,
@@ -159,7 +159,7 @@
 
   {
     "name": "of the Owl",
-    "family": "inc_crit_chances",
+    "family": "inc_crit_chance",
     "tags": [
       "Attack",
       "Critical"
@@ -175,7 +175,7 @@
       {
         "scope": "Local",
         "stat": {
-          "CritChances": null
+          "CritChance": null
         },
         "modifier": "Multiplier",
         "min": 0.1,
@@ -185,7 +185,7 @@
   },
   {
     "name": "of the Tyto",
-    "family": "inc_crit_chances",
+    "family": "inc_crit_chance",
     "tags": [
       "Attack",
       "Critical"
@@ -201,7 +201,7 @@
       {
         "scope": "Local",
         "stat": {
-          "CritChances": null
+          "CritChance": null
         },
         "modifier": "Multiplier",
         "min": 0.2,
@@ -211,7 +211,7 @@
   },
   {
     "name": "of the Hawk",
-    "family": "inc_crit_chances",
+    "family": "inc_crit_chance",
     "tags": [
       "Attack",
       "Critical"
@@ -227,7 +227,7 @@
       {
         "scope": "Local",
         "stat": {
-          "CritChances": null
+          "CritChance": null
         },
         "modifier": "Multiplier",
         "min": 0.3,

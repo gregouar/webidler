@@ -324,7 +324,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 "text-white"
             };
 
-            let crit_chances_color = if specs.crit_chances != base_specs.crit_chances {
+            let crit_chance_color = if specs.crit_chance != base_specs.crit_chance {
                 "text-blue-400"
             } else {
                 "text-white"
@@ -343,8 +343,8 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     "Critical chance: "
                     <span class=format!(
                         "{} font-semibold",
-                        crit_chances_color,
-                    )>{format!("{:.2}%", specs.crit_chances)}</span>
+                        crit_chance_color,
+                    )>{format!("{:.2}%", specs.crit_chance)}</span>
                 </li>
                 <li class="text-gray-400 text-xs xl:text-sm leading-snug">
                     "Critical damage: "

@@ -11,7 +11,7 @@ use shared::data::{
     stat_effect::EffectsMap,
 };
 
-use crate::{constants::SKILL_BASE_COST, game::utils::rng};
+use crate::{constants::SKILL_BASE_COST, game::utils::rng::Rollable};
 pub trait DataInit<Specs> {
     fn init(specs: Specs) -> Self;
 }
@@ -83,7 +83,7 @@ impl DataInit<&MonsterSpecs> for MonsterState {
         MonsterState {
             character_state: CharacterState::init(&specs.character_specs),
             skill_states: specs.skill_specs.iter().map(SkillState::init).collect(),
-            initiative: rng::random_range(0.0..=specs.max_initiative).unwrap_or_default(),
+            initiative: specs.initiative.roll() as f32,
             gold_reward: 0.0,
             gems_reward: 0.0,
         }

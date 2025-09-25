@@ -45,11 +45,12 @@ pub async fn sell_item<'c>(
 ) -> anyhow::Result<()> {
     let item_damages = item.weapon_specs.as_ref().map(|weapon_specs| {
         1.0 / (weapon_specs.cooldown as f64)
-            * (1.0 + weapon_specs.crit_damage * weapon_specs.crit_chances as f64 * 0.0001)
+            // TODO: Lucky?
+            * (1.0 + weapon_specs.crit_damage * weapon_specs.crit_chance.value as f64 * 0.0001)
             * weapon_specs
                 .damage
                 .values()
-                .map(|(min, max)| (min + max) * 0.5)
+                .map(|value| (value.min + value.max) * 0.5)
                 .sum::<f64>()
     });
 
@@ -84,11 +85,11 @@ pub async fn sell_item<'c>(
             .map(|armor_specs| armor_specs.armor),
         item.armor_specs
             .as_ref()
-            .map(|armor_specs| armor_specs.block as f64),
+            .map(|armor_specs| armor_specs.block.value as f64),
         item_damages,
         item.weapon_specs
             .as_ref()
-            .map(|weapon_specs| weapon_specs.crit_chances as f64),
+            .map(|weapon_specs| weapon_specs.crit_chance.value as f64),
         item.weapon_specs
             .as_ref()
             .map(|weapon_specs| weapon_specs.crit_damage),

@@ -9,7 +9,7 @@ use shared::data::{
 
 use crate::{
     constants::{
-        CHAMPION_BASE_CHANCES, CHAMPION_INC_CHANCES, CHAMPION_LEVEL_INC, MONSTER_INCREASE_FACTOR,
+        CHAMPION_BASE_CHANCE, CHAMPION_INC_CHANCE, CHAMPION_LEVEL_INC, MONSTER_INCREASE_FACTOR,
     },
     game::{
         data::{
@@ -237,10 +237,10 @@ fn generate_monster_specs(
     if monster_specs.rarity == MonsterRarity::Normal
         && area_state.area_level > area_state.last_champion_spawn
     {
-        let gem_chances = CHAMPION_BASE_CHANCES
-            + (CHAMPION_INC_CHANCES
+        let gem_chance = CHAMPION_BASE_CHANCE
+            + (CHAMPION_INC_CHANCE
                 * (area_state.area_level - area_state.last_champion_spawn) as f64);
-        if rng::random_range(0.0..=1.0).unwrap_or(1.0) <= gem_chances {
+        if rng::random_range(0.0..=1.0).unwrap_or(1.0) <= gem_chance {
             // area_state.last_champion_spawn = area_state.area_level;
             monster_specs.rarity = MonsterRarity::Champion;
             monster_level += CHAMPION_LEVEL_INC;

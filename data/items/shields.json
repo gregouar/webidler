@@ -64,7 +64,7 @@
         "target": "Source",
         "effects": [
           {
-            "failure_chances": 0.5,
+            "failure_chance": 0.5,
             "ApplyStatus": {
               "min_duration": 1,
               "max_duration": 3,

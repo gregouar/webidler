@@ -21,7 +21,7 @@
           10
         ]
       },
-      "crit_chances": 5,
+      "crit_chance": 5,
       "crit_damage": 200
     }
   },
@@ -47,7 +47,7 @@
           18
         ]
       },
-      "crit_chances": 5,
+      "crit_chance": 5,
       "crit_damage": 200
     },
     "min_area_level": 40
@@ -75,7 +75,7 @@
           18
         ]
       },
-      "crit_chances": 5,
+      "crit_chance": 5,
       "crit_damage": 200
     },
     "rarity": "Unique",
@@ -139,13 +139,13 @@
     "triggers": [
       {
         "trigger_id": "sootreaver_burn",
-        "description": "50% chances to inflict 100% of Fire Damage as extra Fire Damage over Time per second for 4 seconds.",
+        "description": "50% chance to inflict 100% of Fire Damage as extra Fire Damage over Time per second for 4 seconds.",
         "OnHit": {
           "skill_type": "Attack"
         },
         "effects": [
           {
-            "failure_chances": 0.5,
+            "failure_chance": 0.5,
             "ApplyStatus": {
               "min_duration": 4,
               "max_duration": 4,
@@ -222,7 +222,7 @@
           26
         ]
       },
-      "crit_chances": 5,
+      "crit_chance": 5,
       "crit_damage": 200
     },
     "min_area_level": 90

@@ -10,7 +10,7 @@
       "damage": {
         "Physical": [2, 4]
       },
-      "crit_chances": 5,
+      "crit_chance": 5,
       "crit_damage": 100
     }
   },
@@ -26,7 +26,7 @@
       "damage": {
         "Physical": [2, 4]
       },
-      "crit_chances": 5,
+      "crit_chance": 5,
       "crit_damage": 100
     },
     "rarity": "Unique",
@@ -58,7 +58,7 @@
       "damage": {
         "Physical": [4, 7]
       },
-      "crit_chances": 5,
+      "crit_chance": 5,
       "crit_damage": 100
     },
     "min_area_level": 40
@@ -75,7 +75,7 @@
       "damage": {
         "Physical": [4, 7]
       },
-      "crit_chances": 5,
+      "crit_chance": 5,
       "crit_damage": 100
     },
     "rarity": "Unique",
@@ -97,7 +97,7 @@
       {
         "scope": "Local",
         "stat": {
-          "CritChances": null
+          "CritChance": null
         },
         "modifier": "Flat",
         "min": 4,
@@ -107,11 +107,11 @@
     "triggers": [
       {
         "trigger_id": "broken_trophy",
-        "description": "25% chances to inflict 50% of Physical Damage as extra Physical Damage over Time per second for 3 seconds and Decrease Enemy Armor by 50%.",
+        "description": "25% chance to inflict 50% of Physical Damage as extra Physical Damage over Time per second for 3 seconds and Decrease Enemy Armor by 50%.",
         "OnHit": { "skill_type": "Attack" },
         "effects": [
           {
-            "failure_chances": 0.75,
+            "failure_chance": 0.75,
             "ApplyStatus": {
               "min_duration": 3,
               "max_duration": 3,
@@ -166,7 +166,7 @@
       "damage": {
         "Physical": [6, 10]
       },
-      "crit_chances": 5,
+      "crit_chance": 5,
       "crit_damage": 100
     },
     "min_area_level": 90

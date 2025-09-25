@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use shared::data::{
+    chance::ValueChance,
     monster::{MonsterRarity, MonsterSpecs},
     player::CharacterSpecs,
     skill::{BaseSkillSpecs, SkillSpecs},
@@ -19,8 +20,7 @@ pub struct BaseMonsterSpecs {
     #[serde(default)]
     pub rarity: MonsterRarity,
     #[serde(default)]
-    pub min_initiative: f32,
-    pub max_initiative: f32,
+    pub initiative: ValueChance,
     pub power_factor: f64,
 }
 
@@ -30,8 +30,7 @@ impl DataInit<BaseMonsterSpecs> for MonsterSpecs {
             character_specs: specs.character_specs,
             skill_specs: specs.skills.iter().cloned().map(SkillSpecs::init).collect(),
             rarity: specs.rarity,
-            min_initiative: specs.min_initiative,
-            max_initiative: specs.max_initiative,
+            initiative: specs.initiative,
             power_factor: specs.power_factor,
             reward_factor: specs.power_factor,
             triggers: Default::default(),

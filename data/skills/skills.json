@@ -65,7 +65,7 @@
             }
           },
           {
-            "failure_chances": 0.7,
+            "failure_chance": 0.7,
             "ApplyStatus": {
               "min_duration": 3,
               "max_duration": 3,
@@ -534,7 +534,7 @@
               "damage": {
                 "Physical": [5, 10]
               },
-              "crit_chances": 5,
+              "crit_chance": 5,
               "crit_damage": 100
             }
           }

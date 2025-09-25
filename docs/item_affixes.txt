@@ -31,7 +31,7 @@ Head:
 
 Amulet:
     pre:
-        inc_crit_chances
+        inc_crit_chance
         inc_crit_damage
         inc_gold_2
         inc_phys_damage
@@ -56,8 +56,8 @@ Attack Weapon:
         add_storm_damage
     suf:
         inc_speed
-        add_crit_chances
-        inc_crit_chances
+        add_crit_chance
+        inc_crit_chance
         inc_crit_damage
         life_leech
         mana_leech
@@ -73,7 +73,7 @@ Spell Weapon:
     suf:
         add_mana_regen
         inc_spell_speed
-        inc_spell_crit_chances
+        inc_spell_crit_chance
         inc_spell_damage
 
 
@@ -122,7 +122,7 @@ Focus:
         add_poison_res
         add_storm_res
         inc_spell_speed
-        inc_spell_crit_chances
+        inc_spell_crit_chance
         inc_spell_damage
 
 
@@ -160,7 +160,7 @@ Boots:
 
 Ring:
     pre:
-        inc_crit_chances
+        inc_crit_chance
         inc_crit_damage
         inc_gold_2
         inc_phys_damage

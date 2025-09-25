@@ -5,7 +5,7 @@ use shared::data::{
     character::{CharacterId, CharacterSpecs, CharacterState},
     passive::StatEffect,
     skill::{DamageType, SkillType},
-    stat_effect::{ApplyStatModifier, EffectsMap, Modifier, StatType},
+    stat_effect::{ApplyStatModifier, EffectsMap, LuckyRollType, Modifier, StatType},
 };
 
 use crate::game::data::event::{EventsQueue, GameEvent};
@@ -82,11 +82,22 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             StatType::LifeRegen => character_specs.life_regen.apply_effect(effect),
             StatType::Mana => character_specs.max_mana.apply_effect(effect),
             StatType::ManaRegen => character_specs.mana_regen.apply_effect(effect),
-            StatType::Armor(damage_type) => character_specs
-                .armor
-                .entry(damage_type)
-                .or_default()
-                .apply_effect(effect),
+            StatType::Armor(damage_type) => match damage_type {
+                Some(damage_type) => character_specs
+                    .armor
+                    .entry(damage_type)
+                    .or_default()
+                    .apply_effect(effect),
+                None => {
+                    for damage_type in DamageType::iter() {
+                        character_specs
+                            .armor
+                            .entry(damage_type)
+                            .or_default()
+                            .apply_effect(effect)
+                    }
+                }
+            },
             StatType::TakeFromManaBeforeLife => character_specs
                 .take_from_mana_before_life
                 .apply_effect(effect),
@@ -117,6 +128,17 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                     }
                 }
             }
+            StatType::Lucky {
+                skill_type,
+                roll_type: LuckyRollType::Block,
+            } => {
+                if skill_type.map_or(true, |s| s == SkillType::Attack) {
+                    character_specs.block.apply_effect(effect);
+                }
+                if skill_type.map_or(true, |s| s == SkillType::Spell) {
+                    character_specs.block_spell.apply_effect(effect);
+                }
+            }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Only for player (for now...)
             StatType::LifeOnHit(_) | StatType::ManaOnHit(_) => {}
@@ -128,11 +150,12 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             | StatType::MaxDamage { .. }
             | StatType::Restore(_)
             | StatType::SpellPower
-            | StatType::CritChances(_)
+            | StatType::CritChance(_)
             | StatType::CritDamage(_)
             | StatType::StatusDuration { .. }
             | StatType::StatusPower { .. }
             | StatType::Speed(_) => {}
+            StatType::Lucky { .. } => {}
         }
     }
 

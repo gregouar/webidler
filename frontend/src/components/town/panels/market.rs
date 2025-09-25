@@ -928,7 +928,7 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     MarketOrderBy::CritChance => "Highest Critical Chance",
                     MarketOrderBy::CritDamage => "Highest Critical Damage",
                     MarketOrderBy::Armor => "Highest Armor",
-                    MarketOrderBy::Block => "Highest Block Chances",
+                    MarketOrderBy::Block => "Highest Block Chance",
                     MarketOrderBy::Time => "Most Recent",
                 }
                 .into(),
@@ -1026,7 +1026,7 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         id="item_block"
                         label="Min Block %:"
                         input_type="number"
-                        placeholder="Minimum Block Percent Chances"
+                        placeholder="Minimum Block Percent Chance"
                         bind=item_block
                     />
                 </div>
@@ -1184,7 +1184,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             },
             Modifier::Multiplier,
         ),
-        (StatType::CritChances(None), Modifier::Multiplier),
+        (StatType::CritChance(None), Modifier::Multiplier),
         (StatType::CritDamage(None), Modifier::Multiplier),
         // (StatType::SpellPower, Modifier::Multiplier),
         (StatType::StatusPower(None), Modifier::Multiplier),
