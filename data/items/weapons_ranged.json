@@ -59,8 +59,7 @@
           "CritDamage": null
         },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.6
+        "value": [40, 60]
       },
       {
         "scope": "Local",
@@ -68,8 +67,7 @@
           "CritChance": null
         },
         "modifier": "Multiplier",
-        "min": 0.15,
-        "max": 0.3
+        "value": [15, 30]
       },
       {
         "scope": "Local",
@@ -77,8 +75,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.6
+        "value": [40, 60]
       },
       {
         "scope": "Global",
@@ -89,8 +86,7 @@
           }
         },
         "modifier": "Flat",
-        "min": 4,
-        "max": 8
+        "value": [4, 8]
       }
     ],
     "triggers": [
@@ -105,8 +101,7 @@
           {
             "Restore": {
               "restore_type": "Life",
-              "min": 20,
-              "max": 40,
+              "value": [20, 40],
               "modifier": "Flat"
             }
           }

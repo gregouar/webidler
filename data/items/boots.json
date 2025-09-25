@@ -33,13 +33,13 @@
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "Multiplier",
-        "value": [0.4, 0.6]
+        "value": [40, 60]
       },
       {
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Multiplier",
-        "value": 0.2
+        "value": 20
       },
       {
         "scope": "Global",

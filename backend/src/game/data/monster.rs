@@ -19,7 +19,7 @@ pub struct BaseMonsterSpecs {
 
     #[serde(default)]
     pub rarity: MonsterRarity,
-    #[serde(default)]
+
     pub initiative: ValueChance,
     pub power_factor: f64,
 }

@@ -35,15 +35,13 @@
         "scope": "Local",
         "stat": { "Speed": "Attack" },
         "modifier": "Multiplier",
-        "min": 1.0,
-        "max": 1.0
+        "value": 1.0
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "min": 8,
-        "max": 10
+        "value": [8, 10]
       }
     ]
   },
@@ -84,15 +82,13 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "min": 2,
-        "max": 4
+        "value": [2, 4]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "min": 5,
-        "max": 7
+        "value": [5, 7]
       },
       {
         "scope": "Local",
@@ -100,8 +96,7 @@
           "CritChance": null
         },
         "modifier": "Flat",
-        "min": 4,
-        "max": 6
+        "value": [4, 6]
       }
     ],
     "triggers": [
@@ -111,10 +106,9 @@
         "OnHit": { "skill_type": "Attack" },
         "effects": [
           {
-            "failure_chance": 0.75,
+            "failure_chance": 75,
             "ApplyStatus": {
-              "min_duration": 3,
-              "max_duration": 3,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -123,8 +117,7 @@
                       "ignore_armor": true
                     }
                   },
-                  "min_value": 0.5,
-                  "max_value": 0.5
+                  "value": 0
                 },
                 {
                   "status_type": {
@@ -136,8 +129,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 1.0,
-                  "max_value": 1.0
+                  "value": 100.0
                 }
               ]
             }
@@ -146,8 +138,8 @@
         "modifiers": [
           {
             "stat": { "Damage": {} },
-            "modifier": "Multiplier",
-            "factor": 1.0,
+            "modifier": "Flat",
+            "factor": 0.5,
             "source": { "HitDamage": "Physical" }
           }
         ]

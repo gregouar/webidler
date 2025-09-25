@@ -13,8 +13,7 @@
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Multiplier",
-        "min": -0.19,
-        "max": -0.1
+        "value": [-19, -10]
       }
     ]
   },
@@ -32,8 +31,7 @@
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Multiplier",
-        "min": -0.29,
-        "max": -0.2
+        "value": [-29, -20]
       }
     ]
   },
@@ -51,8 +49,7 @@
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Multiplier",
-        "min": -0.39,
-        "max": -0.3
+        "value": [-39, -30]
       }
     ]
   }

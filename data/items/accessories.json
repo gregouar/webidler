@@ -7,19 +7,19 @@
     "affixes": [
       {
         "scope": "Global",
-        "stat": {"Armor":"Fire"},
+        "stat": { "Armor": "Fire" },
         "modifier": "Flat",
         "value": 15
       },
       {
         "scope": "Global",
-        "stat": {"Armor":"Poison"},
+        "stat": { "Armor": "Poison" },
         "modifier": "Flat",
         "value": 15
       },
       {
         "scope": "Global",
-        "stat": {"Armor":"Storm"},
+        "stat": { "Armor": "Storm" },
         "modifier": "Flat",
         "value": 15
       }
@@ -33,19 +33,19 @@
     "affixes": [
       {
         "scope": "Global",
-        "stat": {"Armor":"Fire"},
+        "stat": { "Armor": "Fire" },
         "modifier": "Flat",
         "value": 30
       },
       {
         "scope": "Global",
-        "stat": {"Armor":"Poison"},
+        "stat": { "Armor": "Poison" },
         "modifier": "Flat",
         "value": 30
       },
       {
         "scope": "Global",
-        "stat": {"Armor":"Storm"},
+        "stat": { "Armor": "Storm" },
         "modifier": "Flat",
         "value": 30
       }
@@ -60,19 +60,19 @@
     "affixes": [
       {
         "scope": "Global",
-        "stat": {"Armor":"Fire"},
+        "stat": { "Armor": "Fire" },
         "modifier": "Flat",
         "value": 50
       },
       {
         "scope": "Global",
-        "stat": {"Armor":"Poison"},
+        "stat": { "Armor": "Poison" },
         "modifier": "Flat",
         "value": 50
       },
       {
         "scope": "Global",
-        "stat": {"Armor":"Storm"},
+        "stat": { "Armor": "Storm" },
         "modifier": "Flat",
         "value": 50
       }
