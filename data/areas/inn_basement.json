@@ -13,13 +13,11 @@
       "spawns": [
         {
           "monster": "haunted_wine_bottle.json",
-          "min_quantity": 2,
-          "max_quantity": 2
+          "quantity": 2
         },
         {
           "monster": "haunted_wine_rack.json",
-          "min_quantity": 1,
-          "max_quantity": 1
+          "quantity": 1
         }
       ]
     }
@@ -32,8 +30,7 @@
       "spawns": [
         {
           "monster": "bat.json",
-          "min_quantity": 2,
-          "max_quantity": 4
+          "quantity": [2, 4]
         }
       ]
     },
@@ -44,13 +41,11 @@
       "spawns": [
         {
           "monster": "rat.json",
-          "min_quantity": 1,
-          "max_quantity": 2
+          "quantity": [1, 2]
         },
         {
           "monster": "bat.json",
-          "min_quantity": 2,
-          "max_quantity": 4
+          "quantity": [2, 4]
         }
       ]
     },
@@ -61,28 +56,23 @@
       "spawns": [
         {
           "monster": "bat.json",
-          "min_quantity": 0,
-          "max_quantity": 1
+          "quantity": [0, 1]
         },
         {
           "monster": "centipede.json",
-          "min_quantity": 1,
-          "max_quantity": 1
+          "quantity": 1
         },
         {
           "monster": "bat.json",
-          "min_quantity": 0,
-          "max_quantity": 1
+          "quantity": [0, 1]
         },
         {
           "monster": "centipede.json",
-          "min_quantity": 1,
-          "max_quantity": 1
+          "quantity": 1
         },
         {
           "monster": "bat.json",
-          "min_quantity": 2,
-          "max_quantity": 2
+          "quantity": 2
         }
       ]
     },
@@ -93,18 +83,15 @@
       "spawns": [
         {
           "monster": "rat.json",
-          "min_quantity": 1,
-          "max_quantity": 2
+          "quantity": [1, 2]
         },
         {
           "monster": "bat.json",
-          "min_quantity": 3,
-          "max_quantity": 4
+          "quantity": [3, 4]
         },
         {
           "monster": "rat.json",
-          "min_quantity": 2,
-          "max_quantity": 2
+          "quantity": 2
         }
       ]
     },
@@ -115,18 +102,15 @@
       "spawns": [
         {
           "monster": "cat_skeleton.json",
-          "min_quantity": 1,
-          "max_quantity": 2
+          "quantity": [1, 2]
         },
         {
           "monster": "soot_imp.json",
-          "min_quantity": 2,
-          "max_quantity": 3
+          "quantity": [2, 3]
         },
         {
           "monster": "soot_imp_2.json",
-          "min_quantity": 2,
-          "max_quantity": 3
+          "quantity": [2, 3]
         }
       ]
     },
@@ -137,18 +121,15 @@
       "spawns": [
         {
           "monster": "barrel_mimic.json",
-          "min_quantity": 1,
-          "max_quantity": 2
+          "quantity": [1, 2]
         },
         {
           "monster": "booze_elemental.json",
-          "min_quantity": 2,
-          "max_quantity": 3
+          "quantity": [2, 3]
         },
         {
           "monster": "patron_ghost.json",
-          "min_quantity": 1,
-          "max_quantity": 2
+          "quantity": [1, 2]
         }
       ]
     },
@@ -159,18 +140,15 @@
       "spawns": [
         {
           "monster": "haunted_pot.json",
-          "min_quantity": 1,
-          "max_quantity": 2
+          "quantity": [1, 2]
         },
         {
           "monster": "bat_fire.json",
-          "min_quantity": 2,
-          "max_quantity": 3
+          "quantity": [2, 3]
         },
         {
           "monster": "haunted_lantern.json",
-          "min_quantity": 1,
-          "max_quantity": 2
+          "quantity": [1, 2]
         }
       ]
     }

@@ -8,7 +8,10 @@ use shared::data::{
     stat_effect::{ApplyStatModifier, EffectsMap, LuckyRollType, Modifier, StatType},
 };
 
-use crate::game::data::event::{EventsQueue, GameEvent};
+use crate::game::{
+    data::event::{EventsQueue, GameEvent},
+    utils::rng::Rollable,
+};
 
 use super::statuses_controller;
 
@@ -101,8 +104,8 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             StatType::TakeFromManaBeforeLife => character_specs
                 .take_from_mana_before_life
                 .apply_effect(effect),
-            StatType::Block => character_specs.block.apply_effect(effect),
-            StatType::BlockSpell => character_specs.block_spell.apply_effect(effect),
+            StatType::Block => character_specs.block.value.apply_effect(effect),
+            StatType::BlockSpell => character_specs.block_spell.value.apply_effect(effect),
             StatType::BlockDamageTaken => character_specs.block_damage.apply_effect(effect),
             StatType::DamageResistance {
                 skill_type,
@@ -133,10 +136,13 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                 roll_type: LuckyRollType::Block,
             } => {
                 if skill_type.map_or(true, |s| s == SkillType::Attack) {
-                    character_specs.block.apply_effect(effect);
+                    character_specs.block.lucky_chance.apply_effect(effect);
                 }
                 if skill_type.map_or(true, |s| s == SkillType::Spell) {
-                    character_specs.block_spell.apply_effect(effect);
+                    character_specs
+                        .block_spell
+                        .lucky_chance
+                        .apply_effect(effect);
                 }
             }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
@@ -149,7 +155,6 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             | StatType::MinDamage { .. }
             | StatType::MaxDamage { .. }
             | StatType::Restore(_)
-            | StatType::SpellPower
             | StatType::CritChance(_)
             | StatType::CritDamage(_)
             | StatType::StatusDuration { .. }
@@ -159,7 +164,7 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
         }
     }
 
-    character_specs.block = character_specs.block.clamp(0.0, 100.0);
-    character_specs.block_spell = character_specs.block_spell.clamp(0.0, 100.0);
+    character_specs.block.clamp();
+    character_specs.block_spell.clamp();
     character_specs.block_damage = character_specs.block_damage.clamp(0.0, 100.0);
 }

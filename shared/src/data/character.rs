@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
+    chance::Chance,
     character_status::StatusId,
     skill::{DamageType, SkillType},
 };
@@ -69,9 +70,9 @@ pub struct CharacterSpecs {
     #[serde(default)]
     pub armor: HashMap<DamageType, f64>,
     #[serde(default)]
-    pub block: f32,
+    pub block: Chance,
     #[serde(default)]
-    pub block_spell: f32,
+    pub block_spell: Chance, // chance to block spell are applied on top of block chance
     #[serde(default)]
     pub block_damage: f32,
 

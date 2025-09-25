@@ -188,7 +188,7 @@ pub struct ArmorSpecs {
     #[serde(default)]
     pub armor: f64,
     #[serde(default)]
-    pub block: Chance,
+    pub block: f32,
 }
 
 impl ItemModifiers {

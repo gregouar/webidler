@@ -1,6 +1,7 @@
 use std::vec;
 
 use shared::data::{
+    chance::ValueChance,
     character_status::StatusSpecs,
     item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSpecs, WeaponSpecs},
     item_affix::AffixEffectScope,
@@ -174,13 +175,15 @@ fn compute_armor_specs(
     armor_specs.armor *= 1.0 + quality as f64 * 0.01;
     for effect in effects {
         match effect.stat {
-            StatType::Armor(DamageType::Physical) => armor_specs.armor.apply_effect(effect),
+            StatType::Armor(Some(DamageType::Physical)) => armor_specs.armor.apply_effect(effect),
             StatType::Block => {
                 armor_specs.block.apply_effect(effect);
             }
             _ => {}
         }
     }
+    armor_specs.block = armor_specs.block.clamp(0.0, 100.0);
+
     armor_specs
 }
 
@@ -196,26 +199,28 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             crit_chance: weapon_specs.crit_chance,
             crit_damage: weapon_specs.crit_damage,
         },
-        failure_chance: 0.0,
+        failure_chance: Default::default(),
         ignore_stat_effects: Default::default(),
     }];
 
-    if let Some(&(min_value, max_value)) = weapon_specs.damage.get(&DamageType::Poison) {
+    if let Some(&value) = weapon_specs.damage.get(&DamageType::Poison) {
         effects.push(SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
-                min_duration: WEAPON_POISON_DAMAGE_DURATION,
-                max_duration: WEAPON_POISON_DAMAGE_DURATION,
+                duration: ValueChance {
+                    min: WEAPON_POISON_DAMAGE_DURATION,
+                    max: WEAPON_POISON_DAMAGE_DURATION,
+                    lucky_chance: 0.0,
+                },
                 statuses: vec![ApplyStatusEffect {
                     status_type: StatusSpecs::DamageOverTime {
                         damage_type: DamageType::Poison,
                         ignore_armor: false,
                     },
-                    min_value,
-                    max_value,
+                    value,
                     cumulate: true,
                 }],
             },
-            failure_chance: 0.0,
+            failure_chance: Default::default(),
             ignore_stat_effects: Default::default(),
         });
     }

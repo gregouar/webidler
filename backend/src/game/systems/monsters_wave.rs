@@ -20,7 +20,7 @@ use crate::{
         },
         utils::{
             increase_factors,
-            rng::{self, RandomWeighted},
+            rng::{self, RandomWeighted, Rollable},
         },
     },
 };
@@ -117,7 +117,7 @@ fn generate_all_monsters_specs(
             continue;
         };
 
-        for _ in 0..rng::random_range(spawn.min_quantity..=spawn.max_quantity).unwrap_or_default() {
+        for _ in 0..spawn.quantity.roll() {
             if let Some((x, y)) = find_free_slot(&grid, template.character_specs.size.get_xy_size())
             {
                 occupy_space(
@@ -167,64 +167,6 @@ fn occupy_space(
         }
     }
 }
-
-// fn generate_all_monsters_specs(
-//     spawns: &[MonsterWaveSpawnBlueprint],
-//     area_blueprint: &AreaBlueprint,
-//     area_state: &mut AreaState,
-//     monsters_specs_store: &MonstersSpecsStore,
-// ) -> Vec<MonsterSpecs> {
-//     let mut top_space_available = MAX_MONSTERS_PER_ROW;
-//     let mut bot_space_available = MAX_MONSTERS_PER_ROW;
-
-//     let mut monsters_specs = Vec::with_capacity(top_space_available + bot_space_available);
-//     'spawnloop: for spawn in spawns.iter() {
-//         for _ in 0..rng::random_range(spawn.min_quantity..=spawn.max_quantity).unwrap_or_default() {
-//             if let Some(specs) = monsters_specs_store.get(&spawn.monster) {
-//                 let (x_size, y_size) = specs.character_specs.size.get_xy_size();
-//                 let use_top = y_size > 1 || top_space_available >= bot_space_available;
-//                 let x_pos = (MAX_MONSTERS_PER_ROW + 1
-//                     - if use_top {
-//                         top_space_available
-//                     } else {
-//                         bot_space_available
-//                     }) as u8;
-
-//                 if y_size > 1 {
-//                     if top_space_available >= x_size && bot_space_available >= x_size {
-//                         top_space_available -= x_size;
-//                         bot_space_available -= x_size;
-//                     } else {
-//                         continue;
-//                     }
-//                 } else {
-//                     let row_to_use = if use_top {
-//                         &mut top_space_available
-//                     } else {
-//                         &mut bot_space_available
-//                     };
-//                     if *row_to_use >= x_size {
-//                         *row_to_use -= x_size
-//                     } else {
-//                         continue;
-//                     }
-//                 }
-
-//                 let mut specs = generate_monster_specs(specs, area_blueprint, area_state);
-//                 specs.character_specs.position_y = if use_top { 1 } else { 2 };
-//                 specs.character_specs.position_x = x_pos;
-//                 monsters_specs.push(specs);
-
-//                 if top_space_available == 0 && bot_space_available == 0 {
-//                     break 'spawnloop;
-//                 }
-//             } else {
-//                 tracing::error!("missing monster specs '{:?}'", spawn.monster);
-//             }
-//         }
-//     }
-//     monsters_specs
-// }
 
 fn generate_monster_specs(
     bp_specs: &BaseMonsterSpecs,

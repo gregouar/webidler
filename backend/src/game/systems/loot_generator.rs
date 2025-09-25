@@ -2,10 +2,11 @@ use std::collections::HashSet;
 
 use shared::data::{
     area::AreaLevel,
+    chance::QuantityChance,
     forge::MAX_AFFIXES,
     item::{ItemBase, ItemModifiers, ItemRarity, ItemSpecs},
     item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
-    stat_effect::{Modifier, StatEffect},
+    stat_effect::StatEffect,
 };
 
 use crate::game::{
@@ -13,7 +14,7 @@ use crate::game::{
         items_store::{ItemAffixesTable, ItemsStore},
         loot_table::{LootTable, LootTableEntry, RarityWeights},
     },
-    utils::rng::RandomWeighted,
+    utils::rng::{RandomWeighted, Rollable},
 };
 use crate::{
     constants::{MAX_ITEM_QUALITY, MAX_ITEM_QUALITY_PER_LEVEL},
@@ -98,10 +99,19 @@ pub fn roll_item(
         .for_each(|effect| effect.stat_effect.value *= 1.0 + quality as f64 * 0.01);
 
     let affixes_amount = match rarity {
-        ItemRarity::Magic => rng::random_range(1..=2).unwrap_or(1),
-        ItemRarity::Rare => rng::random_range(3..=4).unwrap_or(3),
-        _ => 0,
-    };
+        ItemRarity::Magic => QuantityChance {
+            min: 1,
+            max: 2,
+            ..Default::default()
+        },
+        ItemRarity::Rare => QuantityChance {
+            min: 3,
+            max: 4,
+            ..Default::default()
+        },
+        _ => QuantityChance::default(),
+    }
+    .roll();
 
     for _ in 0..affixes_amount {
         add_affix(
@@ -292,15 +302,11 @@ fn roll_affix(
 }
 
 fn roll_affix_effect(effect_blueprint: &AffixEffectBlueprint) -> AffixEffect {
-    let value = rng::random_range(effect_blueprint.min..=effect_blueprint.max).unwrap_or_default();
     AffixEffect {
         stat_effect: StatEffect {
             stat: effect_blueprint.stat,
             modifier: effect_blueprint.modifier,
-            value: match effect_blueprint.modifier {
-                Modifier::Multiplier => (value * 100.0).round() * 0.01,
-                Modifier::Flat => value.round(),
-            },
+            value: effect_blueprint.value.roll().round(),
             bypass_ignore: false,
         },
         scope: effect_blueprint.scope,

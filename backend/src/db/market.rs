@@ -85,7 +85,7 @@ pub async fn sell_item<'c>(
             .map(|armor_specs| armor_specs.armor),
         item.armor_specs
             .as_ref()
-            .map(|armor_specs| armor_specs.block.value as f64),
+            .map(|armor_specs| armor_specs.block as f64),
         item_damages,
         item.weapon_specs
             .as_ref()

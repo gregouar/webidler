@@ -1,6 +1,8 @@
 use crate::db::pool::{DbExecutor, DbPool};
 
 // TODO: Convert all items to new chance system
+// TODO: Multiply all Multiplier by 100
+// TODO: Convert SpellPower to SpellDamage
 
 pub async fn migrate(db_pool: &DbPool) -> anyhow::Result<()> {
     let mut tx = db_pool.begin().await?;

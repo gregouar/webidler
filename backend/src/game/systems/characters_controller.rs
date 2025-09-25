@@ -12,7 +12,7 @@ use crate::{
     constants::ARMOR_FACTOR,
     game::{
         data::event::{EventsQueue, GameEvent, HitEvent},
-        utils::{increase_factors, rng},
+        utils::{increase_factors, rng::Rollable},
     },
 };
 
@@ -36,12 +36,11 @@ pub fn attack_character(
         })
         .sum();
 
-    let is_blocked = rng::random_range(0.0..=100.0).unwrap_or(100.0)
-        <= target_specs.block
-            * match skill_type {
-                SkillType::Attack => 1.0,
-                SkillType::Spell => target_specs.block_spell * 0.01,
-            };
+    let is_blocked = target_specs.block.roll()
+        & match skill_type {
+            SkillType::Attack => true,
+            SkillType::Spell => target_specs.block_spell.roll(),
+        };
 
     if is_blocked {
         amount *= target_specs.block_damage as f64 * 0.01;

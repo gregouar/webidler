@@ -10,6 +10,8 @@ use shared::data::{
     stat_effect::{ApplyStatModifier, Modifier, StatEffect, StatType},
 };
 
+use crate::game::utils::rng::Rollable;
+
 pub fn update_skills_states(
     elapsed_time: Duration,
     skill_specs: &[SkillSpecs],
@@ -137,13 +139,13 @@ fn compute_skill_modifier_effects<'a>(
                                     weapon_specs
                                         .damage
                                         .get(&damage_type)
-                                        .map(|(min, max)| (min + max) * 0.5)
+                                        .map(|value| (value.min + value.max) * 0.5)
                                         .unwrap_or_default()
                                 } else {
                                     weapon_specs
                                         .damage
                                         .values()
-                                        .map(|(min, max)| (min + max) * 0.5)
+                                        .map(|value| (value.min + value.max) * 0.5)
                                         .sum()
                                 }
                             }
@@ -202,18 +204,10 @@ pub fn compute_skill_specs_effect<'a>(
         match &mut skill_effect.effect_type {
             SkillEffectType::FlatDamage {
                 damage,
-                crit_chance: crit_chance,
+                crit_chance,
                 crit_damage,
             } => {
-                // TODO: remove with SPellPower
-                if skill_type == SkillType::Spell && effect.stat.is_match(&StatType::SpellPower) {
-                    for (min, max) in damage.values_mut() {
-                        min.apply_effect(effect);
-                        max.apply_effect(effect);
-                    }
-                }
-
-                for (damage_type, (min, max)) in damage.iter_mut() {
+                for (damage_type, value) in damage.iter_mut() {
                     if effect.stat.is_match(&StatType::MinDamage {
                         skill_type: Some(skill_type),
                         damage_type: Some(*damage_type),
@@ -221,7 +215,7 @@ pub fn compute_skill_specs_effect<'a>(
                         skill_type: Some(skill_type),
                         damage_type: Some(*damage_type),
                     }) {
-                        min.apply_effect(effect);
+                        value.min.apply_effect(effect);
                     }
 
                     if effect.stat.is_match(&StatType::MaxDamage {
@@ -231,7 +225,7 @@ pub fn compute_skill_specs_effect<'a>(
                         skill_type: Some(skill_type),
                         damage_type: Some(*damage_type),
                     }) {
-                        max.apply_effect(effect);
+                        value.max.apply_effect(effect);
                     }
                 }
 
@@ -239,7 +233,7 @@ pub fn compute_skill_specs_effect<'a>(
                     .stat
                     .is_match(&StatType::CritChance(Some(skill_type)))
                 {
-                    crit_chance.apply_effect(effect);
+                    crit_chance.value.apply_effect(effect);
                 }
 
                 if effect
@@ -249,24 +243,23 @@ pub fn compute_skill_specs_effect<'a>(
                     crit_damage.apply_effect(effect);
                 }
 
-                *crit_chance = crit_chance.clamp(0.0, 100.0);
-                damage.retain(|_, (min, max)| {
-                    *min = min.clamp(0.0, *max);
-                    *max > 0.0
+                crit_chance.clamp();
+                damage.retain(|_, value| {
+                    value.min = value.min.max(0.0);
+                    value.max = value.max.max(0.0);
+                    value.clamp();
+
+                    value.max > 0.0
                 });
             }
-            SkillEffectType::ApplyStatus {
-                statuses,
-                min_duration,
-                max_duration,
-            } => {
+            SkillEffectType::ApplyStatus { statuses, duration } => {
                 if statuses.iter().any(|status_effect| {
                     effect.stat.is_match(&StatType::StatusDuration(
                         (&status_effect.status_type).into(),
                     ))
                 }) {
-                    min_duration.apply_effect(effect);
-                    max_duration.apply_effect(effect);
+                    duration.min.apply_effect(effect);
+                    duration.max.apply_effect(effect);
                 }
 
                 for status_effect in statuses.iter_mut() {
@@ -289,22 +282,12 @@ pub fn compute_skill_specs_effect<'a>(
                             _ => effect.clone(),
                         };
 
-                        status_effect.min_value.apply_effect(&effect);
-                        status_effect.max_value.apply_effect(&effect);
+                        status_effect.value.min.apply_effect(&effect);
+                        status_effect.value.max.apply_effect(&effect);
                     }
 
                     match status_effect.status_type {
-                        StatusSpecs::Stun => {
-                            // Something?
-                        }
                         StatusSpecs::DamageOverTime { damage_type, .. } => {
-                            if skill_type == SkillType::Spell
-                                && effect.stat.is_match(&StatType::SpellPower)
-                            {
-                                status_effect.min_value.apply_effect(effect);
-                                status_effect.max_value.apply_effect(effect);
-                            }
-
                             if effect.stat.is_match(&StatType::MinDamage {
                                 skill_type: Some(skill_type),
                                 damage_type: Some(damage_type),
@@ -312,7 +295,7 @@ pub fn compute_skill_specs_effect<'a>(
                                 skill_type: Some(skill_type),
                                 damage_type: Some(damage_type),
                             }) {
-                                status_effect.min_value.apply_effect(effect);
+                                status_effect.value.min.apply_effect(effect);
                             }
 
                             if effect.stat.is_match(&StatType::MaxDamage {
@@ -322,51 +305,24 @@ pub fn compute_skill_specs_effect<'a>(
                                 skill_type: Some(skill_type),
                                 damage_type: Some(damage_type),
                             }) {
-                                status_effect.max_value.apply_effect(effect);
+                                status_effect.value.max.apply_effect(effect);
                             }
                         }
-                        StatusSpecs::StatModifier { modifier, .. } => {
-                            if StatType::SpellPower == effect.stat && skill_type == SkillType::Spell
-                            {
-                                if modifier == Modifier::Multiplier
-                                    && effect.modifier == Modifier::Flat
-                                {
-                                    let effect = StatEffect {
-                                        value: effect.value / 100.0,
-                                        ..*effect
-                                    };
-
-                                    status_effect.min_value.apply_effect(&effect);
-                                    status_effect.max_value.apply_effect(&effect);
-                                } else {
-                                    status_effect.min_value.apply_effect(effect);
-                                    status_effect.max_value.apply_effect(effect);
-                                }
-                            }
-                        }
-                        StatusSpecs::Trigger(_) => {}
+                        _ => {}
                     }
                 }
             }
             SkillEffectType::Restore {
                 restore_type,
-                min,
-                max,
+                value,
                 ..
             } => {
-                if match effect.stat {
-                    StatType::SpellPower => true,
-                    StatType::Restore(_)
-                        if effect
-                            .stat
-                            .is_match(&StatType::Restore(Some(*restore_type))) =>
-                    {
-                        true
-                    }
-                    _ => false,
-                } {
-                    min.apply_effect(effect);
-                    max.apply_effect(effect);
+                if effect
+                    .stat
+                    .is_match(&StatType::Restore(Some(*restore_type)))
+                {
+                    value.min.apply_effect(effect);
+                    value.max.apply_effect(effect);
                 };
             }
             SkillEffectType::Resurrect => {}

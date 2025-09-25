@@ -1,6 +1,7 @@
 use std::{iter, time::Duration};
 
 use shared::data::{
+    chance::ValueChance,
     character::CharacterId,
     character_status::StatusSpecs,
     item::{SkillRange, SkillShape},
@@ -60,8 +61,8 @@ pub fn update_player_specs(
 ) {
     // TODO: Reset player_specs
     player_specs.character_specs.armor.clear();
-    player_specs.character_specs.block = 0.0;
-    player_specs.character_specs.block_spell = 0.0;
+    player_specs.character_specs.block = Default::default();
+    player_specs.character_specs.block_spell = Default::default();
     player_specs.character_specs.block_damage = 0.0;
     player_specs.character_specs.max_life = 90.0 + 10.0 * player_specs.level as f64;
     player_specs.character_specs.life_regen = 10.0;
@@ -73,6 +74,7 @@ pub fn update_player_specs(
     player_specs.movement_cooldown = 3.0;
     player_specs.triggers.clear();
 
+    // TODO: Could we figure out a way to keep the block luck somehow?
     let (total_armor, total_block) = player_inventory
         .equipped_items()
         .map(|(_, item)| item)
@@ -85,7 +87,7 @@ pub fn update_player_specs(
         .armor
         .entry(DamageType::Physical)
         .or_default()) += total_armor;
-    player_specs.character_specs.block += total_block;
+    player_specs.character_specs.block.value += total_block;
 
     player_specs.effects = EffectsMap::combine_all(
         player_inventory
@@ -160,15 +162,18 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
                         skill_shape: SkillShape::Single,
                         modifiers: Vec::new(),
                         effects: vec![SkillEffect {
-                            failure_chance: 0.0,
+                            failure_chance: Default::default(),
                             effect_type: SkillEffectType::Restore {
                                 restore_type: if let StatType::LifeOnHit(_) = effect.stat {
                                     RestoreType::Life
                                 } else {
                                     RestoreType::Mana
                                 },
-                                min: effect.value,
-                                max: effect.value,
+                                value: ValueChance {
+                                    min: effect.value,
+                                    max: effect.value,
+                                    lucky_chance: 0.0,
+                                },
                                 modifier: Modifier::Flat,
                             },
                             ignore_stat_effects: Default::default(),
@@ -195,12 +200,12 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
             | StatType::MinDamage { .. }
             | StatType::MaxDamage { .. }
             | StatType::Restore(_)
-            | StatType::SpellPower
             | StatType::CritChance(_)
             | StatType::CritDamage(_)
             | StatType::StatusDuration { .. }
             | StatType::StatusPower { .. }
-            | StatType::Speed(_) => {}
+            | StatType::Speed(_)
+            | StatType::Lucky { .. } => {}
         }
     }
 

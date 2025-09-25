@@ -80,7 +80,6 @@ pub enum StatType {
     LifeOnHit(#[serde(default)] HitTrigger),
     ManaOnHit(#[serde(default)] HitTrigger),
     Restore(#[serde(default)] Option<RestoreType>),
-    SpellPower,
     CritChance(#[serde(default)] Option<SkillType>),
     CritDamage(#[serde(default)] Option<SkillType>),
     StatusPower(#[serde(default)] Option<StatStatusType>),
@@ -297,14 +296,14 @@ impl EffectsMap {
                     .entry((target, modifier))
                     .and_modify(|entry| match modifier {
                         Modifier::Multiplier if target.is_multiplicative() => {
-                            let mut new_entry = *entry + 1.0;
+                            let mut new_entry = *entry + 100.0;
                             new_entry.apply_effect(&StatEffect {
                                 stat: target,
                                 modifier,
                                 value,
                                 bypass_ignore: false,
                             });
-                            *entry = new_entry - 1.0;
+                            *entry = new_entry - 100.0;
                         }
                         _ => *entry += value,
                     })
@@ -325,7 +324,7 @@ pub trait ApplyStatModifier {
                 if effect.value >= 0.0 {
                     effect.value
                 } else {
-                    let div = (1.0 - effect.value).max(0.0);
+                    let div = (1.0 - effect.value * 0.01).max(0.0);
                     if div != 0.0 {
                         effect.value / div
                     } else {
@@ -349,7 +348,7 @@ impl ApplyStatModifier for f32 {
     fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
         match modifier {
             Modifier::Flat => *self += value as f32,
-            Modifier::Multiplier => *self *= (1.0 + value as f32).max(0.0),
+            Modifier::Multiplier => *self *= (1.0 + value as f32 * 0.01).max(0.0),
         }
     }
 }
@@ -358,7 +357,7 @@ impl ApplyStatModifier for f64 {
     fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
         match modifier {
             Modifier::Flat => *self += value,
-            Modifier::Multiplier => *self *= (1.0 + value).max(0.0),
+            Modifier::Multiplier => *self *= (1.0 + value * 0.01).max(0.0),
         }
     }
 }

@@ -17,7 +17,7 @@ use crate::{
         data::event::EventsQueue,
         utils::{
             increase_factors,
-            rng::{self, flip_coin},
+            rng::{self, flip_coin, Rollable},
         },
     },
 };
@@ -67,12 +67,9 @@ fn apply_skill_on_targets<'a>(
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
 ) -> bool {
-    let repeat_amount =
-        rng::random_range(targets_group.repeat.min..=targets_group.repeat.max).unwrap_or(1);
-
     let mut already_hit = HashSet::new();
 
-    for _ in 0..repeat_amount {
+    for _ in 0..targets_group.repeat.value.roll() {
         match apply_repeated_skill_on_targets(
             events_queue,
             skill_type,
@@ -264,24 +261,24 @@ pub fn apply_skill_effect(
     skill_effect: &SkillEffect,
     targets: &mut [&mut Target],
 ) {
-    if rng::random_range(0.0..=1.0).unwrap_or(1.0) <= skill_effect.failure_chance {
+    if skill_effect.failure_chance.roll() {
         return;
     }
 
     match &skill_effect.effect_type {
         SkillEffectType::FlatDamage {
             damage,
-            crit_chance: crit_chance,
+            crit_chance,
             crit_damage,
         } => {
-            let is_crit = rng::random_range(0.0..=100.0).unwrap_or(100.0) <= *crit_chance;
+            let is_crit = crit_chance.roll();
 
             let damage: HashMap<_, _> = damage
                 .iter()
-                .map(|(damage_type, (min, max))| {
+                .map(|(damage_type, value)| {
                     (
                         *damage_type,
-                        rng::random_range(*min..=*max).unwrap_or(*max)
+                        value.roll()
                             * (if is_crit {
                                 1.0 + crit_damage * 0.01
                             } else {
@@ -303,25 +300,15 @@ pub fn apply_skill_effect(
                 );
             }
         }
-        SkillEffectType::ApplyStatus {
-            min_duration,
-            max_duration,
-            statuses,
-        } => {
-            let duration =
-                rng::random_range(*min_duration..=*max_duration).unwrap_or(*max_duration);
+        SkillEffectType::ApplyStatus { duration, statuses } => {
             for status_effect in statuses.iter() {
-                let value: f64 =
-                    rng::random_range(status_effect.min_value..=status_effect.max_value)
-                        .unwrap_or(status_effect.max_value);
-
                 for target in targets.iter_mut() {
                     characters_controller::apply_status(
                         target,
                         &status_effect.status_type,
                         skill_type,
-                        value,
-                        Some(duration),
+                        status_effect.value.roll(),
+                        Some(duration.roll()),
                         status_effect.cumulate,
                     )
                 }
@@ -329,19 +316,16 @@ pub fn apply_skill_effect(
         }
         SkillEffectType::Restore {
             restore_type,
-            min,
-            max,
+            value,
             modifier,
         } => {
-            if let Some(amount) = rng::random_range(*min..=*max) {
-                for target in targets {
-                    characters_controller::restore_character(
-                        target,
-                        *restore_type,
-                        amount,
-                        *modifier,
-                    );
-                }
+            for target in targets {
+                characters_controller::restore_character(
+                    target,
+                    *restore_type,
+                    value.roll(),
+                    *modifier,
+                );
             }
         }
         SkillEffectType::Resurrect => {

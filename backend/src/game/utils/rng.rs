@@ -49,55 +49,72 @@ pub trait Rollable<T> {
 
 impl Rollable<bool> for Chance {
     fn roll(&self) -> bool {
-        if random_range(0.0..=100.0).unwrap_or(100.0) <= self.value {
-            return true;
-        }
+        let first_result = random_range(0.0..=100.0).unwrap_or(100.0) <= self.value;
+        let second_result = random_range(0.0..=100.0).unwrap_or(100.0) <= self.value;
 
-        if random_range(0.0..=100.0).unwrap_or(100.0) <= self.lucky_chance {
-            if random_range(0.0..=100.0).unwrap_or(100.0) <= self.value {
-                return true;
-            }
+        match roll_luck(self.lucky_chance) {
+            LuckResult::Unlucky => first_result.min(second_result),
+            LuckResult::Normal => first_result,
+            LuckResult::Lucky => first_result.max(second_result),
         }
-
-        false
     }
 
     fn clamp(&mut self) {
-        self.value.clamp(0.0, 100.0);
-        self.lucky_chance.clamp(0.0, 100.0);
+        self.value = self.value.clamp(0.0, 100.0);
+        self.lucky_chance = self.lucky_chance.clamp(-100.0, 100.0);
     }
 }
 
 impl Rollable<f64> for ValueChance {
     fn roll(&self) -> f64 {
         let first_result = random_range(self.min..=self.max).unwrap_or(self.max);
+        let second_result = random_range(self.min..=self.max).unwrap_or(self.max);
 
-        if random_range(0.0..=100.0).unwrap_or(100.0) <= self.lucky_chance {
-            return first_result.max(random_range(self.min..=self.max).unwrap_or(self.max));
-        } else {
-            return first_result;
+        match roll_luck(self.lucky_chance) {
+            LuckResult::Unlucky => first_result.min(second_result),
+            LuckResult::Normal => first_result,
+            LuckResult::Lucky => first_result.max(second_result),
         }
     }
 
     fn clamp(&mut self) {
         self.min = self.min.min(self.max);
-        self.lucky_chance.clamp(0.0, 100.0);
+        self.lucky_chance = self.lucky_chance.clamp(-100.0, 100.0);
     }
 }
 
 impl Rollable<u16> for QuantityChance {
     fn roll(&self) -> u16 {
         let first_result = random_range(self.min..=self.max).unwrap_or(self.max);
+        let second_result = random_range(self.min..=self.max).unwrap_or(self.max);
 
-        if random_range(0.0..=100.0).unwrap_or(100.0) <= self.lucky_chance {
-            return first_result.max(random_range(self.min..=self.max).unwrap_or(self.max));
-        } else {
-            return first_result;
+        match roll_luck(self.lucky_chance) {
+            LuckResult::Unlucky => first_result.min(second_result),
+            LuckResult::Normal => first_result,
+            LuckResult::Lucky => first_result.max(second_result),
         }
     }
 
     fn clamp(&mut self) {
         self.min = self.min.min(self.max);
-        self.lucky_chance.clamp(0.0, 100.0);
+        self.lucky_chance = self.lucky_chance.clamp(-100.0, 100.0);
     }
+}
+
+enum LuckResult {
+    Unlucky,
+    Normal,
+    Lucky,
+}
+
+fn roll_luck(lucky_chance: f32) -> LuckResult {
+    if random_range(0.0..=100.0).unwrap_or(100.0) <= lucky_chance.abs() {
+        if lucky_chance < 0.0 {
+            return LuckResult::Unlucky;
+        } else if lucky_chance > 0.0 {
+            return LuckResult::Lucky;
+        }
+    }
+
+    LuckResult::Normal
 }
