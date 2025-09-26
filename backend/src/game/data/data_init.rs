@@ -83,7 +83,7 @@ impl DataInit<&MonsterSpecs> for MonsterState {
         MonsterState {
             character_state: CharacterState::init(&specs.character_specs),
             skill_states: specs.skill_specs.iter().map(SkillState::init).collect(),
-            initiative: specs.initiative.roll() as f32,
+            initiative: specs.initiative.roll(),
             gold_reward: 0.0,
             gems_reward: 0.0,
         }

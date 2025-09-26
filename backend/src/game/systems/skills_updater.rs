@@ -286,29 +286,26 @@ pub fn compute_skill_specs_effect<'a>(
                         status_effect.value.max.apply_effect(&effect);
                     }
 
-                    match status_effect.status_type {
-                        StatusSpecs::DamageOverTime { damage_type, .. } => {
-                            if effect.stat.is_match(&StatType::MinDamage {
-                                skill_type: Some(skill_type),
-                                damage_type: Some(damage_type),
-                            }) || effect.stat.is_match(&StatType::Damage {
-                                skill_type: Some(skill_type),
-                                damage_type: Some(damage_type),
-                            }) {
-                                status_effect.value.min.apply_effect(effect);
-                            }
-
-                            if effect.stat.is_match(&StatType::MaxDamage {
-                                skill_type: Some(skill_type),
-                                damage_type: Some(damage_type),
-                            }) || effect.stat.is_match(&StatType::Damage {
-                                skill_type: Some(skill_type),
-                                damage_type: Some(damage_type),
-                            }) {
-                                status_effect.value.max.apply_effect(effect);
-                            }
+                    if let StatusSpecs::DamageOverTime { damage_type, .. } = status_effect.status_type {
+                        if effect.stat.is_match(&StatType::MinDamage {
+                            skill_type: Some(skill_type),
+                            damage_type: Some(damage_type),
+                        }) || effect.stat.is_match(&StatType::Damage {
+                            skill_type: Some(skill_type),
+                            damage_type: Some(damage_type),
+                        }) {
+                            status_effect.value.min.apply_effect(effect);
                         }
-                        _ => {}
+
+                        if effect.stat.is_match(&StatType::MaxDamage {
+                            skill_type: Some(skill_type),
+                            damage_type: Some(damage_type),
+                        }) || effect.stat.is_match(&StatType::Damage {
+                            skill_type: Some(skill_type),
+                            damage_type: Some(damage_type),
+                        }) {
+                            status_effect.value.max.apply_effect(effect);
+                        }
                     }
                 }
             }

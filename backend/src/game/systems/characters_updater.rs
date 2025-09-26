@@ -135,10 +135,10 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                 skill_type,
                 roll_type: LuckyRollType::Block,
             } => {
-                if skill_type.map_or(true, |s| s == SkillType::Attack) {
+                if skill_type.is_none_or(|s| s == SkillType::Attack) {
                     character_specs.block.lucky_chance.apply_effect(effect);
                 }
-                if skill_type.map_or(true, |s| s == SkillType::Spell) {
+                if skill_type.is_none_or(|s| s == SkillType::Spell) {
                     character_specs
                         .block_spell
                         .lucky_chance

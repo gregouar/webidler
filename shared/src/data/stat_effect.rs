@@ -165,16 +165,17 @@ impl StatType {
 
     pub fn is_multiplicative(&self) -> bool {
         use StatType::*;
-        match self {
+
+        matches!(
+            self,
             Armor(_)
-            | Damage { .. }
-            | MinDamage { .. }
-            | MaxDamage { .. }
-            | CritDamage(_)
-            | StatusPower(_)
-            | GoldFind => true,
-            _ => false,
-        }
+                | Damage { .. }
+                | MinDamage { .. }
+                | MaxDamage { .. }
+                | CritDamage(_)
+                | StatusPower(_)
+                | GoldFind
+        )
     }
 }
 
