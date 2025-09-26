@@ -239,7 +239,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                 damage_type: None,
             },
             modifier: Modifier::Multiplier,
-            value: 0.5,
+            value: 50.0,
             bypass_ignore: true,
         }],
         modifier_effects: vec![],

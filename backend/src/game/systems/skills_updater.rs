@@ -108,8 +108,10 @@ pub fn compute_skill_upgrade_effects(
             stat: effect.stat,
             modifier: effect.modifier,
             value: match effect.modifier {
-                Modifier::Multiplier => (1.0 + effect.value).powf(level) - 1.0,
-                Modifier::Flat => effect.value * level,
+                Modifier::Multiplier if effect.stat.is_multiplicative() => {
+                    ((1.0 + effect.value * 0.01).powf(level) - 1.0) * 100.0
+                }
+                _ => effect.value * level,
             },
             bypass_ignore: true,
         })
