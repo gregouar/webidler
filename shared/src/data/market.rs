@@ -56,7 +56,6 @@ pub struct MarketFilters {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, EnumIter, Hash, PartialEq, Eq)]
 pub enum MarketOrderBy {
-    #[default]
     Price,
     Level,
     Damages,
@@ -64,5 +63,6 @@ pub enum MarketOrderBy {
     CritDamage,
     Armor,
     Block,
+    #[default]
     Time,
 }
