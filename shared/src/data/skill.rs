@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    chance::{Chance, QuantityChance, ValueChance},
+    chance::{Chance, ChanceRange},
     stat_effect::{Modifier, StatType},
     trigger::TriggerSpecs,
 };
@@ -119,14 +119,14 @@ pub struct SkillTargetsGroup {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SkillRepeat {
-    pub value: QuantityChance,
+    pub value: ChanceRange<u8>,
     pub target: SkillRepeatTarget,
 }
 
 impl Default for SkillRepeat {
     fn default() -> Self {
         Self {
-            value: QuantityChance {
+            value: ChanceRange {
                 min: 1,
                 max: 1,
                 lucky_chance: 0.0,
@@ -166,11 +166,11 @@ pub enum SkillEffectType {
     },
     ApplyStatus {
         statuses: Vec<ApplyStatusEffect>,
-        duration: ValueChance,
+        duration: ChanceRange<f64>,
     },
     Restore {
         restore_type: RestoreType,
-        value: ValueChance,
+        value: ChanceRange<f64>,
         modifier: Modifier,
     },
     Resurrect,
@@ -180,7 +180,7 @@ pub enum SkillEffectType {
 pub struct ApplyStatusEffect {
     pub status_type: StatusSpecs,
     #[serde(default)]
-    pub value: ValueChance,
+    pub value: ChanceRange<f64>,
     #[serde(default)]
     pub cumulate: bool,
 }

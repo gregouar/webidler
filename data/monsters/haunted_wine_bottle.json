@@ -3,7 +3,7 @@
   "portrait": "monsters/haunted_wine_bottle.webp",
   "max_life": 5,
   "power_factor": 0,
-  "max_initiative": 1,
+  "initiative": [0, 1],
   "skills": [
     {
       "name": "Sickening Sip",
@@ -14,15 +14,13 @@
           "effects": [
             {
               "ApplyStatus": {
-                "min_duration": 5,
-                "max_duration": 5,
+                "duration": 5,
                 "statuses": [
                   {
                     "status_type": {
                       "DamageOverTime": { "damage_type": "Poison" }
                     },
-                    "min_value": 1,
-                    "max_value": 1
+                    "value": 1
                   }
                 ]
               }

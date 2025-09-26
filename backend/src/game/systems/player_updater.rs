@@ -1,7 +1,7 @@
 use std::{iter, time::Duration};
 
 use shared::data::{
-    chance::ValueChance,
+    chance::ChanceRange,
     character::CharacterId,
     character_status::StatusSpecs,
     item::{SkillRange, SkillShape},
@@ -169,7 +169,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
                                 } else {
                                     RestoreType::Mana
                                 },
-                                value: ValueChance {
+                                value: ChanceRange {
                                     min: effect.value,
                                     max: effect.value,
                                     lucky_chance: 0.0,

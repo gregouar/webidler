@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 use crate::data::{
-    chance::ValueChance, character_status::StatusSpecs, skill::RestoreType, trigger::HitTrigger,
+    chance::ChanceRange, character_status::StatusSpecs, skill::RestoreType, trigger::HitTrigger,
 };
 
 use super::skill::SkillType;
@@ -31,7 +31,7 @@ pub enum DamageType {
     Storm,
 }
 
-pub type DamageMap = HashMap<DamageType, ValueChance>;
+pub type DamageMap = HashMap<DamageType, ChanceRange<f64>>;
 
 #[derive(
     Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,

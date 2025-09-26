@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use shared::data::{
     area::AreaLevel,
-    chance::QuantityChance,
+    chance::ChanceRange,
     forge::MAX_AFFIXES,
     item::{ItemBase, ItemModifiers, ItemRarity, ItemSpecs},
     item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
@@ -99,17 +99,17 @@ pub fn roll_item(
         .for_each(|effect| effect.stat_effect.value *= 1.0 + quality as f64 * 0.01);
 
     let affixes_amount = match rarity {
-        ItemRarity::Magic => QuantityChance {
+        ItemRarity::Magic => ChanceRange {
             min: 1,
             max: 2,
             ..Default::default()
         },
-        ItemRarity::Rare => QuantityChance {
+        ItemRarity::Rare => ChanceRange {
             min: 3,
             max: 4,
             ..Default::default()
         },
-        _ => QuantityChance::default(),
+        _ => ChanceRange::default(),
     }
     .roll();
 

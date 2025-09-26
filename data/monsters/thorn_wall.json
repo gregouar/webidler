@@ -4,7 +4,7 @@
   "max_life": 20,
   "power_factor": 2,
   "size": "Tall",
-  "max_initiative": 2,
+  "initiative": [1, 2],
   "armor": { "Poison": 50, "Physical": 50 },
   "skills": [
     {

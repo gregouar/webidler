@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 
-use crate::data::chance::ValueChance;
+use crate::data::chance::ChanceRange;
 
 use super::{
     area::AreaLevel,
@@ -71,7 +71,7 @@ pub struct AffixEffectBlueprint {
     pub stat: StatType,
     pub modifier: Modifier,
     pub scope: AffixEffectScope,
-    pub value: ValueChance,
+    pub value: ChanceRange<f64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

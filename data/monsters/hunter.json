@@ -5,7 +5,7 @@
   "max_life": 100,
   "size": "Tall",
   "power_factor": 30,
-  "max_initiative": 3,
+  "initiative": [2, 3],
   "armor": {
     "Physical": 50,
     "Poison": 100
@@ -21,17 +21,13 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [
-                    2,
-                    4
-                  ]
+                  "Physical": [2, 4]
                 }
               }
             },
             {
               "ApplyStatus": {
-                "min_duration": 3,
-                "max_duration": 3,
+                "duration": 3,
                 "statuses": [
                   {
                     "status_type": {
@@ -39,8 +35,7 @@
                         "damage_type": "Physical"
                       }
                     },
-                    "min_value": 1,
-                    "max_value": 2
+                    "value": [1,2]
                   }
                 ]
               }
@@ -60,8 +55,7 @@
           "effects": [
             {
               "ApplyStatus": {
-                "min_duration": 5,
-                "max_duration": 5,
+                "duration": 5,
                 "statuses": [
                   {
                     "status_type": {
@@ -69,8 +63,7 @@
                         "damage_type": "Poison"
                       }
                     },
-                    "min_value": 5,
-                    "max_value": 5
+                    "value": 5
                   }
                 ]
               }
@@ -78,10 +71,7 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [
-                    4,
-                    8
-                  ]
+                  "Physical": [4, 8]
                 }
               }
             }
@@ -105,15 +95,13 @@
             {
               "Restore": {
                 "restore_type": "Life",
-                "min": 100,
-                "max": 100,
+                "value": 100,
                 "modifier": "Multiplier"
               }
             },
             {
               "ApplyStatus": {
-                "min_duration": 300,
-                "max_duration": 300,
+                "duration": 300,
                 "statuses": [
                   {
                     "status_type": {
@@ -124,8 +112,7 @@
                       }
                     },
                     "cumulate": true,
-                    "min_value": 1.0,
-                    "max_value": 1.0
+                    "value": 100
                   }
                 ]
               }

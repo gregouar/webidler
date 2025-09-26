@@ -3,7 +3,7 @@
   "portrait": "monsters/bonebark_wolf.webp",
   "max_life": 8,
   "power_factor": 2.0,
-  "initiative": [0.0,1.0],
+  "initiative": [0.0, 1.0],
   "skills": [
     {
       "name": "Haunting Bite",
@@ -35,7 +35,7 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": [5,10],
+                "duration": [5, 10],
                 "statuses": [
                   {
                     "status_type": {

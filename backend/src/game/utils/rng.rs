@@ -2,7 +2,7 @@ use rand::{
     distr::uniform::{SampleRange, SampleUniform},
     Rng,
 };
-use shared::data::chance::{Chance, QuantityChance, ValueChance};
+use shared::data::chance::{Chance, ChanceRange};
 
 pub fn flip_coin() -> bool {
     let mut rng = rand::rng();
@@ -65,38 +65,33 @@ impl Rollable<bool> for Chance {
     }
 }
 
-impl Rollable<f64> for ValueChance {
-    fn roll(&self) -> f64 {
+impl<T> Rollable<T> for ChanceRange<T>
+where
+    T: rand::distr::uniform::SampleUniform + PartialOrd + Copy,
+{
+    fn roll(&self) -> T {
         let first_result = random_range(self.min..=self.max).unwrap_or(self.max);
         let second_result = random_range(self.min..=self.max).unwrap_or(self.max);
 
         match roll_luck(self.lucky_chance) {
-            LuckResult::Unlucky => first_result.min(second_result),
+            LuckResult::Unlucky => match first_result.partial_cmp(&second_result) {
+                Some(std::cmp::Ordering::Greater) => second_result,
+                _ => first_result,
+            },
             LuckResult::Normal => first_result,
-            LuckResult::Lucky => first_result.max(second_result),
+            LuckResult::Lucky => match first_result.partial_cmp(&second_result) {
+                Some(std::cmp::Ordering::Less) => second_result,
+                _ => first_result,
+            },
         }
     }
 
     fn clamp(&mut self) {
-        self.min = self.min.min(self.max);
-        self.lucky_chance = self.lucky_chance.clamp(-100.0, 100.0);
-    }
-}
-
-impl Rollable<u16> for QuantityChance {
-    fn roll(&self) -> u16 {
-        let first_result = random_range(self.min..=self.max).unwrap_or(self.max);
-        let second_result = random_range(self.min..=self.max).unwrap_or(self.max);
-
-        match roll_luck(self.lucky_chance) {
-            LuckResult::Unlucky => first_result.min(second_result),
-            LuckResult::Normal => first_result,
-            LuckResult::Lucky => first_result.max(second_result),
+        if let Some(ordering) = self.min.partial_cmp(&self.max) {
+            if ordering == std::cmp::Ordering::Greater {
+                self.min = self.max;
+            }
         }
-    }
-
-    fn clamp(&mut self) {
-        self.min = self.min.min(self.max);
         self.lucky_chance = self.lucky_chance.clamp(-100.0, 100.0);
     }
 }

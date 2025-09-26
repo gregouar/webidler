@@ -1,7 +1,7 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
-use shared::data::{area::AreaSpecs, chance::QuantityChance};
+use shared::data::{area::AreaSpecs, chance::ChanceRange};
 
 use crate::game::utils::json::LoadJsonFromFile;
 
@@ -42,7 +42,7 @@ pub struct MonsterWaveBlueprint {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MonsterWaveSpawnBlueprint {
     pub monster: String,
-    pub quantity: QuantityChance,
+    pub quantity: ChanceRange<u8>,
 }
 
 impl LoadJsonFromFile for AreaBlueprintSchema {}

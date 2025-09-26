@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use shared::data::{
-    chance::ValueChance,
+    chance::ChanceRange,
     monster::{MonsterRarity, MonsterSpecs},
     player::CharacterSpecs,
     skill::{BaseSkillSpecs, SkillSpecs},
@@ -20,7 +20,7 @@ pub struct BaseMonsterSpecs {
     #[serde(default)]
     pub rarity: MonsterRarity,
 
-    pub initiative: ValueChance,
+    pub initiative: ChanceRange<f32>,
     pub power_factor: f64,
 }
 

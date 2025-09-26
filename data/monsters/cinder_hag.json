@@ -3,7 +3,7 @@
   "portrait": "monsters/cinder_hag.webp",
   "max_life": 7,
   "power_factor": 2.0,
-  "max_initiative": 0.5,
+  "initiative": [0.0, 1.0],
   "armor": { "Fire": 50 },
   "skills": [
     {
@@ -16,15 +16,13 @@
           "effects": [
             {
               "ApplyStatus": {
-                "min_duration": 2,
-                "max_duration": 4,
+                "duration": [2,4],
                 "statuses": [
                   {
                     "status_type": {
                       "DamageOverTime": { "damage_type": "Fire" }
                     },
-                    "min_value": 3,
-                    "max_value": 3
+                    "value": 3
                   }
                 ]
               }
@@ -43,8 +41,7 @@
           "effects": [
             {
               "ApplyStatus": {
-                "min_duration": 5,
-                "max_duration": 5,
+                "duration": 5,
                 "statuses": [
                   {
                     "status_type": {
@@ -53,8 +50,7 @@
                         "debuff": true
                       }
                     },
-                    "min_value": 0.5,
-                    "max_value": 0.5
+                    "value": 100
                   }
                 ]
               }
