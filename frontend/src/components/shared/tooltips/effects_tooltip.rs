@@ -216,7 +216,7 @@ pub fn format_multiplier_stat_name(stat: StatType) -> String {
         StatType::ManaRegen => "Mana Regeneration".to_string(),
         StatType::Armor(armor_type) => match armor_type {
             Some(DamageType::Physical) => "Armor".to_string(),
-            None => "All Resistances and Armor".to_string(),
+            None => "Resistances and Armor".to_string(),
             _ => format!("{}Resistance", optional_damage_type_str(armor_type)),
         },
         StatType::TakeFromManaBeforeLife => "Damage taken from Mana before Life".to_string(),

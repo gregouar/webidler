@@ -13,7 +13,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "targets": [
@@ -45,7 +45,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "targets": [
@@ -64,7 +64,7 @@
             }
           },
           {
-            "failure_chance": 0.7,
+            "failure_chance": 70,
             "ApplyStatus": {
               "duration": 3,
               "statuses": [
@@ -92,7 +92,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "targets": [
@@ -125,7 +125,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "targets": [
@@ -173,7 +173,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "targets": [
@@ -211,8 +211,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
-        "modifier": "Flat",
-        "value": 3
+        "modifier": "Multiplier",
+        "value": 10
       }
     ],
     "targets": [
@@ -257,8 +257,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
-        "modifier": "Flat",
-        "value": 1
+        "modifier": "Multiplier",
+        "value": 5
       }
     ],
     "targets": [
@@ -283,7 +283,7 @@
                       "debuff": true
                     }
                   },
-                  "value": 0.17
+                  "value": 17
                 }
               ]
             }
@@ -303,8 +303,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
-        "modifier": "Flat",
-        "value": 2
+        "modifier": "Multiplier",
+        "value": 10
       }
     ],
     "targets": [
@@ -324,7 +324,7 @@
                       "modifier": "Multiplier"
                     }
                   },
-                  "value": 0.2
+                  "value": 20
                 },
                 {
                   "status_type": {
@@ -333,7 +333,7 @@
                       "modifier": "Multiplier"
                     }
                   },
-                  "value": 0.2
+                  "value": 20
                 }
               ]
             }
@@ -356,7 +356,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "triggers": [
@@ -398,8 +398,8 @@
     "upgrade_effects": [
       {
         "stat": { "Restore": "Life" },
-        "modifier": "Flat",
-        "value": 5
+        "modifier": "Multiplier",
+        "value": 20
       }
     ],
     "targets": [
@@ -468,7 +468,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "modifier_effects": [

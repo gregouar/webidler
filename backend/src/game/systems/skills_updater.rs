@@ -50,21 +50,20 @@ pub fn update_skill_specs<'a>(
     let default_inventory = PlayerInventory::default();
     let inventory = inventory.unwrap_or(&default_inventory);
 
-    let mut all_effects: Vec<_> = effects
-        .cloned()
-        .chain(compute_skill_upgrade_effects(
-            skill_specs,
-            skill_specs.upgrade_level,
-        ))
-        .chain(compute_skill_modifier_effects(skill_specs, inventory))
-        .collect();
+    // TODO: Could gather all Flat first, then apply local multiplier, then global multipliers...
 
-    all_effects.sort_by_key(|e| match e.modifier {
+    let mut skill_effects: Vec<_> =
+        compute_skill_upgrade_effects(skill_specs, skill_specs.upgrade_level)
+            .chain(compute_skill_modifier_effects(skill_specs, inventory))
+            .collect();
+
+    skill_effects.sort_by_key(|e| match e.modifier {
         Modifier::Flat => 0,
         Modifier::Multiplier => 1,
     });
 
-    apply_effects_to_skill_specs(skill_specs, all_effects.iter());
+    apply_effects_to_skill_specs(skill_specs, skill_effects.iter());
+    apply_effects_to_skill_specs(skill_specs, effects);
 }
 
 pub fn apply_effects_to_skill_specs<'a>(
@@ -192,6 +191,9 @@ pub fn compute_skill_specs_effect<'a>(
             }
         }
     }
+
+    // NB: With this approach, Inc Spell Crit Chance is multiplicative with Inc Crit Chance...
+    // But maybe that's fine...
 
     for effect in effects.clone() {
         if !effect.bypass_ignore

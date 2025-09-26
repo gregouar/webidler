@@ -416,15 +416,15 @@
         "effects": [
           {
             "stat": "Block",
-            "modifier": "Flat",
-            "value": 2
+            "modifier": "Multiplier",
+            "value": 10
           }
         ],
         "upgrade_effects": [
           {
             "stat": "Block",
-            "modifier": "Flat",
-            "value": 1
+            "modifier": "Multiplier",
+            "value": 5
           }
         ],
         "max_upgrade_level": 3
@@ -438,15 +438,15 @@
         "effects": [
           {
             "stat": "Block",
-            "modifier": "Flat",
-            "value": 2
+            "modifier": "Multiplier",
+            "value": 10
           }
         ],
         "upgrade_effects": [
           {
             "stat": "Block",
-            "modifier": "Flat",
-            "value": 1
+            "modifier": "Multiplier",
+            "value": 5
           }
         ],
         "max_upgrade_level": 3
@@ -461,8 +461,8 @@
         "effects": [
           {
             "stat": "Block",
-            "modifier": "Flat",
-            "value": 2
+            "modifier": "Multiplier",
+            "value": 10
           },
           {
             "stat": {
@@ -475,8 +475,8 @@
         "upgrade_effects": [
           {
             "stat": "Block",
-            "modifier": "Flat",
-            "value": 1
+            "modifier": "Multiplier",
+            "value": 5
           },
           {
             "stat": {
@@ -1683,6 +1683,7 @@
         "max_upgrade_level": 3
       },
       "storm_lucky": {
+        "initial_node": true,
         "name": "Lightning Never Strike Twice",
         "icon": "passives/lightning_double.svg",
         "x": 81,
@@ -1797,7 +1798,6 @@
         "max_upgrade_level": 3
       },
       "damage_over_time_spread": {
-        "initial_node": true,
         "name": "Spread Destruction",
         "icon": "passives/spread.svg",
         "x": 60,

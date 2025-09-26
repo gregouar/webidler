@@ -187,7 +187,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
     let success_chance = if effect.failure_chance.value > 0.0 {
         Some(format!(
             "{:.0}% chance to ",
-            (1.0 - effect.failure_chance.value) * 100.0
+            (100.0 - effect.failure_chance.value)
         ))
     } else {
         None

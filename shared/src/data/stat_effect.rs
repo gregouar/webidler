@@ -150,6 +150,16 @@ impl StatType {
                 compare_options(skill_type, skill_type_2)
                     && compare_options(damage_type, damage_type_2)
             }
+            (
+                Lucky {
+                    skill_type,
+                    roll_type,
+                },
+                Lucky {
+                    skill_type: skill_type_2,
+                    roll_type: roll_type_2,
+                },
+            ) => compare_options(skill_type, skill_type_2) && roll_type.is_match(roll_type_2),
             (Restore(first), Restore(second)) => compare_options(first, second),
             (CritChance(first), CritChance(second))
             | (CritDamage(first), CritDamage(second))
@@ -173,7 +183,7 @@ impl StatType {
                 | MinDamage { .. }
                 | MaxDamage { .. }
                 | CritDamage(_)
-                | StatusPower(_)
+                | StatusPower(Some(StatStatusType::DamageOverTime { .. }))
                 | GoldFind
         )
     }
@@ -244,6 +254,25 @@ pub enum LuckyRollType {
     // StatusDuration,
     // StatusValue,
     // TODO: could add others
+}
+
+impl LuckyRollType {
+    pub fn is_match(&self, lucky_roll_type: &LuckyRollType) -> bool {
+        if self == lucky_roll_type {
+            return true;
+        }
+
+        use LuckyRollType::*;
+        match (self, lucky_roll_type) {
+            (
+                Damage { damage_type },
+                Damage {
+                    damage_type: damage_type_2,
+                },
+            ) => compare_options(damage_type, damage_type_2),
+            _ => false,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
