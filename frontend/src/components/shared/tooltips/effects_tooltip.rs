@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     skill::{DamageType, SkillType},
-    stat_effect::{Modifier, StatEffect, StatStatusType, StatType},
+    stat_effect::{LuckyRollType, Modifier, StatEffect, StatStatusType, StatType},
 };
 
 use crate::components::{
@@ -51,6 +51,16 @@ pub fn optional_damage_type_str(damage_type: Option<DamageType>) -> &'static str
             DamageType::Storm => "Storm ",
         },
         None => "",
+    }
+}
+
+pub fn lucky_roll_str(roll_type: LuckyRollType) -> String {
+    match roll_type {
+        LuckyRollType::Damage { damage_type } => {
+            format!("{}Damage", optional_damage_type_str(damage_type))
+        }
+        LuckyRollType::Block => "Block Chance".into(),
+        LuckyRollType::CritChance => "Critical Chance".into(),
     }
 }
 
@@ -204,8 +214,9 @@ pub fn format_multiplier_stat_name(stat: StatType) -> String {
         StatType::Mana => "Maximum Mana".to_string(),
         StatType::ManaRegen => "Mana Regeneration".to_string(),
         StatType::Armor(armor_type) => match armor_type {
-            DamageType::Physical => "Armor".to_string(),
-            _ => format!("{}Resistance", optional_damage_type_str(Some(armor_type))),
+            Some(DamageType::Physical) => "Armor".to_string(),
+            None => "All Resistances and Armor".to_string(),
+            _ => format!("{}Resistance", optional_damage_type_str(armor_type)),
         },
         StatType::TakeFromManaBeforeLife => "Damage taken from Mana before Life".to_string(),
         StatType::Block => "Block Chance".to_string(),
@@ -238,7 +249,6 @@ pub fn format_multiplier_stat_name(stat: StatType) -> String {
         StatType::Restore(restore_type) => {
             format!("Restore{} Power", restore_type_str(restore_type))
         }
-        StatType::SpellPower => "Spell Power".to_string(),
         StatType::CritChance(skill_type) => {
             format!("{}Critical Hit Chance", skill_type_str(skill_type))
         }
@@ -271,6 +281,10 @@ pub fn format_multiplier_stat_name(stat: StatType) -> String {
             skill_type_str(skill_type)
         ),
         StatType::ThreatGain => "Threat Gain".into(),
+        StatType::Lucky {
+            skill_type,
+            roll_type,
+        } => skill_type_str(skill_type).to_string() + &lucky_roll_str(roll_type),
     }
 }
 
@@ -291,8 +305,9 @@ pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
             "Adds {} {}",
             format_flat_number(value, false),
             match armor_type {
-                DamageType::Physical => "Armor".to_string(),
-                _ => format!("{}Resistance", optional_damage_type_str(Some(armor_type))),
+                Some(DamageType::Physical) => "Armor".to_string(),
+                None => "to All Resistances and Armor".to_string(),
+                _ => format!("{}Resistance", optional_damage_type_str(armor_type)),
             }
         ),
         StatType::TakeFromManaBeforeLife => {
@@ -327,9 +342,6 @@ pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
                 format_flat_number(value, false),
                 restore_type_str(restore_type)
             )
-        }
-        StatType::SpellPower => {
-            format!("Adds {} Power to Spells", format_flat_number(value, false))
         }
         StatType::CritChance(skill_type) => format!(
             "Adds {}% Critical Hit Chance{}",
@@ -407,6 +419,28 @@ pub fn format_flat_stat(stat: StatType, value: Option<f64>) -> String {
                     format_flat_number(value.map(|v| -v), false),
                     optional_damage_type_str(damage_type),
                     skill_type_str(skill_type)
+                )
+            }
+        }
+        StatType::Lucky {
+            skill_type,
+            roll_type,
+        } => {
+            let luck_type = lucky_roll_str(roll_type) + skill_type_str(skill_type);
+            let unwrap_value = value.unwrap_or_default();
+            if unwrap_value == 100.0 {
+                format!("{luck_type} is Lucky",)
+            } else if unwrap_value == -100.0 {
+                format!("{luck_type} is Unlucky",)
+            } else if unwrap_value >= 0.0 {
+                format!(
+                    "Adds {}% Luck Chance to {luck_type}",
+                    format_flat_number(value, false)
+                )
+            } else {
+                format!(
+                    "Removes {}% Luck Chance to {luck_type}",
+                    format_flat_number(value, false)
                 )
             }
         }

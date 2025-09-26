@@ -1132,9 +1132,9 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         (StatType::Mana, Modifier::Multiplier),
         (StatType::Mana, Modifier::Flat),
         (StatType::ManaRegen, Modifier::Flat),
-        (StatType::Armor(DamageType::Fire), Modifier::Flat),
-        (StatType::Armor(DamageType::Poison), Modifier::Flat),
-        (StatType::Armor(DamageType::Storm), Modifier::Flat),
+        (StatType::Armor(Some(DamageType::Fire)), Modifier::Flat),
+        (StatType::Armor(Some(DamageType::Poison)), Modifier::Flat),
+        (StatType::Armor(Some(DamageType::Storm)), Modifier::Flat),
         (
             StatType::Damage {
                 skill_type: None,

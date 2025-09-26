@@ -144,7 +144,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Increased Physical Damage"
+                                label="More Physical Damage"
                                 value=move || {
                                     format!(
                                         "+{}%",
@@ -161,7 +161,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Increased Fire Damage"
+                                label="More Fire Damage"
                                 value=move || {
                                     format!(
                                         "+{}%",
@@ -178,7 +178,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Increased Poison Damage"
+                                label="More Poison Damage"
                                 value=move || {
                                     format!(
                                         "+{}%",
@@ -195,7 +195,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Increased Storm Damage"
+                                label="More Storm Damage"
                                 value=move || {
                                     format!(
                                         "+{}%",
@@ -305,7 +305,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 value=move || {
                                     format!(
                                         "{:.0}%",
-                                        game_context.player_specs.read().character_specs.block,
+                                        game_context.player_specs.read().character_specs.block.value,
                                     )
                                 }
                             />
@@ -325,7 +325,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Increased Attack Damage"
+                                label="More Attack Damage"
                                 value=move || {
                                     format!(
                                         "+{}%",
@@ -357,7 +357,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Increased Spell Damage"
+                                label="More Spell Damage"
                                 value=move || {
                                     format!(
                                         "+{}%",
@@ -370,15 +370,6 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 Modifier::Multiplier,
                                             ) * 100.0,
                                         ),
-                                    )
-                                }
-                            />
-                            <Stat
-                                label="Increased Spell Power"
-                                value=move || {
-                                    format!(
-                                        "+{:.0}%",
-                                        effect(StatType::SpellPower, Modifier::Multiplier) * 100.0,
                                     )
                                 }
                             />

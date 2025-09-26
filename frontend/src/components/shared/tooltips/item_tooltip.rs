@@ -266,9 +266,8 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             let mut damage_lines = vec![];
 
             for damage_type in DamageType::iter() {
-                let (spec_min, spec_max) =
-                    specs.damage.get(&damage_type).copied().unwrap_or_default();
-                let (base_min, base_max) = base_specs
+                let specs_value = specs.damage.get(&damage_type).copied().unwrap_or_default();
+                let base_value = base_specs
                     .damage
                     .get(&damage_type)
                     .copied()
@@ -276,8 +275,8 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
                 let damage_color = match damage_type {
                     DamageType::Physical => {
-                        if spec_min.round() != base_min.round()
-                            || spec_max.round() != base_max.round()
+                        if specs_value.min.round() != base_value.min.round()
+                            || specs_value.max.round() != base_value.max.round()
                         {
                             "text-blue-400"
                         } else {
@@ -289,7 +288,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     DamageType::Storm => "text-amber-400",
                 };
 
-                if spec_min > 0.0 || spec_max > 0.0 {
+                if specs_value.min > 0.0 || specs_value.max > 0.0 {
                     damage_lines.push(view! {
                         <li class="text-gray-400 text-xs xl:text-sm leading-snug">
                             {effects_tooltip::optional_damage_type_str(Some(damage_type))}
@@ -297,7 +296,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                             <span class=format!(
                                 "{} font-semibold",
                                 damage_color,
-                            )>{format!("{spec_min:.0} - {spec_max:.0}")}</span>
+                            )>{format!("{:.0} - {:.0}", specs_value.min, specs_value.max)}</span>
                         </li>
                     });
                 }
@@ -344,7 +343,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     <span class=format!(
                         "{} font-semibold",
                         crit_chance_color,
-                    )>{format!("{:.2}%", specs.crit_chance)}</span>
+                    )>{format!("{:.2}%", specs.crit_chance.value)}</span>
                 </li>
                 <li class="text-gray-400 text-xs xl:text-sm leading-snug">
                     "Critical damage: "

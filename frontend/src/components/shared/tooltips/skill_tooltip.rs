@@ -3,6 +3,7 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
+    chance::ChanceRange,
     character_status::StatusSpecs,
     item::{ItemSlot, SkillRange, SkillShape},
     passive::StatEffect,
@@ -155,7 +156,7 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
         SkillRange::Any => "Any",
     };
 
-    let repeat = if targets_group.repeat.max > 1 {
+    let repeat = if targets_group.repeat.value.max > 1 {
         format!(
             ", {} {}",
             match targets_group.repeat.target {
@@ -163,10 +164,7 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
                 SkillRepeatTarget::Same => "Multi-Hit",
                 SkillRepeatTarget::Different => "Chain",
             },
-            format_min_max(
-                targets_group.repeat.min as f64,
-                targets_group.repeat.max as f64
-            ),
+            format_min_max(targets_group.repeat.value),
         )
     } else {
         "".into()
@@ -186,10 +184,10 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
 }
 
 fn format_effect(effect: SkillEffect) -> impl IntoView {
-    let success_chance = if effect.failure_chance > 0.0 {
+    let success_chance = if effect.failure_chance.value > 0.0 {
         Some(format!(
             "{:.0}% chance to ",
-            (1.0 - effect.failure_chance) * 100.0
+            (1.0 - effect.failure_chance.value) * 100.0
         ))
     } else {
         None
@@ -198,12 +196,12 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
     match effect.effect_type {
         SkillEffectType::FlatDamage {
             damage,
-            crit_chance: crit_chance,
+            crit_chance,
             crit_damage,
         } => view! {
             {damage
                 .into_iter()
-                .map(|(damage_type, (min, max))| {
+                .map(|(damage_type, value)| {
                     let success_chance = success_chance.clone();
                     let damage_color = damage_color(damage_type);
 
@@ -212,18 +210,20 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                             {success_chance}"Deal "
                             <span class=format!(
                                 "font-semibold {damage_color}",
-                            )>{format_min_max(min, max)}</span> " "
+                            )>{format_min_max(value)}</span> " "
                             {optional_damage_type_str(Some(damage_type))} "Damage"
                         </EffectLi>
                     }
                 })
                 .collect::<Vec<_>>()}
-            {if crit_chance > 0.0 {
+            {if crit_chance.value > 0.0 {
                 Some(
                     view! {
                         <EffectLi>
                             "Critical chance: "
-                            <span class="font-semibold">{format!("{:.2}%", crit_chance)}</span>
+                            <span class="font-semibold">
+                                {format!("{:.2}%", crit_chance.value)}
+                            </span>
                         </EffectLi>
                         <EffectLi>
                             "Critical damage: "
@@ -236,11 +236,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
             }}
         }
         .into_any(),
-        SkillEffectType::ApplyStatus {
-            statuses,
-            min_duration,
-            max_duration,
-        } => {
+        SkillEffectType::ApplyStatus { statuses, duration } => {
             let mut stat_effects = Vec::new();
             let mut max_stat_effects = Vec::new();
 
@@ -250,12 +246,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                 .map(|status_effect| match status_effect.status_type {
                     StatusSpecs::Stun => {
                         let success_chance = success_chance.clone();
-                        view! {
-                            <EffectLi>
-                                {success_chance}"Stun for "
-                                {format_min_max(min_duration, max_duration)}" seconds"
-                            </EffectLi>
-                        }
+                        view! { <EffectLi>{success_chance}"Stun for " {format_min_max(duration)}" seconds"</EffectLi> }
                         .into_any()
                     }
                     StatusSpecs::DamageOverTime { damage_type, .. } => {
@@ -266,14 +257,9 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                                 {success_chance}"Deal "
                                 <span class=format!(
                                     "font-semibold {damage_color}",
-                                )>
-                                    {format_min_max(
-                                        status_effect.min_value,
-                                        status_effect.max_value,
-                                    )}
-                                </span>"  "{optional_damage_type_str(Some(damage_type))}
-                                "Damage per second for "
-                                {format_min_max(min_duration, max_duration)} " seconds"
+                                )>{format_min_max(status_effect.value)}</span>"  "
+                                {optional_damage_type_str(Some(damage_type))}
+                                "Damage per second for " {format_min_max(duration)} " seconds"
                             </EffectLi>
                         }
                         .into_any()
@@ -287,20 +273,20 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                             stat,
                             modifier,
                             value: if debuff {
-                                -status_effect.min_value
+                                -status_effect.value.min
                             } else {
-                                status_effect.min_value
+                                status_effect.value.min
                             },
                             bypass_ignore: false,
                         });
-                        if status_effect.min_value != status_effect.max_value {
+                        if status_effect.value.min != status_effect.value.max {
                             max_stat_effects.push(StatEffect {
                                 stat,
                                 modifier,
                                 value: if debuff {
-                                    -status_effect.min_value
+                                    -status_effect.value.max
                                 } else {
-                                    status_effect.min_value
+                                    status_effect.value.max
                                 },
                                 bypass_ignore: false,
                             });
@@ -312,7 +298,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                         view! {
                             <EffectLi>
                                 {success_chance}"Apply the following status for "
-                                {format_min_max(min_duration, max_duration)} " seconds:"
+                                {format_min_max(duration)} " seconds:"
                                 <ul>{format_trigger(*trigger_specs)}</ul>
                             </EffectLi>
                         }
@@ -326,7 +312,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                     view! {
                         <EffectLi>
                             {success_chance}"Apply the following status for "
-                            {format_min_max(min_duration, max_duration)} " seconds:"
+                            {format_min_max(duration)} " seconds:"
                             <ul>{effects_tooltip::formatted_effects_list(stat_effects)}</ul>
                         </EffectLi>
                         {(!max_stat_effects.is_empty())
@@ -351,14 +337,13 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
         }
         SkillEffectType::Restore {
             restore_type,
-            min,
-            max,
+            value,
             modifier,
         } => view! {
             <EffectLi>
                 {success_chance}"Restore "
                 <span class="font-semibold">
-                    {format_min_max(min, max)}
+                    {format_min_max(value)}
                     {match modifier {
                         Modifier::Multiplier => "%",
                         Modifier::Flat => "",
@@ -382,11 +367,18 @@ fn damage_color(damage_type: DamageType) -> &'static str {
     }
 }
 
-fn format_min_max(min: f64, max: f64) -> String {
-    if min != max {
-        format!("{} - {}", format_number(min), format_number(max))
+fn format_min_max<T>(value: ChanceRange<T>) -> String
+where
+    T: Into<f64> + PartialEq,
+{
+    if value.min != value.max {
+        format!(
+            "{} - {}",
+            format_number(value.min.into()),
+            format_number(value.max.into())
+        )
     } else {
-        format_number(min).to_string()
+        format_number(value.min.into()).to_string()
     }
 }
 
