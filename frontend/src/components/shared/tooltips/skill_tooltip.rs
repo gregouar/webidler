@@ -369,7 +369,7 @@ fn damage_color(damage_type: DamageType) -> &'static str {
 
 fn format_min_max<T>(value: ChanceRange<T>) -> String
 where
-    T: Into<f64> + PartialEq,
+    T: Into<f64> + PartialEq + Copy,
 {
     if value.min != value.max {
         format!(

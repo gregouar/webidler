@@ -61,6 +61,7 @@ pub fn lucky_roll_str(roll_type: LuckyRollType) -> String {
         }
         LuckyRollType::Block => "Block Chance".into(),
         LuckyRollType::CritChance => "Critical Chance".into(),
+        LuckyRollType::SuccessChance => "Success Chance".into(),
     }
 }
 
@@ -247,7 +248,7 @@ pub fn format_multiplier_stat_name(stat: StatType) -> String {
             skill_type_str(skill_type),
         ),
         StatType::Restore(restore_type) => {
-            format!("Restore{} Power", restore_type_str(restore_type))
+            format!("Restore{} Effect", restore_type_str(restore_type))
         }
         StatType::CritChance(skill_type) => {
             format!("{}Critical Hit Chance", skill_type_str(skill_type))
@@ -256,7 +257,7 @@ pub fn format_multiplier_stat_name(stat: StatType) -> String {
             format!("{}Critical Hit Damages", skill_type_str(skill_type))
         }
         StatType::StatusPower(status_type) => {
-            format!("{} Power", status_type_str(status_type))
+            format!("{} Effect", status_type_str(status_type))
         }
         StatType::StatusDuration(status_type) => {
             format!("{} Duration", status_type_str(status_type))

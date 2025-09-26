@@ -7,7 +7,7 @@ use shared::data::{
         ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType, SkillSpecs,
         SkillState, SkillType,
     },
-    stat_effect::{ApplyStatModifier, Modifier, StatEffect, StatType},
+    stat_effect::{ApplyStatModifier, LuckyRollType, Modifier, StatEffect, StatType},
 };
 
 use crate::game::utils::rng::Rollable;
@@ -201,31 +201,50 @@ pub fn compute_skill_specs_effect<'a>(
             continue;
         }
 
+        if effect.stat.is_match(&StatType::Lucky {
+            skill_type: Some(skill_type),
+            roll_type: LuckyRollType::SuccessChance,
+        }) {
+            skill_effect
+                .failure_chance
+                .lucky_chance
+                .apply_negative_effect(effect);
+        }
+
         match &mut skill_effect.effect_type {
             SkillEffectType::FlatDamage {
                 damage,
                 crit_chance,
                 crit_damage,
             } => {
-                for (damage_type, value) in damage.iter_mut() {
+                for (&damage_type, value) in damage.iter_mut() {
                     if effect.stat.is_match(&StatType::MinDamage {
                         skill_type: Some(skill_type),
-                        damage_type: Some(*damage_type),
+                        damage_type: Some(damage_type),
                     }) || effect.stat.is_match(&StatType::Damage {
                         skill_type: Some(skill_type),
-                        damage_type: Some(*damage_type),
+                        damage_type: Some(damage_type),
                     }) {
                         value.min.apply_effect(effect);
                     }
 
                     if effect.stat.is_match(&StatType::MaxDamage {
                         skill_type: Some(skill_type),
-                        damage_type: Some(*damage_type),
+                        damage_type: Some(damage_type),
                     }) || effect.stat.is_match(&StatType::Damage {
                         skill_type: Some(skill_type),
-                        damage_type: Some(*damage_type),
+                        damage_type: Some(damage_type),
                     }) {
                         value.max.apply_effect(effect);
+                    }
+
+                    if effect.stat.is_match(&StatType::Lucky {
+                        skill_type: Some(skill_type),
+                        roll_type: LuckyRollType::Damage {
+                            damage_type: Some(damage_type),
+                        },
+                    }) {
+                        value.lucky_chance.apply_effect(effect);
                     }
                 }
 
@@ -286,7 +305,9 @@ pub fn compute_skill_specs_effect<'a>(
                         status_effect.value.max.apply_effect(&effect);
                     }
 
-                    if let StatusSpecs::DamageOverTime { damage_type, .. } = status_effect.status_type {
+                    if let StatusSpecs::DamageOverTime { damage_type, .. } =
+                        status_effect.status_type
+                    {
                         if effect.stat.is_match(&StatType::MinDamage {
                             skill_type: Some(skill_type),
                             damage_type: Some(damage_type),
@@ -305,6 +326,15 @@ pub fn compute_skill_specs_effect<'a>(
                             damage_type: Some(damage_type),
                         }) {
                             status_effect.value.max.apply_effect(effect);
+                        }
+
+                        if effect.stat.is_match(&StatType::Lucky {
+                            skill_type: Some(skill_type),
+                            roll_type: LuckyRollType::Damage {
+                                damage_type: Some(damage_type),
+                            },
+                        }) {
+                            status_effect.value.lucky_chance.apply_effect(effect);
                         }
                     }
                 }

@@ -239,7 +239,7 @@ pub enum LuckyRollType {
     },
     Block,
     CritChance,
-    // FailureChance,
+    SuccessChance,
     // Restore,
     // StatusDuration,
     // StatusValue,
