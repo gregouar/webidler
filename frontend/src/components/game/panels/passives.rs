@@ -499,12 +499,20 @@ fn NodeTooltip(
 
     let is_locked = move || node_specs_locked && node_level.get() == 0;
 
+    let starting_node_text = (node_specs.initial_node).then(|| {
+        view! {
+            <ul class="list-none space-y-1">
+                <li class="text-gray-400 text-sm leading-snug">"Root Node"</li>
+            </ul>
+            <hr class="border-t border-gray-700" />
+        }
+    });
     let locked_text = move || {
         is_locked().then(|| {
             view! {
                 <hr class="border-t border-gray-700" />
                 <ul class="list-none space-y-1">
-                    <li class="text-blue-400 text-sm leading-snug text-red-500">"Locked"</li>
+                    <li class="text-red-500 text-sm leading-snug">"Locked"</li>
                 </ul>
             }
         })
@@ -585,6 +593,7 @@ fn NodeTooltip(
         ">
             <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
             <hr class="border-t border-gray-700" />
+            {starting_node_text}
             <ul class="list-none space-y-1">{triggers_text}{effects_text}</ul>
             {locked_text}
             {upgrade_text}

@@ -6,7 +6,8 @@ use leptos::{html::*, prelude::*};
 use shared::data::{
     skill::{DamageType, SkillType},
     stat_effect::{
-        LuckyRollType, Modifier, StatConverterSource, StatEffect, StatStatusType, StatType,
+        LuckyRollType, Modifier, StatConverterSource, StatEffect, StatSkillEffectType,
+        StatStatusType, StatType,
     },
 };
 
@@ -95,6 +96,20 @@ fn status_type_str(status_type: Option<StatStatusType>) -> String {
             },
         },
         None => "Effects over Time".to_string(),
+    }
+}
+
+fn stat_skill_effect_type_str(effect_type: Option<StatSkillEffectType>) -> String {
+    match effect_type {
+        Some(skill_effect_type) => match skill_effect_type {
+            StatSkillEffectType::FlatDamage {} => "Hit".into(),
+            StatSkillEffectType::ApplyStatus {} => "Apply Status".into(),
+            StatSkillEffectType::Restore { restore_type } => {
+                format!("Restore{}", restore_type_str(restore_type))
+            }
+            StatSkillEffectType::Resurrect => "Resurrect".into(),
+        },
+        None => "All Effects".into(),
     }
 }
 
@@ -307,6 +322,14 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 format_multiplier_stat_name(&stat_converter_specs.target_stat)
             )
         }
+        StatType::SuccessChance {
+            skill_type,
+            effect_type,
+        } => format!(
+            "{}{} Success Chance",
+            skill_type_str(*skill_type),
+            stat_skill_effect_type_str(*effect_type)
+        ),
     }
 }
 
@@ -448,7 +471,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             skill_type,
             roll_type,
         } => {
-            let luck_type = lucky_roll_str(*roll_type) + skill_type_str(*skill_type);
+            let luck_type = skill_type_str(*skill_type).to_string() + &lucky_roll_str(*roll_type);
             let unwrap_value = value.unwrap_or_default();
             if unwrap_value == 100.0 {
                 format!("{luck_type} is Lucky",)
@@ -472,6 +495,26 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             stat_converter_source_str(stat_converter_specs.source),
             format_multiplier_stat_name(&stat_converter_specs.target_stat)
         ),
+        StatType::SuccessChance {
+            skill_type,
+            effect_type,
+        } => {
+            if value.unwrap_or_default() >= 0.0 {
+                format!(
+                    "Adds {}% Success Chance to {}{}",
+                    format_flat_number(value, false),
+                    skill_type_str(*skill_type),
+                    stat_skill_effect_type_str(*effect_type)
+                )
+            } else {
+                format!(
+                    "Removes {}% Success Chance to {}{}",
+                    format_flat_number(value, false),
+                    skill_type_str(*skill_type),
+                    stat_skill_effect_type_str(*effect_type)
+                )
+            }
+        }
     }
 }
 

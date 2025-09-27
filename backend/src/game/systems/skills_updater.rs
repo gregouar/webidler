@@ -219,6 +219,16 @@ pub fn compute_skill_specs_effect<'a>(
                 .apply_negative_effect(effect);
         }
 
+        if effect.stat.is_match(&StatType::SuccessChance {
+            skill_type: Some(skill_type),
+            effect_type: (&skill_effect.effect_type).into(),
+        }) {
+            skill_effect
+                .failure_chance
+                .value
+                .apply_negative_effect(effect);
+        }
+
         if let StatType::StatConverter(specs) = &effect.stat {
             stat_converters.push((specs.clone(), effect.value));
             continue;

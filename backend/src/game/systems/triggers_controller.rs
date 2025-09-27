@@ -107,6 +107,11 @@ pub fn apply_trigger_effects(
                                 .as_ref()
                                 .map(|hit| hit.damage.values().sum())
                                 .unwrap_or_default(),
+                            TriggerEffectModifierSource::HitCrit => trigger_context
+                                .hit_context
+                                .as_ref()
+                                .map(|hit| hit.is_crit as i64 as f64)
+                                .unwrap_or_default(),
                             TriggerEffectModifierSource::AreaLevel => trigger_context.level as f64,
                             TriggerEffectModifierSource::StatusValue(stat_status_type) => {
                                 statuses_context

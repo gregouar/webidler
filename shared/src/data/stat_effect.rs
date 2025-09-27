@@ -4,7 +4,10 @@ use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 use crate::data::{
-    chance::ChanceRange, character_status::StatusSpecs, skill::RestoreType, trigger::HitTrigger,
+    chance::ChanceRange,
+    character_status::StatusSpecs,
+    skill::{RestoreType, SkillEffectType},
+    trigger::HitTrigger,
 };
 
 use super::skill::SkillType;
@@ -94,6 +97,12 @@ pub enum StatType {
         roll_type: LuckyRollType,
     },
     StatConverter(StatConverterSpecs),
+    SuccessChance {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        effect_type: Option<StatSkillEffectType>,
+    },
 }
 
 fn compare_options<T: PartialEq>(first: &Option<T>, second: &Option<T>) -> bool {
@@ -238,6 +247,53 @@ impl From<&StatusSpecs> for Option<StatStatusType> {
                 debuff: Some(*debuff),
             }),
             StatusSpecs::Trigger(_) => None,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum StatSkillEffectType {
+    FlatDamage {
+        // damage_type: Option<DamageType>,
+    },
+    ApplyStatus {
+        // status_type: Option<StatStatusType>,
+    },
+    Restore {
+        #[serde(default)]
+        restore_type: Option<RestoreType>,
+    },
+    Resurrect,
+}
+
+impl StatSkillEffectType {
+    pub fn is_match(&self, skill_effect_type: &StatSkillEffectType) -> bool {
+        if self == skill_effect_type {
+            return true;
+        }
+
+        use StatSkillEffectType::*;
+        match (self, skill_effect_type) {
+            (
+                Restore { restore_type },
+                Restore {
+                    restore_type: restore_type_2,
+                },
+            ) => compare_options(restore_type, restore_type_2),
+            _ => false,
+        }
+    }
+}
+
+impl From<&SkillEffectType> for Option<StatSkillEffectType> {
+    fn from(value: &SkillEffectType) -> Self {
+        match value {
+            SkillEffectType::FlatDamage { .. } => Some(StatSkillEffectType::FlatDamage {}),
+            SkillEffectType::ApplyStatus { .. } => Some(StatSkillEffectType::ApplyStatus {}),
+            SkillEffectType::Restore { restore_type, .. } => Some(StatSkillEffectType::Restore {
+                restore_type: Some(*restore_type),
+            }),
+            SkillEffectType::Resurrect => Some(StatSkillEffectType::Resurrect),
         }
     }
 }
