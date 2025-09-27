@@ -53,20 +53,22 @@ pub fn update_skill_specs<'a>(
     let default_inventory = PlayerInventory::default();
     let inventory = inventory.unwrap_or(&default_inventory);
 
-    // TODO: Could gather all Flat first, then apply local multiplier, then global multipliers...
-
     let mut local_effects: Vec<_> =
         compute_skill_upgrade_effects(skill_specs, skill_specs.upgrade_level)
             .chain(compute_skill_modifier_effects(skill_specs, inventory))
             .collect();
-
     local_effects.sort_by_key(|e| match e.modifier {
         Modifier::Flat => 0,
         Modifier::Multiplier => 1,
     });
 
+    let global_flat = effects.clone().filter(|e| e.modifier == Modifier::Flat);
+    apply_effects_to_skill_specs(skill_specs, global_flat);
     apply_effects_to_skill_specs(skill_specs, local_effects.iter());
-    apply_effects_to_skill_specs(skill_specs, effects);
+    apply_effects_to_skill_specs(
+        skill_specs,
+        effects.filter(|e| e.modifier == Modifier::Multiplier),
+    );
 }
 
 pub fn apply_effects_to_skill_specs<'a>(
@@ -115,7 +117,7 @@ pub fn compute_skill_upgrade_effects(
                 }
                 _ => effect.value * level,
             },
-            bypass_ignore: true,
+            bypass_ignore: false,
         })
 }
 
@@ -289,13 +291,6 @@ pub fn compute_skill_specs_effect<'a>(
                 }
 
                 crit_chance.clamp();
-                damage.retain(|_, value| {
-                    value.min = value.min.max(0.0);
-                    value.max = value.max.max(0.0);
-                    value.clamp();
-
-                    value.max > 0.0
-                });
             }
             SkillEffectType::ApplyStatus { statuses, duration } => {
                 if statuses.iter().any(|status_effect| {
@@ -368,28 +363,106 @@ pub fn compute_skill_specs_effect<'a>(
     }
 
     if !stat_converters.is_empty() {
-        let stats_converted: Vec<_> = stat_converters
-            .into_iter()
-            .filter_map(|(specs, factor)| {
-                if !specs.skill_type.is_none_or(|s| s == skill_type) {
-                    return None;
-                }
+        let mut stats_converted = Vec::with_capacity(stat_converters.len());
 
-                match (specs.source, &skill_effect.effect_type) {
-                    (
-                        StatConverterSource::CritDamage,
-                        SkillEffectType::FlatDamage { crit_damage, .. },
-                    ) => Some(StatEffect {
+        for (specs, factor) in stat_converters {
+            if !specs.skill_type.is_none_or(|s| s == skill_type) {
+                continue;
+            }
+
+            if let Some(stat) = match (specs.source, &mut skill_effect.effect_type) {
+                (
+                    StatConverterSource::CritDamage,
+                    SkillEffectType::FlatDamage { crit_damage, .. },
+                ) => {
+                    let amount = *crit_damage * factor * 0.01;
+                    if !specs.is_extra {
+                        *crit_damage -= amount;
+                    }
+
+                    Some(StatEffect {
                         stat: (*specs.target_stat).clone(),
                         modifier: specs.target_modifier,
-                        value: crit_damage * factor * 0.01,
+                        value: amount,
                         bypass_ignore: true,
-                    }),
-                    _ => None,
+                    })
                 }
-            })
-            .collect();
+                (
+                    StatConverterSource::Damage { damage_type },
+                    SkillEffectType::FlatDamage { damage, .. },
+                ) => {
+                    let amount = match damage_type {
+                        Some(damage_type) => damage
+                            .get_mut(&damage_type)
+                            .map(|d| {
+                                let amount = (d.min * factor * 0.01, d.max * factor * 0.01);
+                                if !specs.is_extra {
+                                    d.min -= amount.0;
+                                    d.max -= amount.1;
+                                }
+                                amount
+                            })
+                            .unwrap_or_default(),
+                        None => damage
+                            .values_mut()
+                            .fold((0.0, 0.0), |(min_acc, max_acc), d| {
+                                let amount = (d.min * factor * 0.01, d.max * factor * 0.01);
+                                if !specs.is_extra {
+                                    d.min -= amount.0;
+                                    d.max -= amount.1;
+                                }
+                                (min_acc + amount.0, max_acc + amount.1)
+                            }),
+                    };
+                    // Special case, when converting damage we map on min and max respectively
+                    if let StatType::Damage {
+                        skill_type,
+                        damage_type,
+                    } = *specs.target_stat
+                    {
+                        stats_converted.push(StatEffect {
+                            stat: StatType::MinDamage {
+                                skill_type,
+                                damage_type,
+                            },
+                            modifier: specs.target_modifier,
+                            value: amount.0,
+                            bypass_ignore: true,
+                        });
+                        Some(StatEffect {
+                            stat: StatType::MaxDamage {
+                                skill_type,
+                                damage_type,
+                            },
+                            modifier: specs.target_modifier,
+                            value: amount.1,
+                            bypass_ignore: true,
+                        })
+                    } else {
+                        Some(StatEffect {
+                            stat: (*specs.target_stat).clone(),
+                            modifier: specs.target_modifier,
+                            value: (amount.0 + amount.1),
+                            bypass_ignore: true,
+                        })
+                    }
+                }
+                _ => None,
+            } {
+                stats_converted.push(stat);
+            }
+        }
 
         compute_skill_specs_effect(skill_type, skill_effect, stats_converted.iter());
+    }
+
+    if let SkillEffectType::FlatDamage { damage, .. } = &mut skill_effect.effect_type {
+        damage.retain(|_, value| {
+            value.min = value.min.max(0.0);
+            value.max = value.max.max(0.0);
+            value.clamp();
+
+            value.max > 0.0
+        });
     }
 }

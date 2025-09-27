@@ -64,9 +64,14 @@ pub fn reset_character(character_state: &mut CharacterState) {
 pub fn stats_map_to_vec(effects: &EffectsMap) -> Vec<StatEffect> {
     let mut effects: Vec<_> = effects.into();
 
-    effects.sort_by_key(|e| match e.modifier {
-        Modifier::Flat => 0,
-        Modifier::Multiplier => 1,
+    effects.sort_by_key(|e| {
+        (
+            match e.modifier {
+                Modifier::Flat => 0,
+                Modifier::Multiplier => 1,
+            },
+            e.stat.clone(),
+        )
     });
 
     effects
@@ -165,7 +170,7 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::StatConverter(StatConverterSpecs {
-                source: StatConverterSource::CritDamage,
+                source: StatConverterSource::CritDamage | StatConverterSource::Damage { .. },
                 ..
             })
             | StatType::SuccessChance { .. } => {}

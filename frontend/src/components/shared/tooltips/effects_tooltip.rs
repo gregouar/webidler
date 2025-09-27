@@ -45,7 +45,7 @@ pub fn format_effect_value(effect: &StatEffect) -> String {
     }
 }
 
-pub fn optional_damage_type_str(damage_type: Option<DamageType>) -> &'static str {
+pub fn damage_type_str(damage_type: Option<DamageType>) -> &'static str {
     match damage_type {
         Some(damage_type) => match damage_type {
             DamageType::Physical => "Physical ",
@@ -60,7 +60,7 @@ pub fn optional_damage_type_str(damage_type: Option<DamageType>) -> &'static str
 pub fn lucky_roll_str(roll_type: LuckyRollType) -> String {
     match roll_type {
         LuckyRollType::Damage { damage_type } => {
-            format!("{}Damage", optional_damage_type_str(damage_type))
+            format!("{}Damage", damage_type_str(damage_type))
         }
         LuckyRollType::Block => "Block Chance".into(),
         LuckyRollType::CritChance => "Critical Hit Chance".into(),
@@ -71,6 +71,9 @@ pub fn lucky_roll_str(roll_type: LuckyRollType) -> String {
 fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> String {
     match stat_converter_source {
         StatConverterSource::CritDamage => "Critical Hit Damage".into(),
+        StatConverterSource::Damage { damage_type } => {
+            format!("{}Damage", damage_type_str(damage_type))
+        }
     }
 }
 
@@ -87,7 +90,7 @@ fn status_type_str(status_type: Option<StatStatusType>) -> String {
         Some(status_type) => match status_type {
             StatStatusType::Stun => "Stun".to_string(),
             StatStatusType::DamageOverTime { damage_type } => {
-                format!("{}Damage over Time", optional_damage_type_str(damage_type))
+                format!("{}Damage over Time", damage_type_str(damage_type))
             }
             StatStatusType::StatModifier { debuff } => match debuff {
                 Some(true) => "Curses".to_string(),
@@ -188,19 +191,19 @@ pub fn formatted_effects_list(
                     "Adds {} - {} {}Damage{}",
                     format_number(*min_flat),
                     format_number(*max_flat),
-                    optional_damage_type_str(damage_type),
+                    damage_type_str(damage_type),
                     to_skill_type_str(skill_type)
                 )),
                 (Some(min_flat), None) => merged.push(format!(
                     "Adds {} Minimum {}Damage{}",
                     format_number(*min_flat),
-                    optional_damage_type_str(damage_type),
+                    damage_type_str(damage_type),
                     to_skill_type_str(skill_type)
                 )),
                 (None, Some(max_flat)) => merged.push(format!(
                     "Adds {} Maximum {}Damage{}",
                     format_number(*max_flat),
-                    optional_damage_type_str(damage_type),
+                    damage_type_str(damage_type),
                     to_skill_type_str(skill_type)
                 )),
                 _ => {}
@@ -214,19 +217,19 @@ pub fn formatted_effects_list(
                     "Removes {} - {} {}Damage{}",
                     format_number(-*min_flat),
                     format_number(-*max_flat),
-                    optional_damage_type_str(damage_type),
+                    damage_type_str(damage_type),
                     to_skill_type_str(skill_type)
                 )),
                 (Some(min_flat), None) => merged.push(format!(
                     "Removes {} Minimum {}Damage{}",
                     format_number(-*min_flat),
-                    optional_damage_type_str(damage_type),
+                    damage_type_str(damage_type),
                     to_skill_type_str(skill_type)
                 )),
                 (None, Some(max_flat)) => merged.push(format!(
                     "Removes {} Maximum {}Damage{}",
                     format_number(-*max_flat),
-                    optional_damage_type_str(damage_type),
+                    damage_type_str(damage_type),
                     to_skill_type_str(skill_type)
                 )),
                 _ => {}
@@ -246,7 +249,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::Armor(armor_type) => match armor_type {
             Some(DamageType::Physical) => "Armor".to_string(),
             None => "Resistances and Armor".to_string(),
-            _ => format!("{}Resistance", optional_damage_type_str(*armor_type)),
+            _ => format!("{}Resistance", damage_type_str(*armor_type)),
         },
         StatType::TakeFromManaBeforeLife => "Damage taken from Mana before Life".to_string(),
         StatType::Block => "Block Chance".to_string(),
@@ -257,23 +260,23 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             damage_type,
         } => format!(
             "{}{}Damage",
-            optional_damage_type_str(*damage_type),
+            damage_type_str(*damage_type),
             skill_type_str(*skill_type),
         ),
         StatType::MinDamage {
             skill_type,
             damage_type,
         } => format!(
-            "{}{}Minimum Damage",
-            optional_damage_type_str(*damage_type),
+            "Minimum {}{}Damage",
+            damage_type_str(*damage_type),
             skill_type_str(*skill_type),
         ),
         StatType::MaxDamage {
             skill_type,
             damage_type,
         } => format!(
-            "{}{}Maximum Damage",
-            optional_damage_type_str(*damage_type),
+            "Maximum {}{}Damage",
+            damage_type_str(*damage_type),
             skill_type_str(*skill_type),
         ),
         StatType::Restore(restore_type) => {
@@ -307,7 +310,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             damage_type,
         } => format!(
             "{}{}Damage Resistance",
-            optional_damage_type_str(*damage_type),
+            damage_type_str(*damage_type),
             skill_type_str(*skill_type)
         ),
         StatType::ThreatGain => "Threat Gain".into(),
@@ -352,7 +355,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             match armor_type {
                 Some(DamageType::Physical) => "Armor".to_string(),
                 None => "to All Resistances and Armor".to_string(),
-                _ => format!("{}Resistance", optional_damage_type_str(*armor_type)),
+                _ => format!("{}Resistance", damage_type_str(*armor_type)),
             }
         ),
         StatType::TakeFromManaBeforeLife => {
@@ -378,7 +381,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         } => format!(
             "Adds {} {}Damage{}",
             format_flat_number(value, false),
-            optional_damage_type_str(*damage_type),
+            damage_type_str(*damage_type),
             to_skill_type_str(*skill_type)
         ),
         StatType::Restore(restore_type) => {
@@ -455,14 +458,14 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 format!(
                     "Resist {}% of {}{}Damage",
                     format_flat_number(value, false),
-                    optional_damage_type_str(*damage_type),
+                    damage_type_str(*damage_type),
                     skill_type_str(*skill_type)
                 )
             } else {
                 format!(
                     "Take {}% Increased {}{}Damage",
                     format_flat_number(value.map(|v| -v), false),
-                    optional_damage_type_str(*damage_type),
+                    damage_type_str(*damage_type),
                     skill_type_str(*skill_type)
                 )
             }

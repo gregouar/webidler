@@ -209,7 +209,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::StatConverter(StatConverterSpecs {
-                source: StatConverterSource::CritDamage,
+                source: StatConverterSource::CritDamage | StatConverterSource::Damage { .. },
                 ..
             })
             | StatType::SuccessChance { .. } => {}

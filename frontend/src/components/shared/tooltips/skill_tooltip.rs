@@ -21,7 +21,7 @@ use crate::components::{
     ui::number::format_number,
 };
 
-use super::effects_tooltip::optional_damage_type_str;
+use super::effects_tooltip::damage_type_str;
 
 pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
@@ -212,7 +212,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                             <span class=format!(
                                 "font-semibold {damage_color}",
                             )>{format_min_max(value)}</span> " "
-                            {optional_damage_type_str(Some(damage_type))} "Damage"
+                            {damage_type_str(Some(damage_type))} "Damage"
                         </EffectLi>
                     }
                 })
@@ -259,8 +259,8 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                                 <span class=format!(
                                     "font-semibold {damage_color}",
                                 )>{format_min_max(status_effect.value)}</span>"  "
-                                {optional_damage_type_str(Some(damage_type))}
-                                "Damage per second for " {format_min_max(duration)} " seconds"
+                                {damage_type_str(Some(damage_type))} "Damage per second for "
+                                {format_min_max(duration)} " seconds"
                             </EffectLi>
                         }
                         .into_any()
@@ -418,7 +418,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                 format_number(1.0 / skill_modifier.factor),
                 match item_stats {
                     ItemStatsSource::Damage(damage_type) =>
-                        format!("average {}Damage", optional_damage_type_str(damage_type)),
+                        format!("average {}Damage", damage_type_str(damage_type)),
                     ItemStatsSource::Armor => "Armor".to_string(),
                 },
                 match slot {

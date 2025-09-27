@@ -364,6 +364,10 @@ pub struct StatConverterSpecs {
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatConverterSource {
     CritDamage,
+    Damage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
     // TODO: Add others, like life, mana, ...
 }
 

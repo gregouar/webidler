@@ -291,7 +291,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 if specs_value.min > 0.0 || specs_value.max > 0.0 {
                     damage_lines.push(view! {
                         <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                            {effects_tooltip::optional_damage_type_str(Some(damage_type))}
+                            {effects_tooltip::damage_type_str(Some(damage_type))}
                             "Damage: "
                             <span class=format!(
                                 "{} font-semibold",
