@@ -1042,7 +1042,7 @@ fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
             RwSignal::new(
                 stat_effect
                     .as_ref()
-                    .map(|stat_effect| (stat_effect.stat, stat_effect.modifier)),
+                    .map(|stat_effect| (stat_effect.stat.clone(), stat_effect.modifier)),
             ),
             RwSignal::new(stat_effect.as_ref().map(|stat_effect| stat_effect.value)),
         )
@@ -1227,8 +1227,8 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         .into_iter()
         .map(|(stat_type, modifier)| {
             (
-                Some((stat_type, modifier)),
-                format_stat_filter(stat_type, modifier),
+                Some((stat_type.clone(), modifier)),
+                format_stat_filter(&stat_type, modifier),
             )
         })
         .collect();
@@ -1243,7 +1243,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
     }
 }
 
-fn format_stat_filter(stat_type: StatType, modifier: Modifier) -> String {
+fn format_stat_filter(stat_type: &StatType, modifier: Modifier) -> String {
     match modifier {
         Modifier::Multiplier => format!("#% Increased {}", format_multiplier_stat_name(stat_type)),
         Modifier::Flat => format_flat_stat(stat_type, None),

@@ -1095,40 +1095,32 @@
         "locked": true
       },
       "healing_aura": {
+        "initial_node": true,
         "name": "Healing Aura",
         "icon": "passives/healing_aura.svg",
         "x": 40,
         "y": -20,
         "node_type": "Life",
         "size": 2,
-        "triggers": [
+        "effects": [
           {
-            "trigger_id": "healing_aura",
-            "description": "Restore Area Level x 3 Life at the end of each wave.",
-            "OnWaveCompleted": {},
-            "target": "Source",
-            "effects": [
-              {
-                "Restore": {
-                  "restore_type": "Life",
-                  "value": 3,
-                  "modifier": "Flat"
-                }
+            "stat": { "CritChance": null },
+            "modifier": "Multiplier",
+            "value": -99999999999
+          },
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "CritDamage",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier",
+                "is_extra": true
               }
-            ],
-            "modifiers": [
-              {
-                "stat": {
-                  "Restore": null
-                },
-                "modifier": "Multiplier",
-                "factor": 1,
-                "source": "AreaLevel"
-              }
-            ]
+            },
+            "value": 20,
+            "modifier": "Flat"
           }
-        ],
-        "locked": true
+        ]
       },
       "bleeding_crit": {
         "name": "The Ripper",

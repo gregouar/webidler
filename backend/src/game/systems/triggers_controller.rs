@@ -90,7 +90,7 @@ pub fn apply_trigger_effects(
                 .modifiers
                 .iter()
                 .map(|modifier| StatEffect {
-                    stat: modifier.stat,
+                    stat: modifier.stat.clone(),
                     modifier: modifier.modifier,
                     value: modifier.factor
                         * match modifier.source {

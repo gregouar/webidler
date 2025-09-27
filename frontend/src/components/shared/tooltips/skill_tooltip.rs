@@ -270,7 +270,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                         debuff,
                     } => {
                         stat_effects.push(StatEffect {
-                            stat,
+                                stat: stat.clone(),
                             modifier,
                             value: if debuff {
                                 -status_effect.value.min
@@ -281,7 +281,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                         });
                         if status_effect.value.min != status_effect.value.max {
                             max_stat_effects.push(StatEffect {
-                                stat,
+                                stat: stat.clone(),
                                 modifier,
                                 value: if debuff {
                                     -status_effect.value.max

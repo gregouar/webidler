@@ -42,7 +42,7 @@ pub enum Modifier {
     Flat,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatType {
     Life,
     LifeRegen,
@@ -93,6 +93,7 @@ pub enum StatType {
         skill_type: Option<SkillType>,
         roll_type: LuckyRollType,
     },
+    StatConverter(StatConverterSpecs),
 }
 
 fn compare_options<T: PartialEq>(first: &Option<T>, second: &Option<T>) -> bool {
@@ -275,6 +276,24 @@ impl LuckyRollType {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub struct StatConverterSpecs {
+    pub source: StatConverterSource,
+    pub target_stat: Box<StatType>,
+    pub target_modifier: Modifier,
+
+    #[serde(default)]
+    pub is_extra: bool,
+    #[serde(default)]
+    pub skill_type: Option<SkillType>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum StatConverterSource {
+    CritDamage,
+    // TODO: Add others, like life, mana, ...
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct StatEffect {
     pub stat: StatType,
@@ -293,7 +312,7 @@ impl From<&EffectsMap> for Vec<StatEffect> {
         val.0
             .iter()
             .map(|((stat, effect_type), value)| StatEffect {
-                stat: *stat,
+                stat: stat.clone(),
                 modifier: *effect_type,
                 value: *value,
                 bypass_ignore: false,
@@ -323,7 +342,7 @@ impl EffectsMap {
             HashMap::new(),
             |mut result, ((target, modifier), value)| {
                 result
-                    .entry((target, modifier))
+                    .entry((target.clone(), modifier))
                     .and_modify(|entry| match modifier {
                         Modifier::Multiplier if target.is_multiplicative() => {
                             let mut new_entry = *entry + 100.0;
@@ -369,7 +388,7 @@ pub trait ApplyStatModifier {
     fn apply_negative_effect(&mut self, effect: &StatEffect) {
         self.apply_effect(&StatEffect {
             value: -effect.value,
-            ..*effect
+            ..effect.clone()
         })
     }
 }

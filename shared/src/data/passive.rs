@@ -86,7 +86,7 @@ impl PassiveNodeSpecs {
                 .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
                     *effects_map
                         .0
-                        .entry((effect.stat, effect.modifier))
+                        .entry((effect.stat.clone(), effect.modifier))
                         .or_default() += effect.value;
                     effects_map
                 });
@@ -102,7 +102,7 @@ impl PassiveNodeSpecs {
             .fold(effects_map, |mut effects_map, effect| {
                 *effects_map
                     .0
-                    .entry((effect.stat, effect.modifier))
+                    .entry((effect.stat.clone(), effect.modifier))
                     .or_default() += effect.value * level as f64;
                 effects_map
             })

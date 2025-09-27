@@ -7,7 +7,9 @@ use shared::data::{
         ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType, SkillSpecs,
         SkillState, SkillType,
     },
-    stat_effect::{ApplyStatModifier, LuckyRollType, Modifier, StatEffect, StatType},
+    stat_effect::{
+        ApplyStatModifier, LuckyRollType, Modifier, StatConverterSource, StatEffect, StatType,
+    },
 };
 
 use crate::game::utils::rng::Rollable;
@@ -52,17 +54,17 @@ pub fn update_skill_specs<'a>(
 
     // TODO: Could gather all Flat first, then apply local multiplier, then global multipliers...
 
-    let mut skill_effects: Vec<_> =
+    let mut local_effects: Vec<_> =
         compute_skill_upgrade_effects(skill_specs, skill_specs.upgrade_level)
             .chain(compute_skill_modifier_effects(skill_specs, inventory))
             .collect();
 
-    skill_effects.sort_by_key(|e| match e.modifier {
+    local_effects.sort_by_key(|e| match e.modifier {
         Modifier::Flat => 0,
         Modifier::Multiplier => 1,
     });
 
-    apply_effects_to_skill_specs(skill_specs, skill_effects.iter());
+    apply_effects_to_skill_specs(skill_specs, local_effects.iter());
     apply_effects_to_skill_specs(skill_specs, effects);
 }
 
@@ -104,7 +106,7 @@ pub fn compute_skill_upgrade_effects(
         .upgrade_effects
         .iter()
         .map(move |effect| StatEffect {
-            stat: effect.stat,
+            stat: effect.stat.clone(),
             modifier: effect.modifier,
             value: match effect.modifier {
                 Modifier::Multiplier if effect.stat.is_multiplicative() => {
@@ -168,7 +170,7 @@ fn compute_skill_modifier_effects<'a>(
                         .effects
                         .iter()
                         .map(move |effect| StatEffect {
-                            stat: effect.stat,
+                            stat: effect.stat.clone(),
                             modifier: effect.modifier,
                             value: effect.value * factor,
                             bypass_ignore: true,
@@ -195,6 +197,8 @@ pub fn compute_skill_specs_effect<'a>(
     // NB: With this approach, Inc Spell Crit Chance is multiplicative with Inc Crit Chance...
     // But maybe that's fine...
 
+    let mut stat_converters = Vec::new();
+
     for effect in effects.clone() {
         if !effect.bypass_ignore
             && skill_effect
@@ -213,6 +217,11 @@ pub fn compute_skill_specs_effect<'a>(
                 .failure_chance
                 .lucky_chance
                 .apply_negative_effect(effect);
+        }
+
+        if let StatType::StatConverter(specs) = &effect.stat {
+            stat_converters.push((specs.clone(), effect.value));
+            continue;
         }
 
         match &mut skill_effect.effect_type {
@@ -300,7 +309,7 @@ pub fn compute_skill_specs_effect<'a>(
                                 Modifier::Flat,
                             ) => StatEffect {
                                 value: effect.value * 0.01,
-                                ..*effect
+                                ..effect.clone()
                             },
                             _ => effect.clone(),
                         };
@@ -358,5 +367,31 @@ pub fn compute_skill_specs_effect<'a>(
             }
             SkillEffectType::Resurrect => {}
         }
+    }
+
+    if !stat_converters.is_empty() {
+        let stats_converted: Vec<_> = stat_converters
+            .into_iter()
+            .filter_map(|(specs, factor)| {
+                if !specs.skill_type.is_none_or(|s| s == skill_type) {
+                    return None;
+                }
+
+                match (specs.source, &skill_effect.effect_type) {
+                    (
+                        StatConverterSource::CritDamage,
+                        SkillEffectType::FlatDamage { crit_damage, .. },
+                    ) => Some(StatEffect {
+                        stat: (*specs.target_stat).clone(),
+                        modifier: specs.target_modifier,
+                        value: crit_damage * factor * 0.01,
+                        bypass_ignore: true,
+                    }),
+                    _ => None,
+                }
+            })
+            .collect();
+
+        compute_skill_specs_effect(skill_type, skill_effect, stats_converted.iter());
     }
 }

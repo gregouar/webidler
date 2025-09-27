@@ -66,7 +66,7 @@ pub struct ItemAffixBlueprint {
     // pub triggers: Vec<TriggeredEffect>, // TODO
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AffixEffectBlueprint {
     pub stat: StatType,
     pub modifier: Modifier,

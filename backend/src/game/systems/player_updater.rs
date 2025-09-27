@@ -9,7 +9,9 @@ use shared::data::{
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerSpecs, PlayerState},
     skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
-    stat_effect::{ApplyStatModifier, EffectsMap, Modifier, StatType},
+    stat_effect::{
+        ApplyStatModifier, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatType,
+    },
     trigger::{EventTrigger, TriggerTarget, TriggeredEffect},
 };
 
@@ -206,6 +208,10 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
             | StatType::StatusPower { .. }
             | StatType::Speed(_)
             | StatType::Lucky { .. } => {}
+            StatType::StatConverter(StatConverterSpecs {
+                source: StatConverterSource::CritDamage,
+                ..
+            }) => {}
         }
     }
 

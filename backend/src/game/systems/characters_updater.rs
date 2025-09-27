@@ -5,7 +5,10 @@ use shared::data::{
     character::{CharacterId, CharacterSpecs, CharacterState},
     passive::StatEffect,
     skill::{DamageType, SkillType},
-    stat_effect::{ApplyStatModifier, EffectsMap, LuckyRollType, Modifier, StatType},
+    stat_effect::{
+        ApplyStatModifier, EffectsMap, LuckyRollType, Modifier, StatConverterSource,
+        StatConverterSpecs, StatType,
+    },
 };
 
 use crate::game::{
@@ -160,7 +163,11 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             | StatType::StatusDuration { .. }
             | StatType::StatusPower { .. }
             | StatType::Speed(_) => {}
-            StatType::Lucky { .. } => {}
+            StatType::Lucky { .. }
+            | StatType::StatConverter(StatConverterSpecs {
+                source: StatConverterSource::CritDamage,
+                ..
+            }) => {}
         }
     }
 

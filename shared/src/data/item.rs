@@ -200,7 +200,7 @@ impl ItemModifiers {
             .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
                 *effects_map
                     .0
-                    .entry((effect.stat_effect.stat, effect.stat_effect.modifier))
+                    .entry((effect.stat_effect.stat.clone(), effect.stat_effect.modifier))
                     .or_default() += effect.stat_effect.value;
                 effects_map
             })
