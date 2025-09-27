@@ -161,7 +161,7 @@ fn compute_weapon_specs(
         value.min = value.min.max(0.0);
         value.clamp();
 
-        value.min > 0.0
+        value.max > 0.0
     });
 
     weapon_specs
