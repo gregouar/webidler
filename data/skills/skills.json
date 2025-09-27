@@ -443,7 +443,7 @@
     "icon": "skills/pyroclastic_infusion.svg",
     "skill_type": "Attack",
     "cooldown": 5,
-    "mana_cost": 10,
+    "mana_cost": 5,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {

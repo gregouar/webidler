@@ -493,9 +493,13 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             }
         }
         StatType::StatConverter(stat_converter_specs) => format!(
-            "{}% of {} converted to {}",
+            "{}% of {} converted to {}{}",
             format_flat_number(value, false),
             stat_converter_source_str(stat_converter_specs.source),
+            match stat_converter_specs.target_modifier {
+                Modifier::Multiplier => "Increased ",
+                Modifier::Flat => "",
+            },
             format_multiplier_stat_name(&stat_converter_specs.target_stat)
         ),
         StatType::SuccessChance {
