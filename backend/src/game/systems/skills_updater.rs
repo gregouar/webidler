@@ -4,13 +4,14 @@ use shared::data::{
     character_status::StatusSpecs,
     player::PlayerInventory,
     skill::{
-        ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType, SkillSpecs,
-        SkillState, SkillType,
+        DamageType, ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType,
+        SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
         ApplyStatModifier, LuckyRollType, Modifier, StatConverterSource, StatEffect, StatType,
     },
 };
+use strum::IntoEnumIterator;
 
 use crate::game::utils::rng::Rollable;
 
@@ -240,7 +241,8 @@ pub fn compute_skill_specs_effect<'a>(
                 crit_chance,
                 crit_damage,
             } => {
-                for (&damage_type, value) in damage.iter_mut() {
+                for damage_type in DamageType::iter() {
+                    let value = damage.entry(damage_type).or_default();
                     if effect.stat.is_match(&StatType::MinDamage {
                         skill_type: Some(skill_type),
                         damage_type: Some(damage_type),

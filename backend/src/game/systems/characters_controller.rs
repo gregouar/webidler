@@ -153,6 +153,10 @@ pub fn apply_status(
         return;
     }
 
+    if !target_state.is_alive & duration.is_some() {
+        return;
+    }
+
     let value = match status_specs {
         StatusSpecs::DamageOverTime {
             damage_type,

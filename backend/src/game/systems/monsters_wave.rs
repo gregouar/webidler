@@ -222,12 +222,13 @@ fn generate_monster_specs(
         }
     }
 
-    monster_specs.triggers = monster_specs
-        .skill_specs
-        .iter()
-        .flat_map(|skill_specs| skill_specs.triggers.iter())
-        .map(|trigger_specs| trigger_specs.triggered_effect.clone())
-        .collect();
+    // // TODO: should not be duplicated...
+    // monster_specs.character_specs.triggers = monster_specs
+    //     .skill_specs
+    //     .iter()
+    //     .flat_map(|skill_specs| skill_specs.triggers.iter())
+    //     .map(|trigger_specs| trigger_specs.triggered_effect.clone())
+    //     .collect();
 
     monster_specs
 }

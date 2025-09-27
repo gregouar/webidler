@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::{chance::ChanceRange, trigger::TriggeredEffect};
+use crate::data::chance::ChanceRange;
 
 pub use super::character::{CharacterSpecs, CharacterState};
 use super::skill::{SkillSpecs, SkillState};
@@ -22,9 +22,6 @@ pub struct MonsterSpecs {
     pub initiative: ChanceRange<f32>,
     pub power_factor: f64,
     pub reward_factor: f64,
-
-    #[serde(default)]
-    pub triggers: Vec<TriggeredEffect>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

@@ -351,9 +351,9 @@ pub fn Node(
     let icon_filter = move || {
         let status = node_status.get();
         match (status.purchase_status, status.meta_status) {
-            (PurchaseStatus::Purchaseable, _) => "",
-            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5)",
-            _ => "drop-shadow(2px 2px 2px black)",
+            (PurchaseStatus::Purchaseable, _) => "invert(1)",
+            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5) invert(1)",
+            _ => "drop-shadow(2px 2px 2px white) invert(1)",
         }
     };
 

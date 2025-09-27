@@ -33,7 +33,6 @@ impl DataInit<BaseMonsterSpecs> for MonsterSpecs {
             initiative: specs.initiative,
             power_factor: specs.power_factor,
             reward_factor: specs.power_factor,
-            triggers: Default::default(),
         }
     }
 }

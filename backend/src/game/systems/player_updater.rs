@@ -71,10 +71,10 @@ pub fn update_player_specs(
     player_specs.character_specs.max_mana = 100.0;
     player_specs.character_specs.mana_regen = 10.0;
     player_specs.character_specs.damage_resistance.clear();
+    player_specs.character_specs.triggers.clear();
     player_specs.gold_find = 100.0;
     player_specs.threat_gain = 100.0;
     player_specs.movement_cooldown = 3.0;
-    player_specs.triggers.clear();
 
     // TODO: Could we figure out a way to keep the block luck somehow?
     let (total_armor, total_block) = player_inventory
@@ -106,7 +106,7 @@ pub fn update_player_specs(
             )),
     );
 
-    player_specs.triggers = passives_tree_state
+    player_specs.character_specs.triggers = passives_tree_state
         .purchased_nodes
         .iter()
         .filter_map(|node_id| passives_tree_specs.nodes.get(node_id))
@@ -133,7 +133,7 @@ pub fn update_player_specs(
     compute_player_specs(player_specs, player_inventory);
 
     // We only add skills trigger after because they were already increased by skill update
-    player_specs.triggers.extend(
+    player_specs.character_specs.triggers.extend(
         player_specs
             .skills_specs
             .iter()
@@ -156,7 +156,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
             // TODO: Move the character specs
             StatType::LifeOnHit(hit_trigger) | StatType::ManaOnHit(hit_trigger) => {
                 if let Modifier::Flat = effect.modifier {
-                    player_specs.triggers.push(TriggeredEffect {
+                    player_specs.character_specs.triggers.push(TriggeredEffect {
                         trigger: EventTrigger::OnHit(hit_trigger),
                         target: TriggerTarget::Source,
                         skill_range: SkillRange::Any,
@@ -220,7 +220,7 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
         skills_updater::update_skill_specs(skill_specs, effects.iter(), Some(player_inventory));
     }
 
-    for trigger_effect in player_specs.triggers.iter_mut() {
+    for trigger_effect in player_specs.character_specs.triggers.iter_mut() {
         for effect in trigger_effect.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
                 trigger_effect.skill_type,

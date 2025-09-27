@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::{collections::HashSet, iter};
 
 use shared::{
     constants::WAVES_PER_AREA_LEVEL,
@@ -67,33 +67,48 @@ fn handle_hit_event<'a>(
     game_data: &mut GameInstanceData,
     hit_event: &'a HitEvent,
 ) {
-    // TODO: Have the same for monsters... might need to go for an actual ECS for that
-    for triggered_effects in game_data.player_specs.read().triggers.iter() {
-        match triggered_effects.trigger {
-            EventTrigger::OnHit(_) if hit_event.source == CharacterId::Player => {}
-            EventTrigger::OnTakeHit(_) if hit_event.target == CharacterId::Player => {}
-            _ => continue,
-        };
+    let characters = iter::once((
+        CharacterId::Player,
+        &game_data.player_specs.read().character_specs,
+    ))
+    .chain(
+        game_data
+            .monster_specs
+            .iter()
+            .enumerate()
+            .map(|(idx, monster_specs)| {
+                (CharacterId::Monster(idx), &monster_specs.character_specs)
+            }),
+    );
 
-        let hit_trigger = match triggered_effects.trigger {
-            EventTrigger::OnHit(ht) | EventTrigger::OnTakeHit(ht) => ht,
-            _ => continue,
-        };
+    for (character_id, character_specs) in characters {
+        for triggered_effects in character_specs.triggers.iter() {
+            match triggered_effects.trigger {
+                EventTrigger::OnHit(_) if hit_event.source == character_id => {}
+                EventTrigger::OnTakeHit(_) if hit_event.target == character_id => {}
+                _ => continue,
+            };
 
-        if hit_trigger.skill_type.unwrap_or(hit_event.skill_type) == hit_event.skill_type
-            && hit_trigger.range.unwrap_or(hit_event.range) == hit_event.range
-            && hit_trigger.is_crit.unwrap_or(hit_event.is_crit) == hit_event.is_crit
-            && hit_trigger.is_blocked.unwrap_or(hit_event.is_blocked) == hit_event.is_blocked
-            && hit_trigger.is_hurt.unwrap_or(hit_event.is_hurt) == hit_event.is_hurt
-        {
-            trigger_contexts.push(TriggerContext {
-                trigger: triggered_effects.clone(),
-                owner: CharacterId::Player,
-                source: hit_event.source,
-                target: hit_event.target,
-                hit_context: Some(hit_event),
-                level: game_data.area_state.read().area_level as usize,
-            });
+            let hit_trigger = match triggered_effects.trigger {
+                EventTrigger::OnHit(ht) | EventTrigger::OnTakeHit(ht) => ht,
+                _ => continue,
+            };
+
+            if hit_trigger.skill_type.unwrap_or(hit_event.skill_type) == hit_event.skill_type
+                && hit_trigger.range.unwrap_or(hit_event.range) == hit_event.range
+                && hit_trigger.is_crit.unwrap_or(hit_event.is_crit) == hit_event.is_crit
+                && hit_trigger.is_blocked.unwrap_or(hit_event.is_blocked) == hit_event.is_blocked
+                && hit_trigger.is_hurt.unwrap_or(hit_event.is_hurt) == hit_event.is_hurt
+            {
+                trigger_contexts.push(TriggerContext {
+                    trigger: triggered_effects.clone(),
+                    owner: character_id,
+                    source: hit_event.source,
+                    target: hit_event.target,
+                    hit_context: Some(hit_event),
+                    level: game_data.area_state.read().area_level as usize,
+                });
+            }
         }
     }
 }
@@ -136,7 +151,13 @@ fn handle_kill_event(
                         }
                     }
 
-                    for triggered_effects in game_data.player_specs.read().triggers.iter() {
+                    for triggered_effects in game_data
+                        .player_specs
+                        .read()
+                        .character_specs
+                        .triggers
+                        .iter()
+                    {
                         if let EventTrigger::OnKill(kill_trigger) = triggered_effects.trigger {
                             if kill_trigger.is_stunned.unwrap_or(is_stunned) == is_stunned
                                 && kill_trigger.is_debuffed.unwrap_or(is_debuffed) == is_debuffed
@@ -172,7 +193,7 @@ fn handle_kill_event(
                                 }
                             }
                         };
-                        for triggered_effects in &monster_specs.triggers {
+                        for triggered_effects in &monster_specs.character_specs.triggers {
                             if let EventTrigger::OnDeath(target_type) = triggered_effects.trigger {
                                 if target_type == event_target_type
                                     && (monster_state.character_state.is_alive
@@ -267,7 +288,13 @@ fn handle_wave_completed_event(
         events_queue.register_event(GameEvent::AreaCompleted(area_level));
     }
 
-    for triggered_effects in game_data.player_specs.read().triggers.iter() {
+    for triggered_effects in game_data
+        .player_specs
+        .read()
+        .character_specs
+        .triggers
+        .iter()
+    {
         if let EventTrigger::OnWaveCompleted = triggered_effects.trigger {
             trigger_contexts.push(TriggerContext {
                 trigger: triggered_effects.clone(),
@@ -315,7 +342,13 @@ fn handle_threat_increased_event(
         );
     }
 
-    for triggered_effects in game_data.player_specs.read().triggers.iter() {
+    for triggered_effects in game_data
+        .player_specs
+        .read()
+        .character_specs
+        .triggers
+        .iter()
+    {
         if let EventTrigger::OnThreatIncreased = triggered_effects.trigger {
             trigger_contexts.push(TriggerContext {
                 trigger: triggered_effects.clone(),

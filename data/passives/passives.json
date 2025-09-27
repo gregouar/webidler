@@ -1401,6 +1401,83 @@
         ],
         "max_upgrade_level": 3
       },
+      "physical_open_wound": {
+        "initial_node": true,
+        "name": "Savage Attacker",
+        "icon": "passives/open_wound.svg",
+        "x": 114,
+        "y": 18,
+        "size": 2,
+        "node_type": "Physical",
+        "triggers": [
+          {
+            "trigger_id": "open_wound",
+            "description": "Attack Hits apply a stack of Open Wound for 5s. Each stack deals 20% of the initial hit's Physical Damage when the target is Hit by an Attack.",
+            "OnHit": {"skill_type": "Attack"},
+            "effects": [
+              {
+                "ApplyStatus": {
+                  "duration": 5,
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "Trigger": {
+                          "trigger_id": "passives/open_wound.svg",
+                          "description": "Open Wound takes additional Physical Damage when Hit by an Attack.",
+                          "OnTakeHit": { "skill_type": "Attack" },
+                          "skill_type": "Spell",
+                          "effects": [
+                            {
+                              "FlatDamage": {
+                                "damage": {}
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "cumulate": true,
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ],
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": "Attack",
+                  "damage_type": "Physical"
+                }
+              },
+              {
+                "MinDamage": {
+                  "skill_type": "Attack",
+                  "damage_type": "Physical"
+                }
+              },
+              {
+                "MaxDamage": {
+                  "skill_type": "Attack",
+                  "damage_type": "Physical"
+                }
+              }
+            ],
+            "modifiers": [
+              {
+                "stat": {
+                  "Damage": { "damage_type": "Physical" }
+                },
+                "modifier": "Flat",
+                "factor": 0.2,
+                "source": {
+                  "HitDamage": "Physical"
+                }
+              }
+            ]
+          }
+        ],
+        "locked": true
+      },
       "poison_damage_1": {
         "name": "Poison Damage",
         "icon": "passives/poison_damage.svg",

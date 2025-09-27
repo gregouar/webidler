@@ -2,6 +2,7 @@ use std::time::Duration;
 
 use shared::data::{
     character::CharacterId,
+    character_status::StatusSpecs,
     monster::{MonsterSpecs, MonsterState},
 };
 
@@ -53,11 +54,11 @@ pub fn reset_monsters(monster_states: &mut [MonsterState]) {
 pub fn update_monster_specs(
     base_specs: &MonsterSpecs,
     monster_specs: &mut MonsterSpecs,
-    monster_states: &MonsterState,
+    monster_state: &MonsterState,
 ) {
     let effects = characters_updater::stats_map_to_vec(
         &statuses_controller::generate_effects_map_from_statuses(
-            &monster_states.character_state.statuses,
+            &monster_state.character_state.statuses,
         ),
     );
 
@@ -69,10 +70,20 @@ pub fn update_monster_specs(
         skills_updater::apply_effects_to_skill_specs(skill_specs, effects.iter());
     }
 
-    monster_specs.triggers = monster_specs
+    monster_specs.character_specs.triggers = monster_specs
         .skill_specs
         .iter()
         .flat_map(|skill_specs| skill_specs.triggers.iter())
+        .chain(
+            monster_state
+                .character_state
+                .statuses
+                .iter()
+                .filter_map(|(status_specs, _)| match status_specs {
+                    StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
+                    _ => None,
+                }),
+        )
         .map(|trigger_specs| trigger_specs.triggered_effect.clone())
         .collect();
 }

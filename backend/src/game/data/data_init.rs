@@ -38,7 +38,7 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             mana: specs.max_mana,
 
             statuses: StatusMap::default(),
-            buff_status_change: false,
+            buff_status_change: true,
 
             is_alive: true,
             just_hurt: false,
@@ -63,7 +63,6 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             gold_find: 100.0,
             threat_gain: 100.0,
             effects: EffectsMap::default(),
-            triggers: Vec::new(),
         }
     }
 }

@@ -6,6 +6,7 @@ use crate::data::{
     chance::Chance,
     character_status::StatusId,
     skill::{DamageType, SkillType},
+    trigger::TriggeredEffect,
 };
 
 use super::character_status::StatusMap;
@@ -78,6 +79,10 @@ pub struct CharacterSpecs {
 
     #[serde(default)]
     pub damage_resistance: HashMap<(SkillType, DamageType), f64>,
+
+    // TODO: Should have CharacterComputed
+    #[serde(default)]
+    pub triggers: Vec<TriggeredEffect>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
