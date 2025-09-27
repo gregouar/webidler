@@ -240,6 +240,7 @@ pub fn compute_skill_specs_effect<'a>(
                 damage,
                 crit_chance,
                 crit_damage,
+                ..
             } => {
                 for damage_type in DamageType::iter() {
                     let value = damage.entry(damage_type).or_default();

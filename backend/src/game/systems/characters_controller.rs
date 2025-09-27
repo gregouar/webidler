@@ -26,13 +26,20 @@ pub fn attack_character(
     skill_type: SkillType,
     range: SkillRange,
     is_crit: bool,
+    ignore_armor: bool,
 ) {
     let (target_id, (target_specs, target_state)) = target;
 
     let mut amount: f64 = damage
         .iter()
         .map(|(damage_type, amount)| {
-            compute_damage(target_specs, *amount, *damage_type, skill_type, false)
+            compute_damage(
+                target_specs,
+                *amount,
+                *damage_type,
+                skill_type,
+                ignore_armor,
+            )
         })
         .sum();
 

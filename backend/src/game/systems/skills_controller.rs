@@ -270,6 +270,7 @@ pub fn apply_skill_effect(
             damage,
             crit_chance,
             crit_damage,
+            ignore_armor,
         } => {
             let is_crit = crit_chance.roll();
 
@@ -297,6 +298,7 @@ pub fn apply_skill_effect(
                     skill_type,
                     range,
                     is_crit,
+                    *ignore_armor,
                 );
             }
         }

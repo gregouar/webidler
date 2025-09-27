@@ -198,6 +198,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
             damage,
             crit_chance,
             crit_damage,
+            ..
         } => view! {
             {damage
                 .into_iter()

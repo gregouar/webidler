@@ -1402,7 +1402,6 @@
         "max_upgrade_level": 3
       },
       "physical_open_wound": {
-        "initial_node": true,
         "name": "Savage Attacker",
         "icon": "passives/open_wound.svg",
         "x": 114,
@@ -1413,7 +1412,7 @@
           {
             "trigger_id": "open_wound",
             "description": "Attack Hits apply a stack of Open Wound for 5s. Each stack deals 20% of the initial hit's Physical Damage when the target is Hit by an Attack.",
-            "OnHit": {"skill_type": "Attack"},
+            "OnHit": { "skill_type": "Attack" },
             "effects": [
               {
                 "ApplyStatus": {
@@ -1429,7 +1428,8 @@
                           "effects": [
                             {
                               "FlatDamage": {
-                                "damage": {}
+                                "damage": {},
+                                "ignore_armor": true
                               }
                             }
                           ]
@@ -1568,6 +1568,35 @@
           }
         ],
         "max_upgrade_level": 3
+      },
+      "poison_rapid": {
+        "name": "Rapid Toxin",
+        "icon": "passives/rapid_toxin.svg",
+        "x": 114,
+        "y": -18,
+        "size": 2,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 100
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "DamageOverTime": { "damage_type": "Poison" }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -100
+          }
+        ],
+        "locked": true
       },
       "fire_damage_1": {
         "name": "Fire Damage",
@@ -2680,12 +2709,20 @@
         "to": "physical_damage_3"
       },
       {
+        "from": "physical_damage_3",
+        "to": "physical_open_wound"
+      },
+      {
         "from": "poison_damage_1",
         "to": "poison_damage_2"
       },
       {
         "from": "poison_damage_2",
         "to": "poison_damage_3"
+      },
+      {
+        "from": "poison_damage_3",
+        "to": "poison_rapid"
       },
       {
         "from": "fire_damage_1",
