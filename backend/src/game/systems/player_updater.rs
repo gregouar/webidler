@@ -71,7 +71,7 @@ pub fn update_player_specs(
     player_specs.character_specs.max_mana = 100.0;
     player_specs.character_specs.mana_regen = 10.0;
     player_specs.character_specs.damage_resistance.clear();
-    player_specs.gold_find = 1.0;
+    player_specs.gold_find = 100.0;
     player_specs.threat_gain = 100.0;
     player_specs.movement_cooldown = 3.0;
     player_specs.triggers.clear();
