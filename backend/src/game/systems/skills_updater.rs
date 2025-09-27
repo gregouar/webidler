@@ -309,23 +309,8 @@ pub fn compute_skill_specs_effect<'a>(
                         .stat
                         .is_match(&StatType::StatusPower((&status_effect.status_type).into()))
                     {
-                        let effect = match (&status_effect.status_type, effect.modifier) {
-                            // Correct because flat is in percent but multiplier in decimals
-                            (
-                                StatusSpecs::StatModifier {
-                                    modifier: Modifier::Multiplier,
-                                    ..
-                                },
-                                Modifier::Flat,
-                            ) => StatEffect {
-                                value: effect.value * 0.01,
-                                ..effect.clone()
-                            },
-                            _ => effect.clone(),
-                        };
-
-                        status_effect.value.min.apply_effect(&effect);
-                        status_effect.value.max.apply_effect(&effect);
+                        status_effect.value.min.apply_effect(effect);
+                        status_effect.value.max.apply_effect(effect);
                     }
 
                     if let StatusSpecs::DamageOverTime { damage_type, .. } =

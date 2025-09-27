@@ -924,7 +924,7 @@
         "max_upgrade_level": 3
       },
       "crit_damage_1": {
-        "name": "Critical Hit Damage",
+        "name": "t Damage",
         "icon": "passives/critical.svg",
         "x": 5,
         "y": 20,

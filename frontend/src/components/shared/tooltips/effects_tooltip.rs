@@ -63,14 +63,14 @@ pub fn lucky_roll_str(roll_type: LuckyRollType) -> String {
             format!("{}Damage", optional_damage_type_str(damage_type))
         }
         LuckyRollType::Block => "Block Chance".into(),
-        LuckyRollType::CritChance => "Critical Chance".into(),
+        LuckyRollType::CritChance => "Critical Hit Chance".into(),
         LuckyRollType::SuccessChance => "Success Chance".into(),
     }
 }
 
 fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> String {
     match stat_converter_source {
-        StatConverterSource::CritDamage => "Critical Damage".into(),
+        StatConverterSource::CritDamage => "Critical Hit Damage".into(),
     }
 }
 
@@ -473,9 +473,9 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         } => {
             let luck_type = skill_type_str(*skill_type).to_string() + &lucky_roll_str(*roll_type);
             let unwrap_value = value.unwrap_or_default();
-            if unwrap_value == 100.0 {
+            if unwrap_value >= 100.0 {
                 format!("{luck_type} is Lucky",)
-            } else if unwrap_value == -100.0 {
+            } else if unwrap_value <= -100.0 {
                 format!("{luck_type} is Unlucky",)
             } else if unwrap_value >= 0.0 {
                 format!(

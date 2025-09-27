@@ -342,6 +342,56 @@
       }
     ]
   },
+  "blessing_crit": {
+    "name": "Blessing of Precision",
+    "description": "A blessing that increase your chance of critical strike, and make them stronger.",
+    "icon": "skills/blessing_crit.svg",
+    "skill_type": "Spell",
+    "cooldown": 15,
+    "mana_cost": 25,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "modifier": "Multiplier",
+        "value": 10
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Lucky": {"roll_type": "CritChance"}
+                      },
+                      "modifier": "Flat"
+                    }
+                  },
+                  "value": 100
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {"CritDamage": null},
+                      "modifier": "Multiplier"
+                    }
+                  },
+                  "value": 40
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
   "poison_coating": {
     "name": "Poison Coating",
     "description": "Coat your weapon with venom, causing your attacks to inflict poison damage over time.",
@@ -433,7 +483,7 @@
       },
       {
         "stat": {
-          "Speed": "Spell"
+          "Speed": null
         },
         "modifier": "Flat",
         "value": -2

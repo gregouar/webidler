@@ -339,14 +339,14 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 <li class="text-gray-400 text-xs xl:text-sm leading-snug">{range} {shape}</li>
                 {damage_lines}
                 <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                    "Critical chance: "
+                    "Critical hit chance: "
                     <span class=format!(
                         "{} font-semibold",
                         crit_chance_color,
                     )>{format!("{:.2}%", specs.crit_chance.value)}</span>
                 </li>
                 <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                    "Critical damage: "
+                    "Critical hit damage: "
                     <span class=format!(
                         "{} font-semibold",
                         crit_damage_color,

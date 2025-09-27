@@ -84,7 +84,7 @@
           }
         },
         "modifier": "Multiplier",
-        "value": [0.25, 0.49]
+        "value": [25, 49]
       }
     ]
   },
@@ -151,7 +151,7 @@
           }
         },
         "modifier": "Multiplier",
-        "value": [0.25, 0.49]
+        "value": [25, 49]
       }
     ]
   },
@@ -173,7 +173,7 @@
           }
         },
         "modifier": "Multiplier",
-        "value": [0.5, 0.74]
+        "value": [50, 74]
       }
     ]
   },
@@ -195,7 +195,7 @@
           }
         },
         "modifier": "Multiplier",
-        "value": [0.75, 0.99]
+        "value": [75, 99]
       }
     ]
   },

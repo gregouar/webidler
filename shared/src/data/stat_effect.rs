@@ -170,6 +170,23 @@ impl StatType {
                     roll_type: roll_type_2,
                 },
             ) => compare_options(skill_type, skill_type_2) && roll_type.is_match(roll_type_2),
+            (
+                SuccessChance {
+                    skill_type,
+                    effect_type,
+                },
+                SuccessChance {
+                    skill_type: skill_type_2,
+                    effect_type: effect_type_2,
+                },
+            ) => {
+                compare_options(skill_type, skill_type_2)
+                    && effect_type
+                        .zip(*effect_type_2)
+                        .is_none_or(|(effect_type, effect_type_2)| {
+                            effect_type.is_match(&effect_type_2)
+                        })
+            }
             (Restore(first), Restore(second)) => compare_options(first, second),
             (CritChance(first), CritChance(second))
             | (CritDamage(first), CritDamage(second))

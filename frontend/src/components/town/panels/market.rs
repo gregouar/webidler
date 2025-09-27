@@ -925,8 +925,8 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     MarketOrderBy::Price => "Lowest Price",
                     MarketOrderBy::Level => "Lowest Required Level",
                     MarketOrderBy::Damages => "Highest Damages",
-                    MarketOrderBy::CritChance => "Highest Critical Chance",
-                    MarketOrderBy::CritDamage => "Highest Critical Damage",
+                    MarketOrderBy::CritChance => "Highest Critical Hit Chance",
+                    MarketOrderBy::CritDamage => "Highest Critical Hit Damage",
                     MarketOrderBy::Armor => "Highest Armor",
                     MarketOrderBy::Block => "Highest Block Chance",
                     MarketOrderBy::Time => "Most Recent",
@@ -1001,14 +1001,14 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     />
                     <ValidatedInput
                         id="item_damages"
-                        label="Min Critical Chance:"
+                        label="Min Critical Hit Chance:"
                         input_type="number"
                         placeholder="Minimum Critical Percent Chance"
                         bind=item_crit_chance
                     />
                     <ValidatedInput
                         id="item_damages"
-                        label="Min Critical Damage:"
+                        label="Min Critical Hit Damage:"
                         input_type="number"
                         placeholder="Minimum extra Critical Percent Damage"
                         bind=item_crit_damage

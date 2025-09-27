@@ -210,13 +210,13 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Increased Critical Chance"
+                                label="Increased Critical Hit Chance"
                                 value=move || format_effect_value(
                                     effect(StatType::CritChance(None), Modifier::Multiplier),
                                 )
                             />
                             <Stat
-                                label="Increased Critical Damage"
+                                label="Increased Critical Hit Damage"
                                 value=move || {
                                     format!(
                                         "+{}%",
