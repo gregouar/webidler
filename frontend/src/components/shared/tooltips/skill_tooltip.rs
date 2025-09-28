@@ -437,6 +437,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                 }
             )
         }
+        ModifierEffectSource::PlaceHolder => todo!(),
     };
     let effects = formatted_effects_list(skill_modifier.effects);
 

@@ -93,6 +93,7 @@ pub enum ModifierEffectSource {
         slot: Option<ItemSlot>,
         item_stats: ItemStatsSource,
     },
+    PlaceHolder,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]

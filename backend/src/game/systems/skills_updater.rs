@@ -159,7 +159,7 @@ fn compute_skill_modifier_effects<'a>(
         .iter()
         .filter_map(|me| match &me.source {
             ModifierEffectSource::ItemStats { slot, item_stats } => Some((me, *slot, item_stats)),
-            // _ => None,
+            _ => None,
         })
         .flat_map(move |(me, slot, item_stats)| {
             inventory
@@ -209,7 +209,7 @@ fn compute_skill_modifier_effects<'a>(
             .iter()
             .filter_map(|me| match &me.source {
                 ModifierEffectSource::ItemStats { .. } => None,
-                // Add other non-inventory sources here
+                ModifierEffectSource::PlaceHolder => todo!(),
             });
 
     item_sources

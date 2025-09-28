@@ -18,6 +18,7 @@ use crate::{
 
 pub type Target<'a> = (CharacterId, (&'a CharacterSpecs, &'a mut CharacterState));
 
+#[allow(clippy::too_many_arguments)]
 pub fn attack_character(
     events_queue: &mut EventsQueue,
     target: &mut Target,
