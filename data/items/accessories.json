@@ -117,7 +117,8 @@
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Multiplier",
-        "value": [8, 12]
+        "value": [8, 12],
+        "ignore_quality": true
       }
     ],
     "min_area_level": 50

@@ -339,19 +339,16 @@ pub fn compute_skill_specs_effect<'a>(
             roll_type: LuckyRollType::SuccessChance,
         }) {
             skill_effect
-                .failure_chance
+                .success_chance
                 .lucky_chance
-                .apply_negative_effect(effect);
+                .apply_effect(effect);
         }
 
         if effect.stat.is_match(&StatType::SuccessChance {
             skill_type: Some(skill_type),
             effect_type: (&skill_effect.effect_type).into(),
         }) {
-            skill_effect
-                .failure_chance
-                .value
-                .apply_negative_effect(effect);
+            skill_effect.success_chance.value.apply_effect(effect);
         }
 
         if let StatType::StatConverter(specs) = &effect.stat {

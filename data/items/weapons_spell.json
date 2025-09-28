@@ -76,7 +76,8 @@
           "Speed": "Spell"
         },
         "modifier": "Multiplier",
-        "value": [8, 12]
+        "value": [8, 12],
+        "ignore_quality": true
       }
     ],
     "triggers": [

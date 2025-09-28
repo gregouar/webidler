@@ -1703,7 +1703,7 @@
             "OnHit": {},
             "effects": [
               {
-                "failure_chance": 70,
+                "success_chance": 30,
                 "ApplyStatus": {
                   "duration": 2,
                   "statuses": [
@@ -2600,7 +2600,6 @@
         "max_upgrade_level": 3
       },
       "menacing_presence": {
-        "initial_node": true,
         "name": "Menacing Presence",
         "icon": "passives/menacing_presence.svg",
         "x": -80,

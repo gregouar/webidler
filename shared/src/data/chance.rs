@@ -13,6 +13,15 @@ pub struct ChanceRange<T> {
     pub lucky_chance: f32,
 }
 
+impl Chance {
+    pub fn new_sure() -> Self {
+        Self {
+            value: 100.0,
+            lucky_chance: 0.0,
+        }
+    }
+}
+
 // Spicy serde
 
 #[derive(Deserialize)]

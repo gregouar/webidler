@@ -35,7 +35,8 @@
         "scope": "Local",
         "stat": { "Speed": "Attack" },
         "modifier": "Multiplier",
-        "value": 100
+        "value": 100,
+        "ignore_quality": true
       },
       {
         "scope": "Local",
@@ -106,7 +107,7 @@
         "OnHit": { "skill_type": "Attack" },
         "effects": [
           {
-            "failure_chance": 75,
+            "success_chance": 25,
             "ApplyStatus": {
               "duration": 3,
               "statuses": [

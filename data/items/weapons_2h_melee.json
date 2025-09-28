@@ -113,7 +113,7 @@
         },
         "effects": [
           {
-            "failure_chance": 50,
+            "success_chance": 50,
             "ApplyStatus": {
               "duration": 4,
               "statuses": [

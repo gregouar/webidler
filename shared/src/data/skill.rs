@@ -146,8 +146,8 @@ pub enum SkillRepeatTarget {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct SkillEffect {
-    #[serde(default)]
-    pub failure_chance: Chance,
+    #[serde(default = "Chance::new_sure")]
+    pub success_chance: Chance,
 
     #[serde(flatten)]
     pub effect_type: SkillEffectType,

@@ -89,7 +89,8 @@
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Fire" } },
         "modifier": "Multiplier",
-        "value": [100, 200]
+        "value": [100, 200],
+        "ignore_quality": true
       },
       {
         "scope": "Global",
@@ -97,7 +98,8 @@
           "StatusPower": { "DamageOverTime": { "damage_type": "Fire" } }
         },
         "modifier": "Multiplier",
-        "value": [50, 100]
+        "value": [50, 100],
+        "ignore_quality": true
       },
       {
         "scope": "Global",
@@ -105,19 +107,22 @@
           "StatusDuration": { "DamageOverTime": { "damage_type": "Fire" } }
         },
         "modifier": "Multiplier",
-        "value": [50, 100]
+        "value": [50, 100],
+        "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [5, 10]
+        "value": [5, 10],
+        "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "value": [-20, -10]
+        "value": [-20, -10],
+        "ignore_quality": true
       }
     ],
     "min_area_level": 50,

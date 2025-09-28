@@ -184,11 +184,8 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
 }
 
 fn format_effect(effect: SkillEffect) -> impl IntoView {
-    let success_chance = if effect.failure_chance.value > 0.0 {
-        Some(format!(
-            "{:.0}% chance to ",
-            (100.0 - effect.failure_chance.value)
-        ))
+    let success_chance = if effect.success_chance.value < 100.0 {
+        Some(format!("{:.0}% chance to ", effect.success_chance.value))
     } else {
         None
     };

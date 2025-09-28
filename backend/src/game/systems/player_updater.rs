@@ -2,7 +2,7 @@ use std::{iter, time::Duration};
 
 use shared::data::{
     area::AreaThreat,
-    chance::ChanceRange,
+    chance::{Chance, ChanceRange},
     character::CharacterId,
     character_status::StatusSpecs,
     item::{SkillRange, SkillShape},
@@ -173,7 +173,7 @@ fn compute_player_specs(
                         skill_shape: SkillShape::Single,
                         modifiers: Vec::new(),
                         effects: vec![SkillEffect {
-                            failure_chance: Default::default(),
+                            success_chance: Chance::new_sure(),
                             effect_type: SkillEffectType::Restore {
                                 restore_type: if let StatType::LifeOnHit(_) = effect.stat {
                                     RestoreType::Life

@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Menacing",
+    "family": "inc_threat",
+    "tags": ["Threat"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Shield", "Focus"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [10, 19]
+      }
+    ]
+  },
+  {
+    "name": "Dreadful",
+    "family": "inc_threat",
+    "tags": ["Threat"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Shield", "Focus"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [20, 29]
+      }
+    ]
+  },
+  {
+    "name": "Hostile",
+    "family": "inc_threat",
+    "tags": ["Threat"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Shield", "Focus"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [30, 39]
+      }
+    ]
+  }
+]

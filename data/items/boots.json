@@ -51,7 +51,8 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "value": [20, 30]
+        "value": [20, 30],
+        "ignore_quality": true
       }
     ],
     "triggers": [

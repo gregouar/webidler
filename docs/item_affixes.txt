@@ -98,6 +98,7 @@ Shield:
         inc_armor
         add_life
         inc_life
+        inc_threat
     suf:
         add_life_regen
         add_fire_res

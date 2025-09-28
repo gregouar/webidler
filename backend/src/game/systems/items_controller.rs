@@ -1,7 +1,7 @@
 use std::vec;
 
 use shared::data::{
-    chance::ChanceRange,
+    chance::{Chance, ChanceRange},
     character_status::StatusSpecs,
     item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSpecs, WeaponSpecs},
     item_affix::AffixEffectScope,
@@ -200,7 +200,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             crit_damage: weapon_specs.crit_damage,
             ignore_armor: false,
         },
-        failure_chance: Default::default(),
+        success_chance: Chance::new_sure(),
         ignore_stat_effects: Default::default(),
     }];
 
@@ -221,7 +221,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                     cumulate: true,
                 }],
             },
-            failure_chance: Default::default(),
+            success_chance: Chance::new_sure(),
             ignore_stat_effects: Default::default(),
         });
     }

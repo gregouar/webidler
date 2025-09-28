@@ -26,6 +26,7 @@ pub enum AffixTag {
 
     Critical,
     Stealth,
+    Threat,
     Status,
 
     Life,

@@ -261,7 +261,7 @@ pub fn apply_skill_effect(
     skill_effect: &SkillEffect,
     targets: &mut [&mut Target],
 ) {
-    if skill_effect.failure_chance.roll() {
+    if !skill_effect.success_chance.roll() {
         return;
     }
 
