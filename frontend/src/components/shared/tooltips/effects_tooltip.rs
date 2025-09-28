@@ -492,16 +492,33 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 )
             }
         }
-        StatType::StatConverter(stat_converter_specs) => format!(
-            "{}% of {} converted to {}{}",
-            format_flat_number(value, false),
-            stat_converter_source_str(stat_converter_specs.source),
-            match stat_converter_specs.target_modifier {
-                Modifier::Multiplier => "Increased ",
-                Modifier::Flat => "",
-            },
-            format_multiplier_stat_name(&stat_converter_specs.target_stat)
-        ),
+        StatType::StatConverter(stat_converter_specs) => match stat_converter_specs.source {
+            StatConverterSource::ThreatLevel => {
+                let target_stat_effect = StatEffect {
+                    stat: (*stat_converter_specs.target_stat).clone(),
+                    modifier: stat_converter_specs.target_modifier,
+                    value: value.unwrap_or_default(),
+                    bypass_ignore: false,
+                };
+                format!(
+                    "{} {} per Threat Level",
+                    format_effect_value(&target_stat_effect),
+                    format_multiplier_stat_name(&target_stat_effect.stat),
+                )
+            }
+            _ => {
+                format!(
+                    "{}% of {} converted to {}{}",
+                    format_flat_number(value, false),
+                    stat_converter_source_str(stat_converter_specs.source),
+                    match stat_converter_specs.target_modifier {
+                        Modifier::Multiplier => "Increased ",
+                        Modifier::Flat => "",
+                    },
+                    format_multiplier_stat_name(&stat_converter_specs.target_stat)
+                )
+            }
+        },
         StatType::SuccessChance {
             skill_type,
             effect_type,
