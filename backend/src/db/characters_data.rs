@@ -16,7 +16,7 @@ use super::utc_datetime::UtcDateTime;
 
 #[derive(Debug, FromRow)]
 #[allow(dead_code)]
-struct CharacterDataEntry {
+pub struct CharacterDataEntry {
     pub character_id: UserCharacterId,
 
     pub data_version: String,
@@ -62,7 +62,7 @@ pub async fn save_character_inventory<'c>(
     )
 }
 
-async fn upsert_character_inventory_data<'c>(
+pub(in crate::db) async fn upsert_character_inventory_data<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     inventory_data: Vec<u8>,
