@@ -48,7 +48,7 @@
           "Lucky": { "roll_type": { "Damage": { "damage_type": "Physical" } } }
         },
         "modifier": "Flat",
-        "value": [-30, 30]
+        "value": [-40, 40]
       },
       {
         "scope": "Global",
@@ -56,7 +56,7 @@
           "Lucky": { "roll_type": { "Damage": { "damage_type": "Fire" } } }
         },
         "modifier": "Flat",
-        "value": [-30, 30]
+        "value": [-40, 40]
       },
       {
         "scope": "Global",
@@ -64,7 +64,7 @@
           "Lucky": { "roll_type": { "Damage": { "damage_type": "Poison" } } }
         },
         "modifier": "Flat",
-        "value": [-30, 30]
+        "value": [-40, 40]
       },
       {
         "scope": "Global",
@@ -72,25 +72,25 @@
           "Lucky": { "roll_type": { "Damage": { "damage_type": "Storm" } } }
         },
         "modifier": "Flat",
-        "value": [-30, 30]
+        "value": [-40, 40]
       },
       {
         "scope": "Global",
         "stat": { "Lucky": { "roll_type": "Block" } },
         "modifier": "Flat",
-        "value": [-30, 30]
+        "value": [-40, 40]
       },
       {
         "scope": "Global",
         "stat": { "Lucky": { "roll_type": "CritChance" } },
         "modifier": "Flat",
-        "value": [-30, 30]
+        "value": [-40, 40]
       },
       {
         "scope": "Global",
         "stat": { "Lucky": { "roll_type": "SuccessChance" } },
         "modifier": "Flat",
-        "value": [-30, 30]
+        "value": [-40, 40]
       }
     ],
     "min_area_level": 50
