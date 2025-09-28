@@ -244,7 +244,7 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
         StatusId::StatModifier {
             stat, debuff: true, ..
         } => match stat {
-            StatType::Armor(DamageType::Physical) => {
+            StatType::Armor(Some(DamageType::Physical)) => {
                 ("statuses/debuff_armor.svg".to_string(), "Broken Armor")
             }
             _ => ("statuses/debuff.svg".to_string(), "Debuffed"),

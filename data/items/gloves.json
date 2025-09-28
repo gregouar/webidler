@@ -23,22 +23,19 @@
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Fire" } },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.6
+        "value": [40, 60]
       },
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "min": 20,
-        "max": 40
+        "value": [20, 40]
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Fire" },
         "modifier": "Flat",
-        "min": 100,
-        "max": 150
+        "value": [100, 150]
       }
     ]
   },
@@ -74,7 +71,7 @@
       "damage": {
         "Physical": [4, 10]
       },
-      "crit_chances": 10,
+      "crit_chance": 10,
       "crit_damage": 100
     },
     "rarity": "Unique",
@@ -83,22 +80,19 @@
         "scope": "Global",
         "stat": { "Armor": "Poison" },
         "modifier": "Flat",
-        "min": 40,
-        "max": 60
+        "value": [40, 60]
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Fire" },
         "modifier": "Flat",
-        "min": 40,
-        "max": 60
+        "value": [40, 60]
       },
       {
         "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "min": 4,
-        "max": 6
+        "value": [4, 6]
       }
     ],
     "triggers": [
@@ -110,8 +104,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 5,
-              "max_duration": 5,
+              "duration": 5,
               "statuses": [
                 {
                   "status_type": {
@@ -124,8 +117,7 @@
                       }
                     }
                   },
-                  "min_value": 0.3,
-                  "max_value": 0.3,
+                  "value": 30,
                   "cumulate": true
                 }
               ]

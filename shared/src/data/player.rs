@@ -8,7 +8,6 @@ use super::{
     item::{ItemSlot, ItemSpecs},
     skill::{SkillSpecs, SkillState},
     stat_effect::EffectsMap,
-    trigger::TriggeredEffect,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -30,7 +29,6 @@ pub struct PlayerSpecs {
     pub threat_gain: f32,
 
     pub effects: EffectsMap,
-    pub triggers: Vec<TriggeredEffect>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

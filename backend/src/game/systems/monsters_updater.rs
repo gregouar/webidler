@@ -1,11 +1,21 @@
 use std::time::Duration;
 
 use shared::data::{
+    area::AreaThreat,
     character::CharacterId,
+    character_status::StatusSpecs,
     monster::{MonsterSpecs, MonsterState},
+    passive::StatEffect,
+    stat_effect::{Modifier, StatType},
 };
 
-use crate::game::{data::event::EventsQueue, systems::statuses_controller};
+use crate::{
+    constants::THREAT_EFFECT,
+    game::{
+        data::event::EventsQueue,
+        systems::{stats_updater, statuses_controller},
+    },
+};
 
 use super::{characters_updater, skills_updater};
 
@@ -53,13 +63,42 @@ pub fn reset_monsters(monster_states: &mut [MonsterState]) {
 pub fn update_monster_specs(
     base_specs: &MonsterSpecs,
     monster_specs: &mut MonsterSpecs,
-    monster_states: &MonsterState,
+    monster_state: &MonsterState,
+    area_threat: &AreaThreat,
 ) {
-    let effects = characters_updater::stats_map_to_vec(
+    // Why going through stat converter if we already now the effect heh?
+    // let threat_effects = [StatEffect {
+    //     stat: StatType::StatConverter(StatConverterSpecs {
+    //         source: StatConverterSource::ThreatLevel,
+    //         target_stat: Box::new(StatType::Damage {
+    //             skill_type: None,
+    //             damage_type: None,
+    //         }),
+    //         target_modifier: Modifier::Multiplier,
+    //         is_extra: true,
+    //         skill_type: None,
+    //     }),
+    //     value: THREAT_EFFECT,
+    //     modifier: Modifier::Flat,
+    //     bypass_ignore: true,
+    // }];
+
+    let mut effects = stats_updater::stats_map_to_vec(
         &statuses_controller::generate_effects_map_from_statuses(
-            &monster_states.character_state.statuses,
+            &monster_state.character_state.statuses,
         ),
+        area_threat,
     );
+
+    effects.push(StatEffect {
+        stat: StatType::Damage {
+            skill_type: None,
+            damage_type: None,
+        },
+        value: ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
+        modifier: Modifier::Multiplier,
+        bypass_ignore: true,
+    });
 
     monster_specs.character_specs =
         characters_updater::update_character_specs(&base_specs.character_specs, &effects);
@@ -69,10 +108,20 @@ pub fn update_monster_specs(
         skills_updater::apply_effects_to_skill_specs(skill_specs, effects.iter());
     }
 
-    monster_specs.triggers = monster_specs
+    monster_specs.character_specs.triggers = monster_specs
         .skill_specs
         .iter()
         .flat_map(|skill_specs| skill_specs.triggers.iter())
+        .chain(
+            monster_state
+                .character_state
+                .statuses
+                .iter()
+                .filter_map(|(status_specs, _)| match status_specs {
+                    StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
+                    _ => None,
+                }),
+        )
         .map(|trigger_specs| trigger_specs.triggered_effect.clone())
         .collect();
 }

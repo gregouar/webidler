@@ -38,10 +38,10 @@ pub async fn tick(
     if game_data.player_specs.need_to_sync()
         || game_data.player_inventory.need_to_sync()
         || game_data.passives_tree_state.need_to_sync()
-        || game_data.player_state.character_state.buff_status_change
+        || game_data.player_state.character_state.dirty_specs
     {
         // This feels so dirty =(
-        game_data.player_state.character_state.buff_status_change = false;
+        game_data.player_state.character_state.dirty_specs = false;
 
         player_updater::update_player_specs(
             game_data.player_specs.mutate(),
@@ -49,13 +49,14 @@ pub async fn tick(
             game_data.player_inventory.read(),
             &game_data.passives_tree_specs,
             game_data.passives_tree_state.read(),
+            &game_data.area_threat,
         );
     }
 
     if game_data
         .monster_states
         .iter()
-        .any(|m| m.character_state.buff_status_change)
+        .any(|m| m.character_state.dirty_specs)
     {
         for ((base_specs, monster_specs), monster_state) in game_data
             .monster_base_specs
@@ -64,9 +65,14 @@ pub async fn tick(
             .zip(game_data.monster_specs.iter_mut())
             .zip(game_data.monster_states.iter_mut())
         {
-            if monster_state.character_state.buff_status_change {
-                monster_state.character_state.buff_status_change = false;
-                monsters_updater::update_monster_specs(base_specs, monster_specs, monster_state);
+            if monster_state.character_state.dirty_specs {
+                monster_state.character_state.dirty_specs = false;
+                monsters_updater::update_monster_specs(
+                    base_specs,
+                    monster_specs,
+                    monster_state,
+                    &game_data.area_threat,
+                );
             }
         }
     }
@@ -141,6 +147,7 @@ async fn control_entities(
                     monsters_wave::generate_monsters_wave(
                         &game_data.area_blueprint,
                         game_data.area_state.mutate(),
+                        &game_data.area_threat,
                         &master_store.monster_specs_store,
                     )?;
                 game_data.monster_base_specs = LazySyncer::new(monster_specs.clone());
@@ -232,6 +239,7 @@ fn respawn_player(game_data: &mut GameInstanceData) {
         game_data.player_inventory.read(),
         &game_data.passives_tree_specs,
         game_data.passives_tree_state.read(),
+        &game_data.area_threat,
     );
 
     game_data.player_state = PlayerState::init(game_data.player_specs.read());

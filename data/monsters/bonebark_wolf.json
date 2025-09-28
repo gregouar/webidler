@@ -3,7 +3,7 @@
   "portrait": "monsters/bonebark_wolf.webp",
   "max_life": 8,
   "power_factor": 2.0,
-  "max_initiative": 1.0,
+  "initiative": [0.0, 1.0],
   "skills": [
     {
       "name": "Haunting Bite",
@@ -26,7 +26,7 @@
     {
       "name": "Call of the Pack",
       "icon": "skills/haste.svg",
-      "cooldown": 10.0,
+      "cooldown": 8.0,
       "targets": [
         {
           "target_type": "Friend",
@@ -35,8 +35,7 @@
           "effects": [
             {
               "ApplyStatus": {
-                "min_duration": 5,
-                "max_duration": 10,
+                "duration": [5, 10],
                 "statuses": [
                   {
                     "status_type": {
@@ -44,8 +43,7 @@
                         "stat": { "Damage": { "skill_type": "Attack" } }
                       }
                     },
-                    "min_value": 0.3,
-                    "max_value": 0.3,
+                    "value": 30,
                     "cumulate": true
                   }
                 ]

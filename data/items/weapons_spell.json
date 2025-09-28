@@ -3,9 +3,7 @@
     "name": "Wooden Rod",
     "icon": "items/wooden_rod.webp",
     "slot": "Weapon",
-    "categories": [
-      "SpellWeapon"
-    ],
+    "categories": ["SpellWeapon"],
     "affixes": [
       {
         "scope": "Global",
@@ -15,8 +13,7 @@
           }
         },
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.2
+        "value": 20
       }
     ]
   },
@@ -24,9 +21,7 @@
     "name": "Wand",
     "icon": "items/wand.webp",
     "slot": "Weapon",
-    "categories": [
-      "SpellWeapon"
-    ],
+    "categories": ["SpellWeapon"],
     "affixes": [
       {
         "scope": "Global",
@@ -36,8 +31,7 @@
           }
         },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.4
+        "value": 40
       }
     ],
     "min_area_level": 40
@@ -47,9 +41,7 @@
     "description": "An artisan's folly turned arcane marvel; its aroma is divine, its sting utterly vile.",
     "icon": "items/baguette_fromage.webp",
     "slot": "Weapon",
-    "categories": [
-      "SpellWeapon"
-    ],
+    "categories": ["SpellWeapon"],
     "rarity": "Unique",
     "affixes": [
       {
@@ -60,8 +52,7 @@
           }
         },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.4
+        "value": 40
       },
       {
         "scope": "Global",
@@ -71,15 +62,13 @@
           }
         },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.6
+        "value": [40, 60]
       },
       {
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.4
+        "value": [20, 40]
       },
       {
         "scope": "Global",
@@ -87,8 +76,8 @@
           "Speed": "Spell"
         },
         "modifier": "Multiplier",
-        "min": 0.08,
-        "max": 0.12
+        "value": [8, 12],
+        "ignore_quality": true
       }
     ],
     "triggers": [
@@ -102,8 +91,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 3,
-              "max_duration": 3,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -118,8 +106,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 100.0,
-                  "max_value": 100.0
+                  "value": 100.0
                 },
                 {
                   "status_type": {
@@ -134,8 +121,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 100.0,
-                  "max_value": 100.0
+                  "value": 100.0
                 },
                 {
                   "status_type": {
@@ -150,8 +136,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 100.0,
-                  "max_value": 100.0
+                  "value": 100.0
                 },
                 {
                   "status_type": {
@@ -163,8 +148,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 0.33,
-                  "max_value": 0.33
+                  "value": 50
                 }
               ]
             }
@@ -178,9 +162,7 @@
     "name": "Bone Wand",
     "icon": "items/bone_wand.webp",
     "slot": "Weapon",
-    "categories": [
-      "SpellWeapon"
-    ],
+    "categories": ["SpellWeapon"],
     "affixes": [
       {
         "scope": "Global",
@@ -190,8 +172,7 @@
           }
         },
         "modifier": "Multiplier",
-        "min": 0.6,
-        "max": 0.6
+        "value": 60
       }
     ],
     "min_area_level": 90

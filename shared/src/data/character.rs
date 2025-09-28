@@ -3,8 +3,10 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
+    chance::Chance,
     character_status::StatusId,
     skill::{DamageType, SkillType},
+    trigger::TriggeredEffect,
 };
 
 use super::character_status::StatusMap;
@@ -69,14 +71,18 @@ pub struct CharacterSpecs {
     #[serde(default)]
     pub armor: HashMap<DamageType, f64>,
     #[serde(default)]
-    pub block: f32,
+    pub block: Chance,
     #[serde(default)]
-    pub block_spell: f32,
+    pub block_spell: Chance, // chance to block spell are applied on top of block chance
     #[serde(default)]
     pub block_damage: f32,
 
     #[serde(default)]
     pub damage_resistance: HashMap<(SkillType, DamageType), f64>,
+
+    // TODO: Should have CharacterComputed
+    #[serde(default)]
+    pub triggers: Vec<TriggeredEffect>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -87,7 +93,7 @@ pub struct CharacterState {
     pub statuses: StatusMap,
     // This feels dirty
     #[serde(default, skip_serializing, skip_deserializing)]
-    pub buff_status_change: bool,
+    pub dirty_specs: bool,
 
     pub is_alive: bool,
     pub just_hurt: bool,

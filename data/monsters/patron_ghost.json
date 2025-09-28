@@ -3,7 +3,7 @@
   "portrait": "monsters/inn_ghost.webp",
   "max_life": 7,
   "power_factor": 2.0,
-  "max_initiative": 0.5,
+  "initiative": [0.0, 0.5],
   "skills": [
     {
       "name": "Drunken Cheers",
@@ -22,8 +22,7 @@
             },
             {
               "ApplyStatus": {
-                "min_duration": 3,
-                "max_duration": 3,
+                "duration": 3,
                 "statuses": [
                   {
                     "status_type": {
@@ -32,8 +31,7 @@
                         "debuff": true
                       }
                     },
-                    "min_value": 0.5,
-                    "max_value": 0.5
+                    "value": 100
                   }
                 ]
               }

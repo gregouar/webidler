@@ -1,0 +1,113 @@
+{
+  "copper_ring": {
+    "name": "Copper Ring",
+    "icon": "items/copper_ring.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 20
+      }
+    ]
+  },
+  "silver_ring": {
+    "name": "Silver Ring",
+    "icon": "items/silver_ring.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 40
+      }
+    ],
+    "min_area_level": 40
+  },
+  "silver_ring_unique": {
+    "name": "Gambler's Luck",
+    "description": "It does not favor you, it does not curse you, it simply spins the wheel and dares you to wear it.",
+    "icon": "items/gamblers_ring.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 40
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Lucky": { "roll_type": { "Damage": { "damage_type": "Physical" } } }
+        },
+        "modifier": "Flat",
+        "value": [-40, 40]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Lucky": { "roll_type": { "Damage": { "damage_type": "Fire" } } }
+        },
+        "modifier": "Flat",
+        "value": [-40, 40]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Lucky": { "roll_type": { "Damage": { "damage_type": "Poison" } } }
+        },
+        "modifier": "Flat",
+        "value": [-40, 40]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Lucky": { "roll_type": { "Damage": { "damage_type": "Storm" } } }
+        },
+        "modifier": "Flat",
+        "value": [-40, 40]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Lucky": { "roll_type": "Block" } },
+        "modifier": "Flat",
+        "value": [-40, 40]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Lucky": { "roll_type": "CritChance" } },
+        "modifier": "Flat",
+        "value": [-40, 40]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Lucky": { "roll_type": "SuccessChance" } },
+        "modifier": "Flat",
+        "value": [-40, 40]
+      }
+    ],
+    "min_area_level": 50
+  },
+  "gold_ring": {
+    "name": "Gold Ring",
+    "icon": "items/gold_ring.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 60
+      }
+    ],
+    "min_area_level": 90
+  }
+}

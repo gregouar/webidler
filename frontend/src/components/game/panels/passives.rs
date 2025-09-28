@@ -351,9 +351,9 @@ pub fn Node(
     let icon_filter = move || {
         let status = node_status.get();
         match (status.purchase_status, status.meta_status) {
-            (PurchaseStatus::Purchaseable, _) => "",
-            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5)",
-            _ => "drop-shadow(2px 2px 2px black)",
+            (PurchaseStatus::Purchaseable, _) => "invert(1)",
+            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5) invert(1)",
+            _ => "drop-shadow(2px 2px 2px white) invert(1)",
         }
     };
 
@@ -384,22 +384,22 @@ pub fn Node(
             class=class_style
         >
             <circle
-                r=20 + node_specs.size * 10
+                r=20 + node_specs.size * 5
                 fill=fill
                 stroke=stroke
                 stroke-width="3"
                 filter=filter
             />
 
-            <circle r=20 + node_specs.size * 10 fill="url(#node-inner-gradient)" />
+            <circle r=20 + node_specs.size * 5 fill="url(#node-inner-gradient)" />
 
             <image
                 filter="drop-shadow(2px 2px 2px black)"
                 href=icon_asset
-                x=-(24 + node_specs.size as i32 * 20) / 2
-                y=-(24 + node_specs.size as i32 * 20) / 2
-                width=24 + node_specs.size * 20
-                height=24 + node_specs.size * 20
+                x=-(24 + node_specs.size as i32 * 10) / 2
+                y=-(24 + node_specs.size as i32 * 10) / 2
+                width=24 + node_specs.size * 10
+                height=24 + node_specs.size * 10
                 class="group-active:scale-90 group-active:brightness-100"
                 style=move || { format!("pointer-events: none; filter: {}", icon_filter()) }
             />
@@ -499,12 +499,20 @@ fn NodeTooltip(
 
     let is_locked = move || node_specs_locked && node_level.get() == 0;
 
+    let starting_node_text = (node_specs.initial_node).then(|| {
+        view! {
+            <ul class="list-none space-y-1">
+                <li class="text-gray-400 text-sm leading-snug">"Root Node"</li>
+            </ul>
+            <hr class="border-t border-gray-700" />
+        }
+    });
     let locked_text = move || {
         is_locked().then(|| {
             view! {
                 <hr class="border-t border-gray-700" />
                 <ul class="list-none space-y-1">
-                    <li class="text-blue-400 text-sm leading-snug text-red-500">"Locked"</li>
+                    <li class="text-red-500 text-sm leading-snug">"Locked"</li>
                 </ul>
             }
         })
@@ -585,6 +593,7 @@ fn NodeTooltip(
         ">
             <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
             <hr class="border-t border-gray-700" />
+            {starting_node_text}
             <ul class="list-none space-y-1">{triggers_text}{effects_text}</ul>
             {locked_text}
             {upgrade_text}

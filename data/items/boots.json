@@ -33,29 +33,26 @@
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.6
+        "value": [40, 60]
       },
       {
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.2
+        "value": 20
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Storm" },
         "modifier": "Flat",
-        "min": 40,
-        "max": 60
+        "value": [40, 60]
       },
       {
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "min": 20,
-        "max": 30
+        "value": [20, 30],
+        "ignore_quality": true
       }
     ],
     "triggers": [
@@ -68,8 +65,7 @@
           {
             "Restore": {
               "restore_type": "Mana",
-              "min": 5,
-              "max": 10,
+              "value": [5, 10],
               "modifier": "Multiplier"
             }
           }

@@ -5,10 +5,7 @@ use shared::data::{
 };
 
 use crate::game::{
-    data::{
-        event::{EventsQueue, HitEvent},
-        master_store::MasterStore,
-    },
+    data::event::{EventsQueue, HitEvent},
     game_data::GameInstanceData,
 };
 
@@ -27,10 +24,8 @@ pub struct TriggerContext<'a> {
 pub fn apply_trigger_effects(
     events_queue: &mut EventsQueue,
     game_data: &mut GameInstanceData,
-    master_store: &MasterStore,
     trigger_contexts: Vec<TriggerContext>,
 ) {
-    let _ = master_store; // TODO: Remove
     for trigger_context in trigger_contexts {
         {
             let (target_id, attacker) = match trigger_context.trigger.target {
@@ -38,19 +33,56 @@ pub fn apply_trigger_effects(
                 TriggerTarget::Source => (trigger_context.source, trigger_context.target),
                 TriggerTarget::Me => (trigger_context.owner, trigger_context.owner),
             };
-            // TODO: Multi targets
-            let target = match target_id {
-                CharacterId::Player => (
-                    Some(&game_data.player_specs.read().character_specs),
-                    Some(&mut game_data.player_state.character_state),
+
+            // TODO: Only clone ids and values
+            let statuses_context = match trigger_context.target {
+                CharacterId::Player => game_data.player_state.character_state.statuses.clone(),
+                CharacterId::Monster(index) => game_data
+                    .monster_states
+                    .get(index)
+                    .map(|monster_state| monster_state.character_state.statuses.clone())
+                    .unwrap_or_default(),
+            };
+
+            let mut player_target = (
+                CharacterId::Player,
+                (
+                    &game_data.player_specs.read().character_specs,
+                    &mut game_data.player_state.character_state,
                 ),
-                CharacterId::Monster(i) => (
-                    game_data.monster_specs.get(i).map(|m| &m.character_specs),
-                    game_data
-                        .monster_states
-                        .get_mut(i)
-                        .map(|m| &mut m.character_state),
-                ),
+            );
+
+            let mut monsters_still_alive: Vec<_> = game_data
+                .monster_specs
+                .iter()
+                .zip(game_data.monster_states.iter_mut())
+                .enumerate()
+                .filter(|(_, (_, m))| m.character_state.is_alive)
+                .map(|(i, (x, y))| {
+                    (
+                        CharacterId::Monster(i),
+                        (&x.character_specs, &mut y.character_state),
+                    )
+                })
+                .collect();
+
+            let mut targets = match target_id {
+                CharacterId::Player => {
+                    vec![&mut player_target]
+                }
+                CharacterId::Monster(i) => {
+                    let target_position = game_data
+                        .monster_specs
+                        .get(i)
+                        .map(|m| (m.character_specs.position_x, m.character_specs.position_y))
+                        .unwrap_or_default();
+                    skills_controller::find_sub_targets(
+                        trigger_context.trigger.skill_range,
+                        trigger_context.trigger.skill_shape,
+                        target_position,
+                        &mut monsters_still_alive,
+                    )
+                }
             };
 
             let effects_modifiers: Vec<_> = trigger_context
@@ -58,7 +90,7 @@ pub fn apply_trigger_effects(
                 .modifiers
                 .iter()
                 .map(|modifier| StatEffect {
-                    stat: modifier.stat,
+                    stat: modifier.stat.clone(),
                     modifier: modifier.modifier,
                     value: modifier.factor
                         * match modifier.source {
@@ -75,30 +107,65 @@ pub fn apply_trigger_effects(
                                 .as_ref()
                                 .map(|hit| hit.damage.values().sum())
                                 .unwrap_or_default(),
+                            TriggerEffectModifierSource::HitCrit => trigger_context
+                                .hit_context
+                                .as_ref()
+                                .map(|hit| hit.is_crit as i64 as f64)
+                                .unwrap_or_default(),
                             TriggerEffectModifierSource::AreaLevel => trigger_context.level as f64,
+                            TriggerEffectModifierSource::StatusValue(stat_status_type) => {
+                                statuses_context
+                                    .iter()
+                                    .filter(|(status_specs, _)| match stat_status_type {
+                                        Some(stat_status_type) => {
+                                            if let Some(status_type) = status_specs.into() {
+                                                stat_status_type.is_match(&status_type)
+                                            } else {
+                                                false
+                                            }
+                                        }
+                                        None => true,
+                                    })
+                                    .map(|(_, status_state)| status_state.value)
+                                    .sum()
+                            }
+                            TriggerEffectModifierSource::StatusDuration(stat_status_type) => {
+                                statuses_context
+                                    .iter()
+                                    .filter(|(status_specs, _)| match stat_status_type {
+                                        Some(stat_status_type) => {
+                                            if let Some(status_type) = status_specs.into() {
+                                                stat_status_type.is_match(&status_type)
+                                            } else {
+                                                false
+                                            }
+                                        }
+                                        None => true,
+                                    })
+                                    .map(|(_, status_state)| {
+                                        status_state.duration.unwrap_or_default()
+                                    })
+                                    .sum()
+                            }
                         },
                     bypass_ignore: true,
                 })
                 .collect();
 
-            if let (Some(specs), Some(state)) = target {
-                let mut target = (target_id, (specs, state));
-                let mut targets = vec![&mut target];
-                for mut effect in trigger_context.trigger.effects.iter().cloned() {
-                    skills_updater::compute_skill_specs_effect(
-                        trigger_context.trigger.skill_type,
-                        &mut effect,
-                        effects_modifiers.iter(),
-                    );
-                    skills_controller::apply_skill_effect(
-                        events_queue,
-                        attacker,
-                        trigger_context.trigger.skill_type,
-                        trigger_context.trigger.skill_range,
-                        &effect,
-                        &mut targets,
-                    );
-                }
+            for mut effect in trigger_context.trigger.effects.iter().cloned() {
+                skills_updater::compute_skill_specs_effect(
+                    trigger_context.trigger.skill_type,
+                    &mut effect,
+                    effects_modifiers.iter(),
+                );
+                skills_controller::apply_skill_effect(
+                    events_queue,
+                    attacker,
+                    trigger_context.trigger.skill_type,
+                    trigger_context.trigger.skill_range,
+                    &effect,
+                    &mut targets,
+                );
             }
         }
     }

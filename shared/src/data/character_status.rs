@@ -69,7 +69,7 @@ impl From<&StatusSpecs> for StatusId {
                 modifier,
                 debuff,
             } => StatusId::StatModifier {
-                stat: *stat,
+                stat: stat.clone(),
                 modifier: *modifier,
                 debuff: *debuff,
             },

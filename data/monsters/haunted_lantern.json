@@ -3,7 +3,7 @@
   "portrait": "monsters/haunted_lantern.webp",
   "max_life": 5,
   "power_factor": 2.0,
-  "max_initiative": 0.5,
+  "initiative": [0.0, 0.5],
   "armor": { "Fire": 100 },
   "skills": [
     {
@@ -16,15 +16,13 @@
           "effects": [
             {
               "ApplyStatus": {
-                "min_duration": 3,
-                "max_duration": 3,
+                "duration": 3,
                 "statuses": [
                   {
                     "status_type": {
                       "DamageOverTime": { "damage_type": "Fire" }
                     },
-                    "min_value": 3,
-                    "max_value": 3
+                    "value": 3
                   }
                 ]
               }

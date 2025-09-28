@@ -4,7 +4,7 @@
   "max_life": 10,
   "size": "Large",
   "power_factor": 3.0,
-  "max_initiative": 2.0,
+  "initiative": [1.0, 2.0],
   "armor": { "Physical": 20, "Storm": 20 },
   "skills": [
     {
@@ -23,15 +23,13 @@
             },
             {
               "ApplyStatus": {
-                "min_duration": 3,
-                "max_duration": 3,
+                "duration": 3,
                 "statuses": [
                   {
                     "status_type": {
                       "DamageOverTime": { "damage_type": "Poison" }
                     },
-                    "min_value": 2,
-                    "max_value": 2
+                    "value": 2
                   }
                 ]
               }

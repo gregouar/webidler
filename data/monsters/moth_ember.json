@@ -3,7 +3,7 @@
   "portrait": "monsters/moth_ember.webp",
   "max_life": 5,
   "power_factor": 2,
-  "max_initiative": 0.5,
+  "initiative": [0.0, 0.5],
   "armor": { "Fire": 50 },
   "skills": [
     {

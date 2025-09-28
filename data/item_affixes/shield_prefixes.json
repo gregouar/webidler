@@ -1,58 +1,55 @@
 [
   {
-    "name": "Potent",
-    "family": "inc_spell_power",
-    "tags": ["Spell"],
+    "name": "Menacing",
+    "family": "inc_threat",
+    "tags": ["Threat"],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["SpellWeapon"],
+    "restrictions": ["Shield", "Focus"],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": "SpellPower",
+        "stat": "ThreatGain",
         "modifier": "Multiplier",
-        "min": 0.1,
-        "max": 0.19
+        "value": [10, 19]
       }
     ]
   },
   {
-    "name": "Powerful",
-    "family": "inc_spell_power",
-    "tags": ["Spell"],
+    "name": "Dreadful",
+    "family": "inc_threat",
+    "tags": ["Threat"],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["SpellWeapon"],
+    "restrictions": ["Shield", "Focus"],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
-        "stat": "SpellPower",
+        "stat": "ThreatGain",
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.29
+        "value": [20, 29]
       }
     ]
   },
   {
-    "name": "Puissant",
-    "family": "inc_spell_power",
-    "tags": ["Spell"],
+    "name": "Hostile",
+    "family": "inc_threat",
+    "tags": ["Threat"],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["SpellWeapon"],
+    "restrictions": ["Shield", "Focus"],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
-        "stat": "SpellPower",
+        "stat": "ThreatGain",
         "modifier": "Multiplier",
-        "min": 0.3,
-        "max": 0.39
+        "value": [30, 39]
       }
     ]
   }

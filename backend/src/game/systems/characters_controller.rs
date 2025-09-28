@@ -12,12 +12,13 @@ use crate::{
     constants::ARMOR_FACTOR,
     game::{
         data::event::{EventsQueue, GameEvent, HitEvent},
-        utils::{increase_factors, rng},
+        utils::{increase_factors, rng::Rollable},
     },
 };
 
 pub type Target<'a> = (CharacterId, (&'a CharacterSpecs, &'a mut CharacterState));
 
+#[allow(clippy::too_many_arguments)]
 pub fn attack_character(
     events_queue: &mut EventsQueue,
     target: &mut Target,
@@ -26,22 +27,28 @@ pub fn attack_character(
     skill_type: SkillType,
     range: SkillRange,
     is_crit: bool,
+    ignore_armor: bool,
 ) {
     let (target_id, (target_specs, target_state)) = target;
 
     let mut amount: f64 = damage
         .iter()
         .map(|(damage_type, amount)| {
-            compute_damage(target_specs, *amount, *damage_type, skill_type, false)
+            compute_damage(
+                target_specs,
+                *amount,
+                *damage_type,
+                skill_type,
+                ignore_armor,
+            )
         })
         .sum();
 
-    let is_blocked = rng::random_range(0.0..=100.0).unwrap_or(100.0)
-        <= target_specs.block
-            * match skill_type {
-                SkillType::Attack => 1.0,
-                SkillType::Spell => target_specs.block_spell * 0.01,
-            };
+    let is_blocked = target_specs.block.roll()
+        & match skill_type {
+            SkillType::Attack => true,
+            SkillType::Spell => target_specs.block_spell.roll(),
+        };
 
     if is_blocked {
         amount *= target_specs.block_damage as f64 * 0.01;
@@ -154,6 +161,10 @@ pub fn apply_status(
         return;
     }
 
+    if !target_state.is_alive & duration.is_some() {
+        return;
+    }
+
     let value = match status_specs {
         StatusSpecs::DamageOverTime {
             damage_type,
@@ -196,7 +207,7 @@ pub fn apply_status(
     }
 
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger { .. } = status_specs {
-        target_state.buff_status_change = true;
+        target_state.dirty_specs = true;
     }
 }
 

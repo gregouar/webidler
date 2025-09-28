@@ -156,5 +156,18 @@
   { "text": "Whispering", "tags": ["Stealth"] },
   { "text": "Fading", "tags": ["Stealth"] },
   { "text": "Spectral", "tags": ["Stealth", "Spell"] },
-  { "text": "Umbral", "tags": ["Stealth"] }
+  { "text": "Umbral", "tags": ["Stealth"] },
+
+  { "text": "Foreboding", "tags": ["Threat"] },
+  { "text": "Baleful", "tags": ["Threat"] },
+  { "text": "Perilous", "tags": ["Threat"] },
+  { "text": "Relentless", "tags": ["Threat", "Attack"] },
+  { "text": "Dire", "tags": ["Threat"] },
+  { "text": "Ruinous", "tags": ["Threat"] },
+  { "text": "Fateful", "tags": ["Threat"] },
+  { "text": "Harbinger's", "tags": ["Threat", "Spell"] },
+  { "text": "Wrathful", "tags": ["Threat", "Attack"] },
+  { "text": "Malicious", "tags": ["Threat"] },
+  { "text": "Tormenting", "tags": ["Threat", "Status"] },
+  { "text": "Predatory", "tags": ["Threat"] }
 ]

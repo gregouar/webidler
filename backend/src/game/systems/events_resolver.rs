@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::{collections::HashSet, iter};
 
 use shared::{
     constants::WAVES_PER_AREA_LEVEL,
@@ -6,22 +6,18 @@ use shared::{
         area::{AreaLevel, ThreatLevel},
         character::CharacterId,
         character_status::StatusSpecs,
-        skill::{SkillType, TargetType},
-        stat_effect::{Modifier, StatType},
+        skill::TargetType,
         trigger::EventTrigger,
     },
 };
 
-use crate::{
-    constants::THREAT_EFFECT,
-    game::{
-        data::{
-            event::{EventsQueue, GameEvent, HitEvent},
-            master_store::MasterStore,
-        },
-        game_data::GameInstanceData,
-        systems::{characters_controller, triggers_controller},
+use crate::game::{
+    data::{
+        event::{EventsQueue, GameEvent, HitEvent},
+        master_store::MasterStore,
     },
+    game_data::GameInstanceData,
+    systems::triggers_controller,
 };
 
 use super::{
@@ -33,78 +29,88 @@ pub async fn resolve_events(
     game_data: &mut GameInstanceData,
     master_store: &MasterStore,
 ) {
-    let mut trigger_effects = Vec::new();
+    let mut trigger_contexts = Vec::new();
 
     let events = events_queue.consume_events();
     for event in events.iter() {
         match event {
             GameEvent::Hit(hit_event) => {
-                handle_hit_event(&mut trigger_effects, game_data, hit_event)
+                handle_hit_event(&mut trigger_contexts, game_data, hit_event)
             }
             GameEvent::Kill { target } => {
-                handle_kill_event(&mut trigger_effects, game_data, *target)
+                handle_kill_event(&mut trigger_contexts, game_data, *target)
             }
             GameEvent::AreaCompleted(area_level) => {
                 handle_area_completed_event(game_data, master_store, *area_level)
             }
             GameEvent::WaveCompleted(area_level) => handle_wave_completed_event(
-                &mut trigger_effects,
+                &mut trigger_contexts,
                 events_queue,
                 game_data,
                 *area_level,
             ),
             GameEvent::ThreatIncreased(threat_level) => {
-                handle_threat_increased_event(&mut trigger_effects, game_data, *threat_level)
+                handle_threat_increased_event(&mut trigger_contexts, game_data, *threat_level)
             }
         }
     }
 
-    triggers_controller::apply_trigger_effects(
-        events_queue,
-        game_data,
-        master_store,
-        trigger_effects,
-    );
+    triggers_controller::apply_trigger_effects(events_queue, game_data, trigger_contexts);
 }
 
 fn handle_hit_event<'a>(
-    trigger_effects: &mut Vec<TriggerContext<'a>>,
+    trigger_contexts: &mut Vec<TriggerContext<'a>>,
     game_data: &mut GameInstanceData,
     hit_event: &'a HitEvent,
 ) {
-    // TODO: Have the same for monsters... might need to go for an actual ECS for that
-    for triggered_effects in game_data.player_specs.read().triggers.iter() {
-        match triggered_effects.trigger {
-            EventTrigger::OnHit(_) if hit_event.source == CharacterId::Player => {}
-            EventTrigger::OnTakeHit(_) if hit_event.target == CharacterId::Player => {}
-            _ => continue,
-        };
+    let characters = iter::once((
+        CharacterId::Player,
+        &game_data.player_specs.read().character_specs,
+    ))
+    .chain(
+        game_data
+            .monster_specs
+            .iter()
+            .enumerate()
+            .map(|(idx, monster_specs)| {
+                (CharacterId::Monster(idx), &monster_specs.character_specs)
+            }),
+    );
 
-        let hit_trigger = match triggered_effects.trigger {
-            EventTrigger::OnHit(ht) | EventTrigger::OnTakeHit(ht) => ht,
-            _ => continue,
-        };
+    for (character_id, character_specs) in characters {
+        for triggered_effects in character_specs.triggers.iter() {
+            match triggered_effects.trigger {
+                EventTrigger::OnHit(_) if hit_event.source == character_id => {}
+                EventTrigger::OnTakeHit(_) if hit_event.target == character_id => {}
+                _ => continue,
+            };
 
-        if hit_trigger.skill_type.unwrap_or(hit_event.skill_type) == hit_event.skill_type
-            && hit_trigger.range.unwrap_or(hit_event.range) == hit_event.range
-            && hit_trigger.is_crit.unwrap_or(hit_event.is_crit) == hit_event.is_crit
-            && hit_trigger.is_blocked.unwrap_or(hit_event.is_blocked) == hit_event.is_blocked
-            && hit_trigger.is_hurt.unwrap_or(hit_event.is_hurt) == hit_event.is_hurt
-        {
-            trigger_effects.push(TriggerContext {
-                trigger: triggered_effects.clone(),
-                owner: CharacterId::Player,
-                source: hit_event.source,
-                target: hit_event.target,
-                hit_context: Some(hit_event),
-                level: game_data.area_state.read().area_level as usize,
-            });
+            let hit_trigger = match triggered_effects.trigger {
+                EventTrigger::OnHit(ht) | EventTrigger::OnTakeHit(ht) => ht,
+                _ => continue,
+            };
+
+            if hit_trigger.skill_type.unwrap_or(hit_event.skill_type) == hit_event.skill_type
+                && hit_trigger.range.unwrap_or(hit_event.range) == hit_event.range
+                && hit_trigger.is_crit.unwrap_or(hit_event.is_crit) == hit_event.is_crit
+                && hit_trigger.is_blocked.unwrap_or(hit_event.is_blocked) == hit_event.is_blocked
+                && hit_trigger.is_hurt.unwrap_or(hit_event.is_hurt) == hit_event.is_hurt
+            {
+                trigger_contexts.push(TriggerContext {
+                    trigger: triggered_effects.clone(),
+                    owner: character_id,
+                    source: hit_event.source,
+                    target: hit_event.target,
+                    hit_context: Some(hit_event),
+                    level: game_data.area_state.read().area_level as usize,
+                });
+            }
         }
     }
 }
 
 fn handle_kill_event(
-    trigger_effects: &mut Vec<TriggerContext>,
+    trigger_contexts: &mut Vec<TriggerContext>,
     game_data: &mut GameInstanceData,
     target: CharacterId,
 ) {
@@ -141,7 +147,13 @@ fn handle_kill_event(
                         }
                     }
 
-                    for triggered_effects in game_data.player_specs.read().triggers.iter() {
+                    for triggered_effects in game_data
+                        .player_specs
+                        .read()
+                        .character_specs
+                        .triggers
+                        .iter()
+                    {
                         if let EventTrigger::OnKill(kill_trigger) = triggered_effects.trigger {
                             if kill_trigger.is_stunned.unwrap_or(is_stunned) == is_stunned
                                 && kill_trigger.is_debuffed.unwrap_or(is_debuffed) == is_debuffed
@@ -149,7 +161,7 @@ fn handle_kill_event(
                                     .is_damaged_over_time
                                     .is_none_or(|dt| is_damaged_over_time.contains(&dt))
                             {
-                                trigger_effects.push(TriggerContext {
+                                trigger_contexts.push(TriggerContext {
                                     trigger: triggered_effects.clone(),
                                     owner: CharacterId::Player,
                                     source: CharacterId::Player,
@@ -177,13 +189,13 @@ fn handle_kill_event(
                                 }
                             }
                         };
-                        for triggered_effects in &monster_specs.triggers {
+                        for triggered_effects in &monster_specs.character_specs.triggers {
                             if let EventTrigger::OnDeath(target_type) = triggered_effects.trigger {
                                 if target_type == event_target_type
                                     && (monster_state.character_state.is_alive
                                         || target_type == TargetType::Me)
                                 {
-                                    trigger_effects.push(TriggerContext {
+                                    trigger_contexts.push(TriggerContext {
                                         trigger: triggered_effects.clone(),
                                         owner: CharacterId::Monster(idx),
                                         source: CharacterId::Player,
@@ -257,7 +269,7 @@ fn handle_area_completed_event(
 }
 
 fn handle_wave_completed_event(
-    trigger_effects: &mut Vec<TriggerContext>,
+    trigger_contexts: &mut Vec<TriggerContext>,
     events_queue: &mut EventsQueue,
     game_data: &mut GameInstanceData,
     area_level: AreaLevel,
@@ -272,9 +284,15 @@ fn handle_wave_completed_event(
         events_queue.register_event(GameEvent::AreaCompleted(area_level));
     }
 
-    for triggered_effects in game_data.player_specs.read().triggers.iter() {
+    for triggered_effects in game_data
+        .player_specs
+        .read()
+        .character_specs
+        .triggers
+        .iter()
+    {
         if let EventTrigger::OnWaveCompleted = triggered_effects.trigger {
-            trigger_effects.push(TriggerContext {
+            trigger_contexts.push(TriggerContext {
                 trigger: triggered_effects.clone(),
                 owner: CharacterId::Player,
                 source: CharacterId::Player,
@@ -287,42 +305,54 @@ fn handle_wave_completed_event(
 }
 
 fn handle_threat_increased_event(
-    trigger_effects: &mut Vec<TriggerContext>,
+    trigger_contexts: &mut Vec<TriggerContext>,
     game_data: &mut GameInstanceData,
     threat_level: ThreatLevel,
 ) {
-    for (i, (monster_specs, monster_state)) in game_data
-        .monster_specs
-        .iter()
-        .zip(game_data.monster_states.iter_mut())
-        .enumerate()
-    {
-        characters_controller::apply_status(
-            &mut (
-                CharacterId::Monster(i),
-                (
-                    &monster_specs.character_specs,
-                    &mut monster_state.character_state,
-                ),
-            ),
-            &StatusSpecs::StatModifier {
-                stat: StatType::Damage {
-                    skill_type: None,
-                    damage_type: None,
-                },
-                modifier: Modifier::Multiplier,
-                debuff: false,
-            },
-            SkillType::Spell,
-            THREAT_EFFECT,
-            None,
-            true,
-        );
+    // To force recompute specs with new threat level, applying threat level stat converters
+    for monster_state in game_data.monster_states.iter_mut() {
+        monster_state.character_state.dirty_specs = true;
     }
+    game_data.player_state.character_state.dirty_specs = true;
 
-    for triggered_effects in game_data.player_specs.read().triggers.iter() {
+    // for (i, (monster_specs, monster_state)) in game_data
+    //     .monster_specs
+    //     .iter()
+    //     .zip(game_data.monster_states.iter_mut())
+    //     .enumerate()
+    // {
+    //     characters_controller::apply_status(
+    //         &mut (
+    //             CharacterId::Monster(i),
+    //             (
+    //                 &monster_specs.character_specs,
+    //                 &mut monster_state.character_state,
+    //             ),
+    //         ),
+    //         &StatusSpecs::StatModifier {
+    //             stat: StatType::Damage {
+    //                 skill_type: None,
+    //                 damage_type: None,
+    //             },
+    //             modifier: Modifier::Multiplier,
+    //             debuff: false,
+    //         },
+    //         SkillType::Spell,
+    //         THREAT_EFFECT,
+    //         None,
+    //         true,
+    //     );
+    // }
+
+    for triggered_effects in game_data
+        .player_specs
+        .read()
+        .character_specs
+        .triggers
+        .iter()
+    {
         if let EventTrigger::OnThreatIncreased = triggered_effects.trigger {
-            trigger_effects.push(TriggerContext {
+            trigger_contexts.push(TriggerContext {
                 trigger: triggered_effects.clone(),
                 owner: CharacterId::Player,
                 source: CharacterId::Player,

@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 
+use crate::data::chance::ChanceRange;
+
 use super::{
     area::AreaLevel,
     item::ItemCategory,
@@ -24,6 +26,7 @@ pub enum AffixTag {
 
     Critical,
     Stealth,
+    Threat,
     Status,
 
     Life,
@@ -52,7 +55,7 @@ pub struct ItemAffixBlueprint {
 
     pub affix_type: AffixType,
     pub tier: u8,
-    pub weight: u64, // Bigger weight means more chances to have affix
+    pub weight: u64, // Bigger weight means more chance to have affix
 
     #[serde(default)]
     pub restrictions: Option<HashSet<ItemCategory>>,
@@ -64,13 +67,15 @@ pub struct ItemAffixBlueprint {
     // pub triggers: Vec<TriggeredEffect>, // TODO
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AffixEffectBlueprint {
     pub stat: StatType,
     pub modifier: Modifier,
     pub scope: AffixEffectScope,
-    pub min: f64,
-    pub max: f64,
+    pub value: ChanceRange<f64>,
+
+    #[serde(default)]
+    pub ignore_quality: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

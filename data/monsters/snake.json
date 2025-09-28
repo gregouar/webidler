@@ -4,7 +4,7 @@
   "max_life": 15,
   "size": "Large",
   "power_factor": 3.0,
-  "max_initiative": 2.0,
+  "initiative": [1, 2],
   "skills": [
     {
       "name": "Venomous Bite",
@@ -22,15 +22,13 @@
             },
             {
               "ApplyStatus": {
-                "min_duration": 5,
-                "max_duration": 5,
+                "duration": 5,
                 "statuses": [
                   {
                     "status_type": {
                       "DamageOverTime": { "damage_type": "Poison" }
                     },
-                    "min_value": 4,
-                    "max_value": 4
+                    "value": 4
                   }
                 ]
               }

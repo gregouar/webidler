@@ -5,7 +5,7 @@
   "max_life": 75,
   "size": "Large",
   "power_factor": 20,
-  "max_initiative": 2,
+  "initiative": [1, 2],
   "armor": { "Physical": 50, "Fire": 100 },
   "skills": [
     {

@@ -2,17 +2,11 @@
   {
     "name": "of the Vocalist",
     "family": "inc_spell_speed",
-    "tags": [
-      "Spell",
-      "Speed"
-    ],
+    "tags": ["Spell", "Speed"],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": [
-      "SpellWeapon",
-      "Focus"
-    ],
+    "restrictions": ["SpellWeapon", "Focus"],
     "item_level": 1,
     "effects": [
       {
@@ -21,25 +15,18 @@
           "Speed": "Spell"
         },
         "modifier": "Multiplier",
-        "min": 0.05,
-        "max": 0.09
+        "value": [5,9]
       }
     ]
   },
   {
     "name": "of the Caroler",
     "family": "inc_spell_speed",
-    "tags": [
-      "Spell",
-      "Speed"
-    ],
+    "tags": ["Spell", "Speed"],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": [
-      "SpellWeapon",
-      "Focus"
-    ],
+    "restrictions": ["SpellWeapon", "Focus"],
     "item_level": 50,
     "effects": [
       {
@@ -48,25 +35,18 @@
           "Speed": "Spell"
         },
         "modifier": "Multiplier",
-        "min": 0.1,
-        "max": 0.14
+        "value": [10, 14]
       }
     ]
   },
   {
     "name": "of the Singer",
     "family": "inc_spell_speed",
-    "tags": [
-      "Spell",
-      "Speed"
-    ],
+    "tags": ["Spell", "Speed"],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": [
-      "SpellWeapon",
-      "Focus"
-    ],
+    "restrictions": ["SpellWeapon", "Focus"],
     "item_level": 100,
     "effects": [
       {
@@ -75,90 +55,68 @@
           "Speed": "Spell"
         },
         "modifier": "Multiplier",
-        "min": 0.15,
-        "max": 0.19
+        "value": [15, 19]
       }
     ]
   },
 
   {
     "name": "of Fluctuation",
-    "family": "inc_spell_crit_chances",
-    "tags": [
-      "Spell",
-      "Critical"
-    ],
+    "family": "inc_spell_crit_chance",
+    "tags": ["Spell", "Critical"],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 500,
-    "restrictions": [
-      "SpellWeapon",
-      "Focus"
-    ],
+    "restrictions": ["SpellWeapon", "Focus"],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": {
-          "CritChances": "Spell"
+          "CritChance": "Spell"
         },
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.29
+        "value": [20, 29]
       }
     ]
   },
   {
     "name": "of Mutability",
-    "family": "inc_spell_crit_chances",
-    "tags": [
-      "Spell",
-      "Critical"
-    ],
+    "family": "inc_spell_crit_chance",
+    "tags": ["Spell", "Critical"],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 500,
-    "restrictions": [
-      "SpellWeapon",
-      "Focus"
-    ],
+    "restrictions": ["SpellWeapon", "Focus"],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": {
-          "CritChances": "Spell"
+          "CritChance": "Spell"
         },
         "modifier": "Multiplier",
-        "min": 0.3,
-        "max": 0.39
+        "value": [30, 39]
       }
     ]
   },
   {
     "name": "of Instability",
-    "family": "inc_spell_crit_chances",
-    "tags": [
-      "Spell",
-      "Critical"
-    ],
+    "family": "inc_spell_crit_chance",
+    "tags": ["Spell", "Critical"],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 500,
-    "restrictions": [
-      "SpellWeapon",
-      "Focus"
-    ],
+    "restrictions": ["SpellWeapon", "Focus"],
     "item_level": 1000,
     "effects": [
       {
         "scope": "Global",
         "stat": {
-          "CritChances": "Spell"
+          "CritChance": "Spell"
         },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.49
+        "value": [40, 49]
       }
     ]
   }

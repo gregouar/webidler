@@ -3,8 +3,7 @@
   "portrait": "monsters/barrel_mimic.webp",
   "max_life": 15,
   "power_factor": 3.0,
-  "min_initiative": 3.0,
-  "max_initiative": 5.0,
+  "initiative": [3.0, 5.0],
   "armor": { "Physical": 50 },
   "skills": [
     {

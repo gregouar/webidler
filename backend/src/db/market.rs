@@ -6,9 +6,12 @@ use shared::data::{
     item::ItemSpecs, item_affix::AffixEffectScope, market::MarketFilters, user::UserCharacterId,
 };
 
-use crate::db::{
-    pool::{Database, DbExecutor},
-    utc_datetime::UtcDateTime,
+use crate::{
+    constants::DATA_VERSION,
+    db::{
+        pool::{Database, DbExecutor},
+        utc_datetime::UtcDateTime,
+    },
 };
 
 pub type MarketId = i64;
@@ -45,11 +48,12 @@ pub async fn sell_item<'c>(
 ) -> anyhow::Result<()> {
     let item_damages = item.weapon_specs.as_ref().map(|weapon_specs| {
         1.0 / (weapon_specs.cooldown as f64)
-            * (1.0 + weapon_specs.crit_damage * weapon_specs.crit_chances as f64 * 0.0001)
+            // TODO: Lucky?
+            * (1.0 + weapon_specs.crit_damage * weapon_specs.crit_chance.value as f64 * 0.0001)
             * weapon_specs
                 .damage
                 .values()
-                .map(|(min, max)| (min + max) * 0.5)
+                .map(|value| (value.min + value.max) * 0.5)
                 .sum::<f64>()
     });
 
@@ -88,7 +92,7 @@ pub async fn sell_item<'c>(
         item_damages,
         item.weapon_specs
             .as_ref()
-            .map(|weapon_specs| weapon_specs.crit_chances as f64),
+            .map(|weapon_specs| weapon_specs.crit_chance.value as f64),
         item.weapon_specs
             .as_ref()
             .map(|weapon_specs| weapon_specs.crit_damage),
@@ -131,9 +135,9 @@ async fn create_market_item<'c>(
             item_damages, 
             item_crit_chance,
             item_crit_damage,
-            item_data
+            item_data,data_version
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
         RETURNING market_id
         "#,
         character_id,
@@ -149,6 +153,7 @@ async fn create_market_item<'c>(
         item_crit_chance,
         item_crit_damage,
         item_data,
+        DATA_VERSION
     )
     .fetch_one(&mut **executor)
     .await?;

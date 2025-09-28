@@ -13,8 +13,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.39
+        "value": [20, 39]
       }
     ]
   },
@@ -32,8 +31,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.59
+        "value": [40, 59]
       }
     ]
   },
@@ -51,8 +49,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "min": 0.6,
-        "max": 0.79
+        "value": [60, 79]
       }
     ]
   },
@@ -71,15 +68,13 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "min": 1,
-        "max": 2
+        "value": [1, 2]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "min": 3,
-        "max": 4
+        "value": [3, 4]
       }
     ]
   },
@@ -97,15 +92,13 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "min": 2,
-        "max": 4
+        "value": [2, 4]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "min": 5,
-        "max": 7
+        "value": [5, 7]
       }
     ]
   },
@@ -123,15 +116,13 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "min": 3,
-        "max": 5
+        "value": [3, 5]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "min": 6,
-        "max": 8
+        "value": [6, 8]
       }
     ]
   },
@@ -150,15 +141,13 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Fire" } },
         "modifier": "Flat",
-        "min": 1,
-        "max": 3
+        "value": [1, 3]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Fire" } },
         "modifier": "Flat",
-        "min": 3,
-        "max": 5
+        "value": [3, 5]
       }
     ]
   },
@@ -176,15 +165,13 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Fire" } },
         "modifier": "Flat",
-        "min": 2,
-        "max": 5
+        "value": [2, 5]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Fire" } },
         "modifier": "Flat",
-        "min": 6,
-        "max": 8
+        "value": [6, 8]
       }
     ]
   },
@@ -202,19 +189,16 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Fire" } },
         "modifier": "Flat",
-        "min": 4,
-        "max": 7
+        "value": [4, 7]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Fire" } },
         "modifier": "Flat",
-        "min": 8,
-        "max": 11
+        "value": [8, 11]
       }
     ]
   },
-
 
   {
     "name": "Nauseous",
@@ -230,15 +214,13 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Poison" } },
         "modifier": "Flat",
-        "min": 1,
-        "max": 1
+        "value": [1, 1]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Poison" } },
         "modifier": "Flat",
-        "min": 2,
-        "max": 3
+        "value": [2, 3]
       }
     ]
   },
@@ -256,15 +238,13 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Poison" } },
         "modifier": "Flat",
-        "min": 1,
-        "max": 2
+        "value": [1, 2]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Poison" } },
         "modifier": "Flat",
-        "min": 3,
-        "max": 4
+        "value": [3, 4]
       }
     ]
   },
@@ -282,20 +262,17 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Poison" } },
         "modifier": "Flat",
-        "min": 2,
-        "max": 3
+        "value": [2, 3]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Poison" } },
         "modifier": "Flat",
-        "min": 4,
-        "max": 5
+        "value": [4, 5]
       }
     ]
   },
 
-  
   {
     "name": "Crackling",
     "family": "add_storm_damage",
@@ -310,8 +287,7 @@
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Storm" } },
         "modifier": "Flat",
-        "min": 4,
-        "max": 7
+        "value": [4, 7]
       }
     ]
   },
@@ -329,8 +305,7 @@
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Storm" } },
         "modifier": "Flat",
-        "min": 8,
-        "max": 12
+        "value": [8, 12]
       }
     ]
   },
@@ -348,8 +323,7 @@
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Storm" } },
         "modifier": "Flat",
-        "min": 13,
-        "max": 18
+        "value": [13, 18]
       }
     ]
   }

@@ -3,7 +3,7 @@
   "portrait": "monsters/stormwraith.webp",
   "max_life": 5,
   "power_factor": 2.0,
-  "max_initiative": 0.5,
+  "initiative": [0.0, 0.5],
   "armor": { "Storm": 100 },
   "skills": [
     {

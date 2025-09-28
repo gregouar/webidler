@@ -13,8 +13,7 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "min": 20,
-        "max": 39
+        "value": [20, 39]
       }
     ]
   },
@@ -32,8 +31,7 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "min": 40,
-        "max": 59
+        "value": [40, 59]
       }
     ]
   },
@@ -51,8 +49,7 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "min": 60,
-        "max": 79
+        "value": [60, 79]
       }
     ]
   },
@@ -71,8 +68,7 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Multiplier",
-        "min": 0.1,
-        "max": 0.19
+        "value": [10, 19]
       }
     ]
   },
@@ -90,8 +86,7 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.29
+        "value": [20, 29]
       }
     ]
   },
@@ -109,8 +104,7 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Multiplier",
-        "min": 0.3,
-        "max": 0.39
+        "value": [30, 39]
       }
     ]
   }

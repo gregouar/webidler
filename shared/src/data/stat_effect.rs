@@ -3,7 +3,12 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::{character_status::StatusSpecs, skill::RestoreType, trigger::HitTrigger};
+use crate::data::{
+    chance::ChanceRange,
+    character_status::StatusSpecs,
+    skill::{RestoreType, SkillEffectType},
+    trigger::HitTrigger,
+};
 
 use super::skill::SkillType;
 
@@ -24,12 +29,12 @@ use super::skill::SkillType;
 pub enum DamageType {
     #[default]
     Physical,
+    Storm,
     Fire,
     Poison,
-    Storm,
 }
 
-pub type DamageMap = HashMap<DamageType, (f64, f64)>;
+pub type DamageMap = HashMap<DamageType, ChanceRange<f64>>;
 
 #[derive(
     Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,
@@ -40,13 +45,13 @@ pub enum Modifier {
     Flat,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatType {
     Life,
     LifeRegen,
     Mana,
     ManaRegen,
-    Armor(DamageType),
+    Armor(Option<DamageType>),
     DamageResistance {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -78,8 +83,7 @@ pub enum StatType {
     LifeOnHit(#[serde(default)] HitTrigger),
     ManaOnHit(#[serde(default)] HitTrigger),
     Restore(#[serde(default)] Option<RestoreType>),
-    SpellPower,
-    CritChances(#[serde(default)] Option<SkillType>),
+    CritChance(#[serde(default)] Option<SkillType>),
     CritDamage(#[serde(default)] Option<SkillType>),
     StatusPower(#[serde(default)] Option<StatStatusType>),
     StatusDuration(#[serde(default)] Option<StatStatusType>),
@@ -87,6 +91,18 @@ pub enum StatType {
     MovementSpeed,
     GoldFind,
     ThreatGain,
+    Lucky {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        roll_type: LuckyRollType,
+    },
+    StatConverter(StatConverterSpecs),
+    SuccessChance {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        effect_type: Option<StatSkillEffectType>,
+    },
 }
 
 fn compare_options<T: PartialEq>(first: &Option<T>, second: &Option<T>) -> bool {
@@ -144,8 +160,35 @@ impl StatType {
                 compare_options(skill_type, skill_type_2)
                     && compare_options(damage_type, damage_type_2)
             }
+            (
+                Lucky {
+                    skill_type,
+                    roll_type,
+                },
+                Lucky {
+                    skill_type: skill_type_2,
+                    roll_type: roll_type_2,
+                },
+            ) => compare_options(skill_type, skill_type_2) && roll_type.is_match(roll_type_2),
+            (
+                SuccessChance {
+                    skill_type,
+                    effect_type,
+                },
+                SuccessChance {
+                    skill_type: skill_type_2,
+                    effect_type: effect_type_2,
+                },
+            ) => {
+                compare_options(skill_type, skill_type_2)
+                    && effect_type
+                        .zip(*effect_type_2)
+                        .is_none_or(|(effect_type, effect_type_2)| {
+                            effect_type.is_match(&effect_type_2)
+                        })
+            }
             (Restore(first), Restore(second)) => compare_options(first, second),
-            (CritChances(first), CritChances(second))
+            (CritChance(first), CritChance(second))
             | (CritDamage(first), CritDamage(second))
             | (Speed(first), Speed(second)) => compare_options(first, second),
             (StatusPower(first), StatusPower(second))
@@ -155,6 +198,21 @@ impl StatType {
             },
             _ => false,
         }
+    }
+
+    pub fn is_multiplicative(&self) -> bool {
+        use StatType::*;
+
+        matches!(
+            self,
+            Armor(_)
+                | Damage { .. }
+                | MinDamage { .. }
+                | MaxDamage { .. }
+                | CritDamage(_)
+                | StatusPower(Some(StatStatusType::DamageOverTime { .. }))
+                | GoldFind
+        )
     }
 }
 
@@ -210,6 +268,110 @@ impl From<&StatusSpecs> for Option<StatStatusType> {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum StatSkillEffectType {
+    FlatDamage {
+        // damage_type: Option<DamageType>,
+    },
+    ApplyStatus {
+        // status_type: Option<StatStatusType>,
+    },
+    Restore {
+        #[serde(default)]
+        restore_type: Option<RestoreType>,
+    },
+    Resurrect,
+}
+
+impl StatSkillEffectType {
+    pub fn is_match(&self, skill_effect_type: &StatSkillEffectType) -> bool {
+        if self == skill_effect_type {
+            return true;
+        }
+
+        use StatSkillEffectType::*;
+        match (self, skill_effect_type) {
+            (
+                Restore { restore_type },
+                Restore {
+                    restore_type: restore_type_2,
+                },
+            ) => compare_options(restore_type, restore_type_2),
+            _ => false,
+        }
+    }
+}
+
+impl From<&SkillEffectType> for Option<StatSkillEffectType> {
+    fn from(value: &SkillEffectType) -> Self {
+        match value {
+            SkillEffectType::FlatDamage { .. } => Some(StatSkillEffectType::FlatDamage {}),
+            SkillEffectType::ApplyStatus { .. } => Some(StatSkillEffectType::ApplyStatus {}),
+            SkillEffectType::Restore { restore_type, .. } => Some(StatSkillEffectType::Restore {
+                restore_type: Some(*restore_type),
+            }),
+            SkillEffectType::Resurrect => Some(StatSkillEffectType::Resurrect),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum LuckyRollType {
+    Damage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
+    Block,
+    CritChance,
+    SuccessChance,
+    // Restore,
+    // StatusDuration,
+    // StatusValue,
+    // TODO: could add others
+}
+
+impl LuckyRollType {
+    pub fn is_match(&self, lucky_roll_type: &LuckyRollType) -> bool {
+        if self == lucky_roll_type {
+            return true;
+        }
+
+        use LuckyRollType::*;
+        match (self, lucky_roll_type) {
+            (
+                Damage { damage_type },
+                Damage {
+                    damage_type: damage_type_2,
+                },
+            ) => compare_options(damage_type, damage_type_2),
+            _ => false,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub struct StatConverterSpecs {
+    pub source: StatConverterSource,
+    pub target_stat: Box<StatType>,
+    pub target_modifier: Modifier,
+
+    #[serde(default)]
+    pub is_extra: bool,
+    #[serde(default)]
+    pub skill_type: Option<SkillType>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum StatConverterSource {
+    CritDamage,
+    Damage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
+    ThreatLevel,
+    // TODO: Add others, like life, mana, ...
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct StatEffect {
     pub stat: StatType,
@@ -228,7 +390,7 @@ impl From<&EffectsMap> for Vec<StatEffect> {
         val.0
             .iter()
             .map(|((stat, effect_type), value)| StatEffect {
-                stat: *stat,
+                stat: stat.clone(),
                 modifier: *effect_type,
                 value: *value,
                 bypass_ignore: false,
@@ -258,19 +420,19 @@ impl EffectsMap {
             HashMap::new(),
             |mut result, ((target, modifier), value)| {
                 result
-                    .entry((target, modifier))
+                    .entry((target.clone(), modifier))
                     .and_modify(|entry| match modifier {
-                        Modifier::Flat => *entry += value,
-                        Modifier::Multiplier => {
-                            let mut new_entry = *entry + 1.0;
+                        Modifier::Multiplier if target.is_multiplicative() => {
+                            let mut new_entry = *entry + 100.0;
                             new_entry.apply_effect(&StatEffect {
                                 stat: target,
                                 modifier,
                                 value,
                                 bypass_ignore: false,
                             });
-                            *entry = new_entry - 1.0;
+                            *entry = new_entry - 100.0;
                         }
+                        _ => *entry += value,
                     })
                     .or_insert(value);
                 result
@@ -289,7 +451,7 @@ pub trait ApplyStatModifier {
                 if effect.value >= 0.0 {
                     effect.value
                 } else {
-                    let div = (1.0 - effect.value).max(0.0);
+                    let div = (1.0 - effect.value * 0.01).max(0.0);
                     if div != 0.0 {
                         effect.value / div
                     } else {
@@ -303,10 +465,8 @@ pub trait ApplyStatModifier {
 
     fn apply_negative_effect(&mut self, effect: &StatEffect) {
         self.apply_effect(&StatEffect {
-            stat: effect.stat,
-            modifier: effect.modifier,
             value: -effect.value,
-            bypass_ignore: effect.bypass_ignore,
+            ..effect.clone()
         })
     }
 }
@@ -315,7 +475,7 @@ impl ApplyStatModifier for f32 {
     fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
         match modifier {
             Modifier::Flat => *self += value as f32,
-            Modifier::Multiplier => *self *= (1.0 + value as f32).max(0.0),
+            Modifier::Multiplier => *self *= (1.0 + value as f32 * 0.01).max(0.0),
         }
     }
 }
@@ -324,7 +484,7 @@ impl ApplyStatModifier for f64 {
     fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
         match modifier {
             Modifier::Flat => *self += value,
-            Modifier::Multiplier => *self *= (1.0 + value).max(0.0),
+            Modifier::Multiplier => *self *= (1.0 + value * 0.01).max(0.0),
         }
     }
 }

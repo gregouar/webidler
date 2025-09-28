@@ -3,7 +3,7 @@
   "portrait": "monsters/soot_imp_2.webp",
   "max_life": 5,
   "power_factor": 1.5,
-  "max_initiative": 0.5,
+  "initiative": [0.0, 0.5],
   "armor": { "Fire": 50 },
   "skills": [
     {

@@ -1,16 +1,19 @@
 Next things to do:
 
-- add at least basic attack/spell to all monsters to trigger retaliate effects?
-  OR block dot?
+- crit blessing
 
-- failure chances stat effect
-- market notification on sold item/ OR logs
+- lightning always strikes twice: storm damage is lucky
+- rapid toxins: double poison damage, half duration
+- blazing fire: add a % chance to inflict fire dot on fire damage (cumul, short dur)
+- overwhelming force: no crit chance, convert percent of crit damage to attack damage
+- spread destruction: dot spread on enemy death
+
+- failure chance stat effect
+- threat damage passives
 - spider boss & minions
 
-- conductive stun: storm damage is lucky on stunned enemy ? or just storm damage is lucky in general
-- intense toxins: double poison damage, half duration
-- burning fire: add a % chances to inflict fire dot on fire damage (cumul, short dur)
-- overwhelming strikes: no crit chance, convert percent of crit damage to attack damage
+- add at least basic attack/spell to all monsters to trigger retaliate effects?
+  OR block dot?
 
 => find a way to combo multi skills/multi elements
 

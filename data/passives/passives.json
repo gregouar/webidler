@@ -13,14 +13,14 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.5
+            "value": 50
           }
         ],
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 25
           }
         ]
       },
@@ -34,14 +34,14 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ]
       },
@@ -55,14 +55,14 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ]
       },
@@ -76,14 +76,14 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ]
       },
@@ -97,14 +97,14 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ]
       },
@@ -118,14 +118,14 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.5
+            "value": 50
           }
         ],
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 25
           }
         ]
       },
@@ -139,14 +139,14 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.5
+            "value": 50
           }
         ],
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 25
           }
         ]
       },
@@ -160,14 +160,14 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.5
+            "value": 50
           }
         ],
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 25
           }
         ]
       },
@@ -181,14 +181,14 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.5
+            "value": 50
           }
         ],
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 25
           }
         ]
       },
@@ -202,14 +202,14 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.5
+            "value": 50
           }
         ],
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 25
           }
         ]
       },
@@ -223,14 +223,14 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.5
+            "value": 50
           }
         ],
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 25
           }
         ]
       },
@@ -244,14 +244,14 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 0.06
+            "value": 6
           }
         ],
         "upgrade_effects": [
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 0.03
+            "value": 3
           }
         ],
         "max_upgrade_level": 3
@@ -266,14 +266,14 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 0.06
+            "value": 6
           }
         ],
         "upgrade_effects": [
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 0.03
+            "value": 3
           }
         ],
         "max_upgrade_level": 3
@@ -333,7 +333,7 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 0.06
+            "value": 6
           },
           {
             "stat": "LifeRegen",
@@ -345,7 +345,7 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 0.03
+            "value": 3
           },
           {
             "stat": "LifeRegen",
@@ -364,61 +364,19 @@
         "effects": [
           {
             "stat": {
-              "Armor": "Physical"
+              "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Fire"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Poison"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Storm"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
           {
             "stat": {
-              "Armor": "Physical"
+              "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Fire"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Poison"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Storm"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -432,61 +390,19 @@
         "effects": [
           {
             "stat": {
-              "Armor": "Physical"
+              "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Fire"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Poison"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Storm"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
           {
             "stat": {
-              "Armor": "Physical"
+              "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Fire"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Poison"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Storm"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -500,15 +416,15 @@
         "effects": [
           {
             "stat": "Block",
-            "modifier": "Flat",
-            "value": 2
+            "modifier": "Multiplier",
+            "value": 10
           }
         ],
         "upgrade_effects": [
           {
             "stat": "Block",
-            "modifier": "Flat",
-            "value": 1
+            "modifier": "Multiplier",
+            "value": 5
           }
         ],
         "max_upgrade_level": 3
@@ -522,15 +438,15 @@
         "effects": [
           {
             "stat": "Block",
-            "modifier": "Flat",
-            "value": 2
+            "modifier": "Multiplier",
+            "value": 10
           }
         ],
         "upgrade_effects": [
           {
             "stat": "Block",
-            "modifier": "Flat",
-            "value": 1
+            "modifier": "Multiplier",
+            "value": 5
           }
         ],
         "max_upgrade_level": 3
@@ -545,71 +461,29 @@
         "effects": [
           {
             "stat": "Block",
-            "modifier": "Flat",
-            "value": 2
+            "modifier": "Multiplier",
+            "value": 10
           },
           {
             "stat": {
-              "Armor": "Physical"
+              "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Fire"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Poison"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
-          },
-          {
-            "stat": {
-              "Armor": "Storm"
-            },
-            "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
           {
             "stat": "Block",
-            "modifier": "Flat",
-            "value": 1
+            "modifier": "Multiplier",
+            "value": 5
           },
           {
             "stat": {
-              "Armor": "Physical"
+              "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Fire"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Poison"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
-          },
-          {
-            "stat": {
-              "Armor": "Storm"
-            },
-            "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -617,7 +491,7 @@
       "spell_damage_1": {
         "name": "Spell Damage",
         "icon": "passives/spell.svg",
-        "x": 10,
+        "x": -10,
         "y": -12.5,
         "node_type": "Spell",
         "effects": [
@@ -628,7 +502,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -639,7 +513,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -647,7 +521,7 @@
       "spell_damage_2": {
         "name": "Spell Damage",
         "icon": "passives/spell.svg",
-        "x": 20,
+        "x": -20,
         "y": -20,
         "node_type": "Spell",
         "effects": [
@@ -658,7 +532,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -669,7 +543,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -677,7 +551,7 @@
       "spell_speed_1": {
         "name": "Casting Speed",
         "icon": "passives/spell.svg",
-        "x": 5,
+        "x": -5,
         "y": -20,
         "node_type": "Spell",
         "effects": [
@@ -686,7 +560,7 @@
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 0.04
+            "value": 4
           }
         ],
         "upgrade_effects": [
@@ -695,7 +569,7 @@
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 0.02
+            "value": 2
           }
         ],
         "max_upgrade_level": 3
@@ -703,7 +577,7 @@
       "spell_speed_2": {
         "name": "Casting Speed",
         "icon": "passives/spell.svg",
-        "x": 15,
+        "x": -15,
         "y": -27.5,
         "node_type": "Spell",
         "effects": [
@@ -712,7 +586,7 @@
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 0.04
+            "value": 4
           }
         ],
         "upgrade_effects": [
@@ -721,7 +595,7 @@
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 0.02
+            "value": 2
           }
         ],
         "max_upgrade_level": 3
@@ -729,7 +603,7 @@
       "spell_damage_and_speed_1": {
         "name": "Sorcery",
         "icon": "passives/spell.svg",
-        "x": 25,
+        "x": -25,
         "y": -30,
         "size": 1,
         "node_type": "Spell",
@@ -741,14 +615,14 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           },
           {
             "stat": {
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 0.04
+            "value": 4
           }
         ],
         "upgrade_effects": [
@@ -759,14 +633,14 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           },
           {
             "stat": {
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 0.02
+            "value": 2
           }
         ],
         "max_upgrade_level": 3
@@ -774,7 +648,7 @@
       "mana_max_1": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
-        "x": -10,
+        "x": 10,
         "y": -12.5,
         "node_type": "Mana",
         "effects": [
@@ -796,7 +670,7 @@
       "mana_max_2": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
-        "x": -20,
+        "x": 20,
         "y": -20,
         "node_type": "Mana",
         "effects": [
@@ -818,7 +692,7 @@
       "mana_regen_1": {
         "name": "Mana Regeneration",
         "icon": "passives/mana.svg",
-        "x": -5,
+        "x": 5,
         "y": -20,
         "node_type": "Mana",
         "effects": [
@@ -840,7 +714,7 @@
       "mana_regen_2": {
         "name": "Mana Regeneration",
         "icon": "passives/mana.svg",
-        "x": -15,
+        "x": 15,
         "y": -27.5,
         "node_type": "Mana",
         "effects": [
@@ -862,7 +736,7 @@
       "mana_max_and_regen_1": {
         "name": "Wisdom",
         "icon": "passives/mana.svg",
-        "x": -25,
+        "x": 25,
         "y": -30,
         "size": 1,
         "node_type": "Mana",
@@ -906,7 +780,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -917,7 +791,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -936,7 +810,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -947,7 +821,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -964,7 +838,7 @@
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 0.04
+            "value": 4
           }
         ],
         "upgrade_effects": [
@@ -973,7 +847,7 @@
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 0.02
+            "value": 2
           }
         ],
         "max_upgrade_level": 3
@@ -990,7 +864,7 @@
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 0.04
+            "value": 4
           }
         ],
         "upgrade_effects": [
@@ -999,7 +873,7 @@
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 0.02
+            "value": 2
           }
         ],
         "max_upgrade_level": 3
@@ -1019,14 +893,14 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           },
           {
             "stat": {
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 0.04
+            "value": 4
           }
         ],
         "upgrade_effects": [
@@ -1037,20 +911,20 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           },
           {
             "stat": {
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 0.02
+            "value": 2
           }
         ],
         "max_upgrade_level": 3
       },
       "crit_damage_1": {
-        "name": "Critical Hit Damage",
+        "name": "t Damage",
         "icon": "passives/critical.svg",
         "x": 5,
         "y": 20,
@@ -1061,7 +935,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 0.4
+            "value": 40
           }
         ],
         "upgrade_effects": [
@@ -1070,7 +944,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "max_upgrade_level": 3
@@ -1087,7 +961,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 0.4
+            "value": 40
           }
         ],
         "upgrade_effects": [
@@ -1096,13 +970,13 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "max_upgrade_level": 3
       },
-      "crit_chances_1": {
-        "name": "Critical Hit Chances",
+      "crit_chance_1": {
+        "name": "Critical Hit Chance",
         "icon": "passives/critical.svg",
         "x": 10,
         "y": 12.5,
@@ -1110,25 +984,25 @@
         "effects": [
           {
             "stat": {
-              "CritChances": null
+              "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 20
           }
         ],
         "upgrade_effects": [
           {
             "stat": {
-              "CritChances": null
+              "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
       },
-      "crit_chances_2": {
-        "name": "Critical Hit Chances",
+      "crit_chance_2": {
+        "name": "Critical Hit Chance",
         "icon": "passives/critical.svg",
         "x": 20,
         "y": 20,
@@ -1136,24 +1010,24 @@
         "effects": [
           {
             "stat": {
-              "CritChances": null
+              "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 20
           }
         ],
         "upgrade_effects": [
           {
             "stat": {
-              "CritChances": null
+              "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
       },
-      "crit_damage_and_chances_1": {
+      "crit_damage_and_chance_1": {
         "name": "Sadism",
         "icon": "passives/critical.svg",
         "x": 25,
@@ -1163,33 +1037,33 @@
         "effects": [
           {
             "stat": {
-              "CritChances": null
+              "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 20
           },
           {
             "stat": {
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 0.4
+            "value": 40
           }
         ],
         "upgrade_effects": [
           {
             "stat": {
-              "CritChances": null
+              "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 10
           },
           {
             "stat": {
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "max_upgrade_level": 3
@@ -1198,14 +1072,14 @@
         "name": "Arcane Bastion",
         "icon": "passives/rosa_shield.svg",
         "x": -40,
-        "y": 20,
+        "y": -20,
         "node_type": "Armor",
-        "size": 1,
+        "size": 2,
         "effects": [
           {
             "stat": "Block",
             "modifier": "Multiplier",
-            "value": 0.3
+            "value": 30
           },
           {
             "stat": "BlockSpell",
@@ -1220,39 +1094,30 @@
         ],
         "locked": true
       },
-      "healing_aura": {
-        "name": "Healing Aura",
-        "icon": "passives/healing_aura.svg",
-        "x": 40,
-        "y": -20,
-        "node_type": "Life",
-        "size": 1,
-        "triggers": [
+      "overwhelming_force": {
+        "name": "Overwhelming Force",
+        "icon": "passives/overwhelming_force.svg",
+        "x": 0,
+        "y": 40,
+        "node_type": "Critical",
+        "size": 2,
+        "effects": [
           {
-            "trigger_id": "healing_aura",
-            "description": "Restore Area Level x 3 Life at the end of each wave.",
-            "OnWaveCompleted": {},
-            "target": "Source",
-            "effects": [
-              {
-                "Restore": {
-                  "restore_type": "Life",
-                  "min": 3,
-                  "max": 3,
-                  "modifier": "Flat"
-                }
+            "stat": { "CritChance": null },
+            "modifier": "Multiplier",
+            "value": -99999999999
+          },
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "CritDamage",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier",
+                "is_extra": true
               }
-            ],
-            "modifiers": [
-              {
-                "stat": {
-                  "Restore": null
-                },
-                "modifier": "Multiplier",
-                "factor": 1,
-                "source": "AreaLevel"
-              }
-            ]
+            },
+            "value": 25,
+            "modifier": "Flat"
           }
         ],
         "locked": true
@@ -1263,7 +1128,7 @@
         "x": 40,
         "y": 20,
         "node_type": "Critical",
-        "size": 1,
+        "size": 2,
         "triggers": [
           {
             "trigger_id": "bleeding_crit",
@@ -1275,8 +1140,7 @@
             "effects": [
               {
                 "ApplyStatus": {
-                  "min_duration": 2,
-                  "max_duration": 2,
+                  "duration": 2,
                   "statuses": [
                     {
                       "status_type": {
@@ -1285,8 +1149,7 @@
                           "ignore_armor": true
                         }
                       },
-                      "min_value": 1,
-                      "max_value": 1
+                      "value": 1
                     }
                   ]
                 },
@@ -1334,11 +1197,11 @@
         "x": 0,
         "y": -40,
         "node_type": "Spell",
-        "size": 1,
+        "size": 2,
         "effects": [
           {
             "stat": {
-              "CritChances": "Spell"
+              "CritChance": "Spell"
             },
             "modifier": "Flat",
             "value": 5
@@ -1356,10 +1219,10 @@
       "mana_shield": {
         "name": "Mana Shield",
         "icon": "passives/mana_shield.svg",
-        "x": -40,
+        "x": 40,
         "y": -20,
         "node_type": "Mana",
-        "size": 1,
+        "size": 2,
         "effects": [
           {
             "stat": "TakeFromManaBeforeLife",
@@ -1369,7 +1232,7 @@
           {
             "stat": "Mana",
             "modifier": "Multiplier",
-            "value": 0.5
+            "value": 50
           }
         ],
         "locked": true
@@ -1377,22 +1240,21 @@
       "enrage": {
         "name": "Berserker",
         "icon": "passives/enrage.svg",
-        "x": 0,
-        "y": 40,
+        "x": -40,
+        "y": 20,
         "node_type": "Attack",
-        "size": 1,
+        "size": 2,
         "triggers": [
           {
             "trigger_id": "enrage",
-            "description": "Taking a hit grants +20% Attack Speed for 2s and stacks +50% Attack Damage for 2s.",
+            "description": "Taking a hit grants +20% Attack Speed for 2s and stacks +30% Attack Damage for 2s.",
             "OnTakeHit": {
               "is_hurt": true
             },
             "effects": [
               {
                 "ApplyStatus": {
-                  "min_duration": 2,
-                  "max_duration": 2,
+                  "duration": 2,
                   "statuses": [
                     {
                       "status_type": {
@@ -1403,8 +1265,7 @@
                         }
                       },
                       "cumulate": true,
-                      "min_value": 0.5,
-                      "max_value": 0.5
+                      "value": 30
                     },
                     {
                       "status_type": {
@@ -1414,8 +1275,7 @@
                           }
                         }
                       },
-                      "min_value": 0.2,
-                      "max_value": 0.2
+                      "value": 20
                     }
                   ]
                 }
@@ -1437,14 +1297,14 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": -1.0
+            "value": -100
           }
         ],
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 0.25
+            "value": 25
           }
         ],
         "max_upgrade_level": 5,
@@ -1464,7 +1324,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1475,7 +1335,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -1494,7 +1354,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1505,7 +1365,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -1525,7 +1385,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.4
+            "value": 40
           }
         ],
         "upgrade_effects": [
@@ -1536,10 +1396,87 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "max_upgrade_level": 3
+      },
+      "physical_open_wound": {
+        "name": "Savage Attacker",
+        "icon": "passives/open_wound.svg",
+        "x": 114,
+        "y": 18,
+        "size": 2,
+        "node_type": "Physical",
+        "triggers": [
+          {
+            "trigger_id": "open_wound",
+            "description": "Attack Hits apply a stack of Open Wound for 5 seconds. Each stack deals 20% of the initial hit's Physical Damage when the target is Hit by an Attack.",
+            "OnHit": { "skill_type": "Attack" },
+            "effects": [
+              {
+                "ApplyStatus": {
+                  "duration": 5,
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "Trigger": {
+                          "trigger_id": "passives/open_wound.svg",
+                          "description": "Open Wound takes additional Physical Damage when Hit by an Attack.",
+                          "OnTakeHit": { "skill_type": "Attack" },
+                          "skill_type": "Spell",
+                          "effects": [
+                            {
+                              "FlatDamage": {
+                                "damage": {},
+                                "ignore_armor": true
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "cumulate": true,
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ],
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": "Attack",
+                  "damage_type": "Physical"
+                }
+              },
+              {
+                "MinDamage": {
+                  "skill_type": "Attack",
+                  "damage_type": "Physical"
+                }
+              },
+              {
+                "MaxDamage": {
+                  "skill_type": "Attack",
+                  "damage_type": "Physical"
+                }
+              }
+            ],
+            "modifiers": [
+              {
+                "stat": {
+                  "Damage": { "damage_type": "Physical" }
+                },
+                "modifier": "Flat",
+                "factor": 0.2,
+                "source": {
+                  "HitDamage": "Physical"
+                }
+              }
+            ]
+          }
+        ],
+        "locked": true
       },
       "poison_damage_1": {
         "name": "Poison Damage",
@@ -1555,7 +1492,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1566,7 +1503,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -1585,7 +1522,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1596,7 +1533,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -1616,7 +1553,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.4
+            "value": 40
           }
         ],
         "upgrade_effects": [
@@ -1627,10 +1564,39 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "max_upgrade_level": 3
+      },
+      "poison_rapid": {
+        "name": "Rapid Toxin",
+        "icon": "passives/rapid_toxin.svg",
+        "x": 114,
+        "y": -18,
+        "size": 2,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 100
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "DamageOverTime": { "damage_type": "Poison" }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -100
+          }
+        ],
+        "locked": true
       },
       "fire_damage_1": {
         "name": "Fire Damage",
@@ -1646,7 +1612,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1657,7 +1623,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -1676,7 +1642,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1687,7 +1653,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -1707,7 +1673,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.4
+            "value": 40
           }
         ],
         "upgrade_effects": [
@@ -1718,10 +1684,87 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "max_upgrade_level": 3
+      },
+      "fire_burn": {
+        "name": "Blazing Inferno",
+        "icon": "passives/blazing_inferno.svg",
+        "x": 81,
+        "y": 29,
+        "size": 2,
+        "node_type": "Fire",
+        "triggers": [
+          {
+            "trigger_id": "blazing_inferno",
+            "description": "Fire Hits have 30% Chance to apply a stacking Burn for 2s, dealing 50% of the Hit's Fire Damage per second. Critical Hits always Burn.",
+            "OnHit": {},
+            "effects": [
+              {
+                "success_chance": 30,
+                "ApplyStatus": {
+                  "duration": 2,
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Fire",
+                          "ignore_armor": true
+                        }
+                      },
+                      "value": 0
+                    }
+                  ]
+                },
+                "ignore_stat_effects": [
+                  {
+                    "Damage": {
+                      "skill_type": "Attack",
+                      "damage_type": "Fire"
+                    }
+                  },
+                  {
+                    "MinDamage": {
+                      "skill_type": "Attack",
+                      "damage_type": "Fire"
+                    }
+                  },
+                  {
+                    "MaxDamage": {
+                      "skill_type": "Attack",
+                      "damage_type": "Fire"
+                    }
+                  }
+                ]
+              }
+            ],
+            "modifiers": [
+              {
+                "stat": {
+                  "Damage": {}
+                },
+                "modifier": "Flat",
+                "factor": 0.5,
+                "source": {
+                  "HitDamage": "Fire"
+                }
+              },
+              {
+                "stat": {
+                  "SuccessChance": {}
+                },
+                "modifier": "Flat",
+                "factor": 100,
+                "source": {
+                  "HitCrit": null
+                }
+              }
+            ]
+          }
+        ],
+        "locked": true
       },
       "storm_damage_1": {
         "name": "Storm Damage",
@@ -1737,7 +1780,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1748,7 +1791,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -1767,7 +1810,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1778,7 +1821,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -1798,7 +1841,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.4
+            "value": 40
           }
         ],
         "upgrade_effects": [
@@ -1809,10 +1852,34 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "max_upgrade_level": 3
+      },
+      "storm_lucky": {
+        "name": "Lightning Never Strike Twice",
+        "icon": "passives/lightning_double.svg",
+        "x": 81,
+        "y": -29,
+        "size": 2,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": {
+              "Lucky": {
+                "roll_type": {
+                  "Damage": {
+                    "damage_type": "Storm"
+                  }
+                }
+              }
+            },
+            "modifier": "Flat",
+            "value": 100
+          }
+        ],
+        "locked": true
       },
       "damage_over_time_1": {
         "name": "Damage over Time",
@@ -1828,7 +1895,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1839,7 +1906,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -1858,7 +1925,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1869,7 +1936,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -1889,7 +1956,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.4
+            "value": 40
           }
         ],
         "upgrade_effects": [
@@ -1900,10 +1967,305 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "max_upgrade_level": 3
+      },
+      "damage_over_time_spread": {
+        "name": "Spread Destruction",
+        "icon": "passives/spread.svg",
+        "x": 60,
+        "y": 0,
+        "size": 2,
+        "node_type": "Status",
+        "effects": [],
+        "upgrade_effects": [],
+        "triggers": [
+          {
+            "trigger_id": "dot_spread",
+            "description": "Damage over Time effects spread to nearby enemies on Kill, for their remaining Duration.",
+            "OnKill": {
+              "is_damaged_over_time": null
+            },
+            "target": "SameTarget",
+            "skill_range": "Melee",
+            "skill_shape": "Square4",
+            "effects": [
+              {
+                "ApplyStatus": {
+                  "duration": 0,
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Physical",
+                          "ignore_armor": true
+                        }
+                      },
+                      "value": 0
+                    }
+                  ]
+                },
+                "ignore_stat_effects": [
+                  {
+                    "Damage": {}
+                  },
+                  {
+                    "MinDamage": {}
+                  },
+                  {
+                    "MaxDamage": {}
+                  },
+                  {
+                    "StatusDuration": null
+                  },
+                  {
+                    "StatusPower": null
+                  }
+                ]
+              },
+              {
+                "ApplyStatus": {
+                  "duration": 0,
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Fire",
+                          "ignore_armor": true
+                        }
+                      },
+                      "value": 0
+                    }
+                  ]
+                },
+                "ignore_stat_effects": [
+                  {
+                    "Damage": {}
+                  },
+                  {
+                    "MinDamage": {}
+                  },
+                  {
+                    "MaxDamage": {}
+                  },
+                  {
+                    "StatusDuration": null
+                  },
+                  {
+                    "StatusPower": null
+                  }
+                ]
+              },
+              {
+                "ApplyStatus": {
+                  "duration": 0,
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Poison",
+                          "ignore_armor": true
+                        }
+                      },
+                      "value": 0
+                    }
+                  ]
+                },
+                "ignore_stat_effects": [
+                  {
+                    "Damage": {}
+                  },
+                  {
+                    "MinDamage": {}
+                  },
+                  {
+                    "MaxDamage": {}
+                  },
+                  {
+                    "StatusDuration": null
+                  },
+                  {
+                    "StatusPower": null
+                  }
+                ]
+              },
+              {
+                "ApplyStatus": {
+                  "duration": 0,
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Storm",
+                          "ignore_armor": true
+                        }
+                      },
+                      "value": 0
+                    }
+                  ]
+                },
+                "ignore_stat_effects": [
+                  {
+                    "Damage": {}
+                  },
+                  {
+                    "MinDamage": {}
+                  },
+                  {
+                    "MaxDamage": {}
+                  },
+                  {
+                    "StatusDuration": null
+                  },
+                  {
+                    "StatusPower": null
+                  }
+                ]
+              }
+            ],
+            "modifiers": [
+              {
+                "stat": {
+                  "Damage": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusValue": {
+                    "DamageOverTime": {
+                      "damage_type": "Physical"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Physical"
+                    }
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Physical"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "Damage": {
+                    "damage_type": "Fire"
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusValue": {
+                    "DamageOverTime": {
+                      "damage_type": "Fire"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Fire"
+                    }
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Fire"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "Damage": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusValue": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "Damage": {
+                    "damage_type": "Storm"
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusValue": {
+                    "DamageOverTime": {
+                      "damage_type": "Storm"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Storm"
+                    }
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusDuration": {
+                    "DamageOverTime": {
+                      "damage_type": "Storm"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "locked": true
       },
       "movement_init": {
         "name": "Tactical Start",
@@ -1917,7 +2279,7 @@
           {
             "stat": "MovementSpeed",
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "locked": true
@@ -1925,16 +2287,16 @@
       "restoration_1": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": -70,
+        "x": -65,
         "y": 10,
-        "node_type": "Utility",
+        "node_type": "Spell",
         "effects": [
           {
             "stat": {
               "Restore": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "upgrade_effects": [
@@ -1943,7 +2305,7 @@
               "Restore": null
             },
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 5
           }
         ],
         "max_upgrade_level": 3
@@ -1951,16 +2313,16 @@
       "restoration_2": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": -70,
+        "x": -60,
         "y": 20,
-        "node_type": "Utility",
+        "node_type": "Spell",
         "effects": [
           {
             "stat": {
               "Restore": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "upgrade_effects": [
@@ -1969,7 +2331,7 @@
               "Restore": null
             },
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 5
           }
         ],
         "max_upgrade_level": 3
@@ -1977,17 +2339,17 @@
       "restoration_3": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": -70,
+        "x": -60,
         "y": 30,
         "size": 1,
-        "node_type": "Utility",
+        "node_type": "Spell",
         "effects": [
           {
             "stat": {
               "Restore": null
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1996,15 +2358,51 @@
               "Restore": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
       },
+      "healing_aura": {
+        "name": "Healing Aura",
+        "icon": "passives/healing_aura.svg",
+        "x": -60,
+        "y": 40,
+        "node_type": "Spell",
+        "size": 2,
+        "triggers": [
+          {
+            "trigger_id": "healing_aura",
+            "description": "Restore Area Level x 3 Life at the end of each wave.",
+            "OnWaveCompleted": {},
+            "target": "Source",
+            "effects": [
+              {
+                "Restore": {
+                  "restore_type": "Life",
+                  "value": 3,
+                  "modifier": "Flat"
+                }
+              }
+            ],
+            "modifiers": [
+              {
+                "stat": {
+                  "Restore": null
+                },
+                "modifier": "Multiplier",
+                "factor": 1,
+                "source": "AreaLevel"
+              }
+            ]
+          }
+        ],
+        "locked": true
+      },
       "status_duration_1": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -70,
+        "x": -65,
         "y": -10,
         "node_type": "Status",
         "effects": [
@@ -2013,7 +2411,7 @@
               "StatusDuration": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "upgrade_effects": [
@@ -2022,7 +2420,7 @@
               "StatusDuration": null
             },
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 5
           }
         ],
         "max_upgrade_level": 3
@@ -2030,7 +2428,7 @@
       "status_duration_2": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -70,
+        "x": -60,
         "y": -20,
         "node_type": "Status",
         "effects": [
@@ -2039,7 +2437,7 @@
               "StatusDuration": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "upgrade_effects": [
@@ -2048,7 +2446,7 @@
               "StatusDuration": null
             },
             "modifier": "Multiplier",
-            "value": 0.05
+            "value": 5
           }
         ],
         "max_upgrade_level": 3
@@ -2056,7 +2454,7 @@
       "status_duration_3": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -70,
+        "x": -60,
         "y": -30,
         "size": 1,
         "node_type": "Status",
@@ -2066,7 +2464,7 @@
               "StatusDuration": null
             },
             "modifier": "Multiplier",
-            "value": 0.2
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -2075,10 +2473,246 @@
               "StatusDuration": null
             },
             "modifier": "Multiplier",
-            "value": 0.1
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
+      },
+      "infinite_curse": {
+        "name": "Cursed Mouth",
+        "icon": "passives/infinite_curse.svg",
+        "x": -60,
+        "y": -40,
+        "size": 2,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": { "StatModifier": { "debuff": true } }
+            },
+            "modifier": "Flat",
+            "value": 100000
+          }
+        ],
+        "locked": true
+      },
+      "threat_damage_1": {
+        "name": "Threat Damage",
+        "icon": "passives/threat_damage.svg",
+        "x": -75,
+        "y": 10,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "ThreatLevel",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier"
+              }
+            },
+            "modifier": "Flat",
+            "value": 10
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "ThreatLevel",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier"
+              }
+            },
+            "modifier": "Flat",
+            "value": 5
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "threat_damage_2": {
+        "name": "Threat Damage",
+        "icon": "passives/threat_damage.svg",
+        "x": -80,
+        "y": 20,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "ThreatLevel",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier"
+              }
+            },
+            "modifier": "Flat",
+            "value": 10
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "ThreatLevel",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier"
+              }
+            },
+            "modifier": "Flat",
+            "value": 5
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "threat_damage_3": {
+        "name": "Threat Damage",
+        "icon": "passives/threat_damage.svg",
+        "x": -80,
+        "y": 30,
+        "size": 1,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "ThreatLevel",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier"
+              }
+            },
+            "modifier": "Flat",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "ThreatLevel",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier"
+              }
+            },
+            "modifier": "Flat",
+            "value": 10
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "menacing_presence": {
+        "name": "Menacing Presence",
+        "icon": "passives/menacing_presence.svg",
+        "x": -80,
+        "y": 40,
+        "size": 2,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": "ThreatGain",
+            "modifier": "Multiplier",
+            "value": 100
+          }
+        ],
+        "locked": true
+      },
+      "success_chance_1": {
+        "name": "Success Chance",
+        "icon": "passives/success.svg",
+        "x": -75,
+        "y": -10,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {}
+            },
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {}
+            },
+            "modifier": "Multiplier",
+            "value": 5
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "success_chance_2": {
+        "name": "Success Chance",
+        "icon": "passives/success.svg",
+        "x": -80,
+        "y": -20,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {}
+            },
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {}
+            },
+            "modifier": "Multiplier",
+            "value": 5
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "success_chance_3": {
+        "name": "Success Chance",
+        "icon": "passives/success.svg",
+        "x": -80,
+        "y": -30,
+        "size": 1,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {}
+            },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {}
+            },
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "success_chance_lucky": {
+        "name": "Loaded Dice",
+        "icon": "passives/loaded_dice.svg",
+        "x": -80,
+        "y": -40,
+        "size": 2,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "Lucky": {
+                "roll_type": "SuccessChance"
+              }
+            },
+            "modifier": "Flat",
+            "value": 50
+          }
+        ],
+        "locked": true
       }
     },
     "connections": [
@@ -2176,23 +2810,23 @@
       },
       {
         "from": "gold_u_1",
-        "to": "crit_chances_1"
+        "to": "crit_chance_1"
       },
       {
         "from": "crit_damage_1",
         "to": "crit_damage_2"
       },
       {
-        "from": "crit_chances_1",
-        "to": "crit_chances_2"
+        "from": "crit_chance_1",
+        "to": "crit_chance_2"
       },
       {
         "from": "crit_damage_2",
-        "to": "crit_damage_and_chances_1"
+        "to": "crit_damage_and_chance_1"
       },
       {
-        "from": "crit_chances_2",
-        "to": "crit_damage_and_chances_1"
+        "from": "crit_chance_2",
+        "to": "crit_damage_and_chance_1"
       },
       {
         "from": "gold_d_1",
@@ -2247,7 +2881,7 @@
         "to": "block_2"
       },
       {
-        "from": "gold_ul_1",
+        "from": "gold_dl_1",
         "to": "arcane_bastion"
       },
       {
@@ -2256,7 +2890,7 @@
       },
       {
         "from": "gold_ur_1",
-        "to": "crit_chances_2"
+        "to": "crit_chance_2"
       },
       {
         "from": "gold_ur_1",
@@ -2271,12 +2905,12 @@
         "to": "armor_2"
       },
       {
-        "from": "gold_dl_1",
+        "from": "gold_dr_1",
         "to": "mana_shield"
       },
       {
         "from": "gold_dl_1",
-        "to": "mana_max_2"
+        "to": "spell_damage_2"
       },
       {
         "from": "gold_dr_1",
@@ -2284,11 +2918,7 @@
       },
       {
         "from": "gold_dr_1",
-        "to": "healing_aura"
-      },
-      {
-        "from": "gold_dr_1",
-        "to": "spell_damage_2"
+        "to": "mana_max_2"
       },
       {
         "from": "gold_u_2",
@@ -2296,6 +2926,10 @@
       },
       {
         "from": "gold_u_2",
+        "to": "overwhelming_force"
+      },
+      {
+        "from": "gold_ul_1",
         "to": "enrage"
       },
       {
@@ -2343,12 +2977,20 @@
         "to": "physical_damage_3"
       },
       {
+        "from": "physical_damage_3",
+        "to": "physical_open_wound"
+      },
+      {
         "from": "poison_damage_1",
         "to": "poison_damage_2"
       },
       {
         "from": "poison_damage_2",
         "to": "poison_damage_3"
+      },
+      {
+        "from": "poison_damage_3",
+        "to": "poison_rapid"
       },
       {
         "from": "fire_damage_1",
@@ -2359,12 +3001,20 @@
         "to": "fire_damage_3"
       },
       {
+        "from": "fire_damage_3",
+        "to": "fire_burn"
+      },
+      {
         "from": "damage_over_time_1",
         "to": "damage_over_time_2"
       },
       {
         "from": "damage_over_time_2",
         "to": "damage_over_time_3"
+      },
+      {
+        "from": "damage_over_time_3",
+        "to": "damage_over_time_spread"
       },
       {
         "from": "storm_damage_1",
@@ -2375,12 +3025,48 @@
         "to": "storm_damage_3"
       },
       {
+        "from": "storm_damage_3",
+        "to": "storm_lucky"
+      },
+      {
         "from": "movement_init",
         "to": "status_duration_1"
       },
       {
         "from": "movement_init",
         "to": "restoration_1"
+      },
+      {
+        "from": "movement_init",
+        "to": "threat_damage_1"
+      },
+      {
+        "from": "threat_damage_1",
+        "to": "threat_damage_2"
+      },
+      {
+        "from": "threat_damage_2",
+        "to": "threat_damage_3"
+      },
+      {
+        "from": "threat_damage_3",
+        "to": "menacing_presence"
+      },
+      {
+        "from": "movement_init",
+        "to": "success_chance_1"
+      },
+      {
+        "from": "success_chance_1",
+        "to": "success_chance_2"
+      },
+      {
+        "from": "success_chance_2",
+        "to": "success_chance_3"
+      },
+      {
+        "from": "success_chance_3",
+        "to": "success_chance_lucky"
       },
       {
         "from": "status_duration_1",
@@ -2391,12 +3077,20 @@
         "to": "status_duration_3"
       },
       {
+        "from": "status_duration_3",
+        "to": "infinite_curse"
+      },
+      {
         "from": "restoration_1",
         "to": "restoration_2"
       },
       {
         "from": "restoration_2",
         "to": "restoration_3"
+      },
+      {
+        "from": "restoration_3",
+        "to": "healing_aura"
       }
     ]
   }

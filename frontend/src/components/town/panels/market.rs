@@ -925,10 +925,10 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     MarketOrderBy::Price => "Lowest Price",
                     MarketOrderBy::Level => "Lowest Required Level",
                     MarketOrderBy::Damages => "Highest Damages",
-                    MarketOrderBy::CritChance => "Highest Critical Chance",
-                    MarketOrderBy::CritDamage => "Highest Critical Damage",
+                    MarketOrderBy::CritChance => "Highest Critical Hit Chance",
+                    MarketOrderBy::CritDamage => "Highest Critical Hit Damage",
                     MarketOrderBy::Armor => "Highest Armor",
-                    MarketOrderBy::Block => "Highest Block Chances",
+                    MarketOrderBy::Block => "Highest Block Chance",
                     MarketOrderBy::Time => "Most Recent",
                 }
                 .into(),
@@ -1001,14 +1001,14 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     />
                     <ValidatedInput
                         id="item_damages"
-                        label="Min Critical Chance:"
+                        label="Min Critical Hit Chance:"
                         input_type="number"
                         placeholder="Minimum Critical Percent Chance"
                         bind=item_crit_chance
                     />
                     <ValidatedInput
                         id="item_damages"
-                        label="Min Critical Damage:"
+                        label="Min Critical Hit Damage:"
                         input_type="number"
                         placeholder="Minimum extra Critical Percent Damage"
                         bind=item_crit_damage
@@ -1026,7 +1026,7 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         id="item_block"
                         label="Min Block %:"
                         input_type="number"
-                        placeholder="Minimum Block Percent Chances"
+                        placeholder="Minimum Block Percent Chance"
                         bind=item_block
                     />
                 </div>
@@ -1042,7 +1042,7 @@ fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
             RwSignal::new(
                 stat_effect
                     .as_ref()
-                    .map(|stat_effect| (stat_effect.stat, stat_effect.modifier)),
+                    .map(|stat_effect| (stat_effect.stat.clone(), stat_effect.modifier)),
             ),
             RwSignal::new(stat_effect.as_ref().map(|stat_effect| stat_effect.value)),
         )
@@ -1132,9 +1132,9 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         (StatType::Mana, Modifier::Multiplier),
         (StatType::Mana, Modifier::Flat),
         (StatType::ManaRegen, Modifier::Flat),
-        (StatType::Armor(DamageType::Fire), Modifier::Flat),
-        (StatType::Armor(DamageType::Poison), Modifier::Flat),
-        (StatType::Armor(DamageType::Storm), Modifier::Flat),
+        (StatType::Armor(Some(DamageType::Fire)), Modifier::Flat),
+        (StatType::Armor(Some(DamageType::Poison)), Modifier::Flat),
+        (StatType::Armor(Some(DamageType::Storm)), Modifier::Flat),
         (
             StatType::Damage {
                 skill_type: None,
@@ -1184,7 +1184,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             },
             Modifier::Multiplier,
         ),
-        (StatType::CritChances(None), Modifier::Multiplier),
+        (StatType::CritChance(None), Modifier::Multiplier),
         (StatType::CritDamage(None), Modifier::Multiplier),
         // (StatType::SpellPower, Modifier::Multiplier),
         (StatType::StatusPower(None), Modifier::Multiplier),
@@ -1227,8 +1227,8 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         .into_iter()
         .map(|(stat_type, modifier)| {
             (
-                Some((stat_type, modifier)),
-                format_stat_filter(stat_type, modifier),
+                Some((stat_type.clone(), modifier)),
+                format_stat_filter(&stat_type, modifier),
             )
         })
         .collect();
@@ -1243,7 +1243,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
     }
 }
 
-fn format_stat_filter(stat_type: StatType, modifier: Modifier) -> String {
+fn format_stat_filter(stat_type: &StatType, modifier: Modifier) -> String {
     match modifier {
         Modifier::Multiplier => format!("#% Increased {}", format_multiplier_stat_name(stat_type)),
         Modifier::Flat => format_flat_stat(stat_type, None),

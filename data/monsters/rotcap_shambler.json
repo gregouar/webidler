@@ -3,7 +3,7 @@
   "portrait": "monsters/rotcap_shambler.webp",
   "max_life": 5,
   "power_factor": 1.5,
-  "max_initiative": 2.5,
+  "initiative": [1, 2.5],
   "armor": { "Poison": 100 },
   "skills": [
     {
@@ -15,15 +15,13 @@
           "effects": [
             {
               "ApplyStatus": {
-                "min_duration": 3,
-                "max_duration": 5,
+                "duration": [3, 5],
                 "statuses": [
                   {
                     "status_type": {
                       "DamageOverTime": { "damage_type": "Poison" }
                     },
-                    "min_value": 5,
-                    "max_value": 5
+                    "value": 5
                   }
                 ]
               }

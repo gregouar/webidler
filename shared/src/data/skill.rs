@@ -3,6 +3,7 @@ use std::collections::HashSet;
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
+    chance::{Chance, ChanceRange},
     stat_effect::{Modifier, StatType},
     trigger::TriggerSpecs,
 };
@@ -92,6 +93,7 @@ pub enum ModifierEffectSource {
         slot: Option<ItemSlot>,
         item_stats: ItemStatsSource,
     },
+    PlaceHolder,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
@@ -118,16 +120,18 @@ pub struct SkillTargetsGroup {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SkillRepeat {
-    pub min: u8,
-    pub max: u8,
+    pub value: ChanceRange<u8>,
     pub target: SkillRepeatTarget,
 }
 
 impl Default for SkillRepeat {
     fn default() -> Self {
         Self {
-            min: 1,
-            max: 1,
+            value: ChanceRange {
+                min: 1,
+                max: 1,
+                lucky_chance: 0.0,
+            },
             target: SkillRepeatTarget::Any,
         }
     }
@@ -142,8 +146,8 @@ pub enum SkillRepeatTarget {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct SkillEffect {
-    #[serde(default)]
-    pub failure_chances: f32,
+    #[serde(default = "Chance::new_sure")]
+    pub success_chance: Chance,
 
     #[serde(flatten)]
     pub effect_type: SkillEffectType,
@@ -157,22 +161,19 @@ pub enum SkillEffectType {
     FlatDamage {
         damage: DamageMap,
         #[serde(default)]
-        crit_chances: f32,
+        crit_chance: Chance,
         #[serde(default)]
         crit_damage: f64,
+        #[serde(default)]
+        ignore_armor: bool,
     },
     ApplyStatus {
         statuses: Vec<ApplyStatusEffect>,
-        min_duration: f64,
-        max_duration: f64,
+        duration: ChanceRange<f64>,
     },
     Restore {
         restore_type: RestoreType,
-        // TODO: Flat vs Multiplier (=percent?)
-        min: f64,
-        max: f64,
-
-        #[serde(default)]
+        value: ChanceRange<f64>,
         modifier: Modifier,
     },
     Resurrect,
@@ -182,9 +183,7 @@ pub enum SkillEffectType {
 pub struct ApplyStatusEffect {
     pub status_type: StatusSpecs,
     #[serde(default)]
-    pub min_value: f64,
-    #[serde(default)]
-    pub max_value: f64,
+    pub value: ChanceRange<f64>,
     #[serde(default)]
     pub cumulate: bool,
 }

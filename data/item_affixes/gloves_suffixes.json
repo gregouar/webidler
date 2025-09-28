@@ -13,8 +13,7 @@
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Multiplier",
-        "min": 0.03,
-        "max": 0.05
+        "value": [3, 5]
       }
     ]
   },
@@ -32,8 +31,7 @@
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Multiplier",
-        "min": 0.06,
-        "max": 0.08
+        "value": [6, 8]
       }
     ]
   },
@@ -51,8 +49,7 @@
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Multiplier",
-        "min": 0.09,
-        "max": 0.11
+        "value": [9, 11]
       }
     ]
   }

@@ -234,7 +234,7 @@ fn EquippedItemEquippedSlot(
                                 view! {
                                     <div
                                         node_ref=tooltip_ref
-                                        class="fixed whitespace-nowrap z-50 transition-opacity duration-150 text-center px-2"
+                                        class="fixed  z-50 transition-opacity duration-150 text-center px-2"
                                         style=move || {
                                             let (x, y) = tooltip_pos();
                                             format!("left:{}px; top:{}px;", x, y)
@@ -473,7 +473,7 @@ fn BagItem(item_index: usize) -> impl IntoView {
                                     <Portal>
                                         <div
                                             node_ref=tooltip_ref
-                                            class="fixed whitespace-nowrap z-50 transition-opacity duration-150 text-center px-2"
+                                            class="fixed z-50 transition-opacity duration-150 text-center px-2"
                                             style=move || {
                                                 let (x, y) = tooltip_pos();
                                                 format!("left:{}px; top:{}px;", x, y)

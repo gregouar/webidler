@@ -1,18 +1,25 @@
 use std::{iter, time::Duration};
 
 use shared::data::{
+    area::AreaThreat,
+    chance::{Chance, ChanceRange},
     character::CharacterId,
     character_status::StatusSpecs,
-    item::SkillRange,
+    item::{SkillRange, SkillShape},
     item_affix::AffixEffectScope,
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerSpecs, PlayerState},
     skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
-    stat_effect::{ApplyStatModifier, EffectsMap, Modifier, StatType},
+    stat_effect::{
+        ApplyStatModifier, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatType,
+    },
     trigger::{EventTrigger, TriggerTarget, TriggeredEffect},
 };
 
-use crate::game::{data::event::EventsQueue, systems::statuses_controller};
+use crate::game::{
+    data::event::EventsQueue,
+    systems::{stats_updater, statuses_controller},
+};
 
 use super::{characters_updater, passives_controller, skills_updater};
 
@@ -57,22 +64,24 @@ pub fn update_player_specs(
     player_inventory: &PlayerInventory,
     passives_tree_specs: &PassivesTreeSpecs,
     passives_tree_state: &PassivesTreeState,
+    area_threat: &AreaThreat,
 ) {
     // TODO: Reset player_specs
     player_specs.character_specs.armor.clear();
-    player_specs.character_specs.block = 0.0;
-    player_specs.character_specs.block_spell = 0.0;
+    player_specs.character_specs.block = Default::default();
+    player_specs.character_specs.block_spell = Default::default();
     player_specs.character_specs.block_damage = 0.0;
     player_specs.character_specs.max_life = 90.0 + 10.0 * player_specs.level as f64;
     player_specs.character_specs.life_regen = 10.0;
     player_specs.character_specs.max_mana = 100.0;
     player_specs.character_specs.mana_regen = 10.0;
     player_specs.character_specs.damage_resistance.clear();
-    player_specs.gold_find = 1.0;
+    player_specs.character_specs.triggers.clear();
+    player_specs.gold_find = 100.0;
     player_specs.threat_gain = 100.0;
     player_specs.movement_cooldown = 3.0;
-    player_specs.triggers.clear();
 
+    // TODO: Could we figure out a way to keep the block luck somehow?
     let (total_armor, total_block) = player_inventory
         .equipped_items()
         .map(|(_, item)| item)
@@ -85,7 +94,7 @@ pub fn update_player_specs(
         .armor
         .entry(DamageType::Physical)
         .or_default()) += total_armor;
-    player_specs.character_specs.block += total_block;
+    player_specs.character_specs.block.value += total_block;
 
     player_specs.effects = EffectsMap::combine_all(
         player_inventory
@@ -102,7 +111,7 @@ pub fn update_player_specs(
             )),
     );
 
-    player_specs.triggers = passives_tree_state
+    player_specs.character_specs.triggers = passives_tree_state
         .purchased_nodes
         .iter()
         .filter_map(|node_id| passives_tree_specs.nodes.get(node_id))
@@ -126,10 +135,10 @@ pub fn update_player_specs(
         )
         .collect();
 
-    compute_player_specs(player_specs, player_inventory);
+    compute_player_specs(player_specs, player_inventory, area_threat);
 
     // We only add skills trigger after because they were already increased by skill update
-    player_specs.triggers.extend(
+    player_specs.character_specs.triggers.extend(
         player_specs
             .skills_specs
             .iter()
@@ -138,8 +147,12 @@ pub fn update_player_specs(
     );
 }
 
-fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &PlayerInventory) {
-    let effects = characters_updater::stats_map_to_vec(&player_specs.effects);
+fn compute_player_specs(
+    player_specs: &mut PlayerSpecs,
+    player_inventory: &PlayerInventory,
+    area_threat: &AreaThreat,
+) {
+    let effects = stats_updater::stats_map_to_vec(&player_specs.effects, area_threat);
 
     player_specs.character_specs =
         characters_updater::update_character_specs(&player_specs.character_specs, &effects);
@@ -152,22 +165,26 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
             // TODO: Move the character specs
             StatType::LifeOnHit(hit_trigger) | StatType::ManaOnHit(hit_trigger) => {
                 if let Modifier::Flat = effect.modifier {
-                    player_specs.triggers.push(TriggeredEffect {
+                    player_specs.character_specs.triggers.push(TriggeredEffect {
                         trigger: EventTrigger::OnHit(hit_trigger),
                         target: TriggerTarget::Source,
                         skill_range: SkillRange::Any,
                         skill_type: SkillType::Attack,
+                        skill_shape: SkillShape::Single,
                         modifiers: Vec::new(),
                         effects: vec![SkillEffect {
-                            failure_chances: 0.0,
+                            success_chance: Chance::new_sure(),
                             effect_type: SkillEffectType::Restore {
                                 restore_type: if let StatType::LifeOnHit(_) = effect.stat {
                                     RestoreType::Life
                                 } else {
                                     RestoreType::Mana
                                 },
-                                min: effect.value,
-                                max: effect.value,
+                                value: ChanceRange {
+                                    min: effect.value,
+                                    max: effect.value,
+                                    lucky_chance: 0.0,
+                                },
                                 modifier: Modifier::Flat,
                             },
                             ignore_stat_effects: Default::default(),
@@ -194,20 +211,35 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
             | StatType::MinDamage { .. }
             | StatType::MaxDamage { .. }
             | StatType::Restore(_)
-            | StatType::SpellPower
-            | StatType::CritChances(_)
+            | StatType::CritChance(_)
             | StatType::CritDamage(_)
             | StatType::StatusDuration { .. }
             | StatType::StatusPower { .. }
-            | StatType::Speed(_) => {}
+            | StatType::Speed(_)
+            | StatType::Lucky { .. }
+            | StatType::StatConverter(StatConverterSpecs {
+                source: StatConverterSource::CritDamage | StatConverterSource::Damage { .. },
+                ..
+            })
+            | StatType::SuccessChance { .. } => {}
+            // Other
+            StatType::StatConverter(StatConverterSpecs {
+                source: StatConverterSource::ThreatLevel,
+                ..
+            }) => {}
         }
     }
 
     for skill_specs in player_specs.skills_specs.iter_mut() {
-        skills_updater::update_skill_specs(skill_specs, effects.iter(), Some(player_inventory));
+        skills_updater::update_skill_specs(
+            skill_specs,
+            effects.iter(),
+            Some(player_inventory),
+            area_threat,
+        );
     }
 
-    for trigger_effect in player_specs.triggers.iter_mut() {
+    for trigger_effect in player_specs.character_specs.triggers.iter_mut() {
         for effect in trigger_effect.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
                 trigger_effect.skill_type,

@@ -13,8 +13,7 @@
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "min": 1,
-        "max": 3
+        "value": [1, 3]
       }
     ]
   },
@@ -32,8 +31,7 @@
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "min": 4,
-        "max": 6
+        "value": [4, 6]
       }
     ]
   },
@@ -51,8 +49,7 @@
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "min": 7,
-        "max": 9
+        "value": [7, 9]
       }
     ]
   }

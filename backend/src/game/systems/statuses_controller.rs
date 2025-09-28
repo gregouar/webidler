@@ -23,7 +23,7 @@ pub fn update_character_statuses(
                 character_specs,
                 &mut character_state.life,
                 &mut character_state.mana,
-                &mut character_state.buff_status_change,
+                &mut character_state.dirty_specs,
                 status_specs,
                 status_state,
                 elapsed_time_f64,
@@ -38,7 +38,7 @@ pub fn update_character_statuses(
                 character_specs,
                 &mut character_state.life,
                 &mut character_state.mana,
-                &mut character_state.buff_status_change,
+                &mut character_state.dirty_specs,
                 status_specs,
                 status_state,
                 elapsed_time_f64,
@@ -111,7 +111,7 @@ pub fn generate_effects_map_from_statuses(statuses: &StatusMap) -> EffectsMap {
                 modifier,
                 debuff,
             } => Some((
-                (*stat, *modifier),
+                (stat.clone(), *modifier),
                 if *debuff {
                     -status_state.value
                 } else {

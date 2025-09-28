@@ -13,7 +13,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "targets": [
@@ -45,15 +45,14 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "targets": [
       {
         "range": "Any",
         "repeat": {
-          "min": 3,
-          "max": 3,
+          "value": 3,
           "target": "Different"
         },
         "effects": [
@@ -65,10 +64,9 @@
             }
           },
           {
-            "failure_chances": 0.7,
+            "success_chance": 30,
             "ApplyStatus": {
-              "min_duration": 3,
-              "max_duration": 3,
+              "duration": [1, 3],
               "statuses": [
                 {
                   "status_type": "Stun"
@@ -94,7 +92,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "targets": [
@@ -127,7 +125,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "targets": [
@@ -144,8 +142,7 @@
           },
           {
             "ApplyStatus": {
-              "min_duration": 3,
-              "max_duration": 3,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -153,8 +150,7 @@
                       "damage_type": "Fire"
                     }
                   },
-                  "min_value": 1,
-                  "max_value": 2
+                  "value": [1, 2]
                 }
               ]
             }
@@ -177,7 +173,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "targets": [
@@ -187,8 +183,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 5,
-              "max_duration": 5,
+              "duration": 5,
               "statuses": [
                 {
                   "status_type": {
@@ -196,8 +191,7 @@
                       "damage_type": "Poison"
                     }
                   },
-                  "min_value": 2,
-                  "max_value": 3
+                  "value": [2, 3]
                 }
               ]
             }
@@ -217,8 +211,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
-        "modifier": "Flat",
-        "value": 3
+        "modifier": "Multiplier",
+        "value": 10
       }
     ],
     "targets": [
@@ -228,8 +222,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 5,
-              "max_duration": 5,
+              "duration": 5,
               "statuses": [
                 {
                   "status_type": {
@@ -244,8 +237,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 30,
-                  "max_value": 30
+                  "value": 30
                 }
               ]
             }
@@ -265,8 +257,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
-        "modifier": "Flat",
-        "value": 1
+        "modifier": "Multiplier",
+        "value": 5
       }
     ],
     "targets": [
@@ -276,8 +268,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 5,
-              "max_duration": 5,
+              "duration": 5,
               "statuses": [
                 {
                   "status_type": {
@@ -292,8 +283,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 0.17,
-                  "max_value": 0.17
+                  "value": 17
                 }
               ]
             }
@@ -313,8 +303,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
-        "modifier": "Flat",
-        "value": 2
+        "modifier": "Multiplier",
+        "value": 10
       }
     ],
     "targets": [
@@ -323,8 +313,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 5,
-              "max_duration": 5,
+              "duration": 5,
               "statuses": [
                 {
                   "status_type": {
@@ -335,8 +324,7 @@
                       "modifier": "Multiplier"
                     }
                   },
-                  "min_value": 0.2,
-                  "max_value": 0.2
+                  "value": 20
                 },
                 {
                   "status_type": {
@@ -345,8 +333,57 @@
                       "modifier": "Multiplier"
                     }
                   },
-                  "min_value": 0.2,
-                  "max_value": 0.2
+                  "value": 20
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "blessing_crit": {
+    "name": "Blessing of Precision",
+    "description": "A blessing that increase your chance of critical strike, and make them stronger.",
+    "icon": "skills/blessing_crit.svg",
+    "skill_type": "Spell",
+    "cooldown": 15,
+    "mana_cost": 25,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "modifier": "Multiplier",
+        "value": 10
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Lucky": { "roll_type": "CritChance" }
+                      },
+                      "modifier": "Flat"
+                    }
+                  },
+                  "value": 100
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": { "CritDamage": null },
+                      "modifier": "Multiplier"
+                    }
+                  },
+                  "value": 40
                 }
               ]
             }
@@ -369,7 +406,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "triggers": [
@@ -383,8 +420,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 3,
-              "max_duration": 3,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -392,11 +428,118 @@
                       "damage_type": "Poison"
                     }
                   },
-                  "min_value": 4,
-                  "max_value": 8
+                  "value": [4, 8]
                 }
               ]
             }
+          }
+        ]
+      }
+    ]
+  },
+  "pyroclastic_infusion": {
+    "name": "Pyroclastic Infusion",
+    "description": "Infuse your weapon with the power of Fire and Storm.",
+    "icon": "skills/pyroclastic_infusion.svg",
+    "skill_type": "Attack",
+    "cooldown": 5,
+    "mana_cost": 5,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": { "StatusPower": null },
+        "modifier": "Multiplier",
+        "value": 10
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "damage_type": "Fire",
+                          "skill_type": "Attack"
+                        }
+                      },
+                      "modifier": "Multiplier"
+                    }
+                  },
+                  "value": 20
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "damage_type": "Storm",
+                          "skill_type": "Attack"
+                        }
+                      },
+                      "modifier": "Multiplier"
+                    }
+                  },
+                  "value": 20
+                }
+              ]
+            }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "StatConverter": {
+                          "source": {
+                            "Damage": { "damage_type": "Physical" }
+                          },
+                          "target_stat": {
+                            "Damage": { "damage_type": "Fire" }
+                          },
+                          "target_modifier": "Flat"
+                        }
+                      },
+                      "modifier": "Flat"
+                    }
+                  },
+                  "value": 50
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "StatConverter": {
+                          "source": {
+                            "Damage": { "damage_type": "Physical" }
+                          },
+                          "target_stat": {
+                            "MaxDamage": { "damage_type": "Storm" }
+                          },
+                          "target_modifier": "Flat"
+                        }
+                      },
+                      "modifier": "Flat"
+                    }
+                  },
+                  "value": 100
+                }
+              ]
+            },
+            "ignore_stat_effects": [
+              {
+                "StatusPower": null
+              }
+            ]
           }
         ]
       }
@@ -413,8 +556,8 @@
     "upgrade_effects": [
       {
         "stat": { "Restore": "Life" },
-        "modifier": "Flat",
-        "value": 5
+        "modifier": "Multiplier",
+        "value": 20
       }
     ],
     "targets": [
@@ -424,8 +567,7 @@
           {
             "Restore": {
               "restore_type": "Life",
-              "min": 25,
-              "max": 25,
+              "value": 25,
               "modifier": "Flat"
             }
           }
@@ -449,7 +591,7 @@
       },
       {
         "stat": {
-          "Speed": "Spell"
+          "Speed": null
         },
         "modifier": "Flat",
         "value": -2
@@ -462,8 +604,7 @@
           {
             "Restore": {
               "restore_type": "Mana",
-              "min": 10,
-              "max": 10,
+              "value": 10,
               "modifier": "Flat"
             }
           }
@@ -485,7 +626,7 @@
           "Damage": {}
         },
         "modifier": "Multiplier",
-        "value": 0.5
+        "value": 50
       }
     ],
     "modifier_effects": [
@@ -534,7 +675,7 @@
               "damage": {
                 "Physical": [5, 10]
               },
-              "crit_chances": 5,
+              "crit_chance": 5,
               "crit_damage": 100
             }
           }

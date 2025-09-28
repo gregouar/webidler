@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::{item_affix::AffixType, trigger::TriggerSpecs};
+use crate::data::{chance::Chance, item_affix::AffixType, trigger::TriggerSpecs};
 
 pub use super::skill::{SkillRange, SkillShape};
 use super::{
@@ -179,7 +179,7 @@ pub struct WeaponSpecs {
     // #[serde(rename_all = "snake_case")]
     pub damage: DamageMap,
 
-    pub crit_chances: f32,
+    pub crit_chance: Chance,
     pub crit_damage: f64,
 }
 
@@ -200,7 +200,7 @@ impl ItemModifiers {
             .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
                 *effects_map
                     .0
-                    .entry((effect.stat_effect.stat, effect.stat_effect.modifier))
+                    .entry((effect.stat_effect.stat.clone(), effect.stat_effect.modifier))
                     .or_default() += effect.stat_effect.value;
                 effects_map
             })
