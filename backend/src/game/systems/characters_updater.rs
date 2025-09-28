@@ -6,8 +6,7 @@ use shared::data::{
     passive::StatEffect,
     skill::{DamageType, SkillType},
     stat_effect::{
-        ApplyStatModifier, EffectsMap, LuckyRollType, Modifier, StatConverterSource,
-        StatConverterSpecs, StatType,
+        ApplyStatModifier, LuckyRollType, StatConverterSource, StatConverterSpecs, StatType,
     },
 };
 
@@ -59,22 +58,6 @@ pub fn reset_character(character_state: &mut CharacterState) {
     character_state.just_hurt = false;
     character_state.just_hurt_crit = false;
     character_state.just_blocked = false;
-}
-
-pub fn stats_map_to_vec(effects: &EffectsMap) -> Vec<StatEffect> {
-    let mut effects: Vec<_> = effects.into();
-
-    effects.sort_by_key(|e| {
-        (
-            match e.modifier {
-                Modifier::Flat => 0,
-                Modifier::Multiplier => 1,
-            },
-            e.stat.clone(),
-        )
-    });
-
-    effects
 }
 
 pub fn update_character_specs(
@@ -174,6 +157,11 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                 ..
             })
             | StatType::SuccessChance { .. } => {}
+            // Other
+            StatType::StatConverter(StatConverterSpecs {
+                source: StatConverterSource::ThreatLevel,
+                ..
+            }) => {}
         }
     }
 

@@ -1,7 +1,7 @@
 use anyhow::Result;
 
 use shared::data::{
-    area::{AreaLevel, AreaState},
+    area::{AreaLevel, AreaState, AreaThreat},
     monster::{MonsterRarity, MonsterSpecs, MonsterState},
     passive::StatEffect,
     stat_effect::{Modifier, StatType},
@@ -43,10 +43,15 @@ impl RandomWeighted for &BossBlueprint {
 pub fn generate_monsters_wave(
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
+    area_threat: &AreaThreat,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>, bool)> {
-    let (monster_specs, is_boss) =
-        generate_monsters_wave_specs(area_blueprint, area_state, monsters_specs_store)?;
+    let (monster_specs, is_boss) = generate_monsters_wave_specs(
+        area_blueprint,
+        area_state,
+        area_threat,
+        monsters_specs_store,
+    )?;
     let monster_states = monster_specs.iter().map(MonsterState::init).collect();
     Ok((monster_specs, monster_states, is_boss))
 }
@@ -55,6 +60,7 @@ pub fn generate_monsters_wave(
 fn generate_monsters_wave_specs(
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
+    area_threat: &AreaThreat,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Result<(Vec<MonsterSpecs>, bool)> {
     let available_bosses: Vec<_> = area_blueprint
@@ -74,6 +80,7 @@ fn generate_monsters_wave_specs(
                 area_blueprint,
                 area_state,
                 monsters_specs_store,
+                area_threat,
             ),
             true,
         ));
@@ -95,6 +102,7 @@ fn generate_monsters_wave_specs(
                 area_blueprint,
                 area_state,
                 monsters_specs_store,
+                area_threat,
             ),
             false,
         ));
@@ -107,6 +115,7 @@ fn generate_all_monsters_specs(
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
     monsters_specs_store: &MonstersSpecsStore,
+    area_threat: &AreaThreat,
 ) -> Vec<MonsterSpecs> {
     let mut grid = [[true; 3]; 2];
     let mut monsters = Vec::with_capacity(6);
@@ -126,7 +135,8 @@ fn generate_all_monsters_specs(
                     template.character_specs.size.get_xy_size(),
                 );
 
-                let mut specs = generate_monster_specs(template, area_blueprint, area_state);
+                let mut specs =
+                    generate_monster_specs(template, area_blueprint, area_state, area_threat);
                 specs.character_specs.position_x = (x + 1) as u8;
                 specs.character_specs.position_y = (y + 1) as u8;
                 monsters.push(specs);
@@ -172,6 +182,7 @@ fn generate_monster_specs(
     bp_specs: &BaseMonsterSpecs,
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
+    area_threat: &AreaThreat,
 ) -> MonsterSpecs {
     let mut monster_specs = MonsterSpecs::init(bp_specs.clone());
     let mut monster_level = area_state.area_level;
@@ -199,7 +210,7 @@ fn generate_monster_specs(
     monster_specs.reward_factor *= reward_factor;
     monster_specs.character_specs.max_life *= exp_factor;
 
-    let effects = [StatEffect {
+    let upgrade_effects = [StatEffect {
         stat: StatType::Damage {
             skill_type: None,
             damage_type: None,
@@ -210,15 +221,16 @@ fn generate_monster_specs(
     }];
     for skill_specs in monster_specs.skill_specs.iter_mut() {
         if skill_specs.base.upgrade_effects.is_empty() {
-            skills_updater::update_skill_specs(skill_specs, effects.iter(), None);
-        } else {
             skills_updater::update_skill_specs(
                 skill_specs,
-                skills_updater::compute_skill_upgrade_effects(skill_specs, monster_level)
-                    .collect::<Vec<_>>()
-                    .iter(),
+                upgrade_effects.iter(),
                 None,
+                area_threat,
             );
+        } else {
+            let effects: Vec<_> =
+                (&skills_updater::compute_skill_upgrade_effects(skill_specs, monster_level)).into();
+            skills_updater::update_skill_specs(skill_specs, effects.iter(), None, area_threat);
         }
     }
 

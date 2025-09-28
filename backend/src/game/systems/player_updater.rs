@@ -1,6 +1,7 @@
 use std::{iter, time::Duration};
 
 use shared::data::{
+    area::AreaThreat,
     chance::ChanceRange,
     character::CharacterId,
     character_status::StatusSpecs,
@@ -15,7 +16,10 @@ use shared::data::{
     trigger::{EventTrigger, TriggerTarget, TriggeredEffect},
 };
 
-use crate::game::{data::event::EventsQueue, systems::statuses_controller};
+use crate::game::{
+    data::event::EventsQueue,
+    systems::{stats_updater, statuses_controller},
+};
 
 use super::{characters_updater, passives_controller, skills_updater};
 
@@ -60,6 +64,7 @@ pub fn update_player_specs(
     player_inventory: &PlayerInventory,
     passives_tree_specs: &PassivesTreeSpecs,
     passives_tree_state: &PassivesTreeState,
+    area_threat: &AreaThreat,
 ) {
     // TODO: Reset player_specs
     player_specs.character_specs.armor.clear();
@@ -130,7 +135,7 @@ pub fn update_player_specs(
         )
         .collect();
 
-    compute_player_specs(player_specs, player_inventory);
+    compute_player_specs(player_specs, player_inventory, area_threat);
 
     // We only add skills trigger after because they were already increased by skill update
     player_specs.character_specs.triggers.extend(
@@ -142,8 +147,12 @@ pub fn update_player_specs(
     );
 }
 
-fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &PlayerInventory) {
-    let effects = characters_updater::stats_map_to_vec(&player_specs.effects);
+fn compute_player_specs(
+    player_specs: &mut PlayerSpecs,
+    player_inventory: &PlayerInventory,
+    area_threat: &AreaThreat,
+) {
+    let effects = stats_updater::stats_map_to_vec(&player_specs.effects, area_threat);
 
     player_specs.character_specs =
         characters_updater::update_character_specs(&player_specs.character_specs, &effects);
@@ -213,11 +222,21 @@ fn compute_player_specs(player_specs: &mut PlayerSpecs, player_inventory: &Playe
                 ..
             })
             | StatType::SuccessChance { .. } => {}
+            // Other
+            StatType::StatConverter(StatConverterSpecs {
+                source: StatConverterSource::ThreatLevel,
+                ..
+            }) => {}
         }
     }
 
     for skill_specs in player_specs.skills_specs.iter_mut() {
-        skills_updater::update_skill_specs(skill_specs, effects.iter(), Some(player_inventory));
+        skills_updater::update_skill_specs(
+            skill_specs,
+            effects.iter(),
+            Some(player_inventory),
+            area_threat,
+        );
     }
 
     for trigger_effect in player_specs.character_specs.triggers.iter_mut() {

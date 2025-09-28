@@ -6,22 +6,18 @@ use shared::{
         area::{AreaLevel, ThreatLevel},
         character::CharacterId,
         character_status::StatusSpecs,
-        skill::{SkillType, TargetType},
-        stat_effect::{Modifier, StatType},
+        skill::TargetType,
         trigger::EventTrigger,
     },
 };
 
-use crate::{
-    constants::THREAT_EFFECT,
-    game::{
-        data::{
-            event::{EventsQueue, GameEvent, HitEvent},
-            master_store::MasterStore,
-        },
-        game_data::GameInstanceData,
-        systems::{characters_controller, triggers_controller},
+use crate::game::{
+    data::{
+        event::{EventsQueue, GameEvent, HitEvent},
+        master_store::MasterStore,
     },
+    game_data::GameInstanceData,
+    systems::triggers_controller,
 };
 
 use super::{
@@ -313,34 +309,40 @@ fn handle_threat_increased_event(
     game_data: &mut GameInstanceData,
     threat_level: ThreatLevel,
 ) {
-    for (i, (monster_specs, monster_state)) in game_data
-        .monster_specs
-        .iter()
-        .zip(game_data.monster_states.iter_mut())
-        .enumerate()
-    {
-        characters_controller::apply_status(
-            &mut (
-                CharacterId::Monster(i),
-                (
-                    &monster_specs.character_specs,
-                    &mut monster_state.character_state,
-                ),
-            ),
-            &StatusSpecs::StatModifier {
-                stat: StatType::Damage {
-                    skill_type: None,
-                    damage_type: None,
-                },
-                modifier: Modifier::Multiplier,
-                debuff: false,
-            },
-            SkillType::Spell,
-            THREAT_EFFECT,
-            None,
-            true,
-        );
+    // To force recompute specs with new threat level, applying threat level stat converters
+    for monster_state in game_data.monster_states.iter_mut() {
+        monster_state.character_state.dirty_specs = true;
     }
+    game_data.player_state.character_state.dirty_specs = true;
+
+    // for (i, (monster_specs, monster_state)) in game_data
+    //     .monster_specs
+    //     .iter()
+    //     .zip(game_data.monster_states.iter_mut())
+    //     .enumerate()
+    // {
+    //     characters_controller::apply_status(
+    //         &mut (
+    //             CharacterId::Monster(i),
+    //             (
+    //                 &monster_specs.character_specs,
+    //                 &mut monster_state.character_state,
+    //             ),
+    //         ),
+    //         &StatusSpecs::StatModifier {
+    //             stat: StatType::Damage {
+    //                 skill_type: None,
+    //                 damage_type: None,
+    //             },
+    //             modifier: Modifier::Multiplier,
+    //             debuff: false,
+    //         },
+    //         SkillType::Spell,
+    //         THREAT_EFFECT,
+    //         None,
+    //         true,
+    //     );
+    // }
 
     for triggered_effects in game_data
         .player_specs

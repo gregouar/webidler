@@ -38,7 +38,7 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             mana: specs.max_mana,
 
             statuses: StatusMap::default(),
-            buff_status_change: true,
+            dirty_specs: true,
 
             is_alive: true,
             just_hurt: false,

@@ -2441,6 +2441,37 @@
           }
         ],
         "max_upgrade_level": 3
+      },
+      "threat_damage_1": {
+        "initial_node": true,
+        "name": "Threat Damage",
+        "icon": "passives/threat_damage.svg",
+        "x": -80,
+        "y": 0,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "ThreatLevel",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier"
+              }
+            },
+            "modifier": "Flat",
+            "value": 10
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusDuration": null
+            },
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "max_upgrade_level": 3
       }
     },
     "connections": [

@@ -368,6 +368,7 @@ pub enum StatConverterSource {
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
+    ThreatLevel,
     // TODO: Add others, like life, mana, ...
 }
 

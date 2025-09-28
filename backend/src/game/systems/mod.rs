@@ -14,5 +14,6 @@ pub mod player_updater;
 pub mod sessions_controller;
 pub mod skills_controller;
 pub mod skills_updater;
+pub mod stats_updater;
 pub mod statuses_controller;
 pub mod triggers_controller;

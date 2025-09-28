@@ -206,7 +206,7 @@ pub fn apply_status(
     }
 
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger { .. } = status_specs {
-        target_state.buff_status_change = true;
+        target_state.dirty_specs = true;
     }
 }
 

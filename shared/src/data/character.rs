@@ -93,7 +93,7 @@ pub struct CharacterState {
     pub statuses: StatusMap,
     // This feels dirty
     #[serde(default, skip_serializing, skip_deserializing)]
-    pub buff_status_change: bool,
+    pub dirty_specs: bool,
 
     pub is_alive: bool,
     pub just_hurt: bool,
