@@ -334,7 +334,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_type,
             effect_type,
         } => format!(
-            "{}{} Success Chance",
+            "Success Chance to {}{}",
             skill_type_str(*skill_type),
             stat_skill_effect_type_str(*effect_type)
         ),
@@ -411,11 +411,17 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             format_adds_removes(value, false),
             status_type_str(*status_type)
         ),
-        StatType::StatusDuration(status_type) => format!(
-            "{} seconds duration to {}",
-            format_adds_removes(value, true),
-            status_type_str(*status_type)
-        ),
+        StatType::StatusDuration(status_type) => {
+            if value.unwrap_or_default() >= 99999.0 {
+                format!("{} never expire", status_type_str(*status_type))
+            } else {
+                format!(
+                    "{} seconds duration to {}",
+                    format_adds_removes(value, true),
+                    status_type_str(*status_type)
+                )
+            }
+        }
         StatType::Speed(skill_type) => {
             if value.unwrap_or_default() >= 0.0 {
                 format!(

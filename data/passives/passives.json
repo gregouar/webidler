@@ -2287,9 +2287,9 @@
       "restoration_1": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": -70,
+        "x": -65,
         "y": 10,
-        "node_type": "Utility",
+        "node_type": "Spell",
         "effects": [
           {
             "stat": {
@@ -2313,9 +2313,9 @@
       "restoration_2": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": -70,
+        "x": -60,
         "y": 20,
-        "node_type": "Utility",
+        "node_type": "Spell",
         "effects": [
           {
             "stat": {
@@ -2339,10 +2339,10 @@
       "restoration_3": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": -70,
+        "x": -60,
         "y": 30,
         "size": 1,
-        "node_type": "Utility",
+        "node_type": "Spell",
         "effects": [
           {
             "stat": {
@@ -2363,10 +2363,46 @@
         ],
         "max_upgrade_level": 3
       },
+      "healing_aura": {
+        "name": "Healing Aura",
+        "icon": "passives/healing_aura.svg",
+        "x": -60,
+        "y": 40,
+        "node_type": "Spell",
+        "size": 2,
+        "triggers": [
+          {
+            "trigger_id": "healing_aura",
+            "description": "Restore Area Level x 3 Life at the end of each wave.",
+            "OnWaveCompleted": {},
+            "target": "Source",
+            "effects": [
+              {
+                "Restore": {
+                  "restore_type": "Life",
+                  "value": 3,
+                  "modifier": "Flat"
+                }
+              }
+            ],
+            "modifiers": [
+              {
+                "stat": {
+                  "Restore": null
+                },
+                "modifier": "Multiplier",
+                "factor": 1,
+                "source": "AreaLevel"
+              }
+            ]
+          }
+        ],
+        "locked": true
+      },
       "status_duration_1": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -70,
+        "x": -65,
         "y": -10,
         "node_type": "Status",
         "effects": [
@@ -2392,7 +2428,7 @@
       "status_duration_2": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -70,
+        "x": -60,
         "y": -20,
         "node_type": "Status",
         "effects": [
@@ -2418,7 +2454,7 @@
       "status_duration_3": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -70,
+        "x": -60,
         "y": -30,
         "size": 1,
         "node_type": "Status",
@@ -2442,12 +2478,29 @@
         ],
         "max_upgrade_level": 3
       },
+      "infinite_curse": {
+        "name": "Cursed Mouth",
+        "icon": "passives/infinite_curse.svg",
+        "x": -60,
+        "y": -40,
+        "size": 2,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": { "StatModifier": { "debuff": true } }
+            },
+            "modifier": "Flat",
+            "value": 100000
+          }
+        ],
+        "locked": true
+      },
       "threat_damage_1": {
-        "initial_node": true,
         "name": "Threat Damage",
         "icon": "passives/threat_damage.svg",
-        "x": -80,
-        "y": 0,
+        "x": -75,
+        "y": 10,
         "node_type": "Attack",
         "effects": [
           {
@@ -2465,13 +2518,202 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatConverter": {
+                "source": "ThreatLevel",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier"
+              }
+            },
+            "modifier": "Flat",
+            "value": 5
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "threat_damage_2": {
+        "name": "Threat Damage",
+        "icon": "passives/threat_damage.svg",
+        "x": -80,
+        "y": 20,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "ThreatLevel",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier"
+              }
+            },
+            "modifier": "Flat",
+            "value": 10
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "ThreatLevel",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier"
+              }
+            },
+            "modifier": "Flat",
+            "value": 5
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "threat_damage_3": {
+        "name": "Threat Damage",
+        "icon": "passives/threat_damage.svg",
+        "x": -80,
+        "y": 30,
+        "size": 1,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "ThreatLevel",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier"
+              }
+            },
+            "modifier": "Flat",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "ThreatLevel",
+                "target_stat": { "Damage": {} },
+                "target_modifier": "Multiplier"
+              }
+            },
+            "modifier": "Flat",
+            "value": 10
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "menacing_presence": {
+        "initial_node": true,
+        "name": "Menacing Presence",
+        "icon": "passives/menacing_presence.svg",
+        "x": -80,
+        "y": 40,
+        "size": 2,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": "ThreatGain",
+            "modifier": "Multiplier",
+            "value": 100
+          }
+        ],
+        "locked": true
+      },
+      "success_chance_1": {
+        "name": "Success Chance",
+        "icon": "passives/success.svg",
+        "x": -75,
+        "y": -10,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {}
+            },
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {}
+            },
+            "modifier": "Multiplier",
+            "value": 5
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "success_chance_2": {
+        "name": "Success Chance",
+        "icon": "passives/success.svg",
+        "x": -80,
+        "y": -20,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {}
+            },
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {}
+            },
+            "modifier": "Multiplier",
+            "value": 5
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "success_chance_3": {
+        "name": "Success Chance",
+        "icon": "passives/success.svg",
+        "x": -80,
+        "y": -30,
+        "size": 1,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {}
+            },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {}
             },
             "modifier": "Multiplier",
             "value": 10
           }
         ],
         "max_upgrade_level": 3
+      },
+      "success_chance_lucky": {
+        "name": "Loaded Dice",
+        "icon": "passives/loaded_dice.svg",
+        "x": -80,
+        "y": -40,
+        "size": 2,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "Lucky": {
+                "roll_type": "SuccessChance"
+              }
+            },
+            "modifier": "Flat",
+            "value": 50
+          }
+        ],
+        "locked": true
       }
     },
     "connections": [
@@ -2677,10 +2919,6 @@
       },
       {
         "from": "gold_dr_1",
-        "to": "healing_aura"
-      },
-      {
-        "from": "gold_dr_1",
         "to": "mana_max_2"
       },
       {
@@ -2800,6 +3038,38 @@
         "to": "restoration_1"
       },
       {
+        "from": "movement_init",
+        "to": "threat_damage_1"
+      },
+      {
+        "from": "threat_damage_1",
+        "to": "threat_damage_2"
+      },
+      {
+        "from": "threat_damage_2",
+        "to": "threat_damage_3"
+      },
+      {
+        "from": "threat_damage_3",
+        "to": "menacing_presence"
+      },
+      {
+        "from": "movement_init",
+        "to": "success_chance_1"
+      },
+      {
+        "from": "success_chance_1",
+        "to": "success_chance_2"
+      },
+      {
+        "from": "success_chance_2",
+        "to": "success_chance_3"
+      },
+      {
+        "from": "success_chance_3",
+        "to": "success_chance_lucky"
+      },
+      {
         "from": "status_duration_1",
         "to": "status_duration_2"
       },
@@ -2808,12 +3078,20 @@
         "to": "status_duration_3"
       },
       {
+        "from": "status_duration_3",
+        "to": "infinite_curse"
+      },
+      {
         "from": "restoration_1",
         "to": "restoration_2"
       },
       {
         "from": "restoration_2",
         "to": "restoration_3"
+      },
+      {
+        "from": "restoration_3",
+        "to": "healing_aura"
       }
     ]
   }

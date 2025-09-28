@@ -247,7 +247,7 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                 .map(|status_effect| match status_effect.status_type {
                     StatusSpecs::Stun => {
                         let success_chance = success_chance.clone();
-                        view! { <EffectLi>{success_chance}"Stun for " {format_min_max(duration)}" seconds"</EffectLi> }
+                        view! { <EffectLi>{success_chance}"Stun " {format_duration(duration)}</EffectLi> }
                         .into_any()
                     }
                     StatusSpecs::DamageOverTime { damage_type, .. } => {
@@ -259,8 +259,8 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                                 <span class=format!(
                                     "font-semibold {damage_color}",
                                 )>{format_min_max(status_effect.value)}</span>"  "
-                                {damage_type_str(Some(damage_type))} "Damage per second for "
-                                {format_min_max(duration)} " seconds"
+                                {damage_type_str(Some(damage_type))} "Damage per second "
+                                {format_duration(duration)}
                             </EffectLi>
                         }
                         .into_any()
@@ -298,8 +298,8 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                         let success_chance = success_chance.clone();
                         view! {
                             <EffectLi>
-                                {success_chance}"Apply the following status for "
-                                {format_min_max(duration)} " seconds:"
+                                {success_chance}"Apply the following status "
+                                {format_duration(duration)} ":"
                                 <ul>{format_trigger(*trigger_specs)}</ul>
                             </EffectLi>
                         }
@@ -312,8 +312,8 @@ fn format_effect(effect: SkillEffect) -> impl IntoView {
                 (!stat_effects.is_empty()).then(|| {
                     view! {
                         <EffectLi>
-                            {success_chance}"Apply the following status for "
-                            {format_min_max(duration)} " seconds:"
+                            {success_chance}"Apply the following status "
+                            {format_duration(duration)} ":"
                             <ul>{effects_tooltip::formatted_effects_list(stat_effects)}</ul>
                         </EffectLi>
                         {(!max_stat_effects.is_empty())
@@ -380,6 +380,24 @@ where
         )
     } else {
         format_number(value.min.into()).to_string()
+    }
+}
+
+fn format_duration<T>(value: ChanceRange<T>) -> String
+where
+    T: Into<f64> + PartialEq + Copy,
+{
+    if value.min.into() > 9999.0f64 {
+        "forever".into()
+    } else if value.min.into() >= 60.0f64 {
+        let value = ChanceRange::<f64> {
+            min: value.min.into() / 60.0,
+            max: value.max.into() / 60.0,
+            lucky_chance: value.lucky_chance,
+        };
+        format!("for {} minutes", format_min_max(value))
+    } else {
+        format!("for {} seconds", format_min_max(value))
     }
 }
 
