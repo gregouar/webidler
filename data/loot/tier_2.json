@@ -85,6 +85,10 @@
       "weight": 2000
     },
     {
+      "item_id": "silver_ring_unique",
+      "weight": 5
+    },
+    {
       "item_id": "medallion",
       "weight": 2000
     },

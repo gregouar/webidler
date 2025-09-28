@@ -3,9 +3,12 @@ use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
 use sqlx::{types::JsonValue, Transaction};
 
-use crate::db::{
-    characters_data::{upsert_character_inventory_data, CharacterDataEntry, InventoryData},
-    pool::{Database, DbExecutor, DbPool},
+use crate::{
+    constants::DATA_VERSION,
+    db::{
+        characters_data::{upsert_character_inventory_data, CharacterDataEntry, InventoryData},
+        pool::{Database, DbExecutor, DbPool},
+    },
 };
 
 use shared::data::{
@@ -49,6 +52,7 @@ async fn migrate_market_items(executor: &mut Transaction<'static, Database>) -> 
             market_id, 
             item_data as "item_data: JsonValue"
         FROM market
+        WHERE data_version IS NULL
         "#
     )
     .fetch_all(&mut **executor)
@@ -69,8 +73,9 @@ async fn migrate_market_items(executor: &mut Transaction<'static, Database>) -> 
 
     for (market_id, item_data) in new_market_entries {
         sqlx::query!(
-            "UPDATE market SET item_data = $1 WHERE market_id = $2",
+            "UPDATE market SET item_data = $1, data_version = $2 WHERE market_id = $3",
             item_data,
+            DATA_VERSION,
             market_id,
         )
         .execute(&mut **executor)

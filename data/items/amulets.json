@@ -1,49 +1,4 @@
 {
-  "copper_ring": {
-    "name": "Copper Ring",
-    "icon": "items/copper_ring.webp",
-    "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
-    "affixes": [
-      {
-        "scope": "Global",
-        "stat": "GoldFind",
-        "modifier": "Multiplier",
-        "value": 20
-      }
-    ]
-  },
-  "silver_ring": {
-    "name": "Silver Ring",
-    "icon": "items/silver_ring.webp",
-    "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
-    "affixes": [
-      {
-        "scope": "Global",
-        "stat": "GoldFind",
-        "modifier": "Multiplier",
-        "value": 40
-      }
-    ],
-    "min_area_level": 40
-  },
-  "gold_ring": {
-    "name": "Gold Ring",
-    "icon": "items/gold_ring.webp",
-    "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
-    "affixes": [
-      {
-        "scope": "Global",
-        "stat": "GoldFind",
-        "modifier": "Multiplier",
-        "value": 60
-      }
-    ],
-    "min_area_level": 90
-  },
-
   "wooden_beads": {
     "name": "Wooden Beads",
     "icon": "items/wooden_beads.webp",

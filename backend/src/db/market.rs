@@ -6,9 +6,12 @@ use shared::data::{
     item::ItemSpecs, item_affix::AffixEffectScope, market::MarketFilters, user::UserCharacterId,
 };
 
-use crate::db::{
-    pool::{Database, DbExecutor},
-    utc_datetime::UtcDateTime,
+use crate::{
+    constants::DATA_VERSION,
+    db::{
+        pool::{Database, DbExecutor},
+        utc_datetime::UtcDateTime,
+    },
 };
 
 pub type MarketId = i64;
@@ -132,9 +135,9 @@ async fn create_market_item<'c>(
             item_damages, 
             item_crit_chance,
             item_crit_damage,
-            item_data
+            item_data,data_version
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
         RETURNING market_id
         "#,
         character_id,
@@ -150,6 +153,7 @@ async fn create_market_item<'c>(
         item_crit_chance,
         item_crit_damage,
         item_data,
+        DATA_VERSION
     )
     .fetch_one(&mut **executor)
     .await?;
