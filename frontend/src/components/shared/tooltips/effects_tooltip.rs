@@ -20,9 +20,9 @@ pub fn format_effect_value(effect: &StatEffect) -> String {
     match effect.modifier {
         Modifier::Flat => format_number(effect.value),
         Modifier::Multiplier => {
-            let (number, word) = if effect.value >= 0.0 {
+            let (number_value, word) = if effect.value >= 0.0 {
                 (
-                    format_number(effect.value),
+                    effect.value,
                     if effect.stat.is_multiplicative() {
                         "More"
                     } else {
@@ -32,7 +32,7 @@ pub fn format_effect_value(effect: &StatEffect) -> String {
             } else {
                 let div = (1.0 - effect.value * 0.01).max(0.0);
                 (
-                    format_number(-(if div != 0.0 { effect.value / div } else { 0.0 })),
+                    -(if div != 0.0 { effect.value / div } else { 0.0 }),
                     if effect.stat.is_multiplicative() {
                         "Less"
                     } else {
@@ -40,7 +40,11 @@ pub fn format_effect_value(effect: &StatEffect) -> String {
                     },
                 )
             };
-            format!("{number}% {word}")
+            if effect.value < 0.0 && number_value.round() >= 100.0 {
+                "Removes All".into()
+            } else {
+                format!("{}% {word}", format_number(number_value))
+            }
         }
     }
 }

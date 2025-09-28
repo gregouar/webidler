@@ -1297,7 +1297,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": -1.0
+            "value": -100
           }
         ],
         "upgrade_effects": [
