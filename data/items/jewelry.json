@@ -89,7 +89,7 @@
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Fire" } },
         "modifier": "Multiplier",
-        "value": [150, 300]
+        "value": [100, 200]
       },
       {
         "scope": "Global",
@@ -117,7 +117,7 @@
         "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "value": [-10, -5]
+        "value": [-20, -10]
       }
     ],
     "min_area_level": 50,

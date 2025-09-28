@@ -29,9 +29,9 @@ use super::skill::SkillType;
 pub enum DamageType {
     #[default]
     Physical,
+    Storm,
     Fire,
     Poison,
-    Storm,
 }
 
 pub type DamageMap = HashMap<DamageType, ChanceRange<f64>>;

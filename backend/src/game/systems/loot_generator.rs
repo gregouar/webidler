@@ -89,14 +89,8 @@ pub fn roll_item(
         },
         level,
         quality,
-        affixes: roll_unique_affixes(&base),
+        affixes: roll_unique_affixes(&base, quality),
     };
-
-    modifiers
-        .affixes
-        .iter_mut()
-        .flat_map(|affix| affix.effects.iter_mut())
-        .for_each(|effect| effect.stat_effect.value *= 1.0 + quality as f64 * 0.01);
 
     let affixes_amount = match rarity {
         ItemRarity::Magic => ChanceRange {
@@ -165,18 +159,29 @@ fn roll_base_item(
     })
 }
 
-fn roll_unique_affixes(base_item: &ItemBase) -> Vec<ItemAffix> {
+fn roll_unique_affixes(base_item: &ItemBase, quality: f32) -> Vec<ItemAffix> {
     base_item
         .affixes
         .iter()
-        .map(|e| ItemAffix {
-            name: "Unique".to_string(),
-            family: base_item.name.clone(),
-            tags: HashSet::new(),
-            affix_type: AffixType::Unique,
-            tier: 1,
-            item_level: base_item.min_area_level,
-            effects: vec![roll_affix_effect(e)],
+        .map(|e: &AffixEffectBlueprint| {
+            let quality_factor = 1.0
+                + if e.ignore_quality {
+                    0.0
+                } else {
+                    quality as f64 * 0.01
+                };
+            let mut effect = roll_affix_effect(e);
+            effect.stat_effect.value *= quality_factor;
+
+            ItemAffix {
+                name: "Unique".to_string(),
+                family: base_item.name.clone(),
+                tags: HashSet::new(),
+                affix_type: AffixType::Unique,
+                tier: 1,
+                item_level: base_item.min_area_level,
+                effects: vec![effect],
+            }
         })
         .collect()
 }
@@ -308,6 +313,7 @@ fn roll_affix_effect(effect_blueprint: &AffixEffectBlueprint) -> AffixEffect {
             modifier: effect_blueprint.modifier,
             value: effect_blueprint.value.roll().round(),
             bypass_ignore: false,
+            // ignore_quality: effect_blueprint.ignore_quality,
         },
         scope: effect_blueprint.scope,
     }

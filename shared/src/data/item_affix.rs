@@ -72,6 +72,9 @@ pub struct AffixEffectBlueprint {
     pub modifier: Modifier,
     pub scope: AffixEffectScope,
     pub value: ChanceRange<f64>,
+
+    #[serde(default)]
+    pub ignore_quality: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

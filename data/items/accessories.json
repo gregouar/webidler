@@ -52,6 +52,76 @@
     ],
     "min_area_level": 40
   },
+  "hooded_wrap_unique": {
+    "name": "Stormfeast Shroud",
+    "description": "Born of tempest and trial by fire, it drinks the sky's fury and exhales flame.",
+    "icon": "items/stormfeast_shroud.webp",
+    "slot": "Accessory",
+    "categories": ["Accessory", "Cloak"],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": 30
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": 30
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": 30
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "StatConverter": {
+            "source": {
+              "Damage": { "damage_type": "Storm" }
+            },
+            "target_stat": {
+              "Damage": { "damage_type": "Fire" }
+            },
+            "target_modifier": "Flat"
+          }
+        },
+        "modifier": "Flat",
+        "ignore_quality": true,
+        "value": 100
+      },
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Fire" } },
+        "modifier": "Multiplier",
+        "value": [50, 100]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": [-90, -60]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": [30, 60]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Speed": null },
+        "modifier": "Multiplier",
+        "value": [8, 12]
+      }
+    ],
+    "min_area_level": 50
+  },
   "heavy_cloak": {
     "name": "Heavy Cloak",
     "icon": "items/heavy_cloak.webp",
