@@ -176,7 +176,7 @@ fn compute_skill_modifier_effects<'a>(
                                 if let Some(dmg_type) = damage_type {
                                     weapon_specs
                                         .damage
-                                        .get(&dmg_type)
+                                        .get(dmg_type)
                                         .map(|d| (d.min + d.max) * 0.5)
                                         .unwrap_or_default()
                                 } else {
@@ -488,7 +488,7 @@ pub fn compute_skill_specs_effect<'a>(
         let mut stats_converted = Vec::with_capacity(stat_converters.len());
 
         for (specs, factor) in stat_converters {
-            if !specs.skill_type.is_none_or(|s| s == skill_type) {
+            if specs.skill_type.is_some_and(|s| s != skill_type) {
                 continue;
             }
 
