@@ -924,7 +924,7 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                 match category {
                     MarketOrderBy::Price => "Lowest Price",
                     MarketOrderBy::Level => "Lowest Required Level",
-                    MarketOrderBy::Damages => "Highest Damages",
+                    MarketOrderBy::Damage => "Highest Damage",
                     MarketOrderBy::CritChance => "Highest Critical Hit Chance",
                     MarketOrderBy::CritDamage => "Highest Critical Hit Damage",
                     MarketOrderBy::Armor => "Highest Armor",
@@ -994,9 +994,9 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                 <div class="flex flex-col gap-4">
                     <ValidatedInput
                         id="item_damages"
-                        label="Min Damages:"
+                        label="Min Damage:"
                         input_type="number"
-                        placeholder="Minimum Damages per second"
+                        placeholder="Minimum Damage per second"
                         bind=item_damages
                     />
                     <ValidatedInput

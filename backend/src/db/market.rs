@@ -376,7 +376,7 @@ pub async fn read_market_items<'c>(
                 WHEN  $17 = 'Level' THEN market.item_level
             END ASC,
             CASE
-                WHEN  $17 = 'Damages' THEN  market.item_damages
+                WHEN  $17 = 'Damage' THEN  market.item_damages
                 WHEN  $17 = 'CritChance' THEN  market.item_crit_chance
                 WHEN  $17 = 'CritDamage' THEN  market.item_crit_damage
                 WHEN  $17 = 'Armor' THEN  market.item_armor

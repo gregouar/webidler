@@ -291,7 +291,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             format!("{}Critical Hit Chance", skill_type_str(*skill_type))
         }
         StatType::CritDamage(skill_type) => {
-            format!("{}Critical Hit Damages", skill_type_str(*skill_type))
+            format!("{}Critical Hit Damage", skill_type_str(*skill_type))
         }
         StatType::StatusPower(status_type) => {
             format!("{} Effect", status_type_str(*status_type))
@@ -376,7 +376,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         ),
         StatType::BlockDamageTaken => {
             format!(
-                "Takes {}% of Blocked Damages",
+                "Takes {}% of Blocked Damage",
                 format_flat_number(value, false)
             )
         }

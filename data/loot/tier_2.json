@@ -13,6 +13,10 @@
       "weight": 2000
     },
     {
+      "item_id": "leather_cap_unique",
+      "weight": 5
+    },
+    {
       "item_id": "leather_armor",
       "weight": 2000
     },

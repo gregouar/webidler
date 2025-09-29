@@ -58,7 +58,7 @@ pub struct MarketFilters {
 pub enum MarketOrderBy {
     Price,
     Level,
-    Damages,
+    Damage,
     CritChance,
     CritDamage,
     Armor,
