@@ -18,6 +18,52 @@
     },
     "min_area_level": 40
   },
+  "leather_armor_unique": {
+    "name": "Wildheart Vest",
+    "description": "Life feeds on life, this is no cruelty, only the forest's way",
+    "icon": "items/wildheart.webp",
+    "slot": "Body",
+    "categories": ["Armor", "Body"],
+    "rarity": "Unique",
+    "armor_specs": {
+      "armor": 40
+    },
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": { "Restore": "Life" },
+        "modifier": "Multiplier",
+        "value": [30, 50]
+      },
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Multiplier",
+        "value": [40, 60]
+      },
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Multiplier",
+        "value": [8, 10]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Poison"
+        },
+        "modifier": "Flat",
+        "value": [40, 60]
+      },
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": [20, 40]
+      }
+    ],
+    "min_area_level": 50
+  },
   "chain_shirt": {
     "name": "Chain Shirt",
     "icon": "items/chain_shirt.webp",
