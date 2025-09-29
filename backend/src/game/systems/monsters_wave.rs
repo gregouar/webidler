@@ -216,7 +216,7 @@ fn generate_monster_specs(
             damage_type: None,
         },
         modifier: Modifier::Multiplier,
-        value: (monster_level as f64 - 1.0) / 10.0,
+        value: (monster_level as f64 - 1.0) * 10.0,
         bypass_ignore: true,
     }];
     for skill_specs in monster_specs.skill_specs.iter_mut() {
