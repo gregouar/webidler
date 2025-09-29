@@ -1,16 +1,7 @@
 Next things to do:
 
-- crit blessing
-
-- lightning always strikes twice: storm damage is lucky
-- rapid toxins: double poison damage, half duration
-- blazing fire: add a % chance to inflict fire dot on fire damage (cumul, short dur)
-- overwhelming force: no crit chance, convert percent of crit damage to attack damage
-- spread destruction: dot spread on enemy death
-
-- failure chance stat effect
-- threat damage passives
 - spider boss & minions
+- inventory in town
 
 - add at least basic attack/spell to all monsters to trigger retaliate effects?
   OR block dot?
