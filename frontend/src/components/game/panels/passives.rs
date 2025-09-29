@@ -240,11 +240,12 @@ fn InGameConnection(
 
 pub fn node_meta_status(node_level: u8, locked: bool) -> MetaStatus {
     if node_level > 0 {
-        if locked && node_level == 1 {
-            MetaStatus::Normal
-        } else {
-            MetaStatus::Ascended
-        }
+        // if locked && node_level == 1 {
+        //     MetaStatus::Normal
+        // } else {
+        //     MetaStatus::Ascended
+        // }
+        MetaStatus::Ascended
     } else if locked {
         MetaStatus::Locked
     } else {
