@@ -126,7 +126,11 @@ fn InGameNode(
         let node_id = node_id.clone();
 
         move |_| {
-            let meta_status = node_meta_status(node_level.get(), node_specs.locked);
+            let meta_status = node_meta_status(
+                node_level.get(),
+                node_specs.locked,
+                node_specs.max_upgrade_level,
+            );
 
             let purchase_status = if game_context
                 .passives_tree_state
@@ -238,14 +242,13 @@ fn InGameConnection(
     view! { <Connection connection nodes_specs amount_connections node_levels /> }
 }
 
-pub fn node_meta_status(node_level: u8, locked: bool) -> MetaStatus {
+pub fn node_meta_status(node_level: u8, locked: bool, max_upgrade_level: Option<u8>) -> MetaStatus {
     if node_level > 0 {
-        // if locked && node_level == 1 {
-        //     MetaStatus::Normal
-        // } else {
-        //     MetaStatus::Ascended
-        // }
-        MetaStatus::Ascended
+        if locked && node_level == 1 && max_upgrade_level.unwrap_or_default() > 0 {
+            MetaStatus::Normal
+        } else {
+            MetaStatus::Ascended
+        }
     } else if locked {
         MetaStatus::Locked
     } else {
@@ -421,8 +424,8 @@ pub fn Connection(
     view! {
         {if let (Some(from), Some(to)) = (from_node, to_node) {
             let (from_level, to_level) = node_levels.get_untracked();
-            let from_status = node_meta_status(from_level, from.locked);
-            let to_status = node_meta_status(to_level, to.locked);
+            let from_status = node_meta_status(from_level, from.locked, from.max_upgrade_level);
+            let to_status = node_meta_status(to_level, to.locked, to.max_upgrade_level);
             let purchase_status = move || match amount_connections.get() {
                 2 => PurchaseStatus::Purchased,
                 1 => PurchaseStatus::Purchaseable,
