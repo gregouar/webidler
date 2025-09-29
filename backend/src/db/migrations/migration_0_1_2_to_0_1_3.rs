@@ -42,10 +42,6 @@ async fn stop_all_grinds<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()
 }
 
 async fn migrate_market_items(executor: &mut Transaction<'static, Database>) -> anyhow::Result<()> {
-    sqlx::query!("DELETE FROM market WHERE deleted_at IS NOT NULL")
-        .execute(&mut **executor)
-        .await?;
-
     let market_entries = sqlx::query!(
         r#"
         SELECT 
