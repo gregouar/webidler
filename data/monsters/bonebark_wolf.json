@@ -30,7 +30,7 @@
       "targets": [
         {
           "target_type": "Friend",
-          "range": "Melee",
+          "range": "Any",
           "shape": "Square4",
           "effects": [
             {

@@ -1989,7 +1989,7 @@
               "is_damaged_over_time": null
             },
             "target": "SameTarget",
-            "skill_range": "Melee",
+            "skill_range": "Any",
             "skill_shape": "Square4",
             "effects": [
               {
