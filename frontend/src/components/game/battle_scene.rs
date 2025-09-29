@@ -1,6 +1,6 @@
 use leptos::{html::*, prelude::*};
 
-use shared::constants::WAVES_PER_AREA_LEVEL;
+use shared::constants::{THREAT_EFFECT, WAVES_PER_AREA_LEVEL};
 use shared::messages::client::{GoBackLevelMessage, SetAutoProgressMessage};
 
 use crate::assets::img_asset;
@@ -8,10 +8,10 @@ use crate::components::ui::progress_bars::VerticalProgressBar;
 use crate::components::ui::tooltip::{StaticTooltip, StaticTooltipPosition};
 use crate::components::websocket::WebsocketContext;
 
-use super::GameContext;
 use super::loot_queue::LootQueue;
 use super::monsters_grid::MonstersGrid;
 use super::player_card::PlayerCard;
+use super::GameContext;
 
 #[component]
 pub fn BattleScene() -> impl IntoView {
@@ -237,7 +237,9 @@ pub fn ThreatIcon() -> impl IntoView {
     view! {
         <StaticTooltip
             position=StaticTooltipPosition::Left
-            tooltip=|| "Each Threat Level increases Enemies Power by 50%."
+            tooltip=|| {
+                format!("Each Threat Level increases Enemies Power by {:.0}%.", THREAT_EFFECT)
+            }
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"

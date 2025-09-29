@@ -2,8 +2,11 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use shared::messages::client::{
-    LevelUpPlayerMessage, LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage,
+use shared::{
+    computations::{player_level_up_cost, skill_cost_increase},
+    messages::client::{
+        LevelUpPlayerMessage, LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage,
+    },
 };
 
 use crate::{
@@ -121,6 +124,12 @@ pub fn PlayerCard() -> impl IntoView {
 
     let conn = expect_context::<WebsocketContext>();
     let level_up = move |_| {
+        game_context.player_specs.update(|player_specs| {
+            game_context.player_resources.write().experience -= player_specs.experience_needed;
+            player_specs.level += 1;
+            player_specs.experience_needed = player_level_up_cost(player_specs);
+        });
+
         conn.send(&LevelUpPlayerMessage { amount: 1 }.into());
     };
     let disable_level_up = Memo::new(move |_| {
@@ -386,6 +395,14 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
 
     let conn = expect_context::<WebsocketContext>();
     let level_up = move |_| {
+        game_context.player_specs.update(|player_specs| {
+            if let Some(skill_specs) = player_specs.skills_specs.get_mut(index) {
+                game_context.player_resources.write().gold -= skill_specs.next_upgrade_cost;
+                skill_specs.upgrade_level += 1;
+                skill_specs.next_upgrade_cost = skill_cost_increase(skill_specs);
+            }
+        });
+
         conn.send(
             &LevelUpSkillMessage {
                 skill_index: index as u8,

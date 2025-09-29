@@ -1,17 +1,20 @@
 use std::collections::HashSet;
 
-use shared::data::{
-    area::{AreaSpecs, AreaState},
-    character::{CharacterSpecs, CharacterState},
-    character_status::StatusMap,
-    monster::{MonsterSpecs, MonsterState},
-    passive::{PassivesTreeAscension, PassivesTreeState},
-    player::{PlayerSpecs, PlayerState},
-    skill::{BaseSkillSpecs, SkillSpecs, SkillState},
-    stat_effect::EffectsMap,
+use shared::{
+    constants::SKILL_BASE_COST,
+    data::{
+        area::{AreaSpecs, AreaState},
+        character::{CharacterSpecs, CharacterState},
+        character_status::StatusMap,
+        monster::{MonsterSpecs, MonsterState},
+        passive::{PassivesTreeAscension, PassivesTreeState},
+        player::{PlayerSpecs, PlayerState},
+        skill::{BaseSkillSpecs, SkillSpecs, SkillState},
+        stat_effect::EffectsMap,
+    },
 };
 
-use crate::{constants::SKILL_BASE_COST, game::utils::rng::Rollable};
+use crate::game::utils::rng::Rollable;
 pub trait DataInit<Specs> {
     fn init(specs: Specs) -> Self;
 }

@@ -1,28 +1,26 @@
 use anyhow::Result;
 
-use shared::data::{
-    area::{AreaLevel, AreaState, AreaThreat},
-    monster::{MonsterRarity, MonsterSpecs, MonsterState},
-    passive::StatEffect,
-    stat_effect::{Modifier, StatType},
-};
-
-use crate::{
+use shared::{
+    computations,
     constants::{
         CHAMPION_BASE_CHANCE, CHAMPION_INC_CHANCE, CHAMPION_LEVEL_INC, MONSTER_INCREASE_FACTOR,
     },
-    game::{
-        data::{
-            area::{AreaBlueprint, BossBlueprint, MonsterWaveBlueprint, MonsterWaveSpawnBlueprint},
-            master_store::MonstersSpecsStore,
-            monster::BaseMonsterSpecs,
-            DataInit,
-        },
-        utils::{
-            increase_factors,
-            rng::{self, RandomWeighted, Rollable},
-        },
+    data::{
+        area::{AreaLevel, AreaState, AreaThreat},
+        monster::{MonsterRarity, MonsterSpecs, MonsterState},
+        passive::StatEffect,
+        stat_effect::{Modifier, StatType},
     },
+};
+
+use crate::game::{
+    data::{
+        area::{AreaBlueprint, BossBlueprint, MonsterWaveBlueprint, MonsterWaveSpawnBlueprint},
+        master_store::MonstersSpecsStore,
+        monster::BaseMonsterSpecs,
+        DataInit,
+    },
+    utils::rng::{self, RandomWeighted, Rollable},
 };
 
 use super::skills_updater;
@@ -200,8 +198,8 @@ fn generate_monster_specs(
         }
     };
 
-    let exp_factor = increase_factors::exponential(monster_level, MONSTER_INCREASE_FACTOR);
-    let reward_factor = increase_factors::exponential(
+    let exp_factor = computations::exponential(monster_level, MONSTER_INCREASE_FACTOR);
+    let reward_factor = computations::exponential(
         monster_level - area_blueprint.specs.starting_level + 1,
         MONSTER_INCREASE_FACTOR,
     );

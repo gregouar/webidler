@@ -6,15 +6,18 @@ use axum::{
 };
 
 use chrono::Utc;
-use shared::http::{
-    client::{SignInRequest, SignUpRequest},
-    server::{GetUserResponse, SignInResponse, SignUpResponse},
+use shared::{
+    constants::DEFAULT_MAX_CHARACTERS,
+    http::{
+        client::{SignInRequest, SignUpRequest},
+        server::{GetUserResponse, SignInResponse, SignUpResponse},
+    },
 };
 
 use crate::{
     app_state::{AppSettings, AppState},
     auth::{self, CurrentUser},
-    constants, db,
+    db,
 };
 
 use super::AppError;
@@ -62,7 +65,7 @@ async fn post_sign_up(
         email_hash.as_deref(),
         &auth::hash_password(&payload.password)?,
         &Utc::now(),
-        constants::DEFAULT_MAX_CHARACTERS as i16,
+        DEFAULT_MAX_CHARACTERS as i16,
     )
     .await?
     {

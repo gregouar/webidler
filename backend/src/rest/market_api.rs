@@ -3,6 +3,7 @@ use anyhow::{anyhow, Context, Result};
 use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
 
 use shared::{
+    constants::{MAX_MARKET_PRIVATE_LISTINGS, MAX_MARKET_PUBLIC_LISTINGS},
     data::market::MarketItem,
     http::{
         client::{
@@ -19,7 +20,6 @@ use shared::{
 use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
-    constants::{MAX_MARKET_PRIVATE_LISTINGS, MAX_MARKET_PUBLIC_LISTINGS},
     db::{self, market::MarketEntry},
     game::{data::items_store::ItemsStore, systems::items_controller},
     rest::utils::{

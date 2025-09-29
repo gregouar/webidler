@@ -1,20 +1,20 @@
 use std::time::Duration;
 
-use shared::data::{
-    area::AreaThreat,
-    character::CharacterId,
-    character_status::StatusSpecs,
-    monster::{MonsterSpecs, MonsterState},
-    passive::StatEffect,
-    stat_effect::{Modifier, StatType},
+use shared::{
+    constants::THREAT_EFFECT,
+    data::{
+        area::AreaThreat,
+        character::CharacterId,
+        character_status::StatusSpecs,
+        monster::{MonsterSpecs, MonsterState},
+        passive::StatEffect,
+        stat_effect::{Modifier, StatType},
+    },
 };
 
-use crate::{
-    constants::THREAT_EFFECT,
-    game::{
-        data::event::EventsQueue,
-        systems::{stats_updater, statuses_controller},
-    },
+use crate::game::{
+    data::event::EventsQueue,
+    systems::{stats_updater, statuses_controller},
 };
 
 use super::{characters_updater, skills_updater};

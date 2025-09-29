@@ -1,9 +1,10 @@
 use anyhow::Result;
 use std::time::{Duration, Instant};
 
-use shared::data::{area::AreaThreat, character::CharacterId, player::PlayerState};
-
-use crate::constants::{THREAT_BOSS_COOLDOWN, THREAT_COOLDOWN};
+use shared::{
+    constants::{THREAT_BOSS_COOLDOWN, THREAT_COOLDOWN},
+    data::{area::AreaThreat, character::CharacterId, player::PlayerState},
+};
 
 use super::{
     data::{

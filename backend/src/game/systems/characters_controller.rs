@@ -1,19 +1,20 @@
 use std::collections::HashMap;
 
-use shared::data::{
-    character::{CharacterId, CharacterSpecs, CharacterState},
-    character_status::{StatusSpecs, StatusState},
-    item::SkillRange,
-    skill::{DamageType, RestoreType, SkillType},
-    stat_effect::Modifier,
+use shared::{
+    computations,
+    constants::ARMOR_FACTOR,
+    data::{
+        character::{CharacterId, CharacterSpecs, CharacterState},
+        character_status::{StatusSpecs, StatusState},
+        item::SkillRange,
+        skill::{DamageType, RestoreType, SkillType},
+        stat_effect::Modifier,
+    },
 };
 
-use crate::{
-    constants::ARMOR_FACTOR,
-    game::{
-        data::event::{EventsQueue, GameEvent, HitEvent},
-        utils::{increase_factors, rng::Rollable},
-    },
+use crate::game::{
+    data::event::{EventsQueue, GameEvent, HitEvent},
+    utils::rng::Rollable,
 };
 
 pub type Target<'a> = (CharacterId, (&'a CharacterSpecs, &'a mut CharacterState));
@@ -242,7 +243,7 @@ fn decrease_damage_from_armor(
 ) -> f64 {
     amount
         * (1.0
-            - increase_factors::diminishing(
+            - computations::diminishing(
                 target_specs
                     .armor
                     .get(&damage_type)

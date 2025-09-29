@@ -1,21 +1,19 @@
 use anyhow::{anyhow, Result};
 
-use shared::data::{
-    area::{AreaLevel, AreaState},
-    character::CharacterId,
-    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
-    monster::{MonsterRarity, MonsterSpecs},
-    player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-    skill::{BaseSkillSpecs, SkillSpecs, SkillState},
-};
-
-use crate::{
-    constants::{MONSTER_INCREASE_FACTOR, SKILL_BASE_COST, SKILL_COST_FACTOR, XP_INCREASE_FACTOR},
-    game::{
-        data::{event::EventsQueue, master_store::SkillsStore, DataInit},
-        utils::increase_factors,
+use shared::{
+    computations,
+    constants::{MONSTER_INCREASE_FACTOR, SKILL_BASE_COST, SKILL_COST_FACTOR},
+    data::{
+        area::AreaState,
+        character::CharacterId,
+        item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
+        monster::{MonsterRarity, MonsterSpecs},
+        player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+        skill::{BaseSkillSpecs, SkillSpecs, SkillState},
     },
 };
+
+use crate::game::data::{event::EventsQueue, master_store::SkillsStore, DataInit};
 
 use super::{characters_controller::Target, items_controller, skills_controller};
 
@@ -132,9 +130,7 @@ pub fn level_up(
     player_specs.level += 1;
     player_resources.passive_points += 1;
     player_resources.experience -= player_specs.experience_needed;
-    player_specs.experience_needed = (20.0
-        * increase_factors::exponential(player_specs.level as AreaLevel, XP_INCREASE_FACTOR))
-    .round();
+    player_specs.experience_needed = computations::player_level_up_cost(player_specs);
 
     player_state.character_state.life += 10.0;
 
@@ -295,7 +291,7 @@ pub fn sell_item(
             ItemRarity::Masterwork => 8.0,
         } * player_specs.gold_find
             * 0.01
-            * increase_factors::exponential(item_specs.modifiers.level, MONSTER_INCREASE_FACTOR);
+            * computations::exponential(item_specs.modifiers.level, MONSTER_INCREASE_FACTOR);
 }
 
 fn unequip_weapon(

@@ -1,27 +1,27 @@
 use std::collections::HashSet;
 
-use shared::data::{
-    area::AreaLevel,
-    chance::ChanceRange,
-    forge::MAX_AFFIXES,
-    item::{ItemBase, ItemModifiers, ItemRarity, ItemSpecs},
-    item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
-    stat_effect::StatEffect,
+use shared::{
+    constants::{MAX_ITEM_QUALITY, MAX_ITEM_QUALITY_PER_LEVEL},
+    data::{
+        area::AreaLevel,
+        chance::ChanceRange,
+        forge::MAX_AFFIXES,
+        item::{ItemBase, ItemModifiers, ItemRarity, ItemSpecs},
+        item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
+        stat_effect::StatEffect,
+    },
 };
 
+use crate::game::{
+    data::items_store::{ItemAdjectivesTable, ItemNounsTable},
+    utils::rng,
+};
 use crate::game::{
     data::{
         items_store::{ItemAffixesTable, ItemsStore},
         loot_table::{LootTable, LootTableEntry, RarityWeights},
     },
     utils::rng::{RandomWeighted, Rollable},
-};
-use crate::{
-    constants::{MAX_ITEM_QUALITY, MAX_ITEM_QUALITY_PER_LEVEL},
-    game::{
-        data::items_store::{ItemAdjectivesTable, ItemNounsTable},
-        utils::rng,
-    },
 };
 
 use super::items_controller;

@@ -175,7 +175,14 @@ fn InGameNode(
 
     let purchase = {
         let conn = expect_context::<WebsocketContext>();
+        let game_context = expect_context::<GameContext>();
         move || {
+            game_context.player_resources.write().passive_points -= 1;
+            game_context
+                .passives_tree_state
+                .write()
+                .purchased_nodes
+                .insert(node_id.clone());
             conn.send(
                 &PurchasePassiveMessage {
                     node_id: node_id.clone(),
