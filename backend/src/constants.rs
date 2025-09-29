@@ -10,9 +10,9 @@ pub const CHAMPION_BASE_CHANCE: f64 = 0.0001;
 pub const CHAMPION_INC_CHANCE: f64 = 0.000005;
 pub const CHAMPION_LEVEL_INC: AreaLevel = 5;
 
-pub const MONSTER_INCREASE_FACTOR: f64 = 0.125;
+pub const MONSTER_INCREASE_FACTOR: f64 = 0.12;
 pub const SKILL_COST_INCREASE_FACTOR: f64 = 0.31;
-pub const XP_INCREASE_FACTOR: f64 = 0.4;
+pub const XP_INCREASE_FACTOR: f64 = 0.39;
 pub const ARMOR_FACTOR: f64 = 100.0;
 
 pub const MAX_ITEM_QUALITY_PER_LEVEL: f32 = 0.5;
