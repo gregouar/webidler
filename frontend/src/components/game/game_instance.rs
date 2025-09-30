@@ -18,7 +18,7 @@ use super::GameContext;
 #[component]
 pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
     let game_context = GameContext::new();
-    provide_context(game_context.clone());
+    provide_context(game_context);
 
     let auth_context = expect_context::<AuthContext>();
 
@@ -43,7 +43,6 @@ pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
     });
 
     Effect::new({
-        let game_context = game_context.clone();
         let conn = expect_context::<WebsocketContext>();
         move |_| {
             if let Some(message) = conn.message.get() {

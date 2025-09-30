@@ -344,5 +344,5 @@ pub fn level_up_skill(skill_specs: &mut SkillSpecs, player_resources: &mut Playe
     player_resources.gold -= skill_specs.next_upgrade_cost;
 
     skill_specs.upgrade_level += 1;
-    skill_specs.next_upgrade_cost = skill_cost_increase(&skill_specs);
+    skill_specs.next_upgrade_cost = skill_cost_increase(skill_specs);
 }

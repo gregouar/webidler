@@ -18,11 +18,13 @@ pub fn LootQueue() -> impl IntoView {
     let pickup_loot = {
         let conn = conn.clone();
         move |loot_identifier| {
-            game_context
+            if let Some(loot) = game_context
                 .queued_loot
                 .write()
                 .get_mut(loot_identifier as usize)
-                .map(|loot| loot.state = LootState::HasDisappeared);
+            {
+                loot.state = LootState::HasDisappeared
+            }
             conn.send(
                 &PickUpLootMessage {
                     loot_identifier,
@@ -34,11 +36,13 @@ pub fn LootQueue() -> impl IntoView {
     };
 
     let sell_loot = move |loot_identifier| {
-        game_context
+        if let Some(loot) = game_context
             .queued_loot
             .write()
             .get_mut(loot_identifier as usize)
-            .map(|loot| loot.state = LootState::HasDisappeared);
+        {
+            loot.state = LootState::HasDisappeared
+        }
         conn.send(
             &PickUpLootMessage {
                 loot_identifier,
