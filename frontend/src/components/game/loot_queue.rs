@@ -13,10 +13,16 @@ use crate::components::{
 pub fn LootQueue() -> impl IntoView {
     let conn: WebsocketContext = expect_context();
     let accessibility: AccessibilityContext = expect_context();
+    let game_context = expect_context::<GameContext>();
 
     let pickup_loot = {
         let conn = conn.clone();
         move |loot_identifier| {
+            game_context
+                .queued_loot
+                .write()
+                .get_mut(loot_identifier as usize)
+                .map(|loot| loot.state = LootState::HasDisappeared);
             conn.send(
                 &PickUpLootMessage {
                     loot_identifier,
@@ -28,6 +34,11 @@ pub fn LootQueue() -> impl IntoView {
     };
 
     let sell_loot = move |loot_identifier| {
+        game_context
+            .queued_loot
+            .write()
+            .get_mut(loot_identifier as usize)
+            .map(|loot| loot.state = LootState::HasDisappeared);
         conn.send(
             &PickUpLootMessage {
                 loot_identifier,
