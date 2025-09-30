@@ -18,6 +18,7 @@ leptos-use = { version = "0.15.7", features = [
     "storage",
 ] }
 leptos_toaster = "0.2.0"
+web-sys = { version = "0.3", features = ["Performance"] }
 
 console_error_panic_hook = "0.1.7"
 reqwest = { version = "0.12.22", features = ["json"] }

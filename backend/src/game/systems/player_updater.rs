@@ -51,7 +51,6 @@ pub fn update_player_state(
 }
 
 pub fn reset_player(player_state: &mut PlayerState) {
-    player_state.just_leveled_up = false;
     characters_updater::reset_character(&mut player_state.character_state);
     skills_updater::reset_skills(&mut player_state.skills_states);
 }

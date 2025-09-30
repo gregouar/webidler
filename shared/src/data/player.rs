@@ -35,8 +35,6 @@ pub struct PlayerSpecs {
 pub struct PlayerState {
     pub character_state: CharacterState,
     pub skills_states: Vec<SkillState>,
-
-    pub just_leveled_up: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

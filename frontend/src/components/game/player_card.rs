@@ -122,12 +122,15 @@ pub fn PlayerCard() -> impl IntoView {
             .clone()
     });
 
+    let just_leveled_up = RwSignal::new(false);
+
     let conn = expect_context::<WebsocketContext>();
     let level_up = move |_| {
         game_context.player_specs.update(|player_specs| {
             game_context.player_resources.write().experience -= player_specs.experience_needed;
             player_specs.level += 1;
             player_specs.experience_needed = player_level_up_cost(player_specs);
+            just_leveled_up.set(true);
         });
 
         conn.send(&LevelUpPlayerMessage { amount: 1 }.into());
@@ -136,7 +139,6 @@ pub fn PlayerCard() -> impl IntoView {
         game_context.player_specs.read().experience_needed
             > game_context.player_resources.read().experience
     });
-    let just_leveled_up = Memo::new(move |_| game_context.player_state.read().just_leveled_up);
 
     let buy_skill_cost = Memo::new(move |_| game_context.player_specs.read().buy_skill_cost);
 

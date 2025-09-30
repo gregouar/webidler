@@ -10,10 +10,10 @@ use crate::components::auth::AuthContext;
 use crate::components::ui::{toast::*, tooltip::DynamicTooltip};
 use crate::components::websocket::WebsocketContext;
 
-use super::GameContext;
 use super::battle_scene::BattleScene;
 use super::header_menu::HeaderMenu;
 use super::panels::{InventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel};
+use super::GameContext;
 
 #[component]
 pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
@@ -138,13 +138,9 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         game_stats,
     } = sync_message;
 
-    if let Some(area_state) = area_state {
-        game_context.area_state.set(area_state);
-    }
+    game_context.area_state.sync(area_state);
     game_context.area_threat.set(area_threat);
-    if let Some(passives_tree_state) = passives_tree_state {
-        game_context.passives_tree_state.set(passives_tree_state);
-    }
+    game_context.passives_tree_state.sync(passives_tree_state);
     if let Some(player_specs) = player_specs {
         game_context.player_specs.set(player_specs);
     }

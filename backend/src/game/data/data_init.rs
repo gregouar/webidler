@@ -75,7 +75,6 @@ impl DataInit<&PlayerSpecs> for PlayerState {
         PlayerState {
             character_state: CharacterState::init(&specs.character_specs),
             skills_states: specs.skills_specs.iter().map(SkillState::init).collect(),
-            just_leveled_up: false,
         }
     }
 }

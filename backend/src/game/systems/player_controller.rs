@@ -134,8 +134,6 @@ pub fn level_up(
 
     player_state.character_state.life += 10.0;
 
-    player_state.just_leveled_up = true;
-
     true
 }
 

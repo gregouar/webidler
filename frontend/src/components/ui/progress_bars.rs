@@ -11,7 +11,7 @@ pub fn HorizontalProgressBar(
     /// Text
     children: Children,
     // Instant reset
-    #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
+    #[prop(into,default = RwSignal::new(false))] reset: RwSignal<bool>,
     #[prop(optional)] class: Option<&'static str>,
 ) -> impl IntoView {
     let set_value = move || {
@@ -36,6 +36,12 @@ pub fn HorizontalProgressBar(
         if reset.get() {
             reset_bar_animation
                 .set("animation: horizontal-progress-bar-fade-out 0.5s ease-out; animation-fill-mode: both;");
+            set_timeout(
+                move || {
+                    reset.set(false);
+                },
+                std::time::Duration::from_millis(100),
+            );
             set_timeout(
                 move || {
                     reset_bar_animation.set("opacity: 0;");
