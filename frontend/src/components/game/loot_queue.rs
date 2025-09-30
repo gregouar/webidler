@@ -18,13 +18,12 @@ pub fn LootQueue() -> impl IntoView {
     let pickup_loot = {
         let conn = conn.clone();
         move |loot_identifier| {
-            if let Some(loot) = game_context
-                .queued_loot
-                .write()
-                .get_mut(loot_identifier as usize)
-            {
-                loot.state = LootState::HasDisappeared
-            }
+            game_context.queued_loot.update(|queued_loot| {
+                if let Some(loot) = queued_loot.get_mut(loot_identifier as usize) {
+                    loot.state = LootState::HasDisappeared
+                }
+            });
+
             conn.send(
                 &PickUpLootMessage {
                     loot_identifier,
@@ -36,13 +35,12 @@ pub fn LootQueue() -> impl IntoView {
     };
 
     let sell_loot = move |loot_identifier| {
-        if let Some(loot) = game_context
-            .queued_loot
-            .write()
-            .get_mut(loot_identifier as usize)
-        {
-            loot.state = LootState::HasDisappeared
-        }
+        game_context.queued_loot.update(|queued_loot| {
+            if let Some(loot) = queued_loot.get_mut(loot_identifier as usize) {
+                loot.state = LootState::HasDisappeared
+            }
+        });
+
         conn.send(
             &PickUpLootMessage {
                 loot_identifier,
@@ -52,7 +50,6 @@ pub fn LootQueue() -> impl IntoView {
         );
     };
 
-    let game_context = expect_context::<GameContext>();
     let position_style = move |loot_identifier| {
         let index = game_context
             .queued_loot
@@ -65,7 +62,6 @@ pub fn LootQueue() -> impl IntoView {
         format!("left: {}%;", 4 + index * 20)
     };
 
-    let game_context = expect_context::<GameContext>();
     let animation_style = move |loot_identifier| {
         let state = game_context
             .queued_loot
@@ -83,7 +79,6 @@ pub fn LootQueue() -> impl IntoView {
         }
     };
 
-    let game_context = expect_context::<GameContext>();
     view! {
         <div class="relative w-full z-0 pr-4">
             <style>

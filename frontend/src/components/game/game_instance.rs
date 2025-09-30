@@ -140,23 +140,17 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     game_context.area_state.sync(area_state);
     game_context.area_threat.set(area_threat);
     game_context.passives_tree_state.sync(passives_tree_state);
-    if let Some(player_specs) = player_specs {
-        game_context.player_specs.set(player_specs);
-    }
+    game_context.player_specs.sync(player_specs);
     if let Some(player_inventory) = player_inventory {
         game_context.player_inventory.set(player_inventory);
     }
-    if let Some(player_resources) = player_resources {
-        game_context.player_resources.set(player_resources);
-    }
+    game_context.player_resources.sync(player_resources);
     game_context.player_state.set(player_state);
     if let Some(monster_specs) = monster_specs {
         *game_context.monster_wave.write() += 1; // TODO: Overflow
         game_context.monster_specs.set(monster_specs);
     }
     game_context.monster_states.set(monster_states);
-    if let Some(queued_loot) = queued_loot {
-        game_context.queued_loot.set(queued_loot);
-    }
+    game_context.queued_loot.sync(queued_loot);
     game_context.game_stats.set(game_stats);
 }
