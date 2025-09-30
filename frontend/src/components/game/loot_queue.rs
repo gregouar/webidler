@@ -19,7 +19,10 @@ pub fn LootQueue() -> impl IntoView {
         let conn = conn.clone();
         move |loot_identifier| {
             game_context.queued_loot.update(|queued_loot| {
-                if let Some(loot) = queued_loot.get_mut(loot_identifier as usize) {
+                if let Some(loot) = queued_loot
+                    .iter_mut()
+                    .find(|loot| loot.identifier == loot_identifier)
+                {
                     loot.state = LootState::HasDisappeared
                 }
             });
@@ -36,7 +39,10 @@ pub fn LootQueue() -> impl IntoView {
 
     let sell_loot = move |loot_identifier| {
         game_context.queued_loot.update(|queued_loot| {
-            if let Some(loot) = queued_loot.get_mut(loot_identifier as usize) {
+            if let Some(loot) = queued_loot
+                .iter_mut()
+                .find(|loot| loot.identifier == loot_identifier)
+            {
                 loot.state = LootState::HasDisappeared
             }
         });
