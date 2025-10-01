@@ -338,7 +338,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
                 <Show when=move || { gold_reward.get() > 0.0 }>
                     <div class="
-                    reward-float gold-text text-2xl  text-shadow-md
+                    reward-float gold-text text-2xl  text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-50 flex items-center gap-1
                     ">
@@ -354,7 +354,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
                 <Show when=move || { gems_reward.get() > 0.0 }>
                     <div class="
-                    reward-float gems-text text-2xl text-shadow-md
+                    reward-float gems-text text-2xl text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-50 flex items-center gap-1
                     ">
