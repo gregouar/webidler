@@ -138,6 +138,7 @@ pub fn CharacterPortrait(
             }        
             
             .just_hurt_effect {
+                // filter: drop-shadow(0 0 8px red);
                 box-shadow: inset 0 0 32px rgba(192, 0, 0, 1.0);
             }
             
@@ -192,7 +193,21 @@ pub fn CharacterPortrait(
                 </div>
 
                 <div class=format!("absolute inset-0  {}", shimmer_effect)></div>
-                <div class=move || { format!("absolute inset-0  {}", just_hurt_class()) }></div>
+                // <div class=move || { format!("absolute inset-0  {}", just_hurt_class()) }></div>
+
+                <div
+                    class=move || {
+                        if just_hurt.get() {
+                            "absolute inset-0 pointer-events-none opacity-100 transition-opacity duration-100"
+                        } else {
+                            "absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500"
+                        }
+                    }
+                    style="box-shadow: inset 0 0 32px rgba(192, 0, 0, 1.0);"
+                >// class="absolute inset-0 pointer-events-none transition-opacity duration-500"
+                // class:opacity-0=move || !just_hurt.get()
+                // class:duration-100=move || just_hurt.get()
+                </div>
             </div>
 
             {move || {

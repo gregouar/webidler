@@ -18,7 +18,7 @@ pub fn HorizontalProgressBar(
         if reset.get() {
             0.0
         } else {
-            value.get().clamp(0.0, 100.0).round()
+            value.get().clamp(0.0, 100.0).round() * 0.01
         }
     };
 
@@ -26,7 +26,7 @@ pub fn HorizontalProgressBar(
         if reset.get() {
             "transition-none"
         } else {
-            "transition-all ease-linear duration-300 "
+            "transition-transform ease-linear duration-300 "
         }
     };
 
@@ -79,16 +79,24 @@ pub fn HorizontalProgressBar(
             ",
             class.unwrap_or_default(),
         )>
-            <div
-                class=move || format!("flex flex-col {} rounded-lg {}", bar_color, transition())
-                style:width=move || format!("{}%", set_value())
-            >
-                // Fake copy for glow effect on reset
+            // <div
+            // class=move || format!("flex flex-col {} rounded-lg {}", bar_color, transition())
+            // style:width=move || format!("{}%", set_value())
+            // >
+            // </div>
+
+            <div class="overflow-hidden w-full rounded-lg">
                 <div
-                    class=format!("absolute inset-0 z-1 rounded-lg {}", bar_color)
-                    style=reset_bar_animation
+                    class=move || { format!("w-full {} {}", bar_color, transition()) }
+                    style=move || format!("transform: scaleX({});", set_value())
                 ></div>
             </div>
+
+            // Fake copy for glow effect on reset
+            <div
+                class=format!("absolute inset-0 z-1 rounded-lg {}", bar_color)
+                style=reset_bar_animation
+            ></div>
             <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none overflow-hidden">
                 {children()}
             </div>
@@ -109,7 +117,7 @@ pub fn VerticalProgressBar(
         if reset.get() {
             0.0
         } else {
-            value.get().clamp(0.0, 100.0).round()
+            value.get().clamp(0.0, 100.0).round() * 0.01
         }
     };
 
@@ -117,7 +125,7 @@ pub fn VerticalProgressBar(
         if reset.get() {
             "transition-none"
         } else {
-            "transition-all ease-linear duration-300 "
+            "transition-transform ease-linear duration-300 "
         }
     };
 
@@ -154,35 +162,24 @@ pub fn VerticalProgressBar(
             }
             "
         </style>
-        // <div class="
-        // flex flex-col flex-nowrap justify-end h-full
-        // rounded-lg overflow-hidden
-        // bg-stone-900 border border-neutral-950
-        // shadow-[inset_0_0_8px_rgba(0,0,0,0.4)]
-        // ">
-        // <div
-        // class={format!("{bar_color} rounded-lg overflow-hidden -all ease duration-300")}
-        // style:height=move || format!("{}%", value.get().clamp(0.0,100.0).round())
-        // style:-webkit-mask="linear-gradient(#fff 0 0)"
-        // ></div>
-        // </div>
 
         <div class="
         relative flex flex-col justify-end h-full
-        rounded-lg
+        rounded-lg 
         bg-stone-900 border border-neutral-950 
         shadow-[inset_0_0_8px_rgba(0,0,0,0.4)]
         ">
-            <div
-                class=move || format!("flex flex-col {} rounded-lg {}", bar_color, transition())
-                style:height=move || format!("{}%", set_value())
-            >
-                // Fake copy for glow effect on reset
+            <div class="overflow-hidden h-full rounded-lg">
                 <div
-                    class=format!("absolute inset-0 z-1 rounded-lg {}", bar_color)
-                    style=reset_bar_animation
+                    class=move || { format!("h-full origin-bottom {} {}", bar_color, transition()) }
+                    style=move || format!("transform: scaleY({});", set_value())
                 ></div>
             </div>
+            // Fake copy for glow effect on reset
+            <div
+                class=format!("absolute rounded-lg inset-0 z-1 h-full {}", bar_color)
+                style=reset_bar_animation
+            ></div>
         </div>
     }
 }
