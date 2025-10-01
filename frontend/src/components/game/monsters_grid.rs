@@ -41,41 +41,70 @@ pub fn MonstersGrid() -> impl IntoView {
 
     // TODO: double buffering to allow in and out at the same time
     // flex-1 min-h-0 aspect-[12/7]
+    // view! {
+    //     <div class="
+    //     flex-1 min-h-0
+    //     grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2
+    //     items-center
+    //     ">
+    //         <For
+    //             each=move || game_context.monster_specs.get().into_iter().enumerate()
+    //             // We need a unique key to replace old elements
+    //             key=move |(index, _)| (game_context.monster_wave.get(), *index)
+    //             children=move |(index, specs)| {
+    //                 let animation_delay = format!(
+    //                     "animation-delay: {}s;",
+    //                     rand::rng().random_range(0.0..=0.2f32),
+    //                 );
+    //                 let (x_size, y_size) = specs.character_specs.size.get_xy_size();
+    //                 let (x_pos, y_pos) = (
+    //                     specs.character_specs.position_x,
+    //                     specs.character_specs.position_y,
+    //                 );
+
+    //                 view! {
+    //                     <div
+    //                         class=format!(
+    //                             "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full",
+    //                             x_size,
+    //                             y_size,
+    //                             x_pos,
+    //                             y_pos,
+    //                         )
+    //                         style=move || {
+    //                             if all_monsters_dead.get() {
+    //                                 "animation-delay: 0.2s; animation: monster-fade-out 1s ease-in; animation-fill-mode: both; pointer-events: none;"
+    //                                     .to_string()
+    //                             } else if flee.get() {
+    //                                 format!(
+    //                                     "animation: monster-flee 1s ease-out; animation-fill-mode: both; {animation_delay} pointer-events: none;",
+    //                                 )
+    //                             } else {
+    //                                 format!(
+    //                                     "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {animation_delay}",
+    //                                 )
+    //                             }
+    //                         }
+    //                     >
+    //                         <MonsterCard specs=specs index=index />
+    //                     </div>
+    //                 }
+    //             }
+    //         />
+    //     </div>
+    // }
+
     view! {
         <div class="
         flex-1 min-h-0
         grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2 
         items-center
         ">
-            <style>
-                "
-                @keyframes monster-fade-in {
-                 0% { transform: translateX(100%); opacity: 0; }
-                 65% { transform: translateX(0%); opacity: 1; }
-                 80% { transform: translateX(5%); }
-                 100% { transform: translateX(0%); }
-                }
-                
-                @keyframes monster-fade-out {
-                 from { opacity: 1; transform: translateY(0%); }
-                 to { opacity: 0; transform: translateY(100%); }
-                }
-                
-                @keyframes monster-flee {
-                 0% { transform: translateX(0%); opacity: 1; }
-                 100% { transform: translateX(100%); opacity: 0; }
-                }
-                "
-            </style>
             <For
                 each=move || game_context.monster_specs.get().into_iter().enumerate()
-                // We need a unique key to replace old elements
                 key=move |(index, _)| (game_context.monster_wave.get(), *index)
                 children=move |(index, specs)| {
-                    let animation_delay = format!(
-                        "animation-delay: {}s;",
-                        rand::rng().random_range(0.0..=0.2f32),
-                    );
+                    let animation_delay = RwSignal::new(rand::rng().random_range(0.0..=0.2f32));
                     let (x_size, y_size) = specs.character_specs.size.get_xy_size();
                     let (x_pos, y_pos) = (
                         specs.character_specs.position_x,
@@ -84,27 +113,23 @@ pub fn MonstersGrid() -> impl IntoView {
 
                     view! {
                         <div
-                            class=format!(
-                                "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full",
-                                x_size,
-                                y_size,
-                                x_pos,
-                                y_pos,
-                            )
-                            style=move || {
-                                if all_monsters_dead.get() {
-                                    "animation-delay: 0.2s; animation: monster-fade-out 1s ease-in; animation-fill-mode: both; pointer-events: none;"
-                                        .to_string()
-                                } else if flee.get() {
-                                    format!(
-                                        "animation: monster-flee 1s ease-out; animation-fill-mode: both; {animation_delay} pointer-events: none;",
-                                    )
-                                } else {
-                                    format!(
-                                        "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {animation_delay}",
-                                    )
-                                }
+                            class=move || {
+                                format!(
+                                    "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full {}",
+                                    x_size,
+                                    y_size,
+                                    x_pos,
+                                    y_pos,
+                                    if all_monsters_dead.get() {
+                                        "will-change-transform-opacity animate-monster-fade-out pointer-events-none"
+                                    } else if flee.get() {
+                                        "will-change-transform-opacity animate-monster-flee pointer-events-none"
+                                    } else {
+                                        "will-change-transform-opacity animate-monster-fade-in"
+                                    },
+                                )
                             }
+                            style=move || format!("animation-delay: {}s;", animation_delay.get())
                         >
                             <MonsterCard specs=specs index=index />
                         </div>

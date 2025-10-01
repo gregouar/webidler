@@ -21,14 +21,6 @@ pub fn CharacterPortrait(
     #[prop(into)] is_dead: Signal<bool>,
     #[prop(into)] statuses: Signal<StatusMap>,
 ) -> impl IntoView {
-    let just_hurt_class = move || {
-        if just_hurt.get() {
-            "transition-all ease duration-100 just_hurt_effect"
-        } else {
-            "transition-all ease duration-1000"
-        }
-    };
-
     let is_dead_img_effect = move || {
         if is_dead.get() {
             "transition-all duration-1000 saturate-0 brightness-50

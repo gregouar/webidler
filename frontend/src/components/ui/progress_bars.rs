@@ -79,15 +79,9 @@ pub fn HorizontalProgressBar(
             ",
             class.unwrap_or_default(),
         )>
-            // <div
-            // class=move || format!("flex flex-col {} rounded-lg {}", bar_color, transition())
-            // style:width=move || format!("{}%", set_value())
-            // >
-            // </div>
-
             <div class="overflow-hidden w-full rounded-lg">
                 <div
-                    class=move || { format!("w-full {} {}", bar_color, transition()) }
+                    class=move || format!("h-full origin-left {} {}", bar_color, transition())
                     style=move || format!("transform: scaleX({});", set_value())
                 ></div>
             </div>
