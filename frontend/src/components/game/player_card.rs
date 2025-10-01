@@ -16,7 +16,10 @@ use crate::{
         ui::{
             buttons::{FancyButton, Toggle},
             number::format_number,
-            progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
+            progress_bars::{
+                predictive_cooldown, CircularProgressBar, HorizontalProgressBar,
+                VerticalProgressBar,
+            },
             toast::*,
             tooltip::{
                 DynamicTooltipContext, DynamicTooltipPosition, StaticTooltip, StaticTooltipPosition,
@@ -47,7 +50,7 @@ pub fn PlayerCard() -> impl IntoView {
     let life_percent = Signal::derive(move || {
         let max_life = max_life.get();
         if max_life > 0.0 {
-            (life.get() / max_life * 100.0) as f32
+            (life.get() / max_life) as f32
         } else {
             0.0
         }
@@ -68,7 +71,7 @@ pub fn PlayerCard() -> impl IntoView {
     let mana_percent = Signal::derive(move || {
         let max_mana = max_mana.get();
         if max_mana > 0.0 {
-            (mana.get() / max_mana * 100.0) as f32
+            (mana.get() / max_mana) as f32
         } else {
             0.0
         }
@@ -466,6 +469,8 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let hide_tooltip = move || tooltip_context.hide();
 
+    let progress_value = predictive_cooldown(skill_cooldown, just_triggered.into(), is_dead.into());
+
     view! {
         <div class="flex flex-col">
             <div
@@ -485,7 +490,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                 >
                     <CircularProgressBar
                         bar_color="oklch(55.5% 0.163 48.998)"
-                        remaining_time=skill_cooldown
+                        value=progress_value
                         reset=just_triggered
                         disabled=is_dead
                         bar_width=4

@@ -117,7 +117,7 @@ pub fn VerticalProgressBar(
         if reset.get() {
             0.0
         } else {
-            value.get().clamp(0.0, 100.0).round() * 0.01
+            value.get().clamp(0.0, 1.0)
         }
     };
 
@@ -125,7 +125,7 @@ pub fn VerticalProgressBar(
         if reset.get() {
             "transition-none"
         } else {
-            "transition-transform ease-linear duration-300 "
+            "transition-transform ease-linear duration-200 "
         }
     };
 
@@ -193,7 +193,7 @@ pub fn VerticalProgressBar(
 #[component]
 pub fn CircularProgressBar(
     // Percent value, must be between 0 and 100.
-    #[prop(into)] remaining_time: Signal<f32>,
+    #[prop(into)] value: Signal<f32>,
     bar_color: &'static str,
     bar_width: u8,
     // Instant reset
@@ -202,15 +202,15 @@ pub fn CircularProgressBar(
     // Inside the circular bar
     children: Children,
 ) -> impl IntoView {
-    let progress_value = RwSignal::new(0.0f64);
+    // let progress_value = RwSignal::new(0.0f32);
 
     let reset_bar_animation = RwSignal::new("opacity: 0;");
     let reset_icon_animation = RwSignal::new("");
-    let transition = RwSignal::new("transition: opacity 0.5s linear, --progress 0.250s linear;");
+    let transition = RwSignal::new("transition: opacity 0.5s linear, --progress 0.200s linear;");
 
     Effect::new(move |_| {
         if reset.get() {
-            progress_value.set(0.0);
+            // progress_value.set(0.0);
             transition.set("");
 
             if !disabled.get_untracked() {
@@ -229,6 +229,8 @@ pub fn CircularProgressBar(
                     std::time::Duration::from_millis(500),
                 );
             }
+        } else {
+            transition.set("transition: opacity 0.5s linear, --progress 0.200s linear;");
         }
     });
 
@@ -236,7 +238,7 @@ pub fn CircularProgressBar(
         if disabled.get() {
             set_timeout(
                 move || {
-                    progress_value.set(0.0);
+                    // progress_value.set(0.0);
                     transition.set("");
                 },
                 std::time::Duration::from_millis(500),
@@ -244,26 +246,26 @@ pub fn CircularProgressBar(
         }
     });
 
-    let rate = RwSignal::new(0.0);
+    // let rate = RwSignal::new(0.0);
 
-    Effect::new(move || {
-        let remaining_time = remaining_time.get() as f64;
-        if remaining_time > 0.0 {
-            rate.set((1.0 - progress_value.get_untracked()).clamp(0.0, 1.0) / remaining_time);
-        }
-    });
+    // Effect::new(move || {
+    //     let remaining_time = remaining_time.get() as f64;
+    //     if remaining_time > 0.0 {
+    //         rate.set((1.0 - progress_value.get_untracked()).clamp(0.0, 1.0) / remaining_time);
+    //     }
+    // });
 
-    use_interval_fn(
-        move || {
-            if !disabled.get() {
-                transition.set("transition: opacity 0.5s linear, --progress 0.250s linear;");
-                progress_value.update(|progress_value| {
-                    *progress_value += rate.get_untracked() * 0.2;
-                });
-            }
-        },
-        200,
-    );
+    // use_interval_fn(
+    //     move || {
+    //         if !disabled.get() {
+    //             transition.set("transition: opacity 0.5s linear, --progress 0.250s linear;");
+    //             progress_value.update(|progress_value| {
+    //                 *progress_value += rate.get_untracked() * 0.2;
+    //             });
+    //         }
+    //     },
+    //     200,
+    // );
 
     view! {
         <div class="circular-progress-bar">
@@ -302,7 +304,7 @@ pub fn CircularProgressBar(
                             );
                             {}
                         ",transition.get())
-                        style:--progress=move || format!("{}%", progress_value.get() * 100.0)
+                        style:--progress=move || format!("{}%", value.get() * 100.0)
                     ></div>
 
                     // For nice fade out during reset
@@ -329,4 +331,39 @@ pub fn CircularProgressBar(
             </div>
         </div>
     }
+}
+
+pub fn predictive_cooldown(
+    remaining_time: Signal<f32>,
+    reset: Signal<bool>,
+    disabled: Signal<bool>,
+) -> RwSignal<f32> {
+    let progress_value = RwSignal::new(0.0f32);
+    let rate = RwSignal::new(0.0);
+
+    Effect::new(move || {
+        let remaining_time = remaining_time.get();
+        if remaining_time > 0.0 {
+            rate.set((1.0 - progress_value.get_untracked()).clamp(0.0, 1.0) / remaining_time);
+        }
+    });
+
+    Effect::new(move || {
+        if reset.get() {
+            progress_value.set(0.0);
+        }
+    });
+
+    use_interval_fn(
+        move || {
+            if !disabled.get_untracked() {
+                progress_value.update(|progress_value| {
+                    *progress_value += rate.get_untracked() * 0.2;
+                });
+            }
+        },
+        200,
+    );
+
+    progress_value
 }

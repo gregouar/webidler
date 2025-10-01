@@ -8,6 +8,7 @@ use shared::data::monster::MonsterRarity;
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
 
 use crate::assets::img_asset;
+use crate::components::ui::progress_bars::predictive_cooldown;
 use crate::components::{
     shared::tooltips::SkillTooltip,
     ui::{
@@ -456,10 +457,12 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
         }
     });
 
+    let progress_value = predictive_cooldown(skill_cooldown, just_triggered.into(), is_dead.into());
+
     view! {
         <CircularProgressBar
             bar_color="oklch(55.5% 0.163 48.998)"
-            remaining_time=skill_cooldown
+            value=progress_value
             reset=just_triggered
             disabled=is_dead
             bar_width=2

@@ -4,7 +4,7 @@ use shared::constants::{THREAT_EFFECT, WAVES_PER_AREA_LEVEL};
 use shared::messages::client::{GoBackLevelMessage, SetAutoProgressMessage};
 
 use crate::assets::img_asset;
-use crate::components::ui::progress_bars::VerticalProgressBar;
+use crate::components::ui::progress_bars::{predictive_cooldown, VerticalProgressBar};
 use crate::components::ui::tooltip::{StaticTooltip, StaticTooltipPosition};
 use crate::components::websocket::WebsocketContext;
 
@@ -193,29 +193,32 @@ pub fn BattleSceneFooter() -> impl IntoView {
 pub fn ThreatMeter() -> impl IntoView {
     let game_context: GameContext = expect_context();
 
-    // TODO: predictive
-    let value = Signal::derive(move || game_context.area_threat.read().elapsed_cooldown * 100.0);
-
     let threat_increase = Signal::derive(move || game_context.area_threat.read().just_increased);
 
     let time_remaining = Signal::derive(move || {
-        (game_context.area_threat.read().cooldown > 0.0).then(|| {
-            (1.0 - game_context.area_threat.read().elapsed_cooldown)
-                * (game_context.area_threat.read().cooldown
-                    / (game_context.player_specs.read().threat_gain * 0.01))
-        })
+        (game_context.area_threat.read().cooldown > 0.0)
+            .then(|| {
+                (1.0 - game_context.area_threat.read().elapsed_cooldown)
+                    * (game_context.area_threat.read().cooldown
+                        / (game_context.player_specs.read().threat_gain * 0.01))
+            })
+            .unwrap_or_default()
     });
+
+    let no_threat = Signal::derive(move || time_remaining.get() == 0.0);
+
+    let reset = Signal::derive(move || threat_increase.get() || no_threat.get());
+    let progress_value = predictive_cooldown(time_remaining, reset, no_threat.into());
 
     view! {
         <StaticTooltip
             position=StaticTooltipPosition::Left
             tooltip=move || {
-                time_remaining
-                    .get()
-                    .map(|time_remaining| {
-                        format!("Time remaining before next Threat Level: {:.0}s", time_remaining)
-                    })
-                    .unwrap_or("No Threat".to_string())
+                if no_threat.get() {
+                    "No Threat".to_string()
+                } else {
+                    format!("Time remaining before next Threat Level: {:.0}s", time_remaining.get())
+                }
             }
         >
             <div class="h-full py-1 pr-2 xl:pr-3 z-2">
@@ -223,7 +226,7 @@ pub fn ThreatMeter() -> impl IntoView {
                     class:z-2
                     class:w-4
                     class:xl:w-8
-                    value
+                    value=progress_value
                     reset=threat_increase
                     bar_color="bg-gradient-to-l from-yellow-500 to-yellow-700"
                 />
