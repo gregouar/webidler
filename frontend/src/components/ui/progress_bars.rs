@@ -202,11 +202,9 @@ pub fn CircularProgressBar(
     // Inside the circular bar
     children: Children,
 ) -> impl IntoView {
-    // let progress_value = RwSignal::new(0.0f32);
-
     let reset_bar_animation = RwSignal::new("opacity: 0;");
     let reset_icon_animation = RwSignal::new("");
-    let transition = RwSignal::new("transition: opacity 0.5s linear, --progress 0.250s linear;");
+    let transition = RwSignal::new("transition: opacity 0.5s linear, transform 0.250s linear;");
 
     Effect::new(move |_| {
         if reset.get() {
@@ -230,7 +228,7 @@ pub fn CircularProgressBar(
                 );
             }
         } else {
-            transition.set("transition: opacity 0.5s linear, --progress 0.250s linear;");
+            transition.set("transition: opacity 0.5s linear, transform 0.250s linear;");
         }
     });
 
@@ -246,26 +244,20 @@ pub fn CircularProgressBar(
         }
     });
 
-    // let rate = RwSignal::new(0.0);
+    let right_rotation = RwSignal::new(42.0);
+    let left_rotation = RwSignal::new(69.0);
 
-    // Effect::new(move || {
-    //     let remaining_time = remaining_time.get() as f64;
-    //     if remaining_time > 0.0 {
-    //         rate.set((1.0 - progress_value.get_untracked()).clamp(0.0, 1.0) / remaining_time);
-    //     }
-    // });
-
-    // use_interval_fn(
-    //     move || {
-    //         if !disabled.get() {
-    //             transition.set("transition: opacity 0.5s linear, --progress 0.250s linear;");
-    //             progress_value.update(|progress_value| {
-    //                 *progress_value += rate.get_untracked() * 0.2;
-    //             });
-    //         }
-    //     },
-    //     200,
-    // );
+    Effect::new(move |_| {
+        // TODO: Find way to do overflow... might want a third half for bottom
+        let value = value.get().clamp(0.0, 1.0);
+        if value <= 0.5 {
+            right_rotation.set(value * 360.0);
+            left_rotation.set(value * 360.0);
+        } else {
+            right_rotation.set(180.0);
+            left_rotation.set(value * 360.0);
+        }
+    });
 
     view! {
         <div class="circular-progress-bar">
@@ -284,7 +276,7 @@ pub fn CircularProgressBar(
                  }
                  /*100% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }*/
                 }
-
+                
                 @property --progress {
                     syntax: '<percentage>';
                     inherits: false;
@@ -294,41 +286,80 @@ pub fn CircularProgressBar(
             </style>
             <div class="relative">
                 <div class="relative w-full h-full aspect-square rounded-full flex items-center justify-center bg-stone-900">
+                    // Container / background ring
+                    <div class=format!("absolute inset-0 rounded-full bg-stone-900")></div>
+
                     <div
-                      class="absolute inset-0 rounded-full will-change-(--progress)"
-                      class:opacity-0=move || disabled.get()
-                        style=move || format!("
-                            background: conic-gradient(
-                                {bar_color} var(--progress),
-                                transparent var(--progress) 100%
-                            );
-                            {}
-                        ",transition.get())
-                        style:--progress=move || format!("{}%", value.get() * 100.0)
+                        class="absolute inset-0 rounded-l-full overflow-hidden bg-red-500 origin-right"
+                        style=move || {
+                            format!(
+                                "transform: rotate({}deg); width: 50%; {}",
+                                left_rotation.get(),
+                                transition.get(),
+                            )
+                        }
                     ></div>
 
-                    // For nice fade out during reset
                     <div
-                        class="absolute inset-0 rounded-full will-change-[filter]"
-                        style=move || format!("
-                            background: {bar_color};
-                            {}
-                        ",reset_bar_animation.get())
+                        class="absolute inset-0 rounded-l-full overflow-hidden bg-red-500 origin-right"
+                        style=move || {
+                            format!(
+                                "transform: rotate({}deg); width: 50%; {}",
+                                right_rotation.get(),
+                                transition.get(),
+                            )
+                        }
                     ></div>
 
-                    <div class=format!("absolute inset-{} xl:inset-{bar_width} rounded-full
-                            bg-radial from-stone-600 to-zinc-950 to-70%", bar_width/2)></div>
-                </div>
+                // Inner circle for the hole
+                // <div class=format!(
+                // "absolute inset-{} rounded-full bg-stone-900",
+                // bar_width / 2,
+                // )></div>
 
-                <div
-                    class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
-                            will-change-[filter,transform] transition duration-500"
-                    style=reset_icon_animation
-                    class:brightness-50=move || disabled.get()
-                >
-                    {children()}
+                // Children (icon/text) centered
+                // <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                // {children()}
+                // </div>
                 </div>
             </div>
+        // <div class="relative">
+        // <div class="relative w-full h-full aspect-square rounded-full flex items-center justify-center bg-stone-900">
+        // <div
+        // class="absolute inset-0 rounded-full will-change-(--progress)"
+        // class:opacity-0=move || disabled.get()
+        // style=move || format!("
+        // background: conic-gradient(
+        // {bar_color} var(--progress),
+        // transparent var(--progress) 100%
+        // );
+        // {}
+        // ",transition.get())
+        // style:--progress=move || format!("{}%", value.get() * 100.0)
+        // ></div>
+
+        // // For nice fade out during reset
+        // <div
+        // class="absolute inset-0 rounded-full will-change-[filter]"
+        // style=move || format!("
+        // background: {bar_color};
+        // {}
+        // ",reset_bar_animation.get())
+        // ></div>
+
+        // <div class=format!("absolute inset-{} xl:inset-{bar_width} rounded-full
+        // bg-radial from-stone-600 to-zinc-950 to-70%", bar_width/2)></div>
+        // </div>
+
+        // <div
+        // class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
+        // will-change-[filter,transform] transition duration-500"
+        // style=reset_icon_animation
+        // class:brightness-50=move || disabled.get()
+        // >
+        // {children()}
+        // </div>
+        // </div>
         </div>
     }
 }
