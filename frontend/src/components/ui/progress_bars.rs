@@ -117,7 +117,7 @@ pub fn VerticalProgressBar(
         if reset.get() {
             0.0
         } else {
-            value.get().clamp(0.0, 1.0)
+            value.get()
         }
     };
 
@@ -358,7 +358,11 @@ pub fn predictive_cooldown(
         move || {
             if !disabled.get_untracked() {
                 progress_value.update(|progress_value| {
-                    *progress_value += rate.get_untracked() * 0.2;
+                    let rate = rate.get_untracked();
+                    *progress_value += rate * 0.2;
+                    if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
+                        *progress_value = 1.0;
+                    }
                 });
             }
         },
