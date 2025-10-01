@@ -81,7 +81,13 @@ pub fn HorizontalProgressBar(
         )>
             <div class="overflow-hidden w-full rounded-lg">
                 <div
-                    class=move || format!("h-full origin-left {} {}", bar_color, transition())
+                    class=move || {
+                        format!(
+                            "h-full origin-left will-change-transform {} {}",
+                            bar_color,
+                            transition(),
+                        )
+                    }
                     style=move || format!("transform: scaleX({});", set_value())
                 ></div>
             </div>
@@ -165,7 +171,13 @@ pub fn VerticalProgressBar(
         ">
             <div class="overflow-hidden h-full rounded-lg">
                 <div
-                    class=move || { format!("h-full origin-bottom {} {}", bar_color, transition()) }
+                    class=move || {
+                        format!(
+                            "h-full origin-bottom will-change-transform {} {}",
+                            bar_color,
+                            transition(),
+                        )
+                    }
                     style=move || format!("transform: scaleY({});", set_value())
                 ></div>
             </div>
