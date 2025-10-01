@@ -26,7 +26,7 @@ pub fn HorizontalProgressBar(
         if reset.get() {
             "transition-none"
         } else {
-            "transition-transform ease-linear duration-300 "
+            "transition-transform ease-linear duration-250 "
         }
     };
 
@@ -125,7 +125,7 @@ pub fn VerticalProgressBar(
         if reset.get() {
             "transition-none"
         } else {
-            "transition-transform ease-linear duration-200 "
+            "transition-transform ease-linear duration-250 "
         }
     };
 
@@ -206,7 +206,7 @@ pub fn CircularProgressBar(
 
     let reset_bar_animation = RwSignal::new("opacity: 0;");
     let reset_icon_animation = RwSignal::new("");
-    let transition = RwSignal::new("transition: opacity 0.5s linear, --progress 0.200s linear;");
+    let transition = RwSignal::new("transition: opacity 0.5s linear, --progress 0.250s linear;");
 
     Effect::new(move |_| {
         if reset.get() {
@@ -230,7 +230,7 @@ pub fn CircularProgressBar(
                 );
             }
         } else {
-            transition.set("transition: opacity 0.5s linear, --progress 0.200s linear;");
+            transition.set("transition: opacity 0.5s linear, --progress 0.250s linear;");
         }
     });
 
