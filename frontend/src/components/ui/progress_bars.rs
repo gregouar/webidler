@@ -196,6 +196,9 @@ pub fn CircularProgressBar(
 
     let enable_transition = RwSignal::new(true);
 
+    let in_transition = RwSignal::new(false);
+    let next_value = RwSignal::new(0.0f32);
+
     let right_rotation = RwSignal::new(0.0);
     let bottom_rotation = RwSignal::new(0.0);
     let left_rotation = RwSignal::new(0.0);
@@ -205,6 +208,8 @@ pub fn CircularProgressBar(
 
     Effect::new(move |_| {
         if reset.get() {
+            in_transition.set(false);
+
             enable_transition.set(false);
             right_rotation.set(0.0);
             bottom_rotation.set(0.0);
@@ -231,8 +236,45 @@ pub fn CircularProgressBar(
         }
     });
 
+    // let node_ref: NodeRef<leptos::html::Div> = NodeRef::new();
+
+    // // reactive states
+    // let target = RwSignal::new(0.0);
+    // let current = RwSignal::new(0.0);
+
+    // // whenever `value` changes, update target
+    // Effect::new(move |_| {
+    //     target.set(value.get().clamp(0.0, 1.0));
+    //     // if we're idle (current already == target), kick off a transition now
+    //     if (current.get_untracked() - target.get_untracked()).abs() < 1e-6 {
+    //         // set style immediately
+    //         if let Some(el) = node_ref.get() {
+    //             let percent = target.get_untracked() * 100.0;
+    //             el.style("transform", &format!("scaleY({})", target.get_untracked()));
+    //         }
+    //     }
+    // });
+
+    // // attach transitionend handler
+    // leptos::window_event_listener(leptos::ev::TransitionEnd, move |_| {
+    //     let t = target.get_untracked();
+    //     let c = current.get_untracked();
+    //     if (t - c).abs() > 1e-6 {
+    //         current.set(t);
+    //         if let Some(el) = node_ref.get() {
+    //             el.style("transform", &format!("scaleY({})", t));
+    //         }
+    //     }
+    // });
+
     Effect::new(move |_| {
-        let value = value.get().clamp(0.0, 1.2);
+        if !in_transition.get() {
+            next_value.set(value.get());
+        }
+    });
+
+    Effect::new(move |_| {
+        let value = next_value.get().clamp(0.0, 1.2);
         left_rotation.set(value * 360.0);
 
         if value <= 0.5 {
@@ -280,6 +322,13 @@ pub fn CircularProgressBar(
                     >
                         // Left half
                         <div
+                            on:transitionstart=move |_| {
+                                in_transition.set(true);
+                            }
+                            on:transitionend=move |_| {
+                                next_value.set(value.get_untracked());
+                                in_transition.set(false);
+                            }
                             class="absolute inset-0 origin-right w-1/2 will-change-transform"
                             class:transition-progress-bar=enable_transition
                             style=move || {
@@ -386,7 +435,7 @@ pub fn predictive_cooldown(
                 progress_value.update(|progress_value| {
                     let rate = rate.get_untracked();
                     if *progress_value < 1.2 {
-                        *progress_value += rate * 0.1;
+                        *progress_value += rate * 0.05;
                     }
                     if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
                         *progress_value = 1.0;
@@ -394,7 +443,7 @@ pub fn predictive_cooldown(
                 });
             }
         },
-        100,
+        50,
     );
 
     progress_value
