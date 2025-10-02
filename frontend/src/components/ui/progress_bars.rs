@@ -248,23 +248,6 @@ pub fn CircularProgressBar(
     });
 
     Effect::new(move |_| {
-        if disabled.get() {
-            set_timeout(
-                move || {
-                    // progress_value.set(0.0);
-                    // transition.set("");
-                    enable_transition.set(false);
-                },
-                std::time::Duration::from_millis(500),
-            );
-        } else {
-            // transition.set("transition: opacity 0.5s linear, transform 0.250s linear;");
-            enable_transition.set(true);
-        }
-    });
-
-    Effect::new(move |_| {
-        // TODO: Find way to do overflow... might want a third half for bottom
         let value = value.get().clamp(0.0, 1.2);
         if value <= 0.5 {
             right_rotation.set(value.clamp(0.0, 0.5) * 360.0);
@@ -419,14 +402,14 @@ pub fn predictive_cooldown(
             if !disabled.get_untracked() {
                 progress_value.update(|progress_value| {
                     let rate = rate.get_untracked();
-                    *progress_value += rate * 0.2;
+                    *progress_value += rate * 0.1;
                     if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
                         *progress_value = 1.0;
                     }
                 });
             }
         },
-        200,
+        100,
     );
 
     progress_value
