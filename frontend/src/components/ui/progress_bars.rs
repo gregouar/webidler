@@ -199,21 +199,21 @@ pub fn CircularProgressBar(
     let in_transition = RwSignal::new(false);
     let next_value = RwSignal::new(0.0f32);
 
-    let right_rotation = RwSignal::new(0.0);
-    let bottom_rotation = RwSignal::new(0.0);
-    let left_rotation = RwSignal::new(0.0);
+    // let right_rotation = RwSignal::new(0.0);
+    // let bottom_rotation = RwSignal::new(0.0);
+    // let left_rotation = RwSignal::new(0.0);
 
-    let hide_ul_overlay = RwSignal::new(false);
-    let hide_bl_overlay = RwSignal::new(false);
+    // let hide_ul_overlay = RwSignal::new(false);
+    // let hide_bl_overlay = RwSignal::new(false);
 
     Effect::new(move |_| {
         if reset.get() {
             in_transition.set(false);
 
             enable_transition.set(false);
-            right_rotation.set(0.0);
-            bottom_rotation.set(0.0);
-            left_rotation.set(0.0);
+            // right_rotation.set(0.0);
+            // bottom_rotation.set(0.0);
+            // left_rotation.set(0.0);
 
             if !disabled.get_untracked() {
                 reset_bar_animation
@@ -236,63 +236,32 @@ pub fn CircularProgressBar(
         }
     });
 
-    // let node_ref: NodeRef<leptos::html::Div> = NodeRef::new();
-
-    // // reactive states
-    // let target = RwSignal::new(0.0);
-    // let current = RwSignal::new(0.0);
-
-    // // whenever `value` changes, update target
-    // Effect::new(move |_| {
-    //     target.set(value.get().clamp(0.0, 1.0));
-    //     // if we're idle (current already == target), kick off a transition now
-    //     if (current.get_untracked() - target.get_untracked()).abs() < 1e-6 {
-    //         // set style immediately
-    //         if let Some(el) = node_ref.get() {
-    //             let percent = target.get_untracked() * 100.0;
-    //             el.style("transform", &format!("scaleY({})", target.get_untracked()));
-    //         }
-    //     }
-    // });
-
-    // // attach transitionend handler
-    // leptos::window_event_listener(leptos::ev::TransitionEnd, move |_| {
-    //     let t = target.get_untracked();
-    //     let c = current.get_untracked();
-    //     if (t - c).abs() > 1e-6 {
-    //         current.set(t);
-    //         if let Some(el) = node_ref.get() {
-    //             el.style("transform", &format!("scaleY({})", t));
-    //         }
-    //     }
-    // });
-
     Effect::new(move |_| {
         if !in_transition.get() {
             next_value.set(value.get());
         }
     });
 
-    Effect::new(move |_| {
-        let value = next_value.get().clamp(0.0, 1.2);
-        left_rotation.set(value * 360.0);
+    // Effect::new(move |_| {
+    //     let value = next_value.get().clamp(0.0, 1.2);
+    //     left_rotation.set(value * 360.0);
 
-        if value <= 0.5 {
-            right_rotation.set(value.clamp(0.0, 0.5) * 360.0);
-            hide_bl_overlay.set(false);
-        } else {
-            right_rotation.set(180.0);
-            hide_bl_overlay.set(true);
-        }
+    //     if value <= 0.5 {
+    //         right_rotation.set(value.clamp(0.0, 0.5) * 360.0);
+    //         hide_bl_overlay.set(false);
+    //     } else {
+    //         right_rotation.set(180.0);
+    //         hide_bl_overlay.set(true);
+    //     }
 
-        if value <= 0.75 {
-            bottom_rotation.set(value.clamp(0.0, 0.75) * 360.0);
-            hide_ul_overlay.set(false);
-        } else {
-            bottom_rotation.set(270.0);
-            hide_ul_overlay.set(true);
-        }
-    });
+    //     if value <= 0.75 {
+    //         bottom_rotation.set(value.clamp(0.0, 0.75) * 360.0);
+    //         hide_ul_overlay.set(false);
+    //     } else {
+    //         bottom_rotation.set(270.0);
+    //         hide_ul_overlay.set(true);
+    //     }
+    // });
 
     view! {
         <div class="circular-progress-bar">
@@ -307,79 +276,106 @@ pub fn CircularProgressBar(
                     transform: scale(1.2); 
                  }
                 }
+
+
+                @property --progress {
+                    syntax: '<percentage>';
+                    inherits: false;
+                    initial-value: 0%;
+                }
                 "
             </style>
-            <div class="relative">
+            <div class="relative w-full h-full aspect-square rounded-full bg-stone-900 overflow-hidden" style="contain: strict;">
+
+                <div
+                    class="absolute inset-0 will-change-(--progress)"
+                    class:opacity-0=move || disabled.get()
+                    style=format!("
+                        background: conic-gradient(
+                            {bar_color} var(--progress),
+                            transparent var(--progress) 100%
+                        );
+                    ")
+                    class:transition-circular-progress-bar=enable_transition
+                    style:--progress=move || format!("{}%", value.get() * 100.0)
+                    on:transitionstart=move |_| {
+                        in_transition.set(true);
+                    }
+                    on:transitionend=move |_| {
+                        next_value.set(value.get_untracked());
+                        in_transition.set(false);
+                    }
+                ></div>
+
 
                 // Progress bar
-                <div class="relative w-full aspect-square rounded-full overflow-hidden bg-stone-900">
-
+                // <div class="relative w-full aspect-square rounded-full overflow-hidden bg-stone-900">
                     // Second container to add ring to hide not pixel perfect overflow
-                    <div
-                        class="absolute inset-px rounded-full overflow-hidden"
-                        style="contain: strict;"
-                        class:transition-progress-bar=enable_transition
-                        class:opacity-0=disabled
-                    >
-                        // Left half
-                        <div
-                            on:transitionstart=move |_| {
-                                in_transition.set(true);
-                            }
-                            on:transitionend=move |_| {
-                                next_value.set(value.get_untracked());
-                                in_transition.set(false);
-                            }
-                            class="absolute inset-0 origin-right w-1/2 will-change-transform"
-                            class:transition-progress-bar=enable_transition
-                            style=move || {
-                                format!(
-                                    "transform: rotate({}deg); background: {bar_color};",
-                                    left_rotation.get(),
-                                )
-                            }
-                        ></div>
+                //     <div
+                //         class="absolute inset-px rounded-full overflow-hidden"
+                //         style="contain: strict;"
+                //         class:transition-progress-bar=enable_transition
+                //         class:opacity-0=disabled
+                //     >
+                //         // Left half
+                //         <div
+                //             on:transitionstart=move |_| {
+                //                 in_transition.set(true);
+                //             }
+                //             on:transitionend=move |_| {
+                //                 next_value.set(value.get_untracked());
+                //                 in_transition.set(false);
+                //             }
+                //             class="absolute inset-0 origin-right w-1/2 will-change-transform"
+                //             class:transition-progress-bar=enable_transition
+                //             style=move || {
+                //                 format!(
+                //                     "transform: rotate({}deg); background: {bar_color};",
+                //                     left_rotation.get(),
+                //                 )
+                //             }
+                //         ></div>
 
-                        // Bottom half
-                        <div
-                            class="absolute left-0 bottom-0 right-0 origin-top
-                            h-1/2 will-change-transform"
-                            class:transition-progress-bar=enable_transition
-                            style=move || {
-                                format!(
-                                    "transform: rotate({}deg); background: {bar_color};
-                                      border-style: solid; border-color: {bar_color};",
-                                    bottom_rotation.get() + 90.0,
-                                )
-                            }
-                        ></div>
+                //         // Bottom half
+                //         <div
+                //             class="absolute left-0 bottom-0 right-0 origin-top
+                //             h-1/2 will-change-transform"
+                //             class:transition-progress-bar=enable_transition
+                //             style=move || {
+                //                 format!(
+                //                     "transform: rotate({}deg); background: {bar_color};
+                //                       border-style: solid; border-color: {bar_color};",
+                //                     bottom_rotation.get() + 90.0,
+                //                 )
+                //             }
+                //         ></div>
 
-                        // Right half
-                        <div
-                            class="absolute top-0 bottom-0 right-0 origin-left
-                            w-1/2 will-change-transform"
-                            class:transition-progress-bar=enable_transition
-                            style=move || {
-                                format!(
-                                    "transform: rotate({}deg); background: {bar_color};",
-                                    right_rotation.get() + 180.0,
-                                )
-                            }
-                        ></div>
-                    </div>
+                //         // Right half
+                //         <div
+                //             class="absolute top-0 bottom-0 right-0 origin-left
+                //             w-1/2 will-change-transform"
+                //             class:transition-progress-bar=enable_transition
+                //             style=move || {
+                //                 format!(
+                //                     "transform: rotate({}deg); background: {bar_color};",
+                //                     right_rotation.get() + 180.0,
+                //                 )
+                //             }
+                //         ></div>
+                //     </div>
 
-                    // Upper-left overlay
-                    <div
-                        class="absolute inset-0 bg-stone-900 origin-bottom-right size-1/2"
-                        class:hidden=hide_ul_overlay
-                    ></div>
+                //     // Upper-left overlay
+                //     <div
+                //         class="absolute inset-0 bg-stone-900 origin-bottom-right size-1/2"
+                //         class:hidden=hide_ul_overlay
+                //     ></div>
 
-                    // Bottom-left overlay
-                    <div
-                        class="absolute inset-0 bg-stone-900 origin-right w-1/2"
-                        class:hidden=hide_bl_overlay
-                    ></div>
-                </div>
+                //     // Bottom-left overlay
+                //     <div
+                //         class="absolute inset-0 bg-stone-900 origin-right w-1/2"
+                //         class:hidden=hide_bl_overlay
+                //     ></div>
+                // </div>
 
                 // For nice fade out during reset
                 <div
