@@ -209,11 +209,21 @@ pub fn CircularProgressBar(
 
     // let transition = RwSignal::new("transition: opacity 0.5s linear, transform 0.250s linear;");
 
+    let right_rotation = RwSignal::new(0.0);
+    let bottom_rotation = RwSignal::new(0.0);
+    let left_rotation = RwSignal::new(0.0);
+
+    let hide_ul_overlay = RwSignal::new(false);
+    let hide_bl_overlay = RwSignal::new(false);
+
     Effect::new(move |_| {
         if reset.get() {
             // progress_value.set(0.0);
             // transition.set("");
             enable_transition.set(false);
+            right_rotation.set(0.0);
+            bottom_rotation.set(0.0);
+            left_rotation.set(0.0);
 
             if !disabled.get_untracked() {
                 reset_bar_animation
@@ -253,19 +263,12 @@ pub fn CircularProgressBar(
         }
     });
 
-    let right_rotation = RwSignal::new(0.0);
-    let bottom_rotation = RwSignal::new(0.0);
-    let left_rotation = RwSignal::new(0.0);
-
-    let hide_ul_overlay = RwSignal::new(false);
-    let hide_bl_overlay = RwSignal::new(false);
-
     Effect::new(move |_| {
         // TODO: Find way to do overflow... might want a third half for bottom
-        let value = value.get().clamp(0.0, 1.25);
+        let value = value.get().clamp(0.0, 1.2);
         if value <= 0.5 {
-            right_rotation.set(value * 360.0);
-            bottom_rotation.set(value * 360.0);
+            right_rotation.set(value.clamp(0.0, 0.5) * 360.0);
+            bottom_rotation.set(value.clamp(0.0, 0.75) * 360.0);
             left_rotation.set(value * 360.0);
 
             hide_ul_overlay.set(false);
