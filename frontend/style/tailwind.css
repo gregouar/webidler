@@ -69,8 +69,8 @@
 }
 
 @utility transition-progress-bar {
-   transition: opacity 0.5s linear, transform 0.125s linear;
+   transition: opacity 0.5s linear, transform 0.250s linear;
 }
 @utility transition-circular-progress-bar {
-   transition: opacity 0.5s linear, --progress 0.125s linear;
+   transition: opacity 0.5s linear, --progress 0.250s linear;
 }

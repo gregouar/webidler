@@ -242,7 +242,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         </style>
         <div
             class="grid grid-cols-4 h-full
-            bg-zinc-800 shadow-lg/30 rounded-md ring-1 ring-zinc-950
+            bg-zinc-800 xl:shadow-lg/30 rounded-md ring-1 ring-zinc-950
             gap-1 xl:gap-2 p-1 xl:p-2"
             style="contain: strict;"
         >

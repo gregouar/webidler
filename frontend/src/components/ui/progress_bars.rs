@@ -433,7 +433,7 @@ pub fn predictive_cooldown(
                 progress_value.update(|progress_value| {
                     let rate = rate.get_untracked();
                     if *progress_value < 1.2 {
-                        *progress_value += rate * 0.05;
+                        *progress_value += rate * 0.2;
                     }
                     if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
                         *progress_value = 1.0;
@@ -441,7 +441,7 @@ pub fn predictive_cooldown(
                 });
             }
         },
-        50,
+        200,
     );
 
     progress_value
