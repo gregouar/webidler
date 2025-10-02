@@ -380,7 +380,7 @@ pub fn CircularProgressBar(
                 // Icon
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
-                    will-change-transform transition-transform duration-500"
+                    will-change-[filter,transform] transition-[filter,transform] duration-500"
                     style=reset_icon_animation
                     class:brightness-50=move || disabled.get()
                 >
