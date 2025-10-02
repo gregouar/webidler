@@ -121,14 +121,6 @@ pub fn VerticalProgressBar(
         }
     };
 
-    let transition = move || {
-        if reset.get() {
-            "transition-none"
-        } else {
-            "transition-transform ease-linear duration-250 "
-        }
-    };
-
     // Trick to reset animation by removing it when ended
     let reset_bar_animation = RwSignal::new("opacity: 0;");
     Effect::new(move |_| {
@@ -172,12 +164,9 @@ pub fn VerticalProgressBar(
             <div class="overflow-hidden h-full rounded-lg">
                 <div
                     class=move || {
-                        format!(
-                            "h-full origin-bottom will-change-transform {} {}",
-                            bar_color,
-                            transition(),
-                        )
+                        format!("h-full origin-bottom will-change-transform {}", bar_color)
                     }
+                    class:transition-progress-bar=move || !reset.get()
                     style=move || format!("transform: scaleY({});", set_value())
                 ></div>
             </div>
