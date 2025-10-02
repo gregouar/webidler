@@ -2,7 +2,7 @@ name: Frontend
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "feature/rotated_progress_bars"]
     paths:
       [
         "frontend/**",
