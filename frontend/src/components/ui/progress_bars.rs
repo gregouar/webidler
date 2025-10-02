@@ -233,25 +233,22 @@ pub fn CircularProgressBar(
 
     Effect::new(move |_| {
         let value = value.get().clamp(0.0, 1.2);
+        left_rotation.set(value * 360.0);
+
         if value <= 0.5 {
             right_rotation.set(value.clamp(0.0, 0.5) * 360.0);
-            bottom_rotation.set(value.clamp(0.0, 0.75) * 360.0);
-            left_rotation.set(value * 360.0);
-
-            hide_ul_overlay.set(false);
             hide_bl_overlay.set(false);
         } else {
             right_rotation.set(180.0);
-            left_rotation.set(value * 360.0);
-
-            if value <= 0.75 {
-                bottom_rotation.set(value * 360.0);
-            } else {
-                bottom_rotation.set(270.0);
-                hide_ul_overlay.set(true);
-            }
-
             hide_bl_overlay.set(true);
+        }
+
+        if value <= 0.75 {
+            bottom_rotation.set(value.clamp(0.0, 0.75) * 360.0);
+            hide_ul_overlay.set(false);
+        } else {
+            bottom_rotation.set(270.0);
+            hide_ul_overlay.set(true);
         }
     });
 
@@ -295,24 +292,26 @@ pub fn CircularProgressBar(
 
                         // Bottom half
                         <div
-                            class="absolute inset-0 origin-right w-1/2 will-change-transform"
+                            class="absolute left-0 bottom-0 right-0 origin-top
+                            h-1/2 will-change-transform"
                             class:transition-progress-bar=enable_transition
                             style=move || {
                                 format!(
                                     "transform: rotate({}deg); background: {bar_color};",
-                                    bottom_rotation.get(),
+                                    bottom_rotation.get() + 90.0,
                                 )
                             }
                         ></div>
 
                         // Right half
                         <div
-                            class="absolute inset-0 origin-right w-1/2 will-change-transform"
+                            class="absolute top-0 bottom-0 right-0 origin-left
+                            w-1/2 will-change-transform"
                             class:transition-progress-bar=enable_transition
                             style=move || {
                                 format!(
                                     "transform: rotate({}deg); background: {bar_color};",
-                                    right_rotation.get(),
+                                    right_rotation.get() + 180.0,
                                 )
                             }
                         ></div>
@@ -386,7 +385,9 @@ pub fn predictive_cooldown(
             if !disabled.get_untracked() {
                 progress_value.update(|progress_value| {
                     let rate = rate.get_untracked();
-                    *progress_value += rate * 0.1;
+                    if *progress_value < 1.2 {
+                        *progress_value += rate * 0.1;
+                    }
                     if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
                         *progress_value = 1.0;
                     }
