@@ -196,8 +196,6 @@ pub fn CircularProgressBar(
 
     let enable_transition = RwSignal::new(true);
 
-    // let transition = RwSignal::new("transition: opacity 0.5s linear, transform 0.250s linear;");
-
     let right_rotation = RwSignal::new(0.0);
     let bottom_rotation = RwSignal::new(0.0);
     let left_rotation = RwSignal::new(0.0);
@@ -207,8 +205,6 @@ pub fn CircularProgressBar(
 
     Effect::new(move |_| {
         if reset.get() {
-            // progress_value.set(0.0);
-            // transition.set("");
             enable_transition.set(false);
             right_rotation.set(0.0);
             bottom_rotation.set(0.0);
@@ -231,7 +227,6 @@ pub fn CircularProgressBar(
                 );
             }
         } else {
-            // transition.set("transition: opacity 0.5s linear, transform 0.250s linear;");
             enable_transition.set(true);
         }
     });
