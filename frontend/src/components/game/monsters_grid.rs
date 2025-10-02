@@ -40,61 +40,6 @@ pub fn MonstersGrid() -> impl IntoView {
             || game_context.area_state.read().going_back > 0
     });
 
-    // TODO: double buffering to allow in and out at the same time
-    // flex-1 min-h-0 aspect-[12/7]
-    // view! {
-    //     <div class="
-    //     flex-1 min-h-0
-    //     grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2
-    //     items-center
-    //     ">
-    //         <For
-    //             each=move || game_context.monster_specs.get().into_iter().enumerate()
-    //             // We need a unique key to replace old elements
-    //             key=move |(index, _)| (game_context.monster_wave.get(), *index)
-    //             children=move |(index, specs)| {
-    //                 let animation_delay = format!(
-    //                     "animation-delay: {}s;",
-    //                     rand::rng().random_range(0.0..=0.2f32),
-    //                 );
-    //                 let (x_size, y_size) = specs.character_specs.size.get_xy_size();
-    //                 let (x_pos, y_pos) = (
-    //                     specs.character_specs.position_x,
-    //                     specs.character_specs.position_y,
-    //                 );
-
-    //                 view! {
-    //                     <div
-    //                         class=format!(
-    //                             "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full",
-    //                             x_size,
-    //                             y_size,
-    //                             x_pos,
-    //                             y_pos,
-    //                         )
-    //                         style=move || {
-    //                             if all_monsters_dead.get() {
-    //                                 "animation-delay: 0.2s; animation: monster-fade-out 1s ease-in; animation-fill-mode: both; pointer-events: none;"
-    //                                     .to_string()
-    //                             } else if flee.get() {
-    //                                 format!(
-    //                                     "animation: monster-flee 1s ease-out; animation-fill-mode: both; {animation_delay} pointer-events: none;",
-    //                                 )
-    //                             } else {
-    //                                 format!(
-    //                                     "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {animation_delay}",
-    //                                 )
-    //                             }
-    //                         }
-    //                     >
-    //                         <MonsterCard specs=specs index=index />
-    //                     </div>
-    //                 }
-    //             }
-    //         />
-    //     </div>
-    // }
-
     view! {
         <div class="
         flex-1 min-h-0
@@ -252,32 +197,17 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             "
             .gold-text {
                 font-weight: bold;
-                background: linear-gradient(90deg, #ffeb3b, #fcd34d, #fde68a, #fff);
-                background-size: 400%;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                animation: rewardShimmer 2s infinite linear;
                 text-shadow: 0 0 8px rgba(255, 223, 0, 0.9);
             }
             
             .gems-text {
                 font-weight: bold;
-                background: linear-gradient(90deg, #06b6d4, #3b82f6, #9333ea, #06b6d4);
-                background-size: 400%;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                animation: rewardShimmer 2s infinite linear;
                 text-shadow: 0 0 8px rgba(0, 200, 255, 0.9);
             }
             
             .reward-float {
                 animation: rewardFloat 2.5s ease-out forwards;
                 position: absolute;
-            }
-            
-            @keyframes rewardShimmer {
-                0% { background-position: 0% }
-                100% { background-position: 400% }
             }
             
             @keyframes rewardFloat {
@@ -310,9 +240,12 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             }
             "
         </style>
-        <div class="grid grid-cols-4 h-full
-        bg-zinc-800 shadow-lg/30 rounded-md ring-1 ring-zinc-950
-        gap-1 xl:gap-2 p-1 xl:p-2">
+        <div
+            class="grid grid-cols-4 h-full
+            bg-zinc-800 shadow-lg/30 rounded-md ring-1 ring-zinc-950
+            gap-1 xl:gap-2 p-1 xl:p-2"
+            style="contain: strict;"
+        >
             <div class="relative flex flex-col gap-1 xl:gap-2 col-span-3 h-full min-h-0">
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Bottom>
                     <HorizontalProgressBar
@@ -339,7 +272,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
                 <Show when=move || { gold_reward.get() > 0.0 }>
                     <div class="
-                    reward-float gold-text text-2xl  text-shadow-md will-change-transform will-change-opacity
+                    reward-float gold-text text-amber-400 text-2xl  text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-50 flex items-center gap-1
                     ">
@@ -355,7 +288,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
                 <Show when=move || { gems_reward.get() > 0.0 }>
                     <div class="
-                    reward-float gems-text text-2xl text-shadow-md will-change-transform will-change-opacity
+                    reward-float gems-text text-fuchsia-400 text-2xl text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-50 flex items-center gap-1
                     ">

@@ -317,6 +317,7 @@ pub fn CircularProgressBar(
                     // Second container to add ring to hide not pixel perfect overflow
                     <div
                         class="absolute inset-px rounded-full overflow-hidden"
+                        style="contain: strict;"
                         class:transition-progress-bar=enable_transition
                         class:opacity-0=disabled
                     >
@@ -346,7 +347,8 @@ pub fn CircularProgressBar(
                             class:transition-progress-bar=enable_transition
                             style=move || {
                                 format!(
-                                    "transform: rotate({}deg); background: {bar_color};",
+                                    "transform: rotate({}deg); background: {bar_color};
+                                      border-style: solid; border-color: {bar_color};",
                                     bottom_rotation.get() + 90.0,
                                 )
                             }
