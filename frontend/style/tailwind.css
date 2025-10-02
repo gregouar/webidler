@@ -67,3 +67,7 @@
 @utility will-change-transform-opacity {
    will-change: transform, opacity;
 }
+
+@utility transition-progress-bar {
+   transition: opacity 0.5s linear, transform 0.25s linear;
+}

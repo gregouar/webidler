@@ -204,12 +204,16 @@ pub fn CircularProgressBar(
 ) -> impl IntoView {
     let reset_bar_animation = RwSignal::new("opacity: 0;");
     let reset_icon_animation = RwSignal::new("");
-    let transition = RwSignal::new("transition: opacity 0.5s linear, transform 0.250s linear;");
+
+    let enable_transition = RwSignal::new(true);
+
+    // let transition = RwSignal::new("transition: opacity 0.5s linear, transform 0.250s linear;");
 
     Effect::new(move |_| {
         if reset.get() {
             // progress_value.set(0.0);
-            transition.set("");
+            // transition.set("");
+            enable_transition.set(false);
 
             if !disabled.get_untracked() {
                 reset_bar_animation
@@ -228,7 +232,8 @@ pub fn CircularProgressBar(
                 );
             }
         } else {
-            transition.set("transition: opacity 0.5s linear, transform 0.250s linear;");
+            // transition.set("transition: opacity 0.5s linear, transform 0.250s linear;");
+            enable_transition.set(true);
         }
     });
 
@@ -237,25 +242,46 @@ pub fn CircularProgressBar(
             set_timeout(
                 move || {
                     // progress_value.set(0.0);
-                    transition.set("");
+                    // transition.set("");
+                    enable_transition.set(false);
                 },
                 std::time::Duration::from_millis(500),
             );
+        } else {
+            // transition.set("transition: opacity 0.5s linear, transform 0.250s linear;");
+            enable_transition.set(true);
         }
     });
 
-    let right_rotation = RwSignal::new(42.0);
-    let left_rotation = RwSignal::new(69.0);
+    let right_rotation = RwSignal::new(0.0);
+    let bottom_rotation = RwSignal::new(0.0);
+    let left_rotation = RwSignal::new(0.0);
+
+    let hide_ul_overlay = RwSignal::new(false);
+    let hide_bl_overlay = RwSignal::new(false);
 
     Effect::new(move |_| {
         // TODO: Find way to do overflow... might want a third half for bottom
-        let value = value.get().clamp(0.0, 1.0);
+        let value = value.get().clamp(0.0, 1.25);
         if value <= 0.5 {
             right_rotation.set(value * 360.0);
+            bottom_rotation.set(value * 360.0);
             left_rotation.set(value * 360.0);
+
+            hide_ul_overlay.set(false);
+            hide_bl_overlay.set(false);
         } else {
             right_rotation.set(180.0);
             left_rotation.set(value * 360.0);
+
+            if value <= 0.75 {
+                bottom_rotation.set(value * 360.0);
+            } else {
+                bottom_rotation.set(270.0);
+                hide_ul_overlay.set(true);
+            }
+
+            hide_bl_overlay.set(true);
         }
     });
 
@@ -264,102 +290,103 @@ pub fn CircularProgressBar(
             <style>
                 "
                 @keyframes circular-progress-bar-fade-out {
-                 0% { opacity: 1; /*filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));*/ }
-                 /*50% { filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746)); }*/
-                 100% { opacity: 0; /*filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));*/ }
+                 0% { opacity: 1; }
+                 100% { opacity: 0; }
                 }
                 @keyframes circular-progress-bar-glow {
-                 /*0% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }*/
                  50% { 
-                  /*  filter: drop-shadow(0 0 12px oklch(92.4% 0.12 95.746));  */
                     transform: scale(1.2); 
                  }
-                 /*100% { filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0)); }*/
-                }
-                
-                @property --progress {
-                    syntax: '<percentage>';
-                    inherits: false;
-                    initial-value: 0%;
                 }
                 "
             </style>
             <div class="relative">
-                <div class="relative w-full h-full aspect-square rounded-full flex items-center justify-center bg-stone-900">
-                    // Container / background ring
-                    <div class=format!("absolute inset-0 rounded-full bg-stone-900")></div>
 
+                // Progress bar
+                <div class="relative w-full aspect-square rounded-full overflow-hidden bg-stone-900">
+
+                    // Second container to add ring to hide not pixel perfect overflow
                     <div
-                        class="absolute inset-0 rounded-l-full overflow-hidden bg-red-500 origin-right"
-                        style=move || {
-                            format!(
-                                "transform: rotate({}deg); width: 50%; {}",
-                                left_rotation.get(),
-                                transition.get(),
-                            )
-                        }
+                        class="absolute inset-px rounded-full overflow-hidden"
+                        class:transition-progress-bar=enable_transition
+                        class:opacity-0=disabled
+                    >
+                        // Left half
+                        <div
+                            class="absolute inset-0 origin-right w-1/2 will-change-transform"
+                            class:transition-progress-bar=enable_transition
+                            style=move || {
+                                format!(
+                                    "transform: rotate({}deg); background: {bar_color};",
+                                    left_rotation.get(),
+                                )
+                            }
+                        ></div>
+
+                        // Bottom half
+                        <div
+                            class="absolute inset-0 origin-right w-1/2 will-change-transform"
+                            class:transition-progress-bar=enable_transition
+                            style=move || {
+                                format!(
+                                    "transform: rotate({}deg); background: {bar_color};",
+                                    bottom_rotation.get(),
+                                )
+                            }
+                        ></div>
+
+                        // Right half
+                        <div
+                            class="absolute inset-0 origin-right w-1/2 will-change-transform"
+                            class:transition-progress-bar=enable_transition
+                            style=move || {
+                                format!(
+                                    "transform: rotate({}deg); background: {bar_color};",
+                                    right_rotation.get(),
+                                )
+                            }
+                        ></div>
+                    </div>
+
+                    // Upper-left overlay
+                    <div
+                        class="absolute inset-0 bg-stone-900 origin-bottom-right size-1/2"
+                        class:hidden=hide_ul_overlay
                     ></div>
 
+                    // Bottom-left overlay
                     <div
-                        class="absolute inset-0 rounded-l-full overflow-hidden bg-red-500 origin-right"
-                        style=move || {
-                            format!(
-                                "transform: rotate({}deg); width: 50%; {}",
-                                right_rotation.get(),
-                                transition.get(),
-                            )
-                        }
+                        class="absolute inset-0 bg-stone-900 origin-bottom-right size-1/2"
+                        style="transform: rotate(270deg);"
+                        class:hidden=hide_bl_overlay
                     ></div>
+                </div>
 
-                // Inner circle for the hole
-                // <div class=format!(
-                // "absolute inset-{} rounded-full bg-stone-900",
-                // bar_width / 2,
-                // )></div>
+                // For nice fade out during reset
+                <div
+                    class="absolute inset-0 rounded-full will-change-opacity"
+                    style=move || {
+                        format!("background: {bar_color}; {}", reset_bar_animation.get())
+                    }
+                ></div>
 
-                // Children (icon/text) centered
-                // <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                // {children()}
-                // </div>
+                // Hole in the middle
+                <div class=format!(
+                    "absolute inset-{} xl:inset-{bar_width} rounded-full
+                        bg-radial from-stone-600 to-zinc-950 to-70%",
+                    bar_width / 2,
+                )></div>
+
+                // Icon
+                <div
+                    class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
+                    will-change-transform transition-transform duration-500"
+                    style=reset_icon_animation
+                    class:brightness-50=move || disabled.get()
+                >
+                    {children()}
                 </div>
             </div>
-        // <div class="relative">
-        // <div class="relative w-full h-full aspect-square rounded-full flex items-center justify-center bg-stone-900">
-        // <div
-        // class="absolute inset-0 rounded-full will-change-(--progress)"
-        // class:opacity-0=move || disabled.get()
-        // style=move || format!("
-        // background: conic-gradient(
-        // {bar_color} var(--progress),
-        // transparent var(--progress) 100%
-        // );
-        // {}
-        // ",transition.get())
-        // style:--progress=move || format!("{}%", value.get() * 100.0)
-        // ></div>
-
-        // // For nice fade out during reset
-        // <div
-        // class="absolute inset-0 rounded-full will-change-[filter]"
-        // style=move || format!("
-        // background: {bar_color};
-        // {}
-        // ",reset_bar_animation.get())
-        // ></div>
-
-        // <div class=format!("absolute inset-{} xl:inset-{bar_width} rounded-full
-        // bg-radial from-stone-600 to-zinc-950 to-70%", bar_width/2)></div>
-        // </div>
-
-        // <div
-        // class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
-        // will-change-[filter,transform] transition duration-500"
-        // style=reset_icon_animation
-        // class:brightness-50=move || disabled.get()
-        // >
-        // {children()}
-        // </div>
-        // </div>
         </div>
     }
 }
