@@ -356,8 +356,7 @@ pub fn CircularProgressBar(
 
                     // Bottom-left overlay
                     <div
-                        class="absolute inset-0 bg-stone-900 origin-bottom-right size-1/2"
-                        style="transform: rotate(270deg);"
+                        class="absolute inset-0 bg-stone-900 origin-right w-1/2"
                         class:hidden=hide_bl_overlay
                     ></div>
                 </div>
