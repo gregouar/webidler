@@ -211,7 +211,9 @@ async fn update_entities(
     game_data: &mut GameInstanceData,
     elapsed_time: Duration,
 ) {
-    if !game_data.player_state.character_state.is_alive {
+    if !game_data.player_state.character_state.is_alive
+        || game_data.area_state.read().going_back > 0
+    {
         return;
     }
 

@@ -2,8 +2,6 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use rand::Rng;
-
 use shared::data::monster::MonsterRarity;
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
 
@@ -41,16 +39,26 @@ pub fn MonstersGrid() -> impl IntoView {
     });
 
     view! {
-        <div class="
-        flex-1 min-h-0
-        grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2 
-        items-center
-        ">
+        <div class=move || {
+            format!(
+                "flex-1 min-h-0
+                grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2 
+                items-center
+                {} will-change-transform-opacity
+                ",
+                if all_monsters_dead.get() {
+                    "animate-monster-fade-out pointer-events-none"
+                } else if flee.get() {
+                    "animate-monster-flee pointer-events-none"
+                } else {
+                    "animate-monster-fade-in"
+                },
+            )
+        }>
             <For
                 each=move || game_context.monster_specs.get().into_iter().enumerate()
                 key=move |(index, _)| (game_context.monster_wave.get(), *index)
                 children=move |(index, specs)| {
-                    let animation_delay = RwSignal::new(rand::rng().random_range(0.0..=0.2f32));
                     let (x_size, y_size) = specs.character_specs.size.get_xy_size();
                     let (x_pos, y_pos) = (
                         specs.character_specs.position_x,
@@ -58,25 +66,13 @@ pub fn MonstersGrid() -> impl IntoView {
                     );
 
                     view! {
-                        <div
-                            class=move || {
-                                format!(
-                                    "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full {} will-change-transform-opacity",
-                                    x_size,
-                                    y_size,
-                                    x_pos,
-                                    y_pos,
-                                    if all_monsters_dead.get() {
-                                        "animate-monster-fade-out pointer-events-none"
-                                    } else if flee.get() {
-                                        "animate-monster-flee pointer-events-none"
-                                    } else {
-                                        "animate-monster-fade-in"
-                                    },
-                                )
-                            }
-                            style=move || format!("animation-delay: {}s;", animation_delay.get())
-                        >
+                        <div class=format!(
+                            "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full ",
+                            x_size,
+                            y_size,
+                            x_pos,
+                            y_pos,
+                        )>
                             <MonsterCard specs=specs index=index />
                         </div>
                     }
@@ -272,7 +268,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
                 <Show when=move || { gold_reward.get() > 0.0 }>
                     <div class="
-                    reward-float gold-text text-amber-400 text-2xl  text-shadow-md will-change-transform will-change-opacity
+                    reward-float gold-text text-amber-400 text:lg xl:text-2xl  text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-50 flex items-center gap-1
                     ">
@@ -288,7 +284,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
                 <Show when=move || { gems_reward.get() > 0.0 }>
                     <div class="
-                    reward-float gems-text text-fuchsia-400 text-2xl text-shadow-md will-change-transform will-change-opacity
+                    reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-50 flex items-center gap-1
                     ">

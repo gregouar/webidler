@@ -12,20 +12,20 @@
   --animate-monster-flee: monster-flee 1s ease-out both;  
 
   @keyframes monster-fade-in {
-    0% { transform: translateX(100%); opacity: 0; }
+    0% { transform: translateX(50%); opacity: 0; }
     65% { transform: translateX(0%); opacity: 1; }
-    80% { transform: translateX(5%); }
+    80% { transform: translateX(2%); }
     100% { transform: translateX(0%); }
   }
   
   @keyframes monster-fade-out {
     from { opacity: 1; transform: translateY(0%); }
-    to { opacity: 0; transform: translateY(100%); }
+    to { opacity: 0; transform: translateY(50%); }
   }
   
   @keyframes monster-flee {
     0% { transform: translateX(0%); opacity: 1; }
-    100% { transform: translateX(100%); opacity: 0; }
+    100% { transform: translateX(50%); opacity: 0; }
   }
 }
 
