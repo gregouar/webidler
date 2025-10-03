@@ -288,7 +288,7 @@ pub fn CircularProgressBar(
             <div class="relative w-full h-full aspect-square rounded-full bg-stone-900 overflow-hidden" style="contain: strict;">
 
                 <div
-                    class="absolute inset-0 will-change-(--progress)"
+                    class="absolute inset-0 will-change-(--progress) will-change-opacity"
                     class:opacity-0=move || disabled.get()
                     style=format!("
                         background: conic-gradient(

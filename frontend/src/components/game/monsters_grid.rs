@@ -61,17 +61,17 @@ pub fn MonstersGrid() -> impl IntoView {
                         <div
                             class=move || {
                                 format!(
-                                    "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full {}",
+                                    "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full {} will-change-transform-opacity",
                                     x_size,
                                     y_size,
                                     x_pos,
                                     y_pos,
                                     if all_monsters_dead.get() {
-                                        "will-change-transform-opacity animate-monster-fade-out pointer-events-none"
+                                        "animate-monster-fade-out pointer-events-none"
                                     } else if flee.get() {
-                                        "will-change-transform-opacity animate-monster-flee pointer-events-none"
+                                        "animate-monster-flee pointer-events-none"
                                     } else {
-                                        "will-change-transform-opacity animate-monster-fade-in"
+                                        "animate-monster-fade-in"
                                     },
                                 )
                             }
