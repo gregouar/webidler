@@ -74,7 +74,7 @@ pub fn HorizontalProgressBar(
             relative flex w-full
             rounded-lg
             bg-stone-900 border border-neutral-950 
-            shadow-[inset_0_0_8px_rgba(0,0,0,0.4)]
+            xl:shadow-[inset_0_0_8px_rgba(0,0,0,0.4)]
             {}
             ",
             class.unwrap_or_default(),

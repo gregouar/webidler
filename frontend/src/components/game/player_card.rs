@@ -500,7 +500,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                             src=icon_asset
                             alt=skill_name
                             class="w-full h-full flex-no-shrink fill-current
-                            drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
+                            xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
                         />
                     </CircularProgressBar>
                 </button>

@@ -416,7 +416,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 src=icon_asset
                 alt=skill_name
                 class="w-full h-full flex-no-shrink fill-current
-                drop-shadow-[0px_2px_oklch(13% 0.028 261.692)] invert"
+                xl:drop-shadow-[0px_2px_oklch(13% 0.028 261.692)] invert"
             />
         </CircularProgressBar>
     }

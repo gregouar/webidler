@@ -330,20 +330,22 @@ pub fn Node(
         status_color(status.purchase_status, status.meta_status)
     };
 
-    let filter = move || {
+    let shadow_class = move || {
         let status = node_status.get();
         match (status.purchase_status, status.meta_status) {
             (PurchaseStatus::Inactive, MetaStatus::Normal) => "",
             (PurchaseStatus::Purchaseable, MetaStatus::Normal) => {
-                "drop-shadow(0 0 2px darkgoldenrod)"
+                "xl:drop-shadow-[0_0_2px_darkgoldenrod]"
             }
-            (PurchaseStatus::Purchased, MetaStatus::Normal) => "drop-shadow(0 0 4px gold)",
+            (PurchaseStatus::Purchased, MetaStatus::Normal) => "xl:drop-shadow-[0_0_4px_gold]",
 
-            (PurchaseStatus::Inactive, MetaStatus::Ascended) => "drop-shadow(0 0 2px cyan)",
-            (PurchaseStatus::Purchaseable, MetaStatus::Ascended) => "drop-shadow(0 0 4px cyan)",
-            (PurchaseStatus::Purchased, MetaStatus::Ascended) => "drop-shadow(0 0 6px cyan)",
+            (PurchaseStatus::Inactive, MetaStatus::Ascended) => "xl:drop-shadow-[0_0_2px_cyan]",
+            (PurchaseStatus::Purchaseable, MetaStatus::Ascended) => {
+                "xl:drop-shadow-[0_0_4px_cyan])"
+            }
+            (PurchaseStatus::Purchased, MetaStatus::Ascended) => "xl:drop-shadow-[0_0_6px_cyan]",
 
-            (_, MetaStatus::Locked) => "drop-shadow(0 0 2px red)",
+            (_, MetaStatus::Locked) => "xl:drop-shadow-[0_0_2px_red]",
         }
     };
 
@@ -364,7 +366,7 @@ pub fn Node(
         match (status.purchase_status, status.meta_status) {
             (PurchaseStatus::Purchaseable, _) => "invert(1)",
             (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5) invert(1)",
-            _ => "drop-shadow(2px 2px 2px white) invert(1)",
+            _ => "invert(1)",
         }
     };
 
@@ -399,19 +401,19 @@ pub fn Node(
                 fill=fill
                 stroke=stroke
                 stroke-width="3"
-                filter=filter
+                class=shadow_class
             />
 
             <circle r=20 + node_specs.size * 5 fill="url(#node-inner-gradient)" />
 
             <image
-                filter="drop-shadow(2px 2px 2px black)"
                 href=icon_asset
                 x=-(24 + node_specs.size as i32 * 10) / 2
                 y=-(24 + node_specs.size as i32 * 10) / 2
                 width=24 + node_specs.size * 10
                 height=24 + node_specs.size * 10
-                class="group-active:scale-90 group-active:brightness-100"
+                class="group-active:scale-90 group-active:brightness-100
+                xl:drop-shadow-[2px_2px_2px_black]"
                 style=move || { format!("pointer-events: none; filter: {}", icon_filter()) }
             />
         </g>
@@ -468,13 +470,13 @@ pub fn Connection(
                         y1=-from.y * 10.0
                         x2=to.x * 10.0
                         y2=-to.y * 10.0
-                        filter=move || {
+                        class=move || {
                             if amount_connections.get() == 2 {
                                 match (from_status, to_status) {
                                     (MetaStatus::Ascended, MetaStatus::Ascended) => {
-                                        "drop-shadow(0 0 2px cyan)"
+                                        "xl:drop-shadow-[0_0_2px_cyan]"
                                     }
-                                    _ => "drop-shadow(0 0 2px gold)",
+                                    _ => "xl:drop-shadow-[0_0_2px_gold]",
                                 }
                             } else {
                                 ""
