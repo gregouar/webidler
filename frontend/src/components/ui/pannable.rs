@@ -163,8 +163,9 @@ pub fn Pannable(children: Children) -> impl IntoView {
                         let (x, y) = offset.get();
                         format!("translate({x},{y}) scale({})", zoom.get())
                     }
-                    class="xl:drop-shadow-[0_2px_4px_black]"
+                    class="xl:drop-shadow-[0_2px_4px_black] will-change-transform"
                 >
+
                     {children()}
                 </g>
             </svg>
