@@ -1,3 +1,4 @@
+mod account;
 mod game;
 mod leaderboard;
 mod main_menu;
@@ -7,6 +8,7 @@ pub mod terms;
 mod town;
 mod user_dashboard;
 
+pub use account::AccountSettingsPage;
 pub use game::GamePage;
 pub use leaderboard::LeaderboardPage;
 pub use main_menu::MainMenuPage;

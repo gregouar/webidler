@@ -12,7 +12,7 @@ use crate::components::{
     auth::provide_auth_context,
     backend_client::BackendClient,
     pages,
-    ui::confirm::{ConfirmationModal, provide_confirm_context},
+    ui::confirm::{provide_confirm_context, ConfirmationModal},
 };
 
 // TODO: localization https://crates.io/crates/fluent-templates
@@ -52,6 +52,7 @@ pub fn App() -> impl IntoView {
                 <Route path=path!("/leaderboard") view=pages::LeaderboardPage />
                 <Route path=path!("/signup") view=pages::SignUpPage />
                 <Route path=path!("/user-dashboard") view=pages::UserDashboardPage />
+                <Route path=path!("/account") view=pages::AccountSettingsPage />
                 <Route path=path!("/town") view=pages::TownPage />
             </Routes>
         </Router>
