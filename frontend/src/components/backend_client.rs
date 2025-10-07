@@ -7,17 +7,17 @@ use shared::{
         client::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BuyMarketItemRequest,
             CreateCharacterRequest, EditMarketItemRequest, ForgeAddAffixRequest,
-            RejectMarketItemRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
-            UpdateAccountRequest,
+            ForgotPasswordRequest, RejectMarketItemRequest, SellMarketItemRequest, SignInRequest,
+            SignUpRequest, UpdateAccountRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BuyMarketItemResponse,
             CreateCharacterResponse, DeleteCharacterResponse, EditMarketItemResponse,
-            ErrorResponse, ForgeAddAffixResponse, GetAreasResponse, GetCharacterDetailsResponse,
-            GetPassivesResponse, GetSkillsResponse, GetUserCharactersResponse,
-            GetUserDetailsResponse, LeaderboardResponse, PlayersCountResponse,
-            RejectMarketItemResponse, SellMarketItemResponse, SignInResponse, SignUpResponse,
-            UpdateAccountResponse,
+            ErrorResponse, ForgeAddAffixResponse, ForgotPasswordResponse, GetAreasResponse,
+            GetCharacterDetailsResponse, GetPassivesResponse, GetSkillsResponse,
+            GetUserCharactersResponse, GetUserDetailsResponse, LeaderboardResponse,
+            PlayersCountResponse, RejectMarketItemResponse, SellMarketItemResponse, SignInResponse,
+            SignUpResponse, UpdateAccountResponse,
         },
     },
 };
@@ -113,6 +113,13 @@ impl BackendClient {
         request: &SignUpRequest,
     ) -> Result<SignUpResponse, BackendError> {
         self.post("account/signup", request).await
+    }
+
+    pub async fn post_forgot_password(
+        &self,
+        request: &ForgotPasswordRequest,
+    ) -> Result<ForgotPasswordResponse, BackendError> {
+        self.post("account/forgot-password", request).await
     }
 
     // Account

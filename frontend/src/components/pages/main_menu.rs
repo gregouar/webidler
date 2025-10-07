@@ -3,14 +3,18 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::{components::Redirect, hooks::use_navigate};
 use leptos_use::storage;
 
-use shared::http::client::SignInRequest;
+use shared::http::client::{ForgotPasswordRequest, SignInRequest};
 
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
     captcha::*,
     shared::player_count::PlayerCount,
-    ui::{buttons::MenuButton, input::Input, toast::*},
+    ui::{
+        buttons::MenuButton,
+        input::{Input, ValidatedInput},
+        toast::*,
+    },
 };
 
 #[component]
@@ -96,6 +100,8 @@ fn MainMenu() -> impl IntoView {
     };
     let password_ref = NodeRef::<leptos::html::Input>::new();
 
+    let show_forgot_password_modal = RwSignal::new(false);
+
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
             <PlayerCount />
@@ -138,6 +144,14 @@ fn MainMenu() -> impl IntoView {
                             }
                         />
                     </div>
+                    <div class="text-right -mt-4 mb-2">
+                        <button
+                            class="text-amber-300 text-sm underline hover:text-amber-200"
+                            on:click=move |_| show_forgot_password_modal.set(true)
+                        >
+                            "I forgot my password"
+                        </button>
+                    </div>
                     <Captcha token=captcha_token />
                     // </form>
 
@@ -146,6 +160,8 @@ fn MainMenu() -> impl IntoView {
                     </MenuButton>
                     <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>
                     <MenuButton on:click=navigate_to_leaderboard>"Leaderboard"</MenuButton>
+
+                    <ForgotPasswordModal open=show_forgot_password_modal />
                 </div>
             </div>
 
@@ -176,5 +192,102 @@ fn MainMenu() -> impl IntoView {
             </div>
 
         </main>
+    }
+}
+
+#[component]
+pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
+    let backend = expect_context::<BackendClient>();
+    let toaster = expect_context::<Toasts>();
+
+    let email = RwSignal::new(None);
+    let captcha_token = RwSignal::new(None);
+
+    let processing = RwSignal::new(false);
+    let success = RwSignal::new(false);
+
+    let on_submit = {
+        move |_| {
+            if processing.get() {
+                return;
+            }
+
+            processing.set(true);
+            spawn_local({
+                let backend = backend.clone();
+                async move {
+                    // TODO: captcha
+                    match backend
+                        .post_forgot_password(&ForgotPasswordRequest {
+                            captcha_token: captcha_token.get_untracked().unwrap_or_default(),
+                            email: email.get_untracked().unwrap(),
+                        })
+                        .await
+                    {
+                        Ok(_) => {
+                            success.set(true);
+                            show_toast(
+                                toaster.clone(),
+                                "Password reset instructions sent!",
+                                ToastVariant::Success,
+                            );
+                        }
+                        Err(e) => {
+                            show_toast(toaster.clone(), format!("Error: {e}"), ToastVariant::Error);
+                        }
+                    }
+                    success.set(true);
+                    processing.set(false);
+                }
+            });
+        }
+    };
+
+    let disable_submit = Signal::derive(move || {
+        email.read().is_none() || captcha_token.read().is_none() || processing.get()
+    });
+
+    view! {
+        <Show when=move || open.get()>
+            <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+                <div class="bg-zinc-900 ring-1 ring-zinc-700 rounded-lg p-6 w-full max-w-md shadow-xl text-gray-200 space-y-4">
+                    <h2 class="text-xl font-bold text-amber-300">"Forgot Password"</h2>
+
+                    <Show when=move || !success.get()>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            "Enter the email associated with your account. We'll send you a link to reset your password."
+                        </p>
+
+                        <ValidatedInput
+                            label="Email"
+                            id="email"
+                            input_type="text"
+                            placeholder="Enter your email for password recovery"
+                            bind=email
+                        />
+                        <Captcha token=captcha_token />
+
+                        <div class="flex justify-end gap-2 pt-2">
+                            <MenuButton on:click=move |_| open.set(false)>"Cancel"</MenuButton>
+                            <MenuButton on:click=on_submit disabled=disable_submit>
+                                {move || {
+                                    if processing.get() { "Sending..." } else { "Send Reset Link" }
+                                }}
+                            </MenuButton>
+                        </div>
+                    </Show>
+
+                    <Show when=move || success.get()>
+                        <div class="text-center space-y-3">
+                            <p class="text-green-400 font-medium">"Instructions sent!"</p>
+                            <p class="text-gray-400 text-sm">
+                                "Check your email and follow the reset link to set a new password."
+                            </p>
+                            <MenuButton on:click=move |_| open.set(false)>"Close"</MenuButton>
+                        </div>
+                    </Show>
+                </div>
+            </div>
+        </Show>
     }
 }
