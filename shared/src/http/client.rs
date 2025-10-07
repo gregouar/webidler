@@ -26,6 +26,15 @@ pub struct SignInRequest {
     pub password: Password,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UpdateAccountRequest {
+    pub username: Option<Username>,
+    pub email: Option<Option<Email>>,
+
+    pub old_password: Option<Password>,
+    pub password: Option<Password>,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CreateCharacterRequest {
     pub name: Username,

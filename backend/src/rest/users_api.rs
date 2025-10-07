@@ -10,7 +10,7 @@ use shared::{
     constants::DEFAULT_MAX_CHARACTERS,
     http::{
         client::{SignInRequest, SignUpRequest},
-        server::{GetUserResponse, SignInResponse, SignUpResponse},
+        server::{GetUserDetailsResponse, SignInResponse, SignUpResponse},
     },
 };
 
@@ -96,8 +96,8 @@ async fn post_sign_in(
 
 async fn get_me(
     Extension(current_user): Extension<CurrentUser>,
-) -> Result<Json<GetUserResponse>, AppError> {
-    Ok(Json(GetUserResponse {
-        user: current_user.user,
+) -> Result<Json<GetUserDetailsResponse>, AppError> {
+    Ok(Json(GetUserDetailsResponse {
+        user_details: current_user.user_details,
     }))
 }

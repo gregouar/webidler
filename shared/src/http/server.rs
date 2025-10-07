@@ -9,7 +9,7 @@ use crate::data::{
     passive::{PassivesTreeAscension, PassivesTreeSpecs},
     player::PlayerInventory,
     skill::SkillSpecs,
-    user::{User, UserCharacter, UserCharacterId, UserGrindArea, UserId},
+    user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -63,6 +63,14 @@ pub struct SignInResponse {
 pub struct GetUserResponse {
     pub user: User,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetUserDetailsResponse {
+    pub user_details: UserDetails,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UpdateAccountResponse {}
 
 // Characters
 

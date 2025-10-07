@@ -107,7 +107,7 @@ pub fn SignUpPage() -> impl IntoView {
                 />
 
                 <ValidatedInput
-                    label="Email recovery"
+                    label="Email"
                     id="email"
                     input_type="text"
                     placeholder="Optionally enter your email for password recovery"

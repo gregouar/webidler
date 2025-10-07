@@ -49,7 +49,7 @@ pub fn UserDashboardPage() -> impl IntoView {
             let user = backend
                 .get_me(&auth_context.token())
                 .await
-                .map(|r| r.user)
+                .map(|r| r.user_details.user)
                 .ok();
 
             match user {

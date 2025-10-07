@@ -8,14 +8,16 @@ use shared::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BuyMarketItemRequest,
             CreateCharacterRequest, EditMarketItemRequest, ForgeAddAffixRequest,
             RejectMarketItemRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
+            UpdateAccountRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BuyMarketItemResponse,
             CreateCharacterResponse, DeleteCharacterResponse, EditMarketItemResponse,
             ErrorResponse, ForgeAddAffixResponse, GetAreasResponse, GetCharacterDetailsResponse,
-            GetPassivesResponse, GetSkillsResponse, GetUserCharactersResponse, GetUserResponse,
-            LeaderboardResponse, PlayersCountResponse, RejectMarketItemResponse,
-            SellMarketItemResponse, SignInResponse, SignUpResponse,
+            GetPassivesResponse, GetSkillsResponse, GetUserCharactersResponse,
+            GetUserDetailsResponse, LeaderboardResponse, PlayersCountResponse,
+            RejectMarketItemResponse, SellMarketItemResponse, SignInResponse, SignUpResponse,
+            UpdateAccountResponse,
         },
     },
 };
@@ -95,7 +97,7 @@ impl BackendClient {
 
     // Auth
 
-    pub async fn get_me(&self, token: &str) -> Result<GetUserResponse, BackendError> {
+    pub async fn get_me(&self, token: &str) -> Result<GetUserDetailsResponse, BackendError> {
         self.get_auth("account/me", token).await
     }
 
@@ -111,6 +113,16 @@ impl BackendClient {
         request: &SignUpRequest,
     ) -> Result<SignUpResponse, BackendError> {
         self.post("account/signup", request).await
+    }
+
+    // Account
+
+    pub async fn post_update_account(
+        &self,
+        token: &str,
+        request: &UpdateAccountRequest,
+    ) -> Result<UpdateAccountResponse, BackendError> {
+        self.post_auth("account/update", token, request).await
     }
 
     // Characters
