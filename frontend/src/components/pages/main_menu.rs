@@ -247,6 +247,11 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
         email.read().is_none() || captcha_token.read().is_none() || processing.get()
     });
 
+    let on_close = move |_| {
+        success.set(false);
+        open.set(false);
+    };
+
     view! {
         <Show when=move || open.get()>
             <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
@@ -267,8 +272,8 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
                         />
                         <Captcha token=captcha_token />
 
-                        <div class="flex justify-end gap-2 pt-2">
-                            <MenuButton on:click=move |_| open.set(false)>"Cancel"</MenuButton>
+                        <div class="flex justify-between gap-2 pt-2">
+                            <MenuButton on:click=on_close>"Cancel"</MenuButton>
                             <MenuButton on:click=on_submit disabled=disable_submit>
                                 {move || {
                                     if processing.get() { "Sending..." } else { "Send Reset Link" }
@@ -279,11 +284,10 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
 
                     <Show when=move || success.get()>
                         <div class="text-center space-y-3">
-                            <p class="text-green-400 font-medium">"Instructions sent!"</p>
                             <p class="text-gray-400 text-sm">
                                 "Check your email and follow the reset link to set a new password."
                             </p>
-                            <MenuButton on:click=move |_| open.set(false)>"Close"</MenuButton>
+                            <MenuButton on:click=on_close>"Close"</MenuButton>
                         </div>
                     </Show>
                 </div>
