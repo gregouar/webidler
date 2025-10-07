@@ -10,7 +10,7 @@ use crate::components::{
     captcha::Captcha,
     pages::{privacy::PrivacyContent, terms::TermsContent},
     ui::{
-        buttons::MenuButton,
+        buttons::{MenuButton, MenuButtonRed},
         input::{Input, ValidatedInput},
         toast::*,
     },
@@ -31,7 +31,7 @@ pub fn AccountSettingsPage() -> impl IntoView {
                         class="w-full rounded-md bg-zinc-900 border border-zinc-700 p-2 text-gray-200 focus:border-amber-400 focus:ring focus:ring-amber-400/20"
                         prop:value="CurrentUsername"
                     />
-                    <MenuButton text="Save Username" on:click=move |_| {} />
+                    <MenuButton on:click=move |_| {}>"Save Username"</MenuButton>
                 </div>
 
                 // Email
@@ -42,7 +42,7 @@ pub fn AccountSettingsPage() -> impl IntoView {
                         class="w-full rounded-md bg-zinc-900 border border-zinc-700 p-2 text-gray-200 focus:border-amber-400 focus:ring focus:ring-amber-400/20"
                         prop:value="user@example.com"
                     />
-                    <MenuButton text="Save Email" on:click=move |_| {} />
+                    <MenuButton on:click=move |_| {}>"Save Email"</MenuButton>
                 </div>
 
                 // Password update
@@ -63,7 +63,7 @@ pub fn AccountSettingsPage() -> impl IntoView {
                         placeholder="Confirm new password"
                         class="w-full rounded-md bg-zinc-900 border border-zinc-700 p-2"
                     />
-                    <MenuButton text="Update Password" on:click=move |_| {} />
+                    <MenuButton on:click=move |_| {}>"Update Password"</MenuButton>
                 </div>
 
                 // Danger zone
@@ -72,16 +72,12 @@ pub fn AccountSettingsPage() -> impl IntoView {
                     <p class="text-sm text-gray-400">
                         "Deleting your account is irreversible. All game progress will be lost."
                     </p>
-                    <MenuButton
-                        text="Delete Account"
-                        class="bg-red-700 hover:bg-red-800 text-white"
-                        on:click=move |_| {}
-                    />
+                    <MenuButtonRed on:click=move |_| {}>"Delete Account"</MenuButtonRed>
                 </div>
 
                 // Footer
                 <div class="pt-4 border-t border-zinc-700">
-                    <MenuButton text="Back to Dashboard" on:click=move |_| {} />
+                    <MenuButton on:click=move |_| {}>"Back to Dashboard"</MenuButton>
                 </div>
             </div>
         </div>
