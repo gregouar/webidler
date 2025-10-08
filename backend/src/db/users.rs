@@ -1,9 +1,12 @@
 use chrono::{DateTime, Utc};
-use sqlx::FromRow;
+use sqlx::{FromRow, Transaction};
 
 use shared::data::user::UserId;
 
-use super::{pool::DbPool, utc_datetime::UtcDateTime};
+use super::{
+    pool::{Database, DbPool},
+    utc_datetime::UtcDateTime,
+};
 
 #[derive(Debug, FromRow)]
 pub struct UserEntry {
@@ -17,6 +20,14 @@ pub struct UserEntry {
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
     pub deleted_at: Option<UtcDateTime>,
+}
+
+#[derive(Debug, Default)]
+pub struct UserUpdate {
+    pub username: Option<String>,
+    pub email_crypt: Option<Option<Vec<u8>>>,
+    pub email_hash: Option<Option<Vec<u8>>>,
+    pub password_hash: Option<String>,
 }
 
 pub async fn create_user(
@@ -71,9 +82,36 @@ pub async fn read_user(
             created_at, 
             updated_at, 
             deleted_at as "deleted_at?: UtcDateTime"
-         FROM users WHERE user_id = $1
+         FROM users WHERE user_id = $1 AND deleted_at IS NULL
          "#,
         user_id
+    )
+    .fetch_optional(db_pool)
+    .await
+}
+
+pub async fn read_user_by_email(
+    db_pool: &DbPool,
+    email_hash: &[u8],
+) -> Result<Option<UserEntry>, sqlx::Error> {
+    sqlx::query_as!(
+        UserEntry,
+        r#"
+        SELECT 
+            user_id as "user_id: UserId", 
+            username,
+            email_crypt, 
+            terms_accepted_at, 
+            is_admin, 
+            max_characters as "max_characters!: i16", 
+            last_login_at as "last_login_at?: UtcDateTime",
+            created_at, 
+            updated_at, 
+            deleted_at as "deleted_at?: UtcDateTime"
+         FROM users WHERE 
+            email_hash = $1 AND deleted_at IS NULL
+         "#,
+        email_hash
     )
     .fetch_optional(db_pool)
     .await
@@ -88,7 +126,7 @@ pub async fn auth_user(
         SELECT 
             user_id as "user_id: UserId", 
             password_hash 
-        FROM users WHERE LOWER(username) = LOWER($1)
+        FROM users WHERE LOWER(username) = LOWER($1) AND deleted_at IS NULL
         "#,
         username
     )
@@ -101,7 +139,8 @@ pub async fn update_last_login(db_pool: &DbPool, user_id: &UserId) -> Result<(),
     sqlx::query!(
         r#"
             UPDATE users
-            SET last_login_at = CURRENT_TIMESTAMP
+            SET 
+                last_login_at = CURRENT_TIMESTAMP
             WHERE user_id = $1
         "#,
         user_id,
@@ -111,24 +150,83 @@ pub async fn update_last_login(db_pool: &DbPool, user_id: &UserId) -> Result<(),
     Ok(())
 }
 
-// pub async fn delete_user(
-//     db_pool: &DbPool,
-//     user_id: &UserId,
-// ) -> Result<Option<UserEntry>, sqlx::Error> {
-//     Ok(sqlx::query_as!(
-//         UserEntry,
-//         r#"
-//         SELECT
-//             user_id as "user_id: UserId",
-//             username, email, terms_accepted_at, is_admin,
-//             max_characters as "max_characters: u8",
-//             last_login_at as "last_login_at: UtcDateTime",
-//             created_at, updated_at,
-//             deleted_at as "deleted_at: UtcDateTime"
-//          FROM users WHERE user_id = $1
-//          "#,
-//         user_id
-//     )
-//     .fetch_optional(db_pool)
-//     .await?)
-// }
+pub async fn update_user<'c>(
+    executor: &mut Transaction<'c, Database>,
+    user_id: &UserId,
+    user_update: &UserUpdate,
+) -> Result<Option<()>, sqlx::Error> {
+    if let Some((email_crypt, email_hash)) = user_update
+        .email_crypt
+        .clone()
+        .zip(user_update.email_hash.clone())
+    {
+        let res = sqlx::query!(
+            r#"
+            UPDATE users
+            SET 
+                updated_at = CURRENT_TIMESTAMP,
+                email_crypt = COALESCE($2, email_crypt),
+                email_hash = COALESCE($3, email_hash)
+            WHERE user_id = $1 AND deleted_at IS NULL
+        "#,
+            user_id,
+            email_crypt,
+            email_hash,
+        )
+        .execute(&mut **executor)
+        .await;
+
+        match res {
+            Err(sqlx::Error::Database(db_err)) if db_err.is_unique_violation() => return Ok(None),
+            Err(e) => return Err(e),
+            _ => {}
+        };
+    }
+
+    let res = sqlx::query!(
+        r#"
+            UPDATE users
+            SET 
+                updated_at = CURRENT_TIMESTAMP,
+                username = COALESCE($2, username),
+                password_hash = COALESCE($3, password_hash)
+            WHERE user_id = $1 AND deleted_at IS NULL
+        "#,
+        user_id,
+        user_update.username,
+        user_update.password_hash,
+    )
+    .execute(&mut **executor)
+    .await;
+
+    match res {
+        Ok(_) => Ok(Some(())),
+        Err(sqlx::Error::Database(db_err)) if db_err.is_unique_violation() => Ok(None),
+        Err(e) => Err(e),
+    }
+}
+
+pub async fn delete_user(db_pool: &DbPool, user_id: &UserId) -> Result<(), sqlx::Error> {
+    for character in super::characters::read_all_user_characters(db_pool, user_id).await? {
+        super::characters::delete_character(db_pool, &character.character_id).await?;
+    }
+
+    sqlx::query!(
+        r#"
+        UPDATE users
+        SET
+            updated_at = CURRENT_TIMESTAMP,
+            deleted_at = CURRENT_TIMESTAMP,
+            username = NULL,
+            email_crypt = NULL,
+            email_hash = NULL,
+            password_hash = NULL
+        WHERE user_id = $1 AND deleted_at IS NULL
+        "#,
+        user_id
+    )
+    .execute(db_pool)
+    .await?;
+
+    Ok(())
+}

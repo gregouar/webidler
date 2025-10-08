@@ -12,6 +12,11 @@ use axum::{
     middleware::Next,
 };
 use axum_extra::TypedHeader;
+use base64::{
+    alphabet,
+    engine::{self, general_purpose},
+    Engine as _,
+};
 use chrono::{Duration, Utc};
 use headers::{authorization::Bearer, Authorization};
 use jsonwebtoken::{decode, encode, Header, TokenData, Validation};
@@ -19,13 +24,19 @@ use rand::RngCore;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 
-use shared::data::user::{User, UserId};
+use shared::{
+    data::user::{User, UserDetails, UserId},
+    types::Email,
+};
 
 use crate::{
     app_state::{AppSettings, AppState},
     db,
     rest::AppError,
 };
+
+const B64_ENGINE: engine::GeneralPurpose =
+    engine::GeneralPurpose::new(&alphabet::URL_SAFE, general_purpose::NO_PAD);
 
 pub async fn verify_captcha(token: &str) -> anyhow::Result<bool> {
     // TODO: move to app_settings
@@ -78,7 +89,7 @@ pub async fn sign_in(
 
 #[derive(Clone)]
 pub struct CurrentUser {
-    pub user: User,
+    pub user_details: UserDetails,
 }
 
 pub async fn authorization_middleware(
@@ -94,8 +105,17 @@ pub async fn authorization_middleware(
         .await?
         .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
-    req.extensions_mut()
-        .insert(CurrentUser { user: user.into() });
+    let email = user
+        .email_crypt
+        .as_ref()
+        .and_then(|email_crypt| decrypt_email(&state.app_settings, email_crypt).ok());
+
+    req.extensions_mut().insert(CurrentUser {
+        user_details: UserDetails {
+            email,
+            user: user.into(),
+        },
+    });
     Ok(next.run(req).await)
 }
 
@@ -137,7 +157,6 @@ pub fn verify_password(password: &str, password_hash: &str) -> bool {
         })
         .unwrap_or(false)
 }
-
 impl From<db::users::UserEntry> for User {
     fn from(val: db::users::UserEntry) -> Self {
         User {
@@ -164,10 +183,10 @@ pub fn encrypt_email(app_settings: &AppSettings, email: &str) -> anyhow::Result<
     Ok(combined)
 }
 
-pub fn decrypt_email(app_settings: &AppSettings, data: &[u8]) -> anyhow::Result<String> {
+pub fn decrypt_email(app_settings: &AppSettings, data: &[u8]) -> anyhow::Result<Email> {
     let (nonce_bytes, ciphertext) = data.split_at_checked(12).ok_or(anyhow!("invalid data"))?;
 
-    Ok(String::from_utf8(
+    Email::try_new(String::from_utf8(
         app_settings
             .aes_key
             .decrypt(Nonce::from_slice(nonce_bytes), ciphertext)
@@ -175,9 +194,16 @@ pub fn decrypt_email(app_settings: &AppSettings, data: &[u8]) -> anyhow::Result<
     )?)
 }
 
-pub fn hash_email(app_settings: &AppSettings, email: &str) -> Vec<u8> {
+pub fn hash_content(app_settings: &AppSettings, email: &str) -> Vec<u8> {
     let mut hasher = Sha256::new();
     hasher.update(&app_settings.hash_key);
     hasher.update(email.as_bytes());
     hasher.finalize().to_vec()
+}
+
+pub fn generate_token() -> String {
+    let mut token_data = [0u8; 32];
+    rand::rng().fill_bytes(&mut token_data);
+
+    B64_ENGINE.encode(token_data)
 }

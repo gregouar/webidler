@@ -2,6 +2,7 @@ Next things to do:
 
 - spider boss & minions
 - inventory in town
+- show min mana for auto cast
 
 - add at least basic attack/spell to all monsters to trigger retaliate effects?
   OR block dot?
