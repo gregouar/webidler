@@ -303,8 +303,8 @@ pub fn ConfirmAccountDeletionModal(
         let backend = expect_context::<BackendClient>();
         let auth_context = expect_context::<AuthContext>();
         let navigate = use_navigate();
-        let user_id = user_id.get_untracked().unwrap_or_default();
         move |_| {
+            let user_id = user_id.get_untracked().unwrap_or_default();
             spawn_local({
                 let navigate = navigate.clone();
                 async move {
@@ -355,7 +355,9 @@ pub fn ConfirmAccountDeletionModal(
                         <MenuButton on:click=move |_| open.set(false)>"Cancel"</MenuButton>
                         <MenuButtonRed
                             on:click=do_delete.clone()
-                            disabled=Signal::derive(move || confirm_input.read().is_none())
+                            disabled=Signal::derive(move || {
+                                confirm_input.read().is_none() || user_id.read().is_none()
+                            })
                         >
                             "Delete"
                         </MenuButtonRed>

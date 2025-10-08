@@ -82,7 +82,7 @@ pub async fn read_user(
             created_at, 
             updated_at, 
             deleted_at as "deleted_at?: UtcDateTime"
-         FROM users WHERE user_id = $1
+         FROM users WHERE user_id = $1 AND deleted_at IS NULL
          "#,
         user_id
     )
@@ -170,7 +170,7 @@ pub async fn update_user<'c>(
                     ELSE $4                      
                 END,
                 password_hash = COALESCE($5, password_hash)
-            WHERE user_id = $1
+            WHERE user_id = $1 AND deleted_at IS NULL
         "#,
         user_id,
         user_update.username,
