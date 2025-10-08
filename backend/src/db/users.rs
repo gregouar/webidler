@@ -198,7 +198,11 @@ pub async fn delete_user(db_pool: &DbPool, user_id: &UserId) -> Result<(), sqlx:
         UPDATE users
         SET
             updated_at = CURRENT_TIMESTAMP,
-            deleted_at = CURRENT_TIMESTAMP
+            deleted_at = CURRENT_TIMESTAMP,
+            username = NULL,
+            email_crypt = NULL,
+            email_hash = NULL,
+            password_hash = NULL
         WHERE user_id = $1 AND deleted_at IS NULL
         "#,
         user_id
