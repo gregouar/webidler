@@ -10,10 +10,12 @@ use shared::{
 
 use crate::{
     assets::img_asset,
-    components::shared::tooltips::effects_tooltip::formatted_effects_list,
     components::{
         game::game_context::GameContext,
-        shared::tooltips::effects_tooltip,
+        shared::tooltips::{
+            effects_tooltip::{self, formatted_effects_list},
+            format_trigger,
+        },
         ui::{
             buttons::CloseButton,
             menu_panel::{MenuPanel, PanelTitle},
@@ -508,7 +510,13 @@ fn NodeTooltip(
 
     let node_specs_locked = node_specs.locked;
     let max_upgrade_level = node_specs.max_upgrade_level;
-    let triggers_text: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
+    // let triggers_text: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
+    let triggers_text: Vec<_> = node_specs
+        .triggers
+        .clone()
+        .into_iter()
+        .map(format_trigger)
+        .collect();
 
     let is_locked = move || node_specs_locked && node_level.get() == 0;
 
