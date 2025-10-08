@@ -52,9 +52,21 @@ impl<'q> Encode<'q, Sqlite> for UtcDateTime {
     }
 }
 
-impl Type<Postgres> for UtcDateTime {
+// impl Type<Postgres> for UtcDateTime {
+//     fn type_info() -> PgTypeInfo {
+//         <DateTime<Utc> as Type<Postgres>>::type_info()
+//     }
+// }
+
+impl sqlx::Type<Postgres> for UtcDateTime {
     fn type_info() -> PgTypeInfo {
-        <DateTime<Utc> as Type<Postgres>>::type_info()
+        <DateTime<Utc> as sqlx::Type<Postgres>>::type_info()
+    }
+}
+
+impl sqlx::postgres::PgHasArrayType for UtcDateTime {
+    fn array_type_info() -> PgTypeInfo {
+        <DateTime<Utc> as sqlx::postgres::PgHasArrayType>::array_type_info()
     }
 }
 
