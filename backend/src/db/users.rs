@@ -188,24 +188,23 @@ pub async fn update_user<'c>(
     }
 }
 
-// pub async fn delete_user(
-//     db_pool: &DbPool,
-//     user_id: &UserId,
-// ) -> Result<Option<UserEntry>, sqlx::Error> {
-//     Ok(sqlx::query_as!(
-//         UserEntry,
-//         r#"
-//         SELECT
-//             user_id as "user_id: UserId",
-//             username, email, terms_accepted_at, is_admin,
-//             max_characters as "max_characters: u8",
-//             last_login_at as "last_login_at: UtcDateTime",
-//             created_at, updated_at,
-//             deleted_at as "deleted_at: UtcDateTime"
-//          FROM users WHERE user_id = $1
-//          "#,
-//         user_id
-//     )
-//     .fetch_optional(db_pool)
-//     .await?)
-// }
+pub async fn delete_user(db_pool: &DbPool, user_id: &UserId) -> Result<(), sqlx::Error> {
+    for character in super::characters::read_all_user_characters(db_pool, user_id).await? {
+        super::characters::delete_character(db_pool, &character.character_id).await?;
+    }
+
+    sqlx::query!(
+        r#"
+        UPDATE users
+        SET
+            updated_at = CURRENT_TIMESTAMP,
+            deleted_at = CURRENT_TIMESTAMP
+        WHERE user_id = $1 AND deleted_at IS NULL
+        "#,
+        user_id
+    )
+    .execute(db_pool)
+    .await?;
+
+    Ok(())
+}

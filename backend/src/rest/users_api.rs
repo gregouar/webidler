@@ -1,21 +1,22 @@
 use axum::{
-    extract::State,
+    extract::{Path, State},
     middleware,
-    routing::{get, post},
+    routing::{delete, get, post},
     Extension, Json, Router,
 };
 
 use chrono::{Duration, Utc};
 use shared::{
     constants::DEFAULT_MAX_CHARACTERS,
+    data::user::UserId,
     http::{
         client::{
             ForgotPasswordRequest, ResetPasswordRequest, SignInRequest, SignUpRequest,
             UpdateAccountRequest,
         },
         server::{
-            ForgotPasswordResponse, GetUserDetailsResponse, ResetPasswordResponse, SignInResponse,
-            SignUpResponse, UpdateAccountResponse,
+            DeleteAccountResponse, ForgotPasswordResponse, GetUserDetailsResponse,
+            ResetPasswordResponse, SignInResponse, SignUpResponse, UpdateAccountResponse,
         },
     },
 };
@@ -33,6 +34,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
     let auth_routes = Router::new()
         .route("/account/me", get(get_me))
         .route("/account/update", post(post_update_account))
+        .route("/account/{user_id}", delete(delete_account))
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
@@ -242,4 +244,17 @@ async fn post_update_account(
             "username or email already in use".to_string(),
         )),
     }
+}
+
+async fn delete_account(
+    State(db_pool): State<db::DbPool>,
+    Path(user_id): Path<UserId>,
+    Extension(current_user): Extension<CurrentUser>,
+) -> Result<Json<DeleteAccountResponse>, AppError> {
+    if current_user.user_details.user.user_id != user_id {
+        return Err(AppError::Forbidden);
+    }
+
+    db::users::delete_user(&db_pool, &user_id).await?;
+    Ok(Json(DeleteAccountResponse {}))
 }

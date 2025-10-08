@@ -78,6 +78,9 @@ pub struct GetUserDetailsResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct UpdateAccountResponse {}
 
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct DeleteAccountResponse {}
+
 // Characters
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

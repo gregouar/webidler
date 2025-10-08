@@ -1,9 +1,11 @@
 use codee::string::JsonSerdeCodec;
+use nutype::nutype;
+
 use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
-use shared::http::client::UpdateAccountRequest;
+use shared::{data::user::UserId, http::client::UpdateAccountRequest};
 
 use crate::components::{
     auth::AuthContext,
@@ -30,6 +32,8 @@ pub fn AccountSettingsPage() -> impl IntoView {
 
     let (get_username_storage, set_username_storage, _) =
         storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
+
+    let user_id = RwSignal::new(None);
 
     let init_username = RwSignal::new(get_username_storage.get_untracked());
     let username = RwSignal::new(get_username_storage.get_untracked());
@@ -165,6 +169,8 @@ pub fn AccountSettingsPage() -> impl IntoView {
         }
     };
 
+    let show_delete_modal = RwSignal::new(false);
+
     let user_data = LocalResource::new({
         move || async move {
             backend
@@ -179,6 +185,7 @@ pub fn AccountSettingsPage() -> impl IntoView {
         if let Some(user) = user_data.get() {
             email.set(user.as_ref().map(|user| user.email.clone()));
             init_email.set(email.get_untracked());
+            user_id.set(user.as_ref().map(|user| user.user.user_id.clone()));
         }
     });
 
@@ -250,7 +257,9 @@ pub fn AccountSettingsPage() -> impl IntoView {
                     <p class="text-sm text-red-400">
                         "Deleting your account is irreversible. All game progress will be lost."
                     </p>
-                    <MenuButtonRed on:click=move |_| {}>"Delete Account"</MenuButtonRed>
+                    <MenuButtonRed on:click=move |_| {
+                        show_delete_modal.set(true)
+                    }>"Delete Account"</MenuButtonRed>
                 </div>
 
             </div>
@@ -258,6 +267,101 @@ pub fn AccountSettingsPage() -> impl IntoView {
             <div>
                 <MenuButton on:click=navigate_to_dashboard>"Back"</MenuButton>
             </div>
+
+            <ConfirmAccountDeletionModal open=show_delete_modal user_id />
         </main>
+    }
+}
+
+fn validate_delete(s: &str) -> anyhow::Result<()> {
+    if s.eq_ignore_ascii_case("delete") {
+        Ok(())
+    } else {
+        Err(anyhow::anyhow!("Type DELETE to confirm."))
+    }
+}
+
+#[nutype(
+    sanitize(trim),
+    validate(with = validate_delete, error = anyhow::Error),
+    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
+)]
+pub struct DeleteInput(String);
+
+#[component]
+pub fn ConfirmAccountDeletionModal(
+    open: RwSignal<bool>,
+    user_id: RwSignal<Option<UserId>>,
+) -> impl IntoView {
+    let confirm_input = RwSignal::new(None::<DeleteInput>);
+
+    let node_ref = NodeRef::new();
+    let _ = leptos_use::on_click_outside(node_ref, move |_| open.set(false));
+
+    let do_delete = {
+        let toaster = expect_context::<Toasts>();
+        let backend = expect_context::<BackendClient>();
+        let auth_context = expect_context::<AuthContext>();
+        let navigate = use_navigate();
+        let user_id = user_id.get_untracked().unwrap_or_default();
+        move |_| {
+            spawn_local({
+                let navigate = navigate.clone();
+                async move {
+                    match backend
+                        .delete_account(&auth_context.token(), &user_id)
+                        .await
+                    {
+                        Ok(_) => {
+                            show_toast(toaster, format!("Account deleted!"), ToastVariant::Warning);
+                            navigate("/", Default::default());
+                        }
+                        Err(e) => {
+                            show_toast(
+                                toaster,
+                                format!("Account deletion error: {e}"),
+                                ToastVariant::Error,
+                            );
+                        }
+                    }
+                }
+            });
+        }
+    };
+
+    view! {
+        <Show when=move || open.get()>
+            <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+                <div
+                    node_ref=node_ref
+                    class="bg-zinc-900 ring-1 ring-zinc-700 rounded-lg p-6 w-full max-w-md shadow-xl text-gray-200 space-y-4"
+                >
+                    <h2 class="text-xl font-bold text-red-400">"Confirm Account Deletion"</h2>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        "This action is "
+                        <span class="text-red-500 font-semibold">"permanent"</span>
+                        ". All your characters, progress, and items will be lost."
+                    </p>
+
+                    <ValidatedInput
+                        label="Confirm"
+                        id="confirm"
+                        input_type="text"
+                        placeholder="Type DELETE to confirm"
+                        bind=confirm_input
+                    />
+
+                    <div class="flex justify-between gap-2 pt-2">
+                        <MenuButton on:click=move |_| open.set(false)>"Cancel"</MenuButton>
+                        <MenuButtonRed
+                            on:click=do_delete.clone()
+                            disabled=Signal::derive(move || confirm_input.read().is_none())
+                        >
+                            "Delete"
+                        </MenuButtonRed>
+                    </div>
+                </div>
+            </div>
+        </Show>
     }
 }

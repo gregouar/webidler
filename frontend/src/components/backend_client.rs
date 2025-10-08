@@ -12,9 +12,9 @@ use shared::{
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BuyMarketItemResponse,
-            CreateCharacterResponse, DeleteCharacterResponse, EditMarketItemResponse,
-            ErrorResponse, ForgeAddAffixResponse, ForgotPasswordResponse, GetAreasResponse,
-            GetCharacterDetailsResponse, GetPassivesResponse, GetSkillsResponse,
+            CreateCharacterResponse, DeleteAccountResponse, DeleteCharacterResponse,
+            EditMarketItemResponse, ErrorResponse, ForgeAddAffixResponse, ForgotPasswordResponse,
+            GetAreasResponse, GetCharacterDetailsResponse, GetPassivesResponse, GetSkillsResponse,
             GetUserCharactersResponse, GetUserDetailsResponse, LeaderboardResponse,
             PlayersCountResponse, RejectMarketItemResponse, ResetPasswordResponse,
             SellMarketItemResponse, SignInResponse, SignUpResponse, UpdateAccountResponse,
@@ -137,6 +137,14 @@ impl BackendClient {
         request: &UpdateAccountRequest,
     ) -> Result<UpdateAccountResponse, BackendError> {
         self.post_auth("account/update", token, request).await
+    }
+
+    pub async fn delete_account(
+        &self,
+        token: &str,
+        user_id: &UserId,
+    ) -> Result<DeleteAccountResponse, BackendError> {
+        self.del_auth(&format!("account/{user_id}"), token).await
     }
 
     // Characters
