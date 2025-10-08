@@ -157,8 +157,8 @@ pub async fn update_user<'c>(
 ) -> Result<Option<()>, sqlx::Error> {
     if let Some((email_crypt, email_hash)) = user_update
         .email_crypt
-        .as_ref()
-        .zip(user_update.email_hash.as_ref())
+        .clone()
+        .zip(user_update.email_hash.clone())
     {
         let res = sqlx::query!(
             r#"
