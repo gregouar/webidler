@@ -112,6 +112,7 @@ pub fn VerticalProgressBar(
     bar_color: &'static str,
     // Instant reset
     #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
+    #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     let set_value = move || {
         if reset.get() {
@@ -175,6 +176,9 @@ pub fn VerticalProgressBar(
                 class=format!("absolute rounded-lg inset-0 z-1 h-full {}", bar_color)
                 style=reset_bar_animation
             ></div>
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none overflow-hidden">
+                {children.map(|children| children())}
+            </div>
         </div>
     }
 }

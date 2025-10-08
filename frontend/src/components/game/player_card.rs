@@ -203,7 +203,7 @@ pub fn PlayerCard() -> impl IntoView {
                         class:xl:w-8
                         bar_color="bg-gradient-to-l from-red-500 to-red-700"
                         value=life_percent
-                    />
+                    ></VerticalProgressBar>
                 </StaticTooltip>
                 <div class="flex flex-col gap-1 xl:gap-2">
                     <div class="flex-1 min-h-0">
@@ -233,7 +233,7 @@ pub fn PlayerCard() -> impl IntoView {
                         class:xl:w-8
                         bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
                         value=mana_percent
-                    />
+                    ></VerticalProgressBar>
                 </StaticTooltip>
             </div>
 
@@ -469,7 +469,8 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let hide_tooltip = move || tooltip_context.hide();
 
-    let progress_value = predictive_cooldown(skill_cooldown, just_triggered.into(), is_dead.into());
+    let reset_progress = Signal::derive(move || just_triggered.get() || !is_dead.get());
+    let progress_value = predictive_cooldown(skill_cooldown, reset_progress, is_dead.into());
 
     view! {
         <div class="flex flex-col">
