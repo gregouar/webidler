@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use sqlx::{FromRow, Transaction};
 
 use shared::data::user::UserId;
@@ -27,6 +28,8 @@ pub async fn create_password_reset(
     )
     .execute(db_pool)
     .await?;
+
+    let expires_at: DateTime<Utc> = expires_at.into();
 
     sqlx::query!(
         r#"
