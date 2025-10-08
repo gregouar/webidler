@@ -186,12 +186,12 @@ pub fn encrypt_email(app_settings: &AppSettings, email: &str) -> anyhow::Result<
 pub fn decrypt_email(app_settings: &AppSettings, data: &[u8]) -> anyhow::Result<Email> {
     let (nonce_bytes, ciphertext) = data.split_at_checked(12).ok_or(anyhow!("invalid data"))?;
 
-    Ok(Email::try_new(String::from_utf8(
+    Email::try_new(String::from_utf8(
         app_settings
             .aes_key
             .decrypt(Nonce::from_slice(nonce_bytes), ciphertext)
             .map_err(|_| anyhow!("failed to decrypt"))?,
-    )?)?)
+    )?)
 }
 
 pub fn hash_content(app_settings: &AppSettings, email: &str) -> Vec<u8> {

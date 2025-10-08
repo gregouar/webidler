@@ -196,19 +196,17 @@ pub fn ThreatMeter() -> impl IntoView {
     let threat_increase = Signal::derive(move || game_context.area_threat.read().just_increased);
 
     let time_remaining = Signal::derive(move || {
-        (game_context.area_threat.read().cooldown > 0.0)
-            .then(|| {
+        if game_context.area_threat.read().cooldown > 0.0 { {
                 (1.0 - game_context.area_threat.read().elapsed_cooldown)
                     * (game_context.area_threat.read().cooldown
                         / (game_context.player_specs.read().threat_gain * 0.01))
-            })
-            .unwrap_or_default()
+            } } else { Default::default() }
     });
 
     let no_threat = Signal::derive(move || time_remaining.get() == 0.0);
 
     let reset = Signal::derive(move || threat_increase.get() || no_threat.get());
-    let progress_value = predictive_cooldown(time_remaining, reset, no_threat.into());
+    let progress_value = predictive_cooldown(time_remaining, reset, no_threat);
 
     view! {
         <StaticTooltip

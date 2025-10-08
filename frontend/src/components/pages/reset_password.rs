@@ -78,7 +78,7 @@ pub fn ResetPasswordPage() -> impl IntoView {
                         Ok(_) => {
                             show_toast(
                                 toaster,
-                                format!("Reset password success!"),
+                                "Reset password success!".to_string(),
                                 ToastVariant::Success,
                             );
                             navigate("/", Default::default());

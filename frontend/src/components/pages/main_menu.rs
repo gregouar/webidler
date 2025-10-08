@@ -217,7 +217,6 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
 
             processing.set(true);
             spawn_local({
-                let backend = backend.clone();
                 async move {
                     match backend
                         .post_forgot_password(&ForgotPasswordRequest {
@@ -229,14 +228,14 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
                         Ok(_) => {
                             success.set(true);
                             show_toast(
-                                toaster.clone(),
+                                toaster,
                                 "Password reset instructions sent!",
                                 ToastVariant::Success,
                             );
                         }
                         Err(e) => {
                             show_toast(
-                                toaster.clone(),
+                                toaster,
                                 format!("Incorrect email: {e}"),
                                 ToastVariant::Error,
                             );

@@ -70,7 +70,7 @@ pub fn AccountSettingsPage() -> impl IntoView {
                             init_username.set(username.get_untracked());
                             show_toast(
                                 toaster,
-                                format!("Update account success!"),
+                                "Update account success!".to_string(),
                                 ToastVariant::Success,
                             );
                         }
@@ -109,7 +109,7 @@ pub fn AccountSettingsPage() -> impl IntoView {
                             init_email.set(email.get_untracked());
                             show_toast(
                                 toaster,
-                                format!("Update account success!"),
+                                "Update account success!".to_string(),
                                 ToastVariant::Success,
                             );
                         }
@@ -149,9 +149,12 @@ pub fn AccountSettingsPage() -> impl IntoView {
                         .await
                     {
                         Ok(_) => {
+                            old_password.set(None);
+                            password.set(None);
+                            confirm_password.set(None);
                             show_toast(
                                 toaster,
-                                format!("Update password success!"),
+                                "Update password success!".to_string(),
                                 ToastVariant::Success,
                             );
                         }
@@ -185,7 +188,7 @@ pub fn AccountSettingsPage() -> impl IntoView {
         if let Some(user) = user_data.get() {
             email.set(user.as_ref().map(|user| user.email.clone()));
             init_email.set(email.get_untracked());
-            user_id.set(user.as_ref().map(|user| user.user.user_id.clone()));
+            user_id.set(user.as_ref().map(|user| user.user.user_id));
         }
     });
 
@@ -313,7 +316,11 @@ pub fn ConfirmAccountDeletionModal(
                         .await
                     {
                         Ok(_) => {
-                            show_toast(toaster, format!("Account deleted!"), ToastVariant::Warning);
+                            show_toast(
+                                toaster,
+                                "Account deleted!".to_string(),
+                                ToastVariant::Warning,
+                            );
                             navigate("/", Default::default());
                         }
                         Err(e) => {
