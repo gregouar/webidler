@@ -3,9 +3,8 @@ use std::env;
 use anyhow::Result;
 
 use lettre::{
-    message::{header::ContentType, Mailbox},
-    transport::smtp::authentication::Credentials,
-    AsyncSmtpTransport, AsyncTransport, Message, Tokio1Executor,
+    message::Mailbox, transport::smtp::authentication::Credentials, Address, AsyncSmtpTransport,
+    AsyncTransport, Message, Tokio1Executor,
 };
 
 use shared::types::Email;
@@ -39,21 +38,20 @@ impl EmailService {
         html_content: String,
         txt_content: String,
     ) -> Result<()> {
+        let sender = Mailbox::new(
+            Some("Grind to Rust".into()),
+            Address::new("grindtorust", "gregoirenaisse.be")?,
+        );
+
         let email = Message::builder()
-            .from(
-                "Grind to Rust <grindtorust@gregoirenaisse.be>"
-                    .parse()
-                    .unwrap(),
-            )
+            .from(sender.clone())
+            .reply_to(sender)
             .to(Mailbox::new(None, target.into_inner().try_into()?))
             .subject(subject)
-            .header(ContentType::TEXT_HTML)
             .multipart(lettre::message::MultiPart::alternative_plain_html(
                 txt_content,
                 html_content,
-            ))
-            // .body(content)
-            .unwrap();
+            ))?;
 
         self.mailer.send(email).await?;
 

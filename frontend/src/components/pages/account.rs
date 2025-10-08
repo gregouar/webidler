@@ -31,8 +31,12 @@ pub fn AccountSettingsPage() -> impl IntoView {
     let (get_username_storage, set_username_storage, _) =
         storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
 
+    let init_username = RwSignal::new(get_username_storage.get_untracked());
     let username = RwSignal::new(get_username_storage.get_untracked());
+
+    let init_email = RwSignal::new(Some(None));
     let email = RwSignal::new(Some(None));
+
     let old_password = RwSignal::new(None);
     let password = RwSignal::new(None);
     let confirm_password = RwSignal::new(None);
@@ -40,8 +44,9 @@ pub fn AccountSettingsPage() -> impl IntoView {
     let processing = RwSignal::new(false);
     let passwords_mismatch = Signal::derive(move || password.get() != confirm_password.get());
 
-    let disable_username_submit =
-        Signal::derive(move || username.read().is_none() || processing.get());
+    let disable_username_submit = Signal::derive(move || {
+        username.read().is_none() || *init_username.read() == *username.read() || processing.get()
+    });
     let on_update_username = {
         move |_| {
             spawn_local({
@@ -50,14 +55,20 @@ pub fn AccountSettingsPage() -> impl IntoView {
                         .post_update_account(
                             &auth_context.token(),
                             &UpdateAccountRequest {
-                                username: username.get().unwrap(),
+                                username: username.get_untracked().unwrap(),
                                 ..Default::default()
                             },
                         )
                         .await
                     {
                         Ok(_) => {
-                            set_username_storage.set(username.get());
+                            set_username_storage.set(username.get_untracked());
+                            init_username.set(username.get_untracked());
+                            show_toast(
+                                toaster,
+                                format!("Update account success!"),
+                                ToastVariant::Success,
+                            );
                         }
                         Err(e) => {
                             show_toast(
@@ -73,7 +84,9 @@ pub fn AccountSettingsPage() -> impl IntoView {
         }
     };
 
-    let disable_email_submit = Signal::derive(move || email.read().is_none() || processing.get());
+    let disable_email_submit = Signal::derive(move || {
+        email.read().is_none() || *init_email.read() == *email.read() || processing.get()
+    });
     let on_update_email = {
         move |_| {
             spawn_local({
@@ -82,13 +95,20 @@ pub fn AccountSettingsPage() -> impl IntoView {
                         .post_update_account(
                             &auth_context.token(),
                             &UpdateAccountRequest {
-                                email: Some(email.get().unwrap()),
+                                email: Some(email.get_untracked().unwrap()),
                                 ..Default::default()
                             },
                         )
                         .await
                     {
-                        Ok(_) => {}
+                        Ok(_) => {
+                            init_email.set(email.get_untracked());
+                            show_toast(
+                                toaster,
+                                format!("Update account success!"),
+                                ToastVariant::Success,
+                            );
+                        }
                         Err(e) => {
                             show_toast(
                                 toaster,
@@ -124,11 +144,17 @@ pub fn AccountSettingsPage() -> impl IntoView {
                         )
                         .await
                     {
-                        Ok(_) => {}
+                        Ok(_) => {
+                            show_toast(
+                                toaster,
+                                format!("Update password success!"),
+                                ToastVariant::Success,
+                            );
+                        }
                         Err(e) => {
                             show_toast(
                                 toaster,
-                                format!("Update account error: {e}"),
+                                format!("Update password error: {e}"),
                                 ToastVariant::Error,
                             );
                             processing.set(false);
@@ -151,7 +177,8 @@ pub fn AccountSettingsPage() -> impl IntoView {
 
     Effect::new(move || {
         if let Some(user) = user_data.get() {
-            email.set(user.as_ref().map(|user| user.email.clone()))
+            email.set(user.as_ref().map(|user| user.email.clone()));
+            init_email.set(email.get_untracked());
         }
     });
 
@@ -160,7 +187,7 @@ pub fn AccountSettingsPage() -> impl IntoView {
 
             <h1 class="text-amber-200 text-4xl font-extrabold mb-6">"Account Settings"</h1>
 
-            <div class="space-y-6 text-left text-white  mb-6">
+            <div class="space-y-6 text-right text-white  mb-6">
                 <div class="border-t border-zinc-700 pt-4 mt-4 space-y-2">
                     <ValidatedInput
                         label="Username"
@@ -220,7 +247,7 @@ pub fn AccountSettingsPage() -> impl IntoView {
                 </div>
 
                 <div class="border-t border-zinc-700 pt-4 mt-4 space-y-2">
-                    <p class="text-sm text-gray-400">
+                    <p class="text-sm text-red-400">
                         "Deleting your account is irreversible. All game progress will be lost."
                     </p>
                     <MenuButtonRed on:click=move |_| {}>"Delete Account"</MenuButtonRed>

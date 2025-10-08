@@ -9,10 +9,13 @@ use chrono::{Duration, Utc};
 use shared::{
     constants::DEFAULT_MAX_CHARACTERS,
     http::{
-        client::{ForgotPasswordRequest, ResetPasswordRequest, SignInRequest, SignUpRequest},
+        client::{
+            ForgotPasswordRequest, ResetPasswordRequest, SignInRequest, SignUpRequest,
+            UpdateAccountRequest,
+        },
         server::{
             ForgotPasswordResponse, GetUserDetailsResponse, ResetPasswordResponse, SignInResponse,
-            SignUpResponse,
+            SignUpResponse, UpdateAccountResponse,
         },
     },
 };
@@ -27,13 +30,13 @@ use crate::{
 use super::AppError;
 
 pub fn routes(app_state: AppState) -> Router<AppState> {
-    let auth_routes =
-        Router::new()
-            .route("/account/me", get(get_me))
-            .layer(middleware::from_fn_with_state(
-                app_state,
-                auth::authorization_middleware,
-            ));
+    let auth_routes = Router::new()
+        .route("/account/me", get(get_me))
+        .route("/account/update", post(post_update_account))
+        .layer(middleware::from_fn_with_state(
+            app_state,
+            auth::authorization_middleware,
+        ));
 
     Router::new()
         .route("/account/signup", post(post_sign_up))
@@ -183,4 +186,60 @@ async fn post_reset_password(
     tx.commit().await?;
 
     Ok(Json(ResetPasswordResponse {}))
+}
+
+async fn post_update_account(
+    Extension(current_user): Extension<CurrentUser>,
+    State(app_settings): State<AppSettings>,
+    State(db_pool): State<db::DbPool>,
+    Json(payload): Json<UpdateAccountRequest>,
+) -> Result<Json<UpdateAccountResponse>, AppError> {
+    let (email_crypt, email_hash) = if let Some(email) = payload.email {
+        match email.as_deref() {
+            Some(email) => {
+                let crypt = Some(Some(auth::encrypt_email(&app_settings, email)?));
+                let hash = Some(Some(auth::hash_content(&app_settings, email)));
+                (crypt, hash)
+            }
+            None => (Some(None), Some(None)),
+        }
+    } else {
+        (None, None)
+    };
+
+    // Double check authentication when trying to reset password
+    if payload.password.is_some() {
+        auth::sign_in(
+            &app_settings,
+            &db_pool,
+            &current_user.user_details.user.username,
+            &payload
+                .old_password
+                .map(|p| p.into_inner())
+                .unwrap_or_default(),
+        )
+        .await?;
+    }
+
+    let user_update = UserUpdate {
+        username: payload.username.map(|u| u.into_inner()),
+        email_crypt,
+        email_hash,
+        password_hash: payload
+            .password
+            .and_then(|password| auth::hash_password(&password).ok()),
+    };
+
+    match db::users::update_user(
+        &db_pool,
+        &current_user.user_details.user.user_id,
+        &user_update,
+    )
+    .await?
+    {
+        Some(_) => Ok(Json(UpdateAccountResponse {})),
+        None => Err(AppError::UserError(
+            "username or email already in use".to_string(),
+        )),
+    }
 }
