@@ -2373,9 +2373,9 @@
         "triggers": [
           {
             "trigger_id": "healing_aura",
-            "description": "Restore Area Level x 3 Life at the end of each wave.",
+            "description": "Restore 3 Life per Area Level at the end of each Wave.",
             "OnWaveCompleted": {},
-            "target": "Source",
+            "target": "Me",
             "effects": [
               {
                 "Restore": {
@@ -2391,7 +2391,7 @@
                   "Restore": null
                 },
                 "modifier": "Multiplier",
-                "factor": 1,
+                "factor": 100,
                 "source": "AreaLevel"
               }
             ]
