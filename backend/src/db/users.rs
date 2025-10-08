@@ -1,10 +1,10 @@
 use chrono::{DateTime, Utc};
-use sqlx::FromRow;
+use sqlx::{FromRow, Transaction};
 
 use shared::data::user::UserId;
 
 use super::{
-    pool::{DbExecutor, DbPool},
+    pool::{Database, DbPool},
     utc_datetime::UtcDateTime,
 };
 
@@ -151,34 +151,52 @@ pub async fn update_last_login(db_pool: &DbPool, user_id: &UserId) -> Result<(),
 }
 
 pub async fn update_user<'c>(
-    executor: impl DbExecutor<'c>,
+    executor: &mut Transaction<'c, Database>,
     user_id: &UserId,
     user_update: &UserUpdate,
 ) -> Result<Option<()>, sqlx::Error> {
+    if let Some((email_crypt, email_hash)) = user_update
+        .email_crypt
+        .as_ref()
+        .zip(user_update.email_hash.as_ref())
+    {
+        let res = sqlx::query!(
+            r#"
+            UPDATE users
+            SET 
+                updated_at = CURRENT_TIMESTAMP,
+                email_crypt = COALESCE($2, email_crypt),
+                email_hash = COALESCE($3, email_hash)
+            WHERE user_id = $1 AND deleted_at IS NULL
+        "#,
+            user_id,
+            email_crypt,
+            email_hash,
+        )
+        .execute(&mut **executor)
+        .await;
+
+        match res {
+            Err(sqlx::Error::Database(db_err)) if db_err.is_unique_violation() => return Ok(None),
+            Err(e) => return Err(e),
+            _ => {}
+        };
+    }
+
     let res = sqlx::query!(
         r#"
             UPDATE users
             SET 
                 updated_at = CURRENT_TIMESTAMP,
                 username = COALESCE($2, username),
-                email_crypt = CASE
-                    WHEN $3 IS NULL THEN email_crypt     
-                    ELSE $3                      
-                END,
-                email_hash = CASE
-                    WHEN $4 IS NULL THEN email_hash     
-                    ELSE $4                      
-                END,
-                password_hash = COALESCE($5, password_hash)
+                password_hash = COALESCE($3, password_hash)
             WHERE user_id = $1 AND deleted_at IS NULL
         "#,
         user_id,
         user_update.username,
-        user_update.email_crypt,
-        user_update.email_hash,
         user_update.password_hash,
     )
-    .execute(executor)
+    .execute(&mut **executor)
     .await;
 
     match res {

@@ -17,7 +17,7 @@ pub async fn create_password_reset(
     db_pool: &DbPool,
     user_id: &UserId,
     token_hash: &[u8],
-    expires_at: &UtcDateTime,
+    expires_at: UtcDateTime,
 ) -> Result<(), sqlx::Error> {
     sqlx::query!(
         "UPDATE password_reset_tokens SET

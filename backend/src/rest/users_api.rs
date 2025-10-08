@@ -135,7 +135,7 @@ async fn post_forgot_password(
         &db_pool,
         &user.user_id,
         &token_hash,
-        &expires_at.into(),
+        expires_at.into(),
     )
     .await?;
 
@@ -176,7 +176,7 @@ async fn post_reset_password(
         .await?
         .ok_or_else(|| AppError::UserError("invalid token".into()))?;
     db::users::update_user(
-        &mut *tx,
+        &mut tx,
         &payload.user_id,
         &UserUpdate {
             password_hash: Some(auth::hash_password(&payload.password)?),
@@ -232,8 +232,10 @@ async fn post_update_account(
             .and_then(|password| auth::hash_password(&password).ok()),
     };
 
-    match db::users::update_user(
-        &db_pool,
+    let mut tx = db_pool.begin().await?;
+
+    let r = match db::users::update_user(
+        &mut tx,
         &current_user.user_details.user.user_id,
         &user_update,
     )
@@ -243,7 +245,11 @@ async fn post_update_account(
         None => Err(AppError::UserError(
             "username or email already in use".to_string(),
         )),
-    }
+    };
+
+    tx.commit().await?;
+
+    r
 }
 
 async fn delete_account(
