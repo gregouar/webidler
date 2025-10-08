@@ -36,7 +36,8 @@ impl EmailService {
         &self,
         target: Email,
         subject: impl Into<String>,
-        content: String,
+        html_content: String,
+        txt_content: String,
     ) -> Result<()> {
         let email = Message::builder()
             .from(
@@ -46,8 +47,12 @@ impl EmailService {
             )
             .to(Mailbox::new(None, target.into_inner().try_into()?))
             .subject(subject)
-            .header(ContentType::TEXT_PLAIN)
-            .body(content)
+            .header(ContentType::TEXT_HTML)
+            .multipart(lettre::message::MultiPart::alternative_plain_html(
+                txt_content,
+                html_content,
+            ))
+            // .body(content)
             .unwrap();
 
         self.mailer.send(email).await?;

@@ -5,19 +5,22 @@ use axum::{
     Extension, Json, Router,
 };
 
-use chrono::Utc;
+use chrono::{Duration, Utc};
 use shared::{
     constants::DEFAULT_MAX_CHARACTERS,
     http::{
-        client::{ForgotPasswordRequest, SignInRequest, SignUpRequest},
-        server::{ForgotPasswordResponse, GetUserDetailsResponse, SignInResponse, SignUpResponse},
+        client::{ForgotPasswordRequest, ResetPasswordRequest, SignInRequest, SignUpRequest},
+        server::{
+            ForgotPasswordResponse, GetUserDetailsResponse, ResetPasswordResponse, SignInResponse,
+            SignUpResponse,
+        },
     },
 };
 
 use crate::{
     app_state::{AppSettings, AppState},
     auth::{self, CurrentUser},
-    db,
+    db::{self, users::UserUpdate},
     email::EmailService,
 };
 
@@ -36,6 +39,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .route("/account/signup", post(post_sign_up))
         .route("/account/signin", post(post_sign_in))
         .route("/account/forgot-password", post(post_forgot_password))
+        .route("/account/reset-password", post(post_reset_password))
         .merge(auth_routes)
 }
 
@@ -54,7 +58,7 @@ async fn post_sign_up(
     let (email_crypt, email_hash) = match payload.email.as_deref() {
         Some(email) => {
             let crypt = Some(auth::encrypt_email(&app_settings, email)?);
-            let hash = Some(auth::hash_email(&app_settings, email));
+            let hash = Some(auth::hash_content(&app_settings, email));
             (crypt, hash)
         }
         None => (None, None),
@@ -114,16 +118,69 @@ async fn post_forgot_password(
 
     let user = db::users::read_user_by_email(
         &db_pool,
-        &auth::hash_email(&app_settings, payload.email.as_str()),
+        &auth::hash_content(&app_settings, payload.email.as_str()),
     )
     .await?
     .ok_or_else(|| AppError::NotFound)?;
 
-    // TODO add entry to password reset table
+    let token = auth::generate_token();
+    let expires_at = Utc::now() + Duration::minutes(30);
+    let token_hash = auth::hash_content(&app_settings, &token);
+    db::password_reset::create_password_reset(
+        &db_pool,
+        &user.user_id,
+        &token_hash,
+        &expires_at.into(),
+    )
+    .await?;
+
+    let reset_link = format!(
+        "{}/reset-password?user_id={}&token={}",
+        app_settings.frontend_url, &user.user_id, token,
+    );
+
+    let subject = "Reset your password";
+    let html_content = format!(
+        "<p>Hello {},</p>
+         <p>Click <a href=\"{reset_link}\">here</a> to reset your password on Grind to Rust.</p>
+         <p>If you didn’t request this, you can safely ignore this email.</p>",
+        user.username.unwrap_or_default()
+    );
+    let text_content =
+        format!("Visit this link to reset your password on Grind to Rust: {reset_link}");
 
     email_service
-        .send_email(payload.email, "Hello", "hello there".into())
+        .send_email(payload.email, subject, html_content, text_content)
         .await?;
 
     Ok(Json(ForgotPasswordResponse {}))
+}
+
+async fn post_reset_password(
+    State(app_settings): State<AppSettings>,
+    State(db_pool): State<db::DbPool>,
+    Json(payload): Json<ResetPasswordRequest>,
+) -> Result<Json<ResetPasswordResponse>, AppError> {
+    auth::verify_captcha(&payload.captcha_token).await?;
+
+    let token_hash = auth::hash_content(&app_settings, &payload.password_token);
+
+    let mut tx = db_pool.begin().await?;
+
+    db::password_reset::redeem_password_reset(&mut tx, &payload.user_id, &token_hash)
+        .await?
+        .ok_or_else(|| AppError::UserError("invalid token".into()))?;
+    db::users::update_user(
+        &mut *tx,
+        &payload.user_id,
+        &UserUpdate {
+            password_hash: Some(auth::hash_password(&payload.password)?),
+            ..Default::default()
+        },
+    )
+    .await?;
+
+    tx.commit().await?;
+
+    Ok(Json(ResetPasswordResponse {}))
 }

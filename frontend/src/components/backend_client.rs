@@ -7,8 +7,8 @@ use shared::{
         client::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BuyMarketItemRequest,
             CreateCharacterRequest, EditMarketItemRequest, ForgeAddAffixRequest,
-            ForgotPasswordRequest, RejectMarketItemRequest, SellMarketItemRequest, SignInRequest,
-            SignUpRequest, UpdateAccountRequest,
+            ForgotPasswordRequest, RejectMarketItemRequest, ResetPasswordRequest,
+            SellMarketItemRequest, SignInRequest, SignUpRequest, UpdateAccountRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BuyMarketItemResponse,
@@ -16,8 +16,8 @@ use shared::{
             ErrorResponse, ForgeAddAffixResponse, ForgotPasswordResponse, GetAreasResponse,
             GetCharacterDetailsResponse, GetPassivesResponse, GetSkillsResponse,
             GetUserCharactersResponse, GetUserDetailsResponse, LeaderboardResponse,
-            PlayersCountResponse, RejectMarketItemResponse, SellMarketItemResponse, SignInResponse,
-            SignUpResponse, UpdateAccountResponse,
+            PlayersCountResponse, RejectMarketItemResponse, ResetPasswordResponse,
+            SellMarketItemResponse, SignInResponse, SignUpResponse, UpdateAccountResponse,
         },
     },
 };
@@ -120,6 +120,13 @@ impl BackendClient {
         request: &ForgotPasswordRequest,
     ) -> Result<ForgotPasswordResponse, BackendError> {
         self.post("account/forgot-password", request).await
+    }
+
+    pub async fn post_reset_password(
+        &self,
+        request: &ResetPasswordRequest,
+    ) -> Result<ResetPasswordResponse, BackendError> {
+        self.post("account/reset-password", request).await
     }
 
     // Account

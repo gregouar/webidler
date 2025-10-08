@@ -2,8 +2,10 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     data::{
-        item_affix::AffixType, market::MarketFilters, passive::PassivesTreeAscension,
-        user::UserCharacterId,
+        item_affix::AffixType,
+        market::MarketFilters,
+        passive::PassivesTreeAscension,
+        user::{UserCharacterId, UserId},
     },
     types::{AssetName, Email, PaginationLimit, Password, Username},
 };
@@ -31,6 +33,15 @@ pub struct ForgotPasswordRequest {
     pub captcha_token: String,
 
     pub email: Email,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ResetPasswordRequest {
+    pub captcha_token: String,
+
+    pub user_id: UserId,
+    pub password: Password,
+    pub password_token: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

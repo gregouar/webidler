@@ -161,7 +161,9 @@ pub fn SignUpPage() -> impl IntoView {
                     </label>
                 </div>
 
-                <Captcha token=captcha_token class:justify-self-center />
+                <div class="w-full flex justify-center">
+                    <Captcha token=captcha_token />
+                </div>
 
                 <MenuButton class:w-full on:click=on_submit disabled=disable_submit>
                     "Confirm"

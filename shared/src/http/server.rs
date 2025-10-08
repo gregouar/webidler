@@ -63,6 +63,9 @@ pub struct SignInResponse {
 pub struct ForgotPasswordResponse {}
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct ResetPasswordResponse {}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GetUserResponse {
     pub user: User,
 }

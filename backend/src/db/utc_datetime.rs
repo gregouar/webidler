@@ -1,9 +1,9 @@
 use sqlx::decode::Decode;
-use sqlx::postgres::{PgTypeInfo, PgValueRef};
+use sqlx::postgres::{PgArgumentBuffer, PgTypeInfo, PgValueRef};
 use sqlx::sqlite::{Sqlite, SqliteValueRef};
 use sqlx::types::chrono::{DateTime, NaiveDateTime, Utc};
 use sqlx::types::Type;
-use sqlx::Postgres;
+use sqlx::{Encode, Postgres};
 use std::error::Error;
 
 #[derive(Debug, Clone)]
@@ -42,6 +42,16 @@ impl<'r> Decode<'r, Sqlite> for UtcDateTime {
     }
 }
 
+impl<'q> Encode<'q, Sqlite> for UtcDateTime {
+    fn encode_by_ref(
+        &self,
+        buf: &mut <Sqlite as sqlx::Database>::ArgumentBuffer<'q>,
+    ) -> Result<sqlx::encode::IsNull, Box<dyn Error + Send + Sync>> {
+        let naive = self.0.naive_utc();
+        <NaiveDateTime as Encode<Sqlite>>::encode_by_ref(&naive, buf)
+    }
+}
+
 impl Type<Postgres> for UtcDateTime {
     fn type_info() -> PgTypeInfo {
         <DateTime<Utc> as Type<Postgres>>::type_info()
@@ -52,5 +62,14 @@ impl<'r> Decode<'r, Postgres> for UtcDateTime {
     fn decode(value: PgValueRef<'r>) -> Result<Self, Box<dyn Error + Send + Sync>> {
         let dt = <DateTime<Utc> as Decode<Postgres>>::decode(value)?;
         Ok(UtcDateTime(dt))
+    }
+}
+
+impl<'q> Encode<'q, Postgres> for UtcDateTime {
+    fn encode_by_ref(
+        &self,
+        buf: &mut PgArgumentBuffer,
+    ) -> Result<sqlx::encode::IsNull, Box<dyn Error + Send + Sync>> {
+        <DateTime<Utc> as Encode<Postgres>>::encode_by_ref(&self.0, buf)
     }
 }

@@ -12,6 +12,11 @@ use axum::{
     middleware::Next,
 };
 use axum_extra::TypedHeader;
+use base64::{
+    alphabet,
+    engine::{self, general_purpose},
+    Engine as _,
+};
 use chrono::{Duration, Utc};
 use headers::{authorization::Bearer, Authorization};
 use jsonwebtoken::{decode, encode, Header, TokenData, Validation};
@@ -29,6 +34,9 @@ use crate::{
     db,
     rest::AppError,
 };
+
+const B64_ENGINE: engine::GeneralPurpose =
+    engine::GeneralPurpose::new(&alphabet::URL_SAFE, general_purpose::NO_PAD);
 
 pub async fn verify_captcha(token: &str) -> anyhow::Result<bool> {
     // TODO: move to app_settings
@@ -186,9 +194,16 @@ pub fn decrypt_email(app_settings: &AppSettings, data: &[u8]) -> anyhow::Result<
     )?)?)
 }
 
-pub fn hash_email(app_settings: &AppSettings, email: &str) -> Vec<u8> {
+pub fn hash_content(app_settings: &AppSettings, email: &str) -> Vec<u8> {
     let mut hasher = Sha256::new();
     hasher.update(&app_settings.hash_key);
     hasher.update(email.as_bytes());
     hasher.finalize().to_vec()
+}
+
+pub fn generate_token() -> String {
+    let mut token_data = [0u8; 32];
+    rand::rng().fill_bytes(&mut token_data);
+
+    B64_ENGINE.encode(token_data)
 }
