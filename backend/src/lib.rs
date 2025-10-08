@@ -2,6 +2,7 @@ pub mod app_state;
 pub mod auth;
 pub mod constants;
 pub mod db;
+pub mod email;
 pub mod game;
 pub mod rest;
 pub mod tasks;

@@ -79,6 +79,32 @@ pub async fn read_user(
     .await
 }
 
+pub async fn read_user_by_email(
+    db_pool: &DbPool,
+    email_hash: &[u8],
+) -> Result<Option<UserEntry>, sqlx::Error> {
+    sqlx::query_as!(
+        UserEntry,
+        r#"
+        SELECT 
+            user_id as "user_id: UserId", 
+            username,
+            email_crypt, 
+            terms_accepted_at, 
+            is_admin, 
+            max_characters as "max_characters!: i16", 
+            last_login_at as "last_login_at?: UtcDateTime",
+            created_at, 
+            updated_at, 
+            deleted_at as "deleted_at?: UtcDateTime"
+         FROM users WHERE email_hash = $1
+         "#,
+        email_hash
+    )
+    .fetch_optional(db_pool)
+    .await
+}
+
 pub async fn auth_user(
     db_pool: &DbPool,
     username: &str,

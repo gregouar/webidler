@@ -206,6 +206,9 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
     let processing = RwSignal::new(false);
     let success = RwSignal::new(false);
 
+    let node_ref = NodeRef::new();
+    let _ = leptos_use::on_click_outside(node_ref, move |_| open.set(false));
+
     let on_submit = {
         move |_| {
             if processing.get() {
@@ -216,7 +219,6 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
             spawn_local({
                 let backend = backend.clone();
                 async move {
-                    // TODO: captcha
                     match backend
                         .post_forgot_password(&ForgotPasswordRequest {
                             captcha_token: captcha_token.get_untracked().unwrap_or_default(),
@@ -233,10 +235,13 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
                             );
                         }
                         Err(e) => {
-                            show_toast(toaster.clone(), format!("Error: {e}"), ToastVariant::Error);
+                            show_toast(
+                                toaster.clone(),
+                                format!("Incorrect email: {e}"),
+                                ToastVariant::Error,
+                            );
                         }
                     }
-                    success.set(true);
                     processing.set(false);
                 }
             });
@@ -255,7 +260,10 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <Show when=move || open.get()>
             <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-                <div class="bg-zinc-900 ring-1 ring-zinc-700 rounded-lg p-6 w-full max-w-md shadow-xl text-gray-200 space-y-4">
+                <div
+                    node_ref=node_ref
+                    class="bg-zinc-900 ring-1 ring-zinc-700 rounded-lg p-6 w-full max-w-md shadow-xl text-gray-200 space-y-4"
+                >
                     <h2 class="text-xl font-bold text-amber-300">"Forgot Password"</h2>
 
                     <Show when=move || !success.get()>
@@ -285,7 +293,7 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
                     <Show when=move || success.get()>
                         <div class="text-center space-y-3">
                             <p class="text-gray-400 text-sm">
-                                "Check your email and follow the reset link to set a new password."
+                                "Check your email and follow the reset link to set a new password. Please check your spams, I don't have money to pay for a proper mail service."
                             </p>
                             <MenuButton on:click=on_close>"Close"</MenuButton>
                         </div>

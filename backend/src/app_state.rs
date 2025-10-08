@@ -6,6 +6,7 @@ use std::env;
 
 pub use crate::{
     db::pool::DbPool,
+    email::EmailService,
     game::{data::master_store::MasterStore, sessions::SessionsStore},
 };
 
@@ -13,6 +14,7 @@ pub use crate::{
 pub struct AppState {
     pub app_settings: AppSettings,
     pub db_pool: DbPool,
+    pub email_service: EmailService,
     pub master_store: MasterStore,
     pub sessions_store: SessionsStore,
 }
@@ -55,6 +57,11 @@ impl FromRef<AppState> for AppSettings {
 impl FromRef<AppState> for DbPool {
     fn from_ref(app_state: &AppState) -> DbPool {
         app_state.db_pool.clone()
+    }
+}
+impl FromRef<AppState> for EmailService {
+    fn from_ref(app_state: &AppState) -> EmailService {
+        app_state.email_service.clone()
     }
 }
 impl FromRef<AppState> for MasterStore {

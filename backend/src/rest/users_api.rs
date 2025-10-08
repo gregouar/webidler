@@ -9,8 +9,8 @@ use chrono::Utc;
 use shared::{
     constants::DEFAULT_MAX_CHARACTERS,
     http::{
-        client::{SignInRequest, SignUpRequest},
-        server::{GetUserDetailsResponse, SignInResponse, SignUpResponse},
+        client::{ForgotPasswordRequest, SignInRequest, SignUpRequest},
+        server::{ForgotPasswordResponse, GetUserDetailsResponse, SignInResponse, SignUpResponse},
     },
 };
 
@@ -18,6 +18,7 @@ use crate::{
     app_state::{AppSettings, AppState},
     auth::{self, CurrentUser},
     db,
+    email::EmailService,
 };
 
 use super::AppError;
@@ -34,6 +35,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/account/signup", post(post_sign_up))
         .route("/account/signin", post(post_sign_in))
+        .route("/account/forgot-password", post(post_forgot_password))
         .merge(auth_routes)
 }
 
@@ -100,4 +102,28 @@ async fn get_me(
     Ok(Json(GetUserDetailsResponse {
         user_details: current_user.user_details,
     }))
+}
+
+async fn post_forgot_password(
+    State(app_settings): State<AppSettings>,
+    State(email_service): State<EmailService>,
+    State(db_pool): State<db::DbPool>,
+    Json(payload): Json<ForgotPasswordRequest>,
+) -> Result<Json<ForgotPasswordResponse>, AppError> {
+    auth::verify_captcha(&payload.captcha_token).await?;
+
+    let user = db::users::read_user_by_email(
+        &db_pool,
+        &auth::hash_email(&app_settings, payload.email.as_str()),
+    )
+    .await?
+    .ok_or_else(|| AppError::NotFound)?;
+
+    // TODO add entry to password reset table
+
+    email_service
+        .send_email(payload.email, "Hello", "hello there".into())
+        .await?;
+
+    Ok(Json(ForgotPasswordResponse {}))
 }
