@@ -384,6 +384,14 @@ fn format_duration<T>(value: ChanceRange<T>) -> String
 where
     T: Into<f64> + PartialEq + Copy,
 {
+    let format_min_max = |value: ChanceRange<f64>| {
+        if value.min != value.max {
+            format!("{:.1} - {:.1}", value.min, value.max,)
+        } else {
+            format!("{:.1}", value.min)
+        }
+    };
+
     if value.min.into() > 9999.0f64 {
         "forever".into()
     } else if value.min.into() >= 60.0f64 {
@@ -394,6 +402,11 @@ where
         };
         format!("for {} minutes", format_min_max(value))
     } else {
+        let value = ChanceRange::<f64> {
+            min: value.min.into(),
+            max: value.max.into(),
+            lucky_chance: value.lucky_chance,
+        };
         format!("for {} seconds", format_min_max(value))
     }
 }
