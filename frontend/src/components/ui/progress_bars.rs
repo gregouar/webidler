@@ -127,7 +127,7 @@ pub fn VerticalProgressBar(
     Effect::new(move |_| {
         if reset.get() {
             reset_bar_animation
-                .set("animation: horizontal-progress-bar-fade-out 0.5s ease-out; animation-fill-mode: both;");
+                .set("animation: vertical-progress-bar-fade-out 0.5s ease-out; animation-fill-mode: both;");
             set_timeout(
                 move || {
                     reset_bar_animation.set("opacity: 0;");
@@ -176,7 +176,7 @@ pub fn VerticalProgressBar(
                 class=format!("absolute rounded-lg inset-0 z-1 h-full {}", bar_color)
                 style=reset_bar_animation
             ></div>
-            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none overflow-hidden">
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm rounded-lg overflow-hidden">
                 {children.map(|children| children())}
             </div>
         </div>

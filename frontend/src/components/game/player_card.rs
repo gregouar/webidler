@@ -57,6 +57,16 @@ pub fn PlayerCard() -> impl IntoView {
     });
 
     let max_mana = Memo::new(move |_| game_context.player_specs.read().character_specs.max_mana);
+    let reserved_mana = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .skills_specs
+            .iter()
+            .map(|s| s.mana_cost)
+            .max_by(|a, b| a.total_cmp(b))
+            .unwrap_or_default()
+    });
     let mana = Signal::derive(move || game_context.player_state.read().character_state.mana);
 
     let mana_tooltip = move || {
@@ -72,6 +82,14 @@ pub fn PlayerCard() -> impl IntoView {
         let max_mana = max_mana.get();
         if max_mana > 0.0 {
             (mana.get() / max_mana) as f32
+        } else {
+            0.0
+        }
+    });
+    let reserved_mana_percent = Memo::new(move |_| {
+        let max_mana = max_mana.get();
+        if max_mana > 0.0 {
+            (reserved_mana.get() / max_mana) as f32
         } else {
             0.0
         }
@@ -203,7 +221,7 @@ pub fn PlayerCard() -> impl IntoView {
                         class:xl:w-8
                         bar_color="bg-gradient-to-l from-red-500 to-red-700"
                         value=life_percent
-                    ></VerticalProgressBar>
+                    />
                 </StaticTooltip>
                 <div class="flex flex-col gap-1 xl:gap-2">
                     <div class="flex-1 min-h-0">
@@ -233,7 +251,26 @@ pub fn PlayerCard() -> impl IntoView {
                         class:xl:w-8
                         bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
                         value=mana_percent
-                    ></VerticalProgressBar>
+                    >
+                        <StaticTooltip
+                            position=StaticTooltipPosition::Left
+                            tooltip=move || {
+                                format!(
+                                    "{} Mana Reserved for Manual Skill Use. This amount of Mana will never be used for Auto Skill Use.",
+                                    reserved_mana.get(),
+                                )
+                            }
+                            class:h-full
+                            class:w-full
+                        >
+                            <div
+                                class="w-full h-full origin-bottom bg-blue-950 opacity-50 "
+                                style=move || {
+                                    format!("transform: scaleY({});", reserved_mana_percent.get())
+                                }
+                            ></div>
+                        </StaticTooltip>
+                    </VerticalProgressBar>
                 </StaticTooltip>
             </div>
 
