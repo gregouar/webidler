@@ -164,10 +164,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                             </div>
 
                             <div class="flex flex-col items-center gap-2 text-sm text-gray-400">
-                                <a
-                                    href="/account"
-                                    class="underline hover:text-amber-300 transition"
-                                >
+                                <a href="account" class="underline hover:text-amber-300 transition">
                                     "Account Settings"
                                 </a>
                                 <MenuButtonRed on:click=move |_| sign_out()>
