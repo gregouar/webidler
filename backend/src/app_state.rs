@@ -46,7 +46,7 @@ impl AppSettings {
             jwt_decoding_key: DecodingKey::from_secret(jwt_secret.as_ref()),
             aes_key: Aes256Gcm::new_from_slice(&aes_key_str).expect("failed to create AES key"),
             hash_key: env::var("HASH_KEY").expect("HASH_KEY must be set"),
-            frontend_url: env::var("CORS_FRONTEND_URL").expect("CORS_FRONTEND_URL must be set"),
+            frontend_url: env::var("FRONTEND_URL").expect("FRONTEND_URL must be set"),
         }
     }
 }

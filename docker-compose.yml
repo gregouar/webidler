@@ -36,6 +36,7 @@ services:
       SMTP_PASSWORD: ${SMTP_PASSWORD}
       DATABASE_URL: postgres://webidler_user:${POSTGRES_PASSWORD}@database/webidler
       CORS_FRONTEND_URL: https://gregouar.github.io
+      FRONTEND_URL: https://gregouar.github.io/webidler
       RUST_LOG: DEBUG
     networks:
       - backend_net
