@@ -184,8 +184,14 @@ pub fn CharacterPortrait(
                     </For>
                 </div>
 
-                <div class=format!("absolute inset-0  {}", shimmer_effect)></div>
-                // <div class=move || { format!("absolute inset-0  {}", just_hurt_class()) }></div>
+                {move || {
+                    (!is_dead.get() && !shimmer_effect.is_empty())
+                        .then(|| {
+                            view! {
+                                <div class=format!("absolute inset-0  {}", shimmer_effect)></div>
+                            }
+                        })
+                }}
 
                 <div
                     class=move || {
@@ -196,10 +202,7 @@ pub fn CharacterPortrait(
                         }
                     }
                     style="box-shadow: inset 0 0 32px rgba(192, 0, 0, 1.0);"
-                >// class="absolute inset-0 pointer-events-none transition-opacity duration-500"
-                // class:opacity-0=move || !just_hurt.get()
-                // class:duration-100=move || just_hurt.get()
-                </div>
+                ></div>
             </div>
 
             {move || {
