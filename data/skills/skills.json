@@ -183,7 +183,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 5,
+              "duration": 6,
               "statuses": [
                 {
                   "status_type": {
@@ -191,7 +191,7 @@
                       "damage_type": "Poison"
                     }
                   },
-                  "value": [2, 3]
+                  "value": [3, 5]
                 }
               ]
             }
