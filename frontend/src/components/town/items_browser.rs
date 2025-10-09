@@ -225,7 +225,11 @@ pub fn ItemCompare(item_slot: ItemSlot) -> impl IntoView {
         } else {
             tooltip_context.set_content(
                 move || {
-                    view! { <div class="bg-gray-900/50  p-2 xl:p-4 rounded-xl border">"No item equipped"</div> }.into_any()
+                    view! {
+                        <div class="shadow-md bg-gradient-to-br from-gray-800 via-gray-900 to-black  p-2 xl:p-4 rounded-xl border">
+                            "No item equipped"
+                        </div>
+                    }.into_any()
                 },
                 DynamicTooltipPosition::Auto,
             );
