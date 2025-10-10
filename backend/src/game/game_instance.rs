@@ -163,16 +163,20 @@ impl<'a> GameInstance<'a> {
         .await?;
 
         let area_level = self.game_data.area_state.read().max_area_level_completed as i32;
-        db::characters::update_character_progress(
-            &mut tx,
-            self.character_id,
-            &self.game_data.area_id,
-            area_level,
-            // I don't like this
-            area_level - self.game_data.area_blueprint.specs.starting_level as i32 + 1,
-        )
-        .await?;
+        let delta_area_level =
+            area_level - self.game_data.area_blueprint.specs.starting_level as i32 + 1;
 
+        if delta_area_level > 0 {
+            db::characters::update_character_progress(
+                &mut tx,
+                self.character_id,
+                &self.game_data.area_id,
+                area_level,
+                // I don't like this
+                area_level - self.game_data.area_blueprint.specs.starting_level as i32 + 1,
+            )
+            .await?;
+        }
         db::game_instances::delete_game_instance_data(&mut *tx, self.character_id).await?;
 
         tx.commit().await?;
