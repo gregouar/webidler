@@ -198,7 +198,7 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
                 <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm text-center p-2">
                     <div class="text-amber-400 text-lg font-bold tracking-wide">"Locked"</div>
                     <div class="text-gray-300 text-xs mt-1">
-                        {format!("Requires Level {}", area.area_specs.starting_level)}
+                        {format!("Requires Level {}", area.area_specs.required_level)}
                     </div>
                     <div class="mt-2 text-xs text-gray-500 italic">
                         "Keep grinding to unlock this area!"
