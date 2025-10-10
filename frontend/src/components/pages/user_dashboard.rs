@@ -134,7 +134,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     </span>
                                 </div>
 
-                                <div class="flex flex-nowrap gap-6 overflow-x-auto p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                                <div class="flex flex-nowrap gap-6 overflow-x-auto p-4 bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                                     <For
                                         each=move || characters.clone()
                                         key=|c| c.character_id
