@@ -162,11 +162,13 @@ impl<'a> GameInstance<'a> {
         )
         .await?;
 
+        let area_level = self.game_data.area_state.read().max_area_level_completed as i32;
         db::characters::update_character_progress(
             &mut tx,
             self.character_id,
             &self.game_data.area_id,
-            self.game_data.area_state.read().max_area_level_completed as i32,
+            area_level,
+            area_level - self.game_data.area_blueprint.specs.starting_level as i32 + 1,
         )
         .await?;
 

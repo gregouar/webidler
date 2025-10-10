@@ -105,7 +105,10 @@ async fn get_character_details(
             max_level_reached: areas_completed
                 .iter()
                 .find(|area_completed| area_completed.area_id.eq(area_id))
-                .map(|area_completed| area_completed.max_area_level as AreaLevel)
+                .map(|area_completed| {
+                    area_completed.max_area_level as AreaLevel + available_area.specs.starting_level
+                        - 1
+                })
                 .unwrap_or_default(),
         })
         .collect();

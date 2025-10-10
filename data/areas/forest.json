@@ -1,14 +1,15 @@
 {
   "specs": {
     "name": "Dark Forest",
-    "starting_level": 11,
+    "starting_level": 21,
+    "starting_gold": 100,
     "header_background": "areas/forest_header.webp",
     "footer_background": "areas/forest_footer.webp"
   },
   "loot_tables": ["tier_1.json", "tier_2.json", "tier_3.json"],
   "bosses": [
     {
-      "level": 60,
+      "level": 70,
       "interval": 50,
       "spawns": [
         {
@@ -28,7 +29,7 @@
   ],
   "waves": [
     {
-      "min_level": 10,
+      "min_level": 20,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -47,7 +48,7 @@
       ]
     },
     {
-      "min_level": 20,
+      "min_level": 30,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -74,7 +75,7 @@
       ]
     },
     {
-      "min_level": 30,
+      "min_level": 40,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -101,7 +102,7 @@
       ]
     },
     {
-      "min_level": 40,
+      "min_level": 50,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -128,7 +129,7 @@
       ]
     },
     {
-      "min_level": 50,
+      "min_level": 60,
       "max_level": null,
       "weight": 1000,
       "spawns": [
