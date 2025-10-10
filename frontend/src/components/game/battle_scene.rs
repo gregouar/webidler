@@ -170,7 +170,7 @@ pub fn BattleSceneFooter() -> impl IntoView {
                 <div class="relative px-4 py-2">
                     <div class="absolute inset-0 blur-lg
                     bg-gradient-to-r from-transparent via-zinc-950 via-[percentage:10%_90%] to-transparent"></div>
-                    <p class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-boldt">
+                    <p class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold leading-none">
                         {wave_info}
                     </p>
                 </div>
@@ -185,7 +185,7 @@ pub fn BattleSceneFooter() -> impl IntoView {
                     <div class="absolute inset-0 blur-lg
                     bg-gradient-to-r from-transparent via-zinc-950 via-[percentage:10%_90%] to-transparent"></div>
                     <div class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold
-                    flex items-center gap-1">
+                    flex items-center gap-1 leading-none">
                         <span>{threat_level}</span>
                         <span class="text-yellow-500">
                             <ThreatIcon />
