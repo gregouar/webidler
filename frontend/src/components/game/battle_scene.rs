@@ -1,5 +1,6 @@
 use leptos::{html::*, prelude::*};
 
+use shared::computations;
 use shared::constants::{THREAT_EFFECT, WAVES_PER_AREA_LEVEL};
 use shared::messages::client::{GoBackLevelMessage, SetAutoProgressMessage};
 
@@ -158,7 +159,6 @@ pub fn BattleSceneFooter() -> impl IntoView {
     let threat_level = move || game_context.area_threat.read().threat_level;
 
     view! {
-        // h-8 xl:h-16
         <div
             class="h-8 xl:h-16 overflow-hidden z-10 w-full
             bg-center bg-repeat-x flex items-center justify-between"
@@ -171,6 +171,10 @@ pub fn BattleSceneFooter() -> impl IntoView {
                 <p class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold">
                     {wave_info}
                 </p>
+            </div>
+
+            <div class="relative px-1 py-2  text-base xl:text-2xl ">
+                <GemsLoot />
             </div>
 
             <div class="relative px-1 py-2">
@@ -190,17 +194,55 @@ pub fn BattleSceneFooter() -> impl IntoView {
 }
 
 #[component]
+pub fn GemsLoot() -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
+    let gems_chance = move || {
+        game_context
+            .area_state
+            .with(|area_state| computations::gem_chance(area_state))
+    };
+
+    let tooltip = move || {
+        let gems_chance = gems_chance();
+        if gems_chance > 0.0 {
+            format!(
+                "1/{:.0} Chance to find Champion Monster carrying Gems.",
+                1.0 / gems_chance
+            )
+        } else {
+            "No more Gems can be found at this Level.".into()
+        }
+    };
+    view! {
+        <StaticTooltip tooltip=tooltip position=StaticTooltipPosition::Left>
+            <img
+                draggable="false"
+                src=img_asset("ui/gems.webp")
+                alt="Gems Loot"
+                class="h-[2em] aspect-square"
+                class:grayscale=move || gems_chance() == 0.0
+            />
+        </StaticTooltip>
+    }
+}
+
+#[component]
 pub fn ThreatMeter() -> impl IntoView {
     let game_context: GameContext = expect_context();
 
     let threat_increase = Signal::derive(move || game_context.area_threat.read().just_increased);
 
     let time_remaining = Signal::derive(move || {
-        if game_context.area_threat.read().cooldown > 0.0 { {
+        if game_context.area_threat.read().cooldown > 0.0 {
+            {
                 (1.0 - game_context.area_threat.read().elapsed_cooldown)
                     * (game_context.area_threat.read().cooldown
                         / (game_context.player_specs.read().threat_gain * 0.01))
-            } } else { Default::default() }
+            }
+        } else {
+            Default::default()
+        }
     });
 
     let no_threat = Signal::derive(move || time_remaining.get() == 0.0);

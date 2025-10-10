@@ -2,9 +2,7 @@ use anyhow::Result;
 
 use shared::{
     computations,
-    constants::{
-        CHAMPION_BASE_CHANCE, CHAMPION_INC_CHANCE, CHAMPION_LEVEL_INC, MONSTER_INCREASE_FACTOR,
-    },
+    constants::{CHAMPION_LEVEL_INC, MONSTER_INCREASE_FACTOR},
     data::{
         area::{AreaLevel, AreaState, AreaThreat},
         monster::{MonsterRarity, MonsterSpecs, MonsterState},
@@ -185,15 +183,8 @@ fn generate_monster_specs(
     let mut monster_specs = MonsterSpecs::init(bp_specs.clone());
     let mut monster_level = area_state.area_level;
 
-    if monster_specs.rarity == MonsterRarity::Normal
-        && area_state.area_level > area_state.last_champion_spawn
-    {
-        let gem_chance = CHAMPION_BASE_CHANCE
-            + (CHAMPION_INC_CHANCE
-                * (area_state
-                    .area_level
-                    .saturating_sub(area_state.last_champion_spawn)) as f64);
-        if rng::random_range(0.0..=1.0).unwrap_or(1.0) <= gem_chance {
+    if monster_specs.rarity == MonsterRarity::Normal {
+        if rng::random_range(0.0..=1.0).unwrap_or(1.0) < computations::gem_chance(area_state) {
             // area_state.last_champion_spawn = area_state.area_level;
             monster_specs.rarity = MonsterRarity::Champion;
             monster_level += CHAMPION_LEVEL_INC;
