@@ -5,11 +5,11 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     item::{ItemRarity, ItemSlot, ItemSpecs, SkillRange, SkillShape},
-    item_affix::AffixEffectScope,
+    item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix},
     skill::DamageType,
 };
 
-use crate::components::game::tooltips::skill_tooltip::format_trigger;
+use super::skill_tooltip::format_trigger;
 
 use super::effects_tooltip;
 
@@ -19,7 +19,12 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         ItemRarity::Normal => ("border-gray-600", "ring-gray-700", "shadow-gray-800"),
         ItemRarity::Magic => ("border-blue-500", "ring-blue-400", "shadow-blue-700"),
         ItemRarity::Rare => ("border-yellow-400", "ring-yellow-300", "shadow-yellow-600"),
-        ItemRarity::Unique => ("border-amber-700", "ring-amber-600", "shadow-amber-700"),
+        ItemRarity::Masterwork => (
+            "border-fuchsia-400",
+            "ring-fuchsia-300",
+            "shadow-fuchsia-600",
+        ),
+        ItemRarity::Unique => ("border-orange-700", "ring-orange-600", "shadow-orange-700"),
     };
 
     view! {
@@ -37,42 +42,102 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 #[component]
 pub fn ItemTooltipContent(
     item_specs: Arc<ItemSpecs>,
+    #[prop(default = false)] show_affixes: bool,
     #[prop(default = false)] hide_description: bool,
 ) -> impl IntoView {
-    let local_affixes = effects_tooltip::formatted_effects_list(
-        (&item_specs
-            .modifiers
-            .aggregate_effects(AffixEffectScope::Local))
-            .into(),
-        AffixEffectScope::Local,
-    );
-    let global_affixes = effects_tooltip::formatted_effects_list(
-        (&item_specs
-            .modifiers
-            .aggregate_effects(AffixEffectScope::Global))
-            .into(),
-        AffixEffectScope::Global,
-    );
+    let (has_effects, effects) = if show_affixes {
+        let base_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Unique);
+        let prefixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Prefix);
+        let suffixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Suffix);
+        // let effects = formatted_affixes_list(&item_specs.modifiers.affixes);
+        (
+            (!base_affixes.is_empty() || !prefixes.is_empty() || !suffixes.is_empty()),
+            view! {
+                {(!base_affixes.is_empty())
+                    .then(|| {
+                        view! {
+                            // <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            // "Base affixes:"
+                            // </li>
+                            {base_affixes}
+                        }
+                    })}
+                {(!prefixes.is_empty())
+                    .then(|| {
+                        view! {
+                            // <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            // "Prefixes:"
+                            // </li>
+                            {prefixes}
+                        }
+                    })}
+                {(!suffixes.is_empty())
+                    .then(|| {
+                        view! {
+                            // <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            // "Suffixes:"
+                            // </li>
+                            {suffixes}
+                        }
+                    })}
+            }
+            .into_any(),
+        )
+    } else {
+        let mut effects = effects_tooltip::formatted_effects_list(
+            (&item_specs
+                .modifiers
+                .aggregate_effects(AffixEffectScope::Local))
+                .into(),
+        );
+        effects.extend(effects_tooltip::formatted_effects_list(
+            (&item_specs
+                .modifiers
+                .aggregate_effects(AffixEffectScope::Global))
+                .into(),
+        ));
+        (!effects.is_empty(), view! { {effects} }.into_any())
+    };
 
-    let trigger_lines = item_specs
-        .base
-        .triggers
-        .clone()
-        .into_iter()
-        .map(format_trigger)
-        .collect::<Vec<_>>();
+    let (has_triggers, triggers) = {
+        let trigger_lines = item_specs
+            .base
+            .triggers
+            .clone()
+            .into_iter()
+            .map(format_trigger)
+            .collect::<Vec<_>>();
+
+        (
+            !trigger_lines.is_empty(),
+            if show_affixes {
+                view! {
+                    {(!trigger_lines.is_empty())
+                        .then(|| {
+                            view! {
+                                <li class="text-gray-400 text-xs leading-snug">"Triggers:"</li>
+                                {trigger_lines}
+                            }
+                        })}
+                }
+                .into_any()
+            } else {
+                view! { {trigger_lines} }.into_any()
+            },
+        )
+    };
 
     let name_color = name_color_rarity(item_specs.modifiers.rarity);
 
     view! {
         <div class="space-y-2">
             <strong class=format!("text-base xl:text-lg font-bold {}", name_color)>
-                <ul class="list-none space-y-1 md-2">
+                <ul class="list-none space-y-1 mb-2">
                     <li class="leading-snug whitespace-pre-line">
                         {item_specs.modifiers.name.clone()}
                     </li>
                     {match item_specs.modifiers.rarity {
-                        ItemRarity::Rare => {
+                        ItemRarity::Rare | ItemRarity::Masterwork => {
                             Some(
                                 view! {
                                     <li class="leading-snug">{item_specs.base.name.clone()}</li>
@@ -87,22 +152,27 @@ pub fn ItemTooltipContent(
             <hr class="border-t border-gray-700" />
             <ul class="list-none space-y-1">
                 <ItemSlotTooltip item_specs=item_specs.clone() />
+                <QualityTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
             </ul>
-            {(!trigger_lines.is_empty() || !local_affixes.is_empty() || !global_affixes.is_empty())
+            {(has_triggers || has_effects)
                 .then(|| {
                     view! {
                         <hr class="border-t border-gray-700 my-1" />
-                        <ul class="list-none space-y-1">
-                            {local_affixes}{global_affixes}{trigger_lines}
-                        </ul>
+                        <ul class="list-none space-y-1">{effects}{triggers}</ul>
                     }
                 })}
             <hr class="border-t border-gray-700" />
-            <p class="text-xs xl:text-sm text-gray-400 leading-snug">
-                "Item Level: " <span class="text-white">{item_specs.modifiers.level}</span>
-            </p>
+            <ul class="list-none space-y-1">
+                <li class="text-blue-400 text-xs xl:text-sm text-gray-400 leading-snug">
+                    "Required Area Level: "
+                    <span class="text-white">{item_specs.required_level}</span>
+                </li>
+                <li class="text-blue-400 text-xs xl:text-sm text-gray-400 leading-snug">
+                    "Item Level: " <span class="text-white">{item_specs.modifiers.level}</span>
+                </li>
+            </ul>
             {(!hide_description)
                 .then(|| {
                     item_specs
@@ -127,7 +197,8 @@ pub fn name_color_rarity(item_rarity: ItemRarity) -> &'static str {
         ItemRarity::Normal => "text-white",
         ItemRarity::Magic => "text-blue-400",
         ItemRarity::Rare => "text-yellow-400",
-        ItemRarity::Unique => "text-amber-700",
+        ItemRarity::Masterwork => "text-fuchsia-400",
+        ItemRarity::Unique => "text-orange-700",
     }
 }
 
@@ -138,7 +209,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         .as_ref()
         .zip(item_specs.base.armor_specs.as_ref())
         .map(|(specs, base_specs)| {
-            let armor_color = if specs.armor != base_specs.armor {
+            let armor_color = if specs.armor.round() != base_specs.armor.round() {
                 "text-blue-400"
             } else {
                 "text-white"
@@ -170,7 +241,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     Some(
                         view! {
                             <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                                "Block chances: "
+                                "Block chance: "
                                 <span class=format!(
                                     "{} font-semibold",
                                     block_color,
@@ -195,9 +266,8 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             let mut damage_lines = vec![];
 
             for damage_type in DamageType::iter() {
-                let (spec_min, spec_max) =
-                    specs.damage.get(&damage_type).copied().unwrap_or_default();
-                let (base_min, base_max) = base_specs
+                let specs_value = specs.damage.get(&damage_type).copied().unwrap_or_default();
+                let base_value = base_specs
                     .damage
                     .get(&damage_type)
                     .copied()
@@ -205,7 +275,9 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
                 let damage_color = match damage_type {
                     DamageType::Physical => {
-                        if spec_min != base_min || spec_max != base_max {
+                        if specs_value.min.round() != base_value.min.round()
+                            || specs_value.max.round() != base_value.max.round()
+                        {
                             "text-blue-400"
                         } else {
                             "text-white"
@@ -216,15 +288,14 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     DamageType::Storm => "text-amber-400",
                 };
 
-                if spec_min > 0.0 || spec_max > 0.0 {
+                if specs_value.min > 0.0 || specs_value.max > 0.0 {
                     damage_lines.push(view! {
                         <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                            {effects_tooltip::optional_damage_type_str(Some(damage_type))}
-                            "Damage: "
+                            {effects_tooltip::damage_type_str(Some(damage_type))} "Damage: "
                             <span class=format!(
                                 "{} font-semibold",
                                 damage_color,
-                            )>{format!("{spec_min:.0} - {spec_max:.0}")}</span>
+                            )>{format!("{:.0} - {:.0}", specs_value.min, specs_value.max)}</span>
                         </li>
                     });
                 }
@@ -251,13 +322,13 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 "text-white"
             };
 
-            let crit_chances_color = if specs.crit_chances != base_specs.crit_chances {
+            let crit_chance_color = if specs.crit_chance != base_specs.crit_chance {
                 "text-blue-400"
             } else {
                 "text-white"
             };
 
-            let crit_damage_color = if specs.crit_damage != base_specs.crit_damage {
+            let crit_damage_color = if specs.crit_damage.round() != base_specs.crit_damage.round() {
                 "text-blue-400"
             } else {
                 "text-white"
@@ -267,14 +338,14 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 <li class="text-gray-400 text-xs xl:text-sm leading-snug">{range} {shape}</li>
                 {damage_lines}
                 <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                    "Critical chances: "
+                    "Critical hit chance: "
                     <span class=format!(
                         "{} font-semibold",
-                        crit_chances_color,
-                    )>{format!("{:.2}%", specs.crit_chances)}</span>
+                        crit_chance_color,
+                    )>{format!("{:.2}%", specs.crit_chance.value)}</span>
                 </li>
                 <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                    "Critical damage: "
+                    "Critical hit damage: "
                     <span class=format!(
                         "{} font-semibold",
                         crit_damage_color,
@@ -312,4 +383,88 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     };
 
     view! { <li class="text-gray-400 text-xs xl:text-sm leading-snug">{item_slot}</li> }
+}
+
+#[component]
+pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    view! {
+        <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+            "Quality: "
+            <span class="text-white font-semibold">
+                {format!("+{:.0}%", item_specs.modifiers.quality)}
+            </span>
+        </li>
+    }
+}
+
+pub fn formatted_affixes_list(
+    affixes: &[ItemAffix],
+    affix_type: AffixType,
+) -> Vec<impl IntoView + use<>> {
+    affixes
+        .iter()
+        .filter(|affix| affix.affix_type == affix_type)
+        .map(|affix| {
+            let affix_meta = match affix_type {
+                AffixType::Unique => {
+                    view! { <li class="text-gray-400 text-xs leading-snug">"Implicit affix"</li> }
+                        .into_any()
+                }
+                _ => {
+                    let mut tags: Vec<_> = affix.tags.iter().collect();
+                    tags.sort();
+                    let tags: Vec<_> = tags
+                        .into_iter()
+                        .map(|tag| affix_tag_str(*tag).to_string())
+                        .collect();
+
+                    view! {
+                        <li class="text-gray-400 text-xs leading-snug">
+                            {affix_type_str(affix.affix_type)}" \""{affix.name.clone()}
+                            "\"  (Tier: " {affix.tier}") – " {tags.join(", ")}
+                        </li>
+                    }
+                    .into_any()
+                }
+            };
+            view! {
+                {affix_meta}
+                {effects_tooltip::formatted_effects_list(
+                    affix
+                        .effects
+                        .iter()
+                        .map(|affix_effect| affix_effect.stat_effect.clone())
+                        .collect(),
+                )}
+            }
+        })
+        .collect()
+}
+
+fn affix_type_str(affix_type: AffixType) -> &'static str {
+    match affix_type {
+        AffixType::Prefix => "Prefix",
+        AffixType::Suffix => "Suffix",
+        AffixType::Unique => "Base affix",
+    }
+}
+
+fn affix_tag_str(affix_tag: AffixTag) -> &'static str {
+    match affix_tag {
+        AffixTag::Attack => "Attack",
+        AffixTag::Armor => "Defense",
+        AffixTag::Critical => "Critical",
+        AffixTag::Fire => "Fire",
+        AffixTag::Gold => "Gold",
+        AffixTag::Life => "Life",
+        AffixTag::Mana => "Mana",
+        AffixTag::Physical => "Physical",
+        AffixTag::Poison => "Poison",
+        AffixTag::Speed => "Speed",
+        AffixTag::Spell => "Spell",
+        AffixTag::Status => "Status",
+        AffixTag::Stealth => "Stealth",
+        AffixTag::Storm => "Storm",
+        AffixTag::Threat => "Threat",
+    }
 }

@@ -1,5 +1,72 @@
 [
   {
+    "name": "Striking",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Physical"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [25, 49]
+      }
+    ]
+  },
+  {
+    "name": "Pummeling",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Physical"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [50, 74]
+      }
+    ]
+  },
+  {
+    "name": "Bonebreaking",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Physical"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [75, 99]
+      }
+    ]
+  },
+
+  {
     "name": "Warm",
     "family": "inc_fire_damage",
     "tags": ["Spell", "Fire"],
@@ -17,8 +84,7 @@
           }
         },
         "modifier": "Multiplier",
-        "min": 0.25,
-        "max": 0.49
+        "value": [25, 49]
       }
     ]
   },
@@ -40,8 +106,29 @@
           }
         },
         "modifier": "Multiplier",
-        "min": 0.5,
-        "max": 0.74
+        "value": [50, 74]
+      }
+    ]
+  },
+  {
+    "name": "Molten",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Fire"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [75, 99]
       }
     ]
   },
@@ -64,8 +151,7 @@
           }
         },
         "modifier": "Multiplier",
-        "min": 0.25,
-        "max": 0.49
+        "value": [25, 49]
       }
     ]
   },
@@ -87,8 +173,29 @@
           }
         },
         "modifier": "Multiplier",
-        "min": 0.5,
-        "max": 0.74
+        "value": [50, 74]
+      }
+    ]
+  },
+  {
+    "name": "Plagued",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Poison"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [75, 99]
       }
     ]
   },
@@ -111,8 +218,7 @@
           }
         },
         "modifier": "Multiplier",
-        "min": 0.25,
-        "max": 0.49
+        "value": [25, 49]
       }
     ]
   },
@@ -134,8 +240,29 @@
           }
         },
         "modifier": "Multiplier",
-        "min": 0.5,
-        "max": 0.74
+        "value": [50, 74]
+      }
+    ]
+  },
+  {
+    "name": "Conductive",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Storm"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [75, 99]
       }
     ]
   }

@@ -1,7 +1,10 @@
 use anyhow::Result;
 use std::time::{Duration, Instant};
 
-use shared::data::{character::CharacterId, player::PlayerState};
+use shared::{
+    constants::{THREAT_BOSS_COOLDOWN, THREAT_COOLDOWN},
+    data::{area::AreaThreat, character::CharacterId, player::PlayerState},
+};
 
 use super::{
     data::{
@@ -30,14 +33,16 @@ pub async fn tick(
     master_store: &MasterStore,
     elapsed_time: Duration,
 ) -> Result<()> {
+    update_threat(events_queue, game_data, elapsed_time);
+
     // If client input altered the player specs (equip item, ...), we need to recompute the currents specs
     if game_data.player_specs.need_to_sync()
         || game_data.player_inventory.need_to_sync()
         || game_data.passives_tree_state.need_to_sync()
-        || game_data.player_state.character_state.buff_status_change
+        || game_data.player_state.character_state.dirty_specs
     {
         // This feels so dirty =(
-        game_data.player_state.character_state.buff_status_change = false;
+        game_data.player_state.character_state.dirty_specs = false;
 
         player_updater::update_player_specs(
             game_data.player_specs.mutate(),
@@ -45,13 +50,14 @@ pub async fn tick(
             game_data.player_inventory.read(),
             &game_data.passives_tree_specs,
             game_data.passives_tree_state.read(),
+            &game_data.area_threat,
         );
     }
 
     if game_data
         .monster_states
         .iter()
-        .any(|m| m.character_state.buff_status_change)
+        .any(|m| m.character_state.dirty_specs)
     {
         for ((base_specs, monster_specs), monster_state) in game_data
             .monster_base_specs
@@ -60,9 +66,14 @@ pub async fn tick(
             .zip(game_data.monster_specs.iter_mut())
             .zip(game_data.monster_states.iter_mut())
         {
-            if monster_state.character_state.buff_status_change {
-                monster_state.character_state.buff_status_change = false;
-                monsters_updater::update_monster_specs(base_specs, monster_specs, monster_state);
+            if monster_state.character_state.dirty_specs {
+                monster_state.character_state.dirty_specs = false;
+                monsters_updater::update_monster_specs(
+                    base_specs,
+                    monster_specs,
+                    monster_state,
+                    &game_data.area_threat,
+                );
             }
         }
     }
@@ -81,6 +92,7 @@ async fn control_entities(
     master_store: &MasterStore,
 ) -> Result<()> {
     if !game_data.player_state.character_state.is_alive {
+        game_data.area_threat.cooldown = 0.0;
         if game_data.player_respawn_delay.elapsed() > PLAYER_RESPAWN_PERIOD {
             respawn_player(game_data);
         }
@@ -110,6 +122,7 @@ async fn control_entities(
 
         let wave_completed = monsters_still_alive.is_empty();
         if wave_completed || game_data.area_state.read().going_back > 0 {
+            game_data.area_threat.cooldown = 0.0;
             if wave_completed && !game_data.wave_completed {
                 game_data.wave_completed = true;
                 events_queue.register_event(GameEvent::WaveCompleted(
@@ -121,8 +134,7 @@ async fn control_entities(
                 > Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown)
             {
                 if game_data.area_state.read().going_back > 0 {
-                    let area_state: &mut shared::data::area::AreaState =
-                        game_data.area_state.mutate();
+                    let area_state = game_data.area_state.mutate();
                     let amount = area_state.going_back;
                     area_controller::decrease_area_level(
                         &game_data.area_blueprint.specs,
@@ -136,12 +148,24 @@ async fn control_entities(
                     monsters_wave::generate_monsters_wave(
                         &game_data.area_blueprint,
                         game_data.area_state.mutate(),
+                        &game_data.area_threat,
                         &master_store.monster_specs_store,
                     )?;
                 game_data.monster_base_specs = LazySyncer::new(monster_specs.clone());
                 game_data.monster_specs = monster_specs;
                 game_data.monster_states = monster_states;
                 game_data.area_state.mutate().is_boss = is_boss;
+
+                game_data.area_threat = AreaThreat {
+                    threat_level: 0,
+                    cooldown: if is_boss {
+                        THREAT_BOSS_COOLDOWN
+                    } else {
+                        THREAT_COOLDOWN
+                    },
+                    elapsed_cooldown: 0.0,
+                    just_increased: false,
+                };
 
                 game_data.wave_completed = false;
             }
@@ -160,12 +184,36 @@ async fn control_entities(
     Ok(())
 }
 
+pub fn update_threat(
+    events_queue: &mut EventsQueue,
+    game_data: &mut GameInstanceData,
+    elapsed_time: Duration,
+) {
+    game_data.area_threat.just_increased = false;
+    if game_data.area_threat.cooldown > 0.0 {
+        game_data.area_threat.elapsed_cooldown +=
+            elapsed_time.as_secs_f32() * game_data.player_specs.read().threat_gain * 0.01
+                / game_data.area_threat.cooldown;
+        if game_data.area_threat.elapsed_cooldown >= 1.0 {
+            game_data.area_threat.elapsed_cooldown -= 1.0;
+            game_data.area_threat.threat_level =
+                game_data.area_threat.threat_level.saturating_add(1);
+            game_data.area_threat.just_increased = true;
+            events_queue.register_event(GameEvent::ThreatIncreased(
+                game_data.area_threat.threat_level,
+            ));
+        }
+    }
+}
+
 async fn update_entities(
     events_queue: &mut EventsQueue,
     game_data: &mut GameInstanceData,
     elapsed_time: Duration,
 ) {
-    if !game_data.player_state.character_state.is_alive {
+    if !game_data.player_state.character_state.is_alive
+        || game_data.area_state.read().going_back > 0
+    {
         return;
     }
 
@@ -194,13 +242,16 @@ fn respawn_player(game_data: &mut GameInstanceData) {
         game_data.player_inventory.read(),
         &game_data.passives_tree_specs,
         game_data.passives_tree_state.read(),
+        &game_data.area_threat,
     );
 
     game_data.player_state = PlayerState::init(game_data.player_specs.read());
 
-    area_controller::decrease_area_level(
-        &game_data.area_blueprint.specs,
-        game_data.area_state.mutate(),
-        1,
-    );
+    if game_data.area_state.read().auto_progress {
+        area_controller::decrease_area_level(
+            &game_data.area_blueprint.specs,
+            game_data.area_state.mutate(),
+            1,
+        );
+    }
 }

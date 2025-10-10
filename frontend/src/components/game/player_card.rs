@@ -2,54 +2,71 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use shared::messages::client::{
-    LevelUpPlayerMessage, LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage,
-};
-
-use crate::assets::img_asset;
-use crate::components::{
-    ui::{
-        buttons::{FancyButton, Toggle},
-        number::format_number,
-        progress_bars::{CircularProgressBar, HorizontalProgressBar, VerticalProgressBar},
-        toast::*,
-        tooltip::{
-            DynamicTooltipContext, DynamicTooltipPosition, StaticTooltip, StaticTooltipPosition,
-        },
+use shared::{
+    computations::{player_level_up_cost, skill_cost_increase},
+    messages::client::{
+        LevelUpPlayerMessage, LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage,
     },
-    websocket::WebsocketContext,
 };
 
-use super::portrait::CharacterPortrait;
-use super::tooltips::SkillTooltip;
-use super::GameContext;
+use crate::{
+    assets::img_asset,
+    components::{
+        shared::tooltips::SkillTooltip,
+        ui::{
+            buttons::{FancyButton, Toggle},
+            number::format_number,
+            progress_bars::{
+                predictive_cooldown, CircularProgressBar, HorizontalProgressBar,
+                VerticalProgressBar,
+            },
+            toast::*,
+            tooltip::{
+                DynamicTooltipContext, DynamicTooltipPosition, StaticTooltip, StaticTooltipPosition,
+            },
+        },
+        websocket::WebsocketContext,
+    },
+};
+
+use super::{portrait::CharacterPortrait, GameContext};
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let max_health = Memo::new(move |_| game_context.player_specs.read().character_specs.max_life);
-    let health = Signal::derive(move || game_context.player_state.read().character_state.life);
+    let max_life = Memo::new(move |_| game_context.player_specs.read().character_specs.max_life);
+    let life = Signal::derive(move || game_context.player_state.read().character_state.life);
 
-    let health_tooltip = move || {
+    let life_tooltip = move || {
         view! {
-            "Health: "
-            {format_number(health.get())}
+            "Life: "
+            {format_number(life.get())}
             "/"
             {format_number(game_context.player_specs.read().character_specs.max_life)}
         }
     };
 
-    let health_percent = Signal::derive(move || {
-        let max_health = max_health.get();
-        if max_health > 0.0 {
-            (health.get() / max_health * 100.0) as f32
+    let life_percent = Signal::derive(move || {
+        let max_life = max_life.get();
+        if max_life > 0.0 {
+            (life.get() / max_life) as f32
         } else {
             0.0
         }
     });
 
     let max_mana = Memo::new(move |_| game_context.player_specs.read().character_specs.max_mana);
+    let reserved_mana = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .skills_specs
+            .iter()
+            .map(|s| s.mana_cost)
+            .max_by(|a, b| a.total_cmp(b))
+            .unwrap_or_default()
+    });
     let mana = Signal::derive(move || game_context.player_state.read().character_state.mana);
 
     let mana_tooltip = move || {
@@ -64,7 +81,15 @@ pub fn PlayerCard() -> impl IntoView {
     let mana_percent = Signal::derive(move || {
         let max_mana = max_mana.get();
         if max_mana > 0.0 {
-            (mana.get() / max_mana * 100.0) as f32
+            (mana.get() / max_mana) as f32
+        } else {
+            0.0
+        }
+    });
+    let reserved_mana_percent = Memo::new(move |_| {
+        let max_mana = max_mana.get();
+        if max_mana > 0.0 {
+            (reserved_mana.get() / max_mana) as f32
         } else {
             0.0
         }
@@ -118,15 +143,23 @@ pub fn PlayerCard() -> impl IntoView {
             .clone()
     });
 
+    let just_leveled_up = RwSignal::new(false);
+
     let conn = expect_context::<WebsocketContext>();
     let level_up = move |_| {
+        game_context.player_specs.update(|player_specs| {
+            game_context.player_resources.write().experience -= player_specs.experience_needed;
+            player_specs.level += 1;
+            player_specs.experience_needed = player_level_up_cost(player_specs);
+            just_leveled_up.set(true);
+        });
+
         conn.send(&LevelUpPlayerMessage { amount: 1 }.into());
     };
     let disable_level_up = Memo::new(move |_| {
         game_context.player_specs.read().experience_needed
             > game_context.player_resources.read().experience
     });
-    let just_leveled_up = Memo::new(move |_| game_context.player_state.read().just_leveled_up);
 
     let buy_skill_cost = Memo::new(move |_| game_context.player_specs.read().buy_skill_cost);
 
@@ -182,12 +215,12 @@ pub fn PlayerCard() -> impl IntoView {
             <PlayerName />
 
             <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
-                <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Right>
+                <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Right>
                     <VerticalProgressBar
                         class:w-6
                         class:xl:w-8
                         bar_color="bg-gradient-to-l from-red-500 to-red-700"
-                        value=health_percent
+                        value=life_percent
                     />
                 </StaticTooltip>
                 <div class="flex flex-col gap-1 xl:gap-2">
@@ -218,7 +251,26 @@ pub fn PlayerCard() -> impl IntoView {
                         class:xl:w-8
                         bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
                         value=mana_percent
-                    />
+                    >
+                        <StaticTooltip
+                            position=StaticTooltipPosition::Left
+                            tooltip=move || {
+                                format!(
+                                    "{} Mana Reserved for Manual Skill Use. This amount of Mana will never be used for Auto Skill Use.",
+                                    reserved_mana.get(),
+                                )
+                            }
+                            class:h-full
+                            class:w-full
+                        >
+                            <div
+                                class="w-full h-full origin-bottom bg-blue-950 opacity-50 "
+                                style=move || {
+                                    format!("transform: scaleY({});", reserved_mana_percent.get())
+                                }
+                            ></div>
+                        </StaticTooltip>
+                    </VerticalProgressBar>
                 </StaticTooltip>
             </div>
 
@@ -288,8 +340,9 @@ pub fn PlayerName() -> impl IntoView {
 
     view! {
         <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl">
-            <span class="font-bold">{player_name}</span>
-            {move || format!(" — Level: {}", game_context.player_specs.read().level)}
+            <span class="font-bold">
+                {player_name} " — " {move || game_context.player_specs.read().level}
+            </span>
         </p>
     }
 }
@@ -384,6 +437,14 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
 
     let conn = expect_context::<WebsocketContext>();
     let level_up = move |_| {
+        game_context.player_specs.update(|player_specs| {
+            if let Some(skill_specs) = player_specs.skills_specs.get_mut(index) {
+                game_context.player_resources.write().gold -= skill_specs.next_upgrade_cost;
+                skill_specs.upgrade_level += 1;
+                skill_specs.next_upgrade_cost = skill_cost_increase(skill_specs);
+            }
+        });
+
         conn.send(
             &LevelUpSkillMessage {
                 skill_index: index as u8,
@@ -445,12 +506,13 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let hide_tooltip = move || tooltip_context.hide();
 
+    let reset_progress = Signal::derive(move || just_triggered.get() || !is_dead.get());
+    let progress_value = predictive_cooldown(skill_cooldown, reset_progress, is_dead.into());
+
     view! {
         <div class="flex flex-col">
             <div
                 on:touchstart=move |_| { show_tooltip() }
-                on:touchend=move |_| hide_tooltip()
-                on:touchcancel=move |_| hide_tooltip()
                 on:contextmenu=move |ev| {
                     ev.prevent_default();
                 }
@@ -466,7 +528,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                 >
                     <CircularProgressBar
                         bar_color="oklch(55.5% 0.163 48.998)"
-                        remaining_time=skill_cooldown
+                        value=progress_value
                         reset=just_triggered
                         disabled=is_dead
                         bar_width=4
@@ -476,7 +538,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                             src=icon_asset
                             alt=skill_name
                             class="w-full h-full flex-no-shrink fill-current
-                            drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
+                            xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
                         />
                     </CircularProgressBar>
                 </button>

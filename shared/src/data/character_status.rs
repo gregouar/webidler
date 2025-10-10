@@ -69,7 +69,7 @@ impl From<&StatusSpecs> for StatusId {
                 modifier,
                 debuff,
             } => StatusId::StatModifier {
-                stat: *stat,
+                stat: stat.clone(),
                 modifier: *modifier,
                 debuff: *debuff,
             },
@@ -92,6 +92,6 @@ pub enum StatModifierType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StatusState {
     pub value: f64,
-    pub duration: f64,
+    pub duration: Option<f64>,
     pub cumulate: bool,
 }

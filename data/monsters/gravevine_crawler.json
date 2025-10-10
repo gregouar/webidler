@@ -1,0 +1,27 @@
+{
+  "name": "Gravevine Crawler",
+  "portrait": "monsters/gravevine_crawler.webp",
+  "max_life": 12,
+  "power_factor": 2.0,
+  "initiative": [1.0, 2.0],
+  "skills": [
+    {
+      "name": "Vine Lash",
+      "icon": "skills/claw.svg",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [2, 5]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,22 +1,25 @@
 use std::collections::HashMap;
 
-use shared::data::{
-    character::{CharacterId, CharacterSpecs, CharacterState},
-    character_status::{StatusSpecs, StatusState},
-    item::SkillRange,
-    skill::{DamageType, RestoreType, SkillType},
+use shared::{
+    computations,
+    constants::ARMOR_FACTOR,
+    data::{
+        character::{CharacterId, CharacterSpecs, CharacterState},
+        character_status::{StatusSpecs, StatusState},
+        item::SkillRange,
+        skill::{DamageType, RestoreType, SkillType},
+        stat_effect::Modifier,
+    },
 };
 
-use crate::{
-    constants::ARMOR_FACTOR,
-    game::{
-        data::event::{EventsQueue, GameEvent, HitEvent},
-        utils::{increase_factors, rng},
-    },
+use crate::game::{
+    data::event::{EventsQueue, GameEvent, HitEvent},
+    utils::rng::Rollable,
 };
 
 pub type Target<'a> = (CharacterId, (&'a CharacterSpecs, &'a mut CharacterState));
 
+#[allow(clippy::too_many_arguments)]
 pub fn attack_character(
     events_queue: &mut EventsQueue,
     target: &mut Target,
@@ -25,22 +28,28 @@ pub fn attack_character(
     skill_type: SkillType,
     range: SkillRange,
     is_crit: bool,
+    ignore_armor: bool,
 ) {
     let (target_id, (target_specs, target_state)) = target;
 
     let mut amount: f64 = damage
         .iter()
         .map(|(damage_type, amount)| {
-            compute_damage(target_specs, *amount, *damage_type, skill_type, false)
+            compute_damage(
+                target_specs,
+                *amount,
+                *damage_type,
+                skill_type,
+                ignore_armor,
+            )
         })
         .sum();
 
-    let is_blocked = rng::random_range(0.0..=100.0).unwrap_or(100.0)
-        <= target_specs.block
-            * match skill_type {
-                SkillType::Attack => 1.0,
-                SkillType::Spell => target_specs.block_spell * 0.01,
-            };
+    let is_blocked = target_specs.block.roll()
+        & match skill_type {
+            SkillType::Attack => true,
+            SkillType::Spell => target_specs.block_spell.roll(),
+        };
 
     if is_blocked {
         amount *= target_specs.block_damage as f64 * 0.01;
@@ -96,17 +105,30 @@ pub fn damage_character(
     *life -= take_from_life;
 }
 
-pub fn restore_character(target: &mut Target, restore_type: RestoreType, amount: f64) {
-    let (_, (_, target_state)) = target;
+pub fn restore_character(
+    target: &mut Target,
+    restore_type: RestoreType,
+    amount: f64,
+    modifier: Modifier,
+) {
+    let (_, (target_specs, target_state)) = target;
 
     if amount <= 0.0 {
         return;
     }
 
+    let factor = match modifier {
+        Modifier::Multiplier => match restore_type {
+            RestoreType::Life => target_specs.max_life * 0.01,
+            RestoreType::Mana => target_specs.max_mana * 0.01,
+        },
+        Modifier::Flat => 1.0,
+    };
+
     if target_state.is_alive {
         match restore_type {
-            RestoreType::Life => target_state.life += amount,
-            RestoreType::Mana => target_state.mana += amount,
+            RestoreType::Life => target_state.life += amount * factor,
+            RestoreType::Mana => target_state.mana += amount * factor,
         }
     }
 }
@@ -115,6 +137,15 @@ pub fn resuscitate_character(target: &mut Target) {
     let (_, (target_specs, target_state)) = target;
     target_state.is_alive = true;
     target_state.life = target_specs.max_life;
+
+    target_state
+        .statuses
+        .unique_statuses
+        .retain(|_, (_, status_state)| status_state.duration.is_none());
+    target_state
+        .statuses
+        .cumulative_statuses
+        .retain(|(_, status_state)| status_state.duration.is_none());
 }
 
 pub fn apply_status(
@@ -122,12 +153,16 @@ pub fn apply_status(
     status_specs: &StatusSpecs,
     skill_type: SkillType,
     value: f64,
-    duration: f64,
+    duration: Option<f64>,
     cumulate: bool,
 ) {
     let (_, (target_specs, target_state)) = target;
 
-    if duration <= 0.0 || !target_state.is_alive {
+    if duration.unwrap_or(1.0) <= 0.0 {
+        return;
+    }
+
+    if !target_state.is_alive & duration.is_some() {
         return;
     }
 
@@ -154,7 +189,9 @@ pub fn apply_status(
             .unique_statuses
             .entry(status_specs.into())
             .and_modify(|(cur_status_specs, cur_status_state)| {
-                if value * duration > cur_status_state.value * cur_status_state.duration {
+                if value * duration.unwrap_or(1.0)
+                    > cur_status_state.value * cur_status_state.duration.unwrap_or(1.0)
+                {
                     cur_status_state.value = value;
                     cur_status_state.duration = duration;
                     *cur_status_specs = status_specs.clone();
@@ -171,7 +208,7 @@ pub fn apply_status(
     }
 
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger { .. } = status_specs {
-        target_state.buff_status_change = true;
+        target_state.dirty_specs = true;
     }
 }
 
@@ -206,7 +243,7 @@ fn decrease_damage_from_armor(
 ) -> f64 {
     amount
         * (1.0
-            - increase_factors::diminishing(
+            - computations::diminishing(
                 target_specs
                     .armor
                     .get(&damage_type)

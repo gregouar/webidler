@@ -1,0 +1,45 @@
+{
+  "name": "Wall of Thorns",
+  "portrait": "monsters/thorn_wall.webp",
+  "max_life": 20,
+  "power_factor": 2,
+  "size": "Tall",
+  "initiative": [1, 2],
+  "armor": { "Poison": 50, "Physical": 50 },
+  "skills": [
+    {
+      "name": "Uncontrollable Growth",
+      "icon": "skills/heal.svg",
+      "cooldown": 10.0,
+      "targets": [
+        {
+          "target_type": "Friend",
+          "target_dead": true,
+          "effects": [
+            {
+              "Resurrect": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ouch!",
+      "icon": "skills/claw.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [1, 1]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

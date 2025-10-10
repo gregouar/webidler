@@ -44,9 +44,9 @@
 
       "resistance_suffixes.json",
 
+      "shield_prefixes.json",
       "shield_suffixes.json",
 
-      "spell_prefixes.json",
       "spell_suffixes.json"
     ]
   }

@@ -4,24 +4,39 @@
   },
   "resources": {
     "monsters": [
+      "ashroot_sentinel.json",
       "barrel_mimic.json",
       "bat_fire.json",
       "bat.json",
+      "bonebark_wolf.json",
       "booze_elemental.json",
       "cat_skeleton.json",
       "centipede.json",
+      "cinder_hag.json",
+      "gravevine_crawler.json",
       "haunted_pot.json",
       "haunted_wine_bottle.json",
       "haunted_wine_rack.json",
       "haunted_lantern.json",
+      "hunter.json",
+      "hound_fire.json",
+      "hound_storm.json",
+      "moth_ember.json",
+      "moth_mourning.json",
       "patron_ghost.json",
       "rat.json",
+      "rotcap_shambler.json",
       "snake.json",
       "soot_imp.json",
       "soot_imp_2.json",
-      "witch.json",
+      "stormwraith.json",
+      "thorn_sprite.json",
+      "thorn_sprite_2.json",
+      "thorn_wall.json",
+      "thunder_stag.json",
       "witch_child_1.json",
-      "witch_child_2.json"
+      "witch_child_2.json",
+      "witch.json"
     ]
   }
 }

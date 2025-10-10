@@ -187,6 +187,7 @@ pub async fn read_all_user_characters<'c>(
         LEFT OUTER JOIN saved_game_instances
         ON characters.character_id = saved_game_instances.character_id
         WHERE user_id = $1 AND deleted_at IS NULL
+        ORDER BY created_at ASC
         "#,
         user_id
     )
@@ -243,6 +244,7 @@ pub async fn update_character_progress<'c>(
     character_id: &UserCharacterId,
     area_id: &str,
     max_area_level: i32,
+    delta_area_level: i32,
 ) -> Result<(), sqlx::Error>
 // where
     //     A: Acquire<'a, Database = Database>,
@@ -263,7 +265,7 @@ pub async fn update_character_progress<'c>(
     .execute(&mut **executor)
     .await?;
 
-    if max_area_level > 0 {
+    if delta_area_level > 0 {
         sqlx::query!(
         "INSERT INTO character_area_completed (character_id, area_id, max_area_level) VALUES ($1, $2, $3)
          ON CONFLICT(character_id, area_id) DO UPDATE 
@@ -279,7 +281,7 @@ pub async fn update_character_progress<'c>(
         END;",
         character_id,
         area_id,
-        max_area_level
+        delta_area_level
     )
     .execute(&mut **executor)
     .await?;

@@ -17,6 +17,7 @@ use shared::{
 use crate::{
     assets::img_asset,
     components::{
+        accessibility::AccessibilityContext,
         auth::AuthContext,
         backend_client::BackendClient,
         ui::{
@@ -48,7 +49,7 @@ pub fn UserDashboardPage() -> impl IntoView {
             let user = backend
                 .get_me(&auth_context.token())
                 .await
-                .map(|r| r.user)
+                .map(|r| r.user_details.user)
                 .ok();
 
             match user {
@@ -133,7 +134,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     </span>
                                 </div>
 
-                                <div class="flex flex-nowrap gap-6 overflow-x-auto p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                                <div class="flex flex-nowrap gap-6 overflow-x-auto p-4 bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                                     <For
                                         each=move || characters.clone()
                                         key=|c| c.character_id
@@ -163,10 +164,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                             </div>
 
                             <div class="flex flex-col items-center gap-2 text-sm text-gray-400">
-                                <a
-                                    href="/account"
-                                    class="underline hover:text-amber-300 transition"
-                                >
+                                <a href="account" class="underline hover:text-amber-300 transition">
                                     "Account Settings"
                                 </a>
                                 <MenuButtonRed on:click=move |_| sign_out()>
@@ -236,8 +234,10 @@ fn CharacterSlot(
         let (_, set_area_id_storage, _) =
             storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
         let character_activity = character.activity.clone();
+        let accessibility: AccessibilityContext = expect_context();
 
         move |_| {
+            accessibility.go_fullscreen();
             set_character_id_storage.set(character.character_id);
             match &character_activity {
                 UserCharacterActivity::Rusting => navigate("/town", Default::default()),

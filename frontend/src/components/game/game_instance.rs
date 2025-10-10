@@ -18,7 +18,7 @@ use super::GameContext;
 #[component]
 pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
     let game_context = GameContext::new();
-    provide_context(game_context.clone());
+    provide_context(game_context);
 
     let auth_context = expect_context::<AuthContext>();
 
@@ -43,7 +43,6 @@ pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
     });
 
     Effect::new({
-        let game_context = game_context.clone();
         let conn = expect_context::<WebsocketContext>();
         move |_| {
             if let Some(message) = conn.message.get() {
@@ -126,6 +125,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
 fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     let SyncGameStateMessage {
         area_state,
+        area_threat,
         passives_tree_state,
         player_specs,
         player_inventory,
@@ -137,29 +137,20 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         game_stats,
     } = sync_message;
 
-    if let Some(area_state) = area_state {
-        game_context.area_state.set(area_state);
-    }
-    if let Some(passives_tree_state) = passives_tree_state {
-        game_context.passives_tree_state.set(passives_tree_state);
-    }
-    if let Some(player_specs) = player_specs {
-        game_context.player_specs.set(player_specs);
-    }
+    game_context.area_state.sync(area_state);
+    game_context.area_threat.set(area_threat);
+    game_context.passives_tree_state.sync(passives_tree_state);
+    game_context.player_specs.sync(player_specs);
     if let Some(player_inventory) = player_inventory {
         game_context.player_inventory.set(player_inventory);
     }
-    if let Some(player_resources) = player_resources {
-        game_context.player_resources.set(player_resources);
-    }
+    game_context.player_resources.sync(player_resources);
     game_context.player_state.set(player_state);
     if let Some(monster_specs) = monster_specs {
         *game_context.monster_wave.write() += 1; // TODO: Overflow
         game_context.monster_specs.set(monster_specs);
     }
     game_context.monster_states.set(monster_states);
-    if let Some(queued_loot) = queued_loot {
-        game_context.queued_loot.set(queued_loot);
-    }
+    game_context.queued_loot.sync(queued_loot);
     game_context.game_stats.set(game_stats);
 }

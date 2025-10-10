@@ -1,24 +1,29 @@
 use leptos::{html::*, prelude::*};
-use shared::data::item_affix::AffixEffectScope;
 
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use shared::data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassiveNodeType};
-use shared::messages::client::PurchasePassiveMessage;
+use shared::{
+    data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassiveNodeType},
+    messages::client::PurchasePassiveMessage,
+};
 
-use crate::assets::img_asset;
-use crate::components::game::tooltips::effects_tooltip;
-use crate::components::ui::menu_panel::PanelTitle;
-use crate::components::{
-    game::{game_context::GameContext, tooltips::effects_tooltip::formatted_effects_list},
-    ui::{
-        buttons::CloseButton,
-        menu_panel::MenuPanel,
-        pannable::Pannable,
-        tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
+use crate::{
+    assets::img_asset,
+    components::{
+        game::game_context::GameContext,
+        shared::tooltips::{
+            effects_tooltip::{self, formatted_effects_list},
+            format_trigger,
+        },
+        ui::{
+            buttons::CloseButton,
+            menu_panel::{MenuPanel, PanelTitle},
+            pannable::Pannable,
+            tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
+        },
+        websocket::WebsocketContext,
     },
-    websocket::WebsocketContext,
 };
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -123,7 +128,11 @@ fn InGameNode(
         let node_id = node_id.clone();
 
         move |_| {
-            let meta_status = node_meta_status(node_level.get(), node_specs.locked);
+            let meta_status = node_meta_status(
+                node_level.get(),
+                node_specs.locked,
+                node_specs.max_upgrade_level,
+            );
 
             let purchase_status = if game_context
                 .passives_tree_state
@@ -168,7 +177,14 @@ fn InGameNode(
 
     let purchase = {
         let conn = expect_context::<WebsocketContext>();
+        let game_context = expect_context::<GameContext>();
         move || {
+            game_context.player_resources.write().passive_points -= 1;
+            game_context
+                .passives_tree_state
+                .write()
+                .purchased_nodes
+                .insert(node_id.clone());
             conn.send(
                 &PurchasePassiveMessage {
                     node_id: node_id.clone(),
@@ -235,9 +251,9 @@ fn InGameConnection(
     view! { <Connection connection nodes_specs amount_connections node_levels /> }
 }
 
-pub fn node_meta_status(node_level: u8, locked: bool) -> MetaStatus {
+pub fn node_meta_status(node_level: u8, locked: bool, max_upgrade_level: Option<u8>) -> MetaStatus {
     if node_level > 0 {
-        if locked && node_level == 1 {
+        if locked && node_level == 1 && max_upgrade_level.unwrap_or_default() > 0 {
             MetaStatus::Normal
         } else {
             MetaStatus::Ascended
@@ -316,20 +332,22 @@ pub fn Node(
         status_color(status.purchase_status, status.meta_status)
     };
 
-    let filter = move || {
+    let shadow_class = move || {
         let status = node_status.get();
         match (status.purchase_status, status.meta_status) {
             (PurchaseStatus::Inactive, MetaStatus::Normal) => "",
             (PurchaseStatus::Purchaseable, MetaStatus::Normal) => {
-                "drop-shadow(0 0 2px darkgoldenrod)"
+                "xl:drop-shadow-[0_0_2px_darkgoldenrod]"
             }
-            (PurchaseStatus::Purchased, MetaStatus::Normal) => "drop-shadow(0 0 4px gold)",
+            (PurchaseStatus::Purchased, MetaStatus::Normal) => "xl:drop-shadow-[0_0_4px_gold]",
 
-            (PurchaseStatus::Inactive, MetaStatus::Ascended) => "drop-shadow(0 0 2px cyan)",
-            (PurchaseStatus::Purchaseable, MetaStatus::Ascended) => "drop-shadow(0 0 4px cyan)",
-            (PurchaseStatus::Purchased, MetaStatus::Ascended) => "drop-shadow(0 0 6px cyan)",
+            (PurchaseStatus::Inactive, MetaStatus::Ascended) => "xl:drop-shadow-[0_0_2px_cyan]",
+            (PurchaseStatus::Purchaseable, MetaStatus::Ascended) => {
+                "xl:drop-shadow-[0_0_4px_cyan])"
+            }
+            (PurchaseStatus::Purchased, MetaStatus::Ascended) => "xl:drop-shadow-[0_0_6px_cyan]",
 
-            (_, MetaStatus::Locked) => "drop-shadow(0 0 2px red)",
+            (_, MetaStatus::Locked) => "xl:drop-shadow-[0_0_2px_red]",
         }
     };
 
@@ -348,9 +366,9 @@ pub fn Node(
     let icon_filter = move || {
         let status = node_status.get();
         match (status.purchase_status, status.meta_status) {
-            (PurchaseStatus::Purchaseable, _) => "",
-            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5)",
-            _ => "drop-shadow(2px 2px 2px black)",
+            (PurchaseStatus::Purchaseable, _) => "invert(1)",
+            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5) invert(1)",
+            _ => "invert(1)",
         }
     };
 
@@ -363,7 +381,6 @@ pub fn Node(
                 if status.purchase_status == PurchaseStatus::Purchaseable {
                     on_click();
                 }
-                hide_tooltip()
             }
 
             on:mousedown=|ev| ev.stop_propagation()
@@ -372,8 +389,6 @@ pub fn Node(
                 let show_tooltip = show_tooltip.clone();
                 move |_| { show_tooltip() }
             }
-            on:touchend=move |_| hide_tooltip()
-            on:touchcancel=move |_| hide_tooltip()
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
@@ -384,23 +399,23 @@ pub fn Node(
             class=class_style
         >
             <circle
-                r=20 + node_specs.size * 10
+                r=20 + node_specs.size * 5
                 fill=fill
                 stroke=stroke
                 stroke-width="3"
-                filter=filter
+                class=shadow_class
             />
 
-            <circle r=20 + node_specs.size * 10 fill="url(#node-inner-gradient)" />
+            <circle r=20 + node_specs.size * 5 fill="url(#node-inner-gradient)" />
 
             <image
-                filter="drop-shadow(2px 2px 2px black)"
                 href=icon_asset
-                x=-(24 + node_specs.size as i32 * 20) / 2
-                y=-(24 + node_specs.size as i32 * 20) / 2
-                width=24 + node_specs.size * 20
-                height=24 + node_specs.size * 20
-                class="group-active:scale-90 group-active:brightness-100"
+                x=-(24 + node_specs.size as i32 * 10) / 2
+                y=-(24 + node_specs.size as i32 * 10) / 2
+                width=24 + node_specs.size * 10
+                height=24 + node_specs.size * 10
+                class="group-active:scale-90 group-active:brightness-100
+                xl:drop-shadow-[2px_2px_2px_black]"
                 style=move || { format!("pointer-events: none; filter: {}", icon_filter()) }
             />
         </g>
@@ -420,8 +435,8 @@ pub fn Connection(
     view! {
         {if let (Some(from), Some(to)) = (from_node, to_node) {
             let (from_level, to_level) = node_levels.get_untracked();
-            let from_status = node_meta_status(from_level, from.locked);
-            let to_status = node_meta_status(to_level, to.locked);
+            let from_status = node_meta_status(from_level, from.locked, from.max_upgrade_level);
+            let to_status = node_meta_status(to_level, to.locked, to.max_upgrade_level);
             let purchase_status = move || match amount_connections.get() {
                 2 => PurchaseStatus::Purchased,
                 1 => PurchaseStatus::Purchaseable,
@@ -457,13 +472,13 @@ pub fn Connection(
                         y1=-from.y * 10.0
                         x2=to.x * 10.0
                         y2=-to.y * 10.0
-                        filter=move || {
+                        class=move || {
                             if amount_connections.get() == 2 {
                                 match (from_status, to_status) {
                                     (MetaStatus::Ascended, MetaStatus::Ascended) => {
-                                        "drop-shadow(0 0 2px cyan)"
+                                        "xl:drop-shadow-[0_0_2px_cyan]"
                                     }
-                                    _ => "drop-shadow(0 0 2px gold)",
+                                    _ => "xl:drop-shadow-[0_0_2px_gold]",
                                 }
                             } else {
                                 ""
@@ -490,26 +505,35 @@ fn NodeTooltip(
 ) -> impl IntoView {
     let effects_text = {
         let node_specs = node_specs.clone();
-        move || {
-            formatted_effects_list(
-                (&node_specs.aggregate_effects(node_level.get())).into(),
-                AffixEffectScope::Global,
-            )
-        }
+        move || formatted_effects_list((&node_specs.aggregate_effects(node_level.get())).into())
     };
 
     let node_specs_locked = node_specs.locked;
     let max_upgrade_level = node_specs.max_upgrade_level;
-    let triggers_text: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
+    // let triggers_text: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
+    let triggers_text: Vec<_> = node_specs
+        .triggers
+        .clone()
+        .into_iter()
+        .map(format_trigger)
+        .collect();
 
     let is_locked = move || node_specs_locked && node_level.get() == 0;
 
+    let starting_node_text = (node_specs.initial_node).then(|| {
+        view! {
+            <ul class="list-none space-y-1">
+                <li class="text-gray-400 text-sm leading-snug">"Root Node"</li>
+            </ul>
+            <hr class="border-t border-gray-700" />
+        }
+    });
     let locked_text = move || {
         is_locked().then(|| {
             view! {
                 <hr class="border-t border-gray-700" />
                 <ul class="list-none space-y-1">
-                    <li class="text-blue-400 text-sm leading-snug text-red-500">"Locked"</li>
+                    <li class="text-red-500 text-sm leading-snug">"Locked"</li>
                 </ul>
             }
         })
@@ -570,7 +594,6 @@ fn NodeTooltip(
                                         </li>
                                         {effects_tooltip::formatted_effects_list(
                                             upgrade_effects.clone(),
-                                            AffixEffectScope::Global,
                                         )}
                                     </ul>
                                 }
@@ -591,6 +614,7 @@ fn NodeTooltip(
         ">
             <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
             <hr class="border-t border-gray-700" />
+            {starting_node_text}
             <ul class="list-none space-y-1">{triggers_text}{effects_text}</ul>
             {locked_text}
             {upgrade_text}

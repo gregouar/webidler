@@ -6,6 +6,7 @@ use std::env;
 
 pub use crate::{
     db::pool::DbPool,
+    email::EmailService,
     game::{data::master_store::MasterStore, sessions::SessionsStore},
 };
 
@@ -13,6 +14,7 @@ pub use crate::{
 pub struct AppState {
     pub app_settings: AppSettings,
     pub db_pool: DbPool,
+    pub email_service: EmailService,
     pub master_store: MasterStore,
     pub sessions_store: SessionsStore,
 }
@@ -23,6 +25,7 @@ pub struct AppSettings {
     pub jwt_decoding_key: DecodingKey,
     pub aes_key: Aes256Gcm,
     pub hash_key: String,
+    pub frontend_url: String,
 }
 
 impl AppSettings {
@@ -43,6 +46,7 @@ impl AppSettings {
             jwt_decoding_key: DecodingKey::from_secret(jwt_secret.as_ref()),
             aes_key: Aes256Gcm::new_from_slice(&aes_key_str).expect("failed to create AES key"),
             hash_key: env::var("HASH_KEY").expect("HASH_KEY must be set"),
+            frontend_url: env::var("FRONTEND_URL").expect("FRONTEND_URL must be set"),
         }
     }
 }
@@ -55,6 +59,11 @@ impl FromRef<AppState> for AppSettings {
 impl FromRef<AppState> for DbPool {
     fn from_ref(app_state: &AppState) -> DbPool {
         app_state.db_pool.clone()
+    }
+}
+impl FromRef<AppState> for EmailService {
+    fn from_ref(app_state: &AppState) -> EmailService {
+        app_state.email_service.clone()
     }
 }
 impl FromRef<AppState> for MasterStore {

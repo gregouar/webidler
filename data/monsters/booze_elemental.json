@@ -3,7 +3,7 @@
   "portrait": "monsters/haunted_mug.webp",
   "max_life": 5,
   "power_factor": 1.0,
-  "max_initiative": 0.5,
+  "initiative": [0.0, 0.5],
   "armor": { "Storm": 50 },
   "skills": [
     {
@@ -16,7 +16,7 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Storm": [2, 4]
+                  "Storm": [0, 7]
                 }
               }
             }

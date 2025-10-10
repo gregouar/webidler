@@ -3,6 +3,7 @@ use anyhow::{anyhow, Context, Result};
 use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
 
 use shared::{
+    constants::{MAX_MARKET_PRIVATE_LISTINGS, MAX_MARKET_PUBLIC_LISTINGS},
     data::market::MarketItem,
     http::{
         client::{
@@ -19,7 +20,6 @@ use shared::{
 use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
-    constants::{MAX_MARKET_PRIVATE_LISTINGS, MAX_MARKET_PUBLIC_LISTINGS},
     db::{self, market::MarketEntry},
     game::{data::items_store::ItemsStore, systems::items_controller},
     rest::utils::{
@@ -54,6 +54,7 @@ pub async fn post_browse_market(
         &db_pool,
         &payload.character_id,
         payload.own_listings,
+        payload.is_deleted,
         payload.filters,
         payload.skip as i64,
         payload.limit.into_inner(),
@@ -98,9 +99,13 @@ pub async fn post_buy_market_item(
         return Err(AppError::UserError("not enough space".into()));
     }
 
-    let item_bought = db::market::buy_item(&mut tx, payload.item_index as i64)
-        .await?
-        .ok_or(AppError::NotFound)?;
+    let item_bought = db::market::buy_item(
+        &mut tx,
+        payload.item_index as i64,
+        Some(payload.character_id),
+    )
+    .await?
+    .ok_or(AppError::NotFound)?;
 
     if let Some(recipient_id) = item_bought.recipient_id {
         if recipient_id != character.character_id
@@ -264,9 +269,13 @@ pub async fn post_edit_market_item(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let item_bought = db::market::buy_item(&mut tx, payload.item_index as i64)
-        .await?
-        .ok_or(AppError::NotFound)?;
+    let item_bought = db::market::buy_item(
+        &mut tx,
+        payload.item_index as i64,
+        Some(character.character_id),
+    )
+    .await?
+    .ok_or(AppError::NotFound)?;
 
     if item_bought.character_id != character.character_id {
         return Err(AppError::Forbidden);
@@ -310,5 +319,13 @@ fn into_market_item(items_store: &ItemsStore, market_entry: MarketEntry) -> Opti
         )?,
 
         created_at: market_entry.created_at.into(),
+
+        deleted_at: market_entry.deleted_at.map(Into::into),
+        deleted_by: market_entry.deleted_by_id.map(|deleted_by_id| {
+            (
+                deleted_by_id,
+                market_entry.deleted_by_name.unwrap_or_default(),
+            )
+        }),
     })
 }

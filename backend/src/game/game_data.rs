@@ -9,7 +9,7 @@ use super::systems::player_controller::PlayerController;
 use super::{data::area::AreaBlueprint, utils::LazySyncer};
 
 use serde::{Deserialize, Serialize};
-use shared::data::area::AreaLevel;
+use shared::data::area::{AreaLevel, AreaThreat};
 use shared::data::game_stats::GameStats;
 use shared::data::passive::{PassivesTreeSpecs, PassivesTreeState};
 use shared::data::{
@@ -24,6 +24,7 @@ pub struct GameInstanceData {
     pub area_id: String,
     pub area_blueprint: AreaBlueprint,
     pub area_state: LazySyncer<AreaState>,
+    pub area_threat: AreaThreat,
 
     pub passives_tree_id: String,
     pub passives_tree_specs: PassivesTreeSpecs,
@@ -62,6 +63,8 @@ pub struct SavedGameData {
     pub player_inventory: PlayerInventory,
     pub queued_loot: Vec<QueuedLoot>,
     pub game_stats: GameStats,
+    pub last_champion_spawn: AreaLevel,
+    pub auto_progress: bool,
 }
 
 impl GameInstanceData {
@@ -69,7 +72,6 @@ impl GameInstanceData {
     pub fn new(
         area_id: String,
         area_blueprint: AreaBlueprint,
-        area_level: Option<AreaLevel>,
         max_area_level_completed: AreaLevel,
         passives_tree_id: String,
         passives_tree_specs: PassivesTreeSpecs,
@@ -77,19 +79,15 @@ impl GameInstanceData {
         player_resources: PlayerResources,
         player_specs: PlayerSpecs,
         player_inventory: PlayerInventory,
-        queued_loot: Option<Vec<QueuedLoot>>,
-        game_stats: Option<GameStats>,
     ) -> Self {
         let mut area_state = AreaState::init(&area_blueprint.specs);
-        if let Some(area_level) = area_level {
-            area_state.area_level = area_level;
-        }
         area_state.max_area_level_completed = max_area_level_completed;
 
         let mut game_data = Self {
             area_id,
             area_state: LazySyncer::new(area_state),
             area_blueprint,
+            area_threat: AreaThreat::default(),
 
             passives_tree_id,
             passives_tree_specs,
@@ -108,9 +106,9 @@ impl GameInstanceData {
             monster_wave_delay: Instant::now(),
 
             wave_completed: false,
-            queued_loot: LazySyncer::new(queued_loot.unwrap_or_default()),
+            queued_loot: LazySyncer::new(Default::default()),
 
-            game_stats: game_stats.unwrap_or_default(),
+            game_stats: Default::default(),
         };
 
         player_updater::update_player_specs(
@@ -119,6 +117,7 @@ impl GameInstanceData {
             game_data.player_inventory.read(),
             &game_data.passives_tree_specs,
             game_data.passives_tree_state.read(),
+            &game_data.area_threat,
         );
 
         game_data.player_state = PlayerState::init(game_data.player_specs.read());
@@ -130,15 +129,12 @@ impl GameInstanceData {
     pub fn init_from_store(
         master_store: &master_store::MasterStore,
         area_id: &str,
-        area_level: Option<AreaLevel>,
         max_area_level_completed: AreaLevel,
         passives_tree_id: &str,
         passives_tree_state: PassivesTreeState,
         player_resources: PlayerResources,
         player_specs: PlayerSpecs,
         player_inventory: PlayerInventory,
-        queued_loot: Option<Vec<QueuedLoot>>,
-        game_stats: Option<GameStats>,
     ) -> Result<Self> {
         let area_blueprint = master_store
             .area_blueprints_store
@@ -155,7 +151,6 @@ impl GameInstanceData {
         Ok(Self::new(
             area_id.to_string(),
             area_blueprint,
-            area_level,
             max_area_level_completed,
             passives_tree_id.to_string(),
             passives_tree_specs,
@@ -163,8 +158,6 @@ impl GameInstanceData {
             player_resources,
             player_specs,
             player_inventory,
-            queued_loot,
-            game_stats,
         ))
     }
 
@@ -180,6 +173,8 @@ impl GameInstanceData {
             player_inventory: self.player_inventory.unwrap(),
             queued_loot: self.queued_loot.unwrap(),
             game_stats: self.game_stats,
+            last_champion_spawn: self.area_state.read().last_champion_spawn,
+            auto_progress: self.area_state.read().auto_progress,
         })?)
     }
 
@@ -195,21 +190,28 @@ impl GameInstanceData {
             player_inventory,
             queued_loot,
             game_stats,
+            last_champion_spawn,
+            auto_progress,
         } = rmp_serde::from_slice::<SavedGameData>(bytes)?;
 
-        Self::init_from_store(
+        let mut s = Self::init_from_store(
             master_store,
             &area_id,
-            Some(area_level),
             max_area_level_completed,
             &passives_tree_id,
             passives_tree_state,
             player_resources,
             player_specs,
             player_inventory,
-            Some(queued_loot),
-            Some(game_stats),
-        )
+        )?;
+
+        s.area_state.mutate().area_level = area_level;
+        s.area_state.mutate().last_champion_spawn = last_champion_spawn;
+        s.area_state.mutate().auto_progress = auto_progress;
+        s.queued_loot.mutate().extend(queued_loot);
+        s.game_stats = game_stats;
+
+        Ok(s)
     }
 
     pub fn reset_syncers(&mut self) {

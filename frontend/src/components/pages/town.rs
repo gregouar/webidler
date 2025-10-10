@@ -11,11 +11,12 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::{BackendClient, BackendError},
+    shared::player_count::PlayerCount,
     town::{
-        header_menu::HeaderMenu,
-        panels::{ascend::AscendPanel, market::MarketPanel},
-        town_scene::TownScene,
         TownContext,
+        header_menu::HeaderMenu,
+        panels::{ascend::AscendPanel, forge::ForgePanel, market::MarketPanel},
+        town_scene::TownScene,
     },
     ui::tooltip::DynamicTooltip,
 };
@@ -77,6 +78,7 @@ pub fn TownPage() -> impl IntoView {
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <DynamicTooltip />
+            <PlayerCount />
 
             <Transition fallback=move || {
                 view! { <p class="text-gray-400">"Loading..."</p> }
@@ -90,7 +92,7 @@ pub fn TownPage() -> impl IntoView {
                             <TownScene />
                             <MarketPanel open=town_context.open_market />
                             <AscendPanel open=town_context.open_ascend />
-                        // <ForgePanel open=town_context.open_forge />
+                            <ForgePanel open=town_context.open_forge />
                         </div>
                     }
                 })}

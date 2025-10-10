@@ -1,15 +1,20 @@
 use codee::string::JsonSerdeCodec;
-use leptos::{html::*, prelude::*, task::spawn_local, web_sys};
+use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::{components::Redirect, hooks::use_navigate};
 use leptos_use::storage;
 
-use shared::http::client::SignInRequest;
+use shared::http::client::{ForgotPasswordRequest, SignInRequest};
 
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
     captcha::*,
-    ui::{buttons::MenuButton, input::Input, toast::*},
+    shared::player_count::PlayerCount,
+    ui::{
+        buttons::MenuButton,
+        input::{Input, ValidatedInput},
+        toast::*,
+    },
 };
 
 #[component]
@@ -24,17 +29,6 @@ pub fn MainMenuPage() -> impl IntoView {
 
 #[component]
 fn MainMenu() -> impl IntoView {
-    let players_count = LocalResource::new({
-        let backend = expect_context::<BackendClient>();
-        move || async move {
-            backend
-                .get_players_count()
-                .await
-                .map(|r| r.value)
-                .unwrap_or_default()
-        }
-    });
-
     let (get_username_storage, set_username_storage, _) =
         storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
 
@@ -49,27 +43,6 @@ fn MainMenu() -> impl IntoView {
             || captcha_token.read().is_none()
             || connecting.get()
     });
-
-    let go_fullscreen = move || {
-        let window = web_sys::window().unwrap();
-        let navigator = window.navigator();
-
-        if navigator.user_agent().unwrap_or_default().contains("Mobi") {
-            let document = window.document().unwrap();
-            if let Some(elem) = document.document_element() {
-                let _ = elem.request_fullscreen();
-            }
-        }
-
-        // if let Some(win) = web_sys::window() {
-        //     if let Some(screen) = win.screen() {
-        //         // screen is a getter returning Option<Screen>
-        //         if let Some(orientation) = screen.orientation() {
-        //             let _ = orientation.lock("landscape"); // returns a Promise
-        //         }
-        //     }
-        // }
-    };
 
     let signin = {
         let toaster = expect_context::<Toasts>();
@@ -94,7 +67,6 @@ fn MainMenu() -> impl IntoView {
                         .await
                     {
                         Ok(response) => {
-                            go_fullscreen();
                             auth_context.sign_in(response.jwt);
                             set_username_storage.set(username.get_untracked());
                             navigate("user-dashboard", Default::default());
@@ -128,12 +100,11 @@ fn MainMenu() -> impl IntoView {
     };
     let password_ref = NodeRef::<leptos::html::Input>::new();
 
+    let show_forgot_password_modal = RwSignal::new(false);
+
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
-            <div class="fixed bottom-2 right-2 bg-black/70 text-amber-300 px-3 py-1 rounded-lg text-sm shadow-lg font-semibold backdrop-blur-sm border border-gray-700 z-50">
-                "Players online: "
-                {move || players_count.get().map(|x| x.take()).unwrap_or_default()}
-            </div>
+            <PlayerCount />
             <div>
                 <h1 class="text-shadow-lg mb-4 text-amber-200 text-4xl  md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
                     "Grind to Rust!"
@@ -173,6 +144,14 @@ fn MainMenu() -> impl IntoView {
                             }
                         />
                     </div>
+                    <div class="text-right -mt-4 mb-2">
+                        <button
+                            class="text-amber-300 text-sm underline hover:text-amber-200"
+                            on:click=move |_| show_forgot_password_modal.set(true)
+                        >
+                            "I forgot my password"
+                        </button>
+                    </div>
                     <Captcha token=captcha_token />
                     // </form>
 
@@ -181,6 +160,8 @@ fn MainMenu() -> impl IntoView {
                     </MenuButton>
                     <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>
                     <MenuButton on:click=navigate_to_leaderboard>"Leaderboard"</MenuButton>
+
+                    <ForgotPasswordModal open=show_forgot_password_modal />
                 </div>
             </div>
 
@@ -211,5 +192,113 @@ fn MainMenu() -> impl IntoView {
             </div>
 
         </main>
+    }
+}
+
+#[component]
+pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
+    let backend = expect_context::<BackendClient>();
+    let toaster = expect_context::<Toasts>();
+
+    let email = RwSignal::new(None);
+    let captcha_token = RwSignal::new(None);
+
+    let processing = RwSignal::new(false);
+    let success = RwSignal::new(false);
+
+    let node_ref = NodeRef::new();
+    let _ = leptos_use::on_click_outside(node_ref, move |_| open.set(false));
+
+    let on_submit = {
+        move |_| {
+            if processing.get() {
+                return;
+            }
+
+            processing.set(true);
+            spawn_local({
+                async move {
+                    match backend
+                        .post_forgot_password(&ForgotPasswordRequest {
+                            captcha_token: captcha_token.get_untracked().unwrap_or_default(),
+                            email: email.get_untracked().unwrap(),
+                        })
+                        .await
+                    {
+                        Ok(_) => {
+                            success.set(true);
+                            show_toast(
+                                toaster,
+                                "Password reset instructions sent!",
+                                ToastVariant::Success,
+                            );
+                        }
+                        Err(e) => {
+                            show_toast(
+                                toaster,
+                                format!("Incorrect email: {e}"),
+                                ToastVariant::Error,
+                            );
+                        }
+                    }
+                    processing.set(false);
+                }
+            });
+        }
+    };
+
+    let disable_submit = Signal::derive(move || {
+        email.read().is_none() || captcha_token.read().is_none() || processing.get()
+    });
+
+    let on_close = move |_| {
+        success.set(false);
+        open.set(false);
+    };
+
+    view! {
+        <Show when=move || open.get()>
+            <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+                <div
+                    node_ref=node_ref
+                    class="bg-zinc-900 ring-1 ring-zinc-700 rounded-lg p-6 w-full max-w-md shadow-xl text-gray-200 space-y-4"
+                >
+                    <h2 class="text-xl font-bold text-amber-300">"Forgot Password"</h2>
+
+                    <Show when=move || !success.get()>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            "Enter the email associated with your account. We'll send you a link to reset your password."
+                        </p>
+
+                        <ValidatedInput
+                            label="Email"
+                            id="email"
+                            input_type="text"
+                            placeholder="Enter your email for password recovery"
+                            bind=email
+                        />
+                        <Captcha token=captcha_token />
+
+                        <div class="flex justify-between gap-2 pt-2">
+                            <MenuButton on:click=on_close>"Cancel"</MenuButton>
+                            <MenuButton on:click=on_submit disabled=disable_submit>
+                                {move || {
+                                    if processing.get() { "Sending..." } else { "Send Reset Link" }
+                                }}
+                            </MenuButton>
+                        </div>
+                    </Show>
+
+                    <Show when=move || success.get()>
+                        <div class="text-center space-y-3">
+                            <p class="text-gray-400 text-sm">
+                                "Check your email and follow the reset link to set a new password. Please check your spams, I don't have money to pay for a proper mail service."
+                            </p>
+                            <MenuButton on:click=on_close>"Close"</MenuButton>
+                        </div>
+                    </Show>
+                </div>
+            </div>
+        </Show>
     }
 }

@@ -13,13 +13,12 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Flat",
-        "min": 1,
-        "max": 3
+        "value": [1, 2]
       }
     ]
   },
   {
-    "name": "of Block",
+    "name": "of Interception",
     "family": "add_block",
     "tags": ["Physical", "Armor"],
     "affix_type": "Suffix",
@@ -32,8 +31,25 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Flat",
-        "min": 4,
-        "max": 6
+        "value": [3, 4]
+      }
+    ]
+  },
+  {
+    "name": "of Block",
+    "family": "add_block",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Shield"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": "Block",
+        "modifier": "Flat",
+        "value": [5, 6]
       }
     ]
   },
@@ -52,13 +68,12 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "min": 0.1,
-        "max": 0.19
+        "value": [10, 19]
       }
     ]
   },
   {
-    "name": "of Coating",
+    "name": "of Grease",
     "family": "inc_block",
     "tags": ["Physical", "Armor"],
     "affix_type": "Suffix",
@@ -71,8 +86,25 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.29
+        "value": [20, 29]
+      }
+    ]
+  },
+  {
+    "name": "of Coat",
+    "family": "inc_block",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Shield"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": "Block",
+        "modifier": "Multiplier",
+        "value": [30, 39]
       }
     ]
   }

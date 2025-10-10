@@ -1,0 +1,31 @@
+{
+  "name": "Blazefang, the Fire Hound",
+  "portrait": "monsters/hound_fire.webp",
+  "rarity": "Boss",
+  "max_life": 75,
+  "size": "Large",
+  "power_factor": 20,
+  "initiative": [1, 2],
+  "armor": { "Physical": 50, "Fire": 100 },
+  "skills": [
+    {
+      "name": "Blazing Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [2, 4],
+                  "Fire": [4, 6]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -2,79 +2,11 @@
   "name": " Amelia, the Spider Witch",
   "portrait": "monsters/witch_1.webp",
   "rarity": "Boss",
-  "max_life": 500,
+  "max_life": 1000,
   "size": "Gargantuan",
   "power_factor": 200,
-  "max_initiative": 2,
-  "armor": { "Physical": 50, "Fire": 50, "Poison": 50, "Storm": 50 },
+  "initiative": 2,
+  "armor": { "Physical": 100, "Fire": 100, "Poison": 100, "Storm": 100 },
   "skills": [
-    {
-      "name": "Corkscrew Crush",
-      "icon": "skills/claw.svg",
-      "cooldown": 3.0,
-      "targets": [
-        {
-          "effects": [
-            {
-              "FlatDamage": {
-                "damage": {
-                  "Physical": [2, 4]
-                }
-              }
-            },
-            {
-              "ApplyStatus": {
-                "min_duration": 2,
-                "max_duration": 2,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": { "damage_type": "Physical" }
-                    },
-                    "min_value": 1,
-                    "max_value": 2
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Boiling Vintage Spray",
-      "icon": "skills/fireball.svg",
-      "skill_type": "Spell",
-      "cooldown": 5.0,
-      "targets": [
-        {
-          "range": "Distance",
-          "effects": [
-            {
-              "ApplyStatus": {
-                "min_duration": 2,
-                "max_duration": 2,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": { "damage_type": "Fire" }
-                    },
-                    "min_value": 3,
-                    "max_value": 6
-                  }
-                ]
-              }
-            },
-            {
-              "FlatDamage": {
-                "damage": {
-                  "Storm": [0, 10]
-                }
-              }
-            }
-          ]
-        }
-      ]
-    }
   ]
 }

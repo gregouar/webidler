@@ -1,0 +1,43 @@
+{
+  "name": "Thorn Sprite",
+  "portrait": "monsters/thorn_sprite_2.webp",
+  "max_life": 5,
+  "power_factor": 1.5,
+  "initiative": [0.0, 0.5],
+  "armor": { "Poison": 50 },
+  "skills": [
+    {
+      "name": "Spiked Ball",
+      "icon": "skills/magic_missile.svg",
+      "cooldown": 2.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [1, 3]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": 3,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Physical" }
+                    },
+                    "value": 3
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

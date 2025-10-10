@@ -1,13 +1,13 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
+use strum::IntoEnumIterator;
 
 pub use super::character::{CharacterSpecs, CharacterState};
 use super::{
     item::{ItemSlot, ItemSpecs},
     skill::{SkillSpecs, SkillState},
     stat_effect::EffectsMap,
-    trigger::TriggeredEffect,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -26,17 +26,15 @@ pub struct PlayerSpecs {
     // Should move to a DerivedPlayerSpecs
     pub movement_cooldown: f32,
     pub gold_find: f64,
-    pub effects: EffectsMap,
+    pub threat_gain: f32,
 
-    pub triggers: Vec<TriggeredEffect>,
+    pub effects: EffectsMap,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerState {
     pub character_state: CharacterState,
     pub skills_states: Vec<SkillState>,
-
-    pub just_leveled_up: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -63,14 +61,22 @@ pub struct PlayerInventory {
 }
 
 impl PlayerInventory {
+    // Get equipped items, preserving slot order
     pub fn equipped_items(&self) -> impl Iterator<Item = (ItemSlot, &Box<ItemSpecs>)> + Clone {
-        self.equipped
-            .iter()
-            .filter_map(|(slot, equipped_slot)| match equipped_slot {
-                EquippedSlot::MainSlot(item_specs) => Some((*slot, item_specs)),
-                EquippedSlot::ExtraSlot(_) => None,
-            })
+        ItemSlot::iter().filter_map(|slot| match self.equipped.get(&slot) {
+            Some(EquippedSlot::MainSlot(item_specs)) => Some((slot, item_specs)),
+            _ => None,
+        })
     }
+    // pub fn equipped_items(&self) -> impl Iterator<Item = (ItemSlot, &Box<ItemSpecs>)> + Clone {
+    //     self.equipped
+    //         .iter()
+    //         .filter_map(|(slot, equipped_slot)| match equipped_slot {
+    //             EquippedSlot::MainSlot(item_specs) => Some((*slot, item_specs)),
+    //             EquippedSlot::ExtraSlot(_) => None,
+    //         })
+    // }
+
     pub fn equipped_items_mut(&mut self) -> impl Iterator<Item = (ItemSlot, &mut Box<ItemSpecs>)> {
         self.equipped
             .iter_mut()

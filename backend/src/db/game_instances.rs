@@ -5,7 +5,7 @@ use sqlx::FromRow;
 use shared::data::user::UserCharacterId;
 
 use crate::{
-    constants::CHARACTER_DATA_VERSION,
+    constants::DATA_VERSION,
     db::utc_datetime::UtcDateTime,
     game::{data::master_store, game_data::GameInstanceData},
 };
@@ -59,7 +59,7 @@ async fn upsert_saved_game_instance<'c>(
         character_id,
         area_id,
         area_level,
-        CHARACTER_DATA_VERSION,
+        DATA_VERSION,
         game_data
     )
     .execute(executor)

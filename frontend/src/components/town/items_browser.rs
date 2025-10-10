@@ -3,11 +3,22 @@ use leptos::{html::*, prelude::*};
 use leptos_use::{use_infinite_scroll_with_options, UseInfiniteScrollOptions};
 use std::sync::Arc;
 
-use shared::data::{item::ItemSpecs, user::UserCharacterId};
+use shared::data::{
+    item::{ItemSlot, ItemSpecs},
+    player::EquippedSlot,
+    user::UserCharacterId,
+};
 
 use crate::{
     assets::img_asset,
-    components::game::{item_card::ItemCard, tooltips::item_tooltip::ItemTooltipContent},
+    components::{
+        shared::{
+            item_card::ItemCard,
+            tooltips::{item_tooltip::ItemTooltipContent, ItemTooltip},
+        },
+        town::TownContext,
+        ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
+    },
 };
 
 #[derive(Clone)]
@@ -19,10 +30,7 @@ pub enum SelectedItem {
 
 impl SelectedItem {
     pub fn is_empty(&self) -> bool {
-        match self {
-            SelectedItem::InMarket(_) => false,
-            _ => true,
-        }
+        !matches!(self, SelectedItem::InMarket(_))
     }
 }
 
@@ -36,6 +44,8 @@ pub struct SelectedMarketItem {
     pub recipient: Option<(UserCharacterId, String)>,
     pub rejected: bool,
     pub created_at: DateTime<Utc>,
+    pub deleted_at: Option<DateTime<Utc>>,
+    pub deleted_by: Option<(UserCharacterId, String)>,
 }
 
 #[component]
@@ -68,10 +78,7 @@ pub fn ItemsBrowser(
                     item_specs=item.item_specs.clone()
                     on:click=move |_| selected_item.set(SelectedItem::InMarket(item.clone()))
                     price=item.price
-                    highlight=move || selected_item.with(|selected_item| match selected_item {
-                        SelectedItem::InMarket(selected_market_item) if selected_market_item.index == item.index => true,
-                        _ => false,
-                    })
+                    highlight=move || selected_item.with(|selected_item| matches!(selected_item, SelectedItem::InMarket(selected_market_item) if selected_market_item.index == item.index))
                     special_offer=item.recipient.is_some()
                     rejected=item.rejected
                 />
@@ -120,15 +127,17 @@ pub fn ItemRow(
             </div>
 
             <div class="flex flex-col w-full">
-                <ItemTooltipContent item_specs hide_description=true />
+                <ItemTooltipContent item_specs=item_specs.clone() hide_description=true />
             </div>
+
+            <ItemCompare item_slot=item_specs.clone().base.slot />
 
             {(price > 0.0)
                 .then(|| {
                     view! {
                         <div class="absolute flex bottom-2 right-2 gap-1 items-center">
                             <span class="text-gray-400">"Price:"</span>
-                            <span class="text-violet-300 font-semibold">
+                            <span class="text-fuchsia-300 font-semibold">
                                 {format!("{:.0}", price)}
                             </span>
                             <img
@@ -145,7 +154,10 @@ pub fn ItemRow(
 }
 
 #[component]
-pub fn ItemDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+pub fn ItemDetails(
+    selected_item: RwSignal<SelectedItem>,
+    #[prop(default = false)] show_affixes: bool,
+) -> impl IntoView {
     let item_details = move || {
         match selected_item.get() {
             SelectedItem::InMarket(selected_item) => {
@@ -157,10 +169,11 @@ pub fn ItemDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                         />
                     </div>
 
-                    <div class="flex-1 w-full">
+                    <div class="flex-1 w-full max-h-full overflow-y-auto">
                         <ItemTooltipContent
                             item_specs=selected_item.item_specs.clone()
                             class:select-text
+                            show_affixes
                         />
                     </div>
                 }
@@ -183,8 +196,67 @@ pub fn ItemDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     view! {
         <div class="w-full h-full flex items-center justify-center">
-            <div class="flex flex-row gap-6 items-center w-full
+            <div class="flex flex-row gap-6 items-center
+            w-full h-auto aspect-5/2 overflow-y-auto
             bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2">{item_details}</div>
+        </div>
+    }
+}
+
+#[component]
+pub fn ItemCompare(item_slot: ItemSlot) -> impl IntoView {
+    let tooltip_context: DynamicTooltipContext = expect_context();
+    let town_context: TownContext = expect_context();
+
+    let show_tooltip = move || {
+        let item_specs = town_context
+            .inventory
+            .read()
+            .equipped
+            .get(&item_slot)
+            .cloned();
+
+        if let Some(EquippedSlot::MainSlot(item_specs)) = item_specs {
+            let item_specs = Arc::new(*item_specs);
+            tooltip_context.set_content(
+                move || view! { <ItemTooltip item_specs=item_specs.clone() /> }.into_any(),
+                DynamicTooltipPosition::Auto,
+            );
+        } else {
+            tooltip_context.set_content(
+                move || {
+                    view! {
+                        <div class="shadow-md bg-gradient-to-br from-gray-800 via-gray-900 to-black  p-2 xl:p-4 rounded-xl border">
+                            "No item equipped"
+                        </div>
+                    }.into_any()
+                },
+                DynamicTooltipPosition::Auto,
+            );
+        }
+    };
+
+    let hide_tooltip = { move || tooltip_context.hide() };
+
+    view! {
+        <div
+            class="absolute flex top-2 right-2 p-1 rounded-sm items-center bg-zinc-900 hover:bg-zinc-800"
+
+            on:touchstart={
+                let show_tooltip = show_tooltip.clone();
+                move |_| { show_tooltip() }
+            }
+            on:contextmenu=move |ev| {
+                ev.prevent_default();
+            }
+
+            on:mouseenter=move |ev| {
+                ev.prevent_default();
+                show_tooltip()
+            }
+            on:mouseleave=move |_| hide_tooltip()
+        >
+            <span class="text-gray-400">"Compare"</span>
         </div>
     }
 }

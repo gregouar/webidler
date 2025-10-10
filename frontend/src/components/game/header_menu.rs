@@ -4,17 +4,14 @@ use leptos::{html::*, prelude::*};
 
 use shared::messages::client::ClientMessage;
 
-use crate::{
-    assets::img_asset,
-    components::{
-        ui::{
-            buttons::{MenuButton, MenuButtonRed},
-            confirm::ConfirmContext,
-            number::Number,
-            tooltip::{StaticTooltip, StaticTooltipPosition},
-        },
-        websocket::WebsocketContext,
+use crate::components::{
+    shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
+    ui::{
+        buttons::{MenuButton, MenuButtonRed},
+        confirm::ConfirmContext,
+        fullscreen::FullscreenButton,
     },
+    websocket::WebsocketContext,
 };
 
 use super::GameContext;
@@ -62,29 +59,12 @@ pub fn HeaderMenu() -> impl IntoView {
     view! {
         <div class="relative z-50 flex justify-between items-center p-1 xl:p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
-                <ResourceCounter
-                    class:text-amber-200
-                    icon="ui/gold.webp"
-                    name="Gold"
-                    description="To buy level up for skills. Reset at every grind."
-                    value=gold
-                />
-                <ResourceCounter
-                    class:text-violet-300
-                    icon="ui/gems.webp"
-                    name="Gems"
-                    description="To buy items in the market between grinds."
-                    value=gems
-                />
-                <ResourceCounter
-                    class:text-cyan-300
-                    icon="ui/power_shard.webp"
-                    name="Power Shards"
-                    description="To permanently increase power of passive skills."
-                    value=shards
-                />
+                <GoldCounter value=gold />
+                <GemsCounter value=gems />
+                <ShardsCounter value=shards />
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
+                <FullscreenButton />
                 <MenuButton on:click=move |_| {
                     game_context.open_inventory.set(!game_context.open_inventory.get());
                     game_context.open_statistics.set(false);
@@ -109,35 +89,6 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButtonRed on:click=try_abandon_quest>"Stop"</MenuButtonRed>
                 <MenuButton on:click=quit>"Quit"</MenuButton>
             </div>
-        </div>
-    }
-}
-
-#[component]
-pub fn ResourceCounter(
-    icon: &'static str,
-    name: &'static str,
-    description: &'static str,
-    value: Signal<f64>,
-) -> impl IntoView {
-    let tooltip = move || {
-        view! {
-            <div class="flex flex-col space-y-1">
-                <div class="font-semibold text-white">{name}</div>
-                <div class="text-sm text-zinc-300 max-w-xs">{description}</div>
-            </div>
-        }
-    };
-    view! {
-        <div class="flex-1 text-shadow-md shadow-gray-950
-        text-sm xl:text-xl 
-        flex justify-center items-center space-x-1">
-            <div class="font-mono tabular-nums w-[8ch] text-right ">
-                <Number value=value />
-            </div>
-            <StaticTooltip tooltip=tooltip position=StaticTooltipPosition::Bottom>
-                <img draggable="false" src=img_asset(icon) alt=name class="h-[2em] aspect-square" />
-            </StaticTooltip>
         </div>
     }
 }

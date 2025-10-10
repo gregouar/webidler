@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::data::{item::SkillShape, skill::TargetType, stat_effect::StatStatusType};
+
 use super::{
     skill::{DamageType, SkillEffect, SkillRange, SkillType},
     stat_effect::{Modifier, StatType},
@@ -11,6 +13,8 @@ pub enum EventTrigger {
     OnTakeHit(HitTrigger),
     OnKill(KillTrigger),
     OnWaveCompleted,
+    OnThreatIncreased,
+    OnDeath(TargetType),
 }
 
 // TODO: replace by simple tag system?
@@ -64,6 +68,9 @@ pub struct TriggeredEffect {
     #[serde(default)]
     pub skill_type: SkillType,
     pub effects: Vec<SkillEffect>,
+
+    #[serde(default)]
+    pub skill_shape: SkillShape,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -77,7 +84,10 @@ pub struct TriggerEffectModifier {
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
+    HitCrit,
     AreaLevel,
+    StatusValue(Option<StatStatusType>),
+    StatusDuration(Option<StatStatusType>),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
@@ -85,5 +95,6 @@ pub enum TriggerTarget {
     #[default]
     SameTarget,
     Source,
+    Me,
     // TODO: others?
 }

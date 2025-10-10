@@ -1,17 +1,20 @@
 use std::collections::HashSet;
 
-use shared::data::{
-    area::{AreaSpecs, AreaState},
-    character::{CharacterSpecs, CharacterState},
-    character_status::StatusMap,
-    monster::{MonsterSpecs, MonsterState},
-    passive::{PassivesTreeAscension, PassivesTreeState},
-    player::{PlayerSpecs, PlayerState},
-    skill::{BaseSkillSpecs, SkillSpecs, SkillState},
-    stat_effect::EffectsMap,
+use shared::{
+    constants::SKILL_BASE_COST,
+    data::{
+        area::{AreaSpecs, AreaState},
+        character::{CharacterSpecs, CharacterState},
+        character_status::StatusMap,
+        monster::{MonsterSpecs, MonsterState},
+        passive::{PassivesTreeAscension, PassivesTreeState},
+        player::{PlayerSpecs, PlayerState},
+        skill::{BaseSkillSpecs, SkillSpecs, SkillState},
+        stat_effect::EffectsMap,
+    },
 };
 
-use crate::{constants::SKILL_BASE_COST, game::utils::rng};
+use crate::game::utils::rng::Rollable;
 pub trait DataInit<Specs> {
     fn init(specs: Specs) -> Self;
 }
@@ -38,7 +41,7 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             mana: specs.max_mana,
 
             statuses: StatusMap::default(),
-            buff_status_change: false,
+            dirty_specs: true,
 
             is_alive: true,
             just_hurt: false,
@@ -60,9 +63,9 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             level: 1,
             experience_needed: 20.0,
             movement_cooldown: 3.0,
-            gold_find: 1.0,
+            gold_find: 100.0,
+            threat_gain: 100.0,
             effects: EffectsMap::default(),
-            triggers: Vec::new(),
         }
     }
 }
@@ -72,7 +75,6 @@ impl DataInit<&PlayerSpecs> for PlayerState {
         PlayerState {
             character_state: CharacterState::init(&specs.character_specs),
             skills_states: specs.skills_specs.iter().map(SkillState::init).collect(),
-            just_leveled_up: false,
         }
     }
 }
@@ -82,7 +84,7 @@ impl DataInit<&MonsterSpecs> for MonsterState {
         MonsterState {
             character_state: CharacterState::init(&specs.character_specs),
             skill_states: specs.skill_specs.iter().map(SkillState::init).collect(),
-            initiative: rng::random_range(0.0..=specs.max_initiative).unwrap_or_default(),
+            initiative: specs.initiative.roll(),
             gold_reward: 0.0,
             gems_reward: 0.0,
         }

@@ -136,12 +136,14 @@ fn old_item_specs_to_item_specs(
             name: old_item_specs.name,
             rarity: old_item_specs.rarity,
             level: old_item_specs.level,
+            quality: 0.0,
             affixes: old_item_specs.affixes,
         },
         base: old_item_specs.base,
         weapon_specs: old_item_specs.weapon_specs,
         armor_specs: old_item_specs.armor_specs,
         old_game: old_item_specs.old_game,
+        required_level: 0,
     }
 }
 

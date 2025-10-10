@@ -18,6 +18,67 @@
     },
     "min_area_level": 40
   },
+  "leather_cap_unique": {
+    "name": "Skullcap of the Provoker",
+    "description": "In the wild, to show your kills is to invite a fight, and to prove you're ready for it.",
+    "icon": "items/skullcap.webp",
+    "slot": "Helmet",
+    "categories": ["Armor", "Helmet"],
+    "rarity": "Unique",
+    "armor_specs": {
+      "armor": 30
+    },
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Multiplier",
+        "value": [40, 60]
+      },
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [50, 50],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [40, 60]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Poison"
+        },
+        "modifier": "Flat",
+        "value": [40, 60]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Storm"
+        },
+        "modifier": "Flat",
+        "value": [40, 60]
+      }
+    ],
+    "min_area_level": 50
+  },
+  "iron_cap": {
+    "name": "Iron Cap",
+    "icon": "items/iron_cap.webp",
+    "slot": "Helmet",
+    "categories": ["Armor", "Helmet"],
+    "armor_specs": {
+      "armor": 45
+    },
+    "min_area_level": 90
+  },
   "great_helm": {
     "name": "Great Helm",
     "icon": "items/great_helm.webp",
@@ -26,6 +87,6 @@
     "armor_specs": {
       "armor": 60
     },
-    "min_area_level": 120
+    "min_area_level": 140
   }
 }

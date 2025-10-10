@@ -18,6 +18,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use backend::{
     app_state::{AppSettings, AppState},
     db::{self, pool},
+    email::EmailService,
     game::{
         data::master_store::MasterStore, sessions::SessionsStore, systems::sessions_controller,
     },
@@ -82,6 +83,7 @@ async fn main() {
     let app_state = AppState {
         app_settings: AppSettings::from_env(),
         db_pool: db_pool.clone(),
+        email_service: EmailService::from_env(),
         master_store,
         sessions_store: sessions_store.clone(),
     };
@@ -121,6 +123,7 @@ async fn main() {
 async fn migrate_data(db_pool: &db::DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
     db::migrations::migration_0_1_0_to_0_1_1::migrate(db_pool, master_store).await?;
     db::migrations::migration_0_1_1_to_0_1_2::migrate(db_pool).await?;
+    db::migrations::migration_0_1_2_to_0_1_3::migrate(db_pool).await?;
     Ok(())
 }
 

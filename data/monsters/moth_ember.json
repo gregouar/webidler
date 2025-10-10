@@ -1,0 +1,29 @@
+{
+  "name": "Ember Moth",
+  "portrait": "monsters/moth_ember.webp",
+  "max_life": 5,
+  "power_factor": 2,
+  "initiative": [0.0, 0.5],
+  "armor": { "Fire": 50 },
+  "skills": [
+    {
+      "name": "Fire Touch",
+      "icon": "skills/bite.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [1, 3],
+                  "Fire": [2, 4]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

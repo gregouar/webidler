@@ -1,0 +1,47 @@
+{
+  "name": "Thunder Stag",
+  "portrait": "monsters/thunder_stag.webp",
+  "max_life": 12,
+  "power_factor": 3.0,
+  "initiative": [1.0, 2.0],
+  "armor": { "Storm": 50, "Physical": 50 },
+  "skills": [
+    {
+      "name": "Headbutt",
+      "icon": "skills/attack.svg",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [2, 5],
+                  "Storm": [0, 5]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Call of Thunder",
+      "icon": "skills/chain_lightning.svg",
+      "cooldown": 7.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [0, 15]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

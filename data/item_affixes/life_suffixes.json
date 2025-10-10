@@ -18,13 +18,12 @@
         "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "min": 1,
-        "max": 2
+        "value": [1,2]
       }
     ]
   },
   {
-    "name": "of Restoration",
+    "name": "of Vigor",
     "family": "add_life_regen",
     "tags": [
       "Life"
@@ -42,8 +41,30 @@
         "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "min": 3,
-        "max": 4
+        "value": [3, 4]
+      }
+    ]
+  },
+  {
+    "name": "of Restoration",
+    "family": "add_life_regen",
+    "tags": [
+      "Life"
+    ],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": [
+      "Armor",
+      "Shield"
+    ],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [5, 6]
       }
     ]
   }

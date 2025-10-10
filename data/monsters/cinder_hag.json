@@ -1,0 +1,63 @@
+{
+  "name": "Cinder Hag",
+  "portrait": "monsters/cinder_hag.webp",
+  "max_life": 7,
+  "power_factor": 2.0,
+  "initiative": [0.0, 1.0],
+  "armor": { "Fire": 50 },
+  "skills": [
+    {
+      "name": "Blazing Finger",
+      "icon": "skills/fireball.svg",
+      "skill_type": "Spell",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": [2,4],
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Fire" }
+                    },
+                    "value": 3
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Burned Witch Revenge",
+      "icon": "skills/curse_frailty.svg",
+      "skill_type": "Spell",
+      "cooldown": 5.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "Armor": "Fire" },
+                        "debuff": true
+                      }
+                    },
+                    "value": 100
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

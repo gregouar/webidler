@@ -9,7 +9,7 @@ use crate::data::{
     passive::{PassivesTreeAscension, PassivesTreeSpecs},
     player::PlayerInventory,
     skill::SkillSpecs,
-    user::{User, UserCharacter, UserCharacterId, UserGrindArea, UserId},
+    user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -26,16 +26,6 @@ impl fmt::Display for ErrorResponse {
 // Stats
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct PlayersCountResponse {
-    pub value: i64,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct LeaderboardResponse {
-    pub entries: Vec<LeaderboardEntry>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct LeaderboardEntry {
     pub user_id: UserId,
     pub username: String,
@@ -46,6 +36,17 @@ pub struct LeaderboardEntry {
     pub area_level: AreaLevel,
     pub created_at: DateTime<Utc>,
     pub comments: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct PlayersCountResponse {
+    pub value: i64,
+    pub glimpse: Vec<LeaderboardEntry>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct LeaderboardResponse {
+    pub entries: Vec<LeaderboardEntry>,
 }
 
 // Users
@@ -59,9 +60,26 @@ pub struct SignInResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct ForgotPasswordResponse {}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct ResetPasswordResponse {}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GetUserResponse {
     pub user: User,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetUserDetailsResponse {
+    pub user_details: UserDetails,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UpdateAccountResponse {}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct DeleteAccountResponse {}
 
 // Characters
 
@@ -133,3 +151,11 @@ pub struct BuyMarketItemResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RejectMarketItemResponse {}
+
+// Forge
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeAddAffixResponse {
+    pub resource_gems: f64,
+    pub inventory: PlayerInventory,
+}

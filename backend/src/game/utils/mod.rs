@@ -1,4 +1,3 @@
-pub mod increase_factors;
 pub mod json;
 pub mod rng;
 

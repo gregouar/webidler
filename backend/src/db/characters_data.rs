@@ -10,13 +10,13 @@ use shared::data::{
     user::UserCharacterId,
 };
 
-use crate::{constants::CHARACTER_DATA_VERSION, db::pool::DbExecutor};
+use crate::{constants::DATA_VERSION, db::pool::DbExecutor};
 
 use super::utc_datetime::UtcDateTime;
 
 #[derive(Debug, FromRow)]
 #[allow(dead_code)]
-struct CharacterDataEntry {
+pub struct CharacterDataEntry {
     pub character_id: UserCharacterId,
 
     pub data_version: String,
@@ -62,7 +62,7 @@ pub async fn save_character_inventory<'c>(
     )
 }
 
-async fn upsert_character_inventory_data<'c>(
+pub(in crate::db) async fn upsert_character_inventory_data<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     inventory_data: Vec<u8>,
@@ -74,7 +74,7 @@ async fn upsert_character_inventory_data<'c>(
             inventory_data = EXCLUDED.inventory_data, 
             updated_at = CURRENT_TIMESTAMP",
         character_id,
-        CHARACTER_DATA_VERSION,
+        DATA_VERSION,
         inventory_data
     )
     .execute(executor)
@@ -106,7 +106,7 @@ async fn upsert_character_passives_data<'c>(
             updated_at = CURRENT_TIMESTAMP
         WHERE character_id = $1",
         character_id,
-        CHARACTER_DATA_VERSION,
+        DATA_VERSION,
         passives_data
     )
     .execute(executor)

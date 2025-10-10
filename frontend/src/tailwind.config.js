@@ -27,6 +27,9 @@ module.exports = {
     'inset-3',
     'xl:inset-4',
     'opacity-0',
-    'opacity-100'
-  ],
+    'opacity-100',
+    'animate-monster-fade-in',
+    'animate-monster-fade-out',
+    'animate-monster-flee'
+  ]
 };

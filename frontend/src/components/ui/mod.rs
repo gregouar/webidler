@@ -1,6 +1,7 @@
 pub mod buttons;
 pub mod confirm;
 pub mod dropdown;
+pub mod fullscreen;
 pub mod input;
 pub mod menu_panel;
 pub mod number;

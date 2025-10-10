@@ -1,10 +1,15 @@
 use std::collections::HashSet;
 
-use shared::data::{
-    area::AreaLevel,
-    item::{ItemBase, ItemModifiers, ItemRarity, ItemSpecs},
-    item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
-    stat_effect::{Modifier, StatEffect},
+use shared::{
+    constants::{MAX_ITEM_QUALITY, MAX_ITEM_QUALITY_PER_LEVEL},
+    data::{
+        area::AreaLevel,
+        chance::ChanceRange,
+        forge::MAX_AFFIXES,
+        item::{ItemBase, ItemModifiers, ItemRarity, ItemSpecs},
+        item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
+        stat_effect::StatEffect,
+    },
 };
 
 use crate::game::{
@@ -16,7 +21,7 @@ use crate::game::{
         items_store::{ItemAffixesTable, ItemsStore},
         loot_table::{LootTable, LootTableEntry, RarityWeights},
     },
-    utils::rng::RandomWeighted,
+    utils::rng::{RandomWeighted, Rollable},
 };
 
 use super::items_controller;
@@ -73,54 +78,53 @@ pub fn roll_item(
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) -> ItemSpecs {
-    let mut affixes: Vec<ItemAffix> = roll_unique_affixes(&base);
+    let quality = roll_quality(base.min_area_level, level);
 
-    let (prefixes_amount, suffixes_amount) = match rarity {
-        ItemRarity::Magic => roll_affixes_amount(1, 2, 0, 1, 0, 1),
-        ItemRarity::Rare => roll_affixes_amount(3, 4, 1, 2, 1, 2),
-        _ => (0, 0),
+    let mut modifiers = ItemModifiers {
+        base_item_id,
+        name: base.name.clone(),
+        rarity: match rarity {
+            ItemRarity::Unique => ItemRarity::Unique,
+            _ => ItemRarity::Normal,
+        },
+        level,
+        quality,
+        affixes: roll_unique_affixes(&base, quality),
     };
 
-    let mut families_in_use: HashSet<String> = HashSet::new();
-
-    let prefixes: Vec<_> = (0..prefixes_amount)
-        .filter_map(|_| {
-            roll_affix(
-                &base,
-                level,
-                AffixType::Prefix,
-                &mut families_in_use,
-                affixes_table,
-            )
-        })
-        .collect();
-    affixes.extend(prefixes);
-
-    let suffixes: Vec<_> = (0..suffixes_amount)
-        .filter_map(|_| {
-            roll_affix(
-                &base,
-                level,
-                AffixType::Suffix,
-                &mut families_in_use,
-                affixes_table,
-            )
-        })
-        .collect();
-    affixes.extend(suffixes);
-
-    let name = generate_name(&base, rarity, &affixes, adjectives_table, nouns_table);
-    items_controller::create_item_specs(
-        base,
-        ItemModifiers {
-            base_item_id,
-            name,
-            rarity,
-            level,
-            affixes,
+    let affixes_amount = match rarity {
+        ItemRarity::Magic => ChanceRange {
+            min: 1,
+            max: 2,
+            ..Default::default()
         },
-        false,
-    )
+        ItemRarity::Rare => ChanceRange {
+            min: 3,
+            max: 4,
+            ..Default::default()
+        },
+        _ => ChanceRange::default(),
+    }
+    .roll();
+
+    for _ in 0..affixes_amount {
+        add_affix(
+            &base,
+            &mut modifiers,
+            None,
+            affixes_table,
+            adjectives_table,
+            nouns_table,
+        );
+    }
+
+    items_controller::create_item_specs(base, modifiers, false)
+}
+
+fn roll_quality(min_item_level: AreaLevel, level: AreaLevel) -> f32 {
+    (rng::random_range(0..=level.saturating_sub(min_item_level)).unwrap_or_default() as f32
+        * MAX_ITEM_QUALITY_PER_LEVEL)
+        .min(MAX_ITEM_QUALITY)
 }
 
 fn roll_base_item(
@@ -155,45 +159,117 @@ fn roll_base_item(
     })
 }
 
-fn roll_unique_affixes(base_item: &ItemBase) -> Vec<ItemAffix> {
+fn roll_unique_affixes(base_item: &ItemBase, quality: f32) -> Vec<ItemAffix> {
     base_item
         .affixes
         .iter()
-        .map(|e| ItemAffix {
-            name: "Unique".to_string(),
-            family: base_item.name.clone(),
-            tags: HashSet::new(),
-            affix_type: AffixType::Unique,
-            tier: 1,
-            effects: vec![roll_affix_effect(e)],
+        .map(|e: &AffixEffectBlueprint| {
+            let quality_factor = 1.0
+                + if e.ignore_quality {
+                    0.0
+                } else {
+                    quality as f64 * 0.01
+                };
+            let mut effect = roll_affix_effect(e);
+            effect.stat_effect.value *= quality_factor;
+
+            ItemAffix {
+                name: "Unique".to_string(),
+                family: base_item.name.clone(),
+                tags: HashSet::new(),
+                affix_type: AffixType::Unique,
+                tier: 1,
+                item_level: base_item.min_area_level,
+                effects: vec![effect],
+            }
         })
         .collect()
 }
 
-fn roll_affixes_amount(
-    min_amount: usize,
-    max_amount: usize,
-    min_prefixes: usize,
-    max_prefixes: usize,
-    min_suffixes: usize,
-    max_suffixes: usize,
-) -> (usize, usize) {
-    let amount = rng::random_range(min_amount..=max_amount).unwrap_or(min_amount);
-    let prefix_count = rng::random_range(min_prefixes..=max_prefixes).unwrap_or(min_prefixes);
+pub fn add_affix(
+    base: &ItemBase,
+    modifiers: &mut ItemModifiers,
+    affix_type: Option<AffixType>,
+    affixes_table: &ItemAffixesTable,
+    adjectives_table: &ItemAdjectivesTable,
+    nouns_table: &ItemNounsTable,
+) -> bool {
+    if base.rarity == ItemRarity::Unique {
+        return false;
+    }
 
-    let suffix_count = amount
-        .saturating_sub(prefix_count)
-        .min(max_suffixes)
-        .max(min_suffixes);
-    let prefix_count = amount
-        .saturating_sub(suffix_count)
-        .min(min_prefixes)
-        .max(max_prefixes);
+    let prefixes_amount = modifiers.count_affixes(AffixType::Prefix);
+    let suffixes_amount = modifiers.count_affixes(AffixType::Suffix);
 
-    (
-        prefix_count,
-        amount.saturating_sub(prefix_count).min(max_suffixes),
-    )
+    if prefixes_amount + suffixes_amount >= MAX_AFFIXES {
+        return false;
+    }
+
+    let affix_type = match affix_type {
+        Some(AffixType::Prefix) => {
+            if prefixes_amount <= suffixes_amount {
+                AffixType::Prefix
+            } else {
+                return false;
+            }
+        }
+        Some(AffixType::Suffix) => {
+            if suffixes_amount <= prefixes_amount {
+                AffixType::Suffix
+            } else {
+                return false;
+            }
+        }
+        _ => {
+            if prefixes_amount < suffixes_amount {
+                AffixType::Prefix
+            } else if suffixes_amount < prefixes_amount {
+                AffixType::Suffix
+            } else if rng::flip_coin() {
+                AffixType::Prefix
+            } else {
+                AffixType::Suffix
+            }
+        }
+    };
+
+    if let Some(affix) = roll_affix(
+        base,
+        modifiers.level,
+        affix_type,
+        &mut modifiers.get_families(),
+        affixes_table,
+    ) {
+        modifiers.affixes.push(affix);
+    } else {
+        return false;
+    }
+
+    let affixes_amount = prefixes_amount + suffixes_amount + 1;
+    let new_rarity = if affixes_amount <= 2 {
+        ItemRarity::Magic
+    } else if affixes_amount <= 4 {
+        ItemRarity::Rare
+    } else {
+        ItemRarity::Masterwork
+    };
+
+    match modifiers.rarity {
+        ItemRarity::Normal | ItemRarity::Magic => {
+            modifiers.name = generate_name(
+                base,
+                new_rarity,
+                &modifiers.affixes,
+                adjectives_table,
+                nouns_table,
+            );
+        }
+        _ => {}
+    };
+
+    modifiers.rarity = new_rarity;
+
+    true
 }
 
 fn roll_affix(
@@ -224,21 +300,20 @@ fn roll_affix(
             tags: a.tags.clone(),
             affix_type,
             tier: a.tier,
+            item_level: a.item_level,
             effects: a.effects.iter().map(roll_affix_effect).collect(),
         }
     })
 }
 
 fn roll_affix_effect(effect_blueprint: &AffixEffectBlueprint) -> AffixEffect {
-    let value = rng::random_range(effect_blueprint.min..=effect_blueprint.max).unwrap_or_default();
     AffixEffect {
         stat_effect: StatEffect {
-            stat: effect_blueprint.stat,
+            stat: effect_blueprint.stat.clone(),
             modifier: effect_blueprint.modifier,
-            value: match effect_blueprint.modifier {
-                Modifier::Multiplier => (value * 100.0).round() * 0.01,
-                Modifier::Flat => value.round(),
-            },
+            value: effect_blueprint.value.roll().round(),
+            bypass_ignore: false,
+            // ignore_quality: effect_blueprint.ignore_quality,
         },
         scope: effect_blueprint.scope,
     }

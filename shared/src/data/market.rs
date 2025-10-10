@@ -27,6 +27,9 @@ pub struct MarketItem {
     pub item_specs: ItemSpecs,
 
     pub created_at: DateTime<Utc>,
+
+    pub deleted_at: Option<DateTime<Utc>>,
+    pub deleted_by: Option<(UserCharacterId, String)>,
 }
 
 pub const STAT_FILTERS_AMOUNT: usize = 5;
@@ -43,6 +46,8 @@ pub struct MarketFilters {
     pub item_category: Option<ItemCategory>,
 
     pub item_damages: Option<f64>,
+    pub item_crit_chance: Option<f64>,
+    pub item_crit_damage: Option<f64>,
     pub item_armor: Option<f64>,
     pub item_block: Option<f64>,
 
@@ -51,10 +56,13 @@ pub struct MarketFilters {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, EnumIter, Hash, PartialEq, Eq)]
 pub enum MarketOrderBy {
-    #[default]
     Price,
     Level,
-    Damages,
+    Damage,
+    CritChance,
+    CritDamage,
     Armor,
     Block,
+    #[default]
+    Time,
 }

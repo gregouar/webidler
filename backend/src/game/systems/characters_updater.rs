@@ -5,10 +5,15 @@ use shared::data::{
     character::{CharacterId, CharacterSpecs, CharacterState},
     passive::StatEffect,
     skill::{DamageType, SkillType},
-    stat_effect::{ApplyStatModifier, EffectsMap, Modifier, StatType},
+    stat_effect::{
+        ApplyStatModifier, LuckyRollType, StatConverterSource, StatConverterSpecs, StatType,
+    },
 };
 
-use crate::game::data::event::{EventsQueue, GameEvent};
+use crate::game::{
+    data::event::{EventsQueue, GameEvent},
+    utils::rng::Rollable,
+};
 
 use super::statuses_controller;
 
@@ -55,17 +60,6 @@ pub fn reset_character(character_state: &mut CharacterState) {
     character_state.just_blocked = false;
 }
 
-pub fn stats_map_to_vec(effects: &EffectsMap) -> Vec<StatEffect> {
-    let mut effects: Vec<_> = effects.into();
-
-    effects.sort_by_key(|e| match e.modifier {
-        Modifier::Flat => 0,
-        Modifier::Multiplier => 1,
-    });
-
-    effects
-}
-
 pub fn update_character_specs(
     base_specs: &CharacterSpecs,
     effects: &[StatEffect],
@@ -82,16 +76,27 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             StatType::LifeRegen => character_specs.life_regen.apply_effect(effect),
             StatType::Mana => character_specs.max_mana.apply_effect(effect),
             StatType::ManaRegen => character_specs.mana_regen.apply_effect(effect),
-            StatType::Armor(damage_type) => character_specs
-                .armor
-                .entry(damage_type)
-                .or_default()
-                .apply_effect(effect),
+            StatType::Armor(damage_type) => match damage_type {
+                Some(damage_type) => character_specs
+                    .armor
+                    .entry(damage_type)
+                    .or_default()
+                    .apply_effect(effect),
+                None => {
+                    for damage_type in DamageType::iter() {
+                        character_specs
+                            .armor
+                            .entry(damage_type)
+                            .or_default()
+                            .apply_effect(effect)
+                    }
+                }
+            },
             StatType::TakeFromManaBeforeLife => character_specs
                 .take_from_mana_before_life
                 .apply_effect(effect),
-            StatType::Block => character_specs.block.apply_effect(effect),
-            StatType::BlockSpell => character_specs.block_spell.apply_effect(effect),
+            StatType::Block => character_specs.block.value.apply_effect(effect),
+            StatType::BlockSpell => character_specs.block_spell.value.apply_effect(effect),
             StatType::BlockDamageTaken => character_specs.block_damage.apply_effect(effect),
             StatType::DamageResistance {
                 skill_type,
@@ -117,26 +122,50 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                     }
                 }
             }
+            StatType::Lucky {
+                skill_type,
+                roll_type: LuckyRollType::Block,
+            } => {
+                if skill_type.is_none_or(|s| s == SkillType::Attack) {
+                    character_specs.block.lucky_chance.apply_effect(effect);
+                }
+                if skill_type.is_none_or(|s| s == SkillType::Spell) {
+                    character_specs
+                        .block_spell
+                        .lucky_chance
+                        .apply_effect(effect);
+                }
+            }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Only for player (for now...)
             StatType::LifeOnHit(_) | StatType::ManaOnHit(_) => {}
             // Only for player
-            StatType::MovementSpeed | StatType::GoldFind => {}
+            StatType::MovementSpeed | StatType::GoldFind | StatType::ThreatGain => {}
             // Delegate to skills
             StatType::Damage { .. }
             | StatType::MinDamage { .. }
             | StatType::MaxDamage { .. }
             | StatType::Restore(_)
-            | StatType::SpellPower
-            | StatType::CritChances(_)
+            | StatType::CritChance(_)
             | StatType::CritDamage(_)
             | StatType::StatusDuration { .. }
             | StatType::StatusPower { .. }
-            | StatType::Speed(_) => {}
+            | StatType::Speed(_)
+            | StatType::Lucky { .. }
+            | StatType::StatConverter(StatConverterSpecs {
+                source: StatConverterSource::CritDamage | StatConverterSource::Damage { .. },
+                ..
+            })
+            | StatType::SuccessChance { .. } => {}
+            // Other
+            StatType::StatConverter(StatConverterSpecs {
+                source: StatConverterSource::ThreatLevel,
+                ..
+            }) => {}
         }
     }
 
-    character_specs.block = character_specs.block.clamp(0.0, 100.0);
-    character_specs.block_spell = character_specs.block_spell.clamp(0.0, 100.0);
+    character_specs.block.clamp();
+    character_specs.block_spell.clamp();
     character_specs.block_damage = character_specs.block_damage.clamp(0.0, 100.0);
 }

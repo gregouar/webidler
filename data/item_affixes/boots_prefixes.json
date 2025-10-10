@@ -13,13 +13,12 @@
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Multiplier",
-        "min": 0.1,
-        "max": 0.24
+        "value": [10, 24]
       }
     ]
   },
   {
-    "name": "Athletic",
+    "name": "Energetic",
     "family": "inc_movement_speed",
     "tags": ["Speed"],
     "affix_type": "Prefix",
@@ -32,8 +31,25 @@
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Multiplier",
-        "min": 0.25,
-        "max": 0.49
+        "value": [25, 34]
+      }
+    ]
+  },
+  {
+    "name": "Athletic",
+    "family": "inc_movement_speed",
+    "tags": ["Speed"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Boots"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "MovementSpeed",
+        "modifier": "Multiplier",
+        "value": [35, 44]
       }
     ]
   }

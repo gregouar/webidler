@@ -13,13 +13,12 @@
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Multiplier",
-        "min": 0.03,
-        "max": 0.05
+        "value": [3, 5]
       }
     ]
   },
   {
-    "name": "of Swiftness",
+    "name": "of Rapidity",
     "family": "inc_action_speed",
     "tags": ["Speed"],
     "affix_type": "Suffix",
@@ -32,8 +31,25 @@
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Multiplier",
-        "min": 0.06,
-        "max": 0.08
+        "value": [6, 8]
+      }
+    ]
+  },
+  {
+    "name": "of Swiftness",
+    "family": "inc_action_speed",
+    "tags": ["Speed"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Gloves"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": null },
+        "modifier": "Multiplier",
+        "value": [9, 11]
       }
     ]
   }

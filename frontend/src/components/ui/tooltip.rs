@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use leptos::{html::*, prelude::*, web_sys};
+use leptos::{ev, html::*, prelude::*, web_sys};
 use leptos_use::{use_mouse, use_window_size};
 
 #[derive(Clone, Debug, Copy)]
@@ -101,17 +101,35 @@ pub fn DynamicTooltip() -> impl IntoView {
         let left = left.clamp(0.0, (window_width - width).max(0.0));
         let top = top.clamp(0.0, (window_height - height).max(0.0));
 
-        format!("top: {top}px; left: {left}px;")
+        format!("transform: translate3d({left}px, {top}px, 0);")
     };
+
+    let handle = window_event_listener(ev::touchend, {
+        move |ev| {
+            if ev.touches().length() == 0 {
+                tooltip_context.content.set(None)
+            }
+        }
+    });
+
+    on_cleanup(move || handle.remove());
+
+    let handle = window_event_listener(ev::touchcancel, {
+        move |ev| {
+            if ev.touches().length() == 0 {
+                tooltip_context.content.set(None)
+            }
+        }
+    });
+
+    on_cleanup(move || handle.remove());
 
     view! {
         <Show when=show_tooltip>
             {move || {
                 view! {
                     <div
-                        class="fixed z-60 pointer-events-none transition-opacity duration-150 p-2 {}"
-
-                        on:touchend=move |_| tooltip_context.content.set(None)
+                        class="fixed z-60 pointer-events-none transition-opacity duration-150 p-2 will-change-transform"
                         node_ref=tooltip_ref
                         style=style
                     >
@@ -186,12 +204,20 @@ where
         StaticTooltipPosition::Right => "left-full top-1/2 -translate-y-1/2 ml-2",
     };
 
+    let handle = window_event_listener(ev::touchend, {
+        move |ev| {
+            if ev.touches().length() == 0 {
+                is_open.set(false)
+            }
+        }
+    });
+
+    on_cleanup(move || handle.remove());
+
     view! {
         <div
             class="relative group inline-block"
             on:touchstart=move |_| { is_open.set(true) }
-            on:touchend=move |_| { is_open.set(false) }
-            on:touchcancel=move |_| { is_open.set(false) }
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
@@ -203,11 +229,9 @@ where
                 format!(
                     "
                 absolute
-                px-2 py-1 xl:px-3 xl:py-1 text-xs xl:text-sm text-white
+                px-2 py-1 xl:px-3 xl:py-1 text-xs xl:text-sm text-white font-normal
                 bg-zinc-900 border border-neutral-950
                 rounded shadow-lg whitespace-nowrap z-50 select-none
-                max-w-[60vw] xl:max-w-none
-                overflow-auto
                 {} {}
                 ",
                     position_classes,

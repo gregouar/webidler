@@ -10,7 +10,7 @@
       "damage": {
         "Physical": [2, 4]
       },
-      "crit_chances": 5,
+      "crit_chance": 5,
       "crit_damage": 100
     }
   },
@@ -26,7 +26,7 @@
       "damage": {
         "Physical": [2, 4]
       },
-      "crit_chances": 5,
+      "crit_chance": 5,
       "crit_damage": 100
     },
     "rarity": "Unique",
@@ -35,15 +35,14 @@
         "scope": "Local",
         "stat": { "Speed": "Attack" },
         "modifier": "Multiplier",
-        "min": 1.0,
-        "max": 1.0
+        "value": 100,
+        "ignore_quality": true
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "min": 8,
-        "max": 10
+        "value": [8, 10]
       }
     ]
   },
@@ -58,7 +57,7 @@
       "damage": {
         "Physical": [4, 7]
       },
-      "crit_chances": 5,
+      "crit_chance": 5,
       "crit_damage": 100
     },
     "min_area_level": 40
@@ -75,7 +74,7 @@
       "damage": {
         "Physical": [4, 7]
       },
-      "crit_chances": 5,
+      "crit_chance": 5,
       "crit_damage": 100
     },
     "rarity": "Unique",
@@ -84,37 +83,33 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "min": 2,
-        "max": 4
+        "value": [2, 4]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "min": 5,
-        "max": 7
+        "value": [5, 7]
       },
       {
         "scope": "Local",
         "stat": {
-          "CritChances": null
+          "CritChance": null
         },
         "modifier": "Flat",
-        "min": 4,
-        "max": 6
+        "value": [4, 6]
       }
     ],
     "triggers": [
       {
         "trigger_id": "broken_trophy",
-        "description": "25% chances to inflict 50% of Physical Damage as extra Physical Damage over Time per second for 3 seconds and Decrease Enemy Armor by 50%.",
+        "description": "25% chance to inflict 50% of Physical Damage as extra Physical Damage over Time per second for 3 seconds and Decrease Enemy Armor by 50%.",
         "OnHit": { "skill_type": "Attack" },
         "effects": [
           {
-            "failure_chances": 0.75,
+            "success_chance": 25,
             "ApplyStatus": {
-              "min_duration": 3,
-              "max_duration": 3,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -123,8 +118,7 @@
                       "ignore_armor": true
                     }
                   },
-                  "min_value": 0.5,
-                  "max_value": 0.5
+                  "value": 0
                 },
                 {
                   "status_type": {
@@ -136,8 +130,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 1.0,
-                  "max_value": 1.0
+                  "value": 100.0
                 }
               ]
             }
@@ -146,13 +139,29 @@
         "modifiers": [
           {
             "stat": { "Damage": {} },
-            "modifier": "Multiplier",
-            "factor": 1.0,
+            "modifier": "Flat",
+            "factor": 0.5,
             "source": { "HitDamage": "Physical" }
           }
         ]
       }
     ],
     "min_area_level": 50
+  },
+  "hand_axe": {
+    "name": "Hand Axe",
+    "icon": "items/hand_axe.webp",
+    "slot": "Weapon",
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [6, 10]
+      },
+      "crit_chance": 5,
+      "crit_damage": 100
+    },
+    "min_area_level": 90
   }
 }

@@ -1,6 +1,8 @@
 pub mod area;
+pub mod chance;
 pub mod character;
 pub mod character_status;
+pub mod forge;
 pub mod game_stats;
 pub mod item;
 pub mod item_affix;

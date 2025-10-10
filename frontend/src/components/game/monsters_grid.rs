@@ -2,14 +2,13 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use rand::Rng;
-
 use shared::data::monster::MonsterRarity;
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
 
 use crate::assets::img_asset;
+use crate::components::ui::progress_bars::predictive_cooldown;
 use crate::components::{
-    game::tooltips::SkillTooltip,
+    shared::tooltips::SkillTooltip,
     ui::{
         number::format_number,
         progress_bars::{CircularProgressBar, HorizontalProgressBar},
@@ -39,45 +38,27 @@ pub fn MonstersGrid() -> impl IntoView {
             || game_context.area_state.read().going_back > 0
     });
 
-    // TODO: double buffering to allow in and out at the same time
-    // flex-1 min-h-0 aspect-[12/7]
     view! {
-        <div class="
-        flex-1 min-h-0
-        grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2 
-        items-center
-        bg-stone-800
-        overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]
-        ">
-            <style>
-                "
-                @keyframes monster-fade-in {
-                 0% { transform: translateX(100%); opacity: 0; }
-                 65% { transform: translateX(0%); opacity: 1; }
-                 80% { transform: translateX(5%); }
-                 100% { transform: translateX(0%); }
-                }
-                
-                @keyframes monster-fade-out {
-                 from { opacity: 1; transform: translateY(0%); }
-                 to { opacity: 0; transform: translateY(100%); }
-                }
-                
-                @keyframes monster-flee {
-                 0% { transform: translateX(0%); opacity: 1; }
-                 100% { transform: translateX(100%); opacity: 0; }
-                }
-                "
-            </style>
+        <div class=move || {
+            format!(
+                "flex-1 min-h-0
+                grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2 
+                items-center
+                {} will-change-transform-opacity
+                ",
+                if all_monsters_dead.get() {
+                    "animate-monster-fade-out pointer-events-none"
+                } else if flee.get() {
+                    "animate-monster-flee pointer-events-none"
+                } else {
+                    "animate-monster-fade-in"
+                },
+            )
+        }>
             <For
                 each=move || game_context.monster_specs.get().into_iter().enumerate()
-                // We need a unique key to replace old elements
                 key=move |(index, _)| (game_context.monster_wave.get(), *index)
                 children=move |(index, specs)| {
-                    let animation_delay = format!(
-                        "animation-delay: {}s;",
-                        rand::rng().random_range(0.0..=0.2f32),
-                    );
                     let (x_size, y_size) = specs.character_specs.size.get_xy_size();
                     let (x_pos, y_pos) = (
                         specs.character_specs.position_x,
@@ -85,29 +66,13 @@ pub fn MonstersGrid() -> impl IntoView {
                     );
 
                     view! {
-                        <div
-                            class=format!(
-                                "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full",
-                                x_size,
-                                y_size,
-                                x_pos,
-                                y_pos,
-                            )
-                            style=move || {
-                                if all_monsters_dead.get() {
-                                    "animation-delay: 0.2s; animation: monster-fade-out 1s ease-in; animation-fill-mode: both; pointer-events: none;"
-                                        .to_string()
-                                } else if flee.get() {
-                                    format!(
-                                        "animation: monster-flee 1s ease-out; animation-fill-mode: both; {animation_delay} pointer-events: none;",
-                                    )
-                                } else {
-                                    format!(
-                                        "animation: monster-fade-in 1s ease-out; animation-fill-mode: both; {animation_delay}",
-                                    )
-                                }
-                            }
-                        >
+                        <div class=format!(
+                            "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full ",
+                            x_size,
+                            y_size,
+                            x_pos,
+                            y_pos,
+                        )>
                             <MonsterCard specs=specs index=index />
                         </div>
                     }
@@ -123,11 +88,11 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
     let monster_name = specs.character_specs.name.clone();
     let is_big = match specs.character_specs.size {
-        CharacterSize::Small | CharacterSize::Large => false,
+        CharacterSize::Small | CharacterSize::Large | CharacterSize::Tall => false,
         CharacterSize::Huge | CharacterSize::Gargantuan => true,
     };
 
-    let health = Memo::new(move |_| {
+    let life = Memo::new(move |_| {
         game_context
             .monster_states
             .read()
@@ -136,19 +101,19 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .unwrap_or_default()
     });
 
-    let health_tooltip = move || {
+    let life_tooltip = move || {
         view! {
-            "Health: "
-            {format_number(health.get())}
+            "Life: "
+            {format_number(life.get())}
             "/"
             {format_number(specs.character_specs.max_life)}
         }
     };
 
-    let health_percent = Memo::new(move |_| {
-        let max_health = specs.character_specs.max_life;
-        if max_health > 0.0 {
-            (health.get() / specs.character_specs.max_life * 100.0) as f32
+    let life_percent = Memo::new(move |_| {
+        let max_life = specs.character_specs.max_life;
+        if max_life > 0.0 {
+            (life.get() / specs.character_specs.max_life * 100.0) as f32
         } else {
             0.0
         }
@@ -228,32 +193,17 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             "
             .gold-text {
                 font-weight: bold;
-                background: linear-gradient(90deg, #ffeb3b, #fcd34d, #fde68a, #fff);
-                background-size: 400%;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                animation: rewardShimmer 2s infinite linear;
                 text-shadow: 0 0 8px rgba(255, 223, 0, 0.9);
             }
             
             .gems-text {
                 font-weight: bold;
-                background: linear-gradient(90deg, #06b6d4, #3b82f6, #9333ea, #06b6d4);
-                background-size: 400%;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                animation: rewardShimmer 2s infinite linear;
                 text-shadow: 0 0 8px rgba(0, 200, 255, 0.9);
             }
             
             .reward-float {
                 animation: rewardFloat 2.5s ease-out forwards;
                 position: absolute;
-            }
-            
-            @keyframes rewardShimmer {
-                0% { background-position: 0% }
-                100% { background-position: 400% }
             }
             
             @keyframes rewardFloat {
@@ -286,15 +236,18 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             }
             "
         </style>
-        <div class="grid grid-cols-4 h-full
-        bg-zinc-800 shadow-lg/30 rounded-md ring-1 ring-zinc-950
-        gap-1 xl:gap-2 p-1 xl:p-2">
+        <div
+            class="grid grid-cols-4 h-full
+            bg-zinc-800 xl:shadow-lg/30 rounded-md ring-1 ring-zinc-950
+            gap-1 xl:gap-2 p-1 xl:p-2"
+            style="contain: strict;"
+        >
             <div class="relative flex flex-col gap-1 xl:gap-2 col-span-3 h-full min-h-0">
-                <StaticTooltip tooltip=health_tooltip position=StaticTooltipPosition::Bottom>
+                <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Bottom>
                     <HorizontalProgressBar
                         class=if is_big { "h-5 xl:h-8" } else { "h-4 xl:h-5" }
                         bar_color="bg-gradient-to-b from-red-500 to-red-700"
-                        value=health_percent
+                        value=life_percent
                     >
                         <span class=title_style>{monster_name}</span>
                     </HorizontalProgressBar>
@@ -315,7 +268,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
                 <Show when=move || { gold_reward.get() > 0.0 }>
                     <div class="
-                    reward-float gold-text text-2xl  text-shadow-md
+                    reward-float gold-text text-amber-400 text:lg xl:text-2xl  text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-50 flex items-center gap-1
                     ">
@@ -331,7 +284,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
                 <Show when=move || { gems_reward.get() > 0.0 }>
                     <div class="
-                    reward-float gems-text text-2xl text-shadow-md
+                    reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-50 flex items-center gap-1
                     ">
@@ -433,10 +386,12 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
         }
     });
 
+    let progress_value = predictive_cooldown(skill_cooldown, just_triggered.into(), is_dead.into());
+
     view! {
         <CircularProgressBar
             bar_color="oklch(55.5% 0.163 48.998)"
-            remaining_time=skill_cooldown
+            value=progress_value
             reset=just_triggered
             disabled=is_dead
             bar_width=2
@@ -445,8 +400,6 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 let show_tooltip = show_tooltip.clone();
                 move |_| { show_tooltip() }
             }
-            on:touchend=move |_| hide_tooltip()
-            on:touchcancel=move |_| hide_tooltip()
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
@@ -459,7 +412,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 src=icon_asset
                 alt=skill_name
                 class="w-full h-full flex-no-shrink fill-current
-                drop-shadow-[0px_2px_oklch(13% 0.028 261.692)] invert"
+                xl:drop-shadow-[0px_2px_oklch(13% 0.028 261.692)] invert"
             />
         </CircularProgressBar>
     }

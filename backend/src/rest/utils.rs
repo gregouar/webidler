@@ -11,7 +11,7 @@ pub fn verify_character_user(
     character: &CharacterEntry,
     current_user: &CurrentUser,
 ) -> Result<(), AppError> {
-    if character.user_id != current_user.user.user_id {
+    if character.user_id != current_user.user_details.user.user_id {
         return Err(AppError::Forbidden);
     }
     Ok(())

@@ -18,8 +18,7 @@
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "min": 10,
-        "max": 19
+        "value": [10,19]
       }
     ]
   },
@@ -42,11 +41,34 @@
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "min": 20,
-        "max": 29
+        "value": [20, 29]
       }
     ]
   },
+  {
+    "name": "Hearty",
+    "family": "add_life",
+    "tags": [
+      "Life"
+    ],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": [
+      "Armor",
+      "Shield"
+    ],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Flat",
+        "value": [30, 39]
+      }
+    ]
+  },
+
   {
     "name": "Hefty",
     "family": "inc_life",
@@ -66,8 +88,7 @@
         "scope": "Global",
         "stat": "Life",
         "modifier": "Multiplier",
-        "min": 0.02,
-        "max": 0.04
+        "value": [2, 4]
       }
     ]
   },
@@ -90,8 +111,30 @@
         "scope": "Global",
         "stat": "Life",
         "modifier": "Multiplier",
-        "min": 0.05,
-        "max": 0.06
+        "value": [5, 6]
+      }
+    ]
+  },
+  {
+    "name": "Sturdy",
+    "family": "inc_life",
+    "tags": [
+      "Life"
+    ],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": [
+      "Armor",
+      "Shield"
+    ],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Multiplier",
+        "value": [7, 9]
       }
     ]
   }

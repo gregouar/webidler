@@ -21,14 +21,6 @@ pub fn CharacterPortrait(
     #[prop(into)] is_dead: Signal<bool>,
     #[prop(into)] statuses: Signal<StatusMap>,
 ) -> impl IntoView {
-    let just_hurt_class = move || {
-        if just_hurt.get() {
-            "transition-all ease duration-100 just_hurt_effect"
-        } else {
-            "transition-all ease duration-1000"
-        }
-    };
-
     let is_dead_img_effect = move || {
         if is_dead.get() {
             "transition-all duration-1000 saturate-0 brightness-50
@@ -112,9 +104,9 @@ pub fn CharacterPortrait(
                     rgba(59,130,246,0.35) 60%,
                     rgba(255,255,255,0) 70%
                 );
-                background-size: 300% 100%;
+                background-size: 500% 100%;
                 background-repeat: repeat;
-                animation: shimmerMove 5s infinite linear;
+                animation: shimmerMove 8s infinite linear;
                 pointer-events: none;
             }
             
@@ -126,18 +118,19 @@ pub fn CharacterPortrait(
                     rgba(139,0,0,0.4) 60%,
                     rgba(255,255,255,0) 70%
                 );
-                background-size: 300% 100%;
+                background-size: 500% 100%;
                 background-repeat: repeat;
-                animation: shimmerMove 7s infinite linear;
+                animation: shimmerMove 12s infinite linear;
                 pointer-events: none;
             }
             
             @keyframes shimmerMove {
                 0%   { background-position: -100% 0; }
-                100% { background-position: 200% 0; }
+                100% { background-position: 400% 0; }
             }        
             
             .just_hurt_effect {
+                // filter: drop-shadow(0 0 8px red);
                 box-shadow: inset 0 0 32px rgba(192, 0, 0, 1.0);
             }
             
@@ -191,8 +184,25 @@ pub fn CharacterPortrait(
                     </For>
                 </div>
 
-                <div class=format!("absolute inset-0  {}", shimmer_effect)></div>
-                <div class=move || { format!("absolute inset-0  {}", just_hurt_class()) }></div>
+                {move || {
+                    (!is_dead.get() && !shimmer_effect.is_empty())
+                        .then(|| {
+                            view! {
+                                <div class=format!("absolute inset-0  {}", shimmer_effect)></div>
+                            }
+                        })
+                }}
+
+                <div
+                    class=move || {
+                        if just_hurt.get() {
+                            "absolute inset-0 pointer-events-none opacity-100 transition-opacity duration-100"
+                        } else {
+                            "absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500"
+                        }
+                    }
+                    style="box-shadow: inset 0 0 32px rgba(192, 0, 0, 1.0);"
+                ></div>
             </div>
 
             {move || {
@@ -244,7 +254,7 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
         StatusId::StatModifier {
             stat, debuff: true, ..
         } => match stat {
-            StatType::Armor(DamageType::Physical) => {
+            StatType::Armor(Some(DamageType::Physical)) => {
                 ("statuses/debuff_armor.svg".to_string(), "Broken Armor")
             }
             _ => ("statuses/debuff.svg".to_string(), "Debuffed"),
@@ -252,15 +262,15 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
         StatusId::Trigger(trigger_id) => (trigger_id, "Buffed"),
     };
     view! {
-        <div class="relative h-[15%] aspect-square p-1">
+        <div class="relative h-6 xl:h-12 aspect-square bg-black/40 p-1">
             <img
                 draggable="false"
                 src=img_asset(&icon_uri)
                 alt=alt
-                class="w-full h-full drop-shadow-md bg-white/40 invert"
+                class="w-full h-full xl:drop-shadow-md invert"
             />
             <Show when=move || { stack.get() > 1 }>
-                <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/20 rounded leading-tight px-1 m-1 xl:m-2">
+                <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/50 rounded leading-tight px-1">
                     {move || stack.get().to_string()}
                 </div>
             </Show>

@@ -9,8 +9,7 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "min": 30.0,
-        "max": 30.0
+        "value": 20.0
       }
     ]
   },
@@ -24,8 +23,7 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "min": 50.0,
-        "max": 50.0
+        "value": 35.0
       }
     ],
     "min_area_level": 40
@@ -42,22 +40,25 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "min": 50.0,
-        "max": 50.0
+        "value": 35.0
       },
       {
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Poison" } },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.6
+        "value": [40, 60]
       },
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "min": 3,
-        "max": 5
+        "value": [3, 5]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": [40, 60]
       }
     ],
     "triggers": [
@@ -69,17 +70,15 @@
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 5,
-              "max_duration": 5,
+              "duration": 10,
               "statuses": [
                 {
                   "status_type": {
                     "StatModifier": {
-                      "stat": { "Damage": {"damage_type": "Poison"} }
+                      "stat": { "Damage": { "damage_type": "Poison" } }
                     }
                   },
-                  "min_value": 3,
-                  "max_value": 3
+                  "value": 300
                 }
               ]
             }
@@ -88,5 +87,20 @@
       }
     ],
     "min_area_level": 50
+  },
+  "focus_stone": {
+    "name": "Focus Stone",
+    "icon": "items/focus_stone.webp",
+    "slot": "Shield",
+    "categories": ["Focus"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": 50.0
+      }
+    ],
+    "min_area_level": 90
   }
 }

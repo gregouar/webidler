@@ -18,6 +18,7 @@ leptos-use = { version = "0.15.7", features = [
     "storage",
 ] }
 leptos_toaster = "0.2.0"
+web-sys = { version = "0.3", features = ["Performance"] }
 
 console_error_panic_hook = "0.1.7"
 reqwest = { version = "0.12.22", features = ["json"] }
@@ -28,9 +29,7 @@ serde_json = "1.0.140"
 serde_plain = "1.0.2"
 codee = { version = "0.3.0", features = ["msgpack_serde"] }
 strum = "0.27"
-
-rand = "0.9.0"
-getrandom = { version = "0.3.3", features = ["wasm_js"] }
+nutype = { version = "0.6.2",  features = ["serde", "regex"] }
 
 chrono = "0.4.41"
 indexmap = "2.11.0"

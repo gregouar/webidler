@@ -33,11 +33,17 @@ pub fn ItemCard(
             "shadow-yellow-600/20",
             "from-yellow-900/80 to-gray-950",
         ),
+        ItemRarity::Masterwork => (
+            "border-fuchsia-400/70",
+            "ring-fuchsia-300/20",
+            "shadow-fuchsia-600/20",
+            "from-fuchsia-900/80 to-gray-950",
+        ),
         ItemRarity::Unique => (
-            "border-amber-700/70",
-            "ring-amber-600/30",
-            "shadow-amber-700/30",
-            "from-amber-900/80 to-gray-950",
+            "border-orange-700/70",
+            "ring-orange-600/30",
+            "shadow-orange-700/30",
+            "from-orange-900/80 to-gray-950",
         ),
     };
 
@@ -78,8 +84,6 @@ pub fn ItemCard(
                 let show_tooltip = show_tooltip.clone();
                 move |_| { show_tooltip() }
             }
-            on:touchend=move |_| hide_tooltip()
-            on:touchcancel=move |_| hide_tooltip()
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }

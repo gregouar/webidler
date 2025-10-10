@@ -1,7 +1,12 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    data::{market::MarketFilters, passive::PassivesTreeAscension, user::UserCharacterId},
+    data::{
+        item_affix::AffixType,
+        market::MarketFilters,
+        passive::PassivesTreeAscension,
+        user::{UserCharacterId, UserId},
+    },
     types::{AssetName, Email, PaginationLimit, Password, Username},
 };
 
@@ -24,6 +29,31 @@ pub struct SignInRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgotPasswordRequest {
+    pub captcha_token: String,
+
+    pub email: Email,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ResetPasswordRequest {
+    pub captcha_token: String,
+
+    pub user_id: UserId,
+    pub password: Password,
+    pub password_token: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UpdateAccountRequest {
+    pub username: Option<Username>,
+    pub email: Option<Option<Email>>,
+
+    pub old_password: Option<Password>,
+    pub password: Option<Password>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CreateCharacterRequest {
     pub name: Username,
     pub portrait: AssetName,
@@ -39,6 +69,7 @@ pub struct AscendPassivesRequest {
 pub struct BrowseMarketItemsRequest {
     pub character_id: UserCharacterId,
     pub own_listings: bool,
+    pub is_deleted: bool,
 
     pub filters: MarketFilters,
 
@@ -71,4 +102,11 @@ pub struct BuyMarketItemRequest {
 pub struct RejectMarketItemRequest {
     pub character_id: UserCharacterId,
     pub item_index: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeAddAffixRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: u32,
+    pub affix_type: Option<AffixType>,
 }

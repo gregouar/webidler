@@ -3,7 +3,7 @@
   "portrait": "monsters/witch_child_1.webp",
   "max_life": 10,
   "power_factor": 1.0,
-  "max_initiative": 0.5,
+  "initiative": 0.5,
   "skills": [
     {
       "name": "Angry Bite",

@@ -5,12 +5,13 @@
   "resources": {
     "items": [
       "accessories.json",
+      "amulets.json",
       "body_armors.json",
       "boots.json",
       "focuses.json",
       "gloves.json",
       "helmets.json",
-      "jewelry.json",
+      "rings.json",
       "shields.json",
       "weapons_1h_melee.json",
       "weapons_2h_melee.json",

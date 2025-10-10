@@ -1,0 +1,56 @@
+{
+  "entries": [
+    {
+      "item_id": "hand_axe",
+      "weight": 4000
+    },
+    {
+      "item_id": "iron_cap",
+      "weight": 4000
+    },
+    {
+      "item_id": "chain_shirt",
+      "weight": 4000
+    },
+    {
+      "item_id": "studded_gloves",
+      "weight": 4000
+    },
+    {
+      "item_id": "reinforced_boots",
+      "weight": 4000
+    },
+    {
+      "item_id": "glaive",
+      "weight": 4000
+    },
+    {
+      "item_id": "decorated_bow",
+      "weight": 4000
+    },
+    {
+      "item_id": "bone_wand",
+      "weight": 4000
+    },
+    {
+      "item_id": "iron_buckler",
+      "weight": 4000
+    },
+    {
+      "item_id": "focus_stone",
+      "weight": 4000
+    },
+    {
+      "item_id": "heavy_cloak",
+      "weight": 4000
+    },
+    {
+      "item_id": "gold_ring",
+      "weight": 4000
+    },
+    {
+      "item_id": "silver_chain",
+      "weight": 4000
+    }
+  ]
+}

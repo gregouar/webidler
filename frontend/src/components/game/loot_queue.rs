@@ -2,23 +2,60 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use shared::data::loot::LootState;
-use shared::messages::client::PickUpLootMessage;
+use shared::{data::loot::LootState, messages::client::PickUpLootMessage};
 
-use crate::components::game::GameContext;
-use crate::components::ui::tooltip::DynamicTooltipPosition;
-use crate::components::websocket::WebsocketContext;
-
-use super::item_card::ItemCard;
+use crate::components::{
+    accessibility::AccessibilityContext, game::GameContext, shared::item_card::ItemCard,
+    ui::tooltip::DynamicTooltipPosition, websocket::WebsocketContext,
+};
 
 #[component]
 pub fn LootQueue() -> impl IntoView {
-    let conn = expect_context::<WebsocketContext>();
-    let pickup_loot = move |loot_identifier| {
-        conn.send(&PickUpLootMessage { loot_identifier }.into());
+    let conn: WebsocketContext = expect_context();
+    let accessibility: AccessibilityContext = expect_context();
+    let game_context = expect_context::<GameContext>();
+
+    let pickup_loot = {
+        let conn = conn.clone();
+        move |loot_identifier| {
+            game_context.queued_loot.update(|queued_loot| {
+                if let Some(loot) = queued_loot
+                    .iter_mut()
+                    .find(|loot| loot.identifier == loot_identifier)
+                {
+                    loot.state = LootState::HasDisappeared
+                }
+            });
+
+            conn.send(
+                &PickUpLootMessage {
+                    loot_identifier,
+                    sell: false,
+                }
+                .into(),
+            );
+        }
     };
 
-    let game_context = expect_context::<GameContext>();
+    let sell_loot = move |loot_identifier| {
+        game_context.queued_loot.update(|queued_loot| {
+            if let Some(loot) = queued_loot
+                .iter_mut()
+                .find(|loot| loot.identifier == loot_identifier)
+            {
+                loot.state = LootState::HasDisappeared
+            }
+        });
+
+        conn.send(
+            &PickUpLootMessage {
+                loot_identifier,
+                sell: true,
+            }
+            .into(),
+        );
+    };
+
     let position_style = move |loot_identifier| {
         let index = game_context
             .queued_loot
@@ -31,7 +68,6 @@ pub fn LootQueue() -> impl IntoView {
         format!("left: {}%;", 4 + index * 20)
     };
 
-    let game_context = expect_context::<GameContext>();
     let animation_style = move |loot_identifier| {
         let state = game_context
             .queued_loot
@@ -49,9 +85,8 @@ pub fn LootQueue() -> impl IntoView {
         }
     };
 
-    let game_context = expect_context::<GameContext>();
     view! {
-        <div class="relative w-full z-0">
+        <div class="relative w-full z-0 pr-4">
             <style>
                 "
                 @keyframes loot-drop {
@@ -92,6 +127,8 @@ pub fn LootQueue() -> impl IntoView {
                         class="
                         absolute bottom-0 w-[12%] aspect-[2/3]
                         transition-all duration-500 ease
+                        will-change-opacity
+                        will-change-transform
                         pointer-events-none
                         "
                         style=move || {
@@ -112,6 +149,15 @@ pub fn LootQueue() -> impl IntoView {
                             on:click={
                                 let pickup_loot = pickup_loot.clone();
                                 move |_| pickup_loot(loot.identifier)
+                            }
+
+                            on:contextmenu={
+                                let sell_loot = sell_loot.clone();
+                                move |_| {
+                                    if !accessibility.is_on_mobile() {
+                                        sell_loot(loot.identifier);
+                                    }
+                                }
                             }
                         >
                             <ItemCard

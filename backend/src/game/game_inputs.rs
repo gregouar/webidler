@@ -140,7 +140,17 @@ fn handle_client_message(
             game_data.player_controller.preferred_loot = m.preferred_loot;
         }
         ClientMessage::PickupLoot(m) => {
-            if !loot_controller::pickup_loot(
+            if m.sell {
+                if let Some(item_specs) =
+                    loot_controller::take_loot(game_data.queued_loot.mutate(), m.loot_identifier)
+                {
+                    player_controller::sell_item(
+                        game_data.player_specs.read(),
+                        game_data.player_resources.mutate(),
+                        &item_specs,
+                    );
+                }
+            } else if !loot_controller::pickup_loot(
                 &game_data.player_controller,
                 game_data.player_inventory.mutate(),
                 game_data.queued_loot.mutate(),

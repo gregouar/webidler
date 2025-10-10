@@ -108,7 +108,8 @@ jobs:
             echo "TURNSTILE_SECRET=${{ secrets.TURNSTILE_SECRET }}" >> /webidler/tmp/.env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> /webidler/tmp/.env
             echo "AES_KEY=${{ secrets.AES_KEY }}" >> /webidler/tmp/.env
-            echo "AHASH_KEYES_KEY=${{ secrets.HASH_KEY }}" >> /webidler/tmp/.env
+            echo "HASH_KEYES_KEY=${{ secrets.HASH_KEY }}" >> /webidler/tmp/.env
+            echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> /webidler/tmp/.env
             docker load < /webidler/tmp/backend.tar
             docker compose -f /webidler/tmp/docker-compose.yml stop
             docker compose -f /webidler/tmp/docker-compose.yml down

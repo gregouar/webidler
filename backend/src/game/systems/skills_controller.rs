@@ -2,24 +2,22 @@ use std::collections::{HashMap, HashSet};
 
 use rand::{self, seq::IteratorRandom};
 
-use shared::data::{
-    character::{CharacterId, SkillSpecs, SkillState},
-    item::{SkillRange, SkillShape},
-    player::PlayerResources,
-    skill::{
-        SkillEffect, SkillEffectType, SkillRepeatTarget, SkillTargetsGroup, SkillType, TargetType,
+use shared::{
+    computations::skill_cost_increase,
+    data::{
+        character::{CharacterId, SkillSpecs, SkillState},
+        item::{SkillRange, SkillShape},
+        player::PlayerResources,
+        skill::{
+            SkillEffect, SkillEffectType, SkillRepeatTarget, SkillTargetsGroup, SkillType,
+            TargetType,
+        },
     },
 };
 
-use crate::{
-    constants::SKILL_COST_INCREASE_FACTOR,
-    game::{
-        data::event::EventsQueue,
-        utils::{
-            increase_factors,
-            rng::{self, flip_coin},
-        },
-    },
+use crate::game::{
+    data::event::EventsQueue,
+    utils::rng::{self, flip_coin, Rollable},
 };
 
 use super::{characters_controller, characters_controller::Target};
@@ -67,12 +65,9 @@ fn apply_skill_on_targets<'a>(
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
 ) -> bool {
-    let repeat_amount =
-        rng::random_range(targets_group.repeat.min..=targets_group.repeat.max).unwrap_or(1);
-
     let mut already_hit = HashSet::new();
 
-    for _ in 0..repeat_amount {
+    for _ in 0..targets_group.repeat.value.roll() {
         match apply_repeated_skill_on_targets(
             events_queue,
             skill_type,
@@ -144,58 +139,14 @@ fn find_targets<'a, 'b>(
     let (main_target_id, main_target_pos) =
         find_main_target(targets_group, me_position, pre_targets, already_hit)?;
 
-    let dx = match targets_group.range {
-        SkillRange::Melee => 1,
-        SkillRange::Distance => -1,
-        SkillRange::Any => {
-            if flip_coin() {
-                1
-            } else {
-                -1
-            }
-        }
-    };
-
-    // Check if the position is in AoE of skill
-    let is_target_in_range = |pos: (i32, i32)| -> bool {
-        match targets_group.shape {
-            SkillShape::Single => pos == main_target_pos,
-            SkillShape::Vertical2 => pos.0 == main_target_pos.0 && (pos.1 == 1 || pos.1 == 2),
-            SkillShape::Horizontal2 => {
-                (pos.0 == main_target_pos.0 || pos.0 == main_target_pos.0 + dx)
-                    && pos.1 == main_target_pos.1
-            }
-            SkillShape::Horizontal3 => {
-                (pos.0 == main_target_pos.0
-                    || pos.0 == main_target_pos.0 + dx
-                    || pos.0 == main_target_pos.0 + 2 * dx)
-                    && pos.1 == main_target_pos.1
-            }
-            SkillShape::Square4 => {
-                (pos.0 == main_target_pos.0 || pos.0 == main_target_pos.0 + dx)
-                    && (pos.1 == 1 || pos.1 == 2)
-            }
-            SkillShape::All => true,
-        }
-    };
-
     Some((
         main_target_id,
-        // All targets touching the skill area of effect
-        pre_targets
-            .iter_mut()
-            .filter(|(_, (specs, _))| {
-                let (x_size, y_size) = specs.size.get_xy_size();
-                (0..x_size as i32)
-                    .flat_map(|x| (0..y_size as i32).map(move |y| (x, y)))
-                    .any(|(x, y)| {
-                        is_target_in_range((
-                            specs.position_x as i32 + x,
-                            specs.position_y as i32 + y,
-                        ))
-                    })
-            })
-            .collect(),
+        find_sub_targets(
+            targets_group.range,
+            targets_group.shape,
+            main_target_pos,
+            pre_targets,
+        ),
     ))
 }
 
@@ -204,7 +155,7 @@ fn find_main_target<'a, 'b>(
     me_position: (u8, u8),
     pre_targets: &'b mut [Target<'a>],
     already_hit: &HashSet<CharacterId>,
-) -> Option<(CharacterId, (i32, i32))> {
+) -> Option<(CharacterId, (u8, u8))> {
     // Filter by alive status & already hit targets depending on repeat type
     let target_specs = pre_targets
         .iter()
@@ -236,16 +187,68 @@ fn find_main_target<'a, 'b>(
                 let (x_size, y_size) = specs.size.get_xy_size();
                 let dx = rng::random_range(1..=x_size)
                     .and_then(|v| v.checked_sub(1))
-                    .unwrap_or(0) as i32;
+                    .unwrap_or(0) as u8;
                 let dy = rng::random_range(1..=y_size)
                     .and_then(|v| v.checked_sub(1))
-                    .unwrap_or(0) as i32;
-                (
-                    *id,
-                    (specs.position_x as i32 + dx, specs.position_y as i32 + dy),
-                )
+                    .unwrap_or(0) as u8;
+                (*id, (specs.position_x + dx, specs.position_y + dy))
             })
     })
+}
+
+pub fn find_sub_targets<'a, 'b>(
+    skill_range: SkillRange,
+    skill_shape: SkillShape,
+    skill_position: (u8, u8),
+    pre_targets: &'b mut [Target<'a>],
+) -> Vec<&'b mut Target<'a>> {
+    let skill_position = (skill_position.0 as i32, skill_position.1 as i32);
+    let dx = match skill_range {
+        SkillRange::Melee => 1,
+        SkillRange::Distance => -1,
+        SkillRange::Any => {
+            if flip_coin() {
+                1
+            } else {
+                -1
+            }
+        }
+    };
+
+    // Check if the position is in AoE of skill
+    let is_target_in_range = |pos: (i32, i32)| -> bool {
+        match skill_shape {
+            SkillShape::Single => pos == skill_position,
+            SkillShape::Vertical2 => pos.0 == skill_position.0 && (pos.1 == 1 || pos.1 == 2),
+            SkillShape::Horizontal2 => {
+                (pos.0 == skill_position.0 || pos.0 == skill_position.0 + dx)
+                    && pos.1 == skill_position.1
+            }
+            SkillShape::Horizontal3 => {
+                (pos.0 == skill_position.0
+                    || pos.0 == skill_position.0 + dx
+                    || pos.0 == skill_position.0 + 2 * dx)
+                    && pos.1 == skill_position.1
+            }
+            SkillShape::Square4 => {
+                (pos.0 == skill_position.0 || pos.0 == skill_position.0 + dx)
+                    && (pos.1 == 1 || pos.1 == 2)
+            }
+            SkillShape::All => true,
+        }
+    };
+
+    pre_targets
+        .iter_mut()
+        .filter(|(_, (specs, _))| {
+            let (x_size, y_size) = specs.size.get_xy_size();
+            (0..x_size as i32)
+                .flat_map(|x| (0..y_size as i32).map(move |y| (x, y)))
+                .any(|(x, y)| {
+                    is_target_in_range((specs.position_x as i32 + x, specs.position_y as i32 + y))
+                })
+        })
+        .collect()
 }
 
 pub fn apply_skill_effect(
@@ -256,24 +259,25 @@ pub fn apply_skill_effect(
     skill_effect: &SkillEffect,
     targets: &mut [&mut Target],
 ) {
-    if rng::random_range(0.0..=1.0).unwrap_or(1.0) <= skill_effect.failure_chances {
+    if !skill_effect.success_chance.roll() {
         return;
     }
 
     match &skill_effect.effect_type {
         SkillEffectType::FlatDamage {
             damage,
-            crit_chances,
+            crit_chance,
             crit_damage,
+            ignore_armor,
         } => {
-            let is_crit = rng::random_range(0.0..=100.0).unwrap_or(100.0) <= *crit_chances;
+            let is_crit = crit_chance.roll();
 
             let damage: HashMap<_, _> = damage
                 .iter()
-                .map(|(damage_type, (min, max))| {
+                .map(|(damage_type, value)| {
                     (
                         *damage_type,
-                        rng::random_range(*min..=*max).unwrap_or(*max)
+                        value.roll()
                             * (if is_crit {
                                 1.0 + crit_damage * 0.01
                             } else {
@@ -292,28 +296,19 @@ pub fn apply_skill_effect(
                     skill_type,
                     range,
                     is_crit,
+                    *ignore_armor,
                 );
             }
         }
-        SkillEffectType::ApplyStatus {
-            min_duration,
-            max_duration,
-            statuses,
-        } => {
-            let duration =
-                rng::random_range(*min_duration..=*max_duration).unwrap_or(*max_duration);
+        SkillEffectType::ApplyStatus { duration, statuses } => {
             for status_effect in statuses.iter() {
-                let value: f64 =
-                    rng::random_range(status_effect.min_value..=status_effect.max_value)
-                        .unwrap_or(status_effect.max_value);
-
                 for target in targets.iter_mut() {
                     characters_controller::apply_status(
                         target,
                         &status_effect.status_type,
                         skill_type,
-                        value,
-                        duration,
+                        status_effect.value.roll(),
+                        Some(duration.roll()),
                         status_effect.cumulate,
                     )
                 }
@@ -321,13 +316,16 @@ pub fn apply_skill_effect(
         }
         SkillEffectType::Restore {
             restore_type,
-            min,
-            max,
+            value,
+            modifier,
         } => {
-            if let Some(amount) = rng::random_range(*min..=*max) {
-                for target in targets {
-                    characters_controller::restore_character(target, *restore_type, amount);
-                }
+            for target in targets {
+                characters_controller::restore_character(
+                    target,
+                    *restore_type,
+                    value.roll(),
+                    *modifier,
+                );
             }
         }
         SkillEffectType::Resurrect => {
@@ -346,7 +344,5 @@ pub fn level_up_skill(skill_specs: &mut SkillSpecs, player_resources: &mut Playe
     player_resources.gold -= skill_specs.next_upgrade_cost;
 
     skill_specs.upgrade_level += 1;
-    skill_specs.next_upgrade_cost += (10.0
-        * increase_factors::exponential(skill_specs.upgrade_level, SKILL_COST_INCREASE_FACTOR))
-    .round();
+    skill_specs.next_upgrade_cost = skill_cost_increase(skill_specs);
 }

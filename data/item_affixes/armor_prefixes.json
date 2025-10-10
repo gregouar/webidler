@@ -1,18 +1,12 @@
 [
   {
-    "name": "Reinforced",
+    "name": "Patched",
     "family": "add_armor",
-    "tags": [
-      "Physical",
-      "Armor"
-    ],
+    "tags": ["Physical", "Armor"],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": [
-      "Armor",
-      "Shield"
-    ],
+    "restrictions": ["Armor", "Shield"],
     "item_level": 1,
     "effects": [
       {
@@ -21,26 +15,39 @@
           "Armor": "Physical"
         },
         "modifier": "Flat",
-        "min": 5,
-        "max": 10
+        "value": [5, 10]
+      }
+    ]
+  },
+  {
+    "name": "Reinforced",
+    "family": "add_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Flat",
+        "value": [11, 20]
       }
     ]
   },
   {
     "name": "Fortified",
     "family": "add_armor",
-    "tags": [
-      "Physical",
-      "Armor"
-    ],
+    "tags": ["Physical", "Armor"],
     "affix_type": "Prefix",
-    "tier": 2,
+    "tier": 3,
     "weight": 1000,
-    "restrictions": [
-      "Armor",
-      "Shield"
-    ],
-    "item_level": 50,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 100,
     "effects": [
       {
         "scope": "Local",
@@ -48,25 +55,19 @@
           "Armor": "Physical"
         },
         "modifier": "Flat",
-        "min": 11,
-        "max": 20
+        "value": [21,30]
       }
     ]
   },
+
   {
     "name": "Though",
     "family": "inc_armor",
-    "tags": [
-      "Physical",
-      "Armor"
-    ],
+    "tags": ["Physical", "Armor"],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": [
-      "Armor",
-      "Shield"
-    ],
+    "restrictions": ["Armor", "Shield"],
     "item_level": 1,
     "effects": [
       {
@@ -75,25 +76,18 @@
           "Armor": "Physical"
         },
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.39
+        "value": [20, 39]
       }
     ]
   },
   {
     "name": "Hard",
     "family": "inc_armor",
-    "tags": [
-      "Physical",
-      "Armor"
-    ],
+    "tags": ["Physical", "Armor"],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": [
-      "Armor",
-      "Shield"
-    ],
+    "restrictions": ["Armor", "Shield"],
     "item_level": 50,
     "effects": [
       {
@@ -102,8 +96,27 @@
           "Armor": "Physical"
         },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.59
+        "value": [40, 59]
+      }
+    ]
+  },
+  {
+    "name": "Heavy",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Multiplier",
+        "value": [60, 79]
       }
     ]
   }

@@ -7,10 +7,13 @@
     "affixes": [
       {
         "scope": "Global",
-        "stat": "SpellPower",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.2
+        "value": 20
       }
     ]
   },
@@ -22,10 +25,13 @@
     "affixes": [
       {
         "scope": "Global",
-        "stat": "SpellPower",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.4
+        "value": 40
       }
     ],
     "min_area_level": 40
@@ -40,43 +46,52 @@
     "affixes": [
       {
         "scope": "Global",
-        "stat": "SpellPower",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.4
+        "value": 40
       },
       {
         "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Spell" } },
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
         "modifier": "Multiplier",
-        "min": 0.4,
-        "max": 0.6
+        "value": [40, 60]
       },
       {
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.4
+        "value": [20, 40]
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": {
+          "Speed": "Spell"
+        },
         "modifier": "Multiplier",
-        "min": 0.08,
-        "max": 0.12
+        "value": [8, 12],
+        "ignore_quality": true
       }
     ],
     "triggers": [
       {
         "trigger_id": "baguette_fromage",
         "description": "Hitting an Enemy with Fire Spell Damage cover them in Melted Cheese:",
-        "OnHit": { "skill_type": "Spell", "damage_type": "Fire" },
+        "OnHit": {
+          "skill_type": "Spell",
+          "damage_type": "Fire"
+        },
         "effects": [
           {
             "ApplyStatus": {
-              "min_duration": 3,
-              "max_duration": 3,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -91,8 +106,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 100.0,
-                  "max_value": 100.0
+                  "value": 100.0
                 },
                 {
                   "status_type": {
@@ -107,8 +121,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 100.0,
-                  "max_value": 100.0
+                  "value": 100.0
                 },
                 {
                   "status_type": {
@@ -123,8 +136,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 100.0,
-                  "max_value": 100.0
+                  "value": 100.0
                 },
                 {
                   "status_type": {
@@ -136,8 +148,7 @@
                       "debuff": true
                     }
                   },
-                  "min_value": 0.33,
-                  "max_value": 0.33
+                  "value": 50
                 }
               ]
             }
@@ -146,5 +157,24 @@
       }
     ],
     "min_area_level": 50
+  },
+  "bone_wand": {
+    "name": "Bone Wand",
+    "icon": "items/bone_wand.webp",
+    "slot": "Weapon",
+    "categories": ["SpellWeapon"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": 60
+      }
+    ],
+    "min_area_level": 90
   }
 }

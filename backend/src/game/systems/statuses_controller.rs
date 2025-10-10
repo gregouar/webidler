@@ -23,7 +23,7 @@ pub fn update_character_statuses(
                 character_specs,
                 &mut character_state.life,
                 &mut character_state.mana,
-                &mut character_state.buff_status_change,
+                &mut character_state.dirty_specs,
                 status_specs,
                 status_state,
                 elapsed_time_f64,
@@ -38,7 +38,7 @@ pub fn update_character_statuses(
                 character_specs,
                 &mut character_state.life,
                 &mut character_state.mana,
-                &mut character_state.buff_status_change,
+                &mut character_state.dirty_specs,
                 status_specs,
                 status_state,
                 elapsed_time_f64,
@@ -60,12 +60,16 @@ fn update_status(
             character_specs,
             character_life,
             character_mana,
-            status_state.value * elapsed_time_f64.min(status_state.duration),
+            status_state.value
+                * elapsed_time_f64.min(status_state.duration.unwrap_or(elapsed_time_f64)),
         );
     }
 
-    status_state.duration -= elapsed_time_f64;
-    let remove_status = status_state.duration <= 0.0;
+    if let Some(duration) = status_state.duration.as_mut() {
+        *duration -= elapsed_time_f64
+    }
+
+    let remove_status = status_state.duration.unwrap_or(1.0) <= 0.0;
 
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger(_) = status_specs {
         if remove_status {
@@ -107,7 +111,7 @@ pub fn generate_effects_map_from_statuses(statuses: &StatusMap) -> EffectsMap {
                 modifier,
                 debuff,
             } => Some((
-                (*stat, *modifier),
+                (stat.clone(), *modifier),
                 if *debuff {
                     -status_state.value
                 } else {

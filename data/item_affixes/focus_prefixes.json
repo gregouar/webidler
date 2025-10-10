@@ -1,6 +1,6 @@
 [
   {
-    "name": "Weird",
+    "name": "Odd",
     "family": "inc_status_power",
     "tags": ["Spell", "Status"],
     "affix_type": "Prefix",
@@ -13,13 +13,12 @@
         "scope": "Global",
         "stat": { "StatusPower": null },
         "modifier": "Multiplier",
-        "min": 0.1,
-        "max": 0.19
+        "value": [10, 19]
       }
     ]
   },
   {
-    "name": "Witchy",
+    "name": "Weird",
     "family": "inc_status_power",
     "tags": ["Spell", "Status"],
     "affix_type": "Prefix",
@@ -32,8 +31,25 @@
         "scope": "Global",
         "stat": { "StatusPower": null },
         "modifier": "Multiplier",
-        "min": 0.2,
-        "max": 0.29
+        "value": [20, 29]
+      }
+    ]
+  },
+  {
+    "name": "Witchy",
+    "family": "inc_status_power",
+    "tags": ["Spell", "Status"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Focus"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "StatusPower": null },
+        "modifier": "Multiplier",
+        "value": [30, 39]
       }
     ]
   }

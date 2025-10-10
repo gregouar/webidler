@@ -2,6 +2,7 @@ Cloak:
     Pre:
         inc_attack_speed
         inc_spell_speed
+        inc_phys_damage
         inc_fire_damage
         inc_poison_damage
         inc_storm_damage
@@ -18,6 +19,7 @@ Head:
         inc_armor
         add_life
         inc_life
+        dec_threat
     suf:
         inc_gold
         add_life_regen
@@ -29,9 +31,10 @@ Head:
 
 Amulet:
     pre:
-        inc_crit_chances
+        inc_crit_chance
         inc_crit_damage
         inc_gold_2
+        inc_phys_damage
         inc_fire_damage
         inc_poison_damage
         inc_storm_damage
@@ -53,8 +56,8 @@ Attack Weapon:
         add_storm_damage
     suf:
         inc_speed
-        add_crit_chances
-        inc_crit_chances
+        add_crit_chance
+        inc_crit_chance
         inc_crit_damage
         life_leech
         mana_leech
@@ -64,14 +67,13 @@ Spell Weapon:
     pre:
         add_mana
         inc_mana
-        inc_spell_power
         inc_fire_damage
         inc_poison_damage
         inc_storm_damage
     suf:
         add_mana_regen
         inc_spell_speed
-        inc_spell_crit_chances
+        inc_spell_crit_chance
         inc_spell_damage
 
 
@@ -81,6 +83,7 @@ Body:
         inc_armor
         add_life
         inc_life
+        inc_restore
     suf:
         add_life_regen
         add_mana_regen
@@ -95,6 +98,7 @@ Shield:
         inc_armor
         add_life
         inc_life
+        inc_threat
     suf:
         add_life_regen
         add_fire_res
@@ -119,7 +123,7 @@ Focus:
         add_poison_res
         add_storm_res
         inc_spell_speed
-        inc_spell_crit_chances
+        inc_spell_crit_chance
         inc_spell_damage
 
 
@@ -157,9 +161,10 @@ Boots:
 
 Ring:
     pre:
-        inc_crit_chances
+        inc_crit_chance
         inc_crit_damage
         inc_gold_2
+        inc_phys_damage
         inc_fire_damage
         inc_poison_damage
         inc_storm_damage
