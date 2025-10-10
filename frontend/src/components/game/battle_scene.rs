@@ -160,33 +160,37 @@ pub fn BattleSceneFooter() -> impl IntoView {
 
     view! {
         <div
-            class="h-8 xl:h-16 overflow-hidden z-10 w-full
-            bg-center bg-repeat-x flex items-center justify-between"
+            class="relative h-8 xl:h-16 w-full z-10
+            bg-center bg-repeat-x
+            grid grid-cols-[1fr_auto_1fr]
+            place-items-center"
             style=footer_background
         >
-            <div class="relative px-4 py-2">
-                <div class="absolute inset-0 blur-lg
-                bg-gradient-to-r from-transparent via-zinc-950 via-[percentage:10%_90%] to-transparent
-                "></div>
-                <p class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold">
-                    {wave_info}
-                </p>
+            <div class="flex items-center justify-start h-full w-full">
+                <div class="relative px-4 py-2">
+                    <div class="absolute inset-0 blur-lg
+                    bg-gradient-to-r from-transparent via-zinc-950 via-[percentage:10%_90%] to-transparent"></div>
+                    <p class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-boldt">
+                        {wave_info}
+                    </p>
+                </div>
             </div>
 
-            <div class="relative px-1 py-2  text-base xl:text-2xl ">
+            <div class="relative flex items-center justify-center h-full px-2 text-base xl:text-2xl">
                 <GemsLoot />
             </div>
 
-            <div class="relative px-1 py-2">
-                <div class="absolute inset-0 blur-lg
-                bg-gradient-to-r from-transparent via-zinc-950 via-[percentage:10%_90%] to-transparent
-                "></div>
-                <div class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold
-                flex items-center gap-1">
-                    <span>{threat_level}</span>
-                    <span class="text-yellow-500">
-                        <ThreatIcon />
-                    </span>
+            <div class="flex items-center justify-end h-full w-full">
+                <div class="relative px-1 py-2">
+                    <div class="absolute inset-0 blur-lg
+                    bg-gradient-to-r from-transparent via-zinc-950 via-[percentage:10%_90%] to-transparent"></div>
+                    <div class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold
+                    flex items-center gap-1">
+                        <span>{threat_level}</span>
+                        <span class="text-yellow-500">
+                            <ThreatIcon />
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -215,7 +219,7 @@ pub fn GemsLoot() -> impl IntoView {
         }
     };
     view! {
-        <StaticTooltip tooltip=tooltip position=StaticTooltipPosition::Left>
+        <StaticTooltip tooltip=tooltip position=StaticTooltipPosition::Top>
             <img
                 draggable="false"
                 src=img_asset("ui/gems.webp")
