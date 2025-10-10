@@ -6,7 +6,7 @@
     },
     {
       "item_id": "shortsword_unique",
-      "weight": 10
+      "weight": 5
     },
     {
       "item_id": "leather_cap",
@@ -14,7 +14,7 @@
     },
     {
       "item_id": "leather_cap_unique",
-      "weight": 10
+      "weight": 5
     },
     {
       "item_id": "leather_armor",
@@ -22,7 +22,7 @@
     },
     {
       "item_id": "leather_armor_unique",
-      "weight": 10
+      "weight": 5
     },
     {
       "item_id": "leather_gloves",
@@ -30,7 +30,7 @@
     },
     {
       "item_id": "leather_gloves_unique",
-      "weight": 10
+      "weight": 5
     },
     {
       "item_id": "leather_boots",
@@ -38,7 +38,7 @@
     },
     {
       "item_id": "leather_boots_unique",
-      "weight": 10
+      "weight": 5
     },
     {
       "item_id": "woodcutter_axe",
@@ -46,7 +46,7 @@
     },
     {
       "item_id": "woodcutter_axe_unique",
-      "weight": 10
+      "weight": 5
     },
     {
       "item_id": "hunting_bow",
@@ -54,7 +54,7 @@
     },
     {
       "item_id": "hunting_bow_unique",
-      "weight": 10
+      "weight": 5
     },
     {
       "item_id": "wand",
@@ -62,7 +62,7 @@
     },
     {
       "item_id": "wand_unique",
-      "weight": 10
+      "weight": 5
     },
     {
       "item_id": "small_round_shield",
@@ -70,7 +70,7 @@
     },
     {
       "item_id": "small_round_shield_unique",
-      "weight": 10
+      "weight": 5
     },
     {
       "item_id": "spellbook",
@@ -78,7 +78,7 @@
     },
     {
       "item_id": "spellbook_unique",
-      "weight": 10
+      "weight": 5
     },
     {
       "item_id": "hooded_wrap",
@@ -86,7 +86,7 @@
     },
     {
       "item_id": "hooded_wrap_unique",
-      "weight": 10
+      "weight": 5
     },
     {
       "item_id": "silver_ring",
@@ -94,7 +94,7 @@
     },
     {
       "item_id": "silver_ring_unique",
-      "weight": 10
+      "weight": 5
     },
     {
       "item_id": "medallion",
@@ -102,7 +102,7 @@
     },
     {
       "item_id": "medallion_unique",
-      "weight": 10
+      "weight": 5
     }
   ]
 }

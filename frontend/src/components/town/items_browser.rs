@@ -3,11 +3,22 @@ use leptos::{html::*, prelude::*};
 use leptos_use::{use_infinite_scroll_with_options, UseInfiniteScrollOptions};
 use std::sync::Arc;
 
-use shared::data::{item::ItemSpecs, user::UserCharacterId};
+use shared::data::{
+    item::{ItemSlot, ItemSpecs},
+    player::EquippedSlot,
+    user::UserCharacterId,
+};
 
 use crate::{
     assets::img_asset,
-    components::shared::{item_card::ItemCard, tooltips::item_tooltip::ItemTooltipContent},
+    components::{
+        shared::{
+            item_card::ItemCard,
+            tooltips::{item_tooltip::ItemTooltipContent, ItemTooltip},
+        },
+        town::TownContext,
+        ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
+    },
 };
 
 #[derive(Clone)]
@@ -116,8 +127,10 @@ pub fn ItemRow(
             </div>
 
             <div class="flex flex-col w-full">
-                <ItemTooltipContent item_specs hide_description=true />
+                <ItemTooltipContent item_specs=item_specs.clone() hide_description=true />
             </div>
+
+            <ItemCompare item_slot=item_specs.clone().base.slot />
 
             {(price > 0.0)
                 .then(|| {
@@ -186,6 +199,64 @@ pub fn ItemDetails(
             <div class="flex flex-row gap-6 items-center
             w-full h-auto aspect-5/2 overflow-y-auto
             bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2">{item_details}</div>
+        </div>
+    }
+}
+
+#[component]
+pub fn ItemCompare(item_slot: ItemSlot) -> impl IntoView {
+    let tooltip_context: DynamicTooltipContext = expect_context();
+    let town_context: TownContext = expect_context();
+
+    let show_tooltip = move || {
+        let item_specs = town_context
+            .inventory
+            .read()
+            .equipped
+            .get(&item_slot)
+            .cloned();
+
+        if let Some(EquippedSlot::MainSlot(item_specs)) = item_specs {
+            let item_specs = Arc::new(*item_specs);
+            tooltip_context.set_content(
+                move || view! { <ItemTooltip item_specs=item_specs.clone() /> }.into_any(),
+                DynamicTooltipPosition::Auto,
+            );
+        } else {
+            tooltip_context.set_content(
+                move || {
+                    view! {
+                        <div class="shadow-md bg-gradient-to-br from-gray-800 via-gray-900 to-black  p-2 xl:p-4 rounded-xl border">
+                            "No item equipped"
+                        </div>
+                    }.into_any()
+                },
+                DynamicTooltipPosition::Auto,
+            );
+        }
+    };
+
+    let hide_tooltip = { move || tooltip_context.hide() };
+
+    view! {
+        <div
+            class="absolute flex top-2 right-2 p-1 rounded-sm items-center bg-zinc-900 hover:bg-zinc-800"
+
+            on:touchstart={
+                let show_tooltip = show_tooltip.clone();
+                move |_| { show_tooltip() }
+            }
+            on:contextmenu=move |ev| {
+                ev.prevent_default();
+            }
+
+            on:mouseenter=move |ev| {
+                ev.prevent_default();
+                show_tooltip()
+            }
+            on:mouseleave=move |_| hide_tooltip()
+        >
+            <span class="text-gray-400">"Compare"</span>
         </div>
     }
 }
