@@ -1,0 +1,29 @@
+{
+  "name": "Amelia's Victim",
+  "portrait": "monsters/ghost_child.webp",
+  "max_life": 5,
+  "power_factor": 2.0,
+  "initiative": [0.0, 0.5],
+  "armor": { "Storm": 100 },
+  "skills": [
+    {
+      "name": "Play With Me",
+      "icon": "skills/chain_lightning.svg",
+      "skill_type": "Spell",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [0, 10]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

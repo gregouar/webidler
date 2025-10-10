@@ -190,7 +190,9 @@ fn generate_monster_specs(
     {
         let gem_chance = CHAMPION_BASE_CHANCE
             + (CHAMPION_INC_CHANCE
-                * (area_state.area_level - area_state.last_champion_spawn) as f64);
+                * (area_state
+                    .area_level
+                    .saturating_sub(area_state.last_champion_spawn)) as f64);
         if rng::random_range(0.0..=1.0).unwrap_or(1.0) <= gem_chance {
             // area_state.last_champion_spawn = area_state.area_level;
             monster_specs.rarity = MonsterRarity::Champion;
@@ -200,7 +202,7 @@ fn generate_monster_specs(
 
     let exp_factor = computations::exponential(monster_level, MONSTER_INCREASE_FACTOR);
     let reward_factor = computations::exponential(
-        monster_level - area_blueprint.specs.starting_level + 1,
+        monster_level.saturating_sub(area_blueprint.specs.starting_level) + 1,
         MONSTER_INCREASE_FACTOR,
     );
 
@@ -231,14 +233,6 @@ fn generate_monster_specs(
             skills_updater::update_skill_specs(skill_specs, effects.iter(), None, area_threat);
         }
     }
-
-    // // TODO: should not be duplicated...
-    // monster_specs.character_specs.triggers = monster_specs
-    //     .skill_specs
-    //     .iter()
-    //     .flat_map(|skill_specs| skill_specs.triggers.iter())
-    //     .map(|trigger_specs| trigger_specs.triggered_effect.clone())
-    //     .collect();
 
     monster_specs
 }

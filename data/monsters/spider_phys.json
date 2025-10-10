@@ -1,0 +1,28 @@
+{
+  "name": "Ugly Spider",
+  "portrait": "monsters/spider_phys.webp",
+  "max_life": 8,
+  "power_factor": 1.5,
+  "initiative": [0.0, 0.5],
+  "armor": { "Physical": 100 },
+  "skills": [
+    {
+      "name": "Ugly Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [4, 6]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

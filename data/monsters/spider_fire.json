@@ -1,0 +1,28 @@
+{
+  "name": "Charred Spider",
+  "portrait": "monsters/spider_fire.webp",
+  "max_life": 10,
+  "power_factor": 2,
+  "initiative": [0.0, 0.5],
+  "armor": { "Fire": 100 },
+  "skills": [
+    {
+      "name": "Burning Bite",
+      "icon": "skills/fireball.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Fire": [5, 10]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

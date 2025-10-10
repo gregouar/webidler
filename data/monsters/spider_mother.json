@@ -1,0 +1,57 @@
+{
+  "name": "Broodmother",
+  "portrait": "monsters/spider_mother.webp",
+  "max_life": 30,
+  "size": "Huge",
+  "power_factor": 5,
+  "initiative": [2.0, 5.0],
+  "skills": [
+    {
+      "name": "Mommy's Slap",
+      "icon": "skills/claw.svg",
+      "cooldown": 5.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [10, 15]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Physical" }
+                    },
+                    "value": 3
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Birth",
+      "icon": "skills/heal.svg",
+      "cooldown": 10.0,
+      "targets": [
+        {
+          "target_type": "Friend",
+          "target_dead": true,
+          "effects": [
+            {
+              "Resurrect": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

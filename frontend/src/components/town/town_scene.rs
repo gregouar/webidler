@@ -125,25 +125,36 @@ pub fn PlayerName() -> impl IntoView {
 }
 #[component]
 fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+
+    let locked =
+        move || town_context.character.read().max_area_level < area.area_specs.required_level;
+
     let play_area = {
         let navigate = use_navigate();
         let (_, set_area_id_storage, _) =
             storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
 
         move |_| {
-            set_area_id_storage.set(Some(area.area_id.clone()));
-            navigate("/game", Default::default());
+            if !locked() {
+                set_area_id_storage.set(Some(area.area_id.clone()));
+                navigate("/game", Default::default());
+            }
         }
     };
 
     view! {
         <div
-            class="flex flex-col
-            bg-zinc-800 rounded-xl border border-zinc-700 shadow-md overflow-hidden 
-            aspect-square
-            transition cursor-pointer 
-            hover:border-amber-400 hover:shadow-lg
-            active:scale-95 active:border-amber-500"
+            class=move || {
+                format!(
+                    "relative flex flex-col rounded-xl border overflow-hidden aspect-square shadow-md transition {}",
+                    if locked() {
+                        "bg-zinc-900 border-zinc-800 opacity-60"
+                    } else {
+                        "bg-zinc-800 border-zinc-700 cursor-pointer hover:border-amber-400 hover:shadow-lg active:scale-95 active:border-amber-500"
+                    },
+                )
+            }
             on:click=play_area
         >
             <div class="h-10 xl:h-16 w-full relative">
@@ -154,13 +165,16 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
                 />
                 <div class="absolute inset-0 bg-black/30"></div>
             </div>
+
             <div class="p-2 xl:p-4 space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
                 <div class="text-base xl:text-lg font-semibold text-amber-200">
-                    {area.area_specs.name}
+                    {area.area_specs.name.clone()}
                 </div>
+
                 <div class="text-xs xl:text-sm text-gray-400">
-                    "Starting Level: "{area.area_specs.starting_level}
+                    "Starting Level: " {area.area_specs.starting_level}
                 </div>
+
                 <div class="text-xs xl:text-sm text-gray-400">
                     {if area.max_level_reached > 0 {
                         format!("Level Reached: {}", area.max_level_reached)
@@ -168,8 +182,8 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
                         "New Grind!".to_string()
                     }}
                 </div>
-
             </div>
+
             <div class="h-10 xl:h-16 w-full relative">
                 <img
                     draggable="false"
@@ -178,6 +192,18 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
                 />
                 <div class="absolute inset-0 bg-black/20"></div>
             </div>
+
+            <Show when=move || locked()>
+                <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm text-center p-2">
+                    <div class="text-amber-400 text-lg font-bold tracking-wide">"Locked"</div>
+                    <div class="text-gray-300 text-xs mt-1">
+                        {format!("Requires Level {}", area.area_specs.required_level)}
+                    </div>
+                    <div class="mt-2 text-xs text-gray-500 italic">
+                        "Keep grinding to unlock this area!"
+                    </div>
+                </div>
+            </Show>
         </div>
     }
 }

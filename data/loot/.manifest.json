@@ -6,7 +6,8 @@
     "loot": [
       "tier_1.json",
       "tier_2.json",
-      "tier_3.json"
+      "tier_3.json",
+      "witch.json"
     ]
   }
 }

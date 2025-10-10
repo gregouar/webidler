@@ -188,6 +188,9 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         MonsterRarity::Boss => "boss-title",
     };
 
+    let x_size = specs.character_specs.size.get_xy_size().0;
+    let skill_size = if x_size == 1 { "w-full" } else { "w-1/2" };
+
     view! {
         <style>
             "
@@ -299,14 +302,16 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 </Show>
             </div>
 
-            <div class="flex flex-col justify-evenly w-full">
-                <For
-                    each=move || { specs.skill_specs.clone().into_iter().enumerate() }
-                    key=|(i, _)| *i
-                    let((i, p))
-                >
-                    <MonsterSkill skill_specs=p index=i monster_index=index />
-                </For>
+            <div class="w-full flex justify-center">
+                <div class=format!("flex flex-col justify-evenly {skill_size}")>
+                    <For
+                        each=move || { specs.skill_specs.clone().into_iter().enumerate() }
+                        key=|(i, _)| *i
+                        let((i, p))
+                    >
+                        <MonsterSkill skill_specs=p index=i monster_index=index />
+                    </For>
+                </div>
             </div>
         </div>
     }

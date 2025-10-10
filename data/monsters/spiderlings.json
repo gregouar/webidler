@@ -1,0 +1,27 @@
+{
+  "name": "Spiderlings",
+  "portrait": "monsters/spiderlings.webp",
+  "max_life": 3,
+  "power_factor": 1.0,
+  "initiative": [0.0, 0.5],
+  "skills": [
+    {
+      "name": "Itchy Bity",
+      "icon": "skills/bite.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [1, 3]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

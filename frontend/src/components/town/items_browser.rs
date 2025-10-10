@@ -242,10 +242,7 @@ pub fn ItemCompare(item_slot: ItemSlot) -> impl IntoView {
         <div
             class="absolute flex top-2 right-2 p-1 rounded-sm items-center bg-zinc-900 hover:bg-zinc-800"
 
-            on:touchstart={
-                let show_tooltip = show_tooltip.clone();
-                move |_| { show_tooltip() }
-            }
+            on:touchstart=move |_| { show_tooltip() }
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
