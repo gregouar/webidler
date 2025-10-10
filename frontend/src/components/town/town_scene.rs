@@ -147,7 +147,7 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
         <div
             class=move || {
                 format!(
-                    "relative flex flex-col rounded-xl border overflow-hidden aspect-square shadow-md transition {} {}",
+                    "relative flex flex-col rounded-xl border overflow-hidden aspect-square shadow-md transition {}",
                     if locked() {
                         "bg-zinc-900 border-zinc-800 opacity-60"
                     } else {
