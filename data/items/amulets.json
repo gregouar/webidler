@@ -97,5 +97,53 @@
       }
     ],
     "min_area_level": 90
+  },
+  "silver_chain_unique": {
+    "name": "Arachnid Heart",
+    "description": "When her heart stopped, the storm did not. It only found a new host.",
+    "icon": "items/amulet_spider.webp",
+    "slot": "Amulet",
+    "categories": ["Jewelry", "Amulet"],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 60
+      },
+      {
+        "scope": "Global",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 3,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Flat",
+        "value": [40, 60]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Storm"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [80, 120]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Storm"
+        },
+        "modifier": "Flat",
+        "value": [80, 120]
+      }
+    ],
+    "min_area_level": 100
   }
 }

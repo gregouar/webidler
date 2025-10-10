@@ -163,5 +163,100 @@
       "crit_damage": 100
     },
     "min_area_level": 90
+  },
+  "handaxe_unique": {
+    "name": "Fang of the Widow",
+    "description": "Its edge drips with the venom of a thousand silenced hearts.",
+    "icon": "items/hand_axe_spider.webp",
+    "slot": "Weapon",
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "rarity": "Unique",
+    "weapon_specs": {
+      "range": "Melee",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [6, 10]
+      },
+      "crit_chance": 5,
+      "crit_damage": 100
+    },
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": {
+          "MinDamage": {
+            "damage_type": "Poison"
+          }
+        },
+        "modifier": "Flat",
+        "value": 5,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "MaxDamage": {
+            "damage_type": "Poison"
+          }
+        },
+        "modifier": "Flat",
+        "value": 10,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Damage": {
+            "damage_type": "Physical"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [-100, -100],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Poison"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [80, 120]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" }
+        },
+        "modifier": "Flat",
+        "value": [4, 8]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "StatusDuration": { "DamageOverTime": { "damage_type": "Poison" } }
+        },
+        "modifier": "Multiplier",
+        "value": [10, 20]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
+        },
+        "modifier": "Flat",
+        "value": [8, 12]
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Speed": "Attack"
+        },
+        "modifier": "Multiplier",
+        "value": [10, 20]
+      }
+    ],
+    "min_area_level": 100
   }
 }

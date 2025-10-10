@@ -13,6 +13,7 @@
       "cat_skeleton.json",
       "centipede.json",
       "cinder_hag.json",
+      "ghost_child.json",
       "gravevine_crawler.json",
       "haunted_pot.json",
       "haunted_wine_bottle.json",
@@ -29,13 +30,18 @@
       "snake.json",
       "soot_imp.json",
       "soot_imp_2.json",
+      "spiderlings.json",
+      "spider_fire.json",
+      "spider_mother.json",
+      "spider_phys.json",
+      "spider_poison.json",
       "stormwraith.json",
       "thorn_sprite.json",
       "thorn_sprite_2.json",
       "thorn_wall.json",
       "thunder_stag.json",
-      "witch_child_1.json",
-      "witch_child_2.json",
+      "witch_child.json",
+      "witch_spider.json",
       "witch.json"
     ]
   }

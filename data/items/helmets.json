@@ -79,6 +79,75 @@
     },
     "min_area_level": 90
   },
+  "iron_cap_unique": {
+    "name": "The Seamstress's Folly",
+    "description": "No spellbook could teach what she learned from her own undoing.",
+    "icon": "items/witch_hat.webp",
+    "slot": "Helmet",
+    "categories": ["Armor", "Helmet"],
+    "rarity": "Unique",
+    "armor_specs": {
+      "armor": 45
+    },
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Poison"
+        },
+        "modifier": "Flat",
+        "value": [80, 120]
+      },
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [20, 40]
+      },
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [8, 12]
+      },
+      {
+        "scope": "Global",
+        "stat": { "StatusDuration": null },
+        "modifier": "Multiplier",
+        "value": [20, 30]
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "witch_hat",
+        "description": "On Hit Taken:",
+        "skill_type": "Attack",
+        "OnTakeHit": {
+          "is_hurt": true
+        },
+        "target": "Source",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": { "SuccessChance": {} },
+                      "debuff": true
+                    }
+                  },
+                  "value": 100
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 90
+  },
   "great_helm": {
     "name": "Great Helm",
     "icon": "items/great_helm.webp",

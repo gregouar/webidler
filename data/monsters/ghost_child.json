@@ -1,13 +1,15 @@
 {
-  "name": "Spiderlings",
-  "portrait": "monsters/spiderlings.webp",
-  "max_life": 3,
-  "power_factor": 1.0,
+  "name": "Amelia's Victim",
+  "portrait": "monsters/ghost_child.webp",
+  "max_life": 5,
+  "power_factor": 2.0,
   "initiative": [0.0, 0.5],
+  "armor": { "Storm": 100 },
   "skills": [
     {
-      "name": "Itchy Bity",
-      "icon": "skills/bite.svg",
+      "name": "Play With Me",
+      "icon": "skills/chain_lightning.svg",
+      "skill_type": "Spell",
       "cooldown": 2.0,
       "targets": [
         {
@@ -15,7 +17,7 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [1, 3]
+                  "Storm": [0, 10]
                 }
               }
             }

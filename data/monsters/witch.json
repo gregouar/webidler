@@ -1,12 +1,86 @@
 {
-  "name": " Amelia, the Spider Witch",
+  "name": "Amelia, the Spider Witch",
   "portrait": "monsters/witch_1.webp",
   "rarity": "Boss",
-  "max_life": 1000,
+  "max_life": 1,
   "size": "Gargantuan",
   "power_factor": 200,
   "initiative": 2,
   "armor": { "Physical": 100, "Fire": 100, "Poison": 100, "Storm": 100 },
   "skills": [
+    {
+      "name": "Evil Cackling",
+      "icon": "skills/curse_weakness.svg",
+      "skill_type": "Spell",
+      "cooldown": 10.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "SuccessChance": {} },
+                        "debuff": true
+                      }
+                    },
+                    "value": 33
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Witch's Zap",
+      "icon": "skills/chain_lightning.svg",
+      "skill_type": "Spell",
+      "cooldown": 5.0,
+      "targets": [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [0, 30]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tasty Soup",
+      "icon": "skills/poison_cloud.svg",
+      "skill_type": "Spell",
+      "cooldown": 8.0,
+      "targets": [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Poison" }
+                    },
+                    "value": 6
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
   ]
 }
