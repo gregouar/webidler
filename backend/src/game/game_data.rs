@@ -148,10 +148,6 @@ impl GameInstanceData {
             .cloned()
             .ok_or_else(|| anyhow::anyhow!("couldn't load passives tree: {}", passives_tree_id))?;
 
-        // Only the delta is saved in db, so we adjust by starting_level
-        let max_area_level_completed =
-            max_area_level_completed + area_blueprint.specs.starting_level - 1;
-
         Ok(Self::new(
             area_id.to_string(),
             area_blueprint,

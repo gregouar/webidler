@@ -168,6 +168,7 @@ impl<'a> GameInstance<'a> {
             self.character_id,
             &self.game_data.area_id,
             area_level,
+            // I don't like this
             area_level - self.game_data.area_blueprint.specs.starting_level as i32 + 1,
         )
         .await?;
