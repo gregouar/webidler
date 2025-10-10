@@ -153,7 +153,6 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
                     } else {
                         "bg-zinc-800 border-zinc-700 cursor-pointer hover:border-amber-400 hover:shadow-lg active:scale-95 active:border-amber-500"
                     },
-                    if locked() { "" } else { "" },
                 )
             }
             on:click=play_area
