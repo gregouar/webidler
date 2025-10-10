@@ -189,7 +189,7 @@
           }
         },
         "modifier": "Flat",
-        "value": 5,
+        "value": 6,
         "ignore_quality": true
       },
       {
@@ -200,7 +200,7 @@
           }
         },
         "modifier": "Flat",
-        "value": 10,
+        "value": 12,
         "ignore_quality": true
       },
       {
@@ -215,7 +215,7 @@
         "ignore_quality": true
       },
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": {
           "Damage": {
             "damage_type": "Poison"

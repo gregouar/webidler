@@ -2,6 +2,7 @@
   "specs": {
     "name": "Dark Forest",
     "starting_level": 21,
+    "required_level": 50,
     "starting_gold": 100,
     "header_background": "areas/forest_header.webp",
     "footer_background": "areas/forest_footer.webp"

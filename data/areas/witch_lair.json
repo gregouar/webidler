@@ -1,14 +1,16 @@
 {
   "specs": {
     "name": "Spider Witch Lair",
-    "starting_level": 1,
+    "starting_level": 31,
+    "required_level": 100,
+    "starting_gold": 200,
     "header_background": "areas/witch_header.webp",
     "footer_background": "areas/witch_footer.webp"
   },
   "loot_tables": ["tier_1.json", "tier_2.json", "tier_3.json", "witch.json"],
   "bosses": [
     {
-      "level": 0,
+      "level": 60,
       "interval": 1,
       "spawns": [
         {
@@ -20,7 +22,7 @@
   ],
   "waves": [
     {
-      "min_level": 30,
+      "min_level": 1,
       "max_level": null,
       "weight": 1000,
       "spawns": [
