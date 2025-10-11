@@ -9,7 +9,7 @@
     {
       "name": "Ugly Bite",
       "icon": "skills/bite.svg",
-      "cooldown": 2.0,
+      "cooldown": 3.0,
       "targets": [
         {
           "effects": [

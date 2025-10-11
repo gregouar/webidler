@@ -9,7 +9,7 @@
     {
       "name": "Nasty Bite",
       "icon": "skills/poison_coating.svg",
-      "cooldown": 2.0,
+      "cooldown": 4.0,
       "targets": [
         {
           "effects": [
