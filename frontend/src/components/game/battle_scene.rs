@@ -87,15 +87,20 @@ pub fn BattleSceneHeader() -> impl IntoView {
             // <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
 
             <div class="w-12 flex justify-start">
-                <button
-                    class="btn text-2xl xl:text-4xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
-                    hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
-                    active:scale-90 active:brightness-125 transition"
-                    title="Go Back One Level"
-                    on:click=go_back
+                <StaticTooltip
+                    position=StaticTooltipPosition::Right
+                    tooltip=|| "Go Back one Area Level & Pause Progression"
                 >
-                    "←"
-                </button>
+                    <button
+                        class="btn text-2xl xl:text-4xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
+                        hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
+                        active:scale-90 active:brightness-125 transition"
+                        title="Go Back One Level"
+                        on:click=go_back
+                    >
+                        "←"
+                    </button>
+                </StaticTooltip>
             </div>
 
             <div class="flex-1 text-center relative">
@@ -119,15 +124,26 @@ pub fn BattleSceneHeader() -> impl IntoView {
             </div>
 
             <div class="w-12 flex justify-end">
-                <button
-                    class="btn text-xl xl:text-3xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
-                    hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
-                    active:scale-90 active:brightness-125 transition"
-                    title="Toggle Auto Progress"
-                    on:click=toggle_auto_progress
+                <StaticTooltip
+                    position=StaticTooltipPosition::Left
+                    tooltip=move || {
+                        if game_context.area_state.read().auto_progress {
+                            "Area Level will increase, click to Pause Progression"
+                        } else {
+                            "Area Level Progression is Paused, click to Resume Progression"
+                        }
+                    }
                 >
-                    {auto_icon}
-                </button>
+                    <button
+                        class="btn text-xl xl:text-3xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
+                        hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
+                        active:scale-90 active:brightness-125 transition"
+                        title="Toggle Auto Progress"
+                        on:click=toggle_auto_progress
+                    >
+                        {auto_icon}
+                    </button>
+                </StaticTooltip>
             </div>
         </div>
     }
