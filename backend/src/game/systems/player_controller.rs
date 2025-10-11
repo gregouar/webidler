@@ -4,7 +4,7 @@ use shared::{
     computations,
     constants::{MONSTER_INCREASE_FACTOR, SKILL_BASE_COST, SKILL_COST_FACTOR},
     data::{
-        area::AreaState,
+        area::{AreaSpecs, AreaState},
         character::CharacterId,
         item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
         monster::{MonsterRarity, MonsterSpecs},
@@ -256,6 +256,7 @@ pub fn unequip_item(
 }
 
 pub fn sell_item_from_bag(
+    area_specs: &AreaSpecs,
     player_specs: &PlayerSpecs,
     player_inventory: &mut PlayerInventory,
     player_resources: &mut PlayerResources,
@@ -264,6 +265,7 @@ pub fn sell_item_from_bag(
     let item_index = item_index as usize;
     if item_index < player_inventory.bag.len() {
         sell_item(
+            area_specs,
             player_specs,
             player_resources,
             &player_inventory.bag.remove(item_index),
@@ -272,6 +274,7 @@ pub fn sell_item_from_bag(
 }
 
 pub fn sell_item(
+    area_specs: &AreaSpecs,
     player_specs: &PlayerSpecs,
     player_resources: &mut PlayerResources,
     item_specs: &ItemSpecs,
@@ -289,7 +292,13 @@ pub fn sell_item(
             ItemRarity::Masterwork => 8.0,
         } * player_specs.gold_find
             * 0.01
-            * computations::exponential(item_specs.modifiers.level, MONSTER_INCREASE_FACTOR);
+            * computations::exponential(
+                item_specs
+                    .modifiers
+                    .level
+                    .saturating_sub(area_specs.starting_level - 1),
+                MONSTER_INCREASE_FACTOR,
+            );
 }
 
 fn unequip_weapon(

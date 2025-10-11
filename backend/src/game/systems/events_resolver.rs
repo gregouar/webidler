@@ -236,6 +236,7 @@ fn handle_area_completed_event(
                 item_specs,
             ) {
                 player_controller::sell_item(
+                    &game_data.area_blueprint.specs,
                     game_data.player_specs.read(),
                     game_data.player_resources.mutate(),
                     &item_specs,
