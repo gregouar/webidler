@@ -460,7 +460,7 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 <span class="text-pink-400 p-2 font-bold">
                     {move || private_offer().then_some("Private Offer")}
                 </span>
-                <ItemDetails selected_item />
+                <ItemDetails selected_item show_affixes=true />
                 <div class="flex justify-between items-center text-sm text-gray-400 p-2">
                     <span>"Listed by: "{move || seller_name()}</span>
                     <span>{move || listed_at().map(format_datetime)}</span>
@@ -570,7 +570,7 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 />
             </div>
 
-            <ItemDetails selected_item />
+            <ItemDetails selected_item show_affixes=true />
 
             <div class="flex justify-between items-end p-4 border-t border-zinc-700">
                 <div class="flex items-end gap-1 text-lg text-gray-400 ">
@@ -744,7 +744,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                             })
                     }}
                 </span>
-                <ItemDetails selected_item />
+                <ItemDetails selected_item show_affixes=true />
                 <div class="flex justify-between items-center text-sm text-gray-400 p-2">
                     <span>"Listed by: "{move || seller_name()}</span>
                     <span>{move || listed_at().map(format_datetime)}</span>
@@ -827,7 +827,7 @@ pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             </span>
 
             <div class="flex flex-col">
-                <ItemDetails selected_item />
+                <ItemDetails selected_item show_affixes=true />
                 <div class="flex justify-between items-center text-sm text-gray-400 p-2">
                     {if removed() {
                         view! { <span>"Removed"</span> }.into_any()
