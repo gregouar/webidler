@@ -285,7 +285,10 @@ pub fn ThreatIcon() -> impl IntoView {
         <StaticTooltip
             position=StaticTooltipPosition::Left
             tooltip=|| {
-                format!("Each Threat Level increases Enemies Power by {:.0}%.", THREAT_EFFECT)
+                format!(
+                    "Each Threat Level increases Enemies Power by {:.0}%.",
+                    THREAT_EFFECT * 100.0,
+                )
             }
         >
             <svg
