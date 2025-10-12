@@ -2,7 +2,7 @@
   "name": "Amelia, the Spider Witch",
   "portrait": "monsters/witch_1.webp",
   "rarity": "Boss",
-  "max_life": 1,
+  "max_life": 1000,
   "size": "Gargantuan",
   "power_factor": 200,
   "initiative": 2,
