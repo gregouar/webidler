@@ -129,11 +129,6 @@ pub fn CharacterPortrait(
                 100% { background-position: 400% 0; }
             }        
             
-            .just_hurt_effect {
-                // filter: drop-shadow(0 0 8px red);
-                box-shadow: inset 0 0 32px rgba(192, 0, 0, 1.0);
-            }
-            
             @keyframes shake {
                 0%, 100% { transform: translate(0, 0) rotate(0); }
                 25% { transform: translate(-4px, 2px) rotate(-2deg); }
@@ -196,7 +191,7 @@ pub fn CharacterPortrait(
                 <div
                     class=move || {
                         if just_hurt.get() {
-                            "absolute inset-0 pointer-events-none opacity-100 transition-opacity duration-100"
+                            "absolute inset-0 pointer-events-none opacity-100 transition-opacity duration-200"
                         } else {
                             "absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500"
                         }
