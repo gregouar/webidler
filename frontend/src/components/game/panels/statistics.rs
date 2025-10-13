@@ -47,8 +47,16 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 value=move || format_duration(stats().elapsed_time)
                             />
                             <Stat
-                                label="Highest Area Level"
-                                value=move || stats().highest_area_level.to_string()
+                                label="Highest Area Level (this grind)"
+                                value=move || {
+                                    game_context.area_state.read().max_area_level.to_string()
+                                }
+                            />
+                            <Stat
+                                label="Highest Area Level (ever)"
+                                value=move || {
+                                    game_context.area_state.read().max_area_level_ever.to_string()
+                                }
                             />
                             <Stat
                                 label="Areas Completed"

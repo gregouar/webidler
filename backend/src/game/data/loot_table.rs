@@ -18,6 +18,9 @@ pub struct LootTableEntry {
     pub weight: u64,
     pub min_area_level: Option<AreaLevel>,
     pub max_area_level: Option<AreaLevel>,
+
+    #[serde(default)]
+    pub boss_only: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

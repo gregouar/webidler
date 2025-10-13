@@ -40,9 +40,10 @@ pub async fn resolve_events(
             GameEvent::Kill { target } => {
                 handle_kill_event(&mut trigger_contexts, game_data, *target)
             }
-            GameEvent::AreaCompleted(area_level) => {
-                handle_area_completed_event(game_data, master_store, *area_level)
-            }
+            GameEvent::AreaCompleted {
+                area_level,
+                is_boss,
+            } => handle_area_completed_event(game_data, master_store, *area_level, *is_boss),
             GameEvent::WaveCompleted(area_level) => handle_wave_completed_event(
                 &mut trigger_contexts,
                 events_queue,
@@ -220,9 +221,11 @@ fn handle_area_completed_event(
     game_data: &mut GameInstanceData,
     master_store: &MasterStore,
     area_level: AreaLevel,
+    is_boss_level: bool,
 ) {
     match loot_generator::generate_loot(
         area_level,
+        is_boss_level,
         &game_data.area_blueprint.loot_table,
         &master_store.items_store,
         &master_store.item_affixes_table,
@@ -248,16 +251,15 @@ fn handle_area_completed_event(
 
     let area_state = game_data.area_state.mutate();
 
-    if (area_state.area_level > area_state.max_area_level_completed)
+    if (area_state.area_level > area_state.max_area_level_ever)
         && (area_state.area_level - game_data.area_blueprint.specs.starting_level + 1)
             .is_multiple_of(10)
     {
         game_data.player_resources.mutate().shards += 1.0;
     }
 
-    area_state.max_area_level_completed = area_state
-        .max_area_level_completed
-        .max(area_state.area_level);
+    area_state.max_area_level = area_state.max_area_level.max(area_state.area_level);
+    area_state.max_area_level_ever = area_state.max_area_level_ever.max(area_state.area_level);
 
     area_state.waves_done = 1;
     if area_state.auto_progress {
@@ -265,8 +267,6 @@ fn handle_area_completed_event(
     }
 
     game_data.game_stats.areas_completed += 1;
-    game_data.game_stats.highest_area_level =
-        game_data.game_stats.highest_area_level.max(area_level);
 }
 
 fn handle_wave_completed_event(
@@ -282,7 +282,10 @@ fn handle_wave_completed_event(
     }
 
     if area_state.is_boss || area_state.waves_done > WAVES_PER_AREA_LEVEL {
-        events_queue.register_event(GameEvent::AreaCompleted(area_level));
+        events_queue.register_event(GameEvent::AreaCompleted {
+            area_level,
+            is_boss: area_state.is_boss,
+        });
     }
 
     for triggered_effects in game_data

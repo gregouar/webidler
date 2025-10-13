@@ -9,8 +9,13 @@ use shared::data::{
 #[derive(Debug, Clone)]
 pub enum GameEvent {
     Hit(HitEvent),
-    Kill { target: CharacterId },
-    AreaCompleted(AreaLevel),
+    Kill {
+        target: CharacterId,
+    },
+    AreaCompleted {
+        area_level: AreaLevel,
+        is_boss: bool,
+    },
     WaveCompleted(AreaLevel),
     ThreatIncreased(ThreatLevel),
 }

@@ -59,27 +59,30 @@ fn generate_monsters_wave_specs(
     area_threat: &AreaThreat,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Result<(Vec<MonsterSpecs>, bool)> {
-    let available_bosses: Vec<_> = area_blueprint
-        .bosses
-        .iter()
-        .filter(|b| {
-            area_state.area_level >= b.level
-                && (area_state.area_level - b.level)
-                    .is_multiple_of(b.interval.unwrap_or(AreaLevel::MAX))
-        })
-        .collect();
+    // Can only fight boss once per level
+    if area_state.max_area_level < area_state.area_level {
+        let available_bosses: Vec<_> = area_blueprint
+            .bosses
+            .iter()
+            .filter(|b| {
+                area_state.area_level >= b.level
+                    && (area_state.area_level - b.level)
+                        .is_multiple_of(b.interval.unwrap_or(AreaLevel::MAX))
+            })
+            .collect();
 
-    if let Some(boss) = rng::random_weighted_pick(&available_bosses) {
-        return Ok((
-            generate_all_monsters_specs(
-                &boss.spawns,
-                area_blueprint,
-                area_state,
-                monsters_specs_store,
-                area_threat,
-            ),
-            true,
-        ));
+        if let Some(boss) = rng::random_weighted_pick(&available_bosses) {
+            return Ok((
+                generate_all_monsters_specs(
+                    &boss.spawns,
+                    area_blueprint,
+                    area_state,
+                    monsters_specs_store,
+                    area_threat,
+                ),
+                true,
+            ));
+        }
     }
 
     let available_waves: Vec<_> = area_blueprint

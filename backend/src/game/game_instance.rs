@@ -162,7 +162,7 @@ impl<'a> GameInstance<'a> {
         )
         .await?;
 
-        let area_level = self.game_data.area_state.read().max_area_level_completed as i32;
+        let area_level = self.game_data.area_state.read().max_area_level_ever as i32;
         let delta_area_level =
             area_level - self.game_data.area_blueprint.specs.starting_level as i32 + 1;
 

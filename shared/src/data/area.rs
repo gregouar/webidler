@@ -21,7 +21,8 @@ pub struct AreaState {
     pub is_boss: bool,
     pub waves_done: u8,
 
-    pub max_area_level_completed: AreaLevel,
+    pub max_area_level: AreaLevel,      // Max for this grind
+    pub max_area_level_ever: AreaLevel, // Max for all grind of this area
     pub last_champion_spawn: AreaLevel,
 
     pub auto_progress: bool,

@@ -41,13 +41,14 @@ impl RandomWeighted for &LootTableEntry {
 // TODO: inc magic find (accumulated enemy rarity? player stats? area level?)
 pub fn generate_loot(
     level: AreaLevel,
+    is_boss_level: bool,
     loot_table: &LootTable,
     items_store: &ItemsStore,
     affixes_table: &ItemAffixesTable,
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) -> Option<ItemSpecs> {
-    roll_base_item(loot_table, items_store, level).map(|(base_item_id, base)| {
+    roll_base_item(loot_table, items_store, level, is_boss_level).map(|(base_item_id, base)| {
         let rarity = roll_rarity(&RarityWeights::default()).max(base.rarity);
         roll_item(
             base_item_id,
@@ -131,6 +132,7 @@ fn roll_base_item(
     loot_table: &LootTable,
     items_store: &ItemsStore,
     area_level: AreaLevel,
+    is_boss_level: bool,
 ) -> Option<(String, ItemBase)> {
     let items_available: Vec<_> = loot_table
         .entries
@@ -144,6 +146,7 @@ fn roll_base_item(
                         .unwrap_or(AreaLevel::MIN),
                 )
                 && area_level <= l.max_area_level.unwrap_or(AreaLevel::MAX)
+                && (!l.boss_only || is_boss_level)
         })
         .collect();
 

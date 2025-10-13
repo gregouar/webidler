@@ -99,6 +99,7 @@ async fn control_entities(
     } else {
         game_data.player_respawn_delay = Instant::now();
 
+        let monsters_exist = !game_data.monster_specs.is_empty();
         let mut monsters_still_alive: Vec<_> = game_data
             .monster_specs
             .iter()
@@ -123,7 +124,7 @@ async fn control_entities(
         let wave_completed = monsters_still_alive.is_empty();
         if wave_completed || game_data.area_state.read().going_back > 0 {
             game_data.area_threat.cooldown = 0.0;
-            if wave_completed && !game_data.wave_completed {
+            if wave_completed && !game_data.wave_completed && monsters_exist {
                 game_data.wave_completed = true;
                 events_queue.register_event(GameEvent::WaveCompleted(
                     game_data.area_state.read().area_level,

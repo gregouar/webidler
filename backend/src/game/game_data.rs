@@ -55,7 +55,7 @@ pub struct GameInstanceData {
 pub struct SavedGameData {
     pub area_id: String,
     pub area_level: AreaLevel,
-    pub max_area_level_completed: AreaLevel,
+    pub max_area_level_ever: AreaLevel,
     pub passives_tree_id: String,
     pub passives_tree_state: PassivesTreeState,
     pub player_resources: PlayerResources,
@@ -65,6 +65,9 @@ pub struct SavedGameData {
     pub game_stats: GameStats,
     pub last_champion_spawn: AreaLevel,
     pub auto_progress: bool,
+    // For compatibility
+    #[serde(default)]
+    pub max_area_level: AreaLevel,
 }
 
 impl GameInstanceData {
@@ -81,7 +84,7 @@ impl GameInstanceData {
         player_inventory: PlayerInventory,
     ) -> Self {
         let mut area_state = AreaState::init(&area_blueprint.specs);
-        area_state.max_area_level_completed = max_area_level_completed;
+        area_state.max_area_level_ever = max_area_level_completed;
 
         let mut game_data = Self {
             area_id,
@@ -165,7 +168,8 @@ impl GameInstanceData {
         Ok(rmp_serde::to_vec(&SavedGameData {
             area_id: self.area_id,
             area_level: self.area_state.read().area_level,
-            max_area_level_completed: self.area_state.read().max_area_level_completed,
+            max_area_level: self.area_state.read().max_area_level,
+            max_area_level_ever: self.area_state.read().max_area_level_ever,
             passives_tree_id: self.passives_tree_id,
             passives_tree_state: self.passives_tree_state.unwrap(),
             player_resources: self.player_resources.unwrap(),
@@ -182,7 +186,8 @@ impl GameInstanceData {
         let SavedGameData {
             area_id,
             area_level,
-            max_area_level_completed,
+            max_area_level,
+            max_area_level_ever,
             passives_tree_id,
             passives_tree_state,
             player_resources,
@@ -197,7 +202,7 @@ impl GameInstanceData {
         let mut s = Self::init_from_store(
             master_store,
             &area_id,
-            max_area_level_completed,
+            max_area_level_ever,
             &passives_tree_id,
             passives_tree_state,
             player_resources,
@@ -206,6 +211,7 @@ impl GameInstanceData {
         )?;
 
         s.area_state.mutate().area_level = area_level;
+        s.area_state.mutate().max_area_level = max_area_level;
         s.area_state.mutate().last_champion_spawn = last_champion_spawn;
         s.area_state.mutate().auto_progress = auto_progress;
         s.queued_loot.mutate().extend(queued_loot);

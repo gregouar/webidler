@@ -220,7 +220,7 @@ async fn new_game_instance(
     )?;
 
     // Only the delta is saved in db, so we adjust by starting_level
-    game_data.area_state.mutate().max_area_level_completed +=
+    game_data.area_state.mutate().max_area_level_ever +=
         game_data.area_blueprint.specs.starting_level - 1;
     game_data.area_state.mutate().last_champion_spawn +=
         game_data.area_blueprint.specs.starting_level - 1;
