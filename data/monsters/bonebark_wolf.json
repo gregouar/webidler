@@ -43,7 +43,7 @@
                         "stat": { "Damage": { "skill_type": "Attack" } }
                       }
                     },
-                    "value": 30,
+                    "value": 100,
                     "cumulate": true
                   }
                 ]
