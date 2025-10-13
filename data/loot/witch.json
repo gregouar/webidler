@@ -2,17 +2,17 @@
   "entries": [
     {
       "item_id": "silver_chain_unique",
-      "weight": 20,
+      "weight": 5,
       "min_area_level": 50
     },
     {
       "item_id": "handaxe_unique",
-      "weight": 20,
+      "weight": 5,
       "min_area_level": 50
     },
     {
       "item_id": "iron_cap_unique",
-      "weight": 20,
+      "weight": 5,
       "min_area_level": 50
     }
   ]
