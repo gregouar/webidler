@@ -116,8 +116,9 @@ fn apply_repeated_skill_on_targets<'a>(
         }
     }?;
 
+    let mut applied = false;
     for skill_effect in targets_group.effects.iter() {
-        apply_skill_effect(
+        applied |= apply_skill_effect(
             events_queue,
             attacker,
             skill_type,
@@ -127,7 +128,7 @@ fn apply_repeated_skill_on_targets<'a>(
         );
     }
 
-    Some(main_target_id)
+    applied.then(|| main_target_id)
 }
 
 fn find_targets<'a, 'b>(
@@ -251,6 +252,7 @@ pub fn find_sub_targets<'a, 'b>(
         .collect()
 }
 
+// Return whether the skill could applied (like not enemy already cursed)
 pub fn apply_skill_effect(
     events_queue: &mut EventsQueue,
     attacker: CharacterId,
@@ -258,9 +260,9 @@ pub fn apply_skill_effect(
     range: SkillRange,
     skill_effect: &SkillEffect,
     targets: &mut [&mut Target],
-) {
+) -> bool {
     if !skill_effect.success_chance.roll() {
-        return;
+        return true;
     }
 
     match &skill_effect.effect_type {
@@ -299,39 +301,47 @@ pub fn apply_skill_effect(
                     *ignore_armor,
                 );
             }
+
+            true
         }
         SkillEffectType::ApplyStatus { duration, statuses } => {
+            let mut applied = false;
             for status_effect in statuses.iter() {
                 for target in targets.iter_mut() {
-                    characters_controller::apply_status(
+                    applied |= characters_controller::apply_status(
                         target,
                         &status_effect.status_type,
                         skill_type,
                         status_effect.value.roll(),
                         Some(duration.roll()),
                         status_effect.cumulate,
-                    )
+                    );
                 }
             }
+            applied
         }
         SkillEffectType::Restore {
             restore_type,
             value,
             modifier,
         } => {
+            let mut applied = false;
             for target in targets {
-                characters_controller::restore_character(
+                applied |= characters_controller::restore_character(
                     target,
                     *restore_type,
                     value.roll(),
                     *modifier,
                 );
             }
+            applied
         }
         SkillEffectType::Resurrect => {
+            let mut applied = false;
             for target in targets {
-                characters_controller::resuscitate_character(target);
+                applied |= characters_controller::resuscitate_character(target);
             }
+            applied
         }
     }
 }

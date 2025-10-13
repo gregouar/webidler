@@ -2,7 +2,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     skill::{DamageType, RestoreType, SkillType},
-    stat_effect::{Modifier, StatStatusType, StatType},
+    stat_effect::{Modifier, StatConverterSource, StatConverterSpecs, StatStatusType, StatType},
     trigger::HitTrigger,
 };
 
@@ -315,7 +315,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     .then(move || {
                                         view! {
                                             <Stat
-                                                label="Base Life on Hit"
+                                                label="Life on Hit"
                                                 value=move || { format!("{:.0}", life_on_hit) }
                                             />
                                         }
@@ -336,7 +336,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     .then(move || {
                                         view! {
                                             <Stat
-                                                label="Base Mana on Hit"
+                                                label="Mana on Hit"
                                                 value=move || { format!("{:.0}", mana_on_hit) }
                                             />
                                         }
@@ -378,8 +378,20 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             {make_stat(StatType::Speed(Some(SkillType::Spell)))}
                             {make_stat(StatType::CritChance(None))}
                             {make_opt_stat(StatType::CritChance(Some(SkillType::Spell)), 0.0)}
+                            {make_opt_stat(
+                                StatType::StatConverter(StatConverterSpecs {
+                                    source: StatConverterSource::ThreatLevel,
+                                    target_stat: Box::new(StatType::Damage {
+                                        skill_type: None,
+                                        damage_type: None,
+                                    }),
+                                    target_modifier: Modifier::Multiplier,
+                                    is_extra: false,
+                                    skill_type: None,
+                                }),
+                                0.0,
+                            )}
                         </StatCategory>
-
                         <StatCategory title="Damage">
                             {make_stat(StatType::Damage {
                                 skill_type: Some(SkillType::Attack),

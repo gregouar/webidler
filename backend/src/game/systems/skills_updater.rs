@@ -52,11 +52,6 @@ pub fn update_skill_specs<'a>(
     skill_specs.cooldown = skill_specs.base.cooldown;
     skill_specs.mana_cost = skill_specs.base.mana_cost;
 
-    // let mut local_effects: Vec<_> =
-    //     compute_skill_upgrade_effects(skill_specs, skill_specs.upgrade_level)
-    //         .chain(compute_skill_modifier_effects(skill_specs, inventory))
-    //         .collect();
-
     let local_effects = stats_updater::stats_map_to_vec(
         &EffectsMap::combine_all(
             std::iter::once(compute_skill_upgrade_effects(
@@ -70,11 +65,6 @@ pub fn update_skill_specs<'a>(
         ),
         area_threat,
     );
-
-    // local_effects.sort_by_key(|e| match e.modifier {
-    //     Modifier::Flat => 0,
-    //     Modifier::Multiplier => 1,
-    // });
 
     let global_flat = effects.clone().filter(|e| e.modifier == Modifier::Flat);
     apply_effects_to_skill_specs(skill_specs, global_flat);
@@ -114,23 +104,7 @@ pub fn apply_effects_to_skill_specs<'a>(
 }
 
 pub fn compute_skill_upgrade_effects(skill_specs: &SkillSpecs, level: u16) -> EffectsMap {
-    // ) -> impl Iterator<Item = StatEffect> + use<'_> + Clone {
     let level = level as f64 - 1.0;
-    // skill_specs
-    //     .base
-    //     .upgrade_effects
-    //     .iter()
-    //     .map(move |effect| StatEffect {
-    //         stat: effect.stat.clone(),
-    //         modifier: effect.modifier,
-    // value: match effect.modifier {
-    //     Modifier::Multiplier if effect.stat.is_multiplicative() => {
-    //         ((1.0 + effect.value * 0.01).powf(level) - 1.0) * 100.0
-    //     }
-    //     _ => effect.value * level,
-    // },
-    //         bypass_ignore: false,
-    //     })
 
     skill_specs.base.upgrade_effects.iter().fold(
         EffectsMap(HashMap::new()),
@@ -227,82 +201,6 @@ fn compute_skill_modifier_effects<'a>(
             map
         })
 }
-
-// fn compute_skill_modifier_effects<'a>(
-//     skill_specs: &'a SkillSpecs,
-//     inventory: Option<&'a PlayerInventory>,
-// ) -> EffectsMap {
-//     // ) -> impl Iterator<Item = StatEffect> + use<'a> + Clone {
-//     skill_specs
-//         .base
-//         .modifier_effects
-//         .iter()
-//         .flat_map(
-//             move |modifier_effect| match (modifier_effect.source, inventory) {
-//                 (ModifierEffectSource::ItemStats { slot, item_stats }, Some(inventory)) => {
-//                     inventory
-//                         .equipped_items()
-//                         .filter_map(move |(item_slot, item_specs)| {
-//                             let factor = if slot.unwrap_or(item_slot) == item_slot {
-//                                 match (
-//                                     item_stats,
-//                                     &item_specs.weapon_specs,
-//                                     &item_specs.armor_specs,
-//                                 ) {
-//                                     (
-//                                         ItemStatsSource::Damage(damage_type),
-//                                         Some(weapon_specs),
-//                                         _,
-//                                     ) => {
-//                                         if let Some(damage_type) = damage_type {
-//                                             weapon_specs
-//                                                 .damage
-//                                                 .get(&damage_type)
-//                                                 .map(|value| (value.min + value.max) * 0.5)
-//                                                 .unwrap_or_default()
-//                                         } else {
-//                                             weapon_specs
-//                                                 .damage
-//                                                 .values()
-//                                                 .map(|value| (value.min + value.max) * 0.5)
-//                                                 .sum()
-//                                         }
-//                                     }
-//                                     (ItemStatsSource::Armor, _, Some(armor_specs)) => {
-//                                         armor_specs.armor
-//                                     }
-//                                     _ => 0.0,
-//                                 }
-//                             } else {
-//                                 0.0
-//                             };
-
-//                             if factor > 0.0 {
-//                                 Some((modifier_effect, modifier_effect.factor * factor))
-//                             } else {
-//                                 None
-//                             }
-//                         })
-//                 }
-//                 (ModifierEffectSource::ItemStats { .. }, None) => std::iter::empty(),
-//             },
-//         )
-//         .flat_map(|(modifier_effect, factor)| {
-//             modifier_effect.effects.iter().map(move |effect| {
-//                 (
-//                     (effect.stat.clone(), effect.modifier),
-//                     effect.value * factor,
-//                 )
-//             })
-//         })
-//         .fold(
-//             EffectsMap(HashMap::new()),
-//             |mut effects_map, (key, value)| {
-//                 *effects_map.0.entry(key).or_default() += value;
-//                 effects_map
-//             },
-//         )
-// }
 
 pub fn compute_skill_specs_effect<'a>(
     skill_type: SkillType,
