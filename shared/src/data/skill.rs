@@ -215,6 +215,7 @@ pub enum SkillShape {
     Horizontal3,
     Square4,
     All,
+    Contact,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]

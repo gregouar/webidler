@@ -146,6 +146,7 @@ fn find_targets<'a, 'b>(
             targets_group.range,
             targets_group.shape,
             main_target_pos,
+            (1, 1),
             pre_targets,
         ),
     ))
@@ -201,6 +202,7 @@ pub fn find_sub_targets<'a, 'b>(
     skill_range: SkillRange,
     skill_shape: SkillShape,
     skill_position: (u8, u8),
+    skill_size: (usize, usize),
     pre_targets: &'b mut [Target<'a>],
 ) -> Vec<&'b mut Target<'a>> {
     let skill_position = (skill_position.0 as i32, skill_position.1 as i32);
@@ -236,6 +238,12 @@ pub fn find_sub_targets<'a, 'b>(
                     && (pos.1 == 1 || pos.1 == 2)
             }
             SkillShape::All => true,
+            SkillShape::Contact => {
+                ((pos.0 - skill_position.0).abs() <= 1
+                    || (pos.0 - skill_position.0 - skill_size.0 as i32).abs() <= 1)
+                    && ((pos.1 - skill_position.1).abs() <= 1
+                        || (pos.1 - skill_position.1 - skill_size.1 as i32).abs() <= 1)
+            }
         }
     };
 

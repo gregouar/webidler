@@ -142,6 +142,7 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
         SkillShape::Horizontal3 => ", Area 1x3",
         SkillShape::Square4 => ", Area 2x2",
         SkillShape::All => ", All",
+        SkillShape::Contact => ", Contact",
     };
 
     let range = match targets_group.range {
