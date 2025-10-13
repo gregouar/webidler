@@ -4,7 +4,7 @@
   "rarity": "Boss",
   "max_life": 100,
   "size": "Tall",
-  "power_factor": 30,
+  "power_factor": 15,
   "initiative": [2, 3],
   "armor": {
     "Physical": 50,
