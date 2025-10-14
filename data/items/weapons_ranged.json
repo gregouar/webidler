@@ -12,7 +12,7 @@
       "damage": {
         "Physical": [3, 7]
       },
-      "crit_chance": 8,
+      "crit_chance": 10,
       "crit_damage": 100
     }
   },
@@ -29,7 +29,7 @@
       "damage": {
         "Physical": [7, 11]
       },
-      "crit_chance": 8,
+      "crit_chance": 10,
       "crit_damage": 100
     },
     "min_area_level": 40
@@ -48,7 +48,7 @@
       "damage": {
         "Physical": [7, 11]
       },
-      "crit_chance": 8,
+      "crit_chance": 10,
       "crit_damage": 100
     },
     "rarity": "Unique",
@@ -123,7 +123,7 @@
       "damage": {
         "Physical": [11, 15]
       },
-      "crit_chance": 8,
+      "crit_chance": 10,
       "crit_damage": 100
     },
     "min_area_level": 90
