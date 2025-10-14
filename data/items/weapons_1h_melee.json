@@ -230,7 +230,7 @@
           "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" }
         },
         "modifier": "Flat",
-        "value": [4, 8]
+        "value": [2, 4]
       },
       {
         "scope": "Global",

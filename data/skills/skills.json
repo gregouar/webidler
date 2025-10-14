@@ -37,7 +37,7 @@
     "icon": "skills/chain_lightning.svg",
     "skill_type": "Spell",
     "cooldown": 5,
-    "mana_cost": 15,
+    "mana_cost": 10,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -84,7 +84,7 @@
     "icon": "skills/fireball.svg",
     "skill_type": "Spell",
     "cooldown": 5,
-    "mana_cost": 15,
+    "mana_cost": 10,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -117,7 +117,7 @@
     "icon": "skills/burning_ray.svg",
     "skill_type": "Spell",
     "cooldown": 5,
-    "mana_cost": 15,
+    "mana_cost": 10,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -165,7 +165,7 @@
     "icon": "skills/poison_cloud.svg",
     "skill_type": "Spell",
     "cooldown": 10,
-    "mana_cost": 25,
+    "mana_cost": 20,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -206,7 +206,7 @@
     "icon": "skills/curse_frailty.svg",
     "skill_type": "Spell",
     "cooldown": 10,
-    "mana_cost": 25,
+    "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -252,7 +252,7 @@
     "icon": "skills/curse_weakness.svg",
     "skill_type": "Spell",
     "cooldown": 10,
-    "mana_cost": 20,
+    "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -298,7 +298,7 @@
     "icon": "skills/haste.svg",
     "skill_type": "Spell",
     "cooldown": 20,
-    "mana_cost": 25,
+    "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -348,7 +348,7 @@
     "icon": "skills/blessing_crit.svg",
     "skill_type": "Spell",
     "cooldown": 15,
-    "mana_cost": 25,
+    "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -598,7 +598,7 @@
     "icon": "skills/heal.svg",
     "skill_type": "Spell",
     "cooldown": 20,
-    "mana_cost": 30,
+    "mana_cost": 25,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
