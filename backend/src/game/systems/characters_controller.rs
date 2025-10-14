@@ -147,7 +147,7 @@ pub fn restore_character(
 
 pub fn resuscitate_character(target: &mut Target) -> bool {
     let (_, (target_specs, target_state)) = target;
-    if !target_state.is_alive {
+    if target_state.is_alive {
         return false;
     }
 
