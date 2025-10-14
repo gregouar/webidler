@@ -448,6 +448,10 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                 match item_stats {
                     ItemStatsSource::Damage(damage_type) =>
                         format!("average {}Damage", damage_type_str(damage_type)),
+                    ItemStatsSource::MinDamage(damage_type) =>
+                        format!("Minimum {}Damage", damage_type_str(damage_type)),
+                    ItemStatsSource::MaxDamage(damage_type) =>
+                        format!("Maximum {}Damage", damage_type_str(damage_type)),
                     ItemStatsSource::Armor => "Armor".to_string(),
                 },
                 match slot {

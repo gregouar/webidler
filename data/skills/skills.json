@@ -407,6 +407,11 @@
         },
         "modifier": "Multiplier",
         "value": 50
+      },
+      {
+        "stat": { "StatusDuration": null },
+        "modifier": "Multiplier",
+        "value": 1
       }
     ],
     "triggers": [
@@ -420,7 +425,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 3,
+              "duration": 2,
               "statuses": [
                 {
                   "status_type": {
@@ -434,6 +439,48 @@
             }
           }
         ]
+      }
+    ],
+    "modifier_effects": [
+      {
+        "effects": [
+          {
+            "stat": {
+              "MinDamage": {
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": { "MinDamage": "Poison" }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "effects": [
+          {
+            "stat": {
+              "MaxDamage": {
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": { "MaxDamage": "Poison" }
+          }
+        },
+        "factor": 1
       }
     ]
   },

@@ -161,6 +161,28 @@ fn compute_skill_modifier_effects<'a>(
                                         .sum()
                                 }
                             }
+                            (ItemStatsSource::MinDamage(damage_type), Some(weapon_specs), _) => {
+                                if let Some(dmg_type) = damage_type {
+                                    weapon_specs
+                                        .damage
+                                        .get(dmg_type)
+                                        .map(|d| d.min)
+                                        .unwrap_or_default()
+                                } else {
+                                    weapon_specs.damage.values().map(|d| d.min).sum()
+                                }
+                            }
+                            (ItemStatsSource::MaxDamage(damage_type), Some(weapon_specs), _) => {
+                                if let Some(dmg_type) = damage_type {
+                                    weapon_specs
+                                        .damage
+                                        .get(dmg_type)
+                                        .map(|d| d.max)
+                                        .unwrap_or_default()
+                                } else {
+                                    weapon_specs.damage.values().map(|d| d.max).sum()
+                                }
+                            }
                             (ItemStatsSource::Armor, _, Some(armor_specs)) => armor_specs.armor,
                             _ => 0.0,
                         }

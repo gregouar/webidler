@@ -100,6 +100,8 @@ pub enum ModifierEffectSource {
 pub enum ItemStatsSource {
     Damage(Option<DamageType>), // TODO: split in min and max
     Armor,
+    MinDamage(Option<DamageType>),
+    MaxDamage(Option<DamageType>),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
