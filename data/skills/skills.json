@@ -36,7 +36,7 @@
     "description": "A power spell that hit randomly multiple enemies, with a possibility to stun them.",
     "icon": "skills/chain_lightning.svg",
     "skill_type": "Spell",
-    "cooldown": 5,
+    "cooldown": 4,
     "mana_cost": 10,
     "upgrade_cost": 50,
     "upgrade_effects": [
@@ -83,7 +83,7 @@
     "description": "THurl a blazing fireball that explodes on impact, scorching multiple enemies within its area.",
     "icon": "skills/fireball.svg",
     "skill_type": "Spell",
-    "cooldown": 5,
+    "cooldown": 4,
     "mana_cost": 10,
     "upgrade_cost": 50,
     "upgrade_effects": [
@@ -116,7 +116,7 @@
     "description": "Release a horizontal beam of fire that burns enemies over time. Useful for hitting groups in a line.",
     "icon": "skills/burning_ray.svg",
     "skill_type": "Spell",
-    "cooldown": 5,
+    "cooldown": 4,
     "mana_cost": 10,
     "upgrade_cost": 50,
     "upgrade_effects": [
@@ -164,7 +164,7 @@
     "description": "Summon a toxic cloud that poisons all enemies in its area, dealing damage over time.",
     "icon": "skills/poison_cloud.svg",
     "skill_type": "Spell",
-    "cooldown": 10,
+    "cooldown": 8,
     "mana_cost": 20,
     "upgrade_cost": 50,
     "upgrade_effects": [
@@ -347,7 +347,7 @@
     "description": "A blessing that increase your chance of critical strike, and make them stronger.",
     "icon": "skills/blessing_crit.svg",
     "skill_type": "Spell",
-    "cooldown": 15,
+    "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
