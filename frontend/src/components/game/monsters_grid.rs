@@ -107,7 +107,7 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
 
     let style = format!(
         "--x-offset: {}px; --y-offset: {}px; --rotate: {}deg; --duration: {}s; \
-         --scale-start: {}; --scale-end: {}; --x-offset-start: {};",
+         --scale-start: {}; --scale-end: {}; --x-offset-start: {}px;",
         x_offset, y_offset, rotate, duration, scale_start, scale_end, x_offset_start
     );
 
@@ -318,13 +318,13 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 }
                 60% {
                     opacity: 1;
-                    transform: translate(calc(var(--x-offset-start)+var(--x-offset) * 0.6), calc(var(--y-offset) * 0.6))
+                    transform: translate(calc(var(--x-offset-start) + var(--x-offset) * 0.6), calc(var(--y-offset) * 0.6))
                             scale(var(--scale-end))
                             rotate(calc(var(--rotate) * 0.6));
                 }
                 100% {
                     opacity: 0;
-                    transform: translate(calc(var(--x-offset-start)+var(--x-offset)), var(--y-offset))
+                    transform: translate(calc(var(--x-offset-start) + var(--x-offset)), var(--y-offset))
                             scale(calc(var(--scale-end) * 1.1))
                             rotate(var(--rotate));
                 }
