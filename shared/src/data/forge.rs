@@ -8,7 +8,7 @@ pub fn affix_price(amount: usize) -> Option<f64> {
         1 => Some(3.0),
         2 => Some(5.0),
         3 => Some(10.0),
-        4 => Some(100.0),
+        4 => Some(50.0),
         _ => None,
     }
 }
