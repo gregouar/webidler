@@ -433,9 +433,9 @@ pub fn predictive_cooldown(
 
     use_interval_fn(
         move || {
-            if !disabled.get_untracked() {
+            let rate = rate.get_untracked();
+            if !disabled.get_untracked() && rate > 0.0 {
                 progress_value.update(|progress_value| {
-                    let rate = rate.get_untracked();
                     if *progress_value < 1.2 {
                         *progress_value += rate * 0.2;
                     }

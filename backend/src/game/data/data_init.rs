@@ -24,7 +24,7 @@ impl DataInit<&AreaSpecs> for AreaState {
         AreaState {
             area_level: specs.starting_level,
             is_boss: false,
-            waves_done: 0,
+            waves_done: 1,
             max_area_level: 0,
             max_area_level_ever: 0,
             last_champion_spawn: 0,

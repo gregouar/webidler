@@ -1,12 +1,14 @@
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
-    skill::{DamageType, SkillType},
-    stat_effect::{Modifier, StatType},
+    skill::{DamageType, RestoreType, SkillType},
+    stat_effect::{Modifier, StatConverterSource, StatConverterSpecs, StatStatusType, StatType},
+    trigger::HitTrigger,
 };
 
 use crate::components::{
     game::GameContext,
+    shared::tooltips::effects_tooltip::format_multiplier_stat_name,
     ui::{
         buttons::CloseButton,
         menu_panel::{MenuPanel, PanelTitle},
@@ -47,18 +49,6 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 value=move || format_duration(stats().elapsed_time)
                             />
                             <Stat
-                                label="Highest Area Level (this grind)"
-                                value=move || {
-                                    game_context.area_state.read().max_area_level.to_string()
-                                }
-                            />
-                            <Stat
-                                label="Highest Area Level (ever)"
-                                value=move || {
-                                    game_context.area_state.read().max_area_level_ever.to_string()
-                                }
-                            />
-                            <Stat
                                 label="Areas Completed"
                                 value=move || stats().areas_completed.to_string()
                             />
@@ -69,6 +59,18 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             <Stat
                                 label="Player Deaths"
                                 value=move || stats().player_deaths.to_string()
+                            />
+                            <Stat
+                                label="Highest Area Level (this grind)"
+                                value=move || {
+                                    game_context.area_state.read().max_area_level.to_string()
+                                }
+                            />
+                            <Stat
+                                label="Highest Area Level (ever)"
+                                value=move || {
+                                    game_context.area_state.read().max_area_level_ever.to_string()
+                                }
                             />
                         </StatCategory>
 
@@ -134,103 +136,6 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     format!(
                                         "{:.2}s",
                                         game_context.player_specs.read().movement_cooldown,
-                                    )
-                                }
-                            />
-                        </StatCategory>
-
-                        <StatCategory title="Damage">
-                            <Stat
-                                label="Increased Action Speed"
-                                value=move || {
-                                    format!(
-                                        "+{:.0}%",
-                                        effect(StatType::Speed(None), Modifier::Multiplier),
-                                    )
-                                }
-                            />
-                            <Stat
-                                label="More Physical Damage"
-                                value=move || {
-                                    format!(
-                                        "+{}%",
-                                        format_number(
-                                            effect(
-                                                StatType::Damage {
-                                                    skill_type: None,
-                                                    damage_type: Some(DamageType::Physical),
-                                                },
-                                                Modifier::Multiplier,
-                                            ),
-                                        ),
-                                    )
-                                }
-                            />
-                            <Stat
-                                label="More Fire Damage"
-                                value=move || {
-                                    format!(
-                                        "+{}%",
-                                        format_number(
-                                            effect(
-                                                StatType::Damage {
-                                                    skill_type: None,
-                                                    damage_type: Some(DamageType::Fire),
-                                                },
-                                                Modifier::Multiplier,
-                                            ),
-                                        ),
-                                    )
-                                }
-                            />
-                            <Stat
-                                label="More Poison Damage"
-                                value=move || {
-                                    format!(
-                                        "+{}%",
-                                        format_number(
-                                            effect(
-                                                StatType::Damage {
-                                                    skill_type: None,
-                                                    damage_type: Some(DamageType::Poison),
-                                                },
-                                                Modifier::Multiplier,
-                                            ),
-                                        ),
-                                    )
-                                }
-                            />
-                            <Stat
-                                label="More Storm Damage"
-                                value=move || {
-                                    format!(
-                                        "+{}%",
-                                        format_number(
-                                            effect(
-                                                StatType::Damage {
-                                                    skill_type: None,
-                                                    damage_type: Some(DamageType::Storm),
-                                                },
-                                                Modifier::Multiplier,
-                                            ),
-                                        ),
-                                    )
-                                }
-                            />
-                            <Stat
-                                label="Increased Critical Hit Chance"
-                                value=move || format_effect_value(
-                                    effect(StatType::CritChance(None), Modifier::Multiplier),
-                                )
-                            />
-                            <Stat
-                                label="Increased Critical Hit Damage"
-                                value=move || {
-                                    format!(
-                                        "+{}%",
-                                        format_number(
-                                            effect(StatType::CritDamage(None), Modifier::Multiplier),
-                                        ),
                                     )
                                 }
                             />
@@ -310,70 +215,228 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     )
                                 }
                             />
+                            {move || {
+                                let block_spell = game_context
+                                    .player_specs
+                                    .read()
+                                    .character_specs
+                                    .block_spell
+                                    .value as f64;
+                                (block_spell != 0.0)
+                                    .then(move || {
+                                        view! {
+                                            <Stat
+                                                label="Block Chance Applied to Spells"
+                                                value=move || format!("{:.0}%", block_spell)
+                                            />
+                                        }
+                                    })
+                            }}
+                            {move || {
+                                let block_damage = game_context
+                                    .player_specs
+                                    .read()
+                                    .character_specs
+                                    .block_damage as f64;
+                                (block_damage != 0.0)
+                                    .then(move || {
+                                        view! {
+                                            <Stat
+                                                label="Blocked Damage Taken"
+                                                value=move || format!("{:.0}%", block_damage)
+                                            />
+                                        }
+                                    })
+                            }}
+                            {move || {
+                                let take_from_mana_before_life = game_context
+                                    .player_specs
+                                    .read()
+                                    .character_specs
+                                    .take_from_mana_before_life as f64;
+                                (take_from_mana_before_life != 0.0)
+                                    .then(move || {
+                                        view! {
+                                            <Stat
+                                                label="Mana Taken Before Life"
+                                                value=move || format!("{:.0}%", take_from_mana_before_life)
+                                            />
+                                        }
+                                    })
+                            }}
+                            {move || {
+                                game_context
+                                    .player_specs
+                                    .with(|player_specs| {
+                                        view! {
+                                            {player_specs
+                                                .character_specs
+                                                .damage_resistance
+                                                .clone()
+                                                .into_iter()
+                                                .map(|((skill_type, damage_type), value)| {
+                                                    view! {
+                                                        <Stat
+                                                            label=format_multiplier_stat_name(
+                                                                &StatType::DamageResistance {
+                                                                    skill_type: Some(skill_type),
+                                                                    damage_type: Some(damage_type),
+                                                                },
+                                                            )
+                                                            value=move || format!("{:.0}%", value)
+                                                        />
+                                                    }
+                                                })
+                                                .collect::<Vec<_>>()}
+                                        }
+                                    })
+                            }}
                         </StatCategory>
 
-                        <StatCategory title="Attacks">
+                        <StatCategory title="Utility">
                             <Stat
-                                label="Increased Attack Speed"
+                                label="Threat Gain"
                                 value=move || {
-                                    format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            StatType::Speed(Some(SkillType::Attack)),
-                                            Modifier::Multiplier,
-                                        ),
-                                    )
+                                    format!("{:.0}%", game_context.player_specs.read().threat_gain)
                                 }
                             />
-                            <Stat
-                                label="More Attack Damage"
-                                value=move || {
-                                    format!(
-                                        "+{}%",
-                                        format_number(
-                                            effect(
-                                                StatType::Damage {
-                                                    skill_type: Some(SkillType::Attack),
-                                                    damage_type: None,
-                                                },
-                                                Modifier::Multiplier,
-                                            ),
-                                        ),
-                                    )
-                                }
-                            />
+                            {move || {
+                                let life_on_hit = effect(
+                                    StatType::LifeOnHit(HitTrigger {
+                                        skill_type: Some(SkillType::Attack),
+                                        range: None,
+                                        is_crit: None,
+                                        is_blocked: None,
+                                        is_hurt: Some(true),
+                                    }),
+                                    Modifier::Flat,
+                                );
+                                (life_on_hit > 0.0)
+                                    .then(move || {
+                                        view! {
+                                            <Stat
+                                                label="Life on Hit"
+                                                value=move || { format!("{:.0}", life_on_hit) }
+                                            />
+                                        }
+                                    })
+                            }}
+                            {move || {
+                                let mana_on_hit = effect(
+                                    StatType::ManaOnHit(HitTrigger {
+                                        skill_type: Some(SkillType::Attack),
+                                        range: None,
+                                        is_crit: None,
+                                        is_blocked: None,
+                                        is_hurt: Some(true),
+                                    }),
+                                    Modifier::Flat,
+                                );
+                                (mana_on_hit > 0.0)
+                                    .then(move || {
+                                        view! {
+                                            <Stat
+                                                label="Mana on Hit"
+                                                value=move || { format!("{:.0}", mana_on_hit) }
+                                            />
+                                        }
+                                    })
+                            }}
+                            {make_stat(StatType::Restore(None))}
+                            {make_opt_stat(StatType::Restore(Some(RestoreType::Life)), 0.0)}
+                            {make_opt_stat(StatType::Restore(Some(RestoreType::Mana)), 0.0)}
+                            {make_stat(StatType::StatusDuration(None))}
+                            {make_stat(StatType::StatusPower(None))}
+                            {make_opt_stat(
+                                StatType::StatusPower(
+                                    Some(StatStatusType::StatModifier {
+                                        debuff: Some(false),
+                                    }),
+                                ),
+                                0.0,
+                            )}
+                            {make_opt_stat(
+                                StatType::StatusPower(
+                                    Some(StatStatusType::StatModifier {
+                                        debuff: Some(true),
+                                    }),
+                                ),
+                                0.0,
+                            )}
+                            {make_opt_stat(
+                                StatType::SuccessChance {
+                                    skill_type: None,
+                                    effect_type: None,
+                                },
+                                0.0,
+                            )}
                         </StatCategory>
 
-                        <StatCategory title="Spells">
-                            <Stat
-                                label="Increased Casting Speed"
-                                value=move || {
-                                    format!(
-                                        "+{:.0}%",
-                                        effect(
-                                            StatType::Speed(Some(SkillType::Spell)),
-                                            Modifier::Multiplier,
-                                        ),
-                                    )
-                                }
-                            />
-                            <Stat
-                                label="More Spell Damage"
-                                value=move || {
-                                    format!(
-                                        "+{}%",
-                                        format_number(
-                                            effect(
-                                                StatType::Damage {
-                                                    skill_type: Some(SkillType::Spell),
-                                                    damage_type: None,
-                                                },
-                                                Modifier::Multiplier,
-                                            ),
-                                        ),
-                                    )
-                                }
-                            />
+                        <StatCategory title="Combat">
+                            {make_stat(StatType::Speed(None))}
+                            {make_stat(StatType::Speed(Some(SkillType::Attack)))}
+                            {make_stat(StatType::Speed(Some(SkillType::Spell)))}
+                            {make_stat(StatType::CritChance(None))}
+                            {make_opt_stat(StatType::CritChance(Some(SkillType::Spell)), 0.0)}
+                            {make_opt_stat(
+                                StatType::StatConverter(StatConverterSpecs {
+                                    source: StatConverterSource::ThreatLevel,
+                                    target_stat: Box::new(StatType::Damage {
+                                        skill_type: None,
+                                        damage_type: None,
+                                    }),
+                                    target_modifier: Modifier::Multiplier,
+                                    is_extra: false,
+                                    skill_type: None,
+                                }),
+                                0.0,
+                            )}
+                        </StatCategory>
+                        <StatCategory title="Damage">
+                            {make_stat(StatType::Damage {
+                                skill_type: Some(SkillType::Attack),
+                                damage_type: None,
+                            })}
+                            {make_stat(StatType::Damage {
+                                skill_type: Some(SkillType::Spell),
+                                damage_type: None,
+                            })}
+                            {make_opt_stat(
+                                StatType::Damage {
+                                    skill_type: None,
+                                    damage_type: Some(DamageType::Physical),
+                                },
+                                0.0,
+                            )}
+                            {make_opt_stat(
+                                StatType::Damage {
+                                    skill_type: None,
+                                    damage_type: Some(DamageType::Fire),
+                                },
+                                0.0,
+                            )}
+                            {make_opt_stat(
+                                StatType::Damage {
+                                    skill_type: None,
+                                    damage_type: Some(DamageType::Poison),
+                                },
+                                0.0,
+                            )}
+                            {make_opt_stat(
+                                StatType::Damage {
+                                    skill_type: None,
+                                    damage_type: Some(DamageType::Storm),
+                                },
+                                0.0,
+                            )}
+                            {make_opt_stat(
+                                StatType::StatusPower(
+                                    Some(StatStatusType::DamageOverTime {
+                                        damage_type: None,
+                                    }),
+                                ),
+                                0.0,
+                            )} {make_opt_stat(StatType::CritDamage(None), 0.0)}
                         </StatCategory>
                     </div>
 
@@ -402,8 +465,47 @@ fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
     }
 }
 
+fn make_opt_stat(stat_type: StatType, default: f64) -> impl IntoView + use<> {
+    let game_context = expect_context::<GameContext>();
+
+    let value = game_context
+        .player_specs
+        .read()
+        .effects
+        .0
+        .get(&(stat_type.clone(), Modifier::Multiplier))
+        .copied()
+        .unwrap_or_default();
+
+    (default != value).then(|| make_stat(stat_type))
+}
+
+fn make_stat(stat_type: StatType) -> impl IntoView + use<> {
+    let game_context = expect_context::<GameContext>();
+
+    view! {
+        <Stat
+            label=format!(
+                "{} {}",
+                if stat_type.is_multiplicative() { "More" } else { "Increased" },
+                format_multiplier_stat_name(&stat_type),
+            )
+            value=move || format_effect_value(
+                game_context
+                    .player_specs
+                    .read()
+                    .effects
+                    .0
+                    .get(&(stat_type.clone(), Modifier::Multiplier))
+                    .copied()
+                    .unwrap_or_default(),
+            )
+        />
+    }
+}
+
 #[component]
-fn Stat(label: &'static str, value: impl Fn() -> String + 'static) -> impl IntoView {
+fn Stat(#[prop(into)] label: String, value: impl Fn() -> String + 'static) -> impl IntoView {
     view! {
         <div class="flex justify-between px-6 text-sm xl:text-base">
             <span class="text-gray-400">{label}</span>

@@ -3,6 +3,8 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,html}'],
   safelist: [
     'duration-100',
+    'duration-200',
+    'duration-500',
     'duration-1000',
     'col-span-1',
     'col-span-2',

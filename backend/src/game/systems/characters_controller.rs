@@ -110,11 +110,11 @@ pub fn restore_character(
     restore_type: RestoreType,
     amount: f64,
     modifier: Modifier,
-) {
+) -> bool {
     let (_, (target_specs, target_state)) = target;
 
-    if amount <= 0.0 {
-        return;
+    if amount <= 0.0 || !target_state.is_alive {
+        return false;
     }
 
     let factor = match modifier {
@@ -125,16 +125,32 @@ pub fn restore_character(
         Modifier::Flat => 1.0,
     };
 
-    if target_state.is_alive {
-        match restore_type {
-            RestoreType::Life => target_state.life += amount * factor,
-            RestoreType::Mana => target_state.mana += amount * factor,
+    match restore_type {
+        RestoreType::Life => {
+            if target_state.life < target_specs.max_life {
+                target_state.life += amount * factor;
+                true
+            } else {
+                false
+            }
+        }
+        RestoreType::Mana => {
+            if target_state.mana < target_specs.max_mana {
+                target_state.mana += amount * factor;
+                true
+            } else {
+                false
+            }
         }
     }
 }
 
-pub fn resuscitate_character(target: &mut Target) {
+pub fn resuscitate_character(target: &mut Target) -> bool {
     let (_, (target_specs, target_state)) = target;
+    if target_state.is_alive {
+        return false;
+    }
+
     target_state.is_alive = true;
     target_state.life = target_specs.max_life;
 
@@ -146,6 +162,8 @@ pub fn resuscitate_character(target: &mut Target) {
         .statuses
         .cumulative_statuses
         .retain(|(_, status_state)| status_state.duration.is_none());
+
+    true
 }
 
 pub fn apply_status(
@@ -155,16 +173,18 @@ pub fn apply_status(
     value: f64,
     duration: Option<f64>,
     cumulate: bool,
-) {
+) -> bool {
     let (_, (target_specs, target_state)) = target;
 
-    if duration.unwrap_or(1.0) <= 0.0 {
-        return;
+    if duration.unwrap_or(1.0) <= 0.0 || !target_state.is_alive {
+        return false;
     }
 
-    if !target_state.is_alive & duration.is_some() {
-        return;
-    }
+    // Long duration are considered as forever
+    let duration = match duration {
+        Some(duration) if duration > 9999.0f64 => None,
+        _ => duration,
+    };
 
     let value = match status_specs {
         StatusSpecs::DamageOverTime {
@@ -174,6 +194,7 @@ pub fn apply_status(
         _ => value,
     };
 
+    let mut applied = true;
     if cumulate {
         target_state.statuses.cumulative_statuses.push((
             status_specs.clone(),
@@ -189,12 +210,14 @@ pub fn apply_status(
             .unique_statuses
             .entry(status_specs.into())
             .and_modify(|(cur_status_specs, cur_status_state)| {
-                if value * duration.unwrap_or(1.0)
-                    > cur_status_state.value * cur_status_state.duration.unwrap_or(1.0)
+                if value * duration.unwrap_or(10_000.0)
+                    > cur_status_state.value * cur_status_state.duration.unwrap_or(10_000.0)
                 {
                     cur_status_state.value = value;
                     cur_status_state.duration = duration;
                     *cur_status_specs = status_specs.clone();
+                } else {
+                    applied = false;
                 }
             })
             .or_insert((
@@ -207,9 +230,15 @@ pub fn apply_status(
             ));
     }
 
+    if !applied {
+        return false;
+    }
+
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger { .. } = status_specs {
         target_state.dirty_specs = true;
     }
+
+    true
 }
 
 pub fn compute_damage(

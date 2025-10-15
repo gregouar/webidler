@@ -80,6 +80,7 @@ pub enum StatType {
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
+    // TODO: Collapse to simple Effect, if more involved trigger is needed, we can always add as pure trigger
     LifeOnHit(#[serde(default)] HitTrigger),
     ManaOnHit(#[serde(default)] HitTrigger),
     Restore(#[serde(default)] Option<RestoreType>),

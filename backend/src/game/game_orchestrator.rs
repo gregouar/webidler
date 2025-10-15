@@ -93,6 +93,7 @@ async fn control_entities(
 ) -> Result<()> {
     if !game_data.player_state.character_state.is_alive {
         game_data.area_threat.cooldown = 0.0;
+        game_data.monster_wave_delay = Instant::now();
         if game_data.player_respawn_delay.elapsed() > PLAYER_RESPAWN_PERIOD {
             respawn_player(game_data);
         }
@@ -247,6 +248,9 @@ fn respawn_player(game_data: &mut GameInstanceData) {
     );
 
     game_data.player_state = PlayerState::init(game_data.player_specs.read());
+    // for skill_state in game_data.player_state.skills_states.iter_mut() {
+    //     skill_state.elapsed_cooldown = 0.5;
+    // }
 
     if game_data.area_state.read().auto_progress {
         area_controller::decrease_area_level(
@@ -254,5 +258,7 @@ fn respawn_player(game_data: &mut GameInstanceData) {
             game_data.area_state.mutate(),
             1,
         );
+    } else {
+        game_data.area_state.mutate().waves_done = 1;
     }
 }

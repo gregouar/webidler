@@ -1990,7 +1990,7 @@
             },
             "target": "SameTarget",
             "skill_range": "Any",
-            "skill_shape": "Square4",
+            "skill_shape": "Contact",
             "effects": [
               {
                 "ApplyStatus": {

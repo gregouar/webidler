@@ -116,8 +116,9 @@ fn apply_repeated_skill_on_targets<'a>(
         }
     }?;
 
+    let mut applied = false;
     for skill_effect in targets_group.effects.iter() {
-        apply_skill_effect(
+        applied |= apply_skill_effect(
             events_queue,
             attacker,
             skill_type,
@@ -127,7 +128,7 @@ fn apply_repeated_skill_on_targets<'a>(
         );
     }
 
-    Some(main_target_id)
+    applied.then(|| main_target_id)
 }
 
 fn find_targets<'a, 'b>(
@@ -145,6 +146,7 @@ fn find_targets<'a, 'b>(
             targets_group.range,
             targets_group.shape,
             main_target_pos,
+            (1, 1),
             pre_targets,
         ),
     ))
@@ -200,6 +202,7 @@ pub fn find_sub_targets<'a, 'b>(
     skill_range: SkillRange,
     skill_shape: SkillShape,
     skill_position: (u8, u8),
+    skill_size: (usize, usize),
     pre_targets: &'b mut [Target<'a>],
 ) -> Vec<&'b mut Target<'a>> {
     let skill_position = (skill_position.0 as i32, skill_position.1 as i32);
@@ -235,6 +238,21 @@ pub fn find_sub_targets<'a, 'b>(
                     && (pos.1 == 1 || pos.1 == 2)
             }
             SkillShape::All => true,
+            SkillShape::Contact => {
+                let x_dis = (pos.0 - skill_position.0)
+                    .abs()
+                    .min((pos.0 - skill_position.0 - skill_size.0 as i32 + 1).abs());
+                let y_dis = (pos.1 - skill_position.1)
+                    .abs()
+                    .min((pos.1 - skill_position.1 - skill_size.1 as i32 + 1).abs());
+
+                x_dis + y_dis <= 1
+
+                // ((pos.0 - skill_position.0).abs() <= 1
+                //     || (pos.0 - skill_position.0 - skill_size.0 as i32 + 1).abs() <= 1)
+                //     && ((pos.1 - skill_position.1).abs() <= 1
+                //         || (pos.1 - skill_position.1 - skill_size.1 as i32 + 1).abs() <= 1)
+            }
         }
     };
 
@@ -251,6 +269,7 @@ pub fn find_sub_targets<'a, 'b>(
         .collect()
 }
 
+// Return whether the skill could applied (like not enemy already cursed)
 pub fn apply_skill_effect(
     events_queue: &mut EventsQueue,
     attacker: CharacterId,
@@ -258,9 +277,9 @@ pub fn apply_skill_effect(
     range: SkillRange,
     skill_effect: &SkillEffect,
     targets: &mut [&mut Target],
-) {
+) -> bool {
     if !skill_effect.success_chance.roll() {
-        return;
+        return true;
     }
 
     match &skill_effect.effect_type {
@@ -299,39 +318,47 @@ pub fn apply_skill_effect(
                     *ignore_armor,
                 );
             }
+
+            true
         }
         SkillEffectType::ApplyStatus { duration, statuses } => {
+            let mut applied = false;
             for status_effect in statuses.iter() {
                 for target in targets.iter_mut() {
-                    characters_controller::apply_status(
+                    applied |= characters_controller::apply_status(
                         target,
                         &status_effect.status_type,
                         skill_type,
                         status_effect.value.roll(),
                         Some(duration.roll()),
                         status_effect.cumulate,
-                    )
+                    );
                 }
             }
+            applied
         }
         SkillEffectType::Restore {
             restore_type,
             value,
             modifier,
         } => {
+            let mut applied = false;
             for target in targets {
-                characters_controller::restore_character(
+                applied |= characters_controller::restore_character(
                     target,
                     *restore_type,
                     value.roll(),
                     *modifier,
                 );
             }
+            applied
         }
         SkillEffectType::Resurrect => {
+            let mut applied = false;
             for target in targets {
-                characters_controller::resuscitate_character(target);
+                applied |= characters_controller::resuscitate_character(target);
             }
+            applied
         }
     }
 }

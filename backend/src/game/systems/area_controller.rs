@@ -6,5 +6,5 @@ pub fn decrease_area_level(world_specs: &AreaSpecs, area_state: &mut AreaState, 
         .saturating_sub(amount)
         .max(1)
         .max(world_specs.starting_level);
-    area_state.waves_done = 0;
+    area_state.waves_done = 1;
 }

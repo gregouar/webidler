@@ -19,7 +19,7 @@ pub struct AreaSpecs {
 pub struct AreaState {
     pub area_level: AreaLevel,
     pub is_boss: bool,
-    pub waves_done: u8,
+    pub waves_done: u8, // TODO: could rename to current wave
 
     pub max_area_level: AreaLevel,      // Max for this grind
     pub max_area_level_ever: AreaLevel, // Max for all grind of this area

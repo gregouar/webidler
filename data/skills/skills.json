@@ -36,8 +36,8 @@
     "description": "A power spell that hit randomly multiple enemies, with a possibility to stun them.",
     "icon": "skills/chain_lightning.svg",
     "skill_type": "Spell",
-    "cooldown": 5,
-    "mana_cost": 15,
+    "cooldown": 4,
+    "mana_cost": 10,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -59,7 +59,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Storm": [0, 20]
+                "Storm": [0, 25]
               }
             }
           },
@@ -83,8 +83,8 @@
     "description": "THurl a blazing fireball that explodes on impact, scorching multiple enemies within its area.",
     "icon": "skills/fireball.svg",
     "skill_type": "Spell",
-    "cooldown": 5,
-    "mana_cost": 15,
+    "cooldown": 4,
+    "mana_cost": 10,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -116,8 +116,8 @@
     "description": "Release a horizontal beam of fire that burns enemies over time. Useful for hitting groups in a line.",
     "icon": "skills/burning_ray.svg",
     "skill_type": "Spell",
-    "cooldown": 5,
-    "mana_cost": 15,
+    "cooldown": 4,
+    "mana_cost": 10,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -136,7 +136,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Fire": [2, 5]
+                "Fire": [3, 8]
               }
             }
           },
@@ -150,7 +150,7 @@
                       "damage_type": "Fire"
                     }
                   },
-                  "value": [1, 2]
+                  "value": [1, 3]
                 }
               ]
             }
@@ -164,8 +164,8 @@
     "description": "Summon a toxic cloud that poisons all enemies in its area, dealing damage over time.",
     "icon": "skills/poison_cloud.svg",
     "skill_type": "Spell",
-    "cooldown": 10,
-    "mana_cost": 25,
+    "cooldown": 8,
+    "mana_cost": 20,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -206,7 +206,7 @@
     "icon": "skills/curse_frailty.svg",
     "skill_type": "Spell",
     "cooldown": 10,
-    "mana_cost": 25,
+    "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -252,7 +252,7 @@
     "icon": "skills/curse_weakness.svg",
     "skill_type": "Spell",
     "cooldown": 10,
-    "mana_cost": 20,
+    "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -298,13 +298,13 @@
     "icon": "skills/haste.svg",
     "skill_type": "Spell",
     "cooldown": 20,
-    "mana_cost": 25,
+    "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
         "modifier": "Multiplier",
-        "value": 10
+        "value": 5
       }
     ],
     "targets": [
@@ -347,8 +347,8 @@
     "description": "A blessing that increase your chance of critical strike, and make them stronger.",
     "icon": "skills/blessing_crit.svg",
     "skill_type": "Spell",
-    "cooldown": 15,
-    "mana_cost": 25,
+    "cooldown": 10,
+    "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -383,7 +383,7 @@
                       "modifier": "Multiplier"
                     }
                   },
-                  "value": 40
+                  "value": 50
                 }
               ]
             }
@@ -407,6 +407,11 @@
         },
         "modifier": "Multiplier",
         "value": 50
+      },
+      {
+        "stat": { "StatusDuration": null },
+        "modifier": "Multiplier",
+        "value": 1
       }
     ],
     "triggers": [
@@ -420,7 +425,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 3,
+              "duration": 2,
               "statuses": [
                 {
                   "status_type": {
@@ -434,6 +439,48 @@
             }
           }
         ]
+      }
+    ],
+    "modifier_effects": [
+      {
+        "effects": [
+          {
+            "stat": {
+              "MinDamage": {
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": { "MinDamage": "Poison" }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "effects": [
+          {
+            "stat": {
+              "MaxDamage": {
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": { "MaxDamage": "Poison" }
+          }
+        },
+        "factor": 1
       }
     ]
   },
@@ -551,7 +598,7 @@
     "icon": "skills/heal.svg",
     "skill_type": "Spell",
     "cooldown": 20,
-    "mana_cost": 30,
+    "mana_cost": 25,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {

@@ -71,15 +71,21 @@ pub fn apply_trigger_effects(
                     vec![&mut player_target]
                 }
                 CharacterId::Monster(i) => {
-                    let target_position = game_data
+                    let (target_position, target_size) = game_data
                         .monster_specs
                         .get(i)
-                        .map(|m| (m.character_specs.position_x, m.character_specs.position_y))
+                        .map(|m| {
+                            (
+                                (m.character_specs.position_x, m.character_specs.position_y),
+                                m.character_specs.size.get_xy_size(),
+                            )
+                        })
                         .unwrap_or_default();
                     skills_controller::find_sub_targets(
                         trigger_context.trigger.skill_range,
                         trigger_context.trigger.skill_shape,
                         target_position,
+                        target_size,
                         &mut monsters_still_alive,
                     )
                 }
