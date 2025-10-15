@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
+use rand::Rng;
 use shared::data::monster::MonsterRarity;
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
 
@@ -82,6 +83,44 @@ pub fn MonstersGrid() -> impl IntoView {
     }
 }
 
+#[derive(Clone)]
+struct DamageTick {
+    pub id: usize,
+    pub amount: f64,
+}
+
+#[component]
+fn DamageNumber(tick: DamageTick) -> impl IntoView {
+    let mut rng = rand::rng();
+
+    let angle = rng.random_range(-0.4_f32..=0.4_f32);
+    let distance = rng.random_range(50.0..=80.0);
+    let x_offset = -angle.sin() * distance;
+    let y_offset = angle.cos() * distance;
+    let rotate = angle.to_degrees() * 0.8;
+
+    let x_offset_start = rng.random_range(-50..=50);
+
+    let duration = 2.0;
+    let scale_start = rng.random_range(1.0..=1.3);
+    let scale_end = rng.random_range(1.2..=1.6);
+
+    let style = format!(
+        "--x-offset: {}px; --y-offset: {}px; --rotate: {}deg; --duration: {}s; \
+         --scale-start: {}; --scale-end: {}; --x-offset-start: {};",
+        x_offset, y_offset, rotate, duration, scale_start, scale_end, x_offset_start
+    );
+
+    view! {
+        <div
+            class="absolute left-1/2 top-1 text-red-700 font-extrabold text-sm animate-damage-float select-none text-shadow-md "
+            style=style
+        >
+            {format_number(tick.amount)}
+        </div>
+    }
+}
+
 #[component]
 fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
@@ -91,33 +130,6 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         CharacterSize::Small | CharacterSize::Large | CharacterSize::Tall => false,
         CharacterSize::Huge | CharacterSize::Gargantuan => true,
     };
-
-    let life = Memo::new(move |_| {
-        game_context
-            .monster_states
-            .read()
-            .get(index)
-            .map(|s| s.character_state.life)
-            .unwrap_or_default()
-    });
-
-    let life_tooltip = move || {
-        view! {
-            "Life: "
-            {format_number(life.get())}
-            "/"
-            {format_number(specs.character_specs.max_life)}
-        }
-    };
-
-    let life_percent = Memo::new(move |_| {
-        let max_life = specs.character_specs.max_life;
-        if max_life > 0.0 {
-            (life.get() / specs.character_specs.max_life * 100.0) as f32
-        } else {
-            0.0
-        }
-    });
 
     let is_dead = Memo::new(move |_| {
         game_context
@@ -153,6 +165,62 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .get(index)
             .map(|x| x.character_state.just_blocked)
             .unwrap_or_default()
+    });
+
+    let mut damage_tick_id = 0;
+    let damage_ticks = RwSignal::new(Vec::new());
+
+    let mut old_life = specs.character_specs.max_life;
+    let life = RwSignal::new(old_life);
+
+    Effect::new(move || {
+        let new_life = game_context
+            .monster_states
+            .read()
+            .get(index)
+            .map(|s| s.character_state.life)
+            .unwrap_or_default();
+
+        let diff = old_life - new_life;
+        old_life = new_life;
+
+        if just_hurt.get() && diff > 0.0 {
+            let tick_id = damage_tick_id;
+            damage_tick_id += 1;
+            damage_ticks.write().push(DamageTick {
+                id: tick_id,
+                amount: diff,
+            });
+
+            set_timeout(
+                move || {
+                    damage_ticks.write().retain(|tick| tick.id != tick_id);
+                },
+                std::time::Duration::from_secs(2),
+            );
+        }
+
+        if diff != 0.0 {
+            life.set(new_life);
+        }
+    });
+
+    let life_tooltip = move || {
+        view! {
+            "Life: "
+            {format_number(life.get())}
+            "/"
+            {format_number(specs.character_specs.max_life)}
+        }
+    };
+
+    let life_percent = Memo::new(move |_| {
+        let max_life = specs.character_specs.max_life;
+        if max_life > 0.0 {
+            (life.get() / specs.character_specs.max_life * 100.0) as f32
+        } else {
+            0.0
+        }
     });
 
     let statuses = Signal::derive(move || {
@@ -237,6 +305,36 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 font-weight: bold;
                 color: #facc15;
             }
+            
+            
+            @keyframes damage-float {
+                0% {
+                    opacity: 0;
+                    transform: translate(var(--x-offset-start), 0) scale(var(--scale-start)) rotate(0deg);
+                }
+                10% {
+                    opacity: 1;
+                    transform: translate(var(--x-offset-start), -5px) scale(calc(var(--scale-start) * 1.2)) rotate(0deg);
+                }
+                60% {
+                    opacity: 1;
+                    transform: translate(calc(var(--x-offset-start)+var(--x-offset) * 0.6), calc(var(--y-offset) * 0.6))
+                            scale(var(--scale-end))
+                            rotate(calc(var(--rotate) * 0.6));
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(calc(var(--x-offset-start)+var(--x-offset)), var(--y-offset))
+                            scale(calc(var(--scale-end) * 1.1))
+                            rotate(var(--rotate));
+                }
+            }
+            
+            .animate-damage-float {
+                animation: damage-float var(--duration) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+                pointer-events: none;
+                will-change: transform, opacity;
+            }
             "
         </style>
         <div
@@ -268,6 +366,10 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                         statuses=statuses
                     />
                 </div>
+
+                <For each=move || damage_ticks.get() key=|tick| tick.id let(tick)>
+                    <DamageNumber tick />
+                </For>
 
                 <Show when=move || { gold_reward.get() > 0.0 }>
                     <div class="
