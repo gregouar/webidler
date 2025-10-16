@@ -159,7 +159,7 @@ where
         if let Some((server_time, client_time)) =
             server_time.zip(self.client_update_time.get_untracked())
         {
-            if server_time > client_time && (utils::now() - client_time) > 0.5 {
+            if server_time > client_time && (utils::now() - client_time) > 500.0 {
                 self.sync_value();
             }
         } else if server_time.is_some() {

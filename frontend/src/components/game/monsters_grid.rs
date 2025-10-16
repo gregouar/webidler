@@ -27,26 +27,29 @@ pub fn MonstersGrid() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let all_monsters_dead = RwSignal::new(false);
+    let switch_all_monsters_dead = Memo::new(move |_| {
+        game_context.monster_states.with(|monster_states| {
+            !monster_states.is_empty() && monster_states.iter().all(|x| !x.character_state.is_alive)
+        })
+    });
     Effect::new(move || {
-        if game_context
-            .monster_states
-            .read()
-            .iter()
-            .all(|x| !x.character_state.is_alive)
-        {
+        if switch_all_monsters_dead.get() {
             set_timeout(
                 move || {
                     // Repeat in case the state would have change in-between
-                    if game_context
-                        .monster_states
-                        .read()
-                        .iter()
-                        .all(|x| !x.character_state.is_alive)
-                    {
+                    if switch_all_monsters_dead.get_untracked() {
                         all_monsters_dead.set(true);
                     }
                 },
                 std::time::Duration::from_secs(1),
+            );
+            set_timeout(
+                move || {
+                    if !switch_all_monsters_dead.get_untracked() {
+                        all_monsters_dead.set(true);
+                    }
+                },
+                std::time::Duration::from_secs(2),
             );
         } else {
             all_monsters_dead.set(false);
@@ -121,7 +124,7 @@ struct DamageTick {
 fn DamageNumber(tick: DamageTick) -> impl IntoView {
     let mut rng = rand::rng();
 
-    let importance = tick.importance.clamp(0.0, 6.0).sqrt() as f32;
+    let importance = tick.importance.powf(1.0 / 3.0).clamp(0.0, 4.0) as f32;
     let font_scale = 0.5 + 0.5 * importance;
     let motion_scale = 1.0 + 0.5 * importance;
 
