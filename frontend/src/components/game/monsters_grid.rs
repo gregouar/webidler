@@ -114,23 +114,28 @@ pub fn MonstersGrid() -> impl IntoView {
 struct DamageTick {
     pub id: usize,
     pub amount: f64,
+    pub importance: f64,
 }
 
 #[component]
 fn DamageNumber(tick: DamageTick) -> impl IntoView {
     let mut rng = rand::rng();
 
+    let importance = tick.importance.clamp(0.0, 6.0).sqrt() as f32;
+    let font_scale = 0.5 + 0.5 * importance;
+    let motion_scale = 1.0 + 0.5 * importance;
+
     let angle = rng.random_range(-0.4_f32..=0.4_f32);
-    let distance = rng.random_range(50.0..=80.0);
+    let distance = rng.random_range(50.0..=80.0) * motion_scale;
     let x_offset = -angle.sin() * distance;
     let y_offset = angle.cos() * distance;
     let rotate = angle.to_degrees() * 0.8;
 
     let x_offset_start = rng.random_range(-50..=50);
 
-    let duration = 2.0;
-    let scale_start = rng.random_range(1.0..=1.3);
-    let scale_end = rng.random_range(1.2..=1.6);
+    let duration = 1.0 * motion_scale;
+    let scale_start = font_scale * 0.5;
+    let scale_end = font_scale;
 
     let style = format!(
         "--x-offset: {}px; --y-offset: {}px; --rotate: {}deg; --duration: {}s; \
@@ -216,16 +221,18 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         if just_hurt.get() && diff > 0.0 {
             let tick_id = damage_tick_id;
             damage_tick_id += 1;
+            game_context.game_local_stats.add_damage_tick(diff);
             damage_ticks.write().push(DamageTick {
                 id: tick_id,
                 amount: diff,
+                importance: (diff / game_context.game_local_stats.average_damage_tick()),
             });
 
             set_timeout(
                 move || {
                     damage_ticks.write().retain(|tick| tick.id != tick_id);
                 },
-                std::time::Duration::from_secs(2),
+                std::time::Duration::from_secs(10),
             );
         }
 

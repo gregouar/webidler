@@ -72,6 +72,20 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     game_context.area_state.read().max_area_level_ever.to_string()
                                 }
                             />
+                            <Stat
+                                label="Average Damage per Second"
+                                value=move || {
+                                    format_number(game_context.game_local_stats.average_dps())
+                                }
+                            />
+                            <Stat
+                                label="Average Damage per Hit"
+                                value=move || {
+                                    format_number(
+                                        game_context.game_local_stats.average_damage_tick(),
+                                    )
+                                }
+                            />
                         </StatCategory>
 
                         <StatCategory title="Character">
@@ -505,11 +519,14 @@ fn make_stat(stat_type: StatType) -> impl IntoView + use<> {
 }
 
 #[component]
-fn Stat(#[prop(into)] label: String, value: impl Fn() -> String + 'static) -> impl IntoView {
+fn Stat(
+    #[prop(into)] label: String,
+    value: impl Fn() -> String + Send + Sync + 'static,
+) -> impl IntoView {
     view! {
         <div class="flex justify-between px-6 text-sm xl:text-base">
             <span class="text-gray-400">{label}</span>
-            <span class="text-amber-100 font-medium">{value()}</span>
+            <span class="text-amber-100 font-medium">{move || value()}</span>
         </div>
     }
 }
