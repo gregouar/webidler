@@ -130,7 +130,7 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
         format!(
             "--x-offset: {}px; --y-offset: {}px; --rotate: {}deg; --duration: {}s; \
          --scale-start: {}; --scale-end: {}; --x-offset-start: {}px;
-         text-shadow: 0px 2px rgba(0, 0, 0, 0.9), 0px 0px 4px rgba(255, 0, 0, 0.5);",
+         text-shadow: 0px 1px rgba(0, 0, 0, 0.9), 0px 0px 4px rgba(255, 0, 0, 0.5);",
             x_offset, y_offset, rotate, duration, scale_start, scale_end, x_offset_start
         )
     };
