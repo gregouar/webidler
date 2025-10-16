@@ -137,7 +137,7 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
     view! {
         <div
             class="absolute left-1/2 top-1 -translate-x-1/2 z-30
-            text-red-500 text-shadow-sm font-extrabold text-xs xl:text-sm
+            text-red-500 text-shadow-sm font-extrabold text-sm xl:text-base
             animate-damage-float select-none"
             style=style
         >
@@ -383,11 +383,11 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             @keyframes damage-float {
                 0% {
                     opacity: 0;
-                    transform: translate(var(--x-offset-start), 0) scale(var(--scale-start)) rotate(0deg);
+                    transform: translate(var(--x-offset-start), 0) scale(calc(var(--scale-start) * 0.7)) rotate(0deg);
                 }
                 10% {
                     opacity: 1;
-                    transform: translate(var(--x-offset-start), -5px) scale(calc(var(--scale-start) * 1.2)) rotate(0deg);
+                    transform: translate(var(--x-offset-start), -5px) scale(var(--scale-start)) rotate(0deg);
                 }
                 60% {
                     opacity: 1;
