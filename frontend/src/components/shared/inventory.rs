@@ -1,103 +1,62 @@
-use std::{collections::HashSet, sync::Arc, time::Duration};
+use chrono::Duration;
+use std::{collections::HashSet, sync::Arc};
 use strum::IntoEnumIterator;
 
 use leptos::{portal::Portal, prelude::*, web_sys};
 use leptos_use::on_click_outside;
 
-use shared::{
-    data::{
-        item::{ItemCategory, ItemSlot, ItemSpecs},
-        player::EquippedSlot,
-    },
-    messages::client::{EquipItemMessage, FilterLootMessage, SellItemsMessage, UnequipItemMessage},
+use shared::data::{
+    item::{ItemCategory, ItemSlot, ItemSpecs},
+    player::{EquippedSlot, PlayerInventory},
 };
 
 use crate::{
     assets::img_asset,
     components::{
         accessibility::AccessibilityContext,
-        game::{game_context::GameContext, player_card::PlayerName},
-        shared::{inventory::Inventory, item_card::ItemCard, tooltips::ItemTooltip},
+        shared::{item_card::ItemCard, tooltips::ItemTooltip},
         ui::{
             buttons::{CloseButton, MenuButton},
             confirm::ConfirmContext,
             dropdown::DropdownMenu,
-            menu_panel::PanelTitle,
+            menu_panel::{MenuPanel, PanelTitle},
             tooltip::DynamicTooltipPosition,
         },
-        websocket::WebsocketContext,
     },
 };
 
 type SellQueue = RwSignal<HashSet<usize>>;
 
+#[derive(Clone)]
+pub struct InventoryConfig {
+    pub player_inventory: RwSignal<PlayerInventory>,
+    pub loot_preference: Option<RwSignal<Option<ItemCategory>>>,
+    pub on_unequip: Arc<dyn Fn(ItemSlot) + Send + Sync>,
+}
+
 #[component]
-pub fn InventoryPanel(open: RwSignal<bool>) -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
-    let conn = expect_context::<WebsocketContext>();
-    let confirm_context = expect_context::<ConfirmContext>();
+pub fn Inventory(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
+    let sell_queue = SellQueue::default();
+    provide_context(sell_queue);
 
-    // Loot filter
-    Effect::new({
-        move || {
-            conn.send(
-                &FilterLootMessage {
-                    preferred_loot: game_context.loot_preference.get(),
-                }
-                .into(),
-            );
+    Effect::new(move || {
+        if !open.get() {
+            sell_queue.write().drain();
         }
     });
-
-    // Unequip
-    let unequip = Arc::new({
-        let conn = expect_context::<WebsocketContext>();
-
-        move || {
-            conn.send(&UnequipItemMessage { item_slot }.into());
-        }
-    });
-
-    let try_unequip = {
-        let game_context = expect_context::<GameContext>();
-        move |item_slot| {
-            let inventory = game_context.player_inventory.read();
-            let need_confirm = inventory
-                .equipped
-                .get(&item_slot)
-                .map(|x| {
-                    if let EquippedSlot::MainSlot(x) = x {
-                        x.weapon_specs.is_some()
-                    } else {
-                        false
-                    }
-                })
-                .unwrap_or_default();
-
-            if need_confirm {
-                (confirm_context
-                        .confirm)(
-                        "Unequipping your weapon will reset the weapon attack skill upgrade level to 1, are you sure?"
-                            .to_string(),
-                        unequip.clone(),
-                    );
-            } else {
-                unequip();
-            }
-            on_close.run(());
-        }
-    };
 
     view! {
-        <Inventory open=open inventory=game_context.player_inventory>
-            <span class="hidden xl:inline text-gray-400 text-sm">"Loot Preference:"</span>
-            <LootFilterDropdown />
-        </Inventory>
+        <MenuPanel open=open>
+            <div class="relative w-full max-h-full flex justify-between gap-2 xl:gap-4 ">
+                <EquippedItemsCard inventory=inventory.clone() class:justify-self-end />
+                <BagCard inventory=inventory.clone() open=open class:justify-self-start />
+            </div>
+        </MenuPanel>
     }
 }
 
 #[component]
-pub fn EquippedItemsCard() -> impl IntoView {
+pub fn EquippedItemsCard(inventory: InventoryConfig) -> impl IntoView {
     const EQUIPPED_SLOTS: &[(ItemSlot, &str, &str)] = &[
         (ItemSlot::Accessory, "ui/accessory.webp", "Accessory"),
         (ItemSlot::Helmet, "ui/helmet.webp", "Helmet"),
@@ -113,7 +72,9 @@ pub fn EquippedItemsCard() -> impl IntoView {
     view! {
         <div class="w-[30%] h-full flex flex-col gap-1 xl:gap-2 p-1 xl:p-2 bg-zinc-800 rounded-md shadow-xl ring-1 ring-zinc-950">
 
-            <PlayerName />
+            <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl">
+                <span class="font-bold">"Equipped"</span>
+            </p>
 
             <div class="relative min-h-0 flex-1  overflow-y-auto">
                 <div class="grid grid-rows-3 grid-cols-3 gap-1 xl:gap-3 p-2 xl:p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
@@ -122,6 +83,7 @@ pub fn EquippedItemsCard() -> impl IntoView {
                         .map(|(slot, asset, alt)| {
                             view! {
                                 <EquippedItem
+                                    inventory=inventory.clone()
                                     item_slot=*slot
                                     fallback_asset=*asset
                                     fallback_alt=*alt
@@ -137,12 +99,11 @@ pub fn EquippedItemsCard() -> impl IntoView {
 
 #[component]
 fn EquippedItem(
+    inventory: InventoryConfig,
     item_slot: ItemSlot,
     fallback_asset: &'static str,
     fallback_alt: &'static str,
 ) -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
-
     let show_menu = RwSignal::new(false);
 
     let render_fallback = move || {
@@ -160,7 +121,7 @@ fn EquippedItem(
     };
 
     let equipped_item = move || {
-        game_context
+        inventory
             .player_inventory
             .read()
             .equipped
@@ -173,10 +134,11 @@ fn EquippedItem(
             {move || match equipped_item() {
                 Some(EquippedSlot::MainSlot(item_specs)) => {
                     let item_specs = Arc::new(*item_specs.clone());
-                    view! { <EquippedItemEquippedSlot item_slot item_specs show_menu /> }.into_any()
+                    view! { <EquippedItemEquippedSlot inventory item_slot item_specs show_menu /> }
+                        .into_any()
                 }
                 Some(EquippedSlot::ExtraSlot(main_slot)) => {
-                    if let Some(EquippedSlot::MainSlot(item_specs)) = game_context
+                    if let Some(EquippedSlot::MainSlot(item_specs)) = inventory
                         .player_inventory
                         .read()
                         .equipped
@@ -206,6 +168,7 @@ fn EquippedItem(
 
 #[component]
 fn EquippedItemEquippedSlot(
+    inventory: InventoryConfig,
     item_slot: ItemSlot,
     item_specs: Arc<ItemSpecs>,
     show_menu: RwSignal<bool>,
@@ -228,6 +191,7 @@ fn EquippedItemEquippedSlot(
 
             <Show when=move || show_menu.get()>
                 <EquippedItemContextMenu
+                    inventory=inventory.clone()
                     item_slot=item_slot
                     is_being_unequipped=is_being_unequipped
                     on_close=Callback::new(move |_| show_menu.set(false))
@@ -293,60 +257,68 @@ fn EquippedItemEquippedSlot(
 
 #[component]
 pub fn EquippedItemContextMenu(
+    inventory: InventoryConfig,
     item_slot: ItemSlot,
     on_close: Callback<()>,
     is_being_unequipped: RwSignal<bool>,
 ) -> impl IntoView {
     let confirm_context = expect_context::<ConfirmContext>();
 
-    let unequip = Arc::new({
-        let conn = expect_context::<WebsocketContext>();
+    // let unequip = Arc::new({
+    //     let conn = expect_context::<WebsocketContext>();
 
-        move || {
-            conn.send(&UnequipItemMessage { item_slot }.into());
-            is_being_unequipped.set(true);
-            set_timeout(
-                move || is_being_unequipped.set(false),
-                Duration::from_millis(1000),
-            );
-        }
-    });
+    //     move || {
+    //         conn.send(&UnequipItemMessage { item_slot }.into());
+    //         is_being_unequipped.set(true);
+    //         set_timeout(
+    //             move || is_being_unequipped.set(false),
+    //             Duration::from_millis(1000),
+    //         );
+    //     }
+    // });
 
-    let try_unequip = {
-        let game_context = expect_context::<GameContext>();
-        move |_| {
-            let inventory = game_context.player_inventory.read();
-            let need_confirm = inventory
-                .equipped
-                .get(&item_slot)
-                .map(|x| {
-                    if let EquippedSlot::MainSlot(x) = x {
-                        x.weapon_specs.is_some()
-                    } else {
-                        false
-                    }
-                })
-                .unwrap_or_default();
+    // let try_unequip = {
+    //     let game_context = expect_context::<GameContext>();
+    //     move |_| {
+    //         let inventory = game_context.player_inventory.read();
+    //         let need_confirm = inventory
+    //             .equipped
+    //             .get(&item_slot)
+    //             .map(|x| {
+    //                 if let EquippedSlot::MainSlot(x) = x {
+    //                     x.weapon_specs.is_some()
+    //                 } else {
+    //                     false
+    //                 }
+    //             })
+    //             .unwrap_or_default();
 
-            if need_confirm {
-                (confirm_context
-                        .confirm)(
-                        "Unequipping your weapon will reset the weapon attack skill upgrade level to 1, are you sure?"
-                            .to_string(),
-                        unequip.clone(),
-                    );
-            } else {
-                unequip();
-            }
-            on_close.run(());
-        }
-    };
+    //         if need_confirm {
+    //             (confirm_context
+    //                     .confirm)(
+    //                     "Unequipping your weapon will reset the weapon attack skill upgrade level to 1, are you sure?"
+    //                         .to_string(),
+    //                     unequip.clone(),
+    //                 );
+    //         } else {
+    //             unequip();
+    //         }
+    //         on_close.run(());
+    //     }
+    // };
 
     view! {
         <ContextMenu on_close=on_close>
             <button
                 class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40 py-1 xl:py-2"
-                on:click=try_unequip
+                on:click=move |_| {
+                    on_unequip(item_slot);
+                    is_being_unequipped.set(true);
+                    set_timeout(
+                        move || is_being_unequipped.set(false),
+                        Duration::from_millis(1000),
+                    );
+                }
             >
                 "Unequip"
             </button>
@@ -362,9 +334,7 @@ pub fn EquippedItemContextMenu(
 }
 
 #[component]
-fn BagCard(open: RwSignal<bool>) -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
-
+fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
     view! {
         <div class="bg-zinc-800 rounded-md h-full w-[70%] gap-1 xl:gap-2 p-1 xl:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
             <div class="px-4 relative z-10 flex items-center justify-between gap-2">
@@ -374,17 +344,25 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
                         {move || {
                             format!(
                                 "({} / {})",
-                                game_context.player_inventory.read().bag.len(),
-                                game_context.player_inventory.read().max_bag_size,
+                                inventory.read().bag.len(),
+                                inventory.read().max_bag_size,
                             )
                         }}
                     </span>
                 </div>
 
-                <div class="flex items-center gap-2">
-                    <span class="hidden xl:inline text-gray-400 text-sm">"Loot Preference:"</span>
-                    <LootFilterDropdown />
-                </div>
+                {inventory
+                    .loot_preference
+                    .map(|loot_preference| {
+                        view! {
+                            <div class="flex items-center gap-2">
+                                <span class="hidden xl:inline text-gray-400 text-sm">
+                                    "Loot Preference:"
+                                </span>
+                                <LootFilterDropdown loot_preference />
+                            </div>
+                        }
+                    })}
 
                 <div class="flex items-center gap-1 xl:gap-2">
                     <SellAllButton />
@@ -396,12 +374,8 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
                 <div class="grid grid-cols-8 xl:grid-cols-10
                 gap-1 xl:gap-3 p-2 xl:p-4 relative
                 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                    <For
-                        each=move || 0..game_context.player_inventory.read().max_bag_size as usize
-                        key=|i| *i
-                        let(i)
-                    >
-                        <BagItem item_index=i />
+                    <For each=move || 0..inventory.read().max_bag_size as usize key=|i| *i let(i)>
+                        <BagItem inventory item_index=i />
                     </For>
                 </div>
             </div>
@@ -411,19 +385,12 @@ fn BagCard(open: RwSignal<bool>) -> impl IntoView {
 }
 
 #[component]
-fn BagItem(item_index: usize) -> impl IntoView {
+fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
     let is_being_equipped = RwSignal::new(false);
 
-    let game_context = expect_context::<GameContext>();
     let maybe_item = move || {
         is_being_equipped.set(false);
-        game_context
-            .player_inventory
-            .read()
-            .bag
-            .get(item_index)
-            .cloned()
-            .map(Arc::new)
+        inventory.read().bag.get(item_index).cloned().map(Arc::new)
     };
 
     let sell_queue = expect_context::<SellQueue>();
@@ -535,6 +502,7 @@ fn BagItem(item_index: usize) -> impl IntoView {
 
 #[component]
 pub fn BagItemContextMenu(
+    inventory: InventoryConfig,
     item_index: usize,
     on_close: Callback<()>,
     is_being_equipped: RwSignal<bool>,
@@ -542,59 +510,58 @@ pub fn BagItemContextMenu(
     let sell_queue = expect_context::<SellQueue>();
     let confirm_context = expect_context::<ConfirmContext>();
 
-    let equip = Arc::new({
-        let conn = expect_context::<WebsocketContext>();
-        move || {
-            sell_queue.write().remove(&item_index);
-            conn.send(
-                &EquipItemMessage {
-                    item_index: item_index as u8,
-                }
-                .into(),
-            );
-            is_being_equipped.set(true);
-            set_timeout(
-                move || is_being_equipped.set(false),
-                Duration::from_millis(1000),
-            );
-        }
-    });
+    // let equip = Arc::new({
+    //     let conn = expect_context::<WebsocketContext>();
+    //     move || {
+    //         sell_queue.write().remove(&item_index);
+    //         conn.send(
+    //             &EquipItemMessage {
+    //                 item_index: item_index as u8,
+    //             }
+    //             .into(),
+    //         );
+    //         is_being_equipped.set(true);
+    //         set_timeout(
+    //             move || is_being_equipped.set(false),
+    //             Duration::from_millis(1000),
+    //         );
+    //     }
+    // });
 
-    let try_equip = {
-        let game_context = expect_context::<GameContext>();
-        move |_| {
-            let inventory = game_context.player_inventory.read();
-            let need_confirm = inventory
-                .bag
-                .get(item_index)
-                .and_then(|x| inventory.equipped.get(&x.base.slot))
-                .and_then(|x| match x {
-                    EquippedSlot::ExtraSlot(item_slot) => inventory.equipped.get(item_slot),
-                    x => Some(x),
-                })
-                .map(|x| {
-                    if let EquippedSlot::MainSlot(x) = x {
-                        x.weapon_specs.is_some()
-                    } else {
-                        false
-                    }
-                })
-                .unwrap_or_default();
+    // let try_equip = {
+    //     move |_| {
+    //         let inventory = game_context.player_inventory.read();
+    //         let need_confirm = inventory
+    //             .bag
+    //             .get(item_index)
+    //             .and_then(|x| inventory.equipped.get(&x.base.slot))
+    //             .and_then(|x| match x {
+    //                 EquippedSlot::ExtraSlot(item_slot) => inventory.equipped.get(item_slot),
+    //                 x => Some(x),
+    //             })
+    //             .map(|x| {
+    //                 if let EquippedSlot::MainSlot(x) = x {
+    //                     x.weapon_specs.is_some()
+    //                 } else {
+    //                     false
+    //                 }
+    //             })
+    //             .unwrap_or_default();
 
-            if need_confirm {
-                (confirm_context
-                        .confirm)(
-                        "Equipping a new weapon will reset the weapon attack skill upgrade level to 1, are you sure?"
-                            .to_string(),
-                        equip.clone(),
-                    );
-            } else {
-                equip();
-            }
+    //         if need_confirm {
+    //             (confirm_context
+    //                     .confirm)(
+    //                     "Equipping a new weapon will reset the weapon attack skill upgrade level to 1, are you sure?"
+    //                         .to_string(),
+    //                     equip.clone(),
+    //                 );
+    //         } else {
+    //             equip();
+    //         }
 
-            on_close.run(());
-        }
-    };
+    //         on_close.run(());
+    //     }
+    // };
 
     let toggle_sell_mark = {
         move || {
@@ -678,19 +645,19 @@ pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView 
 }
 
 #[component]
-fn SellAllButton() -> impl IntoView {
-    let sell = {
-        let sell_queue = expect_context::<SellQueue>();
-        let conn = expect_context::<WebsocketContext>();
-        move |_| {
-            conn.send(
-                &SellItemsMessage {
-                    item_indexes: sell_queue.write().drain().map(|x| x as u8).collect(),
-                }
-                .into(),
-            );
-        }
-    };
+fn SellAllButton(inventory: InventoryConfig) -> impl IntoView {
+    // let sell = {
+    //     let sell_queue = expect_context::<SellQueue>();
+    //     let conn = expect_context::<WebsocketContext>();
+    //     move |_| {
+    //         conn.send(
+    //             &SellItemsMessage {
+    //                 item_indexes: sell_queue.write().drain().map(|x| x as u8).collect(),
+    //             }
+    //             .into(),
+    //         );
+    //     }
+    // };
 
     let disabled = Signal::derive({
         let sell_queue = expect_context::<SellQueue>();
@@ -706,27 +673,13 @@ fn SellAllButton() -> impl IntoView {
 }
 
 #[component]
-pub fn LootFilterDropdown() -> impl IntoView {
+pub fn LootFilterDropdown(loot_preference: RwSignal<Option<ItemCategory>>) -> impl IntoView {
     let options = std::iter::once(None)
         .chain(ItemCategory::iter().map(Some))
         .map(|category| (category, loot_filter_category_to_str(category).into()))
         .collect();
 
-    Effect::new({
-        let conn = expect_context::<WebsocketContext>();
-        let game_context = expect_context::<GameContext>();
-        move || {
-            conn.send(
-                &FilterLootMessage {
-                    preferred_loot: game_context.loot_preference.get(),
-                }
-                .into(),
-            );
-        }
-    });
-
-    let game_context = expect_context::<GameContext>();
-    view! { <DropdownMenu options chosen_option=game_context.loot_preference /> }
+    view! { <DropdownMenu options chosen_option=loot_preference /> }
 }
 
 pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
