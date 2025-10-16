@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use crate::utils;
 
-pub const DAMAGE_TICKS_WINDOWS: f64 = 10.0;
+pub const DAMAGE_TICKS_WINDOWS: f64 = 60.0;
 
 #[derive(Clone, Copy)]
 pub struct GameLocalStats {
