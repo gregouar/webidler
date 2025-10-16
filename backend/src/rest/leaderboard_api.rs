@@ -8,7 +8,7 @@ use shared::{
 };
 
 use crate::{
-    app_state::{AppState, DbPool},
+    app_state::{AppState, DbPool, MasterStore},
     db,
 };
 
@@ -20,12 +20,20 @@ pub fn routes() -> Router<AppState> {
 
 pub async fn get_leaderboard(
     State(db_pool): State<DbPool>,
+    State(master_store): State<MasterStore>,
 ) -> Result<Json<LeaderboardResponse>, AppError> {
     Ok(Json(LeaderboardResponse {
         entries: db::leaderboard::get_leaderboard(&db_pool, 10)
             .await?
             .into_iter()
-            .map(|entry| entry.into())
+            .map(|mut entry| {
+                entry.area_level += master_store
+                    .area_blueprints_store
+                    .get(&entry.area_id)
+                    .map(|area| area.specs.starting_level as i32)
+                    .unwrap_or_default();
+                entry.into()
+            })
             .collect(),
     }))
 }
