@@ -26,13 +26,40 @@ use super::GameContext;
 pub fn MonstersGrid() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let all_monsters_dead = Memo::new(move |_| {
-        game_context
+    let all_monsters_dead = RwSignal::new(false);
+    Effect::new(move || {
+        if game_context
             .monster_states
             .read()
             .iter()
             .all(|x| !x.character_state.is_alive)
+        {
+            set_timeout(
+                move || {
+                    // Repeat in case the state would have change in-between
+                    if game_context
+                        .monster_states
+                        .read()
+                        .iter()
+                        .all(|x| !x.character_state.is_alive)
+                    {
+                        all_monsters_dead.set(true);
+                    }
+                },
+                std::time::Duration::from_secs(1),
+            );
+        } else {
+            all_monsters_dead.set(false);
+        }
     });
+
+    // let all_monsters_dead = Memo::new(move |_| {
+    //     game_context
+    //         .monster_states
+    //         .read()
+    //         .iter()
+    //         .all(|x| !x.character_state.is_alive)
+    // });
 
     let flee = Memo::new(move |_| {
         !game_context.player_state.read().character_state.is_alive
@@ -113,7 +140,9 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
 
     view! {
         <div
-            class="absolute left-1/2 top-1 text-red-700 font-extrabold text-sm animate-damage-float select-none text-shadow-md "
+            class="absolute left-1/2 top-1 -translate-x-1/2 z-50
+            text-red-600 text-shadow-sm font-extrabold text-xs xl:text-sm
+            animate-damage-float select-none"
             style=style
         >
             {format_number(tick.amount)}
@@ -201,7 +230,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         }
 
         if diff != 0.0 {
-            life.set(new_life);
+            life.set(new_life.max(0.0));
         }
     });
 
