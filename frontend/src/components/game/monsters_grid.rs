@@ -119,7 +119,7 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
     let style = move || {
         let importance = (amount.get() / tick.cur_avg_damage)
             .powf(1.0 / 3.0)
-            .clamp(0.0, 4.0) as f32;
+            .clamp(0.0, 2.0) as f32;
         let font_scale = 0.5 + 0.5 * importance;
         let motion_scale = 1.0 + 0.5 * importance;
         let distance = 60.0 * motion_scale;
@@ -129,7 +129,8 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
         let scale_end = font_scale;
         format!(
             "--x-offset: {}px; --y-offset: {}px; --rotate: {}deg; --duration: {}s; \
-         --scale-start: {}; --scale-end: {}; --x-offset-start: {}px;",
+         --scale-start: {}; --scale-end: {}; --x-offset-start: {}px;
+         text-shadow: 0px 2px rgba(0, 0, 0, 0.9), 0px 0px 4px rgba(255, 0, 0, 0.5);",
             x_offset, y_offset, rotate, duration, scale_start, scale_end, x_offset_start
         )
     };
@@ -137,7 +138,7 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
     view! {
         <div
             class="absolute left-1/2 top-1 -translate-x-1/2 z-30
-            text-red-500 text-shadow-sm font-extrabold text-sm xl:text-base
+            text-red-500 text-shadow-sm font-extrabold text-sm xl:text-lg
             animate-damage-float select-none"
             style=style
         >
@@ -405,7 +406,6 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             
             .animate-damage-float {
                 animation: damage-float var(--duration) cubic-bezier(0.22, 1, 0.36, 1) forwards;
-                pointer-events: none;
                 will-change: transform, opacity;
                 filter: saturate(--scale-end);
             }
