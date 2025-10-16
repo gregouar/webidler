@@ -318,7 +318,7 @@ pub fn EquippedItemContextMenu(
             <button
                 class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40 py-1 xl:py-2"
                 on:click=move |_| {
-                    on_unequip(item_slot);
+                    inventory.on_unequip(item_slot);
                     is_being_unequipped.set(true);
                     set_timeout(
                         move || is_being_unequipped.set(false),
@@ -400,7 +400,13 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
 
     let maybe_item = move || {
         is_being_equipped.set(false);
-        inventory.read().bag.get(item_index).cloned().map(Arc::new)
+        inventory
+            .player_inventory
+            .read()
+            .bag
+            .get(item_index)
+            .cloned()
+            .map(Arc::new)
     };
 
     let sell_queue = expect_context::<SellQueue>();
