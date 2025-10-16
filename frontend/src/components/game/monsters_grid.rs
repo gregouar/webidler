@@ -140,7 +140,7 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
 
     view! {
         <div
-            class="absolute left-1/2 top-1 -translate-x-1/2 z-50
+            class="absolute left-1/2 top-1 -translate-x-1/2 z-30
             text-red-600 text-shadow-sm font-extrabold text-xs xl:text-sm
             animate-damage-float select-none"
             style=style
@@ -404,7 +404,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     <div class="
                     reward-float gold-text text-amber-400 text:lg xl:text-2xl  text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
-                    pointer-events-none z-50 flex items-center gap-1
+                    pointer-events-none z-30 flex items-center gap-1
                     ">
                         <span>+{format_number(gold_reward.get())}</span>
                         <img
@@ -420,7 +420,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     <div class="
                     reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
-                    pointer-events-none z-50 flex items-center gap-1
+                    pointer-events-none z-30 flex items-center gap-1
                     ">
                         <span>+{format_number(gems_reward.get())}</span>
                         <img
