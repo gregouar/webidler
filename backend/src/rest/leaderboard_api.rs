@@ -30,7 +30,7 @@ pub async fn get_leaderboard(
                 entry.area_level += master_store
                     .area_blueprints_store
                     .get(&entry.area_id)
-                    .map(|area| area.specs.starting_level as i32)
+                    .map(|area| area.specs.starting_level as i32 - 1)
                     .unwrap_or_default();
                 entry.into()
             })
