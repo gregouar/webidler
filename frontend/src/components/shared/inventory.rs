@@ -1,5 +1,4 @@
-use chrono::Duration;
-use std::{collections::HashSet, sync::Arc};
+use std::{collections::HashSet, sync::Arc, time::Duration};
 use strum::IntoEnumIterator;
 
 use leptos::{portal::Portal, prelude::*, web_sys};
@@ -134,7 +133,14 @@ fn EquippedItem(
             {move || match equipped_item() {
                 Some(EquippedSlot::MainSlot(item_specs)) => {
                     let item_specs = Arc::new(*item_specs.clone());
-                    view! { <EquippedItemEquippedSlot inventory item_slot item_specs show_menu /> }
+                    view! {
+                        <EquippedItemEquippedSlot
+                            inventory=inventory.clone()
+                            item_slot
+                            item_specs
+                            show_menu
+                        />
+                    }
                         .into_any()
                 }
                 Some(EquippedSlot::ExtraSlot(main_slot)) => {
@@ -344,8 +350,8 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                         {move || {
                             format!(
                                 "({} / {})",
-                                inventory.read().bag.len(),
-                                inventory.read().max_bag_size,
+                                inventory.player_inventory.read().bag.len(),
+                                inventory.player_inventory.read().max_bag_size,
                             )
                         }}
                     </span>
@@ -365,7 +371,7 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                     })}
 
                 <div class="flex items-center gap-1 xl:gap-2">
-                    <SellAllButton />
+                    <SellAllButton inventory=inventory.clone() />
                     <CloseButton on:click=move |_| open.set(false) />
                 </div>
             </div>
@@ -374,8 +380,12 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                 <div class="grid grid-cols-8 xl:grid-cols-10
                 gap-1 xl:gap-3 p-2 xl:p-4 relative
                 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                    <For each=move || 0..inventory.read().max_bag_size as usize key=|i| *i let(i)>
-                        <BagItem inventory item_index=i />
+                    <For
+                        each=move || 0..inventory.player_inventory.read().max_bag_size as usize
+                        key=|i| *i
+                        let(i)
+                    >
+                        <BagItem inventory=inventory.clone() item_index=i />
                     </For>
                 </div>
             </div>
@@ -471,6 +481,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
 
                                 <Show when=move || show_menu.get()>
                                     <BagItemContextMenu
+                                        inventory=inventory.clone()
                                         item_index=item_index
                                         on_close=Callback::new(move |_| show_menu.set(false))
                                         is_being_equipped=is_being_equipped
