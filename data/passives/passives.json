@@ -1247,7 +1247,7 @@
         "triggers": [
           {
             "trigger_id": "enrage",
-            "description": "Taking a hit grants +20% Attack Speed for 2s and stacks +30% Attack Damage for 2s.",
+            "description": "Taking a Hit stacks +30% Attack Damage for 2s.",
             "OnTakeHit": {
               "is_hurt": true
             },
@@ -1266,16 +1266,6 @@
                       },
                       "cumulate": true,
                       "value": 30
-                    },
-                    {
-                      "status_type": {
-                        "StatModifier": {
-                          "stat": {
-                            "Speed": "Attack"
-                          }
-                        }
-                      },
-                      "value": 20
                     }
                   ]
                 }
@@ -1411,7 +1401,7 @@
         "triggers": [
           {
             "trigger_id": "open_wound",
-            "description": "Attack Hits apply a stack of Open Wound for 5 seconds. Each stack deals 20% of the initial hit's Physical Damage when the target is Hit by an Attack.",
+            "description": "Attack Hits apply a stack of Open Wound for 5 seconds. Each stack deals 50% of the initial hit's Physical Damage when the target is Hit by an Attack.",
             "OnHit": { "skill_type": "Attack" },
             "effects": [
               {
@@ -1468,7 +1458,7 @@
                   "Damage": { "damage_type": "Physical" }
                 },
                 "modifier": "Flat",
-                "factor": 0.2,
+                "factor": 0.5,
                 "source": {
                   "HitDamage": "Physical"
                 }
