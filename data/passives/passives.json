@@ -1247,7 +1247,7 @@
         "triggers": [
           {
             "trigger_id": "enrage",
-            "description": "Taking a Hit stacks +30% Attack Damage for 2s.",
+            "description": "On Hit Taken:",
             "OnTakeHit": {
               "is_hurt": true
             },

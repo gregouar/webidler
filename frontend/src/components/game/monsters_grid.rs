@@ -200,82 +200,95 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     });
 
     let mut damage_tick_id = 0;
-    let damage_ticks = RwSignal::new(Vec::new());
-    let dot_tick = RwSignal::new(None);
+    let damage_ticks = ArcRwSignal::new(Vec::new());
+    let dot_tick = ArcRwSignal::new(None);
 
     let mut old_life = specs.character_specs.max_life;
     let life = RwSignal::new(old_life);
 
-    Effect::new(move || {
-        let new_life = game_context
-            .monster_states
-            .read()
-            .get(index)
-            .map(|s| s.character_state.life)
-            .unwrap_or_default();
+    Effect::new({
+        let damage_ticks = damage_ticks.clone();
+        move || {
+            let new_life = game_context
+                .monster_states
+                .read()
+                .get(index)
+                .map(|s| s.character_state.life)
+                .unwrap_or_default();
 
-        let diff = old_life - new_life;
-        old_life = new_life;
+            let diff = old_life - new_life;
+            old_life = new_life;
 
-        if diff > 0.0 {
-            if just_hurt.get_untracked() {
-                let tick_id = damage_tick_id;
-                damage_tick_id += 1;
-                game_context.game_local_stats.add_damage_tick(diff);
-                damage_ticks.write().push(DamageTick {
-                    id: tick_id,
-                    amount: ArcRwSignal::new(diff),
-                    is_crit: just_hurt_crit.get(),
-                    cur_avg_damage: game_context.game_local_stats.average_damage_tick(),
-                });
+            if diff > 0.0 {
+                if just_hurt.get_untracked() {
+                    let tick_id = damage_tick_id;
+                    damage_tick_id += 1;
+                    game_context.game_local_stats.add_damage_tick(diff);
+                    damage_ticks.write().push(DamageTick {
+                        id: tick_id,
+                        amount: ArcRwSignal::new(diff),
+                        is_crit: just_hurt_crit.get(),
+                        cur_avg_damage: game_context.game_local_stats.average_damage_tick(),
+                    });
 
-                set_timeout(
-                    move || {
-                        damage_ticks.write().retain(|tick| tick.id != tick_id);
-                    },
-                    std::time::Duration::from_secs(10),
-                );
-            } else if let Some(dot_tick) = dot_tick.get() {
-                damage_ticks
-                    .write()
-                    .get_mut(dot_tick)
-                    .map(|tick: &mut DamageTick| *tick.amount.write() += diff);
-            } else {
-                let tick_id = damage_tick_id;
-                damage_tick_id += 1;
-                damage_ticks.write().push(DamageTick {
-                    id: tick_id,
-                    amount: ArcRwSignal::new(diff),
-                    is_crit: false,
-                    cur_avg_damage: game_context.game_local_stats.average_damage_tick(),
-                });
-                dot_tick.set(Some(tick_id));
-
-                set_timeout(
-                    move || {
-                        if let Some(amount) = damage_ticks
-                            .read()
-                            .get(tick_id)
-                            .map(|tick: &DamageTick| tick.amount.get_untracked())
+                    set_timeout(
                         {
-                            game_context.game_local_stats.add_damage_tick(amount)
-                        }
-                        dot_tick.set(None);
-                    },
-                    std::time::Duration::from_secs(1),
-                );
+                            let damage_ticks = damage_ticks.clone();
+                            move || {
+                                damage_ticks.write().retain(|tick| tick.id != tick_id);
+                            }
+                        },
+                        std::time::Duration::from_secs(2),
+                    );
+                } else if let Some(dot_tick) = dot_tick.get() {
+                    damage_ticks
+                        .write()
+                        .get_mut(dot_tick)
+                        .map(|tick: &mut DamageTick| *tick.amount.write() += diff);
+                } else {
+                    let tick_id = damage_tick_id;
+                    damage_tick_id += 1;
+                    damage_ticks.write().push(DamageTick {
+                        id: tick_id,
+                        amount: ArcRwSignal::new(diff),
+                        is_crit: false,
+                        cur_avg_damage: game_context.game_local_stats.average_damage_tick(),
+                    });
+                    dot_tick.set(Some(tick_id));
 
-                set_timeout(
-                    move || {
-                        damage_ticks.write().retain(|tick| tick.id != tick_id);
-                    },
-                    std::time::Duration::from_secs(10),
-                );
+                    set_timeout(
+                        {
+                            let damage_ticks = damage_ticks.clone();
+                            let dot_tick = dot_tick.clone();
+                            move || {
+                                if let Some(amount) = damage_ticks
+                                    .read()
+                                    .get(tick_id)
+                                    .map(|tick: &DamageTick| tick.amount.get_untracked())
+                                {
+                                    game_context.game_local_stats.add_damage_tick(amount)
+                                }
+                                dot_tick.set(None);
+                            }
+                        },
+                        std::time::Duration::from_secs(1),
+                    );
+
+                    set_timeout(
+                        {
+                            let damage_ticks = damage_ticks.clone();
+                            move || {
+                                damage_ticks.write().retain(|tick| tick.id != tick_id);
+                            }
+                        },
+                        std::time::Duration::from_secs(2),
+                    );
+                }
             }
-        }
 
-        if diff != 0.0 {
-            life.set(new_life.max(0.0));
+            if diff != 0.0 {
+                life.set(new_life.max(0.0));
+            }
         }
     });
 
