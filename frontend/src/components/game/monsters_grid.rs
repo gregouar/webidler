@@ -112,7 +112,7 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
 
     let angle = rng.random_range(-0.4_f32..=0.4_f32);
     let rotate = angle.to_degrees() * 0.8;
-    let x_offset_start = rng.random_range(-50..=50);
+    let x_offset_start = rng.random_range(-2..=2);
     let duration = 2.0;
 
     let amount = tick.amount.clone();
@@ -122,14 +122,14 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
             .clamp(0.0, 2.0) as f32;
         let font_scale = 0.5 + 0.5 * importance;
         let motion_scale = 1.0 + 0.5 * importance;
-        let distance = 60.0 * motion_scale;
+        let distance = 2.0 * motion_scale;
         let x_offset = -angle.sin() * distance;
         let y_offset = angle.cos() * distance;
         let scale_start = font_scale * 0.5;
         let scale_end = font_scale;
         format!(
-            "--x-offset: {}px; --y-offset: {}px; --rotate: {}deg; --duration: {}s; \
-         --scale-start: {}; --scale-end: {}; --x-offset-start: {}px;
+            "--x-offset: {}em; --y-offset: {}em; --rotate: {}deg; --duration: {}s; \
+         --scale-start: {}; --scale-end: {}; --x-offset-start: {}em;
          text-shadow: 0px 1px rgba(0, 0, 0, 0.9), 0px 0px 4px rgba(255, 0, 0, 0.5);",
             x_offset, y_offset, rotate, duration, scale_start, scale_end, x_offset_start
         )
@@ -139,7 +139,7 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
         <div
             class="absolute left-1/2 top-1 -translate-x-1/2 z-30
             text-red-500 text-shadow-sm font-extrabold text-sm xl:text-lg
-            animate-damage-float select-none font-mono tabular-nums"
+            animate-damage-float select-none tabular-nums"
             style=style
         >
             {move || {
