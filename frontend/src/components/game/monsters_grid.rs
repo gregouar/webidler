@@ -139,7 +139,7 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
         <div
             class="absolute left-1/2 top-1 -translate-x-1/2 z-30
             text-red-500 text-shadow-sm font-extrabold text-sm xl:text-lg
-            animate-damage-float select-none tabular-nums"
+            animate-damage-float select-none font-number"
             style=style
         >
             {move || {
@@ -238,12 +238,13 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                                 damage_ticks.write().retain(|tick| tick.id != tick_id);
                             }
                         },
-                        std::time::Duration::from_secs(2),
+                        std::time::Duration::from_secs(3),
                     );
                 } else if let Some(dot_tick) = dot_tick.get() {
                     damage_ticks
                         .write()
-                        .get_mut(dot_tick)
+                        .iter_mut()
+                        .find(|tick| tick.id == dot_tick)
                         .map(|tick: &mut DamageTick| *tick.amount.write() += diff);
                 } else {
                     let tick_id = damage_tick_id;
@@ -281,7 +282,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                                 damage_ticks.write().retain(|tick| tick.id != tick_id);
                             }
                         },
-                        std::time::Duration::from_secs(2),
+                        std::time::Duration::from_secs(3),
                     );
                 }
             }
@@ -463,7 +464,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     reward-float gold-text text-amber-400 text:lg xl:text-2xl  text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-30 flex items-center gap-1
-                    font-mono tabular-nums">
+                    font-number">
                         <span>+{format_number(gold_reward.get())}</span>
                         <img
                             draggable="false"
@@ -479,7 +480,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-30 flex items-center gap-1
-                    font-mono tabular-nums">
+                    font-number">
                         <span>+{format_number(gems_reward.get())}</span>
                         <img
                             draggable="false"

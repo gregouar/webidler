@@ -74,3 +74,8 @@
 @utility transition-circular-progress-bar {
    transition: opacity 0.5s linear, --progress 0.250s linear;
 }
+
+@utility font-number {
+  font-family: 'SF Mono', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+  font-variant-numeric: tabular-nums;
+}
