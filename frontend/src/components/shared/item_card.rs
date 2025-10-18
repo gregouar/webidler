@@ -2,7 +2,6 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use leptos_use::{use_mouse_in_element, UseMouseInElementReturn};
 use shared::data::item::{ItemRarity, ItemSpecs};
 
 use crate::assets::img_asset;
@@ -69,9 +68,11 @@ pub fn ItemCard(
         move || tooltip_context.hide()
     };
 
-    let node_ref = NodeRef::new();
-    let UseMouseInElementReturn { is_outside, .. } = use_mouse_in_element(node_ref);
-    let is_inside = Memo::new(move |_| !is_outside.get());
+    // let node_ref = NodeRef::new();
+    // let UseMouseInElementReturn { is_outside, .. } = use_mouse_in_element(node_ref);
+    // let is_inside = Memo::new(move |_| !is_outside.get());
+
+    let is_inside = RwSignal::new(false);
 
     let events_context: EventsContext = expect_context();
 
@@ -93,7 +94,7 @@ pub fn ItemCard(
 
     view! {
         <div
-            node_ref=node_ref
+            // node_ref=node_ref
             class=format!(
                 "relative group flex items-center justify-center w-full aspect-[2/3]
                 rounded-md p-1 bg-gradient-to-br {} border-4 {} ring-2 {} shadow-md {}
@@ -112,10 +113,10 @@ pub fn ItemCard(
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
+            on:mouseenter=move |_| is_inside.set(true)
+            on:mouseleave=move |_| is_inside.set(false)
         >
 
-            // on:mouseenter=move |_| show_tooltip()
-            // on:mouseleave=move |_| hide_tooltip()
             <img
                 draggable="false"
                 src=icon_asset
