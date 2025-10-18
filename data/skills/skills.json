@@ -325,15 +325,6 @@
                     }
                   },
                   "value": 20
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": "MovementSpeed",
-                      "modifier": "Multiplier"
-                    }
-                  },
-                  "value": 20
                 }
               ]
             }

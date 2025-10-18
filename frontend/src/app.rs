@@ -11,6 +11,7 @@ use crate::components::{
     accessibility::provide_accessibility_context,
     auth::provide_auth_context,
     backend_client::BackendClient,
+    events::provide_events_context,
     pages,
     ui::confirm::{provide_confirm_context, ConfirmationModal},
 };
@@ -36,6 +37,7 @@ pub fn App() -> impl IntoView {
 
     provide_auth_context();
     provide_accessibility_context();
+    provide_events_context();
 
     let confirm_state = provide_confirm_context();
 

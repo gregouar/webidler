@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
+use rand::Rng;
 use shared::data::monster::MonsterRarity;
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
 
@@ -25,12 +26,27 @@ use super::GameContext;
 pub fn MonstersGrid() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let all_monsters_dead = Memo::new(move |_| {
-        game_context
-            .monster_states
-            .read()
-            .iter()
-            .all(|x| !x.character_state.is_alive)
+    let all_monsters_dead = RwSignal::new(true);
+    let switch_all_monsters_dead = Memo::new(move |_| {
+        game_context.monster_states.with(|monster_states| {
+            !monster_states.is_empty() && monster_states.iter().all(|x| !x.character_state.is_alive)
+        })
+    });
+    Effect::new(move || {
+        if switch_all_monsters_dead.get() {
+            // Leave a second for the player to have time to process + play fade in when instant kill
+            set_timeout(
+                move || {
+                    // Repeat in case the state would have change in-between
+                    if switch_all_monsters_dead.get_untracked() {
+                        all_monsters_dead.set(true);
+                    }
+                },
+                std::time::Duration::from_secs(1),
+            );
+        } else {
+            all_monsters_dead.set(false);
+        }
     });
 
     let flee = Memo::new(move |_| {
@@ -82,6 +98,66 @@ pub fn MonstersGrid() -> impl IntoView {
     }
 }
 
+// TODO: make a full component to handle all that damages tick thing
+#[derive(Clone)]
+struct DamageTick {
+    pub id: usize,
+    pub amount: ArcRwSignal<f64>,
+    pub is_crit: bool,
+    pub cur_avg_damage: f64,
+}
+
+#[component]
+fn DamageNumber(tick: DamageTick) -> impl IntoView {
+    let mut rng = rand::rng();
+
+    let angle = rng.random_range(-0.4_f32..=0.4_f32);
+    let rotate = angle.to_degrees() * 0.8;
+    let x_offset_start = rng.random_range(-2..=2);
+    let duration = 2.0;
+
+    let amount = tick.amount.clone();
+    let style = move || {
+        let importance = if tick.cur_avg_damage > 0.0 {
+            (amount.get() / tick.cur_avg_damage)
+                .powf(1.0 / 3.0)
+                .clamp(0.0, 2.0) as f32
+        } else {
+            1.0
+        };
+        let font_scale = 0.5 + 0.5 * importance;
+        let motion_scale = 1.0 + 0.5 * importance;
+        let distance = 2.0 * motion_scale;
+        let x_offset = -angle.sin() * distance;
+        let y_offset = angle.cos() * distance;
+        let scale_start = font_scale * 0.5;
+        let scale_end = font_scale;
+        format!(
+            "--x-offset: {}em; --y-offset: {}em; --rotate: {}deg; --duration: {}s; \
+         --scale-start: {}; --scale-end: {}; --x-offset-start: {}em;
+         text-shadow: 0px 1px rgba(0, 0, 0, 0.9), 0px 0px 4px rgba(255, 0, 0, 0.5);",
+            x_offset, y_offset, rotate, duration, scale_start, scale_end, x_offset_start
+        )
+    };
+
+    view! {
+        <div
+            class="absolute left-1/2 top-1 -translate-x-1/2 z-30
+            text-red-500 text-shadow-sm font-extrabold text-sm xl:text-lg
+            animate-damage-float select-none font-number"
+            style=style
+        >
+            {move || {
+                format!(
+                    "{}{}",
+                    format_number(tick.amount.get()),
+                    if tick.is_crit { "!" } else { "" },
+                )
+            }}
+        </div>
+    }
+}
+
 #[component]
 fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
@@ -91,33 +167,6 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         CharacterSize::Small | CharacterSize::Large | CharacterSize::Tall => false,
         CharacterSize::Huge | CharacterSize::Gargantuan => true,
     };
-
-    let life = Memo::new(move |_| {
-        game_context
-            .monster_states
-            .read()
-            .get(index)
-            .map(|s| s.character_state.life)
-            .unwrap_or_default()
-    });
-
-    let life_tooltip = move || {
-        view! {
-            "Life: "
-            {format_number(life.get())}
-            "/"
-            {format_number(specs.character_specs.max_life)}
-        }
-    };
-
-    let life_percent = Memo::new(move |_| {
-        let max_life = specs.character_specs.max_life;
-        if max_life > 0.0 {
-            (life.get() / specs.character_specs.max_life * 100.0) as f32
-        } else {
-            0.0
-        }
-    });
 
     let is_dead = Memo::new(move |_| {
         game_context
@@ -153,6 +202,118 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .get(index)
             .map(|x| x.character_state.just_blocked)
             .unwrap_or_default()
+    });
+
+    let mut damage_tick_id = 0;
+    let damage_ticks = ArcRwSignal::new(Vec::new());
+    let dot_tick = ArcRwSignal::new(None);
+
+    let mut old_life = specs.character_specs.max_life;
+    let life = RwSignal::new(old_life);
+
+    Effect::new({
+        let damage_ticks = damage_ticks.clone();
+        move || {
+            let new_life = game_context
+                .monster_states
+                .read()
+                .get(index)
+                .map(|s| s.character_state.life)
+                .unwrap_or_default();
+
+            let diff = old_life - new_life;
+            old_life = new_life;
+
+            if diff > 0.0 {
+                if just_hurt.get_untracked() {
+                    let tick_id = damage_tick_id;
+                    damage_tick_id += 1;
+                    game_context.game_local_stats.add_damage_tick(diff);
+                    damage_ticks.write().push(DamageTick {
+                        id: tick_id,
+                        amount: ArcRwSignal::new(diff),
+                        is_crit: just_hurt_crit.get(),
+                        cur_avg_damage: game_context.game_local_stats.average_damage_tick(),
+                    });
+
+                    set_timeout(
+                        {
+                            let damage_ticks = damage_ticks.clone();
+                            move || {
+                                damage_ticks.write().retain(|tick| tick.id != tick_id);
+                            }
+                        },
+                        std::time::Duration::from_secs(3),
+                    );
+                } else if let Some(dot_tick) = dot_tick.get() {
+                    damage_ticks
+                        .write()
+                        .iter_mut()
+                        .find(|tick| tick.id == dot_tick)
+                        .map(|tick: &mut DamageTick| *tick.amount.write() += diff);
+                } else {
+                    let tick_id = damage_tick_id;
+                    damage_tick_id += 1;
+                    damage_ticks.write().push(DamageTick {
+                        id: tick_id,
+                        amount: ArcRwSignal::new(diff),
+                        is_crit: false,
+                        cur_avg_damage: game_context.game_local_stats.average_damage_tick(),
+                    });
+                    dot_tick.set(Some(tick_id));
+
+                    set_timeout(
+                        {
+                            let damage_ticks = damage_ticks.clone();
+                            let dot_tick = dot_tick.clone();
+                            move || {
+                                if let Some(amount) = damage_ticks
+                                    .read()
+                                    .get(tick_id)
+                                    .map(|tick: &DamageTick| tick.amount.get_untracked())
+                                {
+                                    game_context.game_local_stats.add_damage_tick(amount)
+                                }
+                                dot_tick.set(None);
+                            }
+                        },
+                        std::time::Duration::from_secs(1),
+                    );
+
+                    set_timeout(
+                        {
+                            let damage_ticks = damage_ticks.clone();
+                            move || {
+                                damage_ticks.write().retain(|tick| tick.id != tick_id);
+                            }
+                        },
+                        std::time::Duration::from_secs(3),
+                    );
+                }
+            }
+
+            if diff != 0.0 {
+                life.set(new_life.max(0.0));
+            }
+        }
+    });
+
+    let life_tooltip = move || {
+        view! {
+            "Life: "
+            {format_number(life.get())}
+            "/"
+            {format_number(specs.character_specs.max_life)}
+        }
+    };
+
+    let life_percent = Memo::new(move |_| {
+        let max_life = specs.character_specs.max_life;
+        if max_life > 0.0 {
+            (life.get() / specs.character_specs.max_life * 100.0) as f32
+        } else {
+            0.0
+        }
     });
 
     let statuses = Signal::derive(move || {
@@ -237,6 +398,36 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 font-weight: bold;
                 color: #facc15;
             }
+            
+            
+            @keyframes damage-float {
+                0% {
+                    opacity: 0;
+                    transform: translate(var(--x-offset-start), 0) scale(calc(var(--scale-start) * 0.7)) rotate(0deg);
+                }
+                10% {
+                    opacity: 1;
+                    transform: translate(var(--x-offset-start), -5px) scale(var(--scale-start)) rotate(0deg);
+                }
+                60% {
+                    opacity: 1;
+                    transform: translate(calc(var(--x-offset-start) + var(--x-offset) * 0.6), calc(var(--y-offset) * 0.6))
+                            scale(var(--scale-end))
+                            rotate(calc(var(--rotate) * 0.6));
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(calc(var(--x-offset-start) + var(--x-offset)), var(--y-offset))
+                            scale(calc(var(--scale-end) * 1.1))
+                            rotate(var(--rotate));
+                }
+            }
+            
+            .animate-damage-float {
+                animation: damage-float var(--duration) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+                will-change: transform, opacity;
+                filter: saturate(--scale-end);
+            }
             "
         </style>
         <div
@@ -269,12 +460,16 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     />
                 </div>
 
+                <For each=move || damage_ticks.get() key=|tick| tick.id let(tick)>
+                    <DamageNumber tick />
+                </For>
+
                 <Show when=move || { gold_reward.get() > 0.0 }>
                     <div class="
                     reward-float gold-text text-amber-400 text:lg xl:text-2xl  text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
-                    pointer-events-none z-50 flex items-center gap-1
-                    ">
+                    pointer-events-none z-30 flex items-center gap-1
+                    font-number">
                         <span>+{format_number(gold_reward.get())}</span>
                         <img
                             draggable="false"
@@ -289,8 +484,8 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     <div class="
                     reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
-                    pointer-events-none z-50 flex items-center gap-1
-                    ">
+                    pointer-events-none z-30 flex items-center gap-1
+                    font-number">
                         <span>+{format_number(gems_reward.get())}</span>
                         <img
                             draggable="false"
