@@ -14,7 +14,10 @@ use super::skill_tooltip::format_trigger;
 use super::effects_tooltip;
 
 #[component]
-pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+pub fn ItemTooltip(
+    item_specs: Arc<ItemSpecs>,
+    #[prop(default = false)] show_affixes: bool,
+) -> impl IntoView {
     let (border_color, ring_color, shadow_color) = match item_specs.modifiers.rarity {
         ItemRarity::Normal => ("border-gray-600", "ring-gray-700", "shadow-gray-800"),
         ItemRarity::Magic => ("border-blue-500", "ring-blue-400", "shadow-blue-700"),
@@ -34,7 +37,7 @@ pub fn ItemTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             ring_color,
             shadow_color,
         )>
-            <ItemTooltipContent item_specs />
+            <ItemTooltipContent item_specs=item_specs.clone() show_affixes />
         </div>
     }
 }
