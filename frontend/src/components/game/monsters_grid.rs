@@ -112,7 +112,7 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
 
     let angle = rng.random_range(-0.4_f32..=0.4_f32);
     let rotate = angle.to_degrees() * 0.8;
-    let x_offset_start = rng.random_range(-50..=50);
+    let x_offset_start = rng.random_range(-2..=2);
     let duration = 2.0;
 
     let amount = tick.amount.clone();
@@ -122,14 +122,14 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
             .clamp(0.0, 2.0) as f32;
         let font_scale = 0.5 + 0.5 * importance;
         let motion_scale = 1.0 + 0.5 * importance;
-        let distance = 60.0 * motion_scale;
+        let distance = 2.0 * motion_scale;
         let x_offset = -angle.sin() * distance;
         let y_offset = angle.cos() * distance;
         let scale_start = font_scale * 0.5;
         let scale_end = font_scale;
         format!(
-            "--x-offset: {}px; --y-offset: {}px; --rotate: {}deg; --duration: {}s; \
-         --scale-start: {}; --scale-end: {}; --x-offset-start: {}px;
+            "--x-offset: {}em; --y-offset: {}em; --rotate: {}deg; --duration: {}s; \
+         --scale-start: {}; --scale-end: {}; --x-offset-start: {}em;
          text-shadow: 0px 1px rgba(0, 0, 0, 0.9), 0px 0px 4px rgba(255, 0, 0, 0.5);",
             x_offset, y_offset, rotate, duration, scale_start, scale_end, x_offset_start
         )
@@ -139,7 +139,7 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
         <div
             class="absolute left-1/2 top-1 -translate-x-1/2 z-30
             text-red-500 text-shadow-sm font-extrabold text-sm xl:text-lg
-            animate-damage-float select-none font-mono tabular-nums"
+            animate-damage-float select-none font-number"
             style=style
         >
             {move || {
@@ -200,82 +200,96 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     });
 
     let mut damage_tick_id = 0;
-    let damage_ticks = RwSignal::new(Vec::new());
-    let dot_tick = RwSignal::new(None);
+    let damage_ticks = ArcRwSignal::new(Vec::new());
+    let dot_tick = ArcRwSignal::new(None);
 
     let mut old_life = specs.character_specs.max_life;
     let life = RwSignal::new(old_life);
 
-    Effect::new(move || {
-        let new_life = game_context
-            .monster_states
-            .read()
-            .get(index)
-            .map(|s| s.character_state.life)
-            .unwrap_or_default();
+    Effect::new({
+        let damage_ticks = damage_ticks.clone();
+        move || {
+            let new_life = game_context
+                .monster_states
+                .read()
+                .get(index)
+                .map(|s| s.character_state.life)
+                .unwrap_or_default();
 
-        let diff = old_life - new_life;
-        old_life = new_life;
+            let diff = old_life - new_life;
+            old_life = new_life;
 
-        if diff > 0.0 {
-            if just_hurt.get_untracked() {
-                let tick_id = damage_tick_id;
-                damage_tick_id += 1;
-                game_context.game_local_stats.add_damage_tick(diff);
-                damage_ticks.write().push(DamageTick {
-                    id: tick_id,
-                    amount: ArcRwSignal::new(diff),
-                    is_crit: just_hurt_crit.get(),
-                    cur_avg_damage: game_context.game_local_stats.average_damage_tick(),
-                });
+            if diff > 0.0 {
+                if just_hurt.get_untracked() {
+                    let tick_id = damage_tick_id;
+                    damage_tick_id += 1;
+                    game_context.game_local_stats.add_damage_tick(diff);
+                    damage_ticks.write().push(DamageTick {
+                        id: tick_id,
+                        amount: ArcRwSignal::new(diff),
+                        is_crit: just_hurt_crit.get(),
+                        cur_avg_damage: game_context.game_local_stats.average_damage_tick(),
+                    });
 
-                set_timeout(
-                    move || {
-                        damage_ticks.write().retain(|tick| tick.id != tick_id);
-                    },
-                    std::time::Duration::from_secs(10),
-                );
-            } else if let Some(dot_tick) = dot_tick.get() {
-                damage_ticks
-                    .write()
-                    .get_mut(dot_tick)
-                    .map(|tick: &mut DamageTick| *tick.amount.write() += diff);
-            } else {
-                let tick_id = damage_tick_id;
-                damage_tick_id += 1;
-                damage_ticks.write().push(DamageTick {
-                    id: tick_id,
-                    amount: ArcRwSignal::new(diff),
-                    is_crit: false,
-                    cur_avg_damage: game_context.game_local_stats.average_damage_tick(),
-                });
-                dot_tick.set(Some(tick_id));
-
-                set_timeout(
-                    move || {
-                        if let Some(amount) = damage_ticks
-                            .read()
-                            .get(tick_id)
-                            .map(|tick: &DamageTick| tick.amount.get_untracked())
+                    set_timeout(
                         {
-                            game_context.game_local_stats.add_damage_tick(amount)
-                        }
-                        dot_tick.set(None);
-                    },
-                    std::time::Duration::from_secs(1),
-                );
+                            let damage_ticks = damage_ticks.clone();
+                            move || {
+                                damage_ticks.write().retain(|tick| tick.id != tick_id);
+                            }
+                        },
+                        std::time::Duration::from_secs(3),
+                    );
+                } else if let Some(dot_tick) = dot_tick.get() {
+                    damage_ticks
+                        .write()
+                        .iter_mut()
+                        .find(|tick| tick.id == dot_tick)
+                        .map(|tick: &mut DamageTick| *tick.amount.write() += diff);
+                } else {
+                    let tick_id = damage_tick_id;
+                    damage_tick_id += 1;
+                    damage_ticks.write().push(DamageTick {
+                        id: tick_id,
+                        amount: ArcRwSignal::new(diff),
+                        is_crit: false,
+                        cur_avg_damage: game_context.game_local_stats.average_damage_tick(),
+                    });
+                    dot_tick.set(Some(tick_id));
 
-                set_timeout(
-                    move || {
-                        damage_ticks.write().retain(|tick| tick.id != tick_id);
-                    },
-                    std::time::Duration::from_secs(10),
-                );
+                    set_timeout(
+                        {
+                            let damage_ticks = damage_ticks.clone();
+                            let dot_tick = dot_tick.clone();
+                            move || {
+                                if let Some(amount) = damage_ticks
+                                    .read()
+                                    .get(tick_id)
+                                    .map(|tick: &DamageTick| tick.amount.get_untracked())
+                                {
+                                    game_context.game_local_stats.add_damage_tick(amount)
+                                }
+                                dot_tick.set(None);
+                            }
+                        },
+                        std::time::Duration::from_secs(1),
+                    );
+
+                    set_timeout(
+                        {
+                            let damage_ticks = damage_ticks.clone();
+                            move || {
+                                damage_ticks.write().retain(|tick| tick.id != tick_id);
+                            }
+                        },
+                        std::time::Duration::from_secs(3),
+                    );
+                }
             }
-        }
 
-        if diff != 0.0 {
-            life.set(new_life.max(0.0));
+            if diff != 0.0 {
+                life.set(new_life.max(0.0));
+            }
         }
     });
 
@@ -450,7 +464,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     reward-float gold-text text-amber-400 text:lg xl:text-2xl  text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-30 flex items-center gap-1
-                    font-mono tabular-nums">
+                    font-number">
                         <span>+{format_number(gold_reward.get())}</span>
                         <img
                             draggable="false"
@@ -466,7 +480,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md will-change-transform will-change-opacity
                     absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-30 flex items-center gap-1
-                    font-mono tabular-nums">
+                    font-number">
                         <span>+{format_number(gems_reward.get())}</span>
                         <img
                             draggable="false"

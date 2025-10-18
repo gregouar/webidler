@@ -526,7 +526,7 @@ fn Stat(
     view! {
         <div class="flex justify-between px-6 text-sm xl:text-base">
             <span class="text-gray-400">{label}</span>
-            <span class="text-amber-100 font-medium">{move || value()}</span>
+            <span class="text-amber-100 font-medium font-number">{move || value()}</span>
         </div>
     }
 }
