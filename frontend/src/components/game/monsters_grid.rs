@@ -98,6 +98,7 @@ pub fn MonstersGrid() -> impl IntoView {
     }
 }
 
+// TODO: make a full component to handle all that damages tick thing
 #[derive(Clone)]
 struct DamageTick {
     pub id: usize,
@@ -117,9 +118,13 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
 
     let amount = tick.amount.clone();
     let style = move || {
-        let importance = (amount.get() / tick.cur_avg_damage)
-            .powf(1.0 / 3.0)
-            .clamp(0.0, 2.0) as f32;
+        let importance = if tick.cur_avg_damage > 0.0 {
+            (amount.get() / tick.cur_avg_damage)
+                .powf(1.0 / 3.0)
+                .clamp(0.0, 2.0) as f32
+        } else {
+            1.0
+        };
         let font_scale = 0.5 + 0.5 * importance;
         let motion_scale = 1.0 + 0.5 * importance;
         let distance = 2.0 * motion_scale;
