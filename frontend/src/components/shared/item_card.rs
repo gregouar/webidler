@@ -83,11 +83,9 @@ pub fn ItemCard(
             if is_inside.get() {
                 tooltip_in_use = true;
                 show_tooltip(events_context.key_pressed(Key::Alt));
-            } else {
-                if tooltip_in_use {
-                    tooltip_in_use = false;
-                    hide_tooltip();
-                }
+            } else if tooltip_in_use {
+                tooltip_in_use = false;
+                hide_tooltip();
             }
         }
     });
