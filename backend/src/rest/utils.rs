@@ -36,7 +36,7 @@ pub fn inventory_data_to_player_inventory(
         bag: inventory_data
             .bag
             .into_iter()
-            .filter_map(|item_modifiers| init_item_specs_from_store(&items_store, item_modifiers))
+            .filter_map(|item_modifiers| init_item_specs_from_store(items_store, item_modifiers))
             .collect(),
         max_bag_size: inventory_data.max_bag_size,
     };
