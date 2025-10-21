@@ -217,11 +217,7 @@ pub fn BattleSceneFooter() -> impl IntoView {
 pub fn GemsLoot() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let gems_chance = move || {
-        game_context
-            .area_state
-            .with(|area_state| computations::gem_chance(area_state))
-    };
+    let gems_chance = move || game_context.area_state.with(computations::gem_chance);
 
     let tooltip = move || {
         let gems_chance = gems_chance();
