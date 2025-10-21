@@ -246,11 +246,13 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                         std::time::Duration::from_secs(3),
                     );
                 } else if let Some(dot_tick) = dot_tick.get() {
-                    damage_ticks
+                    if let Some(tick) = damage_ticks
                         .write()
                         .iter_mut()
                         .find(|tick| tick.id == dot_tick)
-                        .map(|tick: &mut DamageTick| *tick.amount.write() += diff);
+                    {
+                        *tick.amount.write() += diff
+                    }
                 } else {
                     let tick_id = damage_tick_id;
                     damage_tick_id += 1;

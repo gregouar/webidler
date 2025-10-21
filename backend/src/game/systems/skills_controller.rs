@@ -128,7 +128,7 @@ fn apply_repeated_skill_on_targets<'a>(
         );
     }
 
-    applied.then(|| main_target_id)
+    applied.then_some(main_target_id)
 }
 
 fn find_targets<'a, 'b>(

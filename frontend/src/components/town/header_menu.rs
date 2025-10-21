@@ -33,6 +33,14 @@ pub fn HeaderMenu() -> impl IntoView {
                 <FullscreenButton />
                 <MenuButton
                     on:click=move |_| {
+                        town_context.open_inventory.set(!town_context.open_inventory.get());
+                    }
+                    disabled=disable_inventory
+                >
+                    "Inventory"
+                </MenuButton>
+                <MenuButton
+                    on:click=move |_| {
                         town_context.open_market.set(!town_context.open_market.get());
                         town_context.open_ascend.set(false);
                         town_context.open_forge.set(false);

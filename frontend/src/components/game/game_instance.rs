@@ -12,7 +12,7 @@ use crate::components::websocket::WebsocketContext;
 
 use super::battle_scene::BattleScene;
 use super::header_menu::HeaderMenu;
-use super::panels::{InventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel};
+use super::panels::{GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel};
 use super::GameContext;
 
 #[component]
@@ -61,7 +61,7 @@ pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
                 <HeaderMenu />
                 <div class="relative flex-1">
                     <BattleScene />
-                    <InventoryPanel open=game_context.open_inventory />
+                    <GameInventoryPanel open=game_context.open_inventory />
                     <PassivesPanel open=game_context.open_passives />
                     <StatisticsPanel open=game_context.open_statistics />
                     <SkillsPanel open=game_context.open_skills />

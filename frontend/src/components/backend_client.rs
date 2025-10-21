@@ -7,7 +7,8 @@ use shared::{
         client::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BuyMarketItemRequest,
             CreateCharacterRequest, EditMarketItemRequest, ForgeAddAffixRequest,
-            ForgotPasswordRequest, RejectMarketItemRequest, ResetPasswordRequest,
+            ForgotPasswordRequest, InventoryDeleteRequest, InventoryEquipRequest,
+            InventoryUnequipRequest, RejectMarketItemRequest, ResetPasswordRequest,
             SellMarketItemRequest, SignInRequest, SignUpRequest, UpdateAccountRequest,
         },
         server::{
@@ -15,7 +16,8 @@ use shared::{
             CreateCharacterResponse, DeleteAccountResponse, DeleteCharacterResponse,
             EditMarketItemResponse, ErrorResponse, ForgeAddAffixResponse, ForgotPasswordResponse,
             GetAreasResponse, GetCharacterDetailsResponse, GetPassivesResponse, GetSkillsResponse,
-            GetUserCharactersResponse, GetUserDetailsResponse, LeaderboardResponse,
+            GetUserCharactersResponse, GetUserDetailsResponse, InventoryDeleteResponse,
+            InventoryEquipResponse, InventoryUnequipResponse, LeaderboardResponse,
             PlayersCountResponse, RejectMarketItemResponse, ResetPasswordResponse,
             SellMarketItemResponse, SignInResponse, SignUpResponse, UpdateAccountResponse,
         },
@@ -235,6 +237,32 @@ impl BackendClient {
         request: &ForgeAddAffixRequest,
     ) -> Result<ForgeAddAffixResponse, BackendError> {
         self.post_auth("forge/add_affix", token, request).await
+    }
+
+    // Inventory
+
+    pub async fn inventory_equip(
+        &self,
+        token: &str,
+        request: &InventoryEquipRequest,
+    ) -> Result<InventoryEquipResponse, BackendError> {
+        self.post_auth("inventory/equip", token, request).await
+    }
+
+    pub async fn inventory_unequip(
+        &self,
+        token: &str,
+        request: &InventoryUnequipRequest,
+    ) -> Result<InventoryUnequipResponse, BackendError> {
+        self.post_auth("inventory/unequip", token, request).await
+    }
+
+    pub async fn inventory_delete(
+        &self,
+        token: &str,
+        request: &InventoryDeleteRequest,
+    ) -> Result<InventoryDeleteResponse, BackendError> {
+        self.post_auth("inventory/delete", token, request).await
     }
 
     // Protected

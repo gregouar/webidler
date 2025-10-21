@@ -186,13 +186,12 @@ fn generate_monster_specs(
     let mut monster_specs = MonsterSpecs::init(bp_specs.clone());
     let mut monster_level = area_state.area_level;
 
-    if monster_specs.rarity == MonsterRarity::Normal {
-        if rng::random_range(0.0..=1.0).unwrap_or(1.0) < computations::gem_chance(area_state) {
+    if monster_specs.rarity == MonsterRarity::Normal
+        && rng::random_range(0.0..=1.0).unwrap_or(1.0) < computations::gem_chance(area_state) {
             // area_state.last_champion_spawn = area_state.area_level;
             monster_specs.rarity = MonsterRarity::Champion;
             monster_level += CHAMPION_LEVEL_INC;
-        }
-    };
+        };
 
     let exp_factor = computations::exponential(monster_level, MONSTER_INCREASE_FACTOR);
     let reward_factor = computations::exponential(

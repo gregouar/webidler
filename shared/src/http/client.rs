@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     data::{
+        item::ItemSlot,
         item_affix::AffixType,
         market::MarketFilters,
         passive::PassivesTreeAscension,
@@ -59,11 +60,15 @@ pub struct CreateCharacterRequest {
     pub portrait: AssetName,
 }
 
+// Ascend
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct AscendPassivesRequest {
     pub character_id: UserCharacterId,
     pub passives_tree_ascension: PassivesTreeAscension,
 }
+
+// Market
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BrowseMarketItemsRequest {
@@ -104,9 +109,31 @@ pub struct RejectMarketItemRequest {
     pub item_index: u32,
 }
 
+// Forge
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForgeAddAffixRequest {
     pub character_id: UserCharacterId,
     pub item_index: u32,
     pub affix_type: Option<AffixType>,
+}
+
+// Inventory
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct InventoryEquipRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: u8,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct InventoryUnequipRequest {
+    pub character_id: UserCharacterId,
+    pub item_slot: ItemSlot,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct InventoryDeleteRequest {
+    pub character_id: UserCharacterId,
+    pub item_indexes: Vec<u8>,
 }
