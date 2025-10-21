@@ -13,10 +13,13 @@ use crate::components::{
     backend_client::{BackendClient, BackendError},
     shared::player_count::PlayerCount,
     town::{
-        TownContext,
         header_menu::HeaderMenu,
-        panels::{ascend::AscendPanel, forge::ForgePanel, market::MarketPanel},
+        panels::{
+            ascend::AscendPanel, forge::ForgePanel, inventory::TownInventoryPanel,
+            market::MarketPanel,
+        },
         town_scene::TownScene,
+        TownContext,
     },
     ui::tooltip::DynamicTooltip,
 };
@@ -93,6 +96,7 @@ pub fn TownPage() -> impl IntoView {
                             <MarketPanel open=town_context.open_market />
                             <AscendPanel open=town_context.open_ascend />
                             <ForgePanel open=town_context.open_forge />
+                            <TownInventoryPanel open=town_context.open_inventory />
                         </div>
                     }
                 })}

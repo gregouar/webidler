@@ -15,6 +15,7 @@ pub struct TownContext {
 
     // TODO: Is this really the correct place? Should we have a UI context?
     // TODO: enum ?
+    pub open_inventory: RwSignal<bool>,
     pub open_ascend: RwSignal<bool>,
     pub open_market: RwSignal<bool>,
     pub open_forge: RwSignal<bool>,

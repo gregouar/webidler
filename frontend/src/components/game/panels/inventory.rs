@@ -14,7 +14,7 @@ use crate::components::{
 };
 
 #[component]
-pub fn InventoryPanel(open: RwSignal<bool>) -> impl IntoView {
+pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
     let conn = expect_context::<WebsocketContext>();
     let confirm_context = expect_context::<ConfirmContext>();
