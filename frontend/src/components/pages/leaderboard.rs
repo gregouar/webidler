@@ -63,11 +63,8 @@ pub fn LeaderboardPanel() -> impl IntoView {
                             .into_iter()
                             .fold(
                                 HashMap::new(),
-                                |mut hash_map, entry| {
-                                    hash_map
-                                        .entry(entry.area_id.clone())
-                                        .or_insert(Vec::new())
-                                        .push(entry);
+                                |mut hash_map: std::collections::HashMap<_, Vec<_>>, entry| {
+                                    hash_map.entry(entry.area_id.clone()).or_default().push(entry);
                                     hash_map
                                 },
                             )
