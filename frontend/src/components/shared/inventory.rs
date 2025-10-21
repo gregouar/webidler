@@ -16,7 +16,6 @@ use crate::{
         shared::{item_card::ItemCard, tooltips::ItemTooltip},
         ui::{
             buttons::{CloseButton, MenuButton},
-            confirm::ConfirmContext,
             dropdown::DropdownMenu,
             menu_panel::{MenuPanel, PanelTitle},
             tooltip::DynamicTooltipPosition,
@@ -30,7 +29,9 @@ type SellQueue = RwSignal<HashSet<usize>>;
 pub struct InventoryConfig {
     pub player_inventory: RwSignal<PlayerInventory>,
     pub loot_preference: Option<RwSignal<Option<ItemCategory>>>,
-    pub on_unequip: Arc<dyn Fn(ItemSlot) + Send + Sync>,
+    pub on_unequip: Option<Arc<dyn Fn(ItemSlot) + Send + Sync>>,
+    pub on_equip: Option<Arc<dyn Fn(usize) + Send + Sync>>,
+    pub on_sell: Option<Arc<dyn Fn(Vec<u8>) + Send + Sync>>,
 }
 
 #[component]
@@ -268,67 +269,28 @@ pub fn EquippedItemContextMenu(
     on_close: Callback<()>,
     is_being_unequipped: RwSignal<bool>,
 ) -> impl IntoView {
-    let confirm_context = expect_context::<ConfirmContext>();
-
-    // let unequip = Arc::new({
-    //     let conn = expect_context::<WebsocketContext>();
-
-    //     move || {
-    //         conn.send(&UnequipItemMessage { item_slot }.into());
-    //         is_being_unequipped.set(true);
-    //         set_timeout(
-    //             move || is_being_unequipped.set(false),
-    //             Duration::from_millis(1000),
-    //         );
-    //     }
-    // });
-
-    // let try_unequip = {
-    //     let game_context = expect_context::<GameContext>();
-    //     move |_| {
-    //         let inventory = game_context.player_inventory.read();
-    //         let need_confirm = inventory
-    //             .equipped
-    //             .get(&item_slot)
-    //             .map(|x| {
-    //                 if let EquippedSlot::MainSlot(x) = x {
-    //                     x.weapon_specs.is_some()
-    //                 } else {
-    //                     false
-    //                 }
-    //             })
-    //             .unwrap_or_default();
-
-    //         if need_confirm {
-    //             (confirm_context
-    //                     .confirm)(
-    //                     "Unequipping your weapon will reset the weapon attack skill upgrade level to 1, are you sure?"
-    //                         .to_string(),
-    //                     unequip.clone(),
-    //                 );
-    //         } else {
-    //             unequip();
-    //         }
-    //         on_close.run(());
-    //     }
-    // };
-
     view! {
         <ContextMenu on_close=on_close>
-            <button
-                class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40 py-1 xl:py-2"
-                on:click=move |_| {
-                    inventory.on_unequip(item_slot);
-                    is_being_unequipped.set(true);
-                    set_timeout(
-                        move || is_being_unequipped.set(false),
-                        Duration::from_millis(1000),
-                    );
-                }
-            >
-                "Unequip"
-            </button>
-
+            {inventory
+                .on_unequip
+                .map(|on_unequip| {
+                    view! {
+                        <button
+                            class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40 py-1 xl:py-2"
+                            on:click=move |_| {
+                                on_unequip(item_slot);
+                                on_close.run(());
+                                is_being_unequipped.set(true);
+                                set_timeout(
+                                    move || is_being_unequipped.set(false),
+                                    Duration::from_millis(1000),
+                                );
+                            }
+                        >
+                            "Unequip"
+                        </button>
+                    }
+                })}
             <button
                 class="btn w-full text-sm xl:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 xl:py-4"
                 on:click=move |_| on_close.run(())
@@ -398,15 +360,18 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
 fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
     let is_being_equipped = RwSignal::new(false);
 
-    let maybe_item = move || {
-        is_being_equipped.set(false);
-        inventory
-            .player_inventory
-            .read()
-            .bag
-            .get(item_index)
-            .cloned()
-            .map(Arc::new)
+    let maybe_item = {
+        let inventory = inventory.clone();
+        move || {
+            is_being_equipped.set(false);
+            inventory
+                .player_inventory
+                .read()
+                .bag
+                .get(item_index)
+                .cloned()
+                .map(Arc::new)
+        }
     };
 
     let sell_queue = expect_context::<SellQueue>();
@@ -451,6 +416,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
             {move || {
                 match maybe_item() {
                     Some(item_specs) => {
+                        let inventory = inventory.clone();
                         view! {
                             <div class="relative w-full h-full overflow-visible">
                                 <ItemCard
@@ -485,7 +451,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                     bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black"></div>
                                 </Show>
 
-                                <Show when=move || show_menu.get()>
+                                <Show when=move || { show_menu.get() }>
                                     <BagItemContextMenu
                                         inventory=inventory.clone()
                                         item_index=item_index
@@ -505,12 +471,18 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                             <ItemTooltip item_specs=maybe_item().unwrap().clone() />
                                         </div>
                                     </Portal>
+
                                 </Show>
                             </div>
                         }
                             .into_any()
                     }
-                    None => view! { <EmptySlot>{}</EmptySlot> }.into_any(),
+                    None => {
+                        // Ignore if Mobile:
+
+                        view! { <EmptySlot>{}</EmptySlot> }
+                            .into_any()
+                    }
                 }
             }}
         </div>
@@ -525,60 +497,6 @@ pub fn BagItemContextMenu(
     is_being_equipped: RwSignal<bool>,
 ) -> impl IntoView {
     let sell_queue = expect_context::<SellQueue>();
-    let confirm_context = expect_context::<ConfirmContext>();
-
-    // let equip = Arc::new({
-    //     let conn = expect_context::<WebsocketContext>();
-    //     move || {
-    //         sell_queue.write().remove(&item_index);
-    //         conn.send(
-    //             &EquipItemMessage {
-    //                 item_index: item_index as u8,
-    //             }
-    //             .into(),
-    //         );
-    //         is_being_equipped.set(true);
-    //         set_timeout(
-    //             move || is_being_equipped.set(false),
-    //             Duration::from_millis(1000),
-    //         );
-    //     }
-    // });
-
-    // let try_equip = {
-    //     move |_| {
-    //         let inventory = game_context.player_inventory.read();
-    //         let need_confirm = inventory
-    //             .bag
-    //             .get(item_index)
-    //             .and_then(|x| inventory.equipped.get(&x.base.slot))
-    //             .and_then(|x| match x {
-    //                 EquippedSlot::ExtraSlot(item_slot) => inventory.equipped.get(item_slot),
-    //                 x => Some(x),
-    //             })
-    //             .map(|x| {
-    //                 if let EquippedSlot::MainSlot(x) = x {
-    //                     x.weapon_specs.is_some()
-    //                 } else {
-    //                     false
-    //                 }
-    //             })
-    //             .unwrap_or_default();
-
-    //         if need_confirm {
-    //             (confirm_context
-    //                     .confirm)(
-    //                     "Equipping a new weapon will reset the weapon attack skill upgrade level to 1, are you sure?"
-    //                         .to_string(),
-    //                     equip.clone(),
-    //                 );
-    //         } else {
-    //             equip();
-    //         }
-
-    //         on_close.run(());
-    //     }
-    // };
 
     let toggle_sell_mark = {
         move || {
@@ -593,20 +511,44 @@ pub fn BagItemContextMenu(
 
     view! {
         <ContextMenu on_close=on_close>
-            <button
-                class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 xl:py-2"
-                on:click=try_equip
-            >
-                "Equip"
-            </button>
-
-            <button
-                class="btn w-full text-sm xl:text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-1 xl:py-2"
-                on:click=move |_| toggle_sell_mark()
-            >
-                {move || if sell_queue.get().contains(&item_index) { "Unsell" } else { "Sell" }}
-            </button>
-
+            {inventory
+                .on_equip
+                .map(|on_equip| {
+                    view! {
+                        <button
+                            class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 xl:py-2"
+                            on:click=move |_| {
+                                on_equip(item_index);
+                                sell_queue.write().remove(&item_index);
+                                is_being_equipped.set(true);
+                                set_timeout(
+                                    move || is_being_equipped.set(false),
+                                    Duration::from_millis(1000),
+                                );
+                                on_close.run(());
+                            }
+                        >
+                            "Equip"
+                        </button>
+                    }
+                })}
+            {(inventory.on_sell.is_some())
+                .then(|| {
+                    view! {
+                        <button
+                            class="btn w-full text-sm xl:text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-1 xl:py-2"
+                            on:click=move |_| toggle_sell_mark()
+                        >
+                            {move || {
+                                if sell_queue.get().contains(&item_index) {
+                                    "Unsell"
+                                } else {
+                                    "Sell"
+                                }
+                            }}
+                        </button>
+                    }
+                })}
             <button
                 class="btn w-full text-sm xl:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 xl:py-4"
                 on:click=move |_| on_close.run(())
@@ -663,30 +605,23 @@ pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView 
 
 #[component]
 fn SellAllButton(inventory: InventoryConfig) -> impl IntoView {
-    // let sell = {
-    //     let sell_queue = expect_context::<SellQueue>();
-    //     let conn = expect_context::<WebsocketContext>();
-    //     move |_| {
-    //         conn.send(
-    //             &SellItemsMessage {
-    //                 item_indexes: sell_queue.write().drain().map(|x| x as u8).collect(),
-    //             }
-    //             .into(),
-    //         );
-    //     }
-    // };
-
-    let disabled = Signal::derive({
+    inventory.on_sell.map(|on_sell| {  
+        let disabled = Signal::derive({
         let sell_queue = expect_context::<SellQueue>();
         move || sell_queue.read().is_empty()
     });
-
     view! {
-        <MenuButton on:click=sell disabled=disabled>
+        <MenuButton
+            on:click={
+                let sell_queue = expect_context::<SellQueue>();
+                move |_| { on_sell(sell_queue.write().drain().map(|x| x as u8).collect()) }
+            }
+            disabled=disabled
+        >
             <span class="inline xl:hidden">"Sell all"</span>
             <span class="hidden xl:inline font-variant:small-caps">"Sell all marked items"</span>
         </MenuButton>
-    }
+    }})
 }
 
 #[component]
