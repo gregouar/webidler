@@ -1,0 +1,106 @@
+use anyhow::Result;
+
+use shared::data::{
+    item::{ItemSlot, ItemSpecs},
+    player::{EquippedSlot, PlayerInventory},
+};
+
+use crate::rest::AppError;
+
+pub fn equip_item_from_bag(
+    player_inventory: &mut PlayerInventory,
+    item_index: u8,
+) -> Result<(), AppError> {
+    let item_index = item_index as usize;
+    let item_specs = player_inventory
+        .bag
+        .get(item_index)
+        .ok_or(AppError::NotFound)?;
+    let old_item = equip_item(player_inventory, item_specs.clone())?;
+
+    if let Some(old_item_specs) = old_item {
+        player_inventory.bag[item_index] = old_item_specs;
+    } else {
+        player_inventory.bag.remove(item_index);
+    }
+
+    Ok(())
+}
+
+pub fn unequip_item_to_bag(
+    player_inventory: &mut PlayerInventory,
+    item_slot: ItemSlot,
+) -> Result<(), AppError> {
+    if player_inventory.bag.len() >= player_inventory.max_bag_size as usize {
+        return Err(AppError::UserError("bag is full".into()));
+    }
+
+    if let Some(item) = unequip_item(player_inventory, item_slot) {
+        player_inventory.bag.push(item);
+    }
+
+    Ok(())
+}
+
+/// Equip new item and return old equipped item
+pub fn equip_item(
+    player_inventory: &mut PlayerInventory,
+    item_specs: ItemSpecs,
+) -> Result<Option<ItemSpecs>, AppError> {
+    if item_specs
+        .base
+        .extra_slots
+        .iter()
+        .any(|x| match player_inventory.equipped.get(x) {
+            Some(EquippedSlot::MainSlot(_)) => true,
+            Some(EquippedSlot::ExtraSlot(main_slot)) => *main_slot != item_specs.base.slot,
+            None => false,
+        })
+    {
+        return Err(AppError::UserError("slot unavailable".into()));
+    }
+
+    let old_item = unequip_item(player_inventory, item_specs.base.slot);
+
+    for item_slot in item_specs.base.extra_slots.iter() {
+        player_inventory
+            .equipped
+            .insert(*item_slot, EquippedSlot::ExtraSlot(item_specs.base.slot));
+    }
+
+    player_inventory.equipped.insert(
+        item_specs.base.slot,
+        EquippedSlot::MainSlot(Box::new(item_specs)),
+    );
+
+    Ok(old_item)
+}
+
+pub fn unequip_item(
+    player_inventory: &mut PlayerInventory,
+    item_slot: ItemSlot,
+) -> Option<ItemSpecs> {
+    match player_inventory.equipped.remove(&item_slot) {
+        Some(EquippedSlot::MainSlot(old_item)) => {
+            for item_slot in old_item.base.extra_slots.iter() {
+                player_inventory.equipped.remove(item_slot);
+            }
+            Some(*old_item)
+        }
+        Some(EquippedSlot::ExtraSlot(item_slot)) => unequip_item(player_inventory, item_slot),
+        None => None,
+    }
+}
+
+pub fn delete_item_from_bag(
+    player_inventory: &mut PlayerInventory,
+    item_index: u8,
+) -> Result<(), AppError> {
+    let item_index = item_index as usize;
+    if item_index < player_inventory.bag.len() {
+        player_inventory.bag.remove(item_index);
+        Ok(())
+    } else {
+        Err(AppError::NotFound)
+    }
+}

@@ -25,13 +25,20 @@ use crate::{
 
 type SellQueue = RwSignal<HashSet<usize>>;
 
+#[derive(Clone, Copy)]
+pub enum SellType {
+    Sell,
+    Discard,
+}
+
 #[derive(Clone)]
 pub struct InventoryConfig {
     pub player_inventory: RwSignal<PlayerInventory>,
     pub loot_preference: Option<RwSignal<Option<ItemCategory>>>,
     pub on_unequip: Option<Arc<dyn Fn(ItemSlot) + Send + Sync>>,
-    pub on_equip: Option<Arc<dyn Fn(usize) + Send + Sync>>,
+    pub on_equip: Option<Arc<dyn Fn(u8) + Send + Sync>>,
     pub on_sell: Option<Arc<dyn Fn(Vec<u8>) + Send + Sync>>,
+    pub sell_type: SellType,
 }
 
 #[component]
@@ -442,7 +449,10 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
 
                                 <Show when=is_queued_for_sale>
                                     <div class="absolute top-1 right-1 px-2 py-0.5 text-xs font-semibold bg-red-500 text-white rounded shadow">
-                                        "SELL"
+                                        {match inventory.sell_type {
+                                            SellType::Sell => "SELL",
+                                            SellType::Discard => "DISC.",
+                                        }}
                                     </div>
                                 </Show>
 
@@ -477,12 +487,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                         }
                             .into_any()
                     }
-                    None => {
-                        // Ignore if Mobile:
-
-                        view! { <EmptySlot>{}</EmptySlot> }
-                            .into_any()
-                    }
+                    None => view! { <EmptySlot>{}</EmptySlot> }.into_any(),
                 }
             }}
         </div>
@@ -518,7 +523,7 @@ pub fn BagItemContextMenu(
                         <button
                             class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 xl:py-2"
                             on:click=move |_| {
-                                on_equip(item_index);
+                                on_equip(item_index as u8);
                                 sell_queue.write().remove(&item_index);
                                 is_being_equipped.set(true);
                                 set_timeout(
@@ -541,9 +546,15 @@ pub fn BagItemContextMenu(
                         >
                             {move || {
                                 if sell_queue.get().contains(&item_index) {
-                                    "Unsell"
+                                    match inventory.sell_type {
+                                        SellType::Sell => "Unsell",
+                                        SellType::Discard => "Keep",
+                                    }
                                 } else {
-                                    "Sell"
+                                    match inventory.sell_type {
+                                        SellType::Sell => "Sell",
+                                        SellType::Discard => "Discard",
+                                    }
                                 }
                             }}
                         </button>
@@ -605,23 +616,34 @@ pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView 
 
 #[component]
 fn SellAllButton(inventory: InventoryConfig) -> impl IntoView {
-    inventory.on_sell.map(|on_sell| {  
+    inventory.on_sell.map(|on_sell| {
         let disabled = Signal::derive({
-        let sell_queue = expect_context::<SellQueue>();
-        move || sell_queue.read().is_empty()
-    });
-    view! {
-        <MenuButton
-            on:click={
-                let sell_queue = expect_context::<SellQueue>();
-                move |_| { on_sell(sell_queue.write().drain().map(|x| x as u8).collect()) }
-            }
-            disabled=disabled
-        >
-            <span class="inline xl:hidden">"Sell all"</span>
-            <span class="hidden xl:inline font-variant:small-caps">"Sell all marked items"</span>
-        </MenuButton>
-    }})
+            let sell_queue = expect_context::<SellQueue>();
+            move || sell_queue.read().is_empty()
+        });
+        view! {
+            <MenuButton
+                on:click={
+                    let sell_queue = expect_context::<SellQueue>();
+                    move |_| { on_sell(sell_queue.write().drain().map(|x| x as u8).collect()) }
+                }
+                disabled=disabled
+            >
+                <span class="inline xl:hidden">
+                    {match inventory.sell_type {
+                        SellType::Sell => "Sell all",
+                        SellType::Discard => "Discard all",
+                    }}
+                </span>
+                <span class="hidden xl:inline font-variant:small-caps">
+                    {match inventory.sell_type {
+                        SellType::Sell => "Sell all marked items",
+                        SellType::Discard => "Discard all marked items",
+                    }}
+                </span>
+            </MenuButton>
+        }
+    })
 }
 
 #[component]

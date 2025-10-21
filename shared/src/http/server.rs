@@ -159,3 +159,20 @@ pub struct ForgeAddAffixResponse {
     pub resource_gems: f64,
     pub inventory: PlayerInventory,
 }
+
+// Inventory
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct InventoryEquipResponse {
+    pub inventory: PlayerInventory,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct InventoryUnequipResponse {
+    pub inventory: PlayerInventory,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct InventoryDeleteResponse {
+    pub inventory: PlayerInventory,
+}

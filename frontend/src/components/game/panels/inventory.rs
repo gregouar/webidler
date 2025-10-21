@@ -8,7 +8,7 @@ use shared::{
 
 use crate::components::{
     game::game_context::GameContext,
-    shared::inventory::{Inventory, InventoryConfig},
+    shared::inventory::{Inventory, InventoryConfig, SellType},
     ui::confirm::ConfirmContext,
     websocket::WebsocketContext,
 };
@@ -36,23 +36,18 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
     let try_equip = {
         let conn = conn.clone();
         let confirm_context = confirm_context.clone();
-        move |item_index: usize| {
+        move |item_index: u8| {
             let conn = conn.clone();
             let equip = Arc::new({
                 move || {
-                    conn.send(
-                        &EquipItemMessage {
-                            item_index: item_index as u8,
-                        }
-                        .into(),
-                    );
+                    conn.send(&EquipItemMessage { item_index }.into());
                 }
             });
 
             let inventory = game_context.player_inventory.read();
             let need_confirm = inventory
                 .bag
-                .get(item_index)
+                .get(item_index as usize)
                 .and_then(|x| inventory.equipped.get(&x.base.slot))
                 .and_then(|x| match x {
                     EquippedSlot::ExtraSlot(item_slot) => inventory.equipped.get(item_slot),
@@ -133,6 +128,7 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
         on_unequip: Some(Arc::new(try_unequip)),
         on_equip: Some(Arc::new(try_equip)),
         on_sell: Some(Arc::new(sell)),
+        sell_type: SellType::Sell,
     };
 
     view! { <Inventory open=open inventory=inventory_config /> }
