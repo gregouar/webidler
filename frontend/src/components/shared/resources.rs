@@ -40,7 +40,7 @@ pub fn ResourceCounter(
         <div class="flex-1 text-shadow-md shadow-gray-950
         text-sm xl:text-xl 
         flex justify-center items-center space-x-1">
-            <div class="font-mono tabular-nums w-[8ch] text-right ">
+            <div class="font-number w-[8ch] text-right ">
                 <Number value=value />
             </div>
             <ResourceIcon icon name description />

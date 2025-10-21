@@ -13,7 +13,7 @@ use shared::data::{
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
 };
 
-use crate::utils;
+use crate::{components::game::local_stats::GameLocalStats, utils};
 
 #[derive(Clone, Copy)]
 pub struct GameContext {
@@ -38,6 +38,7 @@ pub struct GameContext {
     pub queued_loot: Syncable<Vec<QueuedLoot>>,
 
     pub game_stats: RwSignal<GameStats>,
+    pub game_local_stats: GameLocalStats,
 
     // TODO: Is this really the correct place? Should we have a UI context?
     // TODO: enum ?
@@ -79,6 +80,7 @@ impl GameContext {
             queued_loot: Default::default(),
 
             game_stats: RwSignal::new(GameStats::default()),
+            game_local_stats: Default::default(),
 
             open_inventory: RwSignal::new(false),
             open_passives: RwSignal::new(false),
@@ -157,7 +159,7 @@ where
         if let Some((server_time, client_time)) =
             server_time.zip(self.client_update_time.get_untracked())
         {
-            if server_time > client_time && (utils::now() - client_time) > 0.5 {
+            if server_time > client_time && (utils::now() - client_time) > 500.0 {
                 self.sync_value();
             }
         } else if server_time.is_some() {

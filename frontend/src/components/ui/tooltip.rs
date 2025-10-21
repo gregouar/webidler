@@ -47,6 +47,7 @@ pub fn DynamicTooltip() -> impl IntoView {
     let tooltip_ref: NodeRef<Div> = NodeRef::new();
 
     Effect::new(move |_| {
+        let _ = tooltip_context.content.read();
         if let Some(el) = tooltip_ref.get() {
             let rect = el.get_bounding_client_rect();
             tooltip_size.set((rect.width(), rect.height()));

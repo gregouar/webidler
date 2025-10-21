@@ -42,11 +42,11 @@ pub fn update_character_state(
 
     statuses_controller::update_character_statuses(character_specs, character_state, elapsed_time);
 
-    character_state.life = character_state.life.clamp(0.0, character_specs.max_life);
-    character_state.mana = character_state.mana.clamp(0.0, character_specs.max_mana);
+    character_state.life = character_state.life.min(character_specs.max_life);
+    character_state.mana = character_state.mana.min(character_specs.max_mana);
 
     if character_state.life < 0.5 {
-        character_state.life = 0.0;
+        character_state.life = character_state.life.min(0.0);
         character_state.is_alive = false;
         events_queue.register_event(GameEvent::Kill {
             target: character_id,
