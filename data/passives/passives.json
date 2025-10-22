@@ -1149,7 +1149,7 @@
                           "ignore_armor": true
                         }
                       },
-                      "value": 0
+                      "value": 0.5
                     }
                   ]
                 },
@@ -1180,8 +1180,8 @@
                 "stat": {
                   "Damage": {}
                 },
-                "modifier": "Flat",
-                "factor": 0.5,
+                "modifier": "Multiplier",
+                "factor": 100.0,
                 "source": {
                   "HitDamage": "Physical"
                 }
@@ -1704,7 +1704,7 @@
                           "ignore_armor": true
                         }
                       },
-                      "value": 0
+                      "value": 0.5
                     }
                   ]
                 },
@@ -1735,8 +1735,8 @@
                 "stat": {
                   "Damage": {}
                 },
-                "modifier": "Flat",
-                "factor": 0.5,
+                "modifier": "Multiplier",
+                "factor": 100.0,
                 "source": {
                   "HitDamage": "Fire"
                 }
