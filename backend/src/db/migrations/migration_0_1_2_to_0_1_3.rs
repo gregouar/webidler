@@ -6,9 +6,10 @@ use sqlx::{types::JsonValue, Transaction};
 use crate::{
     constants::DATA_VERSION,
     db::{
-        characters_data::{upsert_character_inventory_data, CharacterDataEntry, InventoryData},
+        characters_data::{upsert_character_inventory_data, CharacterDataEntry},
         pool::{Database, DbExecutor, DbPool},
     },
+    game::data::inventory_data::InventoryData,
 };
 
 use shared::data::{

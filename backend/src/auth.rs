@@ -167,6 +167,7 @@ impl From<db::users::UserEntry> for User {
     }
 }
 
+#[allow(deprecated)]
 pub fn encrypt_email(app_settings: &AppSettings, email: &str) -> anyhow::Result<Vec<u8>> {
     let mut nonce = [0u8; 12];
     rand::rng().fill_bytes(&mut nonce);
@@ -183,6 +184,7 @@ pub fn encrypt_email(app_settings: &AppSettings, email: &str) -> anyhow::Result<
     Ok(combined)
 }
 
+#[allow(deprecated)]
 pub fn decrypt_email(app_settings: &AppSettings, data: &[u8]) -> anyhow::Result<Email> {
     let (nonce_bytes, ciphertext) = data.split_at_checked(12).ok_or(anyhow!("invalid data"))?;
 

@@ -31,7 +31,6 @@ Head:
 
 Amulet:
     pre:
-        inc_crit_chance
         inc_crit_damage
         inc_gold_2
         inc_phys_damage
@@ -40,6 +39,7 @@ Amulet:
         inc_storm_damage
     suf:
         inc_gold
+        inc_crit_chance
         inc_attack_damage
         inc_spell_damage
         add_fire_res
@@ -161,7 +161,6 @@ Boots:
 
 Ring:
     pre:
-        inc_crit_chance
         inc_crit_damage
         inc_gold_2
         inc_phys_damage
@@ -170,6 +169,7 @@ Ring:
         inc_storm_damage
     suf:
         inc_gold
+        inc_crit_chance
         inc_attack_damage
         inc_spell_damage
         add_fire_res

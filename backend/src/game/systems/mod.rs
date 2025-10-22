@@ -2,6 +2,7 @@ pub mod area_controller;
 pub mod characters_controller;
 pub mod characters_updater;
 pub mod events_resolver;
+pub mod inventory_controller;
 pub mod items_controller;
 pub mod loot_controller;
 pub mod loot_generator;

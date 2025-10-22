@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use anyhow::Result;
 
 use shared::{
     computations,
@@ -8,12 +8,18 @@ use shared::{
         character::CharacterId,
         item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
         monster::{MonsterRarity, MonsterSpecs},
-        player::{EquippedSlot, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+        player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
         skill::{BaseSkillSpecs, SkillSpecs, SkillState},
     },
 };
 
-use crate::game::data::{event::EventsQueue, master_store::SkillsStore, DataInit};
+use crate::{
+    game::{
+        data::{event::EventsQueue, master_store::SkillsStore, DataInit},
+        systems::inventory_controller,
+    },
+    rest::AppError,
+};
 
 use super::{characters_controller::Target, items_controller, skills_controller};
 
@@ -142,26 +148,25 @@ pub fn equip_item_from_bag(
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
     item_index: u8,
-) -> bool {
-    let item_index = item_index as usize;
-    if let Some(item_specs) = player_inventory.bag.get(item_index) {
-        let old_item = match equip_item(
-            player_specs,
-            player_inventory,
-            player_state,
-            item_specs.clone(),
-        ) {
-            Ok(x) => x,
-            Err(_) => return false,
-        };
+) -> Result<(), AppError> {
+    let (new_item, old_item) =
+        inventory_controller::equip_item_from_bag(player_inventory, item_index)?;
 
-        if let Some(old_item_specs) = old_item {
-            player_inventory.bag[item_index] = old_item_specs;
-        } else {
-            player_inventory.bag.remove(item_index);
-        }
+    if let Some(old_item) = old_item {
+        unequip_weapon(player_specs, player_state, old_item.base.slot);
     }
-    true
+
+    if let Some(ref weapon_specs) = new_item.weapon_specs {
+        equip_weapon(
+            player_specs,
+            player_state,
+            new_item.base.slot,
+            new_item.modifiers.level,
+            weapon_specs,
+        );
+    }
+
+    Ok(())
 }
 
 pub fn unequip_item_to_bag(
@@ -169,90 +174,10 @@ pub fn unequip_item_to_bag(
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
     item_slot: ItemSlot,
-) -> bool {
-    if player_inventory.bag.len() >= player_inventory.max_bag_size as usize {
-        return false;
-    }
-
-    if let Some(item) = unequip_item(player_specs, player_inventory, player_state, item_slot) {
-        player_inventory.bag.push(item);
-    }
-
-    true
-}
-
-/// Equip new item and return old equipped item
-pub fn equip_item(
-    player_specs: &mut PlayerSpecs,
-    player_inventory: &mut PlayerInventory,
-    player_state: &mut PlayerState,
-    item_specs: ItemSpecs,
-) -> Result<Option<ItemSpecs>> {
-    if item_specs
-        .base
-        .extra_slots
-        .iter()
-        .any(|x| match player_inventory.equipped.get(x) {
-            Some(EquippedSlot::MainSlot(_)) => true,
-            Some(EquippedSlot::ExtraSlot(main_slot)) => *main_slot != item_specs.base.slot,
-            None => false,
-        })
-    {
-        return Err(anyhow!("slot unavailable"));
-    }
-
-    let old_item = unequip_item(
-        player_specs,
-        player_inventory,
-        player_state,
-        item_specs.base.slot,
-    );
-
-    if let Some(ref weapon_specs) = item_specs.weapon_specs {
-        equip_weapon(
-            player_specs,
-            player_state,
-            item_specs.base.slot,
-            item_specs.modifiers.level,
-            weapon_specs,
-        );
-    }
-
-    for item_slot in item_specs.base.extra_slots.iter() {
-        player_inventory
-            .equipped
-            .insert(*item_slot, EquippedSlot::ExtraSlot(item_specs.base.slot));
-    }
-
-    player_inventory.equipped.insert(
-        item_specs.base.slot,
-        EquippedSlot::MainSlot(Box::new(item_specs)),
-    );
-
-    Ok(old_item)
-}
-
-pub fn unequip_item(
-    player_specs: &mut PlayerSpecs,
-    player_inventory: &mut PlayerInventory,
-    player_state: &mut PlayerState,
-    item_slot: ItemSlot,
-) -> Option<ItemSpecs> {
-    match player_inventory.equipped.remove(&item_slot) {
-        Some(EquippedSlot::MainSlot(old_item)) => {
-            for item_slot in old_item.base.extra_slots.iter() {
-                player_inventory.equipped.remove(item_slot);
-            }
-            if old_item.weapon_specs.is_some() {
-                unequip_weapon(player_specs, player_state, item_slot);
-            }
-            Some(*old_item)
-        }
-        Some(EquippedSlot::ExtraSlot(item_slot)) => {
-            unequip_item(player_specs, player_inventory, player_state, item_slot)
-        }
-        None => None,
-    }
+) -> Result<(), AppError> {
+    inventory_controller::unequip_item_to_bag(player_inventory, item_slot)?;
+    unequip_weapon(player_specs, player_state, item_slot);
+    Ok(())
 }
 
 pub fn sell_item_from_bag(
@@ -299,6 +224,24 @@ pub fn sell_item(
                     .saturating_sub(area_specs.starting_level - 1),
                 MONSTER_INCREASE_FACTOR,
             );
+}
+
+pub fn init_skills_from_inventory(
+    player_specs: &mut PlayerSpecs,
+    player_inventory: &mut PlayerInventory,
+    player_state: &mut PlayerState,
+) {
+    for (item_slot, equipped_item) in player_inventory.equipped_items() {
+        if let Some(weapon_specs) = equipped_item.weapon_specs.as_ref() {
+            equip_weapon(
+                player_specs,
+                player_state,
+                item_slot,
+                equipped_item.modifiers.level,
+                weapon_specs,
+            );
+        }
+    }
 }
 
 fn unequip_weapon(

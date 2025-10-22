@@ -7,17 +7,19 @@ use shared::data::{
     character::CharacterSize,
     item::ItemRarity,
     passive::PassivesTreeState,
-    player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs},
     user::UserCharacterId,
 };
 
 use crate::{
     db::{self, characters::CharacterEntry},
     game::{
-        data::{master_store::MasterStore, DataInit},
+        data::{
+            inventory_data::inventory_data_to_player_inventory, master_store::MasterStore, DataInit,
+        },
         game_data::GameInstanceData,
         sessions::{Session, SessionsStore},
-        systems::items_controller,
+        systems::inventory_controller,
     },
     rest::AppError,
 };
@@ -113,7 +115,7 @@ async fn new_game_instance(
     character: CharacterEntry,
     area_id: &str,
 ) -> Result<GameInstanceData> {
-    let mut player_specs = PlayerSpecs::init(CharacterSpecs {
+    let player_specs = PlayerSpecs::init(CharacterSpecs {
         name: character.character_name.clone(),
         portrait: character.portrait.clone(),
         size: CharacterSize::Small,
@@ -137,49 +139,11 @@ async fn new_game_instance(
             .map(|area_completed| area_completed.max_area_level)
             .unwrap_or_default();
 
-    let mut player_state = PlayerState::init(&player_specs); // How to avoid this?
-
     let (player_inventory, passives_tree_state) = match character_data {
-        Some((inventory_data, ascension)) => {
-            let mut player_inventory = PlayerInventory {
-                equipped: Default::default(),
-                bag: inventory_data
-                    .bag
-                    .into_iter()
-                    .filter_map(|item_modifiers| {
-                        items_controller::init_item_specs_from_store(
-                            &master_store.items_store,
-                            item_modifiers,
-                        )
-                    })
-                    .collect(),
-                max_bag_size: inventory_data.max_bag_size,
-            };
-
-            for item_specs in inventory_data
-                .equipped
-                .into_values()
-                .filter_map(|item_modifiers| {
-                    items_controller::init_item_specs_from_store(
-                        &master_store.items_store,
-                        item_modifiers,
-                    )
-                })
-            {
-                let _ = player_controller::equip_item(
-                    &mut player_specs,
-                    &mut player_inventory,
-                    &mut player_state,
-                    item_specs,
-                );
-            }
-
-            if player_specs.skills_specs.is_empty() {
-                player_specs.buy_skill_cost = 0.0;
-            }
-
-            (player_inventory, PassivesTreeState::init(ascension))
-        }
+        Some((inventory_data, ascension)) => (
+            inventory_data_to_player_inventory(&master_store.items_store, inventory_data),
+            PassivesTreeState::init(ascension),
+        ),
         None => {
             let mut player_inventory = PlayerInventory {
                 max_bag_size: 40,
@@ -188,10 +152,8 @@ async fn new_game_instance(
 
             let base_weapon_id = "dagger".to_string();
             if let Some(base_weapon) = master_store.items_store.get(&base_weapon_id).cloned() {
-                let _ = player_controller::equip_item(
-                    &mut player_specs,
+                let _ = inventory_controller::equip_item(
                     &mut player_inventory,
-                    &mut player_state,
                     loot_generator::roll_item(
                         base_weapon_id,
                         base_weapon,
@@ -218,6 +180,16 @@ async fn new_game_instance(
         player_specs,
         player_inventory,
     )?;
+
+    player_controller::init_skills_from_inventory(
+        game_data.player_specs.mutate(),
+        game_data.player_inventory.mutate(),
+        &mut game_data.player_state,
+    );
+
+    if game_data.player_specs.mutate().skills_specs.is_empty() {
+        game_data.player_specs.mutate().buy_skill_cost = 0.0;
+    }
 
     // Only the delta is saved in db, so we adjust by starting_level
     game_data.area_state.mutate().max_area_level_ever +=

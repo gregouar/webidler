@@ -10,11 +10,11 @@ use shared::http::{
 use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
-    db::{self},
-    game::town::inventory_controller,
-    rest::utils::{
-        inventory_data_to_player_inventory, verify_character_in_town, verify_character_user,
+    db,
+    game::{
+        data::inventory_data::inventory_data_to_player_inventory, systems::inventory_controller,
     },
+    rest::utils::{verify_character_in_town, verify_character_user},
 };
 
 use super::AppError;

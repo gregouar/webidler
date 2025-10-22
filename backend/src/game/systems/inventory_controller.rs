@@ -7,24 +7,27 @@ use shared::data::{
 
 use crate::rest::AppError;
 
+// Return equipped item, and removed item if any
 pub fn equip_item_from_bag(
     player_inventory: &mut PlayerInventory,
     item_index: u8,
-) -> Result<(), AppError> {
+) -> Result<(ItemSpecs, Option<ItemSpecs>), AppError> {
     let item_index = item_index as usize;
     let item_specs = player_inventory
         .bag
         .get(item_index)
-        .ok_or(AppError::NotFound)?;
+        .ok_or(AppError::NotFound)?
+        .clone();
+
     let old_item = equip_item(player_inventory, item_specs.clone())?;
 
-    if let Some(old_item_specs) = old_item {
+    if let Some(old_item_specs) = old_item.clone() {
         player_inventory.bag[item_index] = old_item_specs;
     } else {
         player_inventory.bag.remove(item_index);
     }
 
-    Ok(())
+    Ok((item_specs, old_item))
 }
 
 pub fn unequip_item_to_bag(
@@ -32,12 +35,12 @@ pub fn unequip_item_to_bag(
     item_slot: ItemSlot,
 ) -> Result<(), AppError> {
     if player_inventory.bag.len() >= player_inventory.max_bag_size as usize {
-        return Err(AppError::UserError("bag is full".into()));
+        return Err(AppError::UserError("Your bag is full!".into()));
     }
 
-    if let Some(item) = unequip_item(player_inventory, item_slot) {
-        player_inventory.bag.push(item);
-    }
+    let old_item = unequip_item(player_inventory, item_slot).ok_or(AppError::NotFound)?;
+
+    player_inventory.bag.push(old_item);
 
     Ok(())
 }
@@ -57,7 +60,9 @@ pub fn equip_item(
             None => false,
         })
     {
-        return Err(AppError::UserError("slot unavailable".into()));
+        return Err(AppError::UserError(
+            "Not enough item slots available, please unequip first!".into(),
+        ));
     }
 
     let old_item = unequip_item(player_inventory, item_specs.base.slot);

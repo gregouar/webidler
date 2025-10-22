@@ -21,10 +21,11 @@ use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
     db::{self, market::MarketEntry},
-    game::{data::items_store::ItemsStore, systems::items_controller},
-    rest::utils::{
-        inventory_data_to_player_inventory, verify_character_in_town, verify_character_user,
+    game::{
+        data::{inventory_data::inventory_data_to_player_inventory, items_store::ItemsStore},
+        systems::items_controller,
     },
+    rest::utils::{verify_character_in_town, verify_character_user},
 };
 
 use super::AppError;

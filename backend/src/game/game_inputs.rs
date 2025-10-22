@@ -97,7 +97,7 @@ fn handle_client_message(
             }
         }
         ClientMessage::EquipItem(m) => {
-            if !player_controller::equip_item_from_bag(
+            if let Err(err) = player_controller::equip_item_from_bag(
                 game_data.player_specs.mutate(),
                 game_data.player_inventory.mutate(),
                 &mut game_data.player_state,
@@ -105,13 +105,13 @@ fn handle_client_message(
             ) {
                 return Some(ErrorMessage {
                     error_type: ErrorType::Game,
-                    message: "Not enough item slots available, please unequip first!".to_string(),
+                    message: err.to_string(),
                     must_disconnect: false,
                 });
             }
         }
         ClientMessage::UnequipItem(m) => {
-            if !player_controller::unequip_item_to_bag(
+            if let Err(err) = player_controller::unequip_item_to_bag(
                 game_data.player_specs.mutate(),
                 game_data.player_inventory.mutate(),
                 &mut game_data.player_state,
@@ -119,7 +119,7 @@ fn handle_client_message(
             ) {
                 return Some(ErrorMessage {
                     error_type: ErrorType::Game,
-                    message: "Your bag is full!".to_string(),
+                    message: err.to_string(),
                     must_disconnect: false,
                 });
             }

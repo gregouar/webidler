@@ -1,16 +1,12 @@
-use std::collections::HashMap;
-
-use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 
 use shared::data::{
-    item::{ItemModifiers, ItemSlot},
-    passive::PassivesTreeAscension,
-    player::PlayerInventory,
-    user::UserCharacterId,
+    passive::PassivesTreeAscension, player::PlayerInventory, user::UserCharacterId,
 };
 
-use crate::{constants::DATA_VERSION, db::pool::DbExecutor};
+use crate::{
+    constants::DATA_VERSION, db::pool::DbExecutor, game::data::inventory_data::InventoryData,
+};
 
 use super::utc_datetime::UtcDateTime;
 
@@ -25,13 +21,6 @@ pub struct CharacterDataEntry {
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct InventoryData {
-    pub equipped: HashMap<ItemSlot, ItemModifiers>,
-    pub bag: Vec<ItemModifiers>,
-    pub max_bag_size: u8,
 }
 
 pub async fn save_character_inventory<'c>(

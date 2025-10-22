@@ -15,10 +15,11 @@ use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
     db::{self},
-    game::systems::loot_generator::add_affix,
-    rest::utils::{
-        inventory_data_to_player_inventory, verify_character_in_town, verify_character_user,
+    game::{
+        data::inventory_data::inventory_data_to_player_inventory,
+        systems::loot_generator::add_affix,
     },
+    rest::utils::{verify_character_in_town, verify_character_user},
 };
 
 use super::AppError;
