@@ -107,7 +107,10 @@ pub fn LeaderboardPanel() -> impl IntoView {
                                                                             #{i + 1}
                                                                         </div>
                                                                         <div class="text-white font-semibold text-lg">
-                                                                            {entry.character_name}
+                                                                            <a href=format!(
+                                                                                "/view-character/{}",
+                                                                                &entry.character_name,
+                                                                            )>{entry.character_name.clone()}</a>
                                                                         </div>
                                                                     </div>
                                                                     <div class="text-sm text-gray-400">{entry.username}</div>

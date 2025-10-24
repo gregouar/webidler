@@ -34,6 +34,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButton
                     on:click=move |_| {
                         town_context.open_inventory.set(!town_context.open_inventory.get());
+                        town_context.open_ascend.set(false);
                     }
                     disabled=disable_inventory
                 >
@@ -64,6 +65,7 @@ pub fn HeaderMenu() -> impl IntoView {
                         town_context.open_forge.set(!town_context.open_forge.get());
                         town_context.open_market.set(false);
                         town_context.open_ascend.set(false);
+                        town_context.open_inventory.set(false);
                     }
                     disabled=disable_inventory
                 >

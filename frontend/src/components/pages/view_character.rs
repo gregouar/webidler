@@ -114,6 +114,16 @@ pub fn HeaderMenu() -> impl IntoView {
     let navigate_quit = {
         let navigate = leptos_router::hooks::use_navigate();
         move |_| {
+            if let Some(window) = web_sys::window() {
+                if let Ok(history) = window.history() {
+                    if let Ok(length) = history.length() {
+                        if length > 1 {
+                            let _ = history.back();
+                            return;
+                        }
+                    }
+                }
+            }
             navigate("/", Default::default());
         }
     };
@@ -132,6 +142,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButton
                     on:click=move |_| {
                         town_context.open_inventory.set(!town_context.open_inventory.get());
+                        town_context.open_ascend.set(false);
                     }
                     disabled=disable_inventory
                 >
@@ -140,8 +151,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButton
                     on:click=move |_| {
                         town_context.open_ascend.set(!town_context.open_ascend.get());
-                        town_context.open_market.set(false);
-                        town_context.open_forge.set(false);
+                        town_context.open_inventory.set(false);
                     }
                     disabled=disable_inventory
                 >

@@ -78,9 +78,15 @@ pub fn PlayerCount() -> impl IntoView {
                                                 .into_iter()
                                                 .map(|entry| {
                                                     view! {
-                                                        <p class="">
-                                                            {entry.character_name}<br />"("{entry.username}")"
-                                                        </p>
+                                                        <a href=format!(
+                                                            "/view-character/{}",
+                                                            &entry.character_name,
+                                                        )>
+                                                            <p class="">
+                                                                {entry.character_name.clone()} <br /> "(" {entry.username}
+                                                                ")"
+                                                            </p>
+                                                        </a>
                                                         <p class="text-amber-400">
                                                             {areas
                                                                 .get(&entry.area_id)
