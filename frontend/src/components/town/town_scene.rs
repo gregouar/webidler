@@ -8,7 +8,7 @@ use shared::data::user::UserGrindArea;
 use crate::{assets::img_asset, components::town::TownContext};
 
 #[component]
-pub fn TownScene() -> impl IntoView {
+pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     let max_area_level = move || town_context.character.read().max_area_level;
@@ -26,7 +26,7 @@ pub fn TownScene() -> impl IntoView {
                     <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between gap-1 xl:gap-2 flex-wrap
                     justify-between">
                         <span class="text-shadow-md shadow-gray-950 text-amber-200 text-lg xl:text-xl font-semibold">
-                            "Choose your grind"
+                            {if view_only { "Unlocked Grinds" } else { "Choose your Grind" }}
                         </span>
                         {move || {
                             (max_area_level() > 0)
@@ -50,7 +50,9 @@ pub fn TownScene() -> impl IntoView {
                                 areas
                             }
                             key=|area| area.area_id.clone()
-                            children=move |area| view! { <GrindingAreaCard area=area.clone() /> }
+                            children=move |area| {
+                                view! { <GrindingAreaCard area=area.clone() view_only /> }
+                            }
                         />
                     </div>
                 </div>
@@ -124,7 +126,7 @@ pub fn PlayerName() -> impl IntoView {
     }
 }
 #[component]
-fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
+fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     let locked =
@@ -136,7 +138,7 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
             storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
 
         move |_| {
-            if !locked() {
+            if !locked() && !view_only {
                 set_area_id_storage.set(Some(area.area_id.clone()));
                 navigate("/game", Default::default());
             }
@@ -150,6 +152,8 @@ fn GrindingAreaCard(area: UserGrindArea) -> impl IntoView {
                     "relative flex flex-col rounded-xl border overflow-hidden aspect-square shadow-md transition {}",
                     if locked() {
                         "bg-zinc-900 border-zinc-800 opacity-60"
+                    } else if view_only {
+                        "bg-zinc-800 border-zinc-700"
                     } else {
                         "bg-zinc-800 border-zinc-700 cursor-pointer hover:border-amber-400 hover:shadow-lg active:scale-95 active:border-amber-500"
                     },

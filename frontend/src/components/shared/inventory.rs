@@ -25,13 +25,14 @@ use crate::{
 
 type SellQueue = RwSignal<HashSet<usize>>;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Default)]
 pub enum SellType {
+    #[default]
     Sell,
     Discard,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct InventoryConfig {
     pub player_inventory: RwSignal<PlayerInventory>,
     pub loot_preference: Option<RwSignal<Option<ItemCategory>>>,

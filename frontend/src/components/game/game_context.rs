@@ -138,10 +138,12 @@ where
     }
 
     pub fn write(&self) -> impl UntrackableGuard<Target = T> {
+        self.client_update_time.set(Some(utils::now()));
         self.client_value.write()
     }
 
     pub fn update(&self, fun: impl FnOnce(&mut T)) {
+        self.client_update_time.set(Some(utils::now()));
         self.client_value.update(fun);
     }
 

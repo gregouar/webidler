@@ -8,6 +8,7 @@ mod signup;
 pub mod terms;
 mod town;
 mod user_dashboard;
+mod view_character;
 
 pub use account::AccountSettingsPage;
 pub use game::GamePage;
@@ -17,3 +18,4 @@ pub use reset_password::ResetPasswordPage;
 pub use signup::SignUpPage;
 pub use town::TownPage;
 pub use user_dashboard::UserDashboardPage;
+pub use view_character::ViewCharacterPage;

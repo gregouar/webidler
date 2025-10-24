@@ -162,11 +162,10 @@ impl BackendClient {
 
     pub async fn get_character_details(
         &self,
-        token: &str,
+        // token: &str,
         character_id: &UserCharacterId,
     ) -> Result<GetCharacterDetailsResponse, BackendError> {
-        self.get_auth(&format!("characters/{character_id}"), token)
-            .await
+        self.get(&format!("characters/{character_id}")).await
     }
 
     pub async fn post_create_character(

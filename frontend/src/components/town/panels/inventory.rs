@@ -15,7 +15,10 @@ use crate::components::{
 };
 
 #[component]
-pub fn TownInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
+pub fn TownInventoryPanel(
+    open: RwSignal<bool>,
+    #[prop(default = false)] view_only: bool,
+) -> impl IntoView {
     let auth_context = expect_context::<AuthContext>();
     let backend = expect_context::<BackendClient>();
     let toaster = expect_context::<Toasts>();
@@ -96,13 +99,20 @@ pub fn TownInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
         })
     };
 
-    let inventory_config = InventoryConfig {
-        player_inventory: town_context.inventory,
-        loot_preference: None,
-        on_unequip: Some(Arc::new(on_unequip)),
-        on_equip: Some(Arc::new(on_equip)),
-        on_sell: Some(Arc::new(on_sell)),
-        sell_type: SellType::Discard,
+    let inventory_config = if view_only {
+        InventoryConfig {
+            player_inventory: town_context.inventory,
+            ..Default::default()
+        }
+    } else {
+        InventoryConfig {
+            player_inventory: town_context.inventory,
+            loot_preference: None,
+            on_unequip: Some(Arc::new(on_unequip)),
+            on_equip: Some(Arc::new(on_equip)),
+            on_sell: Some(Arc::new(on_sell)),
+            sell_type: SellType::Discard,
+        }
     };
 
     view! { <Inventory open=open inventory=inventory_config /> }

@@ -57,6 +57,7 @@ pub fn App() -> impl IntoView {
                 <Route path=path!("/account") view=pages::AccountSettingsPage />
                 <Route path=path!("/reset-password") view=pages::ResetPasswordPage />
                 <Route path=path!("/town") view=pages::TownPage />
+                <Route path=path!("/character/:character_id") view=pages::ViewCharacterPage />
             </Routes>
         </Router>
     }

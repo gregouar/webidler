@@ -22,7 +22,10 @@ use crate::components::{
 };
 
 #[component]
-pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
+pub fn AscendPanel(
+    open: RwSignal<bool>,
+    #[prop(default = false)] view_only: bool,
+) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     let ascension_cost = RwSignal::new(0.0);
@@ -44,33 +47,46 @@ pub fn AscendPanel(open: RwSignal<bool>) -> impl IntoView {
             <div class="w-full h-full">
                 <div class="bg-zinc-800 rounded-md p-1 xl:p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-1 xl:gap-2 max-h-full">
                     <div class="px-2 xl:px-4 flex items-center justify-between">
-                        <PanelTitle>"Ascend Passive Skills"</PanelTitle>
+                        {if view_only {
+                            view! { <PanelTitle>"Ascended Passive Skills"</PanelTitle> }.into_any()
+                        } else {
+                            view! {
+                                <PanelTitle>"Ascend Passive Skills"</PanelTitle>
 
-                        <span class="text-sm xl:text-base text-gray-400">
-                            "Ascension Cost: "
-                            <span class="text-cyan-300">{ascension_cost}" Power Shards"</span>
-                        </span>
+                                <span class="text-sm xl:text-base text-gray-400">
+                                    "Ascension Cost: "
+                                    <span class="text-cyan-300">
+                                        {ascension_cost}" Power Shards"
+                                    </span>
+                                </span>
 
-                        <div class="flex items-center gap-2">
-                            <MenuButton
-                                on:click=move |_| reset()
-                                disabled=Signal::derive(move || ascension_cost.get() == 0.0)
-                            >
-                                "Cancel"
-                            </MenuButton>
-                            <ConfirmButton passives_tree_ascension ascension_cost open />
-                            <CloseButton on:click=move |_| open.set(false) />
-                        </div>
+                                <div class="flex items-center gap-2">
+                                    <MenuButton
+                                        on:click=move |_| reset()
+                                        disabled=Signal::derive(move || ascension_cost.get() == 0.0)
+                                    >
+                                        "Cancel"
+                                    </MenuButton>
+                                    <ConfirmButton passives_tree_ascension ascension_cost open />
+                                </div>
+                            }
+                                .into_any()
+                        }} <CloseButton on:click=move |_| open.set(false) />
                     </div>
 
-                    <PassiveSkillTree passives_tree_ascension ascension_cost />
+                    <PassiveSkillTree passives_tree_ascension ascension_cost view_only />
 
-                    <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <ResetButton passives_tree_ascension ascension_cost />
-                        </div>
+                    {(!view_only)
+                        .then(|| {
+                            view! {
+                                <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <ResetButton passives_tree_ascension ascension_cost />
+                                    </div>
+                                </div>
+                            }
+                        })}
 
-                    </div>
                 </div>
             </div>
         </MenuPanel>
@@ -196,11 +212,16 @@ fn ResetButton(
 fn PassiveSkillTree(
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     ascension_cost: RwSignal<f64>,
+    view_only: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     let points_available = Memo::new(move |_| {
-        (town_context.character.read().resource_shards - ascension_cost.get()).round()
+        if view_only {
+            0.0
+        } else {
+            (town_context.character.read().resource_shards - ascension_cost.get()).round()
+        }
     });
 
     let nodes_specs = Arc::new(
@@ -243,6 +264,7 @@ fn PassiveSkillTree(
                     points_available
                     ascension_cost
                     passives_tree_ascension
+                    view_only
                 />
             </For>
         </Pannable>
@@ -256,6 +278,7 @@ fn AscendNode(
     points_available: Memo<f64>,
     ascension_cost: RwSignal<f64>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
+    view_only: bool,
 ) -> impl IntoView {
     let node_level = Memo::new({
         let node_id = node_id.clone();
@@ -285,7 +308,9 @@ fn AscendNode(
             //  if maxed {
             //     PurchaseStatus::Inactive
             // } else 
-            if points_available.get() > 0.0
+            if view_only && node_level.get() > 0 {
+                PurchaseStatus::Purchased
+            } else if points_available.get() > 0.0
                 && (upgradable || (node_specs.locked && node_level.get() == 0))
             {
                 PurchaseStatus::Purchaseable

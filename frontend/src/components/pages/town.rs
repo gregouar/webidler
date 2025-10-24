@@ -9,7 +9,6 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::{BackendClient, BackendError},
     shared::player_count::PlayerCount,
     town::{
@@ -43,13 +42,12 @@ pub fn TownPage() -> impl IntoView {
         }
     });
 
-    let fetch_data = {
+    let initial_load = LocalResource::new({
         let backend = expect_context::<BackendClient>();
-        let auth_context = expect_context::<AuthContext>();
 
         move || async move {
             match backend
-                .get_character_details(&auth_context.token(), &get_character_id_storage.get())
+                .get_character_details(&get_character_id_storage.get())
                 .await
             {
                 Ok(GetCharacterDetailsResponse {
@@ -72,11 +70,7 @@ pub fn TownPage() -> impl IntoView {
                 _ => {} // TODO: Toast error ?
             }
         }
-    };
-
-    let initial_load = LocalResource::new(fetch_data);
-
-    // use_interval_fn(move || spawn_local(fetch_data()), 5_000);
+    });
 
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
