@@ -59,6 +59,26 @@
       }
     ]
   },
+  {
+    "name": "Bolstered",
+    "family": "add_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Flat",
+        "value": [31,40]
+      }
+    ]
+  },
 
   {
     "name": "Though",
@@ -117,6 +137,26 @@
         },
         "modifier": "Multiplier",
         "value": [60, 79]
+      }
+    ]
+  },
+  {
+    "name": "Bulky",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Multiplier",
+        "value": [80, 99]
       }
     ]
   }

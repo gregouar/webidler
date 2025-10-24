@@ -52,5 +52,23 @@
         "value": [7, 9]
       }
     ]
+  },
+  {
+    "name": "of Growth",
+    "family": "add_mana_regen",
+    "tags": ["Mana"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Armor"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [10, 12]
+      }
+    ]
   }
 ]

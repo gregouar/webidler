@@ -13,7 +13,7 @@
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Multiplier",
-        "value": [10, 24]
+        "value": [10, 14]
       }
     ]
   },
@@ -31,7 +31,7 @@
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Multiplier",
-        "value": [25, 34]
+        "value": [15, 19]
       }
     ]
   },
@@ -49,7 +49,25 @@
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Multiplier",
-        "value": [35, 44]
+        "value": [20, 24]
+      }
+    ]
+  },
+  {
+    "name": "Fast",
+    "family": "inc_movement_speed",
+    "tags": ["Speed"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Boots"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "MovementSpeed",
+        "modifier": "Multiplier",
+        "value": [25, 29]
       }
     ]
   }

@@ -258,5 +258,21 @@
       }
     ],
     "min_area_level": 100
+  },
+  "militia_sword": {
+    "name": "Militia Sword",
+    "icon": "items/longsword.webp",
+    "slot": "Weapon",
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [8, 13]
+      },
+      "crit_chance": 5,
+      "crit_damage": 100
+    },
+    "min_area_level": 140
   }
 }

@@ -2,39 +2,29 @@
   {
     "name": "of Regeneration",
     "family": "add_life_regen",
-    "tags": [
-      "Life"
-    ],
+    "tags": ["Life"],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": [
-      "Armor",
-      "Shield"
-    ],
+    "restrictions": ["Armor", "Shield"],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "value": [1,2]
+        "value": [1, 2]
       }
     ]
   },
   {
     "name": "of Vigor",
     "family": "add_life_regen",
-    "tags": [
-      "Life"
-    ],
+    "tags": ["Life"],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": [
-      "Armor",
-      "Shield"
-    ],
+    "restrictions": ["Armor", "Shield"],
     "item_level": 50,
     "effects": [
       {
@@ -48,16 +38,11 @@
   {
     "name": "of Restoration",
     "family": "add_life_regen",
-    "tags": [
-      "Life"
-    ],
+    "tags": ["Life"],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": [
-      "Armor",
-      "Shield"
-    ],
+    "restrictions": ["Armor", "Shield"],
     "item_level": 100,
     "effects": [
       {
@@ -65,6 +50,24 @@
         "stat": "LifeRegen",
         "modifier": "Flat",
         "value": [5, 6]
+      }
+    ]
+  },
+  {
+    "name": "of Endurance",
+    "family": "add_life_regen",
+    "tags": ["Life"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [7, 8]
       }
     ]
   }

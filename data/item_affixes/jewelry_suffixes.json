@@ -53,6 +53,24 @@
       }
     ]
   },
+  {
+    "name": "of Violence",
+    "family": "inc_attack_damage",
+    "tags": ["Attack"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Jewelry"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [100, 124]
+      }
+    ]
+  },
 
   {
     "name": "of Spellcasting",
@@ -105,6 +123,24 @@
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
         "value": [75, 99]
+      }
+    ]
+  },
+  {
+    "name": "of Thaumaturgy",
+    "family": "inc_spell_damage",
+    "tags": ["Spell"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [100, 124]
       }
     ]
   }

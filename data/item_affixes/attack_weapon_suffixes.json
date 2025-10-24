@@ -40,7 +40,7 @@
     ]
   },
   {
-    "name": "of Haste",
+    "name": "of Urgency",
     "family": "inc_speed",
     "tags": ["Attack", "Speed"],
     "affix_type": "Suffix",
@@ -56,6 +56,26 @@
         },
         "modifier": "Multiplier",
         "value": [15, 19]
+      }
+    ]
+  },
+  {
+    "name": "of Haste",
+    "family": "inc_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "Speed": "Attack"
+        },
+        "modifier": "Multiplier",
+        "value": [20, 24]
       }
     ]
   },
@@ -120,6 +140,26 @@
       }
     ]
   },
+  {
+    "name": "of Mastery",
+    "family": "add_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "CritChance": null
+        },
+        "modifier": "Flat",
+        "value": 4
+      }
+    ]
+  },
 
   {
     "name": "of the Owl",
@@ -181,6 +221,26 @@
       }
     ]
   },
+  {
+    "name": "of the Eagle",
+    "family": "inc_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "CritChance": null
+        },
+        "modifier": "Multiplier",
+        "value": [40, 49]
+      }
+    ]
+  },
 
   {
     "name": "of Destruction",
@@ -223,7 +283,7 @@
     ]
   },
   {
-    "name": "of Annihilation",
+    "name": "of Demolition",
     "family": "inc_crit_damage",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -239,6 +299,26 @@
         },
         "modifier": "Multiplier",
         "value": [75, 99]
+      }
+    ]
+  },
+  {
+    "name": "of Annihilation",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "CritDamage": null
+        },
+        "modifier": "Multiplier",
+        "value": [100, 124]
       }
     ]
   },
@@ -264,7 +344,7 @@
     ]
   },
   {
-    "name": "of the Bat",
+    "name": "of the Tick",
     "family": "life_leech",
     "tags": ["Attack", "Life"],
     "affix_type": "Suffix",
@@ -284,7 +364,7 @@
     ]
   },
   {
-    "name": "of the Leech",
+    "name": "of the Bat",
     "family": "life_leech",
     "tags": ["Attack", "Life"],
     "affix_type": "Suffix",
@@ -300,6 +380,26 @@
         },
         "modifier": "Flat",
         "value": [10, 14]
+      }
+    ]
+  },
+  {
+    "name": "of the Leech",
+    "family": "life_leech",
+    "tags": ["Attack", "Life"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
+        },
+        "modifier": "Flat",
+        "value": [15, 19]
       }
     ]
   },
@@ -345,7 +445,7 @@
     ]
   },
   {
-    "name": "of the Octopus",
+    "name": "of the Tuna",
     "family": "mana_leech",
     "tags": ["Attack", "Mana"],
     "affix_type": "Suffix",
@@ -361,6 +461,26 @@
         },
         "modifier": "Flat",
         "value": [5, 6]
+      }
+    ]
+  },
+  {
+    "name": "of the Octopus",
+    "family": "mana_leech",
+    "tags": ["Attack", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" }
+        },
+        "modifier": "Flat",
+        "value": [7, 8]
       }
     ]
   }

@@ -87,5 +87,16 @@
       "block": 19
     },
     "min_area_level": 90
+  },
+  "heater_shield": {
+    "name": "Heater Shield",
+    "icon": "items/heater_shield.webp",
+    "slot": "Shield",
+    "categories": ["Shield"],
+    "armor_specs": {
+      "armor": 100,
+      "block": 21
+    },
+    "min_area_level": 140
   }
 }

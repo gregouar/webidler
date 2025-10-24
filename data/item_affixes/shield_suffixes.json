@@ -36,7 +36,7 @@
     ]
   },
   {
-    "name": "of Block",
+    "name": "of Protection",
     "family": "add_block",
     "tags": ["Physical", "Armor"],
     "affix_type": "Suffix",
@@ -50,6 +50,24 @@
         "stat": "Block",
         "modifier": "Flat",
         "value": [5, 6]
+      }
+    ]
+  },
+  {
+    "name": "of Block",
+    "family": "add_block",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Shield"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": "Block",
+        "modifier": "Flat",
+        "value": [7, 8]
       }
     ]
   },
@@ -68,7 +86,7 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "value": [10, 19]
+        "value": [10, 14]
       }
     ]
   },
@@ -86,12 +104,12 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "value": [20, 29]
+        "value": [15, 19]
       }
     ]
   },
   {
-    "name": "of Coat",
+    "name": "of Coating",
     "family": "inc_block",
     "tags": ["Physical", "Armor"],
     "affix_type": "Suffix",
@@ -104,7 +122,25 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "value": [30, 39]
+        "value": [20, 24]
+      }
+    ]
+  },
+  {
+    "name": "of Anointment",
+    "family": "inc_block",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Shield"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": "Block",
+        "modifier": "Multiplier",
+        "value": [25, 29]
       }
     ]
   }

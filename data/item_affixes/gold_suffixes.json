@@ -52,5 +52,23 @@
         "value": [75, 99]
       }
     ]
+  },
+  {
+    "name": "of Rapacity",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [100, 124]
+      }
+    ]
   }
 ]

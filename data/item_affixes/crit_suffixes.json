@@ -52,5 +52,23 @@
         "value": [40, 54]
       }
     ]
+  },
+  {
+    "name": "of Mastery",
+    "family": "inc_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Jewelry"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritChance": null },
+        "modifier": "Multiplier",
+        "value": [55, 69]
+      }
+    ]
   }
 ]

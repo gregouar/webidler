@@ -145,5 +145,20 @@
       }
     ],
     "min_area_level": 100
+  },
+  "gold_pendant": {
+    "name": "Gold Pendant",
+    "icon": "items/gold_pendant.webp",
+    "slot": "Amulet",
+    "categories": ["Jewelry", "Amulet"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 80
+      }
+    ],
+    "min_area_level": 140
   }
 }

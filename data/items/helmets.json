@@ -148,9 +148,9 @@
     ],
     "min_area_level": 90
   },
-  "great_helm": {
-    "name": "Great Helm",
-    "icon": "items/great_helm.webp",
+  "mail_coif": {
+    "name": "Mail Coif",
+    "icon": "items/mail_void.webp",
     "slot": "Helmet",
     "categories": ["Armor", "Helmet"],
     "armor_specs": {

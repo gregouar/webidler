@@ -36,7 +36,7 @@
     ]
   },
   {
-    "name": "Hostile",
+    "name": "Threatening",
     "family": "inc_threat",
     "tags": ["Threat"],
     "affix_type": "Prefix",
@@ -50,6 +50,24 @@
         "stat": "ThreatGain",
         "modifier": "Multiplier",
         "value": [30, 39]
+      }
+    ]
+  },
+  {
+    "name": "Hostile",
+    "family": "inc_threat",
+    "tags": ["Threat"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Shield", "Focus"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [40, 49]
       }
     ]
   }

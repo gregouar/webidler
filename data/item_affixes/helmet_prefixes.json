@@ -52,5 +52,23 @@
         "value": [-39, -30]
       }
     ]
+  },
+  {
+    "name": "Hidden",
+    "family": "dec_threat",
+    "tags": ["Stealth"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Helmet"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [-49, -40]
+      }
+    ]
   }
 ]

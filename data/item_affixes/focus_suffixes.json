@@ -52,5 +52,23 @@
         "value": [30, 39]
       }
     ]
+  },
+  {
+    "name": "of Vilification",
+    "family": "inc_status_duration",
+    "tags": ["Spell", "Status"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Focus"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "StatusDuration": null },
+        "modifier": "Multiplier",
+        "value": [40, 49]
+      }
+    ]
   }
 ]

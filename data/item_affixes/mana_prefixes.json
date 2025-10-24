@@ -13,7 +13,7 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "value": [20, 39]
+        "value": [10, 19]
       }
     ]
   },
@@ -31,7 +31,7 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "value": [40, 59]
+        "value": [20, 29]
       }
     ]
   },
@@ -49,7 +49,25 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "value": [60, 79]
+        "value": [30, 39]
+      }
+    ]
+  },
+  {
+    "name": "Knowing",
+    "family": "add_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": [40, 49]
       }
     ]
   },
@@ -68,7 +86,7 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Multiplier",
-        "value": [10, 19]
+        "value": [2, 4]
       }
     ]
   },
@@ -86,12 +104,12 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Multiplier",
-        "value": [20, 29]
+        "value": [5, 7]
       }
     ]
   },
   {
-    "name": "Enlightened",
+    "name": "Intelligent",
     "family": "inc_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -104,7 +122,25 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Multiplier",
-        "value": [30, 39]
+        "value": [8, 10]
+      }
+    ]
+  },
+  {
+    "name": "Enlightened",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [11, 13]
       }
     ]
   }

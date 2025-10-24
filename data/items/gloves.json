@@ -137,5 +137,15 @@
       "armor": 30
     },
     "min_area_level": 90
+  },
+  "chain_gloves": {
+    "name": "Chain Gloves",
+    "icon": "items/chain_gloves.webp",
+    "slot": "Gloves",
+    "categories": ["Armor", "Gloves"],
+    "armor_specs": {
+      "armor": 40
+    },
+    "min_area_level": 140
   }
 }

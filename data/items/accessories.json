@@ -149,5 +149,32 @@
       }
     ],
     "min_area_level": 90
+  },
+  "fur_cloak": {
+    "name": "Fur-lined Cloak",
+    "icon": "items/fur_cloak.webp",
+    "slot": "Accessory",
+    "categories": ["Accessory", "Cloak"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": 75
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": 75
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": 75
+      }
+    ],
+    "min_area_level": 140
   }
 }

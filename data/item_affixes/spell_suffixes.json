@@ -108,7 +108,7 @@
     "tier": 3,
     "weight": 500,
     "restrictions": ["SpellWeapon", "Focus"],
-    "item_level": 1000,
+    "item_level": 100,
     "effects": [
       {
         "scope": "Global",
@@ -117,6 +117,26 @@
         },
         "modifier": "Multiplier",
         "value": [40, 49]
+      }
+    ]
+  },
+  {
+    "name": "of Chaos",
+    "family": "inc_spell_crit_chance",
+    "tags": ["Spell", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 500,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "CritChance": "Spell"
+        },
+        "modifier": "Multiplier",
+        "value": [50, 59]
       }
     ]
   }

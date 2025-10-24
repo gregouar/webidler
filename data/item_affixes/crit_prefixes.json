@@ -1,6 +1,6 @@
 [
   {
-    "name": "Mortal",
+    "name": "Dangerous",
     "family": "inc_crit_damage",
     "tags": ["Attack", "Critical"],
     "affix_type": "Prefix",
@@ -36,7 +36,7 @@
     ]
   },
   {
-    "name": "Fatal",
+    "name": "Deadly",
     "family": "inc_crit_damage",
     "tags": ["Attack", "Critical"],
     "affix_type": "Prefix",
@@ -50,6 +50,24 @@
         "stat": { "CritDamage": null },
         "modifier": "Multiplier",
         "value": [75, 99]
+      }
+    ]
+  },
+  {
+    "name": "Fatal",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Jewelry"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [100, 124]
       }
     ]
   }

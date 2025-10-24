@@ -109,5 +109,20 @@
       }
     ],
     "min_area_level": 90
+  },
+  "signet_ring": {
+    "name": "Signet Ring",
+    "icon": "items/signet_ring.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 80
+      }
+    ],
+    "min_area_level": 140
   }
 }

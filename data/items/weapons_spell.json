@@ -106,7 +106,7 @@
                       "debuff": true
                     }
                   },
-                  "value": 100.0
+                  "value": 200.0
                 },
                 {
                   "status_type": {
@@ -121,7 +121,7 @@
                       "debuff": true
                     }
                   },
-                  "value": 100.0
+                  "value": 200.0
                 },
                 {
                   "status_type": {
@@ -136,7 +136,7 @@
                       "debuff": true
                     }
                   },
-                  "value": 100.0
+                  "value": 200.0
                 },
                 {
                   "status_type": {
@@ -176,5 +176,24 @@
       }
     ],
     "min_area_level": 90
+  },
+  "iron_wand": {
+    "name": "Iron Wand",
+    "icon": "items/iron_wand.webp",
+    "slot": "Weapon",
+    "categories": ["SpellWeapon"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": 80
+      }
+    ],
+    "min_area_level": 140
   }
 }

@@ -59,6 +59,46 @@
       }
     ]
   },
+  {
+    "name": "of Emberveil",
+    "family": "add_fire_res",
+    "tags": ["Fire", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Fire"
+        },
+        "modifier": "Flat",
+        "value": [100, 124]
+      }
+    ]
+  },
+  {
+    "name": "of Emberplate",
+    "family": "add_fire_res",
+    "tags": ["Fire", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Fire"
+        },
+        "modifier": "Flat",
+        "value": [125, 149]
+      }
+    ]
+  },
 
   {
     "name": "of Venomguard",
@@ -120,6 +160,46 @@
       }
     ]
   },
+  {
+    "name": "of Venomveil",
+    "family": "add_poison_res",
+    "tags": ["Poison", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Poison"
+        },
+        "modifier": "Flat",
+        "value": [100, 124]
+      }
+    ]
+  },
+  {
+    "name": "of Venomplate",
+    "family": "add_poison_res",
+    "tags": ["Poison", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Poison"
+        },
+        "modifier": "Flat",
+        "value": [125, 149]
+      }
+    ]
+  },
 
   {
     "name": "of Tempestguard",
@@ -178,6 +258,46 @@
         },
         "modifier": "Flat",
         "value": [75, 99]
+      }
+    ]
+  },
+  {
+    "name": "of Tempestveil",
+    "family": "add_storm_res",
+    "tags": ["Storm", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Storm"
+        },
+        "modifier": "Flat",
+        "value": [100, 124]
+      }
+    ]
+  },
+  {
+    "name": "of Tempestplate",
+    "family": "add_storm_res",
+    "tags": ["Storm", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Storm"
+        },
+        "modifier": "Flat",
+        "value": [125, 149]
       }
     ]
   }

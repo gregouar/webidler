@@ -1,0 +1,56 @@
+{
+  "entries": [
+    {
+      "item_id": "militia_sword",
+      "weight": 8000
+    },
+    {
+      "item_id": "mail_coif",
+      "weight": 8000
+    },
+    {
+      "item_id": "scale_vest",
+      "weight": 8000
+    },
+    {
+      "item_id": "chain_gloves",
+      "weight": 8000
+    },
+    {
+      "item_id": "mail_boots",
+      "weight": 8000
+    },
+    {
+      "item_id": "halberd",
+      "weight": 8000
+    },
+    {
+      "item_id": "composite_bow",
+      "weight": 8000
+    },
+    {
+      "item_id": "iron_wand",
+      "weight": 8000
+    },
+    {
+      "item_id": "heater_shield",
+      "weight": 8000
+    },
+    {
+      "item_id": "engraved_tablet",
+      "weight": 8000
+    },
+    {
+      "item_id": "fur_cloak",
+      "weight": 8000
+    },
+    {
+      "item_id": "signet_ring",
+      "weight": 8000
+    },
+    {
+      "item_id": "gold_pendant",
+      "weight": 8000
+    }
+  ]
+}

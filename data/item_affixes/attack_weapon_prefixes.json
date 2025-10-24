@@ -53,6 +53,24 @@
       }
     ]
   },
+  {
+    "name": "Ruthless",
+    "family": "inc_damage",
+    "tags": ["Attack"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Damage": {} },
+        "modifier": "Multiplier",
+        "value": [80, 99]
+      }
+    ]
+  },
 
   {
     "name": "Sharp",
@@ -74,7 +92,7 @@
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "value": [3, 4]
+        "value": [2, 3]
       }
     ]
   },
@@ -98,7 +116,7 @@
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "value": [5, 7]
+        "value": [4, 6]
       }
     ]
   },
@@ -116,13 +134,37 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "value": [3, 5]
+        "value": [4, 6]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Physical" } },
         "modifier": "Flat",
-        "value": [6, 8]
+        "value": [7, 9]
+      }
+    ]
+  },
+  {
+    "name": "Overwhelming",
+    "family": "add_physical_damage",
+    "tags": ["Physical", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "value": [7, 9]
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "value": [9, 12]
       }
     ]
   },
@@ -176,7 +218,7 @@
     ]
   },
   {
-    "name": "Scorching",
+    "name": "Searing",
     "family": "add_fire_damage",
     "tags": ["Fire", "Attack"],
     "affix_type": "Prefix",
@@ -189,13 +231,37 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Fire" } },
         "modifier": "Flat",
-        "value": [4, 7]
+        "value": [5, 7]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Fire" } },
         "modifier": "Flat",
-        "value": [8, 11]
+        "value": [9, 11]
+      }
+    ]
+  },
+  {
+    "name": "Scorching",
+    "family": "add_fire_damage",
+    "tags": ["Fire", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "modifier": "Flat",
+        "value": [8, 10]
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "modifier": "Flat",
+        "value": [11, 13]
       }
     ]
   },
@@ -238,7 +304,7 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Poison" } },
         "modifier": "Flat",
-        "value": [1, 2]
+        "value": [2, 2]
       },
       {
         "scope": "Local",
@@ -262,13 +328,37 @@
         "scope": "Local",
         "stat": { "MinDamage": { "damage_type": "Poison" } },
         "modifier": "Flat",
-        "value": [2, 3]
+        "value": [3, 3]
       },
       {
         "scope": "Local",
         "stat": { "MaxDamage": { "damage_type": "Poison" } },
         "modifier": "Flat",
         "value": [4, 5]
+      }
+    ]
+  },
+  {
+    "name": "Toxic",
+    "family": "add_poison_damage",
+    "tags": ["Poison", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "modifier": "Flat",
+        "value": [4, 4]
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "modifier": "Flat",
+        "value": [5, 6]
       }
     ]
   },
@@ -324,6 +414,24 @@
         "stat": { "MaxDamage": { "damage_type": "Storm" } },
         "modifier": "Flat",
         "value": [13, 18]
+      }
+    ]
+  },
+  {
+    "name": "Tumultuous",
+    "family": "add_storm_damage",
+    "tags": ["Storm", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "modifier": "Flat",
+        "value": [19, 24]
       }
     ]
   }
