@@ -66,7 +66,7 @@ fn validate_username(s: &str) -> anyhow::Result<()> {
 #[nutype(
     sanitize(trim),
     validate(with = validate_username, error = anyhow::Error),
-    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
+    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref, FromStr)
 )]
 pub struct Username(String);
 

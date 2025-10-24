@@ -4,10 +4,10 @@ use leptos_router::{
     params::Params,
 };
 
-use shared::{data::user::UserCharacterId, http::server::GetCharacterDetailsResponse};
+use shared::http::server::GetCharacterDetailsResponse;
 
 use crate::components::{
-    backend_client::{BackendClient, BackendError},
+    backend_client::BackendClient,
     shared::{
         player_count::PlayerCount,
         resources::{GemsCounter, ShardsCounter},
@@ -20,9 +20,9 @@ use crate::components::{
     ui::{buttons::MenuButton, fullscreen::FullscreenButton, tooltip::DynamicTooltip},
 };
 
-#[derive(Params, PartialEq)]
+#[derive(Clone, Params, PartialEq)]
 struct CharacterParams {
-    character_id: Option<UserCharacterId>,
+    character_name: Option<String>,
 }
 
 #[component]
@@ -46,30 +46,32 @@ pub fn ViewCharacterPage() -> impl IntoView {
     let fetch_data = {
         let backend = expect_context::<BackendClient>();
 
-        let character_id = params
+        let character_name = params
             .read()
             .as_ref()
             .ok()
-            .and_then(|params| params.character_id)
+            .and_then(|params| params.character_name.clone())
             .unwrap_or_default();
 
-        move || async move {
-            match backend.get_character_details(&character_id).await {
-                Ok(GetCharacterDetailsResponse {
-                    character,
-                    areas,
-                    inventory,
-                    ascension,
-                }) => {
-                    town_context.character.set(character);
-                    town_context.areas.set(areas);
-                    town_context.inventory.set(inventory);
-                    town_context.passives_tree_ascension.set(ascension);
+        move || {
+            let character_name = character_name.clone();
+            async move {
+                match backend.get_character_by_name(&character_name).await {
+                    Ok(GetCharacterDetailsResponse {
+                        character,
+                        areas,
+                        inventory,
+                        ascension,
+                    }) => {
+                        town_context.character.set(character);
+                        town_context.areas.set(areas);
+                        town_context.inventory.set(inventory);
+                        town_context.passives_tree_ascension.set(ascension);
+                    }
+                    _ => {
+                        use_navigate()("/", Default::default());
+                    }
                 }
-                Err(BackendError::Unauthorized(_) | BackendError::NotFound) => {
-                    use_navigate()("/", Default::default());
-                }
-                _ => {} // TODO: Toast error ?
             }
         }
     };

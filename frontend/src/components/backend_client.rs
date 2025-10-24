@@ -168,6 +168,13 @@ impl BackendClient {
         self.get(&format!("characters/{character_id}")).await
     }
 
+    pub async fn get_character_by_name(
+        &self,
+        character_name: &str,
+    ) -> Result<GetCharacterDetailsResponse, BackendError> {
+        self.get(&format!("view-character/{character_name}")).await
+    }
+
     pub async fn post_create_character(
         &self,
         token: &str,

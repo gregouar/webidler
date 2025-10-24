@@ -17,6 +17,7 @@ use shared::{
             GetUserCharactersResponse,
         },
     },
+    types::Username,
 };
 
 use crate::{
@@ -40,6 +41,10 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/users/{user_id}/characters", get(get_user_characters))
         .route("/characters/{character_id}", get(get_character_details))
+        .route(
+            "/view-character/{character_name}",
+            get(get_character_by_name),
+        )
         .merge(auth_routes)
     // .route("characters/{character_id}", get(get_character))
 }
@@ -85,6 +90,29 @@ async fn get_character_details(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
     Path(character_id): Path<UserId>,
+) -> Result<Json<GetCharacterDetailsResponse>, AppError> {
+    read_character_details(db_pool, master_store, character_id).await
+}
+
+async fn get_character_by_name(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Path(character_name): Path<Username>,
+) -> Result<Json<GetCharacterDetailsResponse>, AppError> {
+    let character_id = db::characters::get_character_by_name(&db_pool, &character_name)
+        .await?
+        .ok_or(AppError::UserError(format!(
+            "character '{}' not found",
+            character_name.into_inner()
+        )))?;
+
+    read_character_details(db_pool, master_store, character_id).await
+}
+
+async fn read_character_details(
+    db_pool: db::DbPool,
+    master_store: MasterStore,
+    character_id: UserCharacterId,
 ) -> Result<Json<GetCharacterDetailsResponse>, AppError> {
     let (character, areas_completed, character_data) = tokio::join!(
         db::characters::read_character(&db_pool, &character_id),

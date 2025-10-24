@@ -220,14 +220,14 @@ pub async fn post_sell_market_item(
         .then(|| inventory.bag.remove(payload.item_index))
         .ok_or(AppError::NotFound)?;
 
-    let recipient_id = if let Some(username) = payload.recipient_name {
-        let username = username.into_inner();
+    let recipient_id = if let Some(character_name) = payload.recipient_name {
+        let character_name = character_name.into_inner();
         Some(
-            db::characters::get_character_by_name(&mut *tx, &username)
+            db::characters::get_character_by_name(&mut *tx, &character_name)
                 .await?
                 .ok_or(AppError::UserError(format!(
                     "character '{}' not found",
-                    username
+                    character_name
                 )))?,
         )
     } else {
