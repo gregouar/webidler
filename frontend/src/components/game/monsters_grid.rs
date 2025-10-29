@@ -26,7 +26,7 @@ use super::GameContext;
 pub fn MonstersGrid() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let all_monsters_dead = RwSignal::new(true);
+    let all_monsters_dead = RwSignal::new(false);
     let switch_all_monsters_dead = Memo::new(move |_| {
         game_context.monster_states.with(|monster_states| {
             !monster_states.is_empty() && monster_states.iter().all(|x| !x.character_state.is_alive)
@@ -66,8 +66,10 @@ pub fn MonstersGrid() -> impl IntoView {
                     "animate-monster-fade-out pointer-events-none"
                 } else if flee.get() {
                     "animate-monster-flee pointer-events-none"
-                } else {
+                } else if !game_context.monster_states.read().is_empty() {
                     "animate-monster-fade-in"
+                } else {
+                    ""
                 },
             )
         }>
