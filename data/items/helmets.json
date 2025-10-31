@@ -150,7 +150,7 @@
   },
   "mail_coif": {
     "name": "Mail Coif",
-    "icon": "items/mail_void.webp",
+    "icon": "items/mail_coif.webp",
     "slot": "Helmet",
     "categories": ["Armor", "Helmet"],
     "armor_specs": {
