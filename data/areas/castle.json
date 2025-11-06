@@ -167,24 +167,24 @@
       "weight": 1000,
       "spawns": [
         {
-          "monster": "thunder_stag.json",
+          "monster": "royal_guard.json",
           "quantity": [1, 2]
         },
         {
-          "monster": "stormwraith.json",
-          "quantity": [1, 2]
+          "monster": "perfume_siren.json",
+          "quantity": [1,2]
         },
         {
-          "monster": "thunder_stag.json",
-          "quantity": [1, 2]
+          "monster": "court_composer.json",
+          "quantity": 1
         },
         {
-          "monster": "stormwraith.json",
-          "quantity": [1, 2]
+          "monster": "royal_guard.json",
+          "quantity": 1
         },
         {
-          "monster": "moth_mourning.json",
-          "quantity": 2
+          "monster": "perfume_siren.json",
+          "quantity": 1
         }
       ]
     }
