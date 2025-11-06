@@ -1,8 +1,8 @@
 {
   "specs": {
     "name": "Enchanted Castle",
-    "starting_level": 1,
-    "required_level": 0,
+    "starting_level": 31,
+    "required_level": 150,
     "starting_gold": 300,
     "header_background": "areas/castle_header.webp",
     "footer_background": "areas/castle_footer.webp"
