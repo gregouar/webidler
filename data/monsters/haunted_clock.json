@@ -1,0 +1,60 @@
+{
+  "name": "Hollow Chime",
+  "portrait": "monsters/haunted_clock.webp",
+  "max_life": 15,
+  "power_factor": 4,
+  "size": "Tall",
+  "initiative": [1, 2],
+  "armor": { "Storm": 50 },
+  "skills": [
+    {
+      "name": "Time to Chime",
+      "icon": "skills/haste.svg",
+      "cooldown": 5.0,
+      "skill_type": "Spell",
+      "targets": [
+        {
+          "target_type": "Friend",
+          "shape": "All",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": [5, 10],
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "Speed": null }
+                      }
+                    },
+                    "value": 100
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Timely Attack",
+      "icon": "skills/claw.svg",
+      "cooldown": 3.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [0, 15],
+                  "Physical": [4, 6]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

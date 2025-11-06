@@ -10,7 +10,7 @@
   "loot_tables": ["tier_1.json", "tier_2.json", "tier_3.json", "tier_4.json"],
   "bosses": [
     {
-      "level": 70,
+      "level": 80,
       "interval": 50,
       "spawns": [
         {
@@ -61,7 +61,7 @@
       ]
     },
     {
-      "min_level": 1,
+      "min_level": 40,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -100,34 +100,34 @@
       ]
     },
     {
-      "min_level": 30,
+      "min_level": 1,
       "max_level": null,
       "weight": 1000,
       "spawns": [
         {
-          "monster": "bonebark_wolf.json",
+          "monster": "cogspinner_imp.json",
           "quantity": [1, 2]
         },
         {
-          "monster": "gravevine_crawler.json",
+          "monster": "time_spirit.json",
+          "quantity": [1,2]
+        },
+        {
+          "monster": "haunted_clock.json",
           "quantity": 1
         },
         {
-          "monster": "bonebark_wolf.json",
-          "quantity": [1, 3]
+          "monster": "cogspinner_imp.json",
+          "quantity": 1
         },
         {
-          "monster": "gravevine_crawler.json",
-          "quantity": [1, 2]
-        },
-        {
-          "monster": "moth_mourning.json",
-          "quantity": 2
+          "monster": "time_spirit.json",
+          "quantity": 1
         }
       ]
     },
     {
-      "min_level": 40,
+      "min_level": 60,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -154,7 +154,7 @@
       ]
     },
     {
-      "min_level": 50,
+      "min_level": 70,
       "max_level": null,
       "weight": 1000,
       "spawns": [
