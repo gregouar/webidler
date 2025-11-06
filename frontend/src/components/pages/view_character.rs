@@ -114,16 +114,13 @@ pub fn HeaderMenu() -> impl IntoView {
     let navigate_quit = {
         let navigate = leptos_router::hooks::use_navigate();
         move |_| {
-            if let Some(window) = web_sys::window() {
-                if let Ok(history) = window.history() {
-                    if let Ok(length) = history.length() {
-                        if length > 1 {
+            if let Some(window) = web_sys::window()
+                && let Ok(history) = window.history()
+                    && let Ok(length) = history.length()
+                        && length > 1 {
                             let _ = history.back();
                             return;
                         }
-                    }
-                }
-            }
             navigate("/", Default::default());
         }
     };
