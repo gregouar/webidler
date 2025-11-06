@@ -9,7 +9,7 @@
   "skills": [
     {
       "name": "Ash Blizzard",
-      "icon": "skills/burning_ray.svg",
+      "icon": "skills/pyroclastic_infusion.svg",
       "cooldown": 5.0,
       "skill_type": "Spell",
       "targets": [

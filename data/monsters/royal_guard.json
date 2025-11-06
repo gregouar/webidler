@@ -1,0 +1,28 @@
+{
+  "name": "Royal Guard",
+  "portrait": "monsters/royal_guard.webp",
+  "max_life": 15,
+  "power_factor": 3.0,
+  "initiative": [2.0, 4.0],
+  "armor": { "Physical": 100 },
+  "skills": [
+    {
+      "name": "Royal Smite",
+      "icon": "skills/attack.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [8, 16]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

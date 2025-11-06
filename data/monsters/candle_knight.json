@@ -1,0 +1,29 @@
+{
+  "name": "Candle Knight",
+  "portrait": "monsters/candle_knight.webp",
+  "max_life": 15,
+  "power_factor": 3,
+  "initiative": [1, 2],
+  "armor": { "Physical": 50 },
+  "skills": [
+    {
+      "name": "Burning Kitchen Spill",
+      "icon": "skills/attack.svg",
+      "cooldown": 4.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [2, 6],
+                  "Fire": [2, 4]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

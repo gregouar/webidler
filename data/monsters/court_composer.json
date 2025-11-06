@@ -1,0 +1,61 @@
+{
+  "name": "Court Composer",
+  "portrait": "monsters/court_composer.webp",
+  "max_life": 15,
+  "power_factor": 4,
+  "size": "Tall",
+  "initiative": [1, 2],
+  "armor": { "Storm": 50 },
+  "skills": [
+    {
+      "name": "Symphony of Ruin",
+      "icon": "skills/magic_missile.svg",
+      "cooldown": 3.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [4, 6],
+                  "Fire": [4,6],
+                  "Poison": [4,6],
+                  "Storm": [0, 15]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Entrancing Song",
+      "icon": "skills/haste.svg",
+      "cooldown": 10.0,
+      "targets": [
+        {
+          "target_type": "Friend",
+          "shape": "All",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": [5, 10],
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "Damage": { "skill_type": "Attack" } }
+                      }
+                    },
+                    "value": 100
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
