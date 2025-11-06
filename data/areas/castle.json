@@ -40,7 +40,7 @@
         },
         {
           "monster": "briar_ornament.json",
-          "quantity": [0,1]
+          "quantity": [0, 1]
         },
         {
           "monster": "topiary_golem.json",
@@ -61,29 +61,41 @@
       ]
     },
     {
-      "min_level": 20,
+      "min_level": 1,
       "max_level": null,
       "weight": 1000,
       "spawns": [
         {
-          "monster": "thorn_wall.json",
+          "monster": "candle_knight.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "smoldering_rug.json",
           "quantity": 1
         },
         {
-          "monster": "thorn_sprite.json",
+          "monster": "candle_knight.json",
+          "quantity": 1
+        },
+        {
+          "monster": "ember_butler.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "candle_knight.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "ember_butler.json",
           "quantity": [1, 2]
         },
         {
-          "monster": "rotcap_shambler.json",
-          "quantity": [0, 2]
+          "monster": "candle_knight.json",
+          "quantity": 1
         },
         {
-          "monster": "thorn_sprite_2.json",
-          "quantity": [1, 2]
-        },
-        {
-          "monster": "rotcap_shambler.json",
-          "quantity": 2
+          "monster": "ember_butler.json",
+          "quantity": 1
         }
       ]
     },
