@@ -1,0 +1,30 @@
+{
+  "name": "Teapot Wraith",
+  "portrait": "monsters/teapot_wraith.webp",
+  "max_life": 10,
+  "power_factor": 2.0,
+  "initiative": [0.5, 1.5],
+  "armor": { "Storm": 50 },
+  "skills": [
+    {
+      "name": "Hot Spill",
+      "icon": "skills/pyroclastic_infusion.svg",
+      "skill_type": "Spell",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Fire": [5, 15],
+                  "Storm": [0, 20]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
