@@ -10,6 +10,7 @@
       "bat.json",
       "bonebark_wolf.json",
       "booze_elemental.json",
+      "briar_ornament.json",
       "cat_skeleton.json",
       "centipede.json",
       "cinder_hag.json",
@@ -24,6 +25,7 @@
       "hound_storm.json",
       "moth_ember.json",
       "moth_mourning.json",
+      "mourning_basin.json",
       "patron_ghost.json",
       "rat.json",
       "rotcap_shambler.json",
@@ -40,6 +42,7 @@
       "thorn_sprite_2.json",
       "thorn_wall.json",
       "thunder_stag.json",
+      "topiary_golem.json",
       "witch_child.json",
       "witch_spider.json",
       "witch.json"
