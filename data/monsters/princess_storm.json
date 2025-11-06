@@ -1,0 +1,65 @@
+{
+  "name": "Reflection of Grief",
+  "portrait": "monsters/princess_storm.webp",
+  "rarity": "Boss",
+  "max_life": 100,
+  "size": "Tall",
+  "power_factor": 15,
+  "initiative": [0, 1],
+  "armor": { "Physical": 50, "Storm": 100 },
+  "skills": [
+    {
+      "name": "Grieving Tear",
+      "icon": "skills/chain_lightning.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [0, 15]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Neverending Cry",
+      "icon": "skills/haste.svg",
+      "skill_type": "Spell",
+      "cooldown": 0.0,
+      "triggers": [
+        {
+          "trigger_id": "grieving_call",
+          "description": "On Reflection death:",
+          "skill_type": "Spell",
+          "OnDeath": "Friend",
+          "target": "Me",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": 300,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": {
+                          "Damage": {}
+                        }
+                      }
+                    },
+                    "cumulate": true,
+                    "value": 100
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

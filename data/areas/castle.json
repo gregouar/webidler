@@ -14,15 +14,15 @@
       "interval": 50,
       "spawns": [
         {
-          "monster": "hound_fire.json",
+          "monster": "princess_fire.json",
           "quantity": 1
         },
         {
-          "monster": "hound_storm.json",
+          "monster": "princess_poison.json",
           "quantity": 1
         },
         {
-          "monster": "hunter.json",
+          "monster": "princess_storm.json",
           "quantity": 1
         }
       ]
@@ -162,7 +162,7 @@
       ]
     },
     {
-      "min_level": 1,
+      "min_level": 70,
       "max_level": null,
       "weight": 1000,
       "spawns": [
