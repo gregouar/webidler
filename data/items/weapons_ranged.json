@@ -145,5 +145,143 @@
       "crit_damage": 100
     },
     "min_area_level": 140
+  },
+  "composite_bow_unique": {
+    "name": "Voltrach Bite",
+    "description": "Where lightning meets venom, life itself hesitates.",
+    "icon": "items/voltrach_bite.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "RangedWeapon"],
+    "rarity": "Unique",
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [15, 19]
+      },
+      "crit_chance": 10,
+      "crit_damage": 100
+    },
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": {
+          "MinDamage": {
+            "damage_type": "Physical"
+          }
+        },
+        "modifier": "Flat",
+        "value": -15
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "MaxDamage": {
+            "damage_type": "Physical"
+          }
+        },
+        "modifier": "Flat",
+        "value": -19
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "MaxDamage": {
+            "damage_type": "Storm"
+          }
+        },
+        "modifier": "Flat",
+        "value": 34
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Damage": {
+            "damage_type": "Storm"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [50, 100]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [80, 120]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" }
+        },
+        "modifier": "Flat",
+        "value": [2, 4]
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "voltrach_bite",
+        "description": "Hit with Storm Damage have 30% chance to Poison for 30% of Hit Storm Damage per second for 5 seconds.",
+        "OnHit": {},
+        "effects": [
+          {
+            "success_chance": 30,
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison",
+                      "ignore_armor": true
+                    }
+                  },
+                  "value": 0.3
+                }
+              ]
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "damage_type": "Storm"
+                }
+              },
+              {
+                "MinDamage": {
+                  "skill_type": null,
+                  "damage_type": "Storm"
+                }
+              },
+              {
+                "MaxDamage": {
+                  "skill_type": null,
+                  "damage_type": "Storm"
+                }
+              }
+            ]
+          }
+        ],
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {}
+            },
+            "modifier": "Multiplier",
+            "factor": 100.0,
+            "source": {
+              "HitDamage": "Storm"
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 150
   }
 }

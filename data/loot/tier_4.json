@@ -29,6 +29,10 @@
       "weight": 8000
     },
     {
+      "item_id": "composite_bow_unique",
+      "weight": 20
+    },
+    {
       "item_id": "iron_wand",
       "weight": 8000
     },

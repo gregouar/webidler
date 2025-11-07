@@ -1,7 +1,7 @@
 {
   "name": "Mourning Basin",
   "portrait": "monsters/mourning_basin.webp",
-  "max_life": 10,
+  "max_life": 5,
   "power_factor": 2.0,
   "initiative": [2.0, 3.0],
   "armor": { "Physical": 50, "Storm": 50 },

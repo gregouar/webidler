@@ -124,7 +124,7 @@
                       "ignore_armor": true
                     }
                   },
-                  "value": 0
+                  "value": 1.0
                 }
               ]
             },
@@ -155,8 +155,8 @@
             "stat": {
               "Damage": {}
             },
-            "modifier": "Flat",
-            "factor": 1.0,
+            "modifier": "Multiplier",
+            "factor": 100.0,
             "source": {
               "HitDamage": "Fire"
             }
