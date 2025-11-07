@@ -71,7 +71,7 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [4, 8]
+                  "Physical": [2, 6]
                 }
               }
             }

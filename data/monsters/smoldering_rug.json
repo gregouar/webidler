@@ -16,8 +16,8 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [4, 8],
-                  "Fire": [4, 8]
+                  "Physical": [2, 6],
+                  "Fire": [2, 6]
                 }
               }
             },
@@ -29,7 +29,7 @@
                     "status_type": {
                       "DamageOverTime": { "damage_type": "Fire" }
                     },
-                    "value": 5
+                    "value": 3
                   }
                 ]
               }

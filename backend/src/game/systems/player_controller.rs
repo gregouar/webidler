@@ -138,7 +138,7 @@ pub fn level_up(
     player_resources.experience -= player_specs.experience_needed;
     player_specs.experience_needed = computations::player_level_up_cost(player_specs);
 
-    player_state.character_state.life += 10.0;
+    player_state.character_state.life += 4.0;
 
     true
 }
