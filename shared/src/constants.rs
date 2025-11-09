@@ -11,6 +11,7 @@ pub const CHAMPION_LEVEL_INC: AreaLevel = 5;
 
 pub const WAVES_PER_AREA_LEVEL: u8 = 5;
 
+pub const MONSTERS_DEFAULT_DAMAGE_INCREASE: f64 = 5.0;
 pub const MONSTER_INCREASE_FACTOR: f64 = 0.12;
 pub const SKILL_COST_INCREASE_FACTOR: f64 = 0.31;
 pub const XP_INCREASE_FACTOR: f64 = 0.39;
