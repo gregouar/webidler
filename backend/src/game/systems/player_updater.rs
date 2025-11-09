@@ -1,19 +1,23 @@
 use std::{iter, time::Duration};
 
-use shared::data::{
-    area::AreaThreat,
-    chance::{Chance, ChanceRange},
-    character::CharacterId,
-    character_status::StatusSpecs,
-    item::{SkillRange, SkillShape},
-    item_affix::AffixEffectScope,
-    passive::{PassivesTreeSpecs, PassivesTreeState},
-    player::{PlayerInventory, PlayerSpecs, PlayerState},
-    skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
-    stat_effect::{
-        ApplyStatModifier, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatType,
+use shared::{
+    constants::PLAYER_LIFE_PER_LEVEL,
+    data::{
+        area::AreaThreat,
+        chance::{Chance, ChanceRange},
+        character::CharacterId,
+        character_status::StatusSpecs,
+        item::{SkillRange, SkillShape},
+        item_affix::AffixEffectScope,
+        passive::{PassivesTreeSpecs, PassivesTreeState},
+        player::{PlayerInventory, PlayerSpecs, PlayerState},
+        skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
+        stat_effect::{
+            ApplyStatModifier, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs,
+            StatType,
+        },
+        trigger::{EventTrigger, TriggerTarget, TriggeredEffect},
     },
-    trigger::{EventTrigger, TriggerTarget, TriggeredEffect},
 };
 
 use crate::game::{
@@ -70,7 +74,8 @@ pub fn update_player_specs(
     player_specs.character_specs.block = Default::default();
     player_specs.character_specs.block_spell = Default::default();
     player_specs.character_specs.block_damage = 0.0;
-    player_specs.character_specs.max_life = 90.0 + 10.0 * player_specs.level as f64;
+    player_specs.character_specs.max_life =
+        100.0 + PLAYER_LIFE_PER_LEVEL * (player_specs.level.saturating_sub(1)) as f64;
     player_specs.character_specs.life_regen = 10.0;
     player_specs.character_specs.max_mana = 100.0;
     player_specs.character_specs.mana_regen = 10.0;

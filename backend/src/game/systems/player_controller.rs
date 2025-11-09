@@ -2,7 +2,9 @@ use anyhow::Result;
 
 use shared::{
     computations,
-    constants::{MONSTER_INCREASE_FACTOR, SKILL_BASE_COST, SKILL_COST_FACTOR},
+    constants::{
+        MONSTER_INCREASE_FACTOR, PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_COST_FACTOR,
+    },
     data::{
         area::{AreaSpecs, AreaState},
         character::CharacterId,
@@ -138,7 +140,7 @@ pub fn level_up(
     player_resources.experience -= player_specs.experience_needed;
     player_specs.experience_needed = computations::player_level_up_cost(player_specs);
 
-    player_state.character_state.life += 4.0;
+    player_state.character_state.life += PLAYER_LIFE_PER_LEVEL;
 
     true
 }
