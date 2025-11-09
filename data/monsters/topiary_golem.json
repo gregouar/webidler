@@ -34,7 +34,7 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [3, 7]
+                  "Physical": [2, 4]
                 }
               }
             },
@@ -46,7 +46,7 @@
                     "status_type": {
                       "DamageOverTime": { "damage_type": "Physical" }
                     },
-                    "value": 3
+                    "value": 2
                   }
                 ]
               }
