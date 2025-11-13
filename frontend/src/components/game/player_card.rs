@@ -153,6 +153,7 @@ pub fn PlayerCard() -> impl IntoView {
             player_specs.experience_needed = player_level_up_cost(player_specs);
             just_leveled_up.set(true);
         });
+        game_context.player_resources.write().passive_points += 1;
 
         conn.send(&LevelUpPlayerMessage { amount: 1 }.into());
     };
