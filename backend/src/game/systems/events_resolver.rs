@@ -124,6 +124,7 @@ fn handle_kill_event(
                     game_data.player_resources.mutate(),
                     game_data.player_specs.read(),
                     monster_specs,
+                    &game_data.area_blueprint.specs,
                     game_data.area_state.mutate(),
                 );
                 if let Some(monster_state) = game_data.monster_states.get_mut(monster_index) {
