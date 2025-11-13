@@ -7,7 +7,7 @@
   "armor": { "Physical": 50 },
   "skills": [
     {
-      "name": "Burning Kitchen Spill",
+      "name": "Melted Slice",
       "icon": "skills/attack.svg",
       "cooldown": 4.0,
       "targets": [

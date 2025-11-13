@@ -613,6 +613,45 @@
       }
     ]
   },
+  "blessing_heal": {
+    "name": "Blessing of Renewal",
+    "description": "A blessing that increase your life regeneration.",
+    "icon": "skills/renewal.svg",
+    "skill_type": "Spell",
+    "cooldown": 20,
+    "mana_cost": 30,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "modifier": "Multiplier",
+        "value": 2
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": "LifeRegen",
+                      "modifier": "Flat"
+                    }
+                  },
+                  "value": 50
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
   "meditate": {
     "name": "Meditate",
     "description": "Focus your mind to recover mana, replenishing your magical energy.",
