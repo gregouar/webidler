@@ -3,6 +3,7 @@
     "name": "Enchanted Castle",
     "starting_level": 31,
     "required_level": 150,
+    "item_level_modifier": 110,
     "starting_gold": 500,
     "header_background": "areas/castle_header.webp",
     "footer_background": "areas/castle_footer.webp"

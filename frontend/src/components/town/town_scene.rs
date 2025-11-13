@@ -177,6 +177,8 @@ fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
 
                 <div class="text-xs xl:text-sm text-gray-400">
                     "Starting Level: " {area.area_specs.starting_level}
+                    {(area.area_specs.item_level_modifier > 0)
+                        .then(|| format!(" (+{})", area.area_specs.item_level_modifier))}
                 </div>
 
                 <div class="text-xs xl:text-sm text-gray-400">

@@ -224,7 +224,7 @@ fn handle_area_completed_event(
     is_boss_level: bool,
 ) {
     match loot_generator::generate_loot(
-        area_level,
+        area_level.saturating_add(game_data.area_blueprint.specs.item_level_modifier),
         is_boss_level,
         &game_data.area_blueprint.loot_table,
         &master_store.items_store,

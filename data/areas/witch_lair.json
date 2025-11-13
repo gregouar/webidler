@@ -3,6 +3,7 @@
     "name": "Spider Witch Lair",
     "starting_level": 21,
     "required_level": 100,
+    "item_level_modifier": 70,
     "starting_gold": 250,
     "header_background": "areas/witch_header.webp",
     "footer_background": "areas/witch_footer.webp"
