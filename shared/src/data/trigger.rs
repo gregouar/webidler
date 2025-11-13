@@ -32,6 +32,8 @@ pub struct HitTrigger {
     pub is_blocked: Option<bool>,
     #[serde(default)]
     pub is_hurt: Option<bool>,
+    #[serde(default)]
+    pub is_triggered: Option<bool>,
     // TODO: Track skill id?
 }
 

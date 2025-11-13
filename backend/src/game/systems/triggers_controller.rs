@@ -171,6 +171,7 @@ pub fn apply_trigger_effects(
                     trigger_context.trigger.skill_range,
                     &effect,
                     &mut targets,
+                    true,
                 );
             }
         }

@@ -322,6 +322,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         is_crit: None,
                                         is_blocked: None,
                                         is_hurt: Some(true),
+                                        is_triggered: None,
                                     }),
                                     Modifier::Flat,
                                 );
@@ -343,6 +344,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         is_crit: None,
                                         is_blocked: None,
                                         is_hurt: Some(true),
+                                        is_triggered: None,
                                     }),
                                     Modifier::Flat,
                                 );

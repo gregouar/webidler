@@ -28,6 +28,7 @@ pub fn attack_character(
     skill_type: SkillType,
     range: SkillRange,
     is_crit: bool,
+    is_triggered: bool,
     ignore_armor: bool,
 ) {
     let (target_id, (target_specs, target_state)) = target;
@@ -84,6 +85,7 @@ pub fn attack_character(
         is_crit,
         is_blocked,
         is_hurt,
+        is_triggered,
     }));
 }
 

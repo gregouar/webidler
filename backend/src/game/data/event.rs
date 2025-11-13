@@ -30,6 +30,7 @@ pub struct HitEvent {
     pub is_crit: bool,
     pub is_blocked: bool,
     pub is_hurt: bool,
+    pub is_triggered: bool,
 
     pub damage: HashMap<DamageType, f64>,
 }

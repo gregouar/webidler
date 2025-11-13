@@ -246,6 +246,106 @@
       }
     ]
   },
+  "curse_conductivity": {
+    "name": "Curse of Conductivity",
+    "description": "Curse your foes with the storm's fury, making their bodies living conduits that draw lightning to strike all around them.",
+    "icon": "skills/curse_conductivity.svg",
+    "skill_type": "Spell",
+    "cooldown": 10,
+    "mana_cost": 30,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "modifier": "Multiplier",
+        "value": 10
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "All",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "DamageResistance": {
+                          "skill_type": null,
+                          "damage_type": "Storm"
+                        }
+                      },
+                      "modifier": "Flat",
+                      "debuff": true
+                    }
+                  },
+                  "value": 20
+                },
+                {
+                  "status_type": {
+                    "Trigger": {
+                      "trigger_id": "statuses/thunder_skull.svg",
+                      "description": "Trigger a Burst of Lightning when Hit, damaging adjacent enemies for 50% of Storm Damage dealt.",
+                      "OnTakeHit": {
+                        "is_triggered": false
+                      },
+                      "target": "SameTarget",
+                      "skill_range": "Any",
+                      "skill_shape": "Contact",
+                      "skill_type": "Spell",
+                      "effects": [
+                        {
+                          "FlatDamage": {
+                            "damage": {
+                              "Storm": 1.0
+                            },
+                            "ignore_armor": true
+                          }
+                        }
+                      ],
+                      "ignore_stat_effects": [
+                        {
+                          "Damage": {
+                            "damage_type": "Storm"
+                          }
+                        },
+                        {
+                          "MinDamage": {
+                            "damage_type": "Storm"
+                          }
+                        },
+                        {
+                          "MaxDamage": {
+                            "damage_type": "Storm"
+                          }
+                        }
+                      ],
+                      "modifiers": [
+                        {
+                          "stat": {
+                            "Damage": { "damage_type": "Storm" }
+                          },
+                          "modifier": "Multiplier",
+                          "factor": 100.0,
+                          "source": {
+                            "HitDamage": "Storm"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
   "curse_weakness": {
     "name": "Curse of Weakness",
     "description": "A debilitating curse that reduces enemies' damage output and slow them.",
@@ -616,7 +716,7 @@
   "blessing_heal": {
     "name": "Blessing of Renewal",
     "description": "A blessing that increase your life regeneration.",
-    "icon": "skills/renewal.svg",
+    "icon": "skills/blessing_renewal.svg",
     "skill_type": "Spell",
     "cooldown": 20,
     "mana_cost": 30,

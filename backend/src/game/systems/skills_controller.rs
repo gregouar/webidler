@@ -125,6 +125,7 @@ fn apply_repeated_skill_on_targets<'a>(
             targets_group.range,
             skill_effect,
             &mut targets,
+            false,
         );
     }
 
@@ -277,6 +278,7 @@ pub fn apply_skill_effect(
     range: SkillRange,
     skill_effect: &SkillEffect,
     targets: &mut [&mut Target],
+    is_triggered: bool,
 ) -> bool {
     if !skill_effect.success_chance.roll() {
         return true;
@@ -315,6 +317,7 @@ pub fn apply_skill_effect(
                     skill_type,
                     range,
                     is_crit,
+                    is_triggered,
                     *ignore_armor,
                 );
             }
