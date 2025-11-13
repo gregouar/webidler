@@ -20,6 +20,7 @@ use crate::{
         accessibility::AccessibilityContext,
         auth::AuthContext,
         backend_client::BackendClient,
+        shared::player_count::PlayerCount,
         ui::{
             buttons::{MenuButton, MenuButtonRed},
             confirm::ConfirmContext,
@@ -97,6 +98,8 @@ pub fn UserDashboardPage() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto w-full max-w-6xl px-4 xl:px-8 text-center overflow-x-hidden flex flex-col  justify-around min-h-screen">
+            <PlayerCount />
+
             <Transition fallback=move || {
                 view! { <p class="text-gray-400">"Loading..."</p> }
             }>
