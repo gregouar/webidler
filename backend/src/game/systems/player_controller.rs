@@ -223,7 +223,7 @@ pub fn sell_item(
                 item_specs
                     .modifiers
                     .level
-                    .saturating_sub(area_specs.starting_level - 1),
+                    .saturating_sub(area_specs.starting_level + area_specs.item_level_modifier - 1),
                 MONSTER_INCREASE_FACTOR,
             );
 }
