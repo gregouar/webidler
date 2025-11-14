@@ -171,7 +171,7 @@ impl<'a> GameInstance<'a> {
                 &mut tx,
                 self.character_id,
                 &self.game_data.area_id,
-                area_level,
+                area_level + self.game_data.area_blueprint.specs.item_level_modifier as i32,
                 // I don't like this
                 area_level - self.game_data.area_blueprint.specs.starting_level as i32 + 1,
             )
