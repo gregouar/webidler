@@ -301,7 +301,7 @@
                         {
                           "FlatDamage": {
                             "damage": {
-                              "Storm": 1.0
+                              "Storm": 0.5
                             },
                             "ignore_armor": true
                           },
@@ -329,7 +329,7 @@
                           "stat": {
                             "Damage": { "damage_type": "Storm" }
                           },
-                          "modifier": "Multiplier",
+                          "modifier": "Flat",
                           "factor": 100.0,
                           "source": {
                             "HitDamage": "Storm"
