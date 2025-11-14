@@ -719,7 +719,7 @@
     "icon": "skills/blessing_renewal.svg",
     "skill_type": "Spell",
     "cooldown": 20,
-    "mana_cost": 30,
+    "mana_cost": 25,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
