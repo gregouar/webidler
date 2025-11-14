@@ -48,7 +48,7 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [15, 30]
+                  "Physical": [10, 20]
                 }
               }
             }
@@ -68,7 +68,7 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Storm": [0, 50]
+                  "Storm": [0, 30]
                 }
               }
             }
@@ -93,7 +93,7 @@
                     "status_type": {
                       "DamageOverTime": { "damage_type": "Poison" }
                     },
-                    "value": 10
+                    "value": 8
                   }
                 ]
               }
