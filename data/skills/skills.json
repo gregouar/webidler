@@ -329,7 +329,7 @@
                           "stat": {
                             "Damage": { "damage_type": "Storm" }
                           },
-                          "modifier": "Flat",
+                          "modifier": "Multiplier",
                           "factor": 100.0,
                           "source": {
                             "HitDamage": "Storm"
