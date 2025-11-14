@@ -196,7 +196,7 @@ pub fn CharacterPortrait(
                             "absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500"
                         }
                     }
-                    style="box-shadow: inset 0 0 32px rgba(192, 0, 0, 1.0);"
+                    style="box-shadow: inset 0 0 64px rgba(192, 0, 0, 1.0);"
                 ></div>
             </div>
 
