@@ -304,24 +304,24 @@
                               "Storm": 1.0
                             },
                             "ignore_armor": true
-                          }
-                        }
-                      ],
-                      "ignore_stat_effects": [
-                        {
-                          "Damage": {
-                            "damage_type": "Storm"
-                          }
-                        },
-                        {
-                          "MinDamage": {
-                            "damage_type": "Storm"
-                          }
-                        },
-                        {
-                          "MaxDamage": {
-                            "damage_type": "Storm"
-                          }
+                          },
+                          "ignore_stat_effects": [
+                            {
+                              "Damage": {
+                                "damage_type": "Storm"
+                              }
+                            },
+                            {
+                              "MinDamage": {
+                                "damage_type": "Storm"
+                              }
+                            },
+                            {
+                              "MaxDamage": {
+                                "damage_type": "Storm"
+                              }
+                            }
+                          ]
                         }
                       ],
                       "modifiers": [

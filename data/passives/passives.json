@@ -1429,27 +1429,27 @@
                       "value": 1
                     }
                   ]
-                }
-              }
-            ],
-            "ignore_stat_effects": [
-              {
-                "Damage": {
-                  "skill_type": "Attack",
-                  "damage_type": "Physical"
-                }
-              },
-              {
-                "MinDamage": {
-                  "skill_type": "Attack",
-                  "damage_type": "Physical"
-                }
-              },
-              {
-                "MaxDamage": {
-                  "skill_type": "Attack",
-                  "damage_type": "Physical"
-                }
+                },
+                "ignore_stat_effects": [
+                  {
+                    "Damage": {
+                      "skill_type": "Attack",
+                      "damage_type": "Physical"
+                    }
+                  },
+                  {
+                    "MinDamage": {
+                      "skill_type": "Attack",
+                      "damage_type": "Physical"
+                    }
+                  },
+                  {
+                    "MaxDamage": {
+                      "skill_type": "Attack",
+                      "damage_type": "Physical"
+                    }
+                  }
+                ]
               }
             ],
             "modifiers": [

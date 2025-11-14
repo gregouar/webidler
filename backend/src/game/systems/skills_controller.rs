@@ -247,7 +247,7 @@ pub fn find_sub_targets<'a, 'b>(
                     .abs()
                     .min((pos.1 - skill_position.1 - skill_size.1 as i32 + 1).abs());
 
-                x_dis + y_dis <= 1
+                x_dis + y_dis == 1
 
                 // ((pos.0 - skill_position.0).abs() <= 1
                 //     || (pos.0 - skill_position.0 - skill_size.0 as i32 + 1).abs() <= 1)
