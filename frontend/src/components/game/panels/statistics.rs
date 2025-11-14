@@ -86,6 +86,12 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     )
                                 }
                             />
+                            <Stat
+                                label="Gold Collected"
+                                value=move || {
+                                    format_number(game_context.player_resources.read().gold_total)
+                                }
+                            />
                         </StatCategory>
 
                         <StatCategory title="Character">

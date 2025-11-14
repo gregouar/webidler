@@ -79,9 +79,14 @@ pub async fn post_add_affix(
             _ => 1.0,
         };
 
-    let character_resources =
-        db::characters::update_character_resources(&mut *tx, &payload.character_id, -price, 0.0)
-            .await?;
+    let character_resources = db::characters::update_character_resources(
+        &mut *tx,
+        &payload.character_id,
+        -price,
+        0.0,
+        0.0,
+    )
+    .await?;
 
     if character_resources.resource_gems < 0.0 {
         return Err(AppError::UserError("not enough gems".into()));

@@ -44,6 +44,9 @@ pub struct PlayerResources {
     pub gold: f64,
     pub gems: f64,
     pub shards: f64,
+
+    #[serde(default)]
+    pub gold_total: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

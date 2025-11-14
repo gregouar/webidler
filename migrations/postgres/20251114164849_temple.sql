@@ -1,0 +1,4 @@
+ALTER TABLE
+    characters
+ADD
+    COLUMN resource_gold DOUBLE PRECISION NOT NULL DEFAULT 0;

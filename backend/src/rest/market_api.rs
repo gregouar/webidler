@@ -126,6 +126,7 @@ pub async fn post_buy_market_item(
         &item_bought.character_id,
         item_bought.price,
         0.0,
+        0.0,
     )
     .await?;
 
@@ -133,6 +134,7 @@ pub async fn post_buy_market_item(
         &mut *tx,
         &payload.character_id,
         -item_bought.price,
+        0.0,
         0.0,
     )
     .await?;

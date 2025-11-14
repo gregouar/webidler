@@ -1,7 +1,7 @@
 use leptos::{html::*, prelude::*};
 
 use crate::components::{
-    shared::resources::{GemsCounter, ShardsCounter},
+    shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
     town::TownContext,
     ui::{buttons::MenuButton, fullscreen::FullscreenButton},
 };
@@ -10,6 +10,7 @@ use crate::components::{
 pub fn HeaderMenu() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
+    let gold = Signal::derive(move || town_context.character.read().resource_gold);
     let gems = Signal::derive(move || town_context.character.read().resource_gems);
     let shards = Signal::derive(move || town_context.character.read().resource_shards);
 
@@ -26,6 +27,7 @@ pub fn HeaderMenu() -> impl IntoView {
     view! {
         <div class="relative z-50 w-full flex justify-between items-center p-1 xl:p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
+                <GoldCounter value=gold />
                 <GemsCounter value=gems />
                 <ShardsCounter value=shards />
             </div>

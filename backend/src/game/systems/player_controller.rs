@@ -121,6 +121,7 @@ pub fn reward_player(
         0.0
     };
     player_resources.gold += gold_reward;
+    player_resources.gold_total += gold_reward;
     player_resources.gems += gems_reward;
     player_resources.experience += monster_specs.reward_factor.round();
 
@@ -211,7 +212,7 @@ pub fn sell_item(
         return;
     }
 
-    player_resources.gold +=
+    let gold_reward =
         10.0 * match item_specs.modifiers.rarity {
             ItemRarity::Normal => 1.0,
             ItemRarity::Magic => 2.0,
@@ -227,6 +228,9 @@ pub fn sell_item(
                     .saturating_sub(area_specs.starting_level + area_specs.item_level_modifier - 1),
                 MONSTER_INCREASE_FACTOR,
             );
+
+    player_resources.gold += gold_reward;
+    player_resources.gold_total += gold_reward;
 }
 
 pub fn init_skills_from_inventory(
