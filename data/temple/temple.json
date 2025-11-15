@@ -1,0 +1,24 @@
+{
+  "maximum_life": {
+    "price": 10e6,
+    "price_increase_factor": 1000,
+    "effect": {
+      "stat": "Life",
+      "modifier": "Flat",
+      "value": 5
+    },
+    "upgrade_value": 1,
+    "upgrade_modifier": "Flat"
+  },
+  "maximum_mana": {
+    "price": 10e6,
+    "price_increase_factor": 1000,
+    "effect": {
+      "stat": "Mana",
+      "modifier": "Flat",
+      "value": 5
+    },
+    "upgrade_value": 1,
+    "upgrade_modifier": "Flat"
+  }
+}

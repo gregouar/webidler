@@ -19,6 +19,7 @@ pub struct TownContext {
     pub open_ascend: RwSignal<bool>,
     pub open_market: RwSignal<bool>,
     pub open_forge: RwSignal<bool>,
+    pub open_temple: RwSignal<bool>,
 }
 
 // impl Default for TownContext {

@@ -99,6 +99,7 @@ pub struct GetCharacterDetailsResponse {
     pub areas: Vec<UserGrindArea>,
     pub inventory: PlayerInventory,
     pub ascension: PassivesTreeAscension,
+    pub benedictions: PlayerBenedictions,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

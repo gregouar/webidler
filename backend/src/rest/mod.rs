@@ -10,6 +10,7 @@ mod inventory_api;
 mod leaderboard_api;
 mod market_api;
 mod stats_api;
+mod temple_api;
 mod users_api;
 pub mod utils;
 
@@ -25,4 +26,5 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .merge(market_api::routes(app_state.clone()))
         .merge(forge_api::routes(app_state.clone()))
         .merge(inventory_api::routes(app_state.clone()))
+        .merge(temple_api::routes(app_state.clone()))
 }

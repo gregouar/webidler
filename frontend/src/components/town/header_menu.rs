@@ -21,8 +21,7 @@ pub fn HeaderMenu() -> impl IntoView {
         }
     };
 
-    let disable_inventory =
-        Signal::derive(move || town_context.character.read().max_area_level == 0);
+    let disable_panels = Signal::derive(move || town_context.character.read().max_area_level == 0);
 
     view! {
         <div class="relative z-50 w-full flex justify-between items-center p-1 xl:p-2 bg-zinc-800 shadow-md h-auto">
@@ -35,10 +34,23 @@ pub fn HeaderMenu() -> impl IntoView {
                 <FullscreenButton />
                 <MenuButton
                     on:click=move |_| {
+                        town_context.open_temple.set(!town_context.open_temple.get());
+                        town_context.open_ascend.set(false);
+                        town_context.open_market.set(false);
+                        town_context.open_forge.set(false);
+                        town_context.open_inventory.set(false);
+                    }
+                    disabled=disable_panels
+                >
+                    "Temple"
+                </MenuButton>
+                <MenuButton
+                    on:click=move |_| {
                         town_context.open_inventory.set(!town_context.open_inventory.get());
                         town_context.open_ascend.set(false);
+                        town_context.open_temple.set(false);
                     }
-                    disabled=disable_inventory
+                    disabled=disable_panels
                 >
                     "Inventory"
                 </MenuButton>
@@ -47,20 +59,11 @@ pub fn HeaderMenu() -> impl IntoView {
                         town_context.open_market.set(!town_context.open_market.get());
                         town_context.open_ascend.set(false);
                         town_context.open_forge.set(false);
+                        town_context.open_temple.set(false);
                     }
-                    disabled=disable_inventory
+                    disabled=disable_panels
                 >
                     "Market"
-                </MenuButton>
-                <MenuButton
-                    on:click=move |_| {
-                        town_context.open_ascend.set(!town_context.open_ascend.get());
-                        town_context.open_market.set(false);
-                        town_context.open_forge.set(false);
-                    }
-                    disabled=disable_inventory
-                >
-                    "Ascend"
                 </MenuButton>
                 <MenuButton
                     on:click=move |_| {
@@ -68,10 +71,22 @@ pub fn HeaderMenu() -> impl IntoView {
                         town_context.open_market.set(false);
                         town_context.open_ascend.set(false);
                         town_context.open_inventory.set(false);
+                        town_context.open_temple.set(false);
                     }
-                    disabled=disable_inventory
+                    disabled=disable_panels
                 >
                     "Forge"
+                </MenuButton>
+                <MenuButton
+                    on:click=move |_| {
+                        town_context.open_ascend.set(!town_context.open_ascend.get());
+                        town_context.open_market.set(false);
+                        town_context.open_forge.set(false);
+                        town_context.open_temple.set(false);
+                    }
+                    disabled=disable_panels
+                >
+                    "Ascend"
                 </MenuButton>
                 <MenuButton on:click=navigate_quit>"Quit"</MenuButton>
             </div>
