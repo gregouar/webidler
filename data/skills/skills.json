@@ -734,7 +734,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 5,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -743,7 +743,7 @@
                       "modifier": "Flat"
                     }
                   },
-                  "value": 50
+                  "value": 30
                 }
               ]
             }
