@@ -119,7 +119,9 @@ pub async fn post_delete_items(
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
 
-    for &item_index in payload.item_indexes.iter().rev() {
+    let mut item_indexes = payload.item_indexes;
+    item_indexes.sort_by_key(|&i| i);
+    for &item_index in item_indexes.iter().rev() {
         inventory_controller::delete_item_from_bag(&mut inventory, item_index)?;
     }
 
