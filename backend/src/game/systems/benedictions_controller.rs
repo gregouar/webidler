@@ -45,10 +45,10 @@ pub async fn update_benedictions(
 
     validate_benedictions(&master_store.benedictions_store, player_benedictions)?;
 
-    let cost = compute_benedictions_cost(&master_store.benedictions_store, &player_benedictions)
+    let cost = compute_benedictions_cost(&master_store.benedictions_store, player_benedictions)
         - compute_benedictions_cost(&master_store.benedictions_store, &prev_benedictions);
 
-    if cost as f64 > resource_gold {
+    if cost > resource_gold {
         return Err(AppError::UserError("not enough gold".to_string()));
     }
 
