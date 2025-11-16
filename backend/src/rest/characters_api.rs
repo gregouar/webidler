@@ -122,7 +122,7 @@ async fn read_character_details(
 
     let character = character?.ok_or(AppError::NotFound)?.into();
     let areas_completed = areas_completed?;
-    let (inventory_data, ascension) = character_data?.unwrap_or_default();
+    let (inventory_data, ascension, benedictions) = character_data?.unwrap_or_default();
 
     let areas = master_store
         .area_blueprints_store
@@ -173,6 +173,7 @@ async fn read_character_details(
         areas,
         inventory,
         ascension,
+        benedictions,
     }))
 }
 

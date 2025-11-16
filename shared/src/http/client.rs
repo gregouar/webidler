@@ -6,6 +6,7 @@ use crate::{
         item_affix::AffixType,
         market::MarketFilters,
         passive::PassivesTreeAscension,
+        temple::PlayerBenedictions,
         user::{UserCharacterId, UserId},
     },
     types::{AssetName, Email, PaginationLimit, Password, Username},
@@ -58,6 +59,14 @@ pub struct UpdateAccountRequest {
 pub struct CreateCharacterRequest {
     pub name: Username,
     pub portrait: AssetName,
+}
+
+// Temple
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct BuyBenedictionsRequest {
+    pub character_id: UserCharacterId,
+    pub player_benedictions: PlayerBenedictions,
 }
 
 // Ascend

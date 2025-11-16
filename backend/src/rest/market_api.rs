@@ -88,7 +88,7 @@ pub async fn post_buy_market_item(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let (inventory_data, _) =
+    let (inventory_data, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
             .ok_or(AppError::UserError("newbies can't buy items".into()))?;
@@ -210,7 +210,7 @@ pub async fn post_sell_market_item(
         )));
     }
 
-    let (inventory_data, _) =
+    let (inventory_data, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
             .ok_or(anyhow!("inventory not found"))?;

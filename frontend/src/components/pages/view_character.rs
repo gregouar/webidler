@@ -62,11 +62,13 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         areas,
                         inventory,
                         ascension,
+                        benedictions,
                     }) => {
                         town_context.character.set(character);
                         town_context.areas.set(areas);
                         town_context.inventory.set(inventory);
                         town_context.passives_tree_ascension.set(ascension);
+                        town_context.player_benedictions.set(benedictions);
                     }
                     _ => {
                         use_navigate()("/", Default::default());
@@ -116,11 +118,12 @@ pub fn HeaderMenu() -> impl IntoView {
         move |_| {
             if let Some(window) = web_sys::window()
                 && let Ok(history) = window.history()
-                    && let Ok(length) = history.length()
-                        && length > 1 {
-                            let _ = history.back();
-                            return;
-                        }
+                && let Ok(length) = history.length()
+                && length > 1
+            {
+                let _ = history.back();
+                return;
+            }
             navigate("/", Default::default());
         }
     };

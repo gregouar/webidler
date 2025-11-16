@@ -5,17 +5,19 @@ use shared::{
     data::user::{UserCharacterId, UserId},
     http::{
         client::{
-            AscendPassivesRequest, BrowseMarketItemsRequest, BuyMarketItemRequest,
-            CreateCharacterRequest, EditMarketItemRequest, ForgeAddAffixRequest,
-            ForgotPasswordRequest, InventoryDeleteRequest, InventoryEquipRequest,
-            InventoryUnequipRequest, RejectMarketItemRequest, ResetPasswordRequest,
-            SellMarketItemRequest, SignInRequest, SignUpRequest, UpdateAccountRequest,
+            AscendPassivesRequest, BrowseMarketItemsRequest, BuyBenedictionsRequest,
+            BuyMarketItemRequest, CreateCharacterRequest, EditMarketItemRequest,
+            ForgeAddAffixRequest, ForgotPasswordRequest, InventoryDeleteRequest,
+            InventoryEquipRequest, InventoryUnequipRequest, RejectMarketItemRequest,
+            ResetPasswordRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
+            UpdateAccountRequest,
         },
         server::{
-            AscendPassivesResponse, BrowseMarketItemsResponse, BuyMarketItemResponse,
-            CreateCharacterResponse, DeleteAccountResponse, DeleteCharacterResponse,
-            EditMarketItemResponse, ErrorResponse, ForgeAddAffixResponse, ForgotPasswordResponse,
-            GetAreasResponse, GetCharacterDetailsResponse, GetPassivesResponse, GetSkillsResponse,
+            AscendPassivesResponse, BrowseMarketItemsResponse, BuyBenedictionsResponse,
+            BuyMarketItemResponse, CreateCharacterResponse, DeleteAccountResponse,
+            DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse, ForgeAddAffixResponse,
+            ForgotPasswordResponse, GetAreasResponse, GetBenedictionsResponse,
+            GetCharacterDetailsResponse, GetPassivesResponse, GetSkillsResponse,
             GetUserCharactersResponse, GetUserDetailsResponse, InventoryDeleteResponse,
             InventoryEquipResponse, InventoryUnequipResponse, LeaderboardResponse,
             PlayersCountResponse, RejectMarketItemResponse, ResetPasswordResponse,
@@ -95,6 +97,18 @@ impl BackendClient {
         request: &AscendPassivesRequest,
     ) -> Result<AscendPassivesResponse, BackendError> {
         self.post_auth("game/passives", token, request).await
+    }
+
+    pub async fn get_benedictions(&self) -> Result<GetBenedictionsResponse, BackendError> {
+        self.get("game/benedictions").await
+    }
+
+    pub async fn post_buy_benedictions(
+        &self,
+        token: &str,
+        request: &BuyBenedictionsRequest,
+    ) -> Result<BuyBenedictionsResponse, BackendError> {
+        self.post_auth("game/benedictions", token, request).await
     }
 
     // Auth

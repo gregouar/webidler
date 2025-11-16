@@ -69,7 +69,7 @@ pub async fn update_ascension(
     resource_shards: f64,
     passives_tree_ascension: &PassivesTreeAscension,
 ) -> Result<(), AppError> {
-    let (_, prev_ascension) = db::characters_data::load_character_data(&mut **tx, character_id)
+    let (_, prev_ascension, _) = db::characters_data::load_character_data(&mut **tx, character_id)
         .await?
         .unwrap_or_default();
 

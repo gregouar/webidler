@@ -1,24 +1,24 @@
 {
-  "maximum_life": {
+  "life_max": {
     "price": 10e6,
-    "price_increase_factor": 1000,
     "effect": {
       "stat": "Life",
       "modifier": "Flat",
       "value": 5
     },
-    "upgrade_value": 1,
+    "price_increase_factor": 10e4,
+    "upgrade_value": 5,
     "upgrade_modifier": "Flat"
   },
-  "maximum_mana": {
+  "mana_max": {
     "price": 10e6,
-    "price_increase_factor": 1000,
     "effect": {
       "stat": "Mana",
       "modifier": "Flat",
       "value": 5
     },
-    "upgrade_value": 1,
+    "price_increase_factor": 1000,
+    "upgrade_value": 5,
     "upgrade_modifier": "Flat"
   }
 }

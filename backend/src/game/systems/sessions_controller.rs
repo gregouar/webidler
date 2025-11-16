@@ -140,7 +140,7 @@ async fn new_game_instance(
             .unwrap_or_default();
 
     let (player_inventory, passives_tree_state) = match character_data {
-        Some((inventory_data, ascension)) => (
+        Some((inventory_data, ascension, player_benedictions)) => (
             inventory_data_to_player_inventory(&master_store.items_store, inventory_data),
             PassivesTreeState::init(ascension),
         ),

@@ -45,7 +45,7 @@ pub async fn post_equip_item(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let (inventory_data, _) =
+    let (inventory_data, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
             .ok_or(AppError::UserError("newbies don't have inventory".into()))?;
@@ -78,7 +78,7 @@ pub async fn post_unequip_item(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let (inventory_data, _) =
+    let (inventory_data, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
             .ok_or(AppError::UserError("newbies don't have inventory".into()))?;
@@ -111,7 +111,7 @@ pub async fn post_delete_items(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let (inventory_data, _) =
+    let (inventory_data, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
             .ok_or(AppError::UserError("newbies don't have inventory".into()))?;

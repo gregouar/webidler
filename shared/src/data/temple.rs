@@ -25,7 +25,26 @@ pub struct BenedictionState {
     pub upgrade_level: u64,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct PlayerBenedictions {
     pub benedictions: HashMap<String, BenedictionState>,
+}
+
+impl BenedictionSpecs {
+    pub fn compute_effect(&self, upgrade_level: u64) -> StatEffect {
+        let mut effect = self.effect.clone();
+
+        match self.upgrade_modifier {
+            Modifier::Multiplier => todo!(),
+            Modifier::Flat => {
+                effect.value += upgrade_level.saturating_sub(1) as f64 * self.upgrade_value
+            }
+        }
+
+        effect
+    }
+
+    pub fn compute_price(&self, upgrade_level: u64) -> f64 {
+        self.price * self.price_increase_factor.powi(upgrade_level as i32)
+    }
 }

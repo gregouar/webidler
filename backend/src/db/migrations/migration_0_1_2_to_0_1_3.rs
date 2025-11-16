@@ -93,6 +93,7 @@ async fn migrate_character_items(
             data_version,
             inventory_data,
             passives_data,
+            benedictions_data,
             created_at,
             updated_at
          FROM characters_data
