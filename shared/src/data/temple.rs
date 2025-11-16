@@ -20,7 +20,7 @@ pub struct BenedictionSpecs {
     pub max_upgrade_level: Option<u64>,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct BenedictionState {
     pub upgrade_level: u64,
 }

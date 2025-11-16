@@ -10,7 +10,7 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
-    shared::{resources::GoldIcon, tooltips::effects_tooltip::formatted_effects_list},
+    shared::{resources::GoldIcon, tooltips::effects_tooltip},
     town::TownContext,
     ui::{
         buttons::{CloseButton, MenuButton},
@@ -48,7 +48,7 @@ pub fn TemplePanel(
                 <div class="bg-zinc-800 rounded-md p-1 xl:p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-1 xl:gap-2 max-h-full">
                     <div class="px-2 xl:px-4 flex items-center justify-between">
                         <PanelTitle>"Temple"</PanelTitle>
-                        {(view_only)
+                        {(!view_only)
                             .then(|| {
                                 view! {
                                     <span class="text-sm xl:text-base text-gray-400">
@@ -157,13 +157,9 @@ fn BenedictionsList(
     };
 
     view! {
-        <div class="relative min-h-0 flex-1 overflow-y-auto bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] flex flex-col gap-2 p-1 xl:p-2">
-
-            <div class="flex justify-between">
-                <div>"Current Value"</div>
-                <div>"Next Value"</div>
-                <div>"Price"</div>
-            </div>
+        <div class="relative min-h-0 flex-1 overflow-y-auto
+        bg-neutral-900 ring-1 ring-zinc-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] 
+        flex flex-col gap-2 p-1 xl:p-2">
             {move || {
                 benedictions_specs()
                     .into_iter()
@@ -195,6 +191,7 @@ fn BenedictionRow(
     let town_context = expect_context::<TownContext>();
 
     let upgrade_level = Memo::new({
+        let benediction_id = benediction_id.clone();
         move |_| {
             player_benedictions
                 .read()
@@ -234,46 +231,32 @@ fn BenedictionRow(
             || cost.get() + price.get() > town_context.character.read().resource_gold
     });
 
-    // view! {
-    //     <div class="flex justify-between items-center">
-    //         <ul class="text-sm xl:text-base">
-    //             {move || effect().map(|effect| formatted_effects_list([effect].into()))}
-    //         </ul>
-    //         <ul class="text-sm xl:text-base">
-    //             {move || {
-    //                 next_effect().map(|next_effect| formatted_effects_list([next_effect].into()))
-    //             }}
-    //         </ul>
-    //         <MenuButton disabled>
-    //             <div class="flex items-center gap-1 text-lg text-gray-400">
-    //                 {if max_level() {
-    //                     view! { "Max Level" }.into_any()
-    //                 } else {
-    //                     view! {
-    //                         "Buy for "
-    //                         <span class="text-amber-200 font-bold font-number">
-    //                             {move || format_number(price.get())}
-    //                         </span>
-    //                         <GoldIcon />
-    //                     }
-    //                         .into_any()
-    //                 }}
-
-    //             </div>
-    //         </MenuButton>
-    //     </div>
-    // }
+    let upgrade = {
+        let benediction_id = benediction_id.clone();
+        move |_| {
+            cost.update(|cost| *cost += price.get_untracked());
+            player_benedictions.update(|player_benedictions| {
+                player_benedictions
+                    .benedictions
+                    .entry(benediction_id.clone())
+                    .or_default()
+                    .upgrade_level += 1;
+            })
+        }
+    };
 
     view! {
         <div class="p-4 rounded-lg bg-zinc-800 border border-zinc-700
-        shadow-inner flex flex-row gap-6 items-start hover:bg-zinc-700/50
+        shadow-inner flex flex-row gap-6 items-start
         transition-colors">
 
             <div class="flex flex-col flex-1 gap-1">
 
                 <div class="flex items-center justify-between">
                     <div class="text-lg font-semibold text-amber-200 capitalize">
-                        {"Benediction"}
+                        {effects_tooltip::format_multiplier_stat_name(
+                            &benediction_specs.effect.stat,
+                        )}
                     </div>
 
                     <div class="text-sm text-gray-400">"Level " {upgrade_level.get()}</div>
@@ -284,7 +267,12 @@ fn BenedictionRow(
                     <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
                         <div class="text-xs text-gray-400 mb-1">"Current"</div>
                         <ul class="text-sm text-amber-100">
-                            {move || effect().map(|effect| formatted_effects_list([effect].into()))}
+                            {move || {
+                                effect()
+                                    .map(|effect| effects_tooltip::formatted_effects_list(
+                                        [effect].into(),
+                                    ))
+                            }}
                         </ul>
                     </div>
 
@@ -293,7 +281,9 @@ fn BenedictionRow(
                         <ul class="text-sm text-amber-100">
                             {move || {
                                 next_effect()
-                                    .map(|next_effect| formatted_effects_list([next_effect].into()))
+                                    .map(|next_effect| effects_tooltip::formatted_effects_list(
+                                        [next_effect].into(),
+                                    ))
                             }}
                         </ul>
                     </div>
@@ -301,20 +291,22 @@ fn BenedictionRow(
                 </div>
             </div>
 
-            <div class="flex flex-col items-end justify-center min-w-[140px]">
+            <div class="flex flex-col h-full items-end justify-center min-w-[140px]">
 
                 {if max_level() {
                     view! { <span class="text-green-400 font-bold text-lg">"MAX"</span> }.into_any()
                 } else {
                     view! {
-                        <div class="text-sm text-gray-300 mb-1">
-                            "Price: "
+                        <div class="flex items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
                             <span class="text-amber-200 font-bold font-number">
                                 {move || format_number(price.get())}
-                            </span> " Gold"
+                            </span>
+                            <GoldIcon />
                         </div>
 
-                        <MenuButton disabled>"Upgrade"</MenuButton>
+                        <MenuButton disabled class:h-full on:click=upgrade>
+                            "Upgrade"
+                        </MenuButton>
                     }
                         .into_any()
                 }}

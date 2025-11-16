@@ -13,7 +13,7 @@ use crate::components::{
         resources::{GemsCounter, ShardsCounter},
     },
     town::{
-        panels::{ascend::AscendPanel, inventory::TownInventoryPanel},
+        panels::{ascend::AscendPanel, inventory::TownInventoryPanel, temple::TemplePanel},
         town_scene::TownScene,
         TownContext,
     },
@@ -95,6 +95,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         <HeaderMenu />
                         <div class="relative flex-1">
                             <TownScene view_only=true />
+                            <TemplePanel open=town_context.open_temple view_only=true />
                             <AscendPanel open=town_context.open_ascend view_only=true />
                             <TownInventoryPanel open=town_context.open_inventory view_only=true />
                         </div>
@@ -141,8 +142,19 @@ pub fn HeaderMenu() -> impl IntoView {
                 <FullscreenButton />
                 <MenuButton
                     on:click=move |_| {
+                        town_context.open_temple.set(!town_context.open_temple.get());
+                        town_context.open_ascend.set(false);
+                        town_context.open_inventory.set(false);
+                    }
+                    disabled=disable_inventory
+                >
+                    "Temple"
+                </MenuButton>
+                <MenuButton
+                    on:click=move |_| {
                         town_context.open_inventory.set(!town_context.open_inventory.get());
                         town_context.open_ascend.set(false);
+                        town_context.open_temple.set(false);
                     }
                     disabled=disable_inventory
                 >
@@ -152,6 +164,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     on:click=move |_| {
                         town_context.open_ascend.set(!town_context.open_ascend.get());
                         town_context.open_inventory.set(false);
+                        town_context.open_temple.set(false);
                     }
                     disabled=disable_inventory
                 >
