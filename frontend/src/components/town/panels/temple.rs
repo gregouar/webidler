@@ -148,6 +148,14 @@ fn BenedictionsList(
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
+    let benedictions_specs = move || {
+        let mut benedictions_specs: Vec<_> =
+            town_context.benedictions_specs.get().into_iter().collect();
+        benedictions_specs
+            .sort_by_key(|(_, specs)| (specs.effect.stat.clone(), specs.effect.modifier));
+        benedictions_specs
+    };
+
     view! {
         <div class="relative min-h-0 flex-1 overflow-y-auto bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] flex flex-col gap-2 p-1 xl:p-2">
 
@@ -156,22 +164,22 @@ fn BenedictionsList(
                 <div>"Next Value"</div>
                 <div>"Price"</div>
             </div>
-            {town_context
-                .benedictions_specs
-                .get()
-                .into_iter()
-                .map(|(benediction_id, benediction_specs)| {
-                    view! {
-                        <BenedictionRow
-                            benediction_id
-                            benediction_specs
-                            player_benedictions
-                            cost
-                            view_only
-                        />
-                    }
-                })
-                .collect::<Vec<_>>()}
+            {move || {
+                benedictions_specs()
+                    .into_iter()
+                    .map(|(benediction_id, benediction_specs)| {
+                        view! {
+                            <BenedictionRow
+                                benediction_id
+                                benediction_specs
+                                player_benedictions
+                                cost
+                                view_only
+                            />
+                        }
+                    })
+                    .collect::<Vec<_>>()
+            }}
         </div>
     }
 }
@@ -226,33 +234,92 @@ fn BenedictionRow(
             || cost.get() + price.get() > town_context.character.read().resource_gold
     });
 
+    // view! {
+    //     <div class="flex justify-between items-center">
+    //         <ul class="text-sm xl:text-base">
+    //             {move || effect().map(|effect| formatted_effects_list([effect].into()))}
+    //         </ul>
+    //         <ul class="text-sm xl:text-base">
+    //             {move || {
+    //                 next_effect().map(|next_effect| formatted_effects_list([next_effect].into()))
+    //             }}
+    //         </ul>
+    //         <MenuButton disabled>
+    //             <div class="flex items-center gap-1 text-lg text-gray-400">
+    //                 {if max_level() {
+    //                     view! { "Max Level" }.into_any()
+    //                 } else {
+    //                     view! {
+    //                         "Buy for "
+    //                         <span class="text-amber-200 font-bold font-number">
+    //                             {move || format_number(price.get())}
+    //                         </span>
+    //                         <GoldIcon />
+    //                     }
+    //                         .into_any()
+    //                 }}
+
+    //             </div>
+    //         </MenuButton>
+    //     </div>
+    // }
+
     view! {
-        <div class="flex justify-between items-center">
-            <ul class="text-sm xl:text-base">
-                {move || effect().map(|effect| formatted_effects_list([effect].into()))}
-            </ul>
-            <ul class="text-sm xl:text-base">
-                {move || {
-                    next_effect().map(|next_effect| formatted_effects_list([next_effect].into()))
-                }}
-            </ul>
-            <MenuButton disabled>
-                <div class="flex items-center gap-1 text-lg text-gray-400">
-                    {if max_level() {
-                        view! { "Max Level" }.into_any()
-                    } else {
-                        view! {
-                            "Buy for "
-                            <span class="text-amber-200 font-bold font-number">
-                                {move || format_number(price.get())}
-                            </span>
-                            <GoldIcon />
-                        }
-                            .into_any()
-                    }}
+        <div class="p-4 rounded-lg bg-zinc-800 border border-zinc-700
+        shadow-inner flex flex-row gap-6 items-start hover:bg-zinc-700/50
+        transition-colors">
+
+            <div class="flex flex-col flex-1 gap-1">
+
+                <div class="flex items-center justify-between">
+                    <div class="text-lg font-semibold text-amber-200 capitalize">
+                        {"Benediction"}
+                    </div>
+
+                    <div class="text-sm text-gray-400">"Level " {upgrade_level.get()}</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-1">
+
+                    <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
+                        <div class="text-xs text-gray-400 mb-1">"Current"</div>
+                        <ul class="text-sm text-amber-100">
+                            {move || effect().map(|effect| formatted_effects_list([effect].into()))}
+                        </ul>
+                    </div>
+
+                    <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
+                        <div class="text-xs text-gray-400 mb-1">"Next"</div>
+                        <ul class="text-sm text-amber-100">
+                            {move || {
+                                next_effect()
+                                    .map(|next_effect| formatted_effects_list([next_effect].into()))
+                            }}
+                        </ul>
+                    </div>
 
                 </div>
-            </MenuButton>
+            </div>
+
+            <div class="flex flex-col items-end justify-center min-w-[140px]">
+
+                {if max_level() {
+                    view! { <span class="text-green-400 font-bold text-lg">"MAX"</span> }.into_any()
+                } else {
+                    view! {
+                        <div class="text-sm text-gray-300 mb-1">
+                            "Price: "
+                            <span class="text-amber-200 font-bold font-number">
+                                {move || format_number(price.get())}
+                            </span> " Gold"
+                        </div>
+
+                        <MenuButton disabled>"Upgrade"</MenuButton>
+                    }
+                        .into_any()
+                }}
+
+            </div>
         </div>
     }
 }
