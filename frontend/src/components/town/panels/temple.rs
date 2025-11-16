@@ -161,7 +161,7 @@ fn BenedictionsList(
     view! {
         <div class="relative min-h-0 flex-1 overflow-y-auto
         bg-neutral-900 ring-1 ring-zinc-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] 
-        flex flex-col gap-2 p-1 xl:p-2">
+        grid grid-cols-1 xl:grid-cols-2 gap-2 p-1 xl:p-2">
             {move || {
                 benedictions_specs()
                     .into_iter()
@@ -260,7 +260,7 @@ fn BenedictionRow(
                     </div>
 
                     <div class="text-sm text-gray-400">
-                        "Level " {upgrade_level.get()}
+                        "Level " {move || upgrade_level.get()}
                         {benediction_specs
                             .max_upgrade_level
                             .map(|max_upgrade_level| format!("/{}", max_upgrade_level))}

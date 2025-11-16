@@ -6,8 +6,8 @@
       "modifier": "Flat",
       "value": 5
     },
-    "price_increase_factor": 1e4,
-    "upgrade_value": 5,
+    "price_increase_factor": 6,
+    "upgrade_value": 1,
     "upgrade_modifier": "Flat"
   },
   "mana_max": {
@@ -17,8 +17,8 @@
       "modifier": "Flat",
       "value": 5
     },
-    "price_increase_factor": 1e4,
-    "upgrade_value": 5,
+    "price_increase_factor": 6,
+    "upgrade_value": 1,
     "upgrade_modifier": "Flat"
   },
   "damage_physical": {
@@ -28,8 +28,8 @@
       "modifier": "Multiplier",
       "value": 5
     },
-    "price_increase_factor": 1e4,
-    "upgrade_value": 5,
+    "price_increase_factor": 6,
+    "upgrade_value": 1,
     "upgrade_modifier": "Flat"
   },
   "damage_fire": {
@@ -39,8 +39,8 @@
       "modifier": "Multiplier",
       "value": 5
     },
-    "price_increase_factor": 1e4,
-    "upgrade_value": 5,
+    "price_increase_factor": 6,
+    "upgrade_value": 1,
     "upgrade_modifier": "Flat"
   },
   "damage_poison": {
@@ -50,8 +50,8 @@
       "modifier": "Multiplier",
       "value": 5
     },
-    "price_increase_factor": 1e4,
-    "upgrade_value": 5,
+    "price_increase_factor": 6,
+    "upgrade_value": 1,
     "upgrade_modifier": "Flat"
   },
   "damage_storm": {
@@ -61,8 +61,8 @@
       "modifier": "Multiplier",
       "value": 5
     },
-    "price_increase_factor": 1e4,
-    "upgrade_value": 5,
+    "price_increase_factor": 6,
+    "upgrade_value": 1,
     "upgrade_modifier": "Flat"
   }
 }
