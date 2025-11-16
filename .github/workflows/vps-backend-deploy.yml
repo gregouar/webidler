@@ -111,6 +111,14 @@ jobs:
             echo "HASH_KEY=${{ secrets.HASH_KEY }}" >> /webidler/tmp/.env
             echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> /webidler/tmp/.env
             docker load < /webidler/tmp/backend.tar
+
+            BACKUP_DIR="/webidler/backups"
+            mkdir -p $BACKUP_DIR
+            TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+            BACKUP_FILE="$BACKUP_DIR/db_backup_$TIMESTAMP.sql"
+            docker exec postgres pg_dump -U postgres webidler > $BACKUP_FILE
+            echo "Backup created at: $BACKUP_FILE"
+
             docker compose -f /webidler/tmp/docker-compose.yml stop
             docker compose -f /webidler/tmp/docker-compose.yml down
             docker compose -f /webidler/tmp/docker-compose.yml up -d
