@@ -54,7 +54,7 @@ pub fn GoldIcon() -> impl IntoView {
         <ResourceIcon
             icon="ui/gold.webp"
             name="Gold"
-            description="Used during Grind to buy level up for Skills. Total Gold collected during a Grind is also converted to Temple Donations to buy Benedictions in Town."
+            description="Used during Grind to buy level up for Skills. Total Gold collected during a Grind is also converted to Temple Donations to buy Blessings in Town."
         />
     }
 }
@@ -65,7 +65,7 @@ pub fn GoldCounter(value: Signal<f64>) -> impl IntoView {
             class:text-amber-200
             icon="ui/gold.webp"
             name="Gold"
-            description="Used during Grind to buy level up for Skills. Total Gold collected during a Grind is also converted to Temple Donations to buy Benedictions in Town."
+            description="Used during Grind to buy level up for Skills. Total Gold collected during a Grind is also converted to Temple Donations to buy Blessings in Town."
             value
         />
     }
