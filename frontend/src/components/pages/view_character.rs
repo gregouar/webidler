@@ -43,6 +43,17 @@ pub fn ViewCharacterPage() -> impl IntoView {
         }
     });
 
+    let benedictions_specs = LocalResource::new({
+        let backend = expect_context::<BackendClient>();
+        move || async move {
+            backend
+                .get_benedictions()
+                .await
+                .map(|response| response.benedictions_specs)
+                .unwrap_or_default()
+        }
+    });
+
     let fetch_data = {
         let backend = expect_context::<BackendClient>();
 
@@ -91,6 +102,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                 {move || Suspend::new(async move {
                     initial_load.await;
                     town_context.passives_tree_specs.set(passives_tree_specs.await);
+                    town_context.benedictions_specs.set(benedictions_specs.await);
                     view! {
                         <HeaderMenu />
                         <div class="relative flex-1">

@@ -51,10 +51,12 @@ pub fn TemplePanel(
                         {(!view_only)
                             .then(|| {
                                 view! {
-                                    <span class="text-sm xl:text-base text-gray-400">
+                                    <div class="flex h-full items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
                                         "Benedictions Cost: "
-                                        <span class="text-amber-200">{cost}" Gold"</span>
-                                    </span>
+                                        <span class="text-amber-200 font-bold font-number">
+                                            {move || format_number(cost.get())}
+                                        </span> <GoldIcon />
+                                    </div>
 
                                     <div class="flex items-center gap-2">
                                         <MenuButton
@@ -226,9 +228,7 @@ fn BenedictionRow(
     };
 
     let disabled = Signal::derive(move || {
-        view_only
-            || max_level()
-            || cost.get() + price.get() > town_context.character.read().resource_gold
+        max_level() || cost.get() + price.get() > town_context.character.read().resource_gold
     });
 
     let upgrade = {
@@ -259,7 +259,12 @@ fn BenedictionRow(
                         )}
                     </div>
 
-                    <div class="text-sm text-gray-400">"Level " {upgrade_level.get()}</div>
+                    <div class="text-sm text-gray-400">
+                        "Level " {upgrade_level.get()}
+                        {benediction_specs
+                            .max_upgrade_level
+                            .map(|max_upgrade_level| format!("/{}", max_upgrade_level))}
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2 mt-1">
@@ -291,27 +296,35 @@ fn BenedictionRow(
                 </div>
             </div>
 
-            <div class="flex flex-col h-full items-end justify-center min-w-[140px]">
-
-                {if max_level() {
-                    view! { <span class="text-green-400 font-bold text-lg">"MAX"</span> }.into_any()
-                } else {
+            {(!view_only)
+                .then(|| {
                     view! {
-                        <div class="flex items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
-                            <span class="text-amber-200 font-bold font-number">
-                                {move || format_number(price.get())}
-                            </span>
-                            <GoldIcon />
+                        <div class="flex flex-col h-full items-end justify-center min-w-[140px]">
+                            {if max_level() {
+                                view! {
+                                    <span class="text-green-400 font-bold text-lg">"MAX"</span>
+                                }
+                                    .into_any()
+                            } else {
+                                view! {
+                                    <div class="flex items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
+                                        <span class="text-amber-200 font-bold font-number">
+                                            {move || format_number(price.get())}
+                                        </span>
+                                        <GoldIcon />
+                                    </div>
+
+                                    <MenuButton disabled class:h-full on:click=upgrade>
+                                        "Upgrade"
+                                    </MenuButton>
+                                }
+                                    .into_any()
+                            }}
+
                         </div>
-
-                        <MenuButton disabled class:h-full on:click=upgrade>
-                            "Upgrade"
-                        </MenuButton>
                     }
-                        .into_any()
-                }}
+                })}
 
-            </div>
         </div>
     }
 }
