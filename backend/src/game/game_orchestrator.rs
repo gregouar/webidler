@@ -6,6 +6,8 @@ use shared::{
     data::{area::AreaThreat, character::CharacterId, player::PlayerState},
 };
 
+use crate::game::systems::benedictions_controller;
+
 use super::{
     data::{
         event::{EventsQueue, GameEvent},
@@ -50,6 +52,10 @@ pub async fn tick(
             game_data.player_inventory.read(),
             &game_data.passives_tree_specs,
             game_data.passives_tree_state.read(),
+            &benedictions_controller::generate_effects_map_from_benedictions(
+                &master_store.benedictions_store,
+                &game_data.player_benedictions,
+            ),
             &game_data.area_threat,
         );
     }
@@ -95,7 +101,7 @@ async fn control_entities(
         game_data.area_threat.cooldown = 0.0;
         game_data.monster_wave_delay = Instant::now();
         if game_data.player_respawn_delay.elapsed() > PLAYER_RESPAWN_PERIOD {
-            respawn_player(game_data);
+            respawn_player(master_store, game_data);
         }
     } else {
         game_data.player_respawn_delay = Instant::now();
@@ -233,7 +239,7 @@ async fn update_entities(
     );
 }
 
-fn respawn_player(game_data: &mut GameInstanceData) {
+fn respawn_player(master_store: &MasterStore, game_data: &mut GameInstanceData) {
     game_data.monster_base_specs.mutate().clear();
     game_data.monster_specs.clear();
     game_data.monster_states.clear();
@@ -244,6 +250,10 @@ fn respawn_player(game_data: &mut GameInstanceData) {
         game_data.player_inventory.read(),
         &game_data.passives_tree_specs,
         game_data.passives_tree_state.read(),
+        &benedictions_controller::generate_effects_map_from_benedictions(
+            &master_store.benedictions_store,
+            &game_data.player_benedictions,
+        ),
         &game_data.area_threat,
     );
 

@@ -8,6 +8,7 @@ use shared::data::{
     item::ItemRarity,
     passive::PassivesTreeState,
     player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs},
+    temple::PlayerBenedictions,
     user::UserCharacterId,
 };
 
@@ -139,10 +140,11 @@ async fn new_game_instance(
             .map(|area_completed| area_completed.max_area_level)
             .unwrap_or_default();
 
-    let (player_inventory, passives_tree_state) = match character_data {
+    let (player_inventory, passives_tree_state, player_benedictions) = match character_data {
         Some((inventory_data, ascension, player_benedictions)) => (
             inventory_data_to_player_inventory(&master_store.items_store, inventory_data),
             PassivesTreeState::init(ascension),
+            player_benedictions,
         ),
         None => {
             let mut player_inventory = PlayerInventory {
@@ -166,7 +168,11 @@ async fn new_game_instance(
                 );
             }
 
-            (player_inventory, PassivesTreeState::default())
+            (
+                player_inventory,
+                PassivesTreeState::default(),
+                PlayerBenedictions::default(),
+            )
         }
     };
 
@@ -176,6 +182,7 @@ async fn new_game_instance(
         area_level_completed as AreaLevel,
         "default",
         passives_tree_state,
+        player_benedictions,
         player_resources,
         player_specs,
         player_inventory,

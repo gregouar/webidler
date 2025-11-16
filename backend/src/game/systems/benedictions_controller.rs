@@ -11,8 +11,8 @@ use crate::{
 };
 
 pub fn generate_effects_map_from_benedictions(
-    benedictions_store: BenedictionsStore,
-    player_benedictions: PlayerBenedictions,
+    benedictions_store: &BenedictionsStore,
+    player_benedictions: &PlayerBenedictions,
 ) -> EffectsMap {
     player_benedictions
         .purchased_benedictions

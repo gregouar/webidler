@@ -67,9 +67,10 @@ pub fn update_player_specs(
     player_inventory: &PlayerInventory,
     passives_tree_specs: &PassivesTreeSpecs,
     passives_tree_state: &PassivesTreeState,
+    benedictions_effects: &EffectsMap,
     area_threat: &AreaThreat,
 ) {
-    // TODO: Reset player_specs
+    // TODO: Reset player_specs function
     player_specs.character_specs.armor.clear();
     player_specs.character_specs.block = Default::default();
     player_specs.character_specs.block_spell = Default::default();
@@ -104,6 +105,7 @@ pub fn update_player_specs(
         player_inventory
             .equipped_items()
             .map(|(_, i)| i.modifiers.aggregate_effects(AffixEffectScope::Global))
+            .chain(iter::once(benedictions_effects.clone()))
             .chain(passives_controller::generate_effects_map_from_passives(
                 passives_tree_specs,
                 passives_tree_state,
