@@ -60,6 +60,7 @@ pub fn HeaderMenu() -> impl IntoView {
                         town_context.open_ascend.set(false);
                         town_context.open_forge.set(false);
                         town_context.open_temple.set(false);
+                        town_context.open_inventory.set(false);
                     }
                     disabled=disable_panels
                 >
@@ -71,6 +72,7 @@ pub fn HeaderMenu() -> impl IntoView {
                         town_context.open_market.set(false);
                         town_context.open_ascend.set(false);
                         town_context.open_temple.set(false);
+                        town_context.open_inventory.set(false);
                     }
                     disabled=disable_panels
                 >

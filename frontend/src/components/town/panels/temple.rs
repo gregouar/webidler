@@ -127,7 +127,7 @@ fn ConfirmButton(
         let confirm_context = expect_context::<ConfirmContext>();
         move |_| {
             (confirm_context.confirm)(
-                format! {"Do you confirm buying Benedictions for {} Gold?",cost.get() },
+                format! {"Do you confirm buying Benedictions for {} Gold?",format_number(cost.get()) },
                 do_ascend.clone(),
             );
         }
@@ -197,7 +197,7 @@ fn BenedictionRow(
         move |_| {
             player_benedictions
                 .read()
-                .benedictions
+                .purchased_benedictions
                 .get(&benediction_id)
                 .map(|benediction_state| benediction_state.upgrade_level)
                 .unwrap_or_default()
@@ -237,7 +237,7 @@ fn BenedictionRow(
             cost.update(|cost| *cost += price.get_untracked());
             player_benedictions.update(|player_benedictions| {
                 player_benedictions
-                    .benedictions
+                    .purchased_benedictions
                     .entry(benediction_id.clone())
                     .or_default()
                     .upgrade_level += 1;

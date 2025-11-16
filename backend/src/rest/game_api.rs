@@ -22,7 +22,10 @@ use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
     db,
-    game::{data::DataInit, systems::passives_controller},
+    game::{
+        data::DataInit,
+        systems::{benedictions_controller, passives_controller},
+    },
     rest::utils::{verify_character_in_town, verify_character_user},
 };
 
@@ -144,14 +147,14 @@ pub async fn post_buy_benedictions(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    // passives_controller::update_ascension(
-    //     &mut tx,
-    //     &master_store,
-    //     &payload.character_id,
-    //     character.resource_shards,
-    //     &payload.passives_tree_ascension,
-    // )
-    // .await?;
+    benedictions_controller::update_benedictions(
+        &mut tx,
+        &master_store,
+        &payload.character_id,
+        character.resource_gold,
+        &payload.player_benedictions,
+    )
+    .await?;
 
     tx.commit().await?;
 

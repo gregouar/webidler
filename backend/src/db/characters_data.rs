@@ -106,6 +106,40 @@ async fn upsert_character_passives_data<'c>(
     Ok(())
 }
 
+pub async fn save_character_benedictions<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+    player_benedictions: &PlayerBenedictions,
+) -> anyhow::Result<()> {
+    Ok(upsert_character_benedictions_data(
+        executor,
+        character_id,
+        rmp_serde::to_vec(player_benedictions)?,
+    )
+    .await?)
+}
+
+async fn upsert_character_benedictions_data<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+    benedictions_data: Vec<u8>,
+) -> Result<(), sqlx::Error> {
+    sqlx::query!(
+        "UPDATE characters_data SET
+            data_version = $2,
+            benedictions_data = $3, 
+            updated_at = CURRENT_TIMESTAMP
+        WHERE character_id = $1",
+        character_id,
+        DATA_VERSION,
+        benedictions_data
+    )
+    .execute(executor)
+    .await?;
+
+    Ok(())
+}
+
 pub async fn load_character_data<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,

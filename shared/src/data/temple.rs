@@ -27,7 +27,7 @@ pub struct BenedictionState {
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct PlayerBenedictions {
-    pub benedictions: HashMap<String, BenedictionState>,
+    pub purchased_benedictions: HashMap<String, BenedictionState>,
 }
 
 impl BenedictionSpecs {
@@ -55,5 +55,11 @@ impl BenedictionSpecs {
 
     pub fn compute_price(&self, upgrade_level: u64) -> f64 {
         self.price * self.price_increase_factor.powi(upgrade_level as i32)
+    }
+
+    pub fn compute_total_price(&self, upgrade_level: u64) -> f64 {
+        (0..upgrade_level)
+            .map(|level| self.compute_price(level))
+            .sum()
     }
 }
