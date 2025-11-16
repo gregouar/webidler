@@ -3,22 +3,20 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 use std::sync::Arc;
 
 use shared::{
-    data::{
-        stat_effect::Modifier,
-        temple::{BenedictionSpecs, PlayerBenedictions},
-    },
+    data::temple::{BenedictionSpecs, PlayerBenedictions},
     http::client::BuyBenedictionsRequest,
 };
 
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
-    shared::tooltips::effects_tooltip::formatted_effects_list,
+    shared::{resources::GoldIcon, tooltips::effects_tooltip::formatted_effects_list},
     town::TownContext,
     ui::{
         buttons::{CloseButton, MenuButton},
         confirm::ConfirmContext,
         menu_panel::{MenuPanel, PanelTitle},
+        number::format_number,
         toast::*,
     },
 };
@@ -55,7 +53,7 @@ pub fn TemplePanel(
                                 view! {
                                     <span class="text-sm xl:text-base text-gray-400">
                                         "Benedictions Cost: "
-                                        <span class="text-amber-300">{cost}" Gold"</span>
+                                        <span class="text-amber-200">{cost}" Gold"</span>
                                     </span>
 
                                     <div class="flex items-center gap-2">
@@ -151,7 +149,13 @@ fn BenedictionsList(
     let town_context = expect_context::<TownContext>();
 
     view! {
-        <div class="relative min-h-0 flex-1  overflow-y-auto bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] flex flex-col gap-2">
+        <div class="relative min-h-0 flex-1 overflow-y-auto bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] flex flex-col gap-2 p-1 xl:p-2">
+
+            <div class="flex justify-between">
+                <div>"Current Value"</div>
+                <div>"Next Value"</div>
+                <div>"Price"</div>
+            </div>
             {town_context
                 .benedictions_specs
                 .get()
@@ -180,6 +184,8 @@ fn BenedictionRow(
     cost: RwSignal<f64>,
     view_only: bool,
 ) -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+
     let upgrade_level = Memo::new({
         move |_| {
             player_benedictions
@@ -191,12 +197,62 @@ fn BenedictionRow(
         }
     });
 
-    let effect = move || benediction_specs.compute_effect(upgrade_level.get());
+    let effect = {
+        let benediction_specs = benediction_specs.clone();
+        move || benediction_specs.compute_effect(upgrade_level.get())
+    };
+    let next_effect = {
+        let benediction_specs = benediction_specs.clone();
+        move || benediction_specs.compute_effect(upgrade_level.get() + 1)
+    };
+    let price = Memo::new({
+        let benediction_specs = benediction_specs.clone();
+        move |_| benediction_specs.compute_price(upgrade_level.get())
+    });
+
+    let max_level = {
+        let benediction_specs = benediction_specs.clone();
+        move || {
+            benediction_specs
+                .max_upgrade_level
+                .map(|max_upgrade_level| max_upgrade_level <= upgrade_level.get())
+                .unwrap_or_default()
+        }
+    };
+
+    let disabled = Signal::derive(move || {
+        view_only
+            || max_level()
+            || cost.get() + price.get() > town_context.character.read().resource_gold
+    });
 
     view! {
-        <div class="flex justify-between">
-            <ul>{move || formatted_effects_list([effect()].into())}</ul>
-            <MenuButton>"Buy"</MenuButton>
+        <div class="flex justify-between items-center">
+            <ul class="text-sm xl:text-base">
+                {move || effect().map(|effect| formatted_effects_list([effect].into()))}
+            </ul>
+            <ul class="text-sm xl:text-base">
+                {move || {
+                    next_effect().map(|next_effect| formatted_effects_list([next_effect].into()))
+                }}
+            </ul>
+            <MenuButton disabled>
+                <div class="flex items-center gap-1 text-lg text-gray-400">
+                    {if max_level() {
+                        view! { "Max Level" }.into_any()
+                    } else {
+                        view! {
+                            "Buy for "
+                            <span class="text-amber-200 font-bold font-number">
+                                {move || format_number(price.get())}
+                            </span>
+                            <GoldIcon />
+                        }
+                            .into_any()
+                    }}
+
+                </div>
+            </MenuButton>
         </div>
     }
 }

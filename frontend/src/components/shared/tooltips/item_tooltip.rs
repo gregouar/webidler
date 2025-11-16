@@ -163,7 +163,7 @@ pub fn ItemTooltipContent(
                 .then(|| {
                     view! {
                         <hr class="border-t border-gray-700 my-1" />
-                        <ul class="list-none space-y-1">{effects}{triggers}</ul>
+                        <ul class="list-none space-y-1 text-xs xl:text-sm">{effects}{triggers}</ul>
                     }
                 })}
             <hr class="border-t border-gray-700" />

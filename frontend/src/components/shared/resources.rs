@@ -49,13 +49,23 @@ pub fn ResourceCounter(
 }
 
 #[component]
+pub fn GoldIcon() -> impl IntoView {
+    view! {
+        <ResourceIcon
+            icon="ui/gold.webp"
+            name="Gold"
+            description="Used during Grind to buy level up for Skills. Total Gold collected during a Grind can be used in Town to buy Benedictions at the Temple."
+        />
+    }
+}
+#[component]
 pub fn GoldCounter(value: Signal<f64>) -> impl IntoView {
     view! {
         <ResourceCounter
             class:text-amber-200
             icon="ui/gold.webp"
             name="Gold"
-            description="To buy level up for skills. Reset at every grind."
+            description="Used during Grind to buy level up for Skills. Total Gold collected during a Grind can be used in Town to buy Benedictions at the Temple."
             value
         />
     }

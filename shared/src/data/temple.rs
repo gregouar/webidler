@@ -17,7 +17,7 @@ pub struct BenedictionSpecs {
     pub price_increase_factor: f64,
 
     #[serde(default)]
-    pub max_upgrade_level: Option<u8>,
+    pub max_upgrade_level: Option<u64>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -31,8 +31,17 @@ pub struct PlayerBenedictions {
 }
 
 impl BenedictionSpecs {
-    pub fn compute_effect(&self, upgrade_level: u64) -> StatEffect {
+    pub fn compute_effect(&self, upgrade_level: u64) -> Option<StatEffect> {
         let mut effect = self.effect.clone();
+
+        if upgrade_level == 0
+            || self
+                .max_upgrade_level
+                .map(|max_upgrade_level| upgrade_level == max_upgrade_level)
+                .unwrap_or_default()
+        {
+            return None;
+        }
 
         match self.upgrade_modifier {
             Modifier::Multiplier => todo!(),
@@ -41,7 +50,7 @@ impl BenedictionSpecs {
             }
         }
 
-        effect
+        Some(effect)
     }
 
     pub fn compute_price(&self, upgrade_level: u64) -> f64 {

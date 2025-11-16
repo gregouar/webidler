@@ -20,5 +20,16 @@
     "price_increase_factor": 1000,
     "upgrade_value": 5,
     "upgrade_modifier": "Flat"
+  },
+  "damage_phys": {
+    "price": 10e6,
+    "effect": {
+      "stat": { "Damage": { "damage_type": "Physical" } },
+      "modifier": "Multiplier",
+      "value": 5
+    },
+    "price_increase_factor": 1000,
+    "upgrade_value": 5,
+    "upgrade_modifier": "Flat"
   }
 }

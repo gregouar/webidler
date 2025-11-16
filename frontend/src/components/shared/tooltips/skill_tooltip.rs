@@ -93,17 +93,17 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                     })}
             </p>
 
-            <ul class="list-none space-y-1">{targets_lines}{trigger_lines}{modifier_lines}</ul>
+            <ul class="list-none space-y-1 text-xs xl:text-sm">
+                {targets_lines}{trigger_lines}{modifier_lines}
+            </ul>
 
             {(skill_specs.next_upgrade_cost > 0.0)
                 .then(|| {
                     view! {
                         <hr class="border-t border-gray-700" />
-                        <ul>
+                        <ul class="text-xs xl:text-sm ">
                             <li>
-                                <span class="text-xs xl:text-sm text-gray-400 leading-snug">
-                                    "Next upgrade:"
-                                </span>
+                                <span class="text-gray-400 leading-snug">"Next upgrade:"</span>
                             </li>
                             {effects_tooltip::formatted_effects_list(
                                 skill_specs.base.upgrade_effects.clone(),

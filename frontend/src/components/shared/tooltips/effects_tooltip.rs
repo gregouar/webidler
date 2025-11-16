@@ -129,7 +129,7 @@ fn stat_skill_effect_type_str(effect_type: Option<StatSkillEffectType>) -> Strin
 // }
 
 fn effect_li(text: String) -> impl IntoView {
-    view! { <li class="text-blue-400 text-xs xl:text-sm leading-snug">{text}</li> }
+    view! { <li class="text-blue-400 leading-snug">{text}</li> }
 }
 
 pub fn formatted_effects_list(
