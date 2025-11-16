@@ -40,6 +40,7 @@ pub struct UserCharacter {
 
     pub resource_gems: f64,
     pub resource_shards: f64,
+    pub resource_gold: f64,
 
     pub activity: UserCharacterActivity,
 }

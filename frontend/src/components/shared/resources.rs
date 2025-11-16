@@ -49,13 +49,23 @@ pub fn ResourceCounter(
 }
 
 #[component]
+pub fn GoldIcon() -> impl IntoView {
+    view! {
+        <ResourceIcon
+            icon="ui/gold.webp"
+            name="Gold"
+            description="Used during Grind to buy level up for Skills. Total Gold collected during a Grind is also converted to Temple Donations to buy Benedictions in Town."
+        />
+    }
+}
+#[component]
 pub fn GoldCounter(value: Signal<f64>) -> impl IntoView {
     view! {
         <ResourceCounter
             class:text-amber-200
             icon="ui/gold.webp"
             name="Gold"
-            description="To buy level up for skills. Reset at every grind."
+            description="Used during Grind to buy level up for Skills. Total Gold collected during a Grind is also converted to Temple Donations to buy Benedictions in Town."
             value
         />
     }
@@ -67,7 +77,7 @@ pub fn GemsIcon() -> impl IntoView {
         <ResourceIcon
             icon="ui/gems.webp"
             name="Gems"
-            description="To exchange items in the market or craft items at the forge, between grinds."
+            description="To exchange Items in the Market or craft Items at the Forge, in Town between Grinds. Obtained by killing Champion Monsters."
         />
     }
 }
@@ -78,7 +88,7 @@ pub fn GemsCounter(value: Signal<f64>) -> impl IntoView {
             class:text-fuchsia-300
             icon="ui/gems.webp"
             name="Gems"
-            description="To exchange items in the market or craft items at the forge, between grinds."
+            description="To exchange Items in the Market or craft Items at the Forge, in Town between Grinds. Obtained by killing Champion Monsters."
             value
         />
     }
@@ -91,7 +101,7 @@ pub fn ShardsCounter(value: Signal<f64>) -> impl IntoView {
             class:text-cyan-300
             icon="ui/power_shard.webp"
             name="Power Shards"
-            description="To permanently increase power of passive skills, between grinds."
+            description="To permanently increase power of Passive Skills by Ascending them, in Town between Grinds. Obtained for every 10 new Area Level completed."
             value
         />
     }

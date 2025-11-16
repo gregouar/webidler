@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use shared::messages::client::ClientMessage;
+use shared::{computations, constants, messages::client::ClientMessage};
 
 use crate::components::{
     shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
@@ -10,6 +10,7 @@ use crate::components::{
         buttons::{MenuButton, MenuButtonRed},
         confirm::ConfirmContext,
         fullscreen::FullscreenButton,
+        number::format_number,
     },
     websocket::WebsocketContext,
 };
@@ -18,6 +19,8 @@ use super::GameContext;
 
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
     let do_abandon_quest = Arc::new({
         let conn = expect_context::<WebsocketContext>();
         move || {
@@ -29,7 +32,13 @@ pub fn HeaderMenu() -> impl IntoView {
         let confirm_context = expect_context::<ConfirmContext>();
         move |_| {
             (confirm_context.confirm)(
-                "Abandoning the grind will reset the area level, player level and gold, you will only keep items, gems and power shards. Are you sure?".to_string(),
+                format!("Abandoning the Grind will reset the Area Level, Player Level and Gold. You will keep Items, Gems and Power Shards, and collect {} Gold as Temple Donations. Are you sure?",format_number(
+                                        game_context.player_resources.read().gold_total
+                                            * computations::exponential(
+                                                game_context.area_specs.read().item_level_modifier,
+                                                constants::MONSTER_INCREASE_FACTOR,
+                                            ),
+                                    )),
                 do_abandon_quest.clone(),
             );
         }
@@ -42,20 +51,10 @@ pub fn HeaderMenu() -> impl IntoView {
         }
     };
 
-    let gold = {
-        let game_context = expect_context::<GameContext>();
-        Signal::derive(move || game_context.player_resources.read().gold)
-    };
-    let gems = {
-        let game_context = expect_context::<GameContext>();
-        Signal::derive(move || game_context.player_resources.read().gems)
-    };
-    let shards = {
-        let game_context = expect_context::<GameContext>();
-        Signal::derive(move || game_context.player_resources.read().shards)
-    };
+    let gold = Signal::derive(move || game_context.player_resources.read().gold);
+    let gems = Signal::derive(move || game_context.player_resources.read().gems);
+    let shards = Signal::derive(move || game_context.player_resources.read().shards);
 
-    let game_context = expect_context::<GameContext>();
     view! {
         <div class="relative z-50 flex justify-between items-center p-1 xl:p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">

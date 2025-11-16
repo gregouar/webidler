@@ -12,6 +12,7 @@ use crate::game::utils::json::LoadJsonFromFile;
 #[serde(rename_all = "snake_case")]
 pub enum ManifestCategory {
     Passives,
+    Benedictions,
     Skills,
     Items,
     ItemAffixes,

@@ -1,7 +1,8 @@
 use sqlx::FromRow;
 
 use shared::data::{
-    passive::PassivesTreeAscension, player::PlayerInventory, user::UserCharacterId,
+    passive::PassivesTreeAscension, player::PlayerInventory, temple::PlayerBenedictions,
+    user::UserCharacterId,
 };
 
 use crate::{
@@ -18,6 +19,7 @@ pub struct CharacterDataEntry {
     pub data_version: String,
     pub inventory_data: Vec<u8>,
     pub passives_data: Option<Vec<u8>>,
+    pub benedictions_data: Option<Vec<u8>>,
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
@@ -104,10 +106,44 @@ async fn upsert_character_passives_data<'c>(
     Ok(())
 }
 
+pub async fn save_character_benedictions<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+    player_benedictions: &PlayerBenedictions,
+) -> anyhow::Result<()> {
+    Ok(upsert_character_benedictions_data(
+        executor,
+        character_id,
+        rmp_serde::to_vec(player_benedictions)?,
+    )
+    .await?)
+}
+
+async fn upsert_character_benedictions_data<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+    benedictions_data: Vec<u8>,
+) -> Result<(), sqlx::Error> {
+    sqlx::query!(
+        "UPDATE characters_data SET
+            data_version = $2,
+            benedictions_data = $3, 
+            updated_at = CURRENT_TIMESTAMP
+        WHERE character_id = $1",
+        character_id,
+        DATA_VERSION,
+        benedictions_data
+    )
+    .execute(executor)
+    .await?;
+
+    Ok(())
+}
+
 pub async fn load_character_data<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
-) -> anyhow::Result<Option<(InventoryData, PassivesTreeAscension)>> {
+) -> anyhow::Result<Option<(InventoryData, PassivesTreeAscension, PlayerBenedictions)>> {
     let character_data = read_character_data(executor, character_id).await?;
     if let Some(character_data) = character_data {
         Ok(Some((
@@ -116,6 +152,12 @@ pub async fn load_character_data<'c>(
                 .passives_data
                 .and_then(|passives_data| {
                     rmp_serde::from_slice::<PassivesTreeAscension>(&passives_data).ok()
+                })
+                .unwrap_or_default(),
+            character_data
+                .benedictions_data
+                .and_then(|benedictions_data| {
+                    rmp_serde::from_slice::<PlayerBenedictions>(&benedictions_data).ok()
                 })
                 .unwrap_or_default(),
         )))
@@ -136,6 +178,7 @@ async fn read_character_data<'c>(
             data_version,
             inventory_data,
             passives_data,
+            benedictions_data,
             created_at,
             updated_at
          FROM characters_data WHERE character_id = $1

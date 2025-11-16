@@ -48,7 +48,7 @@ pub async fn post_add_affix(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let (inventory_data, _) =
+    let (inventory_data, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
             .ok_or(AppError::UserError("newbies can't forge items".into()))?;
@@ -79,9 +79,14 @@ pub async fn post_add_affix(
             _ => 1.0,
         };
 
-    let character_resources =
-        db::characters::update_character_resources(&mut *tx, &payload.character_id, -price, 0.0)
-            .await?;
+    let character_resources = db::characters::update_character_resources(
+        &mut *tx,
+        &payload.character_id,
+        -price,
+        0.0,
+        0.0,
+    )
+    .await?;
 
     if character_resources.resource_gems < 0.0 {
         return Err(AppError::UserError("not enough gems".into()));

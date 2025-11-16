@@ -1265,7 +1265,7 @@
                         }
                       },
                       "cumulate": true,
-                      "value": 30
+                      "value": 25
                     }
                   ]
                 }
@@ -1276,28 +1276,28 @@
         "locked": true
       },
       "gold_init_2": {
-        "name": "Unlucky Start",
-        "icon": "passives/gold_negative.svg",
+        "name": "Impactful Start",
+        "icon": "passives/stars.svg",
         "initial_node": true,
         "x": 90,
         "y": 0,
         "size": 1,
-        "node_type": "Gold",
+        "node_type": "Attack",
         "effects": [
           {
-            "stat": "GoldFind",
+            "stat": { "Damage": {} },
             "modifier": "Multiplier",
-            "value": -100
+            "value": 10
           }
         ],
         "upgrade_effects": [
           {
-            "stat": "GoldFind",
+            "stat": { "Damage": {} },
             "modifier": "Multiplier",
-            "value": 25
+            "value": 5
           }
         ],
-        "max_upgrade_level": 5,
+        "max_upgrade_level": 4,
         "locked": true
       },
       "physical_damage_1": {
@@ -2703,6 +2703,157 @@
           }
         ],
         "locked": true
+      },
+      "gold_shower_init": {
+        "name": "Golden Start",
+        "icon": "passives/gold.svg",
+        "initial_node": true,
+        "x": -110,
+        "y": 30,
+        "size": 1,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 50
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 25
+          }
+        ],
+        "locked": true
+      },
+      "gold_shower_1": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -120,
+        "y": 20,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ]
+      },
+      "gold_shower_2": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -110,
+        "y": 10,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ]
+      },
+      "gold_shower_3": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -120,
+        "y": 0,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ]
+      },
+      "gold_shower_4": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -110,
+        "y": -10,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ]
+      },
+      "gold_shower_5": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -120,
+        "y": -20,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ]
+      },
+      "gold_shower_6": {
+        "name": "Golden Shower",
+        "icon": "passives/gold.svg",
+        "x": -110,
+        "y": -30,
+        "size": 2,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 100
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 50
+          }
+        ]
       }
     },
     "connections": [
@@ -3081,6 +3232,30 @@
       {
         "from": "restoration_3",
         "to": "healing_aura"
+      },
+      {
+        "from": "gold_shower_init",
+        "to": "gold_shower_1"
+      },
+      {
+        "from": "gold_shower_1",
+        "to": "gold_shower_2"
+      },
+      {
+        "from": "gold_shower_2",
+        "to": "gold_shower_3"
+      },
+      {
+        "from": "gold_shower_3",
+        "to": "gold_shower_4"
+      },
+      {
+        "from": "gold_shower_4",
+        "to": "gold_shower_5"
+      },
+      {
+        "from": "gold_shower_5",
+        "to": "gold_shower_6"
       }
     ]
   }

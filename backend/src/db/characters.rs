@@ -16,6 +16,7 @@ pub struct CharacterEntry {
     pub max_area_level: i32,
     pub resource_gems: f64,
     pub resource_shards: f64,
+    pub resource_gold: f64,
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
@@ -30,6 +31,7 @@ pub struct CharacterEntry {
 pub struct CharacterResources {
     pub resource_gems: f64,
     pub resource_shards: f64,
+    pub resource_gold: f64,
 }
 
 #[derive(Debug, FromRow)]
@@ -102,6 +104,7 @@ pub async fn read_character<'c>(
             max_area_level as "max_area_level!: i32",
             resource_gems,
             resource_shards,
+            resource_gold,
             created_at,
             updated_at,
             deleted_at as "deleted_at?: UtcDateTime",
@@ -178,6 +181,7 @@ pub async fn read_all_user_characters<'c>(
             max_area_level as "max_area_level!: i32",
             resource_gems,
             resource_shards,
+            resource_gold,
             created_at,
             updated_at,
             deleted_at as "deleted_at: UtcDateTime",
@@ -217,6 +221,7 @@ pub async fn update_character_resources<'c>(
     character_id: &UserCharacterId,
     resource_gems: f64,
     resource_shards: f64,
+    resource_gold: f64,
 ) -> Result<CharacterResources, sqlx::Error> {
     sqlx::query_as!(
         CharacterResources,
@@ -225,13 +230,15 @@ pub async fn update_character_resources<'c>(
         SET 
             resource_gems =  resource_gems + $2,
             resource_shards = resource_shards + $3,
+            resource_gold = resource_gold + $4,
             updated_at = CURRENT_TIMESTAMP 
         WHERE character_id = $1
-        RETURNING resource_gems, resource_shards
+        RETURNING resource_gems, resource_shards, resource_gold
         "#,
         character_id,
         resource_gems,
         resource_shards,
+        resource_gold,
     )
     .fetch_one(executor)
     .await

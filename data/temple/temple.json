@@ -1,0 +1,68 @@
+{
+  "life_max": {
+    "price": 1e6,
+    "effect": {
+      "stat": "Life",
+      "modifier": "Flat",
+      "value": 5
+    },
+    "price_increase_factor": 1e4,
+    "upgrade_value": 5,
+    "upgrade_modifier": "Flat"
+  },
+  "mana_max": {
+    "price": 1e6,
+    "effect": {
+      "stat": "Mana",
+      "modifier": "Flat",
+      "value": 5
+    },
+    "price_increase_factor": 1e4,
+    "upgrade_value": 5,
+    "upgrade_modifier": "Flat"
+  },
+  "damage_physical": {
+    "price": 1e6,
+    "effect": {
+      "stat": { "Damage": { "damage_type": "Physical" } },
+      "modifier": "Multiplier",
+      "value": 5
+    },
+    "price_increase_factor": 1e4,
+    "upgrade_value": 5,
+    "upgrade_modifier": "Flat"
+  },
+  "damage_fire": {
+    "price": 1e6,
+    "effect": {
+      "stat": { "Damage": { "damage_type": "Fire" } },
+      "modifier": "Multiplier",
+      "value": 5
+    },
+    "price_increase_factor": 1e4,
+    "upgrade_value": 5,
+    "upgrade_modifier": "Flat"
+  },
+  "damage_poison": {
+    "price": 1e6,
+    "effect": {
+      "stat": { "Damage": { "damage_type": "Poison" } },
+      "modifier": "Multiplier",
+      "value": 5
+    },
+    "price_increase_factor": 1e4,
+    "upgrade_value": 5,
+    "upgrade_modifier": "Flat"
+  },
+  "damage_storm": {
+    "price": 1e6,
+    "effect": {
+      "stat": { "Damage": { "damage_type": "Storm" } },
+      "modifier": "Multiplier",
+      "value": 5
+    },
+    "price_increase_factor": 1e4,
+    "upgrade_value": 5,
+    "upgrade_modifier": "Flat"
+  }
+}

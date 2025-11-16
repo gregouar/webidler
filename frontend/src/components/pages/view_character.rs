@@ -13,7 +13,7 @@ use crate::components::{
         resources::{GemsCounter, ShardsCounter},
     },
     town::{
-        panels::{ascend::AscendPanel, inventory::TownInventoryPanel},
+        panels::{ascend::AscendPanel, inventory::TownInventoryPanel, temple::TemplePanel},
         town_scene::TownScene,
         TownContext,
     },
@@ -43,6 +43,17 @@ pub fn ViewCharacterPage() -> impl IntoView {
         }
     });
 
+    let benedictions_specs = LocalResource::new({
+        let backend = expect_context::<BackendClient>();
+        move || async move {
+            backend
+                .get_benedictions()
+                .await
+                .map(|response| response.benedictions_specs)
+                .unwrap_or_default()
+        }
+    });
+
     let fetch_data = {
         let backend = expect_context::<BackendClient>();
 
@@ -62,11 +73,13 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         areas,
                         inventory,
                         ascension,
+                        benedictions,
                     }) => {
                         town_context.character.set(character);
                         town_context.areas.set(areas);
                         town_context.inventory.set(inventory);
                         town_context.passives_tree_ascension.set(ascension);
+                        town_context.player_benedictions.set(benedictions);
                     }
                     _ => {
                         use_navigate()("/", Default::default());
@@ -89,10 +102,12 @@ pub fn ViewCharacterPage() -> impl IntoView {
                 {move || Suspend::new(async move {
                     initial_load.await;
                     town_context.passives_tree_specs.set(passives_tree_specs.await);
+                    town_context.benedictions_specs.set(benedictions_specs.await);
                     view! {
                         <HeaderMenu />
                         <div class="relative flex-1">
                             <TownScene view_only=true />
+                            <TemplePanel open=town_context.open_temple view_only=true />
                             <AscendPanel open=town_context.open_ascend view_only=true />
                             <TownInventoryPanel open=town_context.open_inventory view_only=true />
                         </div>
@@ -116,11 +131,12 @@ pub fn HeaderMenu() -> impl IntoView {
         move |_| {
             if let Some(window) = web_sys::window()
                 && let Ok(history) = window.history()
-                    && let Ok(length) = history.length()
-                        && length > 1 {
-                            let _ = history.back();
-                            return;
-                        }
+                && let Ok(length) = history.length()
+                && length > 1
+            {
+                let _ = history.back();
+                return;
+            }
             navigate("/", Default::default());
         }
     };
@@ -138,8 +154,19 @@ pub fn HeaderMenu() -> impl IntoView {
                 <FullscreenButton />
                 <MenuButton
                     on:click=move |_| {
+                        town_context.open_temple.set(!town_context.open_temple.get());
+                        town_context.open_ascend.set(false);
+                        town_context.open_inventory.set(false);
+                    }
+                    disabled=disable_inventory
+                >
+                    "Temple"
+                </MenuButton>
+                <MenuButton
+                    on:click=move |_| {
                         town_context.open_inventory.set(!town_context.open_inventory.get());
                         town_context.open_ascend.set(false);
+                        town_context.open_temple.set(false);
                     }
                     disabled=disable_inventory
                 >
@@ -149,6 +176,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     on:click=move |_| {
                         town_context.open_ascend.set(!town_context.open_ascend.get());
                         town_context.open_inventory.set(false);
+                        town_context.open_temple.set(false);
                     }
                     disabled=disable_inventory
                 >

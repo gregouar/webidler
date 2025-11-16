@@ -69,7 +69,7 @@ pub async fn update_ascension(
     resource_shards: f64,
     passives_tree_ascension: &PassivesTreeAscension,
 ) -> Result<(), AppError> {
-    let (_, prev_ascension) = db::characters_data::load_character_data(&mut **tx, character_id)
+    let (_, prev_ascension, _) = db::characters_data::load_character_data(&mut **tx, character_id)
         .await?
         .unwrap_or_default();
 
@@ -85,7 +85,7 @@ pub async fn update_ascension(
         return Err(AppError::UserError("not enough power shards".to_string()));
     }
 
-    db::characters::update_character_resources(&mut **tx, character_id, 0.0, -cost).await?;
+    db::characters::update_character_resources(&mut **tx, character_id, 0.0, -cost, 0.0).await?;
 
     db::characters_data::save_character_passives(&mut **tx, character_id, passives_tree_ascension)
         .await?;

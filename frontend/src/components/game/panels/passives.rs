@@ -586,9 +586,9 @@ fn NodeTooltip(
                             .then(|| {
                                 view! {
                                     <hr class="border-t border-gray-700" />
-                                    <ul>
+                                    <ul class="text-xs xl:text-sm">
                                         <li>
-                                            <span class="text-sm text-gray-400 leading-snug">
+                                            <span class="text-gray-400 leading-snug">
                                                 "Ascend to get:"
                                             </span>
                                         </li>
@@ -615,7 +615,7 @@ fn NodeTooltip(
             <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
             <hr class="border-t border-gray-700" />
             {starting_node_text}
-            <ul class="list-none space-y-1">{triggers_text}{effects_text}</ul>
+            <ul class="list-none space-y-1 text-xs xl:text-sm">{triggers_text}{effects_text}</ul>
             {locked_text}
             {upgrade_text}
         </div>

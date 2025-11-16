@@ -10,9 +10,10 @@ use axum::{
 use shared::{
     data::skill::SkillSpecs,
     http::{
-        client::AscendPassivesRequest,
+        client::{AscendPassivesRequest, BuyBenedictionsRequest},
         server::{
-            AscendPassivesResponse, GetAreasResponse, GetPassivesResponse, GetSkillsResponse,
+            AscendPassivesResponse, BuyBenedictionsResponse, GetAreasResponse,
+            GetBenedictionsResponse, GetPassivesResponse, GetSkillsResponse,
         },
     },
 };
@@ -21,7 +22,10 @@ use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
     db,
-    game::{data::DataInit, systems::passives_controller},
+    game::{
+        data::DataInit,
+        systems::{benedictions_controller, passives_controller},
+    },
     rest::utils::{verify_character_in_town, verify_character_user},
 };
 
@@ -30,6 +34,7 @@ use super::AppError;
 pub fn routes(app_state: AppState) -> Router<AppState> {
     let auth_routes = Router::new()
         .route("/game/passives", post(post_ascend_passives))
+        .route("/game/benedictions", post(post_buy_benedictions))
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
@@ -39,6 +44,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .route("/game/areas", get(get_areas))
         .route("/game/skills", get(get_skills))
         .route("/game/passives", get(get_passives))
+        .route("/game/benedictions", get(get_benedictions))
         .merge(auth_routes)
 }
 
@@ -78,6 +84,14 @@ pub async fn get_passives(
     }))
 }
 
+pub async fn get_benedictions(
+    State(master_store): State<MasterStore>,
+) -> Result<Json<GetBenedictionsResponse>, AppError> {
+    Ok(Json(GetBenedictionsResponse {
+        benedictions_specs: master_store.benedictions_store.as_ref().clone(),
+    }))
+}
+
 pub async fn post_ascend_passives(
     State(master_store): State<MasterStore>,
     State(db_pool): State<db::DbPool>,
@@ -110,10 +124,50 @@ pub async fn post_ascend_passives(
     );
 
     let character = character?.ok_or(AppError::NotFound)?.into();
-    let (_, ascension) = character_data?.unwrap_or_default();
+    let (_, ascension, _) = character_data?.unwrap_or_default();
 
     Ok(Json(AscendPassivesResponse {
         character,
         ascension,
+    }))
+}
+
+pub async fn post_buy_benedictions(
+    State(master_store): State<MasterStore>,
+    State(db_pool): State<db::DbPool>,
+    Extension(current_user): Extension<CurrentUser>,
+    Json(payload): Json<BuyBenedictionsRequest>,
+) -> Result<Json<BuyBenedictionsResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, &current_user)?;
+    verify_character_in_town(&character)?;
+
+    benedictions_controller::update_benedictions(
+        &mut tx,
+        &master_store,
+        &payload.character_id,
+        character.resource_gold,
+        &payload.player_benedictions,
+    )
+    .await?;
+
+    tx.commit().await?;
+
+    let (character, character_data) = tokio::join!(
+        db::characters::read_character(&db_pool, &payload.character_id),
+        db::characters_data::load_character_data(&db_pool, &payload.character_id)
+    );
+
+    let character = character?.ok_or(AppError::NotFound)?.into();
+    let (_, _, player_benedictions) = character_data?.unwrap_or_default();
+
+    Ok(Json(BuyBenedictionsResponse {
+        character,
+        player_benedictions,
     }))
 }

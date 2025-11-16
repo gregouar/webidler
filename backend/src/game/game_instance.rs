@@ -1,5 +1,6 @@
 use anyhow::Result;
 use shared::{
+    computations, constants,
     data::user::UserCharacterId,
     messages::server::{DisconnectMessage, ErrorMessage, ErrorType},
 };
@@ -159,6 +160,11 @@ impl<'a> GameInstance<'a> {
             self.character_id,
             self.game_data.player_resources.read().gems,
             self.game_data.player_resources.read().shards,
+            self.game_data.player_resources.read().gold_total
+                * computations::exponential(
+                    self.game_data.area_blueprint.specs.item_level_modifier,
+                    constants::MONSTER_INCREASE_FACTOR,
+                ),
         )
         .await?;
 

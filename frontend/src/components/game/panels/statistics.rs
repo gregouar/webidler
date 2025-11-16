@@ -1,9 +1,14 @@
 use leptos::{html::*, prelude::*};
 
-use shared::data::{
-    skill::{DamageType, RestoreType, SkillType},
-    stat_effect::{Modifier, StatConverterSource, StatConverterSpecs, StatStatusType, StatType},
-    trigger::HitTrigger,
+use shared::{
+    computations, constants,
+    data::{
+        skill::{DamageType, RestoreType, SkillType},
+        stat_effect::{
+            Modifier, StatConverterSource, StatConverterSpecs, StatStatusType, StatType,
+        },
+        trigger::HitTrigger,
+    },
 };
 
 use crate::components::{
@@ -83,6 +88,24 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 value=move || {
                                     format_number(
                                         game_context.game_local_stats.average_damage_tick(),
+                                    )
+                                }
+                            />
+                            <Stat
+                                label="Gold Collected"
+                                value=move || {
+                                    format_number(game_context.player_resources.read().gold_total)
+                                }
+                            />
+                            <Stat
+                                label="Gold Donations Collected"
+                                value=move || {
+                                    format_number(
+                                        game_context.player_resources.read().gold_total
+                                            * computations::exponential(
+                                                game_context.area_specs.read().item_level_modifier,
+                                                constants::MONSTER_INCREASE_FACTOR,
+                                            ),
                                     )
                                 }
                             />

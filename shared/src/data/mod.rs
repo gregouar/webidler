@@ -13,5 +13,6 @@ pub mod passive;
 pub mod player;
 pub mod skill;
 pub mod stat_effect;
+pub mod temple;
 pub mod trigger;
 pub mod user;

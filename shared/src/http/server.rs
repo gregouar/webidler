@@ -9,6 +9,7 @@ use crate::data::{
     passive::{PassivesTreeAscension, PassivesTreeSpecs},
     player::PlayerInventory,
     skill::SkillSpecs,
+    temple::{BenedictionSpecs, PlayerBenedictions},
     user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
 };
 
@@ -99,6 +100,7 @@ pub struct GetCharacterDetailsResponse {
     pub areas: Vec<UserGrindArea>,
     pub inventory: PlayerInventory,
     pub ascension: PassivesTreeAscension,
+    pub benedictions: PlayerBenedictions,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -122,9 +124,20 @@ pub struct GetPassivesResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetBenedictionsResponse {
+    pub benedictions_specs: HashMap<String, BenedictionSpecs>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct AscendPassivesResponse {
     pub character: UserCharacter,
     pub ascension: PassivesTreeAscension,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct BuyBenedictionsResponse {
+    pub character: UserCharacter,
+    pub player_benedictions: PlayerBenedictions,
 }
 
 // Market

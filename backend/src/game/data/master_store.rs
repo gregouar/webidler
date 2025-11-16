@@ -6,7 +6,10 @@ use std::{
     sync::Arc,
 };
 
-use shared::data::{monster::MonsterSpecs, passive::PassivesTreeSpecs, skill::BaseSkillSpecs};
+use shared::data::{
+    monster::MonsterSpecs, passive::PassivesTreeSpecs, skill::BaseSkillSpecs,
+    temple::BenedictionSpecs,
+};
 
 use super::{
     area::AreaBlueprint,
@@ -21,6 +24,7 @@ use crate::game::{data::manifest::ManifestCategory, utils::json::LoadJsonFromFil
 // TODO: Load from zip/dat file and compress at build time for prod release
 
 pub type PassivesStore = HashMap<String, PassivesTreeSpecs>;
+pub type BenedictionsStore = HashMap<String, BenedictionSpecs>;
 pub type SkillsStore = HashMap<String, BaseSkillSpecs>;
 pub type MonstersSpecsStore = HashMap<String, BaseMonsterSpecs>;
 pub type LootTablesStore = HashMap<String, LootTable>;
@@ -29,6 +33,7 @@ pub type AreaBlueprintStore = HashMap<String, AreaBlueprint>;
 #[derive(Debug, Clone)]
 pub struct MasterStore {
     pub passives_store: Arc<PassivesStore>,
+    pub benedictions_store: Arc<BenedictionsStore>,
     pub skills_store: Arc<SkillsStore>,
     pub items_store: Arc<ItemsStore>,
     pub item_affixes_table: Arc<ItemAffixesTable>,
@@ -42,6 +47,7 @@ pub struct MasterStore {
 impl LoadJsonFromFile for MonsterSpecs {}
 impl LoadJsonFromFile for BaseSkillSpecs {}
 impl LoadJsonFromFile for PassivesTreeSpecs {}
+impl LoadJsonFromFile for BenedictionSpecs {}
 
 impl MasterStore {
     pub async fn load_from_folder(folder_path: impl AsRef<Path>) -> Result<Self> {
@@ -49,6 +55,7 @@ impl MasterStore {
 
         let (
             passives_store,
+            benedictions_store,
             skills_store,
             items_store,
             item_affixes_table,
@@ -58,6 +65,7 @@ impl MasterStore {
             monster_specs_store,
         ) = tokio::join!(
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Passives)),
+            join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Benedictions)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Skills)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Items)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemAffixes)),
@@ -83,6 +91,7 @@ impl MasterStore {
 
         let master_store = MasterStore {
             passives_store: Arc::new(passives_store?),
+            benedictions_store: Arc::new(benedictions_store?),
             skills_store: Arc::new(skills_store?),
             items_store: Arc::new(items_store?),
             item_affixes_table: Arc::new(item_affixes_table?),

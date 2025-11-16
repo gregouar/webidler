@@ -122,7 +122,7 @@ async fn read_character_details(
 
     let character = character?.ok_or(AppError::NotFound)?.into();
     let areas_completed = areas_completed?;
-    let (inventory_data, ascension) = character_data?.unwrap_or_default();
+    let (inventory_data, ascension, benedictions) = character_data?.unwrap_or_default();
 
     let areas = master_store
         .area_blueprints_store
@@ -173,6 +173,7 @@ async fn read_character_details(
         areas,
         inventory,
         ascension,
+        benedictions,
     }))
 }
 
@@ -202,6 +203,7 @@ impl From<db::characters::CharacterEntry> for UserCharacter {
             portrait: val.portrait,
             resource_gems: val.resource_gems,
             resource_shards: val.resource_shards,
+            resource_gold: val.resource_gold,
             max_area_level: val.max_area_level as AreaLevel,
             activity: if let (Some(area_id), Some(area_level)) = (val.area_id, val.area_level) {
                 UserCharacterActivity::Grinding(area_id, area_level as AreaLevel)

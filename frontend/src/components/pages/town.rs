@@ -15,7 +15,7 @@ use crate::components::{
         header_menu::HeaderMenu,
         panels::{
             ascend::AscendPanel, forge::ForgePanel, inventory::TownInventoryPanel,
-            market::MarketPanel,
+            market::MarketPanel, temple::TemplePanel,
         },
         town_scene::TownScene,
         TownContext,
@@ -42,6 +42,17 @@ pub fn TownPage() -> impl IntoView {
         }
     });
 
+    let benedictions_specs = LocalResource::new({
+        let backend = expect_context::<BackendClient>();
+        move || async move {
+            backend
+                .get_benedictions()
+                .await
+                .map(|response| response.benedictions_specs)
+                .unwrap_or_default()
+        }
+    });
+
     let initial_load = LocalResource::new({
         let backend = expect_context::<BackendClient>();
 
@@ -55,6 +66,7 @@ pub fn TownPage() -> impl IntoView {
                     areas,
                     inventory,
                     ascension,
+                    benedictions,
                 }) => {
                     if let UserCharacterActivity::Grinding(_, _) = character.activity {
                         use_navigate()("/game", Default::default())
@@ -63,6 +75,7 @@ pub fn TownPage() -> impl IntoView {
                     town_context.areas.set(areas);
                     town_context.inventory.set(inventory);
                     town_context.passives_tree_ascension.set(ascension);
+                    town_context.player_benedictions.set(benedictions);
                 }
                 Err(BackendError::Unauthorized(_) | BackendError::NotFound) => {
                     use_navigate()("/", Default::default())
@@ -83,10 +96,12 @@ pub fn TownPage() -> impl IntoView {
                 {move || Suspend::new(async move {
                     initial_load.await;
                     town_context.passives_tree_specs.set(passives_tree_specs.await);
+                    town_context.benedictions_specs.set(benedictions_specs.await);
                     view! {
                         <HeaderMenu />
                         <div class="relative flex-1">
                             <TownScene />
+                            <TemplePanel open=town_context.open_temple />
                             <MarketPanel open=town_context.open_market />
                             <AscendPanel open=town_context.open_ascend />
                             <ForgePanel open=town_context.open_forge />
