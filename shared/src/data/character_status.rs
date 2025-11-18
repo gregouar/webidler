@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::data::trigger::TriggerSpecs;
+use crate::data::{skill::SkillType, trigger::TriggerSpecs};
 
 use super::{
     skill::DamageType,
@@ -44,8 +44,9 @@ pub enum StatusSpecs {
     Stun,
     DamageOverTime {
         damage_type: DamageType,
+
         #[serde(default)]
-        ignore_armor: bool,
+        ignore_armor: bool, // TODO: Remove
     },
     StatModifier {
         stat: StatType,
@@ -94,4 +95,5 @@ pub struct StatusState {
     pub value: f64,
     pub duration: Option<f64>,
     pub cumulate: bool,
+    pub skill_type: SkillType,
 }

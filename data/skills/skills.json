@@ -302,8 +302,7 @@
                           "FlatDamage": {
                             "damage": {
                               "Storm": 0.5
-                            },
-                            "ignore_armor": true
+                            }
                           },
                           "ignore_stat_effects": [
                             {

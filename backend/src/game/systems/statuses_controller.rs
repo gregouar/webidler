@@ -55,13 +55,18 @@ fn update_status(
     status_state: &mut StatusState,
     elapsed_time_f64: f64,
 ) -> bool {
-    if let StatusSpecs::DamageOverTime { .. } = status_specs {
+    if let StatusSpecs::DamageOverTime { damage_type, .. } = status_specs {
         characters_controller::damage_character(
             character_specs,
             character_life,
             character_mana,
-            status_state.value
-                * elapsed_time_f64.min(status_state.duration.unwrap_or(elapsed_time_f64)),
+            &HashMap::from([(
+                *damage_type,
+                status_state.value
+                    * elapsed_time_f64.min(status_state.duration.unwrap_or(elapsed_time_f64)),
+            )]),
+            status_state.skill_type,
+            false,
         );
     }
 

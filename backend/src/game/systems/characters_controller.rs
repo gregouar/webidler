@@ -29,22 +29,8 @@ pub fn attack_character(
     range: SkillRange,
     is_crit: bool,
     is_triggered: bool,
-    ignore_armor: bool,
 ) {
     let (target_id, (target_specs, target_state)) = target;
-
-    let mut amount: f64 = damage
-        .iter()
-        .map(|(damage_type, amount)| {
-            compute_damage(
-                target_specs,
-                *amount,
-                *damage_type,
-                skill_type,
-                ignore_armor,
-            )
-        })
-        .sum();
 
     let is_blocked = target_specs.block.roll()
         & match skill_type {
@@ -52,28 +38,24 @@ pub fn attack_character(
             SkillType::Spell => target_specs.block_spell.roll(),
         };
 
-    if is_blocked {
-        amount *= target_specs.block_damage as f64 * 0.01;
-    }
-
-    let is_hurt = amount > 0.0;
+    let is_hurt = damage_character(
+        target_specs,
+        &mut target_state.life,
+        &mut target_state.mana,
+        &damage,
+        skill_type,
+        is_blocked,
+    ) > 0.0;
 
     if is_blocked {
         target_state.just_blocked = true;
     }
 
-    if is_hurt && is_crit {
-        target_state.just_hurt_crit = true;
-    }
-
     if is_hurt {
-        damage_character(
-            target_specs,
-            &mut target_state.life,
-            &mut target_state.mana,
-            amount,
-        );
         target_state.just_hurt = true;
+        if is_crit {
+            target_state.just_hurt_crit = true;
+        }
     }
 
     events_queue.register_event(GameEvent::Hit(HitEvent {
@@ -93,10 +75,25 @@ pub fn damage_character(
     character_specs: &CharacterSpecs,
     life: &mut f64,
     mana: &mut f64,
-    amount: f64,
-) {
+    damage: &HashMap<DamageType, f64>,
+    skill_type: SkillType,
+    is_blocked: bool,
+) -> f64 {
+    let amount = damage
+        .iter()
+        .map(|(damage_type, amount)| {
+            compute_damage(
+                character_specs,
+                *amount,
+                *damage_type,
+                skill_type,
+                is_blocked,
+            )
+        })
+        .sum();
+
     if amount <= 0.0 {
-        return;
+        return 0.0;
     }
 
     let take_from_mana = mana
@@ -105,6 +102,44 @@ pub fn damage_character(
 
     *mana -= take_from_mana;
     *life -= take_from_life;
+
+    amount
+}
+
+fn compute_damage(
+    character_specs: &CharacterSpecs,
+    amount: f64,
+    damage_type: DamageType,
+    skill_type: SkillType,
+    is_blocked: bool,
+) -> f64 {
+    let resistance_factor = (1.0
+        - character_specs
+            .damage_resistance
+            .get(&(skill_type, damage_type))
+            .cloned()
+            .unwrap_or(0.0)
+            * 0.01)
+        .max(0.0);
+
+    let armor_factor = (1.0
+        - computations::diminishing(
+            character_specs
+                .armor
+                .get(&damage_type)
+                .cloned()
+                .unwrap_or_default(),
+            ARMOR_FACTOR,
+        ))
+    .max(0.0);
+
+    let block_factor = if is_blocked {
+        character_specs.block_damage as f64 * 0.01
+    } else {
+        1.0
+    };
+
+    resistance_factor * armor_factor * block_factor * amount
 }
 
 pub fn restore_character(
@@ -176,7 +211,7 @@ pub fn apply_status(
     duration: Option<f64>,
     cumulate: bool,
 ) -> bool {
-    let (_, (target_specs, target_state)) = target;
+    let (_, (_, target_state)) = target;
 
     if duration.unwrap_or(1.0) <= 0.0 || !target_state.is_alive {
         return false;
@@ -188,14 +223,6 @@ pub fn apply_status(
         _ => duration,
     };
 
-    let value = match status_specs {
-        StatusSpecs::DamageOverTime {
-            damage_type,
-            ignore_armor,
-        } => compute_damage(target_specs, value, *damage_type, skill_type, *ignore_armor),
-        _ => value,
-    };
-
     let mut applied = true;
     if cumulate {
         target_state.statuses.cumulative_statuses.push((
@@ -204,6 +231,7 @@ pub fn apply_status(
                 value,
                 duration,
                 cumulate,
+                skill_type,
             },
         ));
     } else {
@@ -228,6 +256,7 @@ pub fn apply_status(
                     value,
                     duration,
                     cumulate,
+                    skill_type,
                 },
             ));
     }
@@ -241,45 +270,4 @@ pub fn apply_status(
     }
 
     true
-}
-
-pub fn compute_damage(
-    target_specs: &CharacterSpecs,
-    amount: f64,
-    damage_type: DamageType,
-    skill_type: SkillType,
-    ignore_armor: bool,
-) -> f64 {
-    let amount = (1.0
-        - target_specs
-            .damage_resistance
-            .get(&(skill_type, damage_type))
-            .cloned()
-            .unwrap_or(0.0)
-            * 0.01)
-        .max(0.0)
-        * amount;
-
-    if ignore_armor {
-        amount
-    } else {
-        decrease_damage_from_armor(target_specs, amount, damage_type)
-    }
-}
-
-fn decrease_damage_from_armor(
-    target_specs: &CharacterSpecs,
-    amount: f64,
-    damage_type: DamageType,
-) -> f64 {
-    amount
-        * (1.0
-            - computations::diminishing(
-                target_specs
-                    .armor
-                    .get(&damage_type)
-                    .cloned()
-                    .unwrap_or_default(),
-                ARMOR_FACTOR,
-            ))
 }

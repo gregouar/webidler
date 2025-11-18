@@ -1145,8 +1145,7 @@
                     {
                       "status_type": {
                         "DamageOverTime": {
-                          "damage_type": "Physical",
-                          "ignore_armor": true
+                          "damage_type": "Physical"
                         }
                       },
                       "value": 0.5
@@ -1418,8 +1417,7 @@
                           "effects": [
                             {
                               "FlatDamage": {
-                                "damage": {},
-                                "ignore_armor": true
+                                "damage": {}
                               }
                             }
                           ]
@@ -1700,8 +1698,7 @@
                     {
                       "status_type": {
                         "DamageOverTime": {
-                          "damage_type": "Fire",
-                          "ignore_armor": true
+                          "damage_type": "Fire"
                         }
                       },
                       "value": 0.5
@@ -1989,8 +1986,7 @@
                     {
                       "status_type": {
                         "DamageOverTime": {
-                          "damage_type": "Physical",
-                          "ignore_armor": true
+                          "damage_type": "Physical"
                         }
                       },
                       "value": 0
@@ -2022,8 +2018,7 @@
                     {
                       "status_type": {
                         "DamageOverTime": {
-                          "damage_type": "Fire",
-                          "ignore_armor": true
+                          "damage_type": "Fire"
                         }
                       },
                       "value": 0
@@ -2055,8 +2050,7 @@
                     {
                       "status_type": {
                         "DamageOverTime": {
-                          "damage_type": "Poison",
-                          "ignore_armor": true
+                          "damage_type": "Poison"
                         }
                       },
                       "value": 0
@@ -2088,8 +2082,7 @@
                     {
                       "status_type": {
                         "DamageOverTime": {
-                          "damage_type": "Storm",
-                          "ignore_armor": true
+                          "damage_type": "Storm"
                         }
                       },
                       "value": 0

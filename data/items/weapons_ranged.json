@@ -238,8 +238,7 @@
                 {
                   "status_type": {
                     "DamageOverTime": {
-                      "damage_type": "Poison",
-                      "ignore_armor": true
+                      "damage_type": "Poison"
                     }
                   },
                   "value": 0.3
