@@ -45,7 +45,7 @@ pub enum StatusSpecs {
     DamageOverTime {
         damage_type: DamageType,
 
-        #[serde(default)]
+        #[serde(default, skip_serializing)]
         ignore_armor: bool, // TODO: Remove
     },
     StatModifier {
