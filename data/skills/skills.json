@@ -725,7 +725,7 @@
       {
         "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
         "modifier": "Multiplier",
-        "value": 2
+        "value": 4
       }
     ],
     "targets": [
@@ -743,7 +743,7 @@
                       "modifier": "Flat"
                     }
                   },
-                  "value": 30
+                  "value": 25
                 }
               ]
             }

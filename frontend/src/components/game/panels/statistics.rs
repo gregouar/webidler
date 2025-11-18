@@ -432,6 +432,13 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             )}
                         </StatCategory>
                         <StatCategory title="Damage">
+                            {make_opt_stat(
+                                StatType::Damage {
+                                    skill_type: None,
+                                    damage_type: None,
+                                },
+                                0.0,
+                            )}
                             {make_stat(StatType::Damage {
                                 skill_type: Some(SkillType::Attack),
                                 damage_type: None,

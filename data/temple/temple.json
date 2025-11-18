@@ -64,5 +64,49 @@
     "price_increase_factor": 6,
     "upgrade_value": 1,
     "upgrade_modifier": "Flat"
+  },
+  "armor_physical": {
+    "price": 1e6,
+    "effect": {
+      "stat": { "Armor": "Physical" },
+      "modifier": "Flat",
+      "value": 5
+    },
+    "price_increase_factor": 6,
+    "upgrade_value": 1,
+    "upgrade_modifier": "Flat"
+  },
+  "armor_fire": {
+    "price": 1e6,
+    "effect": {
+      "stat": { "Armor": "Fire" },
+      "modifier": "Flat",
+      "value": 5
+    },
+    "price_increase_factor": 6,
+    "upgrade_value": 1,
+    "upgrade_modifier": "Flat"
+  },
+  "armor_poison": {
+    "price": 1e6,
+    "effect": {
+      "stat": { "Armor": "Poison" },
+      "modifier": "Flat",
+      "value": 5
+    },
+    "price_increase_factor": 6,
+    "upgrade_value": 1,
+    "upgrade_modifier": "Flat"
+  },
+  "armor_storm": {
+    "price": 1e6,
+    "effect": {
+      "stat": { "Armor": "Storm" },
+      "modifier": "Flat",
+      "value": 5
+    },
+    "price_increase_factor": 6,
+    "upgrade_value": 1,
+    "upgrade_modifier": "Flat"
   }
 }
