@@ -930,6 +930,7 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     MarketOrderBy::Armor => "Highest Armor",
                     MarketOrderBy::Block => "Highest Block Chance",
                     MarketOrderBy::Time => "Most Recent",
+                    MarketOrderBy::StatFilters => "Highest Stat Filters",
                 }
                 .into(),
             )
