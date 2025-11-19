@@ -40,20 +40,30 @@
                   {
                     "status_type": {
                       "StatModifier": {
-                        "stat": { "Armor": "Physical" },
+                        "stat": {
+                          "DamageResistance": {
+                            "damage_type": "Physical"
+                          }
+                        },
+                        "modifier": "Flat",
                         "debuff": true
                       }
                     },
-                    "value": 50
+                    "value": 30
                   },
                   {
                     "status_type": {
                       "StatModifier": {
-                        "stat": { "Armor": "Poison" },
+                        "stat": {
+                          "DamageResistance": {
+                            "damage_type": "Poison"
+                          }
+                        },
+                        "modifier": "Flat",
                         "debuff": true
                       }
                     },
-                    "value": 50
+                    "value": 30
                   }
                 ]
               }

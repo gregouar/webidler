@@ -33,7 +33,7 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                                 .then(|| {
                                     view! {
                                         <span class="text-shadow-md shadow-gray-950 text-amber-200 text-base xl:text-lg">
-                                            "Max Area Level: "
+                                            "Max Item Level: "
                                             <span class="font-semibold">{max_area_level()}</span>
                                         </span>
                                     }
