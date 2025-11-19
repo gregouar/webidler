@@ -71,7 +71,7 @@ pub fn PlayerCount() -> impl IntoView {
                                         .into_any()
                                 } else {
                                     view! {
-                                        <div class="absolute w-full bottom-full right-0 mb-2 overflow-auto
+                                        <div class="absolute w-96 bottom-full right-0 mb-2 overflow-auto
                                         bg-zinc-900 text-white text-xs rounded-lg border border-zinc-700 shadow-lg p-2 space-y-1 z-50
                                         grid grid-cols-2">
                                             {glimpse

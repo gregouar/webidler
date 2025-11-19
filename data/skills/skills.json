@@ -302,8 +302,7 @@
                           "FlatDamage": {
                             "damage": {
                               "Storm": 0.5
-                            },
-                            "ignore_armor": true
+                            }
                           },
                           "ignore_stat_effects": [
                             {
@@ -771,7 +770,7 @@
           "Speed": null
         },
         "modifier": "Flat",
-        "value": -2
+        "value": -0.5
       }
     ],
     "targets": [

@@ -206,8 +206,7 @@ impl StatType {
 
         matches!(
             self,
-            Armor(_)
-                | Damage { .. }
+            Damage { .. }
                 | MinDamage { .. }
                 | MaxDamage { .. }
                 | CritDamage(_)

@@ -114,8 +114,7 @@
                 {
                   "status_type": {
                     "DamageOverTime": {
-                      "damage_type": "Physical",
-                      "ignore_armor": true
+                      "damage_type": "Physical"
                     }
                   },
                   "value": 0

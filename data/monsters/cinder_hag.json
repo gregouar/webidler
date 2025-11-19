@@ -16,7 +16,7 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": [2,4],
+                "duration": [2, 4],
                 "statuses": [
                   {
                     "status_type": {
@@ -46,11 +46,16 @@
                   {
                     "status_type": {
                       "StatModifier": {
-                        "stat": { "Armor": "Fire" },
+                        "stat": {
+                          "DamageResistance": {
+                            "damage_type": "Fire"
+                          }
+                        },
+                        "modifier": "Flat",
                         "debuff": true
                       }
                     },
-                    "value": 100
+                    "value": 30
                   }
                 ]
               }

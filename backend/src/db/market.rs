@@ -273,7 +273,7 @@ pub async fn read_market_items<'c>(
         MarketEntry,
         r#"
         SELECT 
-            market_id, 
+            market.market_id, 
             owner.character_id as "character_id: UserCharacterId", 
             owner.character_name,
             recipient_id as "recipient_id?: UserCharacterId", 
@@ -295,6 +295,26 @@ pub async fn read_market_items<'c>(
             characters AS recipient ON recipient.character_id = market.recipient_id
         LEFT JOIN
             characters AS buyer ON buyer.character_id = market.deleted_by
+        LEFT JOIN
+            market_stats AS ms1 ON ms1.market_id = market.market_id
+                AND ms1.item_stat = $18
+                AND ms1.stat_modifier = $19
+        LEFT JOIN
+            market_stats AS ms2 ON ms2.market_id = market.market_id
+                AND ms2.item_stat = $21
+                AND ms2.stat_modifier = $22
+        LEFT JOIN
+            market_stats AS ms3 ON ms3.market_id = market.market_id
+                AND ms3.item_stat = $24
+                AND ms3.stat_modifier = $25
+        LEFT JOIN
+            market_stats AS ms4 ON ms4.market_id = market.market_id
+                AND ms4.item_stat = $27
+                AND ms4.stat_modifier = $28
+        LEFT JOIN
+            market_stats AS ms5 ON ms5.market_id = market.market_id
+                AND ms5.item_stat = $30
+                AND ms5.stat_modifier = $31
         WHERE 
             (
                 (NOT $37 AND market.deleted_at IS NULL) 
@@ -325,46 +345,11 @@ pub async fn read_market_items<'c>(
             AND ($35 OR market.item_crit_damage >= $36)
             AND ($13 OR market.item_armor >= $14)
             AND ($15 OR market.item_block >= $16)
-            AND ($19 = '' OR EXISTS (
-                SELECT 1
-                FROM market_stats ms
-                WHERE ms.market_id = market.market_id
-                AND ms.item_stat = $18
-                AND ms.stat_modifier = $19
-                AND ms.stat_value >= $20
-            ))
-            AND ($22 = '' OR EXISTS (
-                SELECT 1
-                FROM market_stats ms
-                WHERE ms.market_id = market.market_id
-                AND ms.item_stat = $21
-                AND ms.stat_modifier = $22
-                AND ms.stat_value >= $23
-            ))
-            AND ($25 = '' OR EXISTS (
-                SELECT 1
-                FROM market_stats ms
-                WHERE ms.market_id = market.market_id
-                AND ms.item_stat = $24
-                AND ms.stat_modifier = $25
-                AND ms.stat_value >= $26
-            ))
-            AND ($28 = '' OR EXISTS (
-                SELECT 1
-                FROM market_stats ms
-                WHERE ms.market_id = market.market_id
-                AND ms.item_stat = $27
-                AND ms.stat_modifier = $28
-                AND ms.stat_value >= $29
-            ))
-            AND ($31 = '' OR EXISTS (
-                SELECT 1
-                FROM market_stats ms
-                WHERE ms.market_id = market.market_id
-                AND ms.item_stat = $30
-                AND ms.stat_modifier = $31
-                AND ms.stat_value >= $32
-            ))
+            AND ($19 = '' OR ms1.stat_value >= $20)
+            AND ($22 = '' OR ms2.stat_value >= $23)
+            AND ($25 = '' OR ms3.stat_value >= $26)
+            AND ($28 = '' OR ms4.stat_value >= $29)
+            AND ($31 = '' OR ms5.stat_value >= $32)
         ORDER BY 
             rejected DESC NULLS LAST, 
             recipient_id ASC NULLS LAST, 
@@ -378,6 +363,11 @@ pub async fn read_market_items<'c>(
                 WHEN  $17 = 'Armor' THEN  market.item_armor
                 WHEN  $17 = 'Block' THEN  market.item_block
             END DESC NULLS LAST, 
+            CASE WHEN $17 = 'StatFilters' THEN ms1.stat_value END DESC NULLS LAST,
+            CASE WHEN $17 = 'StatFilters' THEN ms2.stat_value END DESC NULLS LAST,
+            CASE WHEN $17 = 'StatFilters' THEN ms3.stat_value END DESC NULLS LAST,
+            CASE WHEN $17 = 'StatFilters' THEN ms4.stat_value END DESC NULLS LAST,
+            CASE WHEN $17 = 'StatFilters' THEN ms5.stat_value END DESC NULLS LAST,
             CASE 
                 WHEN $17 = 'Time' THEN market.updated_at
             END DESC,

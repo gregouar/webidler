@@ -166,8 +166,8 @@ pub enum SkillEffectType {
         crit_chance: Chance,
         #[serde(default)]
         crit_damage: f64,
-        #[serde(default)]
-        ignore_armor: bool,
+        #[serde(default, skip_serializing)]
+        ignore_armor: bool, // TODO: Remove
     },
     ApplyStatus {
         statuses: Vec<ApplyStatusEffect>,

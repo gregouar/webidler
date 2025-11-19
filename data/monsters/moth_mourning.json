@@ -27,11 +27,16 @@
                   {
                     "status_type": {
                       "StatModifier": {
-                        "stat": { "Armor": "Physical" },
+                        "stat": {
+                          "DamageResistance": {
+                            "damage_type": "Physical"
+                          }
+                        },
+                        "modifier": "Flat",
                         "debuff": true
                       }
                     },
-                    "value": 100
+                    "value": 50
                   }
                 ]
               }

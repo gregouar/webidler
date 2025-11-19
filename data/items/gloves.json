@@ -111,7 +111,6 @@
                     "StatModifier": {
                       "stat": {
                         "Damage": {
-                          "damage_type": "Physical",
                           "skill_type": "Attack"
                         }
                       }
