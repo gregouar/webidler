@@ -57,15 +57,13 @@ pub fn ViewCharacterPage() -> impl IntoView {
     let fetch_data = {
         let backend = expect_context::<BackendClient>();
 
-        let character_name = params
-            .read()
-            .as_ref()
-            .ok()
-            .and_then(|params| params.character_name.clone())
-            .unwrap_or_default();
-
         move || {
-            let character_name = character_name.clone();
+            let character_name = params
+                .read()
+                .as_ref()
+                .ok()
+                .and_then(|params| params.character_name.clone())
+                .unwrap_or_default();
             async move {
                 match backend.get_character_by_name(&character_name).await {
                     Ok(GetCharacterDetailsResponse {
