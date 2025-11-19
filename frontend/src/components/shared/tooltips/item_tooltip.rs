@@ -13,10 +13,18 @@ use super::skill_tooltip::format_trigger;
 
 use super::effects_tooltip;
 
+pub enum ComparableType {
+    NotComparable,
+    Comparable,
+    Compared,
+    Equipped,
+}
+
 #[component]
 pub fn ItemTooltip(
     item_specs: Arc<ItemSpecs>,
     #[prop(default = false)] show_affixes: bool,
+    #[prop(default = ComparableType::NotComparable)] comparable: ComparableType,
 ) -> impl IntoView {
     let (border_color, ring_color, shadow_color) = match item_specs.modifiers.rarity {
         ItemRarity::Normal => ("border-gray-600", "ring-gray-700", "shadow-gray-800"),
@@ -37,7 +45,7 @@ pub fn ItemTooltip(
             ring_color,
             shadow_color,
         )>
-            <ItemTooltipContent item_specs=item_specs.clone() show_affixes />
+            <ItemTooltipContent item_specs=item_specs.clone() show_affixes comparable />
         </div>
     }
 }
@@ -47,6 +55,7 @@ pub fn ItemTooltipContent(
     item_specs: Arc<ItemSpecs>,
     #[prop(default = false)] show_affixes: bool,
     #[prop(default = false)] hide_description: bool,
+    #[prop(default = ComparableType::NotComparable)] comparable: ComparableType,
 ) -> impl IntoView {
     let (has_effects, effects) = if show_affixes {
         let base_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Unique);
@@ -134,7 +143,23 @@ pub fn ItemTooltipContent(
 
     view! {
         <div class="space-y-2">
-            <strong class=format!("text-base xl:text-lg font-bold {}", name_color)>
+            {match comparable {
+                ComparableType::Compared | ComparableType::Equipped => {
+                    Some(
+                        view! {
+                            <p class="text-xs xl:text-sm italic text-gray-400 leading-snug whitespace-pre-line">
+                                {match comparable {
+                                    ComparableType::Compared => "Selected",
+                                    ComparableType::Equipped => "Equipped",
+                                    _ => "",
+                                }}
+                            </p>
+                            <hr class="border-t border-gray-700" />
+                        },
+                    )
+                }
+                _ => None,
+            }} <strong class=format!("text-base xl:text-lg font-bold {}", name_color)>
                 <ul class="list-none space-y-1 mb-2">
                     <li class="leading-snug whitespace-pre-line">
                         {item_specs.modifiers.name.clone()}
@@ -151,9 +176,7 @@ pub fn ItemTooltipContent(
                     }}
 
                 </ul>
-            </strong>
-            <hr class="border-t border-gray-700" />
-            <ul class="list-none space-y-1">
+            </strong> <hr class="border-t border-gray-700" /> <ul class="list-none space-y-1">
                 <ItemSlotTooltip item_specs=item_specs.clone() />
                 <QualityTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
@@ -165,9 +188,7 @@ pub fn ItemTooltipContent(
                         <hr class="border-t border-gray-700 my-1" />
                         <ul class="list-none space-y-1 text-xs xl:text-sm">{effects}{triggers}</ul>
                     }
-                })}
-            <hr class="border-t border-gray-700" />
-            <ul class="list-none space-y-1">
+                })} <hr class="border-t border-gray-700" /> <ul class="list-none space-y-1">
                 <li class="text-blue-400 text-xs xl:text-sm text-gray-400 leading-snug">
                     "Required Area Level: "
                     <span class="text-white">{item_specs.required_level}</span>
@@ -191,6 +212,19 @@ pub fn ItemTooltipContent(
                             }
                         })
                 })}
+            {match comparable {
+                ComparableType::Comparable => {
+                    Some(
+                        view! {
+                            <hr class="border-t border-gray-700" />
+                            <p class="text-xs xl:text-sm italic text-gray-400 leading-snug whitespace-pre-line">
+                                "Hold CTRL to compare."
+                            </p>
+                        },
+                    )
+                }
+                _ => None,
+            }}
         </div>
     }
 }

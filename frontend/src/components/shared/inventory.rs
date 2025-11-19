@@ -425,10 +425,22 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                 match maybe_item() {
                     Some(item_specs) => {
                         let inventory = inventory.clone();
+                        let comparable_item_specs = inventory
+                            .player_inventory
+                            .read()
+                            .equipped
+                            .get(&item_specs.base.slot)
+                            .and_then(|equipped_slot| match equipped_slot {
+                                EquippedSlot::MainSlot(item_specs) => {
+                                    Some(Arc::from(item_specs.clone()))
+                                }
+                                EquippedSlot::ExtraSlot(_) => None,
+                            });
                         view! {
                             <div class="relative w-full h-full overflow-visible">
                                 <ItemCard
                                     item_specs=item_specs.clone()
+                                    comparable_item_specs=comparable_item_specs.clone()
                                     on:click=move |_| show_menu.set(true)
                                     // Ignore if Mobile:
                                     on:contextmenu={
@@ -445,7 +457,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                             }
                                         }
                                     }
-                                    tooltip_position=DynamicTooltipPosition::Auto
+                                    tooltip_position=DynamicTooltipPosition::AutoLeft
                                 />
 
                                 <Show when=is_queued_for_sale>

@@ -31,6 +31,7 @@ pub enum DynamicTooltipPosition {
     BottomRight,
     TopLeft,
     TopRight,
+    AutoLeft,
 }
 
 #[component]
@@ -74,6 +75,13 @@ pub fn DynamicTooltip() -> impl IntoView {
                     (false, false) => DynamicTooltipPosition::TopLeft,
                 }
             }
+            DynamicTooltipPosition::AutoLeft => {
+                if mouse_y < window.height.get() / 2.0 {
+                    DynamicTooltipPosition::BottomLeft
+                } else {
+                    DynamicTooltipPosition::TopLeft
+                }
+            }
             x => x,
         };
 
@@ -96,7 +104,8 @@ pub fn DynamicTooltip() -> impl IntoView {
             DynamicTooltipPosition::BottomRight => (mouse_x, mouse_y),
             DynamicTooltipPosition::TopLeft => (mouse_x - width, mouse_y - height),
             DynamicTooltipPosition::TopRight => (mouse_x, mouse_y - height),
-            _ => (0.0, 0.0),
+            DynamicTooltipPosition::AutoLeft => (mouse_x - width, 0.0),
+            DynamicTooltipPosition::Auto => (0.0, 0.0),
         };
 
         let left = left.clamp(0.0, (window_width - width).max(0.0));

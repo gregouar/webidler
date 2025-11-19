@@ -6,6 +6,7 @@ use shared::data::item::{ItemRarity, ItemSpecs};
 
 use crate::assets::img_asset;
 use crate::components::events::{EventsContext, Key};
+use crate::components::shared::tooltips::item_tooltip::ComparableType;
 use crate::components::ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition};
 
 use super::tooltips::ItemTooltip;
@@ -13,6 +14,7 @@ use super::tooltips::ItemTooltip;
 #[component]
 pub fn ItemCard(
     item_specs: Arc<ItemSpecs>,
+    #[prop(default=None)] comparable_item_specs: Option<Arc<ItemSpecs>>,
     #[prop(default=DynamicTooltipPosition::Auto)] tooltip_position: DynamicTooltipPosition,
 ) -> impl IntoView {
     let (border_color, ring_color, shadow_color, gradient) = match item_specs.modifiers.rarity {
@@ -52,12 +54,47 @@ pub fn ItemCard(
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
 
-    let show_tooltip = move |show_affixes| {
+    let show_tooltip = move |show_affixes, compare: bool| {
         let item_specs = item_specs.clone();
+        let comparable_item_specs = comparable_item_specs.clone();
+
         tooltip_context.set_content(
             move || {
                 let item_specs = item_specs.clone();
-                view! { <ItemTooltip item_specs=item_specs show_affixes /> }.into_any()
+                let is_comparable = comparable_item_specs.is_some();
+                view! {
+                    <div class="flex gap-1 xl:gap-2">
+                        {comparable_item_specs
+                            .as_ref()
+                            .and_then(|comparable_item_specs| {
+                                compare
+                                    .then(|| {
+                                        view! {
+                                            <ItemTooltip
+                                                item_specs=comparable_item_specs.clone()
+                                                show_affixes
+                                                comparable=ComparableType::Equipped
+                                            />
+                                        }
+                                    })
+                            })}
+                        <ItemTooltip
+                            item_specs=item_specs
+                            show_affixes
+                            comparable=if is_comparable {
+                                if compare {
+                                    ComparableType::Compared
+                                } else {
+                                    ComparableType::Comparable
+                                }
+                            } else {
+                                ComparableType::NotComparable
+                            }
+                        />
+
+                    </div>
+                }
+                .into_any()
             },
             tooltip_position,
         );
@@ -82,7 +119,10 @@ pub fn ItemCard(
         move || {
             if is_inside.get() {
                 tooltip_in_use = true;
-                show_tooltip(events_context.key_pressed(Key::Alt));
+                show_tooltip(
+                    events_context.key_pressed(Key::Alt),
+                    events_context.key_pressed(Key::Ctrl),
+                );
             } else if tooltip_in_use {
                 tooltip_in_use = false;
                 hide_tooltip();
@@ -106,7 +146,7 @@ pub fn ItemCard(
 
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();
-                move |_| { show_tooltip(false) }
+                move |_| { show_tooltip(false, false) }
             }
             on:contextmenu=move |ev| {
                 ev.prevent_default();
