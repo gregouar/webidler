@@ -84,6 +84,7 @@ pub async fn glimpse_active_sessions(
         INNER JOIN users ON characters.user_id = users.user_id
         INNER JOIN saved_game_instances ON saved_game_instances.character_id = game_sessions.character_id
         WHERE ended_at = '9999-01-01 23:59:59'
+        ORDER BY RANDOM()
         LIMIT $1
         "#,
         limit
