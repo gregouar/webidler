@@ -7,4 +7,6 @@ pub struct GameStats {
     pub areas_completed: u64,
     pub monsters_killed: u64,
     pub player_deaths: u64,
+    #[serde(default)] // Retro compatibility
+    pub elapsed_time_at_max_level: Duration,
 }
