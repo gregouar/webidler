@@ -261,8 +261,11 @@ fn handle_area_completed_event(
         game_data.player_resources.mutate().shards += 1.0;
     }
 
-    area_state.max_area_level = area_state.max_area_level.max(area_state.area_level);
-    area_state.max_area_level_ever = area_state.max_area_level_ever.max(area_state.area_level);
+    if area_state.area_level > area_state.max_area_level {
+        game_data.game_stats.elapsed_time_at_max_level = game_data.game_stats.elapsed_time;
+        area_state.max_area_level = area_state.area_level;
+        area_state.max_area_level_ever = area_state.max_area_level_ever.max(area_state.area_level);
+    }
 
     area_state.waves_done = 1;
     if area_state.auto_progress {

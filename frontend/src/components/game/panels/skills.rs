@@ -39,6 +39,8 @@ pub fn SkillsPanel(open: RwSignal<bool>) -> impl IntoView {
 
 #[component]
 pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
     let selected_skill = RwSignal::new(None::<String>);
     let disable_confirm = Signal::derive(move || selected_skill.get().is_none());
 
@@ -59,7 +61,6 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
 
     // TODO: sort by types, add dropdown to filter by type, etc
     let available_skills = Signal::derive({
-        let game_context = expect_context::<GameContext>();
         move || {
             let mut skills = skills_response
                 .get()
@@ -83,7 +84,6 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
         }
     });
 
-    let game_context = expect_context::<GameContext>();
     view! {
         <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4">
             <div class="grid grid-cols-6 xl:grid-cols-10 gap-2 xl:gap-4
@@ -126,9 +126,16 @@ fn SkillCard(
     skill_specs: SkillSpecs,
     selected: RwSignal<Option<String>>,
 ) -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
     let is_selected = Signal::derive({
         let skill_id = skill_id.clone();
         move || selected.get().map(|s| s == skill_id).unwrap_or(false)
+    });
+
+    let was_last_bought = Memo::new({
+        let skill_id = skill_id.clone();
+        move |_| game_context.last_skills_bought.read().contains(&skill_id)
     });
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
@@ -154,6 +161,8 @@ fn SkillCard(
                 transition-all shadow cursor-pointer hover:ring-2 hover:ring-amber-400 {}",
                     if is_selected.get() {
                         "border-amber-400 ring-2 ring-amber-500"
+                    } else if was_last_bought.get() {
+                        "border-slate-400 ring-1 ring-slate-500"
                     } else {
                         "border-zinc-700"
                     },

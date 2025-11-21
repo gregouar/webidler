@@ -15,6 +15,7 @@ pub struct LeaderboardEntry {
     pub area_level: i32,
 
     pub created_at: UtcDateTime,
+    pub elapsed_time: Option<f64>,
 }
 
 pub async fn get_leaderboard(
@@ -24,33 +25,80 @@ pub async fn get_leaderboard(
     sqlx::query_as!(
         LeaderboardEntry,
         r#"
-        SELECT
-            users.user_id           AS "user_id: UserId",
-            username,
-            characters.character_id AS "character_id: UserCharacterId",
-            character_name,
-            ranked.area_id,
-            ranked.max_area_level   AS "area_level: i32",
-            ranked.updated_at       AS "created_at"
-        FROM (
+        WITH best_runs AS (
             SELECT
-                cac.*,
+                gs.*,
                 ROW_NUMBER() OVER (
-                    PARTITION BY cac.area_id
-                    ORDER BY cac.max_area_level DESC, cac.updated_at ASC
+                    PARTITION BY gs.area_id, gs.character_id
+                    ORDER BY gs.area_level DESC, gs.elapsed_time DESC, gs.created_at ASC
+                ) AS best_rank
+            FROM game_stats gs
+        ),
+        leaderboard AS (
+            SELECT
+                br.*,
+                ROW_NUMBER() OVER (
+                    PARTITION BY br.area_id
+                    ORDER BY br.area_level DESC, br.elapsed_time DESC, br.created_at ASC
                 ) AS area_rank
-            FROM character_area_completed cac
-        ) AS ranked
-        INNER JOIN characters ON ranked.character_id = characters.character_id
-        INNER JOIN users ON characters.user_id = users.user_id
-        WHERE ranked.area_rank <= $1
-        ORDER BY ranked.area_id, ranked.area_rank;
+            FROM best_runs br
+            WHERE br.best_rank = 1
+        )
+        SELECT
+            u.user_id           AS "user_id: UserId",
+            u.username,
+            c.character_id      AS "character_id: UserCharacterId",
+            c.character_name,
+            lb.area_id,
+            lb.area_level       AS "area_level: i32",
+            lb.created_at       AS "created_at",
+            lb.elapsed_time     AS "elapsed_time?"
+        FROM leaderboard lb
+        JOIN characters c ON lb.character_id = c.character_id
+        JOIN users u      ON c.user_id = u.user_id
+        WHERE lb.area_rank <= $1
+        ORDER BY lb.area_id, lb.area_rank;
         "#,
         top_n
     )
     .fetch_all(db_pool)
     .await
 }
+
+// pub async fn get_leaderboard(
+//     db_pool: &DbPool,
+//     top_n: i64,
+// ) -> Result<Vec<LeaderboardEntry>, sqlx::Error> {
+//     sqlx::query_as!(
+//         LeaderboardEntry,
+//         r#"
+//         SELECT
+//             users.user_id           AS "user_id: UserId",
+//             username,
+//             characters.character_id AS "character_id: UserCharacterId",
+//             character_name,
+//             ranked.area_id,
+//             ranked.max_area_level   AS "area_level: i32",
+//             ranked.updated_at       AS "created_at"
+//         FROM (
+//             SELECT
+//                 cac.*,
+//                 ROW_NUMBER() OVER (
+//                     PARTITION BY cac.area_id
+//                     ORDER BY cac.max_area_level DESC, cac.updated_at ASC
+//                 ) AS area_rank
+//             FROM character_area_completed cac
+//         ) AS ranked
+//         INNER JOIN characters ON ranked.character_id = characters.character_id
+//         INNER JOIN users ON characters.user_id = users.user_id
+//         WHERE ranked.area_rank <= $1
+//         ORDER BY ranked.area_id, ranked.area_rank;
+//         "#,
+//         top_n
+//     )
+//     .fetch_all(db_pool)
+//     .await
+// }
 
 // pub async fn get_leaderboard(
 //     db_pool: &DbPool,

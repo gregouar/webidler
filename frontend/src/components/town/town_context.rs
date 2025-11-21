@@ -1,7 +1,9 @@
 use std::collections::HashMap;
 
 use leptos::prelude::*;
+
 use shared::data::{
+    game_stats::GrindStats,
     passive::{PassivesTreeAscension, PassivesTreeSpecs},
     player::PlayerInventory,
     temple::{BenedictionSpecs, PlayerBenedictions},
@@ -19,6 +21,8 @@ pub struct TownContext {
 
     pub benedictions_specs: RwSignal<HashMap<String, BenedictionSpecs>>,
     pub player_benedictions: RwSignal<PlayerBenedictions>,
+
+    pub last_grind: RwSignal<Option<GrindStats>>,
 
     // TODO: Is this really the correct place? Should we have a UI context?
     // TODO: enum ?

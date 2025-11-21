@@ -2,6 +2,7 @@ pub mod characters;
 pub mod characters_data;
 pub mod game_instances;
 pub mod game_sessions;
+pub mod game_stats;
 pub mod leaderboard;
 pub mod market;
 pub mod migrations;

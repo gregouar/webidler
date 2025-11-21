@@ -1,10 +1,11 @@
 use chrono::{DateTime, Utc};
-use std::{collections::HashMap, fmt};
+use std::{collections::HashMap, fmt, time::Duration};
 
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
     area::{AreaLevel, AreaSpecs},
+    game_stats::GrindStats,
     market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs},
     player::PlayerInventory,
@@ -36,6 +37,7 @@ pub struct LeaderboardEntry {
     pub area_id: String,
     pub area_level: AreaLevel,
     pub created_at: DateTime<Utc>,
+    pub elapsed_time: Option<Duration>,
     pub comments: String,
 }
 
@@ -101,6 +103,8 @@ pub struct GetCharacterDetailsResponse {
     pub inventory: PlayerInventory,
     pub ascension: PassivesTreeAscension,
     pub benedictions: PlayerBenedictions,
+
+    pub last_grind: Option<GrindStats>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

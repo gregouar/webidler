@@ -67,6 +67,7 @@ pub fn TownPage() -> impl IntoView {
                     inventory,
                     ascension,
                     benedictions,
+                    last_grind,
                 }) => {
                     if let UserCharacterActivity::Grinding(_, _) = character.activity {
                         use_navigate()("/game", Default::default())
@@ -76,6 +77,7 @@ pub fn TownPage() -> impl IntoView {
                     town_context.inventory.set(inventory);
                     town_context.passives_tree_ascension.set(ascension);
                     town_context.player_benedictions.set(benedictions);
+                    town_context.last_grind.set(last_grind);
                 }
                 Err(BackendError::Unauthorized(_) | BackendError::NotFound) => {
                     use_navigate()("/", Default::default())

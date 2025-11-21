@@ -7,7 +7,9 @@ use axum::{
 use shared::{
     data::{
         area::AreaLevel,
+        game_stats::GrindStats,
         player::{EquippedSlot, PlayerInventory},
+        skill::SkillSpecs,
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId},
     },
     http::{
@@ -24,7 +26,7 @@ use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
     db,
-    game::systems::items_controller,
+    game::{data::DataInit, systems::items_controller},
 };
 
 use super::AppError;
@@ -114,15 +116,17 @@ async fn read_character_details(
     master_store: MasterStore,
     character_id: UserCharacterId,
 ) -> Result<Json<GetCharacterDetailsResponse>, AppError> {
-    let (character, areas_completed, character_data) = tokio::join!(
+    let (character, areas_completed, character_data, last_grind_data) = tokio::join!(
         db::characters::read_character(&db_pool, &character_id),
         db::characters::read_character_areas_completed(&db_pool, &character_id),
-        db::characters_data::load_character_data(&db_pool, &character_id)
+        db::characters_data::load_character_data(&db_pool, &character_id),
+        db::game_stats::load_last_game_stats(&db_pool, &character_id)
     );
 
     let character = character?.ok_or(AppError::NotFound)?.into();
     let areas_completed = areas_completed?;
     let (inventory_data, ascension, benedictions) = character_data?.unwrap_or_default();
+    let last_grind_data = last_grind_data?;
 
     let areas = master_store
         .area_blueprints_store
@@ -168,12 +172,46 @@ async fn read_character_details(
         max_bag_size: inventory_data.max_bag_size,
     };
 
+    let last_grind = last_grind_data.map(|last_grind_data| {
+        let (items_data, skills_data) = last_grind_data;
+
+        let mut skills_specs: Vec<_> = items_data
+            .map(|items_data| {
+                items_data
+                    .values()
+                    .flat_map(|equipped_slot| match equipped_slot {
+                        EquippedSlot::MainSlot(item_specs) => {
+                            item_specs.weapon_specs.clone().map(|weapon_specs| {
+                                SkillSpecs::init(items_controller::make_weapon_skill(
+                                    item_specs.modifiers.level,
+                                    &weapon_specs,
+                                ))
+                            })
+                        }
+                        _ => None,
+                    })
+                    .collect()
+            })
+            .unwrap_or_default();
+
+        skills_specs.extend(
+            skills_data
+                .unwrap_or_default()
+                .into_iter()
+                .flat_map(|skill_id| master_store.skills_store.get(&skill_id))
+                .map(|base_skill_specs| SkillSpecs::init(base_skill_specs.clone())),
+        );
+
+        GrindStats { skills_specs }
+    });
+
     Ok(Json(GetCharacterDetailsResponse {
         character,
         areas,
         inventory,
         ascension,
         benedictions,
+        last_grind,
     }))
 }
 

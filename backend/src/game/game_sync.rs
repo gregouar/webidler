@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use anyhow::Result;
 
 use shared::messages::server::{InitGameMessage, SyncGameStateMessage};
@@ -9,6 +11,7 @@ use crate::websocket::WebSocketConnection;
 pub async fn sync_init_game(
     client_conn: &mut WebSocketConnection,
     game_data: &mut GameInstanceData,
+    last_skills_bought: HashSet<String>,
 ) -> Result<()> {
     game_data.reset_syncers();
     client_conn
@@ -20,6 +23,7 @@ pub async fn sync_init_game(
                 passives_tree_state: game_data.passives_tree_state.read().clone(),
                 player_specs: game_data.player_specs.read().clone(),
                 player_state: game_data.player_state.clone(),
+                last_skills_bought,
             }
             .into(),
         )

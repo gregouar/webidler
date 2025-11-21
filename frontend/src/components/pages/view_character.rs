@@ -72,12 +72,14 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         inventory,
                         ascension,
                         benedictions,
+                        last_grind,
                     }) => {
                         town_context.character.set(character);
                         town_context.areas.set(areas);
                         town_context.inventory.set(inventory);
                         town_context.passives_tree_ascension.set(ascension);
                         town_context.player_benedictions.set(benedictions);
+                        town_context.last_grind.set(last_grind);
                     }
                     _ => {
                         use_navigate()("/", Default::default());
