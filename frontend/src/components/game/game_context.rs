@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use leptos::prelude::{
     guards::{Plain, ReadGuard},
     *,
@@ -48,6 +50,7 @@ pub struct GameContext {
     pub open_skills: RwSignal<bool>,
 
     pub loot_preference: RwSignal<Option<ItemCategory>>,
+    pub last_skills_bought: RwSignal<HashSet<String>>,
 }
 
 impl Default for GameContext {
@@ -61,16 +64,16 @@ impl GameContext {
         GameContext {
             started: RwSignal::new(false),
 
-            area_specs: RwSignal::new(AreaSpecs::default()),
+            area_specs: RwSignal::new(Default::default()),
             area_state: Default::default(),
-            area_threat: RwSignal::new(AreaThreat::default()),
+            area_threat: RwSignal::new(Default::default()),
 
-            passives_tree_specs: RwSignal::new(PassivesTreeSpecs::default()),
+            passives_tree_specs: RwSignal::new(Default::default()),
             passives_tree_state: Default::default(),
 
             player_specs: Default::default(),
-            player_inventory: RwSignal::new(PlayerInventory::default()),
-            player_state: RwSignal::new(PlayerState::default()),
+            player_inventory: RwSignal::new(Default::default()),
+            player_state: RwSignal::new(Default::default()),
             player_resources: Default::default(),
 
             monster_wave: RwSignal::new(0),
@@ -79,7 +82,7 @@ impl GameContext {
 
             queued_loot: Default::default(),
 
-            game_stats: RwSignal::new(GameStats::default()),
+            game_stats: RwSignal::new(Default::default()),
             game_local_stats: Default::default(),
 
             open_inventory: RwSignal::new(false),
@@ -87,6 +90,7 @@ impl GameContext {
             open_statistics: RwSignal::new(false),
             open_skills: RwSignal::new(false),
             loot_preference: RwSignal::new(None),
+            last_skills_bought: RwSignal::new(Default::default()),
         }
     }
 }

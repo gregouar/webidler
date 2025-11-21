@@ -51,7 +51,14 @@ impl<'a> GameInstance<'a> {
     }
 
     pub async fn run(mut self) -> Result<()> {
-        game_sync::sync_init_game(self.client_conn, self.game_data).await?;
+        let last_skills_bought =
+            db::game_stats::load_last_game_stats(&self.db_pool, self.character_id)
+                .await
+                .ok()
+                .flatten()
+                .and_then(|last_game| last_game.1)
+                .unwrap_or_default();
+        game_sync::sync_init_game(self.client_conn, self.game_data, last_skills_bought).await?;
 
         let mut game_timer = GameTimer::new();
         loop {
