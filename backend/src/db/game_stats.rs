@@ -51,6 +51,7 @@ pub async fn save_game_stats<'c>(
     .await?)
 }
 
+#[allow(clippy::too_many_arguments)]
 async fn insert_game_stats<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
