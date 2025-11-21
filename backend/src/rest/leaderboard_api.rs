@@ -52,7 +52,7 @@ impl From<db::leaderboard::LeaderboardEntry> for LeaderboardEntry {
             created_at: val.created_at.into(),
             elapsed_time: val
                 .elapsed_time
-                .map(|elapsed_time| Duration::from_secs_f64(elapsed_time)),
+                .map(Duration::from_secs_f64),
             comments: "".to_string(),
         }
     }

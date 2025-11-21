@@ -45,7 +45,7 @@ pub async fn save_game_stats<'c>(
             .as_secs_f64(),
         serde_json::to_value(&game_instance_data.game_stats)?,
         serde_json::to_value(&game_instance_data.player_inventory.read().equipped)?,
-        serde_json::to_value(&game_instance_data.passives_tree_state.read())?,
+        serde_json::to_value(game_instance_data.passives_tree_state.read())?,
         serde_json::to_value(&game_instance_data.player_specs.read().bought_skills)?,
     )
     .await?)
