@@ -1,8 +1,10 @@
+use std::collections::{HashMap, HashSet};
+
 use anyhow;
 
 use sqlx::{types::JsonValue, FromRow};
 
-use shared::data::user::UserCharacterId;
+use shared::data::{item::ItemSlot, player::EquippedSlot, user::UserCharacterId};
 
 use crate::{
     constants::DATA_VERSION, db::utc_datetime::UtcDateTime, game::game_data::GameInstanceData,
@@ -79,4 +81,56 @@ async fn insert_game_stats<'c>(
     .await?;
 
     Ok(())
+}
+
+pub async fn load_last_game_stats<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+) -> anyhow::Result<
+    Option<(
+        Option<HashMap<ItemSlot, EquippedSlot>>,
+        Option<HashSet<String>>,
+    )>,
+> {
+    let game_stats_data = read_last_game_stats(executor, character_id).await?;
+    if let Some(game_stats_data) = game_stats_data {
+        Ok(Some((
+            game_stats_data
+                .items_data
+                .and_then(|data| serde_json::from_value(data).ok()),
+            game_stats_data
+                .skills_data
+                .and_then(|data| serde_json::from_value(data).ok()),
+        )))
+    } else {
+        Ok(None)
+    }
+}
+
+async fn read_last_game_stats<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+) -> Result<Option<GameStatsEntry>, sqlx::Error> {
+    sqlx::query_as!(
+        GameStatsEntry,
+        r#"
+        SELECT
+            character_id as "character_id: UserCharacterId",
+            area_id,
+            area_level as "area_level: i32",
+            elapsed_time as "elapsed_time?",
+            stats_data as "stats_data?: JsonValue",
+            items_data as "items_data?: JsonValue",
+            passives_data as "passives_data?: JsonValue",
+            skills_data as "skills_data?: JsonValue",
+            data_version,
+            created_at
+         FROM game_stats WHERE character_id = $1
+         ORDER BY created_at DESC
+         LIMIT 1
+         "#,
+        character_id
+    )
+    .fetch_optional(executor)
+    .await
 }

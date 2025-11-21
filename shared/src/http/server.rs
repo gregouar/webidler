@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     area::{AreaLevel, AreaSpecs},
+    game_stats::GrindStats,
     market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs},
     player::PlayerInventory,
@@ -102,6 +103,8 @@ pub struct GetCharacterDetailsResponse {
     pub inventory: PlayerInventory,
     pub ascension: PassivesTreeAscension,
     pub benedictions: PlayerBenedictions,
+
+    pub last_grind: Option<GrindStats>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
