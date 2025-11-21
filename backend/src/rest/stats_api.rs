@@ -25,6 +25,7 @@ async fn get_players_count(
             area_id: entry.area_id,
             area_level: entry.area_level as u16,
             created_at: entry.created_at.into(),
+            elapsed_time: None,
             comments: "".into(),
         })
         .collect();

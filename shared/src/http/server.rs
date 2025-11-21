@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use std::{collections::HashMap, fmt};
+use std::{collections::HashMap, fmt, time::Duration};
 
 use serde::{Deserialize, Serialize};
 
@@ -36,6 +36,7 @@ pub struct LeaderboardEntry {
     pub area_id: String,
     pub area_level: AreaLevel,
     pub created_at: DateTime<Utc>,
+    pub elapsed_time: Option<Duration>,
     pub comments: String,
 }
 

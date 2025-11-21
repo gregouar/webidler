@@ -5,7 +5,10 @@ use leptos_router::hooks::use_navigate;
 
 use crate::components::{
     backend_client::BackendClient,
-    ui::{buttons::MenuButton, number::format_datetime},
+    ui::{
+        buttons::MenuButton,
+        number::{format_datetime, format_duration},
+    },
 };
 
 #[component]
@@ -123,12 +126,20 @@ pub fn LeaderboardPanel() -> impl IntoView {
                                                                         </span>
                                                                     </div>
                                                                     <div class="text-sm text-zinc-300">
-                                                                        {format_datetime(entry.created_at)}
+                                                                        {entry
+                                                                            .elapsed_time
+                                                                            .map(|elapsed_time| format_duration(elapsed_time))}
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="mt-2 text-xs italic text-zinc-400 border-t border-zinc-700 pt-2">
-                                                                    {entry.comments.clone()}
+                                                                <div class="mt-2 text-xs text-left italic text-zinc-400 border-t border-zinc-700 pt-2 flex flex-col">
+                                                                    <span>
+                                                                        {format!(
+                                                                            "Reached on {}",
+                                                                            format_datetime(entry.created_at),
+                                                                        )}
+                                                                    </span>
+                                                                    <span>{entry.comments.clone()}</span>
                                                                 </div>
                                                             </div>
                                                         }

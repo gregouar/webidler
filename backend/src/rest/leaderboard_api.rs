@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use anyhow::Result;
 
 use axum::{extract::State, routing::get, Json, Router};
@@ -48,6 +50,9 @@ impl From<db::leaderboard::LeaderboardEntry> for LeaderboardEntry {
             area_id: val.area_id,
             area_level: val.area_level as AreaLevel,
             created_at: val.created_at.into(),
+            elapsed_time: val
+                .elapsed_time
+                .map(|elapsed_time| Duration::from_secs_f64(elapsed_time)),
             comments: "".to_string(),
         }
     }

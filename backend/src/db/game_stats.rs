@@ -16,11 +16,13 @@ pub struct GameStatsEntry {
 
     pub area_id: String,
     pub area_level: i32,
-    pub elapsed_time: f64,
+    pub elapsed_time: Option<f64>,
 
-    pub stats_data: JsonValue,
-    pub bought_skills: JsonValue,
-    pub data_version: String,
+    pub stats_data: Option<JsonValue>,
+    pub items_data: Option<JsonValue>,
+    pub passives_data: Option<JsonValue>,
+    pub skills_data: Option<JsonValue>,
+    pub data_version: Option<String>,
 
     pub created_at: UtcDateTime,
 }
@@ -78,42 +80,3 @@ async fn insert_game_stats<'c>(
 
     Ok(())
 }
-
-// pub async fn load_game_instance_data<'c>(
-//     executor: impl DbExecutor<'c>,
-//     master_store: &master_store::MasterStore,
-//     character_id: &UserCharacterId,
-// ) -> anyhow::Result<Option<GameInstanceData>> {
-//     let saved_game_instance = load_saved_game_instance(executor, character_id).await?;
-//     if let Some(instance) = saved_game_instance {
-//         Ok(Some(GameInstanceData::from_bytes(
-//             master_store,
-//             &instance.game_data,
-//         )?))
-//     } else {
-//         Ok(None)
-//     }
-// }
-
-// async fn load_saved_game_instance<'c>(
-//     executor: impl DbExecutor<'c>,
-//     character_id: &UserCharacterId,
-// ) -> Result<Option<SavedGameInstance>, sqlx::Error> {
-//     let instance = sqlx::query_as!(
-//         SavedGameInstance,
-//         r#"SELECT
-//                 character_id as "character_id: UserCharacterId",
-//                 area_id,
-//                 area_level as "area_level: i32",
-//                 saved_at,
-//                 data_version,
-//                 game_data
-//             FROM saved_game_instances
-//             WHERE character_id = $1"#,
-//         character_id
-//     )
-//     .fetch_optional(executor)
-//     .await?;
-
-//     Ok(instance)
-// }
