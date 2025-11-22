@@ -97,89 +97,93 @@ pub fn UserDashboardPage() -> impl IntoView {
     let open_create_character = RwSignal::new(false);
 
     view! {
-        <main class="my-0 mx-auto w-full max-w-6xl px-4 xl:px-8 text-center overflow-x-hidden flex flex-col  justify-around min-h-screen">
+        <main class="my-0 mx-auto w-full min-h-screen text-center overflow-x-hidden flex flex-col justify-center">
+            <DiscordInviteBanner />
             <PlayerCount />
 
-            <Transition fallback=move || {
-                view! { <p class="text-gray-400">"Loading..."</p> }
-            }>
-                {move || {
-                    let sign_out = sign_out.clone();
-                    Suspend::new(async move {
-                        let (areas, user, characters) = async_data.await.unwrap_or_default();
-                        let areas = Arc::new(areas);
-                        let characters_len = characters.len();
+            <div class="h-full max-w-6xl w-full mx-auto px-4 xl:px-8 text-center overflow-x-hidden flex flex-col justify-around">
 
-                        view! {
-                            <CreateCharacterPanel
-                                open=open_create_character
-                                user_id=user.user_id
-                                refresh_trigger=refresh_trigger
-                            />
+                <Transition fallback=move || {
+                    view! { <p class="text-gray-400">"Loading..."</p> }
+                }>
+                    {move || {
+                        let sign_out = sign_out.clone();
+                        Suspend::new(async move {
+                            let (areas, user, characters) = async_data.await.unwrap_or_default();
+                            let areas = Arc::new(areas);
+                            let characters_len = characters.len();
 
-                            <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
-                                "Welcome, " {user.username}
-                            </h1>
+                            view! {
+                                <CreateCharacterPanel
+                                    open=open_create_character
+                                    user_id=user.user_id
+                                    refresh_trigger=refresh_trigger
+                                />
 
-                            <div class="bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner p-2 xl:p-4 text-left space-y-2 xl:space-y-4">
-                                <div class="flex flex-row justify-between items-center gap-1 xl:gap-2">
-                                    // <h2 class="text-2xl font-bold text-white">"Your Characters"</h2>
-                                    <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
-                                        "Your Characters"
-                                    </span>
+                                <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
+                                    "Welcome, " {user.username}
+                                </h1>
 
-                                    <span class="text-sm text-gray-400 font-medium">
-                                        {format!(
-                                            "{} / {} characters",
-                                            characters_len,
-                                            user.max_characters,
-                                        )}
-                                    </span>
-                                </div>
+                                <div class="bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner p-2 xl:p-4 text-left space-y-2 xl:space-y-4">
+                                    <div class="flex flex-row justify-between items-center gap-1 xl:gap-2">
+                                        // <h2 class="text-2xl font-bold text-white">"Your Characters"</h2>
+                                        <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
+                                            "Your Characters"
+                                        </span>
 
-                                <div class="flex flex-nowrap gap-6 overflow-x-auto p-4 bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                                    <For
-                                        each=move || characters.clone()
-                                        key=|c| c.character_id
-                                        children=move |character| {
-                                            view! {
-                                                <CharacterSlot
-                                                    character=character
-                                                    areas=areas.clone()
-                                                    refresh_trigger=refresh_trigger
-                                                />
+                                        <span class="text-sm text-gray-400 font-medium">
+                                            {format!(
+                                                "{} / {} characters",
+                                                characters_len,
+                                                user.max_characters,
+                                            )}
+                                        </span>
+                                    </div>
+
+                                    <div class="flex flex-nowrap gap-6 overflow-x-auto p-4 bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                                        <For
+                                            each=move || characters.clone()
+                                            key=|c| c.character_id
+                                            children=move |character| {
+                                                view! {
+                                                    <CharacterSlot
+                                                        character=character
+                                                        areas=areas.clone()
+                                                        refresh_trigger=refresh_trigger
+                                                    />
+                                                }
                                             }
-                                        }
-                                    />
+                                        />
 
-                                    {if characters_len < user.max_characters as usize {
-                                        Some(
-                                            view! {
-                                                <CreateCharacterSlot on:click=move |_| {
-                                                    open_create_character.set(true)
-                                                } />
-                                            },
-                                        )
-                                    } else {
-                                        None
-                                    }}
+                                        {if characters_len < user.max_characters as usize {
+                                            Some(
+                                                view! {
+                                                    <CreateCharacterSlot on:click=move |_| {
+                                                        open_create_character.set(true)
+                                                    } />
+                                                },
+                                            )
+                                        } else {
+                                            None
+                                        }}
+                                    </div>
+                                    <div class="flex items-center justify-between gap-2 text-gray-400">
+                                        <a href="leaderboard">
+                                            <MenuButton>"Leaderboard"</MenuButton>
+                                        </a>
+                                        <a href="account">
+                                            <MenuButton>"Account Settings"</MenuButton>
+                                        </a>
+                                        <MenuButtonRed on:click=move |_| sign_out()>
+                                            "Sign Out"
+                                        </MenuButtonRed>
+                                    </div>
                                 </div>
-                                <div class="flex items-center justify-between gap-2 text-gray-400">
-                                    <a href="leaderboard">
-                                        <MenuButton>"Leaderboard"</MenuButton>
-                                    </a>
-                                    <a href="account">
-                                        <MenuButton>"Account Settings"</MenuButton>
-                                    </a>
-                                    <MenuButtonRed on:click=move |_| sign_out()>
-                                        "Sign Out"
-                                    </MenuButtonRed>
-                                </div>
-                            </div>
-                        }
-                    })
-                }}
-            </Transition>
+                            }
+                        })
+                    }}
+                </Transition>
+            </div>
         </main>
     }
 }
@@ -491,3 +495,145 @@ pub fn CreateCharacterPanel(
         </MenuPanel>
     }
 }
+
+#[component]
+fn DiscordInviteBanner() -> impl IntoView {
+    let backend = expect_context::<BackendClient>();
+    let auth = expect_context::<AuthContext>();
+    let toaster = expect_context::<Toasts>();
+
+    let invite_url = RwSignal::new(None::<String>);
+    let loading = RwSignal::new(false);
+
+    let fetch_invite = move |_| {
+        loading.set(true);
+
+        spawn_local(async move {
+            match backend.get_discord_invite(&auth.token()).await {
+                Ok(resp) => invite_url.set(Some(format!("https://discord.gg/{}", resp.code))),
+                Err(e) => {
+                    show_toast(
+                        toaster,
+                        format!("Failed to get Discord invite: {e}"),
+                        ToastVariant::Error,
+                    );
+                }
+            }
+
+            loading.set(false);
+        });
+    };
+
+    view! {
+        <div class="
+        sticky left-0 top-0 z-20
+        w-full px-4 py-2
+        bg-slate-800/90 backdrop-blur
+        border-b border-slate-700
+        flex items-center justify-between
+        text-sm
+        ">
+            <span class="text-slate-300">
+                "Help shape the future of the game and join our community on Discord to give feedback, suggest new features, and access early information."
+            </span>
+
+            {move || match invite_url.get() {
+                Some(url) => {
+                    view! {
+                        <a
+                            href=url
+                            target="_blank"
+                            class="px-3 py-1 rounded bg-amber-500 text-black font-semibold hover:bg-amber-400 transition"
+                        >
+                            "Join"
+                        </a>
+                    }
+                        .into_any()
+                }
+                None => {
+
+                    view! {
+                        <button
+                            on:click=fetch_invite
+                            disabled=loading
+                            class="px-3 py-1 rounded bg-slate-700 text-slate-200 border border-slate-600 hover:bg-slate-600 transition disabled:opacity-50"
+                        >
+                            {move || if loading.get() { "..." } else { "Get Link" }}
+                        </button>
+                    }
+                        .into_any()
+                }
+            }}
+        </div>
+    }
+}
+
+// #[component]
+// fn DiscordInviteBanner() -> impl IntoView {
+//     let backend = expect_context::<BackendClient>();
+//     let auth = expect_context::<AuthContext>();
+//     let toaster = expect_context::<Toasts>();
+
+//     let invite_url = RwSignal::new(None::<String>);
+//     let loading = RwSignal::new(false);
+
+//     let fetch_invite = move |_| {
+//         loading.set(true);
+
+//         spawn_local(async move {
+//             // match backend.get_discord_invite(&auth.token()).await {
+//             //     Ok(resp) => {
+//             //         invite_url.set(Some(resp.invite));
+//             //     }
+//             //     Err(err) => {
+//             //         show_toast(
+//             //             toaster,
+//             //             format!("Failed to load Discord invite: {err}"),
+//             //             ToastVariant::Error,
+//             //         );
+//             //     }
+//             // }
+
+//             loading.set(false);
+//         });
+//     };
+
+//     view! {
+//         <div class="w-full bg-amber-900/20 border border-amber-700 rounded-xl p-4 my-6 text-left">
+//             <h2 class="text-amber-300 font-semibold text-lg">
+//                 "Help shape the future of the game!"
+//             </h2>
+//             <p class="text-gray-300 text-sm mt-1">
+//                 "Join our community on Discord to give feedback, suggest new features, and access early information."
+//             </p>
+
+//             {move || match invite_url.get() {
+//                 Some(url) => {
+//                     view! {
+//                         <a
+//                             href=url
+//                             target="_blank"
+//                             class="inline-block mt-3 px-4 py-2 bg-amber-500 text-black font-bold rounded-lg hover:bg-amber-400 transition"
+//                         >
+//                             "Join Discord"
+//                         </a>
+//                     }
+//                         .into_any()
+//                 }
+//                 None => {
+
+//                     view! {
+//                         <button
+//                             class="inline-block mt-3 px-4 py-2 bg-amber-500 text-black font-bold rounded-lg hover:bg-amber-400 transition disabled:opacity-50"
+//                             on:click=fetch_invite
+//                             disabled=loading
+//                         >
+//                             {move || if loading.get() { "Loading..." } else { "Get Invite" }}
+//                         </button>
+//                     }
+//                         .into_any()
+//                 }
+//             }}
+//         </div>
+//     }
+// }

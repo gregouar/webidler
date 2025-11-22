@@ -84,6 +84,11 @@ pub struct UpdateAccountResponse {}
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct DeleteAccountResponse {}
 
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetDiscordInviteResponse {
+    pub code: String,
+}
+
 // Characters
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

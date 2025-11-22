@@ -26,6 +26,7 @@ pub struct AppSettings {
     pub aes_key: Aes256Gcm,
     pub hash_key: String,
     pub frontend_url: String,
+    pub discord_bot_token: String,
 }
 
 impl AppSettings {
@@ -47,6 +48,8 @@ impl AppSettings {
             aes_key: Aes256Gcm::new_from_slice(&aes_key_str).expect("failed to create AES key"),
             hash_key: env::var("HASH_KEY").expect("HASH_KEY must be set"),
             frontend_url: env::var("FRONTEND_URL").expect("FRONTEND_URL must be set"),
+            discord_bot_token: env::var("DISCORD_BOT_TOKEN")
+                .expect("DISCORD_BOT_TOKEN must be set"),
         }
     }
 }

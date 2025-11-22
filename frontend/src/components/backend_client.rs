@@ -17,11 +17,12 @@ use shared::{
             BuyMarketItemResponse, CreateCharacterResponse, DeleteAccountResponse,
             DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse, ForgeAddAffixResponse,
             ForgotPasswordResponse, GetAreasResponse, GetBenedictionsResponse,
-            GetCharacterDetailsResponse, GetPassivesResponse, GetSkillsResponse,
-            GetUserCharactersResponse, GetUserDetailsResponse, InventoryDeleteResponse,
-            InventoryEquipResponse, InventoryUnequipResponse, LeaderboardResponse,
-            PlayersCountResponse, RejectMarketItemResponse, ResetPasswordResponse,
-            SellMarketItemResponse, SignInResponse, SignUpResponse, UpdateAccountResponse,
+            GetCharacterDetailsResponse, GetDiscordInviteResponse, GetPassivesResponse,
+            GetSkillsResponse, GetUserCharactersResponse, GetUserDetailsResponse,
+            InventoryDeleteResponse, InventoryEquipResponse, InventoryUnequipResponse,
+            LeaderboardResponse, PlayersCountResponse, RejectMarketItemResponse,
+            ResetPasswordResponse, SellMarketItemResponse, SignInResponse, SignUpResponse,
+            UpdateAccountResponse,
         },
     },
 };
@@ -161,6 +162,13 @@ impl BackendClient {
         user_id: &UserId,
     ) -> Result<DeleteAccountResponse, BackendError> {
         self.del_auth(&format!("account/{user_id}"), token).await
+    }
+
+    pub async fn get_discord_invite(
+        &self,
+        token: &str,
+    ) -> Result<GetDiscordInviteResponse, BackendError> {
+        self.get_auth("discord", token).await
     }
 
     // Characters
