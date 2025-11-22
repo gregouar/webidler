@@ -245,7 +245,7 @@
           "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
         },
         "modifier": "Flat",
-        "value": [8, 12]
+        "value": [6, 8]
       },
       {
         "scope": "Local",

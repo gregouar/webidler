@@ -213,7 +213,7 @@
           }
         },
         "modifier": "Multiplier",
-        "value": [80, 120]
+        "value": [120, 160]
       },
       {
         "scope": "Global",
