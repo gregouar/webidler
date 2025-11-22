@@ -347,12 +347,12 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         StatType::Life => format!("{} Maximum Life", format_adds_removes(value, false)),
         StatType::LifeRegen => format!(
             "{}% Life Regeneration per second",
-            format_adds_removes(value, true)
+            format_adds_removes(value.map(|value| value * 0.1), true)
         ),
         StatType::Mana => format!("{} Maximum Mana", format_adds_removes(value, false)),
         StatType::ManaRegen => format!(
             "{}% Mana Regeneration per second",
-            format_adds_removes(value, true)
+            format_adds_removes(value.map(|value| value * 0.1), true)
         ),
         StatType::Armor(armor_type) => format!(
             "{} {}",
@@ -553,7 +553,7 @@ fn format_flat_number(value: Option<f64>, precise: bool) -> String {
     match value {
         Some(value) => {
             if precise {
-                format!("{:.1}", value * 0.1)
+                format!("{:.1}", value)
             } else {
                 format!("{:.0}", value)
             }

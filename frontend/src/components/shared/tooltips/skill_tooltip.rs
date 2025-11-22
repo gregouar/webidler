@@ -78,7 +78,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                 {if skill_specs.cooldown > 0.0 {
                     view! {
                         "Cooldown: "
-                        <span class="text-white">{format!("{:.2}s", skill_specs.cooldown)}</span>
+                        <span class="text-white">{format!("{:.1}s", skill_specs.cooldown)}</span>
                     }
                         .into_any()
                 } else {
