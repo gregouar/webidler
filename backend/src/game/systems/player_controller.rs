@@ -68,13 +68,17 @@ impl PlayerController {
 
         let mut friends = vec![];
 
-        let min_mana_needed = player_specs
-            .skills_specs
-            .iter()
-            .take(player_specs.max_skills as usize)
-            .map(|s| s.mana_cost)
-            .max_by(|a, b| a.total_cmp(b))
-            .unwrap_or_default();
+        let min_mana_needed = if player_specs.character_specs.take_from_mana_before_life > 0.0 {
+            0.0
+        } else {
+            player_specs
+                .skills_specs
+                .iter()
+                .take(player_specs.max_skills as usize)
+                .map(|s| s.mana_cost)
+                .max_by(|a, b| a.total_cmp(b))
+                .unwrap_or_default()
+        };
 
         for (i, (skill_specs, skill_state)) in player_specs
             .skills_specs

@@ -58,14 +58,24 @@ pub fn PlayerCard() -> impl IntoView {
 
     let max_mana = Memo::new(move |_| game_context.player_specs.read().character_specs.max_mana);
     let reserved_mana = Memo::new(move |_| {
-        game_context
+        if game_context
             .player_specs
             .read()
-            .skills_specs
-            .iter()
-            .map(|s| s.mana_cost)
-            .max_by(|a, b| a.total_cmp(b))
-            .unwrap_or_default()
+            .character_specs
+            .take_from_mana_before_life
+            > 0.0
+        {
+            0.0
+        } else {
+            game_context
+                .player_specs
+                .read()
+                .skills_specs
+                .iter()
+                .map(|s| s.mana_cost)
+                .max_by(|a, b| a.total_cmp(b))
+                .unwrap_or_default()
+        }
     });
     let mana = Signal::derive(move || game_context.player_state.read().character_state.mana);
 

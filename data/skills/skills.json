@@ -756,21 +756,21 @@
     "description": "Focus your mind to recover mana, replenishing your magical energy.",
     "icon": "skills/meditate.svg",
     "skill_type": "Spell",
-    "cooldown": 20,
+    "cooldown": 5,
     "mana_cost": 0,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
         "stat": { "Restore": "Mana" },
         "modifier": "Flat",
-        "value": 5
+        "value": 1
       },
       {
         "stat": {
           "Speed": null
         },
         "modifier": "Flat",
-        "value": -0.5
+        "value": -0.3
       }
     ],
     "targets": [
@@ -780,7 +780,7 @@
           {
             "Restore": {
               "restore_type": "Mana",
-              "value": 10,
+              "value": 5,
               "modifier": "Flat"
             }
           }
