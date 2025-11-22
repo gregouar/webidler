@@ -37,6 +37,7 @@ services:
       DATABASE_URL: postgres://webidler_user:${POSTGRES_PASSWORD}@database/webidler
       CORS_FRONTEND_URL: https://gregouar.github.io
       FRONTEND_URL: https://gregouar.github.io/webidler
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
       RUST_LOG: DEBUG
     networks:
       - backend_net

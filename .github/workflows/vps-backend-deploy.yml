@@ -110,6 +110,7 @@ jobs:
             echo "AES_KEY=${{ secrets.AES_KEY }}" >> /webidler/tmp/.env
             echo "HASH_KEY=${{ secrets.HASH_KEY }}" >> /webidler/tmp/.env
             echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> /webidler/tmp/.env
+            echo "DISCORD_BOT_TOKEN=${{ secrets.DISCORD_BOT_TOKEN }}" >> /webidler/tmp/.env
             docker load < /webidler/tmp/backend.tar
 
             BACKUP_DIR="/webidler/backups"
