@@ -352,7 +352,7 @@ pub async fn read_market_items<'c>(
             AND ($31 = '' OR ms5.stat_value >= $32)
         ORDER BY 
             rejected DESC NULLS LAST, 
-            recipient_id ASC NULLS LAST, 
+            recipient_id = $3 ASC, 
             CASE
                 WHEN  $17 = 'Level' THEN market.item_level
             END ASC,
