@@ -2701,7 +2701,7 @@
         "name": "Golden Start",
         "icon": "passives/gold.svg",
         "initial_node": true,
-        "x": -110,
+        "x": -100,
         "y": 30,
         "size": 1,
         "node_type": "Gold",
@@ -2724,7 +2724,7 @@
       "gold_shower_1": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -120,
+        "x": -110,
         "y": 20,
         "node_type": "Gold",
         "effects": [
@@ -2745,7 +2745,7 @@
       "gold_shower_2": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -110,
+        "x": -100,
         "y": 10,
         "node_type": "Gold",
         "effects": [
@@ -2766,7 +2766,7 @@
       "gold_shower_3": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -120,
+        "x": -110,
         "y": 0,
         "node_type": "Gold",
         "effects": [
@@ -2787,7 +2787,7 @@
       "gold_shower_4": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -110,
+        "x": -100,
         "y": -10,
         "node_type": "Gold",
         "effects": [
@@ -2808,7 +2808,7 @@
       "gold_shower_5": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -120,
+        "x": -110,
         "y": -20,
         "node_type": "Gold",
         "effects": [
@@ -2829,7 +2829,7 @@
       "gold_shower_6": {
         "name": "Golden Shower",
         "icon": "passives/gold.svg",
-        "x": -110,
+        "x": -100,
         "y": -30,
         "size": 2,
         "node_type": "Gold",
