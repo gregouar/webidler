@@ -4,6 +4,7 @@ use base64::prelude::*;
 use jsonwebtoken::{DecodingKey, EncodingKey};
 use std::env;
 
+use crate::integration::discord::DiscordInvitesStore;
 pub use crate::{
     db::pool::DbPool,
     email::EmailService,
@@ -17,6 +18,7 @@ pub struct AppState {
     pub email_service: EmailService,
     pub master_store: MasterStore,
     pub sessions_store: SessionsStore,
+    pub discord_invites_store: DiscordInvitesStore,
 }
 
 #[derive(Clone)]
@@ -26,7 +28,6 @@ pub struct AppSettings {
     pub aes_key: Aes256Gcm,
     pub hash_key: String,
     pub frontend_url: String,
-    pub discord_bot_token: String,
 }
 
 impl AppSettings {
@@ -48,8 +49,6 @@ impl AppSettings {
             aes_key: Aes256Gcm::new_from_slice(&aes_key_str).expect("failed to create AES key"),
             hash_key: env::var("HASH_KEY").expect("HASH_KEY must be set"),
             frontend_url: env::var("FRONTEND_URL").expect("FRONTEND_URL must be set"),
-            discord_bot_token: env::var("DISCORD_BOT_TOKEN")
-                .expect("DISCORD_BOT_TOKEN must be set"),
         }
     }
 }
@@ -77,5 +76,10 @@ impl FromRef<AppState> for MasterStore {
 impl FromRef<AppState> for SessionsStore {
     fn from_ref(app_state: &AppState) -> SessionsStore {
         app_state.sessions_store.clone()
+    }
+}
+impl FromRef<AppState> for DiscordInvitesStore {
+    fn from_ref(app_state: &AppState) -> DiscordInvitesStore {
+        app_state.discord_invites_store.clone()
     }
 }

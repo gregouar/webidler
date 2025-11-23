@@ -6,7 +6,7 @@ use axum::{
 };
 
 use chrono::{Duration, Utc};
-use serde::Serialize;
+
 use shared::{
     constants::DEFAULT_MAX_CHARACTERS,
     data::user::UserId,
@@ -28,6 +28,7 @@ use crate::{
     auth::{self, CurrentUser},
     db::{self, users::UserUpdate},
     email::EmailService,
+    integration::discord::DiscordInvitesStore,
 };
 
 use super::AppError;
@@ -109,49 +110,14 @@ async fn post_sign_in(
 }
 
 async fn get_discord_invite(
-    State(app_settings): State<AppSettings>,
+    Extension(current_user): Extension<CurrentUser>,
+    State(discord_invites_store): State<DiscordInvitesStore>,
 ) -> Result<Json<GetDiscordInviteResponse>, AppError> {
-    let code = generate_discord_invite(&app_settings.discord_bot_token).await?;
-
-    Ok(Json(GetDiscordInviteResponse { code }))
-}
-
-#[derive(Serialize)]
-struct DiscordCreateInviteBody {
-    max_age: u64,
-    max_uses: u64,
-    temporary: bool,
-    unique: bool,
-}
-
-async fn generate_discord_invite(discord_bot_token: &str) -> anyhow::Result<String> {
-    let body = DiscordCreateInviteBody {
-        max_age: 3600,
-        max_uses: 1,
-        temporary: false,
-        unique: true,
-    };
-
-    let res = reqwest::Client::new()
-        .post("https://discord.com/api/v10/channels/734765714497601649/invites")
-        .header("Authorization", format!("Bot {}", discord_bot_token))
-        .header("Content-Type", "application/json")
-        .json(&body)
-        .send()
+    let code = discord_invites_store
+        .get_invite(current_user.user_details.user.user_id)
         .await?;
 
-    if !res.status().is_success() {
-        let err = res.text().await?;
-        anyhow::bail!("Discord API error: {}", err);
-    }
-
-    Ok(res
-        .json::<serde_json::Value>()
-        .await?
-        .get("code")
-        .and_then(|code| code.as_str())
-        .map(|code| code.to_string())
-        .ok_or(anyhow::anyhow!("failed to get discord invite"))?)
+    Ok(Json(GetDiscordInviteResponse { code }))
 }
 
 async fn get_me(
