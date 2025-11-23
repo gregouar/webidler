@@ -11,6 +11,7 @@ use shared::{
 use crate::{
     assets::img_asset,
     components::{
+        accessibility::AccessibilityContext,
         game::game_context::GameContext,
         shared::tooltips::{
             effects_tooltip::{self, formatted_effects_list},
@@ -194,7 +195,16 @@ fn InGameNode(
         }
     };
 
-    view! { <Node node_specs node_status node_level on_click=purchase show_upgrade=false /> }
+    view! {
+        <Node
+            node_specs
+            node_status
+            node_level
+            on_click=purchase
+            on_right_click=|| {}
+            show_upgrade=false
+        />
+    }
 }
 
 #[component]
@@ -286,6 +296,7 @@ pub fn Node(
     node_level: Memo<u8>,
     show_upgrade: bool,
     on_click: impl Fn() + Send + Sync + 'static,
+    on_right_click: impl Fn() + Send + Sync + 'static,
 ) -> impl IntoView {
     let fill = match node_specs.node_type {
         PassiveNodeType::Attack => "#8b1e1e",
@@ -389,8 +400,14 @@ pub fn Node(
                 let show_tooltip = show_tooltip.clone();
                 move |_| { show_tooltip() }
             }
-            on:contextmenu=move |ev| {
-                ev.prevent_default();
+            on:contextmenu={
+                let accessibility: AccessibilityContext = expect_context();
+                move |ev| {
+                    ev.prevent_default();
+                    if !accessibility.is_on_mobile() {
+                        on_right_click();
+                    }
+                }
             }
 
             on:mouseenter=move |_| show_tooltip()

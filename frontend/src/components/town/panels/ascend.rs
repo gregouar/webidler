@@ -352,5 +352,30 @@ fn AscendNode(
         }
     };
 
-    view! { <Node node_specs node_status node_level on_click=purchase show_upgrade=true /> }
+    let refund = {
+        let node_id = node_id.clone();
+        move || {
+            passives_tree_ascension.update(|passives_tree_ascension| {
+                let entry = passives_tree_ascension
+                    .ascended_nodes
+                    .entry(node_id.clone())
+                    .or_default();
+                if *entry > 0 {
+                    *entry = entry.saturating_sub(1);
+                    ascension_cost.update(|ascension_cost| *ascension_cost -= 1.0);
+                }
+            });
+        }
+    };
+
+    view! {
+        <Node
+            node_specs
+            node_status
+            node_level
+            on_click=purchase
+            on_right_click=refund
+            show_upgrade=true
+        />
+    }
 }
