@@ -403,7 +403,7 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "skills/curse_flammability.svg",
-                      "description": "Trigger an Intense Fire when the target has Fire Damage over Time status, dealing 50% of Hit Fire Damage extra Fire Damage per stack.",
+                      "description": "When the target is hit by Fire damage, trigger an Intense Fire that deals additional Fire Damage equal to 50% of the Hit's Fire Damage for each stack of Fire Damage over Time present on the target.",
                       "OnTakeHit": {
                         "is_triggered": false
                       },
