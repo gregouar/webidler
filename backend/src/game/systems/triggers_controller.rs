@@ -7,6 +7,7 @@ use shared::data::{
 use crate::game::{
     data::event::{EventsQueue, HitEvent},
     game_data::GameInstanceData,
+    systems::stats_updater,
 };
 
 use super::{skills_controller, skills_updater};
@@ -91,7 +92,7 @@ pub fn apply_trigger_effects(
                 }
             };
 
-            let effects_modifiers: Vec<_> = trigger_context
+            let mut effects_modifiers: Vec<_> = trigger_context
                 .trigger
                 .modifiers
                 .iter()
@@ -153,10 +154,27 @@ pub fn apply_trigger_effects(
                                     })
                                     .sum()
                             }
+                            TriggerEffectModifierSource::StatusStacks(stat_status_type) => {
+                                statuses_context
+                                    .iter()
+                                    .filter(|(status_specs, _)| match stat_status_type {
+                                        Some(stat_status_type) => {
+                                            if let Some(status_type) = status_specs.into() {
+                                                stat_status_type.is_match(&status_type)
+                                            } else {
+                                                false
+                                            }
+                                        }
+                                        None => true,
+                                    })
+                                    .count() as f64
+                            }
                         },
                     bypass_ignore: true,
                 })
                 .collect();
+
+            stats_updater::sort_stat_effects(&mut effects_modifiers);
 
             for mut effect in trigger_context.trigger.effects.iter().cloned() {
                 skills_updater::compute_skill_specs_effect(
@@ -164,6 +182,8 @@ pub fn apply_trigger_effects(
                     &mut effect,
                     effects_modifiers.iter(),
                 );
+                tracing::warn!("{:?}", effects_modifiers);
+                tracing::warn!("{:?}", effect);
                 skills_controller::apply_skill_effect(
                     events_queue,
                     attacker,

@@ -37,7 +37,12 @@ pub fn stats_map_to_vec(effects: &EffectsMap, area_threat: &AreaThreat) -> Vec<S
         .collect();
 
     effects.extend(to_add);
+    sort_stat_effects(&mut effects);
 
+    effects
+}
+
+pub fn sort_stat_effects(effects: &mut Vec<StatEffect>) {
     effects.sort_by_key(|e| {
         (
             match e.modifier {
@@ -47,6 +52,4 @@ pub fn stats_map_to_vec(effects: &EffectsMap, area_threat: &AreaThreat) -> Vec<S
             e.stat.clone(),
         )
     });
-
-    effects
 }

@@ -90,6 +90,7 @@ pub enum TriggerEffectModifierSource {
     AreaLevel,
     StatusValue(Option<StatStatusType>),
     StatusDuration(Option<StatStatusType>),
+    StatusStacks(Option<StatStatusType>),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]

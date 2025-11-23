@@ -142,7 +142,7 @@
           },
           {
             "ApplyStatus": {
-              "duration": 3,
+              "duration": 4,
               "statuses": [
                 {
                   "status_type": {
@@ -202,7 +202,7 @@
   },
   "curse_frailty": {
     "name": "Curse of Frailty",
-    "description": "Curse enemies to weaken their defenses, making them take more damage from all sources.",
+    "description": "Curse enemies to weaken their defenses, making them take more damage from Physical and Poison damage.",
     "icon": "skills/curse_frailty.svg",
     "skill_type": "Spell",
     "cooldown": 10,
@@ -230,7 +230,22 @@
                       "stat": {
                         "DamageResistance": {
                           "skill_type": null,
-                          "damage_type": null
+                          "damage_type": "Physical"
+                        }
+                      },
+                      "modifier": "Flat",
+                      "debuff": true
+                    }
+                  },
+                  "value": 30
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "DamageResistance": {
+                          "skill_type": null,
+                          "damage_type": "Poison"
                         }
                       },
                       "modifier": "Flat",
@@ -283,12 +298,12 @@
                       "debuff": true
                     }
                   },
-                  "value": 20
+                  "value": 30
                 },
                 {
                   "status_type": {
                     "Trigger": {
-                      "trigger_id": "statuses/thunder_skull.svg",
+                      "trigger_id": "skills/curse_conductivity.svg",
                       "description": "Trigger a Burst of Lightning when Hit, damaging adjacent enemies for 50% of Storm Damage dealt.",
                       "OnTakeHit": {
                         "is_triggered": false
@@ -332,6 +347,115 @@
                           "factor": 100.0,
                           "source": {
                             "HitDamage": "Storm"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "curse_flammability": {
+    "name": "Curse of Flammability",
+    "description": "Unleash infernal flames upon your enemies, intensifying the fire damage they suffer the longer they burn.",
+    "icon": "skills/curse_flammability.svg",
+    "skill_type": "Spell",
+    "cooldown": 10,
+    "mana_cost": 30,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "modifier": "Multiplier",
+        "value": 10
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "All",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "DamageResistance": {
+                          "skill_type": null,
+                          "damage_type": "Fire"
+                        }
+                      },
+                      "modifier": "Flat",
+                      "debuff": true
+                    }
+                  },
+                  "value": 30
+                },
+                {
+                  "status_type": {
+                    "Trigger": {
+                      "trigger_id": "skills/curse_flammability.svg",
+                      "description": "Trigger an Intense Fire when the target has Fire Damage over Time status, dealing 50% of Hit Fire Damage extra Fire Damage per stack.",
+                      "OnTakeHit": {
+                        "is_triggered": false
+                      },
+                      "target": "SameTarget",
+                      "skill_range": "Any",
+                      "skill_shape": "Single",
+                      "skill_type": "Spell",
+                      "effects": [
+                        {
+                          "FlatDamage": {
+                            "damage": {}
+                          },
+                          "ignore_stat_effects": [
+                            {
+                              "Damage": {
+                                "damage_type": "Fire"
+                              }
+                            },
+                            {
+                              "MinDamage": {
+                                "damage_type": "Fire"
+                              }
+                            },
+                            {
+                              "MaxDamage": {
+                                "damage_type": "Fire"
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "modifiers": [
+                        {
+                          "stat": {
+                            "Damage": { "damage_type": "Fire" }
+                          },
+                          "modifier": "Multiplier",
+                          "factor": 100.0,
+                          "source": {
+                            "HitDamage": "Fire"
+                          }
+                        },
+                        {
+                          "stat": {
+                            "Damage": { "damage_type": "Fire" }
+                          },
+                          "modifier": "Flat",
+                          "factor": 0.5,
+                          "source": {
+                            "StatusStacks": {
+                              "DamageOverTime": { "damage_type": "Fire" }
+                            }
                           }
                         }
                       ]
@@ -609,7 +733,7 @@
                       "modifier": "Multiplier"
                     }
                   },
-                  "value": 20
+                  "value": 30
                 },
                 {
                   "status_type": {
@@ -623,7 +747,7 @@
                       "modifier": "Multiplier"
                     }
                   },
-                  "value": 20
+                  "value": 30
                 }
               ]
             }
