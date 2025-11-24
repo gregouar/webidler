@@ -30,7 +30,7 @@ pub async fn get_leaderboard(
                 gs.*,
                 ROW_NUMBER() OVER (
                     PARTITION BY gs.area_id, gs.character_id
-                    ORDER BY gs.area_level DESC, gs.elapsed_time DESC, gs.created_at ASC
+                    ORDER BY gs.area_level DESC, gs.elapsed_time ASC, gs.created_at ASC
                 ) AS best_rank
             FROM game_stats gs
         ),
@@ -39,7 +39,7 @@ pub async fn get_leaderboard(
                 br.*,
                 ROW_NUMBER() OVER (
                     PARTITION BY br.area_id
-                    ORDER BY br.area_level DESC, br.elapsed_time DESC, br.created_at ASC
+                    ORDER BY br.area_level DESC, br.elapsed_time ASC, br.created_at ASC
                 ) AS area_rank
             FROM best_runs br
             WHERE br.best_rank = 1
