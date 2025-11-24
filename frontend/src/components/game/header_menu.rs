@@ -11,6 +11,7 @@ use crate::components::{
         confirm::ConfirmContext,
         fullscreen::FullscreenButton,
         number::format_number,
+        wiki::WikiButton,
     },
     websocket::WebsocketContext,
 };
@@ -64,6 +65,7 @@ pub fn HeaderMenu() -> impl IntoView {
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
                 <FullscreenButton />
+                <WikiButton />
                 <MenuButton on:click=move |_| {
                     game_context.open_inventory.set(!game_context.open_inventory.get());
                     game_context.open_statistics.set(false);

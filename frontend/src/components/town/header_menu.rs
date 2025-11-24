@@ -3,7 +3,7 @@ use leptos::{html::*, prelude::*};
 use crate::components::{
     shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
     town::TownContext,
-    ui::{buttons::MenuButton, fullscreen::FullscreenButton},
+    ui::{buttons::MenuButton, fullscreen::FullscreenButton, wiki::WikiButton},
 };
 
 #[component]
@@ -32,6 +32,7 @@ pub fn HeaderMenu() -> impl IntoView {
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
                 <FullscreenButton />
+                <WikiButton />
                 <MenuButton
                     on:click=move |_| {
                         town_context.open_temple.set(!town_context.open_temple.get());

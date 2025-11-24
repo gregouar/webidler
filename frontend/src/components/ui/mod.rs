@@ -9,3 +9,4 @@ pub mod pannable;
 pub mod progress_bars;
 pub mod toast;
 pub mod tooltip;
+pub mod wiki;
