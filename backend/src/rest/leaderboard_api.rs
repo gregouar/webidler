@@ -10,7 +10,7 @@ use shared::{
 };
 
 use crate::{
-    app_state::{AppState, DbPool, MasterStore},
+    app_state::{AppState, DbPool},
     db,
 };
 
@@ -22,20 +22,12 @@ pub fn routes() -> Router<AppState> {
 
 pub async fn get_leaderboard(
     State(db_pool): State<DbPool>,
-    State(master_store): State<MasterStore>,
 ) -> Result<Json<LeaderboardResponse>, AppError> {
     Ok(Json(LeaderboardResponse {
         entries: db::leaderboard::get_leaderboard(&db_pool, 10)
             .await?
             .into_iter()
-            .map(|mut entry| {
-                entry.area_level += master_store
-                    .area_blueprints_store
-                    .get(&entry.area_id)
-                    .map(|area| area.specs.starting_level as i32 - 1)
-                    .unwrap_or_default();
-                entry.into()
-            })
+            .map(|entry| entry.into())
             .collect(),
     }))
 }
@@ -50,9 +42,7 @@ impl From<db::leaderboard::LeaderboardEntry> for LeaderboardEntry {
             area_id: val.area_id,
             area_level: val.area_level as AreaLevel,
             created_at: val.created_at.into(),
-            elapsed_time: val
-                .elapsed_time
-                .map(Duration::from_secs_f64),
+            elapsed_time: val.elapsed_time.map(Duration::from_secs_f64),
             comments: "".to_string(),
         }
     }

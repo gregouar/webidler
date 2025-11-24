@@ -38,7 +38,7 @@ pub async fn save_game_stats<'c>(
         executor,
         character_id,
         &game_instance_data.area_id.clone(),
-        game_instance_data.area_state.read().area_level as i32,
+        game_instance_data.area_state.read().max_area_level as i32,
         game_instance_data
             .game_stats
             .elapsed_time_at_max_level

@@ -182,8 +182,6 @@ pub fn apply_trigger_effects(
                     &mut effect,
                     effects_modifiers.iter(),
                 );
-                tracing::warn!("{:?}", effects_modifiers);
-                tracing::warn!("{:?}", effect);
                 skills_controller::apply_skill_effect(
                     events_queue,
                     attacker,
