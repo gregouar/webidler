@@ -1882,7 +1882,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 10
           }
         ],
         "upgrade_effects": [
@@ -1893,7 +1893,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10
+            "value": 5
           }
         ],
         "max_upgrade_level": 3
@@ -1912,7 +1912,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 10
           }
         ],
         "upgrade_effects": [
@@ -1923,7 +1923,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10
+            "value": 5
           }
         ],
         "max_upgrade_level": 3
@@ -1943,7 +1943,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 40
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1954,7 +1954,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
