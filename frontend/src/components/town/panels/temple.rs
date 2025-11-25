@@ -52,7 +52,7 @@ pub fn TemplePanel(
                             .then(|| {
                                 view! {
                                     <div class="flex h-full items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
-                                        "Blessings Cost: "
+                                        "Benedictions Cost: "
                                         <span class="text-amber-200 font-bold font-number">
                                             {move || format_number(cost.get())}
                                         </span> <GoldIcon />
@@ -127,7 +127,7 @@ fn ConfirmButton(
         let confirm_context = expect_context::<ConfirmContext>();
         move |_| {
             (confirm_context.confirm)(
-                format! {"Do you confirm buying Blessings for {} Gold?",format_number(cost.get()) },
+                format! {"Do you confirm buying Benedictions for {} Gold?",format_number(cost.get()) },
                 do_ascend.clone(),
             );
         }
@@ -315,7 +315,7 @@ fn BenedictionRow(
                                     </div>
 
                                     <MenuButton disabled class:h-full on:click=upgrade>
-                                        "Bless"
+                                        "Pray"
                                     </MenuButton>
                                 }
                                     .into_any()
