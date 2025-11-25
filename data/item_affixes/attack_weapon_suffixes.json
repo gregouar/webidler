@@ -339,7 +339,7 @@
           "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
         },
         "modifier": "Flat",
-        "value": [2, 4]
+        "value": [1, 2]
       }
     ]
   },
@@ -359,7 +359,7 @@
           "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
         },
         "modifier": "Flat",
-        "value": [5, 9]
+        "value": [3, 4]
       }
     ]
   },
@@ -379,7 +379,7 @@
           "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
         },
         "modifier": "Flat",
-        "value": [10, 14]
+        "value": [5, 6]
       }
     ]
   },
@@ -399,7 +399,7 @@
           "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
         },
         "modifier": "Flat",
-        "value": [15, 19]
+        "value": [7, 8]
       }
     ]
   },
