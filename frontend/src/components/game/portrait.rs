@@ -141,6 +141,67 @@ pub fn CharacterPortrait(
                 50% { opacity: 0.8; transform: scale(.55) translateY(40%); }
                 100% { opacity: 0; transform: scale(.65) translateY(60%); }
             }
+            
+            /* --- BLEED OVERLAY --- */
+            .status-bleed {
+                background:
+                    linear-gradient(
+                        to bottom,
+                        rgba(150, 0, 0, 0.8) 0%,
+                        rgba(150, 0, 0, 0.4) 15%,
+                        rgba(150, 0, 0, 0) 40%
+                    );
+                animation: bleedPulse 2.5s ease-in-out infinite;
+                mix-blend-mode: multiply;
+            }
+            
+            /* subtle pulsing of intensity */
+            @keyframes bleedPulse {
+                0%, 100% {
+                    opacity: 0.85;
+                }
+                50% {
+                    opacity: 1.0;
+                }
+            }
+            
+            /* --- BURN OVERLAY --- */
+            .status-burn {
+                background:
+                linear-gradient(
+                to right,
+                rgba(255, 90, 0, 0.7) 0%,
+                rgba(255, 90, 0, 0) 25%,
+                rgba(255, 90, 0, 0) 75%,
+                rgba(255, 90, 0, 0.7) 100%
+                );
+                mix-blend-mode: color-burn;
+                animation: burnFlicker 1.4s ease-in-out infinite;
+            }
+            
+            @keyframes burnFlicker {
+                0%   { opacity: 0.7; }
+                45%  { opacity: 1.0; }
+                100% { opacity: 0.7; }
+            }
+            
+            /* --- POISON OVERLAY --- */
+            .status-poison {
+                background:
+                    linear-gradient(
+                        to top,
+                        rgba(64, 120, 0, 0.65) 0%,
+                        rgba(28, 120, 0, 0.35) 20%,
+                        rgba(0, 120, 0, 0) 45%
+                    );
+                mix-blend-mode: multiply;
+                animation: poisonPulse 2.8s ease-in-out infinite;
+            }
+            
+            @keyframes poisonPulse {
+                0%, 100% { opacity: 0.75; }
+                50%      { opacity: 1.0;   }
+            }
             "
         </style>
         <div class=move || {
@@ -168,6 +229,51 @@ pub fn CharacterPortrait(
                             )
                         }
                     />
+
+                    <div
+                        class="absolute inset-0 transition-opacity duration-500 opacity-0"
+                        class:opacity-100=move || {
+                            active_statuses
+                                .read()
+                                .contains(
+                                    &StatusId::DamageOverTime {
+                                        damage_type: DamageType::Physical,
+                                    },
+                                )
+                        }
+                    >
+                        <div class="absolute inset-0 status-bleed"></div>
+                    </div>
+
+                    <div
+                        class="absolute inset-0 transition-opacity duration-500 opacity-0"
+                        class:opacity-100=move || {
+                            active_statuses
+                                .read()
+                                .contains(
+                                    &StatusId::DamageOverTime {
+                                        damage_type: DamageType::Fire,
+                                    },
+                                )
+                        }
+                    >
+                        <div class="absolute inset-0 status-burn"></div>
+                    </div>
+
+                    <div
+                        class="absolute inset-0 transition-opacity duration-500 opacity-0"
+                        class:opacity-100=move || {
+                            active_statuses
+                                .read()
+                                .contains(
+                                    &StatusId::DamageOverTime {
+                                        damage_type: DamageType::Poison,
+                                    },
+                                )
+                        }
+                    >
+                        <div class="absolute inset-0 status-poison"></div>
+                    </div>
                 </div>
 
                 <div class="absolute inset-0 flex place-items-start p-1 xl:p-2">
@@ -249,7 +355,7 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
         StatusId::StatModifier {
             stat, debuff: true, ..
         } => match stat {
-            StatType::Armor(Some(DamageType::Physical)) => {
+            StatType::Armor(_) | StatType::DamageResistance { .. } => {
                 ("statuses/debuff_armor.svg".to_string(), "Broken Armor")
             }
             _ => ("statuses/debuff.svg".to_string(), "Debuffed"),
