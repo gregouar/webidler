@@ -1,6 +1,10 @@
 use std::collections::HashMap;
 
-use shared::data::{stat_effect::EffectsMap, temple::PlayerBenedictions, user::UserCharacterId};
+use shared::data::{
+    stat_effect::EffectsMap,
+    temple::{BenedictionEffect, PlayerBenedictions},
+    user::UserCharacterId,
+};
 use sqlx::Transaction;
 
 use crate::{
@@ -17,10 +21,12 @@ pub fn generate_effects_map_from_benedictions(
     player_benedictions
         .purchased_benedictions
         .iter()
-        .filter_map(|(node_id, benediction_state)| {
+        .filter_map(|(benediction_id, benediction_state)| {
             benedictions_store
-                .get(node_id)
-                .and_then(|node| node.compute_effect(benediction_state.upgrade_level))
+                .get(benediction_id)
+                .and_then(|benediction| {
+                    benediction.compute_stat_effect(benediction_state.upgrade_level)
+                })
         })
         .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
             *effects_map
@@ -29,6 +35,28 @@ pub fn generate_effects_map_from_benedictions(
                 .or_default() += effect.value;
             effects_map
         })
+}
+
+pub fn find_benediction_value(
+    benedictions_store: &BenedictionsStore,
+    player_benedictions: &PlayerBenedictions,
+    benediction_effect: BenedictionEffect,
+) -> f64 {
+    player_benedictions
+        .purchased_benedictions
+        .iter()
+        .filter_map(|(benediction_id, benediction_state)| {
+            benedictions_store
+                .get(benediction_id)
+                .and_then(|benediction| {
+                    if benediction_effect == benediction.effect {
+                        benediction.compute_value(benediction_state.upgrade_level)
+                    } else {
+                        None
+                    }
+                })
+        })
+        .fold(0.0, |total, value| total + value)
 }
 
 pub async fn update_benedictions(

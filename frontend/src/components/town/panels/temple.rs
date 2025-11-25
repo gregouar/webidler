@@ -3,7 +3,7 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 use std::sync::Arc;
 
 use shared::{
-    data::temple::{BenedictionSpecs, PlayerBenedictions},
+    data::temple::{BenedictionEffect, BenedictionSpecs, PlayerBenedictions},
     http::client::BuyBenedictionsRequest,
 };
 
@@ -52,7 +52,7 @@ pub fn TemplePanel(
                             .then(|| {
                                 view! {
                                     <div class="flex h-full items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
-                                        "Blessings Cost: "
+                                        "Benedictions Cost: "
                                         <span class="text-amber-200 font-bold font-number">
                                             {move || format_number(cost.get())}
                                         </span> <GoldIcon />
@@ -127,7 +127,7 @@ fn ConfirmButton(
         let confirm_context = expect_context::<ConfirmContext>();
         move |_| {
             (confirm_context.confirm)(
-                format! {"Do you confirm buying Blessings for {} Gold?",format_number(cost.get()) },
+                format! {"Do you confirm buying Benedictions for {} Gold?",format_number(cost.get()) },
                 do_ascend.clone(),
             );
         }
@@ -153,8 +153,7 @@ fn BenedictionsList(
     let benedictions_specs = move || {
         let mut benedictions_specs: Vec<_> =
             town_context.benedictions_specs.get().into_iter().collect();
-        benedictions_specs
-            .sort_by_key(|(_, specs)| (specs.effect.stat.clone(), specs.effect.modifier));
+        benedictions_specs.sort_by_key(|(_, specs)| specs.effect.clone());
         benedictions_specs
     };
 
@@ -204,14 +203,6 @@ fn BenedictionRow(
         }
     });
 
-    let effect = {
-        let benediction_specs = benediction_specs.clone();
-        move || benediction_specs.compute_effect(upgrade_level.get())
-    };
-    let next_effect = {
-        let benediction_specs = benediction_specs.clone();
-        move || benediction_specs.compute_effect(upgrade_level.get() + 1)
-    };
     let price = Memo::new({
         let benediction_specs = benediction_specs.clone();
         move |_| benediction_specs.compute_price(upgrade_level.get())
@@ -254,9 +245,7 @@ fn BenedictionRow(
 
                 <div class="flex items-center justify-between">
                     <div class="text-lg font-semibold text-amber-200 capitalize">
-                        {effects_tooltip::format_multiplier_stat_name(
-                            &benediction_specs.effect.stat,
-                        )}
+                        {format_benediction_title(&benediction_specs.effect)}
                     </div>
 
                     <div class="text-sm text-gray-400">
@@ -271,26 +260,20 @@ fn BenedictionRow(
 
                     <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
                         <div class="text-xs text-gray-400 mb-1">"Current"</div>
-                        <ul class="text-sm text-amber-100">
-                            {move || {
-                                effect()
-                                    .map(|effect| effects_tooltip::formatted_effects_list(
-                                        [effect].into(),
-                                    ))
-                            }}
-                        </ul>
+                        <EffectDescription
+                            benediction_specs=benediction_specs.clone()
+                            upgrade_level=Signal::derive(move || upgrade_level.get())
+                        />
                     </div>
 
                     <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
                         <div class="text-xs text-gray-400 mb-1">"Next"</div>
-                        <ul class="text-sm text-amber-100">
-                            {move || {
-                                next_effect()
-                                    .map(|next_effect| effects_tooltip::formatted_effects_list(
-                                        [next_effect].into(),
-                                    ))
-                            }}
-                        </ul>
+                        <EffectDescription
+                            benediction_specs=benediction_specs.clone()
+                            upgrade_level=Signal::derive(move || {
+                                upgrade_level.get().saturating_add(1)
+                            })
+                        />
                     </div>
 
                 </div>
@@ -315,7 +298,7 @@ fn BenedictionRow(
                                     </div>
 
                                     <MenuButton disabled class:h-full on:click=upgrade>
-                                        "Bless"
+                                        "Pray"
                                     </MenuButton>
                                 }
                                     .into_any()
@@ -326,5 +309,60 @@ fn BenedictionRow(
                 })}
 
         </div>
+    }
+}
+
+pub fn format_benediction_title(benediction_effect: &BenedictionEffect) -> String {
+    match benediction_effect {
+        BenedictionEffect::StartingGold => "Starting Gold".to_string(),
+        BenedictionEffect::StartingLevel => "Starting Level".to_string(),
+        BenedictionEffect::StatEffect { stat, .. } => {
+            effects_tooltip::format_multiplier_stat_name(stat)
+        }
+    }
+}
+
+#[component]
+pub fn EffectDescription(
+    benediction_specs: BenedictionSpecs,
+    upgrade_level: Signal<u64>,
+) -> impl IntoView {
+    let value = {
+        let benediction_specs = benediction_specs.clone();
+        move || benediction_specs.compute_value(upgrade_level.get())
+    };
+
+    view! {
+        <ul class="text-sm text-amber-100">
+            {move || {
+                value()
+                    .map(|value| match benediction_specs.effect {
+                        BenedictionEffect::StartingGold => {
+                            view! {
+                                {effects_tooltip::effect_li(format!("+{:0} Starting Gold", value))}
+                            }
+                                .into_any()
+                        }
+                        BenedictionEffect::StartingLevel => {
+                            view! {
+                                {effects_tooltip::effect_li(
+                                    format!("+{:0} Starting Player Level", value),
+                                )}
+                            }
+                                .into_any()
+                        }
+                        BenedictionEffect::StatEffect { .. } => {
+                            view! {
+                                {benediction_specs
+                                    .compute_stat_effect(upgrade_level.get())
+                                    .map(|stat_effect| effects_tooltip::formatted_effects_list(
+                                        [stat_effect].into(),
+                                    ))}
+                            }
+                                .into_any()
+                        }
+                    })
+            }}
+        </ul>
     }
 }

@@ -128,7 +128,7 @@ fn stat_skill_effect_type_str(effect_type: Option<StatSkillEffectType>) -> Strin
 //     }
 // }
 
-fn effect_li(text: String) -> impl IntoView {
+pub fn effect_li(text: String) -> impl IntoView {
     view! { <li class="text-blue-400 leading-snug">{text}</li> }
 }
 

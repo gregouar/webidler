@@ -11,8 +11,6 @@ pub struct AreaSpecs {
     pub required_level: AreaLevel,
     #[serde(default)]
     pub item_level_modifier: AreaLevel,
-    #[serde(default)]
-    pub starting_gold: f64,
     pub header_background: String,
     pub footer_background: String,
 }

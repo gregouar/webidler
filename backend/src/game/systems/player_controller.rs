@@ -141,14 +141,22 @@ pub fn level_up(
         return false;
     }
 
+    player_resources.experience -= player_specs.experience_needed;
+    level_up_no_cost(player_specs, player_state, player_resources);
+
+    true
+}
+
+pub fn level_up_no_cost(
+    player_specs: &mut PlayerSpecs,
+    player_state: &mut PlayerState,
+    player_resources: &mut PlayerResources,
+) {
     player_specs.level += 1;
     player_resources.passive_points += 1;
-    player_resources.experience -= player_specs.experience_needed;
     player_specs.experience_needed = computations::player_level_up_cost(player_specs);
 
     player_state.character_state.life += PLAYER_LIFE_PER_LEVEL;
-
-    true
 }
 
 pub fn equip_item_from_bag(
