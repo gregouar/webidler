@@ -31,7 +31,7 @@ pub struct PassivesTreeSpecs {
     pub connections: Vec<PassiveConnection>,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, Default)]
+#[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq)]
 pub struct PassivesTreeAscension {
     pub ascended_nodes: HashMap<PassiveNodeId, u8>,
 }

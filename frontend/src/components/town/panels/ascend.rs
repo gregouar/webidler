@@ -35,6 +35,13 @@ pub fn AscendPanel(
         ascension_cost.set(0.0);
         passives_tree_ascension.set(town_context.passives_tree_ascension.get_untracked());
     };
+
+    let has_changed = Memo::new(move |_| {
+        town_context
+            .passives_tree_ascension
+            .with(|base_ascension| !passives_tree_ascension.read().eq(base_ascension))
+    });
+
     // Reset temporary ascension on opening
     Effect::new(move || {
         if open.get() {
@@ -63,11 +70,16 @@ pub fn AscendPanel(
                                 <div class="flex items-center gap-2">
                                     <MenuButton
                                         on:click=move |_| reset()
-                                        disabled=Signal::derive(move || ascension_cost.get() == 0.0)
+                                        disabled=Signal::derive(move || !has_changed.get())
                                     >
                                         "Cancel"
                                     </MenuButton>
-                                    <ConfirmButton passives_tree_ascension ascension_cost open />
+                                    <ConfirmButton
+                                        passives_tree_ascension
+                                        ascension_cost
+                                        has_changed
+                                        open
+                                    />
                                 </div>
                             }
                                 .into_any()
@@ -97,6 +109,7 @@ pub fn AscendPanel(
 fn ConfirmButton(
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     ascension_cost: RwSignal<f64>,
+    has_changed: Memo<bool>,
     open: RwSignal<bool>,
 ) -> impl IntoView {
     let do_ascend = Arc::new({
@@ -145,7 +158,7 @@ fn ConfirmButton(
         }
     };
 
-    let disabled = Signal::derive(move || ascension_cost.get() == 0.0);
+    let disabled = Signal::derive(move || !has_changed.get());
 
     view! {
         <MenuButton on:click=try_ascend disabled=disabled>
