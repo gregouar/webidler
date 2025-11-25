@@ -2,13 +2,12 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use crate::data::stat_effect::Modifier;
-
-pub use super::stat_effect::StatEffect;
+pub use super::stat_effect::{Modifier, StatEffect, StatType};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct BenedictionSpecs {
-    pub effect: StatEffect,
+    pub value: f64,
+    pub effect: BenedictionEffect,
 
     pub upgrade_modifier: Modifier,
     pub upgrade_value: f64,
@@ -18,6 +17,13 @@ pub struct BenedictionSpecs {
 
     #[serde(default)]
     pub max_upgrade_level: Option<u64>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, PartialOrd, Eq, Ord)]
+pub enum BenedictionEffect {
+    StartingGold,
+    StartingLevel,
+    StatEffect { stat: StatType, modifier: Modifier },
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
@@ -31,8 +37,8 @@ pub struct PlayerBenedictions {
 }
 
 impl BenedictionSpecs {
-    pub fn compute_effect(&self, upgrade_level: u64) -> Option<StatEffect> {
-        let mut effect = self.effect.clone();
+    pub fn compute_value(&self, upgrade_level: u64) -> Option<f64> {
+        let mut value = self.value;
 
         if upgrade_level == 0
             || self
@@ -45,12 +51,23 @@ impl BenedictionSpecs {
 
         match self.upgrade_modifier {
             Modifier::Multiplier => todo!(),
-            Modifier::Flat => {
-                effect.value += upgrade_level.saturating_sub(1) as f64 * self.upgrade_value
-            }
+            Modifier::Flat => value += upgrade_level.saturating_sub(1) as f64 * self.upgrade_value,
         }
 
-        Some(effect)
+        Some(value)
+    }
+
+    pub fn compute_stat_effect(&self, upgrade_level: u64) -> Option<StatEffect> {
+        if let BenedictionEffect::StatEffect { stat, modifier } = self.effect.clone() {
+            self.compute_value(upgrade_level).map(|value| StatEffect {
+                stat,
+                modifier,
+                value,
+                bypass_ignore: false,
+            })
+        } else {
+            None
+        }
     }
 
     pub fn compute_price(&self, upgrade_level: u64) -> f64 {

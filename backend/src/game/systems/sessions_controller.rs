@@ -8,7 +8,7 @@ use shared::data::{
     item::ItemRarity,
     passive::PassivesTreeState,
     player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs},
-    temple::PlayerBenedictions,
+    temple::{BenedictionEffect, PlayerBenedictions},
     user::UserCharacterId,
 };
 
@@ -20,7 +20,7 @@ use crate::{
         },
         game_data::GameInstanceData,
         sessions::{Session, SessionsStore},
-        systems::inventory_controller,
+        systems::{benedictions_controller, inventory_controller},
     },
     rest::AppError,
 };
@@ -204,7 +204,24 @@ async fn new_game_instance(
     game_data.area_state.mutate().last_champion_spawn +=
         game_data.area_blueprint.specs.starting_level - 1;
 
-    game_data.player_resources.mutate().gold += game_data.area_blueprint.specs.starting_gold;
+    game_data.player_resources.mutate().gold += benedictions_controller::find_benediction_value(
+        &master_store.benedictions_store,
+        &game_data.player_benedictions,
+        BenedictionEffect::StartingGold,
+    );
+
+    for _ in 0..benedictions_controller::find_benediction_value(
+        &master_store.benedictions_store,
+        &game_data.player_benedictions,
+        BenedictionEffect::StartingLevel,
+    ) as usize
+    {
+        player_controller::level_up_no_cost(
+            game_data.player_specs.mutate(),
+            &mut game_data.player_state,
+            game_data.player_resources.mutate(),
+        );
+    }
 
     db::game_instances::save_game_instance_data(
         db_pool,
