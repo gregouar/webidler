@@ -39,6 +39,7 @@ impl RandomWeighted for &LootTableEntry {
 }
 
 // TODO: inc magic find (accumulated enemy rarity? player stats? area level?)
+#[allow(clippy::too_many_arguments)]
 pub fn generate_loot(
     level: AreaLevel,
     is_boss_level: bool,
