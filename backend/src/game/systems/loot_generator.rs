@@ -47,9 +47,24 @@ pub fn generate_loot(
     affixes_table: &ItemAffixesTable,
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
+    allow_unique: bool,
 ) -> Option<ItemSpecs> {
-    roll_base_item(loot_table, items_store, level, is_boss_level).map(|(base_item_id, base)| {
-        let rarity = roll_rarity(&RarityWeights::default()).max(base.rarity);
+    let mut rarity = roll_rarity(&RarityWeights::default());
+    if !allow_unique {
+        rarity = rarity.min(ItemRarity::Rare);
+    }
+    roll_base_item(
+        loot_table,
+        items_store,
+        level,
+        is_boss_level,
+        rarity == ItemRarity::Unique,
+    )
+    .map(|(base_item_id, base)| {
+        if base.rarity != ItemRarity::Unique {
+            rarity = rarity.min(ItemRarity::Rare);
+        }
+        rarity = rarity.max(base.rarity);
         roll_item(
             base_item_id,
             base,
@@ -63,10 +78,13 @@ pub fn generate_loot(
 }
 
 fn roll_rarity(weights: &RarityWeights) -> ItemRarity {
-    match rng::random_range(0..=(weights.normal + weights.magic + weights.rare)).unwrap_or(0) {
+    match rng::random_range(0..=(weights.normal + weights.magic + weights.rare + weights.unique))
+        .unwrap_or(0)
+    {
         r if r < weights.normal => ItemRarity::Normal,
         r if r < weights.normal + weights.magic => ItemRarity::Magic,
-        _ => ItemRarity::Rare,
+        r if r < weights.normal + weights.magic + weights.rare => ItemRarity::Rare,
+        _ => ItemRarity::Unique,
     }
 }
 
@@ -133,6 +151,7 @@ fn roll_base_item(
     items_store: &ItemsStore,
     area_level: AreaLevel,
     is_boss_level: bool,
+    is_unique: bool,
 ) -> Option<(String, ItemBase)> {
     let items_available: Vec<_> = loot_table
         .entries
@@ -147,8 +166,41 @@ fn roll_base_item(
                 )
                 && area_level <= l.max_area_level.unwrap_or(AreaLevel::MAX)
                 && (!l.boss_only || is_boss_level)
+            // && (is_unique
+            //     == items_store
+            //         .get(&l.item_id)
+            //         .map(|base| base.rarity == ItemRarity::Unique)
+            //         .unwrap_or_default())
         })
         .collect();
+
+    let items_available: Vec<_> = if is_unique {
+        let uniques_available: Vec<_> = items_available
+            .iter()
+            .filter(|l| {
+                items_store
+                    .get(&l.item_id)
+                    .map(|base| base.rarity == ItemRarity::Unique)
+                    .unwrap_or_default()
+            })
+            .cloned()
+            .collect();
+        if uniques_available.is_empty() {
+            items_available
+        } else {
+            uniques_available
+        }
+    } else {
+        items_available
+            .into_iter()
+            .filter(|l| {
+                items_store
+                    .get(&l.item_id)
+                    .map(|base| base.rarity != ItemRarity::Unique)
+                    .unwrap_or_default()
+            })
+            .collect()
+    };
 
     if items_available.is_empty() {
         tracing::warn!("No base items available for level {}", area_level);

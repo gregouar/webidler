@@ -2,19 +2,19 @@
   "entries": [
     {
       "item_id": "silver_chain_unique",
-      "weight": 50,
+      "weight": 250,
       "min_area_level": 1,
       "boss_only": true
     },
     {
       "item_id": "handaxe_unique",
-      "weight": 50,
+      "weight": 250,
       "min_area_level": 1,
       "boss_only": true
     },
     {
       "item_id": "iron_cap_unique",
-      "weight": 50,
+      "weight": 250,
       "min_area_level": 1,
       "boss_only": true
     }
