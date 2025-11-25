@@ -18,7 +18,7 @@
     },
     {
       "item_id": "cloth_wraps_unique",
-      "weight": 5,
+      "weight": 50,
       "min_area_level": 5
     },
     {
@@ -27,7 +27,7 @@
     },
     {
       "item_id": "dagger_unique",
-      "weight": 5,
+      "weight": 50,
       "min_area_level": 5
     },
     {

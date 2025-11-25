@@ -226,6 +226,23 @@ fn handle_area_completed_event(
     area_level: AreaLevel,
     is_boss_level: bool,
 ) {
+    let area_state = game_data.area_state.mutate();
+
+    if (area_state.area_level > area_state.max_area_level_ever)
+        && (area_state.area_level - game_data.area_blueprint.specs.starting_level + 1)
+            .is_multiple_of(10)
+    {
+        game_data.player_resources.mutate().shards += 1.0;
+    }
+
+    let new_max = area_state.area_level > area_state.max_area_level;
+
+    if new_max {
+        game_data.game_stats.elapsed_time_at_max_level = game_data.game_stats.elapsed_time;
+        area_state.max_area_level = area_state.area_level;
+        area_state.max_area_level_ever = area_state.max_area_level_ever.max(area_state.area_level);
+    }
+
     match loot_generator::generate_loot(
         area_level.saturating_add(game_data.area_blueprint.specs.item_level_modifier),
         is_boss_level,
@@ -234,6 +251,7 @@ fn handle_area_completed_event(
         &master_store.item_affixes_table,
         &master_store.item_adjectives_table,
         &master_store.item_nouns_table,
+        new_max, // Only drop unique when new area completed
     ) {
         Some(item_specs) => {
             for item_specs in loot_controller::drop_loot(
@@ -250,21 +268,6 @@ fn handle_area_completed_event(
             }
         }
         None => tracing::warn!("Failed to generate loot"),
-    }
-
-    let area_state = game_data.area_state.mutate();
-
-    if (area_state.area_level > area_state.max_area_level_ever)
-        && (area_state.area_level - game_data.area_blueprint.specs.starting_level + 1)
-            .is_multiple_of(10)
-    {
-        game_data.player_resources.mutate().shards += 1.0;
-    }
-
-    if area_state.area_level > area_state.max_area_level {
-        game_data.game_stats.elapsed_time_at_max_level = game_data.game_stats.elapsed_time;
-        area_state.max_area_level = area_state.area_level;
-        area_state.max_area_level_ever = area_state.max_area_level_ever.max(area_state.area_level);
     }
 
     area_state.waves_done = 1;

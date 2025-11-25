@@ -42,7 +42,7 @@ pub fn stats_map_to_vec(effects: &EffectsMap, area_threat: &AreaThreat) -> Vec<S
     effects
 }
 
-pub fn sort_stat_effects(effects: &mut Vec<StatEffect>) {
+pub fn sort_stat_effects(effects: &mut [StatEffect]) {
     effects.sort_by_key(|e| {
         (
             match e.modifier {

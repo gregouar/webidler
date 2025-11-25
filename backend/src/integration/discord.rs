@@ -26,7 +26,7 @@ impl DiscordInvitesStore {
             self.invites_cache
                 .lock()
                 .unwrap()
-                .entry(user_id.clone())
+                .entry(user_id)
                 .or_default()
                 .clone()
         };
@@ -77,11 +77,11 @@ async fn generate_discord_invite(discord_bot_token: &str) -> anyhow::Result<Stri
         anyhow::bail!("Discord API error: {}", err);
     }
 
-    Ok(res
+    res
         .json::<serde_json::Value>()
         .await?
         .get("code")
         .and_then(|code| code.as_str())
         .map(|code| code.to_string())
-        .ok_or(anyhow::anyhow!("failed to get discord invite"))?)
+        .ok_or(anyhow::anyhow!("failed to get discord invite"))
 }
