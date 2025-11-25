@@ -43,6 +43,8 @@ pub async fn get_leaderboard(
                 ) AS area_rank
             FROM best_runs br
             WHERE br.best_rank = 1
+              AND (br.elapsed_time IS NULL OR br.elapsed_time <> 0)
+              AND area_level <> 0
         )
         SELECT
             u.user_id           AS "user_id: UserId",
