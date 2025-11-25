@@ -34,6 +34,7 @@ use super::AppError;
 pub fn routes(app_state: AppState) -> Router<AppState> {
     let auth_routes = Router::new()
         .route("/users/{user_id}/characters", post(post_create_character))
+        .route("/characters/{character_id}", get(get_character_details))
         .route("/characters/{character_id}", delete(delete_character))
         .layer(middleware::from_fn_with_state(
             app_state,
@@ -42,7 +43,6 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
 
     Router::new()
         .route("/users/{user_id}/characters", get(get_user_characters))
-        .route("/characters/{character_id}", get(get_character_details))
         .route(
             "/view-character/{character_name}",
             get(get_character_by_name),

@@ -9,6 +9,7 @@ use shared::{
 };
 
 use crate::components::{
+    auth::AuthContext,
     backend_client::{BackendClient, BackendError},
     shared::player_count::PlayerCount,
     town::{
@@ -55,10 +56,11 @@ pub fn TownPage() -> impl IntoView {
 
     let initial_load = LocalResource::new({
         let backend = expect_context::<BackendClient>();
+        let auth = expect_context::<AuthContext>();
 
         move || async move {
             match backend
-                .get_character_details(&get_character_id_storage.get())
+                .get_character_details(&auth.token(), &get_character_id_storage.get())
                 .await
             {
                 Ok(GetCharacterDetailsResponse {
