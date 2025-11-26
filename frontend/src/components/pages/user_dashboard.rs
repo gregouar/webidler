@@ -120,7 +120,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     refresh_trigger=refresh_trigger
                                 />
 
-                                <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
+                                <h1 class="text-shadow-lg shadow-gray-950 text-amber-200 text-4xl  md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
                                     "Welcome, " {user.username}
                                 </h1>
 

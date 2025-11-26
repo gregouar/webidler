@@ -1709,19 +1709,16 @@
                 "ignore_stat_effects": [
                   {
                     "Damage": {
-                      "skill_type": "Attack",
                       "damage_type": "Fire"
                     }
                   },
                   {
                     "MinDamage": {
-                      "skill_type": "Attack",
                       "damage_type": "Fire"
                     }
                   },
                   {
                     "MaxDamage": {
-                      "skill_type": "Attack",
                       "damage_type": "Fire"
                     }
                   }

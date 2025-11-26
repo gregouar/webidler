@@ -5,6 +5,7 @@ use leptos_router::hooks::use_navigate;
 
 use crate::components::{
     backend_client::BackendClient,
+    shared::player_count::PlayerCount,
     ui::{
         buttons::MenuButton,
         number::{format_datetime, format_duration},
@@ -22,6 +23,7 @@ pub fn LeaderboardPage() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto w-full text-center flex flex-col justify-around">
+            <PlayerCount />
             <div>
                 <h1 class="text-shadow-lg shadow-gray-950 mb-4 text-amber-200 text-4xl  md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
                     "Leaderboard"
@@ -126,9 +128,7 @@ pub fn LeaderboardPanel() -> impl IntoView {
                                                                         </span>
                                                                     </div>
                                                                     <div class="text-sm text-zinc-300">
-                                                                        {entry
-                                                                            .elapsed_time
-                                                                            .map(format_duration)}
+                                                                        {entry.elapsed_time.map(format_duration)}
                                                                     </div>
                                                                 </div>
 
