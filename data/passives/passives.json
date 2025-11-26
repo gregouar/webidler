@@ -1687,7 +1687,7 @@
         "triggers": [
           {
             "trigger_id": "blazing_inferno",
-            "description": "Fire Hits have 30% Chance to apply a stacking Burn for 2s, dealing 50% of the Hit's Fire Damage per second. Critical Hits always Burn.",
+            "description": "Fire Hits have 30% Chance to apply a stacking Burn for 2s, dealing 30% of the Hit's Fire Damage per second. Critical Hits always Burn.",
             "OnHit": {},
             "effects": [
               {
@@ -1701,7 +1701,7 @@
                           "damage_type": "Fire"
                         }
                       },
-                      "value": 0.5,
+                      "value": 0.3,
                       "cumulate": true
                     }
                   ]
