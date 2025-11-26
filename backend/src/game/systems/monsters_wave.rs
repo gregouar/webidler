@@ -35,13 +35,13 @@ impl RandomWeighted for &BossBlueprint {
     }
 }
 
-/// Return generated monsters + if it is boss
+/// Return generated monsters
 pub fn generate_monsters_wave(
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
     area_threat: &AreaThreat,
     monsters_specs_store: &MonstersSpecsStore,
-) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>, bool)> {
+) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>)> {
     let (monster_specs, is_boss) = generate_monsters_wave_specs(
         area_blueprint,
         area_state,
@@ -49,7 +49,8 @@ pub fn generate_monsters_wave(
         monsters_specs_store,
     )?;
     let monster_states = monster_specs.iter().map(MonsterState::init).collect();
-    Ok((monster_specs, monster_states, is_boss))
+    area_state.is_boss = is_boss;
+    Ok((monster_specs, monster_states))
 }
 
 /// Return generated monsters + if it is boss

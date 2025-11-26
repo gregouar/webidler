@@ -328,35 +328,6 @@ fn handle_threat_increased_event(
     }
     game_data.player_state.character_state.dirty_specs = true;
 
-    // for (i, (monster_specs, monster_state)) in game_data
-    //     .monster_specs
-    //     .iter()
-    //     .zip(game_data.monster_states.iter_mut())
-    //     .enumerate()
-    // {
-    //     characters_controller::apply_status(
-    //         &mut (
-    //             CharacterId::Monster(i),
-    //             (
-    //                 &monster_specs.character_specs,
-    //                 &mut monster_state.character_state,
-    //             ),
-    //         ),
-    //         &StatusSpecs::StatModifier {
-    //             stat: StatType::Damage {
-    //                 skill_type: None,
-    //                 damage_type: None,
-    //             },
-    //             modifier: Modifier::Multiplier,
-    //             debuff: false,
-    //         },
-    //         SkillType::Spell,
-    //         THREAT_EFFECT,
-    //         None,
-    //         true,
-    //     );
-    // }
-
     for triggered_effects in game_data
         .player_specs
         .read()

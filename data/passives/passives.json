@@ -1701,7 +1701,8 @@
                           "damage_type": "Fire"
                         }
                       },
-                      "value": 0.5
+                      "value": 0.5,
+                      "cumulate": true
                     }
                   ]
                 },

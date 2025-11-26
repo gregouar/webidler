@@ -103,90 +103,93 @@ async fn control_entities(
         if game_data.player_respawn_delay.elapsed() > PLAYER_RESPAWN_PERIOD {
             respawn_player(master_store, game_data);
         }
+        return Ok(());
+    }
+
+    game_data.player_respawn_delay = Instant::now();
+
+    let monsters_exist = !game_data.monster_specs.is_empty();
+    let mut monsters_still_alive: Vec<_> = game_data
+        .monster_specs
+        .iter()
+        .zip(game_data.monster_states.iter_mut())
+        .enumerate()
+        .filter(|(_, (_, m))| m.character_state.is_alive)
+        .map(|(i, (x, y))| {
+            (
+                CharacterId::Monster(i),
+                (&x.character_specs, &mut y.character_state),
+            )
+        })
+        .collect();
+
+    game_data.player_controller.control_player(
+        events_queue,
+        game_data.player_specs.read(),
+        &mut game_data.player_state,
+        &mut monsters_still_alive,
+    );
+
+    let wave_completed = monsters_still_alive.is_empty();
+    if wave_completed || game_data.area_state.read().going_back > 0 {
+        game_data.area_threat.cooldown = 0.0;
+        if wave_completed
+            && !game_data.wave_completed
+            && monsters_exist
+            && game_data.area_state.read().going_back == 0
+        {
+            game_data.wave_completed = true;
+            events_queue.register_event(GameEvent::WaveCompleted(
+                game_data.area_state.read().area_level,
+            ));
+        }
+
+        if game_data.monster_wave_delay.elapsed()
+            > Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown)
+        {
+            if game_data.area_state.read().going_back > 0 {
+                let area_state = game_data.area_state.mutate();
+                let amount = area_state.going_back;
+                area_controller::decrease_area_level(
+                    &game_data.area_blueprint.specs,
+                    area_state,
+                    amount,
+                );
+                area_state.going_back = 0;
+            }
+
+            let (monster_specs, monster_states) = monsters_wave::generate_monsters_wave(
+                &game_data.area_blueprint,
+                game_data.area_state.mutate(),
+                &game_data.area_threat,
+                &master_store.monster_specs_store,
+            )?;
+            game_data.monster_base_specs = LazySyncer::new(monster_specs.clone());
+            game_data.monster_specs = monster_specs;
+            game_data.monster_states = monster_states;
+
+            game_data.area_threat = AreaThreat {
+                threat_level: 0,
+                cooldown: if game_data.area_state.read().is_boss {
+                    THREAT_BOSS_COOLDOWN
+                } else {
+                    THREAT_COOLDOWN
+                },
+                elapsed_cooldown: 0.0,
+                just_increased: false,
+            };
+
+            game_data.wave_completed = false;
+        }
     } else {
-        game_data.player_respawn_delay = Instant::now();
-
-        let monsters_exist = !game_data.monster_specs.is_empty();
-        let mut monsters_still_alive: Vec<_> = game_data
-            .monster_specs
-            .iter()
-            .zip(game_data.monster_states.iter_mut())
-            .enumerate()
-            .filter(|(_, (_, m))| m.character_state.is_alive)
-            .map(|(i, (x, y))| {
-                (
-                    CharacterId::Monster(i),
-                    (&x.character_specs, &mut y.character_state),
-                )
-            })
-            .collect();
-
-        game_data.player_controller.control_player(
+        game_data.monster_wave_delay = Instant::now();
+        monsters_controller::control_monsters(
             events_queue,
+            &game_data.monster_specs,
+            &mut game_data.monster_states,
             game_data.player_specs.read(),
             &mut game_data.player_state,
-            &mut monsters_still_alive,
         );
-
-        let wave_completed = monsters_still_alive.is_empty();
-        if wave_completed || game_data.area_state.read().going_back > 0 {
-            game_data.area_threat.cooldown = 0.0;
-            if wave_completed && !game_data.wave_completed && monsters_exist {
-                game_data.wave_completed = true;
-                events_queue.register_event(GameEvent::WaveCompleted(
-                    game_data.area_state.read().area_level,
-                ));
-            }
-
-            if game_data.monster_wave_delay.elapsed()
-                > Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown)
-            {
-                if game_data.area_state.read().going_back > 0 {
-                    let area_state = game_data.area_state.mutate();
-                    let amount = area_state.going_back;
-                    area_controller::decrease_area_level(
-                        &game_data.area_blueprint.specs,
-                        area_state,
-                        amount,
-                    );
-                    area_state.going_back = 0;
-                }
-
-                let (monster_specs, monster_states, is_boss) =
-                    monsters_wave::generate_monsters_wave(
-                        &game_data.area_blueprint,
-                        game_data.area_state.mutate(),
-                        &game_data.area_threat,
-                        &master_store.monster_specs_store,
-                    )?;
-                game_data.monster_base_specs = LazySyncer::new(monster_specs.clone());
-                game_data.monster_specs = monster_specs;
-                game_data.monster_states = monster_states;
-                game_data.area_state.mutate().is_boss = is_boss;
-
-                game_data.area_threat = AreaThreat {
-                    threat_level: 0,
-                    cooldown: if is_boss {
-                        THREAT_BOSS_COOLDOWN
-                    } else {
-                        THREAT_COOLDOWN
-                    },
-                    elapsed_cooldown: 0.0,
-                    just_increased: false,
-                };
-
-                game_data.wave_completed = false;
-            }
-        } else {
-            game_data.monster_wave_delay = Instant::now();
-            monsters_controller::control_monsters(
-                events_queue,
-                &game_data.monster_specs,
-                &mut game_data.monster_states,
-                game_data.player_specs.read(),
-                &mut game_data.player_state,
-            );
-        }
     }
 
     Ok(())
