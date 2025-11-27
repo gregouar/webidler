@@ -810,6 +810,135 @@
       }
     ]
   },
+  "sharpen_weapon": {
+    "name": "Sharpen Weapon",
+    "description": "Sharpen your weapon, making it likely to bleed your foes.",
+    "icon": "skills/sharpen_weapon.svg",
+    "skill_type": "Attack",
+    "cooldown": 5,
+    "mana_cost": 5,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": { "StatusPower": null },
+        "modifier": "Multiplier",
+        "value": 10
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "damage_type": "Physical",
+                          "skill_type": "Attack"
+                        }
+                      },
+                      "modifier": "Multiplier"
+                    }
+                  },
+                  "value": 20
+                }
+              ]
+            }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "Trigger": {
+                      "trigger_id": "skills/sharpen_weapon.svg",
+                      "description": "Attacks have 30% Chance to inflict Bleed for 2s. Bleed damage is 50% of Physical Damage dealt by initial Hit per second. Critical Hits always apply Bleed.",
+                      "target": "SameTarget",
+                      "skill_type": "Attack",
+                      "OnHit": {
+                        "skill_type": "Attack"
+                      },
+                      "effects": [
+                        {
+                          "success_chance": 30,
+                          "ApplyStatus": {
+                            "duration": 2,
+                            "statuses": [
+                              {
+                                "status_type": {
+                                  "DamageOverTime": {
+                                    "damage_type": "Physical"
+                                  }
+                                },
+                                "value": 0.5
+                              }
+                            ]
+                          },
+                          "ignore_stat_effects": [
+                            {
+                              "Damage": {
+                                "skill_type": "Attack",
+                                "damage_type": "Physical"
+                              }
+                            },
+                            {
+                              "MinDamage": {
+                                "skill_type": "Attack",
+                                "damage_type": "Physical"
+                              }
+                            },
+                            {
+                              "MaxDamage": {
+                                "skill_type": "Attack",
+                                "damage_type": "Physical"
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "modifiers": [
+                        {
+                          "stat": {
+                            "Damage": {}
+                          },
+                          "modifier": "Multiplier",
+                          "factor": 100.0,
+                          "source": {
+                            "HitDamage": "Physical"
+                          }
+                        },
+                        {
+                          "stat": {
+                            "SuccessChance": {}
+                          },
+                          "modifier": "Flat",
+                          "factor": 100,
+                          "source": {
+                            "HitCrit": null
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "ignore_stat_effects": [
+              {
+                "StatusPower": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "heal": {
     "name": "Heal",
     "description": "Restore a portion of your life with this simple yet effective healing spell.",
