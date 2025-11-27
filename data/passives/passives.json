@@ -1204,17 +1204,17 @@
         "size": 2,
         "effects": [
           {
-            "stat": {"DamageResistance": {"damage_type": "Fire"}},
+            "stat": { "DamageResistance": { "damage_type": "Fire" } },
             "modifier": "Flat",
             "value": -20
           },
           {
-            "stat": {"DamageResistance": {"damage_type": "Poison"}},
+            "stat": { "DamageResistance": { "damage_type": "Poison" } },
             "modifier": "Flat",
             "value": -20
           },
           {
-            "stat": {"DamageResistance": {"damage_type": "Storm"}},
+            "stat": { "DamageResistance": { "damage_type": "Storm" } },
             "modifier": "Flat",
             "value": -20
           }
@@ -1422,6 +1422,9 @@
                       "skill_type": "Attack",
                       "damage_type": "Physical"
                     }
+                  },
+                  {
+                    "CritChance": null
                   }
                 ]
               }

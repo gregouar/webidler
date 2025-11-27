@@ -338,6 +338,66 @@
                               "MaxDamage": {
                                 "damage_type": "Storm"
                               }
+                            },
+                            {
+                              "CritChance": null
+                            }
+                          ]
+                        }
+                      ],
+                      "modifiers": [
+                        {
+                          "stat": {
+                            "Damage": { "damage_type": "Storm" }
+                          },
+                          "modifier": "Multiplier",
+                          "factor": 100.0,
+                          "source": {
+                            "HitDamage": "Storm"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "status_type": {
+                    "Trigger": {
+                      "trigger_id": "skills/curse_conductivity.svg",
+                      "description": "Trigger a Maelstrom of Lightning when Critically Hit, damaging all enemies for 10% of Storm Damage dealt.",
+                      "OnTakeHit": {
+                        "is_crit": true,
+                        "is_triggered": false
+                      },
+                      "target": "SameTarget",
+                      "skill_range": "Any",
+                      "skill_shape": "All",
+                      "skill_type": "Spell",
+                      "effects": [
+                        {
+                          "FlatDamage": {
+                            "damage": {
+                              "Storm": 0.1
+                            }
+                          },
+                          "ignore_stat_effects": [
+                            {
+                              "Damage": {
+                                "damage_type": "Storm"
+                              }
+                            },
+                            {
+                              "MinDamage": {
+                                "damage_type": "Storm"
+                              }
+                            },
+                            {
+                              "MaxDamage": {
+                                "damage_type": "Storm"
+                              }
+                            },
+                            {
+                              "CritChance": null
                             }
                           ]
                         }
@@ -435,6 +495,9 @@
                               "MaxDamage": {
                                 "damage_type": "Fire"
                               }
+                            },
+                            {
+                              "CritChance": null
                             }
                           ]
                         }
