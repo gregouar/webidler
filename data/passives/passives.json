@@ -1105,7 +1105,7 @@
           {
             "stat": { "CritChance": null },
             "modifier": "Multiplier",
-            "value": -99999999999
+            "value": -1e300
           },
           {
             "stat": {
@@ -1123,7 +1123,7 @@
         "locked": true
       },
       "convert_dot": {
-        "name": "Ain't Nobody Got Time For That",
+        "name": "Ain't Nobody Got Time for That",
         "icon": "passives/broken_bone.svg",
         "x": 40,
         "y": 20,
@@ -1136,7 +1136,7 @@
                 "DamageOverTime": {}
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": -1e300
           },
           {
@@ -1144,7 +1144,7 @@
               "Damage": {}
             },
             "modifier": "Multiplier",
-            "value": 100
+            "value": 50
           }
         ],
         "locked": true

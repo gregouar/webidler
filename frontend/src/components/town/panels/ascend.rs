@@ -35,7 +35,7 @@ pub fn AscendPanel(
         passives_tree_ascension.set(town_context.passives_tree_ascension.get_untracked());
 
         let refund_missing_nodes =
-            -town_context
+            town_context
                 .passives_tree_specs
                 .with_untracked(|passives_tree_specs| {
                     town_context
@@ -48,7 +48,7 @@ pub fn AscendPanel(
                                     if passives_tree_specs.nodes.contains_key(node_id) {
                                         0.0
                                     } else {
-                                        *v as f64
+                                        -(*v as f64)
                                     }
                                 })
                                 .sum::<f64>()
