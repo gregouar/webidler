@@ -32,8 +32,30 @@ pub fn AscendPanel(
     let passives_tree_ascension = RwSignal::new(PassivesTreeAscension::default());
 
     let reset = move || {
-        ascension_cost.set(0.0);
         passives_tree_ascension.set(town_context.passives_tree_ascension.get_untracked());
+
+        let refund_missing_nodes =
+            -town_context
+                .passives_tree_specs
+                .with_untracked(|passives_tree_specs| {
+                    town_context
+                        .passives_tree_ascension
+                        .with_untracked(|passives_tree_ascension| {
+                            passives_tree_ascension
+                                .ascended_nodes
+                                .iter()
+                                .map(|(node_id, v)| {
+                                    if passives_tree_specs.nodes.contains_key(node_id) {
+                                        0.0
+                                    } else {
+                                        *v as f64
+                                    }
+                                })
+                                .sum::<f64>()
+                        })
+                });
+
+        ascension_cost.set(refund_missing_nodes.round());
     };
 
     let has_changed = Memo::new(move |_| {

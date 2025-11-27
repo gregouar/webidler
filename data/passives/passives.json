@@ -924,7 +924,7 @@
         "max_upgrade_level": 3
       },
       "crit_damage_1": {
-        "name": "t Damage",
+        "name": "Critical Damage",
         "icon": "passives/critical.svg",
         "x": 5,
         "y": 20,
@@ -1122,70 +1122,29 @@
         ],
         "locked": true
       },
-      "bleeding_crit": {
-        "name": "The Ripper",
-        "icon": "passives/bleeding_heart.svg",
+      "convert_dot": {
+        "name": "Ain't Nobody Got Time For That",
+        "icon": "passives/broken_bone.svg",
         "x": 40,
         "y": 20,
-        "node_type": "Critical",
+        "node_type": "Attack",
         "size": 2,
-        "triggers": [
+        "effects": [
           {
-            "trigger_id": "bleeding_crit",
-            "description": "Critical Hit with Attacks inflict Bleed for 2 seconds. Bleed damage is 50% of Physical Damage dealt by initial Hit per second.",
-            "OnHit": {
-              "skill_type": "Attack",
-              "is_crit": true
+            "stat": {
+              "StatusPower": {
+                "DamageOverTime": {}
+              }
             },
-            "effects": [
-              {
-                "ApplyStatus": {
-                  "duration": 2,
-                  "statuses": [
-                    {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Physical"
-                        }
-                      },
-                      "value": 0.5
-                    }
-                  ]
-                },
-                "ignore_stat_effects": [
-                  {
-                    "Damage": {
-                      "skill_type": "Attack",
-                      "damage_type": "Physical"
-                    }
-                  },
-                  {
-                    "MinDamage": {
-                      "skill_type": "Attack",
-                      "damage_type": "Physical"
-                    }
-                  },
-                  {
-                    "MaxDamage": {
-                      "skill_type": "Attack",
-                      "damage_type": "Physical"
-                    }
-                  }
-                ]
-              }
-            ],
-            "modifiers": [
-              {
-                "stat": {
-                  "Damage": {}
-                },
-                "modifier": "Multiplier",
-                "factor": 100.0,
-                "source": {
-                  "HitDamage": "Physical"
-                }
-              }
-            ]
+            "modifier": "Flat",
+            "value": -1e300
+          },
+          {
+            "stat": {
+              "Damage": {}
+            },
+            "modifier": "Multiplier",
+            "value": 100
           }
         ],
         "locked": true
@@ -1243,6 +1202,23 @@
         "y": 20,
         "node_type": "Attack",
         "size": 2,
+        "effects": [
+          {
+            "stat": {"DamageResistance": {"damage_type": "Fire"}},
+            "modifier": "Flat",
+            "value": -20
+          },
+          {
+            "stat": {"DamageResistance": {"damage_type": "Poison"}},
+            "modifier": "Flat",
+            "value": -20
+          },
+          {
+            "stat": {"DamageResistance": {"damage_type": "Storm"}},
+            "modifier": "Flat",
+            "value": -20
+          }
+        ],
         "triggers": [
           {
             "trigger_id": "enrage",
@@ -3026,7 +3002,7 @@
       },
       {
         "from": "gold_ur_1",
-        "to": "bleeding_crit"
+        "to": "convert_dot"
       },
       {
         "from": "gold_ur_1",

@@ -3,7 +3,7 @@ use shared::data::temple::PlayerBenedictions;
 use std::time::Instant;
 
 use crate::game::data::master_store;
-use crate::game::systems::{benedictions_controller, player_updater};
+use crate::game::systems::{benedictions_controller, passives_controller, player_updater};
 
 use super::data::DataInit;
 use super::systems::player_controller::PlayerController;
@@ -128,9 +128,9 @@ impl GameInstanceData {
         area_id: &str,
         max_area_level_completed: AreaLevel,
         passives_tree_id: &str,
-        passives_tree_state: PassivesTreeState,
+        mut passives_tree_state: PassivesTreeState,
         player_benedictions: PlayerBenedictions,
-        player_resources: PlayerResources,
+        mut player_resources: PlayerResources,
         mut player_specs: PlayerSpecs,
         player_inventory: PlayerInventory,
     ) -> Result<Self> {
@@ -147,6 +147,11 @@ impl GameInstanceData {
             .ok_or_else(|| anyhow::anyhow!("couldn't load passives tree: {}", passives_tree_id))?;
 
         let player_state = PlayerState::init(&player_specs);
+        passives_controller::refund_missing(
+            &passives_tree_specs,
+            &mut passives_tree_state,
+            &mut player_resources,
+        );
 
         player_updater::update_player_specs(
             &mut player_specs,
