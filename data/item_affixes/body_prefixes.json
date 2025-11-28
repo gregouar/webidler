@@ -70,5 +70,23 @@
         "value": [40, 49]
       }
     ]
+  },
+  {
+    "name": "Revitalizing",
+    "family": "inc_restore",
+    "tags": ["Mana", "Life"],
+    "affix_type": "Prefix",
+    "restrictions": ["Body"],
+    "tier": 5,
+    "weight": 1000,
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Restore": null },
+        "modifier": "Multiplier",
+        "value": [50, 59]
+      }
+    ]
   }
 ]

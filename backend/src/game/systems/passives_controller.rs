@@ -62,6 +62,20 @@ pub fn generate_effects_map_from_passives<'a>(
         })
 }
 
+pub fn refund_missing(
+    passives_tree_specs: &PassivesTreeSpecs,
+    passives_tree_state: &mut PassivesTreeState,
+    player_resources: &mut PlayerResources,
+) {
+    passives_tree_state.purchased_nodes.retain(|node_id| {
+        let keep = passives_tree_specs.nodes.contains_key(node_id);
+        if !keep {
+            player_resources.passive_points += 1;
+        }
+        keep
+    });
+}
+
 pub async fn update_ascension(
     tx: &mut Transaction<'_, Database>,
     master_store: &MasterStore,
@@ -73,13 +87,13 @@ pub async fn update_ascension(
         .await?
         .unwrap_or_default();
 
-    let cost = validate_ascension(
-        master_store
-            .passives_store
-            .get("default")
-            .ok_or(anyhow::anyhow!("passives tree not found"))?,
-        passives_tree_ascension,
-    )? - compute_ascension_cost(&prev_ascension);
+    let passive_tree_specs = master_store
+        .passives_store
+        .get("default")
+        .ok_or(anyhow::anyhow!("passives tree not found"))?;
+
+    let cost = validate_ascension(passive_tree_specs, passives_tree_ascension)?
+        - compute_ascension_cost(&prev_ascension);
 
     if cost as f64 > resource_shards {
         return Err(AppError::UserError("not enough power shards".to_string()));

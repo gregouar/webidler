@@ -93,5 +93,15 @@
       "armor": 40
     },
     "min_area_level": 140
+  },
+  "iron_shod_boots": {
+    "name": "Iron-Shod Boots",
+    "icon": "items/iron_shod_boots.webp",
+    "slot": "Boots",
+    "categories": ["Armor", "Boots"],
+    "armor_specs": {
+      "armor": 50
+    },
+    "min_area_level": 190
   }
 }

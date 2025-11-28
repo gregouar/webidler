@@ -71,6 +71,24 @@
       }
     ]
   },
+  {
+    "name": "of Cataclysm",
+    "family": "inc_attack_damage",
+    "tags": ["Attack"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Jewelry"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [125, 149]
+      }
+    ]
+  },
 
   {
     "name": "of Spellcasting",
@@ -141,6 +159,24 @@
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
         "value": [100, 124]
+      }
+    ]
+  },
+  {
+    "name": "of Arcanum",
+    "family": "inc_spell_damage",
+    "tags": ["Spell"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [125, 149]
       }
     ]
   }

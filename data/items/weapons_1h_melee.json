@@ -273,5 +273,21 @@
       "crit_damage": 100
     },
     "min_area_level": 140
+  },
+  "spiked_mace": {
+    "name": "Spiked Mace",
+    "icon": "items/spiked_mace.webp",
+    "slot": "Weapon",
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [10, 16]
+      },
+      "crit_chance": 5,
+      "crit_damage": 100
+    },
+    "min_area_level": 190
   }
 }

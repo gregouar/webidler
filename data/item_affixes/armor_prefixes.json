@@ -79,6 +79,26 @@
       }
     ]
   },
+  {
+    "name": "Impervious",
+    "family": "add_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Flat",
+        "value": [41,50]
+      }
+    ]
+  },
 
   {
     "name": "Though",
@@ -157,6 +177,26 @@
         },
         "modifier": "Multiplier",
         "value": [80, 99]
+      }
+    ]
+  },
+  {
+    "name": "Protective",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Multiplier",
+        "value": [100, 119]
       }
     ]
   }

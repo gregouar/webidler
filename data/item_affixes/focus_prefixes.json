@@ -70,5 +70,23 @@
         "value": [40, 49]
       }
     ]
+  },
+  {
+    "name": "Eery",
+    "family": "inc_status_power",
+    "tags": ["Spell", "Status"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Focus"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "StatusPower": null },
+        "modifier": "Multiplier",
+        "value": [50, 59]
+      }
+    ]
   }
 ]

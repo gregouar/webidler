@@ -70,5 +70,23 @@
         "value": [7, 8]
       }
     ]
+  },
+  {
+    "name": "of Vitality",
+    "family": "add_life_regen",
+    "tags": ["Life"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [9, 10]
+      }
+    ]
   }
 ]

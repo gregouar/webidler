@@ -71,6 +71,24 @@
       }
     ]
   },
+  {
+    "name": "of Bastion",
+    "family": "add_block",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Shield"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": "Block",
+        "modifier": "Flat",
+        "value": [9, 10]
+      }
+    ]
+  },
 
   {
     "name": "of Oil",
@@ -141,6 +159,24 @@
         "stat": "Block",
         "modifier": "Multiplier",
         "value": [25, 29]
+      }
+    ]
+  },
+  {
+    "name": "of Fortification",
+    "family": "inc_block",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Shield"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": "Block",
+        "modifier": "Multiplier",
+        "value": [30, 34]
       }
     ]
   }

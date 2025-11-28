@@ -84,7 +84,7 @@
   },
   "fireball": {
     "name": "Fireball",
-    "description": "THurl a blazing fireball that explodes on impact, scorching multiple enemies within its area.",
+    "description": "Hurl a blazing fireball that explodes on impact, scorching multiple enemies within its area.",
     "icon": "skills/fireball.svg",
     "skill_type": "Spell",
     "cooldown": 4,
@@ -198,6 +198,39 @@
                   "value": [3, 5]
                 }
               ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "voodoo_doll": {
+    "name": "Voodoo Doll",
+    "description": "Stab your Voodoo Doll to inflict physical pain to all enemies.",
+    "icon": "skills/voodoo.svg",
+    "skill_type": "Spell",
+    "cooldown": 1.5,
+    "mana_cost": 2,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "Multiplier",
+        "value": 50
+      }
+    ],
+    "targets": [
+      {
+        "range": "Distance",
+        "shape": "All",
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Physical": [1, 2]
+              }
             }
           }
         ]
@@ -338,6 +371,66 @@
                               "MaxDamage": {
                                 "damage_type": "Storm"
                               }
+                            },
+                            {
+                              "CritChance": null
+                            }
+                          ]
+                        }
+                      ],
+                      "modifiers": [
+                        {
+                          "stat": {
+                            "Damage": { "damage_type": "Storm" }
+                          },
+                          "modifier": "Multiplier",
+                          "factor": 100.0,
+                          "source": {
+                            "HitDamage": "Storm"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "status_type": {
+                    "Trigger": {
+                      "trigger_id": "skills/curse_conductivity.svg",
+                      "description": "Trigger a Maelstrom of Lightning when Critically Hit, damaging all enemies for 10% of Storm Damage dealt.",
+                      "OnTakeHit": {
+                        "is_crit": true,
+                        "is_triggered": false
+                      },
+                      "target": "SameTarget",
+                      "skill_range": "Any",
+                      "skill_shape": "All",
+                      "skill_type": "Spell",
+                      "effects": [
+                        {
+                          "FlatDamage": {
+                            "damage": {
+                              "Storm": 0.1
+                            }
+                          },
+                          "ignore_stat_effects": [
+                            {
+                              "Damage": {
+                                "damage_type": "Storm"
+                              }
+                            },
+                            {
+                              "MinDamage": {
+                                "damage_type": "Storm"
+                              }
+                            },
+                            {
+                              "MaxDamage": {
+                                "damage_type": "Storm"
+                              }
+                            },
+                            {
+                              "CritChance": null
                             }
                           ]
                         }
@@ -435,6 +528,9 @@
                               "MaxDamage": {
                                 "damage_type": "Fire"
                               }
+                            },
+                            {
+                              "CritChance": null
                             }
                           ]
                         }
@@ -601,7 +697,7 @@
                       "modifier": "Multiplier"
                     }
                   },
-                  "value": 50
+                  "value": 40
                 }
               ]
             }
@@ -797,6 +893,135 @@
                     }
                   },
                   "value": 100
+                }
+              ]
+            },
+            "ignore_stat_effects": [
+              {
+                "StatusPower": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "sharpen_weapon": {
+    "name": "Sharpen Weapon",
+    "description": "Sharpen your weapon, making it likely to bleed your foes.",
+    "icon": "skills/sharpen_weapon.svg",
+    "skill_type": "Attack",
+    "cooldown": 5,
+    "mana_cost": 5,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": { "StatusPower": null },
+        "modifier": "Multiplier",
+        "value": 10
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "damage_type": "Physical",
+                          "skill_type": "Attack"
+                        }
+                      },
+                      "modifier": "Multiplier"
+                    }
+                  },
+                  "value": 20
+                }
+              ]
+            }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "Trigger": {
+                      "trigger_id": "skills/sharpen_weapon.svg",
+                      "description": "Attacks have 30% Chance to inflict Bleed for 4s. Bleed damage is 50% of Physical Damage dealt by initial Hit per second. Critical Hits always apply Bleed.",
+                      "target": "SameTarget",
+                      "skill_type": "Attack",
+                      "OnHit": {
+                        "skill_type": "Attack"
+                      },
+                      "effects": [
+                        {
+                          "success_chance": 30,
+                          "ApplyStatus": {
+                            "duration": 4,
+                            "statuses": [
+                              {
+                                "status_type": {
+                                  "DamageOverTime": {
+                                    "damage_type": "Physical"
+                                  }
+                                },
+                                "value": 0.5
+                              }
+                            ]
+                          },
+                          "ignore_stat_effects": [
+                            {
+                              "Damage": {
+                                "skill_type": "Attack",
+                                "damage_type": "Physical"
+                              }
+                            },
+                            {
+                              "MinDamage": {
+                                "skill_type": "Attack",
+                                "damage_type": "Physical"
+                              }
+                            },
+                            {
+                              "MaxDamage": {
+                                "skill_type": "Attack",
+                                "damage_type": "Physical"
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "modifiers": [
+                        {
+                          "stat": {
+                            "Damage": {}
+                          },
+                          "modifier": "Multiplier",
+                          "factor": 100.0,
+                          "source": {
+                            "HitDamage": "Physical"
+                          }
+                        },
+                        {
+                          "stat": {
+                            "SuccessChance": {}
+                          },
+                          "modifier": "Flat",
+                          "factor": 100,
+                          "source": {
+                            "HitCrit": null
+                          }
+                        }
+                      ]
+                    }
+                  }
                 }
               ]
             },

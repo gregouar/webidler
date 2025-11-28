@@ -344,35 +344,35 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
 pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
     match stat {
         StatType::MinDamage { .. } | StatType::MaxDamage { .. } => "".to_string(),
-        StatType::Life => format!("{} Maximum Life", format_adds_removes(value, false)),
+        StatType::Life => format!("{} Maximum Life", format_adds_removes(value, false, "")),
         StatType::LifeRegen => format!(
-            "{}% Life Regeneration per second",
-            format_adds_removes(value.map(|value| value * 0.1), true)
+            "{} Life Regeneration per second",
+            format_adds_removes(value.map(|value| value * 0.1), true, "%")
         ),
-        StatType::Mana => format!("{} Maximum Mana", format_adds_removes(value, false)),
+        StatType::Mana => format!("{} Maximum Mana", format_adds_removes(value, false, "")),
         StatType::ManaRegen => format!(
-            "{}% Mana Regeneration per second",
-            format_adds_removes(value.map(|value| value * 0.1), true)
+            "{} Mana Regeneration per second",
+            format_adds_removes(value.map(|value| value * 0.1), true, "%")
         ),
         StatType::Armor(armor_type) => format!(
             "{} {}",
-            format_adds_removes(value, false),
+            format_adds_removes(value, false, "%"),
             match armor_type {
                 Some(DamageType::Physical) => "Armor".to_string(),
-                None => "to All Resistances and Armor".to_string(),
+                None => "All Resistances and Armor".to_string(),
                 _ => format!("{}Resistance", damage_type_str(*armor_type)),
             }
         ),
         StatType::TakeFromManaBeforeLife => {
             format!(
-                "{}% of Damage taken from Mana before Life",
-                format_flat_number(value, false)
+                "{} Damage taken from Mana before Life",
+                format_adds_removes(value, false, "% of")
             )
         }
-        StatType::Block => format!("Adds {}% Block Chance", format_flat_number(value, false)),
+        StatType::Block => format!("{} Block Chance", format_adds_removes(value, false, "%")),
         StatType::BlockSpell => format!(
-            "{}% of Block Chance to Spells",
-            format_adds_removes(value, false)
+            "{} Block Chance to Spells",
+            format_adds_removes(value, false, "% of")
         ),
         StatType::BlockDamageTaken => {
             format!(
@@ -385,7 +385,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             damage_type,
         } => format!(
             "{} {}Damage{}",
-            format_adds_removes(value, false),
+            format_adds_removes(value, false, ""),
             damage_type_str(*damage_type),
             to_skill_type_str(*skill_type)
         ),
@@ -397,27 +397,29 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             )
         }
         StatType::CritChance(skill_type) => format!(
-            "{}% Critical Hit Chance{}",
-            format_adds_removes(value, false),
+            "{} Critical Hit Chance{}",
+            format_adds_removes(value, false, "%"),
             to_skill_type_str(*skill_type)
         ),
         StatType::CritDamage(skill_type) => format!(
-            "{}% Critical Hit Damage{}",
-            format_adds_removes(value, false),
+            "{} Critical Hit Damage{}",
+            format_adds_removes(value, false, "%"),
             to_skill_type_str(*skill_type)
         ),
-        StatType::StatusPower(status_type) => format!(
-            "{} Power to {}",
-            format_adds_removes(value, false),
-            status_type_str(*status_type)
-        ),
+        StatType::StatusPower(status_type) => {
+            format!(
+                "{} {}",
+                format_adds_removes(value, false, " to"),
+                status_type_str(*status_type)
+            )
+        }
         StatType::StatusDuration(status_type) => {
             if value.unwrap_or_default() >= 99999.0 {
                 format!("{} never expire", status_type_str(*status_type))
             } else {
                 format!(
                     "{} seconds duration to {}",
-                    format_adds_removes(value, true),
+                    format_adds_removes(value, true, ""),
                     status_type_str(*status_type)
                 )
             }
@@ -493,8 +495,8 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 format!("{luck_type} is Unlucky",)
             } else {
                 format!(
-                    "{}% Luck Chance to {luck_type}",
-                    format_adds_removes(value, false)
+                    "{} Luck Chance to {luck_type}",
+                    format_adds_removes(value, false, "%")
                 )
             }
         }
@@ -530,8 +532,8 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             effect_type,
         } => {
             format!(
-                "{}% Success Chance to {}{}",
-                format_adds_removes(value, false),
+                "{} Success Chance to {}{}",
+                format_adds_removes(value, false, "%"),
                 skill_type_str(*skill_type),
                 stat_skill_effect_type_str(*effect_type)
             )
@@ -539,13 +541,19 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
     }
 }
 
-fn format_adds_removes(value: Option<f64>, precise: bool) -> String {
+fn format_adds_removes(value: Option<f64>, precise: bool, separator: &str) -> String {
     if value.unwrap_or_default() >= 0.0 {
         // format!("Adds {}", format_flat_number(value, precise),)
-        format!("+{}", format_flat_number(value, precise),)
+        format!("+{}{}", format_flat_number(value, precise), separator)
+    } else if value.unwrap_or_default() < 1e300 {
+        "Removes".to_string()
     } else {
         // format!("Removes {}", format_flat_number(value.map(|v| -v), precise),)
-        format!("-{}", format_flat_number(value.map(|v| -v), precise),)
+        format!(
+            "-{}{}",
+            format_flat_number(value.map(|v| -v), precise),
+            separator
+        )
     }
 }
 

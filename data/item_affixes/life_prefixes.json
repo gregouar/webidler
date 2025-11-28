@@ -67,6 +67,24 @@
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
+        "value": [40, 49]
+      }
+    ]
+  },
+  {
+    "name": "Vigorous",
+    "family": "add_life",
+    "tags": ["Life"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Flat",
         "value": [50, 59]
       }
     ]
@@ -127,7 +145,7 @@
     ]
   },
   {
-    "name": "Hulking",
+    "name": "Beefy",
     "family": "inc_life",
     "tags": ["Life"],
     "affix_type": "Prefix",
@@ -141,6 +159,24 @@
         "stat": "Life",
         "modifier": "Multiplier",
         "value": [9, 10]
+      }
+    ]
+  },
+  {
+    "name": "Hulking",
+    "family": "inc_life",
+    "tags": ["Life"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Multiplier",
+        "value": [11, 12]
       }
     ]
   }

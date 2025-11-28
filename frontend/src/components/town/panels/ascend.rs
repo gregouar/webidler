@@ -10,7 +10,7 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
-    game::panels::passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
+    shared::passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
     town::TownContext,
     ui::{
         buttons::{CloseButton, MenuButton},
@@ -32,8 +32,23 @@ pub fn AscendPanel(
     let passives_tree_ascension = RwSignal::new(PassivesTreeAscension::default());
 
     let reset = move || {
-        ascension_cost.set(0.0);
-        passives_tree_ascension.set(town_context.passives_tree_ascension.get_untracked());
+        let mut initial_cost = 0.0;
+        passives_tree_ascension.update(|passives_tree_ascension| {
+            *passives_tree_ascension = town_context.passives_tree_ascension.get_untracked();
+            passives_tree_ascension.ascended_nodes.retain(|node_id, v| {
+                let keep = town_context
+                    .passives_tree_specs
+                    .read_untracked()
+                    .nodes
+                    .contains_key(node_id);
+                if !keep {
+                    initial_cost -= *v as f64;
+                }
+                keep
+            });
+        });
+
+        ascension_cost.set(initial_cost.round());
     };
 
     let has_changed = Memo::new(move |_| {

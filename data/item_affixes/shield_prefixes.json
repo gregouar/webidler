@@ -70,5 +70,23 @@
         "value": [40, 49]
       }
     ]
+  },
+  {
+    "name": "Intimidating",
+    "family": "inc_threat",
+    "tags": ["Threat"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Shield", "Focus"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [50, 59]
+      }
+    ]
   }
 ]

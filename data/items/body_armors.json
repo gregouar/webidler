@@ -83,5 +83,15 @@
       "armor": 80
     },
     "min_area_level": 140
+  },
+  "brigandine": {
+    "name": "Brigandine",
+    "icon": "items/brigandine.webp",
+    "slot": "Body",
+    "categories": ["Armor", "Body"],
+    "armor_specs": {
+      "armor": 100
+    },
+    "min_area_level": 190
   }
 }

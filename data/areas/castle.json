@@ -7,7 +7,13 @@
     "header_background": "areas/castle_header.webp",
     "footer_background": "areas/castle_footer.webp"
   },
-  "loot_tables": ["tier_1.json", "tier_2.json", "tier_3.json", "tier_4.json"],
+  "loot_tables": [
+    "tier_1.json",
+    "tier_2.json",
+    "tier_3.json",
+    "tier_4.json",
+    "tier_5.json"
+  ],
   "bosses": [
     {
       "level": 80,
@@ -110,7 +116,7 @@
         },
         {
           "monster": "time_spirit.json",
-          "quantity": [1,2]
+          "quantity": [1, 2]
         },
         {
           "monster": "haunted_clock.json",
@@ -141,7 +147,7 @@
         },
         {
           "monster": "teapot_wraith.json",
-          "quantity": [0,2]
+          "quantity": [0, 2]
         },
         {
           "monster": "silverware_familiars.json",
@@ -172,7 +178,7 @@
         },
         {
           "monster": "perfume_siren.json",
-          "quantity": [1,2]
+          "quantity": [1, 2]
         },
         {
           "monster": "court_composer.json",

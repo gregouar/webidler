@@ -1,0 +1,56 @@
+{
+  "entries": [
+    {
+      "item_id": "spiked_mace",
+      "weight": 16000
+    },
+    {
+      "item_id": "nasal_helm",
+      "weight": 16000
+    },
+    {
+      "item_id": "brigandine",
+      "weight": 16000
+    },
+    {
+      "item_id": "leather_gauntlets",
+      "weight": 16000
+    },
+    {
+      "item_id": "iron_shod_boots",
+      "weight": 16000
+    },
+    {
+      "item_id": "bardiche",
+      "weight": 16000
+    },
+    {
+      "item_id": "light_crossbow",
+      "weight": 16000
+    },
+    {
+      "item_id": "decorated_wand",
+      "weight": 16000
+    },
+    {
+      "item_id": "targe",
+      "weight": 16000
+    },
+    {
+      "item_id": "seer_lens",
+      "weight": 16000
+    },
+    {
+      "item_id": "reinforced_cloak",
+      "weight": 16000
+    },
+    {
+      "item_id": "inlaid_ring",
+      "weight": 16000
+    },
+    {
+      "item_id": "crest_pendant",
+      "weight": 16000
+    }
+  ]
+}

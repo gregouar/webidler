@@ -71,6 +71,24 @@
       }
     ]
   },
+  {
+    "name": "Sagacious",
+    "family": "add_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": [50, 59]
+      }
+    ]
+  },
 
   {
     "name": "Cultivated",
@@ -141,6 +159,24 @@
         "stat": "Mana",
         "modifier": "Multiplier",
         "value": [11, 13]
+      }
+    ]
+  },
+  {
+    "name": "Wise",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [14, 16]
       }
     ]
   }

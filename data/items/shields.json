@@ -98,5 +98,16 @@
       "block": 21
     },
     "min_area_level": 140
+  },
+  "targe": {
+    "name": "Targe",
+    "icon": "items/targe.webp",
+    "slot": "Shield",
+    "categories": ["Shield"],
+    "armor_specs": {
+      "armor": 125,
+      "block": 23
+    },
+    "min_area_level": 190
   }
 }

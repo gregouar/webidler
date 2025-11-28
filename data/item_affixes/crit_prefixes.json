@@ -70,5 +70,23 @@
         "value": [100, 124]
       }
     ]
+  },
+  {
+    "name": "Ruinous",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Jewelry"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [125, 149]
+      }
+    ]
   }
 ]

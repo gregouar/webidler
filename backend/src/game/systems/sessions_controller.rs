@@ -1,6 +1,6 @@
 use std::time::{Duration, Instant};
 
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 
 use shared::data::{
     area::AreaLevel,
@@ -187,6 +187,10 @@ async fn new_game_instance(
         player_specs,
         player_inventory,
     )?;
+
+    if game_data.area_blueprint.specs.coming_soon {
+        return Err(anyhow!("forbidden area"));
+    }
 
     player_controller::init_skills_from_inventory(
         game_data.player_specs.mutate(),
