@@ -93,7 +93,7 @@ pub async fn update_ascension(
         .ok_or(anyhow::anyhow!("passives tree not found"))?;
 
     let cost = validate_ascension(passive_tree_specs, passives_tree_ascension)?
-        - compute_ascension_cost(passive_tree_specs, &prev_ascension);
+        - compute_ascension_cost(&prev_ascension);
 
     if cost as f64 > resource_shards {
         return Err(AppError::UserError("not enough power shards".to_string()));
@@ -107,20 +107,11 @@ pub async fn update_ascension(
     Ok(())
 }
 
-pub fn compute_ascension_cost(
-    passives_tree_specs: &PassivesTreeSpecs,
-    passive_tree_ascension: &PassivesTreeAscension,
-) -> f64 {
+pub fn compute_ascension_cost(passive_tree_ascension: &PassivesTreeAscension) -> f64 {
     passive_tree_ascension
         .ascended_nodes
-        .iter()
-        .map(|(node_id, v)| {
-            if passives_tree_specs.nodes.contains_key(node_id) {
-                *v as f64
-            } else {
-                0.0
-            }
-        })
+        .values()
+        .map(|v| *v as f64)
         .sum()
 }
 
