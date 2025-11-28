@@ -12,6 +12,7 @@ use shared::{
 use crate::{
     assets::img_asset,
     components::{
+        events::{EventsContext, Key},
         shared::tooltips::SkillTooltip,
         ui::{
             buttons::{FancyButton, Toggle},
@@ -447,7 +448,14 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     };
 
     let conn = expect_context::<WebsocketContext>();
+    let events_context: EventsContext = expect_context();
     let level_up = move |_| {
+        let amount = if events_context.key_pressed(Key::Ctrl) {
+            10
+        } else {
+            1
+        };
+
         game_context.player_specs.update(|player_specs| {
             if let Some(skill_specs) = player_specs.skills_specs.get_mut(index) {
                 game_context.player_resources.write().gold -= skill_specs.next_upgrade_cost;
@@ -459,7 +467,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         conn.send(
             &LevelUpSkillMessage {
                 skill_index: index as u8,
-                amount: 1,
+                amount,
             }
             .into(),
         );
@@ -496,6 +504,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                 <span class="text-zinc-300">
                     {format!("{} Gold", format_number(level_up_cost.get()))}
                 </span>
+                <span class="text-xs italic text-gray-400">"CTRL + Click: +10"</span>
             </div>
         }
     };
