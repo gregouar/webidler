@@ -197,7 +197,7 @@ pub fn Node(
                     view! {
                         <circle
                             r=20 + node_specs.size * 5 + 4
-                            fill=fill
+                            fill="black"
                             stroke=stroke
                             stroke-width="1"
                             class=shadow_class
