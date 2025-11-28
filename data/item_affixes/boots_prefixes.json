@@ -70,5 +70,23 @@
         "value": [25, 29]
       }
     ]
+  },
+  {
+    "name": "Sprint",
+    "family": "inc_movement_speed",
+    "tags": ["Speed"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Boots"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "MovementSpeed",
+        "modifier": "Multiplier",
+        "value": [30, 34]
+      }
+    ]
   }
 ]

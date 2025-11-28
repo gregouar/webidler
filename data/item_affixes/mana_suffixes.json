@@ -13,7 +13,7 @@
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [1, 3]
+        "value": [1, 2]
       }
     ]
   },
@@ -31,7 +31,7 @@
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [4, 6]
+        "value": [3, 4]
       }
     ]
   },
@@ -49,7 +49,7 @@
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [7, 9]
+        "value": [5, 6]
       }
     ]
   },
@@ -67,7 +67,25 @@
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [10, 12]
+        "value": [7, 8]
+      }
+    ]
+  },
+  {
+    "name": "of Abundance",
+    "family": "add_mana_regen",
+    "tags": ["Mana"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Armor"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [9, 10]
       }
     ]
   }

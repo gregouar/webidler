@@ -44,7 +44,7 @@
     ]
   },
   {
-    "name": "Bonebreaking",
+    "name": "Breaking",
     "family": "inc_phys_damage",
     "tags": ["Attack", "Physical"],
     "affix_type": "Prefix",
@@ -84,6 +84,28 @@
         },
         "modifier": "Multiplier",
         "value": [100, 124]
+      }
+    ]
+  },
+  {
+    "name": "Destroying",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Physical"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [125, 149]
       }
     ]
   },
@@ -176,6 +198,28 @@
       }
     ]
   },
+  {
+    "name": "Infernal",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Fire"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [125, 149]
+      }
+    ]
+  },
 
   {
     "name": "Sick",
@@ -265,6 +309,28 @@
       }
     ]
   },
+  {
+    "name": "Pestiferous",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Poison"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [125, 149]
+      }
+    ]
+  },
 
   {
     "name": "Charged",
@@ -351,6 +417,28 @@
         },
         "modifier": "Multiplier",
         "value": [100, 124]
+      }
+    ]
+  },
+  {
+    "name": "Tempestuous",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Storm"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [125, 149]
       }
     ]
   }

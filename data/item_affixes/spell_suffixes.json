@@ -15,7 +15,7 @@
           "Speed": "Spell"
         },
         "modifier": "Multiplier",
-        "value": [5,9]
+        "value": [5, 9]
       }
     ]
   },
@@ -56,6 +56,46 @@
         },
         "modifier": "Multiplier",
         "value": [15, 19]
+      }
+    ]
+  },
+  {
+    "name": "of the Chantress",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Speed": "Spell"
+        },
+        "modifier": "Multiplier",
+        "value": [20, 24]
+      }
+    ]
+  },
+  {
+    "name": "of the Maestro",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Speed": "Spell"
+        },
+        "modifier": "Multiplier",
+        "value": [25, 29]
       }
     ]
   },
@@ -137,6 +177,26 @@
         },
         "modifier": "Multiplier",
         "value": [50, 59]
+      }
+    ]
+  },
+  {
+    "name": "of Turbulence",
+    "family": "inc_spell_crit_chance",
+    "tags": ["Spell", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 500,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "CritChance": "Spell"
+        },
+        "modifier": "Multiplier",
+        "value": [60, 69]
       }
     ]
   }

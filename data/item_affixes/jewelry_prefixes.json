@@ -70,5 +70,23 @@
         "value": [100, 124]
       }
     ]
+  },
+  {
+    "name": "Radiant",
+    "family": "inc_gold_2",
+    "tags": ["Gold"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Jewelry"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [125, 149]
+      }
+    ]
   }
 ]

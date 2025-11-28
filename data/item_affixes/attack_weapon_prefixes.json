@@ -71,6 +71,25 @@
       }
     ]
   },
+  {
+    "name": "Savage",
+    "family": "inc_damage",
+    "tags": ["Attack"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Damage": {} },
+        "modifier": "Multiplier",
+        "value": [100, 119]
+      }
+    ]
+  },
+
 
   {
     "name": "Sharp",
@@ -168,6 +187,31 @@
       }
     ]
   },
+  {
+    "name": "Colossal",
+    "family": "add_physical_damage",
+    "tags": ["Physical", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "value": [10, 12]
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "value": [13, 15]
+      }
+    ]
+  },
+
 
   {
     "name": "Smouldering",
@@ -262,6 +306,30 @@
         "stat": { "MaxDamage": { "damage_type": "Fire" } },
         "modifier": "Flat",
         "value": [11, 13]
+      }
+    ]
+  },
+  {
+    "name": "Incinerating",
+    "family": "add_fire_damage",
+    "tags": ["Fire", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "modifier": "Flat",
+        "value": [11, 13]
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "modifier": "Flat",
+        "value": [14, 17]
       }
     ]
   },
@@ -362,6 +430,30 @@
       }
     ]
   },
+  {
+    "name": "Virulent",
+    "family": "add_poison_damage",
+    "tags": ["Poison", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "modifier": "Flat",
+        "value": [5, 5]
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "modifier": "Flat",
+        "value": [6, 7]
+      }
+    ]
+  },
 
   {
     "name": "Crackling",
@@ -432,6 +524,24 @@
         "stat": { "MaxDamage": { "damage_type": "Storm" } },
         "modifier": "Flat",
         "value": [19, 24]
+      }
+    ]
+  },
+  {
+    "name": "Cataclysmic",
+    "family": "add_storm_damage",
+    "tags": ["Storm", "Attack"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "modifier": "Flat",
+        "value": [25, 30]
       }
     ]
   }

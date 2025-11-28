@@ -70,5 +70,23 @@
         "value": [55, 69]
       }
     ]
+  },
+  {
+    "name": "of Perfection",
+    "family": "inc_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Jewelry"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritChance": null },
+        "modifier": "Multiplier",
+        "value": [70, 84]
+      }
+    ]
   }
 ]

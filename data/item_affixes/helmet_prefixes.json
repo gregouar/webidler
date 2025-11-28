@@ -70,5 +70,23 @@
         "value": [-49, -40]
       }
     ]
+  },
+  {
+    "name": "Veiled",
+    "family": "dec_threat",
+    "tags": ["Stealth"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Helmet"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [-59, -50]
+      }
+    ]
   }
 ]

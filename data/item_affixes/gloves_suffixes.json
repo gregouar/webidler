@@ -70,5 +70,23 @@
         "value": [9, 10]
       }
     ]
+  },
+  {
+    "name": "of Alacrity",
+    "family": "inc_action_speed",
+    "tags": ["Speed"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Gloves"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": null },
+        "modifier": "Multiplier",
+        "value": [11, 12]
+      }
+    ]
   }
 ]

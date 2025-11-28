@@ -71,6 +71,24 @@
       }
     ]
   },
+  {
+    "name": "Frenzied",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Cloak"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": [16, 18]
+      }
+    ]
+  },
 
   {
     "name": "Spiraling",
@@ -141,6 +159,24 @@
         "stat": { "Speed": "Spell" },
         "modifier": "Multiplier",
         "value": [13, 15]
+      }
+    ]
+  },
+  {
+    "name": "Accelerating",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Cloak"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": [16, 18]
       }
     ]
   }
