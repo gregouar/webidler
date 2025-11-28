@@ -38,7 +38,7 @@ services:
       CORS_FRONTEND_URL: https://gregouar.github.io
       FRONTEND_URL: https://gregouar.github.io/webidler
       DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
-      RUST_LOG: DEBUG
+      RUST_LOG: INFO
     networks:
       - backend_net
 
