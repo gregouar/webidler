@@ -54,7 +54,7 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                     </div>
 
                     <div class="grid grid-cols-3 xl:grid-cols-5 gap-1 xl:gap-2 p-2 xl:p-4
-                    overflow-y-auto h-full
+                    overflow-y-auto h-full place-content-start 
                     bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                         <For
                             each=move || {
@@ -244,8 +244,10 @@ fn PlayerSkill(index: usize) -> impl IntoView {
 fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
-    let locked =
-        move || town_context.character.read().max_area_level < area.area_specs.required_level;
+    let locked = move || {
+        town_context.character.read().max_area_level < area.area_specs.required_level
+            || area.area_specs.coming_soon
+    };
 
     let play_area = {
         let navigate = use_navigate();
@@ -316,12 +318,19 @@ fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
 
             <Show when=move || locked()>
                 <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm text-center p-2">
-                    <div class="text-amber-400 text-lg font-bold tracking-wide">"Locked"</div>
+                    <div class="text-amber-400 text-lg font-bold tracking-wide">
+                        {if area.area_specs.coming_soon { "Coming Soon..." } else { "Locked" }}
+                    </div>
                     <div class="text-gray-300 text-xs mt-1">
                         {format!("Requires Level {}", area.area_specs.required_level)}
                     </div>
                     <div class="mt-2 text-xs text-gray-500 italic">
-                        "Keep grinding to unlock this area!"
+                        {if area.area_specs.coming_soon {
+                            "Wait for a future update!"
+                        } else {
+                            "Keep grinding to unlock this area!"
+                        }}
+
                     </div>
                 </div>
             </Show>

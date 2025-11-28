@@ -209,7 +209,7 @@
     "description": "Stab your Voodoo Doll to inflict physical pain to all enemies.",
     "icon": "skills/voodoo.svg",
     "skill_type": "Spell",
-    "cooldown": 1,
+    "cooldown": 1.5,
     "mana_cost": 2,
     "upgrade_cost": 50,
     "upgrade_effects": [
@@ -697,7 +697,7 @@
                       "modifier": "Multiplier"
                     }
                   },
-                  "value": 50
+                  "value": 40
                 }
               ]
             }

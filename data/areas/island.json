@@ -1,0 +1,16 @@
+{
+  "specs": {
+    "name": "Treasure Island",
+    "starting_level": 41,
+    "required_level": 200,
+    "item_level_modifier": 150,
+    "header_background": "areas/island_header.webp",
+    "footer_background": "areas/island_footer.webp",
+    "coming_soon": true
+  },
+  "loot_tables": ["tier_1.json", "tier_2.json", "tier_3.json", "tier_4.json"],
+  "bosses": [
+  ],
+  "waves": [
+  ]
+}

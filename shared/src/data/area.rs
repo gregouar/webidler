@@ -13,6 +13,8 @@ pub struct AreaSpecs {
     pub item_level_modifier: AreaLevel,
     pub header_background: String,
     pub footer_background: String,
+    #[serde(default)]
+    pub coming_soon: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
