@@ -54,11 +54,16 @@ async fn main() {
         .await
         .expect("couldn't clean game sessions");
 
+    let default_level = if cfg!(debug_assertions) {
+        format!("{}=debug,tower_http=debug", env!("CARGO_CRATE_NAME"))
+    } else {
+        format!("{}=info,tower_http=info", env!("CARGO_CRATE_NAME"))
+    };
+
     tracing_subscriber::registry()
         .with(
-            tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
-                format!("{}=debug,tower_http=debug", env!("CARGO_CRATE_NAME")).into()
-            }),
+            tracing_subscriber::EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| default_level.into()),
         )
         .with(tracing_subscriber::fmt::layer())
         .init();
