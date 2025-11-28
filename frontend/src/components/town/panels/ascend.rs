@@ -10,7 +10,7 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
-    game::panels::passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
+    shared::passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
     town::TownContext,
     ui::{
         buttons::{CloseButton, MenuButton},

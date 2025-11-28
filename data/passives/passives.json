@@ -1263,7 +1263,7 @@
       },
       "convert_dot": {
         "name": "Ain't Nobody Got Time for That",
-        "icon": "passives/broken_bone.svg",
+        "icon": "passives/broken_skull.svg",
         "x": 40,
         "y": 20,
         "node_type": "Attack",
@@ -1290,11 +1290,9 @@
       },
       "convert_dot_damage_1": {
         "name": "Damage",
-        "icon": "passives/stars.svg",
-        "initial_node": true,
-        "x": 100,
-        "y": 0,
-        "size": 1,
+        "icon": "passives/damage.svg",
+        "x": 41.5,
+        "y": 31.5,
         "node_type": "Attack",
         "effects": [
           {
@@ -1309,7 +1307,52 @@
             "modifier": "Multiplier",
             "value": 10
           }
-        ]
+        ],
+        "max_upgrade_level": 3
+      },
+      "convert_dot_damage_2": {
+        "name": "Damage",
+        "icon": "passives/damage.svg",
+        "x": 50,
+        "y": 25,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": { "Damage": {} },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": { "Damage": {} },
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "convert_dot_damage_3": {
+        "name": "Damage",
+        "icon": "passives/damage.svg",
+        "x": 50,
+        "y": 15,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": { "Damage": {} },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": { "Damage": {} },
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "max_upgrade_level": 3
       },
       "spell_crit": {
         "name": "Unstable Power",
@@ -1336,6 +1379,84 @@
         ],
         "locked": true
       },
+      "spell_crit_chance_1": {
+        "name": "Spell Critical Hit Chance",
+        "icon": "passives/critical_chance.svg",
+        "x": -10,
+        "y": -42.5,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": {
+              "CritChance": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "CritChance": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "spell_crit_chance_2": {
+        "name": "Spell Critical Hit Chance",
+        "icon": "passives/critical_chance.svg",
+        "x": 0,
+        "y": -50,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": {
+              "CritChance": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "CritChance": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "spell_crit_chance_3": {
+        "name": "Spell Critical Hit Chance",
+        "icon": "passives/critical_chance.svg",
+        "x": 10,
+        "y": -42.5,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": {
+              "CritChance": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "CritChance": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "max_upgrade_level": 3
+      },
       "mana_shield": {
         "name": "Mana Shield",
         "icon": "passives/mana_shield.svg",
@@ -1348,14 +1469,75 @@
             "stat": "TakeFromManaBeforeLife",
             "modifier": "Flat",
             "value": 100
-          },
-          {
-            "stat": "Mana",
-            "modifier": "Multiplier",
-            "value": 50
           }
         ],
         "locked": true
+      },
+      "mana_shield_mana_1": {
+        "name": "Maximum Mana",
+        "icon": "passives/mana.svg",
+        "x": 50,
+        "y": -15,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Multiplier",
+            "value": 5
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "mana_shield_mana_2": {
+        "name": "Maximum Mana",
+        "icon": "passives/mana.svg",
+        "x": 50,
+        "y": -25,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Multiplier",
+            "value": 5
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "mana_shield_mana_3": {
+        "name": "Maximum Mana",
+        "icon": "passives/mana.svg",
+        "x": 41.5,
+        "y": -31.5,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Multiplier",
+            "value": 5
+          }
+        ],
+        "max_upgrade_level": 3
       },
       "enrage": {
         "name": "Berserker",
@@ -1412,9 +1594,87 @@
         ],
         "locked": true
       },
+      "enrage_armor_1": {
+        "name": "Fire Resistance",
+        "icon": "passives/armor_fire.svg",
+        "x": -41.5,
+        "y": 31.5,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Fire"
+            },
+            "modifier": "Multiplier",
+            "value": 40
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Armor": "Fire"
+            },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "enrage_armor_2": {
+        "name": "Poison Resistance",
+        "icon": "passives/armor_poison.svg",
+        "x": -50,
+        "y": 25,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Poison"
+            },
+            "modifier": "Multiplier",
+            "value": 40
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Armor": "Poison"
+            },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "enrage_armor_3": {
+        "name": "Storm Resistance",
+        "icon": "passives/armor_storm.svg",
+        "x": -50,
+        "y": 15,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Storm"
+            },
+            "modifier": "Multiplier",
+            "value": 40
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Armor": "Storm"
+            },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "max_upgrade_level": 3
+      },
       "gold_init_2": {
         "name": "Impactful Start",
-        "icon": "passives/stars.svg",
+        "icon": "passives/damage.svg",
         "initial_node": true,
         "x": 100,
         "y": 0,
@@ -3169,6 +3429,18 @@
         "to": "convert_dot"
       },
       {
+        "from": "convert_dot",
+        "to": "convert_dot_damage_1"
+      },
+      {
+        "from": "convert_dot",
+        "to": "convert_dot_damage_2"
+      },
+      {
+        "from": "convert_dot",
+        "to": "convert_dot_damage_3"
+      },
+      {
         "from": "gold_ur_1",
         "to": "life_max_2"
       },
@@ -3179,6 +3451,18 @@
       {
         "from": "gold_dr_1",
         "to": "mana_shield"
+      },
+      {
+        "from": "mana_shield",
+        "to": "mana_shield_mana_1"
+      },
+      {
+        "from": "mana_shield",
+        "to": "mana_shield_mana_2"
+      },
+      {
+        "from": "mana_shield",
+        "to": "mana_shield_mana_3"
       },
       {
         "from": "gold_dl_1",
@@ -3217,6 +3501,18 @@
         "to": "enrage"
       },
       {
+        "from": "enrage",
+        "to": "enrage_armor_1"
+      },
+      {
+        "from": "enrage",
+        "to": "enrage_armor_2"
+      },
+      {
+        "from": "enrage",
+        "to": "enrage_armor_3"
+      },
+      {
         "from": "gold_u_2",
         "to": "crit_damage_2"
       },
@@ -3227,6 +3523,18 @@
       {
         "from": "gold_d_2",
         "to": "spell_crit"
+      },
+      {
+        "from": "spell_crit",
+        "to": "spell_crit_chance_1"
+      },
+      {
+        "from": "spell_crit",
+        "to": "spell_crit_chance_2"
+      },
+      {
+        "from": "spell_crit",
+        "to": "spell_crit_chance_3"
       },
       {
         "from": "gold_d_2",
