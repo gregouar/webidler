@@ -200,5 +200,23 @@
       "crit_damage": 200
     },
     "min_area_level": 140
+  },
+  "bardiche": {
+    "name": "Bardiche",
+    "icon": "items/bardiche.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.5,
+      "damage": {
+        "Physical": [12, 42]
+      },
+      "crit_chance": 5,
+      "crit_damage": 200
+    },
+    "min_area_level": 190
   }
 }

@@ -195,5 +195,24 @@
       }
     ],
     "min_area_level": 140
+  },
+  "decorated_wand": {
+    "name": "Decorated Wand",
+    "icon": "items/decorated_wand.webp",
+    "slot": "Weapon",
+    "categories": ["SpellWeapon"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": 100
+      }
+    ],
+    "min_area_level": 190
   }
 }

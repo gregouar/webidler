@@ -176,5 +176,32 @@
       }
     ],
     "min_area_level": 140
+  },
+  "reinforced_cloak": {
+    "name": "Reinforced Cloak",
+    "icon": "items/reinforced_cloak.webp",
+    "slot": "Accessory",
+    "categories": ["Accessory", "Cloak"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": 100
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": 100
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": 100
+      }
+    ],
+    "min_area_level": 190
   }
 }

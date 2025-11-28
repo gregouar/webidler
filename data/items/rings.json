@@ -124,5 +124,20 @@
       }
     ],
     "min_area_level": 140
+  },
+  "inlaid_ring": {
+    "name": "Inlaid Ring",
+    "icon": "items/inlaid_ring.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 100
+      }
+    ],
+    "min_area_level": 190
   }
 }

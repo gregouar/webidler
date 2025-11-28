@@ -8,9 +8,13 @@
     "footer_background": "areas/island_footer.webp",
     "coming_soon": true
   },
-  "loot_tables": ["tier_1.json", "tier_2.json", "tier_3.json", "tier_4.json"],
-  "bosses": [
+  "loot_tables": [
+    "tier_1.json",
+    "tier_2.json",
+    "tier_3.json",
+    "tier_4.json",
+    "tier_5.json"
   ],
-  "waves": [
-  ]
+  "bosses": [],
+  "waves": []
 }

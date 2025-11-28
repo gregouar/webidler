@@ -117,5 +117,20 @@
       }
     ],
     "min_area_level": 140
+  },
+  "seer_lens": {
+    "name": "Seer's Lens",
+    "icon": "items/seer_lens.webp",
+    "slot": "Shield",
+    "categories": ["Focus"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": 60.0
+      }
+    ],
+    "min_area_level": 190
   }
 }
