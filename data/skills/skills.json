@@ -84,7 +84,7 @@
   },
   "fireball": {
     "name": "Fireball",
-    "description": "THurl a blazing fireball that explodes on impact, scorching multiple enemies within its area.",
+    "description": "Hurl a blazing fireball that explodes on impact, scorching multiple enemies within its area.",
     "icon": "skills/fireball.svg",
     "skill_type": "Spell",
     "cooldown": 4,
@@ -198,6 +198,39 @@
                   "value": [3, 5]
                 }
               ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "voodoo_doll": {
+    "name": "Voodoo Doll",
+    "description": "Stab your Voodoo Doll to inflict physical pain to all enemies.",
+    "icon": "skills/voodoo.svg",
+    "skill_type": "Spell",
+    "cooldown": 1,
+    "mana_cost": 2,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "Multiplier",
+        "value": 50
+      }
+    ],
+    "targets": [
+      {
+        "range": "Distance",
+        "shape": "All",
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Physical": [1, 2]
+              }
             }
           }
         ]
@@ -921,7 +954,7 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "skills/sharpen_weapon.svg",
-                      "description": "Attacks have 30% Chance to inflict Bleed for 2s. Bleed damage is 50% of Physical Damage dealt by initial Hit per second. Critical Hits always apply Bleed.",
+                      "description": "Attacks have 30% Chance to inflict Bleed for 4s. Bleed damage is 50% of Physical Damage dealt by initial Hit per second. Critical Hits always apply Bleed.",
                       "target": "SameTarget",
                       "skill_type": "Attack",
                       "OnHit": {
@@ -931,7 +964,7 @@
                         {
                           "success_chance": 30,
                           "ApplyStatus": {
-                            "duration": 2,
+                            "duration": 4,
                             "statuses": [
                               {
                                 "status_type": {
