@@ -280,7 +280,7 @@
       },
       "life_regen_1": {
         "name": "Life Regeneration",
-        "icon": "passives/life.svg",
+        "icon": "passives/life_regen.svg",
         "x": 20,
         "y": -5,
         "node_type": "Life",
@@ -302,7 +302,7 @@
       },
       "life_regen_2": {
         "name": "Life Regeneration",
-        "icon": "passives/life.svg",
+        "icon": "passives/life_regen.svg",
         "x": 30,
         "y": -5,
         "node_type": "Life",
@@ -324,7 +324,7 @@
       },
       "life_max_and_regen_1": {
         "name": "Fortitude",
-        "icon": "passives/life.svg",
+        "icon": "passives/caduceus.svg",
         "x": 40,
         "y": 0,
         "size": 1,
@@ -409,7 +409,7 @@
       },
       "block_1": {
         "name": "Block",
-        "icon": "passives/armor.svg",
+        "icon": "passives/block.svg",
         "x": -20,
         "y": 5,
         "node_type": "Armor",
@@ -431,7 +431,7 @@
       },
       "block_2": {
         "name": "Block",
-        "icon": "passives/armor.svg",
+        "icon": "passives/block.svg",
         "x": -30,
         "y": 5,
         "node_type": "Armor",
@@ -453,7 +453,7 @@
       },
       "armor_and_block_1": {
         "name": "Myrmidon",
-        "icon": "passives/armor.svg",
+        "icon": "passives/myrmidon.svg",
         "x": -40,
         "y": 0,
         "size": 1,
@@ -550,7 +550,7 @@
       },
       "spell_speed_1": {
         "name": "Casting Speed",
-        "icon": "passives/spell.svg",
+        "icon": "passives/spell_speed.svg",
         "x": -5,
         "y": -20,
         "node_type": "Spell",
@@ -576,7 +576,7 @@
       },
       "spell_speed_2": {
         "name": "Casting Speed",
-        "icon": "passives/spell.svg",
+        "icon": "passives/spell_speed.svg",
         "x": -15,
         "y": -27.5,
         "node_type": "Spell",
@@ -602,7 +602,7 @@
       },
       "spell_damage_and_speed_1": {
         "name": "Sorcery",
-        "icon": "passives/spell.svg",
+        "icon": "passives/sorcery.svg",
         "x": -25,
         "y": -30,
         "size": 1,
@@ -691,7 +691,7 @@
       },
       "mana_regen_1": {
         "name": "Mana Regeneration",
-        "icon": "passives/mana.svg",
+        "icon": "passives/mana_regen.svg",
         "x": 5,
         "y": -20,
         "node_type": "Mana",
@@ -713,7 +713,7 @@
       },
       "mana_regen_2": {
         "name": "Mana Regeneration",
-        "icon": "passives/mana.svg",
+        "icon": "passives/mana_regen.svg",
         "x": 15,
         "y": -27.5,
         "node_type": "Mana",
@@ -735,7 +735,7 @@
       },
       "mana_max_and_regen_1": {
         "name": "Wisdom",
-        "icon": "passives/mana.svg",
+        "icon": "passives/wisdom.svg",
         "x": 25,
         "y": -30,
         "size": 1,
@@ -828,7 +828,7 @@
       },
       "attack_speed_1": {
         "name": "Attack Speed",
-        "icon": "passives/attack.svg",
+        "icon": "passives/attack_speed.svg",
         "x": -5,
         "y": 20,
         "node_type": "Attack",
@@ -854,7 +854,7 @@
       },
       "attack_speed_2": {
         "name": "Attack Speed",
-        "icon": "passives/attack.svg",
+        "icon": "passives/attack_speed.svg",
         "x": -15,
         "y": 27.5,
         "node_type": "Attack",
@@ -880,7 +880,7 @@
       },
       "attack_damage_and_speed_1": {
         "name": "Frenzy",
-        "icon": "passives/attack.svg",
+        "icon": "passives/frenzy.svg",
         "x": -25,
         "y": 30,
         "size": 1,
@@ -925,7 +925,7 @@
       },
       "crit_damage_1": {
         "name": "Critical Damage",
-        "icon": "passives/critical.svg",
+        "icon": "passives/critical_damage.svg",
         "x": 5,
         "y": 20,
         "node_type": "Critical",
@@ -951,7 +951,7 @@
       },
       "crit_damage_2": {
         "name": "Critical Hit Damage",
-        "icon": "passives/critical.svg",
+        "icon": "passives/critical_damage.svg",
         "x": 15,
         "y": 27.5,
         "node_type": "Critical",
@@ -977,7 +977,7 @@
       },
       "crit_chance_1": {
         "name": "Critical Hit Chance",
-        "icon": "passives/critical.svg",
+        "icon": "passives/critical_chance.svg",
         "x": 10,
         "y": 12.5,
         "node_type": "Critical",
@@ -1003,7 +1003,7 @@
       },
       "crit_chance_2": {
         "name": "Critical Hit Chance",
-        "icon": "passives/critical.svg",
+        "icon": "passives/critical_chance.svg",
         "x": 20,
         "y": 20,
         "node_type": "Critical",
@@ -1077,11 +1077,6 @@
         "size": 2,
         "effects": [
           {
-            "stat": "Block",
-            "modifier": "Multiplier",
-            "value": 30
-          },
-          {
             "stat": "BlockSpell",
             "modifier": "Flat",
             "value": 50
@@ -1093,6 +1088,72 @@
           }
         ],
         "locked": true
+      },
+      "arcane_bastion_block_1": {
+        "name": "Block",
+        "icon": "passives/block.svg",
+        "x": -50,
+        "y": -15,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": "Block",
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "Block",
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "arcane_bastion_block_2": {
+        "name": "Block",
+        "icon": "passives/block.svg",
+        "x": -50,
+        "y": -25,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": "Block",
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "Block",
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "arcane_bastion_block_3": {
+        "name": "Block",
+        "icon": "passives/block.svg",
+        "x": -41.5,
+        "y": -31.5,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": "Block",
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": "Block",
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "max_upgrade_level": 3
       },
       "overwhelming_force": {
         "name": "Overwhelming Force",
@@ -1122,6 +1183,84 @@
         ],
         "locked": true
       },
+      "overwhelming_force_damage_1": {
+        "name": "Critical Damage",
+        "icon": "passives/critical_damage.svg",
+        "x": -10,
+        "y": 43.5,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": {
+              "CritDamage": null
+            },
+            "modifier": "Multiplier",
+            "value": 40
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "CritDamage": null
+            },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "overwhelming_force_damage_2": {
+        "name": "Critical Damage",
+        "icon": "passives/critical_damage.svg",
+        "x": 0,
+        "y": 50,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": {
+              "CritDamage": null
+            },
+            "modifier": "Multiplier",
+            "value": 40
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "CritDamage": null
+            },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "overwhelming_force_damage_3": {
+        "name": "Critical Damage",
+        "icon": "passives/critical_damage.svg",
+        "x": 10,
+        "y": 43.5,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": {
+              "CritDamage": null
+            },
+            "modifier": "Multiplier",
+            "value": 40
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "CritDamage": null
+            },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "max_upgrade_level": 3
+      },
       "convert_dot": {
         "name": "Ain't Nobody Got Time for That",
         "icon": "passives/broken_bone.svg",
@@ -1148,6 +1287,29 @@
           }
         ],
         "locked": true
+      },
+      "convert_dot_damage_1": {
+        "name": "Damage",
+        "icon": "passives/stars.svg",
+        "initial_node": true,
+        "x": 100,
+        "y": 0,
+        "size": 1,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": { "Damage": {} },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": { "Damage": {} },
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ]
       },
       "spell_crit": {
         "name": "Unstable Power",
@@ -1254,7 +1416,7 @@
         "name": "Impactful Start",
         "icon": "passives/stars.svg",
         "initial_node": true,
-        "x": 90,
+        "x": 100,
         "y": 0,
         "size": 1,
         "node_type": "Attack",
@@ -1278,7 +1440,7 @@
       "physical_damage_1": {
         "name": "Physical Damage",
         "icon": "passives/physical_damage.svg",
-        "x": 90,
+        "x": 100,
         "y": 10,
         "node_type": "Physical",
         "effects": [
@@ -1308,7 +1470,7 @@
       "physical_damage_2": {
         "name": "Physical Damage",
         "icon": "passives/physical_damage.svg",
-        "x": 96,
+        "x": 106,
         "y": 18,
         "node_type": "Physical",
         "effects": [
@@ -1338,7 +1500,7 @@
       "physical_damage_3": {
         "name": "Physical Damage",
         "icon": "passives/physical_damage.svg",
-        "x": 105,
+        "x": 115,
         "y": 21,
         "size": 1,
         "node_type": "Physical",
@@ -1369,7 +1531,7 @@
       "physical_open_wound": {
         "name": "Savage Attacker",
         "icon": "passives/open_wound.svg",
-        "x": 114,
+        "x": 124,
         "y": 18,
         "size": 2,
         "node_type": "Physical",
@@ -1445,7 +1607,7 @@
       "poison_damage_1": {
         "name": "Poison Damage",
         "icon": "passives/poison_damage.svg",
-        "x": 99,
+        "x": 109,
         "y": 3,
         "node_type": "Poison",
         "effects": [
@@ -1475,7 +1637,7 @@
       "poison_damage_2": {
         "name": "Poison Damage",
         "icon": "passives/poison_damage.svg",
-        "x": 108,
+        "x": 118,
         "y": 0,
         "node_type": "Poison",
         "effects": [
@@ -1505,7 +1667,7 @@
       "poison_damage_3": {
         "name": "Poison Damage",
         "icon": "passives/poison_damage.svg",
-        "x": 114,
+        "x": 124,
         "y": -8,
         "size": 1,
         "node_type": "Poison",
@@ -1536,7 +1698,7 @@
       "poison_rapid": {
         "name": "Rapid Toxin",
         "icon": "passives/rapid_toxin.svg",
-        "x": 114,
+        "x": 124,
         "y": -18,
         "size": 2,
         "node_type": "Poison",
@@ -1565,7 +1727,7 @@
       "fire_damage_1": {
         "name": "Fire Damage",
         "icon": "passives/fire_damage.svg",
-        "x": 81,
+        "x": 91,
         "y": 3,
         "node_type": "Fire",
         "effects": [
@@ -1595,7 +1757,7 @@
       "fire_damage_2": {
         "name": "Fire Damage",
         "icon": "passives/fire_damage.svg",
-        "x": 75,
+        "x": 85,
         "y": 11,
         "node_type": "Fire",
         "effects": [
@@ -1625,7 +1787,7 @@
       "fire_damage_3": {
         "name": "Fire Damage",
         "icon": "passives/fire_damage.svg",
-        "x": 75,
+        "x": 85,
         "y": 21,
         "size": 1,
         "node_type": "Fire",
@@ -1656,7 +1818,7 @@
       "fire_burn": {
         "name": "Blazing Inferno",
         "icon": "passives/blazing_inferno.svg",
-        "x": 81,
+        "x": 91,
         "y": 29,
         "size": 2,
         "node_type": "Fire",
@@ -1720,7 +1882,7 @@
       "storm_damage_1": {
         "name": "Storm Damage",
         "icon": "passives/storm_damage.svg",
-        "x": 96,
+        "x": 106,
         "y": -8,
         "node_type": "Storm",
         "effects": [
@@ -1750,7 +1912,7 @@
       "storm_damage_2": {
         "name": "Effects Duration",
         "icon": "passives/storm_damage.svg",
-        "x": 96,
+        "x": 106,
         "y": -18,
         "node_type": "Storm",
         "effects": [
@@ -1780,7 +1942,7 @@
       "storm_damage_3": {
         "name": "Effects Duration",
         "icon": "passives/storm_damage.svg",
-        "x": 90,
+        "x": 100,
         "y": -26,
         "size": 1,
         "node_type": "Storm",
@@ -1811,7 +1973,7 @@
       "storm_lucky": {
         "name": "Lightning Never Strike Twice",
         "icon": "passives/lightning_double.svg",
-        "x": 81,
+        "x": 91,
         "y": -29,
         "size": 2,
         "node_type": "Storm",
@@ -1835,69 +1997,8 @@
       "damage_over_time_1": {
         "name": "Damage over Time",
         "icon": "passives/damage_over_time.svg",
-        "x": 84,
+        "x": 94,
         "y": -8,
-        "node_type": "Status",
-        "effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "DamageOverTime": {}
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "DamageOverTime": {}
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 5
-          }
-        ],
-        "max_upgrade_level": 3
-      },
-      "damage_over_time_2": {
-        "name": "Damage over Time",
-        "icon": "passives/damage_over_time.svg",
-        "x": 75,
-        "y": -11,
-        "node_type": "Status",
-        "effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "DamageOverTime": {}
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "DamageOverTime": {}
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 5
-          }
-        ],
-        "max_upgrade_level": 3
-      },
-      "damage_over_time_3": {
-        "name": "Damage over Time",
-        "icon": "passives/damage_over_time.svg",
-        "x": 66,
-        "y": -8,
-        "size": 1,
         "node_type": "Status",
         "effects": [
           {
@@ -1923,10 +2024,71 @@
         ],
         "max_upgrade_level": 3
       },
+      "damage_over_time_2": {
+        "name": "Damage over Time",
+        "icon": "passives/damage_over_time.svg",
+        "x": 85,
+        "y": -11,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "DamageOverTime": {}
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "DamageOverTime": {}
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10
+          }
+        ],
+        "max_upgrade_level": 3
+      },
+      "damage_over_time_3": {
+        "name": "Damage over Time",
+        "icon": "passives/damage_over_time.svg",
+        "x": 76,
+        "y": -8,
+        "size": 1,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "DamageOverTime": {}
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 40
+          }
+        ],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "DamageOverTime": {}
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20
+          }
+        ],
+        "max_upgrade_level": 3
+      },
       "damage_over_time_spread": {
         "name": "Spread Destruction",
         "icon": "passives/spread.svg",
-        "x": 60,
+        "x": 70,
         "y": 0,
         "size": 2,
         "node_type": "Status",
@@ -2218,7 +2380,7 @@
         "name": "Tactical Start",
         "icon": "passives/sprint.svg",
         "initial_node": true,
-        "x": -70,
+        "x": -80,
         "y": 0,
         "size": 1,
         "node_type": "Utility",
@@ -2234,7 +2396,7 @@
       "restoration_1": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": -65,
+        "x": -75,
         "y": 10,
         "node_type": "Spell",
         "effects": [
@@ -2260,7 +2422,7 @@
       "restoration_2": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": -60,
+        "x": -70,
         "y": 20,
         "node_type": "Spell",
         "effects": [
@@ -2286,7 +2448,7 @@
       "restoration_3": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": -60,
+        "x": -70,
         "y": 30,
         "size": 1,
         "node_type": "Spell",
@@ -2313,7 +2475,7 @@
       "healing_aura": {
         "name": "Healing Aura",
         "icon": "passives/healing_aura.svg",
-        "x": -60,
+        "x": -70,
         "y": 40,
         "node_type": "Spell",
         "size": 2,
@@ -2349,7 +2511,7 @@
       "status_duration_1": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -65,
+        "x": -75,
         "y": -10,
         "node_type": "Status",
         "effects": [
@@ -2375,7 +2537,7 @@
       "status_duration_2": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -60,
+        "x": -70,
         "y": -20,
         "node_type": "Status",
         "effects": [
@@ -2401,7 +2563,7 @@
       "status_duration_3": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -60,
+        "x": -70,
         "y": -30,
         "size": 1,
         "node_type": "Status",
@@ -2428,7 +2590,7 @@
       "infinite_curse": {
         "name": "Cursed Mouth",
         "icon": "passives/infinite_curse.svg",
-        "x": -60,
+        "x": -70,
         "y": -40,
         "size": 2,
         "node_type": "Status",
@@ -2446,7 +2608,7 @@
       "threat_damage_1": {
         "name": "Threat Damage",
         "icon": "passives/threat_damage.svg",
-        "x": -75,
+        "x": -85,
         "y": 10,
         "node_type": "Attack",
         "effects": [
@@ -2480,7 +2642,7 @@
       "threat_damage_2": {
         "name": "Threat Damage",
         "icon": "passives/threat_damage.svg",
-        "x": -80,
+        "x": -90,
         "y": 20,
         "node_type": "Attack",
         "effects": [
@@ -2514,7 +2676,7 @@
       "threat_damage_3": {
         "name": "Threat Damage",
         "icon": "passives/threat_damage.svg",
-        "x": -80,
+        "x": -90,
         "y": 30,
         "size": 1,
         "node_type": "Attack",
@@ -2549,7 +2711,7 @@
       "menacing_presence": {
         "name": "Menacing Presence",
         "icon": "passives/menacing_presence.svg",
-        "x": -80,
+        "x": -90,
         "y": 40,
         "size": 2,
         "node_type": "Attack",
@@ -2565,7 +2727,7 @@
       "success_chance_1": {
         "name": "Success Chance",
         "icon": "passives/success.svg",
-        "x": -75,
+        "x": -85,
         "y": -10,
         "node_type": "Utility",
         "effects": [
@@ -2591,7 +2753,7 @@
       "success_chance_2": {
         "name": "Success Chance",
         "icon": "passives/success.svg",
-        "x": -80,
+        "x": -90,
         "y": -20,
         "node_type": "Utility",
         "effects": [
@@ -2617,7 +2779,7 @@
       "success_chance_3": {
         "name": "Success Chance",
         "icon": "passives/success.svg",
-        "x": -80,
+        "x": -90,
         "y": -30,
         "size": 1,
         "node_type": "Utility",
@@ -2644,7 +2806,7 @@
       "success_chance_lucky": {
         "name": "Loaded Dice",
         "icon": "passives/loaded_dice.svg",
-        "x": -80,
+        "x": -90,
         "y": -40,
         "size": 2,
         "node_type": "Utility",
@@ -2665,7 +2827,7 @@
         "name": "Golden Start",
         "icon": "passives/gold.svg",
         "initial_node": true,
-        "x": -100,
+        "x": -110,
         "y": 30,
         "size": 1,
         "node_type": "Gold",
@@ -2688,7 +2850,7 @@
       "gold_shower_1": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -110,
+        "x": -120,
         "y": 20,
         "node_type": "Gold",
         "effects": [
@@ -2709,7 +2871,7 @@
       "gold_shower_2": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -100,
+        "x": -110,
         "y": 10,
         "node_type": "Gold",
         "effects": [
@@ -2730,7 +2892,7 @@
       "gold_shower_3": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -110,
+        "x": -120,
         "y": 0,
         "node_type": "Gold",
         "effects": [
@@ -2751,7 +2913,7 @@
       "gold_shower_4": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -100,
+        "x": -110,
         "y": -10,
         "node_type": "Gold",
         "effects": [
@@ -2772,7 +2934,7 @@
       "gold_shower_5": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -110,
+        "x": -120,
         "y": -20,
         "node_type": "Gold",
         "effects": [
@@ -2793,7 +2955,7 @@
       "gold_shower_6": {
         "name": "Golden Shower",
         "icon": "passives/gold.svg",
-        "x": -100,
+        "x": -110,
         "y": -30,
         "size": 2,
         "node_type": "Gold",
@@ -2983,6 +3145,18 @@
         "to": "arcane_bastion"
       },
       {
+        "from": "arcane_bastion",
+        "to": "arcane_bastion_block_1"
+      },
+      {
+        "from": "arcane_bastion",
+        "to": "arcane_bastion_block_2"
+      },
+      {
+        "from": "arcane_bastion",
+        "to": "arcane_bastion_block_3"
+      },
+      {
         "from": "gold_ul_1",
         "to": "attack_damage_2"
       },
@@ -3025,6 +3199,18 @@
       {
         "from": "gold_u_2",
         "to": "overwhelming_force"
+      },
+      {
+        "from": "overwhelming_force",
+        "to": "overwhelming_force_damage_1"
+      },
+      {
+        "from": "overwhelming_force",
+        "to": "overwhelming_force_damage_2"
+      },
+      {
+        "from": "overwhelming_force",
+        "to": "overwhelming_force_damage_3"
       },
       {
         "from": "gold_ul_1",
