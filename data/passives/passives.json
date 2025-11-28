@@ -1810,7 +1810,9 @@
                         "Trigger": {
                           "trigger_id": "passives/open_wound.svg",
                           "description": "Open Wound takes additional Physical Damage when Hit by an Attack.",
-                          "OnTakeHit": {},
+                          "OnTakeHit": {
+                            "is_triggered": false
+                          },
                           "skill_type": "Attack",
                           "effects": [
                             {
