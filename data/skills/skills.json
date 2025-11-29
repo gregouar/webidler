@@ -958,7 +958,8 @@
                       "target": "SameTarget",
                       "skill_type": "Attack",
                       "OnHit": {
-                        "skill_type": "Attack"
+                        "skill_type": "Attack",
+                        "is_triggered": false
                       },
                       "effects": [
                         {

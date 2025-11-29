@@ -104,7 +104,7 @@
       {
         "trigger_id": "broken_trophy",
         "description": "25% chance to inflict 50% of Physical Damage as extra Physical Damage over Time per second for 3 seconds and Decrease Enemy Armor by 50%.",
-        "OnHit": { "skill_type": "Attack" },
+        "OnHit": { "skill_type": "Attack", "is_triggered": false },
         "effects": [
           {
             "success_chance": 25,

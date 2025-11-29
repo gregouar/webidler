@@ -99,7 +99,7 @@
       {
         "trigger_id": "fangbreaker",
         "description": "Cannot equip Weapon and On Hit gain:",
-        "OnHit": { "skill_type": "Attack" },
+        "OnHit": { "skill_type": "Attack", "is_triggered": false },
         "target": "Source",
         "effects": [
           {
