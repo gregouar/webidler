@@ -356,7 +356,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         ),
         StatType::Armor(armor_type) => format!(
             "{} {}",
-            format_adds_removes(value, false, "%"),
+            format_adds_removes(value, false, ""),
             match armor_type {
                 Some(DamageType::Physical) => "Armor".to_string(),
                 None => "All Resistances and Armor".to_string(),
