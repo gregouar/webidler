@@ -10,6 +10,7 @@ use shared::{
         trigger::HitTrigger,
     },
 };
+use strum::IntoEnumIterator;
 
 use crate::components::{
     game::GameContext,
@@ -306,23 +307,28 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     .player_specs
                                     .with(|player_specs| {
                                         view! {
-                                            {player_specs
-                                                .character_specs
-                                                .damage_resistance
-                                                .clone()
-                                                .into_iter()
-                                                .map(|((skill_type, damage_type), value)| {
-                                                    view! {
-                                                        <Stat
-                                                            label=format_multiplier_stat_name(
-                                                                &StatType::DamageResistance {
-                                                                    skill_type: Some(skill_type),
-                                                                    damage_type: Some(damage_type),
-                                                                },
-                                                            )
-                                                            value=move || format!("{:.0}%", value)
-                                                        />
-                                                    }
+                                            {itertools::iproduct!(
+                                                DamageType::iter(),SkillType::iter().collect::<Vec::<_>>()
+                                            )
+                                                .filter_map(|(damage_type, skill_type)| {
+                                                    player_specs
+                                                        .character_specs
+                                                        .damage_resistance
+                                                        .get(&(skill_type, damage_type))
+                                                        .cloned()
+                                                        .map(|value| {
+                                                            view! {
+                                                                <Stat
+                                                                    label=format_multiplier_stat_name(
+                                                                        &StatType::DamageResistance {
+                                                                            skill_type: Some(skill_type),
+                                                                            damage_type: Some(damage_type),
+                                                                        },
+                                                                    )
+                                                                    value=move || format!("{:.0}%", value)
+                                                                />
+                                                            }
+                                                        })
                                                 })
                                                 .collect::<Vec<_>>()}
                                         }

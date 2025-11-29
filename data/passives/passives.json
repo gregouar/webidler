@@ -359,7 +359,7 @@
         "name": "Armor",
         "icon": "passives/armor.svg",
         "x": -20,
-        "y": -5,
+        "y": 5,
         "node_type": "Armor",
         "effects": [
           {
@@ -385,7 +385,7 @@
         "name": "Armor",
         "icon": "passives/armor.svg",
         "x": -30,
-        "y": -5,
+        "y": 5,
         "node_type": "Armor",
         "effects": [
           {
@@ -411,7 +411,7 @@
         "name": "Block",
         "icon": "passives/block.svg",
         "x": -20,
-        "y": 5,
+        "y": -5,
         "node_type": "Armor",
         "effects": [
           {
@@ -433,7 +433,7 @@
         "name": "Block",
         "icon": "passives/block.svg",
         "x": -30,
-        "y": 5,
+        "y": -5,
         "node_type": "Armor",
         "effects": [
           {
@@ -3399,7 +3399,7 @@
         "to": "mana_max_and_regen_1"
       },
       {
-        "from": "gold_ul_1",
+        "from": "gold_dl_1",
         "to": "block_2"
       },
       {
@@ -3447,7 +3447,7 @@
         "to": "life_max_2"
       },
       {
-        "from": "gold_dl_1",
+        "from": "gold_ul_1",
         "to": "armor_2"
       },
       {

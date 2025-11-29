@@ -36,6 +36,7 @@ nutype = { version = "0.6.2",  features = ["serde", "regex"] }
 
 chrono = "0.4.41"
 indexmap = "2.11.0"
+itertools = "0.14.0"
 
 rand = "0.9.0"
 getrandom = { version = "0.3", features = ["wasm_js"] }
