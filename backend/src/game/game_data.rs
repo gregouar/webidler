@@ -147,11 +147,11 @@ impl GameInstanceData {
             .ok_or_else(|| anyhow::anyhow!("couldn't load passives tree: {}", passives_tree_id))?;
 
         let player_state = PlayerState::init(&player_specs);
-        // passives_controller::refund_missing(
-        //     &passives_tree_specs,
-        //     &mut passives_tree_state,
-        //     &mut player_resources,
-        // );
+        passives_controller::refund_missing(
+            &passives_tree_specs,
+            &mut passives_tree_state,
+            &mut player_resources,
+        );
 
         player_updater::update_player_specs(
             &mut player_specs,

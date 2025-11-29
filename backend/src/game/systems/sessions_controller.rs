@@ -188,9 +188,9 @@ async fn new_game_instance(
         player_inventory,
     )?;
 
-    // if game_data.area_blueprint.specs.coming_soon {
-    //     return Err(anyhow!("forbidden area"));
-    // }
+    if game_data.area_blueprint.specs.coming_soon {
+        return Err(anyhow!("forbidden area"));
+    }
 
     player_controller::init_skills_from_inventory(
         game_data.player_specs.mutate(),
