@@ -198,7 +198,7 @@
   },
   "decorated_wand": {
     "name": "Decorated Wand",
-    "icon": "items/decorated_wand.webp",
+    "icon": "items/carved_wand.webp",
     "slot": "Weapon",
     "categories": ["SpellWeapon"],
     "affixes": [
