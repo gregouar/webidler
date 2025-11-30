@@ -28,6 +28,40 @@ pub fn MainMenuPage() -> impl IntoView {
 }
 
 #[component]
+pub fn Logo() -> impl IntoView {
+    view! {
+        <div class="relative flex flex-col items-center leading-none select-none">
+            <span class="
+            text-[3.8rem] md:text-[5rem] xl:text-[6rem]
+            font-extrabold tracking-wide [font-variant:small-caps]
+            bg-gradient-to-b from-amber-200 via-amber-500 to-orange-800
+            bg-clip-text text-transparent
+            drop-shadow-[0_4px_2px_rgba(0,0,0,0.55)]
+            [text-shadow:1px_2px_0px_#dac66eff,2px_4px_3px_rgba(0,0,0,0.7)]
+            ">"GrinD"</span>
+
+            <span class="
+            text-[1.2rem] md:text-[1.6rem] xl:text-[2rem]
+            font-extrabold [font-variant:small-caps] -mt-2 -mb-6 tracking-wider
+            bg-gradient-to-b from-amber-100 via-amber-400 to-amber-700
+            bg-clip-text text-transparent
+            drop-shadow-[0_3px_2px_rgba(0,0,0,0.6)]
+            [text-shadow:1px_1px_0px_#dac66eff,2px_3px_2px_rgba(0,0,0,0.6)]
+            ">"to"</span>
+
+            <span class="
+            text-[4rem] md:text-[5.2rem] xl:text-[6.4rem]
+            font-extrabold tracking-wide [font-variant:small-caps]
+            bg-gradient-to-b from-amber-300 via-orange-500 to-[#7a3b00]
+            bg-clip-text text-transparent
+            drop-shadow-[0_5px_3px_rgba(0,0,0,0.55)]
+            [text-shadow:1px_2px_0px_#dac66eff,3px_5px_4px_rgba(0,0,0,0.8)]
+            ">"RusT"</span>
+        </div>
+    }
+}
+
+#[component]
 fn MainMenu() -> impl IntoView {
     let (get_username_storage, set_username_storage, _) =
         storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
@@ -106,9 +140,7 @@ fn MainMenu() -> impl IntoView {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
             <PlayerCount />
             <div>
-                <h1 class="text-shadow-lg mb-4 text-amber-200 text-4xl  md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
-                    "Grind to Rust!"
-                </h1>
+                <Logo />
                 <div class="flex flex-col space-y-2">
                     // <form>
                     <div class="w-full mx-auto text-left">

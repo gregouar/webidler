@@ -14,7 +14,7 @@ use strum::IntoEnumIterator;
 
 use crate::components::{
     game::GameContext,
-    shared::tooltips::effects_tooltip::format_multiplier_stat_name,
+    shared::tooltips::effects_tooltip::{self, format_multiplier_stat_name},
     ui::{
         buttons::CloseButton,
         menu_panel::{MenuPanel, PanelTitle},
@@ -302,37 +302,71 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         }
                                     })
                             }}
+                            // {move || {
+                            // game_context
+                            // .player_specs
+                            // .with(|player_specs| {
+                            // view! {
+                            // {itertools::iproduct!(
+                            // DamageType::iter(),SkillType::iter().collect::<Vec::<_>>()
+                            // )
+                            // .filter_map(|(damage_type, skill_type)| {
+                            // player_specs
+                            // .character_specs
+                            // .damage_resistance
+                            // .get(&(skill_type, damage_type))
+                            // .cloned()
+                            // .map(|value| {
+                            // view! {
+                            // <Stat
+                            // label=format_multiplier_stat_name(
+                            // &StatType::DamageResistance {
+                            // skill_type: Some(skill_type),
+                            // damage_type: Some(damage_type),
+                            // },
+                            // )
+                            // value=move || format!("{:.0}%", value)
+                            // />
+                            // }
+                            // })
+                            // })
+                            // .collect::<Vec<_>>()}
+                            // }
+                            // })
+                            // }}
                             {move || {
-                                game_context
-                                    .player_specs
-                                    .with(|player_specs| {
-                                        view! {
-                                            {itertools::iproduct!(
-                                                DamageType::iter(),SkillType::iter().collect::<Vec::<_>>()
+                                DamageType::iter()
+                                    .filter_map(|damage_type| {
+                                        let value = -game_context
+                                            .player_specs
+                                            .read()
+                                            .effects
+                                            .0
+                                            .get(
+                                                &(
+                                                    StatType::DamageResistance {
+                                                        skill_type: None,
+                                                        damage_type: Some(damage_type),
+                                                    },
+                                                    Modifier::Flat,
+                                                ),
                                             )
-                                                .filter_map(|(damage_type, skill_type)| {
-                                                    player_specs
-                                                        .character_specs
-                                                        .damage_resistance
-                                                        .get(&(skill_type, damage_type))
-                                                        .cloned()
-                                                        .map(|value| {
-                                                            view! {
-                                                                <Stat
-                                                                    label=format_multiplier_stat_name(
-                                                                        &StatType::DamageResistance {
-                                                                            skill_type: Some(skill_type),
-                                                                            damage_type: Some(damage_type),
-                                                                        },
-                                                                    )
-                                                                    value=move || format!("{:.0}%", value)
-                                                                />
-                                                            }
-                                                        })
-                                                })
-                                                .collect::<Vec<_>>()}
-                                        }
+                                            .copied()
+                                            .unwrap_or_default();
+                                        (value != 0.0)
+                                            .then(|| {
+                                                view! {
+                                                    <Stat
+                                                        label=format!(
+                                                            "{}Damage Taken",
+                                                            effects_tooltip::damage_type_str(Some(damage_type)),
+                                                        )
+                                                        value=move || format_effect_value(value)
+                                                    />
+                                                }
+                                            })
                                     })
+                                    .collect::<Vec<_>>()
                             }}
                         </StatCategory>
 
