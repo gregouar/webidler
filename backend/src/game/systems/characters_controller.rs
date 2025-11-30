@@ -240,8 +240,8 @@ pub fn apply_status(
             .unique_statuses
             .entry(status_specs.into())
             .and_modify(|(cur_status_specs, cur_status_state)| {
-                if value * duration.unwrap_or(10_000.0)
-                    > cur_status_state.value * cur_status_state.duration.unwrap_or(10_000.0)
+                if (value + 1.0) * duration.unwrap_or(10_000.0)
+                    > (cur_status_state.value + 1.0) * cur_status_state.duration.unwrap_or(10_000.0)
                 {
                     cur_status_state.value = value;
                     cur_status_state.duration = duration;
