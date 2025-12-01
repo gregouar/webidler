@@ -8,7 +8,7 @@ use sqlx::Transaction;
 
 use crate::{
     app_state::MasterStore,
-    db::{self, pool::Database},
+    db::{self, characters::CharacterAreaEntry, pool::Database},
     rest::AppError,
 };
 
@@ -83,23 +83,29 @@ pub async fn update_ascension(
     resource_shards: f64,
     passives_tree_ascension: &PassivesTreeAscension,
 ) -> Result<(), AppError> {
-    let (_, prev_ascension, _) = db::characters_data::load_character_data(&mut **tx, character_id)
-        .await?
-        .unwrap_or_default();
+    let areas_completed =
+        db::characters::read_character_areas_completed(&mut **tx, &character_id).await?;
 
     let passive_tree_specs = master_store
         .passives_store
         .get("default")
         .ok_or(anyhow::anyhow!("passives tree not found"))?;
 
-    let cost = validate_ascension(passive_tree_specs, passives_tree_ascension)?
-        - compute_ascension_cost(&prev_ascension);
+    let cost = validate_ascension(passive_tree_specs, passives_tree_ascension)?;
+    let total_shards = compute_total_shards(&areas_completed);
 
-    if cost as f64 > resource_shards {
+    if cost > total_shards {
         return Err(AppError::UserError("not enough power shards".to_string()));
     }
 
-    db::characters::update_character_resources(&mut **tx, character_id, 0.0, -cost, 0.0).await?;
+    db::characters::update_character_resources(
+        &mut **tx,
+        character_id,
+        0.0,
+        (total_shards - cost) - resource_shards,
+        0.0,
+    )
+    .await?;
 
     db::characters_data::save_character_passives(&mut **tx, character_id, passives_tree_ascension)
         .await?;
@@ -135,4 +141,11 @@ pub fn validate_ascension(
         cost += (*level) as f64;
     }
     Ok(cost)
+}
+
+fn compute_total_shards(areas_completed: &[CharacterAreaEntry]) -> f64 {
+    areas_completed
+        .iter()
+        .map(|area| (area.max_area_level / 10) as f64)
+        .sum()
 }
