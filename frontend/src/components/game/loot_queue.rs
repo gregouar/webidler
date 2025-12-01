@@ -3,7 +3,7 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*};
 
 use shared::{
-    data::{loot::LootState, player::EquippedSlot},
+    data::{item::ItemRarity, loot::LootState, player::EquippedSlot},
     messages::client::PickUpLootMessage,
 };
 
@@ -125,63 +125,70 @@ pub fn LootQueue() -> impl IntoView {
                 key=|loot| loot.identifier
                 let(loot)
             >
-                <div style="animation: loot-drop 1.3s ease forwards;">
-                    <div
-                        class="
-                        absolute bottom-0 w-[12%] aspect-[2/3]
-                        transition-all duration-500 ease
-                        will-change-opacity
-                        will-change-transform
-                        pointer-events-none
-                        "
-                        style=move || {
-                            format!(
-                                "{} {}",
-                                animation_style(loot.identifier),
-                                position_style(loot.identifier),
-                            )
-                        }
-                    >
-                        <div
-                            class="
-                            relative
-                            transition-all duration-200 ease-in-out 
-                            translate-y-1/2 hover:translate-y-1/4
-                            pointer-events-auto
-                            "
-                            on:click={
-                                let pickup_loot = pickup_loot.clone();
-                                move |_| pickup_loot(loot.identifier)
-                            }
-
-                            on:contextmenu={
-                                let sell_loot = sell_loot.clone();
-                                move |_| {
-                                    if !accessibility.is_on_mobile() {
-                                        sell_loot(loot.identifier);
-                                    }
+                {
+                    let item_rarity = loot.item_specs.modifiers.rarity.clone();
+                    view! {
+                        <div style="animation: loot-drop 1.3s ease forwards;">
+                            <div
+                                class="
+                                absolute bottom-0 w-[12%] aspect-[2/3]
+                                transition-all duration-500 ease
+                                will-change-opacity
+                                will-change-transform
+                                pointer-events-none
+                                "
+                                style=move || {
+                                    format!(
+                                        "{} {}",
+                                        animation_style(loot.identifier),
+                                        position_style(loot.identifier),
+                                    )
                                 }
-                            }
-                        >
-                            <ItemCard
-                                comparable_item_specs=game_context
-                                    .player_inventory
-                                    .read()
-                                    .equipped
-                                    .get(&loot.item_specs.base.slot)
-                                    .and_then(|equipped_slot| match equipped_slot {
-                                        EquippedSlot::MainSlot(item_specs) => {
-                                            Some(Arc::from(item_specs.clone()))
+                            >
+                                <div
+                                    class="
+                                    relative
+                                    transition-all duration-200 ease-in-out 
+                                    translate-y-1/2 hover:translate-y-1/4
+                                    pointer-events-auto
+                                    "
+                                    on:click={
+                                        let pickup_loot = pickup_loot.clone();
+                                        move |_| pickup_loot(loot.identifier)
+                                    }
+
+                                    on:contextmenu={
+                                        let sell_loot = sell_loot.clone();
+                                        move |_| {
+                                            if !accessibility.is_on_mobile()
+                                                && item_rarity != ItemRarity::Unique
+                                            {
+                                                sell_loot(loot.identifier);
+                                            }
                                         }
-                                        EquippedSlot::ExtraSlot(_) => None,
-                                    })
-                                item_specs=Arc::new(loot.item_specs)
-                                tooltip_position=DynamicTooltipPosition::TopLeft
-                                class:shadow-lg
-                            />
+                                    }
+                                >
+                                    <ItemCard
+                                        comparable_item_specs=game_context
+                                            .player_inventory
+                                            .read()
+                                            .equipped
+                                            .get(&loot.item_specs.base.slot)
+                                            .and_then(|equipped_slot| match equipped_slot {
+                                                EquippedSlot::MainSlot(item_specs) => {
+                                                    Some(Arc::from(item_specs.clone()))
+                                                }
+                                                EquippedSlot::ExtraSlot(_) => None,
+                                            })
+                                        item_specs=Arc::new(loot.item_specs)
+                                        tooltip_position=DynamicTooltipPosition::TopLeft
+                                        class:shadow-lg
+                                    />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    }
+                }
             </For>
         </div>
     }

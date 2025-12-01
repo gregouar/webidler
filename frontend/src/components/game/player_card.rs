@@ -447,19 +447,56 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         );
     };
 
+    let level_up_cost = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .skills_specs
+            .get(index)
+            .map(|x| x.next_upgrade_cost)
+            .unwrap_or_default()
+    });
+
+    let level_up_batch = Memo::new(move |_| {
+        let mut total_level = 0u8;
+        let mut total_cost = 0.0;
+
+        game_context
+            .player_specs
+            .read()
+            .skills_specs
+            .get(index)
+            .cloned()
+            .map(|mut skill_specs| {
+                for _ in 0..10 {
+                    if total_cost + skill_specs.next_upgrade_cost
+                        > game_context.player_resources.read().gold
+                    {
+                        break;
+                    }
+                    total_level += 1;
+                    total_cost += skill_specs.next_upgrade_cost;
+                    skill_specs.upgrade_level += 1;
+                    skill_specs.next_upgrade_cost = skill_cost_increase(&skill_specs);
+                }
+            });
+
+        (total_level, total_cost)
+    });
+
     let conn = expect_context::<WebsocketContext>();
     let events_context: EventsContext = expect_context();
     let level_up = move |_| {
-        let amount = if events_context.key_pressed(Key::Ctrl) {
-            10
+        let (amount, cost) = if events_context.key_pressed(Key::Ctrl) {
+            level_up_batch.get()
         } else {
-            1
+            (1, level_up_cost.get())
         };
 
         game_context.player_specs.update(|player_specs| {
             if let Some(skill_specs) = player_specs.skills_specs.get_mut(index) {
-                game_context.player_resources.write().gold -= skill_specs.next_upgrade_cost;
-                skill_specs.upgrade_level += 1;
+                game_context.player_resources.write().gold -= cost;
+                skill_specs.upgrade_level = skill_specs.upgrade_level.saturating_add(amount as u16);
                 skill_specs.next_upgrade_cost = skill_cost_increase(skill_specs);
             }
         });
@@ -472,16 +509,6 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             .into(),
         );
     };
-
-    let level_up_cost = Memo::new(move |_| {
-        game_context
-            .player_specs
-            .read()
-            .skills_specs
-            .get(index)
-            .map(|x| x.next_upgrade_cost)
-            .unwrap_or_default()
-    });
 
     let disable_level_up =
         Memo::new(move |_| level_up_cost.get() > game_context.player_resources.read().gold);
@@ -504,7 +531,9 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                 <span class="text-zinc-300">
                     {format!("{} Gold", format_number(level_up_cost.get()))}
                 </span>
-                <span class="text-xs italic text-gray-400">"CTRL + Click: +10"</span>
+                <span class="text-xs italic text-gray-400">
+                    {format!("Hold CTRL: +{}", level_up_batch.get().0)}
+                </span>
             </div>
         }
     };

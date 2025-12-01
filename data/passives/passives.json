@@ -1550,17 +1550,17 @@
           {
             "stat": { "DamageResistance": { "damage_type": "Fire" } },
             "modifier": "Flat",
-            "value": -20
+            "value": -30
           },
           {
             "stat": { "DamageResistance": { "damage_type": "Poison" } },
             "modifier": "Flat",
-            "value": -20
+            "value": -30
           },
           {
             "stat": { "DamageResistance": { "damage_type": "Storm" } },
             "modifier": "Flat",
-            "value": -20
+            "value": -30
           }
         ],
         "triggers": [
@@ -1606,7 +1606,7 @@
               "Armor": "Fire"
             },
             "modifier": "Multiplier",
-            "value": 40
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1615,7 +1615,7 @@
               "Armor": "Fire"
             },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -1632,7 +1632,7 @@
               "Armor": "Poison"
             },
             "modifier": "Multiplier",
-            "value": 40
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1641,7 +1641,7 @@
               "Armor": "Poison"
             },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
@@ -1658,7 +1658,7 @@
               "Armor": "Storm"
             },
             "modifier": "Multiplier",
-            "value": 40
+            "value": 20
           }
         ],
         "upgrade_effects": [
@@ -1667,7 +1667,7 @@
               "Armor": "Storm"
             },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 10
           }
         ],
         "max_upgrade_level": 3
