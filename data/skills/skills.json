@@ -697,7 +697,7 @@
                       "modifier": "Multiplier"
                     }
                   },
-                  "value": 40
+                  "value": 20
                 }
               ]
             }
@@ -941,7 +941,7 @@
                       "modifier": "Multiplier"
                     }
                   },
-                  "value": 20
+                  "value": 10
                 }
               ]
             }
