@@ -44,7 +44,7 @@
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Fire" } },
         "modifier": "Multiplier",
-        "value": [100, 200],
+        "value": [50, 100],
         "ignore_quality": true
       },
       {
@@ -62,7 +62,7 @@
           "StatusDuration": { "DamageOverTime": { "damage_type": "Fire" } }
         },
         "modifier": "Multiplier",
-        "value": [50, 100],
+        "value": [20, 40],
         "ignore_quality": true
       },
       {

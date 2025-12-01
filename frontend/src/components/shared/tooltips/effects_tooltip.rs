@@ -545,7 +545,7 @@ fn format_adds_removes(value: Option<f64>, precise: bool, separator: &str) -> St
     if value.unwrap_or_default() >= 0.0 {
         // format!("Adds {}", format_flat_number(value, precise),)
         format!("+{}{}", format_flat_number(value, precise), separator)
-    } else if value.unwrap_or_default() < 1e300 {
+    } else if value.unwrap_or_default() < -1e300 {
         "Removes".to_string()
     } else {
         // format!("Removes {}", format_flat_number(value.map(|v| -v), precise),)
