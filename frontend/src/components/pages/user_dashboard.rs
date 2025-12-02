@@ -124,7 +124,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     />
                                 </div>
 
-                                <div class="w-full bg-zinc-800 rounded-xl ring-1 ring-zinc-950
+                                <div class="w-full bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-xl
                                 flex items-center justify-between gap-2 text-gray-400 p-2 xl:p-4">
                                     <a href="leaderboard">
                                         <MenuButton>"Leaderboard"</MenuButton>
@@ -170,7 +170,7 @@ fn CharactersSelection(
             refresh_trigger=refresh_trigger
         />
 
-        <div class="flex flex-col h-full min-h-0 bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner p-4 text-left space-y-4">
+        <div class="flex flex-col h-full min-h-0 bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-xl p-4 text-left space-y-4">
             <div class="flex flex-row justify-between items-center">
                 <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
                     "Your Characters"
@@ -603,7 +603,7 @@ fn NewsPanel() -> impl IntoView {
     });
 
     view! {
-        <div class="flex flex-col bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner p-4 text-left space-y-4">
+        <div class="flex flex-col bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-xl p-4 text-left space-y-4">
             <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
                 "News"
             </span>
