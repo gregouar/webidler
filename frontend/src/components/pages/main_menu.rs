@@ -32,7 +32,7 @@ pub fn Logo() -> impl IntoView {
     view! {
         <div class="relative flex flex-col items-center leading-none select-none">
             <span class="
-            text-[3.8rem] md:text-[5rem] xl:text-[6rem]
+            text-[3.8rem] xl:text-[6rem]
             font-extrabold tracking-wide [font-variant:small-caps]
             bg-gradient-to-b from-amber-200 via-amber-500 to-orange-800
             bg-clip-text text-transparent
@@ -41,8 +41,8 @@ pub fn Logo() -> impl IntoView {
             ">"GrinD"</span>
 
             <span class="
-            text-[1.2rem] md:text-[1.6rem] xl:text-[2rem]
-            font-extrabold [font-variant:small-caps] -mt-2 -mb-6 tracking-wider
+            text-[1.2rem] xl:text-[2rem]
+            font-extrabold [font-variant:small-caps] -mt-1 xl:-mt-2 -mb-3 xl:-mb-6 tracking-wider
             bg-gradient-to-b from-amber-100 via-amber-400 to-amber-700
             bg-clip-text text-transparent
             drop-shadow-[0_3px_2px_rgba(0,0,0,0.6)]
@@ -50,7 +50,7 @@ pub fn Logo() -> impl IntoView {
             ">"to"</span>
 
             <span class="
-            text-[4rem] md:text-[5.2rem] xl:text-[6.4rem]
+            text-[4rem] xl:text-[6.4rem]
             font-extrabold tracking-wide [font-variant:small-caps]
             bg-gradient-to-b from-amber-300 via-orange-500 to-[#7a3b00]
             bg-clip-text text-transparent
