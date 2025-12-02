@@ -5,8 +5,7 @@
     "required_level": 200,
     "item_level_modifier": 150,
     "header_background": "areas/island_header.webp",
-    "footer_background": "areas/island_footer.webp",
-    "coming_soon": true
+    "footer_background": "areas/island_footer.webp"
   },
   "loot_tables": [
     "tier_1.json",
@@ -16,5 +15,33 @@
     "tier_5.json"
   ],
   "bosses": [],
-  "waves": []
+  "waves": [
+    {
+      "min_level": 1,
+      "max_level": null,
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "pirate_deckhand.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "pirate_pistol.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "pirate_lookout.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_pistol.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_deckhand.json",
+          "quantity": 1
+        }
+      ]
+    }
+  ]
 }

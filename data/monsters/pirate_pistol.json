@@ -1,0 +1,29 @@
+{
+  "name": "Blazing Corsair",
+  "portrait": "monsters/pirate_pistol.webp",
+  "max_life": 8,
+  "power_factor": 2,
+  "initiative": [1.0, 2.5],
+  "armor": { "Fire": 50 },
+  "skills": [
+    {
+      "name": "Shoot",
+      "icon": "skills/fireball.svg",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [2, 4],
+                  "Fire": [3, 6]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
