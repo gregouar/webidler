@@ -100,7 +100,7 @@ pub fn UserDashboardPage() -> impl IntoView {
             <DiscordInviteBanner />
             <PlayerCount />
 
-            <div class="relative flex-1 max-w-6xl w-full mx-auto p-4 xl:p-8 gap-4 xl:gap-8 flex flex-col justify-around">
+            <div class="relative flex-1 max-w-6xl w-full mx-auto p-4 xl:p-8 gap-4 xl:gap-8 flex flex-col ">
                 <Transition fallback=move || {
                     view! { <p class="text-gray-400">"Loading..."</p> }
                 }>
@@ -110,7 +110,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                             let (areas, user, characters) = async_data.await.unwrap_or_default();
                             let areas = Arc::new(areas);
                             view! {
-                                <h1 class="text-shadow-lg shadow-gray-950 text-amber-200 text-4xl md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
+                                <h1 class="text-shadow-lg shadow-gray-950 text-amber-200 my-4 text-4xl md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
                                     "Welcome, " {user.username.clone()}"!"
                                 </h1>
 
@@ -125,7 +125,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                 </div>
 
                                 <div class="w-full bg-zinc-800 rounded-xl ring-1 ring-zinc-950
-                                flex items-center justify-between gap-2 text-gray-400 p-2">
+                                flex items-center justify-between gap-2 text-gray-400 p-2 xl:p-4">
                                     <a href="leaderboard">
                                         <MenuButton>"Leaderboard"</MenuButton>
                                     </a>
@@ -169,7 +169,7 @@ fn CharactersSelection(
                     "Your Characters"
                 </span>
                 <span class="text-sm text-gray-400 font-medium">
-                    {format!("{characters_len} / {} characters", user.max_characters)}
+                    {format!("{characters_len} / {}", user.max_characters)}
                 </span>
             </div>
 
@@ -643,7 +643,9 @@ fn NewsCard(news: NewsEntry) -> impl IntoView {
                 <span class="text-xs text-gray-400">{format_datetime(news.timestamp)}</span>
             </div>
 
-            <p class="text-gray-300 text-sm whitespace-pre-line leading-relaxed">{body}</p>
+            <p class="text-gray-300 text-sm text-justify whitespace-pre-line leading-relaxed">
+                {body}
+            </p>
         </div>
     }
 }
