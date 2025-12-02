@@ -20,7 +20,7 @@ use shared::{
             GetCharacterDetailsResponse, GetDiscordInviteResponse, GetPassivesResponse,
             GetSkillsResponse, GetUserCharactersResponse, GetUserDetailsResponse,
             InventoryDeleteResponse, InventoryEquipResponse, InventoryUnequipResponse,
-            LeaderboardResponse, PlayersCountResponse, RejectMarketItemResponse,
+            LeaderboardResponse, NewsResponse, PlayersCountResponse, RejectMarketItemResponse,
             ResetPasswordResponse, SellMarketItemResponse, SignInResponse, SignUpResponse,
             UpdateAccountResponse,
         },
@@ -78,6 +78,10 @@ impl BackendClient {
 
     pub async fn get_leaderboard(&self) -> Result<LeaderboardResponse, BackendError> {
         self.get("leaderboard").await
+    }
+
+    pub async fn get_news(&self) -> Result<NewsResponse, BackendError> {
+        self.get("news").await
     }
 
     pub async fn get_areas(&self) -> Result<GetAreasResponse, BackendError> {

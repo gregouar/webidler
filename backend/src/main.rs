@@ -22,7 +22,7 @@ use backend::{
     game::{
         data::master_store::MasterStore, sessions::SessionsStore, systems::sessions_controller,
     },
-    integration::discord::DiscordInvitesStore,
+    integration::discord::DiscordState,
     rest, tasks, websocket,
 };
 
@@ -92,7 +92,7 @@ async fn main() {
         email_service: EmailService::from_env(),
         master_store,
         sessions_store: sessions_store.clone(),
-        discord_invites_store: DiscordInvitesStore::new(
+        discord_state: DiscordState::new(
             std::env::var("DISCORD_BOT_TOKEN").expect("DISCORD_BOT_TOKEN must be set"),
         ),
     };

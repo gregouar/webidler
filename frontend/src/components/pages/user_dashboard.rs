@@ -8,9 +8,9 @@ use leptos_use::storage;
 use shared::{
     data::{
         area::AreaSpecs,
-        user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserId},
+        user::{User, UserCharacter, UserCharacterActivity, UserCharacterId, UserId},
     },
-    http::client::CreateCharacterRequest,
+    http::{client::CreateCharacterRequest, server::NewsEntry},
     types::AssetName,
 };
 
@@ -26,6 +26,7 @@ use crate::{
             confirm::ConfirmContext,
             input::ValidatedInput,
             menu_panel::MenuPanel,
+            number::format_datetime,
             toast::*,
         },
     },
@@ -94,15 +95,12 @@ pub fn UserDashboardPage() -> impl IntoView {
         }
     });
 
-    let open_create_character = RwSignal::new(false);
-
     view! {
-        <main class="my-0 mx-auto w-full min-h-screen text-center overflow-x-hidden flex flex-col justify-center">
+        <main class="my-0 mx-auto w-full max-h-screen text-center overflow-x-hidden flex flex-col">
             <DiscordInviteBanner />
             <PlayerCount />
 
-            <div class="h-full max-w-6xl w-full mx-auto px-4 xl:px-8 text-center overflow-x-hidden flex flex-col justify-around">
-
+            <div class="relative flex-1 max-w-6xl w-full mx-auto p-4 xl:p-8 gap-4 xl:gap-8 flex flex-col justify-around">
                 <Transition fallback=move || {
                     view! { <p class="text-gray-400">"Loading..."</p> }
                 }>
@@ -111,73 +109,32 @@ pub fn UserDashboardPage() -> impl IntoView {
                         Suspend::new(async move {
                             let (areas, user, characters) = async_data.await.unwrap_or_default();
                             let areas = Arc::new(areas);
-                            let characters_len = characters.len();
-
                             view! {
-                                <CreateCharacterPanel
-                                    open=open_create_character
-                                    user_id=user.user_id
-                                    refresh_trigger=refresh_trigger
-                                />
-
-                                <h1 class="text-shadow-lg shadow-gray-950 text-amber-200 text-4xl  md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
-                                    "Welcome, " {user.username}
+                                <h1 class="text-shadow-lg shadow-gray-950 text-amber-200 text-4xl md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
+                                    "Welcome, " {user.username.clone()}"!"
                                 </h1>
 
-                                <div class="bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner p-2 xl:p-4 text-left space-y-2 xl:space-y-4">
-                                    <div class="flex flex-row justify-between items-center gap-1 xl:gap-2">
-                                        // <h2 class="text-2xl font-bold text-white">"Your Characters"</h2>
-                                        <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
-                                            "Your Characters"
-                                        </span>
+                                <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                    <NewsPanel />
+                                    <CharactersSelection
+                                        areas=areas.clone()
+                                        characters
+                                        user
+                                        refresh_trigger
+                                    />
+                                </div>
 
-                                        <span class="text-sm text-gray-400 font-medium">
-                                            {format!(
-                                                "{} / {} characters",
-                                                characters_len,
-                                                user.max_characters,
-                                            )}
-                                        </span>
-                                    </div>
-
-                                    <div class="flex flex-nowrap gap-6 overflow-x-auto p-4 bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                                        <For
-                                            each=move || characters.clone()
-                                            key=|c| c.character_id
-                                            children=move |character| {
-                                                view! {
-                                                    <CharacterSlot
-                                                        character=character
-                                                        areas=areas.clone()
-                                                        refresh_trigger=refresh_trigger
-                                                    />
-                                                }
-                                            }
-                                        />
-
-                                        {if characters_len < user.max_characters as usize {
-                                            Some(
-                                                view! {
-                                                    <CreateCharacterSlot on:click=move |_| {
-                                                        open_create_character.set(true)
-                                                    } />
-                                                },
-                                            )
-                                        } else {
-                                            None
-                                        }}
-                                    </div>
-                                    <div class="flex items-center justify-between gap-2 text-gray-400">
-                                        <a href="leaderboard">
-                                            <MenuButton>"Leaderboard"</MenuButton>
-                                        </a>
-                                        <a href="account">
-                                            <MenuButton>"Account Settings"</MenuButton>
-                                        </a>
-                                        <MenuButtonRed on:click=move |_| sign_out()>
-                                            "Sign Out"
-                                        </MenuButtonRed>
-                                    </div>
+                                <div class="w-full bg-zinc-800 rounded-xl ring-1 ring-zinc-950
+                                flex items-center justify-between gap-2 text-gray-400 p-2">
+                                    <a href="leaderboard">
+                                        <MenuButton>"Leaderboard"</MenuButton>
+                                    </a>
+                                    <a href="account">
+                                        <MenuButton>"Account Settings"</MenuButton>
+                                    </a>
+                                    <MenuButtonRed on:click=move |_| sign_out()>
+                                        "Sign Out"
+                                    </MenuButtonRed>
                                 </div>
                             }
                         })
@@ -185,6 +142,67 @@ pub fn UserDashboardPage() -> impl IntoView {
                 </Transition>
             </div>
         </main>
+    }
+}
+
+#[component]
+fn CharactersSelection(
+    areas: Arc<HashMap<String, AreaSpecs>>,
+    characters: Vec<UserCharacter>,
+    user: User,
+    refresh_trigger: RwSignal<u64>,
+) -> impl IntoView {
+    let open_create_character = RwSignal::new(false);
+
+    let characters_len = characters.len();
+
+    view! {
+        <CreateCharacterPanel
+            open=open_create_character
+            user_id=user.user_id
+            refresh_trigger=refresh_trigger
+        />
+
+        <div class="flex flex-col h-full min-h-0 bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner p-4 text-left space-y-4">
+            <div class="flex flex-row justify-between items-center">
+                <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
+                    "Your Characters"
+                </span>
+                <span class="text-sm text-gray-400 font-medium">
+                    {format!("{characters_len} / {} characters", user.max_characters)}
+                </span>
+            </div>
+
+            <div class="w-full aspect-[4/5] flex flex-col p-2 gap-2 overflow-y-auto
+            bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                <For
+                    each=move || characters.clone()
+                    key=|c| c.character_id
+                    children=move |character| {
+                        view! {
+                            <CharacterSlot
+                                character=character
+                                areas=areas.clone()
+                                refresh_trigger=refresh_trigger
+                            />
+                        }
+                    }
+                />
+
+                {if characters_len < user.max_characters as usize {
+                    Some(
+                        view! {
+                            <CreateCharacterSlot on:click=move |_| {
+                                open_create_character.set(true)
+                            } />
+                        },
+                    )
+                } else {
+                    None
+                }}
+            </div>
+
+        </div>
     }
 }
 
@@ -260,15 +278,15 @@ fn CharacterSlot(
 
     view! {
         <div
-            class="bg-neutral-800 rounded-xl border border-neutral-700 shadow-md overflow-hidden
-            flex flex-col 
-            min-h-[20rem] w-40 sm:w-48 md:w-56 flex-shrink-0
-            transition group cursor-pointer
-            hover:border-amber-400 hover:shadow-lg active:scale-95 active:border-amber-500"
+            class="bg-neutral-800 rounded-xl border border-neutral-700 shadow-md
+            flex flex-row items-stretch gap-4 p-3
+            cursor-pointer hover:border-amber-400 hover:shadow-lg
+            transition active:scale-95 active:border-amber-500"
             on:click=play_character.clone()
         >
+
             <div
-                class="aspect-[3/4] w-full relative"
+                class="w-28 h-36 rounded-lg overflow-hidden flex-shrink-0"
                 style=format!("background-image: url('{}');", img_asset("ui/paper_background.webp"))
             >
                 <img
@@ -279,8 +297,8 @@ fn CharacterSlot(
                 />
             </div>
 
-            <div class="p-4 flex flex-col flex-grow justify-between">
-                <div class="space-y-1">
+            <div class="flex flex-col justify-between flex-grow overflow-hidden">
+                <div class="space-y-1 overflow-hidden">
                     <div class="text-lg font-semibold text-shadow-md shadow-gray-950 text-amber-200 truncate">
                         {character.name.clone()}
                     </div>
@@ -292,6 +310,7 @@ fn CharacterSlot(
                             "Newbie".to_string()
                         }}
                     </div>
+
                     <div class="text-sm text-gray-400 truncate">
                         {match character.activity {
                             UserCharacterActivity::Rusting => view! { "Rusting in Town" }.into_any(),
@@ -302,8 +321,7 @@ fn CharacterSlot(
                                         .get(&area_id)
                                         .map(|area_specs| area_specs.name.clone())
                                         .unwrap_or(area_id)}
-                                    <br />
-                                    "Level reached: "
+                                    ", Lvl "
                                     {area_level}
                                 }
                                     .into_any()
@@ -312,7 +330,7 @@ fn CharacterSlot(
                     </div>
                 </div>
 
-                <div class="mt-4 flex gap-2">
+                <div class="mt-2 flex gap-2">
                     <MenuButton class:flex-grow on:click=play_character.clone()>
                         "Play"
                     </MenuButton>
@@ -329,23 +347,24 @@ fn CharacterSlot(
 #[component]
 fn CreateCharacterSlot() -> impl IntoView {
     view! {
-        <div class="bg-zinc-800 rounded-xl border border-zinc-700 shadow-md min-h-[20rem]
-        w-40 sm:w-48 md:w-56 flex-shrink-0
-        flex flex-col items-center justify-center cursor-pointer
-        hover:border-amber-400 hover:shadow-lg active:scale-95 active:border-amber-500 transition group">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-12 w-12 text-amber-300 group-hover:scale-110 transition-transform"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-            >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
-            <span class="mt-2 text-lg font-semibold text-amber-300 group-hover:text-amber-200 transition-colors">
-                "Create Character"
-            </span>
+        <div class="bg-zinc-800 rounded-xl border border-zinc-700 shadow-md
+        flex flex-row items-center gap-4 p-4 cursor-pointer
+        hover:border-amber-400 hover:shadow-lg transition active:scale-95">
+
+            <div class="h-12 w-12 flex items-center justify-center">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-12 w-12 text-amber-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+            </div>
+
+            <span class="text-lg font-semibold text-amber-300">"Create Character"</span>
         </div>
     }
 }
@@ -568,72 +587,63 @@ fn DiscordInviteBanner() -> impl IntoView {
     }
 }
 
-// #[component]
-// fn DiscordInviteBanner() -> impl IntoView {
-//     let backend = expect_context::<BackendClient>();
-//     let auth = expect_context::<AuthContext>();
-//     let toaster = expect_context::<Toasts>();
+#[component]
+fn NewsPanel() -> impl IntoView {
+    let news_data = LocalResource::new({
+        let backend = expect_context::<BackendClient>();
+        move || async move { backend.get_news().await.unwrap_or_default().entries }
+    });
 
-//     let invite_url = RwSignal::new(None::<String>);
-//     let loading = RwSignal::new(false);
+    view! {
+        <div class="flex flex-col bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-inner p-4 text-left space-y-4">
+            <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
+                "News"
+            </span>
 
-//     let fetch_invite = move |_| {
-//         loading.set(true);
+            <Transition fallback=move || {
+                view! { <p class="text-gray-400">"Loading..."</p> }
+            }>
+                {move || {
+                    Suspend::new(async move {
+                        let news = news_data.await;
+                        view! {
+                            <div class="w-full aspect-[4/5] flex flex-col p-2 gap-2 overflow-y-auto
+                            bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                                <For
+                                    each=move || news.clone()
+                                    key=|c| c.timestamp
+                                    children=move |news| {
+                                        view! { <NewsCard news /> }
+                                    }
+                                />
+                            </div>
+                        }
+                    })
+                }}
+            </Transition>
+        </div>
+    }
+}
 
-//         spawn_local(async move {
-//             // match backend.get_discord_invite(&auth.token()).await {
-//             //     Ok(resp) => {
-//             //         invite_url.set(Some(resp.invite));
-//             //     }
-//             //     Err(err) => {
-//             //         show_toast(
-//             //             toaster,
-//             //             format!("Failed to load Discord invite: {err}"),
-//             //             ToastVariant::Error,
-//             //         );
-//             //     }
-//             // }
+#[component]
+fn NewsCard(news: NewsEntry) -> impl IntoView {
+    let mut lines = news.content.lines();
 
-//             loading.set(false);
-//         });
-//     };
+    let title = lines.next().unwrap_or("").trim().to_string();
 
-//     view! {
-//         <div class="w-full bg-amber-900/20 border border-amber-700 rounded-xl p-4 my-6 text-left">
-//             <h2 class="text-amber-300 font-semibold text-lg">
-//                 "Help shape the future of the game!"
-//             </h2>
-//             <p class="text-gray-300 text-sm mt-1">
-//                 "Join our community on Discord to give feedback, suggest new features, and access early information."
-//             </p>
+    let body = lines.collect::<Vec<_>>().join("\n");
 
-//             {move || match invite_url.get() {
-//                 Some(url) => {
-//                     view! {
-//                         <a
-//                             href=url
-//                             target="_blank"
-//                             class="inline-block mt-3 px-4 py-2 bg-amber-500 text-black font-bold rounded-lg hover:bg-amber-400 transition"
-//                         >
-//                             "Join Discord"
-//                         </a>
-//                     }
-//                         .into_any()
-//                 }
-//                 None => {
+    view! {
+        <div class="bg-neutral-800 rounded-xl border border-neutral-700 shadow-lg
+        p-4 flex flex-col gap-3">
 
-//                     view! {
-//                         <button
-//                             class="inline-block mt-3 px-4 py-2 bg-amber-500 text-black font-bold rounded-lg hover:bg-amber-400 transition disabled:opacity-50"
-//                             on:click=fetch_invite
-//                             disabled=loading
-//                         >
-//                             {move || if loading.get() { "Loading..." } else { "Get Invite" }}
-//                         </button>
-//                     }
-//                         .into_any()
-//                 }
-//             }}
-//         </div>
-//     }
-// }
+            <div class="flex items-center justify-between">
+                <span class="text-amber-300 font-semibold text-lg">{title}</span>
+
+                <span class="text-xs text-gray-400">{format_datetime(news.timestamp)}</span>
+            </div>
+
+            <p class="text-gray-300 text-sm whitespace-pre-line leading-relaxed">{body}</p>
+        </div>
+    }
+}
