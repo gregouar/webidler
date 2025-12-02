@@ -126,7 +126,7 @@ pub fn LootQueue() -> impl IntoView {
                 let(loot)
             >
                 {
-                    let item_rarity = loot.item_specs.modifiers.rarity.clone();
+                    let item_rarity = loot.item_specs.modifiers.rarity;
                     view! {
                         <div style="animation: loot-drop 1.3s ease forwards;">
                             <div

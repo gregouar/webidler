@@ -84,7 +84,7 @@ pub async fn update_ascension(
     passives_tree_ascension: &PassivesTreeAscension,
 ) -> Result<(), AppError> {
     let areas_completed =
-        db::characters::read_character_areas_completed(&mut **tx, &character_id).await?;
+        db::characters::read_character_areas_completed(&mut **tx, character_id).await?;
 
     let passive_tree_specs = master_store
         .passives_store

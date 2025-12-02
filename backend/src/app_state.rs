@@ -4,7 +4,7 @@ use base64::prelude::*;
 use jsonwebtoken::{DecodingKey, EncodingKey};
 use std::env;
 
-use crate::integration::discord::DiscordInvitesStore;
+use crate::integration::discord::DiscordState;
 pub use crate::{
     db::pool::DbPool,
     email::EmailService,
@@ -18,7 +18,7 @@ pub struct AppState {
     pub email_service: EmailService,
     pub master_store: MasterStore,
     pub sessions_store: SessionsStore,
-    pub discord_invites_store: DiscordInvitesStore,
+    pub discord_state: DiscordState,
 }
 
 #[derive(Clone)]
@@ -78,8 +78,8 @@ impl FromRef<AppState> for SessionsStore {
         app_state.sessions_store.clone()
     }
 }
-impl FromRef<AppState> for DiscordInvitesStore {
-    fn from_ref(app_state: &AppState) -> DiscordInvitesStore {
-        app_state.discord_invites_store.clone()
+impl FromRef<AppState> for DiscordState {
+    fn from_ref(app_state: &AppState) -> DiscordState {
+        app_state.discord_state.clone()
     }
 }

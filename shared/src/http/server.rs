@@ -25,7 +25,7 @@ impl fmt::Display for ErrorResponse {
     }
 }
 
-// Stats
+// Public
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct LeaderboardEntry {
@@ -42,6 +42,12 @@ pub struct LeaderboardEntry {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct NewsEntry {
+    pub content: String,
+    pub timestamp: DateTime<Utc>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayersCountResponse {
     pub value: i64,
     pub glimpse: Vec<LeaderboardEntry>,
@@ -50,6 +56,10 @@ pub struct PlayersCountResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct LeaderboardResponse {
     pub entries: Vec<LeaderboardEntry>,
+}
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct NewsResponse {
+    pub entries: Vec<NewsEntry>,
 }
 
 // Users

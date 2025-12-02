@@ -28,7 +28,7 @@ use crate::{
     auth::{self, CurrentUser},
     db::{self, users::UserUpdate},
     email::EmailService,
-    integration::discord::DiscordInvitesStore,
+    integration::discord::DiscordState,
 };
 
 use super::AppError;
@@ -111,9 +111,9 @@ async fn post_sign_in(
 
 async fn get_discord_invite(
     Extension(current_user): Extension<CurrentUser>,
-    State(discord_invites_store): State<DiscordInvitesStore>,
+    State(discord): State<DiscordState>,
 ) -> Result<Json<GetDiscordInviteResponse>, AppError> {
-    let code = discord_invites_store
+    let code = discord
         .get_invite(current_user.user_details.user.user_id)
         .await?;
 
