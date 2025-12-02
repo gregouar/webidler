@@ -100,7 +100,7 @@ pub fn UserDashboardPage() -> impl IntoView {
             <DiscordInviteBanner />
             <PlayerCount />
 
-            <div class="relative flex-1 max-w-6xl w-full mx-auto p-4 xl:p-8 gap-4 xl:gap-8 flex flex-col ">
+            <div class="relative flex-1 max-w-6xl w-full mx-auto p-3 xl:p-6 gap-3 xl:gap-6 flex flex-col ">
                 <Transition fallback=move || {
                     view! { <p class="text-gray-400">"Loading..."</p> }
                 }>
@@ -110,11 +110,11 @@ pub fn UserDashboardPage() -> impl IntoView {
                             let (areas, user, characters) = async_data.await.unwrap_or_default();
                             let areas = Arc::new(areas);
                             view! {
-                                <h1 class="text-shadow-lg shadow-gray-950 text-amber-200 my-4 text-4xl md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
+                                <h1 class="mb-2 text-shadow-lg shadow-gray-950 text-amber-200 text-4xl md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
                                     "Welcome, " {user.username.clone()}"!"
                                 </h1>
 
-                                <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-3 xl:gap-6">
                                     <NewsPanel />
                                     <CharactersSelection
                                         areas=areas.clone()
@@ -128,6 +128,13 @@ pub fn UserDashboardPage() -> impl IntoView {
                                 flex items-center justify-between gap-2 text-gray-400 p-2 xl:p-4">
                                     <a href="leaderboard">
                                         <MenuButton>"Leaderboard"</MenuButton>
+                                    </a>
+                                    <a
+                                        href="https://webidler.gitbook.io/wiki/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <MenuButton>"Wiki"</MenuButton>
                                     </a>
                                     <a href="account">
                                         <MenuButton>"Account Settings"</MenuButton>
@@ -321,8 +328,9 @@ fn CharacterSlot(
                                         .get(&area_id)
                                         .map(|area_specs| area_specs.name.clone())
                                         .unwrap_or(area_id)}
-                                    ", Lvl "
+                                    " ("
                                     {area_level}
+                                    ")"
                                 }
                                     .into_any()
                             }
@@ -600,15 +608,15 @@ fn NewsPanel() -> impl IntoView {
                 "News"
             </span>
 
-            <Transition fallback=move || {
-                view! { <p class="text-gray-400">"Loading..."</p> }
-            }>
-                {move || {
-                    Suspend::new(async move {
-                        let news = news_data.await;
-                        view! {
-                            <div class="w-full aspect-[4/5] flex flex-col p-2 gap-2 overflow-y-auto
-                            bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+            <div class="w-full aspect-[4/5] flex flex-col p-2 gap-2 overflow-y-auto
+            bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                <Transition fallback=move || {
+                    view! { <p class="text-gray-400">"Loading..."</p> }
+                }>
+                    {move || {
+                        Suspend::new(async move {
+                            let news = news_data.await;
+                            view! {
                                 <For
                                     each=move || news.clone()
                                     key=|c| c.timestamp
@@ -616,11 +624,11 @@ fn NewsPanel() -> impl IntoView {
                                         view! { <NewsCard news /> }
                                     }
                                 />
-                            </div>
-                        }
-                    })
-                }}
-            </Transition>
+                            }
+                        })
+                    }}
+                </Transition>
+            </div>
         </div>
     }
 }
