@@ -100,7 +100,7 @@ pub fn UserDashboardPage() -> impl IntoView {
             <DiscordInviteBanner />
             <PlayerCount />
 
-            <div class="relative flex-1 max-w-6xl w-full mx-auto p-3 xl:p-6 gap-3 xl:gap-6 flex flex-col ">
+            <div class="relative flex-1 max-w-6xl w-full mx-auto p-2 xl:p-4 gap-2 xl:gap-4 flex flex-col ">
                 <Transition fallback=move || {
                     view! { <p class="text-gray-400">"Loading..."</p> }
                 }>
@@ -110,11 +110,11 @@ pub fn UserDashboardPage() -> impl IntoView {
                             let (areas, user, characters) = async_data.await.unwrap_or_default();
                             let areas = Arc::new(areas);
                             view! {
-                                <h1 class="mb-2 text-shadow-lg shadow-gray-950 text-amber-200 text-4xl md:text-5xl xl:text-6xl font-extrabold leading-none tracking-tight">
+                                <h1 class="mb-2 text-shadow-lg shadow-gray-950 text-amber-200 text-2xl xl:text-4xl font-extrabold leading-none tracking-tight">
                                     "Welcome, " {user.username.clone()}"!"
                                 </h1>
 
-                                <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-3 xl:gap-6">
+                                <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-2 xl:gap-4">
                                     <NewsPanel />
                                     <CharactersSelection
                                         areas=areas.clone()
@@ -180,7 +180,7 @@ fn CharactersSelection(
                 </span>
             </div>
 
-            <div class="w-full aspect-[4/5] flex flex-col p-2 gap-2 overflow-y-auto
+            <div class="w-full aspect-square flex flex-col p-2 gap-3 overflow-y-auto
             bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                 <For
                     each=move || characters.clone()
@@ -306,7 +306,7 @@ fn CharacterSlot(
 
             <div class="flex flex-col justify-between flex-grow overflow-hidden">
                 <div class="space-y-1 overflow-hidden">
-                    <div class="text-lg font-semibold text-shadow-md shadow-gray-950 text-amber-200 truncate">
+                    <div class="text-lg font-semibold text-shadow-md shadow-gray-950 text-amber-300 truncate">
                         {character.name.clone()}
                     </div>
 
@@ -608,7 +608,7 @@ fn NewsPanel() -> impl IntoView {
                 "News"
             </span>
 
-            <div class="w-full aspect-[4/5] flex flex-col p-2 gap-2 overflow-y-auto
+            <div class="w-full aspect-square flex flex-col p-2 gap-3 overflow-y-auto
             bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                 <Transition fallback=move || {
                     view! { <p class="text-gray-400">"Loading..."</p> }

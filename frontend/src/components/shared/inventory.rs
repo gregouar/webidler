@@ -85,7 +85,8 @@ pub fn EquippedItemsCard(inventory: InventoryConfig) -> impl IntoView {
             </p>
 
             <div class="relative min-h-0 flex-1  overflow-y-auto">
-                <div class="grid grid-rows-3 grid-cols-3 gap-1 xl:gap-3 p-2 xl:p-4 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                <div class="grid grid-rows-3 grid-cols-3 gap-2 xl:gap-x-4 xl:gap-y-3 py-1 xl:py-3 px-3 xl:px-6
+                bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                     {EQUIPPED_SLOTS
                         .iter()
                         .map(|(slot, asset, alt)| {
@@ -348,7 +349,7 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
 
             <div class="relative min-h-0 flex-1  overflow-y-auto">
                 <div class="grid grid-cols-8 xl:grid-cols-10
-                gap-1 xl:gap-3 p-2 xl:p-4 relative
+                gap-1 xl:gap-x-3 xl:gap-y-2 py-1 xl:py-3 px-3 xl:px-6 relative
                 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                     <For
                         each=move || 0..inventory.player_inventory.read().max_bag_size as usize
