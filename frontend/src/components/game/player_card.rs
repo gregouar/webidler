@@ -495,8 +495,10 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         game_context.player_specs.update(|player_specs| {
             if let Some(skill_specs) = player_specs.skills_specs.get_mut(index) {
                 game_context.player_resources.write().gold -= cost;
-                skill_specs.upgrade_level = skill_specs.upgrade_level.saturating_add(amount as u16);
-                skill_specs.next_upgrade_cost = skill_cost_increase(skill_specs);
+                for _ in 0..amount {
+                    skill_specs.upgrade_level = skill_specs.upgrade_level.saturating_add(1);
+                    skill_specs.next_upgrade_cost = skill_cost_increase(skill_specs);
+                }
             }
         });
 
