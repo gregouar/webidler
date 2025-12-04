@@ -25,9 +25,11 @@ async fn migrate_market_items(
     let records = sqlx::query!(
         r#"
         SELECT 
-            market_id
+            market_id,
+            created_at,
+            updated_at
         FROM market
-        WHERE data_version <= '0.1.4'
+        WHERE data_version <= '0.1.4' AND deleted_at is NULL
         "#
     )
     .fetch_all(&mut **executor)
@@ -35,7 +37,7 @@ async fn migrate_market_items(
 
     for record in records {
         if let Some(market_entry) = db::market::buy_item(executor, record.market_id, None).await? {
-            db::market::sell_item(
+            let market_id = db::market::sell_item(
                 executor,
                 &market_entry.character_id,
                 market_entry.recipient_id,
@@ -46,6 +48,20 @@ async fn migrate_market_items(
                 )
                 .ok_or(anyhow::anyhow!("base item not found"))?,
             )
+            .await?;
+
+            sqlx::query!(
+                r#"
+                UPDATE market SET 
+                    created_at = $1,
+                    updated_at = $2
+                WHERE market_id = $3
+                "#,
+                record.created_at,
+                record.updated_at,
+                market_id
+            )
+            .execute(&mut **executor)
             .await?;
         }
     }

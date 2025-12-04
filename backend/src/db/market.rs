@@ -57,7 +57,7 @@ pub async fn sell_item<'c>(
     recipient_id: Option<UserCharacterId>,
     price: f64,
     item: &ItemSpecs,
-) -> anyhow::Result<()> {
+) -> anyhow::Result<MarketId> {
     let item_damages = item.weapon_specs.as_ref().map(|weapon_specs| {
         1.0 / (weapon_specs.cooldown as f64)
             // TODO: Lucky?
@@ -156,7 +156,7 @@ async fn create_market_item<'c>(
     item_crit_chance: Option<f64>,
     item_crit_damage: Option<f64>,
     item_data: JsonValue,
-) -> Result<(), sqlx::Error> {
+) -> Result<MarketId, sqlx::Error> {
     let market_id = sqlx::query_scalar!(
         r#"
         INSERT INTO market (
@@ -231,7 +231,7 @@ async fn create_market_item<'c>(
         .await?;
     }
 
-    Ok(())
+    Ok(market_id)
 }
 
 pub async fn count_market_items<'c>(
