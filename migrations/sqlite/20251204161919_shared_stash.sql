@@ -80,7 +80,7 @@ WHERE
 
 DROP INDEX idx_market_stats_item_stat;
 
-CREATE INDEX idx_market_stats_item_stat ON market_stats (market_id, item_stat, stat_modifier, stat_value)
+CREATE INDEX idx_market_stats_item_stat ON market_stats (item_stat, stat_modifier, stat_value, market_id)
 WHERE
     deleted_at IS NULL;
 
@@ -201,6 +201,6 @@ CREATE TABLE
 
 CREATE INDEX idx_user_stashes_stats_item_id ON user_stashes_stats (item_id);
 
-CREATE INDEX idx_user_stashes_stats_item_stat ON user_stashes_stats (item_id, item_stat, stat_modifier, stat_value)
+CREATE INDEX idx_user_stashes_stats_item_stat ON user_stashes_stats (item_stat, stat_modifier, stat_value, item_id)
 WHERE
     deleted_at IS NULL;
