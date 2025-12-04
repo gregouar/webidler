@@ -883,6 +883,26 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     let item_damages = RwSignal::new(Some(filters.get_untracked().item_damages));
     Effect::new(move || filters.write().item_damages = item_damages.get().unwrap_or_default());
 
+    let item_damage_physical = RwSignal::new(Some(filters.get_untracked().item_damage_physical));
+    Effect::new(move || {
+        filters.write().item_damage_physical = item_damage_physical.get().unwrap_or_default()
+    });
+
+    let item_damage_fire = RwSignal::new(Some(filters.get_untracked().item_damage_fire));
+    Effect::new(move || {
+        filters.write().item_damage_fire = item_damage_fire.get().unwrap_or_default()
+    });
+
+    let item_damage_poison = RwSignal::new(Some(filters.get_untracked().item_damage_poison));
+    Effect::new(move || {
+        filters.write().item_damage_poison = item_damage_poison.get().unwrap_or_default()
+    });
+
+    let item_damage_storm = RwSignal::new(Some(filters.get_untracked().item_damage_storm));
+    Effect::new(move || {
+        filters.write().item_damage_storm = item_damage_storm.get().unwrap_or_default()
+    });
+
     let item_crit_chance = RwSignal::new(Some(filters.get_untracked().item_crit_chance));
     Effect::new(move || {
         filters.write().item_crit_chance = item_crit_chance.get().unwrap_or_default()
@@ -925,6 +945,10 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     MarketOrderBy::Price => "Lowest Price",
                     MarketOrderBy::Level => "Lowest Required Level",
                     MarketOrderBy::Damage => "Highest Damage",
+                    MarketOrderBy::DamagePhysical => "Highest Physical Damage",
+                    MarketOrderBy::DamageFire => "Highest Fire Damage",
+                    MarketOrderBy::DamagePoison => "Highest Poison Damage",
+                    MarketOrderBy::DamageStorm => "Highest Storm Damage",
                     MarketOrderBy::CritChance => "Highest Critical Hit Chance",
                     MarketOrderBy::CritDamage => "Highest Critical Hit Damage",
                     MarketOrderBy::Armor => "Highest Armor",
@@ -1001,6 +1025,36 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         bind=item_damages
                     />
                     <ValidatedInput
+                        id="item_damage_physical"
+                        label="Min Physical Damage:"
+                        input_type="number"
+                        placeholder="Minimum Physical Damage per second"
+                        bind=item_damage_physical
+                    />
+                    <ValidatedInput
+                        id="item_damage_fire"
+                        label="Min Fire Damage:"
+                        input_type="number"
+                        placeholder="Minimum Fire Damage per second"
+                        bind=item_damage_fire
+                    />
+                    <ValidatedInput
+                        id="item_damage_poison"
+                        label="Min Poison Damage:"
+                        input_type="number"
+                        placeholder="Minimum Poison Damage per second"
+                        bind=item_damage_poison
+                    />
+                    <ValidatedInput
+                        id="item_damage_storm"
+                        label="Min Storm Damage:"
+                        input_type="number"
+                        placeholder="Minimum Storm Damage per second"
+                        bind=item_damage_storm
+                    />
+                </div>
+                <div class="flex flex-col gap-4">
+                    <ValidatedInput
                         id="item_damages"
                         label="Min Critical Hit Chance:"
                         input_type="number"
@@ -1014,8 +1068,6 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         placeholder="Minimum extra Critical Percent Damage"
                         bind=item_crit_damage
                     />
-                </div>
-                <div class="flex flex-col gap-4">
                     <ValidatedInput
                         id="item_armor"
                         label="Min Armor:"

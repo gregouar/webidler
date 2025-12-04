@@ -3,7 +3,11 @@ use std::collections::HashSet;
 use sqlx::{types::JsonValue, FromRow, Transaction};
 
 use shared::data::{
-    item::ItemSpecs, item_affix::AffixEffectScope, market::MarketFilters, user::UserCharacterId,
+    item::{ItemSpecs, WeaponSpecs},
+    item_affix::AffixEffectScope,
+    market::MarketFilters,
+    skill::DamageType,
+    user::UserCharacterId,
 };
 
 use crate::{
@@ -39,6 +43,14 @@ pub struct MarketEntry {
     pub deleted_by_name: Option<String>,
 }
 
+fn average_weapon_damage(weapon_specs: &WeaponSpecs, damage_type: DamageType) -> Option<f64> {
+    weapon_specs
+                .damage.get(&damage_type)
+                .map(|value| 1.0 / (weapon_specs.cooldown as f64)
+            // TODO: Lucky?
+            * (1.0 + weapon_specs.crit_damage * weapon_specs.crit_chance.value as f64 * 0.0001)*(value.min + value.max) * 0.5)
+}
+
 pub async fn sell_item<'c>(
     executor: &mut Transaction<'c, Database>,
     character_id: &UserCharacterId,
@@ -56,6 +68,23 @@ pub async fn sell_item<'c>(
                 .map(|value| (value.min + value.max) * 0.5)
                 .sum::<f64>()
     });
+
+    let item_damage_physical = item
+        .weapon_specs
+        .as_ref()
+        .and_then(|weapon_specs| average_weapon_damage(weapon_specs, DamageType::Physical));
+    let item_damage_fire = item
+        .weapon_specs
+        .as_ref()
+        .and_then(|weapon_specs| average_weapon_damage(weapon_specs, DamageType::Fire));
+    let item_damage_poison = item
+        .weapon_specs
+        .as_ref()
+        .and_then(|weapon_specs| average_weapon_damage(weapon_specs, DamageType::Poison));
+    let item_damage_storm = item
+        .weapon_specs
+        .as_ref()
+        .and_then(|weapon_specs| average_weapon_damage(weapon_specs, DamageType::Storm));
 
     Ok(create_market_item(
         executor,
@@ -90,6 +119,10 @@ pub async fn sell_item<'c>(
             .as_ref()
             .map(|armor_specs| armor_specs.block as f64),
         item_damages,
+        item_damage_physical,
+        item_damage_fire,
+        item_damage_poison,
+        item_damage_storm,
         item.weapon_specs
             .as_ref()
             .map(|weapon_specs| weapon_specs.crit_chance.value as f64),
@@ -116,6 +149,10 @@ async fn create_market_item<'c>(
     item_armor: Option<f64>,
     item_block: Option<f64>,
     item_damages: Option<f64>,
+    item_damage_physical: Option<f64>,
+    item_damage_fire: Option<f64>,
+    item_damage_poison: Option<f64>,
+    item_damage_storm: Option<f64>,
     item_crit_chance: Option<f64>,
     item_crit_damage: Option<f64>,
     item_data: JsonValue,
@@ -133,11 +170,15 @@ async fn create_market_item<'c>(
             item_armor, 
             item_block, 
             item_damages, 
+            item_damage_physical, 
+            item_damage_fire, 
+            item_damage_poison, 
+            item_damage_storm, 
             item_crit_chance,
             item_crit_damage,
             item_data,data_version
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
         RETURNING market_id
         "#,
         character_id,
@@ -150,6 +191,10 @@ async fn create_market_item<'c>(
         item_armor,
         item_block,
         item_damages,
+        item_damage_physical,
+        item_damage_fire,
+        item_damage_poison,
+        item_damage_storm,
         item_crit_chance,
         item_crit_damage,
         item_data,
@@ -232,6 +277,18 @@ pub async fn read_market_items<'c>(
 
     let no_filter_item_damages = filters.item_damages.is_none();
     let item_damages = filters.item_damages.unwrap_or_default();
+
+    let no_filter_item_damage_physical = filters.item_damage_physical.is_none();
+    let item_damage_physical = filters.item_damage_physical.unwrap_or_default();
+
+    let no_filter_item_damage_fire = filters.item_damage_fire.is_none();
+    let item_damage_fire = filters.item_damage_fire.unwrap_or_default();
+
+    let no_filter_item_damage_poison = filters.item_damage_poison.is_none();
+    let item_damage_poison = filters.item_damage_poison.unwrap_or_default();
+
+    let no_filter_item_damage_storm = filters.item_damage_storm.is_none();
+    let item_damage_storm = filters.item_damage_storm.unwrap_or_default();
 
     let no_filter_item_crit_chance = filters.item_crit_chance.is_none();
     let item_crit_chance = filters.item_crit_chance.unwrap_or_default();
@@ -341,6 +398,10 @@ pub async fn read_market_items<'c>(
                 AND mc.category = $10
             ))
             AND ($11 OR market.item_damages >= $12)
+            AND ($38 OR market.item_damage_physical >= $39)
+            AND ($40 OR market.item_damage_fire >= $41)
+            AND ($42 OR market.item_damage_poison >= $43)
+            AND ($44 OR market.item_damage_storm >= $45)
             AND ($33 OR market.item_crit_chance >= $34)
             AND ($35 OR market.item_crit_damage >= $36)
             AND ($13 OR market.item_armor >= $14)
@@ -358,6 +419,10 @@ pub async fn read_market_items<'c>(
             END ASC,
             CASE
                 WHEN  $17 = 'Damage' THEN  market.item_damages
+                WHEN  $17 = 'DamagePhysical' THEN  market.item_damage_physical
+                WHEN  $17 = 'DamageFire' THEN  market.item_damage_fire
+                WHEN  $17 = 'DamagePoison' THEN  market.item_damage_poison
+                WHEN  $17 = 'DamageStorm' THEN  market.item_damage_storm
                 WHEN  $17 = 'CritChance' THEN  market.item_crit_chance
                 WHEN  $17 = 'CritDamage' THEN  market.item_crit_damage
                 WHEN  $17 = 'Armor' THEN  market.item_armor
@@ -414,6 +479,14 @@ pub async fn read_market_items<'c>(
         no_filter_item_crit_damage, // $35
         item_crit_damage,
         is_deleted,
+        no_filter_item_damage_physical,
+        item_damage_physical,
+        no_filter_item_damage_fire, // $40
+        item_damage_fire,
+        no_filter_item_damage_poison,
+        item_damage_poison,
+        no_filter_item_damage_storm,
+        item_damage_storm, // $45
     )
     .fetch_all(executor)
     .await?;
