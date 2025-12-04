@@ -32,6 +32,18 @@ pub struct MarketItem {
     pub deleted_by: Option<(UserCharacterId, String)>,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct StashItem {
+    pub item_id: usize,
+
+    pub owner_id: UserCharacterId,
+    pub owner_name: String,
+
+    pub item_specs: ItemSpecs,
+
+    pub created_at: DateTime<Utc>,
+}
+
 pub const STAT_FILTERS_AMOUNT: usize = 5;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

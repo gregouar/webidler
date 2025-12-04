@@ -868,7 +868,7 @@ pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 }
 
 #[component]
-fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
+pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     // Inputs
 
     let item_name = RwSignal::new(Some(filters.get_untracked().item_name));
@@ -1089,7 +1089,7 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 }
 
 #[component]
-fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
+pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     let stat_filters = filters.get_untracked().stat_filters.map(|stat_effect| {
         (
             RwSignal::new(

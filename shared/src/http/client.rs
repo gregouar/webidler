@@ -118,6 +118,30 @@ pub struct RejectMarketItemRequest {
     pub item_index: u32,
 }
 
+// Stash
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct BrowseStashItemsRequest {
+    pub character_id: UserCharacterId,
+
+    pub filters: MarketFilters,
+
+    pub skip: u32,
+    pub limit: PaginationLimit,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct StoreStashItemRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: usize,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct TakeStashItemRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: u32,
+}
+
 // Forge
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
