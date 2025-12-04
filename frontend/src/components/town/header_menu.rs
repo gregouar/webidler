@@ -58,19 +58,6 @@ pub fn HeaderMenu() -> impl IntoView {
                 </MenuButton>
                 <MenuButton
                     on:click=move |_| {
-                        town_context.open_temple.set(!town_context.open_temple.get());
-                        town_context.open_ascend.set(false);
-                        town_context.open_market.set(false);
-                        town_context.open_forge.set(false);
-                        town_context.open_inventory.set(false);
-                        town_context.open_stash.set(false);
-                    }
-                    disabled=disable_panels
-                >
-                    "Temple"
-                </MenuButton>
-                <MenuButton
-                    on:click=move |_| {
                         town_context.open_market.set(!town_context.open_market.get());
                         town_context.open_ascend.set(false);
                         town_context.open_forge.set(false);
@@ -107,6 +94,19 @@ pub fn HeaderMenu() -> impl IntoView {
                     disabled=disable_panels
                 >
                     "Ascend"
+                </MenuButton>
+                <MenuButton
+                    on:click=move |_| {
+                        town_context.open_temple.set(!town_context.open_temple.get());
+                        town_context.open_ascend.set(false);
+                        town_context.open_market.set(false);
+                        town_context.open_forge.set(false);
+                        town_context.open_inventory.set(false);
+                        town_context.open_stash.set(false);
+                    }
+                    disabled=disable_panels
+                >
+                    "Temple"
                 </MenuButton>
                 <MenuButton on:click=navigate_quit>"Quit"</MenuButton>
             </div>

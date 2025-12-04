@@ -1,42 +1,23 @@
 use chrono::Utc;
 use leptos::{prelude::*, task::spawn_local};
 use std::sync::Arc;
-use strum::IntoEnumIterator;
 
 use shared::{
-    data::{
-        item::{ItemCategory, ItemRarity},
-        market::{MarketFilters, MarketItem, MarketOrderBy, StashItem},
-        passive::StatEffect,
-        skill::{DamageType, SkillType},
-        stat_effect::{Modifier, StatType},
-        trigger::HitTrigger,
-    },
-    http::client::{
-        BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
-        RejectMarketItemRequest, SellMarketItemRequest, StoreStashItemRequest,
-        TakeStashItemRequest,
-    },
-    types::{ItemPrice, PaginationLimit, Username},
+    data::market::{MarketFilters, StashItem},
+    http::client::{BrowseStashItemsRequest, StoreStashItemRequest, TakeStashItemRequest},
+    types::PaginationLimit,
 };
 
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
-    shared::{
-        inventory::loot_filter_category_to_str,
-        resources::GemsIcon,
-        tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
-    },
     town::{
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
         panels::market::{MainFilters, StatsFilters},
         TownContext,
     },
     ui::{
-        buttons::{CloseButton, MenuButton, MenuButtonRed, TabButton},
-        dropdown::{DropdownMenu, SearchableDropdownMenu},
-        input::{Input, ValidatedInput},
+        buttons::{CloseButton, MenuButton, TabButton},
         menu_panel::{MenuPanel, PanelTitle},
         number::format_datetime,
         toast::*,
@@ -59,8 +40,6 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
         selected_item.set(SelectedItem::None);
         active_tab.set(new_tab);
     };
-
-    let town_context: TownContext = expect_context();
 
     let filters = RwSignal::new(MarketFilters {
         // item_level: Some(town_context.character.read_untracked().max_area_level),
@@ -219,8 +198,6 @@ fn StashBrowser(
                             skip,
                             limit: items_per_page,
                             filters,
-                            own_listings,
-                            is_deleted,
                         })
                         .await
                         .unwrap_or_default();
@@ -337,7 +314,7 @@ pub fn TakeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     view! {
         <div class="w-full h-full flex flex-col justify-between p-4 relative">
             <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
-                "Stash"
+                "Take from Stash"
             </span>
 
             <div class="flex flex-col">
@@ -348,9 +325,9 @@ pub fn TakeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 </div>
             </div>
 
-            <div class="flex justify-between items-center p-4 border-t border-zinc-700">
+            <div class="flex justify-end items-center p-4 border-t border-zinc-700">
                 <MenuButton on:click=do_take disabled=disabled>
-                    "Take"
+                    "Take Item"
                 </MenuButton>
             </div>
         </div>
@@ -401,14 +378,14 @@ pub fn StoreDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     view! {
         <div class="w-full h-full flex flex-col justify-between p-4 relative">
             <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center">
-                "Inventory"
+                "Store from Inventory"
             </span>
 
             <ItemDetails selected_item show_affixes=true />
 
-            <div class="flex justify-between items-end p-4 border-t border-zinc-700">
+            <div class="flex justify-end items-end p-4 border-t border-zinc-700">
                 <MenuButton on:click=do_sell disabled=disabled>
-                    "Store"
+                    "Store Item"
                 </MenuButton>
             </div>
         </div>

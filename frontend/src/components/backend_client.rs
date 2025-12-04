@@ -5,23 +5,24 @@ use shared::{
     data::user::{UserCharacterId, UserId},
     http::{
         client::{
-            AscendPassivesRequest, BrowseMarketItemsRequest, BuyBenedictionsRequest,
-            BuyMarketItemRequest, CreateCharacterRequest, EditMarketItemRequest,
-            ForgeAddAffixRequest, ForgotPasswordRequest, InventoryDeleteRequest,
-            InventoryEquipRequest, InventoryUnequipRequest, RejectMarketItemRequest,
-            ResetPasswordRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
-            UpdateAccountRequest,
+            AscendPassivesRequest, BrowseMarketItemsRequest, BrowseStashItemsRequest,
+            BuyBenedictionsRequest, BuyMarketItemRequest, CreateCharacterRequest,
+            EditMarketItemRequest, ForgeAddAffixRequest, ForgotPasswordRequest,
+            InventoryDeleteRequest, InventoryEquipRequest, InventoryUnequipRequest,
+            RejectMarketItemRequest, ResetPasswordRequest, SellMarketItemRequest, SignInRequest,
+            SignUpRequest, StoreStashItemRequest, TakeStashItemRequest, UpdateAccountRequest,
         },
         server::{
-            AscendPassivesResponse, BrowseMarketItemsResponse, BuyBenedictionsResponse,
-            BuyMarketItemResponse, CreateCharacterResponse, DeleteAccountResponse,
-            DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse, ForgeAddAffixResponse,
-            ForgotPasswordResponse, GetAreasResponse, GetBenedictionsResponse,
-            GetCharacterDetailsResponse, GetDiscordInviteResponse, GetPassivesResponse,
-            GetSkillsResponse, GetUserCharactersResponse, GetUserDetailsResponse,
-            InventoryDeleteResponse, InventoryEquipResponse, InventoryUnequipResponse,
-            LeaderboardResponse, NewsResponse, PlayersCountResponse, RejectMarketItemResponse,
-            ResetPasswordResponse, SellMarketItemResponse, SignInResponse, SignUpResponse,
+            AscendPassivesResponse, BrowseMarketItemsResponse, BrowseStashItemsResponse,
+            BuyBenedictionsResponse, BuyMarketItemResponse, CreateCharacterResponse,
+            DeleteAccountResponse, DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
+            ForgeAddAffixResponse, ForgotPasswordResponse, GetAreasResponse,
+            GetBenedictionsResponse, GetCharacterDetailsResponse, GetDiscordInviteResponse,
+            GetPassivesResponse, GetSkillsResponse, GetUserCharactersResponse,
+            GetUserDetailsResponse, InventoryDeleteResponse, InventoryEquipResponse,
+            InventoryUnequipResponse, LeaderboardResponse, NewsResponse, PlayersCountResponse,
+            RejectMarketItemResponse, ResetPasswordResponse, SellMarketItemResponse,
+            SignInResponse, SignUpResponse, StoreStashItemResponse, TakeStashItemResponse,
             UpdateAccountResponse,
         },
     },
@@ -260,6 +261,31 @@ impl BackendClient {
         request: &EditMarketItemRequest,
     ) -> Result<EditMarketItemResponse, BackendError> {
         self.post_auth("market/edit", token, request).await
+    }
+
+    // Stash
+
+    pub async fn browse_stash_items(
+        &self,
+        request: &BrowseStashItemsRequest,
+    ) -> Result<BrowseStashItemsResponse, BackendError> {
+        self.post("stash", request).await
+    }
+
+    pub async fn take_stash_item(
+        &self,
+        token: &str,
+        request: &TakeStashItemRequest,
+    ) -> Result<TakeStashItemResponse, BackendError> {
+        self.post_auth("stash/take", token, request).await
+    }
+
+    pub async fn store_stash_item(
+        &self,
+        token: &str,
+        request: &StoreStashItemRequest,
+    ) -> Result<StoreStashItemResponse, BackendError> {
+        self.post_auth("stash/store", token, request).await
     }
 
     // Forge

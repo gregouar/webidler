@@ -16,7 +16,7 @@ use crate::components::{
         header_menu::HeaderMenu,
         panels::{
             ascend::AscendPanel, forge::ForgePanel, inventory::TownInventoryPanel,
-            market::MarketPanel, temple::TemplePanel,
+            market::MarketPanel, stash::StashPanel, temple::TemplePanel,
         },
         town_scene::TownScene,
         TownContext,
@@ -107,6 +107,7 @@ pub fn TownPage() -> impl IntoView {
                             <TownScene />
                             <TemplePanel open=town_context.open_temple />
                             <MarketPanel open=town_context.open_market />
+                            <StashPanel open=town_context.open_stash />
                             <AscendPanel open=town_context.open_ascend />
                             <ForgePanel open=town_context.open_forge />
                             <TownInventoryPanel open=town_context.open_inventory />
