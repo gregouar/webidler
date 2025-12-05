@@ -1,26 +1,25 @@
 use anyhow::{anyhow, Context, Result};
 
-use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
+use axum::{
+    extract::{Path, State},
+    middleware,
+    routing::post,
+    Extension, Json, Router,
+};
 
 use shared::{
     constants::{MAX_MARKET_PRIVATE_LISTINGS, MAX_MARKET_PUBLIC_LISTINGS},
-    data::market::MarketItem,
+    data::stash::{StashId, StashItem, StashType},
     http::{
-        client::{
-            BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
-            RejectMarketItemRequest, SellMarketItemRequest,
-        },
-        server::{
-            BrowseMarketItemsResponse, BuyMarketItemResponse, EditMarketItemResponse,
-            RejectMarketItemResponse, SellMarketItemResponse,
-        },
+        client::{BrowseStashItemsRequest, StoreStashItemRequest},
+        server::{BrowseStashItemsResponse, StoreStashItemResponse, TakeStashItemResponse},
     },
 };
 
 use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
-    db::{self, market::MarketEntry},
+    db::{self, stash_items::StashEntry},
     game::{
         data::{inventory_data::inventory_data_to_player_inventory, items_store::ItemsStore},
         systems::items_controller,
@@ -32,54 +31,67 @@ use super::AppError;
 
 pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
-        .route("/stashes/{stash_id}", post(post_browse_market))
-        .route("/stashes/{stash_id}/buy", post(post_buy_market_item))
-        .route("/stashes/{stash_id}/sell", post(post_sell_market_item))
+        .route("/stashes/{stash_id}", post(post_browse_stash))
+        .route("/stashes/{stash_id}/buy", post(post_take_stash_item))
+        .route("/stashes/{stash_id}/sell", post(post_store_stash_item))
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
         ))
 }
 
-pub async fn post_browse_market(
+fn verify_stash_access(current_user: &CurrentUser, stash: &Stash) -> Result<(), AppError> {
+    if !match stash.stash_type {
+        StashType::Market => true,
+        StashType::User => stash.user_id == current_user.user_details.user.user_id,
+    } {
+        return AppError::Forbidden;
+    }
+}
+
+pub async fn post_browse_stash(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
-    Json(payload): Json<BrowseMarketItemsRequest>,
-) -> Result<Json<BrowseMarketItemsResponse>, AppError> {
-    let (items, has_more) = db::market::read_market_items(
+    Extension(current_user): Extension<CurrentUser>,
+    Path(stash_id): Path<StashId>,
+    Json(payload): Json<BrowseStashItemsRequest>,
+) -> Result<Json<BrowseStashItemsResponse>, AppError> {
+    let stash = db::stashes::read_stash(stash_id).await?;
+
+    verify_stash_access(&current_user, stash)?;
+
+    let (items, has_more) = db::stash_items::read_stash_items(
         &db_pool,
-        &payload.character_id,
-        payload.own_listings,
-        payload.is_deleted,
+        stash_id,
         payload.filters,
         payload.skip as i64,
         payload.limit.into_inner(),
     )
     .await?;
 
-    Ok(Json(BrowseMarketItemsResponse {
+    Ok(Json(BrowseStashItemsResponse {
         items: items
             .into_iter()
-            .filter_map(|market_item_entry| {
-                into_market_item(&master_store.items_store, market_item_entry)
-            })
+            .filter_map(|item_entry| into_stash_item(&master_store.items_store, item_entry))
             .collect(),
         has_more,
     }))
 }
 
-pub async fn post_buy_market_item(
+pub async fn post_take_stash_item(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
     Extension(current_user): Extension<CurrentUser>,
-    Json(payload): Json<BuyMarketItemRequest>,
-) -> Result<Json<BuyMarketItemResponse>, AppError> {
+    Path(stash_id): Path<StashId>,
+    Json(payload): Json<TakeStashItemRequest>,
+) -> Result<Json<TakeStashItemResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
     let character = db::characters::read_character(&mut *tx, &payload.character_id)
         .await?
         .ok_or(AppError::NotFound)?;
 
+    verify_stash_access(&current_user, stash)?;
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
@@ -151,24 +163,26 @@ pub async fn post_buy_market_item(
 
     tx.commit().await?;
 
-    Ok(Json(BuyMarketItemResponse {
+    Ok(Json(TakeStashItemResponse {
         resource_gems: character_resources.resource_gems,
         inventory,
     }))
 }
 
-pub async fn post_sell_market_item(
+pub async fn post_store_stash_item(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
     Extension(current_user): Extension<CurrentUser>,
-    Json(payload): Json<SellMarketItemRequest>,
-) -> Result<Json<SellMarketItemResponse>, AppError> {
+    Path(stash_id): Path<StashId>,
+    Json(payload): Json<StoreStashItemRequest>,
+) -> Result<Json<StoreStashItemResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
     let character = db::characters::read_character(&mut *tx, &payload.character_id)
         .await?
         .ok_or(AppError::NotFound)?;
 
+    verify_stash_access(&current_user, stash)?;
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
@@ -231,36 +245,21 @@ pub async fn post_sell_market_item(
 
     tx.commit().await?;
 
-    Ok(Json(SellMarketItemResponse { inventory }))
+    Ok(Json(StoreStashItemResponse { inventory }))
 }
 
-fn into_market_item(items_store: &ItemsStore, market_entry: MarketEntry) -> Option<MarketItem> {
-    Some(MarketItem {
-        item_id: market_entry.market_id as usize,
-        owner_id: market_entry.character_id,
-        owner_name: market_entry.character_name,
-        recipient: market_entry.recipient_id.map(|recipient_id| {
-            (
-                recipient_id,
-                market_entry.recipient_name.unwrap_or_default(),
-            )
-        }),
-        rejected: market_entry.rejected,
-        price: market_entry.price,
+fn into_market_item(items_store: &ItemsStore, item_entry: StashEntry) -> Option<StashItem> {
+    Some(StashItem {
+        stash_id: item_entry.stash_id,
+        stash_item_id: item_entry.stash_item_id as usize,
+        character_id: item_entry.character_id,
+        character_name: item_entry.character_name,
 
         item_specs: items_controller::init_item_specs_from_store(
             items_store,
-            serde_json::from_value(market_entry.item_data).ok()?,
+            serde_json::from_value(item_entry.item_data).ok()?,
         )?,
 
-        created_at: market_entry.created_at.into(),
-
-        deleted_at: market_entry.deleted_at.map(Into::into),
-        deleted_by: market_entry.deleted_by_id.map(|deleted_by_id| {
-            (
-                deleted_by_id,
-                market_entry.deleted_by_name.unwrap_or_default(),
-            )
-        }),
+        created_at: item_entry.created_at.into(),
     })
 }

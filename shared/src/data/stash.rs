@@ -10,8 +10,8 @@ pub struct StashItem {
     pub stash_id: StashId,
     pub stash_item_id: usize,
 
-    pub character_id: UserCharacterId,
-    pub character_name: String,
+    pub character_id: Option<UserCharacterId>,
+    pub character_name: Option<String>,
 
     pub item_specs: ItemSpecs,
 
