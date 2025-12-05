@@ -2,7 +2,10 @@ use reqwest::StatusCode;
 use std::time::Duration;
 
 use shared::{
-    data::user::{UserCharacterId, UserId},
+    data::{
+        market::StashId,
+        user::{UserCharacterId, UserId},
+    },
     http::{
         client::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BrowseStashItemsRequest,
@@ -267,25 +270,32 @@ impl BackendClient {
 
     pub async fn browse_stash_items(
         &self,
+        token: &str,
         request: &BrowseStashItemsRequest,
+        stash_id: &StashId,
     ) -> Result<BrowseStashItemsResponse, BackendError> {
-        self.post("stash", request).await
+        self.post_auth(&format!("stashes/{stash_id}"), token, request)
+            .await
     }
 
     pub async fn take_stash_item(
         &self,
         token: &str,
         request: &TakeStashItemRequest,
+        stash_id: &StashId,
     ) -> Result<TakeStashItemResponse, BackendError> {
-        self.post_auth("stash/take", token, request).await
+        self.post_auth(&format!("stashes/{stash_id}/take"), token, request)
+            .await
     }
 
     pub async fn store_stash_item(
         &self,
         token: &str,
         request: &StoreStashItemRequest,
+        stash_id: &StashId,
     ) -> Result<StoreStashItemResponse, BackendError> {
-        self.post_auth("stash/store", token, request).await
+        self.post_auth(&format!("stashes/{stash_id}/store"), token, request)
+            .await
     }
 
     // Forge

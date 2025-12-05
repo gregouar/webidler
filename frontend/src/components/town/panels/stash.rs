@@ -3,7 +3,7 @@ use leptos::{prelude::*, task::spawn_local};
 use std::sync::Arc;
 
 use shared::{
-    data::market::{MarketFilters, StashItem},
+    data::market::{MarketFilters, StashId, StashItem},
     http::client::{BrowseStashItemsRequest, StoreStashItemRequest, TakeStashItemRequest},
     types::PaginationLimit,
 };
@@ -147,6 +147,7 @@ impl From<StashItem> for SelectedMarketItem {
 
 #[component]
 fn StashBrowser(
+    stash_id: StashId,
     selected_item: RwSignal<SelectedItem>,
     #[prop(into)] filters: Signal<MarketFilters>,
 ) -> impl IntoView {
@@ -183,6 +184,7 @@ fn StashBrowser(
     Effect::new({
         let backend = expect_context::<BackendClient>();
         let town_context = expect_context::<TownContext>();
+        let auth_context = expect_context::<AuthContext>();
         move || {
             if reached_end_of_list.get() && has_more.get_untracked() {
                 let skip = extend_list.get_untracked();
@@ -193,12 +195,16 @@ fn StashBrowser(
 
                 spawn_local(async move {
                     let response = backend
-                        .browse_stash_items(&BrowseStashItemsRequest {
-                            character_id,
-                            skip,
-                            limit: items_per_page,
-                            filters,
-                        })
+                        .browse_stash_items(
+                            &auth_context.token(),
+                            &BrowseStashItemsRequest {
+                                character_id,
+                                skip,
+                                limit: items_per_page,
+                                filters,
+                            },
+                            stash_id,
+                        )
                         .await
                         .unwrap_or_default();
 
@@ -246,7 +252,7 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 }
 
 #[component]
-pub fn TakeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+pub fn TakeDetails(stash_id: StashId, selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
     let auth_context = expect_context::<AuthContext>();
@@ -292,6 +298,7 @@ pub fn TakeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                                     character_id,
                                     item_index: item.index as u32,
                                 },
+                                stash_id,
                             )
                             .await
                         {
@@ -335,7 +342,7 @@ pub fn TakeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 }
 
 #[component]
-pub fn StoreDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+pub fn StoreDetails(stash_id: StashId, selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
     let auth_context = expect_context::<AuthContext>();
@@ -356,6 +363,7 @@ pub fn StoreDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                                     character_id,
                                     item_index: item.index,
                                 },
+                                stash_id,
                             )
                             .await
                         {

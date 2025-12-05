@@ -6,10 +6,11 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     area::{AreaLevel, AreaSpecs},
     game_stats::GrindStats,
-    market::{MarketItem, StashItem},
+    market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs},
     player::PlayerInventory,
     skill::SkillSpecs,
+    stash::StashItem,
     temple::{BenedictionSpecs, PlayerBenedictions},
     user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
 };

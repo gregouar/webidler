@@ -84,7 +84,29 @@ CREATE INDEX idx_market_stats_item_stat ON market_stats (item_stat, stat_modifie
 WHERE
     deleted_at IS NULL;
 
--- User Stashes Table
+-- Stashes Table
+CREATE TABLE
+    stashes (
+        stash_id TEXT NOT NULL PRIMARY KEY,
+        --
+        user_id TEXT NOT NULL,
+        stash_type TEXT NOT NULL,
+        --
+        resource_gems FLOAT NOT NULL DEFAULT 0,
+        max_items INT NOT NULL,
+        --
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        deleted_at TIMESTAMP
+        --
+        FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
+    );
+
+CREATE INDEX idx_stashes_user_id ON stashes (user_id);
+
+CREATE INDEX idx_stashes_type ON stashes (stash_type);
+
+-- Stash Items Table
 CREATE TABLE
     stash_items (
         item_id INTEGER NOT NULL PRIMARY KEY,
