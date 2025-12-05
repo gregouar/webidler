@@ -117,6 +117,7 @@ pub async fn post_buy_market_item(
         }
     }
 
+    // TODO: Move check to equip, allow to buy/exchange higher level items
     if character.max_area_level < item_bought.item_level as i32 {
         return Err(AppError::UserError("character level too low".to_string()));
     }

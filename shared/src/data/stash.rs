@@ -8,7 +8,7 @@ pub type StashId = uuid::Uuid;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StashItem {
     pub stash_id: StashId,
-    pub item_id: usize,
+    pub stash_item_id: usize,
 
     pub character_id: UserCharacterId,
     pub character_name: String,
