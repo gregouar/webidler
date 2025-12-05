@@ -86,10 +86,11 @@ WHERE
 
 -- User Stashes Table
 CREATE TABLE
-    user_stashes (
+    stash_items (
         item_id INTEGER NOT NULL PRIMARY KEY,
         --
-        user_id TEXT NOT NULL,
+        stash_id TEXT NOT NULL,
+        character_id TEXT NOT NULL,
         --
         base_item_id TEXT NOT NULL,
         item_name TEXT NOT NULL,
@@ -110,97 +111,95 @@ CREATE TABLE
         --
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        deleted_at TIMESTAMP,
-        --
-        FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
+        deleted_at TIMESTAMP
     );
 
-CREATE INDEX idx_user_stashes_user_id ON user_stashes (user_id, deleted_at);
+CREATE INDEX idx_stash_items_stash_id ON stash_items (stash_id, deleted_at);
 
-CREATE INDEX idx_user_stashes_base_item_id ON user_stashes (user_id, base_item_id)
+CREATE INDEX idx_stash_items_base_item_id ON stash_items (stash_id, base_item_id)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_user_stashes_name ON user_stashes (user_id, UPPER(item_name))
+CREATE INDEX idx_stash_items_name ON stash_items (stash_id, UPPER(item_name))
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_user_stashes_rarity ON user_stashes (user_id, item_rarity)
+CREATE INDEX idx_stash_items_rarity ON stash_items (stash_id, item_rarity)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_user_stashes_level ON user_stashes (user_id, item_level)
+CREATE INDEX idx_stash_items_level ON stash_items (stash_id, item_level)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_user_stashes_armor ON user_stashes (user_id, item_armor)
+CREATE INDEX idx_stash_items_armor ON stash_items (stash_id, item_armor)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_user_stashes_block ON user_stashes (user_id, item_block)
+CREATE INDEX idx_stash_items_block ON stash_items (stash_id, item_block)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_user_stashes_damages ON user_stashes (user_id, item_damages)
+CREATE INDEX idx_stash_items_damages ON stash_items (stash_id, item_damages)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_user_stashes_damage_physical ON user_stashes (user_id, item_damage_physical)
+CREATE INDEX idx_stash_items_damage_physical ON stash_items (stash_id, item_damage_physical)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_user_stashes_damage_fire ON user_stashes (user_id, item_damage_fire)
+CREATE INDEX idx_stash_items_damage_fire ON stash_items (stash_id, item_damage_fire)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_user_stashes_damage_poison ON user_stashes (user_id, item_damage_poison)
+CREATE INDEX idx_stash_items_damage_poison ON stash_items (stash_id, item_damage_poison)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_user_stashes_damage_storm ON user_stashes (user_id, item_damage_storm)
+CREATE INDEX idx_stash_items_damage_storm ON stash_items (stash_id, item_damage_storm)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_user_stashes_crit_chance ON user_stashes (user_id, item_crit_chance)
+CREATE INDEX idx_stash_items_crit_chance ON stash_items (stash_id, item_crit_chance)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_user_stashes_crit_damage ON user_stashes (user_id, item_crit_damage)
+CREATE INDEX idx_stash_items_crit_damage ON stash_items (stash_id, item_crit_damage)
 WHERE
     deleted_at IS NULL;
 
-CREATE INDEX idx_user_stashes_updated_at ON user_stashes (user_id, updated_at);
+CREATE INDEX idx_stash_items_updated_at ON stash_items (stash_id, updated_at);
 
-CREATE INDEX idx_user_stashes_data_version ON user_stashes (data_version);
+CREATE INDEX idx_stash_items_data_version ON stash_items (data_version);
 
 -- Item categories
 CREATE TABLE
-    user_stashes_categories (
+    stash_items_categories (
         item_id INTEGER NOT NULL,
         category TEXT NOT NULL,
         deleted_at TIMESTAMP,
-        FOREIGN KEY (item_id) REFERENCES user_stashes (item_id) ON DELETE CASCADE
+        FOREIGN KEY (item_id) REFERENCES stash_items (item_id) ON DELETE CASCADE
     );
 
-CREATE INDEX idx_user_stashes_categories_item_id ON user_stashes_categories (item_id);
+CREATE INDEX idx_stash_items_categories_item_id ON stash_items_categories (item_id);
 
-CREATE INDEX idx_user_stashes_categories_category ON user_stashes_categories (category, item_id)
+CREATE INDEX idx_stash_items_categories_category ON stash_items_categories (category, item_id)
 WHERE
     deleted_at IS NULL;
 
 -- Item stats
 CREATE TABLE
-    user_stashes_stats (
+    stash_items_stats (
         item_id INTEGER NOT NULL,
         item_stat TEXT NOT NULL,
         stat_modifier TEXT NOT NULL,
         stat_value REAL NOT NULL,
         deleted_at TIMESTAMP,
-        FOREIGN KEY (item_id) REFERENCES user_stashes (item_id) ON DELETE CASCADE
+        FOREIGN KEY (item_id) REFERENCES stash_items (item_id) ON DELETE CASCADE
     );
 
-CREATE INDEX idx_user_stashes_stats_item_id ON user_stashes_stats (item_id);
+CREATE INDEX idx_stash_items_stats_item_id ON stash_items_stats (item_id);
 
-CREATE INDEX idx_user_stashes_stats_item_stat ON user_stashes_stats (item_stat, stat_modifier, stat_value, item_id)
+CREATE INDEX idx_stash_items_stats_item_stat ON stash_items_stats (item_stat, stat_modifier, stat_value, item_id)
 WHERE
     deleted_at IS NULL;

@@ -36,8 +36,8 @@ pub struct MarketItem {
 pub struct StashItem {
     pub item_id: usize,
 
-    pub owner_id: UserCharacterId,
-    pub owner_name: String,
+    pub character_id: UserCharacterId,
+    pub character_name: String,
 
     pub item_specs: ItemSpecs,
 

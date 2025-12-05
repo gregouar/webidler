@@ -134,8 +134,8 @@ impl From<StashItem> for SelectedMarketItem {
             index: value.item_id,
             item_specs: Arc::new(value.item_specs),
             price: 0.0,
-            owner_id: value.owner_id,
-            owner_name: value.owner_name,
+            owner_id: value.character_id,
+            owner_name: value.character_name,
             recipient: None,
             rejected: false,
             created_at: value.created_at,
@@ -272,7 +272,7 @@ pub fn TakeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
         })
     };
 
-    let listed_at = move || {
+    let stored_at = move || {
         selected_item.with(|selected_item| match selected_item {
             SelectedItem::InMarket(selected_item) => Some(selected_item.created_at),
             _ => None,
@@ -321,7 +321,7 @@ pub fn TakeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 <ItemDetails selected_item show_affixes=true />
                 <div class="flex justify-between items-center text-sm text-gray-400 p-2">
                     <span>"Stored by: "{move || owner_name()}</span>
-                    <span>{move || listed_at().map(format_datetime)}</span>
+                    <span>{move || stored_at().map(format_datetime)}</span>
                 </div>
             </div>
 
