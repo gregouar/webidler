@@ -16,7 +16,7 @@ pub struct StashEntry {
     pub stash_type: Json<StashType>,
     pub title: Option<String>,
 
-    pub items_amount: i64,
+    pub items_amount: i32,
     pub max_items: i32,
     pub resource_gems: f64,
 }
@@ -76,7 +76,7 @@ pub async fn get_stash<'c>(
                 FROM stash_items
                 WHERE deleted_at IS NULL
                 AND stash_items.stash_id = stashes.stash_id
-            ) as "items_amount!: i64"
+            ) as "items_amount!: i32"
         FROM stashes
         WHERE stash_id = $1 AND deleted_at IS NULL
         "#,
@@ -108,7 +108,7 @@ pub async fn get_character_stash_by_type<'c>(
                 FROM stash_items
                 WHERE deleted_at IS NULL
                 AND stash_items.stash_id = stashes.stash_id
-            ) as "items_amount!: i64"
+            ) as "items_amount!: i32"
         FROM stashes
         INNER JOIN characters ON characters.user_id = stashes.user_id
         WHERE 
