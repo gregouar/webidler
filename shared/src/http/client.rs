@@ -83,8 +83,10 @@ pub struct AscendPassivesRequest {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BrowseMarketItemsRequest {
     pub user_id: UserId,
-    // pub own_listings: bool,
-    // pub is_deleted: bool,
+
+    pub own_listings: bool,
+    pub is_deleted: bool,
+
     pub filters: MarketFilters,
 
     pub skip: u32,

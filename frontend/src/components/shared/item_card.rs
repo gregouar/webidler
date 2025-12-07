@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
+use shared::data::area::AreaLevel;
 use shared::data::item::{ItemRarity, ItemSpecs};
 
 use crate::assets::img_asset;
@@ -16,6 +17,7 @@ pub fn ItemCard(
     item_specs: Arc<ItemSpecs>,
     #[prop(default=None)] comparable_item_specs: Option<Arc<ItemSpecs>>,
     #[prop(default=DynamicTooltipPosition::Auto)] tooltip_position: DynamicTooltipPosition,
+    max_item_level: Signal<AreaLevel>,
 ) -> impl IntoView {
     let (border_color, ring_color, shadow_color, gradient) = match item_specs.modifiers.rarity {
         ItemRarity::Normal => (
@@ -74,6 +76,7 @@ pub fn ItemCard(
                                                 item_specs=comparable_item_specs.clone()
                                                 show_affixes
                                                 comparable=ComparableType::Equipped
+                                                max_item_level
                                             />
                                         }
                                     })
@@ -90,6 +93,7 @@ pub fn ItemCard(
                             } else {
                                 ComparableType::NotComparable
                             }
+                            max_item_level
                         />
 
                     </div>

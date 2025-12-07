@@ -51,11 +51,11 @@ pub async fn post_browse_market(
     let (items, has_more) = db::market::read_market_items(
         &db_pool,
         &current_user.user_details.user.user_id,
-        // payload.own_listings,
-        // payload.is_deleted,
         payload.filters,
         payload.skip as i64,
         payload.limit.into_inner(),
+        payload.own_listings,
+        payload.is_deleted,
     )
     .await?;
 
@@ -88,7 +88,7 @@ pub async fn post_buy_market_item(
     let market_buy_entry = db::market::buy_item(
         &mut tx,
         payload.item_index as i64,
-        Some(payload.character_id),
+        Some(current_user.user_details.user.user_id),
     )
     .await?
     .ok_or(AppError::NotFound)?;
@@ -277,7 +277,7 @@ pub async fn post_edit_market_item(
     let market_item = db::market::buy_item(
         &mut tx,
         payload.item_index as i64,
-        Some(character.character_id),
+        Some(current_user.user_details.user.user_id),
     )
     .await?
     .ok_or(AppError::NotFound)?;
@@ -328,14 +328,12 @@ fn into_market_item(items_store: &ItemsStore, market_entry: MarketEntry) -> Opti
 
         created_at: market_entry.created_at.into(),
 
-        deleted_at: None,
-        deleted_by: None,
-        // deleted_at: market_entry.deleted_at.map(Into::into),
-        // deleted_by: market_entry.deleted_by_id.map(|deleted_by_id| {
-        //     (
-        //         deleted_by_id,
-        //         market_entry.deleted_by_name.unwrap_or_default(),
-        //     )
-        // }),
+        deleted_at: market_entry.deleted_at.map(Into::into),
+        deleted_by: market_entry.deleted_by_id.map(|deleted_by_id| {
+            (
+                deleted_by_id,
+                market_entry.deleted_by_name.unwrap_or_default(),
+            )
+        }),
     })
 }

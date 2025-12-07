@@ -294,8 +294,8 @@ fn MarketBrowser(
                                 skip,
                                 limit: items_per_page,
                                 filters,
-                                // own_listings,
-                                // is_deleted,
+                                own_listings,
+                                is_deleted,
                             },
                         )
                         .await
@@ -359,8 +359,6 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             selected_item.with(|selected_item| match selected_item {
                 SelectedItem::InMarket(selected_item) => {
                     selected_item.price > town_context.character.read().resource_gems
-                        || selected_item.item_specs.required_level
-                            > town_context.character.read().max_area_level
                 }
                 _ => true,
             })
@@ -672,7 +670,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
         let character_id = town_context.character.read_untracked().character_id;
         move |_| {
             if let SelectedItem::InMarket(item) = selected_item.get() {
-                let price = price.get().unwrap().into_inner();
+                let price = price.get_untracked().unwrap().into_inner();
                 spawn_local({
                     async move {
                         match backend

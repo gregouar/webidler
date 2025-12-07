@@ -58,8 +58,9 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
 
 #[component]
 fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+
     let items_list = Signal::derive({
-        let town_context = expect_context::<TownContext>();
         move || {
             town_context.inventory.with(|inventory| {
                 inventory

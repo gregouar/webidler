@@ -5,6 +5,7 @@ use leptos::{portal::Portal, prelude::*, web_sys};
 use leptos_use::on_click_outside;
 
 use shared::data::{
+    area::AreaLevel,
     item::{ItemCategory, ItemSlot, ItemSpecs},
     player::{EquippedSlot, PlayerInventory},
 };
@@ -40,6 +41,7 @@ pub struct InventoryConfig {
     pub on_equip: Option<Arc<dyn Fn(u8) + Send + Sync>>,
     pub on_sell: Option<Arc<dyn Fn(Vec<u8>) + Send + Sync>>,
     pub sell_type: SellType,
+    pub max_item_level: Signal<AreaLevel>,
 }
 
 #[component]
@@ -198,6 +200,7 @@ fn EquippedItemEquippedSlot(
                 item_specs=item_specs.clone()
                 on:click=move |_| show_menu.set(true)
                 tooltip_position=DynamicTooltipPosition::Auto
+                max_item_level=inventory.max_item_level
             />
 
             <Show when=move || is_being_unequipped.get()>
@@ -259,7 +262,10 @@ fn EquippedItemEquippedSlot(
                                             format!("left:{}px; top:{}px;", x, y)
                                         }
                                     >
-                                        <ItemTooltip item_specs=item_specs.clone() />
+                                        <ItemTooltip
+                                            item_specs=item_specs.clone()
+                                            max_item_level=inventory.max_item_level
+                                        />
                                     </div>
                                 }
                             }
@@ -459,6 +465,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                         }
                                     }
                                     tooltip_position=DynamicTooltipPosition::AutoLeft
+                                    max_item_level=inventory.max_item_level
                                 />
 
                                 <Show when=is_queued_for_sale>
@@ -492,7 +499,10 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                                 format!("left:{}px; top:{}px;", x, y)
                                             }
                                         >
-                                            <ItemTooltip item_specs=maybe_item().unwrap().clone() />
+                                            <ItemTooltip
+                                                item_specs=maybe_item().unwrap().clone()
+                                                max_item_level=inventory.max_item_level
+                                            />
                                         </div>
                                     </Portal>
 

@@ -31,9 +31,9 @@ pub struct MarketEntry {
 
     pub created_at: UtcDateTime,
     // // pub updated_at: UtcDateTime,
-    // pub deleted_at: Option<UtcDateTime>,
-    // pub deleted_by_id: Option<UserCharacterId>,
-    // pub deleted_by_name: Option<String>,
+    pub deleted_at: Option<UtcDateTime>,
+    pub deleted_by_id: Option<UserCharacterId>,
+    pub deleted_by_name: Option<String>,
 }
 
 #[derive(Debug, FromRow)]
@@ -103,6 +103,8 @@ pub async fn read_market_items<'c>(
     filters: MarketFilters,
     skip: i64,
     limit: i64,
+    own_listings: bool,
+    is_deleted: bool,
 ) -> anyhow::Result<(Vec<MarketEntry>, bool)> {
     let limit_more = limit + 1;
 
@@ -179,7 +181,10 @@ pub async fn read_market_items<'c>(
             market.rejected,
             market.price,
             stash_items.item_data as "item_data: JsonValue",
-            market.created_at
+            market.created_at,
+            market.deleted_at as "deleted_at?: UtcDateTime",
+            buyer.user_id as "deleted_by_id?: UserId",
+            buyer.username as "deleted_by_name?: String"
         FROM 
             market 
         INNER JOIN
@@ -190,6 +195,8 @@ pub async fn read_market_items<'c>(
             users AS owner ON owner.user_id = stashes.user_id
         LEFT JOIN
             users AS recipient ON recipient.user_id = market.recipient_id
+        LEFT JOIN
+            users AS buyer ON owner.user_id = market.deleted_by
         LEFT JOIN
             stash_items_stats AS stat1 ON stat1.stash_item_id = market.stash_item_id
                 AND stat1.item_stat = $28
@@ -211,10 +218,29 @@ pub async fn read_market_items<'c>(
                 AND stat5.item_stat = $40
                 AND stat5.stat_modifier = $41
         WHERE 
-            market.deleted_at IS NULL
+            (
+                (
+                    $45
+                    AND market.deleted_at IS NOT NULL
+                    AND market.deleted_by != $4
+                )
+                OR 
+                (
+                    NOT $45 
+                    AND market.deleted_at IS NULL
+                )
+            )
             AND (
-                (recipient_id IS NULL OR recipient_id = $4)
-                AND NOT rejected
+                (
+                    $44
+                    AND owner.user_id = $4
+                )
+                OR
+                (
+                    NOT $44
+                    AND (recipient_id IS NULL OR recipient_id = $4)
+                    AND NOT rejected
+                )
             )
             AND ($5 OR UPPER(market.item_name) LIKE $6)
             AND (market.item_level <= $7)
@@ -262,10 +288,10 @@ pub async fn read_market_items<'c>(
             CASE WHEN $3 = 'StatFilters' THEN stat4.stat_value END DESC NULLS LAST,
             CASE WHEN $3 = 'StatFilters' THEN stat5.stat_value END DESC NULLS LAST,
             CASE 
-                WHEN $17 = 'Time' THEN market.created_at
+                WHEN $3 = 'Time' THEN market.created_at
             END DESC,
             CASE
-                WHEN $17 != 'Time' THEN market.price 
+                WHEN $3 != 'Time' THEN market.price 
             END ASC
         LIMIT $1
         OFFSET $2
@@ -313,6 +339,8 @@ pub async fn read_market_items<'c>(
         stat_filters[4].1,
         stat_filters[4].2,
         price,
+        own_listings,
+        is_deleted,
     )
     .fetch_all(executor)
     .await?;
@@ -325,15 +353,15 @@ pub async fn read_market_items<'c>(
     ))
 }
 
-pub async fn read_market_stash<'c>(
-    executor: impl DbExecutor<'c>,
-    user_id: &UserId,
-    filters: MarketFilters,
-    skip: i64,
-    limit: i64,
-) -> anyhow::Result<(Vec<MarketEntry>, bool)> {
-    unimplemented!()
-}
+// pub async fn read_market_stash<'c>(
+//     executor: impl DbExecutor<'c>,
+//     user_id: &UserId,
+//     filters: MarketFilters,
+//     skip: i64,
+//     limit: i64,
+// ) -> anyhow::Result<(Vec<MarketEntry>, bool)> {
+//     unimplemented!()
+// }
 
 pub async fn reject_item<'c>(
     executor: impl DbExecutor<'c>,
@@ -364,7 +392,7 @@ pub async fn reject_item<'c>(
 pub async fn buy_item<'c>(
     executor: &mut Transaction<'c, Database>,
     market_id: MarketId,
-    buyer: Option<UserCharacterId>,
+    buyer: Option<UserId>,
 ) -> Result<Option<MarketBuyEntry>, sqlx::Error> {
     sqlx::query_as!(
         MarketBuyEntry,
