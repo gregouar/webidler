@@ -8,7 +8,7 @@ use crate::data::{
 
 pub type StashId = uuid::Uuid;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq)]
 pub enum StashType {
     #[default]
     User,

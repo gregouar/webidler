@@ -26,7 +26,7 @@ use crate::components::{
     ui::{
         buttons::{CloseButton, MenuButton, TabButton},
         menu_panel::{MenuPanel, PanelTitle},
-        number::format_datetime,
+        number::{format_datetime, format_number},
         toast::*,
     },
 };
@@ -210,7 +210,10 @@ fn StashTypeRow(stash: RwSignal<Stash>, selected_stash: RwSignal<Option<Stash>>)
                     if selected_stash
                         .read()
                         .as_ref()
-                        .map(|selected_stash| selected_stash.stash_id == stash.read().stash_id)
+                        .map(|selected_stash| {
+                            selected_stash.stash_id == stash.read().stash_id
+                                && selected_stash.stash_type == stash.read().stash_type
+                        })
                         .unwrap_or_default()
                     {
                         "ring-2 ring-amber-400"
@@ -289,6 +292,7 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                             .await
                         {
                             Ok(response) => {
+                                selected_stash.set(Some(response.stash.clone()));
                                 match response.stash.stash_type {
                                     StashType::User => town_context.user_stash.set(response.stash),
                                     StashType::Market => {
@@ -300,7 +304,7 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                             }
                             Err(e) => show_toast(
                                 toaster,
-                                format!("Failed to take item: {e}"),
+                                format!("Failed to upgrade stash: {e}"),
                                 ToastVariant::Error,
                             ),
                         }
@@ -317,41 +321,43 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                 "Upgrade Stashes"
             </span>
 
-            // <div class="flex flex-col">
-            // <span class="text-pink-400 p-2 font-bold">
-            // {move || private_offer().then_some("Private Offer")}
-            // </span>
-            // <ItemDetails selected_item show_affixes=true />
-            // <div class="flex justify-between items-center text-sm text-gray-400 p-2">
-            // <span>"Listed by: "{move || seller_name()}</span>
-            // <span>{move || listed_at().map(format_datetime)}</span>
-            // </div>
-            // </div>
+            <div class="flex flex-col gap-2">
+                <div class="text-lg font-semibold text-white capitalize">
+                    {move || {
+                        if let Some(selected_stash) = selected_stash.get() {
+                            stash_type_str(selected_stash.stash_type)
+                        } else {
+                            "".into()
+                        }
+                    }}
+                </div>
+                <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
+                    <div class="text-xs text-gray-400 mb-1">"Current"</div>
+                    <div class="text-blue-400">
+                        {move || {
+                            selected_stash
+                                .read()
+                                .as_ref()
+                                .map(|selected_stash| {
+                                    if selected_stash.max_items > 0 {
+                                        format!("Storage Space: {}", selected_stash.max_items)
+                                    } else {
+                                        "".into()
+                                    }
+                                })
+                                .unwrap_or_default()
+                        }}
+                    </div>
 
-            <div class="text-lg font-semibold text-white capitalize">
-                move ||
-                {if let Some(selected_stash) = selected_stash.get() {
-                    stash_type_str(selected_stash.stash_type)
-                } else {
-                    "".into()
-                }}
+                </div>
+
+                <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
+                    <div class="text-xs text-gray-400 mb-1">"Next"</div>
+                    <div class="text-blue-400">
+                        {move || { format!("Storage Space: {}", upgrade.get().0) }}
+                    </div>
+                </div>
             </div>
-
-            // <div class="grid grid-cols-2 gap-2 mt-1">
-
-            <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
-                <div class="text-xs text-gray-400 mb-1">"Current"</div>
-
-            </div>
-
-            <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
-                <div class="text-xs text-gray-400 mb-1">"Next"</div>
-                <li class="text-blue-400 leading-snug">
-                    move || {format!("Storage Space: {}", upgrade.get().0)}
-                </li>
-            </div>
-
-            // </div>
 
             <div class="flex justify-between items-center p-4 border-t border-zinc-700">
                 <div class="flex items-center gap-1 text-lg text-gray-400">
@@ -359,7 +365,7 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                         view! {
                             "Price: "
                             <span class="text-amber-300 font-bold">
-                                {format!("{:.0}", upgrade.get().1)}
+                                {format!("{}", format_number(upgrade.get().1))}
                             </span>
                             <GoldIcon />
                         }

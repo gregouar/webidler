@@ -39,8 +39,8 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/stashes/upgrade", post(post_upgrade_stash))
         .route("/stashes/{stash_id}", post(post_browse_stash))
-        .route("/stashes/{stash_id}/buy", post(post_take_stash_item))
-        .route("/stashes/{stash_id}/sell", post(post_store_stash_item))
+        .route("/stashes/{stash_id}/take", post(post_take_stash_item))
+        .route("/stashes/{stash_id}/store", post(post_store_stash_item))
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
