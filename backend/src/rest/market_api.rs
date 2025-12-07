@@ -30,7 +30,8 @@ use crate::{
 use super::AppError;
 
 pub fn routes(app_state: AppState) -> Router<AppState> {
-    let auth_routes = Router::new()
+    Router::new()
+        .route("/market", post(post_browse_market))
         .route("/market/buy", post(post_buy_market_item))
         .route("/market/reject", post(post_reject_market_item))
         .route("/market/sell", post(post_sell_market_item))
@@ -38,23 +39,20 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
-        ));
-
-    Router::new()
-        .route("/market", post(post_browse_market))
-        .merge(auth_routes)
+        ))
 }
 
 pub async fn post_browse_market(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
+    Extension(current_user): Extension<CurrentUser>,
     Json(payload): Json<BrowseMarketItemsRequest>,
 ) -> Result<Json<BrowseMarketItemsResponse>, AppError> {
     let (items, has_more) = db::market::read_market_items(
         &db_pool,
-        &payload.character_id,
-        payload.own_listings,
-        payload.is_deleted,
+        &current_user.user_details.user.user_id,
+        // payload.own_listings,
+        // payload.is_deleted,
         payload.filters,
         payload.skip as i64,
         payload.limit.into_inner(),
@@ -301,8 +299,8 @@ pub async fn post_edit_market_item(
 fn into_market_item(items_store: &ItemsStore, market_entry: MarketEntry) -> Option<MarketItem> {
     Some(MarketItem {
         item_id: market_entry.market_id as usize,
-        owner_id: market_entry.character_id,
-        owner_name: market_entry.character_name,
+        owner_id: market_entry.owner_id,
+        owner_name: market_entry.owner_name,
         recipient: market_entry.recipient_id.map(|recipient_id| {
             (
                 recipient_id,
@@ -319,12 +317,14 @@ fn into_market_item(items_store: &ItemsStore, market_entry: MarketEntry) -> Opti
 
         created_at: market_entry.created_at.into(),
 
-        deleted_at: market_entry.deleted_at.map(Into::into),
-        deleted_by: market_entry.deleted_by_id.map(|deleted_by_id| {
-            (
-                deleted_by_id,
-                market_entry.deleted_by_name.unwrap_or_default(),
-            )
-        }),
+        deleted_at: None,
+        deleted_by: None,
+        // deleted_at: market_entry.deleted_at.map(Into::into),
+        // deleted_by: market_entry.deleted_by_id.map(|deleted_by_id| {
+        //     (
+        //         deleted_by_id,
+        //         market_entry.deleted_by_name.unwrap_or_default(),
+        //     )
+        // }),
     })
 }

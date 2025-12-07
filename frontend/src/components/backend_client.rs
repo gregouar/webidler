@@ -3,7 +3,7 @@ use std::time::Duration;
 
 use shared::{
     data::{
-        market::StashId,
+        stash::StashId,
         user::{UserCharacterId, UserId},
     },
     http::{
@@ -229,9 +229,10 @@ impl BackendClient {
 
     pub async fn browse_market_items(
         &self,
+        token: &str,
         request: &BrowseMarketItemsRequest,
     ) -> Result<BrowseMarketItemsResponse, BackendError> {
-        self.post("market", request).await
+        self.post_auth("market", token, request).await
     }
 
     pub async fn buy_market_item(

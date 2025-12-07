@@ -95,7 +95,8 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                                         view! { <MainFilters filters /> }.into_any()
                                     }
                                     StashTab::Take => {
-                                        view! { <StashBrowser selected_item filters /> }.into_any()
+                                        view! { <StashBrowser stash_id selected_item filters /> }
+                                            .into_any()
                                     }
                                     StashTab::Store => {
                                         view! { <InventoryBrowser selected_item /> }.into_any()
@@ -111,10 +112,10 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                                         view! { <StatsFilters filters /> }.into_any()
                                     }
                                     StashTab::Take => {
-                                        view! { <TakeDetails selected_item /> }.into_any()
+                                        view! { <TakeDetails stash_id selected_item /> }.into_any()
                                     }
                                     StashTab::Store => {
-                                        view! { <StoreDetails selected_item /> }.into_any()
+                                        view! { <StoreDetails stash_id selected_item /> }.into_any()
                                     }
                                 }
                             }}

@@ -269,26 +269,30 @@ fn MarketBrowser(
     });
 
     Effect::new({
-        let backend = expect_context::<BackendClient>();
-        let town_context = expect_context::<TownContext>();
+        let backend: BackendClient = expect_context();
+        let town_context: TownContext = expect_context();
+        let auth_context: AuthContext = expect_context();
         move || {
             if reached_end_of_list.get() && has_more.get_untracked() {
                 let skip = extend_list.get_untracked();
                 (*extend_list.write()) += items_per_page.into_inner() as u32;
 
-                let character_id = town_context.character.read_untracked().character_id;
+                let user_id = town_context.character.read_untracked().character_id;
                 let filters = filters.get_untracked();
 
                 spawn_local(async move {
                     let response = backend
-                        .browse_market_items(&BrowseMarketItemsRequest {
-                            character_id,
-                            skip,
-                            limit: items_per_page,
-                            filters,
-                            own_listings,
-                            is_deleted,
-                        })
+                        .browse_market_items(
+                            &auth_context.token(),
+                            &BrowseMarketItemsRequest {
+                                user_id,
+                                skip,
+                                limit: items_per_page,
+                                filters,
+                                // own_listings,
+                                // is_deleted,
+                            },
+                        )
                         .await
                         .unwrap_or_default();
 
