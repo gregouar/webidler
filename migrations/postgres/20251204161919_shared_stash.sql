@@ -24,7 +24,7 @@ CREATE TABLE
         --
         title TEXT,
         resource_gems DOUBLE PRECISION NOT NULL DEFAULT 0,
-        max_items INTEGER NOT NULL,
+        max_items BIGINT NOT NULL,
         --
         created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,

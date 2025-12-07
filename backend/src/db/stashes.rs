@@ -16,8 +16,8 @@ pub struct StashEntry {
     pub stash_type: Json<StashType>,
     pub title: Option<String>,
 
-    pub items_amount: i32,
-    pub max_items: i32,
+    pub items_amount: i64,
+    pub max_items: i64,
     pub resource_gems: f64,
 }
 
@@ -25,12 +25,13 @@ pub async fn create_stash<'c>(
     executor: impl DbExecutor<'c>,
     user_id: UserId,
     stash_type: StashType,
-    max_items: i32,
+    max_items: i64,
     title: &str,
 ) -> Result<StashEntry, sqlx::Error> {
     let stash_id = uuid::Uuid::new_v4();
 
     let stash_type = Json(stash_type);
+    let stash_type_value = serde_json::to_value(&stash_type).unwrap();
     sqlx::query!(
         r#"
         INSERT INTO stashes (stash_id, user_id, stash_type, title, max_items)
@@ -38,7 +39,7 @@ pub async fn create_stash<'c>(
         "#,
         stash_id,
         user_id,
-        stash_type,
+        stash_type_value,
         title,
         max_items
     )
@@ -76,7 +77,7 @@ pub async fn get_stash<'c>(
                 FROM stash_items
                 WHERE deleted_at IS NULL
                 AND stash_items.stash_id = stashes.stash_id
-            ) as "items_amount!: i32"
+            ) as "items_amount!: i64"
         FROM stashes
         WHERE stash_id = $1 AND deleted_at IS NULL
         "#,
@@ -108,7 +109,7 @@ pub async fn get_character_stash_by_type<'c>(
                 FROM stash_items
                 WHERE deleted_at IS NULL
                 AND stash_items.stash_id = stashes.stash_id
-            ) as "items_amount!: i32"
+            ) as "items_amount!: i64"
         FROM stashes
         INNER JOIN characters ON characters.user_id = stashes.user_id
         WHERE 
@@ -128,7 +129,7 @@ pub async fn update_stash_size<'c>(
     stash_id: &StashId,
     max_items: usize,
 ) -> Result<(), sqlx::Error> {
-    let max_items = max_items as i32;
+    let max_items = max_items as i64;
 
     sqlx::query!(
         r#"
