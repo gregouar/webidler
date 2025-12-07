@@ -17,7 +17,7 @@ pub struct StashEntry {
     pub title: Option<String>,
 
     pub items_amount: i64,
-    pub max_items: i64,
+    pub max_items: i32,
     pub resource_gems: f64,
 }
 
@@ -25,7 +25,7 @@ pub async fn create_stash<'c>(
     executor: impl DbExecutor<'c>,
     user_id: UserId,
     stash_type: StashType,
-    max_items: i64,
+    max_items: i32,
     title: &str,
 ) -> Result<StashEntry, sqlx::Error> {
     let stash_id = uuid::Uuid::new_v4();
