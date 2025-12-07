@@ -1,11 +1,13 @@
 use crate::{
     constants::{
-        CHAMPION_BASE_CHANCE, CHAMPION_INC_CHANCE, SKILL_COST_INCREASE_FACTOR, XP_INCREASE_FACTOR,
+        self, CHAMPION_BASE_CHANCE, CHAMPION_INC_CHANCE, SKILL_COST_INCREASE_FACTOR,
+        XP_INCREASE_FACTOR,
     },
     data::{
         area::{AreaLevel, AreaState},
         player::PlayerSpecs,
         skill::SkillSpecs,
+        stash::{Stash, StashType},
     },
 };
 
@@ -40,4 +42,29 @@ pub fn gem_chance(area_state: &AreaState) -> f64 {
     } else {
         0.0
     }
+}
+
+pub fn stash_upgrade(stash: &Stash) -> (usize, f64) {
+    let stash_price = match stash.stash_type {
+        StashType::User => constants::STASH_USER_PRICE,
+        StashType::Market => constants::STASH_MARKET_PRICE,
+    };
+
+    if stash.max_items < stash_price.start_size {
+        return (stash_price.start_size, stash_price.start_price);
+    }
+
+    let next_stash_level = stash
+        .max_items
+        .saturating_sub(stash_price.start_size)
+        .div_euclid(stash_price.upgrade_size)
+        .saturating_add(1);
+
+    let next_stash_price =
+        stash_price.start_price * stash_price.upgrade_price.powi(next_stash_level as i32);
+
+    (
+        stash_price.start_size + stash_price.upgrade_size.saturating_mul(next_stash_level),
+        next_stash_price,
+    )
 }

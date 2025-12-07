@@ -23,11 +23,11 @@ pub struct StashEntry {
 
 pub async fn create_stash<'c>(
     executor: impl DbExecutor<'c>,
-    user_id: &UserId,
+    user_id: UserId,
     stash_type: StashType,
     max_items: i64,
     title: &str,
-) -> Result<StashId, sqlx::Error> {
+) -> Result<StashEntry, sqlx::Error> {
     let stash_id = uuid::Uuid::new_v4();
 
     let stash_type = Json(stash_type);
@@ -45,7 +45,15 @@ pub async fn create_stash<'c>(
     .execute(executor)
     .await?;
 
-    Ok(stash_id)
+    Ok(StashEntry {
+        stash_id,
+        user_id,
+        stash_type,
+        title: Some(title.to_string()),
+        items_amount: 0,
+        max_items,
+        resource_gems: 0.0,
+    })
 }
 
 pub async fn get_stash<'c>(
@@ -115,4 +123,26 @@ pub async fn get_character_stash_by_type<'c>(
     .await
 }
 
-// pub async fn update_stash_size()
+pub async fn update_stash_size<'c>(
+    executor: impl DbExecutor<'c>,
+    stash_id: &StashId,
+    max_items: usize,
+) -> Result<(), sqlx::Error> {
+    let max_items = max_items as i64;
+
+    sqlx::query!(
+        r#"
+        UPDATE stashes
+        SET 
+            max_items =  $2,
+            updated_at = CURRENT_TIMESTAMP 
+        WHERE stash_id = $1
+        "#,
+        stash_id,
+        max_items,
+    )
+    .execute(executor)
+    .await?;
+
+    Ok(())
+}

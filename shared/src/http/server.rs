@@ -192,6 +192,11 @@ pub struct RejectMarketItemResponse {}
 // Stash
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UpgradeStashResponse {
+    pub resource_gold: f64,
+    pub stash: Stash,
+}
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BrowseStashItemsResponse {
     pub items: Vec<StashItem>,
     pub has_more: bool,

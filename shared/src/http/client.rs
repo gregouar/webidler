@@ -6,6 +6,7 @@ use crate::{
         item_affix::AffixType,
         market::MarketFilters,
         passive::PassivesTreeAscension,
+        stash::StashType,
         temple::PlayerBenedictions,
         user::{UserCharacterId, UserId},
     },
@@ -118,6 +119,12 @@ pub struct RejectMarketItemRequest {
 }
 
 // Stash
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UpgradeStashRequest {
+    pub character_id: UserCharacterId,
+    pub stash_type: StashType,
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BrowseStashItemsRequest {

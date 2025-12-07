@@ -3,17 +3,21 @@ use leptos::{prelude::*, task::spawn_local};
 use std::sync::Arc;
 
 use shared::{
+    computations,
     data::{
         market::MarketFilters,
-        stash::{Stash, StashItem},
+        stash::{Stash, StashItem, StashType},
     },
-    http::client::{BrowseStashItemsRequest, StoreStashItemRequest, TakeStashItemRequest},
+    http::client::{
+        BrowseStashItemsRequest, StoreStashItemRequest, TakeStashItemRequest, UpgradeStashRequest,
+    },
     types::PaginationLimit,
 };
 
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
+    shared::resources::GoldIcon,
     town::{
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
         panels::market::{MainFilters, StatsFilters},
@@ -32,25 +36,34 @@ enum StashTab {
     Filters,
     Store,
     Take,
+    BuyStash,
 }
 
 #[component]
 pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
-    let active_tab = RwSignal::new(StashTab::Store);
-    let selected_item = RwSignal::new(SelectedItem::None);
+    let town_context: TownContext = expect_context();
+    let stash = town_context.user_stash;
 
-    let switch_tab = move |new_tab| {
-        selected_item.set(SelectedItem::None);
-        active_tab.set(new_tab);
-    };
+    let selected_item = RwSignal::new(SelectedItem::None);
+    let selected_stash = RwSignal::new(None);
 
     let filters = RwSignal::new(MarketFilters {
         // item_level: Some(town_context.character.read_untracked().max_area_level),
         ..Default::default()
     });
 
-    let town_context: TownContext = expect_context();
-    let stash = town_context.user_stash;
+    let disable_stash = Signal::derive(move || stash.read().max_items == 0);
+
+    let active_tab = RwSignal::new(if disable_stash.get_untracked() {
+        StashTab::BuyStash
+    } else {
+        StashTab::Store
+    });
+
+    let switch_tab = move |new_tab| {
+        selected_item.set(SelectedItem::None);
+        active_tab.set(new_tab);
+    };
 
     view! {
         <MenuPanel open=open>
@@ -73,6 +86,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                                     active_tab.get() == StashTab::Store
                                 })
                                 on:click=move |_| { switch_tab(StashTab::Store) }
+                                disabled=disable_stash
                             >
                                 "Store"
                             </TabButton>
@@ -81,8 +95,17 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                                     active_tab.get() == StashTab::Take
                                 })
                                 on:click=move |_| { switch_tab(StashTab::Take) }
+                                disabled=disable_stash
                             >
                                 "Take"
+                            </TabButton>
+                            <TabButton
+                                is_active=Signal::derive(move || {
+                                    active_tab.get() == StashTab::BuyStash
+                                })
+                                on:click=move |_| { switch_tab(StashTab::BuyStash) }
+                            >
+                                "Upgrade"
                             </TabButton>
                         </div>
 
@@ -107,6 +130,9 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                                     StashTab::Store => {
                                         view! { <InventoryBrowser selected_item /> }.into_any()
                                     }
+                                    StashTab::BuyStash => {
+                                        view! { <SelectBuyStash selected_stash /> }.into_any()
+                                    }
                                 }
                             }}
                         </div>
@@ -122,6 +148,9 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                     StashTab::Store => {
                                         view! { <StoreDetails stash selected_item /> }.into_any()
+                                    }
+                                    StashTab::BuyStash => {
+                                        view! { <UpgradeStashDetails selected_stash /> }.into_any()
                                     }
                                 }
                             }}
@@ -149,6 +178,200 @@ impl From<StashItem> for SelectedMarketItem {
             deleted_at: None,
             deleted_by: None,
         }
+    }
+}
+
+#[component]
+fn SelectBuyStash(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView {
+    let town_context: TownContext = expect_context();
+    view! {
+        <div class="gap-2 p-1 xl:p-2 flex flex-col">
+            <StashTypeRow stash=town_context.user_stash selected_stash />
+            <StashTypeRow stash=town_context.market_stash selected_stash />
+        </div>
+    }
+}
+
+fn stash_type_str(stash_type: StashType) -> &'static str {
+    match stash_type {
+        StashType::User => "User Stash",
+        StashType::Market => "Market Stash",
+    }
+}
+
+#[component]
+fn StashTypeRow(stash: RwSignal<Stash>, selected_stash: RwSignal<Option<Stash>>) -> impl IntoView {
+    view! {
+        <div
+            class=move || {
+                format!(
+                    "relative flex w-full items-center justify-between p-3 gap-2 cursor-pointer mb-2 shadow-sm transition-colors duration-150 rounded-lg
+                bg-neutral-800 hover:bg-neutral-700 {}",
+                    if selected_stash
+                        .read()
+                        .as_ref()
+                        .map(|selected_stash| selected_stash.stash_id == stash.read().stash_id)
+                        .unwrap_or_default()
+                    {
+                        "ring-2 ring-amber-400"
+                    } else {
+                        "ring-1 ring-zinc-950"
+                    },
+                )
+            }
+            on:click=move |_| { selected_stash.set(Some(stash.get())) }
+        >
+            <div class="flex flex-col flex-1 gap-1">
+
+                <div class="flex items-center justify-between">
+                    <div class="text-lg font-semibold text-white capitalize">
+                        {stash_type_str(stash.read_untracked().stash_type)}
+                    </div>
+
+                    <div class="text-sm text-gray-400">
+                        {move || {
+                            if stash.read().max_items > 0 {
+                                format!("{}/{}", stash.read().items_amount, stash.read().max_items)
+                            } else {
+                                "Click to buy!".into()
+                            }
+                        }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+}
+
+#[component]
+fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+    let backend = expect_context::<BackendClient>();
+    let auth_context = expect_context::<AuthContext>();
+    let toaster = expect_context::<Toasts>();
+
+    let current_max_size = move || {
+        selected_stash
+            .read()
+            .as_ref()
+            .map(|selected_stash| selected_stash.max_items)
+            .unwrap_or_default()
+    };
+
+    let upgrade = Signal::derive(move || {
+        selected_stash.with(|selected_stash| {
+            selected_stash
+                .as_ref()
+                .map(|selected_stash| computations::stash_upgrade(&selected_stash))
+                .unwrap_or_default()
+        })
+    });
+
+    let disabled =
+        Signal::derive(move || upgrade.get().1 > town_context.character.read().resource_gold);
+
+    let do_upgrade = {
+        let character_id = town_context.character.read_untracked().character_id;
+        move |_| {
+            if let Some(stash) = selected_stash.get() {
+                let stash_type = stash.stash_type;
+                spawn_local({
+                    async move {
+                        match backend
+                            .upgrade_stash(
+                                &auth_context.token(),
+                                &UpgradeStashRequest {
+                                    character_id,
+                                    stash_type,
+                                },
+                            )
+                            .await
+                        {
+                            Ok(response) => {
+                                match response.stash.stash_type {
+                                    StashType::User => town_context.user_stash.set(response.stash),
+                                    StashType::Market => {
+                                        town_context.market_stash.set(response.stash)
+                                    }
+                                };
+                                town_context.character.write().resource_gold =
+                                    response.resource_gold;
+                            }
+                            Err(e) => show_toast(
+                                toaster,
+                                format!("Failed to take item: {e}"),
+                                ToastVariant::Error,
+                            ),
+                        }
+                    }
+                });
+            }
+        }
+    };
+
+    view! {
+        <div class="w-full h-full flex flex-col justify-between p-4 relative">
+
+            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
+                "Upgrade Stashes"
+            </span>
+
+            // <div class="flex flex-col">
+            // <span class="text-pink-400 p-2 font-bold">
+            // {move || private_offer().then_some("Private Offer")}
+            // </span>
+            // <ItemDetails selected_item show_affixes=true />
+            // <div class="flex justify-between items-center text-sm text-gray-400 p-2">
+            // <span>"Listed by: "{move || seller_name()}</span>
+            // <span>{move || listed_at().map(format_datetime)}</span>
+            // </div>
+            // </div>
+
+            <div class="text-lg font-semibold text-white capitalize">
+                move ||
+                {if let Some(selected_stash) = selected_stash.get() {
+                    stash_type_str(selected_stash.stash_type)
+                } else {
+                    "".into()
+                }}
+            </div>
+
+            // <div class="grid grid-cols-2 gap-2 mt-1">
+
+            <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
+                <div class="text-xs text-gray-400 mb-1">"Current"</div>
+
+            </div>
+
+            <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
+                <div class="text-xs text-gray-400 mb-1">"Next"</div>
+                <li class="text-blue-400 leading-snug">
+                    move || {format!("Storage Space: {}", upgrade.get().0)}
+                </li>
+            </div>
+
+            // </div>
+
+            <div class="flex justify-between items-center p-4 border-t border-zinc-700">
+                <div class="flex items-center gap-1 text-lg text-gray-400">
+                    {move || {
+                        view! {
+                            "Price: "
+                            <span class="text-amber-300 font-bold">
+                                {format!("{:.0}", upgrade.get().1)}
+                            </span>
+                            <GoldIcon />
+                        }
+                    }}
+                </div>
+                <MenuButton on:click=do_upgrade disabled=disabled>
+                    {move || {
+                        if current_max_size() == 0 { "Buy Stash" } else { "Upgrade Stash" }
+                    }}
+                </MenuButton>
+            </div>
+        </div>
     }
 }
 

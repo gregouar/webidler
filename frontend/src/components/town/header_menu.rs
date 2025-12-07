@@ -23,9 +23,9 @@ pub fn HeaderMenu() -> impl IntoView {
 
     let disable_panels = Signal::derive(move || town_context.character.read().max_area_level == 0);
 
-    let disable_stash = Signal::derive(move || {
-        disable_panels.get() || town_context.user_stash.read().max_items == 0
-    });
+    // let disable_stash = Signal::derive(move || {
+    //     disable_panels.get() || town_context.user_stash.read().max_items == 0
+    // });
 
     view! {
         <div class="relative z-50 w-full flex justify-between items-center p-1 xl:p-2 bg-zinc-800 shadow-md h-auto">
@@ -56,7 +56,7 @@ pub fn HeaderMenu() -> impl IntoView {
                         town_context.open_temple.set(false);
                         town_context.open_inventory.set(false);
                     }
-                    disabled=disable_stash
+                    disabled=disable_panels
                 >
                     "Stash"
                 </MenuButton>

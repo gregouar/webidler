@@ -14,6 +14,7 @@ use shared::{
             InventoryDeleteRequest, InventoryEquipRequest, InventoryUnequipRequest,
             RejectMarketItemRequest, ResetPasswordRequest, SellMarketItemRequest, SignInRequest,
             SignUpRequest, StoreStashItemRequest, TakeStashItemRequest, UpdateAccountRequest,
+            UpgradeStashRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BrowseStashItemsResponse,
@@ -26,7 +27,7 @@ use shared::{
             InventoryUnequipResponse, LeaderboardResponse, NewsResponse, PlayersCountResponse,
             RejectMarketItemResponse, ResetPasswordResponse, SellMarketItemResponse,
             SignInResponse, SignUpResponse, StoreStashItemResponse, TakeStashItemResponse,
-            UpdateAccountResponse,
+            UpdateAccountResponse, UpgradeStashResponse,
         },
     },
 };
@@ -268,6 +269,14 @@ impl BackendClient {
     }
 
     // Stash
+
+    pub async fn upgrade_stash(
+        &self,
+        token: &str,
+        request: &UpgradeStashRequest,
+    ) -> Result<UpgradeStashResponse, BackendError> {
+        self.post_auth("stashes/upgrade", token, request).await
+    }
 
     pub async fn browse_stash_items(
         &self,

@@ -1,4 +1,4 @@
-use crate::data::area::AreaLevel;
+use crate::data::{area::AreaLevel, stash::StashPrice};
 
 // TODO: put in some game config file
 pub const DEFAULT_MAX_CHARACTERS: u8 = 5;
@@ -23,3 +23,17 @@ pub const MAX_ITEM_QUALITY: f32 = 25.0;
 pub const THREAT_COOLDOWN: f32 = 20.0;
 pub const THREAT_BOSS_COOLDOWN: f32 = 60.0;
 pub const THREAT_EFFECT: f64 = 0.5;
+
+pub const STASH_USER_PRICE: StashPrice = StashPrice {
+    start_price: 1e5,
+    start_size: 40,
+    upgrade_price: 1e5,
+    upgrade_size: 10,
+};
+
+pub const STASH_MARKET_PRICE: StashPrice = StashPrice {
+    start_price: 1e7,
+    start_size: 20,
+    upgrade_price: 1e5,
+    upgrade_size: 10,
+};

@@ -41,3 +41,12 @@ pub struct StashItem {
 
     pub created_at: DateTime<Utc>,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct StashPrice {
+    pub start_price: f64,
+    pub start_size: usize,
+
+    pub upgrade_price: f64,
+    pub upgrade_size: usize,
+}
