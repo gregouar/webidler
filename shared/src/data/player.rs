@@ -3,6 +3,8 @@ use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
+use crate::data::area::AreaLevel;
+
 pub use super::character::{CharacterSpecs, CharacterState};
 use super::{
     item::{ItemSlot, ItemSpecs},
@@ -29,6 +31,9 @@ pub struct PlayerSpecs {
     pub threat_gain: f32,
 
     pub effects: EffectsMap,
+
+    #[serde(default)] // for retro compatibility
+    pub max_area_level: AreaLevel,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

@@ -1,6 +1,7 @@
 use anyhow::Result;
 
 use shared::data::{
+    area::AreaLevel,
     item::{ItemSlot, ItemSpecs},
     player::{EquippedSlot, PlayerInventory},
 };
@@ -22,6 +23,7 @@ pub fn store_item_to_bag(
 
 // Return equipped item, and removed item if any
 pub fn equip_item_from_bag(
+    max_item_level: AreaLevel,
     player_inventory: &mut PlayerInventory,
     item_index: u8,
 ) -> Result<(ItemSpecs, Option<ItemSpecs>), AppError> {
@@ -31,6 +33,10 @@ pub fn equip_item_from_bag(
         .get(item_index)
         .ok_or(AppError::NotFound)?
         .clone();
+
+    if item_specs.required_level > max_item_level {
+        return Err(AppError::UserError("level too low".into()));
+    }
 
     let old_item = equip_item(player_inventory, item_specs.clone())?;
 

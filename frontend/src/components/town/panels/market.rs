@@ -552,6 +552,7 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                             .await
                         {
                             Ok(response) => {
+                                town_context.market_stash.set(response.stash);
                                 town_context.inventory.set(response.inventory);
                                 selected_item.set(SelectedItem::Removed(item.index));
                             }
@@ -718,6 +719,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                             .await
                         {
                             Ok(response) => {
+                                // town_context.market_stash.write(response.stash);
                                 town_context.inventory.set(response.inventory);
                                 town_context.character.write().resource_gems =
                                     response.resource_gems;
