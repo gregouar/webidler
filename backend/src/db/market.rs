@@ -196,7 +196,7 @@ pub async fn read_market_items<'c>(
         LEFT JOIN
             users AS recipient ON recipient.user_id = market.recipient_id
         LEFT JOIN
-            users AS buyer ON owner.user_id = market.deleted_by
+            users AS buyer ON buyer.user_id = market.deleted_by
         LEFT JOIN
             stash_items_stats AS stat1 ON stat1.stash_item_id = market.stash_item_id
                 AND stat1.item_stat = $28
@@ -366,7 +366,7 @@ pub async fn read_market_items<'c>(
 pub async fn reject_item<'c>(
     executor: impl DbExecutor<'c>,
     market_id: MarketId,
-    character_id: &UserCharacterId,
+    user_id: &UserId,
 ) -> anyhow::Result<bool> {
     Ok(sqlx::query_scalar!(
         r#"
@@ -382,7 +382,7 @@ pub async fn reject_item<'c>(
             market_id
         "#,
         market_id,
-        character_id
+        user_id
     )
     .fetch_optional(executor)
     .await?

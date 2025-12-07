@@ -430,7 +430,6 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     };
 
     let do_reject = {
-        let character_id = town_context.character.read_untracked().character_id;
         move |_| {
             if let SelectedItem::InMarket(item) = selected_item.get() {
                 spawn_local({
@@ -439,7 +438,6 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                             .reject_market_item(
                                 &auth_context.token(),
                                 &RejectMarketItemRequest {
-                                    character_id,
                                     item_index: item.index as u32,
                                 },
                             )

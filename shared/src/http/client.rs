@@ -116,7 +116,6 @@ pub struct BuyMarketItemRequest {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RejectMarketItemRequest {
-    pub character_id: UserCharacterId,
     pub item_index: u32,
 }
 

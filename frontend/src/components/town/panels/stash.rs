@@ -498,13 +498,10 @@ pub fn TakeDetails(stash: RwSignal<Stash>, selected_item: RwSignal<SelectedItem>
     let toaster = expect_context::<Toasts>();
 
     let disabled = Signal::derive({
-        let town_context = expect_context::<TownContext>();
+        // let town_context = expect_context::<TownContext>();s
         move || {
             selected_item.with(|selected_item| match selected_item {
-                SelectedItem::InMarket(selected_item) => {
-                    selected_item.item_specs.required_level
-                        > town_context.character.read().max_area_level
-                }
+                SelectedItem::InMarket(_) => false,
                 _ => true,
             })
         }

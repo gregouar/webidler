@@ -102,17 +102,13 @@ pub async fn post_buy_market_item(
     .await?;
 
     if let Some(recipient_id) = market_buy_entry.recipient_id {
-        if recipient_id != character.character_id && character.user_id != item_bought.user_id
+        if recipient_id != current_user.user_details.user.user_id
+            && character.user_id != item_bought.user_id
         // Allow seller to remove own listing
         {
             return Err(AppError::Forbidden);
         }
     }
-
-    // TODO: Move check to equip, allow to buy/exchange higher level items
-    // if character.max_area_level < item_bought.item_level as i32 {
-    //     return Err(AppError::UserError("character level too low".to_string()));
-    // }
 
     if let Some(character_id) = item_bought.character_id {
         db::characters::update_character_resources(
@@ -165,13 +161,13 @@ pub async fn post_reject_market_item(
     Extension(current_user): Extension<CurrentUser>,
     Json(payload): Json<RejectMarketItemRequest>,
 ) -> Result<Json<RejectMarketItemResponse>, AppError> {
-    let character = db::characters::read_character(&db_pool, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
-
-    verify_character_user(&character, &current_user)?;
-
-    if !db::market::reject_item(&db_pool, payload.item_index as i64, &payload.character_id).await? {
+    if !db::market::reject_item(
+        &db_pool,
+        payload.item_index as i64,
+        &current_user.user_details.user.user_id,
+    )
+    .await?
+    {
         return Err(AppError::NotFound);
     }
 
@@ -213,21 +209,21 @@ pub async fn post_sell_market_item(
         .then(|| inventory.bag.remove(payload.item_index))
         .ok_or(AppError::NotFound)?;
 
-    let recipient_id = if let Some(character_name) = payload.recipient_name {
-        let character_name = character_name.into_inner();
+    let recipient_id = if let Some(username) = payload.recipient_name {
+        let username = username.into_inner();
         Some(
-            db::characters::get_character_by_name(&mut *tx, &character_name)
+            db::users::get_user_by_name(&mut *tx, &username)
                 .await?
                 .ok_or(AppError::UserError(format!(
-                    "character '{}' not found",
-                    character_name
+                    "user '{}' not found",
+                    username
                 )))?,
         )
     } else {
         None
     };
 
-    if recipient_id.unwrap_or_default() == character.character_id {
+    if recipient_id.unwrap_or_default() == current_user.user_details.user.user_id {
         return Err(AppError::UserError("cannot offer to yourself".into()));
     }
 
