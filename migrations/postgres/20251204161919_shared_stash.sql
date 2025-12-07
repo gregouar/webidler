@@ -129,7 +129,7 @@ CREATE TABLE
         --
         stash_item_id BIGINT NOT NULL,
         recipient_id UUID,
-        rejected BOOLEAN NOT NULL DEFAULT 0,
+        rejected BOOLEAN NOT NULL DEFAULT FALSE,
         --
         price DOUBLE PRECISION NOT NULL,
         --
