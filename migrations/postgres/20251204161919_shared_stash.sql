@@ -20,7 +20,7 @@ CREATE TABLE
         stash_id UUID NOT NULL PRIMARY KEY,
         --
         user_id UUID NOT NULL,
-        stash_type TEXT NOT NULL,
+        stash_type JSONB NOT NULL,
         --
         title TEXT,
         resource_gems DOUBLE PRECISION NOT NULL DEFAULT 0,

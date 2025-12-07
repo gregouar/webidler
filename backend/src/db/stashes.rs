@@ -128,7 +128,7 @@ pub async fn update_stash_size<'c>(
     stash_id: &StashId,
     max_items: usize,
 ) -> Result<(), sqlx::Error> {
-    let max_items = max_items as i64;
+    let max_items = max_items as i32;
 
     sqlx::query!(
         r#"
