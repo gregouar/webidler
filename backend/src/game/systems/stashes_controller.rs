@@ -53,7 +53,7 @@ pub async fn store_stash_item<'c>(
     stash: &mut StashEntry,
     item_specs: &ItemSpecs,
 ) -> Result<StashItemId, AppError> {
-    if stash.items_amount >= stash.max_items {
+    if stash.items_amount >= stash.max_items as i64 {
         return Err(AppError::UserError("stash if full".to_string()));
     }
 
