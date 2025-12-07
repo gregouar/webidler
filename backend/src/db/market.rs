@@ -13,6 +13,7 @@ pub type MarketId = i64;
 #[derive(Debug, FromRow)]
 pub struct MarketEntry {
     pub market_id: MarketId,
+    pub stash_item_id: StashItemId,
 
     pub character_id: UserCharacterId,
     pub character_name: String,
@@ -25,11 +26,20 @@ pub struct MarketEntry {
     pub item_data: JsonValue,
 
     pub created_at: UtcDateTime,
-    pub updated_at: UtcDateTime,
-
+    // pub updated_at: UtcDateTime,
     pub deleted_at: Option<UtcDateTime>,
     pub deleted_by_id: Option<UserCharacterId>,
     pub deleted_by_name: Option<String>,
+}
+
+#[derive(Debug, FromRow)]
+pub struct MarketBuyEntry {
+    pub market_id: MarketId,
+    pub stash_item_id: StashItemId,
+
+    pub recipient_id: Option<UserCharacterId>, // For private offers
+
+    pub price: f64,
 }
 
 pub async fn sell_item<'c>(
@@ -337,8 +347,7 @@ pub async fn reject_item<'c>(
         UPDATE
             market
         SET
-            rejected = TRUE,
-            updated_at = CURRENT_TIMESTAMP
+            rejected = TRUE
         WHERE
             market_id = $1 
             AND recipient_id = $2
@@ -358,48 +367,22 @@ pub async fn buy_item<'c>(
     executor: &mut Transaction<'c, Database>,
     market_id: MarketId,
     buyer: Option<UserCharacterId>,
-) -> Result<Option<MarketEntry>, sqlx::Error> {
-    sqlx::query!(
-        "UPDATE market_categories SET deleted_at = CURRENT_TIMESTAMP WHERE market_id = $1",
-        market_id
-    )
-    .execute(&mut **executor)
-    .await?;
-
-    sqlx::query!(
-        "UPDATE market_stats SET deleted_at = CURRENT_TIMESTAMP WHERE market_id = $1",
-        market_id
-    )
-    .execute(&mut **executor)
-    .await?;
-
+) -> Result<Option<MarketBuyEntry>, sqlx::Error> {
     sqlx::query_as!(
-        MarketEntry,
+        MarketBuyEntry,
         r#"
-        UPDATE 
-            market
+        UPDATE market
         SET 
-            updated_at = CURRENT_TIMESTAMP,
             deleted_at = CURRENT_TIMESTAMP,
             deleted_by = $2
         WHERE 
-            market_id = $1
-            AND deleted_at is NULL
+            market.market_id = $1
+            AND market.deleted_at IS NULL
         RETURNING
-            market_id, 
-            character_id as "character_id: UserCharacterId", 
-            'owner' as "character_name!: String",
-            recipient_id as "recipient_id?: UserCharacterId", 
-            NULL as "recipient_name?: String",
-            rejected,
-            price as "price: f64",
-            item_level as "item_level!: i32",
-            item_data as "item_data: JsonValue",
-            created_at,
-            updated_at,
-            deleted_at as "deleted_at?: UtcDateTime",
-            NULL as "deleted_by_id?: UserCharacterId",
-            NULL as "deleted_by_name?: String"
+            market.market_id, 
+            market.stash_item_id,
+            market.recipient_id as "recipient_id?: UserCharacterId", 
+            market.price as "price: f64"
         "#,
         market_id,
         buyer

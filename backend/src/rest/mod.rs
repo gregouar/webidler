@@ -9,7 +9,7 @@ mod game_api;
 mod inventory_api;
 mod market_api;
 mod public_api;
-mod stash_api;
+mod stashes_api;
 mod users_api;
 pub mod utils;
 
@@ -22,7 +22,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .merge(public_api::routes())
         .merge(users_api::routes(app_state.clone()))
         .merge(market_api::routes(app_state.clone()))
-        .merge(stash_api::routes(app_state.clone()))
+        .merge(stashes_api::routes(app_state.clone()))
         .merge(forge_api::routes(app_state.clone()))
         .merge(inventory_api::routes(app_state.clone()))
 }

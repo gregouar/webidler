@@ -1,7 +1,10 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-use crate::data::{item::ItemSpecs, user::UserCharacterId};
+use crate::data::{
+    item::ItemSpecs,
+    user::{UserCharacterId, UserId},
+};
 
 pub type StashId = uuid::Uuid;
 
@@ -10,6 +13,7 @@ pub struct StashItem {
     pub stash_id: StashId,
     pub stash_item_id: usize,
 
+    pub user_id: UserId,
     pub character_id: Option<UserCharacterId>,
     pub character_name: Option<String>,
 

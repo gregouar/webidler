@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Context, Result};
+use anyhow::{anyhow, Result};
 
 use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
 
@@ -22,7 +22,7 @@ use crate::{
     db::{self, market::MarketEntry},
     game::{
         data::{inventory_data::inventory_data_to_player_inventory, items_store::ItemsStore},
-        systems::{items_controller, stashes_controller},
+        systems::{inventory_controller, items_controller, stashes_controller},
     },
     rest::utils::{verify_character_in_town, verify_character_user},
 };
@@ -87,19 +87,7 @@ pub async fn post_buy_market_item(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let (inventory_data, _, _) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .ok_or(AppError::UserError("newbies can't buy items".into()))?;
-
-    let mut inventory =
-        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
-
-    if inventory.bag.len() >= inventory.max_bag_size as usize {
-        return Err(AppError::UserError("not enough space".into()));
-    }
-
-    let item_bought = db::market::buy_item(
+    let market_buy_entry = db::market::buy_item(
         &mut tx,
         payload.item_index as i64,
         Some(payload.character_id),
@@ -107,9 +95,16 @@ pub async fn post_buy_market_item(
     .await?
     .ok_or(AppError::NotFound)?;
 
-    if let Some(recipient_id) = item_bought.recipient_id {
-        if recipient_id != character.character_id
-            && character.character_id != item_bought.character_id
+    let item_bought = stashes_controller::take_stash_item(
+        &mut tx,
+        &master_store.items_store,
+        None,
+        market_buy_entry.stash_item_id,
+    )
+    .await?;
+
+    if let Some(recipient_id) = market_buy_entry.recipient_id {
+        if recipient_id != character.character_id && character.user_id != item_bought.user_id
         // Allow seller to remove own listing
         {
             return Err(AppError::Forbidden);
@@ -121,19 +116,22 @@ pub async fn post_buy_market_item(
     //     return Err(AppError::UserError("character level too low".to_string()));
     // }
 
-    db::characters::update_character_resources(
-        &mut *tx,
-        &item_bought.character_id,
-        item_bought.price,
-        0.0,
-        0.0,
-    )
-    .await?;
+    if let Some(character_id) = item_bought.character_id {
+        db::characters::update_character_resources(
+            &mut *tx,
+            &character_id,
+            market_buy_entry.price,
+            0.0,
+            0.0,
+        )
+        .await?;
+    }
+    // TODO: Add gems to stash otherwise
 
     let character_resources = db::characters::update_character_resources(
         &mut *tx,
         &payload.character_id,
-        -item_bought.price,
+        -market_buy_entry.price,
         0.0,
         0.0,
     )
@@ -143,13 +141,15 @@ pub async fn post_buy_market_item(
         return Err(AppError::UserError("not enough gems".into()));
     }
 
-    inventory.bag.push(
-        items_controller::init_item_specs_from_store(
-            &master_store.items_store,
-            serde_json::from_value(item_bought.item_data).context("invalid data")?,
-        )
-        .ok_or(anyhow!("base item not found"))?,
-    );
+    let (inventory_data, _, _) =
+        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
+            .await?
+            .ok_or(anyhow!("inventory not found"))?;
+
+    let mut inventory =
+        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+
+    inventory_controller::store_item_to_bag(&mut inventory, item_bought.item_specs)?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
@@ -265,7 +265,7 @@ pub async fn post_edit_market_item(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let item_bought = db::market::buy_item(
+    let market_item = db::market::buy_item(
         &mut tx,
         payload.item_index as i64,
         Some(character.character_id),
@@ -273,20 +273,23 @@ pub async fn post_edit_market_item(
     .await?
     .ok_or(AppError::NotFound)?;
 
-    if item_bought.character_id != character.character_id {
+    let item = stashes_controller::read_stash_item(
+        &mut tx,
+        &master_store.items_store,
+        market_item.stash_item_id,
+    )
+    .await?;
+
+    if item.user_id != character.user_id {
         return Err(AppError::Forbidden);
     }
 
     db::market::sell_item(
         &mut tx,
-        &payload.character_id,
-        item_bought.recipient_id,
+        &market_item.stash_item_id,
+        market_item.recipient_id,
         payload.price,
-        &items_controller::init_item_specs_from_store(
-            &master_store.items_store,
-            serde_json::from_value(item_bought.item_data).context("invalid data")?,
-        )
-        .ok_or(anyhow!("base item not found"))?,
+        (&item.item_specs).try_into()?,
     )
     .await?;
 

@@ -8,7 +8,7 @@ use shared::data::{
     market::MarketFilters,
     skill::DamageType,
     stash::StashId,
-    user::UserCharacterId,
+    user::{UserCharacterId, UserId},
 };
 use strum::IntoEnumIterator;
 
@@ -27,6 +27,7 @@ pub struct StashItemEntry {
     pub stash_id: StashId,
     pub stash_item_id: StashItemId,
 
+    pub user_id: UserId,
     pub character_id: Option<UserCharacterId>,
     pub character_name: Option<String>,
 
@@ -254,6 +255,37 @@ pub async fn count_stash_items<'c>(
     Ok(row.count)
 }
 
+pub async fn read_stash_item<'c>(
+    executor: &mut Transaction<'c, Database>,
+    stash_item_id: StashItemId,
+) -> Result<Option<StashItemEntry>, sqlx::Error> {
+    sqlx::query_as!(
+        StashItemEntry,
+        r#"
+        SELECT 
+            stash_items.stash_item_id,
+            stash_items.stash_id as "stash_id: StashId",
+            stashes.user_id as "user_id: UserId",
+            characters.character_id as "character_id?: UserCharacterId", 
+            characters.character_name as "character_name?: String",
+            stash_items.item_data as "item_data: JsonValue",
+            stash_items.created_at
+        FROM 
+            stash_items
+        INNER JOIN
+            stashes ON stashes.stash_id = stash_items.stash_id
+        INNER JOIN
+            characters ON characters.character_id = stash_items.character_id
+        WHERE 
+            stash_items.stash_item_id = $1
+            AND stash_items.deleted_at is NULL            
+        "#,
+        stash_item_id
+    )
+    .fetch_optional(&mut **executor)
+    .await
+}
+
 pub async fn read_stash_items<'c>(
     executor: impl DbExecutor<'c>,
     stash_id: StashId,
@@ -328,12 +360,15 @@ pub async fn read_stash_items<'c>(
         SELECT 
             stash_items.stash_id as "stash_id: StashId", 
             stash_items.stash_item_id, 
+            stashes.user_id as "user_id: UserId",
             owner.character_id as "character_id?: UserCharacterId", 
             owner.character_name as "character_name?: String",
             item_data as "item_data: JsonValue",
             stash_items.created_at
         FROM 
             stash_items 
+        INNER JOIN
+            stashes ON stashes.stash_id = stash_items.stash_id
         INNER JOIN
             characters AS owner ON owner.character_id = stash_items.character_id
         LEFT JOIN
@@ -462,7 +497,7 @@ pub async fn read_stash_items<'c>(
 
 pub async fn take_item<'c>(
     executor: &mut Transaction<'c, Database>,
-    stash_id: &StashId,
+    stash_id: Option<&StashId>,
     stash_item_id: StashItemId,
 ) -> Result<Option<StashItemEntry>, sqlx::Error> {
     sqlx::query!(
@@ -479,6 +514,8 @@ pub async fn take_item<'c>(
     .execute(&mut **executor)
     .await?;
 
+    let skip_verify_stash_id = stash_id.is_none();
+
     sqlx::query_as!(
         StashItemEntry,
         r#"
@@ -488,10 +525,15 @@ pub async fn take_item<'c>(
             deleted_at = CURRENT_TIMESTAMP
         WHERE 
             stash_item_id = $1
-            AND stash_id = $2
+            AND ($2 OR stash_id = $3)
             AND deleted_at is NULL
         RETURNING
             stash_id as "stash_id: StashId",
+            (
+                SELECT stashes.user_id
+                FROM stashes
+                WHERE stashes.stash_id = stash_items.stash_id
+            ) as "user_id: UserId",
             stash_item_id, 
             character_id as "character_id?: UserCharacterId", 
             NULL as "character_name?: String",
@@ -499,6 +541,7 @@ pub async fn take_item<'c>(
             created_at
         "#,
         stash_item_id,
+        skip_verify_stash_id,
         stash_id
     )
     .fetch_optional(&mut **executor)

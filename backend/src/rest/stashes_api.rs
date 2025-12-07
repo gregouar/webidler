@@ -8,7 +8,7 @@ use axum::{
 };
 
 use shared::{
-    data::stash::{StashId, StashItem, StashType},
+    data::stash::{StashId, StashType},
     http::{
         client::{BrowseStashItemsRequest, StoreStashItemRequest, TakeStashItemRequest},
         server::{BrowseStashItemsResponse, StoreStashItemResponse, TakeStashItemResponse},
@@ -18,10 +18,10 @@ use shared::{
 use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
-    db::{self, stash_items::StashItemEntry, stashes::StashEntry},
+    db::{self, stashes::StashEntry},
     game::{
-        data::{inventory_data::inventory_data_to_player_inventory, items_store::ItemsStore},
-        systems::{items_controller, stashes_controller},
+        data::inventory_data::inventory_data_to_player_inventory,
+        systems::{inventory_controller, stashes_controller},
     },
     rest::utils::{verify_character_in_town, verify_character_user},
 };
@@ -87,7 +87,9 @@ pub async fn post_browse_stash(
     Ok(Json(BrowseStashItemsResponse {
         items: items
             .into_iter()
-            .filter_map(|item_entry| into_stash_item(&master_store.items_store, item_entry))
+            .filter_map(|item_entry| {
+                stashes_controller::into_stash_item(&master_store.items_store, item_entry)
+            })
             .collect(),
         has_more,
     }))
@@ -123,19 +125,17 @@ pub async fn post_take_stash_item(
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
 
-    if inventory.bag.len() >= inventory.max_bag_size as usize {
-        return Err(AppError::UserError("not enough space".into()));
-    }
-
-    inventory.bag.push(
+    inventory_controller::store_item_to_bag(
+        &mut inventory,
         stashes_controller::take_stash_item(
             &mut tx,
             &master_store.items_store,
-            &stash_id,
+            Some(&stash_id),
             payload.item_index as i64,
         )
-        .await?,
-    );
+        .await?
+        .item_specs,
+    )?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
@@ -188,20 +188,4 @@ pub async fn post_store_stash_item(
     tx.commit().await?;
 
     Ok(Json(StoreStashItemResponse { inventory }))
-}
-
-fn into_stash_item(items_store: &ItemsStore, item_entry: StashItemEntry) -> Option<StashItem> {
-    Some(StashItem {
-        stash_id: item_entry.stash_id,
-        stash_item_id: item_entry.stash_item_id as usize,
-        character_id: item_entry.character_id,
-        character_name: item_entry.character_name,
-
-        item_specs: items_controller::init_item_specs_from_store(
-            items_store,
-            serde_json::from_value(item_entry.item_data).ok()?,
-        )?,
-
-        created_at: item_entry.created_at.into(),
-    })
 }

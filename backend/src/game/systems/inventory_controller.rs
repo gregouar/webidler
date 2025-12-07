@@ -7,6 +7,19 @@ use shared::data::{
 
 use crate::rest::AppError;
 
+pub fn store_item_to_bag(
+    player_inventory: &mut PlayerInventory,
+    item_specs: ItemSpecs,
+) -> Result<(), AppError> {
+    if player_inventory.bag.len() >= player_inventory.max_bag_size as usize {
+        return Err(AppError::UserError("not enough space".into()));
+    }
+
+    player_inventory.bag.push(item_specs);
+
+    Ok(())
+}
+
 // Return equipped item, and removed item if any
 pub fn equip_item_from_bag(
     player_inventory: &mut PlayerInventory,
