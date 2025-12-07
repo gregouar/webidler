@@ -140,7 +140,11 @@ pub fn Toggle(
 }
 
 #[component]
-pub fn TabButton(children: Children, #[prop(into)] is_active: Signal<bool>) -> impl IntoView {
+pub fn TabButton(
+    children: Children,
+    #[prop(into)] is_active: Signal<bool>,
+    #[prop(optional, into)] disabled: Option<Signal<bool>>,
+) -> impl IntoView {
     let active_class = |active| {
         if active {
             "bg-gradient-to-t from-zinc-900 to-zinc-950"
@@ -150,9 +154,16 @@ pub fn TabButton(children: Children, #[prop(into)] is_active: Signal<bool>) -> i
             bg-gradient-to-t from-zinc-900 to-zinc-800 
             hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
             active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950
+            disabled:from-zinc-700 disabled:to-zinc-600
+            disabled:text-zinc-400
+            disabled:opacity-60
             "
         }
     };
+
+    let disable_button = Signal::derive(move || {
+        is_active.get() || disabled.map(|disabled| disabled.get()).unwrap_or_default()
+    });
 
     view! {
         <button
@@ -172,7 +183,7 @@ pub fn TabButton(children: Children, #[prop(into)] is_active: Signal<bool>) -> i
                     active_class(is_active.get()),
                 )
             }
-            disabled=is_active
+            disabled=disable_button
         >
             {children()}
         </button>

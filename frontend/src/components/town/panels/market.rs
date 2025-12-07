@@ -68,6 +68,8 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
         ..Default::default()
     });
 
+    let disable_sell = Signal::derive(move || town_context.market_stash.read().max_items == 0);
+
     view! {
         <MenuPanel open=open>
             <div class="w-full">
@@ -95,6 +97,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                                     active_tab.get() == MarketTab::Sell
                                 })
                                 on:click=move |_| { switch_tab(MarketTab::Sell) }
+                                disabled=disable_sell
                             >
                                 "Sell"
                             </TabButton>
@@ -103,6 +106,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                                     active_tab.get() == MarketTab::Listings
                                 })
                                 on:click=move |_| { switch_tab(MarketTab::Listings) }
+                                disabled=disable_sell
                             >
                                 "Listings"
                             </TabButton>
@@ -111,6 +115,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                                     active_tab.get() == MarketTab::Logs
                                 })
                                 on:click=move |_| { switch_tab(MarketTab::Logs) }
+                                disabled=disable_sell
                             >
                                 "Logs"
                             </TabButton>
