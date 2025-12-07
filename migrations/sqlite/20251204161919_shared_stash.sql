@@ -7,8 +7,11 @@ ALTER TABLE market
 RENAME TO market_old;
 
 DROP INDEX idx_market_recipient_id;
+
 DROP INDEX idx_market_deleted;
+
 DROP INDEX idx_market_base_item_id;
+
 DROP INDEX idx_market_name;
 
 -- Stashes Table
@@ -19,6 +22,7 @@ CREATE TABLE
         user_id TEXT NOT NULL,
         stash_type TEXT NOT NULL,
         --
+        title TEXT,
         resource_gems FLOAT NOT NULL DEFAULT 0,
         max_items INT NOT NULL,
         --
@@ -109,7 +113,12 @@ CREATE TABLE
 
 CREATE INDEX idx_stash_items_stats_item_id ON stash_items_stats (stash_item_id);
 
-CREATE INDEX idx_stash_items_stats_item_stat ON stash_items_stats (item_stat, stat_modifier, stat_value, stash_item_id)
+CREATE INDEX idx_stash_items_stats_item_stat ON stash_items_stats (
+    item_stat,
+    stat_modifier,
+    stat_value,
+    stash_item_id
+)
 WHERE
     deleted_at IS NULL;
 
@@ -148,6 +157,10 @@ CREATE TABLE
     );
 
 CREATE INDEX idx_market_item_id ON market (stash_item_id);
+
+CREATE UNIQUE INDEX idx_market_item_id_active ON market (stash_item_id)
+WHERE
+    deleted_at IS NULL;
 
 CREATE INDEX idx_market_recipient_id ON market (recipient_id)
 WHERE
@@ -210,5 +223,3 @@ WHERE
 CREATE INDEX idx_market_crit_damage ON market (item_crit_damage)
 WHERE
     deleted_at IS NULL;
-
-CREATE INDEX idx_market_created_at ON market (created_at);

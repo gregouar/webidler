@@ -48,7 +48,7 @@ async fn migrate_market_items(executor: &mut Transaction<'static, Database>) -> 
         SELECT 
             market_id, 
             item_data as "item_data: JsonValue"
-        FROM market
+        FROM market_old
         WHERE data_version IS NULL
         "#
     )
@@ -70,7 +70,7 @@ async fn migrate_market_items(executor: &mut Transaction<'static, Database>) -> 
 
     for (market_id, item_data) in new_market_entries {
         sqlx::query!(
-            "UPDATE market SET item_data = $1, data_version = $2 WHERE market_id = $3",
+            "UPDATE market_old SET item_data = $1, data_version = $2 WHERE market_id = $3",
             item_data,
             DATA_VERSION,
             market_id,

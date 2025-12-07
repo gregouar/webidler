@@ -23,7 +23,7 @@ use crate::{
 pub type StashItemId = i64;
 
 #[derive(Debug, FromRow)]
-pub struct StashEntry {
+pub struct StashItemEntry {
     pub stash_id: StashId,
     pub stash_item_id: StashItemId,
 
@@ -260,7 +260,7 @@ pub async fn read_stash_items<'c>(
     filters: MarketFilters,
     skip: i64,
     limit: i64,
-) -> anyhow::Result<(Vec<StashEntry>, bool)> {
+) -> anyhow::Result<(Vec<StashItemEntry>, bool)> {
     let limit_more = limit + 1;
 
     let no_filter_by_name = filters.item_name.is_none();
@@ -323,7 +323,7 @@ pub async fn read_stash_items<'c>(
     });
 
     let raw_items = sqlx::query_as!(
-        StashEntry,
+        StashItemEntry,
         r#"
         SELECT 
             stash_items.stash_id as "stash_id: StashId", 
@@ -462,8 +462,9 @@ pub async fn read_stash_items<'c>(
 
 pub async fn take_item<'c>(
     executor: &mut Transaction<'c, Database>,
+    stash_id: &StashId,
     stash_item_id: StashItemId,
-) -> Result<Option<StashEntry>, sqlx::Error> {
+) -> Result<Option<StashItemEntry>, sqlx::Error> {
     sqlx::query!(
         "UPDATE stash_items_categories SET deleted_at = CURRENT_TIMESTAMP WHERE stash_item_id = $1",
         stash_item_id
@@ -479,7 +480,7 @@ pub async fn take_item<'c>(
     .await?;
 
     sqlx::query_as!(
-        StashEntry,
+        StashItemEntry,
         r#"
         UPDATE 
             stash_items
@@ -487,6 +488,7 @@ pub async fn take_item<'c>(
             deleted_at = CURRENT_TIMESTAMP
         WHERE 
             stash_item_id = $1
+            AND stash_id = $2
             AND deleted_at is NULL
         RETURNING
             stash_id as "stash_id: StashId",
@@ -496,7 +498,8 @@ pub async fn take_item<'c>(
             item_data as "item_data: JsonValue",
             created_at
         "#,
-        stash_item_id
+        stash_item_id,
+        stash_id
     )
     .fetch_optional(&mut **executor)
     .await

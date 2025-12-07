@@ -200,7 +200,6 @@ pub struct StoreStashItemResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TakeStashItemResponse {
-    pub resource_gems: f64,
     pub inventory: PlayerInventory,
 }
 

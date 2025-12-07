@@ -3,7 +3,6 @@ use anyhow::{anyhow, Context, Result};
 use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
 
 use shared::{
-    constants::{MAX_MARKET_PRIVATE_LISTINGS, MAX_MARKET_PUBLIC_LISTINGS},
     data::market::MarketItem,
     http::{
         client::{
@@ -23,7 +22,7 @@ use crate::{
     db::{self, market::MarketEntry},
     game::{
         data::{inventory_data::inventory_data_to_player_inventory, items_store::ItemsStore},
-        systems::items_controller,
+        systems::{items_controller, stashes_controller},
     },
     rest::utils::{verify_character_in_town, verify_character_user},
 };
@@ -118,9 +117,9 @@ pub async fn post_buy_market_item(
     }
 
     // TODO: Move check to equip, allow to buy/exchange higher level items
-    if character.max_area_level < item_bought.item_level as i32 {
-        return Err(AppError::UserError("character level too low".to_string()));
-    }
+    // if character.max_area_level < item_bought.item_level as i32 {
+    //     return Err(AppError::UserError("character level too low".to_string()));
+    // }
 
     db::characters::update_character_resources(
         &mut *tx,
@@ -196,20 +195,9 @@ pub async fn post_sell_market_item(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let (public_listings, private_listings) =
-        db::market::count_market_items(&mut *tx, &payload.character_id).await?;
-
-    if payload.recipient_name.is_none() {
-        if public_listings >= MAX_MARKET_PUBLIC_LISTINGS {
-            return Err(AppError::UserError(format!(
-                "too many public listings (max {MAX_MARKET_PUBLIC_LISTINGS})"
-            )));
-        }
-    } else if private_listings >= MAX_MARKET_PRIVATE_LISTINGS {
-        return Err(AppError::UserError(format!(
-            "too many private offers (max {MAX_MARKET_PRIVATE_LISTINGS})"
-        )));
-    }
+    let stash = db::stashes::get_character_market_stash(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
 
     let (inventory_data, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
@@ -241,12 +229,16 @@ pub async fn post_sell_market_item(
         return Err(AppError::UserError("cannot offer to yourself".into()));
     }
 
+    let stash_item_id =
+        stashes_controller::store_stash_item(&mut tx, &payload.character_id, &stash, &item_specs)
+            .await?;
+
     db::market::sell_item(
         &mut tx,
-        &payload.character_id,
+        &stash_item_id,
         recipient_id,
         payload.price,
-        &item_specs,
+        (&item_specs).try_into()?,
     )
     .await?;
 

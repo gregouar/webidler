@@ -1,21 +1,11 @@
-use std::collections::HashSet;
-
 use sqlx::{types::JsonValue, FromRow, Transaction};
 
-use shared::data::{
-    item::{ItemSpecs, WeaponSpecs},
-    item_affix::AffixEffectScope,
-    market::MarketFilters,
-    skill::DamageType,
-    user::UserCharacterId,
-};
+use shared::data::{market::MarketFilters, user::UserCharacterId};
 
-use crate::{
-    constants::DATA_VERSION,
-    db::{
-        pool::{Database, DbExecutor},
-        utc_datetime::UtcDateTime,
-    },
+use crate::db::{
+    pool::{Database, DbExecutor},
+    stash_items::{StashItemFlattenStats, StashItemId},
+    utc_datetime::UtcDateTime,
 };
 
 pub type MarketId = i64;
@@ -32,7 +22,6 @@ pub struct MarketEntry {
 
     pub price: f64,
 
-    pub item_level: i32,
     pub item_data: JsonValue,
 
     pub created_at: UtcDateTime,
@@ -43,216 +32,55 @@ pub struct MarketEntry {
     pub deleted_by_name: Option<String>,
 }
 
-fn average_weapon_damage(weapon_specs: &WeaponSpecs, damage_type: DamageType) -> Option<f64> {
-    weapon_specs
-                .damage.get(&damage_type)
-                .map(|value| 1.0 / (weapon_specs.cooldown as f64)
-            // TODO: Lucky?
-            * (1.0 + weapon_specs.crit_damage * weapon_specs.crit_chance.value as f64 * 0.0001)*(value.min + value.max) * 0.5)
-}
-
 pub async fn sell_item<'c>(
     executor: &mut Transaction<'c, Database>,
-    character_id: &UserCharacterId,
+    stash_item_id: &StashItemId,
     recipient_id: Option<UserCharacterId>,
     price: f64,
-    item: &ItemSpecs,
-) -> anyhow::Result<MarketId> {
-    let item_damages = item.weapon_specs.as_ref().map(|weapon_specs| {
-        1.0 / (weapon_specs.cooldown as f64)
-            // TODO: Lucky?
-            * (1.0 + weapon_specs.crit_damage * weapon_specs.crit_chance.value as f64 * 0.0001)
-            * weapon_specs
-                .damage
-                .values()
-                .map(|value| (value.min + value.max) * 0.5)
-                .sum::<f64>()
-    });
-
-    let item_damage_physical = item
-        .weapon_specs
-        .as_ref()
-        .and_then(|weapon_specs| average_weapon_damage(weapon_specs, DamageType::Physical));
-    let item_damage_fire = item
-        .weapon_specs
-        .as_ref()
-        .and_then(|weapon_specs| average_weapon_damage(weapon_specs, DamageType::Fire));
-    let item_damage_poison = item
-        .weapon_specs
-        .as_ref()
-        .and_then(|weapon_specs| average_weapon_damage(weapon_specs, DamageType::Poison));
-    let item_damage_storm = item
-        .weapon_specs
-        .as_ref()
-        .and_then(|weapon_specs| average_weapon_damage(weapon_specs, DamageType::Storm));
-
-    Ok(create_market_item(
-        executor,
-        character_id,
-        recipient_id,
-        price,
-        item.base
-            .categories
-            .iter()
-            .filter_map(|category| serde_plain::to_string(&category).ok())
-            .collect(),
-        item.modifiers
-            .aggregate_effects(AffixEffectScope::Global)
-            .0
-            .into_iter()
-            .filter_map(|((stat_type, modifier), stat_value)| {
-                Some((
-                    serde_json::to_value(stat_type).ok()?,
-                    serde_plain::to_string(&modifier).ok()?,
-                    stat_value,
-                ))
-            })
-            .collect(),
-        item.modifiers.base_item_id.clone(),
-        item.base.name.clone(),
-        serde_plain::to_string(&item.modifiers.rarity)?,
-        item.required_level as i32,
-        item.armor_specs
-            .as_ref()
-            .map(|armor_specs| armor_specs.armor),
-        item.armor_specs
-            .as_ref()
-            .map(|armor_specs| armor_specs.block as f64),
-        item_damages,
-        item_damage_physical,
-        item_damage_fire,
-        item_damage_poison,
-        item_damage_storm,
-        item.weapon_specs
-            .as_ref()
-            .map(|weapon_specs| weapon_specs.crit_chance.value as f64),
-        item.weapon_specs
-            .as_ref()
-            .map(|weapon_specs| weapon_specs.crit_damage),
-        serde_json::to_value(&item.modifiers)?,
-    )
-    .await?)
-}
-
-#[allow(clippy::too_many_arguments)]
-async fn create_market_item<'c>(
-    executor: &mut Transaction<'c, Database>,
-    character_id: &UserCharacterId,
-    recipient_id: Option<UserCharacterId>,
-    price: f64,
-    item_categories: HashSet<String>,
-    item_stats: Vec<(JsonValue, String, f64)>,
-    base_item_id: String,
-    item_name: String,
-    item_rarity: String,
-    item_level: i32,
-    item_armor: Option<f64>,
-    item_block: Option<f64>,
-    item_damages: Option<f64>,
-    item_damage_physical: Option<f64>,
-    item_damage_fire: Option<f64>,
-    item_damage_poison: Option<f64>,
-    item_damage_storm: Option<f64>,
-    item_crit_chance: Option<f64>,
-    item_crit_damage: Option<f64>,
-    item_data: JsonValue,
+    stash_item_flatten_stats: StashItemFlattenStats,
 ) -> Result<MarketId, sqlx::Error> {
-    let market_id = sqlx::query_scalar!(
+    Ok(sqlx::query_scalar!(
         r#"
         INSERT INTO market (
-            character_id, 
-            recipient_id, 
-            price, 
-            base_item_id, 
-            item_name, 
-            item_rarity, 
-            item_level, 
-            item_armor, 
-            item_block, 
-            item_damages, 
-            item_damage_physical, 
-            item_damage_fire, 
-            item_damage_poison, 
-            item_damage_storm, 
+            stash_item_id,
+            recipient_id,
+            price,
+            base_item_id,
+            item_name,
+            item_rarity,
+            item_level,
+            item_armor,
+            item_block,
+            item_damages,
+            item_damage_physical,
+            item_damage_fire,
+            item_damage_poison,
+            item_damage_storm,
             item_crit_chance,
-            item_crit_damage,
-            item_data,data_version
+            item_crit_damage
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
         RETURNING market_id
         "#,
-        character_id,
+        stash_item_id,
         recipient_id,
         price,
-        base_item_id,
-        item_name,
-        item_rarity,
-        item_level,
-        item_armor,
-        item_block,
-        item_damages,
-        item_damage_physical,
-        item_damage_fire,
-        item_damage_poison,
-        item_damage_storm,
-        item_crit_chance,
-        item_crit_damage,
-        item_data,
-        DATA_VERSION
+        stash_item_flatten_stats.base_item_id,
+        stash_item_flatten_stats.item_name,
+        stash_item_flatten_stats.item_rarity,
+        stash_item_flatten_stats.item_level,
+        stash_item_flatten_stats.item_armor,
+        stash_item_flatten_stats.item_block,
+        stash_item_flatten_stats.item_damages,
+        stash_item_flatten_stats.item_damage_physical,
+        stash_item_flatten_stats.item_damage_fire,
+        stash_item_flatten_stats.item_damage_poison,
+        stash_item_flatten_stats.item_damage_storm,
+        stash_item_flatten_stats.item_crit_chance,
+        stash_item_flatten_stats.item_crit_damage,
     )
     .fetch_one(&mut **executor)
-    .await?;
-
-    for item_category in item_categories {
-        sqlx::query!(
-            "
-        INSERT INTO market_categories (market_id, category)
-        VALUES ($1,$2)
-        ",
-            market_id,
-            item_category,
-        )
-        .execute(&mut **executor)
-        .await?;
-    }
-
-    for (item_stat, stat_modifier, stat_value) in item_stats {
-        sqlx::query!(
-            "
-        INSERT INTO market_stats (market_id, item_stat, stat_modifier, stat_value)
-        VALUES ($1,$2,$3,$4)
-        ",
-            market_id,
-            item_stat,
-            stat_modifier,
-            stat_value,
-        )
-        .execute(&mut **executor)
-        .await?;
-    }
-
-    Ok(market_id)
-}
-
-pub async fn count_market_items<'c>(
-    executor: impl DbExecutor<'c>,
-    character_id: &UserCharacterId,
-) -> anyhow::Result<(i64, i64)> {
-    let row = sqlx::query!(
-        r#"
-        SELECT
-            COUNT(CASE WHEN recipient_id IS NULL THEN 1 END) AS "public_items!",
-            COUNT(CASE WHEN recipient_id IS NOT NULL THEN 1 END) AS "private_items!"
-        FROM market
-        WHERE deleted_at IS NULL
-          AND character_id = $1
-        "#,
-        character_id
-    )
-    .fetch_one(executor)
-    .await?;
-
-    Ok((row.public_items, row.private_items))
+    .await?)
 }
 
 pub async fn read_market_items<'c>(

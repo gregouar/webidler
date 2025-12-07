@@ -1,1 +1,100 @@
-// TODO: Create and update stashes
+use shared::data::{
+    stash::{StashId, StashType},
+    user::{UserCharacterId, UserId},
+};
+use sqlx::{types::Json, FromRow};
+
+use crate::db::pool::DbExecutor;
+
+// pub type DbStashType
+
+#[derive(Debug, FromRow)]
+pub struct StashEntry {
+    pub stash_id: StashId,
+    pub user_id: UserId,
+
+    pub stash_type: Json<StashType>,
+    pub title: Option<String>,
+
+    pub max_items: i64,
+    pub resource_gems: f64,
+}
+
+pub async fn create_stash<'c>(
+    executor: impl DbExecutor<'c>,
+    user_id: &UserId,
+    stash_type: StashType,
+    max_items: i64,
+    title: &str,
+) -> Result<StashId, sqlx::Error> {
+    let stash_id = uuid::Uuid::new_v4();
+
+    let stash_type = Json(stash_type);
+    sqlx::query!(
+        r#"
+        INSERT INTO stashes (stash_id, user_id, stash_type, title, max_items)
+        VALUES ($1, $2, $3, $4, $5)
+        "#,
+        stash_id,
+        user_id,
+        stash_type,
+        title,
+        max_items
+    )
+    .execute(executor)
+    .await?;
+
+    Ok(stash_id)
+}
+
+pub async fn get_stash<'c>(
+    executor: impl DbExecutor<'c>,
+    stash_id: &StashId,
+) -> Result<Option<StashEntry>, sqlx::Error> {
+    sqlx::query_as!(
+        StashEntry,
+        r#"
+        SELECT
+            stash_id as "stash_id: StashId",
+            user_id as "user_id: UserId",
+            stash_type as "stash_type: Json<StashType>",
+            title as "title?",
+            max_items,
+            resource_gems
+        FROM stashes
+        WHERE stash_id = $1 AND deleted_at IS NULL
+        "#,
+        stash_id
+    )
+    .fetch_optional(executor)
+    .await
+}
+
+pub async fn get_character_market_stash<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+) -> Result<Option<StashEntry>, sqlx::Error> {
+    sqlx::query_as!(
+        StashEntry,
+        r#"
+        SELECT
+            stashes.stash_id as "stash_id: StashId",
+            stashes.user_id as "user_id: UserId",
+            stashes.stash_type as "stash_type: Json<StashType>",
+            stashes.title as "title?",
+            stashes.max_items,
+            stashes.resource_gems
+        FROM stashes
+        INNER JOIN characters ON characters.user_id = stashes.user_id
+        WHERE 
+            character_id = $1
+            AND stash_type = 'Market' 
+            AND stashes.deleted_at IS NULL
+        "#,
+        character_id
+    )
+    .fetch_optional(executor)
+    .await
+}
+
+// pub async fn update_stash_size()
