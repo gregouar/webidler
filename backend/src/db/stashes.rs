@@ -31,7 +31,7 @@ pub async fn create_stash<'c>(
     let stash_id = uuid::Uuid::new_v4();
 
     let stash_type = Json(stash_type);
-    let stash_type_value = serde_json::to_value(&stash_type).unwrap();
+    let stash_type_value = serde_json::to_value(stash_type).unwrap();
     sqlx::query!(
         r#"
         INSERT INTO stashes (stash_id, user_id, stash_type, title, max_items)
@@ -92,7 +92,7 @@ pub async fn get_character_stash_by_type<'c>(
     character_id: &UserCharacterId,
     stash_type: StashType,
 ) -> Result<Option<StashEntry>, sqlx::Error> {
-    let stash_type = Json(stash_type);
+    let stash_type = serde_json::to_value(Json(stash_type)).unwrap();
     sqlx::query_as!(
         StashEntry,
         r#"
