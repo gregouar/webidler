@@ -209,8 +209,8 @@ impl From<MarketItem> for SelectedMarketItem {
             index: value.item_id,
             item_specs: Arc::new(value.item_specs),
             price: value.price,
-            owner_id: value.owner_id,
-            owner_name: value.owner_name,
+            owner_id: Some(value.owner_id),
+            owner_name: Some(value.owner_name),
             recipient: value.recipient,
             rejected: value.rejected,
             created_at: value.created_at,
@@ -322,8 +322,10 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 .enumerate()
                 .map(|(index, item)| SelectedMarketItem {
                     index,
-                    owner_id: town_context.character.read_untracked().character_id,
-                    owner_name: town_context.character.read_untracked().name.clone(),
+                    owner_id: None,
+                    owner_name: None,
+                    // owner_id: town_context.character.read_untracked().character_id,
+                    // owner_name: town_context.character.read_untracked().name.clone(),
                     recipient: None,
                     item_specs: Arc::new(item.clone()),
                     price: 0.0,
@@ -376,7 +378,9 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     let seller_name = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(selected_item) => selected_item.owner_name.to_string(),
+            SelectedItem::InMarket(selected_item) => {
+                selected_item.owner_name.clone().unwrap_or_default()
+            }
             _ => "".into(),
         })
     };
@@ -644,7 +648,9 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     let seller_name = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(selected_item) => selected_item.owner_name.to_string(),
+            SelectedItem::InMarket(selected_item) => {
+                selected_item.owner_name.clone().unwrap_or_default()
+            }
             _ => "".into(),
         })
     };

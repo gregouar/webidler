@@ -16,6 +16,7 @@ pub struct StashEntry {
     pub stash_type: Json<StashType>,
     pub title: Option<String>,
 
+    pub items_amount: i64,
     pub max_items: i64,
     pub resource_gems: f64,
 }
@@ -60,7 +61,14 @@ pub async fn get_stash<'c>(
             stash_type as "stash_type: Json<StashType>",
             title as "title?",
             max_items,
-            resource_gems
+            resource_gems,
+            (
+                SELECT
+                    COUNT(1) AS "count!"
+                FROM stash_items
+                WHERE deleted_at IS NULL
+                AND stash_items.stash_id = stashes.stash_id
+            ) as "items_amount!: i64"
         FROM stashes
         WHERE stash_id = $1 AND deleted_at IS NULL
         "#,
@@ -70,10 +78,12 @@ pub async fn get_stash<'c>(
     .await
 }
 
-pub async fn get_character_market_stash<'c>(
+pub async fn get_character_stash_by_type<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
+    stash_type: StashType,
 ) -> Result<Option<StashEntry>, sqlx::Error> {
+    let stash_type = Json(stash_type);
     sqlx::query_as!(
         StashEntry,
         r#"
@@ -83,15 +93,23 @@ pub async fn get_character_market_stash<'c>(
             stashes.stash_type as "stash_type: Json<StashType>",
             stashes.title as "title?",
             stashes.max_items,
-            stashes.resource_gems
+            stashes.resource_gems,
+            (
+                SELECT
+                    COUNT(1) AS "count!"
+                FROM stash_items
+                WHERE deleted_at IS NULL
+                AND stash_items.stash_id = stashes.stash_id
+            ) as "items_amount!: i64"
         FROM stashes
         INNER JOIN characters ON characters.user_id = stashes.user_id
         WHERE 
             character_id = $1
-            AND stash_type = 'Market' 
+            AND stash_type = $2 
             AND stashes.deleted_at IS NULL
         "#,
-        character_id
+        character_id,
+        stash_type
     )
     .fetch_optional(executor)
     .await

@@ -8,6 +8,26 @@ use crate::data::{
 
 pub type StashId = uuid::Uuid;
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default)]
+pub enum StashType {
+    #[default]
+    User,
+    Market,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct Stash {
+    pub stash_id: StashId,
+    pub user_id: UserId,
+
+    pub stash_type: StashType,
+    pub title: Option<String>,
+
+    pub items_amount: usize,
+    pub max_items: usize,
+    pub resource_gems: f64,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StashItem {
     pub stash_id: StashId,
@@ -20,10 +40,4 @@ pub struct StashItem {
     pub item_specs: ItemSpecs,
 
     pub created_at: DateTime<Utc>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
-pub enum StashType {
-    User,
-    Market,
 }

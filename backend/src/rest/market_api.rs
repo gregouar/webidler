@@ -3,7 +3,7 @@ use anyhow::{anyhow, Result};
 use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
 
 use shared::{
-    data::market::MarketItem,
+    data::{market::MarketItem, stash::StashType},
     http::{
         client::{
             BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
@@ -193,9 +193,13 @@ pub async fn post_sell_market_item(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let stash = db::stashes::get_character_market_stash(&mut *tx, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
+    let mut stash = db::stashes::get_character_stash_by_type(
+        &mut *tx,
+        &payload.character_id,
+        StashType::Market,
+    )
+    .await?
+    .ok_or(AppError::NotFound)?;
 
     let (inventory_data, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
@@ -227,9 +231,13 @@ pub async fn post_sell_market_item(
         return Err(AppError::UserError("cannot offer to yourself".into()));
     }
 
-    let stash_item_id =
-        stashes_controller::store_stash_item(&mut tx, &payload.character_id, &stash, &item_specs)
-            .await?;
+    let stash_item_id = stashes_controller::store_stash_item(
+        &mut tx,
+        &payload.character_id,
+        &mut stash,
+        &item_specs,
+    )
+    .await?;
 
     db::market::sell_item(
         &mut tx,
@@ -245,7 +253,10 @@ pub async fn post_sell_market_item(
 
     tx.commit().await?;
 
-    Ok(Json(SellMarketItemResponse { inventory }))
+    Ok(Json(SellMarketItemResponse {
+        inventory,
+        stash: stash.into(),
+    }))
 }
 
 pub async fn post_edit_market_item(

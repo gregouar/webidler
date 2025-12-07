@@ -235,25 +235,25 @@ async fn create_stash_item<'c>(
     Ok(stash_item_id)
 }
 
-pub async fn count_stash_items<'c>(
-    executor: impl DbExecutor<'c>,
-    stash_id: &StashId,
-) -> anyhow::Result<i64> {
-    let row = sqlx::query!(
-        r#"
-        SELECT
-            COUNT(1) AS "count!"
-        FROM stash_items
-        WHERE deleted_at IS NULL
-          AND stash_id = $1
-        "#,
-        stash_id
-    )
-    .fetch_one(executor)
-    .await?;
+// pub async fn count_stash_items<'c>(
+//     executor: impl DbExecutor<'c>,
+//     stash_id: &StashId,
+// ) -> anyhow::Result<i64> {
+//     let row = sqlx::query!(
+//         r#"
+//         SELECT
+//             COUNT(1) AS "count!"
+//         FROM stash_items
+//         WHERE deleted_at IS NULL
+//           AND stash_id = $1
+//         "#,
+//         stash_id
+//     )
+//     .fetch_one(executor)
+//     .await?;
 
-    Ok(row.count)
-}
+//     Ok(row.count)
+// }
 
 pub async fn read_stash_item<'c>(
     executor: &mut Transaction<'c, Database>,
@@ -497,7 +497,7 @@ pub async fn read_stash_items<'c>(
 
 pub async fn take_item<'c>(
     executor: &mut Transaction<'c, Database>,
-    stash_id: Option<&StashId>,
+    stash_id: Option<StashId>,
     stash_item_id: StashItemId,
 ) -> Result<Option<StashItemEntry>, sqlx::Error> {
     sqlx::query!(

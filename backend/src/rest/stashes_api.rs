@@ -8,7 +8,7 @@ use axum::{
 };
 
 use shared::{
-    data::stash::{StashId, StashType},
+    data::stash::{Stash, StashId, StashType},
     http::{
         client::{BrowseStashItemsRequest, StoreStashItemRequest, TakeStashItemRequest},
         server::{BrowseStashItemsResponse, StoreStashItemResponse, TakeStashItemResponse},
@@ -104,7 +104,7 @@ pub async fn post_take_stash_item(
 ) -> Result<Json<TakeStashItemResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
-    let stash = db::stashes::get_stash(&mut *tx, &stash_id)
+    let mut stash = db::stashes::get_stash(&mut *tx, &stash_id)
         .await?
         .ok_or(AppError::NotFound)?;
 
@@ -130,7 +130,7 @@ pub async fn post_take_stash_item(
         stashes_controller::take_stash_item(
             &mut tx,
             &master_store.items_store,
-            Some(&stash_id),
+            Some(&mut stash),
             payload.item_index as i64,
         )
         .await?
@@ -142,7 +142,10 @@ pub async fn post_take_stash_item(
 
     tx.commit().await?;
 
-    Ok(Json(TakeStashItemResponse { inventory }))
+    Ok(Json(TakeStashItemResponse {
+        inventory,
+        stash: stash.into(),
+    }))
 }
 
 pub async fn post_store_stash_item(
@@ -154,7 +157,7 @@ pub async fn post_store_stash_item(
 ) -> Result<Json<StoreStashItemResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
-    let stash = db::stashes::get_stash(&mut *tx, &stash_id)
+    let mut stash = db::stashes::get_stash(&mut *tx, &stash_id)
         .await?
         .ok_or(AppError::NotFound)?;
 
@@ -179,7 +182,7 @@ pub async fn post_store_stash_item(
         .then(|| inventory.bag.remove(payload.item_index))
         .ok_or(AppError::NotFound)?;
 
-    stashes_controller::store_stash_item(&mut tx, &payload.character_id, &stash, &item_specs)
+    stashes_controller::store_stash_item(&mut tx, &payload.character_id, &mut stash, &item_specs)
         .await?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
@@ -187,5 +190,22 @@ pub async fn post_store_stash_item(
 
     tx.commit().await?;
 
-    Ok(Json(StoreStashItemResponse { inventory }))
+    Ok(Json(StoreStashItemResponse {
+        inventory,
+        stash: stash.into(),
+    }))
+}
+
+impl From<db::stashes::StashEntry> for Stash {
+    fn from(value: db::stashes::StashEntry) -> Self {
+        Self {
+            stash_id: value.stash_id,
+            user_id: value.user_id,
+            stash_type: value.stash_type.0,
+            title: value.title,
+            items_amount: value.items_amount as usize,
+            max_items: value.max_items as usize,
+            resource_gems: value.resource_gems,
+        }
+    }
 }

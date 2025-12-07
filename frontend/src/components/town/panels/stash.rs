@@ -3,7 +3,10 @@ use leptos::{prelude::*, task::spawn_local};
 use std::sync::Arc;
 
 use shared::{
-    data::market::{MarketFilters, StashId, StashItem},
+    data::{
+        market::MarketFilters,
+        stash::{Stash, StashItem},
+    },
     http::client::{BrowseStashItemsRequest, StoreStashItemRequest, TakeStashItemRequest},
     types::PaginationLimit,
 };
@@ -45,6 +48,9 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
         // item_level: Some(town_context.character.read_untracked().max_area_level),
         ..Default::default()
     });
+
+    let town_context: TownContext = expect_context();
+    let stash = town_context.user_stash;
 
     view! {
         <MenuPanel open=open>
@@ -95,7 +101,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                                         view! { <MainFilters filters /> }.into_any()
                                     }
                                     StashTab::Take => {
-                                        view! { <StashBrowser stash_id selected_item filters /> }
+                                        view! { <StashBrowser stash selected_item filters /> }
                                             .into_any()
                                     }
                                     StashTab::Store => {
@@ -112,10 +118,10 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                                         view! { <StatsFilters filters /> }.into_any()
                                     }
                                     StashTab::Take => {
-                                        view! { <TakeDetails stash_id selected_item /> }.into_any()
+                                        view! { <TakeDetails stash selected_item /> }.into_any()
                                     }
                                     StashTab::Store => {
-                                        view! { <StoreDetails stash_id selected_item /> }.into_any()
+                                        view! { <StoreDetails stash selected_item /> }.into_any()
                                     }
                                 }
                             }}
@@ -132,7 +138,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
 impl From<StashItem> for SelectedMarketItem {
     fn from(value: StashItem) -> Self {
         Self {
-            index: value.item_id,
+            index: value.stash_item_id,
             item_specs: Arc::new(value.item_specs),
             price: 0.0,
             owner_id: value.character_id,
@@ -148,7 +154,7 @@ impl From<StashItem> for SelectedMarketItem {
 
 #[component]
 fn StashBrowser(
-    stash_id: StashId,
+    stash: RwSignal<Stash>,
     selected_item: RwSignal<SelectedItem>,
     #[prop(into)] filters: Signal<MarketFilters>,
 ) -> impl IntoView {
@@ -192,6 +198,7 @@ fn StashBrowser(
                 (*extend_list.write()) += items_per_page.into_inner() as u32;
 
                 let character_id = town_context.character.read_untracked().character_id;
+                let stash_id = stash.read_untracked().stash_id;
                 let filters = filters.get_untracked();
 
                 spawn_local(async move {
@@ -204,7 +211,7 @@ fn StashBrowser(
                                 limit: items_per_page,
                                 filters,
                             },
-                            stash_id,
+                            &stash_id,
                         )
                         .await
                         .unwrap_or_default();
@@ -235,8 +242,10 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 .enumerate()
                 .map(|(index, item)| SelectedMarketItem {
                     index,
-                    owner_id: town_context.character.read_untracked().character_id,
-                    owner_name: town_context.character.read_untracked().name.clone(),
+                    owner_id: None,
+                    owner_name: None,
+                    // owner_id: Some(town_context.character.read_untracked().character_id),
+                    // owner_name: Some(town_context.character.read_untracked().name.clone()),
                     recipient: None,
                     item_specs: Arc::new(item.clone()),
                     price: 0.0,
@@ -253,7 +262,7 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 }
 
 #[component]
-pub fn TakeDetails(stash_id: StashId, selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+pub fn TakeDetails(stash: RwSignal<Stash>, selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
     let auth_context = expect_context::<AuthContext>();
@@ -274,7 +283,9 @@ pub fn TakeDetails(stash_id: StashId, selected_item: RwSignal<SelectedItem>) -> 
 
     let owner_name = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(selected_item) => selected_item.owner_name.to_string(),
+            SelectedItem::InMarket(selected_item) => {
+                selected_item.owner_name.clone().unwrap_or_default()
+            }
             _ => "".into(),
         })
     };
@@ -288,6 +299,7 @@ pub fn TakeDetails(stash_id: StashId, selected_item: RwSignal<SelectedItem>) -> 
 
     let do_take = {
         let character_id = town_context.character.read_untracked().character_id;
+        let stash_id = stash.read_untracked().stash_id;
         move |_| {
             if let SelectedItem::InMarket(item) = selected_item.get() {
                 spawn_local({
@@ -299,7 +311,7 @@ pub fn TakeDetails(stash_id: StashId, selected_item: RwSignal<SelectedItem>) -> 
                                     character_id,
                                     item_index: item.index as u32,
                                 },
-                                stash_id,
+                                &stash_id,
                             )
                             .await
                         {
@@ -343,7 +355,10 @@ pub fn TakeDetails(stash_id: StashId, selected_item: RwSignal<SelectedItem>) -> 
 }
 
 #[component]
-pub fn StoreDetails(stash_id: StashId, selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+pub fn StoreDetails(
+    stash: RwSignal<Stash>,
+    selected_item: RwSignal<SelectedItem>,
+) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
     let auth_context = expect_context::<AuthContext>();
@@ -351,8 +366,9 @@ pub fn StoreDetails(stash_id: StashId, selected_item: RwSignal<SelectedItem>) ->
 
     let disabled = Signal::derive(move || selected_item.read().is_empty());
 
-    let do_sell = {
+    let do_store = {
         let character_id = town_context.character.read_untracked().character_id;
+        let stash_id = stash.read_untracked().stash_id;
         move |_| {
             if let SelectedItem::InMarket(item) = selected_item.get() {
                 spawn_local({
@@ -364,7 +380,7 @@ pub fn StoreDetails(stash_id: StashId, selected_item: RwSignal<SelectedItem>) ->
                                     character_id,
                                     item_index: item.index,
                                 },
-                                stash_id,
+                                &stash_id,
                             )
                             .await
                         {
@@ -393,7 +409,7 @@ pub fn StoreDetails(stash_id: StashId, selected_item: RwSignal<SelectedItem>) ->
             <ItemDetails selected_item show_affixes=true />
 
             <div class="flex justify-end items-end p-4 border-t border-zinc-700">
-                <MenuButton on:click=do_sell disabled=disabled>
+                <MenuButton on:click=do_store disabled=disabled>
                     "Store Item"
                 </MenuButton>
             </div>

@@ -10,7 +10,7 @@ use crate::data::{
     passive::{PassivesTreeAscension, PassivesTreeSpecs},
     player::PlayerInventory,
     skill::SkillSpecs,
-    stash::StashItem,
+    stash::{Stash, StashItem},
     temple::{BenedictionSpecs, PlayerBenedictions},
     user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
 };
@@ -120,6 +120,9 @@ pub struct GetCharacterDetailsResponse {
     pub ascension: PassivesTreeAscension,
     pub benedictions: PlayerBenedictions,
 
+    pub user_stash: Option<Stash>,
+    pub market_stash: Option<Stash>,
+
     pub last_grind: Option<GrindStats>,
 }
 
@@ -171,6 +174,7 @@ pub struct BrowseMarketItemsResponse {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SellMarketItemResponse {
     pub inventory: PlayerInventory,
+    pub stash: Stash,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -196,11 +200,13 @@ pub struct BrowseStashItemsResponse {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StoreStashItemResponse {
     pub inventory: PlayerInventory,
+    pub stash: Stash,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TakeStashItemResponse {
     pub inventory: PlayerInventory,
+    pub stash: Stash,
 }
 
 // Forge
