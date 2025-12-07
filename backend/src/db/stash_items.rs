@@ -533,7 +533,7 @@ pub async fn take_item<'c>(
                 SELECT stashes.user_id
                 FROM stashes
                 WHERE stashes.stash_id = stash_items.stash_id
-            ) as "user_id: UserId",
+            ) as "user_id!: UserId",
             stash_item_id, 
             character_id as "character_id?: UserCharacterId", 
             NULL as "character_name?: String",
