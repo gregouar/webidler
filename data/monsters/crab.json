@@ -5,8 +5,8 @@
   "power_factor": 3.0,
   "initiative": [3.0, 5.0],
   "armor": { "Physical": 50 },
-  "block": 20,
-  "block_spell": 100,
+  "block": 40,
+  "block_spell": 50,
   "skills": [
     {
       "name": "Pinch",

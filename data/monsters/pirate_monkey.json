@@ -1,0 +1,59 @@
+{
+  "name": "Powder Keg Monkey",
+  "portrait": "monsters/pirate_monkey.webp",
+  "max_life": 8,
+  "power_factor": 1.0,
+  "initiative": [0.0, 1.0],
+  "skills": [
+    {
+      "name": "Scratch",
+      "icon": "skills/claw.svg",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [2, 6]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Kaboom",
+      "icon": "skills/fireball.svg",
+      "skill_type": "Spell",
+      "cooldown": 10.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Fire": [20, 40]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": [3, 6],
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Fire" }
+                    },
+                    "value": 8
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

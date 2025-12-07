@@ -1,0 +1,46 @@
+{
+  "name": "Bosun",
+  "portrait": "monsters/pirate_skirmisher.webp",
+  "max_life": 10,
+  "power_factor": 2,
+  "initiative": [0.0, 0.5],
+  "armor": { "Physical": 50 },
+  "skills": [
+    {
+      "name": "Scimitar Left",
+      "icon": "skills/attack.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [4, 8]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Scimitar Right",
+      "icon": "skills/attack.svg",
+      "cooldown": 2.5,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [4, 8]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
