@@ -34,7 +34,7 @@ pub async fn take_stash_item<'c>(
 ) -> Result<StashItem, AppError> {
     let stash_item_entry = db::stash_items::take_item(
         &mut *executor,
-        stash.as_ref().map(|stash| stash.stash_id.clone()),
+        stash.as_ref().map(|stash| stash.stash_id),
         stash_item_id,
     )
     .await?
@@ -54,7 +54,7 @@ pub async fn store_stash_item<'c>(
     item_specs: &ItemSpecs,
 ) -> Result<StashItemId, AppError> {
     if stash.items_amount >= stash.max_items {
-        return Err(AppError::UserError(format!("stash if full")));
+        return Err(AppError::UserError("stash if full".to_string()));
     }
 
     let stash_item_id =

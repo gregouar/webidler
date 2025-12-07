@@ -152,19 +152,17 @@ fn handle_client_message(
                         &item_specs,
                     );
                 }
-            } else {
-                if let Err(e) = loot_controller::pickup_loot(
-                    &game_data.player_controller,
-                    game_data.player_inventory.mutate(),
-                    game_data.queued_loot.mutate(),
-                    m.loot_identifier,
-                ) {
-                    return Some(ErrorMessage {
-                        error_type: ErrorType::Game,
-                        message: e.to_string(),
-                        must_disconnect: false,
-                    });
-                }
+            } else if let Err(e) = loot_controller::pickup_loot(
+                &game_data.player_controller,
+                game_data.player_inventory.mutate(),
+                game_data.queued_loot.mutate(),
+                m.loot_identifier,
+            ) {
+                return Some(ErrorMessage {
+                    error_type: ErrorType::Game,
+                    message: e.to_string(),
+                    must_disconnect: false,
+                });
             }
         }
         ClientMessage::SetAutoProgress(m) => game_data.area_state.mutate().auto_progress = m.value,

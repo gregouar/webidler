@@ -275,7 +275,7 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
         selected_stash.with(|selected_stash| {
             selected_stash
                 .as_ref()
-                .map(|selected_stash| computations::stash_upgrade(&selected_stash))
+                .map(computations::stash_upgrade)
                 .unwrap_or_default()
         })
     });
@@ -336,7 +336,7 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                         if let Some(selected_stash) = selected_stash.get() {
                             stash_type_str(selected_stash.stash_type)
                         } else {
-                            "".into()
+                            ""
                         }
                     }}
                 </div>
@@ -374,7 +374,7 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                         view! {
                             "Price: "
                             <span class="text-amber-300 font-bold">
-                                {format!("{}", format_number(upgrade.get().1))}
+                                {format_number(upgrade.get().1).to_string()}
                             </span>
                             <GoldIcon />
                         }
@@ -509,10 +509,7 @@ pub fn TakeDetails(stash: RwSignal<Stash>, selected_item: RwSignal<SelectedItem>
     let disabled = Signal::derive({
         // let town_context = expect_context::<TownContext>();s
         move || {
-            selected_item.with(|selected_item| match selected_item {
-                SelectedItem::InMarket(_) => false,
-                _ => true,
-            })
+            selected_item.with(|selected_item| matches!(selected_item, SelectedItem::InMarket(_)))
         }
     });
 

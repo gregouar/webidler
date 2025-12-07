@@ -80,7 +80,7 @@ async fn create_user_stashes<'c>(executor: &mut Transaction<'c, Database>) -> an
 }
 
 async fn migrate_market_items<'c>(
-    mut executor: &mut Transaction<'c, Database>,
+    executor: &mut Transaction<'c, Database>,
     master_store: &MasterStore,
 ) -> anyhow::Result<()> {
     let old_records = sqlx::query_as!(
@@ -140,7 +140,7 @@ async fn migrate_market_items<'c>(
         .await?;
 
         let market_id = db::market::sell_item(
-            &mut executor,
+            executor,
             &stash_item_id,
             record.recipient_id,
             record.price,

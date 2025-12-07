@@ -53,7 +53,7 @@ pub async fn sell_item<'c>(
     price: f64,
     stash_item_flatten_stats: StashItemFlattenStats,
 ) -> Result<MarketId, sqlx::Error> {
-    Ok(sqlx::query_scalar!(
+    sqlx::query_scalar!(
         r#"
         INSERT INTO market (
             stash_item_id,
@@ -94,7 +94,7 @@ pub async fn sell_item<'c>(
         stash_item_flatten_stats.item_crit_damage,
     )
     .fetch_one(&mut **executor)
-    .await?)
+    .await
 }
 
 pub async fn read_market_items<'c>(
