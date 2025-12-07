@@ -42,6 +42,29 @@
           "quantity": 1
         }
       ]
+    },
+    {
+      "min_level": 50,
+      "max_level": null,
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "crab.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "shark.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "jellyfish.json",
+          "quantity": [1,2]
+        },
+        {
+          "monster": "crab.json",
+          "quantity": 2
+        }
+      ]
     }
   ]
 }

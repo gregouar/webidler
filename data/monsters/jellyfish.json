@@ -1,0 +1,41 @@
+{
+  "name": "Poisonous Jellyfish",
+  "portrait": "monsters/jellyfish.webp",
+  "max_life": 5,
+  "power_factor": 1.0,
+  "initiative": [0.0, 0.5],
+  "skills": [
+    {
+      "name": "Poisoned Tendrils",
+      "icon": "skills/poison_coating.svg",
+      "skill_type": "Attack",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [0, 15]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": 4,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Poison" }
+                    },
+                    "value": 5
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
