@@ -62,6 +62,8 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
 
     let town_context: TownContext = expect_context();
 
+    let stash = town_context.market_stash;
+
     let filters = RwSignal::new(MarketFilters {
         item_level: Some(town_context.character.read_untracked().max_area_level),
         // price: ItemPrice::try_new(town_context.character.read_untracked().resource_gems).ok(),
@@ -124,6 +126,15 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                         <div class="flex-1"></div>
 
                         <div class="flex items-center gap-2 mb-2">
+                            <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
+                                {move || {
+                                    format!(
+                                        "({} / {})",
+                                        stash.read().items_amount,
+                                        stash.read().max_items,
+                                    )
+                                }}
+                            </span>
                             <CloseButton on:click=move |_| open.set(false) />
                         </div>
                     </div>
@@ -715,7 +726,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                             .await
                         {
                             Ok(response) => {
-                                // town_context.market_stash.write(response.stash);
+                                town_context.market_stash.write().items_amount -= 1;
                                 town_context.inventory.set(response.inventory);
                                 town_context.character.write().resource_gems =
                                     response.resource_gems;

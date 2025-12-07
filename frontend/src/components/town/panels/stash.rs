@@ -112,6 +112,15 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                         <div class="flex-1"></div>
 
                         <div class="flex items-center gap-2 mb-2">
+                            <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
+                                {move || {
+                                    format!(
+                                        "({} / {})",
+                                        stash.read().items_amount,
+                                        stash.read().max_items,
+                                    )
+                                }}
+                            </span>
                             <CloseButton on:click=move |_| open.set(false) />
                         </div>
                     </div>
@@ -543,6 +552,7 @@ pub fn TakeDetails(stash: RwSignal<Stash>, selected_item: RwSignal<SelectedItem>
                         {
                             Ok(response) => {
                                 town_context.inventory.set(response.inventory);
+                                town_context.user_stash.set(response.stash);
                                 selected_item.set(SelectedItem::Removed(item.index));
                             }
                             Err(e) => show_toast(
@@ -612,6 +622,7 @@ pub fn StoreDetails(
                         {
                             Ok(response) => {
                                 town_context.inventory.set(response.inventory);
+                                town_context.user_stash.set(response.stash);
                                 selected_item.set(SelectedItem::Removed(item.index));
                             }
                             Err(e) => show_toast(
