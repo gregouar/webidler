@@ -214,5 +214,55 @@
       }
     ],
     "min_area_level": 190
+  },
+  "decorated_wand_unique": {
+    "name": "Arcane Cornucopia",
+    "description": "Wizards say this horn was carved to pour mana, not keep it, and it has never stopped spilling since.",
+    "icon": "items/magic_horn.webp",
+    "slot": "Weapon",
+    "categories": ["SpellWeapon"],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": 100
+      },
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [200, 250]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Speed": "Spell"
+        },
+        "modifier": "Multiplier",
+        "value": [20, 25],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [60, 80],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": -400,
+        "ignore_quality": true
+      }
+    ],
+    "min_area_level": 200
   }
 }
