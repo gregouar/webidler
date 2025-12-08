@@ -20,11 +20,11 @@ CREATE TABLE
         stash_id UUID NOT NULL PRIMARY KEY,
         --
         user_id UUID NOT NULL,
-        stash_type TEXT NOT NULL,
+        stash_type JSONB NOT NULL,
         --
         title TEXT,
         resource_gems DOUBLE PRECISION NOT NULL DEFAULT 0,
-        max_items INTEGER NOT NULL,
+        max_items BIGINT NOT NULL,
         --
         created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -129,7 +129,7 @@ CREATE TABLE
         --
         stash_item_id BIGINT NOT NULL,
         recipient_id UUID,
-        rejected BOOLEAN NOT NULL DEFAULT 0,
+        rejected BOOLEAN NOT NULL DEFAULT FALSE,
         --
         price DOUBLE PRECISION NOT NULL,
         --

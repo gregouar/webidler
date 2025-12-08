@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use sqlx::{types::JsonValue, FromRow, Transaction};
 
 use shared::data::{
@@ -148,13 +149,14 @@ async fn migrate_market_items<'c>(
         )
         .await?;
 
+        let created_at: DateTime<Utc> = record.updated_at.into();
         sqlx::query!(
             r#"
                 UPDATE market SET
                     created_at = $1
                 WHERE market_id = $2
                 "#,
-            record.updated_at,
+            created_at,
             market_id
         )
         .execute(&mut **executor)
