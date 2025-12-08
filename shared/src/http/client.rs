@@ -128,6 +128,12 @@ pub struct UpgradeStashRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct ExchangeGemsStashRequest {
+    pub character_id: UserCharacterId,
+    pub gems_amount: f64, // Positive means storing, negative is taking
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BrowseStashItemsRequest {
     pub character_id: UserCharacterId,
 

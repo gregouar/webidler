@@ -101,31 +101,23 @@ pub async fn post_buy_market_item(
     )
     .await?;
 
-    if let Some(recipient_id) = market_buy_entry.recipient_id {
-        if recipient_id != current_user.user_details.user.user_id
-            && character.user_id != item_bought.user_id
-        // Allow seller to remove own listing
-        {
-            return Err(AppError::Forbidden);
+    // Allow seller to remove own listing
+    let price = if character.user_id != item_bought.user_id {
+        if let Some(recipient_id) = market_buy_entry.recipient_id {
+            if recipient_id != current_user.user_details.user.user_id {
+                return Err(AppError::Forbidden);
+            }
         }
-    }
 
-    if let Some(character_id) = item_bought.character_id {
-        db::characters::update_character_resources(
-            &mut *tx,
-            &character_id,
-            market_buy_entry.price,
-            0.0,
-            0.0,
-        )
-        .await?;
-    }
-    // TODO: Add gems to stash otherwise
+        market_buy_entry.price
+    } else {
+        0.0
+    };
 
     let character_resources = db::characters::update_character_resources(
         &mut *tx,
         &payload.character_id,
-        -market_buy_entry.price,
+        -price,
         0.0,
         0.0,
     )
@@ -134,6 +126,8 @@ pub async fn post_buy_market_item(
     if character_resources.resource_gems < 0.0 {
         return Err(AppError::UserError("not enough gems".into()));
     }
+
+    db::stashes::update_stash_gems(&mut *tx, &item_bought.stash_id, price).await?;
 
     let (inventory_data, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)

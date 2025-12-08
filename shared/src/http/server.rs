@@ -196,6 +196,12 @@ pub struct UpgradeStashResponse {
     pub resource_gold: f64,
     pub stash: Stash,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct ExchangeGemsStashResponse {
+    pub resource_gems: f64,
+    pub stash: Stash,
+}
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BrowseStashItemsResponse {
     pub items: Vec<StashItem>,

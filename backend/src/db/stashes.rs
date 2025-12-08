@@ -147,3 +147,24 @@ pub async fn update_stash_size<'c>(
 
     Ok(())
 }
+pub async fn update_stash_gems<'c>(
+    executor: impl DbExecutor<'c>,
+    stash_id: &StashId,
+    gems_difference: f64,
+) -> Result<f64, sqlx::Error> {
+    Ok(sqlx::query_scalar!(
+        r#"
+        UPDATE stashes
+        SET 
+            resource_gems = resource_gems + $2,
+            updated_at = CURRENT_TIMESTAMP 
+        WHERE stash_id = $1
+        RETURNING 
+            resource_gems
+        "#,
+        stash_id,
+        gems_difference,
+    )
+    .fetch_one(executor)
+    .await?)
+}

@@ -72,6 +72,8 @@ pub fn HeaderMenu() -> impl IntoView {
                     disabled=disable_panels
                 >
                     "Market"
+                    {move || (town_context.market_stash.read().resource_gems > 0.0).then(|| " [!]")}
+
                 </MenuButton>
                 <MenuButton
                     on:click=move |_| {

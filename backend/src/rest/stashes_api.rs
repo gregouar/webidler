@@ -12,12 +12,12 @@ use shared::{
     data::stash::{Stash, StashId, StashType},
     http::{
         client::{
-            BrowseStashItemsRequest, StoreStashItemRequest, TakeStashItemRequest,
-            UpgradeStashRequest,
+            BrowseStashItemsRequest, ExchangeGemsStashRequest, StoreStashItemRequest,
+            TakeStashItemRequest, UpgradeStashRequest,
         },
         server::{
-            BrowseStashItemsResponse, StoreStashItemResponse, TakeStashItemResponse,
-            UpgradeStashResponse,
+            BrowseStashItemsResponse, ExchangeGemsStashResponse, StoreStashItemResponse,
+            TakeStashItemResponse, UpgradeStashResponse,
         },
     },
 };
@@ -39,6 +39,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/stashes/upgrade", post(post_upgrade_stash))
         .route("/stashes/{stash_id}", post(post_browse_stash))
+        .route("/stashes/{stash_id}/gems", post(post_exchange_gems))
         .route("/stashes/{stash_id}/take", post(post_take_stash_item))
         .route("/stashes/{stash_id}/store", post(post_store_stash_item))
         .layer(middleware::from_fn_with_state(
@@ -130,6 +131,53 @@ pub async fn post_upgrade_stash(
     Ok(Json(UpgradeStashResponse {
         resource_gold: character_resources.resource_gold,
         stash,
+    }))
+}
+
+pub async fn post_exchange_gems(
+    State(db_pool): State<db::DbPool>,
+    Extension(current_user): Extension<CurrentUser>,
+    Path(stash_id): Path<StashId>,
+    Json(payload): Json<ExchangeGemsStashRequest>,
+) -> Result<Json<ExchangeGemsStashResponse>, AppError> {
+    let mut tx: sqlx::Transaction<'_, sqlx::Sqlite> = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, &current_user)?;
+    verify_character_in_town(&character)?;
+
+    let mut stash = db::stashes::get_stash(&db_pool, &stash_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_stash_access_write(&current_user, &stash)?;
+
+    let gems_difference = if payload.gems_amount > 0.0 {
+        payload.gems_amount.min(character.resource_gems)
+    } else {
+        payload.gems_amount.max(-stash.resource_gems)
+    };
+
+    stash.resource_gems =
+        db::stashes::update_stash_gems(&mut *tx, &stash_id, gems_difference).await?;
+
+    let character_resources = db::characters::update_character_resources(
+        &mut *tx,
+        &payload.character_id,
+        -gems_difference,
+        0.0,
+        0.0,
+    )
+    .await?;
+
+    tx.commit().await?;
+
+    Ok(Json(ExchangeGemsStashResponse {
+        resource_gems: character_resources.resource_gems,
+        stash: stash.into(),
     }))
 }
 

@@ -9,12 +9,13 @@ use shared::{
         market::{MarketFilters, MarketItem, MarketOrderBy},
         passive::StatEffect,
         skill::{DamageType, SkillType},
+        stash::Stash,
         stat_effect::{Modifier, StatType},
         trigger::HitTrigger,
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
-        RejectMarketItemRequest, SellMarketItemRequest,
+        ExchangeGemsStashRequest, RejectMarketItemRequest, SellMarketItemRequest,
     },
     types::{ItemPrice, PaginationLimit, Username},
 };
@@ -24,7 +25,7 @@ use crate::components::{
     backend_client::BackendClient,
     shared::{
         inventory::loot_filter_category_to_str,
-        resources::GemsIcon,
+        resources::{GemsCounter, GemsIcon},
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
     town::{
@@ -52,6 +53,8 @@ enum MarketTab {
 
 #[component]
 pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
+    let town_context: TownContext = expect_context();
+
     let active_tab = RwSignal::new(MarketTab::Buy);
     let selected_item = RwSignal::new(SelectedItem::None);
 
@@ -59,8 +62,6 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
         selected_item.set(SelectedItem::None);
         active_tab.set(new_tab);
     };
-
-    let town_context: TownContext = expect_context();
 
     let stash = town_context.market_stash;
 
@@ -79,7 +80,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                     <div class="px-4 relative z-10 flex items-center justify-between">
                         <PanelTitle>"Market"</PanelTitle>
 
-                        <div class="flex-1 flex justify-center ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto">
+                        <div class="flex-1 flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto">
                             <TabButton
                                 is_active=Signal::derive(move || {
                                     active_tab.get() == MarketTab::Filters
@@ -121,6 +122,12 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                             >
                                 "Logs"
                             </TabButton>
+                        </div>
+
+                        <div class="flex-1"></div>
+
+                        <div class="flex items-center gap-2 mb-2">
+                            <RevenueGems stash />
                         </div>
 
                         <div class="flex-1"></div>
@@ -244,6 +251,63 @@ pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
         Some(ItemRarity::Rare) => "Rare",
         Some(ItemRarity::Masterwork) => "Masterwork",
         Some(ItemRarity::Unique) => "Unique",
+    }
+}
+
+#[component]
+pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
+    let backend = expect_context::<BackendClient>();
+    let town_context = expect_context::<TownContext>();
+    let auth_context = expect_context::<AuthContext>();
+    let toaster = expect_context::<Toasts>();
+
+    let value = Signal::derive(move || stash.read().resource_gems);
+
+    let do_take = {
+        let character_id = town_context.character.read_untracked().character_id;
+        let stash_id = stash.read_untracked().stash_id;
+        let amount = stash.read_untracked().resource_gems;
+        move |_| {
+            spawn_local({
+                async move {
+                    match backend
+                        .exchange_gems_stash(
+                            &auth_context.token(),
+                            &ExchangeGemsStashRequest {
+                                character_id,
+                                gems_amount: -amount,
+                            },
+                            &stash_id,
+                        )
+                        .await
+                    {
+                        Ok(response) => {
+                            town_context.character.write().resource_gems = response.resource_gems;
+                            town_context.market_stash.set(response.stash);
+                        }
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("Failed to take gems: {e}"),
+                            ToastVariant::Error,
+                        ),
+                    }
+                }
+            });
+        }
+    };
+
+    let disabled = Signal::derive(move || value.get() == 0.0);
+
+    view! {
+        <div class="flex gap-2 items-center">
+            <span class="hidden xl:inline text-gray-400 text-xs xl:text-base font-medium">
+                "Revenue:"
+            </span>
+            <GemsCounter value />
+            <MenuButton on:click=do_take disabled>
+                "Take"
+            </MenuButton>
+        </div>
     }
 }
 

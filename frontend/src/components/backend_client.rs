@@ -10,24 +10,24 @@ use shared::{
         client::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BrowseStashItemsRequest,
             BuyBenedictionsRequest, BuyMarketItemRequest, CreateCharacterRequest,
-            EditMarketItemRequest, ForgeAddAffixRequest, ForgotPasswordRequest,
-            InventoryDeleteRequest, InventoryEquipRequest, InventoryUnequipRequest,
-            RejectMarketItemRequest, ResetPasswordRequest, SellMarketItemRequest, SignInRequest,
-            SignUpRequest, StoreStashItemRequest, TakeStashItemRequest, UpdateAccountRequest,
-            UpgradeStashRequest,
+            EditMarketItemRequest, ExchangeGemsStashRequest, ForgeAddAffixRequest,
+            ForgotPasswordRequest, InventoryDeleteRequest, InventoryEquipRequest,
+            InventoryUnequipRequest, RejectMarketItemRequest, ResetPasswordRequest,
+            SellMarketItemRequest, SignInRequest, SignUpRequest, StoreStashItemRequest,
+            TakeStashItemRequest, UpdateAccountRequest, UpgradeStashRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BrowseStashItemsResponse,
             BuyBenedictionsResponse, BuyMarketItemResponse, CreateCharacterResponse,
             DeleteAccountResponse, DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
-            ForgeAddAffixResponse, ForgotPasswordResponse, GetAreasResponse,
-            GetBenedictionsResponse, GetCharacterDetailsResponse, GetDiscordInviteResponse,
-            GetPassivesResponse, GetSkillsResponse, GetUserCharactersResponse,
-            GetUserDetailsResponse, InventoryDeleteResponse, InventoryEquipResponse,
-            InventoryUnequipResponse, LeaderboardResponse, NewsResponse, PlayersCountResponse,
-            RejectMarketItemResponse, ResetPasswordResponse, SellMarketItemResponse,
-            SignInResponse, SignUpResponse, StoreStashItemResponse, TakeStashItemResponse,
-            UpdateAccountResponse, UpgradeStashResponse,
+            ExchangeGemsStashResponse, ForgeAddAffixResponse, ForgotPasswordResponse,
+            GetAreasResponse, GetBenedictionsResponse, GetCharacterDetailsResponse,
+            GetDiscordInviteResponse, GetPassivesResponse, GetSkillsResponse,
+            GetUserCharactersResponse, GetUserDetailsResponse, InventoryDeleteResponse,
+            InventoryEquipResponse, InventoryUnequipResponse, LeaderboardResponse, NewsResponse,
+            PlayersCountResponse, RejectMarketItemResponse, ResetPasswordResponse,
+            SellMarketItemResponse, SignInResponse, SignUpResponse, StoreStashItemResponse,
+            TakeStashItemResponse, UpdateAccountResponse, UpgradeStashResponse,
         },
     },
 };
@@ -276,6 +276,16 @@ impl BackendClient {
         request: &UpgradeStashRequest,
     ) -> Result<UpgradeStashResponse, BackendError> {
         self.post_auth("stashes/upgrade", token, request).await
+    }
+
+    pub async fn exchange_gems_stash(
+        &self,
+        token: &str,
+        request: &ExchangeGemsStashRequest,
+        stash_id: &StashId,
+    ) -> Result<ExchangeGemsStashResponse, BackendError> {
+        self.post_auth(&format!("stashes/{stash_id}/gems"), token, request)
+            .await
     }
 
     pub async fn browse_stash_items(
