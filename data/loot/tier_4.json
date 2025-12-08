@@ -53,6 +53,10 @@
       "weight": 8000
     },
     {
+      "item_id": "fur_cloak_unique",
+      "weight": 50
+    },
+    {
       "item_id": "signet_ring",
       "weight": 8000
     },
