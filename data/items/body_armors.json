@@ -84,6 +84,55 @@
     },
     "min_area_level": 140
   },
+  "scale_vest_unique": {
+    "name": "Mirrorshroud Dress",
+    "description": "It whispers: you may strike, but you may not touch.",
+    "icon": "items/princess_robe.webp",
+    "slot": "Body",
+    "categories": ["Armor", "Body"],
+    "armor_specs": {
+      "armor": 80
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "Multiplier",
+        "value": -1e300,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "Block",
+        "modifier": "Flat",
+        "value": 20,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "BlockSpell",
+        "modifier": "Flat",
+        "value": 50,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [6, 10],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [6, 10],
+        "ignore_quality": true
+      }
+    ],
+    "min_area_level": 150
+  },
   "brigandine": {
     "name": "Brigandine",
     "icon": "items/brigandine.webp",
