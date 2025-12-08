@@ -32,8 +32,8 @@ pub struct OldMarketEntry {
 
     pub character_id: UserCharacterId,
     pub character_name: String,
-    pub recipient_id: Option<UserCharacterId>, // For private offers
-    pub recipient_name: Option<String>,        // For private offers
+    pub recipient_id: Option<UserId>,   // For private offers
+    pub recipient_name: Option<String>, // For private offers
     pub rejected: bool,
 
     pub price: f64,
@@ -90,7 +90,7 @@ async fn migrate_market_items<'c>(
             market_old.market_id, 
             owner.character_id as "character_id: UserCharacterId", 
             owner.character_name,
-            recipient_id as "recipient_id?: UserCharacterId", 
+            recipient.user_id as "recipient_id?: UserId", 
             recipient.character_name as "recipient_name?",
             rejected,
             price as "price: f64",
