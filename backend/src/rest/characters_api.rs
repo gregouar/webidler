@@ -243,6 +243,7 @@ async fn delete_character(
 impl From<db::characters::CharacterEntry> for UserCharacter {
     fn from(val: db::characters::CharacterEntry) -> Self {
         UserCharacter {
+            user_id: val.user_id,
             character_id: val.character_id,
             name: val.character_name,
             portrait: val.portrait,

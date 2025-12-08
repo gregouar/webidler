@@ -32,6 +32,7 @@ pub enum UserCharacterActivity {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct UserCharacter {
+    pub user_id: UserId,
     pub character_id: UserCharacterId,
 
     pub name: String,
