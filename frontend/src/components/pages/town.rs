@@ -16,7 +16,7 @@ use crate::components::{
         header_menu::HeaderMenu,
         panels::{
             ascend::AscendPanel, forge::ForgePanel, inventory::TownInventoryPanel,
-            market::MarketPanel, temple::TemplePanel,
+            market::MarketPanel, stash::StashPanel, temple::TemplePanel,
         },
         town_scene::TownScene,
         TownContext,
@@ -70,6 +70,8 @@ pub fn TownPage() -> impl IntoView {
                     ascension,
                     benedictions,
                     last_grind,
+                    user_stash,
+                    market_stash,
                 }) => {
                     if let UserCharacterActivity::Grinding(_, _) = character.activity {
                         use_navigate()("/game", Default::default())
@@ -80,6 +82,12 @@ pub fn TownPage() -> impl IntoView {
                     town_context.passives_tree_ascension.set(ascension);
                     town_context.player_benedictions.set(benedictions);
                     town_context.last_grind.set(last_grind);
+                    if let Some(user_stash) = user_stash {
+                        town_context.user_stash.set(user_stash);
+                    }
+                    if let Some(market_stash) = market_stash {
+                        town_context.market_stash.set(market_stash);
+                    }
                 }
                 Err(BackendError::Unauthorized(_) | BackendError::NotFound) => {
                     use_navigate()("/", Default::default())
@@ -107,6 +115,7 @@ pub fn TownPage() -> impl IntoView {
                             <TownScene />
                             <TemplePanel open=town_context.open_temple />
                             <MarketPanel open=town_context.open_market />
+                            <StashPanel open=town_context.open_stash />
                             <AscendPanel open=town_context.open_ascend />
                             <ForgePanel open=town_context.open_forge />
                             <TownInventoryPanel open=town_context.open_inventory />

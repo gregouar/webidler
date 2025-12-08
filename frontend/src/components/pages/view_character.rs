@@ -73,6 +73,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         ascension,
                         benedictions,
                         last_grind,
+                        ..
                     }) => {
                         town_context.character.set(character);
                         town_context.areas.set(areas);

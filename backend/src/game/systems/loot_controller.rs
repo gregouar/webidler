@@ -4,6 +4,8 @@ use shared::data::{
     player::PlayerInventory,
 };
 
+use crate::{game::systems::inventory_controller, rest::AppError};
+
 use super::player_controller::PlayerController;
 
 const MAX_QUEUE_SIZE: usize = 5;
@@ -32,7 +34,7 @@ pub fn pickup_loot(
     player_inventory: &mut PlayerInventory,
     queued_loot: &mut Vec<QueuedLoot>,
     loot_identifier: u32,
-) -> bool {
+) -> Result<(), AppError> {
     // Will contain back the item if inventory is full
     let mut move_item = None;
 
@@ -41,21 +43,21 @@ pub fn pickup_loot(
         .find(|x| x.identifier == loot_identifier && x.state != LootState::HasDisappeared)
     {
         loot.state = LootState::HasDisappeared;
-        if player_inventory.bag.len() < player_inventory.max_bag_size as usize {
-            player_inventory.bag.push(loot.item_specs.clone());
-        } else {
-            move_item = Some(loot.item_specs.clone());
+        if let Err(e) =
+            inventory_controller::store_item_to_bag(player_inventory, loot.item_specs.clone())
+        {
+            move_item = Some((loot.item_specs.clone(), e));
         }
     }
 
     // Put back item at front of queue if couldn't pickup
-    if let Some(item_specs) = move_item {
+    if let Some((item_specs, e)) = move_item {
         drop_loot_impl(player_controller, queued_loot, item_specs, false);
-        return false;
+        return Err(e);
     }
 
     update_loot_states(player_controller, queued_loot);
-    true
+    Ok(())
 }
 
 // Return discarded loot

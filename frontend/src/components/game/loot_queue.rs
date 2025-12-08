@@ -3,7 +3,7 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*};
 
 use shared::{
-    data::{item::ItemRarity, loot::LootState, player::EquippedSlot},
+    data::{area::AreaLevel, item::ItemRarity, loot::LootState, player::EquippedSlot},
     messages::client::PickUpLootMessage,
 };
 
@@ -126,7 +126,7 @@ pub fn LootQueue() -> impl IntoView {
                 let(loot)
             >
                 {
-                    let item_rarity = loot.item_specs.modifiers.rarity.clone();
+                    let item_rarity = loot.item_specs.modifiers.rarity;
                     view! {
                         <div style="animation: loot-drop 1.3s ease forwards;">
                             <div
@@ -183,6 +183,7 @@ pub fn LootQueue() -> impl IntoView {
                                         item_specs=Arc::new(loot.item_specs)
                                         tooltip_position=DynamicTooltipPosition::TopLeft
                                         class:shadow-lg
+                                        max_item_level=Signal::derive(|| AreaLevel::MAX)
                                     />
                                 </div>
                             </div>

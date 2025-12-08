@@ -460,26 +460,25 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     let level_up_batch = Memo::new(move |_| {
         let mut total_level = 0u8;
         let mut total_cost = 0.0;
-
-        game_context
+        if let Some(mut skill_specs) = game_context
             .player_specs
             .read()
             .skills_specs
             .get(index)
             .cloned()
-            .map(|mut skill_specs| {
-                for _ in 0..10 {
-                    if total_cost + skill_specs.next_upgrade_cost
-                        > game_context.player_resources.read().gold
-                    {
-                        break;
-                    }
-                    total_level += 1;
-                    total_cost += skill_specs.next_upgrade_cost;
-                    skill_specs.upgrade_level += 1;
-                    skill_specs.next_upgrade_cost = skill_cost_increase(&skill_specs);
+        {
+            for _ in 0..10 {
+                if total_cost + skill_specs.next_upgrade_cost
+                    > game_context.player_resources.read().gold
+                {
+                    break;
                 }
-            });
+                total_level += 1;
+                total_cost += skill_specs.next_upgrade_cost;
+                skill_specs.upgrade_level += 1;
+                skill_specs.next_upgrade_cost = skill_cost_increase(&skill_specs);
+            }
+        }
 
         (total_level, total_cost)
     });
@@ -496,8 +495,10 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         game_context.player_specs.update(|player_specs| {
             if let Some(skill_specs) = player_specs.skills_specs.get_mut(index) {
                 game_context.player_resources.write().gold -= cost;
-                skill_specs.upgrade_level = skill_specs.upgrade_level.saturating_add(amount as u16);
-                skill_specs.next_upgrade_cost = skill_cost_increase(skill_specs);
+                for _ in 0..amount {
+                    skill_specs.upgrade_level = skill_specs.upgrade_level.saturating_add(1);
+                    skill_specs.next_upgrade_cost = skill_cost_increase(skill_specs);
+                }
             }
         });
 

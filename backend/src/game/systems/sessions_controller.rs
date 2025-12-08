@@ -116,7 +116,7 @@ async fn new_game_instance(
     character: CharacterEntry,
     area_id: &str,
 ) -> Result<GameInstanceData> {
-    let player_specs = PlayerSpecs::init(CharacterSpecs {
+    let mut player_specs = PlayerSpecs::init(CharacterSpecs {
         name: character.character_name.clone(),
         portrait: character.portrait.clone(),
         size: CharacterSize::Small,
@@ -128,6 +128,7 @@ async fn new_game_instance(
         mana_regen: 10.0,
         ..Default::default()
     });
+    player_specs.max_area_level = character.max_area_level as AreaLevel;
 
     let player_resources = PlayerResources::default();
 

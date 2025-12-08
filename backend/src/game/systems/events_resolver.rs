@@ -235,6 +235,13 @@ fn handle_area_completed_event(
         game_data.player_resources.mutate().shards += 1.0;
     }
 
+    game_data.player_specs.mutate().max_area_level =
+        game_data.player_specs.read().max_area_level.max(
+            area_state
+                .area_level
+                .saturating_add(game_data.area_blueprint.specs.item_level_modifier),
+        );
+
     let new_max = area_state.area_level > area_state.max_area_level;
 
     if new_max {

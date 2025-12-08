@@ -4,6 +4,7 @@ use leptos_use::{use_infinite_scroll_with_options, UseInfiniteScrollOptions};
 use std::sync::Arc;
 
 use shared::data::{
+    area::AreaLevel,
     item::{ItemSlot, ItemSpecs},
     player::EquippedSlot,
     user::UserCharacterId,
@@ -39,8 +40,8 @@ pub struct SelectedMarketItem {
     pub index: usize,
     pub item_specs: Arc<ItemSpecs>,
     pub price: f64,
-    pub owner_id: UserCharacterId,
-    pub owner_name: String,
+    pub owner_id: Option<UserCharacterId>,
+    pub owner_name: Option<String>,
     pub recipient: Option<(UserCharacterId, String)>,
     pub rejected: bool,
     pub created_at: DateTime<Utc>,
@@ -55,6 +56,9 @@ pub fn ItemsBrowser(
     #[prop(optional)] reached_end_of_list: Option<RwSignal<bool>>,
     #[prop(optional)] has_more: Option<RwSignal<bool>>,
 ) -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+    let max_item_level = Signal::derive(move || town_context.character.read().max_area_level);
+
     let el = NodeRef::<Div>::new();
     if let Some(reached_end_of_list) = reached_end_of_list {
         use_infinite_scroll_with_options(
@@ -81,6 +85,7 @@ pub fn ItemsBrowser(
                     highlight=move || selected_item.with(|selected_item| matches!(selected_item, SelectedItem::InMarket(selected_market_item) if selected_market_item.index == item.index))
                     special_offer=item.recipient.is_some()
                     rejected=item.rejected
+                    max_item_level
                 />
             </For>
             {move || (items_list.read().is_empty() && !has_more.map(|has_more| has_more.get()).unwrap_or_default()).then(|| view!{
@@ -111,6 +116,7 @@ pub fn ItemRow(
     highlight: impl Fn() -> bool + Send + Sync + 'static,
     #[prop(default = false)] special_offer: bool,
     #[prop(default = false)] rejected: bool,
+    max_item_level: Signal<AreaLevel>,
 ) -> impl IntoView {
     view! {
         <div class=move || {
@@ -123,14 +129,18 @@ pub fn ItemRow(
             )
         }>
             <div class="relative h-32 aspect-[2/3] flex-shrink-0">
-                <ItemCard item_specs=item_specs.clone() class:pointer-events-none />
+                <ItemCard item_specs=item_specs.clone() class:pointer-events-none max_item_level />
             </div>
 
             <div class="flex flex-col w-full">
-                <ItemTooltipContent item_specs=item_specs.clone() hide_description=true />
+                <ItemTooltipContent
+                    item_specs=item_specs.clone()
+                    hide_description=true
+                    max_item_level
+                />
             </div>
 
-            <ItemCompare item_slot=item_specs.clone().base.slot />
+            <ItemCompare item_slot=item_specs.clone().base.slot max_item_level />
 
             {(price > 0.0)
                 .then(|| {
@@ -158,6 +168,9 @@ pub fn ItemDetails(
     selected_item: RwSignal<SelectedItem>,
     #[prop(default = false)] show_affixes: bool,
 ) -> impl IntoView {
+    let town_context: TownContext = expect_context();
+    let max_item_level = Signal::derive(move || town_context.character.read().max_area_level);
+
     let item_details = move || {
         match selected_item.get() {
             SelectedItem::InMarket(selected_item) => {
@@ -166,6 +179,7 @@ pub fn ItemDetails(
                         <ItemCard
                             item_specs=selected_item.item_specs.clone()
                             class:pointer-events-none
+                            max_item_level
                         />
                     </div>
 
@@ -174,6 +188,7 @@ pub fn ItemDetails(
                             item_specs=selected_item.item_specs.clone()
                             class:select-text
                             show_affixes
+                            max_item_level
                         />
                     </div>
                 }
@@ -204,7 +219,7 @@ pub fn ItemDetails(
 }
 
 #[component]
-pub fn ItemCompare(item_slot: ItemSlot) -> impl IntoView {
+pub fn ItemCompare(item_slot: ItemSlot, max_item_level: Signal<AreaLevel>) -> impl IntoView {
     let tooltip_context: DynamicTooltipContext = expect_context();
     let town_context: TownContext = expect_context();
 
@@ -219,7 +234,10 @@ pub fn ItemCompare(item_slot: ItemSlot) -> impl IntoView {
         if let Some(EquippedSlot::MainSlot(item_specs)) = item_specs {
             let item_specs = Arc::new(*item_specs);
             tooltip_context.set_content(
-                move || view! { <ItemTooltip item_specs=item_specs.clone() /> }.into_any(),
+                move || {
+                    view! { <ItemTooltip item_specs=item_specs.clone() max_item_level /> }
+                        .into_any()
+                },
                 DynamicTooltipPosition::Auto,
             );
         } else {

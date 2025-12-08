@@ -244,20 +244,11 @@ pub async fn update_character_resources<'c>(
     .await
 }
 
-pub async fn update_character_progress<'c>(
+pub async fn update_character_max_area_level<'c>(
     executor: &mut Transaction<'c, Database>,
-    // pub async fn update_character_progress<'a, A>(
-    //     connection: A,
     character_id: &UserCharacterId,
-    area_id: &str,
     max_area_level: i32,
-    delta_area_level: i32,
-) -> Result<(), sqlx::Error>
-// where
-    //     A: Acquire<'a, Database = Database>,
-{
-    // let mut executor = connection.acquire().await?;
-
+) -> Result<(), sqlx::Error> {
     sqlx::query!(
         r#"
         UPDATE characters
@@ -272,6 +263,15 @@ pub async fn update_character_progress<'c>(
     .execute(&mut **executor)
     .await?;
 
+    Ok(())
+}
+
+pub async fn update_character_area_progress<'c>(
+    executor: &mut Transaction<'c, Database>,
+    character_id: &UserCharacterId,
+    area_id: &str,
+    delta_area_level: i32,
+) -> Result<(), sqlx::Error> {
     if delta_area_level > 0 {
         sqlx::query!(
         "INSERT INTO character_area_completed (character_id, area_id, max_area_level) VALUES ($1, $2, $3)

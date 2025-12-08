@@ -6,6 +6,7 @@ use crate::{
         item_affix::AffixType,
         market::MarketFilters,
         passive::PassivesTreeAscension,
+        stash::StashType,
         temple::PlayerBenedictions,
         user::{UserCharacterId, UserId},
     },
@@ -81,7 +82,8 @@ pub struct AscendPassivesRequest {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BrowseMarketItemsRequest {
-    pub character_id: UserCharacterId,
+    pub user_id: UserId,
+
     pub own_listings: bool,
     pub is_deleted: bool,
 
@@ -114,6 +116,41 @@ pub struct BuyMarketItemRequest {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RejectMarketItemRequest {
+    pub item_index: u32,
+}
+
+// Stash
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UpgradeStashRequest {
+    pub character_id: UserCharacterId,
+    pub stash_type: StashType,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct ExchangeGemsStashRequest {
+    pub character_id: UserCharacterId,
+    pub gems_amount: f64, // Positive means storing, negative is taking
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct BrowseStashItemsRequest {
+    pub character_id: UserCharacterId,
+
+    pub filters: MarketFilters,
+
+    pub skip: u32,
+    pub limit: PaginationLimit,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct StoreStashItemRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: usize,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct TakeStashItemRequest {
     pub character_id: UserCharacterId,
     pub item_index: u32,
 }

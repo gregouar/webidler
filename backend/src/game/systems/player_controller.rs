@@ -165,8 +165,11 @@ pub fn equip_item_from_bag(
     player_state: &mut PlayerState,
     item_index: u8,
 ) -> Result<(), AppError> {
-    let (new_item, old_item) =
-        inventory_controller::equip_item_from_bag(player_inventory, item_index)?;
+    let (new_item, old_item) = inventory_controller::equip_item_from_bag(
+        player_specs.max_area_level,
+        player_inventory,
+        item_index,
+    )?;
 
     if let Some(old_item) = old_item {
         unequip_weapon(player_specs, player_state, old_item.base.slot);

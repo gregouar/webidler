@@ -4,6 +4,7 @@ use strum::IntoEnumIterator;
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
+    area::AreaLevel,
     item::{ItemRarity, ItemSlot, ItemSpecs, SkillRange, SkillShape},
     item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix},
     skill::DamageType,
@@ -25,6 +26,8 @@ pub fn ItemTooltip(
     item_specs: Arc<ItemSpecs>,
     #[prop(default = false)] show_affixes: bool,
     #[prop(default = ComparableType::NotComparable)] comparable: ComparableType,
+    max_item_level: Signal<AreaLevel>,
+    // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
 ) -> impl IntoView {
     let (border_color, ring_color, shadow_color) = match item_specs.modifiers.rarity {
         ItemRarity::Normal => ("border-gray-600", "ring-gray-700", "shadow-gray-800"),
@@ -45,7 +48,12 @@ pub fn ItemTooltip(
             ring_color,
             shadow_color,
         )>
-            <ItemTooltipContent item_specs=item_specs.clone() show_affixes comparable />
+            <ItemTooltipContent
+                item_specs=item_specs.clone()
+                show_affixes
+                comparable
+                max_item_level
+            />
         </div>
     }
 }
@@ -56,6 +64,8 @@ pub fn ItemTooltipContent(
     #[prop(default = false)] show_affixes: bool,
     #[prop(default = false)] hide_description: bool,
     #[prop(default = ComparableType::NotComparable)] comparable: ComparableType,
+    max_item_level: Signal<AreaLevel>,
+    // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
 ) -> impl IntoView {
     let (has_effects, effects) = if show_affixes {
         let base_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Unique);
@@ -141,6 +151,8 @@ pub fn ItemTooltipContent(
 
     let name_color = name_color_rarity(item_specs.modifiers.rarity);
 
+    let required_level = item_specs.required_level;
+
     view! {
         <div class="space-y-2">
             {match comparable {
@@ -190,8 +202,14 @@ pub fn ItemTooltipContent(
                     }
                 })} <hr class="border-t border-gray-700" /> <ul class="list-none space-y-1">
                 <li class="text-blue-400 text-xs xl:text-sm text-gray-400 leading-snug">
-                    "Required Area Level: "
-                    <span class="text-white">{item_specs.required_level}</span>
+                    "Required Power Level: "
+                    <span class=move || {
+                        if max_item_level.get() < required_level {
+                            "font-bold text-red-500"
+                        } else {
+                            "text-white"
+                        }
+                    }>{required_level}</span>
                 </li>
                 <li class="text-blue-400 text-xs xl:text-sm text-gray-400 leading-snug">
                     "Item Level: " <span class="text-white">{item_specs.modifiers.level}</span>
