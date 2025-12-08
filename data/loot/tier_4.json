@@ -65,6 +65,10 @@
       "weight": 8000
     },
     {
+      "item_id": "signet_ring_unique",
+      "weight": 50
+    },
+    {
       "item_id": "gold_pendant",
       "weight": 8000
     }
