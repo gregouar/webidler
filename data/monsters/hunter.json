@@ -101,7 +101,7 @@
             },
             {
               "ApplyStatus": {
-                "duration": 300,
+                "duration": 10000,
                 "statuses": [
                   {
                     "status_type": {

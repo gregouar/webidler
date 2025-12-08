@@ -428,15 +428,25 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
+    let own_item = move || {
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => {
+                selected_item.owner_id.unwrap_or_default() == town_context.character.read().user_id
+            }
+            _ => false,
+        })
+    };
+
     let disabled = Signal::derive({
         let town_context = expect_context::<TownContext>();
         move || {
-            selected_item.with(|selected_item| match selected_item {
-                SelectedItem::InMarket(selected_item) => {
-                    selected_item.price > town_context.character.read().resource_gems
-                }
-                _ => true,
-            })
+            !own_item()
+                && selected_item.with(|selected_item| match selected_item {
+                    SelectedItem::InMarket(selected_item) => {
+                        selected_item.price > town_context.character.read().resource_gems
+                    }
+                    _ => true,
+                })
         }
     });
 
@@ -581,7 +591,15 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 }}
 
                 <MenuButton on:click=do_buy disabled=disabled>
-                    {move || if price().unwrap_or(1.0) > 0.0 { "Buy Item" } else { "Take Item" }}
+                    {move || {
+                        if own_item() {
+                            "Remove Item"
+                        } else if price().unwrap_or(1.0) > 0.0 {
+                            "Buy Item"
+                        } else {
+                            "Take Item"
+                        }
+                    }}
                 </MenuButton>
             </div>
         </div>
