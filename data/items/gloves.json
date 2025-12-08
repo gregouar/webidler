@@ -96,7 +96,7 @@
       },
       {
         "scope": "Global",
-        "stat": {"Speed": "Attack"},
+        "stat": { "Speed": "Attack" },
         "modifier": "Multiplier",
         "value": [10, 15]
       },
@@ -163,6 +163,50 @@
       "armor": 40
     },
     "min_area_level": 140
+  },
+  "chain_gloves_unique": {
+    "name": "Petalweave Gloves",
+    "description": "Each blossom stitched into the silk drinks in stray magic and returns it to its wielder in steady breaths.",
+    "icon": "items/princess_gloves.webp",
+    "slot": "Gloves",
+    "categories": ["Armor", "Gloves"],
+    "armor_specs": {
+      "armor": 40
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "ManaOnHit": {
+            "is_hurt": true
+          }
+        },
+        "modifier": "Flat",
+        "value": 2,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [60, 100]
+      },
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [4, 6],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": [60, 100]
+      }
+    ],
+    "min_area_level": 150
   },
   "leather_gauntlets": {
     "name": "Boiled Leather Gauntlets",
