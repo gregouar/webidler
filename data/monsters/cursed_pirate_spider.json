@@ -1,10 +1,11 @@
 {
-  "name": "Fidel Bosun",
-  "portrait": "monsters/pirate_skirmisher.webp",
-  "max_life": 10,
-  "power_factor": 2,
-  "initiative": [0.0, 0.5],
-  "armor": { "Physical": 50 },
+  "name": "Brine Crawler",
+  "portrait": "monsters/cursed_pirate_spider.webp",
+  "max_life": 20,
+  "size": "Large",
+  "power_factor": 3.0,
+  "initiative": [1.0, 2.0],
+  "armor": { "Physical": 100, "Storm": 50 },
   "skills": [
     {
       "name": "Scimitar Left",

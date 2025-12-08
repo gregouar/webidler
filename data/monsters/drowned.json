@@ -1,23 +1,23 @@
 {
-  "name": "Candle Knight",
-  "portrait": "monsters/candle_knight.webp",
+  "name": "Drowned Sailor",
+  "portrait": "monsters/drowned.webp",
   "max_life": 15,
-  "power_factor": 3,
+  "power_factor": 1,
   "initiative": [1, 2],
-  "armor": { "Physical": 50 },
+  "armor": { "Physical": 50, "Storm": 50 },
   "skills": [
     {
-      "name": "Melted Slice",
+      "name": "Drowning Slap",
       "icon": "skills/attack.svg",
-      "cooldown": 4.0,
+      "cooldown": 3.0,
       "targets": [
         {
           "effects": [
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [2, 4],
-                  "Fire": [2, 5]
+                  "Physical": [4, 6],
+                  "Storm": [0, 10]
                 }
               }
             }

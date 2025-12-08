@@ -1,22 +1,21 @@
 {
-  "name": "Fidel Bosun",
-  "portrait": "monsters/pirate_skirmisher.webp",
-  "max_life": 10,
-  "power_factor": 2,
-  "initiative": [0.0, 0.5],
-  "armor": { "Physical": 50 },
+  "name": "Furious Siren",
+  "portrait": "monsters/harpy.webp",
+  "max_life": 12,
+  "power_factor": 2.0,
+  "initiative": [0.0, 1.0],
   "skills": [
     {
-      "name": "Scimitar Left",
-      "icon": "skills/attack.svg",
-      "cooldown": 2.0,
+      "name": "Vicious Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 5.0,
       "targets": [
         {
           "effects": [
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [4, 8]
+                  "Physical": [5, 10]
                 }
               }
             }
@@ -25,16 +24,16 @@
       ]
     },
     {
-      "name": "Scimitar Right",
-      "icon": "skills/attack.svg",
-      "cooldown": 2.5,
+      "name": "Scratch",
+      "icon": "skills/claw.svg",
+      "cooldown": 3.0,
       "targets": [
         {
           "effects": [
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [4, 8]
+                  "Physical": [3, 6]
                 }
               }
             }

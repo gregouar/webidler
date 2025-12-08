@@ -67,9 +67,9 @@
       ]
     },
     {
-      "min_level": 1,
+      "min_level": 60,
       "max_level": null,
-      "weight": 100000,
+      "weight": 1000,
       "spawns": [
         {
           "monster": "pirate_monkey.json",
@@ -104,7 +104,77 @@
           "quantity": 1
         },
         {
-          "monster": "pirate_skirmisher.json",
+          "monster": "pirate_pistol.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "min_level": 70,
+      "max_level": null,
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "drowned.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "harpy.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "mermaid.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "drowned.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "harpy.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "mermaid.json",
+          "quantity": [1, 2]
+        }
+      ]
+    },
+    {
+      "min_level": 80,
+      "max_level": null,
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "cursed_pirate_digger.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "cursed_pirate_spider.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "cursed_pirate_digger.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cursed_pirate_spider_2.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cursed_pirate_captain.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cursed_pirate_digger.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "cursed_pirate_spider.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cursed_pirate_captain.json",
           "quantity": 1
         }
       ]
