@@ -14,7 +14,38 @@
     "tier_4.json",
     "tier_5.json"
   ],
-  "bosses": [],
+  "bosses": [
+    {
+      "level": 90,
+      "interval": 50,
+      "spawns": [
+        {
+          "monster": "treasure_idol.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_cutlass.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_crown.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_chest.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_compass.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_gun.json",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
   "waves": [
     {
       "min_level": 1,

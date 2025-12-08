@@ -1,0 +1,37 @@
+{
+  "name": "Venom Idol",
+  "portrait": "monsters/treasure_idol.webp",
+  "rarity": "Boss",
+  "max_life": 100,
+  "power_factor": 8,
+  "initiative": [2.5, 3.5],
+  "armor": { "Poison": 100 },
+  "skills": [
+    {
+      "name": "Dangerous Incantation",
+      "icon": "skills/poison_cloud.svg",
+      "cooldown": 5.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": 10,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Poison"
+                      }
+                    },
+                    "value": 10
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

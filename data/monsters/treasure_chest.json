@@ -1,0 +1,39 @@
+{
+  "name": "Gilded Chest",
+  "portrait": "monsters/treasure_chest.webp",
+  "rarity": "Boss",
+  "max_life": 100,
+  "power_factor": 8,
+  "initiative": [2.5, 3.5],
+  "armor": { "Physical": 50, "Poison": 50 },
+  "skills": [
+    {
+      "name": "Protective Hull",
+      "icon": "skills/haste.svg",
+      "cooldown": 10.0,
+      "targets": [
+        {
+          "target_type": "Friend",
+          "shape": "All",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": [5, 10],
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "Armor": null }
+                      }
+                    },
+                    "value": 100
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

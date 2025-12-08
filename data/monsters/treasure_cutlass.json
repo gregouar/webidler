@@ -1,0 +1,44 @@
+{
+  "name": "Cutlass of Greed",
+  "portrait": "monsters/treasure_cutlass.webp",
+  "rarity": "Boss",
+  "max_life": 100,
+  "power_factor": 8,
+  "initiative": [0.0, 0.5],
+  "armor": { "Physical": 100 },
+  "skills": [
+    {
+      "name": "Greedy Lunge",
+      "icon": "skills/attack.svg",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [10, 20]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Physical"
+                      }
+                    },
+                    "value": [2,5]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Crown of Tides Storm",
+  "portrait": "monsters/treasure_crown.webp",
+  "rarity": "Boss",
+  "max_life": 100,
+  "power_factor": 8,
+  "initiative": [2.0, 4.5],
+  "armor": { "Storm": 100 },
+  "skills": [
+    {
+      "name": "Dagon's Revenge",
+      "icon": "skills/magic_missile.svg",
+      "cooldown": 4.0,
+      "targets": [
+        {
+          "repeat": {
+            "value": 3,
+            "target": "Same"
+          },
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [0, 12]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
