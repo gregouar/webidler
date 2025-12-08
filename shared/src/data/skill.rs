@@ -188,6 +188,8 @@ pub struct ApplyStatusEffect {
     pub value: ChanceRange<f64>,
     #[serde(default)]
     pub cumulate: bool,
+    #[serde(default)]
+    pub replace_on_value_only: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, Hash)]

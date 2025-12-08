@@ -210,6 +210,7 @@ pub fn apply_status(
     value: f64,
     duration: Option<f64>,
     cumulate: bool,
+    replace_on_value_only: bool,
 ) -> bool {
     let (_, (_, target_state)) = target;
 
@@ -240,8 +241,12 @@ pub fn apply_status(
             .unique_statuses
             .entry(status_specs.into())
             .and_modify(|(cur_status_specs, cur_status_state)| {
-                if (value + 1.0) * duration.unwrap_or(10_000.0)
-                    > (cur_status_state.value + 1.0) * cur_status_state.duration.unwrap_or(10_000.0)
+                if compute_effect_weight(value, duration, replace_on_value_only)
+                    > compute_effect_weight(
+                        cur_status_state.value,
+                        cur_status_state.duration,
+                        replace_on_value_only,
+                    )
                 {
                     cur_status_state.value = value;
                     cur_status_state.duration = duration;
@@ -270,4 +275,16 @@ pub fn apply_status(
     }
 
     true
+}
+
+fn compute_effect_weight(value: f64, duration: Option<f64>, value_only: bool) -> f64 {
+    if value_only {
+        if duration.unwrap_or(1.0) < 0.2 {
+            value * 0.1
+        } else {
+            value
+        }
+    } else {
+        (value + 1.0) * duration.unwrap_or(10_000.0)
+    }
 }
