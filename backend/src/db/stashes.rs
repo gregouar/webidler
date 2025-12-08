@@ -152,7 +152,7 @@ pub async fn update_stash_gems<'c>(
     stash_id: &StashId,
     gems_difference: f64,
 ) -> Result<f64, sqlx::Error> {
-    Ok(sqlx::query_scalar!(
+    sqlx::query_scalar!(
         r#"
         UPDATE stashes
         SET 
@@ -166,5 +166,5 @@ pub async fn update_stash_gems<'c>(
         gems_difference,
     )
     .fetch_one(executor)
-    .await?)
+    .await
 }

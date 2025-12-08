@@ -72,7 +72,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     disabled=disable_panels
                 >
                     "Market"
-                    {move || (town_context.market_stash.read().resource_gems > 0.0).then(|| " [!]")}
+                    {move || (town_context.market_stash.read().resource_gems > 0.0).then_some(" [!]")}
 
                 </MenuButton>
                 <MenuButton
