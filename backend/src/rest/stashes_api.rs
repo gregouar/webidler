@@ -140,7 +140,7 @@ pub async fn post_exchange_gems(
     Path(stash_id): Path<StashId>,
     Json(payload): Json<ExchangeGemsStashRequest>,
 ) -> Result<Json<ExchangeGemsStashResponse>, AppError> {
-    let mut tx: sqlx::Transaction<'_, sqlx::Sqlite> = db_pool.begin().await?;
+    let mut tx = db_pool.begin().await?;
 
     let character = db::characters::read_character(&mut *tx, &payload.character_id)
         .await?
