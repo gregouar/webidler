@@ -1,7 +1,7 @@
 {
   "name": "Ragged Deckhand",
   "portrait": "monsters/pirate_deckhand.webp",
-  "max_life": 8,
+  "max_life": 5,
   "power_factor": 1.5,
   "initiative": [0.0, 0.5],
   "armor": { "Physical": 50 },

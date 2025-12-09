@@ -1,7 +1,7 @@
 {
   "name": "Crow's Nest",
   "portrait": "monsters/pirate_lookout.webp",
-  "max_life": 15,
+  "max_life": 12,
   "power_factor": 2,
   "size": "Tall",
   "initiative": [1, 2],
