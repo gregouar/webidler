@@ -356,6 +356,7 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
             StatType::Armor(_) | StatType::DamageResistance { .. } => {
                 ("statuses/debuff_armor.svg".to_string(), "Broken Armor")
             }
+            StatType::GoldFind => ("statuses/gold_negative.svg".to_string(), "Less Gold"),
             _ => ("statuses/debuff.svg".to_string(), "Debuffed"),
         },
         StatusId::Trigger(trigger_id) => (trigger_id, "Buffed"),

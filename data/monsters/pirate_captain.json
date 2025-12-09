@@ -1,0 +1,29 @@
+{
+  "name": "Captain Hook",
+  "portrait": "monsters/pirate_captain.webp",
+  "max_life": 12,
+  "power_factor": 3,
+  "initiative": [1.0, 2.5],
+  "armor": { "Fire": 50, "Physical": 50 },
+  "skills": [
+    {
+      "name": "Shoot",
+      "icon": "skills/fireball.svg",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [8, 12],
+                  "Fire": [8, 12]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

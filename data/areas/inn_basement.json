@@ -111,6 +111,10 @@
         {
           "monster": "soot_imp_2.json",
           "quantity": [2, 3]
+        },
+        {
+          "monster": "cat_skeleton.json",
+          "quantity": 1
         }
       ]
     },
@@ -130,6 +134,10 @@
         {
           "monster": "patron_ghost.json",
           "quantity": [1, 2]
+        },
+        {
+          "monster": "booze_elemental.json",
+          "quantity": 2
         }
       ]
     },
@@ -149,6 +157,10 @@
         {
           "monster": "haunted_lantern.json",
           "quantity": [1, 2]
+        },
+        {
+          "monster": "bat_fire.json",
+          "quantity": 2
         }
       ]
     }

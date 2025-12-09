@@ -27,6 +27,7 @@
       "name": "Tea is Served",
       "icon": "skills/heal.svg",
       "cooldown": 5.0,
+      "skill_type": "Spell",
       "targets": [
         {
           "target_type": "Friend",

@@ -24,10 +24,10 @@
     "icon": "items/wildheart.webp",
     "slot": "Body",
     "categories": ["Armor", "Body"],
-    "rarity": "Unique",
     "armor_specs": {
       "armor": 40
     },
+    "rarity": "Unique",
     "affixes": [
       {
         "scope": "Global",
@@ -84,6 +84,55 @@
     },
     "min_area_level": 140
   },
+  "scale_vest_unique": {
+    "name": "Mirrorshroud Dress",
+    "description": "It whispers: you may strike, but you may not touch.",
+    "icon": "items/princess_robe.webp",
+    "slot": "Body",
+    "categories": ["Armor", "Body"],
+    "armor_specs": {
+      "armor": 80
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "Multiplier",
+        "value": -1e300,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "Block",
+        "modifier": "Flat",
+        "value": 20,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "BlockSpell",
+        "modifier": "Flat",
+        "value": 50,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [6, 10],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [6, 10],
+        "ignore_quality": true
+      }
+    ],
+    "min_area_level": 150
+  },
   "brigandine": {
     "name": "Brigandine",
     "icon": "items/brigandine.webp",
@@ -93,5 +142,56 @@
       "armor": 100
     },
     "min_area_level": 190
+  },
+  "brigandine_unique": {
+    "name": "Crustback Bulwark",
+    "description": "Strength enough to weather any storm, at the price of the warmth that once kept you alive.",
+    "icon": "items/crab_armor.webp",
+    "slot": "Body",
+    "categories": ["Armor", "Body"],
+    "armor_specs": {
+      "armor": 100
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Multiplier",
+        "value": -1e300,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Flat",
+        "value": 300
+      },
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "Multiplier",
+        "value": [80, 120]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": [100, 140]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": [60, 100]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": [60, 100]
+      }
+    ],
+    "min_area_level": 200
   }
 }

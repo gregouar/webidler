@@ -1,0 +1,68 @@
+{
+  "name": "Crow's Nest",
+  "portrait": "monsters/pirate_lookout.webp",
+  "max_life": 15,
+  "power_factor": 2,
+  "size": "Tall",
+  "initiative": [1, 2],
+  "armor": { "Physical": 50, "Storm": 50 },
+  "skills": [
+    {
+      "name": "Predict Weather",
+      "icon": "skills/chain_lightning.svg",
+      "skill_type": "Spell",
+      "cooldown": 4.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [0, 30]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Lookout!",
+      "icon": "skills/blessing_crit.svg",
+      "cooldown": 8.0,
+      "targets": [
+        {
+          "target_type": "Friend",
+          "shape": "All",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": [5, 10],
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "CritChance": "Attack" },
+                        "modifier": "Flat"
+                      }
+                    },
+                    "value": 20
+                  },
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "CritDamage": "Attack" },
+                        "modifier": "Flat"
+                      }
+                    },
+                    "value": 300
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

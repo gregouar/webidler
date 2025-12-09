@@ -1,0 +1,41 @@
+{
+  "name": "Reef Shark",
+  "portrait": "monsters/shark.webp",
+  "max_life": 20,
+  "size": "Large",
+  "power_factor": 5.0,
+  "initiative": [1, 2],
+  "skills": [
+    {
+      "name": "Big Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 4.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [5, 10]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Physical" }
+                    },
+                    "value": 5
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

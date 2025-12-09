@@ -13,8 +13,16 @@
       "weight": 8000
     },
     {
+      "item_id": "scale_vest_unique",
+      "weight": 50
+    },
+    {
       "item_id": "chain_gloves",
       "weight": 8000
+    },
+    {
+      "item_id": "chain_gloves_unique",
+      "weight": 50
     },
     {
       "item_id": "mail_boots",
@@ -49,8 +57,16 @@
       "weight": 8000
     },
     {
+      "item_id": "fur_cloak_unique",
+      "weight": 50
+    },
+    {
       "item_id": "signet_ring",
       "weight": 8000
+    },
+    {
+      "item_id": "signet_ring_unique",
+      "weight": 50
     },
     {
       "item_id": "gold_pendant",

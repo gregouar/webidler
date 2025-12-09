@@ -125,6 +125,70 @@
     ],
     "min_area_level": 140
   },
+  "signet_ring_unique": {
+    "name": "Heartstone Band",
+    "description": "Who says battle can't be fabulous?",
+    "icon": "items/princess_ring.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 80
+      },
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [80, 120]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [100, 140]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": [60, 100]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": [60, 100]
+      },
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [100, 140]
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "signet_ring_unique",
+        "description": "On Blocked Hit:",
+        "OnTakeHit": { "is_blocked": true },
+        "target": "SameTarget",
+        "effects": [
+          {
+            "Restore": {
+              "restore_type": "Life",
+              "value": [5, 10],
+              "modifier": "Flat"
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 150
+  },
   "inlaid_ring": {
     "name": "Inlaid Ring",
     "icon": "items/inlaid_ring.webp",

@@ -219,5 +219,115 @@
       "crit_damage": 200
     },
     "min_area_level": 190
+  },
+  "bardiche_unique": {
+    "name": "Tidesbreaker Anchor",
+    "description": "Each swing drags the tides behind it, and the tides never return gently.",
+    "icon": "items/tidesbreaker_anchor.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.5,
+      "damage": {
+        "Physical": [12, 42]
+      },
+      "crit_chance": 5,
+      "crit_damage": 200
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": {
+          "CritDamage": null
+        },
+        "modifier": "Flat",
+        "value": 200,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "Multiplier",
+        "value": [100, 140],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "value": [4, 8]
+      },
+      {
+        "scope": "Local",
+        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "modifier": "Flat",
+        "value": [15, 20]
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "tidesbreaker_anchor",
+        "description": "Trigger a Maelstrom on Critical Hit, inflicting 10% of Physical Hit Damage as Spell Storm Damage to All Enemies.",
+        "OnHit": {
+          "is_crit": true,
+          "is_triggered": false
+        },
+        "target": "SameTarget",
+        "skill_range": "Any",
+        "skill_shape": "All",
+        "skill_type": "Spell",
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Storm": 0.1
+              }
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": "Attack",
+                  "damage_type": "Physical"
+                }
+              },
+              {
+                "MinDamage": {
+                  "skill_type": "Attack",
+                  "damage_type": "Physical"
+                }
+              },
+              {
+                "MaxDamage": {
+                  "skill_type": "Attack",
+                  "damage_type": "Physical"
+                }
+              },
+              {
+                "CritChance": null
+              }
+            ]
+          }
+        ],
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {}
+            },
+            "modifier": "Multiplier",
+            "factor": 100.0,
+            "source": {
+              "HitDamage": "Physical"
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 200
   }
 }

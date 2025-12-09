@@ -13,6 +13,10 @@
       "weight": 16000
     },
     {
+      "item_id": "brigandine_unique",
+      "weight": 50
+    },
+    {
       "item_id": "leather_gauntlets",
       "weight": 16000
     },
@@ -25,12 +29,20 @@
       "weight": 16000
     },
     {
+      "item_id": "bardiche_unique",
+      "weight": 50
+    },
+    {
       "item_id": "light_crossbow",
       "weight": 16000
     },
     {
       "item_id": "decorated_wand",
       "weight": 16000
+    },
+    {
+      "item_id": "decorated_wand_unique",
+      "weight": 50
     },
     {
       "item_id": "targe",
