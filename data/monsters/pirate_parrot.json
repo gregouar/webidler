@@ -1,0 +1,27 @@
+{
+  "name": "Cabin Parrot",
+  "portrait": "monsters/pirate_parrot.webp",
+  "max_life": 3,
+  "power_factor": 1.0,
+  "initiative": [0.0, 0.5],
+  "skills": [
+    {
+      "name": "Angry Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 2.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [10, 14]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

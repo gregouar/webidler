@@ -55,6 +55,7 @@ impl DataInit<&CharacterSpecs> for CharacterState {
 impl DataInit<CharacterSpecs> for PlayerSpecs {
     fn init(specs: CharacterSpecs) -> Self {
         PlayerSpecs {
+            max_area_level: 0,
             character_specs: specs.clone(),
             skills_specs: vec![],
             auto_skills: vec![],

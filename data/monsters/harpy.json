@@ -1,0 +1,45 @@
+{
+  "name": "Furious Siren",
+  "portrait": "monsters/harpy.webp",
+  "max_life": 12,
+  "power_factor": 2.0,
+  "initiative": [0.0, 1.0],
+  "skills": [
+    {
+      "name": "Vicious Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 5.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [5, 10]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Scratch",
+      "icon": "skills/claw.svg",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [3, 6]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

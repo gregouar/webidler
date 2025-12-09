@@ -9,12 +9,13 @@ use shared::{
         market::{MarketFilters, MarketItem, MarketOrderBy},
         passive::StatEffect,
         skill::{DamageType, SkillType},
+        stash::Stash,
         stat_effect::{Modifier, StatType},
         trigger::HitTrigger,
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
-        RejectMarketItemRequest, SellMarketItemRequest,
+        ExchangeGemsStashRequest, RejectMarketItemRequest, SellMarketItemRequest,
     },
     types::{ItemPrice, PaginationLimit, Username},
 };
@@ -24,7 +25,7 @@ use crate::components::{
     backend_client::BackendClient,
     shared::{
         inventory::loot_filter_category_to_str,
-        resources::GemsIcon,
+        resources::{GemsCounter, GemsIcon},
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
     town::{
@@ -52,6 +53,8 @@ enum MarketTab {
 
 #[component]
 pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
+    let town_context: TownContext = expect_context();
+
     let active_tab = RwSignal::new(MarketTab::Buy);
     let selected_item = RwSignal::new(SelectedItem::None);
 
@@ -60,13 +63,15 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
         active_tab.set(new_tab);
     };
 
-    let town_context: TownContext = expect_context();
+    let stash = town_context.market_stash;
 
     let filters = RwSignal::new(MarketFilters {
         item_level: Some(town_context.character.read_untracked().max_area_level),
         // price: ItemPrice::try_new(town_context.character.read_untracked().resource_gems).ok(),
         ..Default::default()
     });
+
+    let disable_sell = Signal::derive(move || town_context.market_stash.read().max_items == 0);
 
     view! {
         <MenuPanel open=open>
@@ -75,7 +80,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                     <div class="px-4 relative z-10 flex items-center justify-between">
                         <PanelTitle>"Market"</PanelTitle>
 
-                        <div class="flex-1 flex justify-center ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto">
+                        <div class="flex-1 flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto">
                             <TabButton
                                 is_active=Signal::derive(move || {
                                     active_tab.get() == MarketTab::Filters
@@ -95,6 +100,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                                     active_tab.get() == MarketTab::Sell
                                 })
                                 on:click=move |_| { switch_tab(MarketTab::Sell) }
+                                disabled=disable_sell
                             >
                                 "Sell"
                             </TabButton>
@@ -103,6 +109,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                                     active_tab.get() == MarketTab::Listings
                                 })
                                 on:click=move |_| { switch_tab(MarketTab::Listings) }
+                                disabled=disable_sell
                             >
                                 "Listings"
                             </TabButton>
@@ -111,6 +118,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                                     active_tab.get() == MarketTab::Logs
                                 })
                                 on:click=move |_| { switch_tab(MarketTab::Logs) }
+                                disabled=disable_sell
                             >
                                 "Logs"
                             </TabButton>
@@ -119,6 +127,21 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                         <div class="flex-1"></div>
 
                         <div class="flex items-center gap-2 mb-2">
+                            <RevenueGems stash />
+                        </div>
+
+                        <div class="flex-1"></div>
+
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
+                                {move || {
+                                    format!(
+                                        "({} / {})",
+                                        stash.read().items_amount,
+                                        stash.read().max_items,
+                                    )
+                                }}
+                            </span>
                             <CloseButton on:click=move |_| open.set(false) />
                         </div>
                     </div>
@@ -209,8 +232,8 @@ impl From<MarketItem> for SelectedMarketItem {
             index: value.item_id,
             item_specs: Arc::new(value.item_specs),
             price: value.price,
-            owner_id: value.owner_id,
-            owner_name: value.owner_name,
+            owner_id: Some(value.owner_id),
+            owner_name: Some(value.owner_name),
             recipient: value.recipient,
             rejected: value.rejected,
             created_at: value.created_at,
@@ -228,6 +251,63 @@ pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
         Some(ItemRarity::Rare) => "Rare",
         Some(ItemRarity::Masterwork) => "Masterwork",
         Some(ItemRarity::Unique) => "Unique",
+    }
+}
+
+#[component]
+pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
+    let backend = expect_context::<BackendClient>();
+    let town_context = expect_context::<TownContext>();
+    let auth_context = expect_context::<AuthContext>();
+    let toaster = expect_context::<Toasts>();
+
+    let value = Signal::derive(move || stash.read().resource_gems);
+
+    let do_take = {
+        let character_id = town_context.character.read_untracked().character_id;
+        let stash_id = stash.read_untracked().stash_id;
+        let amount = stash.read_untracked().resource_gems;
+        move |_| {
+            spawn_local({
+                async move {
+                    match backend
+                        .exchange_gems_stash(
+                            &auth_context.token(),
+                            &ExchangeGemsStashRequest {
+                                character_id,
+                                gems_amount: -amount,
+                            },
+                            &stash_id,
+                        )
+                        .await
+                    {
+                        Ok(response) => {
+                            town_context.character.write().resource_gems = response.resource_gems;
+                            town_context.market_stash.set(response.stash);
+                        }
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("Failed to take gems: {e}"),
+                            ToastVariant::Error,
+                        ),
+                    }
+                }
+            });
+        }
+    };
+
+    let disabled = Signal::derive(move || value.get() == 0.0);
+
+    view! {
+        <div class="flex gap-2 items-center">
+            <span class="hidden xl:inline text-gray-400 text-xs xl:text-base font-medium">
+                "Revenue:"
+            </span>
+            <GemsCounter value />
+            <MenuButton on:click=do_take disabled>
+                "Take"
+            </MenuButton>
+        </div>
     }
 }
 
@@ -269,26 +349,30 @@ fn MarketBrowser(
     });
 
     Effect::new({
-        let backend = expect_context::<BackendClient>();
-        let town_context = expect_context::<TownContext>();
+        let backend: BackendClient = expect_context();
+        let town_context: TownContext = expect_context();
+        let auth_context: AuthContext = expect_context();
         move || {
             if reached_end_of_list.get() && has_more.get_untracked() {
                 let skip = extend_list.get_untracked();
                 (*extend_list.write()) += items_per_page.into_inner() as u32;
 
-                let character_id = town_context.character.read_untracked().character_id;
+                let user_id = town_context.character.read_untracked().character_id;
                 let filters = filters.get_untracked();
 
                 spawn_local(async move {
                     let response = backend
-                        .browse_market_items(&BrowseMarketItemsRequest {
-                            character_id,
-                            skip,
-                            limit: items_per_page,
-                            filters,
-                            own_listings,
-                            is_deleted,
-                        })
+                        .browse_market_items(
+                            &auth_context.token(),
+                            &BrowseMarketItemsRequest {
+                                user_id,
+                                skip,
+                                limit: items_per_page,
+                                filters,
+                                own_listings,
+                                is_deleted,
+                            },
+                        )
                         .await
                         .unwrap_or_default();
 
@@ -318,8 +402,10 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 .enumerate()
                 .map(|(index, item)| SelectedMarketItem {
                     index,
-                    owner_id: town_context.character.read_untracked().character_id,
-                    owner_name: town_context.character.read_untracked().name.clone(),
+                    owner_id: None,
+                    owner_name: None,
+                    // owner_id: town_context.character.read_untracked().character_id,
+                    // owner_name: town_context.character.read_untracked().name.clone(),
                     recipient: None,
                     item_specs: Arc::new(item.clone()),
                     price: 0.0,
@@ -342,17 +428,25 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
+    let own_item = move || {
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => {
+                selected_item.owner_id.unwrap_or_default() == town_context.character.read().user_id
+            }
+            _ => false,
+        })
+    };
+
     let disabled = Signal::derive({
         let town_context = expect_context::<TownContext>();
         move || {
-            selected_item.with(|selected_item| match selected_item {
-                SelectedItem::InMarket(selected_item) => {
-                    selected_item.price > town_context.character.read().resource_gems
-                        || selected_item.item_specs.required_level
-                            > town_context.character.read().max_area_level
-                }
-                _ => true,
-            })
+            !own_item()
+                && selected_item.with(|selected_item| match selected_item {
+                    SelectedItem::InMarket(selected_item) => {
+                        selected_item.price > town_context.character.read().resource_gems
+                    }
+                    _ => true,
+                })
         }
     });
 
@@ -372,7 +466,9 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     let seller_name = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(selected_item) => selected_item.owner_name.to_string(),
+            SelectedItem::InMarket(selected_item) => {
+                selected_item.owner_name.clone().unwrap_or_default()
+            }
             _ => "".into(),
         })
     };
@@ -419,7 +515,6 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     };
 
     let do_reject = {
-        let character_id = town_context.character.read_untracked().character_id;
         move |_| {
             if let SelectedItem::InMarket(item) = selected_item.get() {
                 spawn_local({
@@ -428,7 +523,6 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                             .reject_market_item(
                                 &auth_context.token(),
                                 &RejectMarketItemRequest {
-                                    character_id,
                                     item_index: item.index as u32,
                                 },
                             )
@@ -497,7 +591,15 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 }}
 
                 <MenuButton on:click=do_buy disabled=disabled>
-                    {move || if price().unwrap_or(1.0) > 0.0 { "Buy Item" } else { "Take Item" }}
+                    {move || {
+                        if own_item() {
+                            "Remove Item"
+                        } else if price().unwrap_or(1.0) > 0.0 {
+                            "Buy Item"
+                        } else {
+                            "Take Item"
+                        }
+                    }}
                 </MenuButton>
             </div>
         </div>
@@ -539,6 +641,7 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                             .await
                         {
                             Ok(response) => {
+                                town_context.market_stash.set(response.stash);
                                 town_context.inventory.set(response.inventory);
                                 selected_item.set(SelectedItem::Removed(item.index));
                             }
@@ -640,7 +743,9 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     let seller_name = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(selected_item) => selected_item.owner_name.to_string(),
+            SelectedItem::InMarket(selected_item) => {
+                selected_item.owner_name.clone().unwrap_or_default()
+            }
             _ => "".into(),
         })
     };
@@ -656,7 +761,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
         let character_id = town_context.character.read_untracked().character_id;
         move |_| {
             if let SelectedItem::InMarket(item) = selected_item.get() {
-                let price = price.get().unwrap().into_inner();
+                let price = price.get_untracked().unwrap().into_inner();
                 spawn_local({
                     async move {
                         match backend
@@ -703,6 +808,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                             .await
                         {
                             Ok(response) => {
+                                town_context.market_stash.write().items_amount -= 1;
                                 town_context.inventory.set(response.inventory);
                                 town_context.character.write().resource_gems =
                                     response.resource_gems;
@@ -868,7 +974,7 @@ pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 }
 
 #[component]
-fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
+pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     // Inputs
 
     let item_name = RwSignal::new(Some(filters.get_untracked().item_name));
@@ -882,6 +988,26 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
     let item_damages = RwSignal::new(Some(filters.get_untracked().item_damages));
     Effect::new(move || filters.write().item_damages = item_damages.get().unwrap_or_default());
+
+    let item_damage_physical = RwSignal::new(Some(filters.get_untracked().item_damage_physical));
+    Effect::new(move || {
+        filters.write().item_damage_physical = item_damage_physical.get().unwrap_or_default()
+    });
+
+    let item_damage_fire = RwSignal::new(Some(filters.get_untracked().item_damage_fire));
+    Effect::new(move || {
+        filters.write().item_damage_fire = item_damage_fire.get().unwrap_or_default()
+    });
+
+    let item_damage_poison = RwSignal::new(Some(filters.get_untracked().item_damage_poison));
+    Effect::new(move || {
+        filters.write().item_damage_poison = item_damage_poison.get().unwrap_or_default()
+    });
+
+    let item_damage_storm = RwSignal::new(Some(filters.get_untracked().item_damage_storm));
+    Effect::new(move || {
+        filters.write().item_damage_storm = item_damage_storm.get().unwrap_or_default()
+    });
 
     let item_crit_chance = RwSignal::new(Some(filters.get_untracked().item_crit_chance));
     Effect::new(move || {
@@ -925,6 +1051,10 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     MarketOrderBy::Price => "Lowest Price",
                     MarketOrderBy::Level => "Lowest Required Level",
                     MarketOrderBy::Damage => "Highest Damage",
+                    MarketOrderBy::DamagePhysical => "Highest Physical Damage",
+                    MarketOrderBy::DamageFire => "Highest Fire Damage",
+                    MarketOrderBy::DamagePoison => "Highest Poison Damage",
+                    MarketOrderBy::DamageStorm => "Highest Storm Damage",
                     MarketOrderBy::CritChance => "Highest Critical Hit Chance",
                     MarketOrderBy::CritDamage => "Highest Critical Hit Damage",
                     MarketOrderBy::Armor => "Highest Armor",
@@ -1001,6 +1131,36 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         bind=item_damages
                     />
                     <ValidatedInput
+                        id="item_damage_physical"
+                        label="Min Physical Damage:"
+                        input_type="number"
+                        placeholder="Minimum Physical Damage per second"
+                        bind=item_damage_physical
+                    />
+                    <ValidatedInput
+                        id="item_damage_fire"
+                        label="Min Fire Damage:"
+                        input_type="number"
+                        placeholder="Minimum Fire Damage per second"
+                        bind=item_damage_fire
+                    />
+                    <ValidatedInput
+                        id="item_damage_poison"
+                        label="Min Poison Damage:"
+                        input_type="number"
+                        placeholder="Minimum Poison Damage per second"
+                        bind=item_damage_poison
+                    />
+                    <ValidatedInput
+                        id="item_damage_storm"
+                        label="Min Storm Damage:"
+                        input_type="number"
+                        placeholder="Minimum Storm Damage per second"
+                        bind=item_damage_storm
+                    />
+                </div>
+                <div class="flex flex-col gap-4">
+                    <ValidatedInput
                         id="item_damages"
                         label="Min Critical Hit Chance:"
                         input_type="number"
@@ -1014,8 +1174,6 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         placeholder="Minimum extra Critical Percent Damage"
                         bind=item_crit_damage
                     />
-                </div>
-                <div class="flex flex-col gap-4">
                     <ValidatedInput
                         id="item_armor"
                         label="Min Armor:"
@@ -1037,7 +1195,7 @@ fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 }
 
 #[component]
-fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
+pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     let stat_filters = filters.get_untracked().stat_filters.map(|stat_effect| {
         (
             RwSignal::new(

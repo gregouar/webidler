@@ -7,7 +7,6 @@ pub mod game_sync;
 pub mod game_timer;
 pub mod sessions;
 pub mod systems;
-pub mod town;
 pub mod utils;
 
 pub use game_instance::GameInstance;

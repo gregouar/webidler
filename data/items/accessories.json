@@ -177,6 +177,64 @@
     ],
     "min_area_level": 140
   },
+  "fur_cloak_unique": {
+    "name": "Shadowmoth Embrace",
+    "description": "Spread your wings, let the world fear what follows.",
+    "icon": "items/princess_cloak.webp",
+    "slot": "Accessory",
+    "categories": ["Accessory", "Cloak"],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": 75
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": 75
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": 75
+      },
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": 50,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "StatusDuration": { "DamageOverTime": { "damage_type": "Poison" } }
+        },
+        "modifier": "Multiplier",
+        "value": [30, 50],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Poison" } },
+        "modifier": "Multiplier",
+        "value": [80, 120]
+      },
+      {
+        "scope": "Global",
+        "stat": { "CritChance": "Spell" },
+        "modifier": "Multiplier",
+        "value": [40, 60],
+        "ignore_quality": true
+      }
+    ],
+    "min_area_level": 150
+  },
   "reinforced_cloak": {
     "name": "Reinforced Cloak",
     "icon": "items/reinforced_cloak.webp",

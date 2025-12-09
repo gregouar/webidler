@@ -4,7 +4,7 @@ use sqlx::{FromRow, Transaction};
 use shared::data::user::UserId;
 
 use super::{
-    pool::{Database, DbPool},
+    pool::{Database, DbExecutor, DbPool},
     utc_datetime::UtcDateTime,
 };
 
@@ -114,6 +114,23 @@ pub async fn read_user_by_email(
         email_hash
     )
     .fetch_optional(db_pool)
+    .await
+}
+
+pub async fn get_user_by_name<'c>(
+    executor: impl DbExecutor<'c>,
+    username: &str,
+) -> Result<Option<UserId>, sqlx::Error> {
+    sqlx::query_scalar!(
+        r#"
+        SELECT 
+            user_id as "user_id: UserId"
+        FROM users
+        WHERE LOWER(username) = LOWER($1) AND deleted_at IS NULL
+        "#,
+        username
+    )
+    .fetch_optional(executor)
     .await
 }
 

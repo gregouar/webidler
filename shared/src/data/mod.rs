@@ -12,6 +12,7 @@ pub mod monster;
 pub mod passive;
 pub mod player;
 pub mod skill;
+pub mod stash;
 pub mod stat_effect;
 pub mod temple;
 pub mod trigger;

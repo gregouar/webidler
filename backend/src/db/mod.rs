@@ -8,6 +8,8 @@ pub mod market;
 pub mod migrations;
 pub mod password_reset;
 pub mod pool;
+pub mod stash_items;
+pub mod stashes;
 pub mod users;
 pub mod utc_datetime;
 

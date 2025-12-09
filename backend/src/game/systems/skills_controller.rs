@@ -334,6 +334,7 @@ pub fn apply_skill_effect(
                         status_effect.value.roll(),
                         Some(duration.roll()),
                         status_effect.cumulate,
+                        status_effect.replace_on_value_only,
                     );
                 }
             }

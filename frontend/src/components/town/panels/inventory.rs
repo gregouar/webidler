@@ -112,6 +112,7 @@ pub fn TownInventoryPanel(
             on_equip: Some(Arc::new(on_equip)),
             on_sell: Some(Arc::new(on_sell)),
             sell_type: SellType::Discard,
+            max_item_level: Signal::derive(move || town_context.character.read().max_area_level),
         }
     };
 

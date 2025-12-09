@@ -10,6 +10,7 @@ use crate::data::{
     passive::{PassivesTreeAscension, PassivesTreeSpecs},
     player::PlayerInventory,
     skill::SkillSpecs,
+    stash::{Stash, StashItem},
     temple::{BenedictionSpecs, PlayerBenedictions},
     user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
 };
@@ -119,6 +120,9 @@ pub struct GetCharacterDetailsResponse {
     pub ascension: PassivesTreeAscension,
     pub benedictions: PlayerBenedictions,
 
+    pub user_stash: Option<Stash>,
+    pub market_stash: Option<Stash>,
+
     pub last_grind: Option<GrindStats>,
 }
 
@@ -170,6 +174,7 @@ pub struct BrowseMarketItemsResponse {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SellMarketItemResponse {
     pub inventory: PlayerInventory,
+    pub stash: Stash,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -183,6 +188,37 @@ pub struct BuyMarketItemResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RejectMarketItemResponse {}
+
+// Stash
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UpgradeStashResponse {
+    pub resource_gold: f64,
+    pub stash: Stash,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct ExchangeGemsStashResponse {
+    pub resource_gems: f64,
+    pub stash: Stash,
+}
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct BrowseStashItemsResponse {
+    pub items: Vec<StashItem>,
+    pub has_more: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct StoreStashItemResponse {
+    pub inventory: PlayerInventory,
+    pub stash: Stash,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct TakeStashItemResponse {
+    pub inventory: PlayerInventory,
+    pub stash: Stash,
+}
 
 // Forge
 

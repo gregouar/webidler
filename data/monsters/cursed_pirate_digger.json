@@ -1,0 +1,59 @@
+{
+  "name": "Gilt Digger",
+  "portrait": "monsters/cursed_pirate_digger.webp",
+  "max_life": 15,
+  "power_factor": 1,
+  "initiative": [1, 2],
+  "armor": { "Physical": 50, "Storm": 50 },
+  "skills": [
+    {
+      "name": "Shovel Hit",
+      "icon": "skills/attack.svg",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [4, 6],
+                  "Storm": [0, 10]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Gold Plunder",
+      "icon": "passives/gold_negative.svg",
+      "cooldown": 10.0,
+      "skill_type": "Spell",
+      "targets": [
+        {
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": 120,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": "GoldFind",
+                        "modifier": "Multiplier",
+                        "debuff": true
+                      }
+                    },
+                    "value": 100
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+  ]
+}

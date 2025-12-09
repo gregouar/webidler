@@ -10,6 +10,7 @@ use shared::{
         game_stats::GrindStats,
         player::{EquippedSlot, PlayerInventory},
         skill::SkillSpecs,
+        stash::StashType,
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId},
     },
     http::{
@@ -116,17 +117,21 @@ async fn read_character_details(
     master_store: MasterStore,
     character_id: UserCharacterId,
 ) -> Result<Json<GetCharacterDetailsResponse>, AppError> {
-    let (character, areas_completed, character_data, last_grind_data) = tokio::join!(
+    let (character, areas_completed, character_data, last_grind_data, user_stash, market_stash) = tokio::join!(
         db::characters::read_character(&db_pool, &character_id),
         db::characters::read_character_areas_completed(&db_pool, &character_id),
         db::characters_data::load_character_data(&db_pool, &character_id),
-        db::game_stats::load_last_game_stats(&db_pool, &character_id)
+        db::game_stats::load_last_game_stats(&db_pool, &character_id),
+        db::stashes::get_character_stash_by_type(&db_pool, &character_id, StashType::User),
+        db::stashes::get_character_stash_by_type(&db_pool, &character_id, StashType::Market),
     );
 
     let character = character?.ok_or(AppError::NotFound)?.into();
     let areas_completed = areas_completed?;
     let (inventory_data, ascension, benedictions) = character_data?.unwrap_or_default();
     let last_grind_data = last_grind_data?;
+    let user_stash = user_stash?.map(|x| x.into());
+    let market_stash = market_stash?.map(|x| x.into());
 
     let areas = master_store
         .area_blueprints_store
@@ -212,6 +217,8 @@ async fn read_character_details(
         ascension,
         benedictions,
         last_grind,
+        user_stash,
+        market_stash,
     }))
 }
 
@@ -236,6 +243,7 @@ async fn delete_character(
 impl From<db::characters::CharacterEntry> for UserCharacter {
     fn from(val: db::characters::CharacterEntry) -> Self {
         UserCharacter {
+            user_id: val.user_id,
             character_id: val.character_id,
             name: val.character_name,
             portrait: val.portrait,

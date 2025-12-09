@@ -5,8 +5,7 @@
     "required_level": 200,
     "item_level_modifier": 150,
     "header_background": "areas/island_header.webp",
-    "footer_background": "areas/island_footer.webp",
-    "coming_soon": true
+    "footer_background": "areas/island_footer.webp"
   },
   "loot_tables": [
     "tier_1.json",
@@ -15,6 +14,201 @@
     "tier_4.json",
     "tier_5.json"
   ],
-  "bosses": [],
-  "waves": []
+  "bosses": [
+    {
+      "level": 90,
+      "interval": 50,
+      "spawns": [
+        {
+          "monster": "treasure_idol.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_cutlass.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_crown.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_chest.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_compass.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_gun.json",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
+  "waves": [
+    {
+      "min_level": 1,
+      "max_level": null,
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "pirate_deckhand.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "pirate_pistol.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "pirate_lookout.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_pistol.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_deckhand.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "min_level": 50,
+      "max_level": null,
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "crab.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "shark.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "jellyfish.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "crab.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "min_level": 60,
+      "max_level": null,
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "pirate_monkey.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "pirate_skirmisher.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_witch.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "pirate_skirmisher.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_parrot.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "pirate_captain.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_monkey.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_witch.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_pistol.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "min_level": 70,
+      "max_level": null,
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "drowned.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "harpy.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "mermaid.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "drowned.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "harpy.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "mermaid.json",
+          "quantity": [1, 2]
+        }
+      ]
+    },
+    {
+      "min_level": 80,
+      "max_level": null,
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "cursed_pirate_digger.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "cursed_pirate_spider.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "cursed_pirate_digger.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cursed_pirate_spider_2.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cursed_pirate_captain.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cursed_pirate_digger.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "cursed_pirate_spider.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cursed_pirate_captain.json",
+          "quantity": 1
+        }
+      ]
+    }
+  ]
 }

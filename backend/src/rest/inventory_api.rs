@@ -2,9 +2,12 @@ use anyhow::Result;
 
 use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
 
-use shared::http::{
-    client::{InventoryDeleteRequest, InventoryEquipRequest, InventoryUnequipRequest},
-    server::{InventoryDeleteResponse, InventoryEquipResponse, InventoryUnequipResponse},
+use shared::{
+    data::area::AreaLevel,
+    http::{
+        client::{InventoryDeleteRequest, InventoryEquipRequest, InventoryUnequipRequest},
+        server::{InventoryDeleteResponse, InventoryEquipResponse, InventoryUnequipResponse},
+    },
 };
 
 use crate::{
@@ -53,7 +56,11 @@ pub async fn post_equip_item(
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
 
-    inventory_controller::equip_item_from_bag(&mut inventory, payload.item_index)?;
+    inventory_controller::equip_item_from_bag(
+        character.max_area_level as AreaLevel,
+        &mut inventory,
+        payload.item_index,
+    )?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;

@@ -1984,7 +1984,28 @@
             "value": -100
           }
         ],
-        "locked": true
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 100
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "DamageOverTime": { "damage_type": "Poison" }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -100
+          }
+        ],
+        "locked": true,
+        "max_upgrade_level": 3
       },
       "fire_damage_1": {
         "name": "Fire Damage",

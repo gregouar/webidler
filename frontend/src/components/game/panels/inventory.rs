@@ -129,6 +129,7 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
         on_equip: Some(Arc::new(try_equip)),
         on_sell: Some(Arc::new(sell)),
         sell_type: SellType::Sell,
+        max_item_level: Signal::derive(move || game_context.player_specs.read().max_area_level),
     };
 
     view! { <Inventory open=open inventory=inventory_config /> }

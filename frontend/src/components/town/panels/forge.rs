@@ -58,16 +58,19 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
 
 #[component]
 fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+
     let items_list = Signal::derive({
-        let town_context = expect_context::<TownContext>();
         move || {
             town_context.inventory.with(|inventory| {
                 inventory
                     .equipped_items()
                     .map(|(slot, item)| SelectedMarketItem {
                         index: slot.into(),
-                        owner_id: town_context.character.read_untracked().character_id,
-                        owner_name: town_context.character.read_untracked().name.clone(),
+                        owner_id: None,
+                        owner_name: None,
+                        // owner_id: town_context.character.read_untracked().character_id,
+                        // owner_name: town_context.character.read_untracked().name.clone(),
                         recipient: Some((
                             town_context.character.read_untracked().character_id,
                             "".into(),
@@ -82,8 +85,10 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     .chain(inventory.bag.iter().enumerate().map(|(index, item)| {
                         SelectedMarketItem {
                             index: index + 9,
-                            owner_id: town_context.character.read_untracked().character_id,
-                            owner_name: town_context.character.read_untracked().name.clone(),
+                            // owner_id: town_context.character.read_untracked().character_id,
+                            // owner_name: town_context.character.read_untracked().name.clone(),
+                            owner_id: None,
+                            owner_name: None,
                             recipient: None,
                             item_specs: Arc::new(item.clone()),
                             price: 0.0,
