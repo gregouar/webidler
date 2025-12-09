@@ -668,7 +668,7 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     id="private_offer"
                     label="Private Offer:"
                     input_type="text"
-                    placeholder="Enter Character Name"
+                    placeholder="Enter User Name"
                     bind=recipient_name
                 />
             </div>
