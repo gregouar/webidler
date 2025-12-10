@@ -509,7 +509,7 @@ pub fn TakeDetails(stash: RwSignal<Stash>, selected_item: RwSignal<SelectedItem>
     let disabled = Signal::derive({
         // let town_context = expect_context::<TownContext>();s
         move || {
-            selected_item.with(|selected_item| matches!(selected_item, SelectedItem::InMarket(_)))
+            selected_item.with(|selected_item| !matches!(selected_item, SelectedItem::InMarket(_)))
         }
     });
 
