@@ -35,7 +35,6 @@
       "helmet_suffixes.json",
 
       "jewelry_prefixes.json",
-      "jewelry_suffixes.json",
       
       "life_prefixes.json",
       "life_suffixes.json",
@@ -47,6 +46,8 @@
 
       "shield_prefixes.json",
       "shield_suffixes.json",
+
+      "skill_damage_suffixes.json",
 
       "spell_suffixes.json"
     ]
