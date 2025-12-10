@@ -126,7 +126,9 @@ async fn read_last_game_stats<'c>(
             skills_data as "skills_data?: JsonValue",
             data_version,
             created_at
-         FROM game_stats WHERE character_id = $1
+         FROM game_stats WHERE 
+            character_id = $1
+            AND area_level > 0
          ORDER BY created_at DESC
          LIMIT 1
          "#,
