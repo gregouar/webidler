@@ -99,6 +99,63 @@
     },
     "min_area_level": 140
   },
+  "heater_shield_unique": {
+    "name": "Bouffon's Last Jest",
+    "description": "He laughed at danger until danger learned to fear the joke.",
+    "icon": "items/mocking_shield.webp",
+    "slot": "Shield",
+    "categories": ["Shield"],
+    "armor_specs": {
+      "armor": 100,
+      "block": 21
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "StatConverter": {
+            "source": "ThreatLevel",
+            "target_stat": { "Damage": {} },
+            "target_modifier": "Multiplier"
+          }
+        },
+        "modifier": "Flat",
+        "value": 100,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [40, 60],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [10, 20]
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Multiplier",
+        "value": [80, 120]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Poison"
+        },
+        "modifier": "Flat",
+        "value": [80, 120]
+      }
+    ],
+    "min_area_level": 150
+  },
   "targe": {
     "name": "Targe",
     "icon": "items/targe.webp",

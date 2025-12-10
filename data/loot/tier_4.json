@@ -49,6 +49,10 @@
       "weight": 8000
     },
     {
+      "item_id": "heater_shield_unique",
+      "weight": 50
+    },
+    {
       "item_id": "engraved_tablet",
       "weight": 8000
     },
