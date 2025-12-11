@@ -288,7 +288,7 @@ pub async fn read_market_items<'c>(
             CASE WHEN $3 = 'StatFilters' THEN stat4.stat_value END DESC NULLS LAST,
             CASE WHEN $3 = 'StatFilters' THEN stat5.stat_value END DESC NULLS LAST,
             CASE 
-                WHEN $3 = 'Time' THEN market.created_at
+                WHEN $3 = 'Time' THEN COALESCE(market.deleted_at,market.created_at)
             END DESC,
             CASE
                 WHEN $3 != 'Time' THEN market.price 
