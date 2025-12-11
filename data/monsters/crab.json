@@ -10,7 +10,7 @@
   "skills": [
     {
       "name": "Pinch",
-      "icon": "skills/Claw.svg",
+      "icon": "skills/claw.svg",
       "cooldown": 3.0,
       "targets": [
         {
