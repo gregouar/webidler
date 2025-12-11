@@ -55,6 +55,9 @@ pub struct SkillSpecs {
     pub triggers: Vec<TriggerSpecs>,
 
     pub item_slot: Option<ItemSlot>,
+
+    #[serde(default)] //For retro compatibility
+    pub level_modifier: u16,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

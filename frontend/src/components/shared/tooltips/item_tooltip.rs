@@ -516,6 +516,7 @@ fn affix_tag_str(affix_tag: AffixTag) -> &'static str {
         AffixTag::Mana => "Mana",
         AffixTag::Physical => "Physical",
         AffixTag::Poison => "Poison",
+        AffixTag::Skill => "Skill",
         AffixTag::Speed => "Speed",
         AffixTag::Spell => "Spell",
         AffixTag::Status => "Status",

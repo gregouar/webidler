@@ -198,6 +198,8 @@
 
     Leather Gauntlets – "Heavy-duty gauntlets with overlapping wrist guards."
 
+    Almain rivet gauntlets
+
     Steel Gauntlets – "Forged steel gauntlets with articulated joints and finger plates."
 
     Plated Gauntlets – "Full plate gauntlets with reinforced knuckles and engraved cuffs."

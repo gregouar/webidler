@@ -1,0 +1,128 @@
+[
+  {
+    "name": "of Talent",
+    "family": "add_skill_level",
+    "tags": ["Skill"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Amulet"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SkillLevel": null },
+        "modifier": "Flat",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "name": "of Proficiency",
+    "family": "add_skill_level",
+    "tags": ["Skill"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Amulet"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SkillLevel": null },
+        "modifier": "Flat",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "name": "of Expertise",
+    "family": "add_skill_level",
+    "tags": ["Skill"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Amulet"],
+    "item_level": 300,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SkillLevel": null },
+        "modifier": "Flat",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "name": "of Mastery",
+    "family": "add_skill_level",
+    "tags": ["Skill"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Amulet"],
+    "item_level": 400,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SkillLevel": null },
+        "modifier": "Flat",
+        "value": 4
+      }
+    ]
+  },
+  {
+    "name": "of Omniscience",
+    "family": "add_skill_level",
+    "tags": ["Skill"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Amulet"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SkillLevel": null },
+        "modifier": "Flat",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "name": "of Transcendence",
+    "family": "add_skill_level",
+    "tags": ["Skill"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 1000,
+    "restrictions": ["Amulet"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SkillLevel": null },
+        "modifier": "Flat",
+        "value": 6
+      }
+    ]
+  },
+  {
+    "name": "of Godhood",
+    "family": "add_skill_level",
+    "tags": ["Skill"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 1000,
+    "restrictions": ["Amulet"],
+    "item_level": 700,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SkillLevel": null },
+        "modifier": "Flat",
+        "value": 7
+      }
+    ]
+  }
+]

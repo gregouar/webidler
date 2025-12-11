@@ -338,6 +338,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_type_str(*skill_type),
             stat_skill_effect_type_str(*effect_type)
         ),
+        StatType::SkillLevel(skill_type) => format!("{} Skill Level", skill_type_str(*skill_type)),
     }
 }
 
@@ -536,6 +537,13 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 format_adds_removes(value, false, "%"),
                 skill_type_str(*skill_type),
                 stat_skill_effect_type_str(*effect_type)
+            )
+        }
+        StatType::SkillLevel(skill_type) => {
+            format!(
+                "{} Level(s) to {}Skills",
+                format_adds_removes(value, false, ""),
+                skill_type_str(*skill_type),
             )
         }
     }

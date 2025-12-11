@@ -112,7 +112,20 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
                         <hr class="border-t border-gray-700" />
                         <p class="text-xs xl:text-sm text-gray-400 leading-snug">
-                            "Level: " <span class="text-white">{skill_specs.upgrade_level}</span>
+                            "Level: "
+                            {if skill_specs.level_modifier > 0 {
+                                view! {
+                                    <span class="text-blue-400">
+                                        {skill_specs
+                                            .upgrade_level
+                                            .saturating_add(skill_specs.level_modifier)}
+                                    </span>
+                                }
+                            } else {
+                                view! {
+                                    <span class="text-white">{skill_specs.upgrade_level}</span>
+                                }
+                            }}
                             " | Upgrade Cost: "
                             <span class="text-white">
                                 {format_number(skill_specs.next_upgrade_cost)}" Gold"

@@ -107,7 +107,6 @@ pub enum ItemCategory {
     Cloak,
     Gloves,
     Helmet,
-    Relic,
     Ring,
 }
 

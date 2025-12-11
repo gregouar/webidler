@@ -701,7 +701,6 @@ pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
             ItemCategory::Gloves => "Gloves",
             ItemCategory::Helmet => "Helmet",
             ItemCategory::Ring => "Ring",
-            ItemCategory::Relic => "Relic",
         },
         None => "Any Item",
     }

@@ -104,6 +104,7 @@ impl DataInit<BaseSkillSpecs> for SkillSpecs {
             triggers: specs.triggers.clone(),
             item_slot: None,
             base: specs,
+            level_modifier: 0,
         }
     }
 }

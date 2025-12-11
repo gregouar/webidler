@@ -5,14 +5,14 @@
   { "text": "Scorching", "tags": ["Fire"] },
   { "text": "Emberforged", "tags": ["Fire"] },
   { "text": "Smoldering", "tags": ["Fire"] },
-  
+
   { "text": "Avaricious", "tags": ["Gold"] },
   { "text": "Midas's", "tags": ["Gold"] },
   { "text": "Golden", "tags": ["Gold"] },
   { "text": "Wealthy", "tags": ["Gold"] },
   { "text": "Opulent", "tags": ["Gold"] },
   { "text": "Gilded", "tags": ["Gold"] },
-  
+
   { "text": "Bulky", "tags": ["Armor"] },
   { "text": "Stony", "tags": ["Armor"] },
   { "text": "Ironclad", "tags": ["Armor"] },
@@ -21,21 +21,21 @@
   { "text": "Robust", "tags": ["Life", "Armor"] },
   { "text": "Steelbound", "tags": ["Armor"] },
   { "text": "Adamantine", "tags": ["Armor"] },
-  
+
   { "text": "Edgy", "tags": ["Speed", "Physical"] },
   { "text": "Swift", "tags": ["Speed"] },
   { "text": "Fleetfooted", "tags": ["Speed"] },
   { "text": "Brisk", "tags": ["Speed"] },
   { "text": "Lightning", "tags": ["Speed", "Attack"] },
   { "text": "Rapid", "tags": ["Speed"] },
-  
+
   { "text": "Brutal", "tags": ["Physical", "Attack"] },
   { "text": "Savage", "tags": ["Physical", "Attack"] },
   { "text": "Piercing", "tags": ["Physical", "Attack"] },
   { "text": "Vicious", "tags": ["Physical", "Attack"] },
   { "text": "Feral", "tags": ["Physical", "Attack"] },
   { "text": "Relentless", "tags": ["Physical", "Attack"] },
-  
+
   { "text": "Arcane", "tags": ["Spell"] },
   { "text": "Mystic", "tags": ["Spell"] },
   { "text": "Enchanted", "tags": ["Spell"] },
@@ -43,18 +43,18 @@
   { "text": "Sage's", "tags": ["Mana", "Spell"] },
   { "text": "Runic", "tags": ["Spell"] },
   { "text": "Celestial", "tags": ["Spell"] },
-  
+
   { "text": "Vital", "tags": ["Life"] },
   { "text": "Resilient", "tags": ["Life", "Armor"] },
   { "text": "Robust", "tags": ["Life", "Armor"] },
   { "text": "Tenacious", "tags": ["Life"] },
   { "text": "Enduring", "tags": ["Life"] },
-  
+
   { "text": "Mana-infused", "tags": ["Mana"] },
   { "text": "Mystical", "tags": ["Mana", "Spell"] },
   { "text": "Enlightened", "tags": ["Mana"] },
   { "text": "Arcane-touched", "tags": ["Mana", "Spell"] },
-  
+
   { "text": "Flaming", "tags": ["Fire", "Attack"] },
   { "text": "Blazing Fury", "tags": ["Fire", "Attack"] },
   { "text": "Molten", "tags": ["Fire", "Armor"] },
@@ -63,10 +63,9 @@
   { "text": "Shadowed", "tags": ["Physical", "Spell"] },
   { "text": "Arcane Steel", "tags": ["Spell", "Armor"] },
   { "text": "Lightning-fast", "tags": ["Speed", "Attack"] },
-  { "text": "Frostfire", "tags": ["Fire", "Spell"] }, 
+  { "text": "Frostfire", "tags": ["Fire", "Spell"] },
   { "text": "Soulbound", "tags": ["Life", "Mana"] },
 
-  
   { "text": "Deadly", "tags": ["Critical", "Attack"] },
   { "text": "Precise", "tags": ["Critical"] },
   { "text": "Sharpened", "tags": ["Critical", "Physical"] },
@@ -82,7 +81,7 @@
   { "text": "Executioner's", "tags": ["Critical", "Physical"] },
   { "text": "Blinkstrike", "tags": ["Critical", "Speed", "Attack"] },
   { "text": "Glassfang", "tags": ["Critical", "Spell", "Attack"] },
-  
+
   { "text": "Putrid", "tags": ["Poison"] },
   { "text": "Bile-soaked", "tags": ["Poison"] },
   { "text": "Rotvenom", "tags": ["Poison"] },
@@ -93,7 +92,7 @@
   { "text": "Slimebound", "tags": ["Poison", "Armor"] },
   { "text": "Sporeclouded", "tags": ["Poison", "Spell"] },
   { "text": "Taintwoven", "tags": ["Poison", "Spell"] },
-  
+
   { "text": "Stormcharged", "tags": ["Storm"] },
   { "text": "Thunderous", "tags": ["Storm"] },
   { "text": "Tempestuous", "tags": ["Storm"] },
@@ -114,7 +113,7 @@
   { "text": "Cloudpiercer", "tags": ["Storm", "Attack"] },
   { "text": "Staticcharged", "tags": ["Storm"] },
   { "text": "Boltforged", "tags": ["Storm", "Armor", "Attack"] },
-  
+
   { "text": "Lingering", "tags": ["Status"] },
   { "text": "Endless", "tags": ["Status"] },
   { "text": "Perpetual", "tags": ["Status"] },
@@ -136,7 +135,6 @@
   { "text": "Unending", "tags": ["Status"] },
   { "text": "Binding", "tags": ["Status"] },
 
-  
   { "text": "Shadowed", "tags": ["Stealth", "Physical", "Spell"] },
   { "text": "Cloaked", "tags": ["Stealth"] },
   { "text": "Veiled", "tags": ["Stealth"] },
@@ -169,5 +167,89 @@
   { "text": "Wrathful", "tags": ["Threat", "Attack"] },
   { "text": "Malicious", "tags": ["Threat"] },
   { "text": "Tormenting", "tags": ["Threat", "Status"] },
-  { "text": "Predatory", "tags": ["Threat"] }
+  { "text": "Predatory", "tags": ["Threat"] },
+
+  { "text": "Adept's", "tags": ["Skill"] },
+  { "text": "Masterful", "tags": ["Skill"] },
+  { "text": "Skilled", "tags": ["Skill"] },
+  { "text": "Expert's", "tags": ["Skill"] },
+  { "text": "Prodigy's", "tags": ["Skill"] },
+
+  { "text": "Savant's", "tags": ["Skill", "Mana"] },
+  { "text": "Insightful", "tags": ["Skill", "Mana"] },
+  { "text": "Focus-bound", "tags": ["Skill", "Mana"] },
+  { "text": "Battletrained", "tags": ["Skill", "Attack"] },
+  { "text": "Warwise", "tags": ["Skill", "Attack"] },
+  { "text": "Drilled", "tags": ["Skill", "Attack"] },
+  { "text": "Spelltrained", "tags": ["Skill", "Spell"] },
+  { "text": "Runewise", "tags": ["Skill", "Spell"] },
+  { "text": "Incantation-born", "tags": ["Skill", "Spell"] },
+
+  { "text": "Cindercharged", "tags": ["Fire", "Storm"] },
+  { "text": "Ashforged", "tags": ["Fire", "Armor"] },
+  { "text": "Emberstrike", "tags": ["Fire", "Attack"] },
+  { "text": "Flarewoven", "tags": ["Fire", "Spell"] },
+  { "text": "Scorchveined", "tags": ["Fire", "Life"] },
+
+  { "text": "Tempestlashed", "tags": ["Storm", "Attack"] },
+  { "text": "Thunderforged", "tags": ["Storm", "Armor"] },
+  { "text": "Stormcast", "tags": ["Storm", "Spell"] },
+  { "text": "Galefooted", "tags": ["Storm", "Speed"] },
+  { "text": "Hailpiercer", "tags": ["Storm", "Physical"] },
+  { "text": "Skyforged", "tags": ["Storm", "Life", "Armor"] },
+  { "text": "Stormschooled", "tags": ["Storm", "Skill", "Spell"] },
+
+  { "text": "Toxinveined", "tags": ["Poison", "Life"] },
+  { "text": "Sepsisforged", "tags": ["Poison", "Armor"] },
+  { "text": "Festeredge", "tags": ["Poison", "Physical"] },
+  { "text": "Venomstained", "tags": ["Poison", "Status"] },
+  { "text": "Plaguebitten", "tags": ["Poison", "Attack"] },
+  { "text": "Rothexed", "tags": ["Poison", "Spell"] },
+  { "text": "Sporetrained", "tags": ["Poison", "Skill", "Spell"] },
+
+  { "text": "Steelwhirl", "tags": ["Physical", "Speed"] },
+  { "text": "Bloodforged", "tags": ["Physical", "Life"] },
+  { "text": "Merciless", "tags": ["Physical", "Critical"] },
+  { "text": "Bonebreaker", "tags": ["Physical", "Attack"] },
+  { "text": "Rendbound", "tags": ["Physical", "Status"] },
+  { "text": "Warborn", "tags": ["Physical", "Threat"] },
+
+  { "text": "Mystweaved", "tags": ["Spell", "Armor"] },
+  { "text": "Aetherpulse", "tags": ["Spell", "Speed"] },
+  { "text": "Spellscarred", "tags": ["Spell", "Life"] },
+  { "text": "Manarooted", "tags": ["Mana", "Life"] },
+  { "text": "Runesworn", "tags": ["Spell", "Status"] },
+  { "text": "Arcanecharged", "tags": ["Spell", "Storm"] },
+  { "text": "Mindcrafted", "tags": ["Spell", "Skill", "Mana"] },
+
+  { "text": "Hexlashed", "tags": ["Status", "Attack"] },
+  { "text": "Oathmarked", "tags": ["Status", "Armor"] },
+  { "text": "Cursecrowned", "tags": ["Status", "Spell"] },
+  { "text": "Doomtouched", "tags": ["Status", "Threat"] },
+  { "text": "Markbound", "tags": ["Status", "Critical"] },
+  { "text": "Soulscarred", "tags": ["Status", "Life"] },
+  { "text": "Witchtrained", "tags": ["Status", "Skill", "Spell"] },
+
+  { "text": "Edgehoned", "tags": ["Critical", "Physical"] },
+  { "text": "Perfectstrike", "tags": ["Critical", "Attack"] },
+  { "text": "Sharperforged", "tags": ["Critical", "Armor"] },
+  { "text": "Killinglight", "tags": ["Critical", "Spell"] },
+  { "text": "Keenlashed", "tags": ["Critical", "Speed"] },
+  { "text": "Fatecut", "tags": ["Critical", "Threat"] },
+
+  { "text": "Treasurebound", "tags": ["Gold", "Status"] },
+  { "text": "Gildstrike", "tags": ["Gold", "Attack"] },
+  { "text": "Coincaller’s", "tags": ["Gold", "Spell"] },
+  { "text": "Opulence-wreathed", "tags": ["Gold", "Mana"] },
+  { "text": "Richblooded", "tags": ["Gold", "Life"] },
+  { "text": "Goldenclad", "tags": ["Gold", "Armor"] },
+  { "text": "Prospector’s Insight", "tags": ["Gold", "Skill", "Mana"] },
+
+  { "text": "Heartforged", "tags": ["Life", "Armor"] },
+  { "text": "Ironbred", "tags": ["Life", "Physical"] },
+  { "text": "Bulwarkwoven", "tags": ["Armor", "Spell"] },
+  { "text": "Stoneshelled", "tags": ["Armor", "Status"] },
+  { "text": "Lifetethered", "tags": ["Life", "Mana"] },
+  { "text": "Endureborn", "tags": ["Life", "Threat"] },
+  { "text": "Guardian-trained", "tags": ["Life", "Skill", "Armor"] }
 ]

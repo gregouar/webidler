@@ -4,6 +4,8 @@
   },
   "resources": {
     "item_affixes": [      
+      "amulet_suffixes.json",
+
       "armor_prefixes.json",
       "armor_suffixes.json",
 

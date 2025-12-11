@@ -50,11 +50,11 @@
   { "text": "Loop", "restrictions": ["Jewelry"] },
   { "text": "Wisp", "restrictions": ["Jewelry"] },
 
-  { "text": "Token", "restrictions": ["Accessory", "Focus"] },
-  { "text": "Charm", "restrictions": ["Accessory", "Focus"] },
-  { "text": "Talisman", "restrictions": ["Accessory", "Focus"] },
-  { "text": "Whim", "restrictions": ["Accessory", "Focus"] },
-  { "text": "Gleam", "restrictions": ["Accessory", "Focus"] },
+  { "text": "Token", "restrictions": ["Focus"] },
+  { "text": "Charm", "restrictions": ["Focus"] },
+  { "text": "Talisman", "restrictions": ["Focus"] },
+  { "text": "Whim", "restrictions": ["Focus"] },
+  { "text": "Gleam", "restrictions": ["Focus"] },
 
   { "text": "Skin", "restrictions": ["Body"] },
   { "text": "Husk", "restrictions": ["Body"] },
@@ -68,6 +68,8 @@
   { "text": "Mantle", "restrictions": ["Cloak"] },
   { "text": "Shroud", "restrictions": ["Cloak"] },
   { "text": "Veil", "restrictions": ["Cloak"] },
+  { "text": "Wrap", "restrictions": ["Cloak"] },
+  { "text": "Drape", "restrictions": ["Cloak"] },
 
   { "text": "Grips", "restrictions": ["Gloves"] },
   { "text": "Touch", "restrictions": ["Gloves"] },
@@ -75,11 +77,5 @@
 
   { "text": "Crown", "restrictions": ["Helmet"] },
   { "text": "Skull", "restrictions": ["Helmet"] },
-  { "text": "Mind", "restrictions": ["Helmet"] },
-
-  { "text": "Icon", "restrictions": ["Relic", "Focus"] },
-  { "text": "Artifact", "restrictions": ["Relic", "Focus"] },
-  { "text": "Remnant", "restrictions": ["Relic", "Focus"] },
-  { "text": "Echo", "restrictions": ["Relic", "Focus"] },
-  { "text": "Memory", "restrictions": ["Relic", "Focus"] }
+  { "text": "Mind", "restrictions": ["Helmet"] }
 ]

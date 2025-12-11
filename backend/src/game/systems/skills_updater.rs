@@ -52,11 +52,27 @@ pub fn update_skill_specs<'a>(
     skill_specs.cooldown = skill_specs.base.cooldown;
     skill_specs.mana_cost = skill_specs.base.mana_cost;
 
+    skill_specs.level_modifier = effects
+        .clone()
+        .map(|e| {
+            if e.modifier == Modifier::Flat
+                && e.stat
+                    .is_match(&StatType::SkillLevel(Some(skill_specs.base.skill_type)))
+            {
+                e.value as u16
+            } else {
+                0
+            }
+        })
+        .sum();
+
     let local_effects = stats_updater::stats_map_to_vec(
         &EffectsMap::combine_all(
             std::iter::once(compute_skill_upgrade_effects(
                 skill_specs,
-                skill_specs.upgrade_level,
+                skill_specs
+                    .upgrade_level
+                    .saturating_add(skill_specs.level_modifier),
             ))
             .chain(std::iter::once(compute_skill_modifier_effects(
                 skill_specs,

@@ -97,6 +97,7 @@ pub enum StatType {
         skill_type: Option<SkillType>,
         roll_type: LuckyRollType,
     },
+    SkillLevel(#[serde(default)] Option<SkillType>),
     StatConverter(StatConverterSpecs),
     SuccessChance {
         #[serde(default)]
@@ -197,6 +198,7 @@ impl StatType {
                 (Some(first), Some(second)) => first.is_match(second),
                 _ => true,
             },
+            (SkillLevel(first), SkillLevel(second)) => compare_options(first, second),
             _ => false,
         }
     }

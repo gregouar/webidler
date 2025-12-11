@@ -227,7 +227,8 @@ fn compute_player_specs(
                 source: StatConverterSource::CritDamage | StatConverterSource::Damage { .. },
                 ..
             })
-            | StatType::SuccessChance { .. } => {}
+            | StatType::SuccessChance { .. }
+            | StatType::SkillLevel(_) => {}
             // Other
             StatType::StatConverter(StatConverterSpecs {
                 source: StatConverterSource::ThreatLevel,
