@@ -94,7 +94,8 @@ pub struct AssetName(String);
 #[nutype(
     sanitize(with=|v| v.round()),
     validate(greater_or_equal = 0.0, less = 1000000000.0),
-    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Copy, Deref)
+    default=0.0,
+    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Copy, Deref, Default)
 )]
 pub struct ItemPrice(f64);
 

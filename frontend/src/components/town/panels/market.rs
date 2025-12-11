@@ -15,7 +15,7 @@ use shared::{
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
-        ExchangeGemsStashRequest, RejectMarketItemRequest, SellMarketItemRequest,
+        ExchangeGemsStashRequest, RejectMarketItemRequest, SellMarketItemRequest, StashAction,
     },
     types::{ItemPrice, PaginationLimit, Username},
 };
@@ -266,8 +266,9 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
     let do_take = {
         let character_id = town_context.character.read_untracked().character_id;
         let stash_id = stash.read_untracked().stash_id;
-        let amount = stash.read_untracked().resource_gems;
         move |_| {
+            let amount =
+                ItemPrice::try_new(stash.read_untracked().resource_gems).unwrap_or_default();
             spawn_local({
                 async move {
                     match backend
@@ -275,7 +276,8 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
                             &auth_context.token(),
                             &ExchangeGemsStashRequest {
                                 character_id,
-                                gems_amount: -amount,
+                                amount,
+                                stash_action: StashAction::Take,
                             },
                             &stash_id,
                         )
@@ -283,7 +285,7 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
                     {
                         Ok(response) => {
                             town_context.character.write().resource_gems = response.resource_gems;
-                            town_context.market_stash.set(response.stash);
+                            stash.set(response.stash);
                         }
                         Err(e) => show_toast(
                             toaster,
@@ -1382,6 +1384,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             }),
             Modifier::Flat,
         ),
+        (StatType::SkillLevel(None), Modifier::Flat),
     ];
 
     let options = available_stats

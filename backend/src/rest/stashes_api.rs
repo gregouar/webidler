@@ -12,7 +12,7 @@ use shared::{
     data::stash::{Stash, StashId, StashType},
     http::{
         client::{
-            BrowseStashItemsRequest, ExchangeGemsStashRequest, StoreStashItemRequest,
+            BrowseStashItemsRequest, ExchangeGemsStashRequest, StashAction, StoreStashItemRequest,
             TakeStashItemRequest, UpgradeStashRequest,
         },
         server::{
@@ -155,10 +155,10 @@ pub async fn post_exchange_gems(
 
     verify_stash_access_write(&current_user, &stash)?;
 
-    let gems_difference = if payload.gems_amount > 0.0 {
-        payload.gems_amount.min(character.resource_gems)
-    } else {
-        payload.gems_amount.max(-stash.resource_gems)
+    let gems_amount = payload.amount.into_inner();
+    let gems_difference = match payload.stash_action {
+        StashAction::Store => gems_amount.min(character.resource_gems),
+        StashAction::Take => -gems_amount.min(stash.resource_gems),
     };
 
     stash.resource_gems =

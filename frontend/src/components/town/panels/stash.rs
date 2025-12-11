@@ -9,15 +9,16 @@ use shared::{
         stash::{Stash, StashItem, StashType},
     },
     http::client::{
-        BrowseStashItemsRequest, StoreStashItemRequest, TakeStashItemRequest, UpgradeStashRequest,
+        BrowseStashItemsRequest, ExchangeGemsStashRequest, StashAction, StoreStashItemRequest,
+        TakeStashItemRequest, UpgradeStashRequest,
     },
-    types::PaginationLimit,
+    types::{ItemPrice, PaginationLimit},
 };
 
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
-    shared::resources::GoldIcon,
+    shared::resources::{GemsCounter, GoldIcon},
     town::{
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
         panels::market::{MainFilters, StatsFilters},
@@ -25,6 +26,7 @@ use crate::components::{
     },
     ui::{
         buttons::{CloseButton, MenuButton, TabButton},
+        input::ValidatedInput,
         menu_panel::{MenuPanel, PanelTitle},
         number::{format_datetime, format_number},
         toast::*,
@@ -72,7 +74,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                     <div class="px-4 relative z-10 flex items-center justify-between">
                         <PanelTitle>"User Stash"</PanelTitle>
 
-                        <div class="flex-1 flex justify-center ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto">
+                        <div class="flex-1 flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto">
                             <TabButton
                                 is_active=Signal::derive(move || {
                                     active_tab.get() == StashTab::Filters
@@ -109,6 +111,10 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                             </TabButton>
                         </div>
 
+                        <div class="flex-1"></div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <Gems stash />
+                        </div>
                         <div class="flex-1"></div>
 
                         <div class="flex items-center gap-2 mb-2">
@@ -647,6 +653,113 @@ pub fn StoreDetails(
                     "Store Item"
                 </MenuButton>
             </div>
+        </div>
+    }
+}
+
+#[component]
+pub fn Gems(stash: RwSignal<Stash>) -> impl IntoView {
+    let backend = expect_context::<BackendClient>();
+    let town_context = expect_context::<TownContext>();
+    let auth_context = expect_context::<AuthContext>();
+    let toaster = expect_context::<Toasts>();
+
+    let value = Signal::derive(move || stash.read().resource_gems);
+    let amount = RwSignal::new(Some(None::<ItemPrice>));
+
+    let do_take = {
+        let character_id = town_context.character.read_untracked().character_id;
+        let stash_id = stash.read_untracked().stash_id;
+        move |_| {
+            if let Some(amount) = amount.get() {
+                let amount = amount.unwrap_or(
+                    ItemPrice::try_new(stash.read_untracked().resource_gems).unwrap_or_default(),
+                );
+
+                spawn_local({
+                    async move {
+                        match backend
+                            .exchange_gems_stash(
+                                &auth_context.token(),
+                                &ExchangeGemsStashRequest {
+                                    character_id,
+                                    amount,
+                                    stash_action: StashAction::Take,
+                                },
+                                &stash_id,
+                            )
+                            .await
+                        {
+                            Ok(response) => {
+                                town_context.character.write().resource_gems =
+                                    response.resource_gems;
+                                stash.set(response.stash);
+                            }
+                            Err(e) => show_toast(
+                                toaster,
+                                format!("Failed to take gems: {e}"),
+                                ToastVariant::Error,
+                            ),
+                        }
+                    }
+                });
+            }
+        }
+    };
+
+    let do_store = {
+        let character_id = town_context.character.read_untracked().character_id;
+        let stash_id = stash.read_untracked().stash_id;
+        move |_| {
+            if let Some(amount) = amount.get() {
+                let amount = amount.unwrap_or(
+                    ItemPrice::try_new(town_context.character.read_untracked().resource_gems)
+                        .unwrap_or_default(),
+                );
+                spawn_local({
+                    async move {
+                        match backend
+                            .exchange_gems_stash(
+                                &auth_context.token(),
+                                &ExchangeGemsStashRequest {
+                                    character_id,
+                                    amount,
+                                    stash_action: StashAction::Store,
+                                },
+                                &stash_id,
+                            )
+                            .await
+                        {
+                            Ok(response) => {
+                                town_context.character.write().resource_gems =
+                                    response.resource_gems;
+                                stash.set(response.stash);
+                            }
+                            Err(e) => show_toast(
+                                toaster,
+                                format!("Failed to take gems: {e}"),
+                                ToastVariant::Error,
+                            ),
+                        }
+                    }
+                });
+            }
+        }
+    };
+
+    let disable_take = Signal::derive(move || value.get() == 0.0 || stash.read().max_items == 0);
+    let disable_store = Signal::derive(move || stash.read().max_items == 0);
+
+    view! {
+        <div class="flex gap-2 items-center">
+            <GemsCounter value />
+            <MenuButton on:click=do_store disabled=disable_store>
+                "Store"
+            </MenuButton>
+            <MenuButton on:click=do_take disabled=disable_take>
+                "Take"
+            </MenuButton>
+            <ValidatedInput id="gems_amount" input_type="number" placeholder="All" bind=amount />
         </div>
     }
 }

@@ -10,7 +10,7 @@ use crate::{
         temple::PlayerBenedictions,
         user::{UserCharacterId, UserId},
     },
-    types::{AssetName, Email, PaginationLimit, Password, Username},
+    types::{AssetName, Email, ItemPrice, PaginationLimit, Password, Username},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -121,16 +121,23 @@ pub struct RejectMarketItemRequest {
 
 // Stash
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub enum StashAction {
+    Store,
+    Take,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct UpgradeStashRequest {
     pub character_id: UserCharacterId,
     pub stash_type: StashType,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ExchangeGemsStashRequest {
     pub character_id: UserCharacterId,
-    pub gems_amount: f64, // Positive means storing, negative is taking
+    pub amount: ItemPrice,
+    pub stash_action: StashAction,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
