@@ -1,3 +1,5 @@
+use std::collections::{HashMap, VecDeque};
+
 use shared::data::{
     passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
     player::PlayerResources,
@@ -127,20 +129,76 @@ pub fn validate_ascension(
 ) -> anyhow::Result<f64> {
     let mut cost = 0.0;
 
+    let max_level_tree =
+        compute_max_level_ascension_tree(passives_tree_specs, passive_tree_ascension);
+
     for (node_id, level) in passive_tree_ascension.ascended_nodes.iter() {
-        if *level
-            > passives_tree_specs
-                .nodes
-                .get(node_id)
-                .map(|node_specs| node_specs.max_upgrade_level.unwrap_or(u8::MAX))
-                .unwrap_or_default()
-        {
-            return Err(anyhow::anyhow!("invalid ascension"));
+        let node_specs = passives_tree_specs
+            .nodes
+            .get(node_id)
+            .ok_or(anyhow::anyhow!("invalid ascension: missing node"))?;
+
+        if *level > node_specs.max_upgrade_level.unwrap_or(u8::MAX) {
+            return Err(anyhow::anyhow!("invalid ascension: level too high"));
+        }
+
+        if *level > max_level_tree.get(node_id).map(|x| *x).unwrap_or_default() {
+            return Err(anyhow::anyhow!("invalid ascension: missing connection"));
         }
 
         cost += (*level) as f64;
     }
+
     Ok(cost)
+}
+
+fn compute_max_level_ascension_tree(
+    passives_tree_specs: &PassivesTreeSpecs,
+    passive_tree_ascension: &PassivesTreeAscension,
+) -> HashMap<PassiveNodeId, u8> {
+    let mut propagated_tree = HashMap::new();
+
+    let mut queue: VecDeque<(PassiveNodeId, u8)> = passives_tree_specs
+        .nodes
+        .iter()
+        .filter(|(_, node_specs)| node_specs.initial_node)
+        .map(|(node_id, _)| {
+            (
+                node_id.clone(),
+                passive_tree_ascension
+                    .ascended_nodes
+                    .get(node_id)
+                    .copied()
+                    .unwrap_or_default(),
+            )
+        })
+        .collect();
+
+    while let Some((node_id, level)) = queue.pop_front() {
+        let level = passive_tree_ascension
+            .ascended_nodes
+            .get(&node_id)
+            .copied()
+            .unwrap_or_default()
+            .min(level);
+
+        let entry = propagated_tree.entry(node_id.clone()).or_default();
+        if level <= *entry {
+            continue;
+        }
+        *entry = level;
+
+        // TODO: Could split connections in 2 hashmap or something
+        for connection in &passives_tree_specs.connections {
+            if connection.from == node_id {
+                queue.push_back((connection.to.clone(), level));
+            } else if connection.to == node_id {
+                queue.push_back((connection.from.clone(), level));
+            }
+        }
+    }
+
+    propagated_tree
 }
 
 fn compute_total_shards(areas_completed: &[CharacterAreaEntry]) -> f64 {
