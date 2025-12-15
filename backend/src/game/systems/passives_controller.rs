@@ -142,7 +142,7 @@ pub fn validate_ascension(
             return Err(anyhow::anyhow!("invalid ascension: level too high"));
         }
 
-        if *level > max_level_tree.get(node_id).map(|x| *x).unwrap_or_default() {
+        if *level > max_level_tree.get(node_id).copied().unwrap_or_default() {
             return Err(anyhow::anyhow!("invalid ascension: missing connection"));
         }
 

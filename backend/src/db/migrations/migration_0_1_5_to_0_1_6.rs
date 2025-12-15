@@ -21,7 +21,7 @@ pub async fn migrate(db_pool: &DbPool, master_store: &MasterStore) -> anyhow::Re
     for old_entry in old_entries {
         passives_controller::update_ascension(
             &mut tx,
-            &master_store,
+            master_store,
             &old_entry.character_id,
             old_entry.resource_shards,
             &PassivesTreeAscension::default(),
