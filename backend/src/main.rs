@@ -134,6 +134,7 @@ async fn migrate_data(db_pool: &db::DbPool, master_store: &MasterStore) -> anyho
     db::migrations::migration_0_1_1_to_0_1_2::migrate(db_pool).await?;
     db::migrations::migration_0_1_2_to_0_1_3::migrate(db_pool).await?;
     db::migrations::migration_0_1_4_to_0_1_5::migrate(db_pool, master_store).await?;
+    db::migrations::migration_0_1_5_to_0_1_6::migrate(db_pool, master_store).await?;
     Ok(())
 }
 

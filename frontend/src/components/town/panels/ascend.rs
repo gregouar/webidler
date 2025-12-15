@@ -1,9 +1,9 @@
 use leptos::{html::*, prelude::*, task::spawn_local};
 
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use shared::{
-    data::passive::{PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension},
+    data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension},
     http::client::AscendPassivesRequest,
 };
 
@@ -260,11 +260,6 @@ fn PassiveSkillTree(
             .clone(),
     );
 
-    // Fake amount of connections & ascended to have neatly rendered skill tree
-    let amount_connections = Memo::new(|_| 0);
-    // TODO: Should get actual levels?
-    let node_levels = Memo::new(|_| (0, 0));
-
     view! {
         <Pannable>
             <For
@@ -274,11 +269,10 @@ fn PassiveSkillTree(
                 key=|conn| (conn.from.clone(), conn.to.clone())
                 let(conn)
             >
-                <Connection
+                <AscendConnection
                     connection=conn
                     nodes_specs=nodes_specs.clone()
-                    amount_connections
-                    node_levels
+                    passives_tree_ascension
                 />
             </For>
             <For
@@ -308,6 +302,8 @@ fn AscendNode(
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     view_only: bool,
 ) -> impl IntoView {
+    let town_context: TownContext = expect_context();
+
     let node_level = Memo::new({
         let node_id = node_id.clone();
 
@@ -316,30 +312,66 @@ fn AscendNode(
                 .read()
                 .ascended_nodes
                 .get(&node_id)
-                .cloned()
+                .copied()
                 .unwrap_or_default()
         }
     });
 
-    let max_upgrade_level = if node_specs.upgrade_effects.is_empty() {
-        0
+    let max_node_level = if node_specs.upgrade_effects.is_empty() {
+        node_specs.locked as u8
     } else {
         node_specs.max_upgrade_level.unwrap_or(u8::MAX)
     };
 
+    let max_upgrade_level = Memo::new({
+        let node_id = node_id.clone();
+        move |_| {
+            let max_connection_level = if node_specs.initial_node {
+                u8::MAX
+            } else {
+                town_context
+                    .passives_tree_specs
+                    .read()
+                    .connections
+                    .iter()
+                    .filter_map(|connection| {
+                        if connection.from == node_id {
+                            Some(connection.to.clone())
+                        } else if connection.to == node_id {
+                            Some(connection.from.clone())
+                        } else {
+                            None
+                        }
+                    })
+                    .map(|node_id| {
+                        passives_tree_ascension
+                            .read()
+                            .ascended_nodes
+                            .get(&node_id)
+                            .copied()
+                            .unwrap_or_default()
+                    })
+                    .max()
+                    .unwrap_or_default()
+            };
+
+            max_node_level.min(max_connection_level)
+        }
+    });
+
     let node_status = Memo::new({
         move |_| {
-            let upgradable = max_upgrade_level > node_level.get();
+            let upgradable = max_upgrade_level.get() > node_level.get();
             // let maxed = node_level.get() >= max_upgrade_level && node_level.get() > 0;
 
             let purchase_status =
             //  if maxed {
             //     PurchaseStatus::Inactive
             // } else 
-            if view_only && node_level.get() > 0 {
+            if (view_only|| node_level.get() == max_node_level) && node_level.get() > 0  {
                 PurchaseStatus::Purchased
-            } else if points_available.get() > 0.0
-                && (upgradable || (node_specs.locked && node_level.get() == 0))
+            } else if points_available.get() > 0.0 && upgradable
+                // && (upgradable || (node_specs.locked && node_level.get() == 0))
             {
                 PurchaseStatus::Purchaseable
             } else {
@@ -406,4 +438,51 @@ fn AscendNode(
             show_upgrade=true
         />
     }
+}
+
+#[component]
+fn AscendConnection(
+    connection: PassiveConnection,
+    nodes_specs: Arc<HashMap<String, PassiveNodeSpecs>>,
+    passives_tree_ascension: RwSignal<PassivesTreeAscension>,
+) -> impl IntoView {
+    let amount_connections = Memo::new({
+        let connection_from = connection.from.clone();
+        let connection_to = connection.to.clone();
+
+        move |_| {
+            passives_tree_ascension
+                .read()
+                .ascended_nodes
+                .contains_key(&connection_from) as usize
+                + passives_tree_ascension
+                    .read()
+                    .ascended_nodes
+                    .contains_key(&connection_to) as usize
+        }
+    });
+
+    let node_levels = Memo::new({
+        let connection_from = connection.from.clone();
+        let connection_to = connection.to.clone();
+
+        move |_| {
+            (
+                passives_tree_ascension
+                    .read()
+                    .ascended_nodes
+                    .get(&connection_from)
+                    .cloned()
+                    .unwrap_or_default(),
+                passives_tree_ascension
+                    .read()
+                    .ascended_nodes
+                    .get(&connection_to)
+                    .cloned()
+                    .unwrap_or_default(),
+            )
+        }
+    });
+
+    view! { <Connection connection nodes_specs amount_connections node_levels /> }
 }

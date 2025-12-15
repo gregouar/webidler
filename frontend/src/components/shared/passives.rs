@@ -241,9 +241,16 @@ pub fn Connection(
 
     view! {
         {if let (Some(from), Some(to)) = (from_node, to_node) {
-            let (from_level, to_level) = node_levels.get_untracked();
-            let from_status = node_meta_status(from_level, from.locked, from.max_upgrade_level);
-            let to_status = node_meta_status(to_level, to.locked, to.max_upgrade_level);
+            let from_status = move || node_meta_status(
+                node_levels.get().0,
+                from.locked,
+                from.max_upgrade_level,
+            );
+            let to_status = move || node_meta_status(
+                node_levels.get().1,
+                to.locked,
+                to.max_upgrade_level,
+            );
             let purchase_status = move || match amount_connections.get() {
                 2 => PurchaseStatus::Purchased,
                 1 => PurchaseStatus::Purchaseable,
@@ -255,8 +262,8 @@ pub fn Connection(
                     x => status_color(x, status),
                 }
             };
-            let from_color = move || { color(from_status) };
-            let to_color = move || { color(to_status) };
+            let from_color = move || { color(from_status()) };
+            let to_color = move || { color(to_status()) };
             let dasharray = move || if amount_connections.get() == 2 { "none" } else { "4 3" };
             let width = move || if amount_connections.get() == 2 { "3" } else { "2" };
             let gradient_id = format!("{}-{}", connection.from, connection.to);
@@ -281,7 +288,7 @@ pub fn Connection(
                         y2=-to.y * 10.0
                         class=move || {
                             if amount_connections.get() == 2 {
-                                match (from_status, to_status) {
+                                match (from_status(), to_status()) {
                                     (MetaStatus::Ascended, MetaStatus::Ascended) => {
                                         "xl:drop-shadow-[0_0_2px_cyan]"
                                     }

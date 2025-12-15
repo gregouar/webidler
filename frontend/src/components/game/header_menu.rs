@@ -5,6 +5,7 @@ use leptos::{html::*, prelude::*};
 use shared::{computations, constants, messages::client::ClientMessage};
 
 use crate::components::{
+    events::{EventsContext, Key},
     shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
     ui::{
         buttons::{MenuButton, MenuButtonRed},
@@ -20,17 +21,18 @@ use super::GameContext;
 
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
+    let game_context: GameContext = expect_context();
+    let events_context: EventsContext = expect_context();
 
     let do_abandon_quest = Arc::new({
-        let conn = expect_context::<WebsocketContext>();
+        let conn: WebsocketContext = expect_context();
         move || {
             conn.send(&ClientMessage::EndQuest);
         }
     });
 
     let try_abandon_quest = {
-        let confirm_context = expect_context::<ConfirmContext>();
+        let confirm_context: ConfirmContext = expect_context();
         move |_| {
             (confirm_context.confirm)(
                 format!("Abandoning the Grind will reset the Area Level, Player Level and Gold. You will keep Items, Gems and Power Shards, and collect {} Gold as Temple Donations. Are you sure?",format_number(
@@ -56,6 +58,48 @@ pub fn HeaderMenu() -> impl IntoView {
     let gems = Signal::derive(move || game_context.player_resources.read().gems);
     let shards = Signal::derive(move || game_context.player_resources.read().shards);
 
+    let open_inventory = move || {
+        game_context
+            .open_inventory
+            .set(!game_context.open_inventory.get_untracked());
+        game_context.open_statistics.set(false);
+        game_context.open_passives.set(false);
+    };
+
+    Effect::new(move || {
+        if events_context.key_pressed(Key::Character('i')) {
+            open_inventory()
+        }
+    });
+
+    let open_passives = move || {
+        game_context.open_inventory.set(false);
+        game_context
+            .open_passives
+            .set(!game_context.open_passives.get_untracked());
+        game_context.open_statistics.set(false);
+    };
+
+    Effect::new(move || {
+        if events_context.key_pressed(Key::Character('p')) {
+            open_passives()
+        }
+    });
+
+    let open_stats = move || {
+        game_context.open_inventory.set(false);
+        game_context.open_passives.set(false);
+        game_context
+            .open_statistics
+            .set(!game_context.open_statistics.get_untracked());
+    };
+
+    Effect::new(move || {
+        if events_context.key_pressed(Key::Character('s')) {
+            open_stats()
+        }
+    });
+
     view! {
         <div class="relative z-50 flex justify-between items-center p-1 xl:p-2 bg-zinc-800 shadow-md h-auto">
             <div class="flex justify-around w-full items-center">
@@ -66,27 +110,15 @@ pub fn HeaderMenu() -> impl IntoView {
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
                 <FullscreenButton />
                 <WikiButton />
-                <MenuButton on:click=move |_| {
-                    game_context.open_inventory.set(!game_context.open_inventory.get());
-                    game_context.open_statistics.set(false);
-                    game_context.open_passives.set(false);
-                }>"Inventory"</MenuButton>
-                <MenuButton on:click=move |_| {
-                    game_context.open_inventory.set(false);
-                    game_context.open_passives.set(!game_context.open_passives.get());
-                    game_context.open_statistics.set(false);
-                }>
+                <MenuButton on:click=move |_| open_inventory()>"Inventory"</MenuButton>
+                <MenuButton on:click=move |_| open_passives()>
                     "Passives"
                     {move || {
                         let points = game_context.player_resources.read().passive_points;
                         if points > 0 { format!(" ({points})") } else { "".to_string() }
                     }}
                 </MenuButton>
-                <MenuButton on:click=move |_| {
-                    game_context.open_inventory.set(false);
-                    game_context.open_passives.set(false);
-                    game_context.open_statistics.set(!game_context.open_statistics.get());
-                }>"Stats"</MenuButton>
+                <MenuButton on:click=move |_| open_stats()>"Stats"</MenuButton>
                 <MenuButtonRed on:click=try_abandon_quest>"Stop"</MenuButtonRed>
                 <MenuButton on:click=quit>"Quit"</MenuButton>
             </div>
