@@ -13,11 +13,13 @@ use shared::data::{
         TargetType,
     },
     stat_effect::Modifier,
-    trigger::TriggerSpecs,
 };
 
 use crate::components::{
-    shared::tooltips::effects_tooltip::{self, formatted_effects_list},
+    shared::tooltips::{
+        effects_tooltip::{self, formatted_effects_list},
+        trigger_tooltip::format_trigger,
+    },
     ui::number::format_number,
 };
 
@@ -125,8 +127,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                                 view! {
                                     <span class="text-white">{skill_specs.upgrade_level}</span>
                                 }
-                            }}
-                            " | Upgrade Cost: "
+                            }} " | Upgrade Cost: "
                             <span class="text-white">
                                 {format_number(skill_specs.next_upgrade_cost)}" Gold"
                             </span>
@@ -197,7 +198,7 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
     }
 }
 
-fn format_effect(effect: SkillEffect) -> impl IntoView {
+pub fn format_effect(effect: SkillEffect) -> impl IntoView {
     let success_chance = if effect.success_chance.value < 100.0 {
         Some(format!("{:.0}% chance to ", effect.success_chance.value))
     } else {
@@ -426,29 +427,11 @@ where
 }
 
 #[component]
-fn EffectLi(children: Children) -> impl IntoView {
+pub fn EffectLi(children: Children) -> impl IntoView {
     view! {
         <li class="text-xs xl:text-sm text-violet-200 leading-snug whitespace-pre-line">
             {children()}
         </li>
-    }
-}
-
-pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
-    let effects = if trigger.triggered_effect.modifiers.is_empty() {
-        trigger
-            .triggered_effect
-            .effects
-            .into_iter()
-            .map(format_effect)
-            .collect::<Vec<_>>()
-    } else {
-        vec![]
-    };
-
-    view! {
-        <EffectLi>{trigger.description}</EffectLi>
-        {effects}
     }
 }
 

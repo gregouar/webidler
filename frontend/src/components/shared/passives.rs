@@ -11,7 +11,7 @@ use crate::{
         accessibility::AccessibilityContext,
         shared::tooltips::{
             effects_tooltip::{self, formatted_effects_list},
-            format_trigger,
+            trigger_tooltip::format_trigger,
         },
         ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
     },

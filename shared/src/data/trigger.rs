@@ -43,7 +43,9 @@ pub struct HitTrigger {
 pub struct KillTrigger {
     #[serde(default)]
     pub is_stunned: Option<bool>,
+    #[serde(default)]
     pub is_debuffed: Option<bool>,
+    #[serde(default)]
     pub is_damaged_over_time: Option<DamageType>,
     // TODO: more?
 }

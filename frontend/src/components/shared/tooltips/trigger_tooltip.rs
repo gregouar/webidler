@@ -1,0 +1,152 @@
+use leptos::prelude::*;
+
+use shared::data::{
+    item::SkillRange,
+    skill::{DamageType, TargetType},
+    trigger::{EventTrigger, HitTrigger, KillTrigger, TriggerSpecs},
+};
+
+use crate::components::shared::tooltips::skill_tooltip::{self, skill_type_str, EffectLi};
+
+pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
+    // let effects = if trigger.triggered_effect.modifiers.is_empty() {
+    //     trigger
+    //         .triggered_effect
+    //         .effects
+    //         .into_iter()
+    //         .map(skill_tooltip::format_effect)
+    //         .collect::<Vec<_>>()
+    // } else {
+    //     vec![]
+    // };
+
+    let effects = trigger
+        .triggered_effect
+        .effects
+        .into_iter()
+        .map(skill_tooltip::format_effect)
+        .collect::<Vec<_>>();
+
+    view! {
+        <EffectLi>{format_trigger_event(&trigger.triggered_effect.trigger)}":"</EffectLi>
+        <EffectLi>{trigger.description}</EffectLi>
+        {effects}
+    }
+}
+
+fn format_trigger_event(event_trigger: &EventTrigger) -> String {
+    match event_trigger {
+        EventTrigger::OnHit(hit_trigger) => format!("On {}Hit", format_hit_trigger(hit_trigger)),
+        EventTrigger::OnTakeHit(hit_trigger) => {
+            format!("On {}Hit Taken", format_hit_trigger(hit_trigger))
+        }
+        EventTrigger::OnKill(kill_trigger) => {
+            format!("On {}Kill", format_kill_trigger(kill_trigger))
+        }
+        EventTrigger::OnWaveCompleted => "On Wave completed".to_string(),
+        EventTrigger::OnThreatIncreased => "On Threat increased".to_string(),
+        EventTrigger::OnDeath(target_type) => {
+            format!("On {}Death", format_target_type(target_type))
+        }
+    }
+}
+
+fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
+    format!(
+        "{}{}{}{}{}",
+        hurt_str(hit_trigger.is_hurt),
+        blocked_str(hit_trigger.is_blocked),
+        critical_str(hit_trigger.is_crit),
+        range_str(hit_trigger.range),
+        skill_type_str(hit_trigger.skill_type),
+    )
+}
+
+fn range_str(value: Option<SkillRange>) -> &'static str {
+    match value {
+        Some(value) => match value {
+            SkillRange::Melee => "Melee ",
+            SkillRange::Distance => "Ranged ",
+            SkillRange::Any => "",
+        },
+        None => "",
+    }
+}
+
+fn blocked_str(value: Option<bool>) -> &'static str {
+    match value {
+        Some(value) => match value {
+            true => "Blocked ",
+            false => "Non-Blocked ",
+        },
+        None => "",
+    }
+}
+
+fn hurt_str(value: Option<bool>) -> &'static str {
+    match value {
+        Some(value) => match value {
+            true => "Damaging ",
+            false => "Non-Damaging ",
+        },
+        None => "",
+    }
+}
+
+fn critical_str(value: Option<bool>) -> &'static str {
+    match value {
+        Some(value) => match value {
+            true => "Critical ",
+            false => "Non-Critical ",
+        },
+        None => "",
+    }
+}
+
+fn format_kill_trigger(kill_trigger: &KillTrigger) -> String {
+    format!(
+        "{}{}{}",
+        stunned_str(kill_trigger.is_stunned),
+        debuffed_str(kill_trigger.is_debuffed),
+        damaged_over_time_str(kill_trigger.is_damaged_over_time),
+    )
+}
+
+fn stunned_str(value: Option<bool>) -> &'static str {
+    match value {
+        Some(value) => match value {
+            true => "Stunned ",
+            false => "Non-Stunned ",
+        },
+        None => "",
+    }
+}
+fn debuffed_str(value: Option<bool>) -> &'static str {
+    match value {
+        Some(value) => match value {
+            true => "Cursed ",
+            false => "Non-Cursed ",
+        },
+        None => "",
+    }
+}
+
+fn damaged_over_time_str(value: Option<DamageType>) -> &'static str {
+    match value {
+        Some(value) => match value {
+            DamageType::Physical => "Bleeding ",
+            DamageType::Fire => "Burning ",
+            DamageType::Poison => "Poisoned ",
+            DamageType::Storm => "Chilled ",
+        },
+        None => "",
+    }
+}
+
+fn format_target_type(target_type: &TargetType) -> &'static str {
+    match target_type {
+        TargetType::Enemy => "Enemy ",
+        TargetType::Friend => "Friend ",
+        TargetType::Me => "",
+    }
+}

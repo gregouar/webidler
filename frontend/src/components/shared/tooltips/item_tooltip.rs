@@ -10,7 +10,7 @@ use shared::data::{
     skill::DamageType,
 };
 
-use super::skill_tooltip::format_trigger;
+use crate::components::shared::tooltips::trigger_tooltip::format_trigger;
 
 use super::effects_tooltip;
 
