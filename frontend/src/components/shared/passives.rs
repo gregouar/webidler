@@ -37,13 +37,18 @@ pub struct NodeStatus {
     pub meta_status: MetaStatus,
 }
 
-pub fn node_meta_status(node_level: u8, locked: bool, max_upgrade_level: Option<u8>) -> MetaStatus {
+pub fn node_meta_status(
+    node_level: u8,
+    locked: bool,
+    // max_upgrade_level: Option<u8>,
+) -> MetaStatus {
     if node_level > 0 {
-        if locked && node_level == 1 && max_upgrade_level.unwrap_or_default() > 0 {
-            MetaStatus::Normal
-        } else {
-            MetaStatus::Ascended
-        }
+        // if locked && node_level == 1 && max_upgrade_level.unwrap_or_default() > 0 {
+        //     MetaStatus::Normal
+        // } else {
+        //     MetaStatus::Ascended
+        // }
+        MetaStatus::Ascended
     } else if locked {
         MetaStatus::Locked
     } else {
@@ -241,16 +246,8 @@ pub fn Connection(
 
     view! {
         {if let (Some(from), Some(to)) = (from_node, to_node) {
-            let from_status = move || node_meta_status(
-                node_levels.get().0,
-                from.locked,
-                from.max_upgrade_level,
-            );
-            let to_status = move || node_meta_status(
-                node_levels.get().1,
-                to.locked,
-                to.max_upgrade_level,
-            );
+            let from_status = move || node_meta_status(node_levels.get().0, from.locked);
+            let to_status = move || node_meta_status(node_levels.get().1, to.locked);
             let purchase_status = move || match amount_connections.get() {
                 2 => PurchaseStatus::Purchased,
                 1 => PurchaseStatus::Purchaseable,
@@ -268,6 +265,8 @@ pub fn Connection(
             let width = move || if amount_connections.get() == 2 { "3" } else { "2" };
             let gradient_id = format!("{}-{}", connection.from, connection.to);
             Some(
+                // from.max_upgrade_level,
+                // to.max_upgrade_level,
 
                 view! {
                     <linearGradient

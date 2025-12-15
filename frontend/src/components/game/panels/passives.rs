@@ -106,7 +106,7 @@ fn InGameNode(
             let meta_status = node_meta_status(
                 node_level.get(),
                 node_specs.locked,
-                node_specs.max_upgrade_level,
+                // node_specs.max_upgrade_level,
             );
 
             let purchase_status = if game_context
