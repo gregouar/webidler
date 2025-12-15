@@ -39,11 +39,12 @@ pub struct NodeStatus {
 
 pub fn node_meta_status(node_level: u8, locked: bool, max_upgrade_level: Option<u8>) -> MetaStatus {
     if node_level > 0 {
-        if locked && node_level == 1 && max_upgrade_level.unwrap_or_default() > 0 {
-            MetaStatus::Normal
-        } else {
-            MetaStatus::Ascended
-        }
+        // if locked && node_level == 1 && max_upgrade_level.unwrap_or_default() > 0 {
+        //     MetaStatus::Normal
+        // } else {
+        //     MetaStatus::Ascended
+        // }
+        MetaStatus::Ascended
     } else if locked {
         MetaStatus::Locked
     } else {
