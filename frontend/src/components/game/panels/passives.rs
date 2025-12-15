@@ -93,7 +93,7 @@ fn InGameNode(
                 .ascension
                 .ascended_nodes
                 .get(&node_id)
-                .cloned()
+                .copied()
                 .unwrap_or_default()
         }
     });

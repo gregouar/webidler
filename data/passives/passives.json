@@ -1101,15 +1101,7 @@
             "modifier": "Multiplier",
             "value": 20
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": "Block",
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "arcane_bastion_block_2": {
         "name": "Block",
@@ -1123,15 +1115,7 @@
             "modifier": "Multiplier",
             "value": 20
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": "Block",
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "arcane_bastion_block_3": {
         "name": "Block",
@@ -1145,15 +1129,7 @@
             "modifier": "Multiplier",
             "value": 20
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": "Block",
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "overwhelming_force": {
         "name": "Overwhelming Force",
@@ -1195,19 +1171,9 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 40
+            "value": 50
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": {
-              "CritDamage": null
-            },
-            "modifier": "Multiplier",
-            "value": 20
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "overwhelming_force_damage_2": {
         "name": "Critical Damage",
@@ -1221,19 +1187,9 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 40
+            "value": 50
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": {
-              "CritDamage": null
-            },
-            "modifier": "Multiplier",
-            "value": 20
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "overwhelming_force_damage_3": {
         "name": "Critical Damage",
@@ -1247,19 +1203,9 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 40
+            "value": 50
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": {
-              "CritDamage": null
-            },
-            "modifier": "Multiplier",
-            "value": 20
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "convert_dot": {
         "name": "Ain't Nobody Got Time for That",
@@ -1298,17 +1244,9 @@
           {
             "stat": { "Damage": {} },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 30
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": { "Damage": {} },
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "convert_dot_damage_2": {
         "name": "Damage",
@@ -1320,17 +1258,9 @@
           {
             "stat": { "Damage": {} },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 30
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": { "Damage": {} },
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "convert_dot_damage_3": {
         "name": "Damage",
@@ -1342,17 +1272,9 @@
           {
             "stat": { "Damage": {} },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 30
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": { "Damage": {} },
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "spell_crit": {
         "name": "Unstable Power",
@@ -1380,7 +1302,7 @@
         "locked": true
       },
       "spell_crit_chance_1": {
-        "name": "Spell Critical Hit Chance",
+        "name": "Critical Hit Chance",
         "icon": "passives/critical_chance.svg",
         "x": -10,
         "y": -42.5,
@@ -1388,51 +1310,31 @@
         "effects": [
           {
             "stat": {
-              "CritChance": "Spell"
+              "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 30
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": {
-              "CritChance": "Spell"
-            },
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "spell_crit_chance_2": {
-        "name": "Spell Critical Hit Chance",
-        "icon": "passives/critical_chance.svg",
+        "name": "Spell Critical Hit Damage",
+        "icon": "passives/critical_damage.svg",
         "x": 0,
         "y": -50,
         "node_type": "Critical",
         "effects": [
           {
             "stat": {
-              "CritChance": "Spell"
+              "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 60
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": {
-              "CritChance": "Spell"
-            },
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "spell_crit_chance_3": {
-        "name": "Spell Critical Hit Chance",
+        "name": "Critical Hit Chance",
         "icon": "passives/critical_chance.svg",
         "x": 10,
         "y": -42.5,
@@ -1440,22 +1342,12 @@
         "effects": [
           {
             "stat": {
-              "CritChance": "Spell"
+              "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 30
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": {
-              "CritChance": "Spell"
-            },
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "mana_shield": {
         "name": "Mana Shield",
@@ -1483,17 +1375,9 @@
           {
             "stat": "Mana",
             "modifier": "Multiplier",
-            "value": 10
+            "value": 15
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": "Mana",
-            "modifier": "Multiplier",
-            "value": 5
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "mana_shield_mana_2": {
         "name": "Maximum Mana",
@@ -1505,17 +1389,9 @@
           {
             "stat": "Mana",
             "modifier": "Multiplier",
-            "value": 10
+            "value": 15
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": "Mana",
-            "modifier": "Multiplier",
-            "value": 5
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "mana_shield_mana_3": {
         "name": "Maximum Mana",
@@ -1527,17 +1403,9 @@
           {
             "stat": "Mana",
             "modifier": "Multiplier",
-            "value": 10
+            "value": 15
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": "Mana",
-            "modifier": "Multiplier",
-            "value": 5
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "enrage": {
         "name": "Berserker",
@@ -1606,19 +1474,9 @@
               "Armor": "Fire"
             },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 30
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": {
-              "Armor": "Fire"
-            },
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "enrage_armor_2": {
         "name": "Poison Resistance",
@@ -1632,19 +1490,9 @@
               "Armor": "Poison"
             },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 30
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": {
-              "Armor": "Poison"
-            },
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "enrage_armor_3": {
         "name": "Storm Resistance",
@@ -1658,19 +1506,9 @@
               "Armor": "Storm"
             },
             "modifier": "Multiplier",
-            "value": 20
+            "value": 30
           }
-        ],
-        "upgrade_effects": [
-          {
-            "stat": {
-              "Armor": "Storm"
-            },
-            "modifier": "Multiplier",
-            "value": 10
-          }
-        ],
-        "max_upgrade_level": 3
+        ]
       },
       "gold_init_2": {
         "name": "Impactful Start",
@@ -2671,9 +2509,17 @@
           {
             "stat": "MovementSpeed",
             "modifier": "Multiplier",
-            "value": 20
+            "value": 10
           }
         ],
+        "upgrade_effects": [
+          {
+            "stat": "MovementSpeed",
+            "modifier": "Multiplier",
+            "value": 5
+          }
+        ],
+        "max_upgrade_level": 3,
         "locked": true
       },
       "restoration_1": {
