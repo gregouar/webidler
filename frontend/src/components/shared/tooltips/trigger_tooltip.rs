@@ -3,10 +3,32 @@ use leptos::prelude::*;
 use shared::data::{
     item::SkillRange,
     skill::{DamageType, TargetType},
-    trigger::{EventTrigger, HitTrigger, KillTrigger, TriggerSpecs},
+    trigger::{EventTrigger, HitTrigger, KillTrigger, TriggerEffectModifierSource, TriggerSpecs},
 };
 
-use crate::components::shared::tooltips::skill_tooltip::{self, skill_type_str, EffectLi};
+use crate::components::shared::tooltips::{
+    effects_tooltip::{damage_type_str, status_type_str},
+    skill_tooltip::{self, skill_type_str, EffectLi},
+};
+
+pub fn format_trigger_modifier(modifier: TriggerEffectModifierSource) -> String {
+    match modifier {
+        TriggerEffectModifierSource::HitDamage(damage_type) => {
+            format!("{}Hit Damage as", damage_type_str(damage_type))
+        }
+        TriggerEffectModifierSource::HitCrit => "when Critical".to_string(),
+        TriggerEffectModifierSource::AreaLevel => "Area Level".to_string(),
+        TriggerEffectModifierSource::StatusValue(stat_status_type) => {
+            format!("{} Power", status_type_str(stat_status_type))
+        }
+        TriggerEffectModifierSource::StatusDuration(stat_status_type) => {
+            format!("{} Duration", status_type_str(stat_status_type))
+        }
+        TriggerEffectModifierSource::StatusStacks(stat_status_type) => {
+            format!("per {} Stack", status_type_str(stat_status_type))
+        }
+    }
+}
 
 pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
     // let effects = if trigger.triggered_effect.modifiers.is_empty() {
@@ -24,7 +46,7 @@ pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
         .triggered_effect
         .effects
         .into_iter()
-        .map(skill_tooltip::format_effect)
+        .map(|x| skill_tooltip::format_effect(x, Some(&trigger.triggered_effect.modifiers)))
         .collect::<Vec<_>>();
 
     view! {
@@ -43,7 +65,7 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
         EventTrigger::OnKill(kill_trigger) => {
             format!("On {}Kill", format_kill_trigger(kill_trigger))
         }
-        EventTrigger::OnWaveCompleted => "On Wave completed".to_string(),
+        EventTrigger::OnWaveCompleted => "At the end of each Wave completed".to_string(),
         EventTrigger::OnThreatIncreased => "On Threat increased".to_string(),
         EventTrigger::OnDeath(target_type) => {
             format!("On {}Death", format_target_type(target_type))

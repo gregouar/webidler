@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use leptos::{html::*, prelude::*};
+use leptos::{html::*, leptos_dom::logging::console_log, prelude::*};
 
 use shared::data::{
     chance::ChanceRange,
@@ -13,12 +13,14 @@ use shared::data::{
         TargetType,
     },
     stat_effect::Modifier,
+    temple::StatType,
+    trigger::TriggerEffectModifier,
 };
 
 use crate::components::{
     shared::tooltips::{
         effects_tooltip::{self, formatted_effects_list},
-        trigger_tooltip::format_trigger,
+        trigger_tooltip::{format_trigger, format_trigger_modifier},
     },
     ui::number::format_number,
 };
@@ -188,7 +190,7 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
     let effects = targets_group
         .effects
         .into_iter()
-        .map(format_effect)
+        .map(|x| format_effect(x, None))
         .collect::<Vec<_>>();
 
     view! {
@@ -198,7 +200,41 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
     }
 }
 
-pub fn format_effect(effect: SkillEffect) -> impl IntoView {
+fn format_value<'a>(
+    value: ChanceRange<f64>,
+    stat: StatType,
+    modifiers: Option<&'a [TriggerEffectModifier]>,
+) -> String {
+    if let Some(modifier) = modifiers
+        .unwrap_or_default()
+        .iter()
+        .find(|modifier| modifier.stat.is_match(&stat))
+    {
+        let factor_str = match modifier.modifier {
+            Modifier::Multiplier => format!("{:.0}% of", modifier.factor),
+            Modifier::Flat => format!(
+                "{:.1} per",
+                format_min_max(ChanceRange {
+                    min: value.min + modifier.factor,
+                    max: value.max + modifier.factor,
+                    lucky_chance: value.lucky_chance
+                })
+            ),
+        };
+        format!(
+            "{} {}",
+            factor_str,
+            format_trigger_modifier(modifier.source),
+        )
+    } else {
+        format_min_max(value)
+    }
+}
+
+pub fn format_effect<'a>(
+    effect: SkillEffect,
+    modifiers: Option<&'a [TriggerEffectModifier]>,
+) -> impl IntoView + use<> {
     let success_chance = if effect.success_chance.value < 100.0 {
         Some(format!("{:.0}% chance to ", effect.success_chance.value))
     } else {
@@ -217,14 +253,20 @@ pub fn format_effect(effect: SkillEffect) -> impl IntoView {
                 .map(|(damage_type, value)| {
                     let success_chance = success_chance.clone();
                     let damage_color = damage_color(damage_type);
+                    let value_str = format_value(
+                        value,
+                        StatType::Damage {
+                            damage_type: Some(damage_type),
+                            skill_type: None,
+                        },
+                        modifiers.clone(),
+                    );
 
                     view! {
                         <EffectLi>
                             {success_chance}"Deal "
-                            <span class=format!(
-                                "font-semibold {damage_color}",
-                            )>{format_min_max(value)}</span> " "
-                            {damage_type_str(Some(damage_type))} "Damage"
+                            <span class=format!("font-semibold {damage_color}")>{value_str}</span>
+                            " " {damage_type_str(Some(damage_type))} "Damage"
                         </EffectLi>
                     }
                 })
@@ -265,14 +307,21 @@ pub fn format_effect(effect: SkillEffect) -> impl IntoView {
                     StatusSpecs::DamageOverTime { damage_type, .. } => {
                         let success_chance = success_chance.clone();
                         let damage_color = damage_color(damage_type);
+                        let value_str = format_value(
+                                            status_effect.value,
+                                            StatType::Damage {
+                                                damage_type: Some(damage_type),
+                                                skill_type: None,
+                                            },
+                                            modifiers.clone(),
+                                        );
                         view! {
                             <EffectLi>
                                 {success_chance}"Deal "
                                 <span class=format!(
                                     "font-semibold {damage_color}",
-                                )>{format_min_max(status_effect.value)}</span>"  "
-                                {damage_type_str(Some(damage_type))} "Damage per second "
-                                {format_duration(duration)}
+                                )>{value_str}</span>"  " {damage_type_str(Some(damage_type))}
+                                "Damage per second " {format_duration(duration)}
                             </EffectLi>
                         }
                         .into_any()
@@ -352,19 +401,22 @@ pub fn format_effect(effect: SkillEffect) -> impl IntoView {
             restore_type,
             value,
             modifier,
-        } => view! {
-            <EffectLi>
-                {success_chance}"Restore "
-                <span class="font-semibold">
-                    {format_min_max(value)}
-                    {match modifier {
-                        Modifier::Multiplier => "%",
-                        Modifier::Flat => "",
-                    }}
-                </span> {restore_type_str(Some(restore_type))}
-            </EffectLi>
+        } => {
+            let value_str = format_value(value, StatType::Restore(Some(restore_type)), modifiers);
+            view! {
+                <EffectLi>
+                    {success_chance}"Restore "
+                    <span class="font-semibold">
+                        {value_str}
+                        {match modifier {
+                            Modifier::Multiplier => "%",
+                            Modifier::Flat => "",
+                        }}
+                    </span> {restore_type_str(Some(restore_type))}
+                </EffectLi>
+            }
+            .into_any()
         }
-        .into_any(),
         SkillEffectType::Resurrect => {
             view! { <EffectLi>{success_chance}"Resurrect"</EffectLi> }.into_any()
         }

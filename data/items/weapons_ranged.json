@@ -241,7 +241,7 @@
                       "damage_type": "Poison"
                     }
                   },
-                  "value": 0.3
+                  "value": 1
                 }
               ]
             },
@@ -273,7 +273,7 @@
               "Damage": {}
             },
             "modifier": "Multiplier",
-            "factor": 100.0,
+            "factor": 30.0,
             "source": {
               "HitDamage": "Storm"
             }

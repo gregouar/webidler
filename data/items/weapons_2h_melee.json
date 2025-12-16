@@ -286,7 +286,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Storm": 0.1
+                "Storm": 1.0
               }
             },
             "ignore_stat_effects": [
@@ -320,7 +320,7 @@
               "Damage": {}
             },
             "modifier": "Multiplier",
-            "factor": 100.0,
+            "factor": 10.0,
             "source": {
               "HitDamage": "Physical"
             }

@@ -90,7 +90,7 @@ fn to_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     }
 }
 
-fn status_type_str(status_type: Option<StatStatusType>) -> String {
+pub fn status_type_str(status_type: Option<StatStatusType>) -> String {
     match status_type {
         Some(status_type) => match status_type {
             StatStatusType::Stun => "Stun".to_string(),
