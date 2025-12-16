@@ -107,7 +107,6 @@
     "triggers": [
       {
         "trigger_id": "sootreaver_burn",
-        "description": "50% chance to inflict 100% of Fire Damage as extra Fire Damage over Time per second for 4 seconds.",
         "OnHit": {
           "skill_type": "Attack",
           "is_triggered": false
@@ -273,7 +272,6 @@
     "triggers": [
       {
         "trigger_id": "tidesbreaker_anchor",
-        "description": "Trigger a Maelstrom on Critical Hit, inflicting 10% of Physical Hit Damage as Spell Storm Damage to All Enemies.",
         "OnHit": {
           "is_crit": true,
           "is_triggered": false

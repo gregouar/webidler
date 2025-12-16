@@ -83,7 +83,6 @@
     "triggers": [
       {
         "trigger_id": "baguette_fromage",
-        "description": "Hitting an Enemy with Fire Spell Damage cover them in Melted Cheese:",
         "OnHit": {
           "skill_type": "Spell",
           "damage_type": "Fire"

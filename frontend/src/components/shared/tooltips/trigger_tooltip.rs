@@ -36,9 +36,9 @@ pub fn format_trigger_modifier_as<'a>(
 pub fn format_trigger_modifier_per(modifier: Option<&TriggerEffectModifier>) -> Option<String> {
     modifier.map(|modifier| {
         if let TriggerEffectModifierSource::HitCrit = modifier.source {
-            "on Critical Hit"
+            " on Critical Hit".to_string()
         } else {
-            format!("per {}", trigger_modifier_source_str(modifier.source))
+            format!(" per {}", trigger_modifier_source_str(modifier.source))
         }
     })
 }
@@ -60,7 +60,7 @@ pub fn format_extra_trigger_modifiers<'a>(
                 value: modifier.factor,
                 bypass_ignore: false,
             };
-            view! { <li>{format_stat(&stat_effect)}" " {format_trigger_modifier_per(Some(modifier))}</li> }
+            view! { <li>{format_stat(&stat_effect)}{format_trigger_modifier_per(Some(modifier))}</li> }
             .into_any()
         })
         .collect();

@@ -120,7 +120,6 @@
     "triggers": [
       {
         "trigger_id": "witch_hat",
-        "description": "On Hit Taken:",
         "skill_type": "Attack",
         "OnTakeHit": {
           "is_hurt": true

@@ -1577,7 +1577,6 @@
         "triggers": [
           {
             "trigger_id": "enrage",
-            "description": "On Hit Taken:",
             "OnTakeHit": {
               "is_hurt": true
             },
@@ -2390,7 +2389,7 @@
         "triggers": [
           {
             "trigger_id": "dot_spread",
-            "description": "Damage over Time effects spread to nearby enemies on Kill, for their remaining Duration.",
+            "description": "Damage over Time effects spread to nearby Enemies, for their remaining Duration.",
             "OnKill": {
               "is_damaged_over_time": null
             },

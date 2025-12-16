@@ -371,8 +371,9 @@ pub fn format_effect<'a>(
                                 <span class=format!(
                                     "font-semibold {damage_color}",
                                 )>{format_min_max(status_effect.value)}</span>
-                                {trigger_modifier_str}"  " {damage_type_str(Some(damage_type))}
-                                "Damage per second " {format_duration(duration)}
+                                {trigger_modifier_str}"  " {stackable_str(status_effect.cumulate)}
+                                {damage_type_str(Some(damage_type))} "Damage per second "
+                                {format_duration(duration)}
                             </EffectLi>
                         }
                         .into_any()
@@ -550,6 +551,14 @@ where
             " seconds"
         }
         .into_any()
+    }
+}
+
+fn stackable_str(cumulate: bool) -> &'static str {
+    if cumulate {
+        "Stackable "
+    } else {
+        ""
     }
 }
 

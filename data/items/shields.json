@@ -56,7 +56,6 @@
     "triggers": [
       {
         "trigger_id": "stunning_block",
-        "description": "Blocked Hits inflict:",
         "OnTakeHit": { "is_blocked": true },
         "target": "Source",
         "effects": [

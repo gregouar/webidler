@@ -58,7 +58,6 @@
     "triggers": [
       {
         "trigger_id": "pathwalker_remains",
-        "description": "At the end of each wave:",
         "OnWaveCompleted": {},
         "target": "Source",
         "effects": [

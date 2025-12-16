@@ -402,7 +402,7 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "skills/curse_conductivity.svg",
-                      "description": "Trigger a Maelstrom of Lightning, damaging all enemies for 10% of Storm Damage dealt.",
+                      "description": "Trigger a Maelstrom, damaging all enemies for 10% of Storm Damage dealt.",
                       "OnTakeHit": {
                         "is_crit": true,
                         "is_triggered": false
@@ -742,7 +742,6 @@
     "triggers": [
       {
         "trigger_id": "skills/poison_coating.svg",
-        "description": "Attack Hits:",
         "OnHit": {
           "skill_type": "Attack",
           "is_hurt": true
@@ -958,14 +957,7 @@
                     }
                   },
                   "value": 10
-                }
-              ]
-            }
-          },
-          {
-            "ApplyStatus": {
-              "duration": 5,
-              "statuses": [
+                },
                 {
                   "replace_on_value_only": true,
                   "status_type": {
@@ -1043,12 +1035,7 @@
                   }
                 }
               ]
-            },
-            "ignore_stat_effects": [
-              {
-                "StatusPower": null
-              }
-            ]
+            }
           }
         ]
       }
@@ -1212,7 +1199,6 @@
     "triggers": [
       {
         "trigger_id": "retaliate",
-        "description": "Trigger on block:",
         "skill_type": "Attack",
         "OnTakeHit": {
           "is_blocked": true

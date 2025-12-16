@@ -173,7 +173,6 @@
     "triggers": [
       {
         "trigger_id": "signet_ring_unique",
-        "description": "On Blocked Hit:",
         "OnTakeHit": { "is_blocked": true },
         "target": "SameTarget",
         "effects": [

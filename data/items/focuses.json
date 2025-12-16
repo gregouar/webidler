@@ -64,7 +64,6 @@
     "triggers": [
       {
         "trigger_id": "vile_codex",
-        "description": "On Killing a Cursed Enemy:",
         "OnKill": { "is_debuffed": true },
         "target": "Source",
         "effects": [

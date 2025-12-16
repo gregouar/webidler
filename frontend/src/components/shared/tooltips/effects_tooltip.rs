@@ -544,12 +544,27 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             skill_type,
             effect_type,
         } => {
-            format!(
-                "{} Success Chance to {}{}",
-                format_adds_removes(value, false, "%"),
-                skill_type_str(*skill_type),
-                stat_skill_effect_type_str(*effect_type)
-            )
+            let unwrap_value = value.unwrap_or_default();
+            if unwrap_value >= 100.0 {
+                format!(
+                    "Guaranteed to {}{}",
+                    skill_type_str(*skill_type),
+                    stat_skill_effect_type_str(*effect_type)
+                )
+            } else if unwrap_value <= -100.0 {
+                format!(
+                    "Impossible to {}{}",
+                    skill_type_str(*skill_type),
+                    stat_skill_effect_type_str(*effect_type)
+                )
+            } else {
+                format!(
+                    "{} Success Chance to {}{}",
+                    format_adds_removes(value, false, "%"),
+                    skill_type_str(*skill_type),
+                    stat_skill_effect_type_str(*effect_type)
+                )
+            }
         }
         StatType::SkillLevel(skill_type) => {
             format!(
