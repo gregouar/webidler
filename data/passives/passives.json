@@ -1831,11 +1831,11 @@
                                 "damage": {}
                               }
                             }
-                          ]
+                          ],
+                          "inherit_modifiers": true
                         }
                       },
-                      "cumulate": true,
-                      "value": 1
+                      "cumulate": true
                     }
                   ]
                 },
@@ -2119,7 +2119,6 @@
         "triggers": [
           {
             "trigger_id": "blazing_inferno",
-            "description": "Fire Hits have 30% Chance to apply a stacking Burn for 2s, dealing 30% of the Hit's Fire Damage per second.",
             "OnHit": {},
             "effects": [
               {
@@ -2133,7 +2132,7 @@
                           "damage_type": "Fire"
                         }
                       },
-                      "value": 1.0,
+                      "value": 0.0,
                       "cumulate": true
                     }
                   ]
@@ -2162,8 +2161,8 @@
                 "stat": {
                   "Damage": {}
                 },
-                "modifier": "Multiplier",
-                "factor": 30.0,
+                "modifier": "Flat",
+                "factor": 0.3,
                 "source": {
                   "HitDamage": "Fire"
                 }
@@ -2678,7 +2677,7 @@
         "y": 0,
         "size": 1,
         "node_type": "Utility",
-       
+
         "effects": [
           {
             "stat": "MovementSpeed",

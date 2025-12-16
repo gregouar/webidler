@@ -218,6 +218,15 @@ pub fn apply_status(
         return false;
     }
 
+    match status_specs {
+        StatusSpecs::DamageOverTime { .. } | StatusSpecs::StatModifier { .. } => {
+            if value <= 0.0 {
+                return false;
+            }
+        }
+        StatusSpecs::Trigger(_) | StatusSpecs::Stun => {}
+    }
+
     // Long duration are considered as forever
     let duration = match duration {
         Some(duration) if duration > 9999.0f64 => None,

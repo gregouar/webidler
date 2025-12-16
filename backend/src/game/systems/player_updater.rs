@@ -101,7 +101,7 @@ pub fn update_player_specs(
         .or_default()) += total_armor;
     player_specs.character_specs.block.value += total_block;
 
-    player_specs.effects = EffectsMap::combine_all(
+    player_specs.character_specs.effects = EffectsMap::combine_all(
         player_inventory
             .equipped_items()
             .map(|(_, i)| i.modifiers.aggregate_effects(AffixEffectScope::Global))
@@ -132,6 +132,12 @@ pub fn update_player_specs(
                     _ => None,
                 }),
         )
+        .chain(
+            player_specs
+                .skills_specs
+                .iter()
+                .flat_map(|skill_specs| skill_specs.triggers.iter()),
+        )
         .map(|trigger_specs| trigger_specs.triggered_effect.clone())
         .chain(
             player_inventory
@@ -144,13 +150,13 @@ pub fn update_player_specs(
     compute_player_specs(player_specs, player_inventory, area_threat);
 
     // We only add skills trigger after because they were already increased by skill update
-    player_specs.character_specs.triggers.extend(
-        player_specs
-            .skills_specs
-            .iter()
-            .flat_map(|skill_specs| skill_specs.triggers.iter())
-            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
-    );
+    // player_specs.character_specs.triggers.extend(
+    //     player_specs
+    //         .skills_specs
+    //         .iter()
+    //         .flat_map(|skill_specs| skill_specs.triggers.iter())
+    //         .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
+    // );
 }
 
 fn compute_player_specs(
@@ -158,7 +164,8 @@ fn compute_player_specs(
     player_inventory: &PlayerInventory,
     area_threat: &AreaThreat,
 ) {
-    let effects = stats_updater::stats_map_to_vec(&player_specs.effects, area_threat);
+    let effects =
+        stats_updater::stats_map_to_vec(&player_specs.character_specs.effects, area_threat);
 
     player_specs.character_specs =
         characters_updater::update_character_specs(&player_specs.character_specs, &effects);
@@ -195,6 +202,8 @@ fn compute_player_specs(
                             },
                             ignore_stat_effects: Default::default(),
                         }],
+                        owner: Some(CharacterId::Player),
+                        inherit_modifiers: false,
                     });
                 }
                 // TODO: Find way to do increase?
@@ -246,13 +255,13 @@ fn compute_player_specs(
         );
     }
 
-    for trigger_effect in player_specs.character_specs.triggers.iter_mut() {
-        for effect in trigger_effect.effects.iter_mut() {
-            skills_updater::compute_skill_specs_effect(
-                trigger_effect.skill_type,
-                effect,
-                effects.iter(),
-            )
-        }
-    }
+    // for trigger_effect in player_specs.character_specs.triggers.iter_mut() {
+    //     for effect in trigger_effect.effects.iter_mut() {
+    //         skills_updater::compute_skill_specs_effect(
+    //             trigger_effect.skill_type,
+    //             effect,
+    //             effects.iter(),
+    //         )
+    //     }
+    // }
 }

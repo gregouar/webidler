@@ -124,7 +124,7 @@
                       "damage_type": "Fire"
                     }
                   },
-                  "value": 1.0
+                  "value": 0.0
                 }
               ]
             },
@@ -155,8 +155,8 @@
             "stat": {
               "Damage": {}
             },
-            "modifier": "Multiplier",
-            "factor": 100.0,
+            "modifier": "Flat",
+            "factor": 1.0,
             "source": {
               "HitDamage": "Fire"
             }
@@ -286,7 +286,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Storm": 1.0
+                "Storm": 0.0
               }
             },
             "ignore_stat_effects": [
@@ -319,8 +319,8 @@
             "stat": {
               "Damage": {}
             },
-            "modifier": "Multiplier",
-            "factor": 10.0,
+            "modifier": "Flat",
+            "factor": 0.1,
             "source": {
               "HitDamage": "Physical"
             }

@@ -325,6 +325,7 @@ pub fn format_effect<'a>(
         .into_any(),
         SkillEffectType::ApplyStatus { statuses, duration } => {
             let mut stat_effects = Vec::new();
+            let mut trigger_effects = Vec::new();
             let mut max_stat_effects = Vec::new();
 
             let formatted_status_effects: Vec<_> = statuses
@@ -389,37 +390,38 @@ pub fn format_effect<'a>(
                         ().into_any()
                     }
                     StatusSpecs::Trigger(trigger_specs) => {
-                        let success_chance = success_chance.clone();
-                        view! {
-                            <EffectLi>
-                                {success_chance}"Apply the following status "
-                                {format_duration(duration)} ":"
-                                <ul>{format_trigger(*trigger_specs)}</ul>
-                            </EffectLi>
-                        }
-                        .into_any()
+                        trigger_effects.push(view! { <ul>{format_trigger(*trigger_specs)}</ul> });
+                        ().into_any()
                     }
                 })
                 .collect();
 
             let formatted_stats_effects = {
-                (!stat_effects.is_empty()).then(|| {
+                (!stat_effects.is_empty() || !trigger_effects.is_empty()).then(|| {
                     view! {
                         <EffectLi>
                             {success_chance}"Apply the following status "
                             {format_duration(duration)} ":"
-                            <ul>{effects_tooltip::formatted_effects_list(stat_effects)}</ul>
+                            {(!stat_effects.is_empty())
+                                .then(|| {
+                                    view! {
+                                        <ul>
+                                            {effects_tooltip::formatted_effects_list(stat_effects)}
+                                        </ul>
+                                    }
+                                        .into_any()
+                                })}
+                            {(!max_stat_effects.is_empty())
+                                .then(|| {
+                                    view! {
+                                        "to"
+                                        <ul>
+                                            {effects_tooltip::formatted_effects_list(max_stat_effects)}
+                                        </ul>
+                                    }
+                                        .into_any()
+                                })} {trigger_effects}
                         </EffectLi>
-                        {(!max_stat_effects.is_empty())
-                            .then(|| {
-                                view! {
-                                    "to"
-                                    <ul>
-                                        {effects_tooltip::formatted_effects_list(max_stat_effects)}
-                                    </ul>
-                                }
-                                    .into_any()
-                            })}
                     }
                 })
             };

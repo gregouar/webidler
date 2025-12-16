@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::{item::SkillShape, skill::TargetType, stat_effect::StatStatusType};
+use crate::data::{
+    character::CharacterId, item::SkillShape, skill::TargetType, stat_effect::StatStatusType,
+};
 
 use super::{
     skill::{DamageType, SkillEffect, SkillRange, SkillType},
@@ -53,6 +55,7 @@ pub struct KillTrigger {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggerSpecs {
     pub trigger_id: String,
+    #[serde(default)]
     pub description: String,
     #[serde(flatten)]
     pub triggered_effect: TriggeredEffect,
@@ -75,6 +78,11 @@ pub struct TriggeredEffect {
 
     #[serde(default)]
     pub skill_shape: SkillShape,
+
+    #[serde(default)] // For retro compatibility
+    pub owner: Option<CharacterId>,
+    #[serde(default)] // For retro compatibility
+    pub inherit_modifiers: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

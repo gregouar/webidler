@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 
 use shared::{
     constants::THREAT_EFFECT,
@@ -7,8 +7,7 @@ use shared::{
         character::CharacterId,
         character_status::StatusSpecs,
         monster::{MonsterSpecs, MonsterState},
-        passive::StatEffect,
-        stat_effect::{Modifier, StatType},
+        stat_effect::{EffectsMap, Modifier, StatType},
     },
 };
 
@@ -66,22 +65,41 @@ pub fn update_monster_specs(
     monster_state: &MonsterState,
     area_threat: &AreaThreat,
 ) {
-    let mut effects = stats_updater::stats_map_to_vec(
-        &statuses_controller::generate_effects_map_from_statuses(
+    // let mut effects = stats_updater::stats_map_to_vec(
+    //     &statuses_controller::generate_effects_map_from_statuses(
+    //         &monster_state.character_state.statuses,
+    //     ),
+    //     area_threat,
+    // );
+
+    // effects.push(StatEffect {
+    //     stat: StatType::Damage {
+    //         skill_type: None,
+    //         damage_type: None,
+    //     },
+    //     value: ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
+    //     modifier: Modifier::Multiplier,
+    //     bypass_ignore: true,
+    // });
+
+    monster_specs.character_specs.effects = EffectsMap::combine_all(
+        std::iter::once(statuses_controller::generate_effects_map_from_statuses(
             &monster_state.character_state.statuses,
-        ),
-        area_threat,
+        ))
+        .chain(std::iter::once(EffectsMap(HashMap::from([(
+            (
+                StatType::Damage {
+                    skill_type: None,
+                    damage_type: None,
+                },
+                Modifier::Multiplier,
+            ),
+            ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
+        )])))),
     );
 
-    effects.push(StatEffect {
-        stat: StatType::Damage {
-            skill_type: None,
-            damage_type: None,
-        },
-        value: ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
-        modifier: Modifier::Multiplier,
-        bypass_ignore: true,
-    });
+    let effects =
+        stats_updater::stats_map_to_vec(&monster_specs.character_specs.effects, area_threat);
 
     monster_specs.character_specs =
         characters_updater::update_character_specs(&base_specs.character_specs, &effects);

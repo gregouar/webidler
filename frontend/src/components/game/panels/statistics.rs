@@ -31,6 +31,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
         game_context
             .player_specs
             .read()
+            .character_specs
             .effects
             .0
             .get(&(stat, modifier))
@@ -340,6 +341,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         let value = -game_context
                                             .player_specs
                                             .read()
+                                            .character_specs
                                             .effects
                                             .0
                                             .get(
@@ -557,6 +559,7 @@ fn make_opt_stat(stat_type: StatType, default: f64) -> impl IntoView + use<> {
     let value = game_context
         .player_specs
         .read()
+        .character_specs
         .effects
         .0
         .get(&(stat_type.clone(), Modifier::Multiplier))
@@ -580,6 +583,7 @@ fn make_stat(stat_type: StatType) -> impl IntoView + use<> {
                 game_context
                     .player_specs
                     .read()
+                    .character_specs
                     .effects
                     .0
                     .get(&(stat_type.clone(), Modifier::Multiplier))

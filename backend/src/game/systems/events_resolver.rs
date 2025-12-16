@@ -101,7 +101,6 @@ fn handle_hit_event<'a>(
             {
                 trigger_contexts.push(TriggerContext {
                     trigger: triggered_effects.clone(),
-                    owner: character_id,
                     source: hit_event.source,
                     target: hit_event.target,
                     hit_context: Some(hit_event),
@@ -167,7 +166,6 @@ fn handle_kill_event(
                             {
                                 trigger_contexts.push(TriggerContext {
                                     trigger: triggered_effects.clone(),
-                                    owner: CharacterId::Player,
                                     source: CharacterId::Player,
                                     target,
                                     hit_context: None,
@@ -201,7 +199,6 @@ fn handle_kill_event(
                                 {
                                     trigger_contexts.push(TriggerContext {
                                         trigger: triggered_effects.clone(),
-                                        owner: CharacterId::Monster(idx),
                                         source: CharacterId::Player,
                                         target,
                                         hit_context: None,
@@ -314,7 +311,6 @@ fn handle_wave_completed_event(
         if let EventTrigger::OnWaveCompleted = triggered_effects.trigger {
             trigger_contexts.push(TriggerContext {
                 trigger: triggered_effects.clone(),
-                owner: CharacterId::Player,
                 source: CharacterId::Player,
                 target: CharacterId::Player,
                 hit_context: None,
@@ -345,7 +341,6 @@ fn handle_threat_increased_event(
         if let EventTrigger::OnThreatIncreased = triggered_effects.trigger {
             trigger_contexts.push(TriggerContext {
                 trigger: triggered_effects.clone(),
-                owner: CharacterId::Player,
                 source: CharacterId::Player,
                 target: CharacterId::Player,
                 hit_context: None,

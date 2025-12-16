@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{prelude::*, tachys::view};
 
 use shared::data::{
     chance::ChanceRange,
@@ -75,8 +75,11 @@ pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
 
     view! {
         <EffectLi>{format_trigger_event(&trigger.triggered_effect.trigger)}":"</EffectLi>
-        <EffectLi>{trigger.description}</EffectLi>
-        {effects}
+        {if trigger.description.is_empty() {
+            view! { {effects} }.into_any()
+        } else {
+            view! { <EffectLi>{trigger.description}</EffectLi> }.into_any()
+        }}
     }
 }
 
