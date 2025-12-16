@@ -1,9 +1,14 @@
 use leptos::prelude::*;
 
 use shared::data::{
+    chance::ChanceRange,
     item::SkillRange,
     skill::{DamageType, TargetType},
-    trigger::{EventTrigger, HitTrigger, KillTrigger, TriggerEffectModifierSource, TriggerSpecs},
+    stat_effect::Modifier,
+    trigger::{
+        EventTrigger, HitTrigger, KillTrigger, TriggerEffectModifier, TriggerEffectModifierSource,
+        TriggerSpecs,
+    },
 };
 
 use crate::components::shared::tooltips::{
@@ -11,10 +16,29 @@ use crate::components::shared::tooltips::{
     skill_tooltip::{self, skill_type_str, EffectLi},
 };
 
-pub fn format_trigger_modifier(modifier: TriggerEffectModifierSource) -> String {
-    match modifier {
+pub fn format_trigger_modifier_value(
+    value: ChanceRange<f64>,
+    modifier: TriggerEffectModifier,
+) -> String {
+    format!("")
+}
+
+pub fn format_trigger_modifier_per(modifier: TriggerEffectModifier) -> String {
+    let factor_str = match modifier.modifier {
+        Modifier::Multiplier => format!("{}", 100.0 / modifier.factor),
+        Modifier::Flat => format!("{}", 1.0 / modifier.factor),
+    };
+    format!(
+        "per {} {}",
+        factor_str,
+        trigger_modifier_source_str(modifier.source)
+    )
+}
+
+pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource) -> String {
+    match modifier_source {
         TriggerEffectModifierSource::HitDamage(damage_type) => {
-            format!("{}Hit Damage as", damage_type_str(damage_type))
+            format!("{}Hit Damage", damage_type_str(damage_type))
         }
         TriggerEffectModifierSource::HitCrit => "when Critical".to_string(),
         TriggerEffectModifierSource::AreaLevel => "Area Level".to_string(),
@@ -25,7 +49,7 @@ pub fn format_trigger_modifier(modifier: TriggerEffectModifierSource) -> String 
             format!("{} Duration", status_type_str(stat_status_type))
         }
         TriggerEffectModifierSource::StatusStacks(stat_status_type) => {
-            format!("per {} Stack", status_type_str(stat_status_type))
+            format!("{} Stack", status_type_str(stat_status_type))
         }
     }
 }

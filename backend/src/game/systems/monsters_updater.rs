@@ -66,23 +66,6 @@ pub fn update_monster_specs(
     monster_state: &MonsterState,
     area_threat: &AreaThreat,
 ) {
-    // Why going through stat converter if we already now the effect heh?
-    // let threat_effects = [StatEffect {
-    //     stat: StatType::StatConverter(StatConverterSpecs {
-    //         source: StatConverterSource::ThreatLevel,
-    //         target_stat: Box::new(StatType::Damage {
-    //             skill_type: None,
-    //             damage_type: None,
-    //         }),
-    //         target_modifier: Modifier::Multiplier,
-    //         is_extra: true,
-    //         skill_type: None,
-    //     }),
-    //     value: THREAT_EFFECT,
-    //     modifier: Modifier::Flat,
-    //     bypass_ignore: true,
-    // }];
-
     let mut effects = stats_updater::stats_map_to_vec(
         &statuses_controller::generate_effects_map_from_statuses(
             &monster_state.character_state.statuses,

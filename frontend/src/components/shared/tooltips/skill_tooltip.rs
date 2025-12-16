@@ -20,7 +20,7 @@ use shared::data::{
 use crate::components::{
     shared::tooltips::{
         effects_tooltip::{self, formatted_effects_list},
-        trigger_tooltip::{format_trigger, format_trigger_modifier},
+        trigger_tooltip::format_trigger,
     },
     ui::number::format_number,
 };
@@ -200,36 +200,66 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
     }
 }
 
-fn format_value<'a>(
-    value: ChanceRange<f64>,
-    stat: StatType,
-    modifiers: Option<&'a [TriggerEffectModifier]>,
-) -> String {
-    if let Some(modifier) = modifiers
-        .unwrap_or_default()
-        .iter()
-        .find(|modifier| modifier.stat.is_match(&stat))
-    {
-        let factor_str = match modifier.modifier {
-            Modifier::Multiplier => format!("{:.0}% of", modifier.factor),
-            Modifier::Flat => format!(
-                "{:.1} per",
-                format_min_max(ChanceRange {
-                    min: value.min + modifier.factor,
-                    max: value.max + modifier.factor,
-                    lucky_chance: value.lucky_chance
-                })
-            ),
-        };
-        format!(
-            "{} {}",
-            factor_str,
-            format_trigger_modifier(modifier.source),
-        )
-    } else {
-        format_min_max(value)
-    }
-}
+// fn format_value<'a>(
+//     value: ChanceRange<f64>,
+//     stat: StatType,
+//     modifiers: Option<&'a [TriggerEffectModifier]>,
+// ) -> String {
+//     if let Some(modifier) = modifiers
+//         .unwrap_or_default()
+//         .iter()
+//         .find(|modifier| modifier.stat.is_match(&stat))
+//     {
+//         let factor_str = match modifier.modifier {
+//             Modifier::Multiplier => format!("{:.0}", modifier.factor),
+//             Modifier::Flat => format!(
+//                 "{}+{:.0}",
+//                 format_min_max(value)
+//                 format_min_max(ChanceRange {
+//                     min:  modifier.factor,
+//                     max:  modifier.factor,
+//                     lucky_chance: 0.0
+//                 })
+//             ),
+//         };
+//         format!(
+//             "{}% {}",
+//             factor_str,
+//             format_trigger_modifier(modifier.source),
+//         )
+//     } else {
+//         format_min_max(value)
+//     }
+// }
+
+// fn format_ratio_per<'a>(
+//     value: ChanceRange<f64>,
+//     stat: StatType,
+//     modifiers: Option<&'a [TriggerEffectModifier]>,
+// ) -> Option<String> {
+//     modifiers
+//         .unwrap_or_default()
+//         .iter()
+//         .find(|modifier| modifier.stat.is_match(&stat))
+//         .map(|modifier| {
+//             let factor_str = match modifier.modifier {
+//                 Modifier::Multiplier => format!("{:.0}% of", modifier.factor),
+//                 Modifier::Flat => format!(
+//                     "{:.1} per",
+//                     format_min_max(ChanceRange {
+//                         min: value.min + modifier.factor,
+//                         max: value.max + modifier.factor,
+//                         lucky_chance: value.lucky_chance
+//                     })
+//                 ),
+//             };
+//             format!(
+//                 "{} {}",
+//                 factor_str,
+//                 format_trigger_modifier(modifier.source),
+//             )
+//         })
+// }
 
 pub fn format_effect<'a>(
     effect: SkillEffect,
@@ -253,20 +283,22 @@ pub fn format_effect<'a>(
                 .map(|(damage_type, value)| {
                     let success_chance = success_chance.clone();
                     let damage_color = damage_color(damage_type);
-                    let value_str = format_value(
-                        value,
-                        StatType::Damage {
-                            damage_type: Some(damage_type),
-                            skill_type: None,
-                        },
-                        modifiers.clone(),
-                    );
+                    // let value_str = format_value(
+                    // value,
+                    // StatType::Damage {
+                    // damage_type: Some(damage_type),
+                    // skill_type: None,
+                    // },
+                    // modifiers.clone(),
+                    // );
 
                     view! {
                         <EffectLi>
                             {success_chance}"Deal "
-                            <span class=format!("font-semibold {damage_color}")>{value_str}</span>
-                            " " {damage_type_str(Some(damage_type))} "Damage"
+                            <span class=format!(
+                                "font-semibold {damage_color}",
+                            )>{format_min_max(value)}</span> " "
+                            {damage_type_str(Some(damage_type))} "Damage"
                         </EffectLi>
                     }
                 })
@@ -307,21 +339,22 @@ pub fn format_effect<'a>(
                     StatusSpecs::DamageOverTime { damage_type, .. } => {
                         let success_chance = success_chance.clone();
                         let damage_color = damage_color(damage_type);
-                        let value_str = format_value(
-                                            status_effect.value,
-                                            StatType::Damage {
-                                                damage_type: Some(damage_type),
-                                                skill_type: None,
-                                            },
-                                            modifiers.clone(),
-                                        );
+                        // let value_str = format_value(
+                        //                     status_effect.value,
+                        //                     StatType::Damage {
+                        //                         damage_type: Some(damage_type),
+                        //                         skill_type: None,
+                        //                     },
+                        //                     modifiers.clone(),
+                        //                 );
                         view! {
                             <EffectLi>
                                 {success_chance}"Deal "
                                 <span class=format!(
                                     "font-semibold {damage_color}",
-                                )>{value_str}</span>"  " {damage_type_str(Some(damage_type))}
-                                "Damage per second " {format_duration(duration)}
+                                )>{format_min_max(status_effect.value)}</span>"  "
+                                {damage_type_str(Some(damage_type))} "Damage per second "
+                                {format_duration(duration)}
                             </EffectLi>
                         }
                         .into_any()
@@ -402,12 +435,12 @@ pub fn format_effect<'a>(
             value,
             modifier,
         } => {
-            let value_str = format_value(value, StatType::Restore(Some(restore_type)), modifiers);
+            // let value_str = format_value(value, StatType::Restore(Some(restore_type)), modifiers);
             view! {
                 <EffectLi>
                     {success_chance}"Restore "
                     <span class="font-semibold">
-                        {value_str}
+                        {format_min_max(value)}
                         {match modifier {
                             Modifier::Multiplier => "%",
                             Modifier::Flat => "",
