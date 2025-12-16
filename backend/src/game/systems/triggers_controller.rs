@@ -125,11 +125,7 @@ pub fn apply_trigger_effects(
                                     .iter()
                                     .filter(|(status_specs, _)| match stat_status_type {
                                         Some(stat_status_type) => {
-                                            if let Some(status_type) = status_specs.into() {
-                                                stat_status_type.is_match(&status_type)
-                                            } else {
-                                                false
-                                            }
+                                            stat_status_type.is_match(&status_specs.into())
                                         }
                                         None => true,
                                     })
@@ -141,11 +137,7 @@ pub fn apply_trigger_effects(
                                     .iter()
                                     .filter(|(status_specs, _)| match stat_status_type {
                                         Some(stat_status_type) => {
-                                            if let Some(status_type) = status_specs.into() {
-                                                stat_status_type.is_match(&status_type)
-                                            } else {
-                                                false
-                                            }
+                                            stat_status_type.is_match(&status_specs.into())
                                         }
                                         None => true,
                                     })
@@ -159,11 +151,7 @@ pub fn apply_trigger_effects(
                                     .iter()
                                     .filter(|(status_specs, _)| match stat_status_type {
                                         Some(stat_status_type) => {
-                                            if let Some(status_type) = status_specs.into() {
-                                                stat_status_type.is_match(&status_type)
-                                            } else {
-                                                false
-                                            }
+                                            stat_status_type.is_match(&status_specs.into())
                                         }
                                         None => true,
                                     })

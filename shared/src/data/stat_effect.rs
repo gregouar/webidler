@@ -229,6 +229,7 @@ pub enum StatStatusType {
         #[serde(default)]
         debuff: Option<bool>,
     },
+    Trigger,
 }
 
 impl StatStatusType {
@@ -253,19 +254,17 @@ impl StatStatusType {
     }
 }
 
-impl From<&StatusSpecs> for Option<StatStatusType> {
+impl From<&StatusSpecs> for StatStatusType {
     fn from(value: &StatusSpecs) -> Self {
         match value {
-            StatusSpecs::Stun => Some(StatStatusType::Stun),
-            StatusSpecs::DamageOverTime { damage_type, .. } => {
-                Some(StatStatusType::DamageOverTime {
-                    damage_type: Some(*damage_type),
-                })
-            }
-            StatusSpecs::StatModifier { debuff, .. } => Some(StatStatusType::StatModifier {
+            StatusSpecs::Stun => StatStatusType::Stun,
+            StatusSpecs::DamageOverTime { damage_type, .. } => StatStatusType::DamageOverTime {
+                damage_type: Some(*damage_type),
+            },
+            StatusSpecs::StatModifier { debuff, .. } => StatStatusType::StatModifier {
                 debuff: Some(*debuff),
-            }),
-            StatusSpecs::Trigger(_) => None,
+            },
+            StatusSpecs::Trigger(_) => StatStatusType::Trigger,
         }
     }
 }

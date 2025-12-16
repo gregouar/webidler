@@ -102,6 +102,7 @@ fn status_type_str(status_type: Option<StatStatusType>) -> String {
                 Some(false) => "Blessings".to_string(),
                 None => "Curses and Blessings".to_string(),
             },
+            StatStatusType::Trigger => "Triggered Effects".to_string(),
         },
         None => "Effects over Time".to_string(),
     }
