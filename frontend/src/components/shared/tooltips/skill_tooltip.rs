@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use leptos::{html::*, leptos_dom::logging::console_log, prelude::*};
+use leptos::{html::*, prelude::*};
 
 use shared::data::{
     chance::ChanceRange,
@@ -20,7 +20,10 @@ use shared::data::{
 use crate::components::{
     shared::tooltips::{
         effects_tooltip::{self, formatted_effects_list},
-        trigger_tooltip::format_trigger,
+        trigger_tooltip::{
+            format_extra_trigger_modifiers, format_trigger, format_trigger_modifier_as,
+            format_trigger_modifier_per,
+        },
     },
     ui::number::format_number,
 };
@@ -261,17 +264,30 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
 //         })
 // }
 
+fn find_trigger_modifier<'a>(
+    stat: StatType,
+    modifiers: Option<&'a [TriggerEffectModifier]>,
+) -> Option<&'a TriggerEffectModifier> {
+    modifiers
+        .unwrap_or_default()
+        .iter()
+        .find(|modifier| modifier.stat.is_match(&stat) && modifier.modifier == Modifier::Flat)
+}
+
 pub fn format_effect<'a>(
     effect: SkillEffect,
     modifiers: Option<&'a [TriggerEffectModifier]>,
 ) -> impl IntoView + use<> {
     let success_chance = if effect.success_chance.value < 100.0 {
-        Some(format!("{:.0}% chance to ", effect.success_chance.value))
+        Some(view! {
+            <span class="font-semibold">{format!("{:.0}%", effect.success_chance.value)}</span>
+            " chance to "
+        })
     } else {
         None
     };
 
-    match effect.effect_type {
+    let base_effects = match effect.effect_type {
         SkillEffectType::FlatDamage {
             damage,
             crit_chance,
@@ -283,21 +299,21 @@ pub fn format_effect<'a>(
                 .map(|(damage_type, value)| {
                     let success_chance = success_chance.clone();
                     let damage_color = damage_color(damage_type);
-                    // let value_str = format_value(
-                    // value,
-                    // StatType::Damage {
-                    // damage_type: Some(damage_type),
-                    // skill_type: None,
-                    // },
-                    // modifiers.clone(),
-                    // );
-
+                    let trigger_modifier_str = format_trigger_modifier_as(
+                        find_trigger_modifier(
+                            StatType::Damage {
+                                damage_type: Some(damage_type),
+                                skill_type: None,
+                            },
+                            modifiers.clone(),
+                        ),
+                    );
                     view! {
                         <EffectLi>
                             {success_chance}"Deal "
                             <span class=format!(
                                 "font-semibold {damage_color}",
-                            )>{format_min_max(value)}</span> " "
+                            )>{format_min_max(value)}</span>{trigger_modifier_str} " "
                             {damage_type_str(Some(damage_type))} "Damage"
                         </EffectLi>
                     }
@@ -340,22 +356,23 @@ pub fn format_effect<'a>(
                     StatusSpecs::DamageOverTime { damage_type, .. } => {
                         let success_chance = success_chance.clone();
                         let damage_color = damage_color(damage_type);
-                        // let value_str = format_value(
-                        //                     status_effect.value,
-                        //                     StatType::Damage {
-                        //                         damage_type: Some(damage_type),
-                        //                         skill_type: None,
-                        //                     },
-                        //                     modifiers.clone(),
-                        //                 );
+                        let trigger_modifier_str = format_trigger_modifier_as(
+                                    find_trigger_modifier(
+                                        StatType::Damage {
+                                            damage_type: Some(damage_type),
+                                            skill_type: None,
+                                        },
+                                        modifiers.clone(),
+                                    ),
+                                );
                         view! {
                             <EffectLi>
                                 {success_chance}"Deal "
                                 <span class=format!(
                                     "font-semibold {damage_color}",
-                                )>{format_min_max(status_effect.value)}</span>"  "
-                                {damage_type_str(Some(damage_type))} "Damage per second "
-                                {format_duration(duration)}
+                                )>{format_min_max(status_effect.value)}</span>
+                                {trigger_modifier_str}"  " {damage_type_str(Some(damage_type))}
+                                "Damage per second " {format_duration(duration)}
                             </EffectLi>
                         }
                         .into_any()
@@ -437,17 +454,21 @@ pub fn format_effect<'a>(
             value,
             modifier,
         } => {
-            // let value_str = format_value(value, StatType::Restore(Some(restore_type)), modifiers);
+            let trigger_modifier =
+                find_trigger_modifier(StatType::Restore(Some(restore_type)), modifiers.clone());
+            let trigger_modifier_str = format_trigger_modifier_per(trigger_modifier.clone());
+            let trigger_modifier_factor_str =
+                trigger_modifier.map(|trigger_modifier| format!("{:.0}", trigger_modifier.factor));
             view! {
                 <EffectLi>
                     {success_chance}"Restore "
                     <span class="font-semibold">
-                        {format_min_max(value)}
+                        {format_min_max(value)} {trigger_modifier_factor_str}
                         {match modifier {
                             Modifier::Multiplier => "%",
                             Modifier::Flat => "",
                         }}
-                    </span> {restore_type_str(Some(restore_type))}
+                    </span> {restore_type_str(Some(restore_type))}{trigger_modifier_str}
                 </EffectLi>
             }
             .into_any()
@@ -455,6 +476,13 @@ pub fn format_effect<'a>(
         SkillEffectType::Resurrect => {
             view! { <EffectLi>{success_chance}"Resurrect"</EffectLi> }.into_any()
         }
+    };
+
+    let formatted_modifiers = modifiers.map(|modifiers| format_extra_trigger_modifiers(modifiers));
+
+    view! {
+        {base_effects}
+        {formatted_modifiers}
     }
 }
 
@@ -477,12 +505,14 @@ where
             format_number(value.min.into()),
             format_number(value.max.into())
         )
-    } else {
+    } else if value.min.into() != 0.0 {
         format_number(value.min.into()).to_string()
+    } else {
+        "".to_string()
     }
 }
 
-fn format_duration<T>(value: ChanceRange<T>) -> String
+fn format_duration<T>(value: ChanceRange<T>) -> impl IntoView
 where
     T: Into<f64> + PartialEq + Copy,
 {
@@ -495,21 +525,31 @@ where
     };
 
     if value.min.into() > 9999.0f64 {
-        "forever".into()
+        view! { "forever" }.into_any()
     } else if value.min.into() >= 60.0f64 {
         let value = ChanceRange::<f64> {
             min: value.min.into() / 60.0,
             max: value.max.into() / 60.0,
             lucky_chance: value.lucky_chance,
         };
-        format!("for {} minutes", format_min_max(value))
+        view! {
+            "for "
+            <span class="font-semibold">{format_min_max(value)}</span>
+            " minutes"
+        }
+        .into_any()
     } else {
         let value = ChanceRange::<f64> {
             min: value.min.into(),
             max: value.max.into(),
             lucky_chance: value.lucky_chance,
         };
-        format!("for {} seconds", format_min_max(value))
+        view! {
+            "for "
+            <span class="font-semibold">{format_min_max(value)}</span>
+            " seconds"
+        }
+        .into_any()
     }
 }
 

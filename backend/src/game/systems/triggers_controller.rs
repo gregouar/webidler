@@ -50,20 +50,16 @@ pub fn apply_trigger_effects(
             let mut source_effects: Vec<_> = if trigger_context.trigger.inherit_modifiers {
                 Vec::new()
             } else {
-                trigger_context
-                    .trigger
-                    .owner
-                    .map(|owner| match owner {
-                        CharacterId::Player => {
-                            (&game_data.player_specs.read().character_specs.effects).into()
-                        }
-                        CharacterId::Monster(index) => game_data
-                            .monster_specs
-                            .get(index)
-                            .map(|monster_specs| (&monster_specs.character_specs.effects).into())
-                            .unwrap_or_default(),
-                    })
-                    .unwrap_or_default()
+                match trigger_context.trigger.owner.unwrap_or(CharacterId::Player) {
+                    CharacterId::Player => {
+                        (&game_data.player_specs.read().character_specs.effects).into()
+                    }
+                    CharacterId::Monster(index) => game_data
+                        .monster_specs
+                        .get(index)
+                        .map(|monster_specs| (&monster_specs.character_specs.effects).into())
+                        .unwrap_or_default(),
+                }
             };
 
             let mut player_target = (

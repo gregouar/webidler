@@ -1809,7 +1809,7 @@
         "triggers": [
           {
             "trigger_id": "open_wound",
-            "description": "Attack Hits apply a stack of Open Wound for 5 seconds. Each stack deals 50% of the initial hit's Physical Damage when the target is Hit again.",
+            "description": "Apply a stack of Open Wound for 5 seconds. Each stack deals 50% of the initial hit's Physical Damage when the target is Hit again.",
             "OnHit": { "skill_type": "Attack", "is_triggered": false },
             "effects": [
               {
@@ -1820,7 +1820,7 @@
                       "status_type": {
                         "Trigger": {
                           "trigger_id": "passives/open_wound.svg",
-                          "description": "Open Wound takes additional Physical Damage when Hit by an Attack.",
+                          "description": "Takes additional Physical Damage when Hit.",
                           "OnTakeHit": {
                             "is_triggered": false
                           },

@@ -1,10 +1,10 @@
-use leptos::{prelude::*, tachys::view};
+use leptos::prelude::*;
 
 use shared::data::{
-    chance::ChanceRange,
     item::SkillRange,
     skill::{DamageType, TargetType},
     stat_effect::Modifier,
+    temple::StatEffect,
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, TriggerEffectModifier, TriggerEffectModifierSource,
         TriggerSpecs,
@@ -12,27 +12,67 @@ use shared::data::{
 };
 
 use crate::components::shared::tooltips::{
-    effects_tooltip::{damage_type_str, status_type_str},
+    effects_tooltip::{
+        damage_type_str, format_effect_value, format_multiplier_stat_name, status_type_str,
+    },
     skill_tooltip::{self, skill_type_str, EffectLi},
 };
 
-pub fn format_trigger_modifier_value(
-    value: ChanceRange<f64>,
-    modifier: TriggerEffectModifier,
-) -> String {
-    format!("")
+pub fn format_trigger_modifier_as<'a>(
+    modifier: Option<&'a TriggerEffectModifier>,
+) -> Option<impl IntoView + use<>> {
+    modifier.map(|modifier| {
+        let factor_str = match modifier.modifier {
+            Modifier::Multiplier => format!("{:0}", modifier.factor),
+            Modifier::Flat => format!("{:0}", 100.0 * modifier.factor),
+        };
+        view! {
+            <span class="font-semibold">{factor_str}"%"</span>
+            " of "
+            {trigger_modifier_source_str(modifier.source)}
+            " as"
+        }
+    })
 }
 
-pub fn format_trigger_modifier_per(modifier: TriggerEffectModifier) -> String {
-    let factor_str = match modifier.modifier {
-        Modifier::Multiplier => format!("{}", 100.0 / modifier.factor),
-        Modifier::Flat => format!("{}", 1.0 / modifier.factor),
-    };
-    format!(
-        "per {} {}",
-        factor_str,
-        trigger_modifier_source_str(modifier.source)
-    )
+pub fn format_trigger_modifier_per(modifier: Option<&TriggerEffectModifier>) -> Option<String> {
+    modifier.map(|modifier| {
+        // let factor_str = match modifier.modifier {
+        //     Modifier::Multiplier => format!("{:.1}", 100.0 / modifier.factor),
+        //     Modifier::Flat => format!("{:.1}", 1.0 / modifier.factor),
+        // };
+        format!(
+            "per {}",
+            // factor_str,
+            trigger_modifier_source_str(modifier.source)
+        )
+    })
+}
+
+pub fn format_extra_trigger_modifiers<'a>(
+    modifiers: &'a [TriggerEffectModifier],
+) -> impl IntoView + use<> {
+    let modifiers_str: Vec<_> = modifiers
+        .iter()
+        .map(|modifier| {
+            let stat_effect = StatEffect {
+                stat: modifier.stat.clone(),
+                modifier: modifier.modifier,
+                value: modifier.factor,
+                bypass_ignore: false,
+            };
+            view! {
+                <li>
+                    {format_effect_value(&stat_effect)}" "
+                    {format_multiplier_stat_name(&modifier.stat)} " "
+                    {format_trigger_modifier_per(Some(modifier))}
+                </li>
+            }
+            .into_any()
+        })
+        .collect();
+
+    view! { <ul>{modifiers_str}</ul> }
 }
 
 pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource) -> String {
