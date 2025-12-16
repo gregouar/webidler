@@ -154,15 +154,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 }
 
 fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
-    let shape = match targets_group.shape {
-        SkillShape::Single => ", Single",
-        SkillShape::Vertical2 => ", Area 2x1",
-        SkillShape::Horizontal2 => ", Area 1x2",
-        SkillShape::Horizontal3 => ", Area 1x3",
-        SkillShape::Square4 => ", Area 2x2",
-        SkillShape::All => ", All",
-        SkillShape::Contact => ", Contact",
-    };
+    let shape = shape_str(targets_group.shape);
 
     let range = match targets_group.range {
         SkillRange::Melee => {
@@ -198,8 +190,20 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
 
     view! {
         <hr class="border-t border-gray-700" />
-        <EffectLi>{range}{shape}{repeat}</EffectLi>
+        <EffectLi>{range}", "{shape}{repeat}</EffectLi>
         {effects}
+    }
+}
+
+pub fn shape_str(shape: SkillShape) -> &'static str {
+    match shape {
+        SkillShape::Single => "Single",
+        SkillShape::Vertical2 => "Area 2x1",
+        SkillShape::Horizontal2 => "Area 1x2",
+        SkillShape::Horizontal3 => "Area 1x3",
+        SkillShape::Square4 => "Area 2x2",
+        SkillShape::All => "All",
+        SkillShape::Contact => "Contact",
     }
 }
 

@@ -1,19 +1,19 @@
 use leptos::prelude::*;
 
 use shared::data::{
-    item::SkillRange,
+    item::{SkillRange, SkillShape},
     skill::{DamageType, TargetType},
     stat_effect::Modifier,
     temple::{StatEffect, StatType},
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, TriggerEffectModifier, TriggerEffectModifierSource,
-        TriggerSpecs,
+        TriggerSpecs, TriggerTarget,
     },
 };
 
 use crate::components::shared::tooltips::{
     effects_tooltip::{damage_type_str, format_stat, status_type_str},
-    skill_tooltip::{self, skill_type_str, EffectLi},
+    skill_tooltip::{self, shape_str, skill_type_str, EffectLi},
 };
 
 pub fn format_trigger_modifier_as<'a>(
@@ -88,17 +88,6 @@ pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource)
 }
 
 pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
-    // let effects = if trigger.triggered_effect.modifiers.is_empty() {
-    //     trigger
-    //         .triggered_effect
-    //         .effects
-    //         .into_iter()
-    //         .map(skill_tooltip::format_effect)
-    //         .collect::<Vec<_>>()
-    // } else {
-    //     vec![]
-    // };
-
     let effects = trigger
         .triggered_effect
         .effects
@@ -106,8 +95,16 @@ pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
         .map(|x| skill_tooltip::format_effect(x, Some(&trigger.triggered_effect.modifiers)))
         .collect::<Vec<_>>();
 
+    let target_infos = (trigger.triggered_effect.target != TriggerTarget::SameTarget)
+        .then(|| format!(", {}", trigger_target_str(trigger.triggered_effect.target)));
+
+    let shape_infos = (trigger.triggered_effect.skill_shape != SkillShape::Single)
+        .then(|| format!(", {}", shape_str(trigger.triggered_effect.skill_shape)));
+
     view! {
-        <EffectLi>{format_trigger_event(&trigger.triggered_effect.trigger)}":"</EffectLi>
+        <EffectLi class:mt-2>
+            {format_trigger_event(&trigger.triggered_effect.trigger)}{target_infos}{shape_infos}":"
+        </EffectLi>
         {if trigger.description.is_empty() {
             view! { {effects} }.into_any()
         } else {
@@ -142,6 +139,14 @@ fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
         range_str(hit_trigger.range),
         skill_type_str(hit_trigger.skill_type),
     )
+}
+
+fn trigger_target_str(trigger_target: TriggerTarget) -> &'static str {
+    match trigger_target {
+        TriggerTarget::SameTarget => "Same Target",
+        TriggerTarget::Source => "Source",
+        TriggerTarget::Me => "Self",
+    }
 }
 
 fn range_str(value: Option<SkillRange>) -> &'static str {

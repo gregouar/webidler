@@ -302,7 +302,7 @@
   },
   "curse_conductivity": {
     "name": "Curse of Conductivity",
-    "description": "Curse your foes with the storm's fury, making their bodies living conduits that draw lightning to strike all around them.",
+    "description": "Curse your foes with the storm's fury, making their bodies living conduits that draw lightning to strike all around them, and trigger a Maelstrom in case of critical hit.",
     "icon": "skills/curse_conductivity.svg",
     "skill_type": "Spell",
     "cooldown": 10,
@@ -345,7 +345,6 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "skills/curse_conductivity.svg",
-                      "description": "Trigger a Burst of Lightning, damaging adjacent enemies for 50% of Storm Damage dealt.",
                       "OnTakeHit": {
                         "is_triggered": false
                       },
@@ -402,7 +401,6 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "skills/curse_conductivity.svg",
-                      "description": "Trigger a Maelstrom, damaging all enemies for 10% of Storm Damage dealt.",
                       "OnTakeHit": {
                         "is_crit": true,
                         "is_triggered": false
