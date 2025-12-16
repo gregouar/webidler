@@ -1028,7 +1028,9 @@
                         },
                         {
                           "stat": {
-                            "SuccessChance": {}
+                            "SuccessChance": {
+                              "effect_type": { "ApplyStatus": {} }
+                            }
                           },
                           "modifier": "Flat",
                           "factor": 100,

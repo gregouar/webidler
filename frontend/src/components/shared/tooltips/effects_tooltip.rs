@@ -154,12 +154,7 @@ pub fn formatted_effects_list(
 
     for effect in affix_effects.iter().rev() {
         match effect.modifier {
-            Multiplier => merged.push(format!(
-                "{} {}",
-                format_effect_value(effect),
-                // scope_str(scope),
-                format_multiplier_stat_name(&effect.stat),
-            )),
+            Multiplier => merged.push(format_multiplier_stat(effect)),
             Flat => match &effect.stat {
                 // Save to aggregate after
                 MinDamage {
@@ -244,6 +239,22 @@ pub fn formatted_effects_list(
     }
 
     merged.into_iter().rev().map(effect_li).collect()
+}
+
+pub fn format_stat(effect: &StatEffect) -> String {
+    match effect.modifier {
+        Modifier::Multiplier => format_multiplier_stat(effect),
+        Modifier::Flat => format_flat_stat(&effect.stat, Some(effect.value)),
+    }
+}
+
+pub fn format_multiplier_stat(effect: &StatEffect) -> String {
+    format!(
+        "{} {}",
+        format_effect_value(effect),
+        // scope_str(scope),
+        format_multiplier_stat_name(&effect.stat),
+    )
 }
 
 pub fn format_multiplier_stat_name(stat: &StatType) -> String {

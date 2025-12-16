@@ -4,7 +4,7 @@ use shared::data::{
     item::SkillRange,
     skill::{DamageType, TargetType},
     stat_effect::Modifier,
-    temple::StatEffect,
+    temple::{StatEffect, StatType},
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, TriggerEffectModifier, TriggerEffectModifierSource,
         TriggerSpecs,
@@ -12,9 +12,7 @@ use shared::data::{
 };
 
 use crate::components::shared::tooltips::{
-    effects_tooltip::{
-        damage_type_str, format_effect_value, format_multiplier_stat_name, status_type_str,
-    },
+    effects_tooltip::{damage_type_str, format_stat, status_type_str},
     skill_tooltip::{self, skill_type_str, EffectLi},
 };
 
@@ -37,15 +35,11 @@ pub fn format_trigger_modifier_as<'a>(
 
 pub fn format_trigger_modifier_per(modifier: Option<&TriggerEffectModifier>) -> Option<String> {
     modifier.map(|modifier| {
-        // let factor_str = match modifier.modifier {
-        //     Modifier::Multiplier => format!("{:.1}", 100.0 / modifier.factor),
-        //     Modifier::Flat => format!("{:.1}", 1.0 / modifier.factor),
-        // };
-        format!(
-            "per {}",
-            // factor_str,
-            trigger_modifier_source_str(modifier.source)
-        )
+        if let TriggerEffectModifierSource::HitCrit = modifier.source {
+            "on Critical Hit"
+        } else {
+            format!("per {}", trigger_modifier_source_str(modifier.source))
+        }
     })
 }
 
@@ -54,6 +48,11 @@ pub fn format_extra_trigger_modifiers<'a>(
 ) -> impl IntoView + use<> {
     let modifiers_str: Vec<_> = modifiers
         .iter()
+        .filter(|modifier| match modifier.stat {
+            StatType::Damage { .. } => modifier.modifier == Modifier::Multiplier,
+            StatType::Restore(_) => modifier.modifier == Modifier::Multiplier,
+            _ => true,
+        })
         .map(|modifier| {
             let stat_effect = StatEffect {
                 stat: modifier.stat.clone(),
@@ -61,13 +60,7 @@ pub fn format_extra_trigger_modifiers<'a>(
                 value: modifier.factor,
                 bypass_ignore: false,
             };
-            view! {
-                <li>
-                    {format_effect_value(&stat_effect)}" "
-                    {format_multiplier_stat_name(&modifier.stat)} " "
-                    {format_trigger_modifier_per(Some(modifier))}
-                </li>
-            }
+            view! { <li>{format_stat(&stat_effect)}" " {format_trigger_modifier_per(Some(modifier))}</li> }
             .into_any()
         })
         .collect();
@@ -80,7 +73,7 @@ pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource)
         TriggerEffectModifierSource::HitDamage(damage_type) => {
             format!("{}Hit Damage", damage_type_str(damage_type))
         }
-        TriggerEffectModifierSource::HitCrit => "when Critical".to_string(),
+        TriggerEffectModifierSource::HitCrit => "Critical".to_string(),
         TriggerEffectModifierSource::AreaLevel => "Area Level".to_string(),
         TriggerEffectModifierSource::StatusValue(stat_status_type) => {
             format!("{} Power", status_type_str(stat_status_type))
