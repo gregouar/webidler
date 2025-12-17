@@ -7,25 +7,44 @@ use crate::components::settings::SettingsContext;
 
 #[component]
 pub fn Number(value: Signal<f64>) -> impl IntoView {
-    view! { {move || { format_number(value.get()) }} }
+    let settings_context: SettingsContext = expect_context();
+    view! {
+        {move || {
+            format_number_without_context(
+                value.get(),
+                settings_context.read_settings().scientific_notation,
+            )
+        }}
+    }
 }
 
 pub fn format_number(value: f64) -> String {
+    let settings_context: SettingsContext = expect_context();
+    format_number_without_context(
+        value,
+        settings_context
+            .read_settings_untracked()
+            .scientific_notation,
+    )
+}
+
+pub fn format_number_without_context(value: f64, scientific_notation: bool) -> String {
     if value.is_nan() || value.is_infinite() {
         return value.to_string();
     }
 
     if value < 0.0 {
-        return format!("-{}", format_number(-value));
+        return format!(
+            "-{}",
+            format_number_without_context(-value, scientific_notation)
+        );
     }
 
     if value < 1_000.0 {
         return comma_format(value);
     }
 
-    let settings_context: SettingsContext = expect_context();
-
-    if settings_context.read_settings().scientific_notation {
+    if scientific_notation {
         format_scientific_number(value)
     } else {
         format_alphabetic_number(value)
@@ -113,11 +132,11 @@ mod tests {
 
     #[test]
     fn test_number_format() {
-        assert_eq!(format_number(0.0), "0");
-        assert_eq!(format_number(100.0), "100");
-        assert_eq!(format_number(1000.0), "1,000");
-        assert_eq!(format_number(10000.0), "10,000");
-        assert_eq!(format_number(999999.0), "999,999");
-        assert_eq!(format_number(1000000.0), "1.00e6");
+        assert_eq!(format_number_without_context(0.0, true), "0");
+        assert_eq!(format_number_without_context(100.0, true), "100");
+        assert_eq!(format_number_without_context(1000.0, true), "1,000");
+        assert_eq!(format_number_without_context(10000.0, true), "10,000");
+        assert_eq!(format_number_without_context(999999.0, true), "999,999");
+        assert_eq!(format_number_without_context(1000000.0, true), "1.00e6");
     }
 }
