@@ -47,7 +47,7 @@ pub fn AccountSettingsPage() -> impl IntoView {
     let (get_guest_password_storage, set_guest_password_storage, _) =
         storage::use_local_storage::<Option<_>, JsonSerdeCodec>("guest_password");
 
-    let old_password = RwSignal::new(get_guest_password_storage.get());
+    let old_password = RwSignal::new(get_guest_password_storage.get_untracked());
     let password = RwSignal::new(None);
     let confirm_password = RwSignal::new(None);
 

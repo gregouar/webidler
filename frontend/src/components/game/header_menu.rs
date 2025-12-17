@@ -6,12 +6,13 @@ use shared::{computations, constants, messages::client::ClientMessage};
 
 use crate::components::{
     events::{EventsContext, Key},
+    settings::SettingsContext,
     shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
     ui::{
         buttons::{MenuButton, MenuButtonRed},
         confirm::ConfirmContext,
         fullscreen::FullscreenButton,
-        number::format_number,
+        number::format_number_without_context,
         wiki::WikiButton,
     },
     websocket::WebsocketContext,
@@ -33,15 +34,18 @@ pub fn HeaderMenu() -> impl IntoView {
 
     let try_abandon_quest = {
         let confirm_context: ConfirmContext = expect_context();
+        let settings_context: SettingsContext = expect_context();
         move |_| {
+            let gold_str = format_number_without_context(
+                game_context.player_resources.read().gold_total
+                    * computations::exponential(
+                        game_context.area_specs.read().item_level_modifier,
+                        constants::MONSTER_INCREASE_FACTOR,
+                    ),
+                settings_context.read_settings().scientific_notation,
+            );
             (confirm_context.confirm)(
-                format!("Abandoning the Grind will reset the Area Level, Player Level and Gold. You will keep Items, Gems and Power Shards, and collect {} Gold as Temple Donations. Are you sure?",format_number(
-                                        game_context.player_resources.read().gold_total
-                                            * computations::exponential(
-                                                game_context.area_specs.read().item_level_modifier,
-                                                constants::MONSTER_INCREASE_FACTOR,
-                                            ),
-                                    )),
+                format!("Abandoning the Grind will reset the Area Level, Player Level and Gold. You will keep Items, Gems and Power Shards, and collect {} Gold as Temple Donations. Are you sure?",gold_str),
                 do_abandon_quest.clone(),
             );
         }
