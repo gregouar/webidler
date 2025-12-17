@@ -87,7 +87,7 @@
       "triggers": [
         {
           "trigger_id": "hunter_vengeance",
-          "description": "On Fidel Hound death:",
+          "description": "Fully Heal and get Enraged on Fidel Hound death.",
           "skill_type": "Spell",
           "OnDeath": "Friend",
           "target": "Me",

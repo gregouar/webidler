@@ -90,7 +90,7 @@ fn to_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     }
 }
 
-fn status_type_str(status_type: Option<StatStatusType>) -> String {
+pub fn status_type_str(status_type: Option<StatStatusType>) -> String {
     match status_type {
         Some(status_type) => match status_type {
             StatStatusType::Stun => "Stun".to_string(),
@@ -154,12 +154,7 @@ pub fn formatted_effects_list(
 
     for effect in affix_effects.iter().rev() {
         match effect.modifier {
-            Multiplier => merged.push(format!(
-                "{} {}",
-                format_effect_value(effect),
-                // scope_str(scope),
-                format_multiplier_stat_name(&effect.stat),
-            )),
+            Multiplier => merged.push(format_multiplier_stat(effect)),
             Flat => match &effect.stat {
                 // Save to aggregate after
                 MinDamage {
@@ -244,6 +239,22 @@ pub fn formatted_effects_list(
     }
 
     merged.into_iter().rev().map(effect_li).collect()
+}
+
+pub fn format_stat(effect: &StatEffect) -> String {
+    match effect.modifier {
+        Modifier::Multiplier => format_multiplier_stat(effect),
+        Modifier::Flat => format_flat_stat(&effect.stat, Some(effect.value)),
+    }
+}
+
+pub fn format_multiplier_stat(effect: &StatEffect) -> String {
+    format!(
+        "{} {}",
+        format_effect_value(effect),
+        // scope_str(scope),
+        format_multiplier_stat_name(&effect.stat),
+    )
 }
 
 pub fn format_multiplier_stat_name(stat: &StatType) -> String {
@@ -533,12 +544,27 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             skill_type,
             effect_type,
         } => {
-            format!(
-                "{} Success Chance to {}{}",
-                format_adds_removes(value, false, "%"),
-                skill_type_str(*skill_type),
-                stat_skill_effect_type_str(*effect_type)
-            )
+            let unwrap_value = value.unwrap_or_default();
+            if unwrap_value >= 100.0 {
+                format!(
+                    "Guaranteed to {}{}",
+                    skill_type_str(*skill_type),
+                    stat_skill_effect_type_str(*effect_type)
+                )
+            } else if unwrap_value <= -100.0 {
+                format!(
+                    "Impossible to {}{}",
+                    skill_type_str(*skill_type),
+                    stat_skill_effect_type_str(*effect_type)
+                )
+            } else {
+                format!(
+                    "{} Success Chance to {}{}",
+                    format_adds_removes(value, false, "%"),
+                    skill_type_str(*skill_type),
+                    stat_skill_effect_type_str(*effect_type)
+                )
+            }
         }
         StatType::SkillLevel(skill_type) => {
             format!(

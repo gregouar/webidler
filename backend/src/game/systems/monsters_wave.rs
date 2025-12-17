@@ -5,8 +5,11 @@ use shared::{
     constants::{CHAMPION_LEVEL_INC, MONSTERS_DEFAULT_DAMAGE_INCREASE, MONSTER_INCREASE_FACTOR},
     data::{
         area::{AreaLevel, AreaState, AreaThreat},
+        character::CharacterId,
+        character_status::StatusSpecs,
         monster::{MonsterRarity, MonsterSpecs, MonsterState},
         passive::StatEffect,
+        skill::SkillEffectType,
         stat_effect::{Modifier, StatType},
     },
 };
@@ -135,8 +138,13 @@ fn generate_all_monsters_specs(
                     template.character_specs.size.get_xy_size(),
                 );
 
-                let mut specs =
-                    generate_monster_specs(template, area_blueprint, area_state, area_threat);
+                let mut specs = generate_monster_specs(
+                    CharacterId::Monster(monsters.len()),
+                    template,
+                    area_blueprint,
+                    area_state,
+                    area_threat,
+                );
                 specs.character_specs.position_x = (x + 1) as u8;
                 specs.character_specs.position_y = (y + 1) as u8;
                 monsters.push(specs);
@@ -179,6 +187,7 @@ fn occupy_space(
 }
 
 fn generate_monster_specs(
+    monster_id: CharacterId,
     bp_specs: &BaseMonsterSpecs,
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
@@ -226,6 +235,24 @@ fn generate_monster_specs(
             let effects: Vec<_> =
                 (&skills_updater::compute_skill_upgrade_effects(skill_specs, monster_level)).into();
             skills_updater::update_skill_specs(skill_specs, effects.iter(), None, area_threat);
+        }
+
+        // Link monster_id to triggers of skills
+        for effect in skill_specs
+            .targets
+            .iter_mut()
+            .flat_map(|target| target.effects.iter_mut())
+        {
+            if let SkillEffectType::ApplyStatus {
+                ref mut statuses, ..
+            } = effect.effect_type
+            {
+                for status in statuses {
+                    if let StatusSpecs::Trigger(ref mut trigger_specs) = status.status_type {
+                        trigger_specs.triggered_effect.owner = Some(monster_id);
+                    }
+                }
+            }
         }
     }
 

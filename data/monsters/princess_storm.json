@@ -34,7 +34,7 @@
       "triggers": [
         {
           "trigger_id": "grieving_call",
-          "description": "On Reflection death:",
+          "description": "Get stronger on Reflection Death.",
           "skill_type": "Spell",
           "OnDeath": "Friend",
           "target": "Me",

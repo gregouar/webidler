@@ -7,8 +7,11 @@ use shared::data::{
 
 // maybe AreaThreat should be some kind of more generic "Context"
 pub fn stats_map_to_vec(effects: &EffectsMap, area_threat: &AreaThreat) -> Vec<StatEffect> {
-    let mut effects: Vec<_> = effects.into();
+    combine_effects(effects.into(), area_threat)
+}
 
+// maybe AreaThreat should be some kind of more generic "Context"
+pub fn combine_effects(mut effects: Vec<StatEffect>, area_threat: &AreaThreat) -> Vec<StatEffect> {
     let to_add: Vec<_> = effects
         .iter()
         .flat_map(|effect| {

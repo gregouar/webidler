@@ -107,7 +107,6 @@
     "triggers": [
       {
         "trigger_id": "sootreaver_burn",
-        "description": "50% chance to inflict 100% of Fire Damage as extra Fire Damage over Time per second for 4 seconds.",
         "OnHit": {
           "skill_type": "Attack",
           "is_triggered": false
@@ -124,7 +123,7 @@
                       "damage_type": "Fire"
                     }
                   },
-                  "value": 1.0
+                  "value": 0.0
                 }
               ]
             },
@@ -155,8 +154,8 @@
             "stat": {
               "Damage": {}
             },
-            "modifier": "Multiplier",
-            "factor": 100.0,
+            "modifier": "Flat",
+            "factor": 1.0,
             "source": {
               "HitDamage": "Fire"
             }
@@ -273,7 +272,6 @@
     "triggers": [
       {
         "trigger_id": "tidesbreaker_anchor",
-        "description": "Trigger a Maelstrom on Critical Hit, inflicting 10% of Physical Hit Damage as Spell Storm Damage to All Enemies.",
         "OnHit": {
           "is_crit": true,
           "is_triggered": false
@@ -286,7 +284,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Storm": 0.1
+                "Storm": 0.0
               }
             },
             "ignore_stat_effects": [
@@ -319,8 +317,8 @@
             "stat": {
               "Damage": {}
             },
-            "modifier": "Multiplier",
-            "factor": 100.0,
+            "modifier": "Flat",
+            "factor": 0.1,
             "source": {
               "HitDamage": "Physical"
             }

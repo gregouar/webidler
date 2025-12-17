@@ -98,10 +98,20 @@ fn handle_hit_event<'a>(
                 && hit_trigger.is_hurt.unwrap_or(hit_event.is_hurt) == hit_event.is_hurt
                 && hit_trigger.is_triggered.unwrap_or(hit_event.is_triggered)
                     == hit_event.is_triggered
+                && hit_trigger
+                    .damage_type
+                    .map(|damage_type| {
+                        hit_event
+                            .damage
+                            .get(&damage_type)
+                            .copied()
+                            .unwrap_or_default()
+                            > 0.0
+                    })
+                    .unwrap_or(true)
             {
                 trigger_contexts.push(TriggerContext {
                     trigger: triggered_effects.clone(),
-                    owner: character_id,
                     source: hit_event.source,
                     target: hit_event.target,
                     hit_context: Some(hit_event),
@@ -167,7 +177,6 @@ fn handle_kill_event(
                             {
                                 trigger_contexts.push(TriggerContext {
                                     trigger: triggered_effects.clone(),
-                                    owner: CharacterId::Player,
                                     source: CharacterId::Player,
                                     target,
                                     hit_context: None,
@@ -201,7 +210,6 @@ fn handle_kill_event(
                                 {
                                     trigger_contexts.push(TriggerContext {
                                         trigger: triggered_effects.clone(),
-                                        owner: CharacterId::Monster(idx),
                                         source: CharacterId::Player,
                                         target,
                                         hit_context: None,
@@ -314,7 +322,6 @@ fn handle_wave_completed_event(
         if let EventTrigger::OnWaveCompleted = triggered_effects.trigger {
             trigger_contexts.push(TriggerContext {
                 trigger: triggered_effects.clone(),
-                owner: CharacterId::Player,
                 source: CharacterId::Player,
                 target: CharacterId::Player,
                 hit_context: None,
@@ -345,7 +352,6 @@ fn handle_threat_increased_event(
         if let EventTrigger::OnThreatIncreased = triggered_effects.trigger {
             trigger_contexts.push(TriggerContext {
                 trigger: triggered_effects.clone(),
-                owner: CharacterId::Player,
                 source: CharacterId::Player,
                 target: CharacterId::Player,
                 hit_context: None,
