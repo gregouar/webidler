@@ -41,7 +41,13 @@ pub fn AccountSettingsPage() -> impl IntoView {
     let init_email = RwSignal::new(Some(None));
     let email = RwSignal::new(Some(None));
 
-    let old_password = RwSignal::new(None);
+    let (get_guest_username_storage, set_guest_username_storage, _) =
+        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("guest_username");
+
+    let (get_guest_password_storage, set_guest_password_storage, _) =
+        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("guest_password");
+
+    let old_password = RwSignal::new(get_guest_password_storage.get());
     let password = RwSignal::new(None);
     let confirm_password = RwSignal::new(None);
 
@@ -66,8 +72,14 @@ pub fn AccountSettingsPage() -> impl IntoView {
                         .await
                     {
                         Ok(_) => {
+                            if get_guest_username_storage.get_untracked()
+                                == get_username_storage.get_untracked()
+                            {
+                                set_guest_username_storage.set(username.get_untracked());
+                            }
                             set_username_storage.set(username.get_untracked());
                             init_username.set(username.get_untracked());
+
                             show_toast(
                                 toaster,
                                 "Update account success!".to_string(),
@@ -149,6 +161,12 @@ pub fn AccountSettingsPage() -> impl IntoView {
                         .await
                     {
                         Ok(_) => {
+                            if get_guest_username_storage.get_untracked()
+                                == get_username_storage.get_untracked()
+                            {
+                                set_guest_password_storage.set(None);
+                            }
+
                             old_password.set(None);
                             password.set(None);
                             confirm_password.set(None);
