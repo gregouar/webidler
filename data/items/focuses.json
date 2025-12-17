@@ -65,7 +65,7 @@
       {
         "trigger_id": "vile_codex",
         "OnKill": { "is_debuffed": true },
-        "target": "Source",
+        "target": "Me",
         "effects": [
           {
             "ApplyStatus": {
