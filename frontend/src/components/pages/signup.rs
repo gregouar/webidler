@@ -149,13 +149,13 @@ pub fn SignUpPage() -> impl IntoView {
                         >
                             "Terms & Conditions"
                         </button>
-                        " and "
+                        " and I have read the "
                         <button
                             type="button"
                             class="btn text-amber-400 underline hover:text-amber-300"
                             on:click=move |_| show_privacy.set(true)
                         >
-                            "Privacy Policy"
+                            "Privacy Notice"
                         </button>
                         "."
                     </label>
