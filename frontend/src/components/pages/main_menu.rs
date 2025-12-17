@@ -502,6 +502,7 @@ pub fn GuestModal(open: RwSignal<bool>, captcha_token: RwSignal<Option<String>>)
                             <Input
                                 id="username"
                                 input_type="text"
+                                label="Username:"
                                 placeholder="Enter your username"
                                 bind=username
                             />
