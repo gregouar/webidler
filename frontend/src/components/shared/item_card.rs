@@ -7,6 +7,7 @@ use shared::data::item::{ItemRarity, ItemSpecs};
 
 use crate::assets::img_asset;
 use crate::components::events::{EventsContext, Key};
+use crate::components::settings::SettingsContext;
 use crate::components::shared::tooltips::item_tooltip::ComparableType;
 use crate::components::ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition};
 
@@ -116,6 +117,7 @@ pub fn ItemCard(
     let is_inside = RwSignal::new(false);
 
     let events_context: EventsContext = expect_context();
+    let settings_context: SettingsContext = expect_context();
 
     Effect::new({
         let show_tooltip = show_tooltip.clone();
@@ -124,8 +126,10 @@ pub fn ItemCard(
             if is_inside.get() {
                 tooltip_in_use = true;
                 show_tooltip(
-                    events_context.key_pressed(Key::Alt),
-                    events_context.key_pressed(Key::Ctrl),
+                    events_context.key_pressed(Key::Alt)
+                        || settings_context.read_settings().always_display_affix_tiers,
+                    events_context.key_pressed(Key::Ctrl)
+                        || settings_context.read_settings().always_compare_items,
                 );
             } else if tooltip_in_use {
                 tooltip_in_use = false;

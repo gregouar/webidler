@@ -3,18 +3,59 @@ use std::time::Duration;
 
 use leptos::{prelude::*, wasm_bindgen::JsValue, web_sys::js_sys::Date};
 
+use crate::components::settings::SettingsContext;
+
 #[component]
 pub fn Number(value: Signal<f64>) -> impl IntoView {
     view! { {move || { format_number(value.get()) }} }
 }
 
 pub fn format_number(value: f64) -> String {
-    let value = value.round();
+    if value.is_nan() || value.is_infinite() {
+        return value.to_string();
+    }
 
     if value < 0.0 {
         return format!("-{}", format_number(-value));
     }
 
+    if value < 1_000.0 {
+        return comma_format(value);
+    }
+
+    let settings_context: SettingsContext = expect_context();
+
+    if settings_context.read_settings().scientific_notation {
+        format_scientific_number(value)
+    } else {
+        format_alphabetic_number(value)
+    }
+}
+
+fn format_alphabetic_number(value: f64) -> String {
+    const SUFFIXES: [&str; 34] = [
+        "", "K", "M", "B", "t", "q", "Q", "s", "S", "o", "n", "d", "U", "D", "T", "Qt", "Qd", "Sd",
+        "St", "O", "N", "v", "c", "Dvg", "Tvg", "Qav", "Qvg", "Svg", "Spv", "Ovg", "Nvg", "Tg",
+        "Utg", "Dtg",
+    ];
+
+    let index = (value.log10() / 3.0).floor() as usize;
+    if let Some(suffix) = SUFFIXES.get(index) {
+        let scaled = value / 1000_f64.powi(index as i32);
+
+        if scaled >= 100.0 {
+            format!("{:.0}{}", scaled, suffix)
+        } else if scaled >= 10.0 {
+            format!("{:.1}{}", scaled, suffix)
+        } else {
+            format!("{:.2}{}", scaled, suffix)
+        }
+    } else {
+        format_scientific_number(value)
+    }
+}
+
+fn format_scientific_number(value: f64) -> String {
     if value >= 1_000_000.0 {
         format!("{value:.2e}")
     } else {
