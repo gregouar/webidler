@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
-use shared::{data::user::UserId, http::client::UpdateAccountRequest};
+use shared::{data::user::UserId, http::client::UpdateAccountRequest, types::Username};
 
 use crate::components::{
     auth::AuthContext,
@@ -315,25 +315,42 @@ pub fn ConfirmAccountDeletionModal(
     user_id: RwSignal<Option<UserId>>,
 ) -> impl IntoView {
     let confirm_input = RwSignal::new(None::<DeleteInput>);
-
     let node_ref = NodeRef::new();
     let _ = leptos_use::on_click_outside(node_ref, move |_| open.set(false));
+
+    let (get_username_storage, set_username_storage, _) =
+        storage::use_local_storage::<Option<Username>, JsonSerdeCodec>("username");
+
+    let (get_guest_username_storage, set_guest_username_storage, _) =
+        storage::use_local_storage::<Option<Username>, JsonSerdeCodec>("guest_username");
 
     let do_delete = {
         let toaster = expect_context::<Toasts>();
         let backend = expect_context::<BackendClient>();
         let auth_context = expect_context::<AuthContext>();
         let navigate = use_navigate();
+
         move |_| {
             let user_id = user_id.get_untracked().unwrap_or_default();
             spawn_local({
                 let navigate = navigate.clone();
+                let get_username_storage = get_username_storage.clone();
+                let set_username_storage = set_username_storage.clone();
+                let get_guest_username_storage = get_guest_username_storage.clone();
+                let set_guest_username_storage = set_guest_username_storage.clone();
                 async move {
                     match backend
                         .delete_account(&auth_context.token(), &user_id)
                         .await
                     {
                         Ok(_) => {
+                            if get_username_storage.get_untracked()
+                                == get_guest_username_storage.get_untracked()
+                            {
+                                set_guest_username_storage.set(None);
+                            }
+                            set_username_storage.set(None);
+
                             show_toast(
                                 toaster,
                                 "Account deleted!".to_string(),
