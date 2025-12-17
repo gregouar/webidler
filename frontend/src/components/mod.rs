@@ -5,6 +5,7 @@ pub mod captcha;
 pub mod events;
 pub mod game;
 pub mod pages;
+pub mod settings;
 pub mod shared;
 pub mod town;
 pub mod ui;

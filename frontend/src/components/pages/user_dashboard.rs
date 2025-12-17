@@ -20,7 +20,7 @@ use crate::{
         accessibility::AccessibilityContext,
         auth::AuthContext,
         backend_client::BackendClient,
-        shared::player_count::PlayerCount,
+        shared::{player_count::PlayerCount, settings::SettingsModal},
         ui::{
             buttons::{MenuButton, MenuButtonRed},
             confirm::ConfirmContext,
@@ -95,10 +95,13 @@ pub fn UserDashboardPage() -> impl IntoView {
         }
     });
 
+    let open_settings = RwSignal::new(false);
+
     view! {
         <main class="my-0 mx-auto w-full max-h-screen text-center overflow-x-hidden flex flex-col">
             <DiscordInviteBanner />
             <PlayerCount />
+            <SettingsModal open=open_settings />
 
             <div class="relative flex-1 max-w-6xl w-full mx-auto p-2 xl:p-4 gap-2 xl:gap-4 flex flex-col ">
                 <Transition fallback=move || {
@@ -126,19 +129,26 @@ pub fn UserDashboardPage() -> impl IntoView {
 
                                 <div class="w-full bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-xl
                                 flex items-center justify-between gap-2 text-gray-400 p-2 xl:p-4">
-                                    <a href="leaderboard">
-                                        <MenuButton>"Leaderboard"</MenuButton>
-                                    </a>
-                                    <a
-                                        href="https://webidler.gitbook.io/wiki/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        <MenuButton>"Wiki"</MenuButton>
-                                    </a>
-                                    <a href="account">
-                                        <MenuButton>"Account Settings"</MenuButton>
-                                    </a>
+                                    <div class="flex gap-2">
+                                        <MenuButton on:click=move |_| {
+                                            open_settings.set(true)
+                                        }>"Game Settings"</MenuButton>
+                                        <a href="account">
+                                            <MenuButton>"Account Settings"</MenuButton>
+                                        </a>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <a href="leaderboard">
+                                            <MenuButton>"Leaderboard"</MenuButton>
+                                        </a>
+                                        <a
+                                            href="https://webidler.gitbook.io/wiki/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            <MenuButton>"Wiki"</MenuButton>
+                                        </a>
+                                    </div>
                                     <MenuButtonRed on:click=move |_| sign_out()>
                                         "Sign Out"
                                     </MenuButtonRed>
