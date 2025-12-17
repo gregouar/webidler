@@ -268,19 +268,19 @@ pub fn shape_str(shape: SkillShape) -> &'static str {
 //         })
 // }
 
-fn find_trigger_modifier<'a>(
+fn find_trigger_modifier(
     stat: StatType,
-    modifiers: Option<&'a [TriggerEffectModifier]>,
-) -> Option<&'a TriggerEffectModifier> {
+    modifiers: Option<&[TriggerEffectModifier]>,
+) -> Option<&TriggerEffectModifier> {
     modifiers
         .unwrap_or_default()
         .iter()
         .find(|modifier| modifier.stat.is_match(&stat) && modifier.modifier == Modifier::Flat)
 }
 
-pub fn format_effect<'a>(
+pub fn format_effect(
     effect: SkillEffect,
-    modifiers: Option<&'a [TriggerEffectModifier]>,
+    modifiers: Option<&[TriggerEffectModifier]>,
 ) -> impl IntoView + use<> {
     let success_chance = if effect.success_chance.value < 100.0 {
         Some(view! {
@@ -309,7 +309,7 @@ pub fn format_effect<'a>(
                                 damage_type: Some(damage_type),
                                 skill_type: None,
                             },
-                            modifiers.clone(),
+                            modifiers,
                         ),
                     );
                     view! {
@@ -366,7 +366,7 @@ pub fn format_effect<'a>(
                                             damage_type: Some(damage_type),
                                             skill_type: None,
                                         },
-                                        modifiers.clone(),
+                                        modifiers,
                                     ),
                                 );
                         view! {
@@ -460,8 +460,8 @@ pub fn format_effect<'a>(
             modifier,
         } => {
             let trigger_modifier =
-                find_trigger_modifier(StatType::Restore(Some(restore_type)), modifiers.clone());
-            let trigger_modifier_str = format_trigger_modifier_per(trigger_modifier.clone());
+                find_trigger_modifier(StatType::Restore(Some(restore_type)), modifiers);
+            let trigger_modifier_str = format_trigger_modifier_per(trigger_modifier);
             let trigger_modifier_factor_str =
                 trigger_modifier.map(|trigger_modifier| format!("{:.0}", trigger_modifier.factor));
             view! {
@@ -483,7 +483,7 @@ pub fn format_effect<'a>(
         }
     };
 
-    let formatted_modifiers = modifiers.map(|modifiers| format_extra_trigger_modifiers(modifiers));
+    let formatted_modifiers = modifiers.map(format_extra_trigger_modifiers);
 
     view! {
         {base_effects}

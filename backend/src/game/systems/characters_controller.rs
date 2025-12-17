@@ -203,6 +203,7 @@ pub fn resuscitate_character(target: &mut Target) -> bool {
     true
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn apply_status(
     target: &mut Target,
     attacker: CharacterId,

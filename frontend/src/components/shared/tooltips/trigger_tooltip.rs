@@ -16,8 +16,8 @@ use crate::components::shared::tooltips::{
     skill_tooltip::{self, shape_str, skill_type_str, EffectLi},
 };
 
-pub fn format_trigger_modifier_as<'a>(
-    modifier: Option<&'a TriggerEffectModifier>,
+pub fn format_trigger_modifier_as(
+    modifier: Option<&TriggerEffectModifier>,
 ) -> Option<impl IntoView + use<>> {
     modifier.map(|modifier| {
         let factor_str = match modifier.modifier {
@@ -43,8 +43,8 @@ pub fn format_trigger_modifier_per(modifier: Option<&TriggerEffectModifier>) -> 
     })
 }
 
-pub fn format_extra_trigger_modifiers<'a>(
-    modifiers: &'a [TriggerEffectModifier],
+pub fn format_extra_trigger_modifiers(
+    modifiers: &[TriggerEffectModifier],
 ) -> impl IntoView + use<> {
     let modifiers_str: Vec<_> = modifiers
         .iter()
