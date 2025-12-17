@@ -120,7 +120,7 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
             format!("On {}Hit Taken", format_hit_trigger(hit_trigger))
         }
         EventTrigger::OnKill(kill_trigger) => {
-            format!("On {}Kill", format_kill_trigger(kill_trigger))
+            format!("On {}Enemy Kill", format_kill_trigger(kill_trigger))
         }
         EventTrigger::OnWaveCompleted => "At the end of each Wave completed".to_string(),
         EventTrigger::OnThreatIncreased => "On Threat increased".to_string(),

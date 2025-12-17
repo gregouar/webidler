@@ -95,7 +95,7 @@
         "OnKill": {
           "is_damaged_over_time": "Physical"
         },
-        "target": "Source",
+        "target": "Me",
         "effects": [
           {
             "Restore": {
