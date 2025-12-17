@@ -499,7 +499,7 @@ pub fn GuestModal(open: RwSignal<bool>, captcha_token: RwSignal<Option<String>>)
                                 You will be able to change them later from the 'Account Settings' page."
                             </p>
 
-                            <Input
+                            <ValidatedInput
                                 id="username"
                                 input_type="text"
                                 label="Username:"
