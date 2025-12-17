@@ -554,16 +554,19 @@ fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
 fn make_opt_stat(stat_type: StatType, default: f64) -> impl IntoView + use<> {
     let game_context = expect_context::<GameContext>();
 
-    let value = game_context
-        .player_specs
-        .read()
-        .effects
-        .0
-        .get(&(stat_type.clone(), Modifier::Multiplier))
-        .copied()
-        .unwrap_or_default();
-
-    (default != value).then(|| make_stat(stat_type))
+    view! {
+        {move || {
+            let value = game_context
+                .player_specs
+                .read()
+                .effects
+                .0
+                .get(&(stat_type.clone(), Modifier::Multiplier))
+                .copied()
+                .unwrap_or_default();
+            (default != value).then(|| make_stat(stat_type.clone()))
+        }}
+    }
 }
 
 fn make_stat(stat_type: StatType) -> impl IntoView + use<> {
