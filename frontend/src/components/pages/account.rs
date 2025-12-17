@@ -334,10 +334,6 @@ pub fn ConfirmAccountDeletionModal(
             let user_id = user_id.get_untracked().unwrap_or_default();
             spawn_local({
                 let navigate = navigate.clone();
-                let get_username_storage = get_username_storage.clone();
-                let set_username_storage = set_username_storage.clone();
-                let get_guest_username_storage = get_guest_username_storage.clone();
-                let set_guest_username_storage = set_guest_username_storage.clone();
                 async move {
                     match backend
                         .delete_account(&auth_context.token(), &user_id)
