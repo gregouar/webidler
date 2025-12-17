@@ -98,6 +98,17 @@ fn handle_hit_event<'a>(
                 && hit_trigger.is_hurt.unwrap_or(hit_event.is_hurt) == hit_event.is_hurt
                 && hit_trigger.is_triggered.unwrap_or(hit_event.is_triggered)
                     == hit_event.is_triggered
+                && hit_trigger
+                    .damage_type
+                    .map(|damage_type| {
+                        hit_event
+                            .damage
+                            .get(&damage_type)
+                            .copied()
+                            .unwrap_or_default()
+                            > 0.0
+                    })
+                    .unwrap_or(true)
             {
                 trigger_contexts.push(TriggerContext {
                     trigger: triggered_effects.clone(),

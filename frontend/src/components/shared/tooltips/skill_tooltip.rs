@@ -207,67 +207,6 @@ pub fn shape_str(shape: SkillShape) -> &'static str {
     }
 }
 
-// fn format_value<'a>(
-//     value: ChanceRange<f64>,
-//     stat: StatType,
-//     modifiers: Option<&'a [TriggerEffectModifier]>,
-// ) -> String {
-//     if let Some(modifier) = modifiers
-//         .unwrap_or_default()
-//         .iter()
-//         .find(|modifier| modifier.stat.is_match(&stat))
-//     {
-//         let factor_str = match modifier.modifier {
-//             Modifier::Multiplier => format!("{:.0}", modifier.factor),
-//             Modifier::Flat => format!(
-//                 "{}+{:.0}",
-//                 format_min_max(value)
-//                 format_min_max(ChanceRange {
-//                     min:  modifier.factor,
-//                     max:  modifier.factor,
-//                     lucky_chance: 0.0
-//                 })
-//             ),
-//         };
-//         format!(
-//             "{}% {}",
-//             factor_str,
-//             format_trigger_modifier(modifier.source),
-//         )
-//     } else {
-//         format_min_max(value)
-//     }
-// }
-
-// fn format_ratio_per<'a>(
-//     value: ChanceRange<f64>,
-//     stat: StatType,
-//     modifiers: Option<&'a [TriggerEffectModifier]>,
-// ) -> Option<String> {
-//     modifiers
-//         .unwrap_or_default()
-//         .iter()
-//         .find(|modifier| modifier.stat.is_match(&stat))
-//         .map(|modifier| {
-//             let factor_str = match modifier.modifier {
-//                 Modifier::Multiplier => format!("{:.0}% of", modifier.factor),
-//                 Modifier::Flat => format!(
-//                     "{:.1} per",
-//                     format_min_max(ChanceRange {
-//                         min: value.min + modifier.factor,
-//                         max: value.max + modifier.factor,
-//                         lucky_chance: value.lucky_chance
-//                     })
-//                 ),
-//             };
-//             format!(
-//                 "{} {}",
-//                 factor_str,
-//                 format_trigger_modifier(modifier.source),
-//             )
-//         })
-// }
-
 fn find_trigger_modifier(
     stat: StatType,
     modifiers: Option<&[TriggerEffectModifier]>,

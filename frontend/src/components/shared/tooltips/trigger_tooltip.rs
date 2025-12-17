@@ -132,12 +132,13 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
 
 fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
     format!(
-        "{}{}{}{}{}",
+        "{}{}{}{}{}{}",
         hurt_str(hit_trigger.is_hurt),
         blocked_str(hit_trigger.is_blocked),
         critical_str(hit_trigger.is_crit),
         range_str(hit_trigger.range),
         skill_type_str(hit_trigger.skill_type),
+        damage_type_str(hit_trigger.damage_type),
     )
 }
 

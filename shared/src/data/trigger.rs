@@ -36,6 +36,8 @@ pub struct HitTrigger {
     pub is_hurt: Option<bool>,
     #[serde(default)]
     pub is_triggered: Option<bool>,
+    #[serde(default)]
+    pub damage_type: Option<DamageType>,
     // TODO: Track skill id?
 }
 
