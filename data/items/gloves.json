@@ -216,5 +216,15 @@
       "armor": 50
     },
     "min_area_level": 190
+  },
+  "lamellar_gauntlets": {
+    "name": "Lamellar Gauntlets",
+    "icon": "items/leather_gauntlets.webp",
+    "slot": "Gloves",
+    "categories": ["Armor", "Gloves"],
+    "armor_specs": {
+      "armor": 60
+    },
+    "min_area_level": 240
   }
 }

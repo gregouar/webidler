@@ -1,0 +1,56 @@
+{
+  "entries": [
+    {
+      "item_id": "sabre",
+      "weight": 32000
+    },
+    {
+      "item_id": "bascinet",
+      "weight": 32000
+    },
+    {
+      "item_id": "breastplate",
+      "weight": 32000
+    },
+    {
+      "item_id": "lamellar_gauntlets",
+      "weight": 32000
+    },
+    {
+      "item_id": "sabatons",
+      "weight": 32000
+    },
+    {
+      "item_id": "flamberge",
+      "weight": 32000
+    },
+    {
+      "item_id": "compound_bow",
+      "weight": 32000
+    },
+    {
+      "item_id": "crystal_wand",
+      "weight": 32000
+    },
+    {
+      "item_id": "kite_shield",
+      "weight": 32000
+    },
+    {
+      "item_id": "ritual_orb",
+      "weight": 32000
+    },
+    {
+      "item_id": "great_cloak",
+      "weight": 32000
+    },
+    {
+      "item_id": "jewelled_ring",
+      "weight": 32000
+    },
+    {
+      "item_id": "amulet",
+      "weight": 32000
+    }
+  ]
+}

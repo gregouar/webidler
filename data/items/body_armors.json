@@ -193,5 +193,15 @@
       }
     ],
     "min_area_level": 200
+  },
+  "breastplate": {
+    "name": "Breastplate",
+    "icon": "items/breastplate.webp",
+    "slot": "Body",
+    "categories": ["Armor", "Body"],
+    "armor_specs": {
+      "armor": 120
+    },
+    "min_area_level": 240
   }
 }

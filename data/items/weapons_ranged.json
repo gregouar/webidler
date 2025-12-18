@@ -298,5 +298,23 @@
       "crit_damage": 100
     },
     "min_area_level": 190
+  },
+  "compound_bow": {
+    "name": "Compound Bow",
+    "icon": "items/compound_bow.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "RangedWeapon"],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [23, 27]
+      },
+      "crit_chance": 10,
+      "crit_damage": 100
+    },
+    "min_area_level": 240
   }
 }

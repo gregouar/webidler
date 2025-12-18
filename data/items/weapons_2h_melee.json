@@ -327,5 +327,23 @@
       }
     ],
     "min_area_level": 200
+  },
+  "flamberge": {
+    "name": "Flamberge",
+    "icon": "items/flamberge.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.5,
+      "damage": {
+        "Physical": [14, 50]
+      },
+      "crit_chance": 5,
+      "crit_damage": 200
+    },
+    "min_area_level": 240
   }
 }

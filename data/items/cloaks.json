@@ -261,5 +261,32 @@
       }
     ],
     "min_area_level": 190
+  },
+  "great_cloak": {
+    "name": "Great Cloak",
+    "icon": "items/great_cloak.webp",
+    "slot": "Accessory",
+    "categories": ["Accessory", "Cloak"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": 125
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": 125
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": 125
+      }
+    ],
+    "min_area_level": 240
   }
 }

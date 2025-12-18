@@ -175,5 +175,20 @@
       }
     ],
     "min_area_level": 190
+  },
+  "amulet": {
+    "name": "Amulet",
+    "icon": "items/amulet.webp",
+    "slot": "Amulet",
+    "categories": ["Jewelry", "Amulet"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 120
+      }
+    ],
+    "min_area_level": 240
   }
 }
