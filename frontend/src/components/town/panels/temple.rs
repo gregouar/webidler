@@ -10,13 +10,14 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
+    settings::SettingsContext,
     shared::{resources::GoldIcon, tooltips::effects_tooltip},
     town::TownContext,
     ui::{
         buttons::{CloseButton, MenuButton},
         confirm::ConfirmContext,
         menu_panel::{MenuPanel, PanelTitle},
-        number::format_number,
+        number::{format_number, format_number_without_context},
         toast::*,
     },
 };
@@ -124,10 +125,15 @@ fn ConfirmButton(
     });
 
     let try_ascend = {
-        let confirm_context = expect_context::<ConfirmContext>();
+        let confirm_context: ConfirmContext = expect_context();
+        let settings_context: SettingsContext = expect_context();
+        let cost_str = format_number_without_context(
+            cost.get(),
+            settings_context.read_settings().scientific_notation,
+        );
         move |_| {
             (confirm_context.confirm)(
-                format! {"Do you confirm buying Benedictions for {} Gold?",format_number(cost.get()) },
+                format! {"Do you confirm buying Benedictions for {} Gold?",cost_str },
                 do_ascend.clone(),
             );
         }
