@@ -127,11 +127,11 @@ fn ConfirmButton(
     let try_ascend = {
         let confirm_context: ConfirmContext = expect_context();
         let settings_context: SettingsContext = expect_context();
-        let cost_str = format_number_without_context(
-            cost.get(),
-            settings_context.read_settings().scientific_notation,
-        );
         move |_| {
+            let cost_str = format_number_without_context(
+                cost.get(),
+                settings_context.read_settings().scientific_notation,
+            );
             (confirm_context.confirm)(
                 format! {"Do you confirm buying Benedictions for {} Gold?",cost_str },
                 do_ascend.clone(),
