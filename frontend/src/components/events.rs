@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use leptos::{
     ev::{keydown, keyup},
     prelude::*,
+    web_sys::{wasm_bindgen::JsCast, Element, HtmlInputElement, HtmlTextAreaElement},
 };
 use leptos_use::{use_document, use_event_listener};
 
@@ -22,12 +23,20 @@ pub fn provide_events_context() {
     let pressed_keys = RwSignal::new(HashMap::new());
 
     let _ = use_event_listener(use_document(), keydown, move |ev| {
+        if is_text_input_target(&ev) {
+            return;
+        }
+
         pressed_keys.update(|pressed_keys| {
             pressed_keys.insert(Key::from(ev.key().as_str()), true);
         });
     });
 
     let _ = use_event_listener(use_document(), keyup, move |ev| {
+        if is_text_input_target(&ev) {
+            return;
+        }
+
         pressed_keys
             .write()
             .insert(Key::from(ev.key().as_str()), false);
@@ -69,4 +78,15 @@ impl From<&str> for Key {
             _ => Key::Unknown,
         }
     }
+}
+
+fn is_text_input_target(ev: &web_sys::KeyboardEvent) -> bool {
+    ev.target()
+        .and_then(|t| t.dyn_into::<Element>().ok())
+        .map(|el| {
+            el.dyn_ref::<HtmlInputElement>().is_some()
+                || el.dyn_ref::<HtmlTextAreaElement>().is_some()
+                || el.get_attribute("contenteditable").as_deref() == Some("true")
+        })
+        .unwrap_or(false)
 }
