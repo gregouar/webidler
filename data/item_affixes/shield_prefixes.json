@@ -88,5 +88,95 @@
         "value": [50, 59]
       }
     ]
+  },
+  {
+    "name": "Formidable",
+    "family": "inc_threat",
+    "tags": ["Threat"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Shield", "Focus"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [60, 69]
+      }
+    ]
+  },
+  {
+    "name": "Terrifying",
+    "family": "inc_threat",
+    "tags": ["Threat"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Shield", "Focus"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [70, 79]
+      }
+    ]
+  },
+  {
+    "name": "Fearsome",
+    "family": "inc_threat",
+    "tags": ["Threat"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Shield", "Focus"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [80, 89]
+      }
+    ]
+  },
+  {
+    "name": "Daunting",
+    "family": "inc_threat",
+    "tags": ["Threat"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Shield", "Focus"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [90, 99]
+      }
+    ]
+  },
+  {
+    "name": "Terrorizing",
+    "family": "inc_threat",
+    "tags": ["Threat"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Shield", "Focus"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ThreatGain",
+        "modifier": "Multiplier",
+        "value": [100, 109]
+      }
+    ]
   }
 ]

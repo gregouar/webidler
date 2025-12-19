@@ -1,6 +1,6 @@
 [
   {
-    "name": "of Emberguard",
+    "name": "of Emberscreen",
     "family": "add_fire_res",
     "tags": ["Fire", "Armor"],
     "affix_type": "Suffix",
@@ -16,6 +16,46 @@
         },
         "modifier": "Flat",
         "value": [25, 49]
+      }
+    ]
+  },
+  {
+    "name": "of Emberfoil",
+    "family": "add_fire_res",
+    "tags": ["Fire", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Fire"
+        },
+        "modifier": "Flat",
+        "value": [50, 74]
+      }
+    ]
+  },
+  {
+    "name": "of Emberguard",
+    "family": "add_fire_res",
+    "tags": ["Fire", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Armor": "Fire"
+        },
+        "modifier": "Flat",
+        "value": [75, 99]
       }
     ]
   },
@@ -24,10 +64,10 @@
     "family": "add_fire_res",
     "tags": ["Fire", "Armor"],
     "affix_type": "Suffix",
-    "tier": 2,
+    "tier": 4,
     "weight": 1000,
     "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
-    "item_level": 50,
+    "item_level": 150,
     "effects": [
       {
         "scope": "Global",
@@ -35,27 +75,7 @@
           "Armor": "Fire"
         },
         "modifier": "Flat",
-        "value": [50, 74]
-      }
-    ]
-  },
-  {
-    "name": "of Emberward",
-    "family": "add_fire_res",
-    "tags": ["Fire", "Armor"],
-    "affix_type": "Suffix",
-    "tier": 3,
-    "weight": 1000,
-    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
-    "item_level": 100,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "value": [75, 99]
+        "value": [100, 124]
       }
     ]
   },
@@ -64,10 +84,10 @@
     "family": "add_fire_res",
     "tags": ["Fire", "Armor"],
     "affix_type": "Suffix",
-    "tier": 4,
+    "tier": 5,
     "weight": 1000,
     "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
-    "item_level": 150,
+    "item_level": 200,
     "effects": [
       {
         "scope": "Global",
@@ -75,7 +95,79 @@
           "Armor": "Fire"
         },
         "modifier": "Flat",
-        "value": [100, 124]
+        "value": [125, 149]
+      }
+    ]
+  },
+  {
+    "name": "of Emberward",
+    "family": "add_fire_res",
+    "tags": ["Fire", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": [150, 174]
+      }
+    ]
+  },
+  {
+    "name": "of Embermantle",
+    "family": "add_fire_res",
+    "tags": ["Fire", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": [175, 199]
+      }
+    ]
+  },
+  {
+    "name": "of Emberscale",
+    "family": "add_fire_res",
+    "tags": ["Fire", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": [200, 224]
+      }
+    ]
+  },
+  {
+    "name": "of Embermail",
+    "family": "add_fire_res",
+    "tags": ["Fire", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": [225, 249]
       }
     ]
   },
@@ -84,24 +176,22 @@
     "family": "add_fire_res",
     "tags": ["Fire", "Armor"],
     "affix_type": "Suffix",
-    "tier": 5,
-    "weight": 1000,
+    "tier": 10,
+    "weight": 500,
     "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
-    "item_level": 200,
+    "item_level": 600,
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Armor": "Fire"
-        },
+        "stat": { "Armor": "Fire" },
         "modifier": "Flat",
-        "value": [125, 149]
+        "value": [250, 274]
       }
     ]
   },
 
   {
-    "name": "of Venomguard",
+    "name": "of Venomscreen",
     "family": "add_poison_res",
     "tags": ["Poison", "Armor"],
     "affix_type": "Suffix",
@@ -112,11 +202,45 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Armor": "Poison"
-        },
+        "stat": { "Armor": "Poison" },
         "modifier": "Flat",
         "value": [25, 49]
+      }
+    ]
+  },
+  {
+    "name": "of Venomfoil",
+    "family": "add_poison_res",
+    "tags": ["Poison", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": [50, 74]
+      }
+    ]
+  },
+  {
+    "name": "of Venomguard",
+    "family": "add_poison_res",
+    "tags": ["Poison", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": [75, 99]
       }
     ]
   },
@@ -125,46 +249,6 @@
     "family": "add_poison_res",
     "tags": ["Poison", "Armor"],
     "affix_type": "Suffix",
-    "tier": 2,
-    "weight": 1000,
-    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
-    "item_level": 50,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "value": [50, 74]
-      }
-    ]
-  },
-  {
-    "name": "of Venomward",
-    "family": "add_poison_res",
-    "tags": ["Poison", "Armor"],
-    "affix_type": "Suffix",
-    "tier": 3,
-    "weight": 1000,
-    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
-    "item_level": 100,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "value": [75, 99]
-      }
-    ]
-  },
-  {
-    "name": "of Venomveil",
-    "family": "add_poison_res",
-    "tags": ["Poison", "Armor"],
-    "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
     "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
@@ -172,16 +256,14 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Armor": "Poison"
-        },
+        "stat": { "Armor": "Poison" },
         "modifier": "Flat",
         "value": [100, 124]
       }
     ]
   },
   {
-    "name": "of Venomplate",
+    "name": "of Venomveil",
     "family": "add_poison_res",
     "tags": ["Poison", "Armor"],
     "affix_type": "Suffix",
@@ -192,17 +274,105 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Armor": "Poison"
-        },
+        "stat": { "Armor": "Poison" },
         "modifier": "Flat",
         "value": [125, 149]
       }
     ]
   },
+  {
+    "name": "of Venomward",
+    "family": "add_poison_res",
+    "tags": ["Poison", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": [150, 174]
+      }
+    ]
+  },
+  {
+    "name": "of Venommantle",
+    "family": "add_poison_res",
+    "tags": ["Poison", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": [175, 199]
+      }
+    ]
+  },
+  {
+    "name": "of Venomscale",
+    "family": "add_poison_res",
+    "tags": ["Poison", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": [200, 224]
+      }
+    ]
+  },
+  {
+    "name": "of Venommail",
+    "family": "add_poison_res",
+    "tags": ["Poison", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": [225, 249]
+      }
+    ]
+  },
+  {
+    "name": "of Venomplate",
+    "family": "add_poison_res",
+    "tags": ["Poison", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": [250, 274]
+      }
+    ]
+  },
 
   {
-    "name": "of Tempestguard",
+    "name": "of Tempestscreen",
     "family": "add_storm_res",
     "tags": ["Storm", "Armor"],
     "affix_type": "Suffix",
@@ -213,16 +383,14 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Armor": "Storm"
-        },
+        "stat": { "Armor": "Storm" },
         "modifier": "Flat",
         "value": [25, 49]
       }
     ]
   },
   {
-    "name": "of Tempestshield",
+    "name": "of Tempestfoil",
     "family": "add_storm_res",
     "tags": ["Storm", "Armor"],
     "affix_type": "Suffix",
@@ -233,16 +401,14 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Armor": "Storm"
-        },
+        "stat": { "Armor": "Storm" },
         "modifier": "Flat",
         "value": [50, 74]
       }
     ]
   },
   {
-    "name": "of Tempestward",
+    "name": "of Tempestguard",
     "family": "add_storm_res",
     "tags": ["Storm", "Armor"],
     "affix_type": "Suffix",
@@ -253,16 +419,14 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Armor": "Storm"
-        },
+        "stat": { "Armor": "Storm" },
         "modifier": "Flat",
         "value": [75, 99]
       }
     ]
   },
   {
-    "name": "of Tempestveil",
+    "name": "of Tempestshield",
     "family": "add_storm_res",
     "tags": ["Storm", "Armor"],
     "affix_type": "Suffix",
@@ -273,16 +437,14 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Armor": "Storm"
-        },
+        "stat": { "Armor": "Storm" },
         "modifier": "Flat",
         "value": [100, 124]
       }
     ]
   },
   {
-    "name": "of Tempestplate",
+    "name": "of Tempestveil",
     "family": "add_storm_res",
     "tags": ["Storm", "Armor"],
     "affix_type": "Suffix",
@@ -293,11 +455,99 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Armor": "Storm"
-        },
+        "stat": { "Armor": "Storm" },
         "modifier": "Flat",
         "value": [125, 149]
+      }
+    ]
+  },
+  {
+    "name": "of Tempestward",
+    "family": "add_storm_res",
+    "tags": ["Storm", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": [150, 174]
+      }
+    ]
+  },
+  {
+    "name": "of Tempestmantle",
+    "family": "add_storm_res",
+    "tags": ["Storm", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": [175, 199]
+      }
+    ]
+  },
+  {
+    "name": "of Tempestscale",
+    "family": "add_storm_res",
+    "tags": ["Storm", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": [200, 224]
+      }
+    ]
+  },
+  {
+    "name": "of Tempestmail",
+    "family": "add_storm_res",
+    "tags": ["Storm", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": [225, 249]
+      }
+    ]
+  },
+  {
+    "name": "of Tempestplate",
+    "family": "add_storm_res",
+    "tags": ["Storm", "Armor"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Armor", "Accessory", "Jewelry", "Focus", "Shield"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": [250, 274]
       }
     ]
   }

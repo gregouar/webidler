@@ -1,6 +1,6 @@
 [
   {
-    "name": "Agile",
+    "name": "Sprightly",
     "family": "inc_movement_speed",
     "tags": ["Speed"],
     "affix_type": "Prefix",
@@ -18,7 +18,7 @@
     ]
   },
   {
-    "name": "Energetic",
+    "name": "Vivacious",
     "family": "inc_movement_speed",
     "tags": ["Speed"],
     "affix_type": "Prefix",
@@ -36,7 +36,7 @@
     ]
   },
   {
-    "name": "Athletic",
+    "name": "Adroit",
     "family": "inc_movement_speed",
     "tags": ["Speed"],
     "affix_type": "Prefix",
@@ -54,7 +54,7 @@
     ]
   },
   {
-    "name": "Fast",
+    "name": "Lithe",
     "family": "inc_movement_speed",
     "tags": ["Speed"],
     "affix_type": "Prefix",
@@ -72,7 +72,7 @@
     ]
   },
   {
-    "name": "Sprint",
+    "name": "Supple",
     "family": "inc_movement_speed",
     "tags": ["Speed"],
     "affix_type": "Prefix",
@@ -86,6 +86,96 @@
         "stat": "MovementSpeed",
         "modifier": "Multiplier",
         "value": [30, 34]
+      }
+    ]
+  },
+  {
+    "name": "Energetic",
+    "family": "inc_movement_speed",
+    "tags": ["Speed"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Boots"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "MovementSpeed",
+        "modifier": "Multiplier",
+        "value": [35, 39]
+      }
+    ]
+  },
+  {
+    "name": "Athletic",
+    "family": "inc_movement_speed",
+    "tags": ["Speed"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Boots"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "MovementSpeed",
+        "modifier": "Multiplier",
+        "value": [40, 44]
+      }
+    ]
+  },
+  {
+    "name": "Impetuous",
+    "family": "inc_movement_speed",
+    "tags": ["Speed"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Boots"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "MovementSpeed",
+        "modifier": "Multiplier",
+        "value": [45, 49]
+      }
+    ]
+  },
+  {
+    "name": "Precipitous",
+    "family": "inc_movement_speed",
+    "tags": ["Speed"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Boots"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "MovementSpeed",
+        "modifier": "Multiplier",
+        "value": [50, 54]
+      }
+    ]
+  },
+  {
+    "name": "Expeditious",
+    "family": "inc_movement_speed",
+    "tags": ["Speed"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Boots"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "MovementSpeed",
+        "modifier": "Multiplier",
+        "value": [55, 59]
       }
     ]
   }

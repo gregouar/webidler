@@ -89,6 +89,96 @@
       }
     ]
   },
+  {
+    "name": "Burly",
+    "family": "add_life",
+    "tags": ["Life"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Flat",
+        "value": [60, 69]
+      }
+    ]
+  },
+  {
+    "name": "Brawny",
+    "family": "add_life",
+    "tags": ["Life"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Flat",
+        "value": [70, 79]
+      }
+    ]
+  },
+  {
+    "name": "Solid",
+    "family": "add_life",
+    "tags": ["Life"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Flat",
+        "value": [80, 89]
+      }
+    ]
+  },
+  {
+    "name": "Imposing",
+    "family": "add_life",
+    "tags": ["Life"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Flat",
+        "value": [90, 99]
+      }
+    ]
+  },
+  {
+    "name": "Formidable",
+    "family": "add_life",
+    "tags": ["Life"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Flat",
+        "value": [100, 109]
+      }
+    ]
+  },
 
   {
     "name": "Hefty",
@@ -163,7 +253,7 @@
     ]
   },
   {
-    "name": "Hulking",
+    "name": "Endurant",
     "family": "inc_life",
     "tags": ["Life"],
     "affix_type": "Prefix",
@@ -177,6 +267,96 @@
         "stat": "Life",
         "modifier": "Multiplier",
         "value": [11, 12]
+      }
+    ]
+  },
+  {
+    "name": "Hulking",
+    "family": "inc_life",
+    "tags": ["Life"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Multiplier",
+        "value": [13, 14]
+      }
+    ]
+  },
+  {
+    "name": "Resistant",
+    "family": "inc_life",
+    "tags": ["Life"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Multiplier",
+        "value": [15, 16]
+      }
+    ]
+  },
+  {
+    "name": "Tenacious",
+    "family": "inc_life",
+    "tags": ["Life"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Multiplier",
+        "value": [17, 18]
+      }
+    ]
+  },
+  {
+    "name": "Resilient",
+    "family": "inc_life",
+    "tags": ["Life"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Multiplier",
+        "value": [19, 20]
+      }
+    ]
+  },
+  {
+    "name": "Stalwart",
+    "family": "inc_life",
+    "tags": ["Life"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Multiplier",
+        "value": [21, 22]
       }
     ]
   }

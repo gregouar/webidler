@@ -1,6 +1,6 @@
 [
   {
-    "name": "of Anger",
+    "name": "of Ire",
     "family": "inc_attack_damage",
     "tags": ["Attack"],
     "affix_type": "Suffix",
@@ -18,7 +18,7 @@
     ]
   },
   {
-    "name": "of Rage",
+    "name": "of Temper",
     "family": "inc_attack_damage",
     "tags": ["Attack"],
     "affix_type": "Suffix",
@@ -36,7 +36,7 @@
     ]
   },
   {
-    "name": "of Fury",
+    "name": "of Wrath",
     "family": "inc_attack_damage",
     "tags": ["Attack"],
     "affix_type": "Suffix",
@@ -54,7 +54,7 @@
     ]
   },
   {
-    "name": "of Violence",
+    "name": "of Belligerence",
     "family": "inc_attack_damage",
     "tags": ["Attack"],
     "affix_type": "Suffix",
@@ -72,7 +72,7 @@
     ]
   },
   {
-    "name": "of Cataclysm",
+    "name": "of Ferocity",
     "family": "inc_attack_damage",
     "tags": ["Attack"],
     "affix_type": "Suffix",
@@ -86,6 +86,96 @@
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
         "value": [125, 149]
+      }
+    ]
+  },
+  {
+    "name": "of Aggression",
+    "family": "inc_attack_damage",
+    "tags": ["Attack"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Jewelry"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [150, 174]
+      }
+    ]
+  },
+  {
+    "name": "of Rage",
+    "family": "inc_attack_damage",
+    "tags": ["Attack"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Jewelry"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [175, 199]
+      }
+    ]
+  },
+  {
+    "name": "of Hatred",
+    "family": "inc_attack_damage",
+    "tags": ["Attack"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Jewelry"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [200, 224]
+      }
+    ]
+  },
+  {
+    "name": "of Fury",
+    "family": "inc_attack_damage",
+    "tags": ["Attack"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Jewelry"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [225, 249]
+      }
+    ]
+  },
+  {
+    "name": "of Bloodlust",
+    "family": "inc_attack_damage",
+    "tags": ["Attack"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Jewelry"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [250, 274]
       }
     ]
   },
@@ -177,6 +267,96 @@
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
         "value": [125, 149]
+      }
+    ]
+  },
+  {
+    "name": "of Theurgy",
+    "family": "inc_spell_damage",
+    "tags": ["Spell"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Jewelry", "SpellWeapon"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [150, 174]
+      }
+    ]
+  },
+  {
+    "name": "of Enchantment",
+    "family": "inc_spell_damage",
+    "tags": ["Spell"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Jewelry", "SpellWeapon"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [175, 199]
+      }
+    ]
+  },
+  {
+    "name": "of Incantation",
+    "family": "inc_spell_damage",
+    "tags": ["Spell"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Jewelry", "SpellWeapon"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [200, 224]
+      }
+    ]
+  },
+  {
+    "name": "of Conjuration",
+    "family": "inc_spell_damage",
+    "tags": ["Spell"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Jewelry", "SpellWeapon"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [225, 249]
+      }
+    ]
+  },
+  {
+    "name": "of Invocation",
+    "family": "inc_spell_damage",
+    "tags": ["Spell"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Jewelry", "SpellWeapon"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [250, 274]
       }
     ]
   }

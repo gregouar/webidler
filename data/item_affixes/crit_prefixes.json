@@ -1,6 +1,6 @@
 [
   {
-    "name": "Dangerous",
+    "name": "Harmful",
     "family": "inc_crit_damage",
     "tags": ["Attack", "Critical"],
     "affix_type": "Prefix",
@@ -18,7 +18,7 @@
     ]
   },
   {
-    "name": "Lethal",
+    "name": "Dangerous",
     "family": "inc_crit_damage",
     "tags": ["Attack", "Critical"],
     "affix_type": "Prefix",
@@ -36,7 +36,7 @@
     ]
   },
   {
-    "name": "Deadly",
+    "name": "Grievous",
     "family": "inc_crit_damage",
     "tags": ["Attack", "Critical"],
     "affix_type": "Prefix",
@@ -54,7 +54,7 @@
     ]
   },
   {
-    "name": "Fatal",
+    "name": "Lethal",
     "family": "inc_crit_damage",
     "tags": ["Attack", "Critical"],
     "affix_type": "Prefix",
@@ -72,7 +72,7 @@
     ]
   },
   {
-    "name": "Ruinous",
+    "name": "Mortal",
     "family": "inc_crit_damage",
     "tags": ["Attack", "Critical"],
     "affix_type": "Prefix",
@@ -86,6 +86,96 @@
         "stat": { "CritDamage": null },
         "modifier": "Multiplier",
         "value": [125, 149]
+      }
+    ]
+  },
+  {
+    "name": "Deadly",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Jewelry"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [150, 174]
+      }
+    ]
+  },
+  {
+    "name": "Fatal",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Jewelry"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [175, 199]
+      }
+    ]
+  },
+  {
+    "name": "Grim",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Jewelry"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [200, 224]
+      }
+    ]
+  },
+  {
+    "name": "Terrible",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Jewelry"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [225, 249]
+      }
+    ]
+  },
+  {
+    "name": "Terminal",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Jewelry"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [250, 274]
       }
     ]
   }

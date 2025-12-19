@@ -18,7 +18,7 @@
     ]
   },
   {
-    "name": "of Progress",
+    "name": "of Stream",
     "family": "add_mana_regen",
     "tags": ["Mana"],
     "affix_type": "Suffix",
@@ -36,7 +36,7 @@
     ]
   },
   {
-    "name": "of Stream",
+    "name": "of Current",
     "family": "add_mana_regen",
     "tags": ["Mana"],
     "affix_type": "Suffix",
@@ -54,7 +54,7 @@
     ]
   },
   {
-    "name": "of Growth",
+    "name": "of Progress",
     "family": "add_mana_regen",
     "tags": ["Mana"],
     "affix_type": "Suffix",
@@ -72,7 +72,7 @@
     ]
   },
   {
-    "name": "of Abundance",
+    "name": "of Growth",
     "family": "add_mana_regen",
     "tags": ["Mana"],
     "affix_type": "Suffix",
@@ -86,6 +86,96 @@
         "stat": "ManaRegen",
         "modifier": "Flat",
         "value": [9, 10]
+      }
+    ]
+  },
+  {
+    "name": "of Cogitation",
+    "family": "add_mana_regen",
+    "tags": ["Mana"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["SpellWeapon", "Focus", "Armor"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [11, 12]
+      }
+    ]
+  },
+  {
+    "name": "of Meditation",
+    "family": "add_mana_regen",
+    "tags": ["Mana"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["SpellWeapon", "Focus", "Armor"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [13, 14]
+      }
+    ]
+  },
+  {
+    "name": "of Tranquility",
+    "family": "add_mana_regen",
+    "tags": ["Mana"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["SpellWeapon", "Focus", "Armor"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [15, 16]
+      }
+    ]
+  },
+  {
+    "name": "of Enlightenment",
+    "family": "add_mana_regen",
+    "tags": ["Mana"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["SpellWeapon", "Focus", "Armor"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [17, 18]
+      }
+    ]
+  },
+  {
+    "name": "of Nirvana",
+    "family": "add_mana_regen",
+    "tags": ["Mana"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["SpellWeapon", "Focus", "Armor"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [19, 20]
       }
     ]
   }

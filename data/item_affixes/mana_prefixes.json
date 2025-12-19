@@ -1,6 +1,6 @@
 [
   {
-    "name": "Thoughtful",
+    "name": "Novice",
     "family": "add_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -18,7 +18,7 @@
     ]
   },
   {
-    "name": "Cognitive",
+    "name": "Studious",
     "family": "add_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -36,7 +36,7 @@
     ]
   },
   {
-    "name": "Analytical",
+    "name": "Learned",
     "family": "add_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -54,7 +54,7 @@
     ]
   },
   {
-    "name": "Knowing",
+    "name": "Scholastic",
     "family": "add_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -72,7 +72,7 @@
     ]
   },
   {
-    "name": "Sagacious",
+    "name": "Cultivated",
     "family": "add_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -89,9 +89,99 @@
       }
     ]
   },
+  {
+    "name": "Academic",
+    "family": "add_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": [60, 69]
+      }
+    ]
+  },
+  {
+    "name": "Sage",
+    "family": "add_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": [70, 79]
+      }
+    ]
+  },
+  {
+    "name": "Erudite",
+    "family": "add_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": [80, 89]
+      }
+    ]
+  },
+  {
+    "name": "Magisterial",
+    "family": "add_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": [90, 99]
+      }
+    ]
+  },
+  {
+    "name": "Illuminated",
+    "family": "add_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": [100, 109]
+      }
+    ]
+  },
 
   {
-    "name": "Cultivated",
+    "name": "Thoughtful",
     "family": "inc_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -109,7 +199,7 @@
     ]
   },
   {
-    "name": "Educated",
+    "name": "Cognitive",
     "family": "inc_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -127,7 +217,7 @@
     ]
   },
   {
-    "name": "Intelligent",
+    "name": "Analytical",
     "family": "inc_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -145,7 +235,7 @@
     ]
   },
   {
-    "name": "Enlightened",
+    "name": "Knowing",
     "family": "inc_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -163,7 +253,7 @@
     ]
   },
   {
-    "name": "Wise",
+    "name": "Sagacious",
     "family": "inc_mana",
     "tags": ["Mana"],
     "affix_type": "Prefix",
@@ -177,6 +267,96 @@
         "stat": "Mana",
         "modifier": "Multiplier",
         "value": [14, 16]
+      }
+    ]
+  },
+  {
+    "name": "Insightful",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [17, 19]
+      }
+    ]
+  },
+  {
+    "name": "Intelligent",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [20, 22]
+      }
+    ]
+  },
+  {
+    "name": "Intuitive",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [23, 25]
+      }
+    ]
+  },
+  {
+    "name": "Gifted",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [26, 28]
+      }
+    ]
+  },
+  {
+    "name": "Genius",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [29, 32]
       }
     ]
   }

@@ -4,6 +4,7 @@ use strum::IntoEnumIterator;
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
+    item_affix::AffixEffectScope,
     skill::{DamageType, SkillType},
     stat_effect::{
         LuckyRollType, Modifier, StatConverterSource, StatEffect, StatSkillEffectType,
@@ -122,12 +123,12 @@ fn stat_skill_effect_type_str(effect_type: Option<StatSkillEffectType>) -> Strin
     }
 }
 
-// fn scope_str(scope: AffixEffectScope) -> &'static str {
-//     match scope {
-//         AffixEffectScope::Local => "",
-//         AffixEffectScope::Global => "Global ",
-//     }
-// }
+pub fn scope_str(scope: AffixEffectScope) -> &'static str {
+    match scope {
+        AffixEffectScope::Local => "Local",
+        AffixEffectScope::Global => "Global",
+    }
+}
 
 pub fn effect_li(text: String) -> impl IntoView {
     view! { <li class="text-blue-400 leading-snug">{text}</li> }
