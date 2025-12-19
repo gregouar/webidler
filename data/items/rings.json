@@ -173,7 +173,6 @@
     "triggers": [
       {
         "trigger_id": "signet_ring_unique",
-        "description": "On Blocked Hit:",
         "OnTakeHit": { "is_blocked": true },
         "target": "SameTarget",
         "effects": [
@@ -203,5 +202,20 @@
       }
     ],
     "min_area_level": 190
+  },
+  "jewelled_ring": {
+    "name": "Jewelled Ring",
+    "icon": "items/jewelled_ring.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 120
+      }
+    ],
+    "min_area_level": 240
   }
 }

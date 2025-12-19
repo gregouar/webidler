@@ -30,7 +30,8 @@ pub struct PlayerSpecs {
     pub gold_find: f64,
     pub threat_gain: f32,
 
-    pub effects: EffectsMap,
+    #[serde(default)] // for retro compatibility
+    pub effects: EffectsMap, //TODO: REMOVE
 
     #[serde(default)] // for retro compatibility
     pub max_area_level: AreaLevel,

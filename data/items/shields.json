@@ -56,7 +56,6 @@
     "triggers": [
       {
         "trigger_id": "stunning_block",
-        "description": "Blocked Hits inflict:",
         "OnTakeHit": { "is_blocked": true },
         "target": "Source",
         "effects": [
@@ -166,5 +165,16 @@
       "block": 23
     },
     "min_area_level": 190
+  },
+  "kite_shield": {
+    "name": "Kite Shield",
+    "icon": "items/kite_shield.webp",
+    "slot": "Shield",
+    "categories": ["Shield"],
+    "armor_specs": {
+      "armor": 150,
+      "block": 25
+    },
+    "min_area_level": 240
   }
 }

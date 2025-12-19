@@ -11,11 +11,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Speed": "Attack"
-        },
+        "stat": { "Speed": "Attack" },
         "modifier": "Multiplier",
-        "value": [5, 9]
+        "value": [5, 7]
       }
     ]
   },
@@ -31,11 +29,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Speed": "Attack"
-        },
+        "stat": { "Speed": "Attack" },
         "modifier": "Multiplier",
-        "value": [10, 14]
+        "value": [8, 10]
       }
     ]
   },
@@ -51,16 +47,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Speed": "Attack"
-        },
+        "stat": { "Speed": "Attack" },
         "modifier": "Multiplier",
-        "value": [15, 19]
+        "value": [11, 13]
       }
     ]
   },
   {
-    "name": "of Haste",
+    "name": "of Acceleration",
     "family": "inc_speed",
     "tags": ["Attack", "Speed"],
     "affix_type": "Suffix",
@@ -71,16 +65,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Speed": "Attack"
-        },
+        "stat": { "Speed": "Attack" },
         "modifier": "Multiplier",
-        "value": [20, 24]
+        "value": [14, 16]
       }
     ]
   },
   {
-    "name": "of Frenzy",
+    "name": "of Haste",
     "family": "inc_speed",
     "tags": ["Attack", "Speed"],
     "affix_type": "Suffix",
@@ -93,13 +85,103 @@
         "scope": "Local",
         "stat": { "Speed": "Attack" },
         "modifier": "Multiplier",
-        "value": [25, 29]
+        "value": [17, 19]
+      }
+    ]
+  },
+  {
+    "name": "of Frenzy",
+    "family": "inc_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": [20, 22]
+      }
+    ]
+  },
+  {
+    "name": "of Tantrum",
+    "family": "inc_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": [23, 25]
+      }
+    ]
+  },
+  {
+    "name": "of Craze",
+    "family": "inc_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": [26, 28]
+      }
+    ]
+  },
+  {
+    "name": "of Madness",
+    "family": "inc_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": [29, 31]
+      }
+    ]
+  },
+  {
+    "name": "of Hysteria",
+    "family": "inc_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": [32, 34]
       }
     ]
   },
 
   {
-    "name": "of Aim",
+    "name": "of the Owl",
     "family": "add_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -110,16 +192,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "CritChance": null
-        },
+        "stat": { "CritChance": null },
         "modifier": "Flat",
         "value": 1
       }
     ]
   },
   {
-    "name": "of Accuracy",
+    "name": "of the Tyto",
     "family": "add_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -130,16 +210,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "CritChance": null
-        },
+        "stat": { "CritChance": null },
         "modifier": "Flat",
         "value": 2
       }
     ]
   },
   {
-    "name": "of Precision",
+    "name": "of the Hawk",
     "family": "add_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -150,16 +228,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "CritChance": null
-        },
+        "stat": { "CritChance": null },
         "modifier": "Flat",
         "value": 3
       }
     ]
   },
   {
-    "name": "of Mastery",
+    "name": "of the Kestrel",
     "family": "add_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -170,16 +246,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "CritChance": null
-        },
+        "stat": { "CritChance": null },
         "modifier": "Flat",
         "value": 4
       }
     ]
   },
   {
-    "name": "of Perfection",
+    "name": "of the Eagle",
     "family": "add_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -196,9 +270,99 @@
       }
     ]
   },
+  {
+    "name": "of the Falcon",
+    "family": "add_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 6
+      }
+    ]
+  },
+  {
+    "name": "of the Harrier",
+    "family": "add_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 7
+      }
+    ]
+  },
+  {
+    "name": "of the Osprey",
+    "family": "add_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 8
+      }
+    ]
+  },
+  {
+    "name": "of the Peregrine",
+    "family": "add_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 9
+      }
+    ]
+  },
+  {
+    "name": "of the Harpy",
+    "family": "add_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 10
+      }
+    ]
+  },
 
   {
-    "name": "of the Owl",
+    "name": "of Aim",
     "family": "inc_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -209,16 +373,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "CritChance": null
-        },
+        "stat": { "CritChance": null },
         "modifier": "Multiplier",
         "value": [10, 19]
       }
     ]
   },
   {
-    "name": "of the Tyto",
+    "name": "of Rigor",
     "family": "inc_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -229,16 +391,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "CritChance": null
-        },
+        "stat": { "CritChance": null },
         "modifier": "Multiplier",
         "value": [20, 29]
       }
     ]
   },
   {
-    "name": "of the Hawk",
+    "name": "of Accuracy",
     "family": "inc_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -249,16 +409,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "CritChance": null
-        },
+        "stat": { "CritChance": null },
         "modifier": "Multiplier",
         "value": [30, 39]
       }
     ]
   },
   {
-    "name": "of the Eagle",
+    "name": "of Efficiency",
     "family": "inc_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -269,16 +427,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "CritChance": null
-        },
+        "stat": { "CritChance": null },
         "modifier": "Multiplier",
         "value": [40, 49]
       }
     ]
   },
   {
-    "name": "of the Falcon",
+    "name": "of Precision",
     "family": "inc_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -295,6 +451,96 @@
       }
     ]
   },
+  {
+    "name": "of Incisiveness",
+    "family": "inc_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Multiplier",
+        "value": [60, 69]
+      }
+    ]
+  },
+  {
+    "name": "of Exactitude",
+    "family": "inc_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Multiplier",
+        "value": [70, 79]
+      }
+    ]
+  },
+  {
+    "name": "of Meticulousness",
+    "family": "inc_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Multiplier",
+        "value": [80, 89]
+      }
+    ]
+  },
+  {
+    "name": "of Certainty",
+    "family": "inc_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Multiplier",
+        "value": [90, 99]
+      }
+    ]
+  },
+  {
+    "name": "of Perfection",
+    "family": "inc_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Multiplier",
+        "value": [100, 109]
+      }
+    ]
+  },
 
   {
     "name": "of Destruction",
@@ -308,9 +554,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "CritDamage": null
-        },
+        "stat": { "CritDamage": null },
         "modifier": "Multiplier",
         "value": [25, 49]
       }
@@ -328,9 +572,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "CritDamage": null
-        },
+        "stat": { "CritDamage": null },
         "modifier": "Multiplier",
         "value": [50, 74]
       }
@@ -348,9 +590,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "CritDamage": null
-        },
+        "stat": { "CritDamage": null },
         "modifier": "Multiplier",
         "value": [75, 99]
       }
@@ -368,9 +608,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "CritDamage": null
-        },
+        "stat": { "CritDamage": null },
         "modifier": "Multiplier",
         "value": [100, 124]
       }
@@ -394,9 +632,99 @@
       }
     ]
   },
+  {
+    "name": "of Rampage",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [150, 174]
+      }
+    ]
+  },
+  {
+    "name": "of Ruination",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [175, 199]
+      }
+    ]
+  },
+  {
+    "name": "of Devastation",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [200, 224]
+      }
+    ]
+  },
+  {
+    "name": "of Extermination",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [225, 249]
+      }
+    ]
+  },
+  {
+    "name": "of Oblivion",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [250, 274]
+      }
+    ]
+  },
 
   {
-    "name": "of the Mosquito",
+    "name": "of the Flea",
     "family": "life_leech",
     "tags": ["Attack", "Life"],
     "affix_type": "Suffix",
@@ -407,9 +735,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
-        },
+        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [1, 2]
       }
@@ -427,16 +753,14 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
-        },
+        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [3, 4]
       }
     ]
   },
   {
-    "name": "of the Bat",
+    "name": "of the Mosquito",
     "family": "life_leech",
     "tags": ["Attack", "Life"],
     "affix_type": "Suffix",
@@ -447,16 +771,14 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
-        },
+        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [5, 6]
       }
     ]
   },
   {
-    "name": "of the Leech",
+    "name": "of the Bat",
     "family": "life_leech",
     "tags": ["Attack", "Life"],
     "affix_type": "Suffix",
@@ -467,16 +789,14 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
-        },
+        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [7, 8]
       }
     ]
   },
   {
-    "name": "of the Lamprey",
+    "name": "of the Leech",
     "family": "life_leech",
     "tags": ["Attack", "Life"],
     "affix_type": "Suffix",
@@ -493,6 +813,96 @@
       }
     ]
   },
+  {
+    "name": "of the Finch",
+    "family": "life_leech",
+    "tags": ["Attack", "Life"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "modifier": "Flat",
+        "value": [11, 12]
+      }
+    ]
+  },
+  {
+    "name": "of the Candiru",
+    "family": "life_leech",
+    "tags": ["Attack", "Life"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "modifier": "Flat",
+        "value": [13, 14]
+      }
+    ]
+  },
+  {
+    "name": "of the Oxpecker",
+    "family": "life_leech",
+    "tags": ["Attack", "Life"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "modifier": "Flat",
+        "value": [15, 16]
+      }
+    ]
+  },
+  {
+    "name": "of the Lamprey",
+    "family": "life_leech",
+    "tags": ["Attack", "Life"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "modifier": "Flat",
+        "value": [17, 18]
+      }
+    ]
+  },
+  {
+    "name": "of the Vampire",
+    "family": "life_leech",
+    "tags": ["Attack", "Life"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "modifier": "Flat",
+        "value": [19, 20]
+      }
+    ]
+  },
 
   {
     "name": "of the Carp",
@@ -506,9 +916,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" }
-        },
+        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [1, 2]
       }
@@ -526,9 +934,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" }
-        },
+        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [3, 4]
       }
@@ -546,9 +952,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" }
-        },
+        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [5, 6]
       }
@@ -566,9 +970,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" }
-        },
+        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [7, 8]
       }
@@ -589,6 +991,96 @@
         "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [9, 10]
+      }
+    ]
+  },
+  {
+    "name": "of the Moray",
+    "family": "mana_leech",
+    "tags": ["Attack", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "modifier": "Flat",
+        "value": [11, 12]
+      }
+    ]
+  },
+  {
+    "name": "of the Barracuda",
+    "family": "mana_leech",
+    "tags": ["Attack", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "modifier": "Flat",
+        "value": [13, 14]
+      }
+    ]
+  },
+  {
+    "name": "of the Shark",
+    "family": "mana_leech",
+    "tags": ["Attack", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "modifier": "Flat",
+        "value": [15, 16]
+      }
+    ]
+  },
+  {
+    "name": "of the Kraken",
+    "family": "mana_leech",
+    "tags": ["Attack", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "modifier": "Flat",
+        "value": [17, 18]
+      }
+    ]
+  },
+  {
+    "name": "of the Leviathan",
+    "family": "mana_leech",
+    "tags": ["Attack", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "modifier": "Flat",
+        "value": [19, 20]
       }
     ]
   }

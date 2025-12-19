@@ -11,9 +11,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Armor": "Physical"
-        },
+        "stat": { "Armor": "Physical" },
         "modifier": "Flat",
         "value": [5, 10]
       }
@@ -31,9 +29,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Armor": "Physical"
-        },
+        "stat": { "Armor": "Physical" },
         "modifier": "Flat",
         "value": [11, 20]
       }
@@ -51,11 +47,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Armor": "Physical"
-        },
+        "stat": { "Armor": "Physical" },
         "modifier": "Flat",
-        "value": [21,30]
+        "value": [21, 30]
       }
     ]
   },
@@ -71,16 +65,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Armor": "Physical"
-        },
+        "stat": { "Armor": "Physical" },
         "modifier": "Flat",
-        "value": [31,40]
+        "value": [31, 40]
       }
     ]
   },
   {
-    "name": "Impervious",
+    "name": "Hardened",
     "family": "add_armor",
     "tags": ["Physical", "Armor"],
     "affix_type": "Prefix",
@@ -91,17 +83,105 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Armor": "Physical"
-        },
+        "stat": { "Armor": "Physical" },
         "modifier": "Flat",
-        "value": [41,50]
+        "value": [41, 50]
+      }
+    ]
+  },
+  {
+    "name": "Adamant",
+    "family": "add_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "Flat",
+        "value": [51, 60]
+      }
+    ]
+  },
+  {
+    "name": "Impenetrable",
+    "family": "add_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "Flat",
+        "value": [61, 70]
+      }
+    ]
+  },
+  {
+    "name": "Unyielding",
+    "family": "add_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "Flat",
+        "value": [71, 80]
+      }
+    ]
+  },
+  {
+    "name": "Unassailable",
+    "family": "add_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "Flat",
+        "value": [81, 90]
+      }
+    ]
+  },
+  {
+    "name": "Invincible",
+    "family": "add_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "Flat",
+        "value": [91, 100]
       }
     ]
   },
 
   {
-    "name": "Though",
+    "name": "Tough",
     "family": "inc_armor",
     "tags": ["Physical", "Armor"],
     "affix_type": "Prefix",
@@ -112,16 +192,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Armor": "Physical"
-        },
+        "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
         "value": [20, 39]
       }
     ]
   },
   {
-    "name": "Hard",
+    "name": "Sturdy",
     "family": "inc_armor",
     "tags": ["Physical", "Armor"],
     "affix_type": "Prefix",
@@ -132,16 +210,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Armor": "Physical"
-        },
+        "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
         "value": [40, 59]
       }
     ]
   },
   {
-    "name": "Heavy",
+    "name": "Reinforcing",
     "family": "inc_armor",
     "tags": ["Physical", "Armor"],
     "affix_type": "Prefix",
@@ -152,16 +228,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Armor": "Physical"
-        },
+        "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
         "value": [60, 79]
       }
     ]
   },
   {
-    "name": "Bulky",
+    "name": "Bulwarked",
     "family": "inc_armor",
     "tags": ["Physical", "Armor"],
     "affix_type": "Prefix",
@@ -172,9 +246,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Armor": "Physical"
-        },
+        "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
         "value": [80, 99]
       }
@@ -192,11 +264,99 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": {
-          "Armor": "Physical"
-        },
+        "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
         "value": [100, 119]
+      }
+    ]
+  },
+  {
+    "name": "Defensive",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "Multiplier",
+        "value": [120, 139]
+      }
+    ]
+  },
+  {
+    "name": "Guardian",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "Multiplier",
+        "value": [140, 159]
+      }
+    ]
+  },
+  {
+    "name": "Sentinel",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "Multiplier",
+        "value": [160, 179]
+      }
+    ]
+  },
+  {
+    "name": "Bastion",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "Multiplier",
+        "value": [180, 199]
+      }
+    ]
+  },
+  {
+    "name": "Fortress",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Armor", "Shield"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "Multiplier",
+        "value": [200, 219]
       }
     ]
   }

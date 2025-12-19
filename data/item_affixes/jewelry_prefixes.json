@@ -88,5 +88,95 @@
         "value": [125, 149]
       }
     ]
+  },
+  {
+    "name": "Polished",
+    "family": "inc_gold_2",
+    "tags": ["Gold"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Jewelry"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [150, 174]
+      }
+    ]
+  },
+  {
+    "name": "Brilliant",
+    "family": "inc_gold_2",
+    "tags": ["Gold"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Jewelry"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [175, 199]
+      }
+    ]
+  },
+  {
+    "name": "Resplendent",
+    "family": "inc_gold_2",
+    "tags": ["Gold"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Jewelry"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [200, 224]
+      }
+    ]
+  },
+  {
+    "name": "Gilded",
+    "family": "inc_gold_2",
+    "tags": ["Gold"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Jewelry"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [225, 249]
+      }
+    ]
+  },
+  {
+    "name": "Opulent",
+    "family": "inc_gold_2",
+    "tags": ["Gold"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Jewelry"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [250, 274]
+      }
+    ]
   }
 ]

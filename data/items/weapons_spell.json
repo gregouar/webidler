@@ -83,7 +83,6 @@
     "triggers": [
       {
         "trigger_id": "baguette_fromage",
-        "description": "Hitting an Enemy with Fire Spell Damage cover them in Melted Cheese:",
         "OnHit": {
           "skill_type": "Spell",
           "damage_type": "Fire"
@@ -264,5 +263,24 @@
       }
     ],
     "min_area_level": 200
+  },
+  "crystal_wand": {
+    "name": "Crystal Wand",
+    "icon": "items/crystal_wand.webp",
+    "slot": "Weapon",
+    "categories": ["SpellWeapon"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": 120
+      }
+    ],
+    "min_area_level": 240
   }
 }

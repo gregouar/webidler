@@ -11,11 +11,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Speed": "Spell"
-        },
+        "stat": { "Speed": "Spell" },
         "modifier": "Multiplier",
-        "value": [5, 9]
+        "value": [5, 7]
       }
     ]
   },
@@ -31,11 +29,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Speed": "Spell"
-        },
+        "stat": { "Speed": "Spell" },
         "modifier": "Multiplier",
-        "value": [10, 14]
+        "value": [8, 10]
       }
     ]
   },
@@ -51,11 +47,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Speed": "Spell"
-        },
+        "stat": { "Speed": "Spell" },
         "modifier": "Multiplier",
-        "value": [15, 19]
+        "value": [11, 13]
       }
     ]
   },
@@ -71,11 +65,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Speed": "Spell"
-        },
+        "stat": { "Speed": "Spell" },
         "modifier": "Multiplier",
-        "value": [20, 24]
+        "value": [14, 16]
       }
     ]
   },
@@ -91,11 +83,99 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "Speed": "Spell"
-        },
+        "stat": { "Speed": "Spell" },
         "modifier": "Multiplier",
-        "value": [25, 29]
+        "value": [17, 19]
+      }
+    ]
+  },
+  {
+    "name": "of the Virtuoso",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": [20, 22]
+      }
+    ]
+  },
+  {
+    "name": "of the Conductor",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": [23, 25]
+      }
+    ]
+  },
+  {
+    "name": "of the Sinfonietta",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": [26, 28]
+      }
+    ]
+  },
+  {
+    "name": "of the Orchestra",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": [29, 31]
+      }
+    ]
+  },
+  {
+    "name": "of the Symphony",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": [32, 34]
       }
     ]
   },
@@ -112,9 +192,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "CritChance": "Spell"
-        },
+        "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
         "value": [20, 29]
       }
@@ -132,16 +210,14 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "CritChance": "Spell"
-        },
+        "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
         "value": [30, 39]
       }
     ]
   },
   {
-    "name": "of Instability",
+    "name": "of Flux",
     "family": "inc_spell_crit_chance",
     "tags": ["Spell", "Critical"],
     "affix_type": "Suffix",
@@ -152,16 +228,14 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "CritChance": "Spell"
-        },
+        "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
         "value": [40, 49]
       }
     ]
   },
   {
-    "name": "of Chaos",
+    "name": "of Instability",
     "family": "inc_spell_crit_chance",
     "tags": ["Spell", "Critical"],
     "affix_type": "Suffix",
@@ -172,16 +246,14 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "CritChance": "Spell"
-        },
+        "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
         "value": [50, 59]
       }
     ]
   },
   {
-    "name": "of Turbulence",
+    "name": "of Chaos",
     "family": "inc_spell_crit_chance",
     "tags": ["Spell", "Critical"],
     "affix_type": "Suffix",
@@ -192,11 +264,99 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": {
-          "CritChance": "Spell"
-        },
+        "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
         "value": [60, 69]
+      }
+    ]
+  },
+  {
+    "name": "of Turbulence",
+    "family": "inc_spell_crit_chance",
+    "tags": ["Spell", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 450,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritChance": "Spell" },
+        "modifier": "Multiplier",
+        "value": [70, 79]
+      }
+    ]
+  },
+  {
+    "name": "of Aberration",
+    "family": "inc_spell_crit_chance",
+    "tags": ["Spell", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 400,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritChance": "Spell" },
+        "modifier": "Multiplier",
+        "value": [80, 89]
+      }
+    ]
+  },
+  {
+    "name": "of Uncertainty",
+    "family": "inc_spell_crit_chance",
+    "tags": ["Spell", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 350,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritChance": "Spell" },
+        "modifier": "Multiplier",
+        "value": [90, 99]
+      }
+    ]
+  },
+  {
+    "name": "of Anomaly",
+    "family": "inc_spell_crit_chance",
+    "tags": ["Spell", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 300,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritChance": "Spell" },
+        "modifier": "Multiplier",
+        "value": [100, 109]
+      }
+    ]
+  },
+  {
+    "name": "of Pandemonium",
+    "family": "inc_spell_crit_chance",
+    "tags": ["Spell", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 250,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritChance": "Spell" },
+        "modifier": "Multiplier",
+        "value": [110, 119]
       }
     ]
   }

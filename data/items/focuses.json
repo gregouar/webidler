@@ -64,9 +64,8 @@
     "triggers": [
       {
         "trigger_id": "vile_codex",
-        "description": "On Killing a Cursed Enemy:",
         "OnKill": { "is_debuffed": true },
-        "target": "Source",
+        "target": "Me",
         "effects": [
           {
             "ApplyStatus": {
@@ -132,5 +131,20 @@
       }
     ],
     "min_area_level": 190
+  },
+  "ritual_orb": {
+    "name": "Ritual Orb",
+    "icon": "items/ritual_orb.webp",
+    "slot": "Shield",
+    "categories": ["Focus"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": 70.0
+      }
+    ],
+    "min_area_level": 240
   }
 }

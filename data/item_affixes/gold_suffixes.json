@@ -54,7 +54,7 @@
     ]
   },
   {
-    "name": "of Rapacity",
+    "name": "of Covetousness",
     "family": "inc_gold",
     "tags": ["Gold"],
     "affix_type": "Suffix",
@@ -72,7 +72,7 @@
     ]
   },
   {
-    "name": "of Plunder",
+    "name": "of Rapacity",
     "family": "inc_gold",
     "tags": ["Gold"],
     "affix_type": "Suffix",
@@ -86,6 +86,96 @@
         "stat": "GoldFind",
         "modifier": "Multiplier",
         "value": [125, 149]
+      }
+    ]
+  },
+  {
+    "name": "of Plunder",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [150, 174]
+      }
+    ]
+  },
+  {
+    "name": "of Pillage",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [175, 199]
+      }
+    ]
+  },
+  {
+    "name": "of Looting",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [200, 224]
+      }
+    ]
+  },
+  {
+    "name": "of Hoarding",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [225, 249]
+      }
+    ]
+  },
+  {
+    "name": "of Gluttony",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [250, 274]
       }
     ]
   }

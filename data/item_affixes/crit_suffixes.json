@@ -18,7 +18,7 @@
     ]
   },
   {
-    "name": "of Accuracy",
+    "name": "of Rigor",
     "family": "inc_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -36,7 +36,7 @@
     ]
   },
   {
-    "name": "of Precision",
+    "name": "of Accuracy",
     "family": "inc_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -54,7 +54,7 @@
     ]
   },
   {
-    "name": "of Mastery",
+    "name": "of Efficiency",
     "family": "inc_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -72,7 +72,7 @@
     ]
   },
   {
-    "name": "of Perfection",
+    "name": "of Precision",
     "family": "inc_crit_chance",
     "tags": ["Attack", "Critical"],
     "affix_type": "Suffix",
@@ -86,6 +86,96 @@
         "stat": { "CritChance": null },
         "modifier": "Multiplier",
         "value": [70, 84]
+      }
+    ]
+  },
+  {
+    "name": "of Incisiveness",
+    "family": "inc_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Jewelry"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritChance": null },
+        "modifier": "Multiplier",
+        "value": [85, 99]
+      }
+    ]
+  },
+  {
+    "name": "of Exactitude",
+    "family": "inc_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Jewelry"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritChance": null },
+        "modifier": "Multiplier",
+        "value": [100, 114]
+      }
+    ]
+  },
+  {
+    "name": "of Meticulousness",
+    "family": "inc_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Jewelry"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritChance": null },
+        "modifier": "Multiplier",
+        "value": [115, 129]
+      }
+    ]
+  },
+  {
+    "name": "of Certainty",
+    "family": "inc_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Jewelry"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritChance": null },
+        "modifier": "Multiplier",
+        "value": [130, 144]
+      }
+    ]
+  },
+  {
+    "name": "of Perfection",
+    "family": "inc_crit_chance",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Jewelry"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritChance": null },
+        "modifier": "Multiplier",
+        "value": [145, 159]
       }
     ]
   }

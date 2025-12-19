@@ -92,11 +92,10 @@
     "triggers": [
       {
         "trigger_id": "bloodspiller",
-        "description": "On Killing a Bleeding Enemy:",
         "OnKill": {
           "is_damaged_over_time": "Physical"
         },
-        "target": "Source",
+        "target": "Me",
         "effects": [
           {
             "Restore": {
@@ -227,7 +226,6 @@
     "triggers": [
       {
         "trigger_id": "voltrach_bite",
-        "description": "Hit with Storm Damage have 30% chance to Poison for 30% of Hit Storm Damage per second for 5 seconds.",
         "OnHit": {},
         "effects": [
           {
@@ -241,7 +239,7 @@
                       "damage_type": "Poison"
                     }
                   },
-                  "value": 0.3
+                  "value": 0
                 }
               ]
             },
@@ -272,8 +270,8 @@
             "stat": {
               "Damage": {}
             },
-            "modifier": "Multiplier",
-            "factor": 100.0,
+            "modifier": "Flat",
+            "factor": 0.3,
             "source": {
               "HitDamage": "Storm"
             }
@@ -300,5 +298,23 @@
       "crit_damage": 100
     },
     "min_area_level": 190
+  },
+  "compound_bow": {
+    "name": "Compound Bow",
+    "icon": "items/compound_bow.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "RangedWeapon"],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [23, 27]
+      },
+      "crit_chance": 10,
+      "crit_damage": 100
+    },
+    "min_area_level": 240
   }
 }

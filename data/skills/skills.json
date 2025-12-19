@@ -302,7 +302,7 @@
   },
   "curse_conductivity": {
     "name": "Curse of Conductivity",
-    "description": "Curse your foes with the storm's fury, making their bodies living conduits that draw lightning to strike all around them.",
+    "description": "Curse your foes with the storm's fury, making their bodies living conduits that draw lightning to strike all around them, and trigger a Maelstrom in case of critical hit.",
     "icon": "skills/curse_conductivity.svg",
     "skill_type": "Spell",
     "cooldown": 10,
@@ -345,7 +345,6 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "skills/curse_conductivity.svg",
-                      "description": "Trigger a Burst of Lightning when Hit, damaging adjacent enemies for 50% of Storm Damage dealt.",
                       "OnTakeHit": {
                         "is_triggered": false
                       },
@@ -357,7 +356,7 @@
                         {
                           "FlatDamage": {
                             "damage": {
-                              "Storm": 0.5
+                              "Storm": 0
                             }
                           },
                           "ignore_stat_effects": [
@@ -387,8 +386,8 @@
                           "stat": {
                             "Damage": { "damage_type": "Storm" }
                           },
-                          "modifier": "Multiplier",
-                          "factor": 100.0,
+                          "modifier": "Flat",
+                          "factor": 0.5,
                           "source": {
                             "HitDamage": "Storm"
                           }
@@ -402,7 +401,6 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "skills/curse_conductivity.svg",
-                      "description": "Trigger a Maelstrom of Lightning when Critically Hit, damaging all enemies for 10% of Storm Damage dealt.",
                       "OnTakeHit": {
                         "is_crit": true,
                         "is_triggered": false
@@ -415,7 +413,7 @@
                         {
                           "FlatDamage": {
                             "damage": {
-                              "Storm": 0.1
+                              "Storm": 0.0
                             }
                           },
                           "ignore_stat_effects": [
@@ -445,8 +443,8 @@
                           "stat": {
                             "Damage": { "damage_type": "Storm" }
                           },
-                          "modifier": "Multiplier",
-                          "factor": 100.0,
+                          "modifier": "Flat",
+                          "factor": 0.1,
                           "source": {
                             "HitDamage": "Storm"
                           }
@@ -507,7 +505,7 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "skills/curse_flammability.svg",
-                      "description": "When the target is hit by Fire damage, trigger an Intense Fire that deals additional Fire Damage equal to 30% of the Hit's Fire Damage for each stack of Fire Damage over Time present on the target.",
+                      "description": "Trigger an Intense Fire that deals additional Fire Damage equal to 30% of the Hit's Fire Damage for each stack of Fire Damage over Time present on the target.",
                       "OnTakeHit": {
                         "is_triggered": false
                       },
@@ -742,7 +740,6 @@
     "triggers": [
       {
         "trigger_id": "skills/poison_coating.svg",
-        "description": "Attack Hits:",
         "OnHit": {
           "skill_type": "Attack",
           "is_hurt": true
@@ -958,20 +955,12 @@
                     }
                   },
                   "value": 10
-                }
-              ]
-            }
-          },
-          {
-            "ApplyStatus": {
-              "duration": 5,
-              "statuses": [
+                },
                 {
                   "replace_on_value_only": true,
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "skills/sharpen_weapon.svg",
-                      "description": "Attacks have 30% Chance to inflict Bleed for 4s. Bleed damage is 50% of Physical Damage dealt by initial Hit per second. Critical Hits always apply Bleed.",
                       "target": "SameTarget",
                       "skill_type": "Attack",
                       "OnHit": {
@@ -990,7 +979,7 @@
                                     "damage_type": "Physical"
                                   }
                                 },
-                                "value": 0.5
+                                "value": 0
                               }
                             ]
                           },
@@ -1021,15 +1010,17 @@
                           "stat": {
                             "Damage": {}
                           },
-                          "modifier": "Multiplier",
-                          "factor": 100.0,
+                          "modifier": "Flat",
+                          "factor": 0.5,
                           "source": {
                             "HitDamage": "Physical"
                           }
                         },
                         {
                           "stat": {
-                            "SuccessChance": {}
+                            "SuccessChance": {
+                              "effect_type": { "ApplyStatus": {} }
+                            }
                           },
                           "modifier": "Flat",
                           "factor": 100,
@@ -1042,12 +1033,7 @@
                   }
                 }
               ]
-            },
-            "ignore_stat_effects": [
-              {
-                "StatusPower": null
-              }
-            ]
+            }
           }
         ]
       }
@@ -1211,7 +1197,6 @@
     "triggers": [
       {
         "trigger_id": "retaliate",
-        "description": "Trigger on block:",
         "skill_type": "Attack",
         "OnTakeHit": {
           "is_blocked": true

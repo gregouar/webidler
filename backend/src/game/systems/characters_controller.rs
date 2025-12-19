@@ -203,8 +203,10 @@ pub fn resuscitate_character(target: &mut Target) -> bool {
     true
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn apply_status(
     target: &mut Target,
+    attacker: CharacterId,
     status_specs: &StatusSpecs,
     skill_type: SkillType,
     value: f64,
@@ -218,16 +220,30 @@ pub fn apply_status(
         return false;
     }
 
+    match status_specs {
+        StatusSpecs::DamageOverTime { .. } | StatusSpecs::StatModifier { .. } => {
+            if value <= 0.0 {
+                return false;
+            }
+        }
+        StatusSpecs::Trigger(_) | StatusSpecs::Stun => {}
+    }
+
     // Long duration are considered as forever
     let duration = match duration {
         Some(duration) if duration > 9999.0f64 => None,
         _ => duration,
     };
 
+    let mut new_status_specs = status_specs.clone();
+    if let StatusSpecs::Trigger(ref mut trigger_specs) = new_status_specs {
+        trigger_specs.triggered_effect.owner = Some(attacker);
+    }
+
     let mut applied = true;
     if cumulate {
         target_state.statuses.cumulative_statuses.push((
-            status_specs.clone(),
+            new_status_specs,
             StatusState {
                 value,
                 duration,
@@ -250,13 +266,13 @@ pub fn apply_status(
                 {
                     cur_status_state.value = value;
                     cur_status_state.duration = duration;
-                    *cur_status_specs = status_specs.clone();
+                    *cur_status_specs = new_status_specs.clone();
                 } else {
                     applied = false;
                 }
             })
             .or_insert((
-                status_specs.clone(),
+                new_status_specs,
                 StatusState {
                     value,
                     duration,

@@ -103,7 +103,6 @@
     "triggers": [
       {
         "trigger_id": "broken_trophy",
-        "description": "25% chance to inflict 50% of Physical Damage as extra Physical Damage over Time per second for 3 seconds and Decrease Enemy Armor by 50%.",
         "OnHit": { "skill_type": "Attack", "is_triggered": false },
         "effects": [
           {
@@ -289,5 +288,21 @@
       "crit_damage": 100
     },
     "min_area_level": 190
+  },
+  "sabre": {
+    "name": "Sabre",
+    "icon": "items/sabre.webp",
+    "slot": "Weapon",
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [12, 19]
+      },
+      "crit_chance": 5,
+      "crit_damage": 100
+    },
+    "min_area_level": 240
   }
 }

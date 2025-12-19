@@ -58,7 +58,6 @@
     "triggers": [
       {
         "trigger_id": "pathwalker_remains",
-        "description": "At the end of each wave:",
         "OnWaveCompleted": {},
         "target": "Source",
         "effects": [
@@ -103,5 +102,15 @@
       "armor": 50
     },
     "min_area_level": 190
+  },
+  "sabatons": {
+    "name": "Sabatons",
+    "icon": "items/sabatons.webp",
+    "slot": "Boots",
+    "categories": ["Armor", "Boots"],
+    "armor_specs": {
+      "armor": 60
+    },
+    "min_area_level": 240
   }
 }

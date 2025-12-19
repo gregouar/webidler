@@ -120,7 +120,6 @@
     "triggers": [
       {
         "trigger_id": "witch_hat",
-        "description": "On Hit Taken:",
         "skill_type": "Attack",
         "OnTakeHit": {
           "is_hurt": true
@@ -167,5 +166,15 @@
       "armor": 75
     },
     "min_area_level": 190
+  },
+  "bascinet": {
+    "name": "Bascinet",
+    "icon": "items/bascinet.webp",
+    "slot": "Helmet",
+    "categories": ["Armor", "Helmet"],
+    "armor_specs": {
+      "armor": 90
+    },
+    "min_area_level": 240
   }
 }

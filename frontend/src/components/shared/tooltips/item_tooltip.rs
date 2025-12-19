@@ -10,7 +10,9 @@ use shared::data::{
     skill::DamageType,
 };
 
-use super::skill_tooltip::format_trigger;
+use crate::components::shared::tooltips::{
+    effects_tooltip::scope_str, trigger_tooltip::format_trigger,
+};
 
 use super::effects_tooltip;
 
@@ -461,6 +463,10 @@ pub fn formatted_affixes_list(
         .iter()
         .filter(|affix| affix.affix_type == affix_type)
         .map(|affix| {
+            let scope = affix
+                .effects.first()
+                .map(|e| e.scope)
+                .unwrap_or(AffixEffectScope::Global);
             let affix_meta = match affix_type {
                 AffixType::Unique => {
                     view! { <li class="text-gray-400 text-xs leading-snug">"Implicit affix"</li> }
@@ -476,8 +482,9 @@ pub fn formatted_affixes_list(
 
                     view! {
                         <li class="text-gray-400 text-xs leading-snug">
-                            {affix_type_str(affix.affix_type)}" \""{affix.name.clone()}
-                            "\"  (Tier: " {affix.tier}") – " {tags.join(", ")}
+                            {affix_type_str(affix.affix_type)}" "
+                            <span class="italic">"‘"{affix.name.clone()}"’"</span> "  (Tier: "
+                            {affix.tier}") – " {scope_str(scope)} " – "{tags.join(", ")}
                         </li>
                     }
                     .into_any()

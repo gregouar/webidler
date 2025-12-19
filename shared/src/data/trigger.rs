@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::{item::SkillShape, skill::TargetType, stat_effect::StatStatusType};
+use crate::data::{
+    character::CharacterId, item::SkillShape, skill::TargetType, stat_effect::StatStatusType,
+};
 
 use super::{
     skill::{DamageType, SkillEffect, SkillRange, SkillType},
@@ -34,6 +36,8 @@ pub struct HitTrigger {
     pub is_hurt: Option<bool>,
     #[serde(default)]
     pub is_triggered: Option<bool>,
+    #[serde(default)]
+    pub damage_type: Option<DamageType>,
     // TODO: Track skill id?
 }
 
@@ -43,7 +47,9 @@ pub struct HitTrigger {
 pub struct KillTrigger {
     #[serde(default)]
     pub is_stunned: Option<bool>,
+    #[serde(default)]
     pub is_debuffed: Option<bool>,
+    #[serde(default)]
     pub is_damaged_over_time: Option<DamageType>,
     // TODO: more?
 }
@@ -51,6 +57,7 @@ pub struct KillTrigger {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggerSpecs {
     pub trigger_id: String,
+    #[serde(default)]
     pub description: String,
     #[serde(flatten)]
     pub triggered_effect: TriggeredEffect,
@@ -73,6 +80,11 @@ pub struct TriggeredEffect {
 
     #[serde(default)]
     pub skill_shape: SkillShape,
+
+    #[serde(default)] // For retro compatibility
+    pub owner: Option<CharacterId>,
+    #[serde(default)] // For retro compatibility
+    pub inherit_modifiers: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

@@ -4,7 +4,7 @@
   },
   "resources": {
     "items": [
-      "accessories.json",
+      "cloaks.json",
       "amulets.json",
       "body_armors.json",
       "boots.json",
