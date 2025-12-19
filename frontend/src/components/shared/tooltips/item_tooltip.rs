@@ -464,9 +464,7 @@ pub fn formatted_affixes_list(
         .filter(|affix| affix.affix_type == affix_type)
         .map(|affix| {
             let scope = affix
-                .effects
-                .iter()
-                .next()
+                .effects.first()
                 .map(|e| e.scope)
                 .unwrap_or(AffixEffectScope::Global);
             let affix_meta = match affix_type {
