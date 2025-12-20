@@ -48,9 +48,15 @@ pub fn combine_effects(mut effects: Vec<StatEffect>, area_threat: &AreaThreat) -
 pub fn sort_stat_effects(effects: &mut [StatEffect]) {
     effects.sort_by_key(|e| {
         (
-            match e.modifier {
-                Modifier::Flat => 0,
-                Modifier::Multiplier => 1,
+            match e.stat {
+                StatType::StatConverter(ref specs) => match specs.target_modifier {
+                    Modifier::Flat => 1,
+                    Modifier::Multiplier => 3,
+                },
+                _ => match e.modifier {
+                    Modifier::Flat => 0,
+                    Modifier::Multiplier => 2,
+                },
             },
             e.stat.clone(),
         )

@@ -82,13 +82,17 @@ pub fn update_skill_specs<'a>(
         area_threat,
     );
 
-    let global_flat = effects.clone().filter(|e| e.modifier == Modifier::Flat);
+    let global_flat = effects.clone().filter(is_global_flat);
     apply_effects_to_skill_specs(skill_specs, global_flat);
     apply_effects_to_skill_specs(skill_specs, local_effects.iter());
-    apply_effects_to_skill_specs(
-        skill_specs,
-        effects.filter(|e| e.modifier == Modifier::Multiplier),
-    );
+    apply_effects_to_skill_specs(skill_specs, effects.filter(|e| !is_global_flat(e)));
+}
+
+fn is_global_flat(stat_effect: &&StatEffect) -> bool {
+    match &stat_effect.stat {
+        StatType::StatConverter(specs) => specs.target_modifier == Modifier::Flat,
+        _ => stat_effect.modifier == Modifier::Flat,
+    }
 }
 
 pub fn apply_effects_to_skill_specs<'a>(
@@ -436,7 +440,7 @@ pub fn compute_skill_specs_effect<'a>(
                         *crit_damage -= amount;
                     }
 
-                    Some(StatEffect {
+                    (amount > 0.0).then(|| StatEffect {
                         stat: (*specs.target_stat).clone(),
                         modifier: specs.target_modifier,
                         value: amount,
