@@ -64,7 +64,7 @@ pub fn ItemsBrowser(
         use_infinite_scroll_with_options(
             el,
             move |_| async move {
-                if !reached_end_of_list.get() {
+                if !reached_end_of_list.get_untracked() {
                     reached_end_of_list.set(true)
                 }
             },

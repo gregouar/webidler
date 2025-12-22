@@ -10,7 +10,7 @@ pub struct AuthContext {
 
 impl AuthContext {
     pub fn token(&self) -> String {
-        self.get_jwt.get()
+        self.get_jwt.get_untracked()
     }
 
     pub fn sign_in(&self, token: String) {
