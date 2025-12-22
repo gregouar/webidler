@@ -239,7 +239,7 @@
   },
   "curse_frailty": {
     "name": "Curse of Frailty",
-    "description": "Curse enemies to weaken their defenses, making them take more damage from Physical and Poison damage.",
+    "description": "Curse enemies to weaken their defenses, making them take more damage from physical damage.",
     "icon": "skills/curse_frailty.svg",
     "skill_type": "Spell",
     "cooldown": 10,
@@ -280,18 +280,42 @@
                 {
                   "replace_on_value_only": true,
                   "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "DamageResistance": {
-                          "skill_type": null,
-                          "damage_type": "Poison"
-                        }
+                    "Trigger": {
+                      "trigger_id": "skills/curse_frailty.svg",
+                      "OnTakeHit": {
+                        "is_crit": true,
+                        "is_triggered": false
                       },
-                      "modifier": "Flat",
-                      "debuff": true
+                      "target": "SameTarget",
+                      "skill_range": "Any",
+                      "skill_type": "Spell",
+                      "effects": [
+                        {
+                          "ApplyStatus": {
+                            "duration": 5,
+                            "statuses": [
+                              {
+                                "replace_on_value_only": true,
+                                "status_type": {
+                                  "StatModifier": {
+                                    "stat": {
+                                      "DamageResistance": {
+                                        "skill_type": null,
+                                        "damage_type": null
+                                      }
+                                    },
+                                    "modifier": "Flat",
+                                    "debuff": true
+                                  }
+                                },
+                                "value": 100
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     }
-                  },
-                  "value": 30
+                  }
                 }
               ]
             }
@@ -447,6 +471,110 @@
                           "factor": 0.1,
                           "source": {
                             "HitDamage": "Storm"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "curse_putridity": {
+    "name": "Curse of Putridity",
+    "description": "Curse your foes with the rot, making their bodies crumble.",
+    "icon": "skills/curse_putridity.svg",
+    "skill_type": "Spell",
+    "cooldown": 10,
+    "mana_cost": 30,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "modifier": "Multiplier",
+        "value": 10
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "All",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "DamageResistance": {
+                          "skill_type": null,
+                          "damage_type": "Poison"
+                        }
+                      },
+                      "modifier": "Flat",
+                      "debuff": true
+                    }
+                  },
+                  "value": 30
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "Trigger": {
+                      "trigger_id": "skills/curse_putridity.svg",
+                      "OnTakeHit": {
+                        "is_triggered": false
+                      },
+                      "target": "SameTarget",
+                      "skill_range": "Any",
+                      "skill_type": "Spell",
+                      "effects": [
+                        {
+                          "FlatDamage": {
+                            "damage": {
+                              "Poison": 0
+                            }
+                          },
+                          "ignore_stat_effects": [
+                            {
+                              "Damage": {
+                                "damage_type": "Poison"
+                              }
+                            },
+                            {
+                              "MinDamage": {
+                                "damage_type": "Poison"
+                              }
+                            },
+                            {
+                              "MaxDamage": {
+                                "damage_type": "Poison"
+                              }
+                            },
+                            {
+                              "CritChance": null
+                            }
+                          ]
+                        }
+                      ],
+                      "modifiers": [
+                        {
+                          "stat": {
+                            "Damage": { "damage_type": "Poison" }
+                          },
+                          "modifier": "Flat",
+                          "factor": 0.5,
+                          "source": {
+                            "StatusValue": {
+                              "DamageOverTime": { "damage_type": "Poison" }
+                            }
                           }
                         }
                       ]
@@ -707,6 +835,70 @@
                     }
                   },
                   "value": 20
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "blessing_protection": {
+    "name": "Blessing of Protection",
+    "description": "A blessing that massively increase your defense.",
+    "icon": "skills/blessing_protection.svg",
+    "skill_type": "Spell",
+    "cooldown": 10,
+    "mana_cost": 30,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "modifier": "Multiplier",
+        "value": 10
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "DamageResistance": {}
+                      },
+                      "modifier": "Flat"
+                    }
+                  },
+                  "value": 15
+                }
+              ]
+            },
+            "ignore_stat_effects": [
+              {
+                "StatusPower": null
+              }
+            ]
+          },
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": { "Armor": null },
+                      "modifier": "Multiplier"
+                    }
+                  },
+                  "value": 10
                 }
               ]
             }

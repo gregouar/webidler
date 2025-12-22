@@ -61,6 +61,14 @@
       "weight": 16000
     },
     {
+      "item_id": "inlaid_ring_unique",
+      "weight": 50
+    },
+    {
+      "item_id": "inlaid_ring_unique_2",
+      "weight": 50
+    },
+    {
       "item_id": "crest_pendant",
       "weight": 16000
     }

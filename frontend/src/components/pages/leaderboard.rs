@@ -16,7 +16,7 @@ use crate::components::{
 pub fn LeaderboardPage() -> impl IntoView {
     let navigate_to_menu = {
         let navigate = use_navigate();
-        move |_| {
+        move || {
             navigate("/", Default::default());
         }
     };
@@ -30,8 +30,15 @@ pub fn LeaderboardPage() -> impl IntoView {
                 </h1>
                 <div class="flex flex-col space-y-2">
                     <div class="w-full mx-auto mb-6 justify-center">
+                        <MenuButton on:click={
+                            let navigate_to_menu = navigate_to_menu.clone();
+                            move |_| { navigate_to_menu() }
+                        }>"Back"</MenuButton>
                         <LeaderboardPanel />
-                        <MenuButton on:click=navigate_to_menu>"Back"</MenuButton>
+                        <MenuButton on:click={
+                            let navigate_to_menu = navigate_to_menu.clone();
+                            move |_| { navigate_to_menu() }
+                        }>"Back"</MenuButton>
                     </div>
                 </div>
             </div>

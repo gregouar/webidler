@@ -17,6 +17,8 @@ pub enum EventTrigger {
     OnWaveCompleted,
     OnThreatIncreased,
     OnDeath(TargetType),
+    OnApplyStatus(StatusTrigger),
+    // TODO: Receive status
 }
 
 // TODO: replace by simple tag system?
@@ -41,6 +43,17 @@ pub struct HitTrigger {
     // TODO: Track skill id?
 }
 
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default, PartialOrd, Ord,
+)]
+pub struct StatusTrigger {
+    #[serde(default)]
+    pub skill_type: Option<SkillType>,
+    #[serde(default)]
+    pub status_type: Option<StatStatusType>,
+    #[serde(default)]
+    pub is_triggered: Option<bool>,
+}
 #[derive(
     Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default, PartialOrd, Ord,
 )]

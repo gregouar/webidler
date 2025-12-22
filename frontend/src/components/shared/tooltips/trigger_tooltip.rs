@@ -6,8 +6,8 @@ use shared::data::{
     stat_effect::Modifier,
     temple::{StatEffect, StatType},
     trigger::{
-        EventTrigger, HitTrigger, KillTrigger, TriggerEffectModifier, TriggerEffectModifierSource,
-        TriggerSpecs, TriggerTarget,
+        EventTrigger, HitTrigger, KillTrigger, StatusTrigger, TriggerEffectModifier,
+        TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
     },
 };
 
@@ -127,6 +127,9 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
         EventTrigger::OnDeath(target_type) => {
             format!("On {}Death", format_target_type(target_type))
         }
+        EventTrigger::OnApplyStatus(status_trigger) => {
+            format!("On Applying {}", format_status_trigger(status_trigger))
+        }
     }
 }
 
@@ -139,6 +142,14 @@ fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
         range_str(hit_trigger.range),
         skill_type_str(hit_trigger.skill_type),
         damage_type_str(hit_trigger.damage_type),
+    )
+}
+
+fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
+    format!(
+        "{}{}",
+        skill_type_str(status_trigger.skill_type),
+        status_type_str(status_trigger.status_type),
     )
 }
 

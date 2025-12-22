@@ -476,7 +476,12 @@ impl ApplyStatModifier for f32 {
     fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
         match modifier {
             Modifier::Flat => *self += value as f32,
-            Modifier::Multiplier => *self *= (1.0 + value as f32 * 0.01).max(0.0),
+            Modifier::Multiplier => {
+                //TODO: Check if this is OK, the idea was that inc restore shouldn't apply if already negative
+                if *self > 0.0 {
+                    *self *= (1.0 + value as f32 * 0.01).max(0.0)
+                }
+            }
         }
     }
 }
@@ -485,7 +490,11 @@ impl ApplyStatModifier for f64 {
     fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
         match modifier {
             Modifier::Flat => *self += value,
-            Modifier::Multiplier => *self *= (1.0 + value * 0.01).max(0.0),
+            Modifier::Multiplier => {
+                if *self > 0.0 {
+                    *self *= (1.0 + value * 0.01).max(0.0)
+                }
+            }
         }
     }
 }

@@ -5,7 +5,14 @@
     "header_background": "areas/inn_header.webp",
     "footer_background": "areas/inn_footer.webp"
   },
-  "loot_tables": ["tier_1.json", "tier_2.json", "tier_3.json"],
+  "loot_tables": [
+    "tier_1.json",
+    "tier_2.json",
+    "tier_3.json",
+    "tier_4.json",
+    "tier_5.json",
+    "tier_6.json"
+  ],
   "bosses": [
     {
       "level": 50,

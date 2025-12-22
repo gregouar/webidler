@@ -4,6 +4,7 @@ use shared::data::{
     area::{AreaLevel, ThreatLevel},
     character::CharacterId,
     skill::{DamageType, SkillRange, SkillType},
+    stat_effect::StatStatusType,
 };
 
 #[derive(Debug, Clone)]
@@ -18,6 +19,7 @@ pub enum GameEvent {
     },
     WaveCompleted(AreaLevel),
     ThreatIncreased(ThreatLevel),
+    StatusApplied(StatusEvent),
 }
 
 #[derive(Debug, Clone)]
@@ -33,6 +35,18 @@ pub struct HitEvent {
     pub is_triggered: bool,
 
     pub damage: HashMap<DamageType, f64>,
+}
+#[derive(Debug, Clone)]
+pub struct StatusEvent {
+    pub source: CharacterId,
+    pub target: CharacterId,
+
+    pub skill_type: SkillType,
+    pub is_triggered: bool,
+
+    pub status_type: StatStatusType,
+    pub value: f64,
+    pub duration: Option<f64>,
 }
 
 #[derive(Debug, Default)]

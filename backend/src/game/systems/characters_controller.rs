@@ -13,7 +13,7 @@ use shared::{
 };
 
 use crate::game::{
-    data::event::{EventsQueue, GameEvent, HitEvent},
+    data::event::{EventsQueue, GameEvent, HitEvent, StatusEvent},
     utils::rng::Rollable,
 };
 
@@ -205,6 +205,7 @@ pub fn resuscitate_character(target: &mut Target) -> bool {
 
 #[allow(clippy::too_many_arguments)]
 pub fn apply_status(
+    events_queue: &mut EventsQueue,
     target: &mut Target,
     attacker: CharacterId,
     status_specs: &StatusSpecs,
@@ -213,8 +214,9 @@ pub fn apply_status(
     duration: Option<f64>,
     cumulate: bool,
     replace_on_value_only: bool,
+    is_triggered: bool,
 ) -> bool {
-    let (_, (_, target_state)) = target;
+    let (target_id, (_, target_state)) = target;
 
     if duration.unwrap_or(1.0) <= 0.0 || !target_state.is_alive {
         return false;
@@ -285,6 +287,16 @@ pub fn apply_status(
     if !applied {
         return false;
     }
+
+    events_queue.register_event(GameEvent::StatusApplied(StatusEvent {
+        source: attacker,
+        target: *target_id,
+        skill_type,
+        status_type: status_specs.into(),
+        value,
+        duration,
+        is_triggered,
+    }));
 
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger { .. } = status_specs {
         target_state.dirty_specs = true;

@@ -328,6 +328,7 @@ pub fn apply_skill_effect(
             for status_effect in statuses.iter() {
                 for target in targets.iter_mut() {
                     applied |= characters_controller::apply_status(
+                        events_queue,
                         target,
                         attacker,
                         &status_effect.status_type,
@@ -336,6 +337,7 @@ pub fn apply_skill_effect(
                         Some(duration.roll()),
                         status_effect.cumulate,
                         status_effect.replace_on_value_only,
+                        is_triggered,
                     );
                 }
             }

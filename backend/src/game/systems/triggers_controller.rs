@@ -5,7 +5,7 @@ use shared::data::{
 };
 
 use crate::game::{
-    data::event::{EventsQueue, HitEvent},
+    data::event::{EventsQueue, HitEvent, StatusEvent},
     game_data::GameInstanceData,
     systems::stats_updater,
 };
@@ -18,6 +18,7 @@ pub struct TriggerContext<'a> {
     pub source: CharacterId,
     pub target: CharacterId,
     pub hit_context: Option<&'a HitEvent>,
+    pub status_context: Option<&'a StatusEvent>,
     pub level: usize,
 }
 
@@ -37,15 +38,48 @@ pub fn apply_trigger_effects(
                 ),
             };
 
-            // TODO: Only clone ids and values
-            let statuses_context = match trigger_context.target {
-                CharacterId::Player => game_data.player_state.character_state.statuses.clone(),
-                CharacterId::Monster(index) => game_data
-                    .monster_states
-                    .get(index)
-                    .map(|monster_state| monster_state.character_state.statuses.clone())
-                    .unwrap_or_default(),
-            };
+            let statuses_context: Vec<_> =
+                if let Some(status_context) = trigger_context.status_context {
+                    [status_context.clone()].into()
+                } else {
+                    match trigger_context.target {
+                        CharacterId::Player => game_data
+                            .player_state
+                            .character_state
+                            .statuses
+                            .iter()
+                            .map(|(status_specs, status_state)| StatusEvent {
+                                source: trigger_context.source,
+                                target: trigger_context.target,
+                                skill_type: status_state.skill_type,
+                                is_triggered: false,
+                                status_type: status_specs.into(),
+                                value: status_state.value,
+                                duration: status_state.duration,
+                            })
+                            .collect(),
+                        CharacterId::Monster(index) => game_data
+                            .monster_states
+                            .get(index)
+                            .map(|monster_state| {
+                                monster_state
+                                    .character_state
+                                    .statuses
+                                    .iter()
+                                    .map(|(status_specs, status_state)| StatusEvent {
+                                        source: trigger_context.source,
+                                        target: trigger_context.target,
+                                        skill_type: status_state.skill_type,
+                                        is_triggered: false,
+                                        status_type: status_specs.into(),
+                                        value: status_state.value,
+                                        duration: status_state.duration,
+                                    })
+                                    .collect()
+                            })
+                            .unwrap_or_default(),
+                    }
+                };
 
             let mut source_effects: Vec<_> = if trigger_context.trigger.inherit_modifiers {
                 Vec::new()
@@ -144,35 +178,33 @@ pub fn apply_trigger_effects(
                                 TriggerEffectModifierSource::StatusValue(stat_status_type) => {
                                     statuses_context
                                         .iter()
-                                        .filter(|(status_specs, _)| match stat_status_type {
+                                        .filter(|status_event| match stat_status_type {
                                             Some(stat_status_type) => {
-                                                stat_status_type.is_match(&status_specs.into())
+                                                stat_status_type.is_match(&status_event.status_type)
                                             }
                                             None => true,
                                         })
-                                        .map(|(_, status_state)| status_state.value)
+                                        .map(|status_event| status_event.value)
                                         .sum()
                                 }
                                 TriggerEffectModifierSource::StatusDuration(stat_status_type) => {
                                     statuses_context
                                         .iter()
-                                        .filter(|(status_specs, _)| match stat_status_type {
+                                        .filter(|status_event| match stat_status_type {
                                             Some(stat_status_type) => {
-                                                stat_status_type.is_match(&status_specs.into())
+                                                stat_status_type.is_match(&status_event.status_type)
                                             }
                                             None => true,
                                         })
-                                        .map(|(_, status_state)| {
-                                            status_state.duration.unwrap_or_default()
-                                        })
+                                        .map(|status_event| status_event.duration.unwrap_or(1e20))
                                         .sum()
                                 }
                                 TriggerEffectModifierSource::StatusStacks(stat_status_type) => {
                                     statuses_context
                                         .iter()
-                                        .filter(|(status_specs, _)| match stat_status_type {
+                                        .filter(|status_event| match stat_status_type {
                                             Some(stat_status_type) => {
-                                                stat_status_type.is_match(&status_specs.into())
+                                                stat_status_type.is_match(&status_event.status_type)
                                             }
                                             None => true,
                                         })

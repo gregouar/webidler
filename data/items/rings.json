@@ -203,6 +203,94 @@
     ],
     "min_area_level": 190
   },
+  "inlaid_ring_unique": {
+    "name": "Band of Blessing",
+    "description": "In devotion, there is no room for doubt, nor for curses.",
+    "icon": "items/band_blessing.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 100
+      },
+      {
+        "scope": "Global",
+        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "modifier": "Multiplier",
+        "value": 100,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "modifier": "Multiplier",
+        "value": -1e300,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "StatusDuration": { "StatModifier": { "debuff": false } } },
+        "modifier": "Multiplier",
+        "value": [20, 40],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": [80, 120]
+      }
+    ],
+    "min_area_level": 200
+  },
+  "inlaid_ring_unique_2": {
+    "name": "Band of Cursing",
+    "description": "Every blessing denied leaves space for something far worse.",
+    "icon": "items/band_cursing.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 100
+      },
+      {
+        "scope": "Global",
+        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "modifier": "Multiplier",
+        "value": 100,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "modifier": "Multiplier",
+        "value": -1e300,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "StatusDuration": { "StatModifier": { "debuff": true } } },
+        "modifier": "Multiplier",
+        "value": [20, 40],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": [80, 120]
+      }
+    ],
+    "min_area_level": 200
+  },
   "jewelled_ring": {
     "name": "Jewelled Ring",
     "icon": "items/jewelled_ring.webp",

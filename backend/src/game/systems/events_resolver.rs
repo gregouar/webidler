@@ -13,7 +13,7 @@ use shared::{
 
 use crate::game::{
     data::{
-        event::{EventsQueue, GameEvent, HitEvent},
+        event::{EventsQueue, GameEvent, HitEvent, StatusEvent},
         master_store::MasterStore,
     },
     game_data::GameInstanceData,
@@ -52,6 +52,9 @@ pub async fn resolve_events(
             ),
             GameEvent::ThreatIncreased(threat_level) => {
                 handle_threat_increased_event(&mut trigger_contexts, game_data, *threat_level)
+            }
+            GameEvent::StatusApplied(status_event) => {
+                handle_status_event(&mut trigger_contexts, game_data, status_event)
             }
         }
     }
@@ -115,6 +118,65 @@ fn handle_hit_event<'a>(
                     source: hit_event.source,
                     target: hit_event.target,
                     hit_context: Some(hit_event),
+                    status_context: None,
+                    level: game_data.area_state.read().area_level as usize,
+                });
+            }
+        }
+    }
+}
+
+fn handle_status_event<'a>(
+    trigger_contexts: &mut Vec<TriggerContext<'a>>,
+    game_data: &mut GameInstanceData,
+    status_event: &'a StatusEvent,
+) {
+    let characters = iter::once((
+        CharacterId::Player,
+        &game_data.player_specs.read().character_specs,
+    ))
+    .chain(
+        game_data
+            .monster_specs
+            .iter()
+            .enumerate()
+            .map(|(idx, monster_specs)| {
+                (CharacterId::Monster(idx), &monster_specs.character_specs)
+            }),
+    );
+
+    for (character_id, character_specs) in characters {
+        for triggered_effects in character_specs.triggers.iter() {
+            match triggered_effects.trigger {
+                EventTrigger::OnApplyStatus(_) if status_event.source == character_id => {}
+                // EventTrigger::OnTakeHit(_) if hit_event.target == character_id => {}
+                _ => continue,
+            };
+
+            let status_trigger = match triggered_effects.trigger {
+                EventTrigger::OnApplyStatus(trigger)
+                // | EventTrigger::OnTakeHit(ht) 
+                => trigger,
+                _ => continue,
+            };
+
+            if status_trigger.skill_type.unwrap_or(status_event.skill_type)
+                == status_event.skill_type
+                && status_trigger
+                    .is_triggered
+                    .unwrap_or(status_event.is_triggered)
+                    == status_event.is_triggered
+                && status_trigger
+                    .status_type
+                    .map(|status_type| status_event.status_type.is_match(&status_type))
+                    .unwrap_or(true)
+            {
+                trigger_contexts.push(TriggerContext {
+                    trigger: triggered_effects.clone(),
+                    source: status_event.source,
+                    target: status_event.target,
+                    hit_context: None,
+                    status_context: Some(status_event),
                     level: game_data.area_state.read().area_level as usize,
                 });
             }
@@ -180,6 +242,7 @@ fn handle_kill_event(
                                     source: CharacterId::Player,
                                     target,
                                     hit_context: None,
+                                    status_context: None,
                                     level: game_data.area_state.read().area_level as usize,
                                 });
                             }
@@ -213,6 +276,7 @@ fn handle_kill_event(
                                         source: CharacterId::Player,
                                         target,
                                         hit_context: None,
+                                        status_context: None,
                                         level: game_data.area_state.read().area_level as usize,
                                     });
                                 }
@@ -325,6 +389,7 @@ fn handle_wave_completed_event(
                 source: CharacterId::Player,
                 target: CharacterId::Player,
                 hit_context: None,
+                status_context: None,
                 level: area_level as usize,
             });
         }
@@ -355,6 +420,7 @@ fn handle_threat_increased_event(
                 source: CharacterId::Player,
                 target: CharacterId::Player,
                 hit_context: None,
+                status_context: None,
                 level: threat_level as usize,
             });
         }

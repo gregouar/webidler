@@ -154,31 +154,32 @@ pub fn formatted_effects_list(
         HashMap::new();
 
     for effect in affix_effects.iter().rev() {
-        match effect.modifier {
-            Multiplier => merged.push(format_multiplier_stat(effect)),
-            Flat => match &effect.stat {
-                // Save to aggregate after
+        match (effect.modifier, &effect.stat) {
+            (
+                Flat,
                 MinDamage {
                     skill_type,
                     damage_type,
-                } => {
-                    min_damage.insert(
-                        (*skill_type, *damage_type, effect.value >= 0.0),
-                        effect.value,
-                    );
-                }
+                },
+            ) => {
+                min_damage.insert(
+                    (*skill_type, *damage_type, effect.value >= 0.0),
+                    effect.value,
+                );
+            }
+            (
+                Flat,
                 MaxDamage {
                     skill_type,
                     damage_type,
-                } => {
-                    max_damage.insert(
-                        (*skill_type, *damage_type, effect.value >= 0.0),
-                        effect.value,
-                    );
-                }
-                //
-                stat => merged.push(format_flat_stat(stat, Some(effect.value))),
-            },
+                },
+            ) => {
+                max_damage.insert(
+                    (*skill_type, *damage_type, effect.value >= 0.0),
+                    effect.value,
+                );
+            }
+            _ => merged.push(format_stat(effect)),
         }
     }
 
@@ -243,9 +244,13 @@ pub fn formatted_effects_list(
 }
 
 pub fn format_stat(effect: &StatEffect) -> String {
-    match effect.modifier {
-        Modifier::Multiplier => format_multiplier_stat(effect),
-        Modifier::Flat => format_flat_stat(&effect.stat, Some(effect.value)),
+    if effect.value == 0.0 {
+        "No Effect".to_string()
+    } else {
+        match effect.modifier {
+            Modifier::Multiplier => format_multiplier_stat(effect),
+            Modifier::Flat => format_flat_stat(&effect.stat, Some(effect.value)),
+        }
     }
 }
 

@@ -176,5 +176,122 @@
       "block": 25
     },
     "min_area_level": 240
+  },
+  "kite_shield_unique": {
+    "name": "Oath of the Cursed King",
+    "description": "Each curse strengthens his reign, and drains what little life remains.",
+    "icon": "items/shield_cursed.webp",
+    "slot": "Shield",
+    "categories": ["Shield"],
+    "armor_specs": {
+      "armor": 150,
+      "block": 25
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "Life",
+        "modifier": "Flat",
+        "value": [80, 120]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": [80, 120]
+      },
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [80, 120]
+      },
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": 20,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "kite_shield_unique",
+        "description": "Stacks 30% More Damage and -0.3% Life Regeneration per second, for the duration of the Curse.",
+        "OnApplyStatus": {
+          "status_type": { "StatModifier": { "debuff": true } },
+          "is_triggered": false
+        },
+        "target": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 0,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {}
+                      }
+                    }
+                  },
+                  "value": 30,
+                  "cumulate": true
+                }
+              ]
+            },
+            "ignore_stat_effects": [
+              {
+                "StatusDuration": null
+              },
+              {
+                "StatusPower": null
+              }
+            ]
+          },
+          {
+            "ApplyStatus": {
+              "duration": 0,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "debuff": true,
+                      "modifier": "Flat",
+                      "stat": "LifeRegen"
+                    }
+                  },
+                  "value": 3,
+                  "cumulate": true
+                }
+              ]
+            },
+            "ignore_stat_effects": [
+              {
+                "StatusDuration": null
+              },
+              {
+                "StatusPower": null
+              }
+            ]
+          }
+        ],
+        "modifiers": [
+          {
+            "stat": {
+              "StatusDuration": null
+            },
+            "modifier": "Flat",
+            "factor": 1.0,
+            "source": {
+              "StatusDuration": { "StatModifier": { "debuff": true } }
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 250
   }
 }
