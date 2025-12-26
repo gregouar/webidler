@@ -124,7 +124,7 @@ Focus:
         add_storm_res
         inc_spell_speed
         inc_spell_crit_chance
-        // inc_spell_damage
+        inc_spell_damage
 
 
 Gloves:

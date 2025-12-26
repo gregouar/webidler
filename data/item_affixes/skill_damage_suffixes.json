@@ -187,7 +187,7 @@
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Jewelry", "SpellWeapon"],
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
     "item_level": 1,
     "effects": [
       {
@@ -205,7 +205,7 @@
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Jewelry", "SpellWeapon"],
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
     "item_level": 50,
     "effects": [
       {
@@ -223,7 +223,7 @@
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Jewelry", "SpellWeapon"],
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
     "item_level": 100,
     "effects": [
       {
@@ -241,7 +241,7 @@
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Jewelry", "SpellWeapon"],
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
     "item_level": 150,
     "effects": [
       {
@@ -259,7 +259,7 @@
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Jewelry", "SpellWeapon"],
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
     "item_level": 200,
     "effects": [
       {
@@ -277,7 +277,7 @@
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Jewelry", "SpellWeapon"],
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
     "item_level": 260,
     "effects": [
       {
@@ -295,7 +295,7 @@
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Jewelry", "SpellWeapon"],
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
     "item_level": 330,
     "effects": [
       {
@@ -313,7 +313,7 @@
     "affix_type": "Suffix",
     "tier": 8,
     "weight": 700,
-    "restrictions": ["Jewelry", "SpellWeapon"],
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
     "item_level": 410,
     "effects": [
       {
@@ -331,7 +331,7 @@
     "affix_type": "Suffix",
     "tier": 9,
     "weight": 600,
-    "restrictions": ["Jewelry", "SpellWeapon"],
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
     "item_level": 500,
     "effects": [
       {
@@ -349,7 +349,7 @@
     "affix_type": "Suffix",
     "tier": 10,
     "weight": 500,
-    "restrictions": ["Jewelry", "SpellWeapon"],
+    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
     "item_level": 600,
     "effects": [
       {
