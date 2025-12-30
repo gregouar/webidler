@@ -936,6 +936,7 @@
           "skill_type": "Attack",
           "is_hurt": true
         },
+        "inherit_modifiers": true,
         "effects": [
           {
             "ApplyStatus": {
@@ -1394,6 +1395,7 @@
           "is_blocked": true
         },
         "target": "Source",
+        "inherit_modifiers": true,
         "effects": [
           {
             "FlatDamage": {

@@ -82,8 +82,7 @@ pub fn update_skill_specs<'a>(
         area_threat,
     );
 
-    let global_flat = effects.clone().filter(is_global_flat);
-    apply_effects_to_skill_specs(skill_specs, global_flat);
+    apply_effects_to_skill_specs(skill_specs, effects.clone().filter(is_global_flat));
     apply_effects_to_skill_specs(skill_specs, local_effects.iter());
     apply_effects_to_skill_specs(skill_specs, effects.filter(|e| !is_global_flat(e)));
 }
@@ -112,12 +111,13 @@ pub fn apply_effects_to_skill_specs<'a>(
         .targets
         .iter_mut()
         .flat_map(|t| t.effects.iter_mut())
-    // .chain(
-    //     skill_specs
-    //         .triggers
-    //         .iter_mut()
-    //         .flat_map(|trigger| trigger.triggered_effect.effects.iter_mut()),
-    // )
+        .chain(
+            skill_specs
+                .triggers
+                .iter_mut()
+                .filter(|trigger| trigger.triggered_effect.inherit_modifiers)
+                .flat_map(|trigger| trigger.triggered_effect.effects.iter_mut()),
+        )
     {
         compute_skill_specs_effect(skill_specs.base.skill_type, skill_effect, effects.clone())
     }
