@@ -306,6 +306,7 @@ pub fn apply_status(
 }
 
 fn compute_effect_weight(value: f64, duration: Option<f64>, value_only: bool) -> f64 {
+    let value = value + 1.0;
     if value_only {
         if duration.unwrap_or(1.0) < 0.2 {
             value * 0.1
@@ -313,6 +314,6 @@ fn compute_effect_weight(value: f64, duration: Option<f64>, value_only: bool) ->
             value
         }
     } else {
-        (value + 1.0) * duration.unwrap_or(10_000.0)
+        value * duration.unwrap_or(10_000.0)
     }
 }
