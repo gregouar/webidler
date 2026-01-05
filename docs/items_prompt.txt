@@ -20,7 +20,7 @@
 
     Arming Sword – "A knight’s sidearm with a double-edged blade and cruciform hilt."
 
-    War Axe – "A forged war axe with reinforced head and battle scarring."
+    Battle Axe – "A forged battle axe with reinforced head and battle scarring."
 
     Knight’s Sword – "A pristine knight’s longsword with gem-inlaid pommel and engraved crossguard."
 
@@ -178,7 +178,11 @@
 
     Breastplate – "A polished steel breastplate with etched lines and shoulder hinges."
 
+    Light-Cavalry Armor
+
     Plate Cuirass – "A full cuirass with articulated steel plates and ornate chestpiece."
+
+    Maximilian armour
 
 🧤 Gloves
 

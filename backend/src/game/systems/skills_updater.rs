@@ -344,6 +344,13 @@ pub fn compute_skill_specs_effect<'a>(
                     crit_chance.value.apply_effect(effect);
                 }
 
+                if effect.stat.is_match(&StatType::Lucky {
+                    skill_type: Some(skill_type),
+                    roll_type: LuckyRollType::CritChance,
+                }) {
+                    crit_chance.lucky_chance.apply_effect(effect);
+                }
+
                 if effect
                     .stat
                     .is_match(&StatType::CritDamage(Some(skill_type)))
