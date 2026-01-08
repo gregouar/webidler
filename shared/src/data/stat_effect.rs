@@ -453,7 +453,10 @@ pub trait ApplyStatModifier {
                     effect.value
                 } else {
                     let div = (1.0 - effect.value * 0.01).max(0.0);
-                    if div != 0.0 {
+
+                    if effect.value <= -1e300 {
+                        -100.0
+                    } else if div != 0.0 {
                         effect.value / div
                     } else {
                         0.0
@@ -479,7 +482,7 @@ impl ApplyStatModifier for f32 {
             Modifier::Multiplier => {
                 //TODO: Check if this is OK, the idea was that inc restore shouldn't apply if already negative
                 if *self > 0.0 {
-                    *self *= (1.0 + value as f32 * 0.01).max(0.0)
+                    *self *= (100.0 + value as f32).max(0.0) * 0.01
                 }
             }
         }
@@ -492,7 +495,7 @@ impl ApplyStatModifier for f64 {
             Modifier::Flat => *self += value,
             Modifier::Multiplier => {
                 if *self > 0.0 {
-                    *self *= (1.0 + value * 0.01).max(0.0)
+                    *self *= (100.0 + value).max(0.0) * 0.01
                 }
             }
         }

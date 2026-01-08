@@ -342,11 +342,19 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             roll_type,
         } => skill_type_str(*skill_type).to_string() + &lucky_roll_str(*roll_type),
         StatType::StatConverter(stat_converter_specs) => {
-            format!(
-                "Converted {} to {}",
-                stat_converter_source_str(stat_converter_specs.source),
-                format_multiplier_stat_name(&stat_converter_specs.target_stat)
-            )
+            if stat_converter_specs.is_extra {
+                format!(
+                    "Gain {} as {}",
+                    stat_converter_source_str(stat_converter_specs.source),
+                    format_multiplier_stat_name(&stat_converter_specs.target_stat)
+                )
+            } else {
+                format!(
+                    "Convert {} to {}",
+                    stat_converter_source_str(stat_converter_specs.source),
+                    format_multiplier_stat_name(&stat_converter_specs.target_stat)
+                )
+            }
         }
         StatType::SuccessChance {
             skill_type,
@@ -534,8 +542,12 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 )
             }
             _ => {
+                let extra_str = match stat_converter_specs.is_extra {
+                    true => "gained as",
+                    false => "converted to",
+                };
                 format!(
-                    "{}% of {} converted to {}{}",
+                    "{}% of {} {extra_str} {}{}",
                     format_flat_number(value, false),
                     stat_converter_source_str(stat_converter_specs.source),
                     match stat_converter_specs.target_modifier {

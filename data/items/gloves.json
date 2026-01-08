@@ -226,5 +226,106 @@
       "armor": 60
     },
     "min_area_level": 240
+  },
+  "lamellar_gauntlets_unique": {
+    "name": "Twinbound Grasp",
+    "description": "Abal's fury, Zael's cunning, bound in mortal hands.",
+    "icon": "items/dragon_gloves.webp",
+    "slot": "Gloves",
+    "categories": ["Armor", "Gloves"],
+    "armor_specs": {
+      "armor": 60
+    },
+    "rarity": "Unique",
+    "affixes": [],
+    "triggers": [
+      {
+        "trigger_id": "twinbound_fire",
+        "OnHit": {
+          "damage_type": "Fire",
+          "is_crit": false,
+          "is_triggered": false
+        },
+        "target": "Source",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "damage_type": "Storm"
+                        }
+                      }
+                    }
+                  },
+                  "value": 500
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "damage_type": "Fire"
+                        }
+                      },
+                      "debuff": true
+                    }
+                  },
+                  "value": 1e300
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "trigger_id": "twinbound_storm",
+        "OnHit": {
+          "damage_type": "Storm",
+          "is_crit": true,
+          "is_triggered": false
+        },
+        "target": "Source",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "damage_type": "Fire"
+                        }
+                      }
+                    }
+                  },
+                  "value": 500
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "damage_type": "Storm"
+                        }
+                      },
+                      "debuff": true
+                    }
+                  },
+                  "value": 1e300
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 250
   }
 }

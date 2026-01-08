@@ -37,7 +37,7 @@ impl Default for RarityWeights {
             normal: 20_000,
             magic: 16_000,
             rare: 4_000,
-            unique: 100,
+            unique: 100_00000000,
         }
     }
 }

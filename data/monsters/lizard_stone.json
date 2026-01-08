@@ -28,7 +28,7 @@
     },
     {
       "name": "Ravenous Claws",
-      "icon": "skills/scratch.svg",
+      "icon": "skills/claw.svg",
       "cooldown": 2.5,
       "targets": [
         {

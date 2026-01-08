@@ -146,5 +146,63 @@
       }
     ],
     "min_area_level": 240
+  },
+  "ritual_orb_unique": {
+    "name": "Zael's Eye",
+    "description": "Zael's gaze weighed the sky and found it wanting.",
+    "icon": "items/dragon_eye.webp",
+    "slot": "Shield",
+    "categories": ["Focus"],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": 70.0
+      },
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Storm" } },
+        "modifier": "Multiplier",
+        "value": [150, 200],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "CritChance": "Spell" },
+        "modifier": "Multiplier",
+        "value": [60, 80],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [150, 200],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": {} } } },
+        "modifier": "Multiplier",
+        "value": [20, 40],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Lucky": {
+            "roll_type": {
+              "Damage": {}
+            }
+          }
+        },
+        "modifier": "Flat",
+        "value": 100,
+        "ignore_quality": true
+      }
+    ],
+    "min_area_level": 250
   }
 }
