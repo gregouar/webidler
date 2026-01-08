@@ -43,7 +43,7 @@ impl BenedictionSpecs {
         if upgrade_level == 0
             || self
                 .max_upgrade_level
-                .map(|max_upgrade_level| upgrade_level == max_upgrade_level)
+                .map(|max_upgrade_level| upgrade_level > max_upgrade_level)
                 .unwrap_or_default()
         {
             return None;

@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
 use shared::{
-    constants::SKILL_BASE_COST,
+    constants::{DEFAULT_MAX_LEVEL, SKILL_BASE_COST},
     data::{
         area::{AreaSpecs, AreaState},
         character::{CharacterSpecs, CharacterState},
@@ -68,6 +68,7 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             gold_find: 100.0,
             threat_gain: 100.0,
             effects: EffectsMap::default(),
+            max_level: DEFAULT_MAX_LEVEL,
         }
     }
 }

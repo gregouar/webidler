@@ -226,5 +226,118 @@
       "armor": 60
     },
     "min_area_level": 240
+  },
+  "lamellar_gauntlets_unique": {
+    "name": "Twinbound Grasp",
+    "description": "Abal's fury, Zael's cunning, bound in mortal hands.",
+    "icon": "items/dragon_gloves.webp",
+    "slot": "Gloves",
+    "categories": ["Armor", "Gloves"],
+    "armor_specs": {
+      "armor": 60
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": [80, 120]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": [80, 120]
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "twinbound_storm",
+        "OnHit": {
+          "is_triggered": false
+        },
+        "target": "SameTarget",
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Storm": 0.0
+              }
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "damage_type": "Fire"
+                }
+              },
+              {
+                "MinDamage": {
+                  "damage_type": "Fire"
+                }
+              },
+              {
+                "MaxDamage": {
+                  "damage_type": "Fire"
+                }
+              },
+              {
+                "CritChance": null
+              }
+            ]
+          },
+          {
+            "FlatDamage": {
+              "damage": {
+                "Fire": 0.0
+              }
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "damage_type": "Storm"
+                }
+              },
+              {
+                "MinDamage": {
+                  "damage_type": "Storm"
+                }
+              },
+              {
+                "MaxDamage": {
+                  "damage_type": "Storm"
+                }
+              },
+              {
+                "CritChance": null
+              }
+            ]
+          }
+        ],
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": { "damage_type": "Fire" }
+            },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "HitDamage": "Storm"
+            }
+          },
+          {
+            "stat": {
+              "Damage": { "damage_type": "Storm" }
+            },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "HitDamage": "Fire"
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 250
   }
 }

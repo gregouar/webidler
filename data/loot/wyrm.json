@@ -1,0 +1,34 @@
+{
+  "entries": [
+    {
+      "item_id": "breastplate_unique",
+      "weight": 250,
+      "min_area_level": 1,
+      "boss_only": true
+    },
+    {
+      "item_id": "sabatons_unique",
+      "weight": 250,
+      "min_area_level": 1,
+      "boss_only": true
+    },
+    {
+      "item_id": "ritual_orb_unique",
+      "weight": 250,
+      "min_area_level": 1,
+      "boss_only": true
+    },
+    {
+      "item_id": "compound_bow_unique",
+      "weight": 250,
+      "min_area_level": 1,
+      "boss_only": true
+    },
+    {
+      "item_id": "lamellar_gauntlets_unique",
+      "weight": 250,
+      "min_area_level": 1,
+      "boss_only": true
+    }
+  ]
+}

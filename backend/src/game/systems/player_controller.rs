@@ -137,7 +137,9 @@ pub fn level_up(
     player_state: &mut PlayerState,
     player_resources: &mut PlayerResources,
 ) -> bool {
-    if player_resources.experience < player_specs.experience_needed {
+    if player_resources.experience < player_specs.experience_needed
+        || player_specs.level >= player_specs.max_level
+    {
         return false;
     }
 

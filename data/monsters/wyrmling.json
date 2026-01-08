@@ -1,22 +1,21 @@
 {
-  "name": "Cogspinner Imp",
-  "portrait": "monsters/cogspinner_imp.webp",
-  "max_life": 7,
+  "name": "Wyrmling",
+  "portrait": "monsters/wyrmling.webp",
+  "max_life": 8,
   "power_factor": 1.5,
   "initiative": [0.0, 0.5],
-  "armor": { "Physical": 50, "Storm": 50 },
   "skills": [
     {
-      "name": "Tick Tack",
-      "icon": "skills/attack.svg",
-      "cooldown": 1.5,
+      "name": "Playful Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 3.0,
       "targets": [
         {
           "effects": [
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [3, 6]
+                  "Physical": [4, 6]
                 }
               }
             }

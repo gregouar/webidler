@@ -1,20 +1,26 @@
 {
-  "name": "Compass of Ruin",
-  "portrait": "monsters/treasure_compass.webp",
-  "rarity": "Boss",
-  "max_life": 100,
-  "power_factor": 8,
-  "initiative": [1.0, 1.5],
-  "armor": { "Fire": 50, "Storm": 50 },
+  "name": "Cloud Elemental",
+  "portrait": "monsters/cloud.webp",
+  "max_life": 5,
+  "power_factor": 2.0,
+  "initiative": [0.0, 0.5],
+  "armor": { "Storm": 100 },
   "skills": [
     {
-      "name": "Spread the Curse",
-      "icon": "skills/curse_weakness.svg",
-      "cooldown": 5.0,
+      "name": "Blizzard",
+      "icon": "skills/chain_lightning.svg",
       "skill_type": "Spell",
+      "cooldown": 2.0,
       "targets": [
         {
           "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [0, 15]
+                }
+              }
+            },
             {
               "ApplyStatus": {
                 "duration": 3,
@@ -22,12 +28,11 @@
                   {
                     "status_type": {
                       "StatModifier": {
-                        "stat": "LifeRegen",
-                        "modifier": "Flat",
+                        "stat": { "Speed": null },
                         "debuff": true
                       }
                     },
-                    "value": 30
+                    "value": 50
                   }
                 ]
               }

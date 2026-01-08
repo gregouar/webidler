@@ -3,6 +3,7 @@ use crate::data::{area::AreaLevel, stash::StashPrice};
 // TODO: put in some game config file
 pub const DEFAULT_MAX_CHARACTERS: u8 = 5;
 pub const PLAYER_LIFE_PER_LEVEL: f64 = 3.0;
+pub const DEFAULT_MAX_LEVEL: u8 = 50;
 pub const SKILL_BASE_COST: f64 = 100.0;
 pub const SKILL_COST_FACTOR: f64 = 1_000.0;
 pub const CHAMPION_BASE_CHANCE: f64 = 0.0001;

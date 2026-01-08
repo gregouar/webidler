@@ -1,0 +1,117 @@
+{
+  "name": "Zael, the Father Drake",
+  "portrait": "monsters/dragon_black.webp",
+  "rarity": "Boss",
+  "max_life": 1000,
+  "size": "Gargantuan",
+  "power_factor": 20,
+  "initiative": 2,
+  "armor": { "Poison": 100, "Storm": 100 },
+  "skills": [
+    {
+      "name": "Tempest Talon",
+      "icon": "skills/chain_lightning.svg",
+      "skill_type": "Attack",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "range": "Melee",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [0, 60]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Poison Spike",
+      "icon": "skills/poison_cloud.svg",
+      "skill_type": "Attack",
+      "cooldown": 5.0,
+      "targets": [
+        {
+          "range": "Melee",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [5, 10]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Poison" }
+                    },
+                    "value": 25
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Evil Eye",
+      "icon": "skills/blessing_crit.svg",
+      "cooldown": 15.0,
+      "targets": [
+        {
+          "target_type": "Me",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": [5, 10],
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "CritChance": "Attack" },
+                        "modifier": "Flat"
+                      }
+                    },
+                    "value": 25
+                  },
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "CritDamage": "Attack" },
+                        "modifier": "Flat"
+                      }
+                    },
+                    "value": 200
+                  },
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": {
+                          "Lucky": {
+                            "roll_type": {
+                              "Damage": {}
+                            }
+                          }
+                        },
+                        "modifier": "Flat"
+                      }
+                    },
+                    "value": 100
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -171,6 +171,7 @@ pub fn PlayerCard() -> impl IntoView {
     let disable_level_up = Memo::new(move |_| {
         game_context.player_specs.read().experience_needed
             > game_context.player_resources.read().experience
+            || game_context.player_specs.read().level >= game_context.player_specs.read().max_level
     });
 
     let buy_skill_cost = Memo::new(move |_| game_context.player_specs.read().buy_skill_cost);

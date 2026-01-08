@@ -289,27 +289,22 @@ fn BenedictionRow(
                 .then(|| {
                     view! {
                         <div class="flex flex-col h-full items-end justify-center min-w-[140px]">
-                            {if max_level() {
-                                view! {
-                                    <span class="text-green-400 font-bold text-lg">"MAX"</span>
-                                }
-                                    .into_any()
-                            } else {
-                                view! {
-                                    <div class="flex items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
-                                        <span class="text-amber-200 font-bold font-number">
-                                            {move || format_number(price.get())}
-                                        </span>
-                                        <GoldIcon />
-                                    </div>
+                            <div class="flex items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
+                                <span class="text-amber-200 font-bold font-number">
+                                    {move || {
+                                        if max_level() {
+                                            "0".to_string()
+                                        } else {
+                                            format_number(price.get())
+                                        }
+                                    }}
+                                </span>
+                                <GoldIcon />
+                            </div>
 
-                                    <MenuButton disabled class:h-full on:click=upgrade>
-                                        "Pray"
-                                    </MenuButton>
-                                }
-                                    .into_any()
-                            }}
-
+                            <MenuButton disabled class:h-full on:click=upgrade>
+                                {move || if max_level() { "Max" } else { "Pray" }}
+                            </MenuButton>
                         </div>
                     }
                 })}

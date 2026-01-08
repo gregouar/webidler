@@ -1,14 +1,14 @@
 {
-  "name": "Cinder Hag",
-  "portrait": "monsters/cinder_hag.webp",
+  "name": "Pine Trickster",
+  "portrait": "monsters/pine_trickster.webp",
   "max_life": 7,
   "power_factor": 2.0,
   "initiative": [0.0, 1.0],
-  "armor": { "Fire": 50 },
+  "armor": { "Poison": 50 },
   "skills": [
     {
-      "name": "Blazing Finger",
-      "icon": "skills/fireball.svg",
+      "name": "Touchy Touchy",
+      "icon": "skills/poison_coating.svg",
       "skill_type": "Spell",
       "cooldown": 3.0,
       "targets": [
@@ -20,7 +20,7 @@
                 "statuses": [
                   {
                     "status_type": {
-                      "DamageOverTime": { "damage_type": "Fire" }
+                      "DamageOverTime": { "damage_type": "Poison" }
                     },
                     "value": 3
                   }
@@ -32,8 +32,8 @@
       ]
     },
     {
-      "name": "Burned Witch Revenge",
-      "icon": "skills/curse_flammability.svg",
+      "name": "Dirty Trick",
+      "icon": "skills/curse_putridity.svg",
       "skill_type": "Spell",
       "cooldown": 5.0,
       "targets": [
@@ -48,14 +48,14 @@
                       "StatModifier": {
                         "stat": {
                           "DamageResistance": {
-                            "damage_type": "Fire"
+                            "damage_type": "Poison"
                           }
                         },
                         "modifier": "Flat",
                         "debuff": true
                       }
                     },
-                    "value": 30
+                    "value": 50
                   }
                 ]
               }

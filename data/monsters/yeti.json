@@ -1,0 +1,76 @@
+{
+  "name": "Abominable Yeti",
+  "portrait": "monsters/yeti.webp",
+  "max_life": 30,
+  "size": "Huge",
+  "power_factor": 5,
+  "initiative": [3.0, 5.0],
+  "armor": { "Physical": 50 },
+  "skills": [
+    {
+      "name": "Abominable Slam",
+      "icon": "skills/attack.svg",
+      "cooldown": 5.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [10, 20]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Awful Breath",
+      "icon": "skills/curse_frailty.svg",
+      "skill_type": "Spell",
+      "cooldown": 10.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": {
+                          "DamageResistance": {
+                            "damage_type": "Physical"
+                          }
+                        },
+                        "modifier": "Flat",
+                        "debuff": true
+                      }
+                    },
+                    "value": 50
+                  },
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": {
+                          "DamageResistance": {
+                            "damage_type": "Storm"
+                          }
+                        },
+                        "modifier": "Flat",
+                        "debuff": true
+                      }
+                    },
+                    "value": 50
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

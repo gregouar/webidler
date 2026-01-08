@@ -5,8 +5,7 @@
     "required_level": 250,
     "item_level_modifier": 190,
     "header_background": "areas/peaks_header.webp",
-    "footer_background": "areas/peaks_footer.webp",
-    "coming_soon": true
+    "footer_background": "areas/peaks_footer.webp"
   },
   "loot_tables": [
     "tier_1.json",
@@ -14,8 +13,132 @@
     "tier_3.json",
     "tier_4.json",
     "tier_5.json",
-    "tier_6.json"
+    "tier_6.json",
+    "wyrm.json"
   ],
-  "bosses": [],
-  "waves": []
+  "bosses": [
+    {
+      "level": 80,
+      "interval": 2,
+      "spawns": [
+        {
+          "monster": "dragon_black.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "level": 81,
+      "interval": 2,
+      "spawns": [
+        {
+          "monster": "dragon_red.json",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
+  "waves": [
+    {
+      "min_level": 1,
+      "max_level": null,
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "beetle_lava.json",
+          "quantity": [0, 2]
+        },
+        {
+          "monster": "wyrmling.json",
+          "quantity": [0, 2]
+        },
+        {
+          "monster": "lizard_stone.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "wyrmling.json",
+          "quantity": 1
+        },
+        {
+          "monster": "beetle_lava.json",
+          "quantity": 1
+        },
+        {
+          "monster": "wyrmling.json",
+          "quantity": 1
+        },
+        {
+          "monster": "beetle_lava.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "min_level": 60,
+      "max_level": null,
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "pine_trickster.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "troll.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "wyvern_poison.json",
+          "quantity": [0, 2]
+        },
+        {
+          "monster": "pine_trickster.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "troll.json",
+          "quantity": 1
+        },
+        {
+          "monster": "wyvern_poison.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pine_trickster.json",
+          "quantity": 3
+        }
+      ]
+    },
+    {
+      "min_level": 70,
+      "max_level": null,
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "cloud.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "yeti.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "wyvern_snow.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cloud.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "wyvern_snow.json",
+          "quantity": 2
+        },
+        {
+          "monster": "cloud.json",
+          "quantity": 2
+        }
+      ]
+    }
+  ]
 }
