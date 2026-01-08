@@ -1,0 +1,48 @@
+{
+  "name": "Volcanic Lizard",
+  "portrait": "monsters/lizard_stone.webp",
+  "max_life": 15,
+  "size": "Large",
+  "power_factor": 3.0,
+  "initiative": [1, 2],
+  "armor": { "Physical": 100 },
+  "skills": [
+    {
+      "name": "Hot Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 4.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [3, 6],
+                  "Fire": [6, 14]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ravenous Claws",
+      "icon": "skills/scratch.svg",
+      "cooldown": 2.5,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [5, 10]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

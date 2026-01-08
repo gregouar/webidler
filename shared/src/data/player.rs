@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
-use crate::data::area::AreaLevel;
+use crate::{constants::DEFAULT_MAX_LEVEL, data::area::AreaLevel};
 
 pub use super::character::{CharacterSpecs, CharacterState};
 use super::{
@@ -35,6 +35,13 @@ pub struct PlayerSpecs {
 
     #[serde(default)] // for retro compatibility
     pub max_area_level: AreaLevel,
+
+    #[serde(default = "default_max_level")] // for retro compatibility
+    pub max_level: u8,
+}
+
+fn default_max_level() -> u8 {
+    DEFAULT_MAX_LEVEL
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

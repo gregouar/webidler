@@ -8,6 +8,7 @@
       "barrel_mimic.json",
       "bat_fire.json",
       "bat.json",
+      "beetle_lava.json",
       "bonebark_wolf.json",
       "booze_elemental.json",
       "briar_ornament.json",
@@ -15,6 +16,7 @@
       "cat_skeleton.json",
       "centipede.json",
       "cinder_hag.json",
+      "cloud.json",
       "cogspinner_imp.json",
       "court_composer.json",
       "crab.json",
@@ -22,6 +24,8 @@
       "cursed_pirate_digger.json",
       "cursed_pirate_spider.json",
       "cursed_pirate_spider_2.json",
+      "dragon_black.json",
+      "dragon_red.json",
       "drowned.json",
       "ember_butler.json",
       "ghost_child.json",
@@ -34,6 +38,7 @@
       "haunted_lantern.json",
       "hunter.json",
       "jellyfish.json",
+      "lizard_stone.json",
       "mermaid.json",
       "hound_fire.json",
       "hound_storm.json",
@@ -42,6 +47,7 @@
       "mourning_basin.json",
       "patron_ghost.json",
       "perfume_siren.json",
+      "pine_trickster.json",
       "pirate_captain.json",
       "pirate_deckhand.json",
       "pirate_lookout.json",
@@ -82,9 +88,14 @@
       "treasure_cutlass.json",
       "treasure_gun.json",
       "treasure_idol.json",
+      "troll.json",
       "witch_child.json",
       "witch_spider.json",
-      "witch.json"
+      "witch.json",
+      "wyrmling.json",
+      "wyvern_poison.json",
+      "wyvern_snow.json",
+      "yeti.json"
     ]
   }
 }

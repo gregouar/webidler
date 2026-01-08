@@ -1,0 +1,48 @@
+{
+  "name": "Wings of Terror",
+  "portrait": "monsters/wyvern_snow.webp",
+  "max_life": 20,
+  "size": "Large",
+  "power_factor": 5.0,
+  "initiative": [1, 2],
+  "armor": { "Storm": 50 },
+  "skills": [
+    {
+      "name": "Terror Strike",
+      "icon": "skills/claw.svg",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [5, 10]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Thunder Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 5.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [5, 10],
+                  "Storm": [0, 40]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

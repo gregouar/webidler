@@ -1,0 +1,115 @@
+{
+  "name": "Abal, the Mother Wyrm",
+  "portrait": "monsters/dragon_red.webp",
+  "rarity": "Boss",
+  "max_life": 1200,
+  "size": "Gargantuan",
+  "power_factor": 20,
+  "initiative": 3,
+  "armor": { "Physical": 100, "Fire": 100 },
+  "skills": [
+    {
+      "name": "Crushing Tail",
+      "icon": "skills/attack.svg",
+      "skill_type": "Attack",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "range": "Melee",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [20, 40]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Incinerating Breath",
+      "icon": "skills/burning_ray.svg",
+      "skill_type": "Attack",
+      "cooldown": 10.0,
+      "targets": [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Fire": [10, 20]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": [5, 10],
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Fire" }
+                    },
+                    "value": 25
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Enrage",
+      "icon": "skills/haste.svg",
+      "skill_type": "Spell",
+      "cooldown": 20.0,
+      "targets": [
+        {
+          "target_type": "Me",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": [5, 10],
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "Speed": null },
+                        "modifier": "Multiplier"
+                      }
+                    },
+                    "value": 50
+                  },
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "Damage": {} },
+                        "modifier": "Multiplier"
+                      }
+                    },
+                    "value": 100
+                  },
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": {
+                          "DamageResistance": {}
+                        },
+                        "modifier": "Flat",
+                        "debuff": true
+                      }
+                    },
+                    "value": 30
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

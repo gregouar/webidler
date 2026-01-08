@@ -1,0 +1,42 @@
+{
+  "name": "Wyvern",
+  "portrait": "monsters/wyvern_poison.webp",
+  "max_life": 15,
+  "size": "Large",
+  "power_factor": 3.0,
+  "initiative": [1, 2],
+  "armor": { "Poison": 50 },
+  "skills": [
+    {
+      "name": "Deadly Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 5.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [5, 10]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Poison" }
+                    },
+                    "value": 20
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

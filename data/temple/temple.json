@@ -5,7 +5,8 @@
     "effect": "StartingGold",
     "price_increase_factor": 1e5,
     "upgrade_value": 100,
-    "upgrade_modifier": "Flat"
+    "upgrade_modifier": "Flat",
+    "max_upgrade_level": 60
   },
   "starting_level": {
     "price": 1e10,
@@ -13,7 +14,8 @@
     "effect": "StartingLevel",
     "price_increase_factor": 1e10,
     "upgrade_value": 1,
-    "upgrade_modifier": "Flat"
+    "upgrade_modifier": "Flat",
+    "max_upgrade_level": 30
   },
   "life_max": {
     "price": 1e6,
@@ -26,7 +28,8 @@
     },
     "price_increase_factor": 6,
     "upgrade_value": 1,
-    "upgrade_modifier": "Flat"
+    "upgrade_modifier": "Flat",
+    "max_upgrade_level": 200
   },
   "mana_max": {
     "price": 1e6,
@@ -39,7 +42,8 @@
     },
     "price_increase_factor": 6,
     "upgrade_value": 1,
-    "upgrade_modifier": "Flat"
+    "upgrade_modifier": "Flat",
+    "max_upgrade_level": 200
   },
   "armor_physical": {
     "price": 1e7,
@@ -52,7 +56,8 @@
     },
     "price_increase_factor": 6,
     "upgrade_value": 1,
-    "upgrade_modifier": "Flat"
+    "upgrade_modifier": "Flat",
+    "max_upgrade_level": 200
   },
   "armor_fire": {
     "price": 1e7,
@@ -65,7 +70,8 @@
     },
     "price_increase_factor": 6,
     "upgrade_value": 1,
-    "upgrade_modifier": "Flat"
+    "upgrade_modifier": "Flat",
+    "max_upgrade_level": 200
   },
   "armor_poison": {
     "price": 1e7,
@@ -78,7 +84,8 @@
     },
     "price_increase_factor": 6,
     "upgrade_value": 1,
-    "upgrade_modifier": "Flat"
+    "upgrade_modifier": "Flat",
+    "max_upgrade_level": 200
   },
   "armor_storm": {
     "price": 1e7,
@@ -91,7 +98,8 @@
     },
     "price_increase_factor": 6,
     "upgrade_value": 1,
-    "upgrade_modifier": "Flat"
+    "upgrade_modifier": "Flat",
+    "max_upgrade_level": 200
   },
   "damage_physical": {
     "price": 1e8,
@@ -104,7 +112,8 @@
     },
     "price_increase_factor": 6,
     "upgrade_value": 1,
-    "upgrade_modifier": "Flat"
+    "upgrade_modifier": "Flat",
+    "max_upgrade_level": 200
   },
   "damage_fire": {
     "price": 1e8,
@@ -117,7 +126,8 @@
     },
     "price_increase_factor": 6,
     "upgrade_value": 1,
-    "upgrade_modifier": "Flat"
+    "upgrade_modifier": "Flat",
+    "max_upgrade_level": 200
   },
   "damage_poison": {
     "price": 1e8,
@@ -130,7 +140,8 @@
     },
     "price_increase_factor": 6,
     "upgrade_value": 1,
-    "upgrade_modifier": "Flat"
+    "upgrade_modifier": "Flat",
+    "max_upgrade_level": 200
   },
   "damage_storm": {
     "price": 1e8,
@@ -143,6 +154,7 @@
     },
     "price_increase_factor": 6,
     "upgrade_value": 1,
-    "upgrade_modifier": "Flat"
+    "upgrade_modifier": "Flat",
+    "max_upgrade_level": 200
   }
 }
