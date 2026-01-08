@@ -1,7 +1,7 @@
 {
   "specs": {
     "name": "Wyrm's Peaks",
-    "starting_level": 1,
+    "starting_level": 51,
     "required_level": 250,
     "item_level_modifier": 190,
     "header_background": "areas/peaks_header.webp",
@@ -18,7 +18,7 @@
   ],
   "bosses": [
     {
-      "level": 1,
+      "level": 80,
       "interval": 2,
       "spawns": [
         {
@@ -28,7 +28,7 @@
       ]
     },
     {
-      "level": 2,
+      "level": 81,
       "interval": 2,
       "spawns": [
         {

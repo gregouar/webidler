@@ -26,7 +26,7 @@
     },
     {
       "item_id": "lamellar_gauntlets_unique",
-      "weight": 25000000,
+      "weight": 250,
       "min_area_level": 1,
       "boss_only": true
     }

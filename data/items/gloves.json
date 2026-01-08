@@ -237,90 +237,102 @@
       "armor": 60
     },
     "rarity": "Unique",
-    "affixes": [],
-    "triggers": [
+    "affixes": [
       {
-        "trigger_id": "twinbound_fire",
-        "OnHit": {
-          "damage_type": "Fire",
-          "is_crit": false,
-          "is_triggered": false
-        },
-        "target": "Source",
-        "effects": [
-          {
-            "ApplyStatus": {
-              "duration": 5,
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "damage_type": "Storm"
-                        }
-                      }
-                    }
-                  },
-                  "value": 500
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "damage_type": "Fire"
-                        }
-                      },
-                      "debuff": true
-                    }
-                  },
-                  "value": 1e300
-                }
-              ]
-            }
-          }
-        ]
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": [80, 120]
       },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": [80, 120]
+      }
+    ],
+    "triggers": [
       {
         "trigger_id": "twinbound_storm",
         "OnHit": {
-          "damage_type": "Storm",
-          "is_crit": true,
           "is_triggered": false
         },
-        "target": "Source",
+        "target": "SameTarget",
         "effects": [
           {
-            "ApplyStatus": {
-              "duration": 5,
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "damage_type": "Fire"
-                        }
-                      }
-                    }
-                  },
-                  "value": 500
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "damage_type": "Storm"
-                        }
-                      },
-                      "debuff": true
-                    }
-                  },
-                  "value": 1e300
+            "FlatDamage": {
+              "damage": {
+                "Storm": 0.0
+              }
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "damage_type": "Fire"
                 }
-              ]
+              },
+              {
+                "MinDamage": {
+                  "damage_type": "Fire"
+                }
+              },
+              {
+                "MaxDamage": {
+                  "damage_type": "Fire"
+                }
+              },
+              {
+                "CritChance": null
+              }
+            ]
+          },
+          {
+            "FlatDamage": {
+              "damage": {
+                "Fire": 0.0
+              }
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "damage_type": "Storm"
+                }
+              },
+              {
+                "MinDamage": {
+                  "damage_type": "Storm"
+                }
+              },
+              {
+                "MaxDamage": {
+                  "damage_type": "Storm"
+                }
+              },
+              {
+                "CritChance": null
+              }
+            ]
+          }
+        ],
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": { "damage_type": "Fire" }
+            },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "HitDamage": "Storm"
+            }
+          },
+          {
+            "stat": {
+              "Damage": { "damage_type": "Storm" }
+            },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "HitDamage": "Fire"
             }
           }
         ]
