@@ -424,14 +424,27 @@ impl EffectsMap {
                     .entry((target.clone(), modifier))
                     .and_modify(|entry| match modifier {
                         Modifier::Multiplier if target.is_multiplicative() => {
-                            let mut new_entry = *entry + 100.0;
+                            if *entry == 0.0 {
+                                *entry = value;
+                                return;
+                            }
+
+                            let sign = if *entry < 0.0 { -1.0 } else { 1.0 };
+                            let mut new_entry = entry.abs() + 100.0;
+
                             new_entry.apply_effect(&StatEffect {
                                 stat: target,
                                 modifier,
-                                value,
+                                value: sign * value,
                                 bypass_ignore: false,
                             });
-                            *entry = new_entry - 100.0;
+
+                            *entry = sign
+                                * if new_entry >= 100.0 {
+                                    new_entry - 100.0
+                                } else {
+                                    -100.0 / (new_entry * 0.01) + 100.0
+                                };
                         }
                         _ => *entry += value,
                     })

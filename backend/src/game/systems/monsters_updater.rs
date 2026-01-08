@@ -82,7 +82,7 @@ pub fn update_monster_specs(
     //     bypass_ignore: true,
     // });
 
-    monster_specs.character_specs.effects = EffectsMap::combine_all(
+    let effects_map = EffectsMap::combine_all(
         std::iter::once(statuses_controller::generate_effects_map_from_statuses(
             &monster_state.character_state.statuses,
         ))
@@ -97,12 +97,11 @@ pub fn update_monster_specs(
             ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
         )])))),
     );
-
-    let effects =
-        stats_updater::stats_map_to_vec(&monster_specs.character_specs.effects, area_threat);
+    let effects = stats_updater::stats_map_to_vec(&effects_map, area_threat);
 
     monster_specs.character_specs =
         characters_updater::update_character_specs(&base_specs.character_specs, &effects);
+    monster_specs.character_specs.effects = effects_map;
     monster_specs.skill_specs = base_specs.skill_specs.clone();
 
     for skill_specs in monster_specs.skill_specs.iter_mut() {
