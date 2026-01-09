@@ -33,7 +33,7 @@ pub fn BattleScene() -> impl IntoView {
 
                         // <Show when=move || game_context.area_state.read().rush_mode>
                         <div
-                            class="absolute inset-0 opacity-0 transition-opacity duration-500"
+                            class="absolute inset-0 opacity-0 transition-opacity duration-500 pointer-events-none"
                             class:opacity-100=move || game_context.area_state.read().rush_mode
                         >
                             <RushOverlay />
