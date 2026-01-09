@@ -1,5 +1,5 @@
 use anyhow::Result;
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
 use shared::{
     constants::{THREAT_BOSS_COOLDOWN, THREAT_COOLDOWN},
@@ -99,14 +99,16 @@ async fn control_entities(
 ) -> Result<()> {
     if !game_data.player_state.character_state.is_alive {
         game_data.area_threat.cooldown = 0.0;
-        game_data.monster_wave_delay = Instant::now();
-        if game_data.player_respawn_delay.elapsed() > PLAYER_RESPAWN_PERIOD {
+        game_data.monster_wave_delay =
+            Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown);
+
+        if game_data.player_respawn_delay.is_zero() {
             respawn_player(master_store, game_data);
         }
         return Ok(());
     }
 
-    game_data.player_respawn_delay = Instant::now();
+    game_data.player_respawn_delay = PLAYER_RESPAWN_PERIOD;
 
     let monsters_exist = !game_data.monster_specs.is_empty();
     let mut monsters_still_alive: Vec<_> = game_data
@@ -144,9 +146,7 @@ async fn control_entities(
             ));
         }
 
-        if game_data.monster_wave_delay.elapsed()
-            > Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown)
-        {
+        if game_data.monster_wave_delay.is_zero() {
             if game_data.area_state.read().going_back > 0 {
                 let area_state = game_data.area_state.mutate();
                 let amount = area_state.going_back;
@@ -182,7 +182,8 @@ async fn control_entities(
             game_data.wave_completed = false;
         }
     } else {
-        game_data.monster_wave_delay = Instant::now();
+        game_data.monster_wave_delay =
+            Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown);
         monsters_controller::control_monsters(
             events_queue,
             &game_data.monster_specs,
@@ -225,8 +226,12 @@ async fn update_entities(
     if !game_data.player_state.character_state.is_alive
         || game_data.area_state.read().going_back > 0
     {
+        game_data.player_respawn_delay =
+            game_data.player_respawn_delay.saturating_sub(elapsed_time);
         return;
     }
+
+    game_data.monster_wave_delay = game_data.monster_wave_delay.saturating_sub(elapsed_time);
 
     player_updater::update_player_state(
         events_queue,

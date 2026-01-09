@@ -1,6 +1,6 @@
 use anyhow::Result;
 use shared::data::temple::PlayerBenedictions;
-use std::time::Instant;
+use std::time::Duration;
 
 use crate::game::data::master_store;
 use crate::game::systems::{benedictions_controller, passives_controller, player_updater};
@@ -39,14 +39,14 @@ pub struct GameInstanceData {
     pub player_resources: LazySyncer<PlayerResources>,
 
     pub player_controller: PlayerController,
-    pub player_respawn_delay: Instant,
+    pub player_respawn_delay: Duration,
 
     // TODO: Need to find better more granular way to handle these things...
     // Probably need to split more between static and computed specs
     pub monster_base_specs: LazySyncer<Vec<MonsterSpecs>>,
     pub monster_specs: Vec<MonsterSpecs>, // Only use internally, not shared
     pub monster_states: Vec<MonsterState>,
-    pub monster_wave_delay: Instant,
+    pub monster_wave_delay: Duration,
 
     pub wave_completed: bool,
     pub queued_loot: LazySyncer<Vec<QueuedLoot>>,
@@ -108,12 +108,12 @@ impl GameInstanceData {
             player_controller: PlayerController::init(&player_specs),
             player_specs: LazySyncer::new(player_specs),
             player_inventory: LazySyncer::new(player_inventory),
-            player_respawn_delay: Instant::now(),
+            player_respawn_delay: Default::default(),
 
             monster_base_specs: LazySyncer::new(Vec::new()),
             monster_specs: Vec::new(),
             monster_states: Vec::new(),
-            monster_wave_delay: Instant::now(),
+            monster_wave_delay: Default::default(),
 
             wave_completed: false,
             queued_loot: LazySyncer::new(Default::default()),

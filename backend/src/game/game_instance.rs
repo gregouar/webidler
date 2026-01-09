@@ -75,13 +75,17 @@ impl<'a> GameInstance<'a> {
                 break;
             }
 
-            game_orchestrator::tick(
-                &mut self.events_queue,
-                self.game_data,
-                &self.master_store,
-                game_timer.delta(),
-            )
-            .await?;
+            let elapsed_time = game_timer.delta();
+            let tick_multiplier = 1;
+            for _ in 0..tick_multiplier {
+                game_orchestrator::tick(
+                    &mut self.events_queue,
+                    self.game_data,
+                    &self.master_store,
+                    elapsed_time,
+                )
+                .await?;
+            }
 
             if let Err(e) = game_sync::sync_update_game(self.client_conn, self.game_data).await {
                 tracing::warn!("failed to sync client: {}", e);
