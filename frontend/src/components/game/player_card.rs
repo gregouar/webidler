@@ -105,28 +105,6 @@ pub fn PlayerCard() -> impl IntoView {
             0.0
         }
     });
-
-    let max_xp = Memo::new(move |_| game_context.player_specs.read().experience_needed);
-    let xp = Memo::new(move |_| game_context.player_resources.read().experience);
-
-    let xp_tooltip = move || {
-        view! {
-            "Experience: "
-            {format_number(xp.get())}
-            "/"
-            {format_number(max_xp.get())}
-        }
-    };
-
-    let xp_percent = Signal::derive(move || {
-        let max_xp = max_xp.get();
-        if max_xp > 0.0 {
-            (xp.get() / max_xp * 100.0) as f32
-        } else {
-            0.0
-        }
-    });
-
     let is_dead = Memo::new(move |_| !game_context.player_state.read().character_state.is_alive);
 
     let just_hurt = Memo::new(move |_| game_context.player_state.read().character_state.just_hurt);
@@ -157,6 +135,42 @@ pub fn PlayerCard() -> impl IntoView {
     let just_leveled_up = RwSignal::new(false);
 
     let conn = expect_context::<WebsocketContext>();
+    let max_level = move || {
+        game_context.player_specs.read().level >= game_context.player_specs.read().max_level
+    };
+
+    let max_xp = Memo::new(move |_| {
+        if max_level() {
+            0.0
+        } else {
+            game_context.player_specs.read().experience_needed
+        }
+    });
+    let xp = Memo::new(move |_| game_context.player_resources.read().experience);
+
+    let xp_tooltip = move || {
+        if max_level() {
+            view! { "Max Level" }.into_any()
+        } else {
+            view! {
+                "Experience: "
+                {format_number(xp.get())}
+                "/"
+                {format_number(max_xp.get())}
+            }
+            .into_any()
+        }
+    };
+
+    let xp_percent = Signal::derive(move || {
+        let max_xp = max_xp.get();
+        if max_xp > 0.0 {
+            (xp.get() / max_xp * 100.0) as f32
+        } else {
+            0.0
+        }
+    });
+
     let level_up = move |_| {
         game_context.player_specs.update(|player_specs| {
             game_context.player_resources.write().experience -= player_specs.experience_needed;
@@ -171,7 +185,7 @@ pub fn PlayerCard() -> impl IntoView {
     let disable_level_up = Memo::new(move |_| {
         game_context.player_specs.read().experience_needed
             > game_context.player_resources.read().experience
-            || game_context.player_specs.read().level >= game_context.player_specs.read().max_level
+            || max_level()
     });
 
     let buy_skill_cost = Memo::new(move |_| game_context.player_specs.read().buy_skill_cost);
@@ -254,7 +268,9 @@ pub fn PlayerCard() -> impl IntoView {
                         />
                     </div>
                     <FancyButton disabled=disable_level_up on:click=level_up>
-                        <span class="text-base xl:text-lg">"Level Up"</span>
+                        <span class="text-base xl:text-lg">
+                            {move || if max_level() { "Max Level" } else { "Level Up" }}
+                        </span>
                     </FancyButton>
                 </div>
 
