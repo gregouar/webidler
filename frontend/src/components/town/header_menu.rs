@@ -156,7 +156,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButton on:click=move |_| open_temple() disabled=disable_panels>
                     "Temple"
                 </MenuButton>
-                <MenuButton on:click=navigate_quit>"Quit"</MenuButton>
+                <MenuButton on:click=navigate_quit>"Back"</MenuButton>
             </div>
         </div>
     }

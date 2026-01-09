@@ -238,6 +238,10 @@ fn generate_monster_specs(
         }
 
         // Link monster_id to triggers of skills
+        for trigger in skill_specs.triggers.iter_mut() {
+            trigger.triggered_effect.owner = Some(monster_id);
+        }
+
         for effect in skill_specs
             .targets
             .iter_mut()

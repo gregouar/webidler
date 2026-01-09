@@ -1808,7 +1808,7 @@
         "triggers": [
           {
             "trigger_id": "open_wound",
-            "description": "Apply a stack of Open Wound for 5 seconds. Each stack deals 35% of the initial hit's Physical Damage when the target is Hit again.",
+            "description": "Apply a stack of Open Wound for 5 seconds. Each stack deals 25% of the initial hit's Physical Damage when the target is Hit again.",
             "OnHit": { "skill_type": "Attack", "is_triggered": false },
             "effects": [
               {
@@ -1866,7 +1866,7 @@
                   "Damage": { "damage_type": "Physical" }
                 },
                 "modifier": "Flat",
-                "factor": 0.35,
+                "factor": 0.25,
                 "source": {
                   "HitDamage": "Physical"
                 }
