@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::{collections::HashSet, time::Duration};
 
 use leptos::prelude::{
     guards::{Plain, ReadGuard},
@@ -32,6 +32,7 @@ pub struct GameContext {
     pub player_inventory: RwSignal<PlayerInventory>,
     pub player_state: RwSignal<PlayerState>,
     pub player_resources: Syncable<PlayerResources>,
+    pub player_stamina: RwSignal<Duration>,
 
     pub monster_wave: RwSignal<usize>, // Used to generate unique key in list
     pub monster_specs: RwSignal<Vec<MonsterSpecs>>,
@@ -75,6 +76,7 @@ impl GameContext {
             player_inventory: RwSignal::new(Default::default()),
             player_state: RwSignal::new(Default::default()),
             player_resources: Default::default(),
+            player_stamina: Default::default(),
 
             monster_wave: RwSignal::new(0),
             monster_specs: RwSignal::new(Vec::new()),

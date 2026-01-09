@@ -1,7 +1,8 @@
 use anyhow::Result;
 
 use shared::{
-    computations, constants,
+    computations,
+    constants::{self, RUSH_MODE_SPEED_MULTIPLIER},
     data::user::UserCharacterId,
     messages::server::{DisconnectMessage, ErrorMessage, ErrorType},
 };
@@ -76,7 +77,11 @@ impl<'a> GameInstance<'a> {
             }
 
             let elapsed_time = game_timer.delta();
-            let tick_multiplier = 1;
+            let tick_multiplier = if self.game_data.area_state.read().rush_mode {
+                RUSH_MODE_SPEED_MULTIPLIER
+            } else {
+                1
+            };
             for _ in 0..tick_multiplier {
                 game_orchestrator::tick(
                     &mut self.events_queue,

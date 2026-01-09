@@ -2,9 +2,10 @@ use leptos::{html::*, prelude::*};
 
 use shared::computations;
 use shared::constants::{THREAT_EFFECT, WAVES_PER_AREA_LEVEL};
-use shared::messages::client::{GoBackLevelMessage, SetAutoProgressMessage};
+use shared::messages::client::{GoBackLevelMessage, SetAutoProgressMessage, SetRushModeMessage};
 
 use crate::assets::img_asset;
+use crate::components::ui::number::format_duration;
 use crate::components::ui::progress_bars::{predictive_cooldown, VerticalProgressBar};
 use crate::components::ui::tooltip::{StaticTooltip, StaticTooltipPosition};
 use crate::components::websocket::WebsocketContext;
@@ -16,16 +17,28 @@ use super::GameContext;
 
 #[component]
 pub fn BattleScene() -> impl IntoView {
+    let game_context: GameContext = expect_context();
     view! {
         <div class="absolute inset-0 p-1 xl:p-4">
             <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
                 <PlayerCard />
                 <div class="w-2/3 aspect-[12/8] flex flex-col shadow-xl/30 rounded-md overflow-hidden">
                     <BattleSceneHeader />
-                    <div class="flex w-full flex-1 min-h-0
+                    <div class="flex relative w-full flex-1 min-h-0
                     bg-stone-800 overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                        <MonstersGrid />
-                        <ThreatMeter />
+                        <Show when=move || !game_context.area_state.read().rush_mode>
+                            <MonstersGrid />
+                            <ThreatMeter />
+                        </Show>
+
+                        // <Show when=move || game_context.area_state.read().rush_mode>
+                        <div
+                            class="absolute inset-0 opacity-0 transition-opacity duration-500"
+                            class:opacity-100=move || game_context.area_state.read().rush_mode
+                        >
+                            <RushOverlay />
+                        </div>
+                    // </Show>
                     </div>
                     <LootQueue />
                     <BattleSceneFooter />
@@ -37,18 +50,10 @@ pub fn BattleScene() -> impl IntoView {
 
 #[component]
 pub fn BattleSceneHeader() -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
-
-    let auto_icon = move || {
-        if game_context.area_state.read().auto_progress {
-            "⏸"
-        } else {
-            "▶"
-        }
-    };
+    let game_context: GameContext = expect_context();
 
     let go_back = {
-        let conn = expect_context::<WebsocketContext>();
+        let conn: WebsocketContext = expect_context();
         move |_| {
             conn.send(&GoBackLevelMessage { amount: 1 }.into());
             game_context.area_state.update(|area_state| {
@@ -71,12 +76,31 @@ pub fn BattleSceneHeader() -> impl IntoView {
         }
     };
 
+    let toggle_rush_mode = {
+        let conn = expect_context::<WebsocketContext>();
+        move |_| {
+            let rush_mode = !game_context.area_state.read_untracked().rush_mode;
+            game_context.area_state.write().rush_mode = rush_mode;
+            conn.send(&SetRushModeMessage { value: rush_mode }.into());
+        }
+    };
+
     let header_background = move || {
         format!(
             "background-image: url('{}');",
             img_asset(&game_context.area_specs.read().header_background)
         )
     };
+
+    let auto_icon = move || {
+        if game_context.area_state.read().auto_progress {
+            "⏸"
+        } else {
+            "▶"
+        }
+    };
+
+    let disable_rush = Memo::new(move |_| game_context.player_stamina.read().is_zero());
 
     view! {
         <div
@@ -123,7 +147,34 @@ pub fn BattleSceneHeader() -> impl IntoView {
                 </p>
             </div>
 
-            <div class="w-12 flex justify-end">
+            <div class="w-24 flex justify-end gap-4 items-center">
+                <StaticTooltip
+                    position=StaticTooltipPosition::Left
+                    tooltip=move || {
+                        if disable_rush.get() {
+                            "No Stamina, Go Offline to Recuperate".to_string()
+                        } else {
+                            format!(
+                                "Rush! ({} Stamina)",
+                                format_duration(game_context.player_stamina.get(), false),
+                            )
+                        }
+                    }
+                >
+                    <button
+                        class="btn text-xl xl:text-3xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
+                        hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)]
+                        active:scale-90 active:brightness-125 transition
+                        items-center"
+                        title="Rush Mode"
+                        on:click=toggle_rush_mode
+                        class:grayscale=disable_rush
+                        disabled=disable_rush
+                    >
+                        "⚡"
+                    </button>
+                </StaticTooltip>
+
                 <StaticTooltip
                     position=StaticTooltipPosition::Left
                     tooltip=move || {
@@ -137,7 +188,8 @@ pub fn BattleSceneHeader() -> impl IntoView {
                     <button
                         class="btn text-xl xl:text-3xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
                         hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
-                        active:scale-90 active:brightness-125 transition"
+                        active:scale-90 active:brightness-125 transition
+                        items-center"
                         title="Toggle Auto Progress"
                         on:click=toggle_auto_progress
                     >
@@ -386,5 +438,28 @@ pub fn ThreatIcon() -> impl IntoView {
                 </g>
             </svg>
         </StaticTooltip>
+    }
+}
+
+#[component]
+fn RushOverlay() -> impl IntoView {
+    let game_context: GameContext = expect_context();
+
+    view! {
+        <div class="relative w-full h-full flex items-center justify-center bg-stone-900">
+            <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-sky-500/10 animate-pulse" />
+
+            <div class="z-10 flex flex-col items-center gap-4">
+                <div class="text-6xl text-yellow-400 animate-pulse">"⚡"</div>
+
+                <div class=" text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold leading-none">
+                    "Stamina Left:"
+                </div>
+
+                <div class="text-4xl font-bold text-amber-400">
+                    {move || format_duration(game_context.player_stamina.get(), false)}
+                </div>
+            </div>
+        </div>
     }
 }

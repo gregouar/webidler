@@ -35,6 +35,7 @@ impl_into_message! {
 
         SetAutoProgress(SetAutoProgressMessage),
         GoBack(GoBackLevelMessage),
+        SetRushMode(SetRushModeMessage),
     }
 }
 
@@ -118,5 +119,10 @@ pub struct GoBackLevelMessage {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetAutoProgressMessage {
+    pub value: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SetRushModeMessage {
     pub value: bool,
 }

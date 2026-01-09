@@ -2,14 +2,18 @@ use std::time::{Duration, Instant};
 
 use anyhow::{anyhow, Result};
 
-use shared::data::{
-    area::AreaLevel,
-    character::CharacterSize,
-    item::ItemRarity,
-    passive::PassivesTreeState,
-    player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs},
-    temple::{BenedictionEffect, PlayerBenedictions},
-    user::UserCharacterId,
+use chrono::Utc;
+use shared::{
+    constants::MAX_PLAYER_STAMINA,
+    data::{
+        area::AreaLevel,
+        character::CharacterSize,
+        item::ItemRarity,
+        passive::PassivesTreeState,
+        player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs},
+        temple::{BenedictionEffect, PlayerBenedictions},
+        user::UserCharacterId,
+    },
 };
 
 use crate::{
@@ -96,7 +100,18 @@ async fn load_game_instance(
     )
     .await
     {
-        Ok(x) => x,
+        Ok(Some((mut game_instance, saved_at))) => {
+            // Maybe move this somewhere else
+            game_instance.player_stamina += Duration::from_secs(
+                Utc::now().signed_duration_since(saved_at).num_seconds() as u64,
+            );
+            if game_instance.player_stamina > MAX_PLAYER_STAMINA {
+                game_instance.player_stamina = MAX_PLAYER_STAMINA;
+            }
+
+            Some(game_instance)
+        }
+        Ok(None) => None,
         Err(e) => {
             tracing::error!(
                 "failed to load game instance for character '{}': {}",
@@ -187,6 +202,7 @@ async fn new_game_instance(
         player_resources,
         player_specs,
         player_inventory,
+        Default::default(),
     )?;
 
     if game_data.area_blueprint.specs.coming_soon {

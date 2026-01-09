@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::{collections::HashSet, time::Duration};
 
 use serde::{Deserialize, Serialize};
 
@@ -61,6 +61,7 @@ pub struct SyncGameStateMessage {
     pub player_inventory: Option<PlayerInventory>,
     pub player_state: PlayerState,
     pub player_resources: Option<PlayerResources>,
+    pub player_stamina: Duration,
     pub monster_specs: Option<Vec<MonsterSpecs>>,
     pub monster_states: Vec<MonsterState>,
     pub queued_loot: Option<Vec<QueuedLoot>>,

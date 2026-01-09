@@ -30,6 +30,7 @@ impl DataInit<&AreaSpecs> for AreaState {
             last_champion_spawn: 0,
             auto_progress: true,
             going_back: 0,
+            rush_mode: false,
             end_quest: false,
         }
     }

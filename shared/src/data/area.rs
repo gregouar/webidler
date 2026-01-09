@@ -29,6 +29,7 @@ pub struct AreaState {
 
     pub auto_progress: bool,
     pub going_back: u16,
+    pub rush_mode: bool,
 
     pub end_quest: bool,
 }
