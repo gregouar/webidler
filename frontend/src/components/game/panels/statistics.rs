@@ -53,7 +53,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         <StatCategory title="Game">
                             <Stat
                                 label="Elapsed Time"
-                                value=move || format_duration(stats().elapsed_time)
+                                value=move || format_duration(stats().elapsed_time, true)
                             />
                             <Stat
                                 label="Areas Completed"

@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use crate::data::{area::AreaLevel, stash::StashPrice};
 
 // TODO: put in some game config file
@@ -11,6 +13,8 @@ pub const CHAMPION_INC_CHANCE: f64 = 0.000005;
 pub const CHAMPION_LEVEL_INC: AreaLevel = 5;
 
 pub const WAVES_PER_AREA_LEVEL: u8 = 5;
+pub const RUSH_MODE_SPEED_MULTIPLIER: usize = 12;
+pub const MAX_PLAYER_STAMINA: Duration = Duration::from_hours(24);
 
 pub const MONSTERS_DEFAULT_DAMAGE_INCREASE: f64 = 5.0;
 pub const MONSTER_INCREASE_FACTOR: f64 = 0.12;

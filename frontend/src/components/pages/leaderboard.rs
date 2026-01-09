@@ -135,7 +135,9 @@ pub fn LeaderboardPanel() -> impl IntoView {
                                                                         </span>
                                                                     </div>
                                                                     <div class="text-sm text-zinc-300">
-                                                                        {entry.elapsed_time.map(format_duration)}
+                                                                        {entry
+                                                                            .elapsed_time
+                                                                            .map(|elapsed_time| format_duration(elapsed_time, true))}
                                                                     </div>
                                                                 </div>
 

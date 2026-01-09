@@ -171,6 +171,7 @@ fn handle_client_message(
             area_state.going_back += m.amount;
             area_state.auto_progress = false;
         }
+        ClientMessage::SetRushMode(m) => game_data.area_state.mutate().rush_mode = m.value,
         ClientMessage::PurchasePassive(m) => passives_controller::purchase_node(
             game_data.player_resources.mutate(),
             &game_data.passives_tree_specs,

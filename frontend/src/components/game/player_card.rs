@@ -378,7 +378,9 @@ pub fn PlayerName() -> impl IntoView {
 
 #[component]
 fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
+    let game_context: GameContext = expect_context();
+
+    let rush_mode = Memo::new(move |_| game_context.area_state.read().rush_mode);
 
     let icon_asset = Memo::new(move |_| {
         if let Some(skill_specs) = game_context.player_specs.read().skills_specs.get(index) {
@@ -424,23 +426,25 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         .unwrap_or(&false);
 
     let just_triggered = Memo::new(move |_| {
-        game_context
-            .player_state
-            .read()
-            .skills_states
-            .get(index)
-            .map(|x| x.just_triggered)
-            .unwrap_or_default()
+        !rush_mode.get()
+            && game_context
+                .player_state
+                .read()
+                .skills_states
+                .get(index)
+                .map(|x| x.just_triggered)
+                .unwrap_or_default()
     });
 
     let is_ready = Memo::new(move |_| {
-        game_context
-            .player_state
-            .read()
-            .skills_states
-            .get(index)
-            .map(|x| x.is_ready)
-            .unwrap_or_default()
+        !rush_mode.get()
+            && game_context
+                .player_state
+                .read()
+                .skills_states
+                .get(index)
+                .map(|x| x.is_ready)
+                .unwrap_or_default()
     });
 
     let conn = expect_context::<WebsocketContext>();
@@ -573,8 +577,13 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let hide_tooltip = move || tooltip_context.hide();
 
-    let reset_progress = Signal::derive(move || just_triggered.get() || !is_dead.get());
-    let progress_value = predictive_cooldown(skill_cooldown, reset_progress, is_dead.into());
+    let reset_progress =
+        Signal::derive(move || just_triggered.get() || !is_dead.get() || rush_mode.get());
+    let progress_value = predictive_cooldown(
+        skill_cooldown,
+        reset_progress,
+        Signal::derive(move || is_dead.get() || rush_mode.get()),
+    );
 
     view! {
         <div class="flex flex-col">

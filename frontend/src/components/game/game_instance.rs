@@ -133,6 +133,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         player_inventory,
         player_state,
         player_resources,
+        player_stamina,
         monster_specs,
         monster_states,
         queued_loot,
@@ -148,6 +149,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     }
     game_context.player_resources.sync(player_resources);
     game_context.player_state.set(player_state);
+    game_context.player_stamina.set(player_stamina);
     if let Some(monster_specs) = monster_specs {
         *game_context.monster_wave.write() += 1; // TODO: Overflow
         game_context.monster_specs.set(monster_specs);

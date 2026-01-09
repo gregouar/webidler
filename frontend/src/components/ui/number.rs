@@ -101,12 +101,19 @@ fn comma_format(value: f64) -> String {
         .collect::<String>()
 }
 
-pub fn format_duration(duration: Duration) -> String {
-    let secs = duration.as_secs();
+pub fn format_duration(duration: Duration, show_seconds: bool) -> String {
+    let mut secs = duration.as_secs();
+    if !show_seconds {
+        secs = secs.div_ceil(60) * 60;
+    }
     let hours = secs / 3600;
     let minutes = (secs % 3600) / 60;
     let seconds = secs % 60;
-    format!("{hours:02}:{minutes:02}:{seconds:02}")
+    if show_seconds {
+        format!("{hours}:{minutes:02}:{seconds:02}")
+    } else {
+        format!("{hours}:{minutes:02}")
+    }
 }
 
 pub fn format_datetime(dt: DateTime<Utc>) -> String {

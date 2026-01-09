@@ -1,6 +1,6 @@
 use anyhow::Result;
 use shared::data::temple::PlayerBenedictions;
-use std::time::Instant;
+use std::time::Duration;
 
 use crate::game::data::master_store;
 use crate::game::systems::{benedictions_controller, passives_controller, player_updater};
@@ -37,16 +37,17 @@ pub struct GameInstanceData {
     pub player_inventory: LazySyncer<PlayerInventory>,
     pub player_state: PlayerState,
     pub player_resources: LazySyncer<PlayerResources>,
+    pub player_stamina: Duration,
 
     pub player_controller: PlayerController,
-    pub player_respawn_delay: Instant,
+    pub player_respawn_delay: Duration,
 
     // TODO: Need to find better more granular way to handle these things...
     // Probably need to split more between static and computed specs
     pub monster_base_specs: LazySyncer<Vec<MonsterSpecs>>,
     pub monster_specs: Vec<MonsterSpecs>, // Only use internally, not shared
     pub monster_states: Vec<MonsterState>,
-    pub monster_wave_delay: Instant,
+    pub monster_wave_delay: Duration,
 
     pub wave_completed: bool,
     pub queued_loot: LazySyncer<Vec<QueuedLoot>>,
@@ -72,6 +73,8 @@ pub struct SavedGameData {
     pub max_area_level: AreaLevel,
     #[serde(default)] // For compatibility
     pub player_benedictions: PlayerBenedictions,
+    #[serde(default)]
+    player_stamina: Duration,
 }
 
 impl GameInstanceData {
@@ -87,6 +90,7 @@ impl GameInstanceData {
         player_resources: PlayerResources,
         player_specs: PlayerSpecs,
         player_inventory: PlayerInventory,
+        player_stamina: Duration,
     ) -> Self {
         let mut area_state = AreaState::init(&area_blueprint.specs);
         area_state.max_area_level_ever = max_area_level_completed;
@@ -108,12 +112,13 @@ impl GameInstanceData {
             player_controller: PlayerController::init(&player_specs),
             player_specs: LazySyncer::new(player_specs),
             player_inventory: LazySyncer::new(player_inventory),
-            player_respawn_delay: Instant::now(),
+            player_respawn_delay: Default::default(),
+            player_stamina,
 
             monster_base_specs: LazySyncer::new(Vec::new()),
             monster_specs: Vec::new(),
             monster_states: Vec::new(),
-            monster_wave_delay: Instant::now(),
+            monster_wave_delay: Default::default(),
 
             wave_completed: false,
             queued_loot: LazySyncer::new(Default::default()),
@@ -133,6 +138,7 @@ impl GameInstanceData {
         mut player_resources: PlayerResources,
         mut player_specs: PlayerSpecs,
         player_inventory: PlayerInventory,
+        player_stamina: Duration,
     ) -> Result<Self> {
         let area_blueprint = master_store
             .area_blueprints_store
@@ -177,6 +183,7 @@ impl GameInstanceData {
             player_resources,
             player_specs,
             player_inventory,
+            player_stamina,
         ))
     }
 
@@ -192,6 +199,7 @@ impl GameInstanceData {
             player_resources: self.player_resources.unwrap(),
             player_specs: self.player_specs.unwrap(),
             player_inventory: self.player_inventory.unwrap(),
+            player_stamina: self.player_stamina,
             queued_loot: self.queued_loot.unwrap(),
             game_stats: self.game_stats,
             last_champion_spawn: self.area_state.read().last_champion_spawn,
@@ -211,6 +219,7 @@ impl GameInstanceData {
             player_resources,
             player_specs,
             player_inventory,
+            player_stamina,
             queued_loot,
             game_stats,
             last_champion_spawn,
@@ -227,6 +236,7 @@ impl GameInstanceData {
             player_resources,
             player_specs,
             player_inventory,
+            player_stamina,
         )?;
 
         s.area_state.mutate().area_level = area_level;
