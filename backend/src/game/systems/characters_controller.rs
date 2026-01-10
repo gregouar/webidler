@@ -203,6 +203,49 @@ pub fn resuscitate_character(target: &mut Target) -> bool {
     true
 }
 
+pub fn should_apply_status(
+    target: &Target,
+    status_specs: &StatusSpecs,
+    value: f64,
+    duration: Option<f64>,
+    cumulate: bool,
+    replace_on_value_only: bool,
+) -> bool {
+    let (_, (_, target_state)) = target;
+
+    if duration.unwrap_or(1.0) <= 0.0 || !target_state.is_alive {
+        return false;
+    }
+
+    match status_specs {
+        StatusSpecs::DamageOverTime { .. } | StatusSpecs::StatModifier { .. } => {
+            if value <= 0.0 {
+                return false;
+            }
+        }
+        StatusSpecs::Trigger(_) | StatusSpecs::Stun => {}
+    }
+
+    if cumulate {
+        return true;
+    }
+
+    if let Some((_, cur_status_state)) = target_state
+        .statuses
+        .unique_statuses
+        .get(&status_specs.into())
+    {
+        return compute_effect_weight(value, duration, replace_on_value_only)
+            > compute_effect_weight(
+                cur_status_state.value,
+                cur_status_state.duration,
+                replace_on_value_only,
+            );
+    }
+
+    true
+}
+
 #[allow(clippy::too_many_arguments)]
 pub fn apply_status(
     events_queue: &mut EventsQueue,
@@ -213,7 +256,6 @@ pub fn apply_status(
     value: f64,
     duration: Option<f64>,
     cumulate: bool,
-    replace_on_value_only: bool,
     is_triggered: bool,
 ) -> bool {
     let (target_id, (_, target_state)) = target;
@@ -259,11 +301,11 @@ pub fn apply_status(
             .unique_statuses
             .entry(status_specs.into())
             .and_modify(|(cur_status_specs, cur_status_state)| {
-                if compute_effect_weight(value, duration, replace_on_value_only)
+                if compute_effect_weight(value, duration, false)
                     > compute_effect_weight(
                         cur_status_state.value,
                         cur_status_state.duration,
-                        replace_on_value_only,
+                        false,
                     )
                 {
                     cur_status_state.value = value;

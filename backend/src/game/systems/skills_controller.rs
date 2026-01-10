@@ -325,22 +325,36 @@ pub fn apply_skill_effect(
         }
         SkillEffectType::ApplyStatus { duration, statuses } => {
             let mut applied = false;
-            for status_effect in statuses.iter() {
-                for target in targets.iter_mut() {
-                    applied |= characters_controller::apply_status(
-                        events_queue,
+
+            for target in targets.iter_mut() {
+                let should_apply = statuses.iter().any(|status_effect| {
+                    characters_controller::should_apply_status(
                         target,
-                        attacker,
                         &status_effect.status_type,
-                        skill_type,
                         status_effect.value.roll(),
                         Some(duration.roll()),
                         status_effect.cumulate,
                         status_effect.replace_on_value_only,
-                        is_triggered,
-                    );
+                    )
+                });
+
+                if should_apply {
+                    for status_effect in statuses.iter() {
+                        applied |= characters_controller::apply_status(
+                            events_queue,
+                            target,
+                            attacker,
+                            &status_effect.status_type,
+                            skill_type,
+                            status_effect.value.roll(),
+                            Some(duration.roll()),
+                            status_effect.cumulate,
+                            is_triggered,
+                        );
+                    }
                 }
             }
+
             applied
         }
         SkillEffectType::Restore {
