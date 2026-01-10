@@ -77,7 +77,7 @@ fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> Stri
     match stat_converter_source {
         StatConverterSource::CritDamage => "Critical Hit Damage".into(),
         StatConverterSource::Damage { damage_type } => {
-            format!("{}Damage", damage_type_str(damage_type))
+            format!("Base {}Damage", damage_type_str(damage_type))
         }
         StatConverterSource::ThreatLevel => "Threat Level".into(),
     }
