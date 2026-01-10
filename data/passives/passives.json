@@ -2121,9 +2121,9 @@
             "OnHit": {},
             "effects": [
               {
-                "success_chance": 30,
+                "success_chance": 50,
                 "ApplyStatus": {
-                  "duration": 2,
+                  "duration": 4,
                   "statuses": [
                     {
                       "status_type": {
@@ -2161,7 +2161,7 @@
                   "Damage": {}
                 },
                 "modifier": "Flat",
-                "factor": 0.3,
+                "factor": 0.25,
                 "source": {
                   "HitDamage": "Fire"
                 }
