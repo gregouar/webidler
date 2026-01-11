@@ -420,10 +420,14 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
             .as_f64()
             .unwrap();
 
-        (
-            (item_rect.left() - tooltip_width).max(0.0),
-            item_rect.top().min(window_height - tooltip_height),
-        )
+        if tooltip_width > 0.0 {
+            (
+                (item_rect.left() - tooltip_width).max(0.0),
+                item_rect.top().min(window_height - tooltip_height),
+            )
+        } else {
+            (0.0, 0.0)
+        }
     };
 
     view! {
@@ -493,7 +497,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                     <Portal>
                                         <div
                                             node_ref=tooltip_ref
-                                            class="fixed z-50 transition-opacity duration-150 text-center px-2"
+                                            class="fixed left-0 z-50 transition-opacity duration-150 text-center px-2"
                                             style=move || {
                                                 let (x, y) = tooltip_pos();
                                                 format!("left:{}px; top:{}px;", x, y)
