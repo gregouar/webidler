@@ -62,6 +62,12 @@ pub struct CreateCharacterRequest {
     pub portrait: AssetName,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct UpdateCharacterRequest {
+    pub name: Username,
+    pub portrait: AssetName,
+}
+
 // Temple
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

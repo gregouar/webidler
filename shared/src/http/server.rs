@@ -127,6 +127,9 @@ pub struct GetCharacterDetailsResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UpdateCharacterResponse {}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct DeleteCharacterResponse {}
 
 // Game

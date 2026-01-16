@@ -10,8 +10,8 @@ use shared::{
         area::AreaSpecs,
         user::{User, UserCharacter, UserCharacterActivity, UserCharacterId, UserId},
     },
-    http::{client::CreateCharacterRequest, server::NewsEntry},
-    types::AssetName,
+    http::{client::{CreateCharacterRequest, UpdateCharacterRequest}, server::NewsEntry},
+    types::{AssetName, Username},
 };
 
 use crate::{
@@ -96,6 +96,11 @@ pub fn UserDashboardPage() -> impl IntoView {
     });
 
     let open_settings = RwSignal::new(false);
+    let open_character_panel = RwSignal::new(false);
+
+    let selected_character_id  = RwSignal::new(None);
+    let selected_character_name = RwSignal::new(None);
+    let selected_character_portrait = RwSignal::new(None);
 
     view! {
         <main class="my-0 mx-auto w-full max-h-screen text-center overflow-x-hidden flex flex-col">
@@ -103,16 +108,24 @@ pub fn UserDashboardPage() -> impl IntoView {
             <PlayerCount />
             <SettingsModal open=open_settings />
 
-            <div class="relative flex-1 max-w-6xl w-full mx-auto p-2 xl:p-4 gap-2 xl:gap-4 flex flex-col ">
-                <Transition fallback=move || {
-                    view! { <p class="text-gray-400">"Loading..."</p> }
-                }>
-                    {move || {
-                        let sign_out = sign_out.clone();
-                        Suspend::new(async move {
-                            let (areas, user, characters) = async_data.await.unwrap_or_default();
-                            let areas = Arc::new(areas);
-                            view! {
+            <Transition fallback=move || {
+                view! { <p class="text-gray-400">"Loading..."</p> }
+            }>
+                {move || {
+                    let sign_out = sign_out.clone();
+                    Suspend::new(async move {
+                        let (areas, user, characters) = async_data.await.unwrap_or_default();
+                        let areas = Arc::new(areas);
+                        view! {
+                            <CreateCharacterPanel
+                                open=open_character_panel
+                                user_id=user.user_id
+                                refresh_trigger=refresh_trigger
+                                selected_character_id
+                                selected_character_name
+                                selected_character_portrait
+                            />
+                            <div class="relative flex-1 max-w-6xl w-full mx-auto p-2 xl:p-4 gap-2 xl:gap-4 flex flex-col ">
                                 <h1 class="mb-2 text-shadow-lg shadow-gray-950 text-amber-200 text-2xl xl:text-4xl font-extrabold leading-none tracking-tight">
                                     "Welcome, " {user.username.clone()}"!"
                                 </h1>
@@ -124,6 +137,10 @@ pub fn UserDashboardPage() -> impl IntoView {
                                         characters
                                         user
                                         refresh_trigger
+                                        open_character_panel
+                                        selected_character_id
+                                        selected_character_name
+                                        selected_character_portrait
                                     />
                                 </div>
 
@@ -153,11 +170,11 @@ pub fn UserDashboardPage() -> impl IntoView {
                                         "Sign Out"
                                     </MenuButtonRed>
                                 </div>
-                            }
-                        })
-                    }}
-                </Transition>
-            </div>
+                            </div>
+                        }
+                    })
+                }}
+            </Transition>
         </main>
     }
 }
@@ -168,18 +185,15 @@ fn CharactersSelection(
     characters: Vec<UserCharacter>,
     user: User,
     refresh_trigger: RwSignal<u64>,
+    open_character_panel: RwSignal<bool>,
+    selected_character_id: RwSignal<Option<UserCharacterId>>,
+    selected_character_name: RwSignal<Option<Username>>,
+    selected_character_portrait: RwSignal<Option<AssetName>>,
 ) -> impl IntoView {
-    let open_create_character = RwSignal::new(false);
 
     let characters_len = characters.len();
 
     view! {
-        <CreateCharacterPanel
-            open=open_create_character
-            user_id=user.user_id
-            refresh_trigger=refresh_trigger
-        />
-
         <div class="flex flex-col h-full min-h-0 bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-xl p-4 text-left space-y-4">
             <div class="flex flex-row justify-between items-center">
                 <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
@@ -201,6 +215,10 @@ fn CharactersSelection(
                                 character=character
                                 areas=areas.clone()
                                 refresh_trigger=refresh_trigger
+                                open_character_panel
+                                selected_character_id
+                                selected_character_name
+                                selected_character_portrait
                             />
                         }
                     }
@@ -210,7 +228,10 @@ fn CharactersSelection(
                     Some(
                         view! {
                             <CreateCharacterSlot on:click=move |_| {
-                                open_create_character.set(true)
+                                open_character_panel.set(true);
+                                selected_character_id.set(None);
+                                selected_character_name.set(None);
+                                selected_character_portrait.set(None);
                             } />
                         },
                     )
@@ -228,6 +249,10 @@ fn CharacterSlot(
     character: UserCharacter,
     refresh_trigger: RwSignal<u64>,
     areas: Arc<HashMap<String, AreaSpecs>>,
+    open_character_panel: RwSignal<bool>,
+    selected_character_id: RwSignal<Option<UserCharacterId>>,
+    selected_character_name: RwSignal<Option<Username>>,
+    selected_character_portrait: RwSignal<Option<AssetName>>,
 ) -> impl IntoView {
     let delete_character = Arc::new({
         let backend = expect_context::<BackendClient>();
@@ -293,17 +318,28 @@ fn CharacterSlot(
         }
     };
 
+    let edit_character = {
+        let character_id = character.character_id;
+        let name=character.name.clone();
+        let portrait = character.portrait.clone().replace(".webp", "").replace("adventurers/","");
+        move |_| {
+            open_character_panel.set(true);
+            selected_character_id.set(Some(character_id));
+            selected_character_name.set(Username::try_new(&name).ok());
+            selected_character_portrait.set(AssetName::try_new(&portrait).ok());
+        }
+    };
+
     view! {
-        <div
-            class="bg-neutral-800 rounded-xl border border-neutral-700 shadow-md
-            flex flex-row items-stretch gap-4 p-3
-            cursor-pointer hover:border-amber-400 hover:shadow-lg
-            transition active:scale-95 active:border-amber-500"
-            on:click=play_character.clone()
-        >
+        <div class="bg-neutral-800 rounded-xl border border-neutral-700 shadow-md
+        flex flex-row items-stretch  overflow-hidden relative">
+
+            <div class="flex gap-2 absolute top-2 right-2 z-10">
+                <MenuButton on:click=try_delete_character>"❌"</MenuButton>
+            </div>
 
             <div
-                class="w-28 h-36 rounded-lg overflow-hidden flex-shrink-0"
+                class="w-28 h-full overflow-hidden flex-shrink-0"
                 style=format!("background-image: url('{}');", img_asset("ui/paper_background.webp"))
             >
                 <img
@@ -314,7 +350,7 @@ fn CharacterSlot(
                 />
             </div>
 
-            <div class="flex flex-col justify-between flex-grow overflow-hidden">
+            <div class="flex flex-col justify-between flex-grow overflow-hidden p-3">
                 <div class="space-y-1 overflow-hidden">
                     <div class="text-lg font-semibold text-shadow-md shadow-gray-950 text-amber-300 truncate">
                         {character.name.clone()}
@@ -349,13 +385,10 @@ fn CharacterSlot(
                 </div>
 
                 <div class="mt-2 flex gap-2">
+                    <MenuButton on:click=edit_character>"Edit"</MenuButton>
                     <MenuButton class:flex-grow on:click=play_character.clone()>
                         "Play"
                     </MenuButton>
-                    <MenuButton on:click=move |ev: leptos::ev::MouseEvent| {
-                        ev.stop_propagation();
-                        try_delete_character(ev);
-                    }>"❌"</MenuButton>
                 </div>
             </div>
         </div>
@@ -392,13 +425,13 @@ pub fn CreateCharacterPanel(
     open: RwSignal<bool>,
     user_id: UserId,
     refresh_trigger: RwSignal<u64>,
+    selected_character_id: RwSignal<Option<UserCharacterId>>,
+    selected_character_name: RwSignal<Option<Username>>,
+    selected_character_portrait: RwSignal<Option<AssetName>>,
 ) -> impl IntoView {
-    let name = RwSignal::new(None);
-    let selected_portrait = RwSignal::new(None);
-
     let processing = RwSignal::new(false);
     let disable_submit =
-        Signal::derive(move || name.read().is_none() || selected_portrait.read().is_none());
+        Signal::derive(move || selected_character_name.read().is_none() || selected_character_portrait.read().is_none());
 
     let on_submit = {
         let auth_context = expect_context::<AuthContext>();
@@ -413,13 +446,40 @@ pub fn CreateCharacterPanel(
             processing.set(true);
             spawn_local({
                 async move {
-                    match backend
+                    match selected_character_id.get() 
+                    {
+                        Some(character_id) => match backend
+                        .post_update_character(
+                            &auth_context.token(),
+                            &character_id,
+                            &UpdateCharacterRequest {
+                                name: selected_character_name.get().unwrap(),
+                                portrait: selected_character_portrait.get().unwrap(),
+                            },
+                        )
+                        .await
+                    {
+                        Ok(_) => {
+                            open.set(false);
+                            processing.set(false);
+                            refresh_trigger.update(|n| *n += 1);
+                        }
+                        Err(e) => {
+                            show_toast(
+                                toaster,
+                                format!("Character edit error: {e}"),
+                                ToastVariant::Error,
+                            );
+                            processing.set(false);
+                        }
+                    },
+                        None =>  match backend
                         .post_create_character(
                             &auth_context.token(),
                             &user_id,
                             &CreateCharacterRequest {
-                                name: name.get().unwrap(),
-                                portrait: selected_portrait.get().unwrap(),
+                                name: selected_character_name.get().unwrap(),
+                                portrait: selected_character_portrait.get().unwrap(),
                             },
                         )
                         .await
@@ -437,7 +497,9 @@ pub fn CreateCharacterPanel(
                             );
                             processing.set(false);
                         }
+                    },
                     }
+                   
                 }
             });
         }
@@ -445,17 +507,28 @@ pub fn CreateCharacterPanel(
 
     let portraits = [
         "human_male_1",
-        "human_male_2",
-        "human_male_3",
         "human_female_1",
+        "human_male_2",
         "human_female_2",
+        "human_male_3",
         "human_female_3",
+        "orc_male_1",
+        "orc_female_1",
+        "elf_male_1",
+        "elf_female_1",
+        "demon_male_1",
+        "demon_female_1",
+        "furry_male_1",
+        "furry_female_1",
+        "blue_male_1",
+        "blue_female_1",
     ];
 
     view! {
         <MenuPanel open=open>
-            <div class="flex items-center justify-center p-4 max-h-full">
-                <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl p-6 sm:p-8 space-y-8 w-full max-w-lg mx-auto">
+            <div class="flex items-center justify-center p-2 xl:p-4 h-full">
+                <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl p-4 xl:p-8 space-y-8 w-full max-w-lg mx-auto max-h-full
+                flex flex-col">
                     <h2 class="text-2xl font-bold text-amber-300 text-center">
                         "Create Character"
                     </h2>
@@ -464,21 +537,21 @@ pub fn CreateCharacterPanel(
                         id="name"
                         label="Character Name"
                         input_type="text"
-                        bind=name
+                        bind=selected_character_name
                         placeholder="Enter a name"
                     />
 
-                    <div>
-                        <span class="block text-sm font-medium text-gray-400 mb-2">
-                            "Choose a Portrait"
-                        </span>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <span class="block text-sm font-medium text-gray-400 mb-2">
+                        "Choose a Portrait"
+                    </span>
+                    <div class="flex-1 flex flex-col overflow-y-auto min-h-0">
+                        <div class="grid grid-cols-2 xl:grid-cols-4 p-2 xl:p-4 gap-2 xl:gap-4 h-full">
                             <For
                                 each=move || portraits
                                 key=|src| src.to_string()
                                 children=move |src| {
                                     let is_selected = Signal::derive(move || {
-                                        selected_portrait
+                                        selected_character_portrait
                                             .get()
                                             .map(|portrait| portrait.into_inner() == src)
                                             .unwrap_or_default()
@@ -486,7 +559,7 @@ pub fn CreateCharacterPanel(
                                     view! {
                                         <div
                                             class="relative rounded-lg overflow-hidden border-2 cursor-pointer transition
-                                            hover:scale-105"
+                                            hover:scale-105 active:scale-95"
                                             style=format!(
                                                 "background-image: url('{}');",
                                                 img_asset("ui/paper_background.webp"),
@@ -494,14 +567,15 @@ pub fn CreateCharacterPanel(
                                             class:border-amber-400=move || is_selected.get()
                                             class:border-transparent=move || !is_selected.get()
                                             on:click=move |_| {
-                                                selected_portrait.set(AssetName::try_new(src).ok());
+                                                selected_character_portrait
+                                                    .set(AssetName::try_new(src).ok());
                                             }
                                         >
                                             <img
                                                 draggable="false"
                                                 src=img_asset(&format!("adventurers/{src}.webp"))
                                                 alt="Portrait"
-                                                class="object-cover w-full h-28 sm:h-32"
+                                                class="object-cover w-full h-28 xl:h-32"
                                             />
                                             {move || {
                                                 is_selected

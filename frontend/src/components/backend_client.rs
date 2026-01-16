@@ -14,7 +14,8 @@ use shared::{
             ForgotPasswordRequest, InventoryDeleteRequest, InventoryEquipRequest,
             InventoryUnequipRequest, RejectMarketItemRequest, ResetPasswordRequest,
             SellMarketItemRequest, SignInRequest, SignUpRequest, StoreStashItemRequest,
-            TakeStashItemRequest, UpdateAccountRequest, UpgradeStashRequest,
+            TakeStashItemRequest, UpdateAccountRequest, UpdateCharacterRequest,
+            UpgradeStashRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BrowseStashItemsResponse,
@@ -214,6 +215,16 @@ impl BackendClient {
         request: &CreateCharacterRequest,
     ) -> Result<CreateCharacterResponse, BackendError> {
         self.post_auth(&format!("users/{user_id}/characters"), token, request)
+            .await
+    }
+
+    pub async fn post_update_character(
+        &self,
+        token: &str,
+        character_id: &UserCharacterId,
+        request: &UpdateCharacterRequest,
+    ) -> Result<UpdateAccountResponse, BackendError> {
+        self.post_auth(&format!("characters/{character_id}"), token, request)
             .await
     }
 

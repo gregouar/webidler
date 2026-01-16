@@ -14,10 +14,10 @@ use shared::{
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId},
     },
     http::{
-        client::CreateCharacterRequest,
+        client::{CreateCharacterRequest, UpdateCharacterRequest},
         server::{
             CreateCharacterResponse, DeleteCharacterResponse, GetCharacterDetailsResponse,
-            GetUserCharactersResponse,
+            GetUserCharactersResponse, UpdateCharacterResponse,
         },
     },
     types::Username,
@@ -36,6 +36,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
     let auth_routes = Router::new()
         .route("/users/{user_id}/characters", post(post_create_character))
         .route("/characters/{character_id}", get(get_character_details))
+        .route("/characters/{character_id}", post(post_update_character))
         .route("/characters/{character_id}", delete(delete_character))
         .layer(middleware::from_fn_with_state(
             app_state,
@@ -220,6 +221,33 @@ async fn read_character_details(
         user_stash,
         market_stash,
     }))
+}
+
+async fn post_update_character(
+    State(db_pool): State<db::DbPool>,
+    Path(character_id): Path<UserCharacterId>,
+    Extension(current_user): Extension<CurrentUser>,
+    Json(payload): Json<UpdateCharacterRequest>,
+) -> Result<Json<UpdateCharacterResponse>, AppError> {
+    let character = db::characters::read_character(&db_pool, &character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    if current_user.user_details.user.user_id != character.user_id {
+        return Err(AppError::Forbidden);
+    }
+
+    match db::characters::update_character(
+        &db_pool,
+        &character_id,
+        &payload.name,
+        &format!("adventurers/{}.webp", payload.portrait.into_inner()),
+    )
+    .await?
+    {
+        Some(_) => Ok(Json(UpdateCharacterResponse {})),
+        None => Err(AppError::UserError("name already taken".to_string())),
+    }
 }
 
 async fn delete_character(

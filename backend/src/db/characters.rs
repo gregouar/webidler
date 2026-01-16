@@ -215,6 +215,35 @@ pub async fn count_user_characters<'c>(
     .await
 }
 
+pub async fn update_character<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+    name: &str,
+    portrait: &str,
+) -> Result<Option<()>, sqlx::Error> {
+    let res = sqlx::query!(
+        r#"
+        UPDATE characters 
+        SET
+            character_name = $2,
+            portrait = $3
+        WHERE
+            character_id = $1
+        "#,
+        character_id,
+        name,
+        portrait
+    )
+    .execute(executor)
+    .await;
+
+    match res {
+        Ok(_) => Ok(Some(())),
+        Err(sqlx::Error::Database(db_err)) if db_err.is_unique_violation() => Ok(None),
+        Err(e) => Err(e),
+    }
+}
+
 /// Add/remove resources to character
 pub async fn update_character_resources<'c>(
     executor: impl DbExecutor<'c>,
