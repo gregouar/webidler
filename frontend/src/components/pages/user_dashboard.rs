@@ -204,40 +204,45 @@ fn CharactersSelection(
                 </span>
             </div>
 
-            <div class="w-full aspect-square flex flex-col p-2 gap-3 overflow-y-auto
+            <div class="w-full aspect-square overflow-y-auto
             bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                <For
-                    each=move || characters.clone()
-                    key=|c| c.character_id
-                    children=move |character| {
-                        view! {
-                            <CharacterSlot
-                                character=character
-                                areas=areas.clone()
-                                refresh_trigger=refresh_trigger
-                                open_character_panel
-                                selected_character_id
-                                selected_character_name
-                                selected_character_portrait
-                            />
+                <div class="h-full flex flex-col p-2 gap-3">
+                    <For
+                        each=move || characters.clone()
+                        key=|c| c.character_id
+                        children=move |character| {
+                            view! {
+                                <CharacterSlot
+                                    character=character
+                                    areas=areas.clone()
+                                    refresh_trigger=refresh_trigger
+                                    open_character_panel
+                                    selected_character_id
+                                    selected_character_name
+                                    selected_character_portrait
+                                />
+                            }
                         }
-                    }
-                />
+                    />
 
-                {if characters_len < user.max_characters as usize {
-                    Some(
-                        view! {
-                            <CreateCharacterSlot on:click=move |_| {
-                                open_character_panel.set(true);
-                                selected_character_id.set(None);
-                                selected_character_name.set(None);
-                                selected_character_portrait.set(None);
-                            } />
-                        },
-                    )
-                } else {
-                    None
-                }}
+                    {if characters_len < user.max_characters as usize {
+                        Some(
+                            view! {
+                                <CreateCharacterSlot
+                                    class:mb-4
+                                    on:click=move |_| {
+                                        open_character_panel.set(true);
+                                        selected_character_id.set(None);
+                                        selected_character_name.set(None);
+                                        selected_character_portrait.set(None);
+                                    }
+                                />
+                            },
+                        )
+                    } else {
+                        None
+                    }}
+                </div>
             </div>
 
         </div>
@@ -332,26 +337,26 @@ fn CharacterSlot(
 
     view! {
         <div class="bg-neutral-800 rounded-xl border border-neutral-700 shadow-md
-        flex flex-row items-stretch  overflow-hidden relative">
-
-            <div class="flex gap-2 absolute top-2 right-2 z-10">
-                <MenuButton on:click=try_delete_character>"❌"</MenuButton>
-            </div>
+        flex flex-row items-stretch h-full">
 
             <div
-                class="w-28 h-full overflow-hidden flex-shrink-0"
+                class="w-28 min-h-0  rounded-l-xl overflow-hidden"
                 style=format!("background-image: url('{}');", img_asset("ui/paper_background.webp"))
             >
                 <img
                     draggable="false"
                     src=img_asset(&character.portrait)
                     alt="Portrait"
-                    class="object-cover w-full h-full"
+                    class="w-full h-full object-cover"
                 />
             </div>
 
-            <div class="flex flex-col justify-between flex-grow overflow-hidden p-3">
-                <div class="space-y-1 overflow-hidden">
+            <div class="flex flex-col justify-between flex-grow p-3 relative h-full">
+                <div class="flex gap-2 absolute top-3 right-3 z-10">
+                    <MenuButton on:click=try_delete_character>"❌"</MenuButton>
+                </div>
+
+                <div class="space-y-1 overflow-x-hidden">
                     <div class="text-lg font-semibold text-shadow-md shadow-gray-950 text-amber-300 truncate">
                         {character.name.clone()}
                     </div>
