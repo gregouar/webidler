@@ -12,10 +12,10 @@
     "price": 1e10,
     "value": 1,
     "effect": "StartingLevel",
-    "price_increase_factor": 1e10,
+    "price_increase_factor": 1e6,
     "upgrade_value": 1,
     "upgrade_modifier": "Flat",
-    "max_upgrade_level": 30
+    "max_upgrade_level": 50
   },
   "life_max": {
     "price": 1e6,

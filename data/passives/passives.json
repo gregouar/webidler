@@ -1479,9 +1479,17 @@
           {
             "stat": "TakeFromManaBeforeLife",
             "modifier": "Flat",
-            "value": 100
+            "value": 50
           }
         ],
+        "upgrade_effects": [
+          {
+            "stat": "TakeFromManaBeforeLife",
+            "modifier": "Flat",
+            "value": 50
+          }
+        ],
+        "max_upgrade_level": 2,
         "locked": true
       },
       "mana_shield_mana_1": {
@@ -1504,7 +1512,7 @@
             "value": 5
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 2
       },
       "mana_shield_mana_2": {
         "name": "Maximum Mana",
@@ -1526,7 +1534,7 @@
             "value": 5
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 2
       },
       "mana_shield_mana_3": {
         "name": "Maximum Mana",
@@ -1548,7 +1556,7 @@
             "value": 5
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 2
       },
       "enrage": {
         "name": "Berserker",
@@ -1808,10 +1816,11 @@
         "triggers": [
           {
             "trigger_id": "open_wound",
-            "description": "Apply a stack of Open Wound for 5 seconds. Each stack deals 25% of the initial hit's Physical Damage when the target is Hit again.",
+            "description": "50% Chance to Apply a stack of Open Wound for 5 seconds. Each stack deals 25% of the initial hit's Physical Damage when the target is Hit again.",
             "OnHit": { "skill_type": "Attack", "is_triggered": false },
             "effects": [
               {
+                "success_chance": 50,
                 "ApplyStatus": {
                   "duration": 5,
                   "statuses": [
