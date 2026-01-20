@@ -71,10 +71,10 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                         }}
                     </div>
 
-                    <div class="flex relative w-full flex-1 min-h-0
-                    bg-neutral-900 overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                    <div class="flex flex-col relative w-full flex-1 min-h-0
+                    bg-neutral-900 overflow-auto shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
                         <div class="grid grid-cols-3 xl:grid-cols-5 gap-1 xl:gap-2 p-2 xl:p-4
-                        h-full place-content-start">
+                        place-content-start">
                             <For
                                 each=move || {
                                     let mut areas = town_context.areas.get();
@@ -93,6 +93,7 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                                 }
                             />
                         </div>
+                        <div class="flex-1"></div>
                     </div>
                 </div>
 
@@ -291,7 +292,7 @@ fn GrindingAreaCard(
         <div
             class=move || {
                 format!(
-                    "relative flex flex-col rounded-xl border overflow-hidden aspect-square shadow-md transition {}",
+                    "relative flex flex-col rounded-xl border overflow-hidden shadow-md transition {}",
                     if locked() {
                         "bg-zinc-900 border-zinc-800 opacity-60"
                     } else if view_only {
