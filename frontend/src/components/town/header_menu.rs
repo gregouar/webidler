@@ -31,6 +31,7 @@ pub fn HeaderMenu() -> impl IntoView {
             .set(!town_context.open_inventory.get_untracked());
         town_context.open_ascend.set(false);
         town_context.open_temple.set(false);
+        town_context.use_item_category_filter.set(None);
     };
 
     Effect::new(move || {

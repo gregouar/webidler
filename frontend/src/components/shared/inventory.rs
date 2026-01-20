@@ -42,6 +42,7 @@ pub struct InventoryConfig {
     pub on_sell: Option<Arc<dyn Fn(Vec<u8>) + Send + Sync>>,
     pub sell_type: SellType,
     pub max_item_level: Signal<AreaLevel>,
+    pub use_item_category_filter: Option<Signal<Option<ItemCategory>>>,
 }
 
 #[component]
@@ -453,6 +454,21 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                     })
                             })
                             .flatten();
+                        let can_equip = Signal::derive({
+                            let item_specs = item_specs.clone();
+                            move || {
+                                if let Some(use_item_category_filter) = inventory
+                                    .use_item_category_filter
+                                    .map(|use_item_category_filter| use_item_category_filter.get())
+                                    .flatten()
+                                {
+                                    item_specs.base.categories.contains(&use_item_category_filter)
+                                } else {
+                                    item_specs.base.slot.is_some()
+                                }
+                            }
+                        });
+
                         view! {
                             <div class="relative w-full h-full overflow-visible">
                                 <ItemCard
@@ -476,6 +492,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                     }
                                     tooltip_position=DynamicTooltipPosition::AutoLeft
                                     max_item_level=inventory.max_item_level
+                                    class:brightness-50=move || !can_equip.get()
                                 />
 
                                 <Show when=is_queued_for_sale>
@@ -498,7 +515,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                         item_index=item_index
                                         on_close=Callback::new(move |_| show_menu.set(false))
                                         is_being_equipped=is_being_equipped
-                                        can_equip=item_specs.base.slot.is_some()
+                                        can_equip
                                     />
 
                                     <Portal>
@@ -535,7 +552,7 @@ pub fn BagItemContextMenu(
     item_index: usize,
     on_close: Callback<()>,
     is_being_equipped: RwSignal<bool>,
-    can_equip: bool,
+    can_equip: Signal<bool>,
 ) -> impl IntoView {
     let sell_queue = expect_context::<SellQueue>();
 
@@ -552,31 +569,34 @@ pub fn BagItemContextMenu(
 
     view! {
         <ContextMenu on_close=on_close>
-            {inventory
-                .on_equip
-                .map(|on_equip| {
-                    can_equip
-                        .then(|| {
-                            view! {
-                                <button
-                                    class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 xl:py-2"
-                                    on:click=move |_| {
-                                        on_equip(item_index as u8);
-                                        sell_queue.write().remove(&item_index);
-                                        is_being_equipped.set(true);
-                                        set_timeout(
-                                            move || is_being_equipped.set(false),
-                                            Duration::from_millis(1000),
-                                        );
-                                        on_close.run(());
-                                    }
-                                >
-                                    "Equip"
-                                </button>
-                            }
-                        })
-                })
-                .flatten()}
+            {{
+                inventory
+                    .on_equip
+                    .map(|on_equip| {
+                        can_equip
+                            .get()
+                            .then(|| {
+                                view! {
+                                    <button
+                                        class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 xl:py-2"
+                                        on:click=move |_| {
+                                            on_equip(item_index as u8);
+                                            sell_queue.write().remove(&item_index);
+                                            is_being_equipped.set(true);
+                                            set_timeout(
+                                                move || is_being_equipped.set(false),
+                                                Duration::from_millis(1000),
+                                            );
+                                            on_close.run(());
+                                        }
+                                    >
+                                        "Equip"
+                                    </button>
+                                }
+                            })
+                    })
+                    .flatten()
+            }}
             {(inventory.on_sell.is_some())
                 .then(|| {
                     view! {

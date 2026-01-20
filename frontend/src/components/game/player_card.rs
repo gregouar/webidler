@@ -236,8 +236,7 @@ pub fn PlayerCard() -> impl IntoView {
         <div class="max-h-full w-1/3
         flex flex-col gap-1 xl:gap-2 p-1 xl:p-2
         bg-zinc-800 ring-1 ring-zinc-950
-        rounded-md shadow-xl/30
-        ">
+        rounded-md shadow-xl/30">
 
             <PlayerName />
 

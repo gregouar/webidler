@@ -5,7 +5,10 @@ use leptos::prelude::*;
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
-use shared::data::{item::ItemSpecs, user::UserGrindArea};
+use shared::data::{
+    item::{ItemCategory, ItemSpecs},
+    user::UserGrindArea,
+};
 
 use crate::{
     assets::img_asset,
@@ -41,17 +44,17 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
 
     view! {
         <StartGrindPanel open=open_grind_panel selected_area />
-        <div class="w-full grid grid-cols-3 gap-2 xl:gap-4 p-2 xl:p-4 ">
-            <PlayerCard class:col-span-1 class:justify-self-end />
 
-            <div class="w-full col-span-2 justify-self-start">
+        <div class="absolute inset-0 p-1 xl:p-4">
+            <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
+                <PlayerCard />
 
-                <div class="rounded-md shadow-md  bg-zinc-800 ring-1 ring-zinc-950 h-full w-full
+                <div class="w-2/3 aspect-[12/8] flex flex-col shadow-xl/30 rounded-md overflow-hidden
                 gap-1 xl:gap-2 p-1 xl:p-2 
-                shadow-lg relative flex flex-col">
+                ring-1 ring-zinc-950 bg-zinc-800">
 
                     <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between gap-1 xl:gap-2 flex-wrap
-                    justify-between">
+                    flex justify-between">
                         <span class="text-shadow-md shadow-gray-950 text-amber-200 text-lg xl:text-xl font-semibold">
                             {if view_only { "Unlocked Grinds" } else { "Choose your Grind" }}
                         </span>
@@ -68,26 +71,32 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                         }}
                     </div>
 
-                    <div class="grid grid-cols-3 xl:grid-cols-5 gap-1 xl:gap-2 p-2 xl:p-4
-                    overflow-y-auto h-full place-content-start 
-                    bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                        <For
-                            each=move || {
-                                let mut areas = town_context.areas.get();
-                                areas.sort_by_key(|area| area.area_specs.starting_level);
-                                areas
-                            }
-                            key=|area| area.area_id.clone()
-                            children=move |area| {
-                                view! {
-                                    <GrindingAreaCard area=area.clone() view_only selected_area />
+                    <div class="flex relative w-full flex-1 min-h-0
+                    bg-neutral-900 overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                        <div class="grid grid-cols-3 xl:grid-cols-5 gap-1 xl:gap-2 p-2 xl:p-4
+                        h-full place-content-start">
+                            <For
+                                each=move || {
+                                    let mut areas = town_context.areas.get();
+                                    areas.sort_by_key(|area| area.area_specs.starting_level);
+                                    areas
                                 }
-                            }
-                        />
+                                key=|area| area.area_id.clone()
+                                children=move |area| {
+                                    view! {
+                                        <GrindingAreaCard
+                                            area=area.clone()
+                                            view_only
+                                            selected_area
+                                        />
+                                    }
+                                }
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     }
 }
@@ -97,38 +106,37 @@ fn PlayerCard() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     view! {
-        <div class="
-        w-full h-full flex flex-col 
-        gap-1 xl:gap-2 p-1 xl:p-2 
-        bg-zinc-800 ring-1 ring-zinc-950 rounded-md shadow-md 
-        ">
-            <div>
-                <PlayerName />
+        <div class="max-h-full w-1/3
+        flex flex-col gap-1 xl:gap-2 p-1 xl:p-2
+        bg-zinc-800 ring-1 ring-zinc-950
+        rounded-md shadow-xl/30">
+            <PlayerName />
+
+            <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
+                <div class="flex flex-col gap-1 xl:gap-2">
+                    <div class="flex-1 min-h-0">
+                        <CharacterPortrait />
+                    </div>
+                </div>
             </div>
 
-            <div class="flex flex-col gap-1 xl:gap-2">
-                <div class="flex gap-1 xl:gap-2">
-                    <CharacterPortrait />
-                </div>
-
-                <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2">
-                    <For
-                        each=move || {
-                            0..town_context
-                                .last_grind
-                                .with(|last_grind| {
-                                    last_grind
-                                        .as_ref()
-                                        .map(|last_grind| last_grind.skills_specs.len().min(4))
-                                        .unwrap_or_default()
-                                })
-                        }
-                        key=|i| *i
-                        let(i)
-                    >
-                        <PlayerSkill index=i />
-                    </For>
-                </div>
+            <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2">
+                <For
+                    each=move || {
+                        0..town_context
+                            .last_grind
+                            .with(|last_grind| {
+                                last_grind
+                                    .as_ref()
+                                    .map(|last_grind| last_grind.skills_specs.len().min(4))
+                                    .unwrap_or_default()
+                            })
+                    }
+                    key=|i| *i
+                    let(i)
+                >
+                    <PlayerSkill index=i />
+                </For>
             </div>
         </div>
     }
@@ -376,18 +384,25 @@ pub fn StartGrindPanel(
         }
     };
 
-    let selected_map_item_index = RwSignal::new(None);
-
     let selected_map = Signal::derive(move || {
-        selected_map_item_index.get().and_then(|item_index: usize| {
-            town_context
-                .inventory
-                .read()
-                .bag
-                .get(item_index)
-                .cloned()
-                .map(|item_specs: ItemSpecs| Arc::new(item_specs))
-        })
+        town_context
+            .selected_item_index
+            .get()
+            .and_then(|item_index: u8| {
+                town_context
+                    .inventory
+                    .read()
+                    .bag
+                    .get(item_index as usize)
+                    .cloned()
+                    .and_then(|item_specs: ItemSpecs| {
+                        item_specs
+                            .base
+                            .categories
+                            .contains(&ItemCategory::Map)
+                            .then(|| Arc::new(item_specs))
+                    })
+            })
     });
 
     let map_details = move || {
@@ -428,13 +443,18 @@ pub fn StartGrindPanel(
     };
 
     let choose_map = move |_| {
+        town_context.selected_item_index.set(None);
+        town_context
+            .use_item_category_filter
+            .set(Some(ItemCategory::Map));
         town_context.open_inventory.set(true);
     };
 
     view! {
         <MenuPanel open=open>
             <div class="flex items-center justify-center p-2 xl:p-4 h-full">
-                <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl  w-full max-w-lg mx-auto max-h-full
+                <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl
+                w-full max-w-4xl mx-auto max-h-full
                 flex flex-col overflow-hidden">
                     <div class="h-10 xl:h-16 w-full relative">
                         <img
@@ -451,7 +471,7 @@ pub fn StartGrindPanel(
                         <div class="absolute inset-0 bg-black/30"></div>
                     </div>
 
-                    <div class="flex flex-col  p-4 xl:p-8 space-y-4">
+                    <div class="flex flex-col  p-4 xl:p-8 space-y-4 overflow-y-auto">
 
                         <h2 class="text-2xl font-bold text-amber-300 text-center">
                             {move || {
@@ -501,13 +521,15 @@ pub fn StartGrindPanel(
                             </li>
                         </ul>
 
-                        <div
-                            class="w-full h-full flex items-center justify-center cursor-pointer"
-                            on:click=choose_map
-                        >
-                            <div class="flex flex-row gap-6 items-center
-                            w-full h-auto aspect-5/2 overflow-y-auto
-                            bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2">
+                        <div class="w-full h-full flex items-center justify-center">
+                            <div
+                                class="flex flex-row gap-6 items-center
+                                w-full h-auto aspect-5/2 overflow-y-auto
+                                bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2
+                                hover:ring-amber-400 hover:shadow-lg active:scale-95 
+                                active:ring-amber-500 cursor-pointer"
+                                on:click=choose_map
+                            >
                                 {map_details}
                             </div>
                         </div>
