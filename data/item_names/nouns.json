@@ -77,5 +77,19 @@
 
   { "text": "Crown", "restrictions": ["Helmet"] },
   { "text": "Skull", "restrictions": ["Helmet"] },
-  { "text": "Mind", "restrictions": ["Helmet"] }
+  { "text": "Mind", "restrictions": ["Helmet"] },
+
+  { "text": "Mandate", "restrictions": ["Map"] },
+  { "text": "Decree", "restrictions": ["Map"] },
+  { "text": "Ordinance", "restrictions": ["Map"] },
+  { "text": "Proclamation", "restrictions": ["Map"] },
+  { "text": "Directive", "restrictions": ["Map"] },
+  { "text": "Judgment", "restrictions": ["Map"] },
+  { "text": "Verdict", "restrictions": ["Map"] },
+  { "text": "Condemnation", "restrictions": ["Map"] },
+  { "text": "Sentence", "restrictions": ["Map"] },
+  { "text": "Reckoning", "restrictions": ["Map"] },
+  { "text": "Tribunal", "restrictions": ["Map"] },
+  { "text": "Indictment", "restrictions": ["Map"] },
+  { "text": "Sanction", "restrictions": ["Map"] }
 ]

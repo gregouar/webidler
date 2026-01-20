@@ -162,7 +162,8 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             StatType::StatConverter(StatConverterSpecs {
                 source: StatConverterSource::ThreatLevel,
                 ..
-            }) => {}
+            })
+            | StatType::ItemRarity => {}
         }
     }
 

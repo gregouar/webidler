@@ -1,6 +1,7 @@
 {
   "specs": {
     "name": "Treasure Island",
+    "description": "An island of glittering promise, where greed has armed the dead and taught treasure how to bite.",
     "starting_level": 41,
     "required_level": 200,
     "item_level_modifier": 150,

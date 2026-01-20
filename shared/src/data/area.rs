@@ -6,6 +6,7 @@ pub type ThreatLevel = u16;
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct AreaSpecs {
     pub name: String,
+    pub description: String,
     pub starting_level: AreaLevel,
     #[serde(default)]
     pub required_level: AreaLevel,

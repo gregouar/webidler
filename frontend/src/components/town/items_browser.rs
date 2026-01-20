@@ -118,6 +118,7 @@ pub fn ItemRow(
     #[prop(default = false)] rejected: bool,
     max_item_level: Signal<AreaLevel>,
 ) -> impl IntoView {
+    let slot = item_specs.base.slot;
     view! {
         <div class=move || {
             format!(
@@ -140,7 +141,7 @@ pub fn ItemRow(
                 />
             </div>
 
-            <ItemCompare item_slot=item_specs.clone().base.slot max_item_level />
+            {slot.map(|slot| view! { <ItemCompare item_slot=slot max_item_level /> })}
 
             {(price > 0.0)
                 .then(|| {

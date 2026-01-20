@@ -320,6 +320,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::Speed(skill_type) => format!("{}Speed", skill_type_str(*skill_type)),
         StatType::MovementSpeed => "Movement Speed".to_string(),
         StatType::GoldFind => "Gold Find".to_string(),
+        StatType::ItemRarity => "Item Rarity".to_string(),
         StatType::LifeOnHit(hit_trigger) => format!(
             "Life gained on {}Hit",
             skill_type_str(hit_trigger.skill_type)
@@ -386,7 +387,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             format_adds_removes(value, false, ""),
             match armor_type {
                 Some(DamageType::Physical) => "Armor".to_string(),
-                None => "All Resistances and Armor".to_string(),
+                None => "Resistances and Armor".to_string(),
                 _ => format!("{}Resistance", damage_type_str(*armor_type)),
             }
         ),
@@ -470,6 +471,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             format!("-{}s Movement Cooldown", format_flat_number(value, true))
         }
         StatType::GoldFind => format!("Adds {} Gold per Kill", format_flat_number(value, false)),
+        StatType::ItemRarity => format!("Adds {}% Item Rarity", format_flat_number(value, false)),
         StatType::ThreatGain => {
             if value.unwrap_or_default() >= 0.0 {
                 format!("Gain {}% Extra Threat ", format_flat_number(value, false))

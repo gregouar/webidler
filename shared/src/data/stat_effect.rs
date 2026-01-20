@@ -91,6 +91,7 @@ pub enum StatType {
     Speed(#[serde(default)] Option<SkillType>),
     MovementSpeed,
     GoldFind,
+    ItemRarity,
     ThreatGain,
     Lucky {
         #[serde(default)]

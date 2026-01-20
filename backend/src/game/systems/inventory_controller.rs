@@ -69,13 +69,18 @@ pub fn equip_item(
     player_inventory: &mut PlayerInventory,
     item_specs: ItemSpecs,
 ) -> Result<Option<ItemSpecs>, AppError> {
+    let slot = item_specs
+        .base
+        .slot
+        .ok_or(AppError::UserError("item cannot be equipped".into()))?;
+
     if item_specs
         .base
         .extra_slots
         .iter()
         .any(|x| match player_inventory.equipped.get(x) {
             Some(EquippedSlot::MainSlot(_)) => true,
-            Some(EquippedSlot::ExtraSlot(main_slot)) => *main_slot != item_specs.base.slot,
+            Some(EquippedSlot::ExtraSlot(main_slot)) => *main_slot != slot,
             None => false,
         })
     {
@@ -84,18 +89,17 @@ pub fn equip_item(
         ));
     }
 
-    let old_item = unequip_item(player_inventory, item_specs.base.slot);
+    let old_item = unequip_item(player_inventory, slot);
 
     for item_slot in item_specs.base.extra_slots.iter() {
         player_inventory
             .equipped
-            .insert(*item_slot, EquippedSlot::ExtraSlot(item_specs.base.slot));
+            .insert(*item_slot, EquippedSlot::ExtraSlot(slot));
     }
 
-    player_inventory.equipped.insert(
-        item_specs.base.slot,
-        EquippedSlot::MainSlot(Box::new(item_specs)),
-    );
+    player_inventory
+        .equipped
+        .insert(slot, EquippedSlot::MainSlot(Box::new(item_specs)));
 
     Ok(old_item)
 }

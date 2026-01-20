@@ -48,8 +48,9 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
             let need_confirm = inventory
                 .bag
                 .get(item_index as usize)
-                .and_then(|x| inventory.equipped.get(&x.base.slot))
-                .and_then(|x| match x {
+                .and_then(|item_specs| item_specs.base.slot)
+                .and_then(|slot| inventory.equipped.get(&slot))
+                .and_then(|equipped_slot| match equipped_slot {
                     EquippedSlot::ExtraSlot(item_slot) => inventory.equipped.get(item_slot),
                     x => Some(x),
                 })
@@ -103,7 +104,7 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
             if need_confirm {
                 (confirm_context
                         .confirm)(
-                        "Unequipping your weapon will reset the weapon attack skill upgrade level to 1, are you sure?"
+                        "Removing your weapon will reset the weapon attack skill upgrade level to 1, are you sure?"
                             .to_string(),
                         unequip.clone(),
                     );

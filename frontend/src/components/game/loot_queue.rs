@@ -169,17 +169,24 @@ pub fn LootQueue() -> impl IntoView {
                                     }
                                 >
                                     <ItemCard
-                                        comparable_item_specs=game_context
-                                            .player_inventory
-                                            .read()
-                                            .equipped
-                                            .get(&loot.item_specs.base.slot)
-                                            .and_then(|equipped_slot| match equipped_slot {
-                                                EquippedSlot::MainSlot(item_specs) => {
-                                                    Some(Arc::from(item_specs.clone()))
-                                                }
-                                                EquippedSlot::ExtraSlot(_) => None,
+                                        comparable_item_specs=loot
+                                            .item_specs
+                                            .base
+                                            .slot
+                                            .map(|slot| {
+                                                game_context
+                                                    .player_inventory
+                                                    .read()
+                                                    .equipped
+                                                    .get(&slot)
+                                                    .and_then(|equipped_slot| match equipped_slot {
+                                                        EquippedSlot::MainSlot(item_specs) => {
+                                                            Some(Arc::from(item_specs.clone()))
+                                                        }
+                                                        EquippedSlot::ExtraSlot(_) => None,
+                                                    })
                                             })
+                                            .flatten()
                                         item_specs=Arc::new(loot.item_specs)
                                         tooltip_position=DynamicTooltipPosition::TopLeft
                                         class:shadow-lg

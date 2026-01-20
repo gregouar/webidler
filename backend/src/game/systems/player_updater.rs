@@ -242,7 +242,8 @@ fn compute_player_specs(
             StatType::StatConverter(StatConverterSpecs {
                 source: StatConverterSource::ThreatLevel,
                 ..
-            }) => {}
+            })
+            | StatType::ItemRarity => {}
         }
     }
 

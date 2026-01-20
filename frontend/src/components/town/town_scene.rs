@@ -5,14 +5,19 @@ use leptos::prelude::*;
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
-use shared::data::user::UserGrindArea;
+use shared::data::{item::ItemSpecs, user::UserGrindArea};
 
 use crate::{
     assets::img_asset,
     components::{
-        shared::tooltips::SkillTooltip,
+        shared::{
+            item_card::ItemCard,
+            tooltips::{item_tooltip::ItemTooltipContent, SkillTooltip},
+        },
         town::TownContext,
         ui::{
+            buttons::{MenuButton, MenuButtonRed},
+            menu_panel::MenuPanel,
             progress_bars::CircularProgressBar,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
         },
@@ -25,7 +30,17 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
 
     let max_area_level = move || town_context.character.read().max_area_level;
 
+    let open_grind_panel = RwSignal::new(false);
+    let selected_area = RwSignal::new(None);
+
+    Effect::new(move || {
+        if selected_area.read().is_some() {
+            open_grind_panel.set(true)
+        }
+    });
+
     view! {
+        <StartGrindPanel open=open_grind_panel selected_area />
         <div class="w-full grid grid-cols-3 gap-2 xl:gap-4 p-2 xl:p-4 ">
             <PlayerCard class:col-span-1 class:justify-self-end />
 
@@ -64,7 +79,9 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                             }
                             key=|area| area.area_id.clone()
                             children=move |area| {
-                                view! { <GrindingAreaCard area=area.clone() view_only /> }
+                                view! {
+                                    <GrindingAreaCard area=area.clone() view_only selected_area />
+                                }
                             }
                         />
                     </div>
@@ -241,7 +258,11 @@ fn PlayerSkill(index: usize) -> impl IntoView {
 }
 
 #[component]
-fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
+fn GrindingAreaCard(
+    area: UserGrindArea,
+    view_only: bool,
+    selected_area: RwSignal<Option<UserGrindArea>>,
+) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     let locked = move || {
@@ -250,14 +271,10 @@ fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
     };
 
     let play_area = {
-        let navigate = use_navigate();
-        let (_, set_area_id_storage, _) =
-            storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
-
+        let area = area.clone();
         move |_| {
             if !locked() && !view_only {
-                set_area_id_storage.set(Some(area.area_id.clone()));
-                navigate("/game", Default::default());
+                selected_area.set(Some(area.clone()));
             }
         }
     };
@@ -335,5 +352,192 @@ fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
                 </div>
             </Show>
         </div>
+    }
+}
+
+#[component]
+pub fn StartGrindPanel(
+    open: RwSignal<bool>,
+    selected_area: RwSignal<Option<UserGrindArea>>,
+) -> impl IntoView {
+    let town_context: TownContext = expect_context();
+    let max_item_level = Signal::derive(move || town_context.character.read().max_area_level);
+
+    let play_area = {
+        let navigate = use_navigate();
+        let (_, set_area_id_storage, _) =
+            storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
+
+        move |_| {
+            if let Some(selected_area) = selected_area.get_untracked() {
+                set_area_id_storage.set(Some(selected_area.area_id));
+                navigate("/game", Default::default());
+            }
+        }
+    };
+
+    let selected_map_item_index = RwSignal::new(None);
+
+    let selected_map = Signal::derive(move || {
+        selected_map_item_index.get().and_then(|item_index: usize| {
+            town_context
+                .inventory
+                .read()
+                .bag
+                .get(item_index)
+                .cloned()
+                .map(|item_specs: ItemSpecs| Arc::new(item_specs))
+        })
+    });
+
+    let map_details = move || {
+        match selected_map.get() {
+            Some(selected_map) => {
+                view! {
+                    <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
+                        <ItemCard
+                            item_specs=selected_map.clone()
+                            class:pointer-events-none
+                            max_item_level
+                        />
+                    </div>
+
+                    <div class="flex-1 w-full max-h-full overflow-y-auto">
+                        <ItemTooltipContent
+                            item_specs=selected_map.clone()
+                            class:select-text
+                            max_item_level
+                        />
+                    </div>
+                }
+                .into_any()
+            }
+           None => {
+                view! {
+                    <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
+                        <div class="
+                        relative group flex items-center justify-center w-full h-full
+                        rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70
+                        "></div>
+                    </div>
+
+                    <div class="flex-1 text-gray-400">"Proclaim Edict"</div>
+                }.into_any()
+            }
+        }
+    };
+
+    let choose_map = move |_| {
+        town_context.open_inventory.set(true);
+    };
+
+    view! {
+        <MenuPanel open=open>
+            <div class="flex items-center justify-center p-2 xl:p-4 h-full">
+                <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl  w-full max-w-lg mx-auto max-h-full
+                flex flex-col overflow-hidden">
+                    <div class="h-10 xl:h-16 w-full relative">
+                        <img
+                            draggable="false"
+                            src=move || {
+                                selected_area
+                                    .read()
+                                    .as_ref()
+                                    .map(|area| img_asset(&area.area_specs.header_background))
+                                    .unwrap_or_default()
+                            }
+                            class="object-cover w-full h-full"
+                        />
+                        <div class="absolute inset-0 bg-black/30"></div>
+                    </div>
+
+                    <div class="flex flex-col  p-4 xl:p-8 space-y-4">
+
+                        <h2 class="text-2xl font-bold text-amber-300 text-center">
+                            {move || {
+                                selected_area
+                                    .read()
+                                    .as_ref()
+                                    .map(|area| area.area_specs.name.clone())
+                                    .unwrap_or_default()
+                            }}
+                        </h2>
+
+                        <span class="block text-sm font-medium text-gray-400 italic mb-2 border-b border-zinc-700">
+                            {move || {
+                                selected_area
+                                    .read()
+                                    .as_ref()
+                                    .map(|area| area.area_specs.description.clone())
+                                    .unwrap_or_default()
+                            }}
+                        </span>
+
+                        <ul class="text-xs xl:text-sm text-gray-400">
+                            <li>
+                                "Starting Level: "
+                                <span class="font-semibold text-white">
+                                    {move || {
+                                        selected_area
+                                            .read()
+                                            .as_ref()
+                                            .map(|area| area.area_specs.starting_level)
+                                            .unwrap_or_default()
+                                    }}
+                                </span>
+                            </li>
+                            <li>
+                                "Item Level Modifier: "
+                                <span class="font-semibold text-white">
+                                    "+"
+                                    {move || {
+                                        selected_area
+                                            .read()
+                                            .as_ref()
+                                            .map(|area| area.area_specs.item_level_modifier)
+                                            .unwrap_or_default()
+                                    }}
+                                </span>
+                            </li>
+                        </ul>
+
+                        <div
+                            class="w-full h-full flex items-center justify-center cursor-pointer"
+                            on:click=choose_map
+                        >
+                            <div class="flex flex-row gap-6 items-center
+                            w-full h-auto aspect-5/2 overflow-y-auto
+                            bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2">
+                                {map_details}
+                            </div>
+                        </div>
+
+                        <div class="flex justify-around gap-3 pt-4 border-t border-zinc-700">
+                            <MenuButtonRed on:click=move |_| {
+                                open.set(false)
+                            }>"Cancel"</MenuButtonRed>
+                            <MenuButton on:click=play_area.clone()>"Confirm"</MenuButton>
+                        </div>
+
+                    </div>
+
+                    <div class="h-10 xl:h-16 w-full relative">
+                        <img
+                            draggable="false"
+                            src=move || {
+                                selected_area
+                                    .read()
+                                    .as_ref()
+                                    .map(|area| img_asset(&area.area_specs.footer_background))
+                                    .unwrap_or_default()
+                            }
+                            class="object-cover w-full h-full"
+                        />
+                        <div class="absolute inset-0 bg-black/20"></div>
+                    </div>
+
+                </div>
+            </div>
+        </MenuPanel>
     }
 }

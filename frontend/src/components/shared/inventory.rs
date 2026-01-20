@@ -436,17 +436,23 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                 match maybe_item() {
                     Some(item_specs) => {
                         let inventory = inventory.clone();
-                        let comparable_item_specs = inventory
-                            .player_inventory
-                            .read()
-                            .equipped
-                            .get(&item_specs.base.slot)
-                            .and_then(|equipped_slot| match equipped_slot {
-                                EquippedSlot::MainSlot(item_specs) => {
-                                    Some(Arc::from(item_specs.clone()))
-                                }
-                                EquippedSlot::ExtraSlot(_) => None,
-                            });
+                        let comparable_item_specs = item_specs
+                            .base
+                            .slot
+                            .map(|slot| {
+                                inventory
+                                    .player_inventory
+                                    .read()
+                                    .equipped
+                                    .get(&slot)
+                                    .and_then(|equipped_slot| match equipped_slot {
+                                        EquippedSlot::MainSlot(item_specs) => {
+                                            Some(Arc::from(item_specs.clone()))
+                                        }
+                                        EquippedSlot::ExtraSlot(_) => None,
+                                    })
+                            })
+                            .flatten();
                         view! {
                             <div class="relative w-full h-full overflow-visible">
                                 <ItemCard
@@ -492,6 +498,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                         item_index=item_index
                                         on_close=Callback::new(move |_| show_menu.set(false))
                                         is_being_equipped=is_being_equipped
+                                        can_equip=item_specs.base.slot.is_some()
                                     />
 
                                     <Portal>
@@ -528,6 +535,7 @@ pub fn BagItemContextMenu(
     item_index: usize,
     on_close: Callback<()>,
     is_being_equipped: RwSignal<bool>,
+    can_equip: bool,
 ) -> impl IntoView {
     let sell_queue = expect_context::<SellQueue>();
 
@@ -547,24 +555,28 @@ pub fn BagItemContextMenu(
             {inventory
                 .on_equip
                 .map(|on_equip| {
-                    view! {
-                        <button
-                            class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 xl:py-2"
-                            on:click=move |_| {
-                                on_equip(item_index as u8);
-                                sell_queue.write().remove(&item_index);
-                                is_being_equipped.set(true);
-                                set_timeout(
-                                    move || is_being_equipped.set(false),
-                                    Duration::from_millis(1000),
-                                );
-                                on_close.run(());
+                    can_equip
+                        .then(|| {
+                            view! {
+                                <button
+                                    class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 xl:py-2"
+                                    on:click=move |_| {
+                                        on_equip(item_index as u8);
+                                        sell_queue.write().remove(&item_index);
+                                        is_being_equipped.set(true);
+                                        set_timeout(
+                                            move || is_being_equipped.set(false),
+                                            Duration::from_millis(1000),
+                                        );
+                                        on_close.run(());
+                                    }
+                                >
+                                    "Equip"
+                                </button>
                             }
-                        >
-                            "Equip"
-                        </button>
-                    }
-                })}
+                        })
+                })
+                .flatten()}
             {(inventory.on_sell.is_some())
                 .then(|| {
                     view! {
@@ -685,26 +697,28 @@ pub fn LootFilterDropdown(loot_preference: RwSignal<Option<ItemCategory>>) -> im
 }
 
 pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
+    use ItemCategory::*;
     match opt {
         Some(item_category) => match item_category {
-            ItemCategory::Armor => "Any Armor",
-            ItemCategory::AttackWeapon => "Any Attack Weapon",
-            ItemCategory::SpellWeapon => "Any Spell Weapon",
-            ItemCategory::MeleeWeapon => "Any Melee Weapon",
-            ItemCategory::Jewelry => "Any Jewelry",
-            ItemCategory::Accessory => "Any Accessory",
-            ItemCategory::MeleeWeapon1H => "One-Handed Melee Weapon",
-            ItemCategory::MeleeWeapon2H => "Two-Handed Melee Weapon",
-            ItemCategory::RangedWeapon => "Ranged Weapon",
-            ItemCategory::Shield => "Shield",
-            ItemCategory::Focus => "Magical Focus",
-            ItemCategory::Amulet => "Amulet",
-            ItemCategory::Body => "Body Armor",
-            ItemCategory::Boots => "Boots",
-            ItemCategory::Cloak => "Cloak",
-            ItemCategory::Gloves => "Gloves",
-            ItemCategory::Helmet => "Helmet",
-            ItemCategory::Ring => "Ring",
+            Armor => "Any Armor",
+            AttackWeapon => "Any Attack Weapon",
+            SpellWeapon => "Any Spell Weapon",
+            MeleeWeapon => "Any Melee Weapon",
+            Jewelry => "Any Jewelry",
+            Accessory => "Any Accessory",
+            MeleeWeapon1H => "One-Handed Melee Weapon",
+            MeleeWeapon2H => "Two-Handed Melee Weapon",
+            RangedWeapon => "Ranged Weapon",
+            Shield => "Shield",
+            Focus => "Magical Focus",
+            Amulet => "Amulet",
+            Body => "Body Armor",
+            Boots => "Boots",
+            Cloak => "Cloak",
+            Gloves => "Gloves",
+            Helmet => "Helmet",
+            Ring => "Ring",
+            Map => "Edict",
         },
         None => "Any Item",
     }

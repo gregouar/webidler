@@ -100,6 +100,7 @@ pub enum ItemCategory {
     Focus,
     Jewelry,
     Accessory,
+    Map,
     // Minor categories:
     Amulet,
     Body,
@@ -117,7 +118,8 @@ pub struct ItemBase {
     #[serde(default)]
     pub description: Option<String>,
 
-    pub slot: ItemSlot,
+    #[serde(default)]
+    pub slot: Option<ItemSlot>,
     #[serde(default)]
     pub extra_slots: HashSet<ItemSlot>,
     pub categories: HashSet<ItemCategory>,
