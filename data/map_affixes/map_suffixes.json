@@ -16,10 +16,10 @@
         "value": 100
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Multiplier",
-        "value": 50
+        "value": 50000
       }
     ]
   },
@@ -40,7 +40,7 @@
         "value": 50
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Multiplier",
         "value": 50

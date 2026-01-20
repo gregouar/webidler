@@ -38,19 +38,19 @@ impl RandomWeighted for &LootTableEntry {
     }
 }
 
-// TODO: inc magic find (accumulated enemy rarity? player stats? area level?)
 #[allow(clippy::too_many_arguments)]
 pub fn generate_loot(
-    level: AreaLevel,
-    is_boss_level: bool,
     loot_table: &LootTable,
     items_store: &ItemsStore,
     affixes_table: &ItemAffixesTable,
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
+    level: AreaLevel,
+    is_boss_level: bool,
     allow_unique: bool,
+    loot_rarity: f64,
 ) -> Option<ItemSpecs> {
-    let mut rarity = roll_rarity(&RarityWeights::default());
+    let mut rarity = roll_rarity(&RarityWeights::default(), loot_rarity);
     if !allow_unique {
         rarity = rarity.min(ItemRarity::Rare);
     }
@@ -78,13 +78,17 @@ pub fn generate_loot(
     })
 }
 
-fn roll_rarity(weights: &RarityWeights) -> ItemRarity {
+fn roll_rarity(weights: &RarityWeights, loot_rarity: f64) -> ItemRarity {
     match rng::random_range(0..(weights.normal + weights.magic + weights.rare + weights.unique))
         .unwrap_or(0)
+        * (loot_rarity * 0.01).round() as usize
     {
-        r if r < weights.unique => ItemRarity::Unique,
-        r if r < weights.unique + weights.rare => ItemRarity::Rare,
-        r if r < weights.unique + weights.rare + weights.magic => ItemRarity::Magic,
+        r if r >= weights.normal + weights.magic + weights.rare => ItemRarity::Unique,
+        r if r >= weights.normal + weights.magic => ItemRarity::Rare,
+        r if r >= weights.normal => ItemRarity::Magic,
+        // r if r < weights.unique => ItemRarity::Unique,
+        // r if r < weights.unique + weights.rare => ItemRarity::Rare,
+        // r if r < weights.unique + weights.rare + weights.magic => ItemRarity::Magic,
         _ => ItemRarity::Normal,
     }
 }

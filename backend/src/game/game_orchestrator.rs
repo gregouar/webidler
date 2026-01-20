@@ -169,6 +169,7 @@ async fn control_entities(
                 &game_data.area_blueprint,
                 game_data.area_state.mutate(),
                 &game_data.area_threat,
+                &game_data.area_effects,
                 &master_store.monster_specs_store,
             )?;
             game_data.monster_base_specs = LazySyncer::new(monster_specs.clone());

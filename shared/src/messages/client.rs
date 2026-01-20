@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    area::AreaLevel,
+    area::{AreaLevel, StartAreaConfig},
     item::{ItemCategory, ItemSlot},
     passive::PassiveNodeId,
     user::UserCharacterId,
@@ -51,7 +51,7 @@ impl Default for ClientMessage {
 pub struct ClientConnectMessage {
     pub jwt: String,
     pub character_id: UserCharacterId,
-    pub area_id: Option<String>,
+    pub area_config: Option<StartAreaConfig>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

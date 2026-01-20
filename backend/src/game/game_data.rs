@@ -1,5 +1,6 @@
 use anyhow::Result;
-use shared::data::temple::PlayerBenedictions;
+use shared::data::stat_effect::{ApplyStatModifier, EffectsMap};
+use shared::data::temple::{Modifier, PlayerBenedictions, StatEffect, StatType};
 use std::time::Duration;
 
 use crate::game::data::master_store;
@@ -42,6 +43,8 @@ pub struct GameInstanceData {
     pub player_controller: PlayerController,
     pub player_respawn_delay: Duration,
 
+    pub area_effects: EffectsMap,
+
     // TODO: Need to find better more granular way to handle these things...
     // Probably need to split more between static and computed specs
     pub monster_base_specs: LazySyncer<Vec<MonsterSpecs>>,
@@ -57,24 +60,26 @@ pub struct GameInstanceData {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SavedGameData {
-    pub area_id: String,
-    pub area_level: AreaLevel,
-    pub max_area_level_ever: AreaLevel,
-    pub passives_tree_id: String,
-    pub passives_tree_state: PassivesTreeState,
-    pub player_resources: PlayerResources,
-    pub player_specs: PlayerSpecs,
-    pub player_inventory: PlayerInventory,
-    pub queued_loot: Vec<QueuedLoot>,
-    pub game_stats: GameStats,
-    pub last_champion_spawn: AreaLevel,
-    pub auto_progress: bool,
+    area_id: String,
+    area_level: AreaLevel,
+    max_area_level_ever: AreaLevel,
+    passives_tree_id: String,
+    passives_tree_state: PassivesTreeState,
+    player_resources: PlayerResources,
+    player_specs: PlayerSpecs,
+    player_inventory: PlayerInventory,
+    queued_loot: Vec<QueuedLoot>,
+    game_stats: GameStats,
+    last_champion_spawn: AreaLevel,
+    auto_progress: bool,
     #[serde(default)] // For compatibility
-    pub max_area_level: AreaLevel,
+    max_area_level: AreaLevel,
     #[serde(default)] // For compatibility
-    pub player_benedictions: PlayerBenedictions,
+    player_benedictions: PlayerBenedictions,
     #[serde(default)]
     player_stamina: Duration,
+    #[serde(default)]
+    area_effects: EffectsMap,
 }
 
 impl GameInstanceData {
@@ -83,6 +88,7 @@ impl GameInstanceData {
         area_id: String,
         area_blueprint: AreaBlueprint,
         max_area_level_completed: AreaLevel,
+        area_effects: EffectsMap,
         passives_tree_id: String,
         passives_tree_specs: PassivesTreeSpecs,
         passives_tree_state: PassivesTreeState,
@@ -95,11 +101,33 @@ impl GameInstanceData {
         let mut area_state = AreaState::init(&area_blueprint.specs);
         area_state.max_area_level_ever = max_area_level_completed;
 
+        // TODO: Move elsewhere
+        if let Some(&value) = area_effects.0.get(&(StatType::ItemRarity, Modifier::Flat)) {
+            area_state.loot_rarity.apply_effect(&StatEffect {
+                stat: StatType::ItemRarity,
+                modifier: Modifier::Flat,
+                value,
+                bypass_ignore: false,
+            });
+        }
+        if let Some(&value) = area_effects
+            .0
+            .get(&(StatType::ItemRarity, Modifier::Multiplier))
+        {
+            area_state.loot_rarity.apply_effect(&StatEffect {
+                stat: StatType::ItemRarity,
+                modifier: Modifier::Multiplier,
+                value,
+                bypass_ignore: false,
+            });
+        }
+
         Self {
             area_id,
             area_state: LazySyncer::new(area_state),
             area_blueprint,
             area_threat: AreaThreat::default(),
+            area_effects,
 
             passives_tree_id,
             passives_tree_specs,
@@ -132,6 +160,7 @@ impl GameInstanceData {
         master_store: &master_store::MasterStore,
         area_id: &str,
         max_area_level_completed: AreaLevel,
+        area_effects: EffectsMap,
         passives_tree_id: &str,
         mut passives_tree_state: PassivesTreeState,
         player_benedictions: PlayerBenedictions,
@@ -176,6 +205,7 @@ impl GameInstanceData {
             area_id.to_string(),
             area_blueprint,
             max_area_level_completed,
+            area_effects,
             passives_tree_id.to_string(),
             passives_tree_specs,
             passives_tree_state,
@@ -193,6 +223,7 @@ impl GameInstanceData {
             area_level: self.area_state.read().area_level,
             max_area_level: self.area_state.read().max_area_level,
             max_area_level_ever: self.area_state.read().max_area_level_ever,
+            area_effects: self.area_effects,
             passives_tree_id: self.passives_tree_id,
             passives_tree_state: self.passives_tree_state.unwrap(),
             player_benedictions: self.player_benedictions,
@@ -213,6 +244,7 @@ impl GameInstanceData {
             area_level,
             max_area_level,
             max_area_level_ever,
+            area_effects,
             passives_tree_id,
             passives_tree_state,
             player_benedictions,
@@ -230,6 +262,7 @@ impl GameInstanceData {
             master_store,
             &area_id,
             max_area_level_ever,
+            area_effects,
             &passives_tree_id,
             passives_tree_state,
             player_benedictions,

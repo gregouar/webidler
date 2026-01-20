@@ -95,7 +95,8 @@ pub fn update_monster_specs(
                 Modifier::Multiplier,
             ),
             ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
-        )])))),
+        )]))))
+        .chain(std::iter::once(base_specs.character_specs.effects.clone())),
     );
     let effects = stats_updater::stats_map_to_vec(&effects_map, area_threat);
 

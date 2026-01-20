@@ -2,6 +2,7 @@ use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*};
 use leptos_use::storage;
 
+use shared::data::area::StartAreaConfig;
 use shared::data::user::UserCharacterId;
 use shared::messages::client::ClientConnectMessage;
 use shared::messages::server::{ErrorType, InitGameMessage, ServerMessage, SyncGameStateMessage};
@@ -16,15 +17,17 @@ use super::panels::{GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPa
 use super::GameContext;
 
 #[component]
-pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
+pub fn GameInstance() -> impl IntoView {
     let game_context = GameContext::new();
     provide_context(game_context);
 
     let auth_context = expect_context::<AuthContext>();
 
-    // TODO: CharacterContext ? With character_id and area_id
-    let (get_area_id_storage, _, _) =
-        storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
+    let (get_character_id_storage, _, _) =
+        storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
+
+    let (get_area_config_storage, _, _) =
+        storage::use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
 
     Effect::new({
         let conn = expect_context::<WebsocketContext>();
@@ -33,8 +36,8 @@ pub fn GameInstance(character_id: UserCharacterId) -> impl IntoView {
                 conn.send(
                     &ClientConnectMessage {
                         jwt: auth_context.token(),
-                        character_id,
-                        area_id: get_area_id_storage.get_untracked(),
+                        character_id: get_character_id_storage.get_untracked(),
+                        area_config: get_area_config_storage.get_untracked(),
                     }
                     .into(),
                 );

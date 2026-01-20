@@ -6,11 +6,13 @@ use chrono::Utc;
 use shared::{
     constants::MAX_PLAYER_STAMINA,
     data::{
-        area::AreaLevel,
+        area::{AreaLevel, StartAreaConfig},
         character::CharacterSize,
-        item::ItemRarity,
+        item::{ItemCategory, ItemRarity},
+        item_affix::AffixEffectScope,
         passive::PassivesTreeState,
         player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs},
+        stat_effect::EffectsMap,
         temple::{BenedictionEffect, PlayerBenedictions},
         user::UserCharacterId,
     },
@@ -36,7 +38,7 @@ pub async fn create_session(
     sessions_store: &SessionsStore,
     master_store: &MasterStore,
     character: CharacterEntry,
-    area_id: &Option<String>,
+    area_config: Option<StartAreaConfig>,
 ) -> Result<Session> {
     let character_id = character.character_id;
     tracing::debug!("create new session for player '{character_id}'...");
@@ -76,8 +78,8 @@ pub async fn create_session(
     let game_instance_data = match load_game_instance(db_pool, master_store, &character_id).await {
         Some(saved_instance) => saved_instance,
         None => {
-            let area_id = area_id.as_ref().ok_or(anyhow::anyhow!("missing area id"))?;
-            new_game_instance(db_pool, master_store, character, area_id).await?
+            let area_config = area_config.ok_or(anyhow::anyhow!("missing area id"))?;
+            new_game_instance(db_pool, master_store, character, area_config).await?
         }
     };
 
@@ -129,7 +131,7 @@ async fn new_game_instance(
     db_pool: &db::DbPool,
     master_store: &MasterStore,
     character: CharacterEntry,
-    area_id: &str,
+    area_config: StartAreaConfig,
 ) -> Result<GameInstanceData> {
     let mut player_specs = PlayerSpecs::init(CharacterSpecs {
         name: character.character_name.clone(),
@@ -150,13 +152,16 @@ async fn new_game_instance(
     let character_data =
         db::characters_data::load_character_data(db_pool, &character.character_id).await?;
 
-    let area_level_completed =
-        db::characters::read_character_area_completed(db_pool, &character.character_id, area_id)
-            .await?
-            .map(|area_completed| area_completed.max_area_level)
-            .unwrap_or_default();
+    let area_level_completed = db::characters::read_character_area_completed(
+        db_pool,
+        &character.character_id,
+        &area_config.area_id,
+    )
+    .await?
+    .map(|area_completed| area_completed.max_area_level)
+    .unwrap_or_default();
 
-    let (player_inventory, passives_tree_state, player_benedictions) = match character_data {
+    let (mut player_inventory, passives_tree_state, player_benedictions) = match character_data {
         Some((inventory_data, ascension, player_benedictions)) => (
             inventory_data_to_player_inventory(&master_store.items_store, inventory_data),
             PassivesTreeState::init(ascension),
@@ -192,10 +197,38 @@ async fn new_game_instance(
         }
     };
 
+    let area_effects = if let Some(map_item_index) = area_config.map_item_index {
+        let selected_map = if (map_item_index as usize) < player_inventory.bag.len() {
+            player_inventory.bag.remove(map_item_index as usize)
+        } else {
+            return Err(anyhow::anyhow!("missing map item"));
+        };
+
+        if !selected_map.base.categories.contains(&ItemCategory::Map) {
+            return Err(anyhow::anyhow!("missing map item"));
+        }
+
+        EffectsMap::combine_all(
+            std::iter::once(
+                selected_map
+                    .modifiers
+                    .aggregate_effects(AffixEffectScope::Local),
+            )
+            .chain(std::iter::once(
+                selected_map
+                    .modifiers
+                    .aggregate_effects(AffixEffectScope::Global),
+            )),
+        )
+    } else {
+        Default::default()
+    };
+
     let mut game_data = GameInstanceData::init_from_store(
         master_store,
-        area_id,
+        &area_config.area_id,
         area_level_completed as AreaLevel,
+        area_effects,
         "default",
         passives_tree_state,
         player_benedictions,

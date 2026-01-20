@@ -154,7 +154,7 @@ async fn handle_connect(
         &app_state.sessions_store,
         &app_state.master_store,
         user_character,
-        &msg.area_id,
+        msg.area_config,
     )
     .await?;
 

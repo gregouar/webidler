@@ -323,14 +323,20 @@ fn handle_area_completed_event(
     }
 
     match loot_generator::generate_loot(
-        area_level.saturating_add(game_data.area_blueprint.specs.item_level_modifier),
-        is_boss_level,
         &game_data.area_blueprint.loot_table,
         &master_store.items_store,
         &master_store.item_affixes_table,
         &master_store.item_adjectives_table,
         &master_store.item_nouns_table,
+        area_level.saturating_add(game_data.area_blueprint.specs.item_level_modifier),
+        is_boss_level,
         new_max, // Only drop unique when new area completed
+        area_state.loot_rarity,
+        // game_data
+        //     .area_effects
+        //     .0
+        //     .get(&(StatType::ItemRarity, Modifier::Multiplier))
+        //     .unwrap_or_default(),
     ) {
         Some(item_specs) => {
             for item_specs in loot_controller::drop_loot(

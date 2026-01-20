@@ -10,7 +10,7 @@ use shared::{
         monster::{MonsterRarity, MonsterSpecs, MonsterState},
         passive::StatEffect,
         skill::SkillEffectType,
-        stat_effect::{Modifier, StatType},
+        stat_effect::{EffectsMap, Modifier, StatType},
     },
 };
 
@@ -43,12 +43,14 @@ pub fn generate_monsters_wave(
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
     area_threat: &AreaThreat,
+    area_effects: &EffectsMap,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>)> {
     let (monster_specs, is_boss) = generate_monsters_wave_specs(
         area_blueprint,
         area_state,
         area_threat,
+        area_effects,
         monsters_specs_store,
     )?;
     let monster_states = monster_specs.iter().map(MonsterState::init).collect();
@@ -61,6 +63,7 @@ fn generate_monsters_wave_specs(
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
     area_threat: &AreaThreat,
+    area_effects: &EffectsMap,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Result<(Vec<MonsterSpecs>, bool)> {
     // Can only fight boss once per level
@@ -83,6 +86,7 @@ fn generate_monsters_wave_specs(
                     area_state,
                     monsters_specs_store,
                     area_threat,
+                    area_effects,
                 ),
                 true,
             ));
@@ -106,6 +110,7 @@ fn generate_monsters_wave_specs(
                 area_state,
                 monsters_specs_store,
                 area_threat,
+                area_effects,
             ),
             false,
         ));
@@ -113,12 +118,14 @@ fn generate_monsters_wave_specs(
 
     Err(anyhow::format_err!("no monster wave available"))
 }
+
 fn generate_all_monsters_specs(
     spawns: &[MonsterWaveSpawnBlueprint],
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
     monsters_specs_store: &MonstersSpecsStore,
     area_threat: &AreaThreat,
+    area_effects: &EffectsMap,
 ) -> Vec<MonsterSpecs> {
     let mut grid = [[true; 3]; 2];
     let mut monsters = Vec::with_capacity(6);
@@ -144,6 +151,7 @@ fn generate_all_monsters_specs(
                     area_blueprint,
                     area_state,
                     area_threat,
+                    area_effects,
                 );
                 specs.character_specs.position_x = (x + 1) as u8;
                 specs.character_specs.position_y = (y + 1) as u8;
@@ -192,9 +200,12 @@ fn generate_monster_specs(
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
     area_threat: &AreaThreat,
+    area_effects: &EffectsMap,
 ) -> MonsterSpecs {
     let mut monster_specs = MonsterSpecs::init(bp_specs.clone());
     let mut monster_level = area_state.area_level;
+
+    monster_specs.character_specs.effects = area_effects.clone();
 
     if monster_specs.rarity == MonsterRarity::Normal
         && rng::random_range(0.0..=1.0).unwrap_or(1.0) < computations::gem_chance(area_state)

@@ -24,6 +24,8 @@ pub struct AreaState {
     pub is_boss: bool,
     pub waves_done: u8, // TODO: could rename to current wave
 
+    pub loot_rarity: f64,
+
     pub max_area_level: AreaLevel,      // Max for this grind
     pub max_area_level_ever: AreaLevel, // Max for all grind of this area
     pub last_champion_spawn: AreaLevel,
@@ -43,4 +45,10 @@ pub struct AreaThreat {
     pub elapsed_cooldown: f32,
 
     pub just_increased: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+pub struct StartAreaConfig {
+    pub area_id: String,
+    pub map_item_index: Option<u8>,
 }

@@ -6,6 +6,7 @@ use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
 use shared::data::{
+    area::StartAreaConfig,
     item::{ItemCategory, ItemSpecs},
     user::UserGrindArea,
 };
@@ -372,19 +373,6 @@ pub fn StartGrindPanel(
     let town_context: TownContext = expect_context();
     let max_item_level = Signal::derive(move || town_context.character.read().max_area_level);
 
-    let play_area = {
-        let navigate = use_navigate();
-        let (_, set_area_id_storage, _) =
-            storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
-
-        move |_| {
-            if let Some(selected_area) = selected_area.get_untracked() {
-                set_area_id_storage.set(Some(selected_area.area_id));
-                navigate("/game", Default::default());
-            }
-        }
-    };
-
     let selected_map = Signal::derive(move || {
         town_context
             .selected_item_index
@@ -449,6 +437,22 @@ pub fn StartGrindPanel(
             .use_item_category_filter
             .set(Some(ItemCategory::Map));
         town_context.open_inventory.set(true);
+    };
+
+    let play_area = {
+        let navigate = use_navigate();
+        let (_, set_area_config_storage, _) =
+            storage::use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
+
+        move |_| {
+            if let Some(selected_area) = selected_area.get_untracked() {
+                set_area_config_storage.set(Some(StartAreaConfig {
+                    area_id: selected_area.area_id,
+                    map_item_index: town_context.selected_item_index.get_untracked(),
+                }));
+                navigate("/game", Default::default());
+            }
+        }
     };
 
     view! {
@@ -528,7 +532,7 @@ pub fn StartGrindPanel(
                                 w-full h-auto aspect-5/2 overflow-y-auto
                                 bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2
                                 hover:ring-amber-400 hover:shadow-lg active:scale-95 
-                                active:ring-amber-500 cursor-pointer"
+                                active:ring-amber-500 cursor-pointer transition"
                                 on:click=choose_map
                             >
                                 {map_details}
