@@ -14,7 +14,7 @@ pub fn SettingsModal(open: RwSignal<bool>) -> impl IntoView {
     let settings_data = RwSignal::new(settings.read_settings_untracked().clone());
 
     view! {
-        <MenuPanel open=open>
+        <MenuPanel open=open w_full=false>
             <div class="flex items-center justify-center p-4 max-h-full">
                 <div class="
                 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl

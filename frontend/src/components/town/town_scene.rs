@@ -464,7 +464,7 @@ pub fn StartGrindPanel(
     });
 
     view! {
-        <MenuPanel open=open>
+        <MenuPanel open=open w_full=false>
             <div class="flex items-center justify-center p-2 xl:p-4 h-full">
                 <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl
                 w-full max-w-4xl mx-auto max-h-full
@@ -484,9 +484,9 @@ pub fn StartGrindPanel(
                         <div class="absolute inset-0 bg-black/30"></div>
                     </div>
 
-                    <div class="flex flex-col  p-4 xl:p-8 space-y-4 overflow-y-auto">
+                    <div class="flex flex-col p-3 xl:p68 space-y-2 xl:space-y-4 overflow-y-auto">
 
-                        <h2 class="text-2xl font-bold text-amber-300 text-center">
+                        <h2 class="text-lg xl:text-2xl font-bold text-amber-300 text-center">
                             {move || {
                                 selected_area
                                     .read()
@@ -496,7 +496,9 @@ pub fn StartGrindPanel(
                             }}
                         </h2>
 
-                        <span class="block text-sm font-medium text-gray-400 italic mb-2 border-b border-zinc-700">
+                        <span class="block text-xs xl:text-sm font-medium text-gray-400 italic
+                        pb-2 mb-2 border-b border-zinc-700
+                        max-w-xl mx-auto">
                             {move || {
                                 selected_area
                                     .read()
@@ -506,8 +508,8 @@ pub fn StartGrindPanel(
                             }}
                         </span>
 
-                        <ul class="text-xs xl:text-sm text-gray-400">
-                            <li>
+                        <ul class="text-xs xl:text-sm text-gray-400 list-none space-y-1">
+                            <li class="leading-snug ">
                                 "Starting Level: "
                                 <span class="font-semibold text-white">
                                     {move || {
@@ -519,7 +521,7 @@ pub fn StartGrindPanel(
                                     }}
                                 </span>
                             </li>
-                            <li>
+                            <li class="leading-snug ">
                                 "Item Level Modifier: "
                                 <span class="font-semibold text-white">
                                     "+"

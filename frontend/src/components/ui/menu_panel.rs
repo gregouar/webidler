@@ -3,7 +3,7 @@ use std::time::Duration;
 use leptos::{ev::KeyboardEvent, html::*, prelude::*};
 
 #[component]
-pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
+pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn, #[prop(default = true)] w_full:bool,) -> impl IntoView {
     let panel_ref = NodeRef::<Div>::new();
 
     Effect::new(move |_| {
@@ -69,7 +69,8 @@ pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn) -> impl IntoView {
                 tabindex="0"
             >
                 <div
-                    class="w-full z-41 shrink max-h-full flex flex-col will-change-transform"
+                    class="z-41 w-fit mx-auto max-h-full flex flex-col will-change-transform"
+                    class:w-full=w_full
                     style=move || {
                         if open.get() {
                             "animation: dropDown 0.3s ease-out forwards;"
