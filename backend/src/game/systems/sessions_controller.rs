@@ -208,6 +208,10 @@ async fn new_game_instance(
             return Err(anyhow::anyhow!("missing map item"));
         }
 
+        if !selected_map.required_level > player_specs.max_area_level {
+            return Err(anyhow::anyhow!("power level too low"));
+        }
+
         EffectsMap::combine_all(
             std::iter::once(
                 selected_map

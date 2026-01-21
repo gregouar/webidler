@@ -455,6 +455,14 @@ pub fn StartGrindPanel(
         }
     };
 
+    let disable_confirm = Signal::derive(move || {
+        selected_map
+            .read()
+            .as_ref()
+            .map(|map| map.required_level > town_context.character.read().max_area_level)
+            .unwrap_or_default()
+    });
+
     view! {
         <MenuPanel open=open>
             <div class="flex items-center justify-center p-2 xl:p-4 h-full">
@@ -543,7 +551,9 @@ pub fn StartGrindPanel(
                             <MenuButtonRed on:click=move |_| {
                                 open.set(false)
                             }>"Cancel"</MenuButtonRed>
-                            <MenuButton on:click=play_area.clone()>"Confirm"</MenuButton>
+                            <MenuButton on:click=play_area.clone() disabled=disable_confirm>
+                                "Confirm"
+                            </MenuButton>
                         </div>
 
                     </div>

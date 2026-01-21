@@ -11,6 +11,7 @@
         "modifier": "Multiplier",
         "value": 20.0
       }
-    ]
+    ],
+    "min_area_level": 100
   }
 }

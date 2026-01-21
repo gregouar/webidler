@@ -7,7 +7,7 @@
     "tier": 1,
     "weight": 1000,
     "restrictions": ["Map"],
-    "item_level": 1,
+    "item_level": 100,
     "effects": [
       {
         "scope": "Local",
@@ -31,7 +31,7 @@
     "tier": 1,
     "weight": 1000,
     "restrictions": ["Map"],
-    "item_level": 1,
+    "item_level": 100,
     "effects": [
       {
         "scope": "Local",

@@ -130,7 +130,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     "Welcome, " {user.username.clone()}"!"
                                 </h1>
 
-                                <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-2 xl:gap-4">
+                                <div class="w-full grid grid-cols-2 gap-2 xl:gap-4">
                                     <NewsPanel />
                                     <CharactersSelection
                                         areas=areas.clone()
@@ -204,9 +204,9 @@ fn CharactersSelection(
                 </span>
             </div>
 
-            <div class="w-full aspect-square overflow-y-auto
+            <div class="w-full aspect-square overflow-y-auto p-2
             bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                <div class="h-full flex flex-col p-2 gap-3">
+                <div class="flex flex-col gap-3">
                     <For
                         each=move || characters.clone()
                         key=|c| c.character_id
@@ -228,15 +228,12 @@ fn CharactersSelection(
                     {if characters_len < user.max_characters as usize {
                         Some(
                             view! {
-                                <CreateCharacterSlot
-                                    class:mb-4
-                                    on:click=move |_| {
-                                        open_character_panel.set(true);
-                                        selected_character_id.set(None);
-                                        selected_character_name.set(None);
-                                        selected_character_portrait.set(None);
-                                    }
-                                />
+                                <CreateCharacterSlot on:click=move |_| {
+                                    open_character_panel.set(true);
+                                    selected_character_id.set(None);
+                                    selected_character_name.set(None);
+                                    selected_character_portrait.set(None);
+                                } />
                             },
                         )
                     } else {
