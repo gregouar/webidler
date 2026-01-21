@@ -21,6 +21,7 @@ use crate::game::{
         monster::BaseMonsterSpecs,
         DataInit,
     },
+    systems::{characters_updater, stats_updater},
     utils::rng::{self, RandomWeighted, Rollable},
 };
 
@@ -225,6 +226,7 @@ fn generate_monster_specs(
     monster_specs.reward_factor *= reward_factor;
     monster_specs.character_specs.max_life *= exp_factor;
 
+    // Apply upgrade effects
     let upgrade_effects = [StatEffect {
         stat: StatType::Damage {
             skill_type: None,
@@ -269,6 +271,15 @@ fn generate_monster_specs(
                 }
             }
         }
+    }
+
+    // Apply area effects
+    let area_effects = stats_updater::stats_map_to_vec(&area_effects, area_threat);
+    monster_specs.character_specs =
+        characters_updater::update_character_specs(&monster_specs.character_specs, &area_effects);
+    // monster_specs.character_specs.effects = effects_map;
+    for skill_specs in monster_specs.skill_specs.iter_mut() {
+        skills_updater::apply_effects_to_skill_specs(skill_specs, area_effects.iter());
     }
 
     monster_specs
