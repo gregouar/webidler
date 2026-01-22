@@ -99,7 +99,10 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
                     <CloseButton on:click=move |_| open.set(false) />
                 </div>
 
-                <div class="flex flex-col">
+                <div class="flex flex-col
+                bg-neutral-900 rounded-lg shadow-[inset_0_0_24px_rgba(0,0,0,0.6)]
+                p-2 xl:p-4 ring-1 ring-zinc-900">
+
                     <div class="flex">
                         <GoldCounter value=gold_donation_value />
                         "Collected"

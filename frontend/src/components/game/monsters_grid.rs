@@ -52,6 +52,7 @@ pub fn MonstersGrid() -> impl IntoView {
     let flee = Memo::new(move |_| {
         !game_context.player_state.read().character_state.is_alive
             || game_context.area_state.read().going_back > 0
+            || game_context.quest_rewards.read().is_some()
     });
 
     view! {

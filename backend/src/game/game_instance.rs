@@ -79,6 +79,10 @@ impl<'a> GameInstance<'a> {
                 break;
             }
 
+            if self.game_data.terminate_quest {
+                break;
+            }
+
             let elapsed_time = game_timer.delta();
             let tick_multiplier = if self.game_data.area_state.read().rush_mode {
                 RUSH_MODE_SPEED_MULTIPLIER
@@ -102,10 +106,6 @@ impl<'a> GameInstance<'a> {
             if game_timer.should_autosave() {
                 self.auto_save();
             }
-
-            // if self.game_data.end_quest {
-            //     self.send_end_quest().await?;
-            // }
 
             if self
                 .sessions_store
