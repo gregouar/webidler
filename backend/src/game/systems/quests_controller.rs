@@ -1,4 +1,7 @@
-use shared::data::quest::QuestRewards;
+use shared::{
+    constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL},
+    data::{item::ItemCategory, quest::QuestRewards},
+};
 
 use crate::{
     app_state::MasterStore,
@@ -53,16 +56,14 @@ fn generate_end_quest_rewards(
     let delta_area_level = 1 + game_data
         .area_state
         .read()
-        .max_area_level_ever
+        .max_area_level
         .saturating_sub(game_data.area_blueprint.specs.starting_level);
 
-    if delta_area_level >= 100 {}
+    let mut item_rewards = Vec::new();
 
-    // TODO: If completed X levels only
-    // TODO: Try to generate first 2 edicts and then complete until 3 items
-    let item_rewards = (0..3)
-        .into_iter()
-        .flat_map(|_| {
+    // If enough, generate 2 Maps
+    if delta_area_level >= ITEM_REWARDS_MAP_MIN_LEVEL {
+        item_rewards.extend((0..2).into_iter().flat_map(|_| {
             loot_generator::generate_loot(
                 &game_data.area_blueprint.loot_table,
                 &master_store.items_store,
@@ -72,14 +73,57 @@ fn generate_end_quest_rewards(
                 game_data
                     .area_state
                     .read()
-                    .area_level
+                    .max_area_level
                     .saturating_add(game_data.area_blueprint.specs.item_level_modifier),
                 false,
                 true,
+                Some(ItemCategory::Map),
                 game_data.area_state.read().loot_rarity,
             )
-        })
-        .collect();
+        }));
+    // Otherwise fill with normal items
+    } else if delta_area_level >= ITEM_REWARDS_MIN_LEVEL {
+        item_rewards.extend((0..2).into_iter().flat_map(|_| {
+            loot_generator::generate_loot(
+                &game_data.area_blueprint.loot_table,
+                &master_store.items_store,
+                &master_store.item_affixes_table,
+                &master_store.item_adjectives_table,
+                &master_store.item_nouns_table,
+                game_data
+                    .area_state
+                    .read()
+                    .max_area_level
+                    .saturating_add(game_data.area_blueprint.specs.item_level_modifier),
+                false,
+                true,
+                None,
+                game_data.area_state.read().loot_rarity,
+            )
+        }));
+    }
+
+    // Add an extra rarer item
+    if delta_area_level >= ITEM_REWARDS_MIN_LEVEL {
+        item_rewards.extend((0..1).into_iter().flat_map(|_| {
+            loot_generator::generate_loot(
+                &game_data.area_blueprint.loot_table,
+                &master_store.items_store,
+                &master_store.item_affixes_table,
+                &master_store.item_adjectives_table,
+                &master_store.item_nouns_table,
+                game_data
+                    .area_state
+                    .read()
+                    .max_area_level
+                    .saturating_add(game_data.area_blueprint.specs.item_level_modifier),
+                true,
+                true,
+                None,
+                game_data.area_state.read().loot_rarity * 5.0,
+            )
+        }))
+    }
 
     QuestRewards { item_rewards }
 }

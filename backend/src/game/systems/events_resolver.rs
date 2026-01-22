@@ -331,12 +331,8 @@ fn handle_area_completed_event(
         area_level.saturating_add(game_data.area_blueprint.specs.item_level_modifier),
         is_boss_level,
         new_max, // Only drop unique when new area completed
+        None,
         area_state.loot_rarity,
-        // game_data
-        //     .area_effects
-        //     .0
-        //     .get(&(StatType::ItemRarity, Modifier::Multiplier))
-        //     .unwrap_or_default(),
     ) {
         Some(item_specs) => {
             for item_specs in loot_controller::drop_loot(

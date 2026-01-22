@@ -6,7 +6,7 @@ use shared::{
         area::AreaLevel,
         chance::ChanceRange,
         forge::MAX_AFFIXES,
-        item::{ItemBase, ItemModifiers, ItemRarity, ItemSpecs},
+        item::{ItemBase, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
         item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
         stat_effect::StatEffect,
     },
@@ -48,6 +48,7 @@ pub fn generate_loot(
     level: AreaLevel,
     is_boss_level: bool,
     allow_unique: bool,
+    filter_category: Option<ItemCategory>,
     loot_rarity: f64,
 ) -> Option<ItemSpecs> {
     let mut rarity = roll_rarity(&RarityWeights::default(), loot_rarity);
@@ -60,6 +61,7 @@ pub fn generate_loot(
         level,
         is_boss_level,
         rarity == ItemRarity::Unique,
+        filter_category,
     )
     .map(|(base_item_id, base)| {
         if base.rarity != ItemRarity::Unique {
@@ -157,25 +159,28 @@ fn roll_base_item(
     area_level: AreaLevel,
     is_boss_level: bool,
     is_unique: bool,
+    filter_category: Option<ItemCategory>,
 ) -> Option<(String, ItemBase)> {
     let items_available: Vec<_> = loot_table
         .entries
         .iter()
         .filter(|l| {
+            let item_specs = items_store.get(&l.item_id);
             area_level
                 >= l.min_area_level.unwrap_or(
-                    items_store
-                        .get(&l.item_id)
+                    item_specs
                         .map(|i| i.min_area_level)
                         .unwrap_or(AreaLevel::MIN),
                 )
                 && area_level <= l.max_area_level.unwrap_or(AreaLevel::MAX)
                 && (!l.boss_only || is_boss_level)
-            // && (is_unique
-            //     == items_store
-            //         .get(&l.item_id)
-            //         .map(|base| base.rarity == ItemRarity::Unique)
-            //         .unwrap_or_default())
+                && (filter_category
+                    .map(|category| {
+                        item_specs
+                            .map(|base| base.categories.contains(&category))
+                            .unwrap_or_default()
+                    })
+                    .unwrap_or(true))
         })
         .collect();
 

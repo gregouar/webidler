@@ -72,7 +72,7 @@
     },
     {
       "item_id": "edict",
-      "weight": 1000000000
+      "weight": 100
     }
   ]
 }

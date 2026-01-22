@@ -29,6 +29,9 @@ pub const THREAT_COOLDOWN: f32 = 20.0;
 pub const THREAT_BOSS_COOLDOWN: f32 = 60.0;
 pub const THREAT_EFFECT: f64 = 0.5;
 
+pub const ITEM_REWARDS_MIN_LEVEL: u16 = 50;
+pub const ITEM_REWARDS_MAP_MIN_LEVEL: u16 = 100;
+
 pub const STASH_USER_PRICE: StashPrice = StashPrice {
     start_price: 1e5,
     start_size: 40,
