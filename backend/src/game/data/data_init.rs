@@ -31,7 +31,6 @@ impl DataInit<&AreaSpecs> for AreaState {
             auto_progress: true,
             going_back: 0,
             rush_mode: false,
-            end_quest: false,
             loot_rarity: 100.0,
         }
     }

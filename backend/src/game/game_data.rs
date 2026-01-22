@@ -1,4 +1,5 @@
 use anyhow::Result;
+use shared::data::quest::QuestRewards;
 use shared::data::stat_effect::{ApplyStatModifier, EffectsMap};
 use shared::data::temple::{Modifier, PlayerBenedictions, StatEffect, StatType};
 use std::time::Duration;
@@ -56,6 +57,10 @@ pub struct GameInstanceData {
     pub queued_loot: LazySyncer<Vec<QueuedLoot>>,
 
     pub game_stats: GameStats,
+
+    pub end_quest: bool, // Initiate end, generate rewards
+    pub quest_rewards: LazySyncer<Option<QuestRewards>>,
+    pub terminate_quest: bool, // Actually close the quest
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -80,6 +85,11 @@ pub struct SavedGameData {
     player_stamina: Duration,
     #[serde(default)]
     area_effects: EffectsMap,
+
+    #[serde(default)]
+    end_quest: bool,
+    #[serde(default)]
+    quest_rewards: Option<QuestRewards>,
 }
 
 impl GameInstanceData {
@@ -152,6 +162,10 @@ impl GameInstanceData {
             queued_loot: LazySyncer::new(Default::default()),
 
             game_stats: Default::default(),
+
+            end_quest: false,
+            quest_rewards: LazySyncer::new(None),
+            terminate_quest: false,
         }
     }
 
@@ -235,6 +249,8 @@ impl GameInstanceData {
             game_stats: self.game_stats,
             last_champion_spawn: self.area_state.read().last_champion_spawn,
             auto_progress: self.area_state.read().auto_progress,
+            end_quest: self.end_quest,
+            quest_rewards: self.quest_rewards.read().clone(),
         })?)
     }
 
@@ -256,6 +272,8 @@ impl GameInstanceData {
             game_stats,
             last_champion_spawn,
             auto_progress,
+            end_quest,
+            quest_rewards,
         } = rmp_serde::from_slice::<SavedGameData>(bytes)?;
 
         let mut s = Self::init_from_store(
@@ -278,6 +296,8 @@ impl GameInstanceData {
         s.area_state.mutate().auto_progress = auto_progress;
         s.queued_loot.mutate().extend(queued_loot);
         s.game_stats = game_stats;
+        s.end_quest = end_quest;
+        *s.quest_rewards.mutate() = quest_rewards;
 
         Ok(s)
     }
@@ -290,5 +310,6 @@ impl GameInstanceData {
         self.player_inventory.mutate();
         self.monster_base_specs.mutate();
         self.queued_loot.mutate();
+        self.quest_rewards.mutate();
     }
 }

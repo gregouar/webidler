@@ -11,6 +11,7 @@ pub mod market;
 pub mod monster;
 pub mod passive;
 pub mod player;
+pub mod quest;
 pub mod skill;
 pub mod stash;
 pub mod stat_effect;

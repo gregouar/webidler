@@ -162,11 +162,9 @@ async fn handle_connect(
 }
 
 async fn handle_disconnect(sessions_store: &SessionsStore, mut session: Session) -> Result<()> {
-    let end_quest = session.game_data.area_state.read().end_quest;
-
     session.last_active = Instant::now();
 
-    if !end_quest {
+    if !session.game_data.terminate_quest {
         sessions_store
             .sessions
             .lock()

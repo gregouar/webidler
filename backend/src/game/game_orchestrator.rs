@@ -25,6 +25,10 @@ use super::{
 const PLAYER_RESPAWN_PERIOD: Duration = Duration::from_secs(5);
 
 pub async fn reset_entities(game_data: &mut GameInstanceData) {
+    if game_data.end_quest {
+        return;
+    }
+
     player_updater::reset_player(&mut game_data.player_state);
     monsters_updater::reset_monsters(&mut game_data.monster_states);
 }
@@ -35,6 +39,10 @@ pub async fn tick(
     master_store: &MasterStore,
     elapsed_time: Duration,
 ) -> Result<()> {
+    if game_data.end_quest {
+        return Ok(());
+    }
+
     update_threat(events_queue, game_data, elapsed_time);
 
     if game_data.area_state.read().rush_mode {

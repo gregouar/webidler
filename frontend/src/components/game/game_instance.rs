@@ -2,19 +2,25 @@ use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*};
 use leptos_use::storage;
 
-use shared::data::area::StartAreaConfig;
-use shared::data::user::UserCharacterId;
-use shared::messages::client::ClientConnectMessage;
-use shared::messages::server::{ErrorType, InitGameMessage, ServerMessage, SyncGameStateMessage};
+use shared::{
+    data::{area::StartAreaConfig, user::UserCharacterId},
+    messages::{
+        client::ClientConnectMessage,
+        server::{ErrorType, InitGameMessage, ServerMessage, SyncGameStateMessage},
+    },
+};
 
-use crate::components::auth::AuthContext;
-use crate::components::ui::{toast::*, tooltip::DynamicTooltip};
-use crate::components::websocket::WebsocketContext;
-
-use super::battle_scene::BattleScene;
-use super::header_menu::HeaderMenu;
-use super::panels::{GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel};
-use super::GameContext;
+use crate::components::{
+    auth::AuthContext,
+    game::{
+        battle_scene::BattleScene,
+        header_menu::HeaderMenu,
+        panels::{EndQuestPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
+        GameContext,
+    },
+    ui::{toast::*, tooltip::DynamicTooltip},
+    websocket::WebsocketContext,
+};
 
 #[component]
 pub fn GameInstance() -> impl IntoView {
@@ -64,6 +70,7 @@ pub fn GameInstance() -> impl IntoView {
                 <HeaderMenu />
                 <div class="relative flex-1">
                     <BattleScene />
+                    <EndQuestPanel />
                     <GameInventoryPanel open=game_context.open_inventory />
                     <PassivesPanel open=game_context.open_passives />
                     <StatisticsPanel open=game_context.open_statistics />
@@ -141,6 +148,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         monster_states,
         queued_loot,
         game_stats,
+        quest_rewards,
     } = sync_message;
 
     game_context.area_state.sync(area_state);
@@ -160,4 +168,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     game_context.monster_states.set(monster_states);
     game_context.queued_loot.sync(queued_loot);
     game_context.game_stats.set(game_stats);
+    if let Some(quest_rewards) = quest_rewards {
+        game_context.quest_rewards.set(quest_rewards);
+    }
 }

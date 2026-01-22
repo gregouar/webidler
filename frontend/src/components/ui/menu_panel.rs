@@ -3,7 +3,11 @@ use std::time::Duration;
 use leptos::{ev::KeyboardEvent, html::*, prelude::*};
 
 #[component]
-pub fn MenuPanel(open: RwSignal<bool>, children: ChildrenFn, #[prop(default = true)] w_full:bool,) -> impl IntoView {
+pub fn MenuPanel(
+    open: RwSignal<bool>, 
+    children: ChildrenFn, 
+    #[prop(default = true)] w_full:bool,
+) -> impl IntoView {
     let panel_ref = NodeRef::<Div>::new();
 
     Effect::new(move |_| {

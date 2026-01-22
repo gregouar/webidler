@@ -18,7 +18,7 @@ pub fn ItemCard(
     item_specs: Arc<ItemSpecs>,
     #[prop(default=None)] comparable_item_specs: Option<Arc<ItemSpecs>>,
     #[prop(default=DynamicTooltipPosition::Auto)] tooltip_position: DynamicTooltipPosition,
-    max_item_level: Signal<AreaLevel>,
+    #[prop(default=Signal::derive(|| AreaLevel::MAX))] max_item_level: Signal<AreaLevel>,
 ) -> impl IntoView {
     let (border_color, ring_color, shadow_color, gradient) = match item_specs.modifiers.rarity {
         ItemRarity::Normal => (

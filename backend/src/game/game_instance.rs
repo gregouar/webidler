@@ -64,7 +64,9 @@ impl<'a> GameInstance<'a> {
 
         let mut game_timer = GameTimer::new();
         loop {
-            game_orchestrator::reset_entities(self.game_data).await;
+            if !self.game_data.end_quest {
+                game_orchestrator::reset_entities(self.game_data).await;
+            }
 
             if game_inputs::handle_client_inputs(
                 self.client_conn,
@@ -101,9 +103,9 @@ impl<'a> GameInstance<'a> {
                 self.auto_save();
             }
 
-            if self.game_data.area_state.read().end_quest {
-                break;
-            }
+            // if self.game_data.end_quest {
+            //     self.send_end_quest().await?;
+            // }
 
             if self
                 .sessions_store
@@ -124,19 +126,19 @@ impl<'a> GameInstance<'a> {
                     )
                     .await
                     .unwrap_or_else(|_| tracing::warn!("failed to send disconnection message"));
-                break;
+                tracing::debug!("game session '{}' stolen ", self.character_id);
+                return Ok(());
             }
 
             game_timer.wait_tick().await;
         }
 
-        let end_quest = self.game_data.area_state.read().end_quest;
-        if end_quest {
-            self.end_quest().await?;
+        if self.game_data.terminate_quest {
+            self.terminate_quest().await?;
         }
 
         self.client_conn
-            .send(&DisconnectMessage { end_quest }.into())
+            .send(&DisconnectMessage {}.into())
             .await
             .unwrap_or_else(|_| tracing::warn!("failed to send disconnection message"));
 
@@ -163,7 +165,18 @@ impl<'a> GameInstance<'a> {
         });
     }
 
-    async fn end_quest(&self) -> Result<()> {
+    // async fn send_end_quest(&self) -> Result<()> {
+    //     let quest_rewards =
+    //         quests_controller::generate_end_quest_rewards(self.game_data, &self.master_store);
+
+    //     self.client_conn
+    //         .send(&EndQuestMessage { quest_rewards }.into())
+    //         .await
+    //         .unwrap_or_else(|_| tracing::warn!("failed to send end quest message"));
+    //     Ok(())
+    // }
+
+    async fn terminate_quest(&self) -> Result<()> {
         let mut tx = self.db_pool.begin().await?;
 
         db::characters_data::save_character_inventory(

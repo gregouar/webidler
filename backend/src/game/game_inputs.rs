@@ -6,7 +6,10 @@ use shared::messages::{
     server::{ErrorMessage, ErrorType},
 };
 
-use crate::{game::data::master_store::MasterStore, websocket::WebSocketConnection};
+use crate::{
+    game::{data::master_store::MasterStore, systems::quests_controller},
+    websocket::WebSocketConnection,
+};
 
 use super::{
     game_data::GameInstanceData,
@@ -45,7 +48,16 @@ fn handle_client_message(
     match msg {
         ClientMessage::Heartbeat => {}
         ClientMessage::EndQuest => {
-            game_data.area_state.mutate().end_quest = true;
+            quests_controller::end_quest(master_store, game_data);
+        }
+        ClientMessage::TerminateQuest(m) => {
+            if let Err(err) = quests_controller::terminate_quest(game_data, m.item_index) {
+                return Some(ErrorMessage {
+                    error_type: ErrorType::Game,
+                    message: err.to_string(),
+                    must_disconnect: false,
+                });
+            }
         }
         ClientMessage::UseSkill(m) => {
             game_data

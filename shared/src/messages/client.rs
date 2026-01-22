@@ -17,6 +17,7 @@ impl_into_message! {
         Connect(ClientConnectMessage),
 
         EndQuest,
+        TerminateQuest(TerminateQuestMessage),
 
         UseSkill(UseSkillMessage),
         SetAutoSkill(SetAutoSkillMessage),
@@ -52,6 +53,11 @@ pub struct ClientConnectMessage {
     pub jwt: String,
     pub character_id: UserCharacterId,
     pub area_config: Option<StartAreaConfig>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct TerminateQuestMessage {
+    pub item_index: Option<u8>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
