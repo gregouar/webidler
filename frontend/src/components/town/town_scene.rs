@@ -21,7 +21,7 @@ use crate::{
         town::TownContext,
         ui::{
             buttons::{MenuButton, MenuButtonRed},
-            card::{Card, CardInset},
+            card::{Card, CardInset, CardTitle},
             menu_panel::MenuPanel,
             progress_bars::CircularProgressBar,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
@@ -52,12 +52,9 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                 <PlayerCard />
 
                 <Card class="w-2/3 aspect-[12/8]">
-
                     <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between gap-1 xl:gap-2 flex-wrap
                     flex justify-between">
-                        <span class="text-shadow-md shadow-gray-950 text-amber-200 text-lg xl:text-xl font-semibold">
-                            {if view_only { "Unlocked Grinds" } else { "Choose your Grind" }}
-                        </span>
+                        <CardTitle>"Grinds"</CardTitle>
                         {move || {
                             (max_area_level() > 0)
                                 .then(|| {
@@ -71,9 +68,8 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                         }}
                     </div>
 
-                    <CardInset>
-                        <div class="grid grid-cols-3 xl:grid-cols-5 gap-1 xl:gap-2 p-2 xl:p-4
-                        place-content-start">
+                    <CardInset class="min-h-0 flex-1">
+                        <div class="grid grid-cols-3 xl:grid-cols-5 gap-1 xl:gap-2 place-content-start">
                             <For
                                 each=move || {
                                     let mut areas = town_context.areas.get();
@@ -106,10 +102,7 @@ fn PlayerCard() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     view! {
-        <div class="max-h-full w-1/3
-        flex flex-col gap-1 xl:gap-2 p-1 xl:p-2
-        bg-zinc-800 ring-1 ring-zinc-950
-        rounded-md shadow-xl/30">
+        <Card class="w-1/3">
             <PlayerName />
 
             <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
@@ -138,7 +131,7 @@ fn PlayerCard() -> impl IntoView {
                     <PlayerSkill index=i />
                 </For>
             </div>
-        </div>
+        </Card>
     }
 }
 
@@ -150,7 +143,6 @@ pub fn CharacterPortrait() -> impl IntoView {
 
     view! {
         <div class="flex items-center justify-center h-full w-full relative overflow-hidden">
-
             <div class="border-6 xl:border-8 border-double border-stone-500 h-full w-full">
                 <div
                     class="h-full w-full"
@@ -481,8 +473,7 @@ pub fn StartGrindPanel(
                         </h2>
 
                         <span class="block text-xs xl:text-sm font-medium text-gray-400 italic
-                        pb-2 mb-2 border-b border-zinc-700
-                        max-w-xl mx-auto">
+                        pb-2 mb-2 max-w-xl mx-auto">
                             {move || {
                                 selected_area
                                     .read()
@@ -491,6 +482,8 @@ pub fn StartGrindPanel(
                                     .unwrap_or_default()
                             }}
                         </span>
+
+                        <div class="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
 
                         <ul class="text-xs xl:text-sm text-gray-400 list-none space-y-1">
                             <li class="leading-snug ">

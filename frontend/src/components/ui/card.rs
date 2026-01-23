@@ -16,7 +16,7 @@ pub fn Card(
             {} {} {}",
             class.unwrap_or_default(),
             if gap { "gap-1 xl:gap-2" } else { "" },
-            if pad { "p-1 xl:p-2" } else { "" },
+            if pad { "p-1 xl:p-3" } else { "" },
         )>{children()}</div>
     }
 }
@@ -25,7 +25,7 @@ pub fn Card(
 pub fn CardTitle(children: Children) -> impl IntoView {
     view! {
         <span class="
-        text-shadow-md shadow-gray-950 text-amber-200 font-semibold
+        text-shadow-lg/30 shadow-gray-950 text-amber-200 font-semibold
         text-base xl:text-xl 
         ">{children()}</span>
     }

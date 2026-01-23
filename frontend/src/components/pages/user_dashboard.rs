@@ -22,12 +22,7 @@ use crate::{
         backend_client::BackendClient,
         shared::{player_count::PlayerCount, settings::SettingsModal},
         ui::{
-            buttons::{MenuButton, MenuButtonRed},
-            confirm::ConfirmContext,
-            input::ValidatedInput,
-            menu_panel::MenuPanel,
-            number::format_datetime,
-            toast::*,
+            buttons::{MenuButton, MenuButtonRed}, card::{Card, CardInset, CardTitle}, confirm::ConfirmContext, input::ValidatedInput, menu_panel::MenuPanel, number::format_datetime, toast::*
         },
     },
 };
@@ -104,7 +99,7 @@ pub fn UserDashboardPage() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto w-full max-h-screen text-center overflow-x-hidden flex flex-col">
-            <DiscordInviteBanner />
+            <DiscordInviteBanner class:hidden class:xl:inline />
             <PlayerCount />
             <SettingsModal open=open_settings />
 
@@ -126,7 +121,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                 selected_character_portrait
                             />
                             <div class="relative flex-1 max-w-6xl w-full mx-auto p-2 xl:p-4 gap-2 xl:gap-4 flex flex-col ">
-                                <h1 class="mb-2 text-shadow-lg shadow-gray-950 text-amber-200 text-2xl xl:text-4xl font-extrabold leading-none tracking-tight">
+                                <h1 class="mb-2 text-shadow-lg/30 shadow-gray-950 text-amber-200 text-2xl/30 xl:text-4xl font-extrabold leading-none tracking-tight">
                                     "Welcome, " {user.username.clone()}"!"
                                 </h1>
 
@@ -144,32 +139,33 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     />
                                 </div>
 
-                                <div class="w-full bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-xl
-                                flex items-center justify-between gap-2 text-gray-400 p-2 xl:p-4">
-                                    <div class="flex gap-2">
-                                        <MenuButton on:click=move |_| {
-                                            open_settings.set(true)
-                                        }>"Game Settings"</MenuButton>
-                                        <a href="account">
-                                            <MenuButton>"Account Settings"</MenuButton>
-                                        </a>
+                                <Card class="w-full ">
+                                    <div class="flex items-center justify-between gap-2 text-gray-400">
+                                        <div class="flex gap-2">
+                                            <MenuButton on:click=move |_| {
+                                                open_settings.set(true)
+                                            }>"Game Settings"</MenuButton>
+                                            <a href="account">
+                                                <MenuButton>"Account Settings"</MenuButton>
+                                            </a>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <a href="leaderboard">
+                                                <MenuButton>"Leaderboard"</MenuButton>
+                                            </a>
+                                            <a
+                                                href="https://webidler.gitbook.io/wiki/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <MenuButton>"Wiki"</MenuButton>
+                                            </a>
+                                        </div>
+                                        <MenuButtonRed on:click=move |_| sign_out()>
+                                            "Sign Out"
+                                        </MenuButtonRed>
                                     </div>
-                                    <div class="flex gap-2">
-                                        <a href="leaderboard">
-                                            <MenuButton>"Leaderboard"</MenuButton>
-                                        </a>
-                                        <a
-                                            href="https://webidler.gitbook.io/wiki/"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <MenuButton>"Wiki"</MenuButton>
-                                        </a>
-                                    </div>
-                                    <MenuButtonRed on:click=move |_| sign_out()>
-                                        "Sign Out"
-                                    </MenuButtonRed>
-                                </div>
+                                </Card>
                             </div>
                         }
                     })
@@ -194,18 +190,15 @@ fn CharactersSelection(
     let characters_len = characters.len();
 
     view! {
-        <div class="flex flex-col h-full min-h-0 bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-xl p-4 text-left space-y-4">
-            <div class="flex flex-row justify-between items-center">
-                <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
-                    "Your Characters"
-                </span>
+        <Card class="h-full">
+            <div class="flex flex-row justify-between items-center px-4">
+                <CardTitle>"Your Characters"</CardTitle>
                 <span class="text-sm text-gray-400 font-medium">
                     {format!("{characters_len} / {}", user.max_characters)}
                 </span>
             </div>
 
-            <div class="w-full aspect-square overflow-y-auto p-2
-            bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+            <CardInset class="w-full aspect-square">
                 <div class="flex flex-col gap-3">
                     <For
                         each=move || characters.clone()
@@ -240,9 +233,8 @@ fn CharactersSelection(
                         None
                     }}
                 </div>
-            </div>
-
-        </div>
+            </CardInset>
+        </Card>
     }
 }
 
@@ -337,7 +329,7 @@ fn CharacterSlot(
         flex flex-row items-stretch h-full">
 
             <div
-                class="w-28 min-h-0  rounded-l-xl overflow-hidden"
+                class="w-28 min-h-0 rounded-l-xl overflow-hidden"
                 style=format!("background-image: url('{}');", img_asset("ui/paper_background.webp"))
             >
                 <img
@@ -348,12 +340,12 @@ fn CharacterSlot(
                 />
             </div>
 
-            <div class="flex flex-col justify-between flex-grow p-3 relative h-full">
+            <div class="flex flex-col justify-between flex-grow p-1 xl:p-3 relative h-full">
                 <div class="flex gap-2 absolute top-3 right-3 z-10">
                     <MenuButton on:click=try_delete_character>"❌"</MenuButton>
                 </div>
 
-                <div class="space-y-1 overflow-x-hidden">
+                <div class="space-y-1 overflow-x-hidden text-left">
                     <div class="text-lg font-semibold text-shadow-md shadow-gray-950 text-amber-300 truncate">
                         {character.name.clone()}
                     </div>
@@ -529,11 +521,8 @@ pub fn CreateCharacterPanel(
     view! {
         <MenuPanel open=open w_full=false h_full=false>
             <div class="flex items-center justify-center p-2 xl:p-4 h-full">
-                <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl p-4 xl:p-8 space-y-8 w-full max-w-lg mx-auto max-h-full
-                flex flex-col">
-                    <h2 class="text-2xl font-bold text-amber-300 text-center">
-                        "Create Character"
-                    </h2>
+                <Card class="space-y-3 xl:space-y-8 w-full max-w-lg mx-auto max-h-full">
+                    <CardTitle>"Create Character"</CardTitle>
 
                     <ValidatedInput
                         id="name"
@@ -603,7 +592,7 @@ pub fn CreateCharacterPanel(
                             "Confirm"
                         </MenuButton>
                     </div>
-                </div>
+                </Card>
             </div>
         </MenuPanel>
     }
@@ -689,13 +678,12 @@ fn NewsPanel() -> impl IntoView {
     });
 
     view! {
-        <div class="flex flex-col bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-xl p-4 text-left space-y-4">
-            <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
-                "News"
-            </span>
+        <Card class="text-left">
+            <div class="px-4">
+                <CardTitle>"News"</CardTitle>
+            </div>
 
-            <div class="w-full aspect-square flex flex-col p-2 gap-3 overflow-y-auto
-            bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+            <CardInset class="w-full aspect-square">
                 <Transition fallback=move || {
                     view! { <p class="text-gray-400">"Loading..."</p> }
                 }>
@@ -714,8 +702,8 @@ fn NewsPanel() -> impl IntoView {
                         })
                     }}
                 </Transition>
-            </div>
-        </div>
+            </CardInset>
+        </Card>
     }
 }
 

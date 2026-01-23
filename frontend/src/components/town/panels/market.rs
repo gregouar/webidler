@@ -652,7 +652,7 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
             <ItemDetails selected_item show_affixes=true />
 
-            <div class="flex justify-between items-end border-t border-zinc-700">
+            <div class="flex justify-between items-end border-t border-zinc-700 p-1 xl:p-4">
                 <div class="flex items-end gap-1 text-lg text-gray-400 ">
                     <ValidatedInput
                         id="price"
@@ -832,7 +832,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 </div>
             </div>
 
-            <div class="flex justify-between items-end p-4 border-t border-zinc-700">
+            <div class="flex justify-between items-end p-1 xl:p-4 border-t border-zinc-700">
                 <div class="flex items-end gap-1 text-lg text-gray-400 ">
                     <ValidatedInput
                         id="price"
@@ -845,12 +845,14 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                         <GemsIcon />
                     </div>
                     <MenuButton on:click=do_edit disabled=disabled>
-                        "Edit Price"
+                        <span class="inline xl:hidden">"Edit"</span>
+                        <span class="hidden xl:inline font-variant:small-caps">"Edit Price"</span>
                     </MenuButton>
                 </div>
 
                 <MenuButton on:click=do_remove disabled=disabled>
-                    "Remove Item"
+                    <span class="inline xl:hidden">"Remove"</span>
+                    <span class="hidden xl:inline font-variant:small-caps">"Remove Item"</span>
                 </MenuButton>
             </div>
         </div>

@@ -525,8 +525,6 @@ fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
             }
             "
         </style>
-        // <div class="bg-neutral-900 shadow-[inset_0_0_24px_rgba(0,0,0,0.6)]
-        // py-2 xl:py-4 ring-1 ring-zinc-900">
         <CardInset>
             <h2 class="text-amber-300 text-sm xl:text-base font-bold mb-1 xl:mb-2 tracking-wide">
                 {title}

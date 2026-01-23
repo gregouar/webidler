@@ -126,7 +126,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     view! {
-        <div class="relative z-50 w-full flex justify-between items-center p-1 xl:p-2 bg-zinc-800 shadow-md h-auto">
+        <div class="relative z-50 w-full flex justify-between items-center p-1 xl:p-2 bg-zinc-800 shadow-md/30 h-auto">
             <div class="flex justify-around w-full items-center">
                 <GoldCounter value=gold />
                 <GemsCounter value=gems />
