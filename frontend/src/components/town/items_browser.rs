@@ -68,7 +68,7 @@ pub fn ItemsBrowser(
                     reached_end_of_list.set(true)
                 }
             },
-            UseInfiniteScrollOptions::default().distance(10.0),
+            UseInfiniteScrollOptions::default().distance(20.0),
         );
     }
     view! {

@@ -17,8 +17,9 @@ use crate::{
         shared::{item_card::ItemCard, tooltips::ItemTooltip},
         ui::{
             buttons::{CloseButton, MenuButton},
+            card::{Card, CardInset, CardTitle},
             dropdown::DropdownMenu,
-            menu_panel::{MenuPanel, PanelTitle},
+            menu_panel::MenuPanel,
             tooltip::DynamicTooltipPosition,
         },
     },
@@ -81,15 +82,17 @@ pub fn EquippedItemsCard(inventory: InventoryConfig) -> impl IntoView {
     ];
 
     view! {
-        <div class="w-[30%] h-full flex flex-col gap-1 xl:gap-2 p-1 xl:p-2 bg-zinc-800 rounded-md shadow-xl ring-1 ring-zinc-950">
+        // <div class="w-[30%] h-full flex flex-col gap-1 xl:gap-2 p-1 xl:p-2 bg-zinc-800 rounded-md shadow-xl ring-1 ring-zinc-950">
+        <Card class="w-[30%] h-full">
 
-            <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl">
-                <span class="font-bold">"Equipped"</span>
-            </p>
+            // <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl">
+            // <span class="font-bold">"Equipped"</span>
+            // </p>
+            <CardTitle>"Equipped"</CardTitle>
 
-            <div class="relative min-h-0 flex-1  overflow-y-auto">
-                <div class="grid grid-rows-3 grid-cols-3 gap-2 xl:gap-x-4 xl:gap-y-3 py-1 xl:py-3 px-3 xl:px-6
-                bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+            // <div class="relative min-h-0 flex-1  overflow-y-auto">
+            <CardInset class="relative min-h-0 flex-1">
+                <div class="grid grid-rows-3 grid-cols-3 gap-2 xl:gap-x-4 xl:gap-y-3 py-1 xl:py-3 px-3 xl:px-6">
                     {EQUIPPED_SLOTS
                         .iter()
                         .map(|(slot, asset, alt)| {
@@ -104,8 +107,8 @@ pub fn EquippedItemsCard(inventory: InventoryConfig) -> impl IntoView {
                         })
                         .collect::<Vec<_>>()}
                 </div>
-            </div>
-        </div>
+            </CardInset>
+        </Card>
     }
 }
 
@@ -320,10 +323,11 @@ pub fn EquippedItemContextMenu(
 #[component]
 fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
     view! {
-        <div class="bg-zinc-800 rounded-md h-full w-[70%] gap-1 xl:gap-2 p-1 xl:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
+        // <div class="bg-zinc-800 rounded-md h-full w-[70%] gap-1 xl:gap-2 p-1 xl:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
+        <Card class="h-full w-[70%]">
             <div class="px-4 relative z-10 flex items-center justify-between gap-2">
                 <div class="flex flex-row items-center gap-1 xl:gap-2">
-                    <PanelTitle>"Inventory"</PanelTitle>
+                    <CardTitle>"Inventory"</CardTitle>
                     <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
                         {move || {
                             format!(
@@ -354,10 +358,9 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                 </div>
             </div>
 
-            <div class="relative min-h-0 flex-1  overflow-y-auto">
+            <CardInset class="relative min-h-0 flex-1">
                 <div class="grid grid-cols-8 xl:grid-cols-10
-                gap-1 xl:gap-x-3 xl:gap-y-2 py-1 xl:py-3 px-3 xl:px-6 relative
-                bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                gap-1 xl:gap-x-3 xl:gap-y-2 py-1 xl:py-3 px-3 xl:px-6 relative">
                     <For
                         each=move || 0..inventory.player_inventory.read().max_bag_size as usize
                         key=|i| *i
@@ -366,9 +369,9 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                         <BagItem inventory=inventory.clone() item_index=i />
                     </For>
                 </div>
-            </div>
+            </CardInset>
 
-        </div>
+        </Card>
     }
 }
 

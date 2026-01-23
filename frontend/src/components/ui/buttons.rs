@@ -171,7 +171,7 @@ pub fn TabButton(
                 format!(
                     "btn
                     flex-1
-                    px-1 xl:px-3 py-1 xl:py-2 
+                    px-2 xl:px-3 py-1 xl:py-2 
                     text-sm xl:text-base 
                     font-bold text-shadow
                     border-t border-l border-r border-neutral-950 rounded-t-md 

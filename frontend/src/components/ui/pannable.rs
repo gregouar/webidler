@@ -142,7 +142,7 @@ pub fn Pannable(children: Children) -> impl IntoView {
             on:touchstart=on_touch_start
             on:touchmove=on_touch_move
             on:touchend=on_touch_end
-            class="flex items-center justify-center w-full h-full touch-none overflow-hidden bg-neutral-900"
+            class="flex items-center justify-center w-full h-full touch-none overflow-hidden"
         >
             <svg
                 node_ref=svg_ref

@@ -9,9 +9,10 @@ use crate::components::{
         resources::{GemsCounter, GoldCounter, ShardsCounter},
     },
     ui::{
-        buttons::{CloseButton, MenuButton},
+        buttons::MenuButton,
+        card::{Card, CardHeader, CardInset},
         confirm::ConfirmContext,
-        menu_panel::{MenuPanel, PanelTitle},
+        menu_panel::MenuPanel,
         number::format_duration,
     },
     websocket::WebsocketContext,
@@ -31,7 +32,7 @@ pub fn EndQuestPanel() -> impl IntoView {
     });
 
     view! {
-        <MenuPanel open w_full=false>
+        <MenuPanel open w_full=false h_full=false>
             <EndQuest open />
         </MenuPanel>
     }
@@ -100,21 +101,10 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <div class="max-w-2xl max-h-full mx-auto">
-            <div class="bg-zinc-800 rounded-xl p-3 xl:p-4 shadow-2xl ring-1 ring-zinc-950 flex flex-col gap-3 max-h-full">
+            <Card>
+                <CardHeader title="Grind Ended" on_close=move || open.set(false) />
 
-                <div class="px-4 flex items-center justify-between">
-                    <PanelTitle>"Grind Ended"</PanelTitle>
-                    <CloseButton on:click=move |_| open.set(false) />
-                </div>
-
-                <div class="
-                flex flex-col gap-1 xl:gap-4
-                bg-neutral-900 rounded-lg
-                shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]
-                ring-1 ring-zinc-900
-                p-1 xl:p-4
-                ">
-
+                <CardInset>
                     <div class="grid grid-cols-3 gap-4 text-center">
                         <div class="flex flex-col items-center gap-1">
                             <GoldCounter value=gold_donation_value />
@@ -145,13 +135,12 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
                     </div>
 
                     <ItemRewards item_reward_picked />
+                </CardInset>
 
-                    <div class="flex justify-center pt-2">
-                        <MenuButton on:click=try_confirm_end>"Confirm Reward & Exit"</MenuButton>
-                    </div>
-
+                <div class="flex justify-center">
+                    <MenuButton on:click=try_confirm_end>"Confirm Reward & Exit"</MenuButton>
                 </div>
-            </div>
+            </Card>
         </div>
     }
 }
@@ -165,7 +154,7 @@ fn ItemRewards(item_reward_picked: RwSignal<Option<usize>>) -> impl IntoView {
     view! {
         <div class="w-full h-full flex flex-col gap-2 items-center justify-center">
 
-            <span class="text-center text-sm xl:text-base font-semibold text-amber-200 tracking-wide">
+            <span class="text-center text-sm xl:text-base font-semibold text-amber-300 tracking-wide">
                 "Pick a Reward"
             </span>
 

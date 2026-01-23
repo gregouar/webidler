@@ -11,8 +11,8 @@ use crate::components::{
     game::GameContext,
     shared::tooltips::effects_tooltip::{self, format_multiplier_stat_name},
     ui::{
-        buttons::CloseButton,
-        menu_panel::{MenuPanel, PanelTitle},
+        card::{Card, CardHeader, CardInset},
+        menu_panel::MenuPanel,
         number::{format_duration, format_number},
     },
 };
@@ -37,11 +37,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open=open>
             <div class="w-full  h-full">
-                <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-2 max-h-full">
-                    <div class="px-4 relative z-10 flex items-center justify-between">
-                        <PanelTitle>"Statistics "</PanelTitle>
-                        <CloseButton on:click=move |_| open.set(false) />
-                    </div>
+                <Card>
+                    <CardHeader title="Statistics" on_close=move || open.set(false) />
 
                     <div class="grid grid-cols-2 xl:grid-cols-3 gap-2 xl:gap-4 overflow-y-auto">
 
@@ -513,7 +510,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         </StatCategory>
                     </div>
 
-                </div>
+                </Card>
             </div>
         </MenuPanel>
     }
@@ -528,13 +525,14 @@ fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
             }
             "
         </style>
-        <div class="bg-neutral-900 rounded-lg shadow-[inset_0_0_24px_rgba(0,0,0,0.6)]
-        py-2 xl:py-4 ring-1 ring-zinc-900">
+        // <div class="bg-neutral-900 shadow-[inset_0_0_24px_rgba(0,0,0,0.6)]
+        // py-2 xl:py-4 ring-1 ring-zinc-900">
+        <CardInset>
             <h2 class="text-amber-300 text-sm xl:text-base font-bold mb-1 xl:mb-2 tracking-wide">
                 {title}
             </h2>
             <div class="flex flex-col gap-1 stat-list">{children()}</div>
-        </div>
+        </CardInset>
     }
 }
 

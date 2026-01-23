@@ -14,9 +14,10 @@ use crate::components::{
     shared::{resources::GoldIcon, tooltips::effects_tooltip},
     town::TownContext,
     ui::{
-        buttons::{CloseButton, MenuButton},
+        buttons::MenuButton,
+        card::{Card, CardHeader, CardInset, CardTitle},
         confirm::ConfirmContext,
-        menu_panel::{MenuPanel, PanelTitle},
+        menu_panel::MenuPanel,
         number::{format_number, format_number_without_context},
         toast::*,
     },
@@ -46,18 +47,21 @@ pub fn TemplePanel(
     view! {
         <MenuPanel open=open>
             <div class="w-full h-full">
-                <div class="bg-zinc-800 rounded-md p-1 xl:p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-1 xl:gap-2 max-h-full">
-                    <div class="px-2 xl:px-4 flex items-center justify-between">
-                        <PanelTitle>"Temple"</PanelTitle>
+                <Card>
+                    <CardHeader title="Temple" on_close=move || open.set(false)>
                         {(!view_only)
                             .then(|| {
                                 view! {
+                                    <div class="flex-1" />
+
                                     <div class="flex h-full items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
                                         "Benedictions Cost: "
                                         <span class="text-amber-200 font-bold font-number">
                                             {move || format_number(cost.get())}
                                         </span> <GoldIcon />
                                     </div>
+
+                                    <div class="flex-1" />
 
                                     <div class="flex items-center gap-2">
                                         <MenuButton
@@ -70,11 +74,11 @@ pub fn TemplePanel(
                                     </div>
                                 }
                             })}
-                        <CloseButton on:click=move |_| open.set(false) />
-                    </div>
-
-                    <BenedictionsList player_benedictions cost view_only />
-                </div>
+                    </CardHeader>
+                    <CardInset>
+                        <BenedictionsList player_benedictions cost view_only />
+                    </CardInset>
+                </Card>
             </div>
         </MenuPanel>
     }
@@ -164,9 +168,8 @@ fn BenedictionsList(
     };
 
     view! {
-        <div class="relative min-h-0 flex-1 overflow-y-auto
-        bg-neutral-900 ring-1 ring-zinc-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] 
-        grid grid-cols-1 xl:grid-cols-2 gap-2 p-1 xl:p-2">
+        <div class="relative min-h-0 flex-1
+        grid grid-cols-1 xl:grid-cols-2 gap-2">
             {move || {
                 benedictions_specs()
                     .into_iter()
@@ -242,6 +245,8 @@ fn BenedictionRow(
         }
     };
 
+    let benediction_title = format_benediction_title(&benediction_specs.effect);
+
     view! {
         <div class="p-4 rounded-lg bg-zinc-800 border border-zinc-700
         shadow-inner flex flex-row gap-6 items-start
@@ -250,9 +255,7 @@ fn BenedictionRow(
             <div class="flex flex-col flex-1 gap-1">
 
                 <div class="flex items-center justify-between">
-                    <div class="text-lg font-semibold text-amber-200 capitalize">
-                        {format_benediction_title(&benediction_specs.effect)}
-                    </div>
+                    <CardTitle>{benediction_title}</CardTitle>
 
                     <div class="text-sm text-gray-400">
                         "Level " {move || upgrade_level.get()}

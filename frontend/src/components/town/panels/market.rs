@@ -33,10 +33,11 @@ use crate::components::{
         TownContext,
     },
     ui::{
-        buttons::{CloseButton, MenuButton, MenuButtonRed, TabButton},
+        buttons::{MenuButton, MenuButtonRed, TabButton},
+        card::{Card, CardHeader, CardInset, CardTitle},
         dropdown::{DropdownMenu, SearchableDropdownMenu},
         input::{Input, ValidatedInput},
-        menu_panel::{MenuPanel, PanelTitle},
+        menu_panel::MenuPanel,
         number::format_datetime,
         toast::*,
     },
@@ -75,153 +76,134 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <div class="w-full">
-                <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col">
-                    <div class="px-4 relative z-10 flex items-center justify-between">
-                        <PanelTitle>"Market"</PanelTitle>
-
-                        <div class="flex-1 flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto">
-                            <TabButton
-                                is_active=Signal::derive(move || {
-                                    active_tab.get() == MarketTab::Filters
-                                })
-                                on:click=move |_| { switch_tab(MarketTab::Filters) }
-                            >
-                                "Filters"
-                            </TabButton>
-                            <TabButton
-                                is_active=Signal::derive(move || active_tab.get() == MarketTab::Buy)
-                                on:click=move |_| { switch_tab(MarketTab::Buy) }
-                            >
-                                "Buy"
-                            </TabButton>
-                            <TabButton
-                                is_active=Signal::derive(move || {
-                                    active_tab.get() == MarketTab::Sell
-                                })
-                                on:click=move |_| { switch_tab(MarketTab::Sell) }
-                                disabled=disable_sell
-                            >
-                                "Sell"
-                            </TabButton>
-                            <TabButton
-                                is_active=Signal::derive(move || {
-                                    active_tab.get() == MarketTab::Listings
-                                })
-                                on:click=move |_| { switch_tab(MarketTab::Listings) }
-                                disabled=disable_sell
-                            >
-                                "Listings"
-                            </TabButton>
-                            <TabButton
-                                is_active=Signal::derive(move || {
-                                    active_tab.get() == MarketTab::Logs
-                                })
-                                on:click=move |_| { switch_tab(MarketTab::Logs) }
-                                disabled=disable_sell
-                            >
-                                "Logs"
-                            </TabButton>
-                        </div>
-
-                        <div class="flex-1"></div>
-
-                        <div class="flex items-center gap-2 mb-2">
-                            <RevenueGems stash />
-                        </div>
-
-                        <div class="flex-1"></div>
-
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
-                                {move || {
-                                    format!(
-                                        "({} / {})",
-                                        stash.read().items_amount,
-                                        stash.read().max_items,
-                                    )
-                                }}
-                            </span>
-                            <CloseButton on:click=move |_| open.set(false) />
-                        </div>
+            <Card class="h-full" gap=false>
+                <CardHeader title="Market" on_close=move || open.set(false)>
+                    <div class="flex-1 flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto">
+                        <TabButton
+                            is_active=Signal::derive(move || {
+                                active_tab.get() == MarketTab::Filters
+                            })
+                            on:click=move |_| { switch_tab(MarketTab::Filters) }
+                        >
+                            "Filters"
+                        </TabButton>
+                        <TabButton
+                            is_active=Signal::derive(move || active_tab.get() == MarketTab::Buy)
+                            on:click=move |_| { switch_tab(MarketTab::Buy) }
+                        >
+                            "Buy"
+                        </TabButton>
+                        <TabButton
+                            is_active=Signal::derive(move || {
+                                active_tab.get() == MarketTab::Sell
+                            })
+                            on:click=move |_| { switch_tab(MarketTab::Sell) }
+                            disabled=disable_sell
+                        >
+                            "Sell"
+                        </TabButton>
+                        <TabButton
+                            is_active=Signal::derive(move || {
+                                active_tab.get() == MarketTab::Listings
+                            })
+                            on:click=move |_| { switch_tab(MarketTab::Listings) }
+                            disabled=disable_sell
+                        >
+                            "Listings"
+                        </TabButton>
+                        <TabButton
+                            is_active=Signal::derive(move || {
+                                active_tab.get() == MarketTab::Logs
+                            })
+                            on:click=move |_| { switch_tab(MarketTab::Logs) }
+                            disabled=disable_sell
+                        >
+                            "Logs"
+                        </TabButton>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="w-full aspect-[4/3] bg-neutral-900 overflow-y-auto ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                            {move || {
-                                match active_tab.get() {
-                                    MarketTab::Filters => {
-                                        view! { <MainFilters filters /> }.into_any()
-                                    }
-                                    MarketTab::Buy => {
-                                        view! {
-                                            <MarketBrowser
-                                                selected_item
-                                                filters
-                                                own_listings=false
-                                                is_deleted=false
-                                            />
-                                        }
-                                            .into_any()
-                                    }
-                                    MarketTab::Sell => {
-                                        view! { <InventoryBrowser selected_item /> }.into_any()
-                                    }
-                                    MarketTab::Listings => {
-                                        view! {
-                                            <MarketBrowser
-                                                selected_item
-                                                filters
-                                                own_listings=true
-                                                is_deleted=false
-                                            />
-                                        }
-                                            .into_any()
-                                    }
-                                    MarketTab::Logs => {
-                                        view! {
-                                            <MarketBrowser
-                                                selected_item
-                                                filters=Signal::derive(|| MarketFilters {
-                                                    order_by: MarketOrderBy::Time,
-                                                    ..Default::default()
-                                                })
-                                                own_listings=true
-                                                is_deleted=true
-                                            />
-                                        }
-                                            .into_any()
-                                    }
-                                }
-                            }}
-                        </div>
+                    <div class="flex-1"></div>
 
-                        <div class="w-full aspect-[4/3] bg-neutral-900 overflow-y-auto shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                            {move || {
-                                match active_tab.get() {
-                                    MarketTab::Filters => {
-                                        view! { <StatsFilters filters /> }.into_any()
-                                    }
-                                    MarketTab::Buy => {
-                                        view! { <BuyDetails selected_item /> }.into_any()
-                                    }
-                                    MarketTab::Sell => {
-                                        view! { <SellDetails selected_item /> }.into_any()
-                                    }
-                                    MarketTab::Listings => {
-                                        view! { <ListingDetails selected_item /> }.into_any()
-                                    }
-                                    MarketTab::Logs => {
-                                        view! { <LogsDetails selected_item /> }.into_any()
-                                    }
-                                }
-                            }}
-                        </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <RevenueGems stash />
                     </div>
 
-                    <div class="px-4 relative z-10 flex items-center justify-between"></div>
+                    <div class="flex-1"></div>
+
+                    <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
+                        {move || {
+                            format!("({} / {})", stash.read().items_amount, stash.read().max_items)
+                        }}
+                    </span>
+                </CardHeader>
+
+                <div class="grid grid-cols-2 gap-2 min-h-0 flex-1">
+                    <CardInset class="w-full" pad=false>
+                        {move || {
+                            match active_tab.get() {
+                                MarketTab::Filters => view! { <MainFilters filters /> }.into_any(),
+                                MarketTab::Buy => {
+                                    view! {
+                                        <MarketBrowser
+                                            selected_item
+                                            filters
+                                            own_listings=false
+                                            is_deleted=false
+                                        />
+                                    }
+                                        .into_any()
+                                }
+                                MarketTab::Sell => {
+                                    view! { <InventoryBrowser selected_item /> }.into_any()
+                                }
+                                MarketTab::Listings => {
+                                    view! {
+                                        <MarketBrowser
+                                            selected_item
+                                            filters
+                                            own_listings=true
+                                            is_deleted=false
+                                        />
+                                    }
+                                        .into_any()
+                                }
+                                MarketTab::Logs => {
+                                    view! {
+                                        <MarketBrowser
+                                            selected_item
+                                            filters=Signal::derive(|| MarketFilters {
+                                                order_by: MarketOrderBy::Time,
+                                                ..Default::default()
+                                            })
+                                            own_listings=true
+                                            is_deleted=true
+                                        />
+                                    }
+                                        .into_any()
+                                }
+                            }
+                        }}
+                    </CardInset>
+
+                    <CardInset class="w-full">
+                        {move || {
+                            match active_tab.get() {
+                                MarketTab::Filters => view! { <StatsFilters filters /> }.into_any(),
+                                MarketTab::Buy => view! { <BuyDetails selected_item /> }.into_any(),
+                                MarketTab::Sell => {
+                                    view! { <SellDetails selected_item /> }.into_any()
+                                }
+                                MarketTab::Listings => {
+                                    view! { <ListingDetails selected_item /> }.into_any()
+                                }
+                                MarketTab::Logs => {
+                                    view! { <LogsDetails selected_item /> }.into_any()
+                                }
+                            }
+                        }}
+                    </CardInset>
                 </div>
-            </div>
+            </Card>
         </MenuPanel>
     }
 }
@@ -546,11 +528,8 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     };
 
     view! {
-        <div class="w-full h-full flex flex-col justify-between p-4 relative">
-
-            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
-                "Buy from Market"
-            </span>
+        <div class="w-full h-full flex flex-col justify-between">
+            <CardTitle>"Buy from Market"</CardTitle>
 
             <div class="flex flex-col">
                 <span class="text-pink-400 p-2 font-bold">
@@ -660,24 +639,20 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     };
 
     view! {
-        <div class="w-full h-full flex flex-col justify-between p-4 relative">
-            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center">
-                "Sell from Bag"
-            </span>
+        <div class="w-full h-full flex flex-col justify-between relative">
+            <CardTitle>"Sell from Bag"</CardTitle>
 
-            <div>
-                <ValidatedInput
-                    id="private_offer"
-                    label="Private Offer:"
-                    input_type="text"
-                    placeholder="Enter User Name"
-                    bind=recipient_name
-                />
-            </div>
+            <ValidatedInput
+                id="private_offer"
+                label="Private Offer:"
+                input_type="text"
+                placeholder="Enter User Name"
+                bind=recipient_name
+            />
 
             <ItemDetails selected_item show_affixes=true />
 
-            <div class="flex justify-between items-end p-4 border-t border-zinc-700">
+            <div class="flex justify-between items-end border-t border-zinc-700">
                 <div class="flex items-end gap-1 text-lg text-gray-400 ">
                     <ValidatedInput
                         id="price"
@@ -829,10 +804,8 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     };
 
     view! {
-        <div class="w-full h-full flex flex-col justify-between p-4 relative">
-            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center">
-                "Remove from Market"
-            </span>
+        <div class="w-full h-full flex flex-col justify-between relative">
+            <CardTitle>"Remove from Market"</CardTitle>
 
             <div class="flex flex-col">
                 <span class="p-2">
@@ -929,10 +902,8 @@ pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     };
 
     view! {
-        <div class="w-full h-full flex flex-col justify-between p-4 relative">
-            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center">
-                "Remove from Market"
-            </span>
+        <div class="w-full h-full flex flex-col justify-between relative">
+            <CardTitle>"Item Sold"</CardTitle>
 
             <div class="flex flex-col">
                 <ItemDetails selected_item show_affixes=true />
@@ -1070,10 +1041,8 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
         .collect();
 
     view! {
-        <div class="w-full h-full flex flex-col p-4 relative">
-            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
-                "Main Filters"
-            </span>
+        <div class="w-full h-full flex flex-col gap-2 xl:gap-4 relative p-1 xl:p-4">
+            <CardTitle>"Main Filters"</CardTitle>
 
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4 border-b border-zinc-700">
                 <div class="flex flex-col gap-4">
@@ -1221,12 +1190,10 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     });
 
     view! {
-        <div class="w-full h-full flex flex-col p-4 relative">
-            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
-                "Stat Filters"
-            </span>
+        <div class="w-full min-h-0 flex-1 flex flex-col gap-2 xl:gap-4 relative">
+            <CardTitle>"Stat Filters"</CardTitle>
 
-            <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4 border-b border-zinc-700">
+            <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4">
                 {stat_filters
                     .map(|(stat_type, stat_value)| {
                         view! {

@@ -14,8 +14,8 @@ use crate::components::{
         node_meta_status, Connection, MetaStatus, Node, NodeStatus, PurchaseStatus,
     },
     ui::{
-        buttons::CloseButton,
-        menu_panel::{MenuPanel, PanelTitle},
+        card::{Card, CardHeader, CardInset},
+        menu_panel::MenuPanel,
         pannable::Pannable,
     },
     websocket::WebsocketContext,
@@ -26,14 +26,12 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open=open>
             <div class="w-full h-full">
-                <div class="bg-zinc-800 rounded-md p-1 xl:p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-1 xl:gap-2 max-h-full">
-                    <div class="px-2 xl:px-4 flex items-center justify-between">
-                        <PanelTitle>"Passive Skills"</PanelTitle>
-                        <CloseButton on:click=move |_| open.set(false) />
-                    </div>
-
-                    <PassiveSkillTree />
-                </div>
+                <Card>
+                    <CardHeader title="Passive Skills" on_close=move || open.set(false) />
+                    <CardInset pad=false>
+                        <PassiveSkillTree />
+                    </CardInset>
+                </Card>
             </div>
         </MenuPanel>
     }

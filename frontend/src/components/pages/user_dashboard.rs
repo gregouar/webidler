@@ -527,7 +527,7 @@ pub fn CreateCharacterPanel(
     ];
 
     view! {
-        <MenuPanel open=open w_full=false>
+        <MenuPanel open=open w_full=false h_full=false>
             <div class="flex items-center justify-center p-2 xl:p-4 h-full">
                 <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl p-4 xl:p-8 space-y-8 w-full max-w-lg mx-auto max-h-full
                 flex flex-col">

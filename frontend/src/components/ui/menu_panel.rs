@@ -7,6 +7,7 @@ pub fn MenuPanel(
     open: RwSignal<bool>, 
     children: ChildrenFn, 
     #[prop(default = true)] w_full:bool,
+    #[prop(default = true)] h_full:bool,
 ) -> impl IntoView {
     let panel_ref = NodeRef::<Div>::new();
 
@@ -75,6 +76,7 @@ pub fn MenuPanel(
                 <div
                     class="z-41 w-fit mx-auto max-h-full flex flex-col will-change-transform"
                     class:w-full=w_full
+                    class:h-full=h_full
                     style=move || {
                         if open.get() {
                             "animation: dropDown 0.3s ease-out forwards;"
@@ -88,13 +90,5 @@ pub fn MenuPanel(
                 </div>
             </div>
         </Show>
-    }
-}
-
-#[component]
-pub fn PanelTitle(children: Children) -> impl IntoView {
-    view! {
-        <span class="text-shadow-md shadow-gray-950 text-amber-200 font-semibold
-        text-sm xl:text-base xl:text-xl">{children()}</span>
     }
 }

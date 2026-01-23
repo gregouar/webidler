@@ -107,9 +107,13 @@ pub fn HeaderMenu() -> impl IntoView {
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
                 <FullscreenButton />
                 <WikiButton />
-                <MenuButton on:click=move |_| open_inventory()>"Inventory"</MenuButton>
+                <MenuButton on:click=move |_| open_inventory()>
+                    <span class="inline xl:hidden">"Inv."</span>
+                    <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
+                </MenuButton>
                 <MenuButton on:click=move |_| open_passives()>
-                    "Passives"
+                    <span class="inline xl:hidden">"Pas."</span>
+                    <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
                     {move || {
                         let points = game_context.player_resources.read().passive_points;
                         if points > 0 { format!(" ({points})") } else { "".to_string() }

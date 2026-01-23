@@ -143,7 +143,7 @@ pub fn ItemCard(
             // node_ref=node_ref
             class=format!(
                 "relative group flex items-center justify-center w-full aspect-[2/3]
-                rounded-md p-1 bg-gradient-to-br {} border-4 {} ring-2 {} shadow-md {}
+                rounded-md p-1 bg-gradient-to-br {} border-2 xl:border-4 {} ring-1 xl:ring-2 {} shadow-md {}
                 cursor-pointer
                 ",
                 gradient,

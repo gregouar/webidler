@@ -21,6 +21,7 @@ use crate::{
         town::TownContext,
         ui::{
             buttons::{MenuButton, MenuButtonRed},
+            card::{Card, CardInset},
             menu_panel::MenuPanel,
             progress_bars::CircularProgressBar,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
@@ -50,9 +51,7 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
             <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
                 <PlayerCard />
 
-                <div class="w-2/3 aspect-[12/8] flex flex-col shadow-xl/30 rounded-md overflow-hidden
-                gap-1 xl:gap-2 p-1 xl:p-2 
-                ring-1 ring-zinc-950 bg-zinc-800">
+                <Card class="w-2/3 aspect-[12/8]">
 
                     <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between gap-1 xl:gap-2 flex-wrap
                     flex justify-between">
@@ -72,8 +71,7 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                         }}
                     </div>
 
-                    <div class="flex flex-col relative w-full flex-1 min-h-0
-                    bg-neutral-900 overflow-auto shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                    <CardInset>
                         <div class="grid grid-cols-3 xl:grid-cols-5 gap-1 xl:gap-2 p-2 xl:p-4
                         place-content-start">
                             <For
@@ -95,8 +93,8 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                             />
                         </div>
                         <div class="flex-1"></div>
-                    </div>
-                </div>
+                    </CardInset>
+                </Card>
 
             </div>
         </div>
@@ -280,7 +278,7 @@ fn GrindingAreaCard(
             || area.area_specs.coming_soon
     };
 
-    let play_area = {
+    let select_area = {
         let area = area.clone();
         move |_| {
             if !locked() && !view_only {
@@ -303,7 +301,7 @@ fn GrindingAreaCard(
                     },
                 )
             }
-            on:click=play_area
+            on:click=select_area
         >
             <div class="h-10 xl:h-16 w-full relative">
                 <img
@@ -439,21 +437,7 @@ pub fn StartGrindPanel(
         town_context.open_inventory.set(true);
     };
 
-    let play_area = {
-        let navigate = use_navigate();
-        let (_, set_area_config_storage, _) =
-            storage::use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
-
-        move |_| {
-            if let Some(selected_area) = selected_area.get_untracked() {
-                set_area_config_storage.set(Some(StartAreaConfig {
-                    area_id: selected_area.area_id,
-                    map_item_index: town_context.selected_item_index.get_untracked(),
-                }));
-                navigate("/game", Default::default());
-            }
-        }
-    };
+    // let play_area =;
 
     let disable_confirm = Signal::derive(move || {
         selected_map
@@ -463,12 +447,13 @@ pub fn StartGrindPanel(
             .unwrap_or_default()
     });
 
+    let (_, set_area_config_storage, _) =
+        storage::use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
+
     view! {
-        <MenuPanel open=open w_full=false>
+        <MenuPanel open=open w_full=false h_full=false>
             <div class="flex items-center justify-center p-2 xl:p-4 h-full">
-                <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl
-                w-full max-w-4xl mx-auto max-h-full
-                flex flex-col overflow-hidden">
+                <Card class="max-w-4xl mx-auto overflow-hidden" pad=false gap=false>
                     <div class="h-10 xl:h-16 w-full relative">
                         <img
                             draggable="false"
@@ -484,8 +469,7 @@ pub fn StartGrindPanel(
                         <div class="absolute inset-0 bg-black/30"></div>
                     </div>
 
-                    <div class="flex flex-col p-3 xl:p68 space-y-2 xl:space-y-4 overflow-y-auto">
-
+                    <CardInset class="space-y-2 xl:space-y-4">
                         <h2 class="text-lg xl:text-2xl font-bold text-amber-300 text-center">
                             {move || {
                                 selected_area
@@ -553,12 +537,30 @@ pub fn StartGrindPanel(
                             <MenuButtonRed on:click=move |_| {
                                 open.set(false)
                             }>"Cancel"</MenuButtonRed>
-                            <MenuButton on:click=play_area.clone() disabled=disable_confirm>
+                            <MenuButton
+                                on:click={
+                                    let navigate = use_navigate();
+                                    move |_| {
+                                        if let Some(selected_area) = selected_area.get_untracked() {
+                                            set_area_config_storage
+                                                .set(
+                                                    Some(StartAreaConfig {
+                                                        area_id: selected_area.area_id,
+                                                        map_item_index: town_context
+                                                            .selected_item_index
+                                                            .get_untracked(),
+                                                    }),
+                                                );
+                                            navigate("/game", Default::default());
+                                        }
+                                    }
+                                }
+                                disabled=disable_confirm
+                            >
                                 "Confirm"
                             </MenuButton>
                         </div>
-
-                    </div>
+                    </CardInset>
 
                     <div class="h-10 xl:h-16 w-full relative">
                         <img
@@ -574,8 +576,7 @@ pub fn StartGrindPanel(
                         />
                         <div class="absolute inset-0 bg-black/20"></div>
                     </div>
-
-                </div>
+                </Card>
             </div>
         </MenuPanel>
     }
