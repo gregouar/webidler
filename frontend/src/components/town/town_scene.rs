@@ -20,7 +20,7 @@ use crate::{
         },
         town::TownContext,
         ui::{
-            buttons::{MenuButton, MenuButtonRed},
+            buttons::{CloseButton, MenuButton},
             card::{Card, CardInset, CardTitle},
             menu_panel::MenuPanel,
             progress_bars::CircularProgressBar,
@@ -301,7 +301,6 @@ fn GrindingAreaCard(
                     src=img_asset(&area.area_specs.header_background)
                     class="object-cover w-full h-full"
                 />
-                <div class="absolute inset-0 bg-black/30"></div>
             </div>
 
             <div class="p-2 xl:p-4 space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
@@ -330,7 +329,6 @@ fn GrindingAreaCard(
                     src=img_asset(&area.area_specs.footer_background)
                     class="object-cover w-full h-full"
                 />
-                <div class="absolute inset-0 bg-black/20"></div>
             </div>
 
             <Show when=move || locked()>
@@ -444,7 +442,7 @@ pub fn StartGrindPanel(
 
     view! {
         <MenuPanel open=open w_full=false h_full=false>
-            <div class="flex items-center justify-center p-2 xl:p-4 h-full">
+            <div class="flex items-center justify-center p-1 xl:p-4 h-full">
                 <Card class="max-w-4xl mx-auto overflow-hidden" pad=false gap=false>
                     <div class="h-10 xl:h-16 w-full relative">
                         <img
@@ -458,11 +456,15 @@ pub fn StartGrindPanel(
                             }
                             class="object-cover w-full h-full"
                         />
-                        <div class="absolute inset-0 bg-black/30"></div>
+                        <div class="absolute inset-0">
+                            <div class="w-full h-full flex justify-end items-center px-4">
+                                <CloseButton on:click=move |_| open.set(false) />
+                            </div>
+                        </div>
                     </div>
 
-                    <CardInset class="space-y-2 xl:space-y-4">
-                        <h2 class="text-lg xl:text-2xl font-bold text-amber-300 text-center">
+                    <CardInset class="xl:space-y-4">
+                        <span class="text-lg xl:text-2xl font-bold text-amber-300 text-center">
                             {move || {
                                 selected_area
                                     .read()
@@ -470,10 +472,10 @@ pub fn StartGrindPanel(
                                     .map(|area| area.area_specs.name.clone())
                                     .unwrap_or_default()
                             }}
-                        </h2>
+                        </span>
 
                         <span class="block text-xs xl:text-sm font-medium text-gray-400 italic
-                        pb-2 mb-2 max-w-xl mx-auto">
+                        xl:mb-4 max-w-xl mx-auto">
                             {move || {
                                 selected_area
                                     .read()
@@ -513,7 +515,7 @@ pub fn StartGrindPanel(
                             </li>
                         </ul>
 
-                        <div class="w-full h-full flex items-center justify-center">
+                        <div class="w-full h-full px-4 flex items-center justify-center">
                             <div
                                 class="flex flex-row gap-6 items-center
                                 w-full h-auto aspect-5/2 overflow-y-auto
@@ -526,33 +528,6 @@ pub fn StartGrindPanel(
                             </div>
                         </div>
 
-                        <div class="flex justify-around gap-3 pt-4 border-t border-zinc-700">
-                            <MenuButtonRed on:click=move |_| {
-                                open.set(false)
-                            }>"Cancel"</MenuButtonRed>
-                            <MenuButton
-                                on:click={
-                                    let navigate = use_navigate();
-                                    move |_| {
-                                        if let Some(selected_area) = selected_area.get_untracked() {
-                                            set_area_config_storage
-                                                .set(
-                                                    Some(StartAreaConfig {
-                                                        area_id: selected_area.area_id,
-                                                        map_item_index: town_context
-                                                            .selected_item_index
-                                                            .get_untracked(),
-                                                    }),
-                                                );
-                                            navigate("/game", Default::default());
-                                        }
-                                    }
-                                }
-                                disabled=disable_confirm
-                            >
-                                "Confirm"
-                            </MenuButton>
-                        </div>
                     </CardInset>
 
                     <div class="h-10 xl:h-16 w-full relative">
@@ -567,7 +542,32 @@ pub fn StartGrindPanel(
                             }
                             class="object-cover w-full h-full"
                         />
-                        <div class="absolute inset-0 bg-black/20"></div>
+                        <div class="absolute inset-0">
+                            <div class="w-full h-full flex justify-around px-4 py-1 xl:py-2">
+                                <MenuButton
+                                    on:click={
+                                        let navigate = use_navigate();
+                                        move |_| {
+                                            if let Some(selected_area) = selected_area.get_untracked() {
+                                                set_area_config_storage
+                                                    .set(
+                                                        Some(StartAreaConfig {
+                                                            area_id: selected_area.area_id,
+                                                            map_item_index: town_context
+                                                                .selected_item_index
+                                                                .get_untracked(),
+                                                        }),
+                                                    );
+                                                navigate("/game", Default::default());
+                                            }
+                                        }
+                                    }
+                                    disabled=disable_confirm
+                                >
+                                    "Confirm & Start Grind"
+                                </MenuButton>
+                            </div>
+                        </div>
                     </div>
                 </Card>
             </div>

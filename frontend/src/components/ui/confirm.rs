@@ -57,7 +57,7 @@ pub fn ConfirmationModal(state: RwSignal<Option<(String, ArcFn)>>) -> impl IntoV
                     border border-gray-700 ring-2 ring-gray-700
                     text-white text-center shadow-2xl rounded-xl p-6 w-80 animate-[modal-fade_0.2s_ease-out]"
                 >
-                    <p class="text-lg mb-6 leading-snug px-2">
+                    <p class="text-base xl:text-lg mb-6 leading-snug px-2">
                         {move || {
                             state.read().as_ref().map(|(msg, _)| msg.clone()).unwrap_or_default()
                         }}

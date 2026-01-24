@@ -16,6 +16,7 @@ use crate::{
         shared::tooltips::SkillTooltip,
         ui::{
             buttons::{FancyButton, Toggle},
+            card::Card,
             number::format_number,
             progress_bars::{
                 predictive_cooldown, CircularProgressBar, HorizontalProgressBar,
@@ -233,10 +234,11 @@ pub fn PlayerCard() -> impl IntoView {
             }
             "
         </style>
-        <div class="max-h-full w-1/3
-        flex flex-col gap-1 xl:gap-2 p-1 xl:p-2
-        bg-zinc-800 ring-1 ring-zinc-950
-        rounded-md shadow-xl/30">
+        <Card class="w-1/3">
+            // <div class="max-h-full w-1/3
+            // flex flex-col gap-1 xl:gap-2 p-1 xl:p-2
+            // bg-zinc-800 ring-1 ring-zinc-950
+            // rounded-md shadow-xl/30">
 
             <PlayerName />
 
@@ -349,7 +351,7 @@ pub fn PlayerCard() -> impl IntoView {
                     </div>
                 </Show>
             </div>
-        </div>
+        </Card>
     }
 }
 
