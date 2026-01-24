@@ -520,10 +520,15 @@ pub fn CreateCharacterPanel(
 
     view! {
         <MenuPanel open=open w_full=false h_full=false class:items-center>
-            <Card class="w-full max-w-lg mx-auto">
-                <CardTitle>"Create Character"</CardTitle>
+            <Card class="w-full max-w-lg xl:max-w-xl mx-auto">
+                <CardTitle>
+                    {move || match selected_character_id.read().is_some() {
+                        true => "Edit Character",
+                        false => "Create Character",
+                    }}
+                </CardTitle>
 
-                <CardInset>
+                <CardInset class="h-fit">
                     <ValidatedInput
                         id="name"
                         label="Character Name"
@@ -535,7 +540,7 @@ pub fn CreateCharacterPanel(
 
                 <CardInset class="flex-1 min-h-0">
                     <span class="block text-sm font-medium text-gray-400">"Choose a Portrait"</span>
-                    <div class="grid grid-cols-2 xl:grid-cols-4 p-2 xl:p-4 gap-2 xl:gap-4 h-full">
+                    <div class="grid grid-cols-4 gap-1 xl:gap-2">
                         <For
                             each=move || portraits
                             key=|src| src.to_string()
@@ -548,9 +553,9 @@ pub fn CreateCharacterPanel(
                                 });
                                 view! {
                                     <div
-                                        class="relative rounded-lg overflow-hidden border-2 cursor-pointer transition
-                                        h-full
-                                        hover:scale-105 active:scale-95"
+                                        class="relative aspect-square rounded-lg 
+                                        overflow-hidden border-2 cursor-pointer 
+                                        transition hover:scale-105 active:scale-95"
                                         style=format!(
                                             "background-image: url('{}');",
                                             img_asset("ui/paper_background.webp"),
@@ -567,7 +572,7 @@ pub fn CreateCharacterPanel(
                                             draggable="false"
                                             src=img_asset(&format!("adventurers/{src}.webp"))
                                             alt="Portrait"
-                                            class="object-cover w-full h-28 xl:h-32"
+                                            class="object-cover"
                                         />
                                     </div>
                                 }
