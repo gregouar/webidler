@@ -58,7 +58,7 @@ pub fn Inventory(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoV
     });
 
     view! {
-        <MenuPanel open=open>
+        <MenuPanel open=open h_full=false center=false>
             <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
                 <EquippedItemsCard inventory=inventory.clone() class:justify-self-end />
                 <BagCard inventory=inventory.clone() open=open class:justify-self-start />
@@ -461,7 +461,9 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                             move || {
                                 if let Some(use_item_category_filter) = inventory
                                     .use_item_category_filter
-                                    .and_then(|use_item_category_filter| use_item_category_filter.get())
+                                    .and_then(|use_item_category_filter| {
+                                        use_item_category_filter.get()
+                                    })
                                 {
                                     item_specs.base.categories.contains(&use_item_category_filter)
                                 } else {

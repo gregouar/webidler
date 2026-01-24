@@ -46,40 +46,38 @@ pub fn TemplePanel(
 
     view! {
         <MenuPanel open=open>
-            <div class="w-full h-full">
-                <Card>
-                    <CardHeader title="Temple" on_close=move || open.set(false)>
-                        {(!view_only)
-                            .then(|| {
-                                view! {
-                                    <div class="flex-1" />
+            <Card>
+                <CardHeader title="Temple" on_close=move || open.set(false)>
+                    {(!view_only)
+                        .then(|| {
+                            view! {
+                                <div class="flex-1" />
 
-                                    <div class="flex h-full items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
-                                        "Benedictions Cost: "
-                                        <span class="text-amber-200 font-bold font-number">
-                                            {move || format_number(cost.get())}
-                                        </span> <GoldIcon />
-                                    </div>
+                                <div class="flex h-full items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
+                                    "Benedictions Cost: "
+                                    <span class="text-amber-200 font-bold font-number">
+                                        {move || format_number(cost.get())}
+                                    </span> <GoldIcon />
+                                </div>
 
-                                    <div class="flex-1" />
+                                <div class="flex-1" />
 
-                                    <div class="flex items-center gap-2">
-                                        <MenuButton
-                                            on:click=move |_| reset()
-                                            disabled=Signal::derive(move || cost.get() == 0.0)
-                                        >
-                                            "Cancel"
-                                        </MenuButton>
-                                        <ConfirmButton player_benedictions cost open />
-                                    </div>
-                                }
-                            })}
-                    </CardHeader>
-                    <CardInset>
-                        <BenedictionsList player_benedictions cost view_only />
-                    </CardInset>
-                </Card>
-            </div>
+                                <div class="flex items-center gap-2">
+                                    <MenuButton
+                                        on:click=move |_| reset()
+                                        disabled=Signal::derive(move || cost.get() == 0.0)
+                                    >
+                                        "Cancel"
+                                    </MenuButton>
+                                    <ConfirmButton player_benedictions cost open />
+                                </div>
+                            }
+                        })}
+                </CardHeader>
+                <CardInset>
+                    <BenedictionsList player_benedictions cost view_only />
+                </CardInset>
+            </Card>
         </MenuPanel>
     }
 }

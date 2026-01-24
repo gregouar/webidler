@@ -64,8 +64,8 @@ pub fn CardInset(
         <div class=format!(
             "flex flex-col
             bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]
-            shadow-[inset_-1px_-1px_2px_rgba(255,255,255,0.04)]
-            shadow-[inset_3px_3px_6px_rgba(0,0,0,0.6)]
+            shadow-[inset_-1px_-1px_2px_rgba(255,255,255,0.1)]
+            shadow-[inset_3px_3px_6px_rgba(0,0,0,0.2)]
             ring-1 ring-zinc-950
             overflow-y-auto
             {} {} {}",

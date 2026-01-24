@@ -32,7 +32,7 @@ pub fn EndQuestPanel() -> impl IntoView {
     });
 
     view! {
-        <MenuPanel open w_full=false h_full=false>
+        <MenuPanel open w_full=false h_full=false class:items-center>
             <EndQuest open />
         </MenuPanel>
     }
@@ -100,48 +100,44 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
     };
 
     view! {
-        <div class="max-w-2xl max-h-full mx-auto">
-            <Card>
-                <CardHeader title="Grind Ended" on_close=move || open.set(false) />
+        <Card class="max-w-2xl max-h-full mx-auto">
+            <CardHeader title="Grind Ended" on_close=move || open.set(false) />
 
-                <CardInset>
-                    <div class="grid grid-cols-3 gap-4 text-center">
-                        <div class="flex flex-col items-center gap-1">
-                            <GoldCounter value=gold_donation_value />
-                        </div>
-                        <div class="flex flex-col items-center gap-1">
-                            <GemsCounter value=gems_value />
-                        </div>
-                        <div class="flex flex-col items-center gap-1">
-                            <ShardsCounter value=shards_value />
-                        </div>
+            <CardInset>
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div class="flex flex-col items-center gap-1">
+                        <GoldCounter value=gold_donation_value />
                     </div>
-
-                    <div class="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
-
-                    <div class="flex flex-col gap-1 px-6 text-sm xl:text-base">
-                        <div class="flex justify-between">
-                            <span class="text-gray-400">"Total Time"</span>
-                            <span class="text-amber-100 font-medium font-number">
-                                {move || format_duration(stats().elapsed_time, true)}
-                            </span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-400">"Area Completed"</span>
-                            <span class="text-amber-100 font-medium font-number">
-                                {area_completed}
-                            </span>
-                        </div>
+                    <div class="flex flex-col items-center gap-1">
+                        <GemsCounter value=gems_value />
                     </div>
-
-                    <ItemRewards item_reward_picked />
-                </CardInset>
-
-                <div class="flex justify-center">
-                    <MenuButton on:click=try_confirm_end>"Confirm Reward & Exit"</MenuButton>
+                    <div class="flex flex-col items-center gap-1">
+                        <ShardsCounter value=shards_value />
+                    </div>
                 </div>
-            </Card>
-        </div>
+
+                <div class="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
+
+                <div class="flex flex-col gap-1 px-6 text-sm xl:text-base">
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">"Total Time"</span>
+                        <span class="text-amber-100 font-medium font-number">
+                            {move || format_duration(stats().elapsed_time, true)}
+                        </span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">"Area Completed"</span>
+                        <span class="text-amber-100 font-medium font-number">{area_completed}</span>
+                    </div>
+                </div>
+
+                <ItemRewards item_reward_picked />
+            </CardInset>
+
+            <div class="flex justify-center">
+                <MenuButton on:click=try_confirm_end>"Confirm Reward & Exit"</MenuButton>
+            </div>
+        </Card>
     }
 }
 

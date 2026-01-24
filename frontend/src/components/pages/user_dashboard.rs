@@ -519,11 +519,11 @@ pub fn CreateCharacterPanel(
     ];
 
     view! {
-        <MenuPanel open=open w_full=false h_full=false>
-            <div class="flex items-center justify-center p-2 xl:p-4 h-full">
-                <Card class="space-y-3 xl:space-y-8 w-full max-w-lg mx-auto max-h-full">
-                    <CardTitle>"Create Character"</CardTitle>
+        <MenuPanel open=open w_full=false h_full=false class:items-center>
+            <Card class="w-full max-w-lg mx-auto">
+                <CardTitle>"Create Character"</CardTitle>
 
+                <CardInset>
                     <ValidatedInput
                         id="name"
                         label="Character Name"
@@ -531,69 +531,58 @@ pub fn CreateCharacterPanel(
                         bind=selected_character_name
                         placeholder="Enter a name"
                     />
+                </CardInset>
 
-                    <span class="block text-sm font-medium text-gray-400 mb-2">
-                        "Choose a Portrait"
-                    </span>
-                    <div class="flex-1 flex flex-col overflow-y-auto min-h-0">
-                        <div class="grid grid-cols-2 xl:grid-cols-4 p-2 xl:p-4 gap-2 xl:gap-4 h-full">
-                            <For
-                                each=move || portraits
-                                key=|src| src.to_string()
-                                children=move |src| {
-                                    let is_selected = Signal::derive(move || {
-                                        selected_character_portrait
-                                            .get()
-                                            .map(|portrait| portrait.into_inner() == src)
-                                            .unwrap_or_default()
-                                    });
-                                    view! {
-                                        <div
-                                            class="relative rounded-lg overflow-hidden border-2 cursor-pointer transition
-                                            hover:scale-105 active:scale-95"
-                                            style=format!(
-                                                "background-image: url('{}');",
-                                                img_asset("ui/paper_background.webp"),
-                                            )
-                                            class:border-amber-400=move || is_selected.get()
-                                            class:border-transparent=move || !is_selected.get()
-                                            on:click=move |_| {
-                                                selected_character_portrait
-                                                    .set(AssetName::try_new(src).ok());
-                                            }
-                                        >
-                                            <img
-                                                draggable="false"
-                                                src=img_asset(&format!("adventurers/{src}.webp"))
-                                                alt="Portrait"
-                                                class="object-cover w-full h-28 xl:h-32"
-                                            />
-                                            {move || {
-                                                is_selected
-                                                    .get()
-                                                    .then(|| {
-                                                        view! {
-                                                            <div class="absolute inset-0 bg-amber-400/20"></div>
-                                                        }
-                                                    })
-                                            }}
-                                        </div>
-                                    }
+                <CardInset class="flex-1 min-h-0">
+                    <span class="block text-sm font-medium text-gray-400">"Choose a Portrait"</span>
+                    <div class="grid grid-cols-2 xl:grid-cols-4 p-2 xl:p-4 gap-2 xl:gap-4 h-full">
+                        <For
+                            each=move || portraits
+                            key=|src| src.to_string()
+                            children=move |src| {
+                                let is_selected = Signal::derive(move || {
+                                    selected_character_portrait
+                                        .get()
+                                        .map(|portrait| portrait.into_inner() == src)
+                                        .unwrap_or_default()
+                                });
+                                view! {
+                                    <div
+                                        class="relative rounded-lg overflow-hidden border-2 cursor-pointer transition
+                                        h-full
+                                        hover:scale-105 active:scale-95"
+                                        style=format!(
+                                            "background-image: url('{}');",
+                                            img_asset("ui/paper_background.webp"),
+                                        )
+                                        class:border-amber-400=move || is_selected.get()
+                                        class:border-transparent=move || !is_selected.get()
+                                        class:brightness-30=move || !is_selected.get()
+                                        on:click=move |_| {
+                                            selected_character_portrait
+                                                .set(AssetName::try_new(src).ok());
+                                        }
+                                    >
+                                        <img
+                                            draggable="false"
+                                            src=img_asset(&format!("adventurers/{src}.webp"))
+                                            alt="Portrait"
+                                            class="object-cover w-full h-28 xl:h-32"
+                                        />
+                                    </div>
                                 }
-                            />
-                        </div>
+                            }
+                        />
                     </div>
+                </CardInset>
 
-                    <div class="flex justify-around gap-3 pt-4 border-t border-zinc-700">
-                        <MenuButtonRed on:click=move |_| {
-                            open.set(false)
-                        }>"Cancel"</MenuButtonRed>
-                        <MenuButton on:click=on_submit disabled=disable_submit>
-                            "Confirm"
-                        </MenuButton>
-                    </div>
-                </Card>
-            </div>
+                <div class="flex justify-between px-4">
+                    <MenuButtonRed on:click=move |_| { open.set(false) }>"Cancel"</MenuButtonRed>
+                    <MenuButton on:click=on_submit disabled=disable_submit>
+                        "Confirm"
+                    </MenuButton>
+                </div>
+            </Card>
         </MenuPanel>
     }
 }

@@ -165,7 +165,6 @@ pub fn Pannable(children: Children) -> impl IntoView {
                     }
                     class="xl:drop-shadow-[0_2px_4px_black] will-change-transform"
                 >
-
                     {children()}
                 </g>
             </svg>

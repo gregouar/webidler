@@ -441,136 +441,134 @@ pub fn StartGrindPanel(
         storage::use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
 
     view! {
-        <MenuPanel open=open w_full=false h_full=false>
-            <div class="flex items-center justify-center p-1 xl:p-4 h-full">
-                <Card class="max-w-4xl mx-auto overflow-hidden" pad=false gap=false>
-                    <div class="h-10 xl:h-16 w-full relative">
-                        <img
-                            draggable="false"
-                            src=move || {
-                                selected_area
-                                    .read()
-                                    .as_ref()
-                                    .map(|area| img_asset(&area.area_specs.header_background))
-                                    .unwrap_or_default()
-                            }
-                            class="object-cover w-full h-full"
-                        />
-                        <div class="absolute inset-0">
-                            <div class="w-full h-full flex justify-end items-center px-4">
-                                <CloseButton on:click=move |_| open.set(false) />
-                            </div>
+        <MenuPanel open=open w_full=false h_full=false class:items-center>
+            <Card class="max-w-4xl mx-auto overflow-hidden" pad=false gap=false>
+                <div class="h-10 xl:h-16 w-full relative">
+                    <img
+                        draggable="false"
+                        src=move || {
+                            selected_area
+                                .read()
+                                .as_ref()
+                                .map(|area| img_asset(&area.area_specs.header_background))
+                                .unwrap_or_default()
+                        }
+                        class="object-cover w-full h-full"
+                    />
+                    <div class="absolute inset-0">
+                        <div class="w-full h-full flex justify-end items-center px-4">
+                            <CloseButton on:click=move |_| open.set(false) />
+                        </div>
+                    </div>
+                </div>
+
+                <CardInset class="xl:space-y-4">
+                    <span class="text-lg xl:text-2xl font-bold text-amber-300 text-center">
+                        {move || {
+                            selected_area
+                                .read()
+                                .as_ref()
+                                .map(|area| area.area_specs.name.clone())
+                                .unwrap_or_default()
+                        }}
+                    </span>
+
+                    <span class="block text-xs xl:text-sm font-medium text-gray-400 italic
+                    xl:mb-4 max-w-xl mx-auto">
+                        {move || {
+                            selected_area
+                                .read()
+                                .as_ref()
+                                .map(|area| area.area_specs.description.clone())
+                                .unwrap_or_default()
+                        }}
+                    </span>
+
+                    <div class="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
+
+                    <ul class="text-xs xl:text-sm text-gray-400 list-none space-y-1">
+                        <li class="leading-snug ">
+                            "Starting Level: "
+                            <span class="font-semibold text-white">
+                                {move || {
+                                    selected_area
+                                        .read()
+                                        .as_ref()
+                                        .map(|area| area.area_specs.starting_level)
+                                        .unwrap_or_default()
+                                }}
+                            </span>
+                        </li>
+                        <li class="leading-snug ">
+                            "Item Level Modifier: "
+                            <span class="font-semibold text-white">
+                                "+"
+                                {move || {
+                                    selected_area
+                                        .read()
+                                        .as_ref()
+                                        .map(|area| area.area_specs.item_level_modifier)
+                                        .unwrap_or_default()
+                                }}
+                            </span>
+                        </li>
+                    </ul>
+
+                    <div class="w-full h-full px-4 flex items-center justify-center">
+                        <div
+                            class="flex flex-row gap-6 items-center
+                            w-full h-auto aspect-5/2 overflow-y-auto
+                            bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2
+                            hover:ring-amber-400 hover:shadow-lg active:scale-95 
+                            active:ring-amber-500 cursor-pointer transition"
+                            on:click=choose_map
+                        >
+                            {map_details}
                         </div>
                     </div>
 
-                    <CardInset class="xl:space-y-4">
-                        <span class="text-lg xl:text-2xl font-bold text-amber-300 text-center">
-                            {move || {
-                                selected_area
-                                    .read()
-                                    .as_ref()
-                                    .map(|area| area.area_specs.name.clone())
-                                    .unwrap_or_default()
-                            }}
-                        </span>
+                </CardInset>
 
-                        <span class="block text-xs xl:text-sm font-medium text-gray-400 italic
-                        xl:mb-4 max-w-xl mx-auto">
-                            {move || {
-                                selected_area
-                                    .read()
-                                    .as_ref()
-                                    .map(|area| area.area_specs.description.clone())
-                                    .unwrap_or_default()
-                            }}
-                        </span>
-
-                        <div class="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
-
-                        <ul class="text-xs xl:text-sm text-gray-400 list-none space-y-1">
-                            <li class="leading-snug ">
-                                "Starting Level: "
-                                <span class="font-semibold text-white">
-                                    {move || {
-                                        selected_area
-                                            .read()
-                                            .as_ref()
-                                            .map(|area| area.area_specs.starting_level)
-                                            .unwrap_or_default()
-                                    }}
-                                </span>
-                            </li>
-                            <li class="leading-snug ">
-                                "Item Level Modifier: "
-                                <span class="font-semibold text-white">
-                                    "+"
-                                    {move || {
-                                        selected_area
-                                            .read()
-                                            .as_ref()
-                                            .map(|area| area.area_specs.item_level_modifier)
-                                            .unwrap_or_default()
-                                    }}
-                                </span>
-                            </li>
-                        </ul>
-
-                        <div class="w-full h-full px-4 flex items-center justify-center">
-                            <div
-                                class="flex flex-row gap-6 items-center
-                                w-full h-auto aspect-5/2 overflow-y-auto
-                                bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2
-                                hover:ring-amber-400 hover:shadow-lg active:scale-95 
-                                active:ring-amber-500 cursor-pointer transition"
-                                on:click=choose_map
-                            >
-                                {map_details}
-                            </div>
-                        </div>
-
-                    </CardInset>
-
-                    <div class="h-10 xl:h-16 w-full relative">
-                        <img
-                            draggable="false"
-                            src=move || {
-                                selected_area
-                                    .read()
-                                    .as_ref()
-                                    .map(|area| img_asset(&area.area_specs.footer_background))
-                                    .unwrap_or_default()
-                            }
-                            class="object-cover w-full h-full"
-                        />
-                        <div class="absolute inset-0">
-                            <div class="w-full h-full flex justify-around px-4 py-1 xl:py-2">
-                                <MenuButton
-                                    on:click={
-                                        let navigate = use_navigate();
-                                        move |_| {
-                                            if let Some(selected_area) = selected_area.get_untracked() {
-                                                set_area_config_storage
-                                                    .set(
-                                                        Some(StartAreaConfig {
-                                                            area_id: selected_area.area_id,
-                                                            map_item_index: town_context
-                                                                .selected_item_index
-                                                                .get_untracked(),
-                                                        }),
-                                                    );
-                                                navigate("/game", Default::default());
-                                            }
+                <div class="h-10 xl:h-16 w-full relative">
+                    <img
+                        draggable="false"
+                        src=move || {
+                            selected_area
+                                .read()
+                                .as_ref()
+                                .map(|area| img_asset(&area.area_specs.footer_background))
+                                .unwrap_or_default()
+                        }
+                        class="object-cover w-full h-full"
+                    />
+                    <div class="absolute inset-0">
+                        <div class="w-full h-full flex justify-around px-4 py-1 xl:py-2">
+                            <MenuButton
+                                on:click={
+                                    let navigate = use_navigate();
+                                    move |_| {
+                                        if let Some(selected_area) = selected_area.get_untracked() {
+                                            set_area_config_storage
+                                                .set(
+                                                    Some(StartAreaConfig {
+                                                        area_id: selected_area.area_id,
+                                                        map_item_index: town_context
+                                                            .selected_item_index
+                                                            .get_untracked(),
+                                                    }),
+                                                );
+                                            navigate("/game", Default::default());
                                         }
                                     }
-                                    disabled=disable_confirm
-                                >
-                                    "Confirm & Start Grind"
-                                </MenuButton>
-                            </div>
+                                }
+                                disabled=disable_confirm
+                            >
+                                "Confirm & Start Grind"
+                            </MenuButton>
                         </div>
                     </div>
-                </Card>
-            </div>
+                </div>
+            </Card>
         </MenuPanel>
     }
 }
