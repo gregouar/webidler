@@ -142,7 +142,8 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             // Only for player
             StatType::MovementSpeed | StatType::GoldFind | StatType::ThreatGain => {}
             // Delegate to skills
-            StatType::Damage { .. }
+            StatType::ManaCost { .. }
+            | StatType::Damage { .. }
             | StatType::MinDamage { .. }
             | StatType::MaxDamage { .. }
             | StatType::Restore(_)

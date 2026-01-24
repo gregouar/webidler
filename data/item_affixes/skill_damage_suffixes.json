@@ -181,6 +181,247 @@
   },
 
   {
+    "name": "of Caution",
+    "family": "heavy_attack_damage",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [50, 99]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": -5
+      }
+    ]
+  },
+  {
+    "name": "of Carefulness",
+    "family": "heavy_attack_damage",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [100, 149]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": -10
+      }
+    ]
+  },
+  {
+    "name": "of Attention",
+    "family": "heavy_attack_damage",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [150, 199]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": -15
+      }
+    ]
+  },
+  {
+    "name": "of Watchfulness",
+    "family": "heavy_attack_damage",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [200, 249]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": -20
+      }
+    ]
+  },
+  {
+    "name": "of Deliberation",
+    "family": "heavy_attack_damage",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [250, 299]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": -25
+      }
+    ]
+  },
+  {
+    "name": "of Focus",
+    "family": "heavy_attack_damage",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [300, 349]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": -30
+      }
+    ]
+  },
+  {
+    "name": "of Calculation",
+    "family": "heavy_attack_damage",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [350, 399]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": -35
+      }
+    ]
+  },
+  {
+    "name": "of Discipline",
+    "family": "heavy_attack_damage",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [400, 449]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": -40
+      }
+    ]
+  },
+  {
+    "name": "of Control",
+    "family": "heavy_attack_damage",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [450, 499]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": -45
+      }
+    ]
+  },
+  {
+    "name": "of Reckoning",
+    "family": "heavy_attack_damage",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "Multiplier",
+        "value": [500, 549]
+      },
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": -50
+      }
+    ]
+  },
+
+  {
     "name": "of Spellcasting",
     "family": "inc_spell_damage",
     "tags": ["Spell"],
@@ -357,6 +598,247 @@
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
         "value": [250, 274]
+      }
+    ]
+  },
+
+  {
+    "name": "of Confidence",
+    "family": "costly_power",
+    "tags": ["Spell", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [50, 99]
+      },
+      {
+        "scope": "Global",
+        "stat": { "ManaCost": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": 25
+      }
+    ]
+  },
+  {
+    "name": "of Presumption",
+    "family": "costly_power",
+    "tags": ["Spell", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [100, 149]
+      },
+      {
+        "scope": "Global",
+        "stat": { "ManaCost": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": 50
+      }
+    ]
+  },
+  {
+    "name": "of Vanity",
+    "family": "costly_power",
+    "tags": ["Spell", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [150, 199]
+      },
+      {
+        "scope": "Global",
+        "stat": { "ManaCost": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": 75
+      }
+    ]
+  },
+  {
+    "name": "of Arrogance",
+    "family": "costly_power",
+    "tags": ["Spell", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [200, 249]
+      },
+      {
+        "scope": "Global",
+        "stat": { "ManaCost": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": 100
+      }
+    ]
+  },
+  {
+    "name": "of Conceit",
+    "family": "costly_power",
+    "tags": ["Spell", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [250, 299]
+      },
+      {
+        "scope": "Global",
+        "stat": { "ManaCost": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": 125
+      }
+    ]
+  },
+  {
+    "name": "of Audacity",
+    "family": "costly_power",
+    "tags": ["Spell", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [300, 349]
+      },
+      {
+        "scope": "Global",
+        "stat": { "ManaCost": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": 150
+      }
+    ]
+  },
+  {
+    "name": "of Insolence",
+    "family": "costly_power",
+    "tags": ["Spell", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [350, 399]
+      },
+      {
+        "scope": "Global",
+        "stat": { "ManaCost": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": 175
+      }
+    ]
+  },
+  {
+    "name": "of Pride",
+    "family": "costly_power",
+    "tags": ["Spell", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [400, 449]
+      },
+      {
+        "scope": "Global",
+        "stat": { "ManaCost": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": 200
+      }
+    ]
+  },
+  {
+    "name": "of Ego",
+    "family": "costly_power",
+    "tags": ["Spell", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [450, 499]
+      },
+      {
+        "scope": "Global",
+        "stat": { "ManaCost": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": 225
+      }
+    ]
+  },
+  {
+    "name": "of Hubris",
+    "family": "costly_power",
+    "tags": ["Spell", "Mana"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": [500, 549]
+      },
+      {
+        "scope": "Global",
+        "stat": { "ManaCost": { "skill_type": "Spell" } },
+        "modifier": "Multiplier",
+        "value": 250
       }
     ]
   }

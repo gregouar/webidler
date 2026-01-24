@@ -222,7 +222,8 @@ fn compute_player_specs(
             | StatType::BlockDamageTaken
             | StatType::DamageResistance { .. } => {}
             // Delegate to skills
-            StatType::Damage { .. }
+            StatType::ManaCost { .. }
+            | StatType::Damage { .. }
             | StatType::MinDamage { .. }
             | StatType::MaxDamage { .. }
             | StatType::Restore(_)

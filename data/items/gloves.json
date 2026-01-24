@@ -320,7 +320,7 @@
               "Damage": { "damage_type": "Fire" }
             },
             "modifier": "Flat",
-            "factor": 0.5,
+            "factor": 0.25,
             "source": {
               "HitDamage": "Storm"
             }
@@ -330,7 +330,7 @@
               "Damage": { "damage_type": "Storm" }
             },
             "modifier": "Flat",
-            "factor": 0.5,
+            "factor": 0.25,
             "source": {
               "HitDamage": "Fire"
             }
