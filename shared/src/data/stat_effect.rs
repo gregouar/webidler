@@ -51,6 +51,10 @@ pub enum StatType {
     LifeRegen,
     Mana,
     ManaRegen,
+    ManaCost {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
     Armor(Option<DamageType>),
     DamageResistance {
         #[serde(default)]
@@ -190,6 +194,12 @@ impl StatType {
                             effect_type.is_match(&effect_type_2)
                         })
             }
+            (
+                ManaCost { skill_type },
+                ManaCost {
+                    skill_type: skill_type_2,
+                },
+            ) => compare_options(skill_type, skill_type_2),
             (Restore(first), Restore(second)) => compare_options(first, second),
             (CritChance(first), CritChance(second))
             | (CritDamage(first), CritDamage(second))

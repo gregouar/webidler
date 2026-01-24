@@ -269,6 +269,9 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::LifeRegen => "Life Regeneration".to_string(),
         StatType::Mana => "Maximum Mana".to_string(),
         StatType::ManaRegen => "Mana Regeneration".to_string(),
+        StatType::ManaCost { skill_type } => {
+            format!("{}Mana cost", skill_type_str(*skill_type))
+        }
         StatType::Armor(armor_type) => match armor_type {
             Some(DamageType::Physical) => "Armor".to_string(),
             None => "Resistances and Armor".to_string(),
@@ -381,6 +384,11 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         StatType::ManaRegen => format!(
             "{} Mana Regeneration per second",
             format_adds_removes(value.map(|value| value * 0.1), true, "%")
+        ),
+        StatType::ManaCost { skill_type } => format!(
+            "{} Mana Cost{}",
+            format_adds_removes(value, false, ""),
+            to_skill_type_str(*skill_type)
         ),
         StatType::Armor(armor_type) => format!(
             "{} {}",

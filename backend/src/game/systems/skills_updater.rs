@@ -105,6 +105,12 @@ pub fn apply_effects_to_skill_specs<'a>(
         {
             skill_specs.cooldown.apply_negative_effect(effect);
         }
+
+        if effect.stat.is_match(&StatType::ManaCost {
+            skill_type: Some(skill_specs.base.skill_type),
+        }) {
+            skill_specs.mana_cost.apply_effect(effect);
+        }
     }
 
     for skill_effect in skill_specs
