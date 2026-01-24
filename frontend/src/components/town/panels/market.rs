@@ -536,7 +536,7 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     {move || private_offer().then_some("Private Offer")}
                 </span>
                 <ItemDetails selected_item show_affixes=true />
-                <div class="flex justify-between items-center text-sm text-gray-400 p-2">
+                <div class="flex justify-between items-center text-xs xl:text-sm text-gray-400 p-2">
                     <span>"Listed by: "{move || seller_name()}</span>
                     <span>{move || listed_at().map(format_datetime)}</span>
                 </div>

@@ -27,10 +27,8 @@ pub fn SkillsPanel(open: RwSignal<bool>) -> impl IntoView {
         <MenuPanel open=open>
             <Card>
                 <CardHeader title="Buy New Skill" on_close=move || open.set(false) />
-                <CardInset>
-                    // flex-1 overflow-auto max-h-[65vh]
-                    <SkillShop open=open />
-                </CardInset>
+                // flex-1 overflow-auto max-h-[65vh]
+                <SkillShop open=open />
             </Card>
         </MenuPanel>
     }
@@ -84,25 +82,27 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
     });
 
     view! {
-        <div class="grid grid-cols-6 xl:grid-cols-10 gap-2 xl:gap-4
-        ">
-            <Suspense fallback=move || {
-                view! { "Loading..." }
-            }>
-                {move || {
-                    view! {
-                        <For
+        <CardInset>
+            <div class="grid grid-cols-6 xl:grid-cols-10 gap-2 xl:gap-4
+            ">
+                <Suspense fallback=move || {
+                    view! { "Loading..." }
+                }>
+                    {move || {
+                        view! {
+                            <For
                             each=move || available_skills.get().into_iter()
                             key=|(skill_id, _)| skill_id.clone()
                             let:((skill_id,skill_specs))
                             >
                                 <SkillCard skill_id skill_specs selected=selected_skill />
                             </For>
-                    }
-                }}
+                        }
+                    }}
 
-            </Suspense>
-        </div>
+                </Suspense>
+            </div>
+        </CardInset>
 
         <div class="flex items-center justify-center">
             <FancyButton disabled=disable_confirm on:click=buy_skill class:py-2 class:px-4>

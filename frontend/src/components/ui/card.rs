@@ -12,12 +12,30 @@ pub fn Card(
     view! {
         <div class=format!(
             "max-h-full flex flex-col
-            bg-zinc-800 rounded-md shadow-xl/30 ring-1 ring-zinc-700
+            bg-zinc-800 rounded-md shadow-xl/30
+            relative
+            border-1 
+            border-b-zinc-950 border-r-zinc-900
+            border-t-zinc-600 border-l-zinc-700
             {} {} {}",
             class.unwrap_or_default(),
             if gap { "gap-1 xl:gap-2" } else { "" },
             if pad { "p-1 xl:p-3" } else { "" },
-        )>{children()}</div>
+        )>
+            // <div class="
+            // absolute inset-0 rounded-md pointer-events-none
+            // ring-1 ring-white/10
+            // translate-x-[0.5px] translate-y-[0.5px]
+            // "></div>
+
+            // <div class="
+            // absolute inset-0 rounded-md pointer-events-none
+            // ring-1 ring-black/40
+            // -translate-x-[0.5px] -translate-y-[0.5px]
+            // "></div>
+
+            {children()}
+        </div>
     }
 }
 
@@ -56,7 +74,8 @@ pub fn CardInset(
     view! {
         <div class=format!(
             "flex flex-col
-            bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] ring-1 ring-zinc-950
+            bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]
+            ring-1  ring-zinc-950
             overflow-y-auto
             {} {} {}",
             class.unwrap_or_default(),

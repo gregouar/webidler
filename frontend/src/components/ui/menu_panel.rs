@@ -61,7 +61,7 @@ pub fn MenuPanel(
 
         <Show when=move || is_visible.get()>
             <div
-                class="absolute inset-0 bg-black/70 z-40 flex flex-col p-2 xl:p-4 will-change-opacity"
+                class="absolute inset-0 bg-black/70 z-40 flex flex-col p-1 xl:p-4 will-change-opacity"
                 style=move || {
                     if open.get() {
                         "animation: fadeIn 0.3s ease-out forwards;"

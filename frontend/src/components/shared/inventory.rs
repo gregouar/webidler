@@ -59,7 +59,7 @@ pub fn Inventory(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoV
 
     view! {
         <MenuPanel open=open>
-            <div class="relative w-full max-h-full flex justify-between gap-2 xl:gap-4 ">
+            <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
                 <EquippedItemsCard inventory=inventory.clone() class:justify-self-end />
                 <BagCard inventory=inventory.clone() open=open class:justify-self-start />
             </div>
@@ -92,7 +92,7 @@ pub fn EquippedItemsCard(inventory: InventoryConfig) -> impl IntoView {
 
             // <div class="relative min-h-0 flex-1  overflow-y-auto">
             <CardInset class="relative min-h-0 flex-1">
-                <div class="grid grid-rows-3 grid-cols-3 gap-2 xl:gap-x-4 xl:gap-y-3 py-1 xl:py-3 px-3 xl:px-6">
+                <div class="grid grid-rows-3 grid-cols-3 gap-2 xl:gap-x-4 xl:gap-y-3 px-2 xl:px-3">
                     {EQUIPPED_SLOTS
                         .iter()
                         .map(|(slot, asset, alt)| {
@@ -360,7 +360,7 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
 
             <CardInset class="relative min-h-0 flex-1">
                 <div class="grid grid-cols-8 xl:grid-cols-10
-                gap-1 xl:gap-x-3 xl:gap-y-2 py-1 xl:py-3 px-3 xl:px-6 relative">
+                gap-1 xl:gap-x-3 xl:gap-y-2 px-2 xl:px-3 relative">
                     <For
                         each=move || 0..inventory.player_inventory.read().max_bag_size as usize
                         key=|i| *i
