@@ -34,8 +34,7 @@ pub fn terminate_quest(
 
     if let Some(ref quest_rewards) = game_data.quest_rewards.read() {
         if let Some(item_specs) = item_index
-            .map(|item_index| quest_rewards.item_rewards.get(item_index as usize))
-            .flatten()
+            .and_then(|item_index| quest_rewards.item_rewards.get(item_index as usize))
         {
             inventory_controller::store_item_to_bag(
                 game_data.player_inventory.mutate(),
@@ -63,7 +62,7 @@ fn generate_end_quest_rewards(
 
     // If enough, generate 2 Maps
     if delta_area_level >= ITEM_REWARDS_MAP_MIN_LEVEL {
-        item_rewards.extend((0..2).into_iter().flat_map(|_| {
+        item_rewards.extend((0..2).flat_map(|_| {
             loot_generator::generate_loot(
                 &game_data.area_blueprint.loot_table,
                 &master_store.items_store,
@@ -83,7 +82,7 @@ fn generate_end_quest_rewards(
         }));
     // Otherwise fill with normal items
     } else if delta_area_level >= ITEM_REWARDS_MIN_LEVEL {
-        item_rewards.extend((0..2).into_iter().flat_map(|_| {
+        item_rewards.extend((0..2).flat_map(|_| {
             loot_generator::generate_loot(
                 &game_data.area_blueprint.loot_table,
                 &master_store.items_store,
@@ -105,7 +104,7 @@ fn generate_end_quest_rewards(
 
     // Add an extra rarer item
     if delta_area_level >= ITEM_REWARDS_MIN_LEVEL {
-        item_rewards.extend((0..1).into_iter().flat_map(|_| {
+        item_rewards.extend((0..1).flat_map(|_| {
             loot_generator::generate_loot(
                 &game_data.area_blueprint.loot_table,
                 &master_store.items_store,

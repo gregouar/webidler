@@ -274,7 +274,7 @@ fn generate_monster_specs(
     }
 
     // Apply area effects
-    let area_effects = stats_updater::stats_map_to_vec(&area_effects, area_threat);
+    let area_effects = stats_updater::stats_map_to_vec(area_effects, area_threat);
     monster_specs.character_specs =
         characters_updater::update_character_specs(&monster_specs.character_specs, &area_effects);
     // monster_specs.character_specs.effects = effects_map;

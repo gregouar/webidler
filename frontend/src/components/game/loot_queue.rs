@@ -173,7 +173,7 @@ pub fn LootQueue() -> impl IntoView {
                                             .item_specs
                                             .base
                                             .slot
-                                            .map(|slot| {
+                                            .and_then(|slot| {
                                                 game_context
                                                     .player_inventory
                                                     .read()
@@ -186,7 +186,6 @@ pub fn LootQueue() -> impl IntoView {
                                                         EquippedSlot::ExtraSlot(_) => None,
                                                     })
                                             })
-                                            .flatten()
                                         item_specs=Arc::new(loot.item_specs)
                                         tooltip_position=DynamicTooltipPosition::TopLeft
                                         class:shadow-lg

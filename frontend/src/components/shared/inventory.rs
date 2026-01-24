@@ -443,7 +443,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                         let comparable_item_specs = item_specs
                             .base
                             .slot
-                            .map(|slot| {
+                            .and_then(|slot| {
                                 inventory
                                     .player_inventory
                                     .read()
@@ -455,15 +455,13 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                         }
                                         EquippedSlot::ExtraSlot(_) => None,
                                     })
-                            })
-                            .flatten();
+                            });
                         let can_equip = Signal::derive({
                             let item_specs = item_specs.clone();
                             move || {
                                 if let Some(use_item_category_filter) = inventory
                                     .use_item_category_filter
-                                    .map(|use_item_category_filter| use_item_category_filter.get())
-                                    .flatten()
+                                    .and_then(|use_item_category_filter| use_item_category_filter.get())
                                 {
                                     item_specs.base.categories.contains(&use_item_category_filter)
                                 } else {
@@ -575,7 +573,7 @@ pub fn BagItemContextMenu(
             {{
                 inventory
                     .on_equip
-                    .map(|on_equip| {
+                    .and_then(|on_equip| {
                         can_equip
                             .get()
                             .then(|| {
@@ -598,7 +596,6 @@ pub fn BagItemContextMenu(
                                 }
                             })
                     })
-                    .flatten()
             }}
             {(inventory.on_sell.is_some())
                 .then(|| {
