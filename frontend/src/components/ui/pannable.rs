@@ -135,6 +135,17 @@ pub fn Pannable(children: Children) -> impl IntoView {
         last_pinch_distance.set(None);
     };
 
+    let grid_size = Memo::new(move |_| {
+        let z = zoom.get();
+        if z < 0.5 {
+            100
+        } else if z < 1.0 {
+            50
+        } else {
+            25
+        }
+    });
+
     view! {
         <div
             on:wheel=on_wheel
@@ -157,6 +168,23 @@ pub fn Pannable(children: Children) -> impl IntoView {
                         <stop offset="70%" stop-color="black" stop-opacity=0.5 />
                         <stop offset="100%" stop-color="black" stop-opacity=0.8 />
                     </radialGradient>
+
+                    <pattern
+                        id="grid"
+                        width=move || grid_size.get()
+                        height=move || grid_size.get()
+                        patternUnits="userSpaceOnUse"
+                    >
+                        <path
+                            d=move || {
+                                let s = grid_size.get();
+                                format!("M {s} 0 L 0 0 0 {s}")
+                            }
+                            fill="none"
+                            stroke="#555"
+                            stroke-width="1"
+                        />
+                    </pattern>
                 </defs>
                 <g
                     transform=move || {

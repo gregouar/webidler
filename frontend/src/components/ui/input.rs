@@ -53,11 +53,18 @@ pub fn ValidatedInput<T>(
     id: &'static str,
     #[prop(default = "")] label: &'static str,
     input_type: &'static str,
-    placeholder: &'static str,
+    #[prop(default = "")] placeholder: &'static str,
+    #[prop(default = "any")] step: &'static str,
     bind: RwSignal<Option<T>>,
 ) -> impl IntoView
 where
-    T: serde::de::DeserializeOwned + serde::ser::Serialize + Clone + Send + Sync + 'static,
+    T: serde::de::DeserializeOwned
+        + serde::ser::Serialize
+        + std::cmp::PartialEq
+        + Clone
+        + Send
+        + Sync
+        + 'static,
 {
     let node_ref = NodeRef::<leptos::html::Input>::new();
     let validation_error = RwSignal::new(None);
@@ -94,10 +101,15 @@ where
                     )
                 }
                 placeholder=placeholder
-                value=move || { bind.get().and_then(|value| serde_plain::to_string(&value).ok()) }
+                step=step
+                prop:value=move || {
+                    bind.get().and_then(|value| serde_plain::to_string(&value).ok())
+                }
                 on:input:target=move |ev| match serde_plain::from_str(&ev.target().value()) {
                     Ok(v) => {
-                        bind.set(Some(v));
+                        if bind.get().as_ref() != Some(&v) {
+                            bind.set(Some(v));
+                        }
                         validation_error.set(None);
                     }
                     Err(err) => {

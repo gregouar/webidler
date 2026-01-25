@@ -1,6 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
+use strum_macros::EnumIter;
 
 use crate::data::{stat_effect::EffectsMap, trigger::TriggerSpecs};
 
@@ -8,7 +9,7 @@ pub use super::stat_effect::StatEffect;
 
 pub type PassiveNodeId = String;
 
-#[derive(Serialize, Deserialize, Clone, Debug, Default)]
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, Default, Hash, PartialEq, Eq, EnumIter)]
 pub enum PassiveNodeType {
     Attack,
     Life,

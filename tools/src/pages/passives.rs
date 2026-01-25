@@ -10,6 +10,7 @@ use frontend::components::{
     ui::{
         buttons::MenuButton,
         card::{Card, CardHeader, CardInset, CardTitle},
+        dropdown::DropdownMenu,
         input::ValidatedInput,
         pannable::Pannable,
         tooltip::DynamicTooltip,
@@ -18,8 +19,9 @@ use frontend::components::{
 use leptos::{html::*, prelude::*};
 use serde::Serialize;
 use shared::data::passive::{
-    PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeSpecs,
+    PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassiveNodeType, PassivesTreeSpecs,
 };
+use strum::IntoEnumIterator;
 
 use crate::{
     header::HeaderMenu,
@@ -109,6 +111,7 @@ fn PassiveSkillTree(
 ) -> impl IntoView {
     view! {
         <Pannable>
+            <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#grid)" />
             <For
                 each=move || { passives_tree_specs.read().connections.clone().into_iter() }
                 key=|conn| (conn.from.clone(), conn.to.clone())
@@ -191,12 +194,7 @@ fn EditNodeMenu(
                 .get()
                 .map(|node_id| {
                     let node_specs = RwSignal::new(
-                        passives_tree_specs
-                            .read_untracked()
-                            .nodes
-                            .get(&node_id)
-                            .cloned()
-                            .unwrap_or_default(),
+                        passives_tree_specs.read().nodes.get(&node_id).cloned().unwrap_or_default(),
                     );
                     let on_save = {
                         let node_id = node_id.clone();
@@ -232,17 +230,109 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
         }
     });
 
+    let node_icon = RwSignal::new(Some(node_specs.read_untracked().icon.clone()));
+    Effect::new(move || {
+        if let Some(node_icon) = node_icon.get() {
+            node_specs.write().icon = node_icon;
+        }
+    });
+
+    let node_x = RwSignal::new(Some(node_specs.read_untracked().x));
+    Effect::new(move || {
+        if let Some(node_x) = node_x.get() {
+            node_specs.write().x = node_x;
+        }
+    });
+
+    let node_y = RwSignal::new(Some(node_specs.read_untracked().y));
+    Effect::new(move || {
+        if let Some(node_y) = node_y.get() {
+            node_specs.write().y = node_y;
+        }
+    });
+
+    let node_size = RwSignal::new(Some(node_specs.read_untracked().size));
+    Effect::new(move || {
+        if let Some(node_size) = node_size.get() {
+            node_specs.write().size = node_size;
+        }
+    });
+
+    let node_type = RwSignal::new(node_specs.read_untracked().node_type.clone());
+    Effect::new(move || {
+        node_specs.write().node_type = node_type.get();
+    });
+
+    let initial_node = RwSignal::new(node_specs.read_untracked().initial_node.clone());
+    Effect::new(move || {
+        node_specs.write().initial_node = initial_node.get();
+    });
+
+    let node_locked = RwSignal::new(node_specs.read_untracked().locked.clone());
+    Effect::new(move || {
+        node_specs.write().locked = node_locked.get();
+    });
+
+    let node_max_level = RwSignal::new(Some(node_specs.read_untracked().max_upgrade_level));
+    Effect::new(move || {
+        if let Some(node_max_level) = node_max_level.get() {
+            node_specs.write().max_upgrade_level = node_max_level;
+        }
+    });
+
     view! {
-        <CardInset class="flex-1 space-y-2">
+        <CardInset class="flex-1">
             <div class="text-amber-300">{node_id}</div>
+            <ValidatedInput label="Name" id="node_name" input_type="text" bind=node_name />
+            <ValidatedInput label="Icon" id="node_icon" input_type="text" bind=node_icon />
+            <div class="flex justify-between gap-2">
+                <ValidatedInput label="Pos. x" id="x" input_type="number" step="0.5" bind=node_x />
+                <ValidatedInput label="Pos. y" id="y" input_type="number" step="0.5" bind=node_y />
+            </div>
+            <div class="flex justify-between gap-2 items-end">
+                <ValidatedInput label="Size" id="size" input_type="number" bind=node_size />
+                <DropdownMenu
+                    options=PassiveNodeType::iter()
+                        .map(|category| (category, serde_plain::to_string(&category).unwrap()))
+                        .collect()
+                    chosen_option=node_type
+                />
+            </div>
+            <div class="flex justify-between gap-2">
+                <div class="flex items-start mt-4">
+                    <input
+                        id="initial_node"
+                        type="checkbox"
+                        class="mt-1 mr-2"
+                        prop:checked=initial_node
+                        on:input=move |ev| initial_node.set(event_target_checked(&ev))
+                    />
+                    <label for="terms" class="text-sm text-gray-400">
+                        "Root Node"
+                    </label>
+                </div>
+
+                <div class="flex items-start mt-4">
+                    <input
+                        id="node_locked"
+                        type="checkbox"
+                        class="mt-1 mr-2"
+                        prop:checked=node_locked
+                        on:input=move |ev| node_locked.set(event_target_checked(&ev))
+                    />
+                    <label for="terms" class="text-sm text-gray-400">
+                        "Locked"
+                    </label>
+                </div>
+            </div>
             <ValidatedInput
-                label="Name"
-                id="node_name"
-                input_type="text"
-                placeholder="Node Name"
-                bind=node_name
+                label="Max Level"
+                id="max_level"
+                input_type="number"
+                bind=node_max_level
             />
         </CardInset>
+
         <div>"Result:"</div>
         <CardInset class="space-y-2">
             {move || {
