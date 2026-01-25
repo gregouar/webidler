@@ -1,15 +1,18 @@
 use std::{collections::HashMap, sync::Arc};
 
 use frontend::components::{
-    shared::passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
+    shared::passives::{
+        Connection, MetaStatus, Node, NodeStatus, NodeTooltipContent, PurchaseStatus,
+    },
     ui::{
         buttons::MenuButton,
-        card::{Card, CardInset, CardTitle},
+        card::{Card, CardHeader, CardInset, CardTitle},
+        input::ValidatedInput,
         pannable::Pannable,
         tooltip::DynamicTooltip,
     },
 };
-use leptos::{html::*, leptos_dom::logging::console_log, prelude::*};
+use leptos::{html::*, prelude::*};
 use shared::data::passive::{
     PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeSpecs,
 };
@@ -20,6 +23,8 @@ use crate::{header::HeaderMenu, utils::file_loader::use_json_loader};
 pub fn PassivesPage() -> impl IntoView {
     let (loaded_file, on_skills_file) = use_json_loader::<HashMap<String, PassivesTreeSpecs>>();
     let passives_tree_specs = RwSignal::new(Default::default());
+
+    let selected_node: RwSignal<Option<PassiveNodeId>> = RwSignal::new(None);
 
     Effect::new(move || {
         loaded_file.with(|loaded_file| {
@@ -34,7 +39,7 @@ pub fn PassivesPage() -> impl IntoView {
             <DynamicTooltip />
             <HeaderMenu />
             <div class="relative flex-1">
-                <div class="absolute inset-0 flex flex-col p-1 xl:p-4 items-center">
+                <div class="absolute inset-0 flex p-1 xl:p-4 items-center gap-4">
                     <div class="w-full h-full">
                         <Card>
                             <div class="flex justify-between mx-4 items-center">
@@ -48,11 +53,14 @@ pub fn PassivesPage() -> impl IntoView {
                                     <MenuButton>"Save"</MenuButton>
                                 </div>
                             </div>
-                            <CardInset pad=false>
-                                <PassiveSkillTree passives_tree_specs />
+                            <CardInset pad=false class:flex-1>
+                                <PassiveSkillTree passives_tree_specs selected_node />
                             </CardInset>
                         </Card>
                     </div>
+
+                    <EditNodeMenu passives_tree_specs selected_node />
+
                 </div>
             </div>
         </main>
@@ -60,10 +68,10 @@ pub fn PassivesPage() -> impl IntoView {
 }
 
 #[component]
-fn PassiveSkillTree(passives_tree_specs: RwSignal<PassivesTreeSpecs>) -> impl IntoView {
-    // THIS FEELS WRONG
-    let nodes_specs = Arc::new(passives_tree_specs.read_untracked().nodes.clone());
-
+fn PassiveSkillTree(
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    selected_node: RwSignal<Option<PassiveNodeId>>,
+) -> impl IntoView {
     view! {
         <Pannable>
             <For
@@ -71,33 +79,40 @@ fn PassiveSkillTree(passives_tree_specs: RwSignal<PassivesTreeSpecs>) -> impl In
                 key=|conn| (conn.from.clone(), conn.to.clone())
                 let(conn)
             >
-                <ToolConnection connection=conn nodes_specs=nodes_specs.clone() />
+                <ToolConnection connection=conn passives_tree_specs />
             </For>
             <For
                 each=move || { passives_tree_specs.read().nodes.clone().into_iter() }
                 key=|(id, _)| id.clone()
                 let((id, node))
             >
-                <ToolNode node_id=id node_specs=node />
+                <ToolNode node_id=id node_specs=node selected_node />
             </For>
         </Pannable>
     }
 }
 
 #[component]
-fn ToolNode(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl IntoView {
-    let node_status = Memo::new(|_| NodeStatus {
-        purchase_status: PurchaseStatus::Purchased,
-        meta_status: MetaStatus::Normal,
+fn ToolNode(
+    node_id: PassiveNodeId,
+    node_specs: PassiveNodeSpecs,
+    selected_node: RwSignal<Option<PassiveNodeId>>,
+) -> impl IntoView {
+    let node_status = Memo::new(move |_| NodeStatus {
+        purchase_status: PurchaseStatus::Purchaseable,
+        meta_status: match node_specs.locked {
+            true => MetaStatus::Locked,
+            false => MetaStatus::Normal,
+        },
     });
-    let node_level = Memo::new(|_| 1);
+    let node_level = Memo::new(|_| 0);
 
     view! {
         <Node
             node_specs
             node_status
             node_level
-            on_click=move || {}
+            on_click=move || { selected_node.set(Some(node_id.clone())) }
             on_right_click=move || {}
             show_upgrade=true
         />
@@ -107,10 +122,73 @@ fn ToolNode(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl IntoVi
 #[component]
 fn ToolConnection(
     connection: PassiveConnection,
-    nodes_specs: Arc<HashMap<String, PassiveNodeSpecs>>,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
 ) -> impl IntoView {
-    let amount_connections = Memo::new(|_| 2);
-    let node_levels = Memo::new(|_| (1, 1));
+    let amount_connections = Memo::new(|_| 1);
+    let node_levels = Memo::new(|_| (0, 0));
 
-    view! { <Connection connection nodes_specs amount_connections node_levels /> }
+    view! { <Connection connection passives_tree_specs amount_connections node_levels /> }
+}
+
+#[component]
+fn EditNodeMenu(
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    selected_node: RwSignal<Option<PassiveNodeId>>,
+) -> impl IntoView {
+    view! {
+        <Card class="h-full w-xl">
+            <CardHeader title="Edit Node" on_close=move || selected_node.set(None)>
+                <div class="flex-1" />
+                <MenuButton class:mr-2>"Save"</MenuButton>
+            </CardHeader>
+            {move || match selected_node.get() {
+                Some(selected_node) => {
+                    let node_specs = RwSignal::new(
+                        passives_tree_specs
+                            .read_untracked()
+                            .nodes
+                            .get(&selected_node)
+                            .cloned()
+                            .unwrap_or_default(),
+                    );
+
+                    view! { <EditNode node_id=selected_node node_specs /> }
+                        .into_any()
+                }
+                None => view! {}.into_any(),
+            }}
+        </Card>
+    }
+}
+
+#[component]
+fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> impl IntoView {
+    let node_level = Memo::new(|_| 0);
+
+    let node_name = RwSignal::new(Some(node_specs.read_untracked().name.clone()));
+    Effect::new(move || {
+        if let Some(node_name) = node_name.get() {
+            node_specs.write().name = node_name;
+        }
+    });
+
+    view! {
+        <CardInset class="flex-1 space-y-2">
+            <div class="text-amber-300">{node_id}</div>
+            <ValidatedInput
+                label="Name"
+                id="node_name"
+                input_type="text"
+                placeholder="Node Name"
+                bind=node_name
+            />
+        </CardInset>
+        <div>"Result:"</div>
+        <CardInset class="space-y-2">
+            {move || {
+                let node_specs = Arc::new(node_specs.get());
+                view! { <NodeTooltipContent node_specs node_level show_upgrade=false /> }
+            }}
+        </CardInset>
+    }
 }

@@ -8,7 +8,7 @@ pub use super::stat_effect::StatEffect;
 
 pub type PassiveNodeId = String;
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub enum PassiveNodeType {
     Attack,
     Life,
@@ -22,6 +22,7 @@ pub enum PassiveNodeType {
     Fire,
     Storm,
     Status,
+    #[default]
     Utility,
 }
 
@@ -42,7 +43,7 @@ pub struct PassivesTreeState {
     pub ascension: PassivesTreeAscension,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct PassiveNodeSpecs {
     pub name: String,
     pub icon: String,

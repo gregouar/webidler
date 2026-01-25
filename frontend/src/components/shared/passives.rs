@@ -1,9 +1,10 @@
 use leptos::{html::*, prelude::*};
 
-use std::collections::HashMap;
 use std::sync::Arc;
 
-use shared::data::passive::{PassiveConnection, PassiveNodeSpecs, PassiveNodeType};
+use shared::data::passive::{
+    PassiveConnection, PassiveNodeSpecs, PassiveNodeType, PassivesTreeSpecs,
+};
 
 use crate::{
     assets::img_asset,
@@ -237,81 +238,106 @@ pub fn Node(
 #[component]
 pub fn Connection(
     connection: PassiveConnection,
-    nodes_specs: Arc<HashMap<String, PassiveNodeSpecs>>,
+    // TODO: Could we avoid passing the whole thing?
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     amount_connections: Memo<usize>,
     node_levels: Memo<(u8, u8)>,
 ) -> impl IntoView {
-    let from_node = nodes_specs.get(&connection.from).cloned();
-    let to_node = nodes_specs.get(&connection.to).cloned();
+    let from_node = {
+        let node_id = connection.from.clone();
+        move || passives_tree_specs.read().nodes.get(&node_id).cloned()
+    };
+    let to_node = {
+        let node_id = connection.to.clone();
+        move || passives_tree_specs.read().nodes.get(&node_id).cloned()
+    };
 
     view! {
-        {if let (Some(from), Some(to)) = (from_node, to_node) {
-            let from_status = move || node_meta_status(node_levels.get().0, from.locked);
-            let to_status = move || node_meta_status(node_levels.get().1, to.locked);
-            let purchase_status = move || match amount_connections.get() {
-                2 => PurchaseStatus::Purchased,
-                1 => PurchaseStatus::Purchaseable,
-                _ => PurchaseStatus::Inactive,
-            };
-            let color = move |status| {
-                match purchase_status() {
-                    PurchaseStatus::Inactive => "gray",
-                    x => status_color(x, status),
-                }
-            };
-            let from_color = move || { color(from_status()) };
-            let to_color = move || { color(to_status()) };
-            let dasharray = move || if amount_connections.get() == 2 { "none" } else { "4 3" };
-            let width = move || if amount_connections.get() == 2 { "3" } else { "2" };
-            let gradient_id = format!("{}-{}", connection.from, connection.to);
-            Some(
-                // from.max_upgrade_level,
-                // to.max_upgrade_level,
+        {move || {
+            if let (Some(from), Some(to)) = (from_node(), to_node()) {
+                let from_status = move || node_meta_status(node_levels.get().0, from.locked);
+                let to_status = move || node_meta_status(node_levels.get().1, to.locked);
+                let purchase_status = move || match amount_connections.get() {
+                    2 => PurchaseStatus::Purchased,
+                    1 => PurchaseStatus::Purchaseable,
+                    _ => PurchaseStatus::Inactive,
+                };
+                let color = move |status| {
+                    match purchase_status() {
+                        PurchaseStatus::Inactive => "gray",
+                        x => status_color(x, status),
+                    }
+                };
+                let from_color = move || { color(from_status()) };
+                let to_color = move || { color(to_status()) };
+                let dasharray = move || if amount_connections.get() == 2 { "none" } else { "4 3" };
+                let width = move || if amount_connections.get() == 2 { "3" } else { "2" };
+                let gradient_id = format!("{}-{}", connection.from, connection.to);
+                Some(
+                    // from.max_upgrade_level,
+                    // to.max_upgrade_level,
 
-                view! {
-                    <linearGradient
-                        id=gradient_id.clone()
-                        gradientUnits="userSpaceOnUse"
-                        x1=from.x * 10.0
-                        y1=-from.y * 10.0
-                        x2=to.x * 10.0
-                        y2=-to.y * 10.0
-                    >
-                        <stop offset="0%" stop-color=from_color />
-                        <stop offset="100%" stop-color=to_color />
-                    </linearGradient>
-                    <line
-                        x1=from.x * 10.0
-                        y1=-from.y * 10.0
-                        x2=to.x * 10.0
-                        y2=-to.y * 10.0
-                        class=move || {
-                            if amount_connections.get() == 2 {
-                                match (from_status(), to_status()) {
-                                    (MetaStatus::Ascended, MetaStatus::Ascended) => {
-                                        "xl:drop-shadow-[0_0_2px_cyan]"
+                    view! {
+                        <linearGradient
+                            id=gradient_id.clone()
+                            gradientUnits="userSpaceOnUse"
+                            x1=from.x * 10.0
+                            y1=-from.y * 10.0
+                            x2=to.x * 10.0
+                            y2=-to.y * 10.0
+                        >
+                            <stop offset="0%" stop-color=from_color />
+                            <stop offset="100%" stop-color=to_color />
+                        </linearGradient>
+                        <line
+                            x1=from.x * 10.0
+                            y1=-from.y * 10.0
+                            x2=to.x * 10.0
+                            y2=-to.y * 10.0
+                            class=move || {
+                                if amount_connections.get() == 2 {
+                                    match (from_status(), to_status()) {
+                                        (MetaStatus::Ascended, MetaStatus::Ascended) => {
+                                            "xl:drop-shadow-[0_0_2px_cyan]"
+                                        }
+                                        _ => "xl:drop-shadow-[0_0_2px_gold]",
                                     }
-                                    _ => "xl:drop-shadow-[0_0_2px_gold]",
+                                } else {
+                                    ""
                                 }
-                            } else {
-                                ""
                             }
-                        }
-                        stroke=format!("url(#{gradient_id})")
-                        stroke-dasharray=dasharray
-                        stroke-linecap="round"
-                        stroke-width=width
-                    />
-                },
-            )
-        } else {
-            None
+                            stroke=format!("url(#{gradient_id})")
+                            stroke-dasharray=dasharray
+                            stroke-linecap="round"
+                            stroke-width=width
+                        />
+                    },
+                )
+            } else {
+                None
+            }
         }}
     }
 }
 
 #[component]
-fn NodeTooltip(
+pub fn NodeTooltip(
+    node_specs: Arc<PassiveNodeSpecs>,
+    node_level: Memo<u8>,
+    show_upgrade: bool,
+) -> impl IntoView {
+    view! {
+        <div class="
+        max-w-xs p-4 rounded-xl border border-teal-700 ring-2 ring-teal-500 
+        shadow-md shadow-teal-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
+        ">
+            <NodeTooltipContent node_specs node_level show_upgrade />
+        </div>
+    }
+}
+
+#[component]
+pub fn NodeTooltipContent(
     node_specs: Arc<PassiveNodeSpecs>,
     node_level: Memo<u8>,
     show_upgrade: bool,
@@ -421,16 +447,11 @@ fn NodeTooltip(
     };
 
     view! {
-        <div class="
-        max-w-xs p-4 rounded-xl border border-teal-700 ring-2 ring-teal-500 
-        shadow-md shadow-teal-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
-        ">
-            <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
-            <hr class="border-t border-gray-700" />
-            {starting_node_text}
-            <ul class="list-none space-y-1 text-xs xl:text-sm">{triggers_text}{effects_text}</ul>
-            {locked_text}
-            {upgrade_text}
-        </div>
+        <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
+        <hr class="border-t border-gray-700" />
+        {starting_node_text}
+        <ul class="list-none space-y-1 text-xs xl:text-sm">{triggers_text}{effects_text}</ul>
+        {locked_text}
+        {upgrade_text}
     }
 }

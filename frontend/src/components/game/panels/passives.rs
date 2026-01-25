@@ -1,8 +1,5 @@
 use leptos::{html::*, prelude::*};
 
-use std::collections::HashMap;
-use std::sync::Arc;
-
 use shared::{
     data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs},
     messages::client::PurchasePassiveMessage,
@@ -44,14 +41,6 @@ fn PassiveSkillTree() -> impl IntoView {
     let points_available =
         Memo::new(move |_| game_context.player_resources.read().passive_points > 0);
 
-    let nodes_specs = Arc::new(
-        game_context
-            .passives_tree_specs
-            .read_untracked()
-            .nodes
-            .clone(),
-    );
-
     view! {
         <Pannable>
             <For
@@ -61,7 +50,7 @@ fn PassiveSkillTree() -> impl IntoView {
                 key=|conn| (conn.from.clone(), conn.to.clone())
                 let(conn)
             >
-                <InGameConnection connection=conn nodes_specs=nodes_specs.clone() />
+                <InGameConnection connection=conn />
             </For>
             <For
                 each=move || { game_context.passives_tree_specs.read().nodes.clone().into_iter() }
@@ -180,12 +169,10 @@ fn InGameNode(
 }
 
 #[component]
-fn InGameConnection(
-    connection: PassiveConnection,
-    nodes_specs: Arc<HashMap<String, PassiveNodeSpecs>>,
-) -> impl IntoView {
+fn InGameConnection(connection: PassiveConnection) -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
     let amount_connections = Memo::new({
-        let game_context = expect_context::<GameContext>();
         let connection_from = connection.from.clone();
         let connection_to = connection.to.clone();
 
@@ -204,7 +191,6 @@ fn InGameConnection(
     });
 
     let node_levels = Memo::new({
-        let game_context = expect_context::<GameContext>();
         let connection_from = connection.from.clone();
         let connection_to = connection.to.clone();
 
@@ -230,5 +216,12 @@ fn InGameConnection(
         }
     });
 
-    view! { <Connection connection nodes_specs amount_connections node_levels /> }
+    view! {
+        <Connection
+            connection
+            passives_tree_specs=game_context.passives_tree_specs
+            amount_connections
+            node_levels
+        />
+    }
 }
