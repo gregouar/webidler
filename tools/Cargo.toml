@@ -39,4 +39,6 @@ itertools = "0.14.0"
 
 rand = "0.9.0"
 getrandom = { version = "0.3", features = ["wasm_js"] }
+regex = "1.12.2"
+html-escape = "0.2.13"
 

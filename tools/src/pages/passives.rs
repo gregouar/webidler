@@ -288,6 +288,11 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
         node_specs.write().effects = node_effects.get();
     });
 
+    let node_upgrades = RwSignal::new(node_specs.read_untracked().upgrade_effects.clone());
+    Effect::new(move || {
+        node_specs.write().upgrade_effects = node_upgrades.get();
+    });
+
     let node_triggers = RwSignal::new(node_specs.read_untracked().triggers.clone());
     Effect::new(move || {
         node_specs.write().triggers = node_triggers.get();
@@ -345,6 +350,7 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
                 bind=node_max_level
             />
             <JsonEditor label="Effects" value=node_effects />
+            <JsonEditor label="Upgrade Effects" value=node_upgrades />
             <JsonEditor label="Triggers" value=node_triggers />
         </CardInset>
 
