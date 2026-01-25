@@ -22,7 +22,7 @@ leptos-use = { version = "0.15.7", features = [
     "storage",
 ] }
 leptos_toaster = "0.2.0"
-web-sys = { version = "0.3", features = ["Performance"] }
+web-sys = { version = "0.3", features = ["Performance","Blob","BlobPropertyBag"] }
 
 console_error_panic_hook = "0.1.7"
 

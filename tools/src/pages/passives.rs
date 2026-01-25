@@ -1,4 +1,7 @@
-use std::{collections::HashMap, sync::Arc};
+use std::{
+    collections::{BTreeMap, HashMap},
+    sync::Arc,
+};
 
 use frontend::components::{
     shared::passives::{
@@ -13,11 +16,21 @@ use frontend::components::{
     },
 };
 use leptos::{html::*, prelude::*};
+use serde::Serialize;
 use shared::data::passive::{
     PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeSpecs,
 };
 
-use crate::{header::HeaderMenu, utils::file_loader::use_json_loader};
+use crate::{
+    header::HeaderMenu,
+    utils::file_loader::{save_json, use_json_loader},
+};
+
+#[derive(Serialize)]
+pub struct SerPassivesTreeSpecs {
+    pub nodes: BTreeMap<PassiveNodeId, PassiveNodeSpecs>,
+    pub connections: Vec<PassiveConnection>,
+}
 
 #[component]
 pub fn PassivesPage() -> impl IntoView {
@@ -48,9 +61,29 @@ pub fn PassivesPage() -> impl IntoView {
                                 <div class="flex gap-2">
                                     <MenuButton>
                                         <input type="file" on:change=on_skills_file />
-                                    // "Load"
                                     </MenuButton>
-                                    <MenuButton>"Save"</MenuButton>
+                                    <MenuButton on:click=move |_| {
+                                        save_json(
+                                            &HashMap::from([
+                                                (
+                                                    "default",
+                                                    SerPassivesTreeSpecs {
+                                                        nodes: passives_tree_specs
+                                                            .read_untracked()
+                                                            .nodes
+                                                            .clone()
+                                                            .into_iter()
+                                                            .collect(),
+                                                        connections: passives_tree_specs
+                                                            .read_untracked()
+                                                            .connections
+                                                            .clone(),
+                                                    },
+                                                ),
+                                            ]),
+                                            "passives.json",
+                                        );
+                                    }>"Save"</MenuButton>
                                 </div>
                             </div>
                             <CardInset pad=false class:flex-1>
@@ -59,7 +92,9 @@ pub fn PassivesPage() -> impl IntoView {
                         </Card>
                     </div>
 
-                    <EditNodeMenu passives_tree_specs selected_node />
+                    <Card class="h-full w-xl">
+                        <EditNodeMenu passives_tree_specs selected_node />
+                    </Card>
 
                 </div>
             </div>
@@ -82,11 +117,26 @@ fn PassiveSkillTree(
                 <ToolConnection connection=conn passives_tree_specs />
             </For>
             <For
-                each=move || { passives_tree_specs.read().nodes.clone().into_iter() }
-                key=|(id, _)| id.clone()
-                let((id, node))
+                each=move || {
+                    passives_tree_specs.read().nodes.keys().cloned().collect::<Vec<_>>()
+                }
+                key=|id| id.clone()
+                let(id)
             >
-                <ToolNode node_id=id node_specs=node selected_node />
+                {move || {
+                    view! {
+                        <ToolNode
+                            node_id=id.clone()
+                            node_specs=passives_tree_specs
+                                .read()
+                                .nodes
+                                .get(&id)
+                                .cloned()
+                                .unwrap_or_default()
+                            selected_node
+                        />
+                    }
+                }}
             </For>
         </Pannable>
     }
@@ -136,28 +186,38 @@ fn EditNodeMenu(
     selected_node: RwSignal<Option<PassiveNodeId>>,
 ) -> impl IntoView {
     view! {
-        <Card class="h-full w-xl">
-            <CardHeader title="Edit Node" on_close=move || selected_node.set(None)>
-                <div class="flex-1" />
-                <MenuButton class:mr-2>"Save"</MenuButton>
-            </CardHeader>
-            {move || match selected_node.get() {
-                Some(selected_node) => {
+        {move || {
+            selected_node
+                .get()
+                .map(|node_id| {
                     let node_specs = RwSignal::new(
                         passives_tree_specs
                             .read_untracked()
                             .nodes
-                            .get(&selected_node)
+                            .get(&node_id)
                             .cloned()
                             .unwrap_or_default(),
                     );
-
-                    view! { <EditNode node_id=selected_node node_specs /> }
-                        .into_any()
-                }
-                None => view! {}.into_any(),
-            }}
-        </Card>
+                    let on_save = {
+                        let node_id = node_id.clone();
+                        move |_| {
+                            passives_tree_specs
+                                .write()
+                                .nodes
+                                .insert(node_id.clone(), node_specs.get_untracked());
+                        }
+                    };
+                    view! {
+                        <CardHeader title="Edit Node" on_close=move || selected_node.set(None)>
+                            <div class="flex-1" />
+                            <MenuButton class:mr-2 on:click=on_save>
+                                "Save"
+                            </MenuButton>
+                        </CardHeader>
+                        <EditNode node_id node_specs />
+                    }
+                })
+        }}
     }
 }
 
