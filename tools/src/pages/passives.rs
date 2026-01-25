@@ -25,7 +25,10 @@ use strum::IntoEnumIterator;
 
 use crate::{
     header::HeaderMenu,
-    utils::file_loader::{save_json, use_json_loader},
+    utils::{
+        file_loader::{save_json, use_json_loader},
+        json_editor::JsonEditor,
+    },
 };
 
 #[derive(Serialize)]
@@ -280,6 +283,16 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
         }
     });
 
+    let node_effects = RwSignal::new(node_specs.read_untracked().effects.clone());
+    Effect::new(move || {
+        node_specs.write().effects = node_effects.get();
+    });
+
+    let node_triggers = RwSignal::new(node_specs.read_untracked().triggers.clone());
+    Effect::new(move || {
+        node_specs.write().triggers = node_triggers.get();
+    });
+
     view! {
         <CardInset class="flex-1">
             <div class="text-amber-300">{node_id}</div>
@@ -331,10 +344,12 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
                 input_type="number"
                 bind=node_max_level
             />
+            <JsonEditor label="Effects" value=node_effects />
+            <JsonEditor label="Triggers" value=node_triggers />
         </CardInset>
 
         <div>"Result:"</div>
-        <CardInset class="space-y-2">
+        <CardInset class="space-y-1">
             {move || {
                 let node_specs = Arc::new(node_specs.get());
                 view! { <NodeTooltipContent node_specs node_level show_upgrade=false /> }
