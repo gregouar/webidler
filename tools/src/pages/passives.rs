@@ -1,214 +1,104 @@
-use frontend::components::ui::{
-    buttons::MenuButton,
-    card::{Card, CardInset, CardTitle},
-    pannable::Pannable,
-};
-use leptos::{html::*, prelude::*};
+use std::{collections::HashMap, sync::Arc};
 
-use crate::header::HeaderMenu;
+use frontend::components::{
+    shared::passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
+    ui::{
+        buttons::MenuButton,
+        card::{Card, CardInset, CardTitle},
+        pannable::Pannable,
+        tooltip::DynamicTooltip,
+    },
+};
+use leptos::{html::*, leptos_dom::logging::console_log, prelude::*};
+use shared::data::passive::{
+    PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeSpecs,
+};
+
+use crate::{header::HeaderMenu, utils::file_loader::use_json_loader};
 
 #[component]
 pub fn PassivesPage() -> impl IntoView {
+    let (loaded_file, on_skills_file) = use_json_loader::<HashMap<String, PassivesTreeSpecs>>();
+    let passives_tree_specs = RwSignal::new(Default::default());
 
-    let passives_tree = ;
+    Effect::new(move || {
+        loaded_file.with(|loaded_file| {
+            if let Some(specs) = loaded_file.as_ref().and_then(|f| f.get("default")) {
+                passives_tree_specs.set(specs.clone());
+            }
+        });
+    });
 
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
+            <DynamicTooltip />
             <HeaderMenu />
             <div class="relative flex-1">
-                <Card>
-                    <div class="flex flex-between mx-4">
-                        <CardTitle>"Passives"</CardTitle>
-                        <MenuButton>"Save"</MenuButton>
+                <div class="absolute inset-0 flex flex-col p-1 xl:p-4 items-center">
+                    <div class="w-full h-full">
+                        <Card>
+                            <div class="flex justify-between mx-4 items-center">
+                                <CardTitle>"Passives"</CardTitle>
+
+                                <div class="flex gap-2">
+                                    <MenuButton>
+                                        <input type="file" on:change=on_skills_file />
+                                    // "Load"
+                                    </MenuButton>
+                                    <MenuButton>"Save"</MenuButton>
+                                </div>
+                            </div>
+                            <CardInset pad=false>
+                                <PassiveSkillTree passives_tree_specs />
+                            </CardInset>
+                        </Card>
                     </div>
-                    <CardInset pad=false>
-                        <div class="w-full h-full">
-                            <PassiveSkillTree />
-                        </div>
-                    </CardInset>
-                </Card>
+                </div>
             </div>
         </main>
     }
 }
 
 #[component]
-fn PassiveSkillTree() -> impl IntoView {
+fn PassiveSkillTree(passives_tree_specs: RwSignal<PassivesTreeSpecs>) -> impl IntoView {
+    // THIS FEELS WRONG
+    let nodes_specs = Arc::new(passives_tree_specs.read_untracked().nodes.clone());
+
     view! {
         <Pannable>
             <For
-                each=move || {
-                    town_context.passives_tree_specs.read().connections.clone().into_iter()
-                }
+                each=move || { passives_tree_specs.read().connections.clone().into_iter() }
                 key=|conn| (conn.from.clone(), conn.to.clone())
                 let(conn)
             >
-                <ToolConnection
-                    connection=conn
-                    nodes_specs=nodes_specs.clone()
-                    passives_tree_ascension
-                />
+                <ToolConnection connection=conn nodes_specs=nodes_specs.clone() />
             </For>
             <For
-                each=move || { town_context.passives_tree_specs.read().nodes.clone().into_iter() }
+                each=move || { passives_tree_specs.read().nodes.clone().into_iter() }
                 key=|(id, _)| id.clone()
                 let((id, node))
             >
-                <ToolNode
-                    node_id=id
-                    node_specs=node
-                    points_available
-                    ascension_cost
-                    passives_tree_ascension
-                    view_only
-                />
+                <ToolNode node_id=id node_specs=node />
             </For>
         </Pannable>
     }
 }
 
 #[component]
-fn ToolNode(
-    node_id: PassiveNodeId,
-    node_specs: PassiveNodeSpecs,
-    points_available: Memo<f64>,
-    ascension_cost: RwSignal<f64>,
-    passives_tree_ascension: RwSignal<PassivesTreeAscension>,
-    view_only: bool,
-) -> impl IntoView {
-    let town_context: TownContext = expect_context();
-
-    let node_level = Memo::new({
-        let node_id = node_id.clone();
-
-        move |_| {
-            passives_tree_ascension
-                .read()
-                .ascended_nodes
-                .get(&node_id)
-                .copied()
-                .unwrap_or_default()
-        }
+fn ToolNode(node_id: PassiveNodeId, node_specs: PassiveNodeSpecs) -> impl IntoView {
+    let node_status = Memo::new(|_| NodeStatus {
+        purchase_status: PurchaseStatus::Purchased,
+        meta_status: MetaStatus::Normal,
     });
-
-    let max_node_level = if node_specs.upgrade_effects.is_empty() {
-        node_specs.locked as u8
-    } else {
-        node_specs.max_upgrade_level.unwrap_or(u8::MAX)
-    };
-
-    let max_upgrade_level = Memo::new({
-        let node_id = node_id.clone();
-        move |_| {
-            let max_connection_level = if node_specs.initial_node {
-                u8::MAX
-            } else {
-                town_context
-                    .passives_tree_specs
-                    .read()
-                    .connections
-                    .iter()
-                    .filter_map(|connection| {
-                        if connection.from == node_id {
-                            Some(connection.to.clone())
-                        } else if connection.to == node_id {
-                            Some(connection.from.clone())
-                        } else {
-                            None
-                        }
-                    })
-                    .map(|node_id| {
-                        passives_tree_ascension
-                            .read()
-                            .ascended_nodes
-                            .get(&node_id)
-                            .copied()
-                            .unwrap_or_default()
-                    })
-                    .max()
-                    .unwrap_or_default()
-            };
-
-            max_node_level.min(max_connection_level)
-        }
-    });
-
-    let node_status = Memo::new({
-        move |_| {
-            let upgradable = max_upgrade_level.get() > node_level.get();
-            // let maxed = node_level.get() >= max_upgrade_level && node_level.get() > 0;
-
-            let purchase_status =
-            //  if maxed {
-            //     PurchaseStatus::Inactive
-            // } else 
-            if (view_only|| node_level.get() == max_node_level) && node_level.get() > 0  {
-                PurchaseStatus::Purchased
-            } else if points_available.get() > 0.0 && upgradable
-                // && (upgradable || (node_specs.locked && node_level.get() == 0))
-            {
-                PurchaseStatus::Purchaseable
-            } else {
-                PurchaseStatus::Inactive
-            };
-
-            let meta_status = if node_level.get() > 0 {
-                // if node_specs.locked && node_level.get() == 1 {
-                //     MetaStatus::Normal
-                // } else {
-                //     MetaStatus::Ascended
-                // }
-                MetaStatus::Ascended
-            } else if node_specs.locked {
-                MetaStatus::Locked
-            } else {
-                MetaStatus::Normal
-            };
-
-            NodeStatus {
-                purchase_status,
-                meta_status,
-            }
-        }
-    });
-
-    let purchase = {
-        let node_id = node_id.clone();
-        move || {
-            passives_tree_ascension.update(|passives_tree_ascension| {
-                let entry = passives_tree_ascension
-                    .ascended_nodes
-                    .entry(node_id.clone())
-                    .or_default();
-                *entry = entry.saturating_add(1);
-            });
-            ascension_cost.update(|ascension_cost| *ascension_cost += 1.0); // TODO: Ascend cost?
-        }
-    };
-
-    let refund = {
-        let node_id = node_id.clone();
-        move || {
-            passives_tree_ascension.update(|passives_tree_ascension| {
-                let entry = passives_tree_ascension
-                    .ascended_nodes
-                    .entry(node_id.clone())
-                    .or_default();
-                if *entry > 0 {
-                    *entry = entry.saturating_sub(1);
-                    ascension_cost.update(|ascension_cost| *ascension_cost -= 1.0);
-                }
-            });
-        }
-    };
+    let node_level = Memo::new(|_| 1);
 
     view! {
         <Node
             node_specs
             node_status
             node_level
-            on_click=purchase
-            on_right_click=refund
+            on_click=move || {}
+            on_right_click=move || {}
             show_upgrade=true
         />
     }
@@ -218,45 +108,9 @@ fn ToolNode(
 fn ToolConnection(
     connection: PassiveConnection,
     nodes_specs: Arc<HashMap<String, PassiveNodeSpecs>>,
-    passives_tree_ascension: RwSignal<PassivesTreeAscension>,
 ) -> impl IntoView {
-    let amount_connections = Memo::new({
-        let connection_from = connection.from.clone();
-        let connection_to = connection.to.clone();
-
-        move |_| {
-            passives_tree_ascension
-                .read()
-                .ascended_nodes
-                .contains_key(&connection_from) as usize
-                + passives_tree_ascension
-                    .read()
-                    .ascended_nodes
-                    .contains_key(&connection_to) as usize
-        }
-    });
-
-    let node_levels = Memo::new({
-        let connection_from = connection.from.clone();
-        let connection_to = connection.to.clone();
-
-        move |_| {
-            (
-                passives_tree_ascension
-                    .read()
-                    .ascended_nodes
-                    .get(&connection_from)
-                    .cloned()
-                    .unwrap_or_default(),
-                passives_tree_ascension
-                    .read()
-                    .ascended_nodes
-                    .get(&connection_to)
-                    .cloned()
-                    .unwrap_or_default(),
-            )
-        }
-    });
+    let amount_connections = Memo::new(|_| 2);
+    let node_levels = Memo::new(|_| (1, 1));
 
     view! { <Connection connection nodes_specs amount_connections node_levels /> }
 }

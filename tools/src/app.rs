@@ -1,3 +1,7 @@
+use frontend::components::{
+    accessibility::provide_accessibility_context, events::provide_events_context,
+    settings::provide_settings_context,
+};
 use leptos::prelude::*;
 use leptos_meta::*;
 use leptos_router::{
@@ -11,6 +15,10 @@ use crate::pages;
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
+
+    provide_accessibility_context();
+    provide_settings_context();
+    provide_events_context();
 
     view! {
         <Toaster position=ToasterPosition::BottomCenter></Toaster>
