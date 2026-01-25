@@ -24,7 +24,13 @@ where
             error.set(None);
 
             if let Some(el) = textarea_ref.get() {
+                let start = el.selection_start().unwrap_or(Some(0)).unwrap_or(0);
+                let end = el.selection_end().unwrap_or(Some(0)).unwrap_or(0);
+
                 el.set_value(&json);
+
+                el.set_selection_start(Some(start)).ok();
+                el.set_selection_end(Some(end)).ok();
             }
 
             if let Some(gutter) = gutter_ref.get() {
