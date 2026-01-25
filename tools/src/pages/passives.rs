@@ -154,14 +154,23 @@ fn ToolNode(
     node_specs: PassiveNodeSpecs,
     selected_node: RwSignal<Option<PassiveNodeId>>,
 ) -> impl IntoView {
-    let node_status = Memo::new(move |_| NodeStatus {
-        purchase_status: PurchaseStatus::Purchaseable,
-        meta_status: match node_specs.locked {
-            true => MetaStatus::Locked,
-            false => MetaStatus::Normal,
-        },
+    let node_status = Memo::new({
+        let node_id = node_id.clone();
+        move |_| NodeStatus {
+            purchase_status: match selected_node.read() == Some(node_id.clone()) {
+                true => PurchaseStatus::Purchased,
+                false => PurchaseStatus::Purchaseable,
+            },
+            meta_status: match node_specs.locked && selected_node.read() != Some(node_id.clone()) {
+                true => MetaStatus::Locked,
+                false => MetaStatus::Normal,
+            },
+        }
     });
-    let node_level = Memo::new(|_| 0);
+    let node_level = Memo::new({
+        let max_level = node_specs.max_upgrade_level.unwrap_or_default();
+        move |_| max_level
+    });
 
     view! {
         <Node
@@ -224,6 +233,7 @@ fn EditNodeMenu(
 
 #[component]
 fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> impl IntoView {
+    // TODO: Allow to choose level to test
     let node_level = Memo::new(|_| 0);
 
     let node_name = RwSignal::new(Some(node_specs.read_untracked().name.clone()));
@@ -358,7 +368,7 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
         <CardInset class="space-y-1">
             {move || {
                 let node_specs = Arc::new(node_specs.get());
-                view! { <NodeTooltipContent node_specs node_level show_upgrade=false /> }
+                view! { <NodeTooltipContent node_specs node_level show_upgrade=true /> }
             }}
         </CardInset>
     }
