@@ -9,13 +9,15 @@ where
 {
     let textarea_ref = NodeRef::<leptos::html::Textarea>::new();
     let pre_ref = NodeRef::<leptos::html::Pre>::new();
+    let gutter_ref = NodeRef::<leptos::html::Div>::new();
 
     let text = RwSignal::new(String::new());
     let error = RwSignal::new(None::<String>);
 
-    // Sync FROM model → editor (imperative!)
+    // Sync FROM model → editor
     Effect::new({
         let textarea_ref = textarea_ref.clone();
+        let gutter_ref = gutter_ref.clone();
         move || {
             let json = serde_json::to_string_pretty(&value.get()).unwrap();
             text.set(json.clone());
@@ -24,10 +26,19 @@ where
             if let Some(el) = textarea_ref.get() {
                 el.set_value(&json);
             }
+
+            if let Some(gutter) = gutter_ref.get() {
+                let lines = json.lines().count();
+                let gutter_text = (1..=lines)
+                    .map(|n| n.to_string())
+                    .collect::<Vec<_>>()
+                    .join("\n");
+                gutter.set_inner_text(&gutter_text);
+            }
         }
     });
 
-    // Input handler (editor → model)
+    // Input handler
     let on_input = move |ev: leptos::ev::Event| {
         let input = event_target_value(&ev);
         text.set(input.clone());
@@ -37,15 +48,21 @@ where
                 value.set(parsed);
                 error.set(None);
             }
-            Err(e) => {
-                error.set(Some(e.to_string()));
-            }
+            Err(e) => error.set(Some(e.to_string())),
+        }
+
+        if let Some(gutter) = gutter_ref.get() {
+            let lines = input.lines().count();
+            let gutter_text = (1..=lines)
+                .map(|n| n.to_string())
+                .collect::<Vec<_>>()
+                .join("\n");
+            gutter.set_inner_text(&gutter_text);
         }
     };
 
     // Scroll sync
     let on_scroll = move |ev: leptos::ev::Event| {
-        // let ta = ev.target_unchecked::<web_sys::HtmlElement>();
         if let Some(ta) = ev
             .target()
             .and_then(|t| t.dyn_into::<web_sys::HtmlElement>().ok())
@@ -54,67 +71,71 @@ where
                 pre.set_scroll_top(ta.scroll_top());
                 pre.set_scroll_left(ta.scroll_left());
             }
+            if let Some(gutter) = gutter_ref.get() {
+                gutter.set_scroll_top(ta.scroll_top());
+            }
         }
     };
 
     view! {
         <style>
-            ".json-key {
-            color: #fbbf24; /* amber */
-            }
-            
-            .json-string {
-            color: #34d399; /* green */
-            }
-            
-            .json-number {
-            color: #60a5fa; /* blue */
-            }
-            
-            .json-bool {
-            color: #f472b6; /* pink */
-            }
-            
-            .json-null {
-            color: #a78bfa; /* violet */
-            }
-            
-            textarea::selection {
-            background: rgba(251, 191, 36, 0.3);
-            }"
+            ".json-key { color: #fbbf24; }
+             .json-string { color: #34d399; }
+             .json-number { color: #60a5fa; }
+             .json-bool { color: #f472b6; }
+             .json-null { color: #a78bfa; }
+             .json-editor-gutter { color: #888; text-align: right; user-select: none; padding-right: 4px; }"
         </style>
-        <div class="flex flex-col space-y-1">
+
+        <div class="flex flex-col space-y-1 text-left">
             <label class="text-xs font-medium text-gray-400">{label}</label>
 
-            <div class="relative text-left">
-                <pre
-                    node_ref=pre_ref
+            <div class="relative flex w-full h-64">
+                <div
+                    node_ref=gutter_ref
                     class="
-                    absolute inset-0 overflow-auto
-                    pointer-events-none
+                    json-editor-gutter
+                    flex-shrink-0
                     font-mono text-sm leading-5
-                    p-2 whitespace-pre-wrap break-words
-                    bg-gray-900 rounded-lg
+                    p-2 h-64 overflow-y-hidden
+                    bg-gray-800 rounded-l-lg
+                    text-right
                     "
-                    inner_html=move || highlight_json(&text.get())
                 />
 
-                <textarea
-                    node_ref=textarea_ref
-                    class=move || {
-                        format!(
-                            "relative w-full h-64 font-mono text-sm leading-5 p-2
-                             bg-transparent resize-none
-                             text-transparent caret-amber-400
-                             border rounded-lg focus:outline-none
-                             {}",
-                            if error.get().is_some() { "border-red-500" } else { "border-gray-700" },
-                        )
-                    }
-                    spellcheck="false"
-                    on:input=on_input
-                    on:scroll=on_scroll
-                />
+                <div class="relative flex-1 h-full">
+                    <pre
+                        node_ref=pre_ref
+                        class="
+                        absolute inset-0 overflow-auto
+                        pointer-events-none
+                        font-mono text-sm leading-5
+                        p-2 whitespace-pre-wrap break-words
+                        bg-gray-900 rounded-r-lg
+                        "
+                        inner_html=move || highlight_json(&text.get())
+                    />
+                    <textarea
+                        node_ref=textarea_ref
+                        class=move || {
+                            format!(
+                                "relative w-full h-full font-mono text-sm leading-5 p-2
+                    bg-transparent resize-none
+                    text-transparent caret-amber-400
+                    border rounded-r-lg focus:outline-none
+                    {}",
+                                if error.get().is_some() {
+                                    "border-red-500"
+                                } else {
+                                    "border-gray-700"
+                                },
+                            )
+                        }
+                        spellcheck="false"
+                        on:input=on_input
+                        on:scroll=on_scroll
+                    />
+                </div>
             </div>
 
             {move || {
