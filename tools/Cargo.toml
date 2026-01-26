@@ -43,4 +43,5 @@ getrandom = { version = "0.3", features = ["wasm_js"] }
 regex = "1.12.2"
 html-escape = "0.2.13"
 serde_ignored = "0.1.14"
+uuid = { version = "1.17.0", features = ["v4","js"] }
 
