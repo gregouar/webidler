@@ -49,7 +49,7 @@ where
                 }
             }
         },
-        3000.0,
+        1500.0,
         WatchDebouncedOptions::default().immediate(true),
     );
 

@@ -52,6 +52,7 @@ pub fn PassivesPage() -> impl IntoView {
     let passives_tree_specs = RwSignal::new(Default::default());
 
     let selected_node: RwSignal<Option<PassiveNodeId>> = RwSignal::new(None);
+    let clipboard_node = RwSignal::new(None);
     let tool_mode = RwSignal::new(ToolMode::Edit);
 
     Effect::new(move || {
@@ -86,17 +87,12 @@ pub fn PassivesPage() -> impl IntoView {
                                         is_active=Signal::derive(move || {
                                             tool_mode.get() == ToolMode::Connect
                                         })
-                                        on:click=move |_| tool_mode.set(ToolMode::Connect)
+                                        on:click=move |_| {
+                                            selected_node.set(None);
+                                            tool_mode.set(ToolMode::Connect);
+                                        }
                                     >
                                         "Connect"
-                                    </TabButton>
-                                    <TabButton
-                                        is_active=Signal::derive(move || {
-                                            tool_mode.get() == ToolMode::Edit
-                                        })
-                                        on:click=move |_| tool_mode.set(ToolMode::Edit)
-                                    >
-                                        "Edit"
                                     </TabButton>
                                     <TabButton
                                         is_active=Signal::derive(move || {
@@ -108,6 +104,14 @@ pub fn PassivesPage() -> impl IntoView {
                                         }
                                     >
                                         "Move"
+                                    </TabButton>
+                                    <TabButton
+                                        is_active=Signal::derive(move || {
+                                            tool_mode.get() == ToolMode::Edit
+                                        })
+                                        on:click=move |_| tool_mode.set(ToolMode::Edit)
+                                    >
+                                        "Edit"
                                     </TabButton>
                                 </div>
 
@@ -147,10 +151,16 @@ pub fn PassivesPage() -> impl IntoView {
                         </Card>
                     </div>
 
-                    <Card class="h-full w-xl">
+                    <Card class="h-full w-2xl">
                         {move || match tool_mode.get() {
                             ToolMode::Edit | ToolMode::Add => {
-                                view! { <EditNodeMenu passives_tree_specs selected_node /> }
+                                view! {
+                                    <EditNodeMenu
+                                        passives_tree_specs
+                                        selected_node
+                                        clipboard_node
+                                    />
+                                }
                                     .into_any()
                             }
                             ToolMode::Move | ToolMode::Connect => view! {}.into_any(),
@@ -327,17 +337,19 @@ fn handle_click_outside(
         ToolMode::Add => {
             passives_tree_specs.update(|passives_tree_specs| {
                 let (x, y) = mouse_position_to_node_position(mouse_position.get_untracked());
+                let node_id: String = uuid::Uuid::new_v4().into();
                 passives_tree_specs.nodes.insert(
-                    uuid::Uuid::new_v4().into(),
+                    node_id.clone(),
                     PassiveNodeSpecs {
                         name: "New Node".into(),
                         icon: "passives/XXX.svg".into(),
                         x,
                         y,
-                        size: 1,
                         ..Default::default()
                     },
                 );
+                selected_node.set(Some(node_id));
+                tool_mode.set(ToolMode::Edit);
             });
         }
     }
@@ -404,6 +416,7 @@ fn ToolConnection(
 fn EditNodeMenu(
     passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     selected_node: RwSignal<Option<PassiveNodeId>>,
+    clipboard_node: RwSignal<Option<PassiveNodeSpecs>>,
 ) -> impl IntoView {
     view! {
         {move || {
@@ -420,6 +433,27 @@ fn EditNodeMenu(
                                 .write()
                                 .nodes
                                 .insert(node_id.clone(), node_specs.get_untracked());
+                        }
+                    };
+                    let on_copy = {
+                        move |_| { clipboard_node.set(Some(node_specs.get_untracked())) }
+                    };
+                    let on_paste = {
+                        let on_save = on_save.clone();
+                        move |ev| {
+                            if let Some(clipboard_node) = clipboard_node.get_untracked() {
+                                let (x, y) = (
+                                    node_specs.read_untracked().x,
+                                    node_specs.read_untracked().y,
+                                );
+                                node_specs
+                                    .set(PassiveNodeSpecs {
+                                        x,
+                                        y,
+                                        ..clipboard_node
+                                    });
+                                on_save(ev);
+                            }
                         }
                     };
                     let delete_node = Arc::new({
@@ -446,11 +480,21 @@ fn EditNodeMenu(
                     };
 
                     view! {
-                        <CardHeader title="Edit Node" on_close=move || selected_node.set(None)>
+                        <CardHeader
+                            title="Edit Node"
+                            on_close=move || selected_node.set(None)
+                            class:gap-2
+                        >
                             <MenuButton class:ml-2 on:click=try_delete_node>
                                 "❌"
                             </MenuButton>
-                            <div class="flex-1" />
+                            <MenuButton on:click=on_copy>"Copy"</MenuButton>
+                            <MenuButton
+                                on:click=on_paste
+                                disabled=Signal::derive(move || { clipboard_node.read().is_none() })
+                            >
+                                "Paste"
+                            </MenuButton>
                             <MenuButton class:mr-2 on:click=on_save>
                                 "Save"
                             </MenuButton>
