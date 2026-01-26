@@ -38,7 +38,7 @@ struct SerPassivesTreeSpecs {
     connections: Vec<PassiveConnection>,
 }
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 enum ToolMode {
     Edit,
     Move,
@@ -192,9 +192,6 @@ fn PassiveSkillTree(
                 selected_node,
                 tool_mode,
             )
-            on:mouseup=move |_| {
-                handle_click_outside(mouse_position, passives_tree_specs, selected_node, tool_mode)
-            }
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
@@ -415,6 +412,7 @@ fn EditNodeMenu(
                                         });
                                     passives_tree_specs.nodes.remove_entry(&node_id);
                                 });
+                            selected_node.set(None);
                         }
                     });
                     let try_delete_node = {
