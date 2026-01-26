@@ -20,6 +20,7 @@ leptos-use = { version = "0.15.7", features = [
     "on_click_outside",
     "use_infinite_scroll",
     "storage",
+    "watch_debounced",
 ] }
 leptos_toaster = "0.2.0"
 web-sys = { version = "0.3", features = ["Performance","Blob","BlobPropertyBag"] }
@@ -41,4 +42,5 @@ rand = "0.9.0"
 getrandom = { version = "0.3", features = ["wasm_js"] }
 regex = "1.12.2"
 html-escape = "0.2.13"
+serde_ignored = "0.1.14"
 

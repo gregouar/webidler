@@ -1,6 +1,9 @@
 use leptos::{prelude::*, wasm_bindgen::JsCast};
+use leptos_use::{watch_debounced_with_options, WatchDebouncedOptions};
 use regex::Regex;
 use serde::{de::DeserializeOwned, Serialize};
+use serde_ignored;
+use serde_json::Deserializer;
 
 #[component]
 pub fn JsonEditor<T>(label: &'static str, value: RwSignal<T>) -> impl IntoView
@@ -15,41 +18,48 @@ where
     let error = RwSignal::new(None::<String>);
 
     // Sync FROM model → editor
-    Effect::new({
-        let textarea_ref = textarea_ref.clone();
-        let gutter_ref = gutter_ref.clone();
-        move || {
-            let json = serde_json::to_string_pretty(&value.get()).unwrap();
-            text.set(json.clone());
-            error.set(None);
+    let _ = watch_debounced_with_options(
+        move || value.get(),
+        {
+            let textarea_ref = textarea_ref.clone();
+            let gutter_ref = gutter_ref.clone();
+            move |value, _, _| {
+                let json = serde_json::to_string_pretty(value).unwrap();
 
-            if let Some(el) = textarea_ref.get() {
-                let start = el.selection_start().unwrap_or(Some(0)).unwrap_or(0);
-                let end = el.selection_end().unwrap_or(Some(0)).unwrap_or(0);
+                text.set(json.clone());
+                error.set(None);
 
-                el.set_value(&json);
+                if let Some(el) = textarea_ref.get() {
+                    let start = el.selection_start().unwrap_or(Some(0)).unwrap_or(0);
+                    let end = el.selection_end().unwrap_or(Some(0)).unwrap_or(0);
 
-                el.set_selection_start(Some(start)).ok();
-                el.set_selection_end(Some(end)).ok();
+                    el.set_value(&json);
+
+                    el.set_selection_start(Some(start)).ok();
+                    el.set_selection_end(Some(end)).ok();
+                }
+
+                if let Some(gutter) = gutter_ref.get() {
+                    let lines = json.lines().count();
+                    let gutter_text = (1..=lines)
+                        .map(|n| n.to_string())
+                        .collect::<Vec<_>>()
+                        .join("\n");
+                    gutter.set_inner_text(&gutter_text);
+                }
             }
-
-            if let Some(gutter) = gutter_ref.get() {
-                let lines = json.lines().count();
-                let gutter_text = (1..=lines)
-                    .map(|n| n.to_string())
-                    .collect::<Vec<_>>()
-                    .join("\n");
-                gutter.set_inner_text(&gutter_text);
-            }
-        }
-    });
+        },
+        3000.0,
+        WatchDebouncedOptions::default().immediate(true),
+    );
 
     // Input handler
     let on_input = move |ev: leptos::ev::Event| {
         let input = event_target_value(&ev);
         text.set(input.clone());
 
-        match serde_json::from_str::<T>(&input) {
+        // match serde_json::from_str::<T>(&input) {
+        match load_json(&input) {
             Ok(parsed) => {
                 value.set(parsed);
                 error.set(None);
@@ -126,10 +136,10 @@ where
                         class=move || {
                             format!(
                                 "relative w-full h-full font-mono text-sm leading-5 p-2
-                    bg-transparent resize-none
-                    text-transparent caret-amber-400
-                    border rounded-r-lg focus:outline-none
-                    {}",
+                                bg-transparent resize-none
+                                text-transparent caret-white
+                                border rounded-r-lg focus:outline-none
+                                {}",
                                 if error.get().is_some() {
                                     "border-red-500"
                                 } else {
@@ -159,33 +169,49 @@ fn highlight_json(json: &str) -> String {
     let text = html_escape::encode_text(json);
 
     // Regex: capture any quoted string, optionally followed by a colon
-    let re = Regex::new(r#""([^"\\]*(?:\\.[^"\\]*)*)"(?:\s*(:))?(\s*)"#).unwrap();
+    let highlighted = Regex::new(r#""([^"\\]*(?:\\.[^"\\]*)*)"(?:\s*(:))?(\s*)"#)
+        .unwrap()
+        .replace_all(&text, |caps: &regex::Captures| {
+            let trailing_ws = &caps[3]; // preserve spaces/newlines
 
-    let highlighted = re.replace_all(&text, |caps: &regex::Captures| {
-        let trailing_ws = &caps[3]; // preserve spaces/newlines
+            if caps.get(2).is_some() {
+                format!(
+                    r#"<span class="json-key">"{}"</span>:{}"#,
+                    &caps[1], trailing_ws
+                )
+            } else {
+                format!(
+                    r#"<span class="json-string">"{}"</span>{}"#,
+                    &caps[1], trailing_ws
+                )
+            }
+        });
 
-        if caps.get(2).is_some() {
-            // Key
-            format!(
-                r#"<span class="json-key">"{}"</span>:{}"#,
-                &caps[1], trailing_ws
-            )
-        } else {
-            // String value
-            format!(
-                r#"<span class="json-string">"{}"</span>{}"#,
-                &caps[1], trailing_ws
-            )
-        }
-    });
+    let highlighted = Regex::new(r"\b-?\d+(\.\d+)?([eE][+-]?\d+)?\b")
+        .unwrap()
+        .replace_all(&highlighted, r#"<span class="json-number">$0</span>"#);
 
-    // Numbers
-    let re_number = Regex::new(r"\b-?\d+(\.\d+)?([eE][+-]?\d+)?\b").unwrap();
-    let highlighted = re_number.replace_all(&highlighted, r#"<span class="json-number">$0</span>"#);
-
-    // Booleans and null
-    let re_bool = Regex::new(r"\b(true|false|null)\b").unwrap();
-    let highlighted = re_bool.replace_all(&highlighted, r#"<span class="json-bool">$0</span>"#);
+    let highlighted = Regex::new(r"\b(true|false|null)\b")
+        .unwrap()
+        .replace_all(&highlighted, r#"<span class="json-bool">$0</span>"#);
 
     highlighted.to_string()
+}
+
+fn load_json<S>(value: &str) -> anyhow::Result<S>
+where
+    S: DeserializeOwned,
+{
+    let mut de = Deserializer::from_str(value);
+
+    let mut unknown = Vec::new();
+    let value = serde_ignored::deserialize(&mut de, |path| {
+        unknown.push(path.to_string());
+    })?;
+
+    if !unknown.is_empty() {
+        anyhow::bail!("Unknown fields: {}", unknown.join(", "));
+    }
+
+    Ok(value)
 }

@@ -161,9 +161,13 @@ fn ToolNode(
                 true => PurchaseStatus::Purchased,
                 false => PurchaseStatus::Purchaseable,
             },
-            meta_status: match node_specs.locked && selected_node.read() != Some(node_id.clone()) {
-                true => MetaStatus::Locked,
-                false => MetaStatus::Normal,
+            meta_status: match (
+                node_specs.locked,
+                selected_node.read() == Some(node_id.clone()),
+            ) {
+                (_, true) => MetaStatus::Ascended,
+                (true, _) => MetaStatus::Locked,
+                _ => MetaStatus::Normal,
             },
         }
     });
