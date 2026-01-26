@@ -1,6 +1,8 @@
 use frontend::components::{
-    accessibility::provide_accessibility_context, events::provide_events_context,
+    accessibility::provide_accessibility_context,
+    events::provide_events_context,
     settings::provide_settings_context,
+    ui::confirm::{provide_confirm_context, ConfirmationModal},
 };
 use leptos::prelude::*;
 use leptos_meta::*;
@@ -20,8 +22,11 @@ pub fn App() -> impl IntoView {
     provide_settings_context();
     provide_events_context();
 
+    let confirm_state = provide_confirm_context();
+
     view! {
         <Toaster position=ToasterPosition::BottomCenter></Toaster>
+        <ConfirmationModal state=confirm_state />
         <Router>
             <Routes fallback=|| "Page not found.">
                 <Route path=path!("/") view=pages::HomePage />

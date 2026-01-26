@@ -169,14 +169,19 @@ pub fn Node(
         <g
             transform=format!("translate({}, {})", node_specs.x * 10.0, -node_specs.y * 10.0)
 
-            on:click=move |_| {
+            on:click=move |ev| {
+                ev.stop_propagation();
                 let status = node_status.get();
                 if status.purchase_status == PurchaseStatus::Purchaseable {
                     on_click();
                 }
             }
 
-            on:mousedown=|ev| ev.stop_propagation()
+            on:mousedown=|ev| {
+                if ev.button() == 0 {
+                    ev.stop_propagation()
+                }
+            }
 
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();

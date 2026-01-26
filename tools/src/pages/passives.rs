@@ -8,8 +8,9 @@ use frontend::components::{
         Connection, MetaStatus, Node, NodeStatus, NodeTooltipContent, PurchaseStatus,
     },
     ui::{
-        buttons::MenuButton,
+        buttons::{MenuButton, TabButton},
         card::{Card, CardHeader, CardInset, CardTitle},
+        confirm::ConfirmContext,
         dropdown::DropdownMenu,
         input::ValidatedInput,
         pannable::Pannable,
@@ -32,9 +33,16 @@ use crate::{
 };
 
 #[derive(Serialize)]
-pub struct SerPassivesTreeSpecs {
-    pub nodes: BTreeMap<PassiveNodeId, PassiveNodeSpecs>,
-    pub connections: Vec<PassiveConnection>,
+struct SerPassivesTreeSpecs {
+    nodes: BTreeMap<PassiveNodeId, PassiveNodeSpecs>,
+    connections: Vec<PassiveConnection>,
+}
+
+#[derive(Clone, Copy, PartialEq)]
+enum ToolMode {
+    Edit,
+    Move,
+    Connect,
 }
 
 #[component]
@@ -43,6 +51,7 @@ pub fn PassivesPage() -> impl IntoView {
     let passives_tree_specs = RwSignal::new(Default::default());
 
     let selected_node: RwSignal<Option<PassiveNodeId>> = RwSignal::new(None);
+    let tool_mode = RwSignal::new(ToolMode::Edit);
 
     Effect::new(move || {
         loaded_file.with(|loaded_file| {
@@ -62,6 +71,41 @@ pub fn PassivesPage() -> impl IntoView {
                         <Card>
                             <div class="flex justify-between mx-4 items-center">
                                 <CardTitle>"Passives"</CardTitle>
+
+                                <div class="flex gap-2 mx-4">
+                                    <MenuButton>"Add"</MenuButton>
+                                </div>
+                                <div class="flex gap-2 -mb-4 items-end">
+                                    <TabButton
+                                        is_active=Signal::derive(move || {
+                                            tool_mode.get() == ToolMode::Edit
+                                        })
+                                        on:click=move |_| tool_mode.set(ToolMode::Edit)
+                                    >
+                                        "Edit"
+                                    </TabButton>
+                                    <TabButton
+                                        is_active=Signal::derive(move || {
+                                            tool_mode.get() == ToolMode::Move
+                                        })
+                                        on:click=move |_| {
+                                            selected_node.set(None);
+                                            tool_mode.set(ToolMode::Move);
+                                        }
+                                    >
+                                        "Move"
+                                    </TabButton>
+                                    <TabButton
+                                        is_active=Signal::derive(move || {
+                                            tool_mode.get() == ToolMode::Connect
+                                        })
+                                        on:click=move |_| tool_mode.set(ToolMode::Connect)
+                                    >
+                                        "Connect"
+                                    </TabButton>
+                                </div>
+
+                                <div class="flex-1" />
 
                                 <div class="flex gap-2">
                                     <MenuButton>
@@ -92,13 +136,21 @@ pub fn PassivesPage() -> impl IntoView {
                                 </div>
                             </div>
                             <CardInset pad=false class:flex-1>
-                                <PassiveSkillTree passives_tree_specs selected_node />
+                                <PassiveSkillTree passives_tree_specs selected_node tool_mode />
                             </CardInset>
                         </Card>
                     </div>
 
                     <Card class="h-full w-xl">
-                        <EditNodeMenu passives_tree_specs selected_node />
+                        {move || match tool_mode.get() {
+                            ToolMode::Edit => {
+                                view! { <EditNodeMenu passives_tree_specs selected_node /> }
+                                    .into_any()
+                            }
+                            ToolMode::Move => view! {}.into_any(),
+                            ToolMode::Connect => view! {}.into_any(),
+                        }}
+
                     </Card>
 
                 </div>
@@ -111,9 +163,42 @@ pub fn PassivesPage() -> impl IntoView {
 fn PassiveSkillTree(
     passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     selected_node: RwSignal<Option<PassiveNodeId>>,
+    tool_mode: RwSignal<ToolMode>,
 ) -> impl IntoView {
+    let mouse_position = RwSignal::new((0.0, 0.0));
+
+    Effect::new(move |_| {
+        if let ToolMode::Move = tool_mode.get() {
+            if let Some(node_id) = selected_node.get() {
+                passives_tree_specs
+                    .write()
+                    .nodes
+                    .get_mut(&node_id)
+                    .map(|node| {
+                        let (x, y) = mouse_position.get();
+                        node.x = ((x * 0.1 / 2.5) as f64).round() * 2.5;
+                        node.y = -((y * 0.1 / 2.5) as f64).round() * 2.5;
+                    });
+            }
+        }
+    });
+
     view! {
-        <Pannable>
+        <Pannable
+            mouse_position
+            on:click=move |_| handle_click_outside(
+                mouse_position,
+                passives_tree_specs,
+                selected_node,
+                tool_mode,
+            )
+            on:mouseup=move |_| {
+                handle_click_outside(mouse_position, passives_tree_specs, selected_node, tool_mode)
+            }
+            on:contextmenu=move |ev| {
+                ev.prevent_default();
+            }
+        >
             <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#grid)" />
             <For
                 each=move || { passives_tree_specs.read().connections.clone().into_iter() }
@@ -139,7 +224,9 @@ fn PassiveSkillTree(
                                 .get(&id)
                                 .cloned()
                                 .unwrap_or_default()
+                            passives_tree_specs
                             selected_node
+                            tool_mode
                         />
                     }
                 }}
@@ -152,7 +239,9 @@ fn PassiveSkillTree(
 fn ToolNode(
     node_id: PassiveNodeId,
     node_specs: PassiveNodeSpecs,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     selected_node: RwSignal<Option<PassiveNodeId>>,
+    tool_mode: RwSignal<ToolMode>,
 ) -> impl IntoView {
     let node_status = Memo::new({
         let node_id = node_id.clone();
@@ -171,21 +260,114 @@ fn ToolNode(
             },
         }
     });
+
     let node_level = Memo::new({
         let max_level = node_specs.max_upgrade_level.unwrap_or_default();
         move |_| max_level
     });
+
+    let on_click = {
+        let node_id = node_id.clone();
+        move || {
+            handle_click_node(
+                node_id.clone(),
+                passives_tree_specs,
+                selected_node,
+                tool_mode,
+            )
+        }
+    };
+
+    let on_right_click = move || match tool_mode.get_untracked() {
+        ToolMode::Edit => {}
+        ToolMode::Move => {}
+        ToolMode::Connect => {}
+    };
 
     view! {
         <Node
             node_specs
             node_status
             node_level
-            on_click=move || { selected_node.set(Some(node_id.clone())) }
-            on_right_click=move || {}
+            on_click
+            on_right_click
             show_upgrade=true
+            on:mousedown=move |ev| {
+                if ev.button() == 0 {
+                    if let ToolMode::Move = tool_mode.get_untracked() {
+                        selected_node.set(Some(node_id.clone()));
+                    }
+                }
+            }
+            on:mouseup=move |ev| {
+                if ev.button() == 0 {
+                    if let ToolMode::Move = tool_mode.get_untracked() {
+                        selected_node.set(None);
+                    }
+                }
+            }
         />
     }
+}
+
+fn handle_click_outside(
+    mouse_position: RwSignal<(f64, f64)>,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    selected_node: RwSignal<Option<PassiveNodeId>>,
+    tool_mode: RwSignal<ToolMode>,
+) {
+    let _ = mouse_position;
+    let _ = passives_tree_specs;
+    match tool_mode.get_untracked() {
+        ToolMode::Edit => selected_node.set(None),
+        ToolMode::Move => selected_node.set(None),
+        ToolMode::Connect => selected_node.set(None),
+    }
+}
+
+fn handle_click_node(
+    node_id: PassiveNodeId,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    selected_node: RwSignal<Option<PassiveNodeId>>,
+    tool_mode: RwSignal<ToolMode>,
+) {
+    match tool_mode.get_untracked() {
+        ToolMode::Edit => selected_node.set(Some(node_id)),
+        ToolMode::Move => {}
+        ToolMode::Connect => match selected_node.get_untracked() {
+            Some(selected_node_id) if selected_node_id == node_id => selected_node.set(None),
+            Some(selected_node_id) => {
+                add_remove_connection(passives_tree_specs, selected_node_id, node_id);
+                selected_node.set(None);
+            }
+            None => selected_node.set(Some(node_id)),
+        },
+    }
+}
+
+fn add_remove_connection(
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    from: PassiveNodeId,
+    to: PassiveNodeId,
+) {
+    passives_tree_specs.update(|passives_tree_specs| {
+        if let Some((index, _)) =
+            passives_tree_specs
+                .connections
+                .iter()
+                .enumerate()
+                .find(|(_, connection)| {
+                    (connection.from == from && connection.to == to)
+                        || (connection.from == to && connection.to == from)
+                })
+        {
+            passives_tree_specs.connections.remove(index);
+        } else {
+            passives_tree_specs
+                .connections
+                .push(PassiveConnection { from, to });
+        }
+    });
 }
 
 #[component]
@@ -221,8 +403,33 @@ fn EditNodeMenu(
                                 .insert(node_id.clone(), node_specs.get_untracked());
                         }
                     };
+                    let delete_node = Arc::new({
+                        let node_id = node_id.clone();
+                        move || {
+                            passives_tree_specs
+                                .update(|passives_tree_specs| {
+                                    passives_tree_specs
+                                        .connections
+                                        .retain(|connection| {
+                                            connection.from != node_id && connection.to != node_id
+                                        });
+                                    passives_tree_specs.nodes.remove_entry(&node_id);
+                                });
+                        }
+                    });
+                    let try_delete_node = {
+                        let confirm_context: ConfirmContext = expect_context();
+                        move |_| {
+                            (confirm_context
+                                .confirm)("Confirm delete node?".to_string(), delete_node.clone());
+                        }
+                    };
+
                     view! {
                         <CardHeader title="Edit Node" on_close=move || selected_node.set(None)>
+                            <MenuButton class:ml-2 on:click=try_delete_node>
+                                "❌"
+                            </MenuButton>
                             <div class="flex-1" />
                             <MenuButton class:mr-2 on:click=on_save>
                                 "Save"

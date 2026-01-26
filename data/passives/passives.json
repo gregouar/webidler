@@ -13,14 +13,12 @@
           {
             "stat": "BlockSpell",
             "modifier": "Flat",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           },
           {
             "stat": "BlockDamageTaken",
             "modifier": "Flat",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -40,8 +38,7 @@
           {
             "stat": "Block",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -50,8 +47,7 @@
           {
             "stat": "Block",
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 1
@@ -68,8 +64,7 @@
           {
             "stat": "Block",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -78,8 +73,7 @@
           {
             "stat": "Block",
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 1
@@ -96,8 +90,7 @@
           {
             "stat": "Block",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -106,8 +99,7 @@
           {
             "stat": "Block",
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 1
@@ -126,8 +118,7 @@
               "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -138,8 +129,7 @@
               "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -158,8 +148,7 @@
               "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -170,8 +159,7 @@
               "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -188,16 +176,14 @@
           {
             "stat": "Block",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           },
           {
             "stat": {
               "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -206,16 +192,14 @@
           {
             "stat": "Block",
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           },
           {
             "stat": {
               "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -237,8 +221,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -252,8 +235,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -275,8 +257,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -290,8 +271,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -313,16 +293,14 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           },
           {
             "stat": {
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 4.0,
-            "bypass_ignore": false
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -336,16 +314,14 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           },
           {
             "stat": {
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 2.0,
-            "bypass_ignore": false
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3
@@ -364,8 +340,7 @@
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 4.0,
-            "bypass_ignore": false
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -376,8 +351,7 @@
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 2.0,
-            "bypass_ignore": false
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3
@@ -396,8 +370,7 @@
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 4.0,
-            "bypass_ignore": false
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -408,8 +381,7 @@
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 2.0,
-            "bypass_ignore": false
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3
@@ -426,8 +398,7 @@
           {
             "stat": "Block",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -436,8 +407,7 @@
           {
             "stat": "Block",
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3
@@ -454,8 +424,7 @@
           {
             "stat": "Block",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -464,8 +433,7 @@
           {
             "stat": "Block",
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3
@@ -488,8 +456,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": -1e300,
-            "bypass_ignore": false
+            "value": -1e300
           },
           {
             "stat": {
@@ -499,8 +466,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -525,8 +491,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -540,8 +505,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 1
@@ -563,8 +527,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -578,8 +541,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 1
@@ -601,8 +563,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -616,8 +577,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 1
@@ -636,8 +596,7 @@
               "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -648,8 +607,7 @@
               "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -668,8 +626,7 @@
               "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -680,8 +637,7 @@
               "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -700,8 +656,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 40.0,
-            "bypass_ignore": false
+            "value": 40.0
           }
         ],
         "triggers": [],
@@ -712,8 +667,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 3
@@ -732,8 +686,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 40.0,
-            "bypass_ignore": false
+            "value": 40.0
           }
         ],
         "triggers": [],
@@ -744,8 +697,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 3
@@ -764,16 +716,14 @@
               "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           },
           {
             "stat": {
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 40.0,
-            "bypass_ignore": false
+            "value": 40.0
           }
         ],
         "triggers": [],
@@ -784,16 +734,14 @@
               "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           },
           {
             "stat": {
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 3
@@ -816,8 +764,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -832,8 +779,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -856,8 +802,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -872,8 +817,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -896,8 +840,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 40.0,
-            "bypass_ignore": false
+            "value": 40.0
           }
         ],
         "triggers": [],
@@ -912,8 +855,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 3
@@ -1112,19 +1054,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
                     "StatusDuration": null
-                  },
-                  {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
                   },
                   {
                     "Damage": {
@@ -1133,7 +1063,19 @@
                     }
                   },
                   {
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
                     "StatusPower": null
+                  },
+                  {
+                    "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
                   }
                 ]
               },
@@ -1167,16 +1109,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "StatusPower": null
-                  },
-                  {
-                    "Damage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -1185,7 +1118,16 @@
                     "StatusDuration": null
                   },
                   {
-                    "MinDamage": {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "StatusPower": null
+                  },
+                  {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -1222,10 +1164,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": null
-                  },
-                  {
-                    "MaxDamage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -1240,7 +1179,10 @@
                     }
                   },
                   {
-                    "MinDamage": {
+                    "StatusDuration": null
+                  },
+                  {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -1277,16 +1219,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": null
-                  },
-                  {
                     "Damage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -1299,6 +1232,15 @@
                       "skill_type": null,
                       "damage_type": null
                     }
+                  },
+                  {
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "StatusDuration": null
                   }
                 ]
               }
@@ -1329,8 +1271,7 @@
               }
             },
             "modifier": "Flat",
-            "value": -30.0,
-            "bypass_ignore": false
+            "value": -30.0
           },
           {
             "stat": {
@@ -1340,8 +1281,7 @@
               }
             },
             "modifier": "Flat",
-            "value": -30.0,
-            "bypass_ignore": false
+            "value": -30.0
           },
           {
             "stat": {
@@ -1351,8 +1291,7 @@
               }
             },
             "modifier": "Flat",
-            "value": -30.0,
-            "bypass_ignore": false
+            "value": -30.0
           }
         ],
         "triggers": [
@@ -1434,8 +1373,7 @@
               "Armor": "Fire"
             },
             "modifier": "Multiplier",
-            "value": 30.0,
-            "bypass_ignore": false
+            "value": 30.0
           }
         ],
         "triggers": [],
@@ -1446,8 +1384,7 @@
               "Armor": "Fire"
             },
             "modifier": "Multiplier",
-            "value": 15.0,
-            "bypass_ignore": false
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 1
@@ -1466,8 +1403,7 @@
               "Armor": "Poison"
             },
             "modifier": "Multiplier",
-            "value": 30.0,
-            "bypass_ignore": false
+            "value": 30.0
           }
         ],
         "triggers": [],
@@ -1478,8 +1414,7 @@
               "Armor": "Poison"
             },
             "modifier": "Multiplier",
-            "value": 15.0,
-            "bypass_ignore": false
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 1
@@ -1498,8 +1433,7 @@
               "Armor": "Storm"
             },
             "modifier": "Multiplier",
-            "value": 30.0,
-            "bypass_ignore": false
+            "value": 30.0
           }
         ],
         "triggers": [],
@@ -1510,8 +1444,7 @@
               "Armor": "Storm"
             },
             "modifier": "Multiplier",
-            "value": 15.0,
-            "bypass_ignore": false
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 1
@@ -1587,12 +1520,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": "Fire"
-                    }
-                  },
-                  {
                     "MinDamage": {
                       "skill_type": null,
                       "damage_type": "Fire"
@@ -1600,6 +1527,12 @@
                   },
                   {
                     "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": "Fire"
+                    }
+                  },
+                  {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": "Fire"
                     }
@@ -1633,8 +1566,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -1648,8 +1580,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -1671,8 +1602,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -1686,8 +1616,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -1709,8 +1638,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 40.0,
-            "bypass_ignore": false
+            "value": 40.0
           }
         ],
         "triggers": [],
@@ -1724,8 +1652,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 3
@@ -1742,8 +1669,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -1752,8 +1678,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -1770,8 +1695,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -1780,8 +1704,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 25.0,
-            "bypass_ignore": false
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 3
@@ -1798,8 +1721,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -1808,8 +1730,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 25.0,
-            "bypass_ignore": false
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 3
@@ -1826,8 +1747,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -1836,8 +1756,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 25.0,
-            "bypass_ignore": false
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 3
@@ -1854,8 +1773,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -1864,8 +1782,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 25.0,
-            "bypass_ignore": false
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 3
@@ -1887,8 +1804,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -1902,8 +1818,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 4
@@ -1920,8 +1835,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -1930,8 +1844,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -1948,8 +1861,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -1958,8 +1870,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -1976,8 +1887,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -1986,8 +1896,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": null
@@ -2004,8 +1913,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -2014,8 +1922,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": null
@@ -2032,8 +1939,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -2042,8 +1948,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": null
@@ -2060,8 +1965,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -2070,8 +1974,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": null
@@ -2088,8 +1991,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -2098,8 +2000,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": null
@@ -2116,8 +2017,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 100.0,
-            "bypass_ignore": false
+            "value": 100.0
           }
         ],
         "triggers": [],
@@ -2126,8 +2026,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "max_upgrade_level": null
@@ -2144,8 +2043,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -2154,8 +2052,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 25.0,
-            "bypass_ignore": false
+            "value": 25.0
           }
         ],
         "max_upgrade_level": null
@@ -2172,8 +2069,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -2182,8 +2078,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -2200,8 +2095,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -2210,8 +2104,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 25.0,
-            "bypass_ignore": false
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 3
@@ -2228,8 +2121,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -2238,8 +2130,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 25.0,
-            "bypass_ignore": false
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 3
@@ -2256,8 +2147,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -2266,8 +2156,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 25.0,
-            "bypass_ignore": false
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 3
@@ -2344,8 +2233,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 100000.0,
-            "bypass_ignore": false
+            "value": 100000.0
           }
         ],
         "triggers": [],
@@ -2365,8 +2253,7 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 6.0,
-            "bypass_ignore": false
+            "value": 6.0
           }
         ],
         "triggers": [],
@@ -2375,8 +2262,7 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 3.0,
-            "bypass_ignore": false
+            "value": 3.0
           }
         ],
         "max_upgrade_level": 3
@@ -2393,8 +2279,7 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 6.0,
-            "bypass_ignore": false
+            "value": 6.0
           }
         ],
         "triggers": [],
@@ -2403,8 +2288,7 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 3.0,
-            "bypass_ignore": false
+            "value": 3.0
           }
         ],
         "max_upgrade_level": 3
@@ -2421,14 +2305,12 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 6.0,
-            "bypass_ignore": false
+            "value": 6.0
           },
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 4.0,
-            "bypass_ignore": false
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -2437,14 +2319,12 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 3.0,
-            "bypass_ignore": false
+            "value": 3.0
           },
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 2.0,
-            "bypass_ignore": false
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3
@@ -2461,8 +2341,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 4.0,
-            "bypass_ignore": false
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -2471,8 +2350,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 2.0,
-            "bypass_ignore": false
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3
@@ -2489,8 +2367,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 4.0,
-            "bypass_ignore": false
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -2499,8 +2376,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 2.0,
-            "bypass_ignore": false
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3
@@ -2517,8 +2393,7 @@
           {
             "stat": "Mana",
             "modifier": "Flat",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -2527,8 +2402,7 @@
           {
             "stat": "Mana",
             "modifier": "Flat",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -2545,8 +2419,7 @@
           {
             "stat": "Mana",
             "modifier": "Flat",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -2555,8 +2428,7 @@
           {
             "stat": "Mana",
             "modifier": "Flat",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -2573,14 +2445,12 @@
           {
             "stat": "Mana",
             "modifier": "Flat",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           },
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 4.0,
-            "bypass_ignore": false
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -2589,14 +2459,12 @@
           {
             "stat": "Mana",
             "modifier": "Flat",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           },
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 2.0,
-            "bypass_ignore": false
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3
@@ -2613,8 +2481,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 4.0,
-            "bypass_ignore": false
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -2623,8 +2490,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 2.0,
-            "bypass_ignore": false
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3
@@ -2641,8 +2507,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 4.0,
-            "bypass_ignore": false
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -2651,8 +2516,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 2.0,
-            "bypass_ignore": false
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3
@@ -2669,8 +2533,7 @@
           {
             "stat": "TakeFromManaBeforeLife",
             "modifier": "Flat",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -2679,8 +2542,7 @@
           {
             "stat": "TakeFromManaBeforeLife",
             "modifier": "Flat",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "max_upgrade_level": 2
@@ -2697,8 +2559,7 @@
           {
             "stat": "Mana",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -2707,8 +2568,7 @@
           {
             "stat": "Mana",
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 2
@@ -2725,8 +2585,7 @@
           {
             "stat": "Mana",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -2735,8 +2594,7 @@
           {
             "stat": "Mana",
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 2
@@ -2753,8 +2611,7 @@
           {
             "stat": "Mana",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -2763,8 +2620,7 @@
           {
             "stat": "Mana",
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 2
@@ -2781,8 +2637,7 @@
           {
             "stat": "ThreatGain",
             "modifier": "Multiplier",
-            "value": 100.0,
-            "bypass_ignore": false
+            "value": 100.0
           }
         ],
         "triggers": [],
@@ -2802,8 +2657,7 @@
           {
             "stat": "MovementSpeed",
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -2812,8 +2666,7 @@
           {
             "stat": "MovementSpeed",
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3
@@ -2832,8 +2685,7 @@
               "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": -1e300,
-            "bypass_ignore": false
+            "value": -1e300
           },
           {
             "stat": {
@@ -2851,8 +2703,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 25.0,
-            "bypass_ignore": false
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -2874,8 +2725,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -2886,8 +2736,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 25.0,
-            "bypass_ignore": false
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 1
@@ -2906,8 +2755,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -2918,8 +2766,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 25.0,
-            "bypass_ignore": false
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 1
@@ -2938,8 +2785,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -2950,8 +2796,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 25.0,
-            "bypass_ignore": false
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 1
@@ -2973,8 +2818,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -2988,8 +2832,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -3011,8 +2854,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3026,8 +2868,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -3049,8 +2890,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 40.0,
-            "bypass_ignore": false
+            "value": 40.0
           }
         ],
         "triggers": [],
@@ -3064,8 +2904,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 3
@@ -3175,6 +3014,12 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": "Physical"
+                    }
+                  },
+                  {
                     "MaxDamage": {
                       "skill_type": null,
                       "damage_type": "Physical"
@@ -3182,12 +3027,6 @@
                   },
                   {
                     "Damage": {
-                      "skill_type": null,
-                      "damage_type": "Physical"
-                    }
-                  },
-                  {
-                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": "Physical"
                     }
@@ -3224,8 +3063,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3239,8 +3077,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -3262,8 +3099,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3277,8 +3113,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -3300,8 +3135,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 40.0,
-            "bypass_ignore": false
+            "value": 40.0
           }
         ],
         "triggers": [],
@@ -3315,8 +3149,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 3
@@ -3338,8 +3171,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 100.0,
-            "bypass_ignore": false
+            "value": 100.0
           },
           {
             "stat": {
@@ -3350,8 +3182,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": -100.0,
-            "bypass_ignore": false
+            "value": -100.0
           }
         ],
         "triggers": [],
@@ -3365,8 +3196,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 100.0,
-            "bypass_ignore": false
+            "value": 100.0
           },
           {
             "stat": {
@@ -3377,8 +3207,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": -100.0,
-            "bypass_ignore": false
+            "value": -100.0
           }
         ],
         "max_upgrade_level": 3
@@ -3397,8 +3226,7 @@
               "Restore": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -3409,8 +3237,7 @@
               "Restore": null
             },
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3
@@ -3429,8 +3256,7 @@
               "Restore": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -3441,8 +3267,7 @@
               "Restore": null
             },
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3
@@ -3461,8 +3286,7 @@
               "Restore": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3473,8 +3297,7 @@
               "Restore": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -3493,16 +3316,14 @@
               "CritChance": "Spell"
             },
             "modifier": "Flat",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           },
           {
             "stat": {
               "CritDamage": "Spell"
             },
             "modifier": "Flat",
-            "value": 100.0,
-            "bypass_ignore": false
+            "value": 100.0
           }
         ],
         "triggers": [],
@@ -3524,8 +3345,7 @@
               "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3536,8 +3356,7 @@
               "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 1
@@ -3556,8 +3375,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 40.0,
-            "bypass_ignore": false
+            "value": 40.0
           }
         ],
         "triggers": [],
@@ -3568,8 +3386,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 1
@@ -3588,8 +3405,7 @@
               "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3600,8 +3416,7 @@
               "CritChance": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 1
@@ -3623,8 +3438,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3638,8 +3452,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -3661,8 +3474,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3676,8 +3488,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -3699,16 +3510,14 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           },
           {
             "stat": {
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 4.0,
-            "bypass_ignore": false
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -3722,16 +3531,14 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           },
           {
             "stat": {
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 2.0,
-            "bypass_ignore": false
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3
@@ -3750,8 +3557,7 @@
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 4.0,
-            "bypass_ignore": false
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -3762,8 +3568,7 @@
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 2.0,
-            "bypass_ignore": false
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3
@@ -3782,8 +3587,7 @@
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 4.0,
-            "bypass_ignore": false
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -3794,8 +3598,7 @@
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 2.0,
-            "bypass_ignore": false
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3
@@ -3814,8 +3617,7 @@
               "StatusDuration": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -3826,8 +3628,7 @@
               "StatusDuration": null
             },
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3
@@ -3846,8 +3647,7 @@
               "StatusDuration": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -3858,8 +3658,7 @@
               "StatusDuration": null
             },
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3
@@ -3878,8 +3677,7 @@
               "StatusDuration": null
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3890,8 +3688,7 @@
               "StatusDuration": null
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -3913,8 +3710,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3928,8 +3724,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -3951,8 +3746,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3966,8 +3760,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -3989,8 +3782,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 40.0,
-            "bypass_ignore": false
+            "value": 40.0
           }
         ],
         "triggers": [],
@@ -4004,8 +3796,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 3
@@ -4031,8 +3822,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 100.0,
-            "bypass_ignore": false
+            "value": 100.0
           }
         ],
         "triggers": [],
@@ -4057,8 +3847,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -4072,8 +3861,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3
@@ -4095,8 +3883,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -4110,8 +3897,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3
@@ -4133,8 +3919,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -4148,8 +3933,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
@@ -4171,8 +3955,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 50.0,
-            "bypass_ignore": false
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -4205,8 +3988,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -4228,8 +4010,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3
@@ -4259,8 +4040,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -4282,8 +4062,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 5.0,
-            "bypass_ignore": false
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3
@@ -4313,8 +4092,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 20.0,
-            "bypass_ignore": false
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -4336,8 +4114,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 10.0,
-            "bypass_ignore": false
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3
