@@ -19,6 +19,7 @@ use frontend::components::{
     },
 };
 use leptos::{html::*, prelude::*};
+use leptos_use::{watch_debounced_with_options, WatchDebouncedOptions};
 use serde::Serialize;
 use shared::data::passive::{
     PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassiveNodeType, PassivesTreeSpecs,
@@ -54,7 +55,7 @@ pub fn PassivesPage() -> impl IntoView {
     let (loaded_file, on_skills_file) = use_json_loader::<HashMap<String, PassivesTreeSpecs>>();
     let passives_tree_specs = RwSignal::new(Default::default());
     let passives_history_tracker = RwSignal::new(HistoryTracker::<PassivesTreeSpecs>::new(
-        20,
+        100,
         passives_tree_specs.get_untracked(),
     ));
 
@@ -567,17 +568,42 @@ fn EditNodeMenu(
                                 );
                             }
                         };
-                        let on_save = {
-                            move || {
+                        let _ = watch_debounced_with_options(
+                            move || node_specs.get(),
+                            move |value, _, _| {
                                 if let Some(node_id) = selected_node.get_untracked() {
-                                    passives_tree_specs
-                                        .write()
+                                    if passives_tree_specs
+                                        .read_untracked()
                                         .nodes
-                                        .insert(node_id.clone(), node_specs.get_untracked());
-                                    record_history(passives_history_tracker, passives_tree_specs);
+                                        .get(&node_id)
+                                        .map(|node_specs| *node_specs != *value)
+                                        .unwrap_or_default()
+                                    {
+                                        passives_tree_specs
+                                            .write()
+                                            .nodes
+                                            .insert(node_id.clone(), value.clone());
+                                        record_history(
+                                            passives_history_tracker,
+                                            passives_tree_specs,
+                                        );
+                                    }
                                 }
-                            }
-                        };
+                            },
+                            500.0,
+                            WatchDebouncedOptions::default().immediate(false),
+                        );
+                        // let on_save = {
+                        // move || {
+                        // if let Some(node_id) = selected_node.get_untracked() {
+                        // passives_tree_specs
+                        // .write()
+                        // .nodes
+                        // .insert(node_id.clone(), node_specs.get_untracked());
+                        // record_history(passives_history_tracker, passives_tree_specs);
+                        // }
+                        // }
+                        // };
 
                         view! {
                             <CardHeader
@@ -588,11 +614,14 @@ fn EditNodeMenu(
                                 <MenuButton class:ml-2 on:click=try_delete_node>
                                     "❌"
                                 </MenuButton>
+                                <div class="flex-1" />
                                 <MenuButton on:click=move |_| on_copy()>"Copy"</MenuButton>
-                                <MenuButton on:click=move |_| on_paste()>"Paste"</MenuButton>
-                                <MenuButton class:mr-2 on:click=move |_| on_save()>
-                                    "Save"
+                                <MenuButton class:mr-2 on:click=move |_| on_paste()>
+                                    "Paste"
                                 </MenuButton>
+                            // <MenuButton class:mr-2 on:click=move |_| on_save()>
+                            // "Save"
+                            // </MenuButton>
                             </CardHeader>
                             <EditNode node_id node_specs />
                         }

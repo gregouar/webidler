@@ -27,6 +27,11 @@ pub fn provide_events_context() {
             return;
         }
 
+        if ev.alt_key() || ev.code() == "AltLeft" || ev.code() == "AltRight" {
+            ev.prevent_default();
+            ev.stop_propagation();
+        }
+
         pressed_keys.update(|pressed_keys| {
             pressed_keys.insert(Key::from(ev.key().as_str()), true);
         });
@@ -35,6 +40,11 @@ pub fn provide_events_context() {
     let _ = use_event_listener(use_document(), keyup, move |ev| {
         if is_text_input_target(&ev) {
             return;
+        }
+
+        if ev.alt_key() || ev.code() == "AltLeft" || ev.code() == "AltRight" {
+            ev.prevent_default();
+            ev.stop_propagation();
         }
 
         pressed_keys

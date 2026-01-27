@@ -44,7 +44,7 @@ pub struct PassivesTreeState {
     pub ascension: PassivesTreeAscension,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, Default)]
+#[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq)]
 pub struct PassiveNodeSpecs {
     pub name: String,
     pub icon: String,
