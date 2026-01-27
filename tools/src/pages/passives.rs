@@ -4,6 +4,7 @@ use std::{
 };
 
 use frontend::components::{
+    events::{EventsContext, Key},
     shared::passives::{
         Connection, MetaStatus, Node, NodeStatus, NodeTooltipContent, PurchaseStatus,
     },
@@ -47,12 +48,15 @@ enum ToolMode {
 
 #[component]
 pub fn PassivesPage() -> impl IntoView {
+    let events_context: EventsContext = expect_context();
+
     let (loaded_file, on_skills_file) = use_json_loader::<HashMap<String, PassivesTreeSpecs>>();
     let passives_tree_specs = RwSignal::new(Default::default());
 
     let selected_node: RwSignal<Option<PassiveNodeId>> = RwSignal::new(None);
     let clipboard_node = RwSignal::new(None);
     let tool_mode = RwSignal::new(ToolMode::Edit);
+    let clicked_tool_mode = RwSignal::new(ToolMode::Edit);
 
     Effect::new(move || {
         loaded_file.with(|loaded_file| {
@@ -60,6 +64,16 @@ pub fn PassivesPage() -> impl IntoView {
                 passives_tree_specs.set(specs.clone());
             }
         });
+    });
+
+    Effect::new(move || {
+        if events_context.key_pressed(Key::Alt) {
+            tool_mode.set(ToolMode::Add);
+        } else if events_context.key_pressed(Key::Shift) {
+            tool_mode.set(ToolMode::Connect);
+        } else {
+            tool_mode.set(clicked_tool_mode.get_untracked());
+        }
     });
 
     view! {
@@ -78,8 +92,12 @@ pub fn PassivesPage() -> impl IntoView {
                                         is_active=Signal::derive(move || {
                                             tool_mode.get() == ToolMode::Add
                                         })
-                                        on:click=move |_| tool_mode.set(ToolMode::Add)
+                                        on:click=move |_| {
+                                            tool_mode.set(ToolMode::Add);
+                                            clicked_tool_mode.set(ToolMode::Add);
+                                        }
                                     >
+
                                         "Add"
                                     </TabButton>
                                     <TabButton
@@ -89,6 +107,7 @@ pub fn PassivesPage() -> impl IntoView {
                                         on:click=move |_| {
                                             selected_node.set(None);
                                             tool_mode.set(ToolMode::Connect);
+                                            clicked_tool_mode.set(ToolMode::Connect);
                                         }
                                     >
                                         "Connect"
@@ -97,7 +116,10 @@ pub fn PassivesPage() -> impl IntoView {
                                         is_active=Signal::derive(move || {
                                             tool_mode.get() == ToolMode::Edit
                                         })
-                                        on:click=move |_| tool_mode.set(ToolMode::Edit)
+                                        on:click=move |_| {
+                                            tool_mode.set(ToolMode::Edit);
+                                            clicked_tool_mode.set(ToolMode::Edit);
+                                        }
                                     >
                                         "Edit"
                                     </TabButton>
@@ -133,15 +155,20 @@ pub fn PassivesPage() -> impl IntoView {
                                     }>"Save"</MenuButton>
                                 </div>
                             </div>
-                            <CardInset pad=false class:flex-1>
-                                <PassiveSkillTree passives_tree_specs selected_node tool_mode />
+                            <CardInset pad=false class:flex-1 class:z-1>
+                                <PassiveSkillTree
+                                    passives_tree_specs
+                                    selected_node
+                                    clipboard_node
+                                    tool_mode
+                                />
                             </CardInset>
                         </Card>
                     </div>
 
                     <Card class="h-full w-2xl">
                         {move || match tool_mode.get() {
-                            ToolMode::Edit | ToolMode::Add => {
+                            ToolMode::Edit => {
                                 view! {
                                     <EditNodeMenu
                                         passives_tree_specs
@@ -151,7 +178,7 @@ pub fn PassivesPage() -> impl IntoView {
                                 }
                                     .into_any()
                             }
-                            ToolMode::Connect => view! {}.into_any(),
+                            ToolMode::Connect | ToolMode::Add => view! {}.into_any(),
                         }}
 
                     </Card>
@@ -166,9 +193,32 @@ pub fn PassivesPage() -> impl IntoView {
 fn PassiveSkillTree(
     passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     selected_node: RwSignal<Option<PassiveNodeId>>,
+    clipboard_node: RwSignal<Option<PassiveNodeSpecs>>,
     tool_mode: RwSignal<ToolMode>,
 ) -> impl IntoView {
+    let events_context: EventsContext = expect_context();
     let mouse_position = RwSignal::new((0.0, 0.0));
+
+    Effect::new({
+        let pasted = RwSignal::new(false);
+        move || {
+            if selected_node.read().is_none()
+                && events_context.key_pressed(Key::Ctrl)
+                && events_context.key_pressed(Key::Character('v'))
+            {
+                if !pasted.get_untracked() {
+                    pasted.set(true);
+                    paste_node(
+                        &add_node(passives_tree_specs, mouse_position),
+                        passives_tree_specs,
+                        clipboard_node,
+                    );
+                }
+            } else {
+                pasted.set(false);
+            }
+        }
+    });
 
     view! {
         <Pannable
@@ -370,22 +420,8 @@ fn handle_click_outside(
     match tool_mode.get_untracked() {
         ToolMode::Edit | ToolMode::Connect => selected_node.set(None),
         ToolMode::Add => {
-            passives_tree_specs.update(|passives_tree_specs| {
-                let (x, y) = mouse_position_to_node_position(mouse_position.get_untracked());
-                let node_id: String = uuid::Uuid::new_v4().into();
-                passives_tree_specs.nodes.insert(
-                    node_id.clone(),
-                    PassiveNodeSpecs {
-                        name: "New Node".into(),
-                        icon: "passives/XXX.svg".into(),
-                        x,
-                        y,
-                        ..Default::default()
-                    },
-                );
-                selected_node.set(Some(node_id));
-                tool_mode.set(ToolMode::Edit);
-            });
+            selected_node.set(Some(add_node(passives_tree_specs, mouse_position)));
+            tool_mode.set(ToolMode::Edit);
         }
     }
 }
@@ -402,7 +438,6 @@ fn handle_click_node(
             Some(selected_node_id) if selected_node_id == node_id => selected_node.set(None),
             Some(selected_node_id) => {
                 add_remove_connection(passives_tree_specs, selected_node_id, node_id);
-                selected_node.set(None);
             }
             None => selected_node.set(Some(node_id)),
         },
@@ -452,91 +487,123 @@ fn EditNodeMenu(
     selected_node: RwSignal<Option<PassiveNodeId>>,
     clipboard_node: RwSignal<Option<PassiveNodeSpecs>>,
 ) -> impl IntoView {
-    view! {
-        {move || {
-            selected_node
-                .get()
-                .map(|node_id| {
-                    let node_specs = RwSignal::new(
-                        passives_tree_specs.read().nodes.get(&node_id).cloned().unwrap_or_default(),
-                    );
-                    let on_save = {
-                        let node_id = node_id.clone();
-                        move |_| {
-                            passives_tree_specs
-                                .write()
-                                .nodes
-                                .insert(node_id.clone(), node_specs.get_untracked());
-                        }
-                    };
-                    let on_copy = {
-                        move |_| { clipboard_node.set(Some(node_specs.get_untracked())) }
-                    };
-                    let on_paste = {
-                        let on_save = on_save.clone();
-                        move |ev| {
-                            if let Some(clipboard_node) = clipboard_node.get_untracked() {
-                                let (x, y) = (
-                                    node_specs.read_untracked().x,
-                                    node_specs.read_untracked().y,
-                                );
-                                node_specs
-                                    .set(PassiveNodeSpecs {
-                                        x,
-                                        y,
-                                        ..clipboard_node
-                                    });
-                                on_save(ev);
-                            }
-                        }
-                    };
-                    let delete_node = Arc::new({
-                        let node_id = node_id.clone();
-                        move || {
-                            passives_tree_specs
-                                .update(|passives_tree_specs| {
-                                    passives_tree_specs
-                                        .connections
-                                        .retain(|connection| {
-                                            connection.from != node_id && connection.to != node_id
-                                        });
-                                    passives_tree_specs.nodes.remove_entry(&node_id);
-                                });
-                            selected_node.set(None);
-                        }
-                    });
-                    let try_delete_node = {
-                        let confirm_context: ConfirmContext = expect_context();
-                        move |_| {
-                            (confirm_context
-                                .confirm)("Confirm delete node?".to_string(), delete_node.clone());
-                        }
-                    };
+    let events_context: EventsContext = expect_context();
 
-                    view! {
-                        <CardHeader
-                            title="Edit Node"
-                            on_close=move || selected_node.set(None)
-                            class:gap-2
-                        >
-                            <MenuButton class:ml-2 on:click=try_delete_node>
-                                "❌"
-                            </MenuButton>
-                            <MenuButton on:click=on_copy>"Copy"</MenuButton>
-                            <MenuButton
-                                on:click=on_paste
-                                disabled=Signal::derive(move || { clipboard_node.read().is_none() })
-                            >
-                                "Paste"
-                            </MenuButton>
-                            <MenuButton class:mr-2 on:click=on_save>
-                                "Save"
-                            </MenuButton>
-                        </CardHeader>
-                        <EditNode node_id node_specs />
+    let on_copy = move || {
+        if let Some(node_id) = selected_node.get_untracked() {
+            clipboard_node.set(Some(
+                passives_tree_specs
+                    .read_untracked()
+                    .nodes
+                    .get(&node_id)
+                    .cloned()
+                    .unwrap_or_default(),
+            ));
+        }
+    };
+    let on_paste = move || {
+        if let Some(node_id) = selected_node.get_untracked() {
+            paste_node(&node_id, passives_tree_specs, clipboard_node)
+        }
+    };
+    let delete_node = Arc::new({
+        move || {
+            if let Some(node_id) = selected_node.get_untracked() {
+                passives_tree_specs.update(|passives_tree_specs| {
+                    passives_tree_specs.connections.retain(|connection| {
+                        connection.from != node_id && connection.to != node_id
+                    });
+                    passives_tree_specs.nodes.remove_entry(&node_id);
+                });
+                selected_node.set(None);
+            }
+        }
+    });
+    Effect::new({
+        let pasted = RwSignal::new(false);
+        let copied = RwSignal::new(false);
+        let on_copy = on_copy.clone();
+        let on_paste = on_paste.clone();
+        move || {
+            if events_context.key_pressed(Key::Ctrl) {
+                if events_context.key_pressed(Key::Character('c')) {
+                    if !copied.get_untracked() {
+                        on_copy();
+                        copied.set(true);
                     }
-                })
-        }}
+                } else {
+                    copied.set(false);
+                }
+                if events_context.key_pressed(Key::Character('v')) {
+                    if !pasted.get_untracked() {
+                        on_paste();
+                        pasted.set(true);
+                    }
+                } else {
+                    pasted.set(false);
+                }
+            }
+        }
+    });
+
+    view! {
+        {
+            let on_copy = on_copy.clone();
+            let on_paste = on_paste.clone();
+            move || {
+                selected_node
+                    .get()
+                    .map(|node_id| {
+                        let node_specs = RwSignal::new(
+                            passives_tree_specs
+                                .read()
+                                .nodes
+                                .get(&node_id)
+                                .cloned()
+                                .unwrap_or_default(),
+                        );
+                        let try_delete_node = {
+                            let confirm_context: ConfirmContext = expect_context();
+                            let delete_node = delete_node.clone();
+                            move |_| {
+                                (confirm_context
+                                    .confirm)(
+                                    "Confirm delete node?".to_string(),
+                                    delete_node.clone(),
+                                );
+                            }
+                        };
+                        let on_save = {
+                            move || {
+                                if let Some(node_id) = selected_node.get_untracked() {
+                                    passives_tree_specs
+                                        .write()
+                                        .nodes
+                                        .insert(node_id.clone(), node_specs.get_untracked());
+                                }
+                            }
+                        };
+
+                        view! {
+                            <CardHeader
+                                title="Edit Node"
+                                on_close=move || selected_node.set(None)
+                                class:gap-2
+                            >
+                                <MenuButton class:ml-2 on:click=try_delete_node>
+                                    "❌"
+                                </MenuButton>
+                                <MenuButton on:click=move |_| on_copy()>"Copy"</MenuButton>
+                                <MenuButton on:click=move |_| on_paste()>"Paste"</MenuButton>
+                                <MenuButton class:mr-2 on:click=move |_| on_save()>
+                                    "Save"
+                                </MenuButton>
+                            </CardHeader>
+                            <EditNode node_id node_specs />
+                        }
+                    })
+            }
+        }
     }
 }
 
@@ -680,5 +747,47 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
                 view! { <NodeTooltipContent node_specs node_level show_upgrade=true /> }
             }}
         </CardInset>
+    }
+}
+
+fn add_node(
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    mouse_position: RwSignal<(f64, f64)>,
+) -> PassiveNodeId {
+    let node_id: String = uuid::Uuid::new_v4().into();
+    passives_tree_specs.update(|passives_tree_specs| {
+        let (x, y) = mouse_position_to_node_position(mouse_position.get_untracked());
+
+        passives_tree_specs.nodes.insert(
+            node_id.clone(),
+            PassiveNodeSpecs {
+                name: "New Node".into(),
+                icon: "passives/XXX.svg".into(),
+                x,
+                y,
+                ..Default::default()
+            },
+        );
+    });
+    node_id
+}
+
+fn paste_node(
+    node_id: &PassiveNodeId,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    clipboard_node: RwSignal<Option<PassiveNodeSpecs>>,
+) {
+    if let Some(clipboard_node) = clipboard_node.get_untracked() {
+        passives_tree_specs
+            .write()
+            .nodes
+            .get_mut(node_id)
+            .map(|node_specs| {
+                *node_specs = PassiveNodeSpecs {
+                    x: node_specs.x,
+                    y: node_specs.y,
+                    ..clipboard_node
+                };
+            });
     }
 }
