@@ -29,6 +29,7 @@ use crate::{
     header::HeaderMenu,
     utils::{
         file_loader::{save_json, use_json_loader},
+        history_tracker::HistoryTracker,
         json_editor::JsonEditor,
     },
 };
@@ -52,6 +53,10 @@ pub fn PassivesPage() -> impl IntoView {
 
     let (loaded_file, on_skills_file) = use_json_loader::<HashMap<String, PassivesTreeSpecs>>();
     let passives_tree_specs = RwSignal::new(Default::default());
+    let passives_history_tracker = RwSignal::new(HistoryTracker::<PassivesTreeSpecs>::new(
+        20,
+        passives_tree_specs.get_untracked(),
+    ));
 
     let selected_node: RwSignal<Option<PassiveNodeId>> = RwSignal::new(None);
     let clipboard_node = RwSignal::new(None);
@@ -62,12 +67,20 @@ pub fn PassivesPage() -> impl IntoView {
         loaded_file.with(|loaded_file| {
             if let Some(specs) = loaded_file.as_ref().and_then(|f| f.get("default")) {
                 passives_tree_specs.set(specs.clone());
+                record_history(passives_history_tracker, passives_tree_specs);
             }
         });
     });
 
     Effect::new(move || {
-        if events_context.key_pressed(Key::Alt) {
+        if events_context.key_pressed(Key::Ctrl) {
+            if events_context.key_pressed(Key::Character('z')) {
+                undo_history(passives_history_tracker, passives_tree_specs);
+            }
+            if events_context.key_pressed(Key::Character('y')) {
+                redo_history(passives_history_tracker, passives_tree_specs);
+            }
+        } else if events_context.key_pressed(Key::Alt) {
             tool_mode.set(ToolMode::Add);
         } else if events_context.key_pressed(Key::Shift) {
             tool_mode.set(ToolMode::Connect);
@@ -127,6 +140,33 @@ pub fn PassivesPage() -> impl IntoView {
 
                                 <div class="flex-1" />
 
+                                <div class="flex gap-2 ">
+                                    <MenuButton
+                                        on:click=move |_| undo_history(
+                                            passives_history_tracker,
+                                            passives_tree_specs,
+                                        )
+                                        disabled=Signal::derive(move || {
+                                            !passives_history_tracker.read().can_undo()
+                                        })
+                                    >
+                                        "Undo"
+                                    </MenuButton>
+                                    <MenuButton
+                                        on:click=move |_| redo_history(
+                                            passives_history_tracker,
+                                            passives_tree_specs,
+                                        )
+                                        disabled=Signal::derive(move || {
+                                            !passives_history_tracker.read().can_redo()
+                                        })
+                                    >
+                                        "Redo"
+                                    </MenuButton>
+                                </div>
+
+                                <div class="flex-1" />
+
                                 <div class="flex gap-2">
                                     <MenuButton>
                                         <input type="file" on:change=on_skills_file />
@@ -158,6 +198,7 @@ pub fn PassivesPage() -> impl IntoView {
                             <CardInset pad=false class:flex-1 class:z-1>
                                 <PassiveSkillTree
                                     passives_tree_specs
+                                    passives_history_tracker
                                     selected_node
                                     clipboard_node
                                     tool_mode
@@ -172,6 +213,7 @@ pub fn PassivesPage() -> impl IntoView {
                                 view! {
                                     <EditNodeMenu
                                         passives_tree_specs
+                                        passives_history_tracker
                                         selected_node
                                         clipboard_node
                                     />
@@ -192,6 +234,7 @@ pub fn PassivesPage() -> impl IntoView {
 #[component]
 fn PassiveSkillTree(
     passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
     selected_node: RwSignal<Option<PassiveNodeId>>,
     clipboard_node: RwSignal<Option<PassiveNodeSpecs>>,
     tool_mode: RwSignal<ToolMode>,
@@ -209,8 +252,13 @@ fn PassiveSkillTree(
                 if !pasted.get_untracked() {
                     pasted.set(true);
                     paste_node(
-                        &add_node(passives_tree_specs, mouse_position),
+                        &add_node(
+                            passives_tree_specs,
+                            passives_history_tracker,
+                            mouse_position,
+                        ),
                         passives_tree_specs,
+                        passives_history_tracker,
                         clipboard_node,
                     );
                 }
@@ -226,6 +274,7 @@ fn PassiveSkillTree(
             on:click=move |_| handle_click_outside(
                 mouse_position,
                 passives_tree_specs,
+                passives_history_tracker,
                 selected_node,
                 tool_mode,
             )
@@ -253,6 +302,7 @@ fn PassiveSkillTree(
                         <ToolNode
                             node_id=id.clone()
                             passives_tree_specs
+                            passives_history_tracker
                             selected_node
                             tool_mode
                             mouse_position
@@ -268,6 +318,7 @@ fn PassiveSkillTree(
 fn ToolNode(
     node_id: PassiveNodeId,
     passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
     selected_node: RwSignal<Option<PassiveNodeId>>,
     tool_mode: RwSignal<ToolMode>,
     mouse_position: RwSignal<(f64, f64)>,
@@ -325,6 +376,7 @@ fn ToolNode(
             handle_click_node(
                 node_id.clone(),
                 passives_tree_specs,
+                passives_history_tracker,
                 selected_node,
                 tool_mode,
             )
@@ -356,6 +408,43 @@ fn ToolNode(
         }
     });
 
+    let on_mousedown = {
+        let node_id = node_id.clone();
+        let node_specs_untracked = node_specs_untracked.clone();
+        move |ev: web_sys::MouseEvent| {
+            if ev.button() == 0 {
+                if let ToolMode::Edit = tool_mode.get_untracked() {
+                    if dragging_start.get_untracked().is_none()
+                        && selected_node.get() == Some(node_id.clone())
+                    {
+                        let node_specs = node_specs_untracked();
+                        dragging_start.set(Some((
+                            mouse_position.get_untracked(),
+                            (node_specs.x, node_specs.y),
+                        )));
+                    }
+                }
+            }
+        }
+    };
+
+    let on_mouseup = {
+        let node_specs_untracked = node_specs_untracked.clone();
+        move |ev: web_sys::MouseEvent| {
+            if ev.button() == 0 {
+                if let ToolMode::Edit = tool_mode.get_untracked() {
+                    if let Some((_, old_node_pos)) = dragging_start.get_untracked() {
+                        let node_specs = node_specs_untracked();
+                        if old_node_pos != (node_specs.x, node_specs.y) {
+                            record_history(passives_history_tracker, passives_tree_specs);
+                        }
+                    }
+                    dragging_start.set(None);
+                }
+            }
+        }
+    };
+
     view! {
         {move || {
             view! {
@@ -366,108 +455,12 @@ fn ToolNode(
                     on_click=on_click.clone()
                     on_right_click=move || {}
                     show_upgrade=true
-                    on:mousedown={
-                        let node_id = node_id.clone();
-                        let node_specs_untracked = node_specs_untracked.clone();
-                        move |ev| {
-                            if ev.button() == 0 {
-                                if let ToolMode::Edit = tool_mode.get_untracked() {
-                                    if dragging_start.get_untracked().is_none()
-                                        && selected_node.get() == Some(node_id.clone())
-                                    {
-                                        let node_specs = node_specs_untracked();
-                                        dragging_start
-                                            .set(
-                                                Some((
-                                                    mouse_position.get_untracked(),
-                                                    (node_specs.x, node_specs.y),
-                                                )),
-                                            );
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    on:mouseup=move |ev| {
-                        if ev.button() == 0 {
-                            if let ToolMode::Edit = tool_mode.get_untracked() {
-                                dragging_start.set(None);
-                            }
-                        }
-                    }
+                    on:mousedown=on_mousedown.clone()
+                    on:mouseup=on_mouseup.clone()
                 />
             }
         }}
     }
-}
-
-fn mouse_position_to_node_position(mouse_position: (f64, f64)) -> (f64, f64) {
-    let (x, y) = mouse_position;
-    (
-        ((x * 0.1 / 2.5) as f64).round() * 2.5,
-        -((y * 0.1 / 2.5) as f64).round() * 2.5,
-    )
-}
-
-fn handle_click_outside(
-    mouse_position: RwSignal<(f64, f64)>,
-    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
-    selected_node: RwSignal<Option<PassiveNodeId>>,
-    tool_mode: RwSignal<ToolMode>,
-) {
-    let _ = mouse_position;
-    let _ = passives_tree_specs;
-    match tool_mode.get_untracked() {
-        ToolMode::Edit | ToolMode::Connect => selected_node.set(None),
-        ToolMode::Add => {
-            selected_node.set(Some(add_node(passives_tree_specs, mouse_position)));
-            tool_mode.set(ToolMode::Edit);
-        }
-    }
-}
-
-fn handle_click_node(
-    node_id: PassiveNodeId,
-    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
-    selected_node: RwSignal<Option<PassiveNodeId>>,
-    tool_mode: RwSignal<ToolMode>,
-) {
-    match tool_mode.get_untracked() {
-        ToolMode::Edit => selected_node.set(Some(node_id)),
-        ToolMode::Connect => match selected_node.get_untracked() {
-            Some(selected_node_id) if selected_node_id == node_id => selected_node.set(None),
-            Some(selected_node_id) => {
-                add_remove_connection(passives_tree_specs, selected_node_id, node_id);
-            }
-            None => selected_node.set(Some(node_id)),
-        },
-        ToolMode::Add => {}
-    }
-}
-
-fn add_remove_connection(
-    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
-    from: PassiveNodeId,
-    to: PassiveNodeId,
-) {
-    passives_tree_specs.update(|passives_tree_specs| {
-        if let Some((index, _)) =
-            passives_tree_specs
-                .connections
-                .iter()
-                .enumerate()
-                .find(|(_, connection)| {
-                    (connection.from == from && connection.to == to)
-                        || (connection.from == to && connection.to == from)
-                })
-        {
-            passives_tree_specs.connections.remove(index);
-        } else {
-            passives_tree_specs
-                .connections
-                .push(PassiveConnection { from, to });
-        }
-    });
 }
 
 #[component]
@@ -484,6 +477,7 @@ fn ToolConnection(
 #[component]
 fn EditNodeMenu(
     passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
     selected_node: RwSignal<Option<PassiveNodeId>>,
     clipboard_node: RwSignal<Option<PassiveNodeSpecs>>,
 ) -> impl IntoView {
@@ -503,18 +497,18 @@ fn EditNodeMenu(
     };
     let on_paste = move || {
         if let Some(node_id) = selected_node.get_untracked() {
-            paste_node(&node_id, passives_tree_specs, clipboard_node)
+            paste_node(
+                &node_id,
+                passives_tree_specs,
+                passives_history_tracker,
+                clipboard_node,
+            )
         }
     };
-    let delete_node = Arc::new({
+    let do_delete_node = Arc::new({
         move || {
             if let Some(node_id) = selected_node.get_untracked() {
-                passives_tree_specs.update(|passives_tree_specs| {
-                    passives_tree_specs.connections.retain(|connection| {
-                        connection.from != node_id && connection.to != node_id
-                    });
-                    passives_tree_specs.nodes.remove_entry(&node_id);
-                });
+                delete_node(&node_id, passives_tree_specs, passives_history_tracker);
                 selected_node.set(None);
             }
         }
@@ -564,12 +558,12 @@ fn EditNodeMenu(
                         );
                         let try_delete_node = {
                             let confirm_context: ConfirmContext = expect_context();
-                            let delete_node = delete_node.clone();
+                            let do_delete_node = do_delete_node.clone();
                             move |_| {
                                 (confirm_context
                                     .confirm)(
                                     "Confirm delete node?".to_string(),
-                                    delete_node.clone(),
+                                    do_delete_node.clone(),
                                 );
                             }
                         };
@@ -580,6 +574,7 @@ fn EditNodeMenu(
                                         .write()
                                         .nodes
                                         .insert(node_id.clone(), node_specs.get_untracked());
+                                    record_history(passives_history_tracker, passives_tree_specs);
                                 }
                             }
                         };
@@ -743,15 +738,98 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
         <div>"Result:"</div>
         <CardInset class="space-y-1">
             {move || {
-                let node_specs = Arc::new(node_specs.get());
+                let node_specs = node_specs.get();
                 view! { <NodeTooltipContent node_specs node_level show_upgrade=true /> }
             }}
         </CardInset>
     }
 }
 
+fn mouse_position_to_node_position(mouse_position: (f64, f64)) -> (f64, f64) {
+    let (x, y) = mouse_position;
+    (
+        ((x * 0.1 / 2.5) as f64).round() * 2.5,
+        -((y * 0.1 / 2.5) as f64).round() * 2.5,
+    )
+}
+
+fn handle_click_outside(
+    mouse_position: RwSignal<(f64, f64)>,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
+    selected_node: RwSignal<Option<PassiveNodeId>>,
+    tool_mode: RwSignal<ToolMode>,
+) {
+    let _ = mouse_position;
+    let _ = passives_tree_specs;
+    match tool_mode.get_untracked() {
+        ToolMode::Edit | ToolMode::Connect => selected_node.set(None),
+        ToolMode::Add => {
+            selected_node.set(Some(add_node(
+                passives_tree_specs,
+                passives_history_tracker,
+                mouse_position,
+            )));
+            tool_mode.set(ToolMode::Edit);
+        }
+    }
+}
+
+fn handle_click_node(
+    node_id: PassiveNodeId,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
+    selected_node: RwSignal<Option<PassiveNodeId>>,
+    tool_mode: RwSignal<ToolMode>,
+) {
+    match tool_mode.get_untracked() {
+        ToolMode::Edit => selected_node.set(Some(node_id)),
+        ToolMode::Connect => match selected_node.get_untracked() {
+            Some(selected_node_id) if selected_node_id == node_id => selected_node.set(None),
+            Some(selected_node_id) => {
+                add_remove_connection(
+                    passives_tree_specs,
+                    passives_history_tracker,
+                    selected_node_id,
+                    node_id,
+                );
+            }
+            None => selected_node.set(Some(node_id)),
+        },
+        ToolMode::Add => {}
+    }
+}
+
+fn add_remove_connection(
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
+    from: PassiveNodeId,
+    to: PassiveNodeId,
+) {
+    passives_tree_specs.update(|passives_tree_specs| {
+        if let Some((index, _)) =
+            passives_tree_specs
+                .connections
+                .iter()
+                .enumerate()
+                .find(|(_, connection)| {
+                    (connection.from == from && connection.to == to)
+                        || (connection.from == to && connection.to == from)
+                })
+        {
+            passives_tree_specs.connections.remove(index);
+        } else {
+            passives_tree_specs
+                .connections
+                .push(PassiveConnection { from, to });
+        }
+    });
+    record_history(passives_history_tracker, passives_tree_specs);
+}
+
 fn add_node(
     passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
     mouse_position: RwSignal<(f64, f64)>,
 ) -> PassiveNodeId {
     let node_id: String = uuid::Uuid::new_v4().into();
@@ -769,12 +847,14 @@ fn add_node(
             },
         );
     });
+    record_history(passives_history_tracker, passives_tree_specs);
     node_id
 }
 
 fn paste_node(
     node_id: &PassiveNodeId,
     passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
     clipboard_node: RwSignal<Option<PassiveNodeSpecs>>,
 ) {
     if let Some(clipboard_node) = clipboard_node.get_untracked() {
@@ -789,5 +869,47 @@ fn paste_node(
                     ..clipboard_node
                 };
             });
+        record_history(passives_history_tracker, passives_tree_specs);
+    }
+}
+
+fn delete_node(
+    node_id: &PassiveNodeId,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
+) {
+    passives_tree_specs.update(|passives_tree_specs| {
+        passives_tree_specs
+            .connections
+            .retain(|connection| connection.from != *node_id && connection.to != *node_id);
+        passives_tree_specs.nodes.remove_entry(node_id);
+    });
+    record_history(passives_history_tracker, passives_tree_specs);
+}
+
+fn record_history(
+    passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+) {
+    passives_history_tracker
+        .write()
+        .push(passives_tree_specs.get_untracked());
+}
+
+fn undo_history(
+    passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+) {
+    if let Some(specs) = passives_history_tracker.write().undo() {
+        passives_tree_specs.set(specs.clone());
+    }
+}
+
+fn redo_history(
+    passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+) {
+    if let Some(specs) = passives_history_tracker.write().redo() {
+        passives_tree_specs.set(specs.clone());
     }
 }

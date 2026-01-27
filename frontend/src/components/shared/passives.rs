@@ -18,21 +18,23 @@ use crate::{
     },
 };
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
 pub enum PurchaseStatus {
+    #[default]
     Inactive,
     Purchaseable,
     Purchased,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
 pub enum MetaStatus {
+    #[default]
     Normal,
     Locked,
     Ascended,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
 pub struct NodeStatus {
     pub purchase_status: PurchaseStatus,
     pub meta_status: MetaStatus,
@@ -95,38 +97,45 @@ pub fn Node(
         PassiveNodeType::Status => "#3ea9a4ff",
         PassiveNodeType::Utility => "#973ea9ff",
     };
+    let tooltip_context: Option<DynamicTooltipContext> = use_context();
+    let accessibility: Option<AccessibilityContext> = use_context();
 
-    let node_specs = Arc::new(node_specs);
+    let node_status = move || node_status.try_get().unwrap_or_default();
 
     let show_tooltip = {
-        let tooltip_context = expect_context::<DynamicTooltipContext>();
         let node_specs = node_specs.clone();
         move || {
             let node_specs = node_specs.clone();
-            tooltip_context.set_content(
-                move || {
-                    let node_specs = node_specs.clone();
-                    view! { <NodeTooltip node_specs node_level show_upgrade /> }.into_any()
-                },
-                DynamicTooltipPosition::Auto,
-            );
+            if let Some(tooltip_context) = tooltip_context {
+                tooltip_context.set_content(
+                    move || {
+                        let node_specs = node_specs.clone();
+                        view! { <NodeTooltip node_specs node_level show_upgrade /> }.into_any()
+                    },
+                    DynamicTooltipPosition::Auto,
+                );
+            }
         }
     };
 
+    let node_specs = Arc::new(node_specs);
     let hide_tooltip = {
-        let tooltip_context = expect_context::<DynamicTooltipContext>();
-        move || tooltip_context.hide()
+        move || {
+            if let Some(tooltip_context) = tooltip_context {
+                tooltip_context.hide()
+            }
+        }
     };
 
     let icon_asset = img_asset(&node_specs.icon);
 
     let stroke = move || {
-        let status = node_status.get();
+        let status = node_status();
         status_color(status.purchase_status, status.meta_status)
     };
 
     let shadow_class = move || {
-        let status = node_status.get();
+        let status = node_status();
         match (status.purchase_status, status.meta_status) {
             (PurchaseStatus::Inactive, MetaStatus::Normal) => "",
             (PurchaseStatus::Purchaseable, MetaStatus::Normal) => {
@@ -145,7 +154,7 @@ pub fn Node(
     };
 
     let class_style = move || {
-        let status = node_status.get();
+        let status = node_status();
         match (status.purchase_status, status.meta_status) {
             (PurchaseStatus::Purchaseable, _) => {
                 "saturate-50 cursor-pointer group active:brightness-50"
@@ -157,7 +166,7 @@ pub fn Node(
     };
 
     let icon_filter = move || {
-        let status = node_status.get();
+        let status = node_status();
         match (status.purchase_status, status.meta_status) {
             (PurchaseStatus::Purchaseable, _) => "invert(1)",
             (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5) invert(1)",
@@ -171,7 +180,7 @@ pub fn Node(
 
             on:click=move |ev| {
                 ev.stop_propagation();
-                let status = node_status.get();
+                let status = node_status();
                 if status.purchase_status == PurchaseStatus::Purchaseable {
                     on_click();
                 }
@@ -187,10 +196,9 @@ pub fn Node(
                 let show_tooltip = show_tooltip.clone();
                 move |_| { show_tooltip() }
             }
-            on:contextmenu={
-                let accessibility: AccessibilityContext = expect_context();
-                move |ev| {
-                    ev.prevent_default();
+            on:contextmenu=move |ev| {
+                ev.prevent_default();
+                if let Some(accessibility) = accessibility {
                     if !accessibility.is_on_mobile() {
                         on_right_click();
                     }
@@ -327,7 +335,7 @@ pub fn Connection(
 
 #[component]
 pub fn NodeTooltip(
-    node_specs: Arc<PassiveNodeSpecs>,
+    node_specs: PassiveNodeSpecs,
     node_level: Memo<u8>,
     show_upgrade: bool,
 ) -> impl IntoView {
@@ -343,13 +351,15 @@ pub fn NodeTooltip(
 
 #[component]
 pub fn NodeTooltipContent(
-    node_specs: Arc<PassiveNodeSpecs>,
+    node_specs: PassiveNodeSpecs,
     node_level: Memo<u8>,
     show_upgrade: bool,
 ) -> impl IntoView {
+    let node_level = move || node_level.try_get().unwrap_or_default();
+
     let effects_text = {
         let node_specs = node_specs.clone();
-        move || formatted_effects_list((&node_specs.aggregate_effects(node_level.get())).into())
+        move || formatted_effects_list((&node_specs.aggregate_effects(node_level())).into())
     };
 
     let node_specs_locked = node_specs.locked;
@@ -362,7 +372,7 @@ pub fn NodeTooltipContent(
         .map(format_trigger)
         .collect();
 
-    let is_locked = move || node_specs_locked && node_level.get() == 0;
+    let is_locked = move || node_specs_locked && node_level() == 0;
 
     let starting_node_text = (node_specs.initial_node).then(|| {
         view! {
@@ -403,7 +413,7 @@ pub fn NodeTooltipContent(
                     .into_any(),
                 )
             } else if !upgrade_effects.is_empty() {
-                let max_level = node_level.get() >= max_upgrade_level.unwrap_or(u8::MAX);
+                let max_level = node_level() >= max_upgrade_level.unwrap_or(u8::MAX);
                 Some(
                     view! {
                         <hr class="border-t border-gray-700" />

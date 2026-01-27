@@ -22,7 +22,7 @@ pub fn MenuPanel(
 
     let handle_key = move |e: KeyboardEvent| {
         if e.key() == "Escape" {
-            open.set(false);
+            open.try_set(false);
         }
     };
 
@@ -70,7 +70,9 @@ pub fn MenuPanel(
                         "animation: fadeOut 0.3s ease-out forwards;"
                     }
                 }
-                on:click=move |_| open.set(false)
+                on:click=move |_| {
+                    open.try_set(false);
+                }
                 on:keydown=handle_key
                 tabindex="0"
             >
