@@ -21,8 +21,6 @@ where
     let _ = watch_debounced_with_options(
         move || value.get(),
         {
-            let textarea_ref = textarea_ref.clone();
-            let gutter_ref = gutter_ref.clone();
             move |value, _, _| {
                 let json = serde_json::to_string_pretty(value).unwrap();
 

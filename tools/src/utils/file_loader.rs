@@ -8,13 +8,11 @@ pub fn use_json_loader<T: 'static + DeserializeOwned + Sync + Send>(
     let data = RwSignal::new(None::<T>);
 
     let on_file_change = {
-        let data = data.clone();
         move |event: web_sys::Event| {
             let input: web_sys::HtmlInputElement = event.target().unwrap().dyn_into().unwrap();
 
             if let Some(file) = input.files().and_then(|f| f.get(0)) {
                 let reader = web_sys::FileReader::new().unwrap();
-                let data = data.clone();
 
                 let onload = Closure::once_into_js({
                     let reader = reader.clone();

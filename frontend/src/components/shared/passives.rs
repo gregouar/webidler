@@ -198,11 +198,10 @@ pub fn Node(
             }
             on:contextmenu=move |ev| {
                 ev.prevent_default();
-                if let Some(accessibility) = accessibility {
-                    if !accessibility.is_on_mobile() {
+                if let Some(accessibility) = accessibility
+                    && !accessibility.is_on_mobile() {
                         on_right_click();
                     }
-                }
             }
 
             on:mouseenter=move |_| show_tooltip()

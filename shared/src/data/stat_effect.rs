@@ -385,7 +385,7 @@ pub enum StatConverterSource {
 }
 
 fn is_false(value: &bool) -> bool {
-    *value == false
+    !*value
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
