@@ -2,7 +2,7 @@ use leptos::{html::*, prelude::*};
 
 #[component]
 pub fn MenuButton(
-    #[prop(optional)] disabled: Option<Signal<bool>>,
+    #[prop(optional, into)] disabled: Option<Signal<bool>>,
     #[prop(optional)] button_type: Option<&'static str>,
     children: Children,
 ) -> impl IntoView {

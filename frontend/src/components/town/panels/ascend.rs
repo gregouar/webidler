@@ -1,9 +1,12 @@
 use leptos::{html::*, prelude::*, task::spawn_local};
 
-use std::{collections::HashMap, sync::Arc};
+use std::sync::Arc;
 
 use shared::{
-    data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension},
+    data::passive::{
+        PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension,
+        PassivesTreeSpecs,
+    },
     http::client::AscendPassivesRequest,
 };
 
@@ -250,14 +253,6 @@ fn PassiveSkillTree(
         }
     });
 
-    let nodes_specs = Arc::new(
-        town_context
-            .passives_tree_specs
-            .read_untracked()
-            .nodes
-            .clone(),
-    );
-
     view! {
         <Pannable>
             <For
@@ -269,7 +264,7 @@ fn PassiveSkillTree(
             >
                 <AscendConnection
                     connection=conn
-                    nodes_specs=nodes_specs.clone()
+                    passives_tree_specs=town_context.passives_tree_specs
                     passives_tree_ascension
                 />
             </For>
@@ -441,7 +436,7 @@ fn AscendNode(
 #[component]
 fn AscendConnection(
     connection: PassiveConnection,
-    nodes_specs: Arc<HashMap<String, PassiveNodeSpecs>>,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
 ) -> impl IntoView {
     let amount_connections = Memo::new({
@@ -482,5 +477,5 @@ fn AscendConnection(
         }
     });
 
-    view! { <Connection connection nodes_specs amount_connections node_levels /> }
+    view! { <Connection connection passives_tree_specs amount_connections node_levels /> }
 }

@@ -384,13 +384,17 @@ pub enum StatConverterSource {
     // TODO: Add others, like life, mana, ...
 }
 
+fn is_false(value: &bool) -> bool {
+    !*value
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct StatEffect {
     pub stat: StatType,
     pub modifier: Modifier,
     pub value: f64,
 
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub bypass_ignore: bool,
 }
 

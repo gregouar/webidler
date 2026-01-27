@@ -1,0 +1,82 @@
+@import 'tailwindcss';
+
+@source "./src/**/*.rs";
+@source "./../frontend/src/**/*.rs";
+
+@theme {  
+  --text-shadow-sm: 0 1px 2px rgb(0, 0, 0);  
+  --text-shadow: 0 2px 4px rgb(0, 0, 0);  
+  --text-shadow-xl: 0 8px 16px rgb(0, 0, 0);  
+
+  --animate-monster-fade-in: monster-fade-in 1s ease-out both;  
+  --animate-monster-fade-out: monster-fade-out 1s ease-in both;  
+  --animate-monster-flee: monster-flee 1s ease-out both;  
+
+  @keyframes monster-fade-in {
+    0% { transform: translateX(50%); opacity: 0; }
+    65% { transform: translateX(0%); opacity: 1; }
+    80% { transform: translateX(2%); }
+    100% { transform: translateX(0%); }
+  }
+  
+  @keyframes monster-fade-out {
+    from { opacity: 1; transform: translateY(0%); }
+    to { opacity: 0; transform: translateY(50%); }
+  }
+  
+  @keyframes monster-flee {
+    0% { transform: translateX(0%); opacity: 1; }
+    100% { transform: translateX(50%); opacity: 0; }
+  }
+}
+
+@layer components {
+  .btn {
+    @apply cursor-pointer disabled:cursor-auto disabled:pointer-events-none;
+  }
+}
+
+
+@layer base {
+  /* WebKit browsers (Chrome, Edge, Safari) */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #1f1f1f;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #525252;
+    border-radius: 4px;
+    border: 2px solid #1f1f1f;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #737373;
+  }
+
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #525252 #1f1f1f;
+  }
+}
+
+@utility will-change-transform-opacity {
+   will-change: transform, opacity;
+}
+
+@utility transition-progress-bar {
+   transition: opacity 0.5s linear, transform 0.250s linear;
+}
+@utility transition-circular-progress-bar {
+   transition: opacity 0.5s linear, --progress 0.250s linear;
+}
+
+@utility font-number {
+  font-family: 'SF Mono', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+  font-variant-numeric: tabular-nums;
+}
