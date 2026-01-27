@@ -42,7 +42,6 @@ struct SerPassivesTreeSpecs {
 enum ToolMode {
     Add,
     Edit,
-    Move,
     Connect,
 }
 
@@ -93,17 +92,6 @@ pub fn PassivesPage() -> impl IntoView {
                                         }
                                     >
                                         "Connect"
-                                    </TabButton>
-                                    <TabButton
-                                        is_active=Signal::derive(move || {
-                                            tool_mode.get() == ToolMode::Move
-                                        })
-                                        on:click=move |_| {
-                                            selected_node.set(None);
-                                            tool_mode.set(ToolMode::Move);
-                                        }
-                                    >
-                                        "Move"
                                     </TabButton>
                                     <TabButton
                                         is_active=Signal::derive(move || {
@@ -163,7 +151,7 @@ pub fn PassivesPage() -> impl IntoView {
                                 }
                                     .into_any()
                             }
-                            ToolMode::Move | ToolMode::Connect => view! {}.into_any(),
+                            ToolMode::Connect => view! {}.into_any(),
                         }}
 
                     </Card>
@@ -181,20 +169,6 @@ fn PassiveSkillTree(
     tool_mode: RwSignal<ToolMode>,
 ) -> impl IntoView {
     let mouse_position = RwSignal::new((0.0, 0.0));
-
-    Effect::new(move |_| {
-        if let ToolMode::Move = tool_mode.get() {
-            if let Some(node_id) = selected_node.get() {
-                passives_tree_specs
-                    .write()
-                    .nodes
-                    .get_mut(&node_id)
-                    .map(|node| {
-                        (node.x, node.y) = mouse_position_to_node_position(mouse_position.get());
-                    });
-            }
-        }
-    });
 
     view! {
         <Pannable
@@ -228,15 +202,10 @@ fn PassiveSkillTree(
                     view! {
                         <ToolNode
                             node_id=id.clone()
-                            node_specs=passives_tree_specs
-                                .read()
-                                .nodes
-                                .get(&id)
-                                .cloned()
-                                .unwrap_or_default()
                             passives_tree_specs
                             selected_node
                             tool_mode
+                            mouse_position
                         />
                     }
                 }}
@@ -248,20 +217,44 @@ fn PassiveSkillTree(
 #[component]
 fn ToolNode(
     node_id: PassiveNodeId,
-    node_specs: PassiveNodeSpecs,
     passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     selected_node: RwSignal<Option<PassiveNodeId>>,
     tool_mode: RwSignal<ToolMode>,
+    mouse_position: RwSignal<(f64, f64)>,
 ) -> impl IntoView {
+    let node_specs = {
+        let node_id = node_id.clone();
+        move || {
+            passives_tree_specs
+                .read()
+                .nodes
+                .get(&node_id)
+                .cloned()
+                .unwrap_or_default()
+        }
+    };
+    let node_specs_untracked = {
+        let node_id = node_id.clone();
+        move || {
+            passives_tree_specs
+                .read_untracked()
+                .nodes
+                .get(&node_id)
+                .cloned()
+                .unwrap_or_default()
+        }
+    };
+
     let node_status = Memo::new({
         let node_id = node_id.clone();
+        let node_specs = node_specs.clone();
         move |_| NodeStatus {
             purchase_status: match selected_node.read() == Some(node_id.clone()) {
                 true => PurchaseStatus::Purchased,
                 false => PurchaseStatus::Purchaseable,
             },
             meta_status: match (
-                node_specs.locked,
+                node_specs().locked,
                 selected_node.read() == Some(node_id.clone()),
             ) {
                 (_, true) => MetaStatus::Ascended,
@@ -272,8 +265,8 @@ fn ToolNode(
     });
 
     let node_level = Memo::new({
-        let max_level = node_specs.max_upgrade_level.unwrap_or_default();
-        move |_| max_level
+        let node_specs = node_specs.clone();
+        move |_| node_specs().max_upgrade_level.unwrap_or_default()
     });
 
     let on_click = {
@@ -288,31 +281,73 @@ fn ToolNode(
         }
     };
 
-    let on_right_click = move || {};
+    let dragging_start: RwSignal<Option<((f64, f64), (f64, f64))>> = RwSignal::new(None);
+    Effect::new({
+        let node_id = node_id.clone();
+        move |_| {
+            if let ToolMode::Edit = tool_mode.get() {
+                if let Some((mouse_start, node_start)) = dragging_start.get() {
+                    let mouse_position = mouse_position.get();
+
+                    let delta = mouse_position_to_node_position((
+                        mouse_position.0 - mouse_start.0,
+                        mouse_position.1 - mouse_start.1,
+                    ));
+
+                    passives_tree_specs
+                        .write()
+                        .nodes
+                        .get_mut(&node_id)
+                        .map(|node| {
+                            (node.x, node.y) = (node_start.0 + delta.0, node_start.1 + delta.1);
+                        });
+                }
+            }
+        }
+    });
 
     view! {
-        <Node
-            node_specs
-            node_status
-            node_level
-            on_click
-            on_right_click
-            show_upgrade=true
-            on:mousedown=move |ev| {
-                if ev.button() == 0 {
-                    if let ToolMode::Move = tool_mode.get_untracked() {
-                        selected_node.set(Some(node_id.clone()));
+        {move || {
+            view! {
+                <Node
+                    node_specs=node_specs()
+                    node_status
+                    node_level
+                    on_click=on_click.clone()
+                    on_right_click=move || {}
+                    show_upgrade=true
+                    on:mousedown={
+                        let node_id = node_id.clone();
+                        let node_specs_untracked = node_specs_untracked.clone();
+                        move |ev| {
+                            if ev.button() == 0 {
+                                if let ToolMode::Edit = tool_mode.get_untracked() {
+                                    if dragging_start.get_untracked().is_none()
+                                        && selected_node.get() == Some(node_id.clone())
+                                    {
+                                        let node_specs = node_specs_untracked();
+                                        dragging_start
+                                            .set(
+                                                Some((
+                                                    mouse_position.get_untracked(),
+                                                    (node_specs.x, node_specs.y),
+                                                )),
+                                            );
+                                    }
+                                }
+                            }
+                        }
                     }
-                }
-            }
-            on:mouseup=move |ev| {
-                if ev.button() == 0 {
-                    if let ToolMode::Move = tool_mode.get_untracked() {
-                        selected_node.set(None);
+                    on:mouseup=move |ev| {
+                        if ev.button() == 0 {
+                            if let ToolMode::Edit = tool_mode.get_untracked() {
+                                dragging_start.set(None);
+                            }
+                        }
                     }
-                }
+                />
             }
-        />
+        }}
     }
 }
 
@@ -333,7 +368,7 @@ fn handle_click_outside(
     let _ = mouse_position;
     let _ = passives_tree_specs;
     match tool_mode.get_untracked() {
-        ToolMode::Edit | ToolMode::Move | ToolMode::Connect => selected_node.set(None),
+        ToolMode::Edit | ToolMode::Connect => selected_node.set(None),
         ToolMode::Add => {
             passives_tree_specs.update(|passives_tree_specs| {
                 let (x, y) = mouse_position_to_node_position(mouse_position.get_untracked());
@@ -363,7 +398,6 @@ fn handle_click_node(
 ) {
     match tool_mode.get_untracked() {
         ToolMode::Edit => selected_node.set(Some(node_id)),
-        ToolMode::Move => {}
         ToolMode::Connect => match selected_node.get_untracked() {
             Some(selected_node_id) if selected_node_id == node_id => selected_node.set(None),
             Some(selected_node_id) => {
