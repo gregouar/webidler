@@ -221,10 +221,7 @@ pub fn PassivesPage() -> impl IntoView {
                                 }
                                     .into_any()
                             }
-                            ToolMode::Connect | ToolMode::Add => {
-                                let _: () = view! {};
-                                ().into_any()
-                            }
+                            ToolMode::Connect | ToolMode::Add => ().into_any(),
                         }}
 
                     </Card>
@@ -387,7 +384,7 @@ fn ToolNode(
         }
     };
 
-    let dragging_start: RwSignal<Option<((f64, f64), (f64, f64))>> = RwSignal::new(None);
+    let dragging_start= RwSignal::new(None::<((f64, f64), (f64, f64))>);
     Effect::new({
         let node_id = node_id.clone();
         move |_| {
@@ -513,8 +510,6 @@ fn EditNodeMenu(
     Effect::new({
         let pasted = RwSignal::new(false);
         let copied = RwSignal::new(false);
-        let on_copy = on_copy;
-        let on_paste = on_paste;
         move || {
             if events_context.key_pressed(Key::Ctrl) {
                 if events_context.key_pressed(Key::Character('c')) {
@@ -538,88 +533,79 @@ fn EditNodeMenu(
     });
 
     view! {
-        {
-            let on_copy = on_copy;
-            let on_paste = on_paste;
-            move || {
-                selected_node
-                    .get()
-                    .map(|node_id| {
-                        let node_specs = RwSignal::new(
-                            passives_tree_specs
-                                .read()
-                                .nodes
-                                .get(&node_id)
-                                .cloned()
-                                .unwrap_or_default(),
-                        );
-                        let try_delete_node = {
-                            let confirm_context: ConfirmContext = expect_context();
-                            let do_delete_node = do_delete_node.clone();
-                            move |_| {
-                                (confirm_context
-                                    .confirm)(
-                                    "Confirm delete node?".to_string(),
-                                    do_delete_node.clone(),
-                                );
-                            }
-                        };
-                        let _ = watch_debounced_with_options(
-                            move || node_specs.get(),
-                            move |value, _, _| {
-                                if let Some(node_id) = selected_node.get_untracked()
-                                    && passives_tree_specs
-                                        .read_untracked()
-                                        .nodes
-                                        .get(&node_id)
-                                        .map(|node_specs| *node_specs != *value)
-                                        .unwrap_or_default()
-                                {
-                                    passives_tree_specs
-                                        .write()
-                                        .nodes
-                                        .insert(node_id.clone(), value.clone());
-                                    record_history(passives_history_tracker, passives_tree_specs);
-                                }
-                            },
-                            500.0,
-                            WatchDebouncedOptions::default().immediate(false),
-                        );
-                        // let on_save = {
-                        // move || {
-                        // if let Some(node_id) = selected_node.get_untracked() {
-                        // passives_tree_specs
-                        // .write()
-                        // .nodes
-                        // .insert(node_id.clone(), node_specs.get_untracked());
-                        // record_history(passives_history_tracker, passives_tree_specs);
-                        // }
-                        // }
-                        // };
-
-                        view! {
-                            <CardHeader
-                                title="Edit Node"
-                                on_close=move || selected_node.set(None)
-                                class:gap-2
-                            >
-                                <MenuButton class:ml-2 on:click=try_delete_node>
-                                    "❌"
-                                </MenuButton>
-                                <div class="flex-1" />
-                                <MenuButton on:click=move |_| on_copy()>"Copy"</MenuButton>
-                                <MenuButton class:mr-2 on:click=move |_| on_paste()>
-                                    "Paste"
-                                </MenuButton>
-                            // <MenuButton class:mr-2 on:click=move |_| on_save()>
-                            // "Save"
-                            // </MenuButton>
-                            </CardHeader>
-                            <EditNode node_id node_specs />
+        {move || {
+            selected_node
+                .get()
+                .map(|node_id| {
+                    let node_specs = RwSignal::new(
+                        passives_tree_specs.read().nodes.get(&node_id).cloned().unwrap_or_default(),
+                    );
+                    let try_delete_node = {
+                        let confirm_context: ConfirmContext = expect_context();
+                        let do_delete_node = do_delete_node.clone();
+                        move |_| {
+                            (confirm_context
+                                .confirm)(
+                                "Confirm delete node?".to_string(),
+                                do_delete_node.clone(),
+                            );
                         }
-                    })
-            }
-        }
+                    };
+                    let _ = watch_debounced_with_options(
+                        move || node_specs.get(),
+                        move |value, _, _| {
+                            if let Some(node_id) = selected_node.get_untracked()
+                                && passives_tree_specs
+                                    .read_untracked()
+                                    .nodes
+                                    .get(&node_id)
+                                    .map(|node_specs| *node_specs != *value)
+                                    .unwrap_or_default()
+                            {
+                                passives_tree_specs
+                                    .write()
+                                    .nodes
+                                    .insert(node_id.clone(), value.clone());
+                                record_history(passives_history_tracker, passives_tree_specs);
+                            }
+                        },
+                        500.0,
+                        WatchDebouncedOptions::default().immediate(false),
+                    );
+                    // let on_save = {
+                    // move || {
+                    // if let Some(node_id) = selected_node.get_untracked() {
+                    // passives_tree_specs
+                    // .write()
+                    // .nodes
+                    // .insert(node_id.clone(), node_specs.get_untracked());
+                    // record_history(passives_history_tracker, passives_tree_specs);
+                    // }
+                    // }
+                    // };
+
+                    view! {
+                        <CardHeader
+                            title="Edit Node"
+                            on_close=move || selected_node.set(None)
+                            class:gap-2
+                        >
+                            <MenuButton class:ml-2 on:click=try_delete_node>
+                                "❌"
+                            </MenuButton>
+                            <div class="flex-1" />
+                            <MenuButton on:click=move |_| on_copy()>"Copy"</MenuButton>
+                            <MenuButton class:mr-2 on:click=move |_| on_paste()>
+                                "Paste"
+                            </MenuButton>
+                        // <MenuButton class:mr-2 on:click=move |_| on_save()>
+                        // "Save"
+                        // </MenuButton>
+                        </CardHeader>
+                        <EditNode node_id node_specs />
+                    }
+                })
+        }}
     }
 }
 
@@ -769,8 +755,8 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
 fn mouse_position_to_node_position(mouse_position: (f64, f64)) -> (f64, f64) {
     let (x, y) = mouse_position;
     (
-        ((x * 0.1 / 2.5)).round() * 2.5,
-        -((y * 0.1 / 2.5)).round() * 2.5,
+        (x * 0.1 / 2.5).round() * 2.5,
+        -(y * 0.1 / 2.5).round() * 2.5,
     )
 }
 
@@ -781,8 +767,6 @@ fn handle_click_outside(
     selected_node: RwSignal<Option<PassiveNodeId>>,
     tool_mode: RwSignal<ToolMode>,
 ) {
-    let _ = mouse_position;
-    let _ = passives_tree_specs;
     match tool_mode.get_untracked() {
         ToolMode::Edit | ToolMode::Connect => selected_node.set(None),
         ToolMode::Add => {
