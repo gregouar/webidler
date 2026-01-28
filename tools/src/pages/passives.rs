@@ -100,8 +100,6 @@ pub fn PassivesPage() -> impl IntoView {
     };
 
     Effect::new({
-        let save = save.clone();
-        let load = load.clone();
         move || {
             if events_context.key_pressed(Key::Ctrl) {
                 if events_context.key_pressed(Key::Character('z')) {
