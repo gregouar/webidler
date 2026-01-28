@@ -158,7 +158,8 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                 ..
             })
             | StatType::SuccessChance { .. }
-            | StatType::SkillLevel(_) => {}
+            | StatType::SkillLevel(_)
+            | StatType::SkillConditionalModifier { .. } => {}
             // Other
             StatType::StatConverter(StatConverterSpecs {
                 source: StatConverterSource::ThreatLevel,
