@@ -13,7 +13,7 @@ use shared::data::{
 
 use crate::components::shared::tooltips::{
     effects_tooltip::{damage_type_str, format_stat, status_type_str},
-    skill_tooltip::{self, shape_str, skill_type_str, EffectLi},
+    skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
 };
 
 pub fn format_trigger_modifier_as(

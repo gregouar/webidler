@@ -4,11 +4,11 @@ use leptos::{ev::KeyboardEvent, html::*, prelude::*};
 
 #[component]
 pub fn MenuPanel(
-    open: RwSignal<bool>, 
-    children: ChildrenFn, 
-    #[prop(default = true)] w_full:bool,
-    #[prop(default = true)] h_full:bool,
-    #[prop(default = true)] center:bool,
+    open: RwSignal<bool>,
+    children: ChildrenFn,
+    #[prop(default = true)] w_full: bool,
+    #[prop(default = true)] h_full: bool,
+    #[prop(default = true)] center: bool,
 ) -> impl IntoView {
     let panel_ref = NodeRef::<Div>::new();
 

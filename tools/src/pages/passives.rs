@@ -19,7 +19,7 @@ use frontend::components::{
     },
 };
 use leptos::{html::*, prelude::*};
-use leptos_use::{watch_debounced_with_options, WatchDebouncedOptions};
+use leptos_use::{WatchDebouncedOptions, watch_debounced_with_options};
 use serde::Serialize;
 use shared::data::passive::{
     PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassiveNodeType, PassivesTreeSpecs,
@@ -73,26 +73,68 @@ pub fn PassivesPage() -> impl IntoView {
         });
     });
 
-    Effect::new(move || {
-        if events_context.key_pressed(Key::Ctrl) {
-            if events_context.key_pressed(Key::Character('z')) {
-                undo_history(passives_history_tracker, passives_tree_specs);
+    let save = move || {
+        save_json(
+            &HashMap::from([(
+                "default",
+                SerPassivesTreeSpecs {
+                    nodes: passives_tree_specs
+                        .read_untracked()
+                        .nodes
+                        .clone()
+                        .into_iter()
+                        .collect(),
+                    connections: passives_tree_specs.read_untracked().connections.clone(),
+                },
+            )]),
+            "passives.json",
+        );
+    };
+
+    let file_input: NodeRef<Input> = NodeRef::new();
+
+    let load = move || {
+        if let Some(input) = file_input.get() {
+            input.click();
+        }
+    };
+
+    Effect::new({
+        let save = save.clone();
+        let load = load.clone();
+        move || {
+            if events_context.key_pressed(Key::Ctrl) {
+                if events_context.key_pressed(Key::Character('z')) {
+                    undo_history(passives_history_tracker, passives_tree_specs);
+                }
+                if events_context.key_pressed(Key::Character('y')) {
+                    redo_history(passives_history_tracker, passives_tree_specs);
+                }
+                if events_context.key_pressed(Key::Character('s')) {
+                    save();
+                } else if events_context.key_pressed(Key::Character('o')) {
+                    load();
+                }
+            } else if events_context.key_pressed(Key::Alt) {
+                tool_mode.set(ToolMode::Add);
+            } else if events_context.key_pressed(Key::Shift) {
+                tool_mode.set(ToolMode::Connect);
+            } else {
+                tool_mode.set(clicked_tool_mode.get_untracked());
             }
-            if events_context.key_pressed(Key::Character('y')) {
-                redo_history(passives_history_tracker, passives_tree_specs);
-            }
-        } else if events_context.key_pressed(Key::Alt) {
-            tool_mode.set(ToolMode::Add);
-        } else if events_context.key_pressed(Key::Shift) {
-            tool_mode.set(ToolMode::Connect);
-        } else {
-            tool_mode.set(clicked_tool_mode.get_untracked());
         }
     });
 
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <DynamicTooltip />
+            <input
+                node_ref=file_input
+                type="file"
+                accept="application/json"
+                on:change=on_skills_file
+                class="hidden"
+            />
             <HeaderMenu />
             <div class="relative flex-1">
                 <div class="absolute inset-0 flex p-1 xl:p-4 items-center gap-4">
@@ -101,7 +143,14 @@ pub fn PassivesPage() -> impl IntoView {
                             <div class="flex justify-between mx-4 items-center">
                                 <CardTitle>"Passives"</CardTitle>
 
-                                <div class="flex mx-4 gap-2 -mb-4 items-end">
+                                <div class="flex gap-2 ml-4">
+                                    <MenuButton on:click=move |_| { load() }>"Load"</MenuButton>
+                                    <MenuButton on:click=move |_| { save() }>"Save"</MenuButton>
+                                </div>
+
+                                <div class="flex-1" />
+
+                                <div class="flex gap-2 -mb-4 items-end">
                                     <TabButton
                                         is_active=Signal::derive(move || {
                                             tool_mode.get() == ToolMode::Add
@@ -166,35 +215,6 @@ pub fn PassivesPage() -> impl IntoView {
                                     </MenuButton>
                                 </div>
 
-                                <div class="flex-1" />
-
-                                <div class="flex gap-2">
-                                    <MenuButton>
-                                        <input type="file" on:change=on_skills_file />
-                                    </MenuButton>
-                                    <MenuButton on:click=move |_| {
-                                        save_json(
-                                            &HashMap::from([
-                                                (
-                                                    "default",
-                                                    SerPassivesTreeSpecs {
-                                                        nodes: passives_tree_specs
-                                                            .read_untracked()
-                                                            .nodes
-                                                            .clone()
-                                                            .into_iter()
-                                                            .collect(),
-                                                        connections: passives_tree_specs
-                                                            .read_untracked()
-                                                            .connections
-                                                            .clone(),
-                                                    },
-                                                ),
-                                            ]),
-                                            "passives.json",
-                                        );
-                                    }>"Save"</MenuButton>
-                                </div>
                             </div>
                             <CardInset pad=false class:flex-1 class:z-1>
                                 <PassiveSkillTree
@@ -384,24 +404,24 @@ fn ToolNode(
         }
     };
 
-    let dragging_start= RwSignal::new(None::<((f64, f64), (f64, f64))>);
+    let dragging_start = RwSignal::new(None::<((f64, f64), (f64, f64))>);
     Effect::new({
         let node_id = node_id.clone();
         move |_| {
             if let ToolMode::Edit = tool_mode.get()
-                && let Some((mouse_start, node_start)) = dragging_start.get() {
-                    let mouse_position = mouse_position.get();
+                && let Some((mouse_start, node_start)) = dragging_start.get()
+            {
+                let mouse_position = mouse_position.get();
 
-                    let delta = mouse_position_to_node_position((
-                        mouse_position.0 - mouse_start.0,
-                        mouse_position.1 - mouse_start.1,
-                    ));
+                let delta = mouse_position_to_node_position((
+                    mouse_position.0 - mouse_start.0,
+                    mouse_position.1 - mouse_start.1,
+                ));
 
-                    if let Some(node) = passives_tree_specs
-                        .write()
-                        .nodes
-                        .get_mut(&node_id) { (node.x, node.y) = (node_start.0 + delta.0, node_start.1 + delta.1); }
+                if let Some(node) = passives_tree_specs.write().nodes.get_mut(&node_id) {
+                    (node.x, node.y) = (node_start.0 + delta.0, node_start.1 + delta.1);
                 }
+            }
         }
     });
 
@@ -411,15 +431,15 @@ fn ToolNode(
         move |ev: web_sys::MouseEvent| {
             if ev.button() == 0
                 && let ToolMode::Edit = tool_mode.get_untracked()
-                    && dragging_start.get_untracked().is_none()
-                        && selected_node.get() == Some(node_id.clone())
-                    {
-                        let node_specs = node_specs_untracked();
-                        dragging_start.set(Some((
-                            mouse_position.get_untracked(),
-                            (node_specs.x, node_specs.y),
-                        )));
-                    }
+                && dragging_start.get_untracked().is_none()
+                && selected_node.get() == Some(node_id.clone())
+            {
+                let node_specs = node_specs_untracked();
+                dragging_start.set(Some((
+                    mouse_position.get_untracked(),
+                    (node_specs.x, node_specs.y),
+                )));
+            }
         }
     };
 
@@ -427,15 +447,16 @@ fn ToolNode(
         let node_specs_untracked = node_specs_untracked.clone();
         move |ev: web_sys::MouseEvent| {
             if ev.button() == 0
-                && let ToolMode::Edit = tool_mode.get_untracked() {
-                    if let Some((_, old_node_pos)) = dragging_start.get_untracked() {
-                        let node_specs = node_specs_untracked();
-                        if old_node_pos != (node_specs.x, node_specs.y) {
-                            record_history(passives_history_tracker, passives_tree_specs);
-                        }
+                && let ToolMode::Edit = tool_mode.get_untracked()
+            {
+                if let Some((_, old_node_pos)) = dragging_start.get_untracked() {
+                    let node_specs = node_specs_untracked();
+                    if old_node_pos != (node_specs.x, node_specs.y) {
+                        record_history(passives_history_tracker, passives_tree_specs);
                     }
-                    dragging_start.set(None);
                 }
+                dragging_start.set(None);
+            }
         }
     };
 
@@ -863,14 +884,13 @@ fn paste_node(
     clipboard_node: RwSignal<Option<PassiveNodeSpecs>>,
 ) {
     if let Some(clipboard_node) = clipboard_node.get_untracked() {
-        if let Some(node_specs) = passives_tree_specs
-            .write()
-            .nodes
-            .get_mut(node_id) { *node_specs = PassiveNodeSpecs {
-                    x: node_specs.x,
-                    y: node_specs.y,
-                    ..clipboard_node
-                }; }
+        if let Some(node_specs) = passives_tree_specs.write().nodes.get_mut(node_id) {
+            *node_specs = PassiveNodeSpecs {
+                x: node_specs.x,
+                y: node_specs.y,
+                ..clipboard_node
+            };
+        }
         record_history(passives_history_tracker, passives_tree_specs);
     }
 }

@@ -498,11 +498,7 @@ where
 }
 
 fn stackable_str(cumulate: bool) -> &'static str {
-    if cumulate {
-        "Stackable "
-    } else {
-        ""
-    }
+    if cumulate { "Stackable " } else { "" }
 }
 
 #[component]

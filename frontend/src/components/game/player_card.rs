@@ -19,8 +19,8 @@ use crate::{
             card::Card,
             number::format_number,
             progress_bars::{
-                predictive_cooldown, CircularProgressBar, HorizontalProgressBar,
-                VerticalProgressBar,
+                CircularProgressBar, HorizontalProgressBar, VerticalProgressBar,
+                predictive_cooldown,
             },
             toast::*,
             tooltip::{
@@ -31,7 +31,7 @@ use crate::{
     },
 };
 
-use super::{portrait::CharacterPortrait, GameContext};
+use super::{GameContext, portrait::CharacterPortrait};
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {

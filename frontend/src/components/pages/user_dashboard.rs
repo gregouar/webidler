@@ -10,7 +10,10 @@ use shared::{
         area::AreaSpecs,
         user::{User, UserCharacter, UserCharacterActivity, UserCharacterId, UserId},
     },
-    http::{client::{CreateCharacterRequest, UpdateCharacterRequest}, server::NewsEntry},
+    http::{
+        client::{CreateCharacterRequest, UpdateCharacterRequest},
+        server::NewsEntry,
+    },
     types::{AssetName, Username},
 };
 
@@ -22,7 +25,13 @@ use crate::{
         backend_client::BackendClient,
         shared::{player_count::PlayerCount, settings::SettingsModal},
         ui::{
-            buttons::{MenuButton, MenuButtonRed}, card::{Card, CardInset, CardTitle}, confirm::ConfirmContext, input::ValidatedInput, menu_panel::MenuPanel, number::format_datetime, toast::*
+            buttons::{MenuButton, MenuButtonRed},
+            card::{Card, CardInset, CardTitle},
+            confirm::ConfirmContext,
+            input::ValidatedInput,
+            menu_panel::MenuPanel,
+            number::format_datetime,
+            toast::*,
         },
     },
 };
@@ -93,7 +102,7 @@ pub fn UserDashboardPage() -> impl IntoView {
     let open_settings = RwSignal::new(false);
     let open_character_panel = RwSignal::new(false);
 
-    let selected_character_id  = RwSignal::new(None);
+    let selected_character_id = RwSignal::new(None);
     let selected_character_name = RwSignal::new(None);
     let selected_character_portrait = RwSignal::new(None);
 
@@ -186,7 +195,6 @@ fn CharactersSelection(
     selected_character_name: RwSignal<Option<Username>>,
     selected_character_portrait: RwSignal<Option<AssetName>>,
 ) -> impl IntoView {
-
     let characters_len = characters.len();
 
     view! {
@@ -314,8 +322,12 @@ fn CharacterSlot(
 
     let edit_character = {
         let character_id = character.character_id;
-        let name=character.name.clone();
-        let portrait = character.portrait.clone().replace(".webp", "").replace("adventurers/","");
+        let name = character.name.clone();
+        let portrait = character
+            .portrait
+            .clone()
+            .replace(".webp", "")
+            .replace("adventurers/", "");
         move |_| {
             open_character_panel.set(true);
             selected_character_id.set(Some(character_id));
@@ -424,8 +436,9 @@ pub fn CreateCharacterPanel(
     selected_character_portrait: RwSignal<Option<AssetName>>,
 ) -> impl IntoView {
     let processing = RwSignal::new(false);
-    let disable_submit =
-        Signal::derive(move || selected_character_name.read().is_none() || selected_character_portrait.read().is_none());
+    let disable_submit = Signal::derive(move || {
+        selected_character_name.read().is_none() || selected_character_portrait.read().is_none()
+    });
 
     let on_submit = {
         let auth_context = expect_context::<AuthContext>();
@@ -440,60 +453,58 @@ pub fn CreateCharacterPanel(
             processing.set(true);
             spawn_local({
                 async move {
-                    match selected_character_id.get() 
-                    {
+                    match selected_character_id.get() {
                         Some(character_id) => match backend
-                        .post_update_character(
-                            &auth_context.token(),
-                            &character_id,
-                            &UpdateCharacterRequest {
-                                name: selected_character_name.get().unwrap(),
-                                portrait: selected_character_portrait.get().unwrap(),
-                            },
-                        )
-                        .await
-                    {
-                        Ok(_) => {
-                            open.set(false);
-                            processing.set(false);
-                            refresh_trigger.update(|n| *n += 1);
-                        }
-                        Err(e) => {
-                            show_toast(
-                                toaster,
-                                format!("Character edit error: {e}"),
-                                ToastVariant::Error,
-                            );
-                            processing.set(false);
-                        }
-                    },
-                        None =>  match backend
-                        .post_create_character(
-                            &auth_context.token(),
-                            &user_id,
-                            &CreateCharacterRequest {
-                                name: selected_character_name.get().unwrap(),
-                                portrait: selected_character_portrait.get().unwrap(),
-                            },
-                        )
-                        .await
-                    {
-                        Ok(_) => {
-                            open.set(false);
-                            processing.set(false);
-                            refresh_trigger.update(|n| *n += 1);
-                        }
-                        Err(e) => {
-                            show_toast(
-                                toaster,
-                                format!("Character creation error: {e}"),
-                                ToastVariant::Error,
-                            );
-                            processing.set(false);
-                        }
-                    },
+                            .post_update_character(
+                                &auth_context.token(),
+                                &character_id,
+                                &UpdateCharacterRequest {
+                                    name: selected_character_name.get().unwrap(),
+                                    portrait: selected_character_portrait.get().unwrap(),
+                                },
+                            )
+                            .await
+                        {
+                            Ok(_) => {
+                                open.set(false);
+                                processing.set(false);
+                                refresh_trigger.update(|n| *n += 1);
+                            }
+                            Err(e) => {
+                                show_toast(
+                                    toaster,
+                                    format!("Character edit error: {e}"),
+                                    ToastVariant::Error,
+                                );
+                                processing.set(false);
+                            }
+                        },
+                        None => match backend
+                            .post_create_character(
+                                &auth_context.token(),
+                                &user_id,
+                                &CreateCharacterRequest {
+                                    name: selected_character_name.get().unwrap(),
+                                    portrait: selected_character_portrait.get().unwrap(),
+                                },
+                            )
+                            .await
+                        {
+                            Ok(_) => {
+                                open.set(false);
+                                processing.set(false);
+                                refresh_trigger.update(|n| *n += 1);
+                            }
+                            Err(e) => {
+                                show_toast(
+                                    toaster,
+                                    format!("Character creation error: {e}"),
+                                    ToastVariant::Error,
+                                );
+                                processing.set(false);
+                            }
+                        },
                     }
-                   
                 }
             });
         }
@@ -553,7 +564,7 @@ pub fn CreateCharacterPanel(
                                 });
                                 view! {
                                     <div
-                                        class="relative aspect-square rounded-lg 
+                                        class="relative aspect-square rounded-lg
                                         overflow-hidden border-2 cursor-pointer 
                                         transition hover:scale-105 active:scale-95"
                                         style=format!(
