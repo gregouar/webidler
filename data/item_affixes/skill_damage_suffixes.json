@@ -13,7 +13,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [25, 49]
+        "value": [25, 45]
       }
     ]
   },
@@ -31,7 +31,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [50, 74]
+        "value": [55, 70]
       }
     ]
   },
@@ -49,7 +49,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [75, 99]
+        "value": [80, 95]
       }
     ]
   },
@@ -67,7 +67,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [100, 124]
+        "value": [105, 120]
       }
     ]
   },
@@ -85,7 +85,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [125, 149]
+        "value": [130, 145]
       }
     ]
   },
@@ -103,7 +103,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [150, 174]
+        "value": [155, 170]
       }
     ]
   },
@@ -121,7 +121,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [175, 199]
+        "value": [180, 195]
       }
     ]
   },
@@ -139,7 +139,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [200, 224]
+        "value": [205, 220]
       }
     ]
   },
@@ -157,7 +157,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [225, 249]
+        "value": [230, 250]
       }
     ]
   },
@@ -175,7 +175,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [250, 274]
+        "value": [260, 300]
       }
     ]
   },
@@ -194,7 +194,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [50, 99]
+        "value": [50, 90]
       },
       {
         "scope": "Global",
@@ -218,7 +218,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [100, 149]
+        "value": [110, 140]
       },
       {
         "scope": "Global",
@@ -242,7 +242,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [150, 199]
+        "value": [160, 190]
       },
       {
         "scope": "Global",
@@ -266,7 +266,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [200, 249]
+        "value": [210, 240]
       },
       {
         "scope": "Global",
@@ -290,7 +290,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [250, 299]
+        "value": [260, 290]
       },
       {
         "scope": "Global",
@@ -314,7 +314,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [300, 349]
+        "value": [310, 340]
       },
       {
         "scope": "Global",
@@ -338,7 +338,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [350, 399]
+        "value": [360, 390]
       },
       {
         "scope": "Global",
@@ -362,7 +362,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [400, 449]
+        "value": [410, 440]
       },
       {
         "scope": "Global",
@@ -386,7 +386,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [450, 499]
+        "value": [460, 500]
       },
       {
         "scope": "Global",
@@ -410,7 +410,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "Multiplier",
-        "value": [500, 549]
+        "value": [520, 600]
       },
       {
         "scope": "Global",
@@ -435,7 +435,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [25, 49]
+        "value": [25, 45]
       }
     ]
   },
@@ -453,7 +453,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [50, 74]
+        "value": [55, 70]
       }
     ]
   },
@@ -471,7 +471,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [75, 99]
+        "value": [80, 95]
       }
     ]
   },
@@ -489,7 +489,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [100, 124]
+        "value": [105, 120]
       }
     ]
   },
@@ -507,7 +507,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [125, 149]
+        "value": [120, 145]
       }
     ]
   },
@@ -525,7 +525,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [150, 174]
+        "value": [155, 170]
       }
     ]
   },
@@ -543,7 +543,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [175, 199]
+        "value": [180, 195]
       }
     ]
   },
@@ -561,7 +561,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [200, 224]
+        "value": [205, 220]
       }
     ]
   },
@@ -579,7 +579,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [225, 249]
+        "value": [230, 250]
       }
     ]
   },
@@ -597,7 +597,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [250, 274]
+        "value": [260, 300]
       }
     ]
   },
@@ -616,7 +616,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [50, 99]
+        "value": [50, 90]
       },
       {
         "scope": "Global",
@@ -640,7 +640,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [100, 149]
+        "value": [110, 140]
       },
       {
         "scope": "Global",
@@ -664,7 +664,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [150, 199]
+        "value": [160, 190]
       },
       {
         "scope": "Global",
@@ -688,7 +688,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [200, 249]
+        "value": [210, 240]
       },
       {
         "scope": "Global",
@@ -712,7 +712,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [250, 299]
+        "value": [260, 290]
       },
       {
         "scope": "Global",
@@ -736,7 +736,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [300, 349]
+        "value": [310, 340]
       },
       {
         "scope": "Global",
@@ -760,7 +760,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [350, 399]
+        "value": [360, 390]
       },
       {
         "scope": "Global",
@@ -784,7 +784,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [400, 449]
+        "value": [410, 440]
       },
       {
         "scope": "Global",
@@ -808,7 +808,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [450, 499]
+        "value": [460, 500]
       },
       {
         "scope": "Global",
@@ -832,7 +832,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "Multiplier",
-        "value": [500, 549]
+        "value": [520, 600]
       },
       {
         "scope": "Global",

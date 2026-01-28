@@ -3223,7 +3223,7 @@
         "effects": [
           {
             "stat": {
-              "Restore": null
+              "Restore": "Life" 
             },
             "modifier": "Multiplier",
             "value": 10.0
@@ -3234,7 +3234,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": null
+              "Restore": "Life" 
             },
             "modifier": "Multiplier",
             "value": 5.0
@@ -3253,7 +3253,7 @@
         "effects": [
           {
             "stat": {
-              "Restore": null
+              "Restore": "Life" 
             },
             "modifier": "Multiplier",
             "value": 10.0
@@ -3264,7 +3264,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": null
+              "Restore": "Life" 
             },
             "modifier": "Multiplier",
             "value": 5.0
@@ -3283,7 +3283,7 @@
         "effects": [
           {
             "stat": {
-              "Restore": null
+              "Restore": "Life" 
             },
             "modifier": "Multiplier",
             "value": 20.0
@@ -3294,7 +3294,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": null
+              "Restore": "Life" 
             },
             "modifier": "Multiplier",
             "value": 10.0

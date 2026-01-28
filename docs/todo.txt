@@ -1,0 +1,72 @@
+Temple:
+------
+V) make starting level cheaper
+-> add max level?
+-> add max stamina?
+
+Passives:
+------
+V) open wound to 50% 
+V) 2-step mana shield (first is 50, second 100)
+
+damage against stunned enemy? stun/chance duration?
+damage per debuff on enemy?
+inc damage on max life
+inc damage when at full mana
+use life instead of mana?
+remove all max mana, mana is converted to more damage
+Grim Pact - Life regeneration instead applies to Mana
+Stabilizer - Convert 50% of max storm damage to min storm damage
+Overheal inc damage (like 1% damage per hp over max, for X sec)
+Pendulum like (hit damage for 50, 100, and 200)  => difficult to do?
+restore health per mana spent?
+Caustic Intoxication - On apply poison dot, apply fire dot for 20% of damage
+Inc poison duration
+
+TBD:
+add/inc crit chance when enemy full life?
+
+TODO: Skill Conditional Modifiers
+=> also rework uniques to leverage it
+=> could thinkg of fun things like inc poison duration against burning enemies or whatever
+
+Items:
+------
+V: inc mana cost, inc spell damage
+V: dec attack speed, inc attack damage
+Gain %of damage as extra? Or even on hit effect for double dip? => on ring? => no, on jewel! :D
+DoT damage? :(
+Hit damage? :(
+
+TODO: Rework affix tier to have at least 10% increase between tiers
+
+Uniques:
+------
+
+
+Edicts:
+-------------
+Unique: Cursed Treasure Map 
+ - only on treasure island
+ - +1 picked reward
+ - guaranteed unique reward drop
+ - add unique items treasure type to the pool (only for reward?)
+ - enemies curse on hit, applying life regen debuff + poison ?
+
+
+Skills:
+------
+Conductivity: spread stun?
+Blizzard: storm damage all, repeat + slow ?
+
+Bosses:
+------
+Stun resistance
+Could have passive that remove stun resistance, but remove stun effect or replace by slow
+
+
+Other:
+----
+Should I add player initiative?
+
+

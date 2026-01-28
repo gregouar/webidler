@@ -13,7 +13,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [20, 39]
+        "value": [20, 35]
       }
     ]
   },
@@ -31,7 +31,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [40, 59]
+        "value": [45, 55]
       }
     ]
   },
@@ -49,7 +49,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [60, 79]
+        "value": [65, 75]
       }
     ]
   },
@@ -67,7 +67,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [80, 99]
+        "value": [85, 95]
       }
     ]
   },
@@ -85,7 +85,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [100, 119]
+        "value": [105, 115]
       }
     ]
   },
@@ -103,7 +103,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [120, 139]
+        "value": [125, 135]
       }
     ]
   },
@@ -121,7 +121,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [140, 159]
+        "value": [145, 155]
       }
     ]
   },
@@ -139,7 +139,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [160, 179]
+        "value": [165, 175]
       }
     ]
   },
@@ -157,7 +157,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [180, 199]
+        "value": [185, 200]
       }
     ]
   },
@@ -175,7 +175,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [200, 219]
+        "value": [210, 250]
       }
     ]
   },
