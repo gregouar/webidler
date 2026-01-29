@@ -13,7 +13,10 @@ use shared::data::{
 };
 
 use crate::components::{
-    shared::tooltips::skill_tooltip::{restore_type_str, skill_type_str},
+    shared::tooltips::{
+        conditions_tooltip,
+        skill_tooltip::{restore_type_str, skill_type_str},
+    },
     ui::number::format_number,
 };
 
@@ -87,6 +90,14 @@ fn to_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
         Some(SkillType::Attack) => " to Attacks",
         Some(SkillType::Spell) => " to Spells",
+        None => "",
+    }
+}
+
+fn with_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
+    match skill_type {
+        Some(SkillType::Attack) => " with Attacks",
+        Some(SkillType::Spell) => " with Spells",
         None => "",
     }
 }
@@ -369,6 +380,16 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             stat_skill_effect_type_str(*effect_type)
         ),
         StatType::SkillLevel(skill_type) => format!("{} Skill Level", skill_type_str(*skill_type)),
+        StatType::SkillConditionalModifier {
+            stat,
+            skill_type,
+            conditions,
+        } => format!(
+            "{}{} against {} Enemies",
+            format_multiplier_stat_name(stat),
+            with_skill_type_str(*skill_type),
+            conditions_tooltip::format_skill_modifier_conditions(conditions)
+        ),
     }
 }
 
@@ -601,6 +622,16 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 skill_type_str(*skill_type),
             )
         }
+        StatType::SkillConditionalModifier {
+            stat,
+            skill_type,
+            conditions,
+        } => format!(
+            "{}{} against {} Enemies",
+            format_flat_stat(stat, value),
+            with_skill_type_str(*skill_type),
+            conditions_tooltip::format_skill_modifier_conditions(conditions)
+        ),
     }
 }
 

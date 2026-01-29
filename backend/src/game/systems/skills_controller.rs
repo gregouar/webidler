@@ -6,6 +6,7 @@ use shared::{
     computations::skill_cost_increase,
     data::{
         character::{CharacterId, SkillSpecs, SkillState},
+        conditional_modifier::Condition,
         item::{SkillRange, SkillShape},
         player::PlayerResources,
         skill::{
@@ -17,6 +18,7 @@ use shared::{
 
 use crate::game::{
     data::event::EventsQueue,
+    systems::skills_updater,
     utils::{
         rng::{self, flip_coin, RngSeed, Rollable},
         AnyAll,
@@ -291,7 +293,7 @@ pub fn apply_skill_effect(
             attacker,
             skill_type,
             range,
-            &apply_conditional_modifiers(target, skill_effect),
+            &apply_conditional_modifiers(target, skill_effect, skill_type),
             target,
             is_triggered,
             &mut seed.clone(),
@@ -299,12 +301,43 @@ pub fn apply_skill_effect(
     })
 }
 
-fn apply_conditional_modifiers(target: &mut Target, skill_effect: &SkillEffect) -> SkillEffect {
-    let mut skill_effect = skill_effect.clone();
+fn apply_conditional_modifiers(
+    target: &mut Target,
+    skill_effect: &SkillEffect,
+    skill_type: SkillType,
+) -> SkillEffect {
+    let mut new_skill_effect = skill_effect.clone();
 
-    // TODO: APPLY MODIFIERS
+    let effects: Vec<_> = skill_effect
+        .conditional_modifiers
+        .iter()
+        .filter(|conditional_modifier| {
+            conditional_modifier
+                .conditions
+                .iter()
+                .all(|condition| check_condition(target, condition))
+        })
+        .flat_map(|conditional_modifier| conditional_modifier.effects.iter())
+        .collect();
 
-    skill_effect
+    skills_updater::compute_skill_specs_effect(
+        skill_type,
+        &mut new_skill_effect,
+        effects.into_iter(),
+    );
+
+    new_skill_effect
+}
+
+fn check_condition(target: &Target, condition: &Condition) -> bool {
+    let (_, (_, target_state)) = target;
+
+    match condition {
+        Condition::HasStatus(stat_status_type) => target_state
+            .statuses
+            .iter()
+            .any(|(status_specs, _)| (*stat_status_type).is_match(&status_specs.into())),
+    }
 }
 
 fn apply_skill_effect_on_target(
