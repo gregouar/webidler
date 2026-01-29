@@ -293,6 +293,7 @@ pub fn apply_skill_effect(
             attacker,
             skill_type,
             range,
+            // TODO: Could branch to only clone when needed
             &apply_conditional_modifiers(target, skill_effect, skill_type),
             target,
             is_triggered,
