@@ -17,7 +17,10 @@ use shared::{
 
 use crate::game::{
     data::event::EventsQueue,
-    utils::rng::{self, flip_coin, RngSeed, Rollable},
+    utils::{
+        rng::{self, flip_coin, RngSeed, Rollable},
+        AnyAll,
+    },
 };
 
 use super::{characters_controller, characters_controller::Target};
@@ -280,22 +283,20 @@ pub fn apply_skill_effect(
     targets: &mut [&mut Target],
     is_triggered: bool,
 ) -> bool {
-    let mut seed = rng::roll_seed();
-    let mut applied = false;
-    for target in targets {
-        let modified_skill_effect = apply_conditional_modifiers(target, skill_effect);
-        applied |= apply_skill_effect_on_target(
+    let seed = rng::roll_seed();
+
+    targets.into_iter().any_all(|target| {
+        apply_skill_effect_on_target(
             events_queue,
             attacker,
             skill_type,
             range,
-            &modified_skill_effect,
+            &apply_conditional_modifiers(target, skill_effect),
             target,
             is_triggered,
             &mut seed.clone(),
         )
-    }
-    applied
+    })
 }
 
 fn apply_conditional_modifiers(target: &mut Target, skill_effect: &SkillEffect) -> SkillEffect {
@@ -358,8 +359,6 @@ fn apply_skill_effect_on_target(
             true
         }
         SkillEffectType::ApplyStatus { duration, statuses } => {
-            let mut applied = false;
-
             let values: Vec<_> = statuses
                 .iter()
                 .map(|status_effect| status_effect.value.roll_with_seed(seed))
@@ -367,7 +366,7 @@ fn apply_skill_effect_on_target(
 
             let duration = Some(duration.roll_with_seed(seed));
 
-            let should_apply = statuses
+            if !statuses
                 .iter()
                 .zip(values.iter())
                 .any(|(status_effect, value)| {
@@ -379,11 +378,16 @@ fn apply_skill_effect_on_target(
                         status_effect.cumulate,
                         status_effect.replace_on_value_only,
                     )
-                });
+                })
+            {
+                return false;
+            }
 
-            if should_apply {
-                for (status_effect, value) in statuses.iter().zip(values.iter()) {
-                    applied |= characters_controller::apply_status(
+            statuses
+                .iter()
+                .zip(values.iter())
+                .any_all(|(status_effect, value)| {
+                    characters_controller::apply_status(
                         events_queue,
                         target,
                         attacker,
@@ -393,11 +397,8 @@ fn apply_skill_effect_on_target(
                         duration,
                         status_effect.cumulate,
                         is_triggered,
-                    );
-                }
-            }
-
-            applied
+                    )
+                })
         }
         SkillEffectType::Restore {
             restore_type,
