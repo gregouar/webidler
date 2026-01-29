@@ -57,6 +57,8 @@ pub struct CharacterSpecs {
     #[serde(default)]
     pub position_y: u8,
 
+    // TODO: All the above: move elsewhere ^^^
+    //
     pub max_life: f64,
     #[serde(default)]
     pub life_regen: f64,

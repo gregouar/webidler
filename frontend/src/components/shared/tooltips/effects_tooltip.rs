@@ -83,6 +83,10 @@ fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> Stri
             format!("Base {}Damage", damage_type_str(damage_type))
         }
         StatConverterSource::ThreatLevel => "Threat Level".into(),
+        StatConverterSource::MaxLife => "Maximum Life".into(),
+        StatConverterSource::MaxMana => "Maximum Mana".into(),
+        StatConverterSource::ManaRegen => "Mana Regeneration".into(),
+        StatConverterSource::LifeRegen => "Life Regeneration".into(),
     }
 }
 

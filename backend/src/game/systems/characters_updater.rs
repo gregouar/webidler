@@ -5,9 +5,7 @@ use shared::data::{
     character::{CharacterId, CharacterSpecs, CharacterState},
     passive::StatEffect,
     skill::{DamageType, SkillType},
-    stat_effect::{
-        ApplyStatModifier, LuckyRollType, StatConverterSource, StatConverterSpecs, StatType,
-    },
+    stat_effect::{ApplyStatModifier, LuckyRollType, StatConverterSource, StatType},
 };
 
 use crate::game::{
@@ -70,6 +68,8 @@ pub fn update_character_specs(
 }
 
 fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[StatEffect]) {
+    let mut stat_converters = Vec::new();
+
     for effect in effects.iter() {
         match effect.stat {
             StatType::Life => character_specs.max_life.apply_effect(effect),
@@ -136,6 +136,9 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                         .apply_effect(effect);
                 }
             }
+            StatType::StatConverter(ref specs) => {
+                stat_converters.push((specs.clone(), effect.value));
+            }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Only for player (for now...)
             StatType::LifeOnHit(_) | StatType::ManaOnHit(_) => {}
@@ -153,22 +156,70 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             | StatType::StatusPower { .. }
             | StatType::Speed(_)
             | StatType::Lucky { .. }
-            | StatType::StatConverter(StatConverterSpecs {
-                source: StatConverterSource::CritDamage | StatConverterSource::Damage { .. },
-                ..
-            })
             | StatType::SuccessChance { .. }
             | StatType::SkillLevel(_)
             | StatType::SkillConditionalModifier { .. } => {}
             // Other
-            StatType::StatConverter(StatConverterSpecs {
-                source: StatConverterSource::ThreatLevel,
-                ..
-            })
-            | StatType::ItemRarity => {}
+            StatType::ItemRarity => {}
         }
     }
 
+    // TODO: How to propagate to player/monster/skills?
+    if !stat_converters.is_empty() {
+        let mut stats_converted = Vec::with_capacity(stat_converters.len());
+
+        for (specs, factor) in stat_converters {
+            let factor = factor * 0.01;
+            let amount = match specs.source {
+                StatConverterSource::MaxLife => {
+                    let amount = character_specs.max_life * factor;
+                    if !specs.is_extra {
+                        character_specs.max_life -= amount;
+                    }
+                    amount
+                }
+                StatConverterSource::MaxMana => {
+                    let amount = character_specs.max_mana * factor;
+                    if !specs.is_extra {
+                        character_specs.max_mana -= amount;
+                    }
+                    amount
+                }
+                StatConverterSource::ManaRegen => {
+                    let amount = character_specs.mana_regen * factor;
+                    if !specs.is_extra {
+                        character_specs.mana_regen -= amount;
+                    }
+                    amount
+                }
+                StatConverterSource::LifeRegen => {
+                    let amount = character_specs.life_regen * factor;
+                    if !specs.is_extra {
+                        character_specs.life_regen -= amount;
+                    }
+                    amount
+                }
+
+                StatConverterSource::CritDamage
+                | StatConverterSource::Damage { .. }
+                | StatConverterSource::ThreatLevel => {
+                    continue;
+                }
+            };
+
+            stats_converted.push(StatEffect {
+                stat: (*specs.target_stat).clone(),
+                modifier: specs.target_modifier,
+                value: amount * factor,
+                bypass_ignore: true,
+            });
+        }
+
+        compute_character_specs(character_specs, &stats_converted);
+    }
+
+    character_specs.max_life = character_specs.max_life.max(1.0);
+    character_specs.max_mana = character_specs.max_mana.max(0.0);
     character_specs.block.clamp();
     character_specs.block_spell.clamp();
     character_specs.block_damage = character_specs.block_damage.clamp(0.0, 100.0);

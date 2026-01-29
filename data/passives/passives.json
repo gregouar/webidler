@@ -6,7 +6,7 @@
         "icon": "passives/XXX.svg",
         "x": 30.0,
         "y": 50.0,
-        "size": 4,
+        "size": 1,
         "initial_node": true,
         "node_type": "Utility",
         "effects": [
@@ -472,6 +472,39 @@
           }
         ],
         "max_upgrade_level": 3
+      },
+      "cfff8b24-fb03-4a7e-a0b1-0c512a2ec7c4": {
+        "name": "Grim Pact",
+        "icon": "passives/tentacles_skull.svg",
+        "x": 47.5,
+        "y": 47.5,
+        "size": 2,
+        "initial_node": true,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": -1e300
+          },
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "LifeRegen",
+                "target_stat": "ManaRegen",
+                "target_modifier": "Flat",
+                "is_extra": false,
+                "skill_type": null
+              }
+            },
+            "modifier": "Flat",
+            "value": 100.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
+        "max_upgrade_level": null
       },
       "convert_dot": {
         "name": "Ain't Nobody Got Time for That",
@@ -1089,6 +1122,9 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusPower": null
+                  },
+                  {
                     "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
@@ -1108,9 +1144,6 @@
                       "skill_type": null,
                       "damage_type": null
                     }
-                  },
-                  {
-                    "StatusPower": null
                   }
                 ],
                 "conditional_modifiers": []
@@ -1148,7 +1181,7 @@
                     "StatusPower": null
                   },
                   {
-                    "Damage": {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -1160,13 +1193,13 @@
                     }
                   },
                   {
-                    "MaxDamage": {
+                    "StatusDuration": null
+                  },
+                  {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
-                  },
-                  {
-                    "StatusDuration": null
                   }
                 ],
                 "conditional_modifiers": []
@@ -1201,6 +1234,15 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "StatusPower": null
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null
@@ -1213,16 +1255,7 @@
                     }
                   },
                   {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
                     "StatusDuration": null
-                  },
-                  {
-                    "StatusPower": null
                   }
                 ],
                 "conditional_modifiers": []
@@ -1260,13 +1293,13 @@
                     "StatusDuration": null
                   },
                   {
-                    "Damage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
-                    "MinDamage": {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -1275,7 +1308,7 @@
                     "StatusPower": null
                   },
                   {
-                    "MaxDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -3057,6 +3090,9 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "CritChance": null
+                  },
+                  {
                     "MinDamage": {
                       "skill_type": null,
                       "damage_type": "Physical"
@@ -3067,9 +3103,6 @@
                       "skill_type": null,
                       "damage_type": "Physical"
                     }
-                  },
-                  {
-                    "CritChance": null
                   },
                   {
                     "MaxDamage": {

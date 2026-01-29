@@ -397,7 +397,11 @@ pub enum StatConverterSource {
         damage_type: Option<DamageType>,
     },
     ThreatLevel,
-    // TODO: Add others, like life, mana, ...
+    MaxLife,
+    MaxMana,
+    ManaRegen,
+    LifeRegen,
+    // TODO: Add others, like armor, ...
 }
 
 fn is_false(value: &bool) -> bool {

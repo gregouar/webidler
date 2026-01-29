@@ -7,11 +7,10 @@ use shared::{
     constants::MAX_PLAYER_STAMINA,
     data::{
         area::{AreaLevel, StartAreaConfig},
-        character::CharacterSize,
         item::{ItemCategory, ItemRarity},
         item_affix::AffixEffectScope,
         passive::PassivesTreeState,
-        player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs},
+        player::{PlayerInventory, PlayerResources, PlayerSpecs},
         stat_effect::EffectsMap,
         temple::{BenedictionEffect, PlayerBenedictions},
         user::UserCharacterId,
@@ -26,7 +25,7 @@ use crate::{
         },
         game_data::GameInstanceData,
         sessions::{Session, SessionsStore},
-        systems::{benedictions_controller, inventory_controller},
+        systems::{benedictions_controller, inventory_controller, player_updater},
     },
     rest::AppError,
 };
@@ -133,18 +132,11 @@ async fn new_game_instance(
     character: CharacterEntry,
     area_config: StartAreaConfig,
 ) -> Result<GameInstanceData> {
-    let mut player_specs = PlayerSpecs::init(CharacterSpecs {
-        name: character.character_name.clone(),
-        portrait: character.portrait.clone(),
-        size: CharacterSize::Small,
-        position_x: 0,
-        position_y: 0,
-        max_life: 100.0,
-        life_regen: 10.0,
-        max_mana: 100.0,
-        mana_regen: 10.0,
-        ..Default::default()
-    });
+    let mut player_specs = PlayerSpecs::init(player_updater::base_player_character_specs(
+        character.character_name.clone(),
+        character.portrait.clone(),
+        1,
+    ));
     player_specs.max_area_level = character.max_area_level as AreaLevel;
 
     let player_resources = PlayerResources::default();

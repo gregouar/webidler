@@ -5,12 +5,12 @@ use shared::{
     data::{
         area::AreaThreat,
         chance::{Chance, ChanceRange},
-        character::CharacterId,
+        character::{CharacterId, CharacterSize},
         character_status::StatusSpecs,
         item::{SkillRange, SkillShape},
         item_affix::AffixEffectScope,
         passive::{PassivesTreeSpecs, PassivesTreeState},
-        player::{PlayerInventory, PlayerSpecs, PlayerState},
+        player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
         skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
         stat_effect::{
             ApplyStatModifier, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs,
@@ -26,6 +26,21 @@ use crate::game::{
 };
 
 use super::{characters_updater, passives_controller, skills_updater};
+
+pub fn base_player_character_specs(name: String, portrait: String, level: u8) -> CharacterSpecs {
+    CharacterSpecs {
+        name,
+        portrait,
+        size: CharacterSize::Small,
+        position_x: 0,
+        position_y: 0,
+        max_life: 100.0 + PLAYER_LIFE_PER_LEVEL * (level.saturating_sub(1)) as f64,
+        life_regen: 10.0,
+        max_mana: 100.0,
+        mana_regen: 10.0,
+        ..Default::default()
+    }
+}
 
 pub fn update_player_state(
     events_queue: &mut EventsQueue,
@@ -70,18 +85,12 @@ pub fn update_player_specs(
     benedictions_effects: &EffectsMap,
     area_threat: &AreaThreat,
 ) {
-    // TODO: Reset player_specs function
-    player_specs.character_specs.armor.clear();
-    player_specs.character_specs.block = Default::default();
-    player_specs.character_specs.block_spell = Default::default();
-    player_specs.character_specs.block_damage = 0.0;
-    player_specs.character_specs.max_life =
-        100.0 + PLAYER_LIFE_PER_LEVEL * (player_specs.level.saturating_sub(1)) as f64;
-    player_specs.character_specs.life_regen = 10.0;
-    player_specs.character_specs.max_mana = 100.0;
-    player_specs.character_specs.mana_regen = 10.0;
-    player_specs.character_specs.damage_resistance.clear();
-    player_specs.character_specs.triggers.clear();
+    player_specs.character_specs = base_player_character_specs(
+        player_specs.character_specs.name.clone(),
+        player_specs.character_specs.portrait.clone(),
+        player_specs.level,
+    );
+
     player_specs.gold_find = 100.0;
     player_specs.threat_gain = 100.0;
     player_specs.movement_cooldown = 3.0;
@@ -221,7 +230,15 @@ fn compute_player_specs(
             | StatType::Block
             | StatType::BlockSpell
             | StatType::BlockDamageTaken
-            | StatType::DamageResistance { .. } => {}
+            | StatType::DamageResistance { .. }
+            | StatType::StatConverter(StatConverterSpecs {
+                source:
+                    StatConverterSource::MaxLife
+                    | StatConverterSource::LifeRegen
+                    | StatConverterSource::MaxMana
+                    | StatConverterSource::ManaRegen,
+                ..
+            }) => {}
             // Delegate to skills
             StatType::ManaCost { .. }
             | StatType::Damage { .. }
