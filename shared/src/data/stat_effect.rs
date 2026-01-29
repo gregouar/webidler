@@ -104,13 +104,11 @@ pub enum StatType {
         roll_type: LuckyRollType,
     },
     SkillConditionalModifier {
+        stat: Box<StatType>,
         #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
-        target_conditions: Vec<Condition>,
-        #[serde(default)]
-        source_conditions: Vec<Condition>,
-        stat: Box<StatType>,
+        conditions: Vec<Condition>,
     },
     SkillLevel(#[serde(default)] Option<SkillType>),
     StatConverter(StatConverterSpecs),

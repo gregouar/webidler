@@ -6,7 +6,6 @@ use crate::data::{stat_effect::StatStatusType, temple::StatEffect};
 pub struct ConditionalModifier {
     pub conditions: Vec<Condition>,
     pub effects: Vec<StatEffect>,
-    pub factor: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]

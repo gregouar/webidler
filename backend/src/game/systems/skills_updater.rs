@@ -307,8 +307,7 @@ pub fn compute_skill_specs_effect<'a>(
 
         if let StatType::SkillConditionalModifier {
             skill_type: modifier_skill_type,
-            target_conditions,
-            source_conditions,
+            conditions,
             stat,
         } = &effect.stat
         {
@@ -316,8 +315,7 @@ pub fn compute_skill_specs_effect<'a>(
                 skill_effect
                     .conditional_modifiers
                     .push(ConditionalModifier {
-                        target_conditions: target_conditions.clone(),
-                        source_conditions: source_conditions.clone(),
+                        conditions: conditions.clone(),
                         effects: [StatEffect {
                             stat: *(stat.clone()),
                             modifier: effect.modifier,

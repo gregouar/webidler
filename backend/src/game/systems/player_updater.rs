@@ -201,6 +201,7 @@ fn compute_player_specs(
                                 modifier: Modifier::Flat,
                             },
                             ignore_stat_effects: Default::default(),
+                            conditional_modifiers: Default::default(),
                         }],
                         owner: Some(CharacterId::Player),
                         inherit_modifiers: false,
