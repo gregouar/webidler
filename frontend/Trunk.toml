@@ -6,6 +6,7 @@ clean-dist = true
 release = false
 
 [watch]
+cooldown_ms = 500
 ignore = ["dist"]
 
 [tools]

@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 use leptos::{html::*, prelude::*};
-use leptos_use::{use_infinite_scroll_with_options, UseInfiniteScrollOptions};
+use leptos_use::{UseInfiniteScrollOptions, use_infinite_scroll_with_options};
 use std::sync::Arc;
 
 use shared::data::{
@@ -15,7 +15,7 @@ use crate::{
     components::{
         shared::{
             item_card::ItemCard,
-            tooltips::{item_tooltip::ItemTooltipContent, ItemTooltip},
+            tooltips::{ItemTooltip, item_tooltip::ItemTooltipContent},
         },
         town::TownContext,
         ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
@@ -68,7 +68,7 @@ pub fn ItemsBrowser(
                     reached_end_of_list.set(true)
                 }
             },
-            UseInfiniteScrollOptions::default().distance(10.0),
+            UseInfiniteScrollOptions::default().distance(20.0),
         );
     }
     view! {
@@ -118,6 +118,7 @@ pub fn ItemRow(
     #[prop(default = false)] rejected: bool,
     max_item_level: Signal<AreaLevel>,
 ) -> impl IntoView {
+    let slot = item_specs.base.slot;
     view! {
         <div class=move || {
             format!(
@@ -140,7 +141,7 @@ pub fn ItemRow(
                 />
             </div>
 
-            <ItemCompare item_slot=item_specs.clone().base.slot max_item_level />
+            {slot.map(|slot| view! { <ItemCompare item_slot=slot max_item_level /> })}
 
             {(price > 0.0)
                 .then(|| {

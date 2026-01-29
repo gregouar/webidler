@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemRarity, ItemSlot, ItemSpecs, SkillRange, SkillShape},
+    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, SkillRange, SkillShape},
     item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix},
     skill::DamageType,
 };
@@ -195,6 +195,7 @@ pub fn ItemTooltipContent(
                 <QualityTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
+                <CategoryTooltip item_specs=item_specs.clone() />
             </ul>
             {(has_triggers || has_effects)
                 .then(|| {
@@ -422,25 +423,32 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
 #[component]
 pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
-    let item_slot = match &item_specs.base.slot {
-        ItemSlot::Amulet => "Amulet",
-        ItemSlot::Body => "Body Armor",
-        ItemSlot::Boots => "Boots",
-        ItemSlot::Gloves => "Gloves",
-        ItemSlot::Helmet => "Helmet",
-        ItemSlot::Ring => "Ring",
-        ItemSlot::Shield => "Shield",
-        ItemSlot::Accessory => "Accessory",
-        ItemSlot::Weapon => {
-            if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
-                "Two-Handed Weapon"
-            } else {
-                "One-Handed Weapon"
-            }
-        }
-    };
+    view! {
+        {item_specs
+            .base
+            .slot
+            .map(|slot| {
+                let item_slot = match slot {
+                    ItemSlot::Amulet => "Amulet",
+                    ItemSlot::Body => "Body Armor",
+                    ItemSlot::Boots => "Boots",
+                    ItemSlot::Gloves => "Gloves",
+                    ItemSlot::Helmet => "Helmet",
+                    ItemSlot::Ring => "Ring",
+                    ItemSlot::Shield => "Shield",
+                    ItemSlot::Accessory => "Accessory",
+                    ItemSlot::Weapon => {
+                        if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
+                            "Two-Handed Weapon"
+                        } else {
+                            "One-Handed Weapon"
+                        }
+                    }
+                };
 
-    view! { <li class="text-gray-400 text-xs xl:text-sm leading-snug">{item_slot}</li> }
+                view! { <li class="text-gray-400 text-xs xl:text-sm leading-snug">{item_slot}</li> }
+            })}
+    }
 }
 
 #[component]
@@ -455,6 +463,23 @@ pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     }
 }
 
+#[component]
+pub fn CategoryTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    view! {
+        {item_specs
+            .base
+            .categories
+            .contains(&ItemCategory::Map)
+            .then(|| {
+                view! {
+                    <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                        "Apply to a Grind to give all Enemies the following effects:"
+                    </li>
+                }
+            })}
+    }
+}
+
 pub fn formatted_affixes_list(
     affixes: &[ItemAffix],
     affix_type: AffixType,
@@ -464,7 +489,8 @@ pub fn formatted_affixes_list(
         .filter(|affix| affix.affix_type == affix_type)
         .map(|affix| {
             let scope = affix
-                .effects.first()
+                .effects
+                .first()
                 .map(|e| e.scope)
                 .unwrap_or(AffixEffectScope::Global);
             let affix_meta = match affix_type {

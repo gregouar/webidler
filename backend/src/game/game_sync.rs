@@ -50,6 +50,7 @@ pub async fn sync_update_game(
                 monster_states: game_data.monster_states.clone(),
                 queued_loot: game_data.queued_loot.sync(),
                 game_stats: game_data.game_stats.clone(),
+                quest_rewards: game_data.quest_rewards.sync(),
             }
             .into(),
         )

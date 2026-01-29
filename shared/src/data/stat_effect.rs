@@ -6,6 +6,7 @@ use strum_macros::EnumIter;
 use crate::data::{
     chance::ChanceRange,
     character_status::StatusSpecs,
+    conditional_modifier::Condition,
     skill::{RestoreType, SkillEffectType},
     trigger::HitTrigger,
 };
@@ -51,6 +52,10 @@ pub enum StatType {
     LifeRegen,
     Mana,
     ManaRegen,
+    ManaCost {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
     Armor(Option<DamageType>),
     DamageResistance {
         #[serde(default)]
@@ -91,11 +96,19 @@ pub enum StatType {
     Speed(#[serde(default)] Option<SkillType>),
     MovementSpeed,
     GoldFind,
+    ItemRarity,
     ThreatGain,
     Lucky {
         #[serde(default)]
         skill_type: Option<SkillType>,
         roll_type: LuckyRollType,
+    },
+    SkillConditionalModifier {
+        stat: Box<StatType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        conditions: Vec<Condition>,
     },
     SkillLevel(#[serde(default)] Option<SkillType>),
     StatConverter(StatConverterSpecs),
@@ -107,7 +120,7 @@ pub enum StatType {
     },
 }
 
-fn compare_options<T: PartialEq>(first: &Option<T>, second: &Option<T>) -> bool {
+pub fn compare_options<T: PartialEq>(first: &Option<T>, second: &Option<T>) -> bool {
     first.is_none() || second.is_none() || first == second
 }
 
@@ -189,6 +202,12 @@ impl StatType {
                             effect_type.is_match(&effect_type_2)
                         })
             }
+            (
+                ManaCost { skill_type },
+                ManaCost {
+                    skill_type: skill_type_2,
+                },
+            ) => compare_options(skill_type, skill_type_2),
             (Restore(first), Restore(second)) => compare_options(first, second),
             (CritChance(first), CritChance(second))
             | (CritDamage(first), CritDamage(second))
@@ -199,6 +218,14 @@ impl StatType {
                 _ => true,
             },
             (SkillLevel(first), SkillLevel(second)) => compare_options(first, second),
+            (
+                SkillConditionalModifier {
+                    skill_type: first, ..
+                },
+                SkillConditionalModifier {
+                    skill_type: second, ..
+                },
+            ) => compare_options(first, second),
             _ => false,
         }
     }
@@ -370,7 +397,15 @@ pub enum StatConverterSource {
         damage_type: Option<DamageType>,
     },
     ThreatLevel,
-    // TODO: Add others, like life, mana, ...
+    MaxLife,
+    MaxMana,
+    ManaRegen,
+    LifeRegen,
+    // TODO: Add others, like armor, ...
+}
+
+fn is_false(value: &bool) -> bool {
+    !*value
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -379,7 +414,7 @@ pub struct StatEffect {
     pub modifier: Modifier,
     pub value: f64,
 
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub bypass_ignore: bool,
 }
 
@@ -399,21 +434,6 @@ impl From<&EffectsMap> for Vec<StatEffect> {
             .collect()
     }
 }
-
-// impl From<Vec<StatEffect>> for EffectsMap {
-//     fn from(value: Vec<StatEffect>) -> Self {
-//         value.iter().fold(
-//             EffectsMap(HashMap::new()),
-//             |mut effects_map, stat_effect| {
-//                 *effects_map
-//                     .0
-//                     .entry((stat_effect.stat, stat_effect.modifier))
-//                     .or_default() += stat_effect.value;
-//                 effects_map
-//             },
-//         )
-//     }
-// }
 
 impl EffectsMap {
     pub fn combine_all(maps: impl Iterator<Item = EffectsMap>) -> Self {

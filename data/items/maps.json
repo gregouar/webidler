@@ -1,0 +1,17 @@
+{
+  "edict": {
+    "name": "Edict",
+    "icon": "items/edict.webp",
+    "categories": ["Map"],
+    "rarity": "Magic",
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Multiplier",
+        "value": 20.0
+      }
+    ],
+    "min_area_level": 100
+  }
+}

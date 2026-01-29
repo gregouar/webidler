@@ -1,9 +1,12 @@
 use leptos::{html::*, prelude::*, task::spawn_local};
 
-use std::{collections::HashMap, sync::Arc};
+use std::sync::Arc;
 
 use shared::{
-    data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension},
+    data::passive::{
+        PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension,
+        PassivesTreeSpecs,
+    },
     http::client::AscendPassivesRequest,
 };
 
@@ -13,9 +16,10 @@ use crate::components::{
     shared::passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
     town::TownContext,
     ui::{
-        buttons::{CloseButton, MenuButton},
+        buttons::MenuButton,
+        card::{Card, CardHeader, CardInset},
         confirm::ConfirmContext,
-        menu_panel::{MenuPanel, PanelTitle},
+        menu_panel::MenuPanel,
         pannable::Pannable,
         toast::*,
     },
@@ -67,54 +71,51 @@ pub fn AscendPanel(
     view! {
         <MenuPanel open=open>
             <div class="w-full h-full">
-                <div class="bg-zinc-800 rounded-md p-1 xl:p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-1 xl:gap-2 max-h-full">
-                    <div class="px-2 xl:px-4 flex items-center justify-between">
-                        {if view_only {
-                            view! { <PanelTitle>"Ascended Passive Skills"</PanelTitle> }.into_any()
-                        } else {
-                            view! {
-                                <PanelTitle>"Ascend Passive Skills"</PanelTitle>
+                <Card>
+                    <CardHeader title="Ascend Passive Skills" on_close=move || open.set(false)>
+                        {(!view_only)
+                            .then(|| {
+                                view! {
+                                    <div class="flex-1" />
 
-                                <span class="text-sm xl:text-base text-gray-400">
-                                    "Ascension Cost: "
-                                    <span class="text-cyan-300">
-                                        {ascension_cost}" Power Shards"
-                                    </span>
-                                </span>
-
-                                <div class="flex items-center gap-2">
-                                    <MenuButton
-                                        on:click=move |_| reset()
-                                        disabled=Signal::derive(move || !has_changed.get())
-                                    >
-                                        "Cancel"
-                                    </MenuButton>
-                                    <ConfirmButton
-                                        passives_tree_ascension
-                                        ascension_cost
-                                        has_changed
-                                        open
-                                    />
-                                </div>
-                            }
-                                .into_any()
-                        }} <CloseButton on:click=move |_| open.set(false) />
-                    </div>
-
-                    <PassiveSkillTree passives_tree_ascension ascension_cost view_only />
-
-                    {(!view_only)
-                        .then(|| {
-                            view! {
-                                <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between">
-                                    <div class="flex items-center gap-2">
-                                        <ResetButton passives_tree_ascension ascension_cost />
+                                    <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <ResetButton passives_tree_ascension ascension_cost />
+                                        </div>
                                     </div>
-                                </div>
-                            }
-                        })}
 
-                </div>
+                                    <div class="flex-1" />
+
+                                    <span class="text-sm xl:text-base text-gray-400">
+                                        "Ascension Cost: "
+                                        <span class="text-cyan-300">
+                                            {ascension_cost}" Power Shards"
+                                        </span>
+                                    </span>
+
+                                    <div class="flex-1" />
+
+                                    <div class="flex items-center gap-2">
+                                        <MenuButton
+                                            on:click=move |_| reset()
+                                            disabled=Signal::derive(move || !has_changed.get())
+                                        >
+                                            "Cancel"
+                                        </MenuButton>
+                                        <ConfirmButton
+                                            passives_tree_ascension
+                                            ascension_cost
+                                            has_changed
+                                            open
+                                        />
+                                    </div>
+                                }
+                            })}
+                    </CardHeader>
+                    <CardInset pad=false>
+                        <PassiveSkillTree passives_tree_ascension ascension_cost view_only />
+                    </CardInset>
+                </Card>
             </div>
         </MenuPanel>
     }
@@ -252,14 +253,6 @@ fn PassiveSkillTree(
         }
     });
 
-    let nodes_specs = Arc::new(
-        town_context
-            .passives_tree_specs
-            .read_untracked()
-            .nodes
-            .clone(),
-    );
-
     view! {
         <Pannable>
             <For
@@ -271,7 +264,7 @@ fn PassiveSkillTree(
             >
                 <AscendConnection
                     connection=conn
-                    nodes_specs=nodes_specs.clone()
+                    passives_tree_specs=town_context.passives_tree_specs
                     passives_tree_ascension
                 />
             </For>
@@ -443,7 +436,7 @@ fn AscendNode(
 #[component]
 fn AscendConnection(
     connection: PassiveConnection,
-    nodes_specs: Arc<HashMap<String, PassiveNodeSpecs>>,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
 ) -> impl IntoView {
     let amount_connections = Memo::new({
@@ -484,5 +477,5 @@ fn AscendConnection(
         }
     });
 
-    view! { <Connection connection nodes_specs amount_connections node_levels /> }
+    view! { <Connection connection passives_tree_specs amount_connections node_levels /> }
 }

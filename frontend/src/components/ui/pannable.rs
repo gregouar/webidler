@@ -1,7 +1,10 @@
 use leptos::{html::*, prelude::*, web_sys};
 
 #[component]
-pub fn Pannable(children: Children) -> impl IntoView {
+pub fn Pannable(
+    children: Children,
+    #[prop(optional)] mouse_position: Option<RwSignal<(f64, f64)>>,
+) -> impl IntoView {
     let offset = RwSignal::new((0.0, 0.0));
     let dragging = RwSignal::new(None::<(f64, f64)>);
     let zoom = RwSignal::new(0.5f64);
@@ -18,13 +21,38 @@ pub fn Pannable(children: Children) -> impl IntoView {
     };
 
     // --- Mouse handling ---
+    if let Some(mouse_position) = mouse_position {
+        let _ = window_event_listener(leptos::ev::mousemove, move |ev| {
+            let mouse_pos = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
+            let offset = offset.get_untracked();
+            let zoom = zoom.get_untracked();
+
+            mouse_position.set((
+                (mouse_pos.0 - offset.0) / zoom,
+                (mouse_pos.1 - offset.1) / zoom,
+            ));
+        });
+    }
+
+    // let on_mouse_move = {
+    //     move |ev: web_sys::MouseEvent| {
+    //         let mouse_pos = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
+    //         if let Some(mouse_position) = mouse_position {
+    //             let offset = offset.get_untracked();
+    //             let zoom = zoom.get_untracked();
+    //             mouse_position.set((
+    //                 (mouse_pos.0 - offset.0) / zoom,
+    //                 (mouse_pos.1 - offset.1) / zoom,
+    //             ));
+    //         }
+    //     }
+    // };
+
     let on_mouse_down = {
         move |ev: web_sys::MouseEvent| {
             ev.stop_propagation();
-            dragging.set(Some(screen_to_svg(
-                ev.client_x() as f64,
-                ev.client_y() as f64,
-            )));
+            let mouse_pos = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
+            dragging.set(Some(mouse_pos));
         }
     };
 
@@ -135,6 +163,17 @@ pub fn Pannable(children: Children) -> impl IntoView {
         last_pinch_distance.set(None);
     };
 
+    let grid_size = Memo::new(move |_| {
+        let z = zoom.get();
+        if z < 0.5 {
+            100
+        } else if z < 1.0 {
+            50
+        } else {
+            25
+        }
+    });
+
     view! {
         <div
             on:wheel=on_wheel
@@ -142,7 +181,7 @@ pub fn Pannable(children: Children) -> impl IntoView {
             on:touchstart=on_touch_start
             on:touchmove=on_touch_move
             on:touchend=on_touch_end
-            class="flex items-center justify-center w-full h-full touch-none overflow-hidden bg-neutral-900"
+            class="flex items-center justify-center w-full h-full touch-none overflow-hidden"
         >
             <svg
                 node_ref=svg_ref
@@ -157,6 +196,23 @@ pub fn Pannable(children: Children) -> impl IntoView {
                         <stop offset="70%" stop-color="black" stop-opacity=0.5 />
                         <stop offset="100%" stop-color="black" stop-opacity=0.8 />
                     </radialGradient>
+
+                    <pattern
+                        id="grid"
+                        width=move || grid_size.get()
+                        height=move || grid_size.get()
+                        patternUnits="userSpaceOnUse"
+                    >
+                        <path
+                            d=move || {
+                                let s = grid_size.get();
+                                format!("M {s} 0 L 0 0 0 {s}")
+                            }
+                            fill="none"
+                            stroke="#555"
+                            stroke-width="1"
+                        />
+                    </pattern>
                 </defs>
                 <g
                     transform=move || {
@@ -165,7 +221,6 @@ pub fn Pannable(children: Children) -> impl IntoView {
                     }
                     class="xl:drop-shadow-[0_2px_4px_black] will-change-transform"
                 >
-
                     {children()}
                 </g>
             </svg>

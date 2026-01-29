@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     chance::{Chance, ChanceRange},
+    conditional_modifier::ConditionalModifier,
     stat_effect::{Modifier, StatType},
     trigger::TriggerSpecs,
 };
@@ -38,7 +39,6 @@ pub struct BaseSkillSpecs {
     pub targets: Vec<SkillTargetsGroup>,
     #[serde(default)]
     pub triggers: Vec<TriggerSpecs>,
-    // TODO: special upgrades at some levels?
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -159,6 +159,9 @@ pub struct SkillEffect {
 
     #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
+
+    #[serde(default)]
+    pub conditional_modifiers: Vec<ConditionalModifier>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

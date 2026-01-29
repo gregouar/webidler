@@ -31,7 +31,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Flat",
-        "value": [11, 20]
+        "value": [15, 20]
       }
     ]
   },
@@ -49,7 +49,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Flat",
-        "value": [21, 30]
+        "value": [25, 30]
       }
     ]
   },
@@ -67,7 +67,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Flat",
-        "value": [31, 40]
+        "value": [35, 40]
       }
     ]
   },
@@ -85,7 +85,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Flat",
-        "value": [41, 50]
+        "value": [45, 50]
       }
     ]
   },
@@ -103,7 +103,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Flat",
-        "value": [51, 60]
+        "value": [55, 60]
       }
     ]
   },
@@ -121,7 +121,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Flat",
-        "value": [61, 70]
+        "value": [65, 70]
       }
     ]
   },
@@ -139,7 +139,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Flat",
-        "value": [71, 80]
+        "value": [75, 80]
       }
     ]
   },
@@ -157,7 +157,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Flat",
-        "value": [81, 90]
+        "value": [85, 90]
       }
     ]
   },
@@ -175,7 +175,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Flat",
-        "value": [91, 100]
+        "value": [95, 100]
       }
     ]
   },
@@ -194,7 +194,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
-        "value": [20, 39]
+        "value": [20, 35]
       }
     ]
   },
@@ -212,7 +212,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
-        "value": [40, 59]
+        "value": [45, 55]
       }
     ]
   },
@@ -230,7 +230,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
-        "value": [60, 79]
+        "value": [65, 75]
       }
     ]
   },
@@ -248,7 +248,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
-        "value": [80, 99]
+        "value": [85, 95]
       }
     ]
   },
@@ -266,7 +266,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
-        "value": [100, 119]
+        "value": [105, 115]
       }
     ]
   },
@@ -284,7 +284,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
-        "value": [120, 139]
+        "value": [125, 135]
       }
     ]
   },
@@ -302,7 +302,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
-        "value": [140, 159]
+        "value": [145, 155]
       }
     ]
   },
@@ -320,7 +320,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
-        "value": [160, 179]
+        "value": [165, 175]
       }
     ]
   },
@@ -338,7 +338,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
-        "value": [180, 199]
+        "value": [185, 195]
       }
     ]
   },
@@ -356,7 +356,7 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Multiplier",
-        "value": [200, 219]
+        "value": [205, 220]
       }
     ]
   }

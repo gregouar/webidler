@@ -174,17 +174,21 @@ pub fn equip_item_from_bag(
     )?;
 
     if let Some(old_item) = old_item {
-        unequip_weapon(player_specs, player_state, old_item.base.slot);
+        if let Some(slot) = old_item.base.slot {
+            unequip_weapon(player_specs, player_state, slot);
+        }
     }
 
     if let Some(ref weapon_specs) = new_item.weapon_specs {
-        equip_weapon(
-            player_specs,
-            player_state,
-            new_item.base.slot,
-            new_item.modifiers.level,
-            weapon_specs,
-        );
+        if let Some(slot) = new_item.base.slot {
+            equip_weapon(
+                player_specs,
+                player_state,
+                slot,
+                new_item.modifiers.level,
+                weapon_specs,
+            );
+        }
     }
 
     Ok(())

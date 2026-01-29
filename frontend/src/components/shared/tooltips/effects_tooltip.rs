@@ -13,7 +13,10 @@ use shared::data::{
 };
 
 use crate::components::{
-    shared::tooltips::skill_tooltip::{restore_type_str, skill_type_str},
+    shared::tooltips::{
+        conditions_tooltip,
+        skill_tooltip::{restore_type_str, skill_type_str},
+    },
     ui::number::format_number,
 };
 
@@ -80,6 +83,10 @@ fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> Stri
             format!("Base {}Damage", damage_type_str(damage_type))
         }
         StatConverterSource::ThreatLevel => "Threat Level".into(),
+        StatConverterSource::MaxLife => "Maximum Life".into(),
+        StatConverterSource::MaxMana => "Maximum Mana".into(),
+        StatConverterSource::ManaRegen => "Mana Regeneration".into(),
+        StatConverterSource::LifeRegen => "Life Regeneration".into(),
     }
 }
 
@@ -87,6 +94,14 @@ fn to_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
         Some(SkillType::Attack) => " to Attacks",
         Some(SkillType::Spell) => " to Spells",
+        None => "",
+    }
+}
+
+fn with_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
+    match skill_type {
+        Some(SkillType::Attack) => " with Attacks",
+        Some(SkillType::Spell) => " with Spells",
         None => "",
     }
 }
@@ -269,6 +284,9 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::LifeRegen => "Life Regeneration".to_string(),
         StatType::Mana => "Maximum Mana".to_string(),
         StatType::ManaRegen => "Mana Regeneration".to_string(),
+        StatType::ManaCost { skill_type } => {
+            format!("{}Mana cost", skill_type_str(*skill_type))
+        }
         StatType::Armor(armor_type) => match armor_type {
             Some(DamageType::Physical) => "Armor".to_string(),
             None => "Resistances and Armor".to_string(),
@@ -320,6 +338,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::Speed(skill_type) => format!("{}Speed", skill_type_str(*skill_type)),
         StatType::MovementSpeed => "Movement Speed".to_string(),
         StatType::GoldFind => "Gold Find".to_string(),
+        StatType::ItemRarity => "Item Rarity".to_string(),
         StatType::LifeOnHit(hit_trigger) => format!(
             "Life gained on {}Hit",
             skill_type_str(hit_trigger.skill_type)
@@ -365,6 +384,16 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             stat_skill_effect_type_str(*effect_type)
         ),
         StatType::SkillLevel(skill_type) => format!("{} Skill Level", skill_type_str(*skill_type)),
+        StatType::SkillConditionalModifier {
+            stat,
+            skill_type,
+            conditions,
+        } => format!(
+            "{}{} against {} Enemies",
+            format_multiplier_stat_name(stat),
+            with_skill_type_str(*skill_type),
+            conditions_tooltip::format_skill_modifier_conditions(conditions)
+        ),
     }
 }
 
@@ -381,12 +410,17 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             "{} Mana Regeneration per second",
             format_adds_removes(value.map(|value| value * 0.1), true, "%")
         ),
+        StatType::ManaCost { skill_type } => format!(
+            "{} Mana Cost{}",
+            format_adds_removes(value, false, ""),
+            to_skill_type_str(*skill_type)
+        ),
         StatType::Armor(armor_type) => format!(
             "{} {}",
             format_adds_removes(value, false, ""),
             match armor_type {
                 Some(DamageType::Physical) => "Armor".to_string(),
-                None => "All Resistances and Armor".to_string(),
+                None => "Resistances and Armor".to_string(),
                 _ => format!("{}Resistance", damage_type_str(*armor_type)),
             }
         ),
@@ -470,6 +504,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             format!("-{}s Movement Cooldown", format_flat_number(value, true))
         }
         StatType::GoldFind => format!("Adds {} Gold per Kill", format_flat_number(value, false)),
+        StatType::ItemRarity => format!("Adds {}% Item Rarity", format_flat_number(value, false)),
         StatType::ThreatGain => {
             if value.unwrap_or_default() >= 0.0 {
                 format!("Gain {}% Extra Threat ", format_flat_number(value, false))
@@ -591,6 +626,16 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 skill_type_str(*skill_type),
             )
         }
+        StatType::SkillConditionalModifier {
+            stat,
+            skill_type,
+            conditions,
+        } => format!(
+            "{}{} against {} Enemies",
+            format_flat_stat(stat, value),
+            with_skill_type_str(*skill_type),
+            conditions_tooltip::format_skill_modifier_conditions(conditions)
+        ),
     }
 }
 

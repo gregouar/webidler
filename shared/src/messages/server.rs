@@ -9,6 +9,7 @@ use crate::data::{
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    quest::QuestRewards,
 };
 
 use super::macros::impl_into_message;
@@ -66,9 +67,10 @@ pub struct SyncGameStateMessage {
     pub monster_states: Vec<MonsterState>,
     pub queued_loot: Option<Vec<QueuedLoot>>,
     pub game_stats: GameStats,
+    pub quest_rewards: Option<Option<QuestRewards>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DisconnectMessage {
-    pub end_quest: bool,
+    // pub end_quest: bool,
 }

@@ -194,7 +194,7 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "value": [10, 14]
+        "value": [10, 13]
       }
     ]
   },
@@ -212,7 +212,7 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "value": [15, 19]
+        "value": [16, 18]
       }
     ]
   },
@@ -230,7 +230,7 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "value": [20, 24]
+        "value": [21, 23]
       }
     ]
   },
@@ -248,7 +248,7 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "value": [25, 29]
+        "value": [26, 28]
       }
     ]
   },
@@ -266,7 +266,7 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "value": [30, 34]
+        "value": [31, 33]
       }
     ]
   },
@@ -284,7 +284,7 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "value": [35, 39]
+        "value": [36, 38]
       }
     ]
   },
@@ -302,7 +302,7 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "value": [40, 44]
+        "value": [41, 43]
       }
     ]
   },
@@ -320,7 +320,7 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "value": [45, 49]
+        "value": [46, 48]
       }
     ]
   },
@@ -338,7 +338,7 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "value": [50, 54]
+        "value": [51, 53]
       }
     ]
   },
@@ -356,7 +356,7 @@
         "scope": "Local",
         "stat": "Block",
         "modifier": "Multiplier",
-        "value": [55, 59]
+        "value": [56, 60]
       }
     ]
   }

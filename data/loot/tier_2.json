@@ -103,6 +103,10 @@
     {
       "item_id": "medallion_unique",
       "weight": 50
+    },
+    {
+      "item_id": "edict",
+      "weight": 200
     }
   ]
 }

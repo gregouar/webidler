@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "enabled": true
+  },
+  "resources": {
+    "item_affixes": [      
+      "map_prefixes.json",
+      "map_suffixes.json"
+    ]
+  }
+}

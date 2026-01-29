@@ -1,6 +1,7 @@
 {
   "specs": {
     "name": "Inn Basement",
+    "description": "Once a place for barrels and forgotten bottles, the inn's basement now crawls with vermin, restless ghosts, and cursed remnants of nights long past.",
     "starting_level": 1,
     "header_background": "areas/inn_header.webp",
     "footer_background": "areas/inn_footer.webp"

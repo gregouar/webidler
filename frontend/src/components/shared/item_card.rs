@@ -18,7 +18,7 @@ pub fn ItemCard(
     item_specs: Arc<ItemSpecs>,
     #[prop(default=None)] comparable_item_specs: Option<Arc<ItemSpecs>>,
     #[prop(default=DynamicTooltipPosition::Auto)] tooltip_position: DynamicTooltipPosition,
-    max_item_level: Signal<AreaLevel>,
+    #[prop(default=Signal::derive(|| AreaLevel::MAX))] max_item_level: Signal<AreaLevel>,
 ) -> impl IntoView {
     let (border_color, ring_color, shadow_color, gradient) = match item_specs.modifiers.rarity {
         ItemRarity::Normal => (
@@ -143,7 +143,7 @@ pub fn ItemCard(
             // node_ref=node_ref
             class=format!(
                 "relative group flex items-center justify-center w-full aspect-[2/3]
-                rounded-md p-1 bg-gradient-to-br {} border-4 {} ring-2 {} shadow-md {}
+                rounded-md p-1 bg-gradient-to-br {} border-2 xl:border-4 {} ring-1 xl:ring-2 {} shadow-md {}
                 cursor-pointer
                 ",
                 gradient,

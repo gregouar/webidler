@@ -13,6 +13,7 @@ use shared::data::{
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    quest::QuestRewards,
 };
 
 use crate::{components::game::local_stats::GameLocalStats, utils};
@@ -39,6 +40,7 @@ pub struct GameContext {
     pub monster_states: RwSignal<Vec<MonsterState>>,
 
     pub queued_loot: Syncable<Vec<QueuedLoot>>,
+    pub quest_rewards: RwSignal<Option<QuestRewards>>,
 
     pub game_stats: RwSignal<GameStats>,
     pub game_local_stats: GameLocalStats,
@@ -49,6 +51,7 @@ pub struct GameContext {
     pub open_passives: RwSignal<bool>,
     pub open_statistics: RwSignal<bool>,
     pub open_skills: RwSignal<bool>,
+    pub open_end_quest: RwSignal<bool>,
 
     pub loot_preference: RwSignal<Option<ItemCategory>>,
     pub last_skills_bought: RwSignal<HashSet<String>>,
@@ -83,6 +86,7 @@ impl GameContext {
             monster_states: RwSignal::new(Vec::new()),
 
             queued_loot: Default::default(),
+            quest_rewards: RwSignal::new(None),
 
             game_stats: RwSignal::new(Default::default()),
             game_local_stats: Default::default(),
@@ -91,6 +95,8 @@ impl GameContext {
             open_passives: RwSignal::new(false),
             open_statistics: RwSignal::new(false),
             open_skills: RwSignal::new(false),
+            open_end_quest: RwSignal::new(false),
+
             loot_preference: RwSignal::new(None),
             last_skills_bought: RwSignal::new(Default::default()),
         }
