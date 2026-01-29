@@ -1,10 +1,10 @@
-use leptos::wasm_bindgen::{closure::Closure, JsCast, JsValue};
+use leptos::wasm_bindgen::{JsCast, JsValue, closure::Closure};
 use leptos::{prelude::*, web_sys};
-use serde::de::DeserializeOwned;
 use serde::Serialize;
+use serde::de::DeserializeOwned;
 
-pub fn use_json_loader<T: 'static + DeserializeOwned + Sync + Send>(
-) -> (RwSignal<Option<T>>, impl Fn(web_sys::Event)) {
+pub fn use_json_loader<T: 'static + DeserializeOwned + Sync + Send>()
+-> (RwSignal<Option<T>>, impl Fn(web_sys::Event)) {
     let data = RwSignal::new(None::<T>);
 
     let on_file_change = {

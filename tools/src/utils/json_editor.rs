@@ -1,7 +1,7 @@
 use leptos::{prelude::*, wasm_bindgen::JsCast};
-use leptos_use::{watch_debounced_with_options, WatchDebouncedOptions};
+use leptos_use::{WatchDebouncedOptions, watch_debounced_with_options};
 use regex::Regex;
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{Serialize, de::DeserializeOwned};
 use serde_ignored;
 use serde_json::Deserializer;
 

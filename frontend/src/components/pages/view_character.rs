@@ -1,4 +1,4 @@
-use leptos::{prelude::*, Params};
+use leptos::{Params, prelude::*};
 use leptos_router::{
     hooks::{use_navigate, use_params},
     params::Params,
@@ -13,9 +13,9 @@ use crate::components::{
         resources::{GemsCounter, ShardsCounter},
     },
     town::{
+        TownContext,
         panels::{ascend::AscendPanel, inventory::TownInventoryPanel, temple::TemplePanel},
         town_scene::TownScene,
-        TownContext,
     },
     ui::{buttons::MenuButton, fullscreen::FullscreenButton, tooltip::DynamicTooltip},
 };

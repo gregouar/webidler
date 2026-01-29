@@ -2,7 +2,7 @@ use frontend::components::{
     accessibility::provide_accessibility_context,
     events::provide_events_context,
     settings::provide_settings_context,
-    ui::confirm::{provide_confirm_context, ConfirmationModal},
+    ui::confirm::{ConfirmationModal, provide_confirm_context},
 };
 use leptos::prelude::*;
 use leptos_meta::*;
