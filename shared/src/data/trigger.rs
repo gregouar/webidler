@@ -111,11 +111,12 @@ pub struct TriggerEffectModifier {
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
-    HitCrit,
     AreaLevel,
     StatusValue(Option<StatStatusType>),
     StatusDuration(Option<StatStatusType>),
     StatusStacks(Option<StatStatusType>),
+    // TODO: Move to conditional modifiers?
+    HitCrit,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]

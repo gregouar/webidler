@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use shared::data::{
     item::{SkillRange, SkillShape},
-    skill::{DamageType, TargetType},
+    skill::TargetType,
     stat_effect::Modifier,
     temple::{StatEffect, StatType},
     trigger::{
@@ -12,6 +12,7 @@ use shared::data::{
 };
 
 use crate::components::shared::tooltips::{
+    conditions_tooltip,
     effects_tooltip::{damage_type_str, format_stat, status_type_str},
     skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
 };
@@ -205,41 +206,10 @@ fn critical_str(value: Option<bool>) -> &'static str {
 fn format_kill_trigger(kill_trigger: &KillTrigger) -> String {
     format!(
         "{}{}{}",
-        stunned_str(kill_trigger.is_stunned),
-        debuffed_str(kill_trigger.is_debuffed),
-        damaged_over_time_str(kill_trigger.is_damaged_over_time),
+        conditions_tooltip::stunned_str(kill_trigger.is_stunned),
+        conditions_tooltip::debuffed_str(kill_trigger.is_debuffed),
+        conditions_tooltip::damaged_over_time_str(kill_trigger.is_damaged_over_time),
     )
-}
-
-fn stunned_str(value: Option<bool>) -> &'static str {
-    match value {
-        Some(value) => match value {
-            true => "Stunned ",
-            false => "Non-Stunned ",
-        },
-        None => "",
-    }
-}
-fn debuffed_str(value: Option<bool>) -> &'static str {
-    match value {
-        Some(value) => match value {
-            true => "Cursed ",
-            false => "Non-Cursed ",
-        },
-        None => "",
-    }
-}
-
-fn damaged_over_time_str(value: Option<DamageType>) -> &'static str {
-    match value {
-        Some(value) => match value {
-            DamageType::Physical => "Bleeding ",
-            DamageType::Fire => "Burning ",
-            DamageType::Poison => "Poisoned ",
-            DamageType::Storm => "Chilled ",
-        },
-        None => "",
-    }
 }
 
 fn format_target_type(target_type: &TargetType) -> &'static str {

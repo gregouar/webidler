@@ -3,14 +3,15 @@ use std::{collections::HashMap, time::Duration};
 use shared::data::{
     area::AreaThreat,
     character_status::StatusSpecs,
+    conditional_modifier::ConditionalModifier,
     player::PlayerInventory,
     skill::{
         DamageType, ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType,
         SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
-        ApplyStatModifier, EffectsMap, LuckyRollType, Modifier, StatConverterSource, StatEffect,
-        StatType,
+        compare_options, ApplyStatModifier, EffectsMap, LuckyRollType, Modifier,
+        StatConverterSource, StatEffect, StatType,
     },
 };
 use strum::IntoEnumIterator;
@@ -302,6 +303,28 @@ pub fn compute_skill_specs_effect<'a>(
         if let StatType::StatConverter(specs) = &effect.stat {
             stat_converters.push((specs.clone(), effect.value));
             continue;
+        }
+
+        if let StatType::SkillConditionalModifier {
+            skill_type: modifier_skill_type,
+            conditions,
+            stat,
+        } = &effect.stat
+        {
+            if compare_options(modifier_skill_type, &Some(skill_type)) {
+                skill_effect
+                    .conditional_modifiers
+                    .push(ConditionalModifier {
+                        conditions: conditions.clone(),
+                        effects: [StatEffect {
+                            stat: *(stat.clone()),
+                            modifier: effect.modifier,
+                            value: effect.value,
+                            bypass_ignore: effect.bypass_ignore,
+                        }]
+                        .into(),
+                    });
+            }
         }
 
         match &mut skill_effect.effect_type {

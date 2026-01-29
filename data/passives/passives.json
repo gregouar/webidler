@@ -1,6 +1,41 @@
 {
   "default": {
     "nodes": {
+      "8939c1bd-e0aa-4d12-88cd-aa933daba56d": {
+        "name": "Test Stun Condition",
+        "icon": "passives/XXX.svg",
+        "x": 30.0,
+        "y": 50.0,
+        "size": 4,
+        "initial_node": true,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": "Stun"
+                  }
+                ]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 500.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
+        "max_upgrade_level": null
+      },
       "arcane_bastion": {
         "name": "Arcane Bastion",
         "icon": "passives/rosa_shield.svg",
@@ -1054,6 +1089,12 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
                     "StatusDuration": null
                   },
                   {
@@ -1070,14 +1111,9 @@
                   },
                   {
                     "StatusPower": null
-                  },
-                  {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
                   }
-                ]
+                ],
+                "conditional_modifiers": []
               },
               {
                 "success_chance": {
@@ -1109,13 +1145,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "StatusDuration": null
+                    "StatusPower": null
                   },
                   {
                     "Damage": {
@@ -1124,15 +1154,22 @@
                     }
                   },
                   {
-                    "StatusPower": null
+                    "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
                   },
                   {
                     "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
+                  },
+                  {
+                    "StatusDuration": null
                   }
-                ]
+                ],
+                "conditional_modifiers": []
               },
               {
                 "success_chance": {
@@ -1164,16 +1201,19 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MinDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
-                    "StatusPower": null
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
                   },
                   {
-                    "Damage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -1182,12 +1222,10 @@
                     "StatusDuration": null
                   },
                   {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
+                    "StatusPower": null
                   }
-                ]
+                ],
+                "conditional_modifiers": []
               },
               {
                 "success_chance": {
@@ -1219,13 +1257,13 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusDuration": null
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
-                  },
-                  {
-                    "StatusPower": null
                   },
                   {
                     "MinDamage": {
@@ -1234,15 +1272,16 @@
                     }
                   },
                   {
+                    "StatusPower": null
+                  },
+                  {
                     "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
-                  },
-                  {
-                    "StatusDuration": null
                   }
-                ]
+                ],
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Contact",
@@ -1347,7 +1386,8 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": []
+                "ignore_stat_effects": [],
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Single",
@@ -1520,12 +1560,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": "Fire"
-                    }
-                  },
-                  {
                     "MaxDamage": {
                       "skill_type": null,
                       "damage_type": "Fire"
@@ -1536,8 +1570,15 @@
                       "skill_type": null,
                       "damage_type": "Fire"
                     }
+                  },
+                  {
+                    "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": "Fire"
+                    }
                   }
-                ]
+                ],
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Single",
@@ -2203,7 +2244,8 @@
                   },
                   "modifier": "Flat"
                 },
-                "ignore_stat_effects": []
+                "ignore_stat_effects": [],
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Single",
@@ -2989,7 +3031,8 @@
                                 },
                                 "crit_damage": 0.0
                               },
-                              "ignore_stat_effects": []
+                              "ignore_stat_effects": [],
+                              "conditional_modifiers": []
                             }
                           ],
                           "skill_shape": "Single",
@@ -3020,12 +3063,6 @@
                     }
                   },
                   {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": "Physical"
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": "Physical"
@@ -3033,8 +3070,15 @@
                   },
                   {
                     "CritChance": null
+                  },
+                  {
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": "Physical"
+                    }
                   }
-                ]
+                ],
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Single",
@@ -3223,7 +3267,7 @@
         "effects": [
           {
             "stat": {
-              "Restore": "Life" 
+              "Restore": "Life"
             },
             "modifier": "Multiplier",
             "value": 10.0
@@ -3234,7 +3278,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": "Life" 
+              "Restore": "Life"
             },
             "modifier": "Multiplier",
             "value": 5.0
@@ -3253,7 +3297,7 @@
         "effects": [
           {
             "stat": {
-              "Restore": "Life" 
+              "Restore": "Life"
             },
             "modifier": "Multiplier",
             "value": 10.0
@@ -3264,7 +3308,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": "Life" 
+              "Restore": "Life"
             },
             "modifier": "Multiplier",
             "value": 5.0
@@ -3283,7 +3327,7 @@
         "effects": [
           {
             "stat": {
-              "Restore": "Life" 
+              "Restore": "Life"
             },
             "modifier": "Multiplier",
             "value": 20.0
@@ -3294,7 +3338,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": "Life" 
+              "Restore": "Life"
             },
             "modifier": "Multiplier",
             "value": 10.0
