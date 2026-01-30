@@ -112,6 +112,11 @@ pub enum StatType {
     },
     SkillLevel(#[serde(default)] Option<SkillType>),
     StatConverter(StatConverterSpecs),
+    StatConditionalModifier {
+        stat: Box<StatType>,
+        #[serde(default)]
+        conditions: Vec<Condition>,
+    },
     SuccessChance {
         #[serde(default)]
         skill_type: Option<SkillType>,

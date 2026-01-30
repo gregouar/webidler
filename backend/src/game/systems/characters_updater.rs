@@ -4,12 +4,14 @@ use strum::IntoEnumIterator;
 use shared::data::{
     character::{CharacterId, CharacterSpecs, CharacterState},
     passive::StatEffect,
-    skill::{DamageType, SkillType},
+    skill::{DamageType, RestoreType, SkillType},
     stat_effect::{ApplyStatModifier, LuckyRollType, StatConverterSource, StatType},
+    temple::Modifier,
 };
 
 use crate::game::{
     data::event::{EventsQueue, GameEvent},
+    systems::characters_controller::restore_character,
     utils::rng::Rollable,
 };
 
@@ -28,17 +30,31 @@ pub fn update_character_state(
 
     let elapsed_time_f64 = elapsed_time.as_secs_f64();
 
-    character_state.life = character_specs.max_life.min(
-        character_state.life
-            + (elapsed_time_f64 * character_specs.life_regen * character_specs.max_life * 0.001),
-    );
-
-    character_state.mana = character_specs.max_mana.min(
-        character_state.mana
-            + (elapsed_time_f64 * character_specs.mana_regen * character_specs.max_mana * 0.001),
-    );
-
     statuses_controller::update_character_statuses(character_specs, character_state, elapsed_time);
+
+    // character_state.life = character_specs.max_life.min(
+    //     character_state.life
+    //         + (elapsed_time_f64 * character_specs.life_regen * character_specs.max_life * 0.001),
+    // );
+
+    // character_state.mana = character_specs.max_mana.min(
+    //     character_state.mana
+    //         + (elapsed_time_f64 * character_specs.mana_regen * character_specs.max_mana * 0.001),
+    // );
+
+    restore_character(
+        &mut (character_id, (character_specs, character_state)),
+        RestoreType::Life,
+        elapsed_time_f64 * character_specs.life_regen * 0.1,
+        Modifier::Multiplier,
+    );
+
+    restore_character(
+        &mut (character_id, (character_specs, character_state)),
+        RestoreType::Mana,
+        elapsed_time_f64 * character_specs.mana_regen * 0.1,
+        Modifier::Multiplier,
+    );
 
     character_state.life = character_state.life.min(character_specs.max_life);
     character_state.mana = character_state.mana.min(character_specs.max_mana);

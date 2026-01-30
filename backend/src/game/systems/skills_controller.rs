@@ -6,7 +6,6 @@ use shared::{
     computations::skill_cost_increase,
     data::{
         character::{CharacterId, SkillSpecs, SkillState},
-        conditional_modifier::Condition,
         item::{SkillRange, SkillShape},
         player::PlayerResources,
         skill::{
@@ -18,7 +17,7 @@ use shared::{
 
 use crate::game::{
     data::event::EventsQueue,
-    systems::skills_updater,
+    systems::{skills_updater, stats_updater},
     utils::{
         rng::{self, flip_coin, RngSeed, Rollable},
         AnyAll,
@@ -309,36 +308,18 @@ fn apply_conditional_modifiers(
 ) -> SkillEffect {
     let mut new_skill_effect = skill_effect.clone();
 
-    let effects: Vec<_> = skill_effect
-        .conditional_modifiers
-        .iter()
-        .filter(|conditional_modifier| {
-            conditional_modifier
-                .conditions
-                .iter()
-                .all(|condition| check_condition(target, condition))
-        })
-        .flat_map(|conditional_modifier| conditional_modifier.effects.iter())
-        .collect();
-
     skills_updater::compute_skill_specs_effect(
         skill_type,
         &mut new_skill_effect,
-        effects.into_iter(),
+        stats_updater::compute_conditional_modifiers(
+            target.1 .0,
+            target.1 .1,
+            &skill_effect.conditional_modifiers,
+        )
+        .into_iter(),
     );
 
     new_skill_effect
-}
-
-fn check_condition(target: &Target, condition: &Condition) -> bool {
-    let (_, (_, target_state)) = target;
-
-    match condition {
-        Condition::HasStatus(stat_status_type) => target_state
-            .statuses
-            .iter()
-            .any(|(status_specs, _)| (*stat_status_type).is_match(&status_specs.into())),
-    }
 }
 
 #[allow(clippy::too_many_arguments)]
