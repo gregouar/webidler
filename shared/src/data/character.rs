@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     chance::Chance,
     character_status::StatusId,
+    conditional_modifier::ConditionalModifier,
     skill::{DamageType, SkillType},
     stat_effect::EffectsMap,
     trigger::TriggeredEffect,
@@ -88,6 +89,9 @@ pub struct CharacterSpecs {
     pub triggers: Vec<TriggeredEffect>,
     #[serde(default)] // for retro compatibility
     pub effects: EffectsMap,
+
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub conditional_modifiers: Vec<ConditionalModifier>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -104,6 +108,10 @@ pub struct CharacterState {
     pub just_hurt: bool,
     pub just_hurt_crit: bool,
     pub just_blocked: bool,
+
+    // This feels dirty
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub monitored_conditions: HashMap<ConditionalModifier, bool>,
 }
 
 impl CharacterState {

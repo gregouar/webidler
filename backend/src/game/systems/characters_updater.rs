@@ -3,6 +3,7 @@ use strum::IntoEnumIterator;
 
 use shared::data::{
     character::{CharacterId, CharacterSpecs, CharacterState},
+    conditional_modifier::ConditionalModifier,
     passive::StatEffect,
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{ApplyStatModifier, LuckyRollType, StatConverterSource, StatType},
@@ -65,6 +66,13 @@ pub fn update_character_state(
         events_queue.register_event(GameEvent::Kill {
             target: character_id,
         });
+    }
+
+    // TODO:
+    let new_conditions = compute_conditions(character_specs.conditional_modifiers);
+    if character_state.monitored_conditions != new_conditions {
+        character_state.monitored_conditions = new_conditions;
+        character_state.dirty_specs = true;
     }
 }
 
@@ -154,6 +162,23 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             }
             StatType::StatConverter(ref specs) => {
                 stat_converters.push((specs.clone(), effect.value));
+            }
+            StatType::StatConditionalModifier {
+                ref stat,
+                ref conditions,
+            } => {
+                character_specs
+                    .conditional_modifiers
+                    .push(ConditionalModifier {
+                        conditions: conditions.clone(),
+                        effects: [StatEffect {
+                            stat: *(*stat).clone(),
+                            modifier: effect.modifier,
+                            value: effect.value,
+                            bypass_ignore: effect.bypass_ignore,
+                        }]
+                        .into(),
+                    });
             }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Only for player (for now...)

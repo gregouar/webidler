@@ -123,7 +123,12 @@ pub fn update_player_specs(
                 statuses_controller::generate_effects_map_from_statuses(
                     &player_state.character_state.statuses,
                 ),
-            )),
+            ))
+            .chain(iter::once(stats_updater::compute_conditional_modifiers(
+                &player_specs.character_specs,
+                &player_state.character_state,
+                &player_specs.character_specs.conditional_modifiers,
+            ))),
     );
 
     player_specs.character_specs.triggers = passives_tree_state
@@ -238,7 +243,8 @@ fn compute_player_specs(
                     | StatConverterSource::MaxMana
                     | StatConverterSource::ManaRegen,
                 ..
-            }) => {}
+            })
+            | StatType::StatConditionalModifier { .. } => {}
             // Delegate to skills
             StatType::ManaCost { .. }
             | StatType::Damage { .. }
