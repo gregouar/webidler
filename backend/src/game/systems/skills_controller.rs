@@ -287,7 +287,7 @@ pub fn apply_skill_effect(
 ) -> bool {
     let seed = rng::roll_seed();
 
-    targets.into_iter().any_all(|target| {
+    targets.iter_mut().any_all(|target| {
         apply_skill_effect_on_target(
             events_queue,
             attacker,
@@ -341,6 +341,7 @@ fn check_condition(target: &Target, condition: &Condition) -> bool {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn apply_skill_effect_on_target(
     events_queue: &mut EventsQueue,
     attacker: CharacterId,
