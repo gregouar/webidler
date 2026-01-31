@@ -1,5 +1,9 @@
+use std::collections::HashMap;
+
 use shared::data::{
     area::AreaThreat,
+    conditional_modifier::{Condition, ConditionalModifier},
+    player::{CharacterSpecs, CharacterState},
     stat_effect::{
         EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect, StatType,
     },
@@ -61,4 +65,54 @@ pub fn sort_stat_effects(effects: &mut [StatEffect]) {
             e.stat.clone(),
         )
     });
+}
+
+pub fn compute_conditional_modifiers<'a>(
+    character_specs: &CharacterSpecs,
+    character_state: &CharacterState,
+    conditional_modifiers: &'a [ConditionalModifier],
+) -> Vec<&'a StatEffect> {
+    conditional_modifiers
+        .iter()
+        .filter(|conditional_modifier| {
+            conditional_modifier
+                .conditions
+                .iter()
+                .all(|condition| check_condition(character_specs, character_state, condition))
+        })
+        .flat_map(|conditional_modifier| conditional_modifier.effects.iter())
+        .collect()
+}
+
+pub fn check_condition(
+    character_specs: &CharacterSpecs,
+    character_state: &CharacterState,
+    condition: &Condition,
+) -> bool {
+    match condition {
+        Condition::HasStatus(stat_status_type) => character_state
+            .statuses
+            .iter()
+            .any(|(status_specs, _)| (*stat_status_type).is_match(&status_specs.into())),
+        Condition::MaximumLife => character_state.life >= character_specs.max_life * 0.99,
+    }
+}
+
+pub fn compute_conditions(
+    character_specs: &CharacterSpecs,
+    character_state: &CharacterState,
+    conditional_modifiers: &[ConditionalModifier],
+) -> HashMap<Condition, bool> {
+    conditional_modifiers
+        .iter()
+        .fold(HashMap::new(), |mut acc, value| {
+            for condition in &value.conditions {
+                acc.entry(condition.clone()).or_insert(check_condition(
+                    character_specs,
+                    character_state,
+                    condition,
+                ));
+            }
+            acc
+        })
 }

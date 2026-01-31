@@ -112,6 +112,11 @@ pub enum StatType {
     },
     SkillLevel(#[serde(default)] Option<SkillType>),
     StatConverter(StatConverterSpecs),
+    StatConditionalModifier {
+        stat: Box<StatType>,
+        #[serde(default)]
+        conditions: Vec<Condition>,
+    },
     SuccessChance {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -432,6 +437,16 @@ impl From<&EffectsMap> for Vec<StatEffect> {
                 bypass_ignore: false,
             })
             .collect()
+    }
+}
+
+impl From<Vec<&StatEffect>> for EffectsMap {
+    fn from(value: Vec<&StatEffect>) -> Self {
+        EffectsMap::combine_all(
+            value
+                .iter()
+                .map(|x| EffectsMap(HashMap::from([((x.stat.clone(), x.modifier), x.value)]))),
+        )
     }
 }
 

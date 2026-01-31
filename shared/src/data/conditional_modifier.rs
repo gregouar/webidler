@@ -12,6 +12,7 @@ pub struct ConditionalModifier {
 pub enum Condition {
     // HitCrit,
     HasStatus(StatStatusType),
+    MaximumLife,
     // StatusValue(Option<StatStatusType>),
     // StatusDuration(Option<StatStatusType>),
     // StatusStacks(Option<StatStatusType>),

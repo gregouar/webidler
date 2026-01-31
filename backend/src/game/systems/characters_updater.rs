@@ -3,13 +3,16 @@ use strum::IntoEnumIterator;
 
 use shared::data::{
     character::{CharacterId, CharacterSpecs, CharacterState},
+    conditional_modifier::ConditionalModifier,
     passive::StatEffect,
-    skill::{DamageType, SkillType},
+    skill::{DamageType, RestoreType, SkillType},
     stat_effect::{ApplyStatModifier, LuckyRollType, StatConverterSource, StatType},
+    temple::Modifier,
 };
 
 use crate::game::{
     data::event::{EventsQueue, GameEvent},
+    systems::{characters_controller::restore_character, stats_updater},
     utils::rng::Rollable,
 };
 
@@ -28,17 +31,31 @@ pub fn update_character_state(
 
     let elapsed_time_f64 = elapsed_time.as_secs_f64();
 
-    character_state.life = character_specs.max_life.min(
-        character_state.life
-            + (elapsed_time_f64 * character_specs.life_regen * character_specs.max_life * 0.001),
-    );
-
-    character_state.mana = character_specs.max_mana.min(
-        character_state.mana
-            + (elapsed_time_f64 * character_specs.mana_regen * character_specs.max_mana * 0.001),
-    );
-
     statuses_controller::update_character_statuses(character_specs, character_state, elapsed_time);
+
+    // character_state.life = character_specs.max_life.min(
+    //     character_state.life
+    //         + (elapsed_time_f64 * character_specs.life_regen * character_specs.max_life * 0.001),
+    // );
+
+    // character_state.mana = character_specs.max_mana.min(
+    //     character_state.mana
+    //         + (elapsed_time_f64 * character_specs.mana_regen * character_specs.max_mana * 0.001),
+    // );
+
+    restore_character(
+        &mut (character_id, (character_specs, character_state)),
+        RestoreType::Life,
+        elapsed_time_f64 * character_specs.life_regen * 0.1,
+        Modifier::Multiplier,
+    );
+
+    restore_character(
+        &mut (character_id, (character_specs, character_state)),
+        RestoreType::Mana,
+        elapsed_time_f64 * character_specs.mana_regen * 0.1,
+        Modifier::Multiplier,
+    );
 
     character_state.life = character_state.life.min(character_specs.max_life);
     character_state.mana = character_state.mana.min(character_specs.max_mana);
@@ -49,6 +66,16 @@ pub fn update_character_state(
         events_queue.register_event(GameEvent::Kill {
             target: character_id,
         });
+    }
+
+    let new_conditions = stats_updater::compute_conditions(
+        character_specs,
+        character_state,
+        &character_specs.conditional_modifiers,
+    );
+    if character_state.monitored_conditions != new_conditions {
+        character_state.monitored_conditions = new_conditions;
+        character_state.dirty_specs = true;
     }
 }
 
@@ -138,6 +165,23 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             }
             StatType::StatConverter(ref specs) => {
                 stat_converters.push((specs.clone(), effect.value));
+            }
+            StatType::StatConditionalModifier {
+                ref stat,
+                ref conditions,
+            } => {
+                character_specs
+                    .conditional_modifiers
+                    .push(ConditionalModifier {
+                        conditions: conditions.clone(),
+                        effects: [StatEffect {
+                            stat: *(*stat).clone(),
+                            modifier: effect.modifier,
+                            value: effect.value,
+                            bypass_ignore: effect.bypass_ignore,
+                        }]
+                        .into(),
+                    });
             }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Only for player (for now...)

@@ -1,6 +1,38 @@
 {
   "default": {
     "nodes": {
+      "563e3226-2387-4147-bed3-914575c77d9a": {
+        "name": "Max Life Max Damage",
+        "icon": "passives/attack.svg",
+        "x": 12.5,
+        "y": 55.0,
+        "size": 0,
+        "initial_node": true,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null
+                  }
+                },
+                "conditions": [
+                  "MaximumLife"
+                ]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 200.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
+        "max_upgrade_level": null
+      },
       "8939c1bd-e0aa-4d12-88cd-aa933daba56d": {
         "name": "Test Stun Condition",
         "icon": "passives/XXX.svg",
@@ -1593,7 +1625,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MaxDamage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": "Fire"
                     }
@@ -1605,7 +1637,7 @@
                     }
                   },
                   {
-                    "MinDamage": {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": "Fire"
                     }
@@ -3090,7 +3122,10 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "CritChance": null
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": "Physical"
+                    }
                   },
                   {
                     "MinDamage": {
@@ -3099,13 +3134,10 @@
                     }
                   },
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": "Physical"
-                    }
+                    "CritChance": null
                   },
                   {
-                    "MaxDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": "Physical"
                     }

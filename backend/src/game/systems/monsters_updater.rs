@@ -1,4 +1,4 @@
-use std::{collections::HashMap, time::Duration};
+use std::{collections::HashMap, iter, time::Duration};
 
 use shared::{
     constants::THREAT_EFFECT,
@@ -95,7 +95,15 @@ pub fn update_monster_specs(
                 Modifier::Multiplier,
             ),
             ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
-        )])))), // .chain(std::iter::once(base_specs.character_specs.effects.clone())),
+        )])))) // .chain(std::iter::once(base_specs.character_specs.effects.clone())),
+        .chain(iter::once(
+            stats_updater::compute_conditional_modifiers(
+                &monster_specs.character_specs,
+                &monster_state.character_state,
+                &monster_specs.character_specs.conditional_modifiers,
+            )
+            .into(),
+        )),
     );
     let effects = stats_updater::stats_map_to_vec(&effects_map, area_threat);
 

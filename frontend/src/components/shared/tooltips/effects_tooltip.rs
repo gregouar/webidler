@@ -394,6 +394,11 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             with_skill_type_str(*skill_type),
             conditions_tooltip::format_skill_modifier_conditions(conditions)
         ),
+        StatType::StatConditionalModifier { stat, conditions } => format!(
+            "{} when {}",
+            format_multiplier_stat_name(stat),
+            conditions_tooltip::format_skill_modifier_conditions(conditions)
+        ),
     }
 }
 
@@ -634,6 +639,11 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             "{}{} against {} Enemies",
             format_flat_stat(stat, value),
             with_skill_type_str(*skill_type),
+            conditions_tooltip::format_skill_modifier_conditions(conditions)
+        ),
+        StatType::StatConditionalModifier { stat, conditions } => format!(
+            "{} when {}",
+            format_flat_stat(stat, value),
             conditions_tooltip::format_skill_modifier_conditions(conditions)
         ),
     }

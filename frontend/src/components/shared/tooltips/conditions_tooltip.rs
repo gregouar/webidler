@@ -10,6 +10,7 @@ pub fn format_skill_modifier_conditions(conditions: &[Condition]) -> String {
             Condition::HasStatus(stat_status_type) => {
                 format_status_type_condition(stat_status_type).to_string()
             }
+            Condition::MaximumLife => "On Maximum Life".into(),
         })
         .collect::<Vec<_>>()
         .join(" ")
