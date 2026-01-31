@@ -12,7 +12,7 @@ use shared::data::{
 
 use crate::game::{
     data::event::{EventsQueue, GameEvent},
-    systems::characters_controller::restore_character,
+    systems::{characters_controller::restore_character, stats_updater},
     utils::rng::Rollable,
 };
 
@@ -68,8 +68,11 @@ pub fn update_character_state(
         });
     }
 
-    // TODO:
-    let new_conditions = compute_conditions(character_specs.conditional_modifiers);
+    let new_conditions = stats_updater::compute_conditions(
+        character_specs,
+        character_state,
+        &character_specs.conditional_modifiers,
+    );
     if character_state.monitored_conditions != new_conditions {
         character_state.monitored_conditions = new_conditions;
         character_state.dirty_specs = true;

@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     chance::Chance,
     character_status::StatusId,
-    conditional_modifier::ConditionalModifier,
+    conditional_modifier::{Condition, ConditionalModifier},
     skill::{DamageType, SkillType},
     stat_effect::EffectsMap,
     trigger::TriggeredEffect,
@@ -111,7 +111,7 @@ pub struct CharacterState {
 
     // This feels dirty
     #[serde(default, skip_serializing, skip_deserializing)]
-    pub monitored_conditions: HashMap<ConditionalModifier, bool>,
+    pub monitored_conditions: HashMap<Condition, bool>,
 }
 
 impl CharacterState {

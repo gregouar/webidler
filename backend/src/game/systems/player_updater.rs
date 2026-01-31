@@ -85,6 +85,30 @@ pub fn update_player_specs(
     benedictions_effects: &EffectsMap,
     area_threat: &AreaThreat,
 ) {
+    let effects = EffectsMap::combine_all(
+        player_inventory
+            .equipped_items()
+            .map(|(_, i)| i.modifiers.aggregate_effects(AffixEffectScope::Global))
+            .chain(iter::once(benedictions_effects.clone()))
+            .chain(passives_controller::generate_effects_map_from_passives(
+                passives_tree_specs,
+                passives_tree_state,
+            ))
+            .chain(iter::once(
+                statuses_controller::generate_effects_map_from_statuses(
+                    &player_state.character_state.statuses,
+                ),
+            ))
+            .chain(iter::once(
+                stats_updater::compute_conditional_modifiers(
+                    &player_specs.character_specs,
+                    &player_state.character_state,
+                    &player_specs.character_specs.conditional_modifiers,
+                )
+                .into(),
+            )),
+    );
+
     player_specs.character_specs = base_player_character_specs(
         player_specs.character_specs.name.clone(),
         player_specs.character_specs.portrait.clone(),
@@ -94,6 +118,7 @@ pub fn update_player_specs(
     player_specs.gold_find = 100.0;
     player_specs.threat_gain = 100.0;
     player_specs.movement_cooldown = 3.0;
+    player_specs.character_specs.effects = effects;
 
     // TODO: Could we figure out a way to keep the block luck somehow?
     let (total_armor, total_block) = player_inventory
@@ -109,27 +134,6 @@ pub fn update_player_specs(
         .entry(DamageType::Physical)
         .or_default()) += total_armor;
     player_specs.character_specs.block.value += total_block;
-
-    player_specs.character_specs.effects = EffectsMap::combine_all(
-        player_inventory
-            .equipped_items()
-            .map(|(_, i)| i.modifiers.aggregate_effects(AffixEffectScope::Global))
-            .chain(iter::once(benedictions_effects.clone()))
-            .chain(passives_controller::generate_effects_map_from_passives(
-                passives_tree_specs,
-                passives_tree_state,
-            ))
-            .chain(iter::once(
-                statuses_controller::generate_effects_map_from_statuses(
-                    &player_state.character_state.statuses,
-                ),
-            ))
-            .chain(iter::once(stats_updater::compute_conditional_modifiers(
-                &player_specs.character_specs,
-                &player_state.character_state,
-                &player_specs.character_specs.conditional_modifiers,
-            ))),
-    );
 
     player_specs.character_specs.triggers = passives_tree_state
         .purchased_nodes
