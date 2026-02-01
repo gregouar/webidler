@@ -8,7 +8,7 @@ use shared::{
 use crate::components::{
     game::game_context::GameContext,
     shared::passives::{
-        Connection, MetaStatus, Node, NodeStatus, PurchaseStatus, node_meta_status,
+        node_meta_status, Connection, MetaStatus, Node, NodeStatus, PurchaseStatus,
     },
     ui::{
         card::{Card, CardHeader, CardInset},
@@ -69,8 +69,8 @@ fn InGameNode(
     node_specs: PassiveNodeSpecs,
     points_available: Memo<bool>,
 ) -> impl IntoView {
+    let game_context: GameContext = expect_context();
     let node_level = Memo::new({
-        let game_context = expect_context::<GameContext>();
         let node_id = node_id.clone();
 
         move |_| {
@@ -86,7 +86,6 @@ fn InGameNode(
     });
 
     let node_status = Memo::new({
-        let game_context = expect_context::<GameContext>();
         let node_id = node_id.clone();
 
         move |_| {
@@ -139,7 +138,7 @@ fn InGameNode(
 
     let purchase = {
         let conn = expect_context::<WebsocketContext>();
-        let game_context = expect_context::<GameContext>();
+
         move || {
             game_context.player_resources.write().passive_points -= 1;
             game_context

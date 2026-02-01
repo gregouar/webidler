@@ -197,10 +197,16 @@ pub fn Pannable(
                         <stop offset="100%" stop-color="black" stop-opacity=0.8 />
                     </radialGradient>
 
-                    <radialGradient id="socket-gradient" cx="70%" cy="70%">
-                        <stop offset="0%" stop-color="#2a2a2a" />
-                        <stop offset="70%" stop-color="#0f0f0f" />
-                        <stop offset="100%" stop-color="#000000" />
+                    <radialGradient id="socket-outer-gradient" cx="30%" cy="30%">
+                        <stop offset="0%" stop-color="#474747" />
+                        <stop offset="70%" stop-color="#242424" />
+                        <stop offset="100%" stop-color="#141414" />
+                    </radialGradient>
+
+                    <radialGradient id="socket-inner-gradient" cx="60%" cy="60%">
+                        <stop offset="0%" stop-color="#474747" />
+                        <stop offset="80%" stop-color="#242424" />
+                        <stop offset="100%" stop-color="#141414" />
                     </radialGradient>
 
                     <pattern

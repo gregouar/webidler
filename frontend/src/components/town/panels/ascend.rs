@@ -259,9 +259,9 @@ fn PassiveSkillTree(
     let selected_socket_node = RwSignal::new(None);
 
     Effect::new(move || {
-        if let Some(passive_node_id) = selected_socket_node.get_untracked() {
-            if let Some(item_index) = town_context.selected_item_index.get() {
-                if let Some(item_specs) = town_context.inventory.read().bag.get(item_index as usize)
+        if let Some(passive_node_id) = selected_socket_node.get_untracked()
+            && let Some(item_index) = town_context.selected_item_index.get()
+                && let Some(item_specs) = town_context.inventory.read().bag.get(item_index as usize)
                 {
                     selected_socket_node.set(None);
                     town_context.selected_item_index.set(None);
@@ -273,8 +273,6 @@ fn PassiveSkillTree(
                         .socketed_nodes
                         .insert(passive_node_id, item_specs.modifiers.clone());
                 }
-            }
-        }
     });
 
     view! {

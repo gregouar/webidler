@@ -235,13 +235,19 @@ pub fn Node(
             {(node_specs.socket)
                 .then(|| {
                     view! {
-                        <circle r=18 + node_specs.size * 5 fill="url(#socket-gradient)" />
+                        <circle r=20 + node_specs.size * 5 fill="url(#socket-outer-gradient)" />
                         <circle
                             r=14 + node_specs.size * 5
-                            fill="none"
-                            stroke="rgba(0,0,0,0.5)"
+                            fill="url(#socket-inner-gradient)"
+                            stroke="rgba(50,50,50,0.5)"
                             stroke-width="2"
                         />
+                        // <circle
+                        // r=14 + node_specs.size * 5
+                        // fill="none"
+                        // stroke="rgba(0,0,0,0.5)"
+                        // stroke-width="2"
+                        // />
                         <circle
                             r=19 + node_specs.size * 5
                             fill="none"
