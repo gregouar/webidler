@@ -1,0 +1,20 @@
+{
+  "rune": {
+    "name": "Rune",
+    "icon": "items/rune.webp",
+    "categories": ["Rune"],
+    "rarity": "Magic",
+    "affixes": [
+    ],
+    "min_area_level": 1
+  },
+  "rune_root": {
+    "name": "Anchor Rune",
+    "icon": "items/rune.webp",
+    "categories": ["Rune"],
+    "affixes": [
+    ],
+    "min_area_level": 1
+  }
+}
+

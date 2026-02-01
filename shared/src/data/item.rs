@@ -101,6 +101,7 @@ pub enum ItemCategory {
     Jewelry,
     Accessory,
     Map,
+    Rune,
     // Minor categories:
     Amulet,
     Body,

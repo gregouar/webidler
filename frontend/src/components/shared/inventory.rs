@@ -741,6 +741,7 @@ pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
             Helmet => "Helmet",
             Ring => "Ring",
             Map => "Edict",
+            Rune => "Rune",
         },
         None => "Any Item",
     }

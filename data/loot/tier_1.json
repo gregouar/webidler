@@ -73,6 +73,14 @@
     {
       "item_id": "edict",
       "weight": 100
+    },
+    {
+      "item_id": "rune",
+      "weight": 100000000
+    },
+    {
+      "item_id": "rune_root",
+      "weight": 100000000
     }
   ]
 }

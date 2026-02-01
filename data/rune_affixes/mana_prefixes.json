@@ -1,0 +1,182 @@
+[
+   {
+    "name": "Thoughtful",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [1, 2]
+      }
+    ]
+  },
+  {
+    "name": "Cognitive",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [3, 4]
+      }
+    ]
+  },
+  {
+    "name": "Analytical",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [5, 6]
+      }
+    ]
+  },
+  {
+    "name": "Knowing",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [7, 8]
+      }
+    ]
+  },
+  {
+    "name": "Sagacious",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [9, 10]
+      }
+    ]
+  },
+  {
+    "name": "Insightful",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Rune"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [11, 12]
+      }
+    ]
+  },
+  {
+    "name": "Intelligent",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Rune"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [13, 14]
+      }
+    ]
+  },
+  {
+    "name": "Intuitive",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Rune"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [15, 16]
+      }
+    ]
+  },
+  {
+    "name": "Gifted",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Rune"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [17, 18]
+      }
+    ]
+  },
+  {
+    "name": "Genius",
+    "family": "inc_mana",
+    "tags": ["Mana"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Rune"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Multiplier",
+        "value": [19, 20]
+      }
+    ]
+  }
+]
