@@ -3,7 +3,13 @@
     "enabled": true
   },
   "resources": {
-    "items": [
+    "item_affixes": [
+        "elemental_damage_prefixes.json",
+        "life_prefixes.json",
+        "life_suffixes.json",
+        "mana_prefixes.json",
+        "mana_suffixes.json",
+        "skill_damage_suffixes.json"
     ]
   }
 }

@@ -683,6 +683,11 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
         node_specs.write().locked = node_locked.get();
     });
 
+    let node_socket = RwSignal::new(node_specs.read_untracked().socket);
+    Effect::new(move || {
+        node_specs.write().socket = node_socket.get();
+    });
+
     let node_max_level = RwSignal::new(Some(node_specs.read_untracked().max_upgrade_level));
     Effect::new(move || {
         if let Some(node_max_level) = node_max_level.get() {
@@ -747,6 +752,19 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
                     />
                     <label for="terms" class="text-sm text-gray-400">
                         "Locked"
+                    </label>
+                </div>
+
+                <div class="flex items-start mt-4">
+                    <input
+                        id="node_socket"
+                        type="checkbox"
+                        class="mt-1 mr-2"
+                        prop:checked=node_socket
+                        on:input=move |ev| node_socket.set(event_target_checked(&ev))
+                    />
+                    <label for="terms" class="text-sm text-gray-400">
+                        "Socket"
                     </label>
                 </div>
             </div>

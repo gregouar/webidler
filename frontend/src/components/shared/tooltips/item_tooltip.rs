@@ -477,6 +477,18 @@ pub fn CategoryTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     </li>
                 }
             })}
+
+        {item_specs
+            .base
+            .categories
+            .contains(&ItemCategory::Rune)
+            .then(|| {
+                view! {
+                    <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                        "Socket in Ascended Passives tree to create a new Node with effects:"
+                    </li>
+                }
+            })}
     }
 }
 

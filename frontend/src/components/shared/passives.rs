@@ -198,10 +198,9 @@ pub fn Node(
             }
             on:contextmenu=move |ev| {
                 ev.prevent_default();
-                if let Some(accessibility) = accessibility
-                    && !accessibility.is_on_mobile() {
-                        on_right_click();
-                    }
+                if let Some(accessibility) = accessibility && !accessibility.is_on_mobile() {
+                    on_right_click();
+                }
             }
 
             on:mouseenter=move |_| show_tooltip()
@@ -232,6 +231,40 @@ pub fn Node(
             />
 
             <circle r=20 + node_specs.size * 5 fill="url(#node-inner-gradient)" />
+
+            {(node_specs.socket)
+                .then(|| {
+                    view! {
+                        <circle r=18 + node_specs.size * 5 fill="url(#socket-gradient)" />
+                        <circle
+                            r=14 + node_specs.size * 5
+                            fill="none"
+                            stroke="rgba(0,0,0,0.5)"
+                            stroke-width="2"
+                        />
+                        <circle
+                            r=19 + node_specs.size * 5
+                            fill="none"
+                            stroke="rgba(255,255,255,0.15)"
+                            stroke-width="1"
+                        />
+                        // <circle
+                        // r=18 + node_specs.size * 5
+                        // fill="none"
+                        // stroke="rgba(255,200,100,0.6)"
+                        // stroke-width="1"
+                        // class="animate-[pulse_2.5s_ease-in-out_infinite]"
+                        // />
+                        <text
+                            text-anchor="middle"
+                            dominant-baseline="central"
+                            fill="rgba(255,255,255,0.4)"
+                            font-size="16"
+                        >
+                            "+"
+                        </text>
+                    }
+                })}
 
             <image
                 href=icon_asset
@@ -392,6 +425,22 @@ pub fn NodeTooltipContent(
         })
     };
 
+    let socket_text = {
+        (node_specs.socket).then(|| {
+            view! {
+                // <hr class="border-t border-gray-700" />
+                <ul>
+                    <li>
+                        <span class="text-sm text-gray-400 leading-snug">
+                            "Ascend to Socket Rune"
+                        </span>
+                    </li>
+                </ul>
+            }
+            .into_any()
+        })
+    };
+
     let upgrade_text = {
         let upgrade_effects = node_specs.upgrade_effects.clone();
         move || {
@@ -464,6 +513,7 @@ pub fn NodeTooltipContent(
         <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
         <hr class="border-t border-gray-700" />
         {starting_node_text}
+        {socket_text}
         <ul class="list-none space-y-1 text-xs xl:text-sm">{triggers_text}{effects_text}</ul>
         {locked_text}
         {upgrade_text}

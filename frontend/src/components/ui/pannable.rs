@@ -197,6 +197,12 @@ pub fn Pannable(
                         <stop offset="100%" stop-color="black" stop-opacity=0.8 />
                     </radialGradient>
 
+                    <radialGradient id="socket-gradient" cx="70%" cy="70%">
+                        <stop offset="0%" stop-color="#2a2a2a" />
+                        <stop offset="70%" stop-color="#0f0f0f" />
+                        <stop offset="100%" stop-color="#000000" />
+                    </radialGradient>
+
                     <pattern
                         id="grid"
                         width=move || grid_size.get()

@@ -140,7 +140,7 @@ pub struct ItemBase {
     pub armor_specs: Option<ArmorSpecs>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemModifiers {
     pub base_item_id: String,
     pub name: String,

@@ -4,17 +4,22 @@
     "icon": "items/rune.webp",
     "categories": ["Rune"],
     "rarity": "Magic",
-    "affixes": [
-    ],
+    "affixes": [],
+    "min_area_level": 1
+  },
+  "rune_2": {
+    "name": "Rune",
+    "icon": "items/rune_2.webp",
+    "categories": ["Rune"],
+    "rarity": "Magic",
+    "affixes": [],
     "min_area_level": 1
   },
   "rune_root": {
     "name": "Anchor Rune",
-    "icon": "items/rune.webp",
+    "icon": "items/rune_root.webp",
     "categories": ["Rune"],
-    "affixes": [
-    ],
+    "affixes": [],
     "min_area_level": 1
   }
 }
-

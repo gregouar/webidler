@@ -79,6 +79,10 @@
       "weight": 100000000
     },
     {
+      "item_id": "rune_2",
+      "weight": 100000000
+    },
+    {
       "item_id": "rune_root",
       "weight": 100000000
     }

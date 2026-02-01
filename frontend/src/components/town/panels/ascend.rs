@@ -3,9 +3,12 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 use std::sync::Arc;
 
 use shared::{
-    data::passive::{
-        PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension,
-        PassivesTreeSpecs,
+    data::{
+        item::ItemCategory,
+        passive::{
+            PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension,
+            PassivesTreeSpecs,
+        },
     },
     http::client::AscendPassivesRequest,
 };
@@ -253,6 +256,27 @@ fn PassiveSkillTree(
         }
     });
 
+    let selected_socket_node = RwSignal::new(None);
+
+    Effect::new(move || {
+        if let Some(passive_node_id) = selected_socket_node.get_untracked() {
+            if let Some(item_index) = town_context.selected_item_index.get() {
+                if let Some(item_specs) = town_context.inventory.read().bag.get(item_index as usize)
+                {
+                    selected_socket_node.set(None);
+                    town_context.selected_item_index.set(None);
+
+                    // TODO: Use backend directly? => but then socket might be not unlocked yet =/
+
+                    passives_tree_ascension
+                        .write()
+                        .socketed_nodes
+                        .insert(passive_node_id, item_specs.modifiers.clone());
+                }
+            }
+        }
+    });
+
     view! {
         <Pannable>
             <For
@@ -279,6 +303,7 @@ fn PassiveSkillTree(
                     points_available
                     ascension_cost
                     passives_tree_ascension
+                    selected_socket_node
                     view_only
                 />
             </For>
@@ -293,6 +318,7 @@ fn AscendNode(
     points_available: Memo<f64>,
     ascension_cost: RwSignal<f64>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
+    selected_socket_node: RwSignal<Option<PassiveNodeId>>,
     view_only: bool,
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
@@ -361,9 +387,9 @@ fn AscendNode(
             //  if maxed {
             //     PurchaseStatus::Inactive
             // } else 
-            if (view_only|| node_level.get() == max_node_level) && node_level.get() > 0  {
+            if (view_only|| (node_level.get() == max_node_level && !node_specs.socket )) && node_level.get() > 0  {
                 PurchaseStatus::Purchased
-            } else if points_available.get() > 0.0 && upgradable
+            } else if (points_available.get() > 0.0 && upgradable) || (node_specs.socket && (! node_specs.locked || node_level.get() > 0 ))
                 // && (upgradable || (node_specs.locked && node_level.get() == 0))
             {
                 PurchaseStatus::Purchaseable
@@ -394,14 +420,23 @@ fn AscendNode(
     let purchase = {
         let node_id = node_id.clone();
         move || {
-            passives_tree_ascension.update(|passives_tree_ascension| {
-                let entry = passives_tree_ascension
-                    .ascended_nodes
-                    .entry(node_id.clone())
-                    .or_default();
-                *entry = entry.saturating_add(1);
-            });
-            ascension_cost.update(|ascension_cost| *ascension_cost += 1.0); // TODO: Ascend cost?
+            if node_specs.socket && (!node_specs.locked || node_level.get() > 0) {
+                selected_socket_node.set(Some(node_id.clone()));
+                town_context.selected_item_index.set(None);
+                town_context
+                    .use_item_category_filter
+                    .set(Some(ItemCategory::Rune));
+                town_context.open_inventory.set(true);
+            } else {
+                passives_tree_ascension.update(|passives_tree_ascension| {
+                    let entry = passives_tree_ascension
+                        .ascended_nodes
+                        .entry(node_id.clone())
+                        .or_default();
+                    *entry = entry.saturating_add(1);
+                });
+                ascension_cost.update(|ascension_cost| *ascension_cost += 1.0); // TODO: Ascend cost?
+            }
         }
     };
 
@@ -447,11 +482,15 @@ fn AscendConnection(
             passives_tree_ascension
                 .read()
                 .ascended_nodes
-                .contains_key(&connection_from) as usize
+                .get(&connection_from)
+                .map(|x| (*x > 0) as usize)
+                .unwrap_or_default()
                 + passives_tree_ascension
                     .read()
                     .ascended_nodes
-                    .contains_key(&connection_to) as usize
+                    .get(&connection_to)
+                    .map(|x| (*x > 0) as usize)
+                    .unwrap_or_default()
         }
     });
 
