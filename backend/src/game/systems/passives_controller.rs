@@ -3,6 +3,7 @@ use std::collections::{HashMap, VecDeque};
 use shared::data::{
     area::AreaLevel,
     item::ItemSpecs,
+    item_affix::AffixEffectScope,
     passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
     player::PlayerResources,
     stat_effect::EffectsMap,
@@ -64,6 +65,30 @@ pub fn generate_effects_map_from_passives<'a>(
                 )
             })
         })
+}
+
+pub fn compute_passives_tree_specs(
+    passives_tree_specs: &mut PassivesTreeSpecs,
+    passives_tree_ascension: &PassivesTreeAscension,
+) {
+    // TODO: Could compute ascension effects here to have them ready?
+
+    for (passive_node_id, item_specs) in passives_tree_ascension.socketed_nodes.iter() {
+        if let Some(node_specs) = passives_tree_specs.nodes.get_mut(passive_node_id) {
+            node_specs.icon = item_specs.base.icon.clone();
+            node_specs.effects = (&(item_specs
+                .modifiers
+                .aggregate_effects(AffixEffectScope::Global)))
+                .into(); // TODO: Better copy, don't aggregate?
+            node_specs.triggers = item_specs.base.triggers.clone();
+            node_specs.initial_node |= item_specs
+                .base
+                .rune_specs
+                .as_ref()
+                .map(|rune_specs| rune_specs.root_node)
+                .unwrap_or_default();
+        }
+    }
 }
 
 pub fn refund_missing(

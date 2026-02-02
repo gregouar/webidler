@@ -407,16 +407,11 @@ fn AscendNode(
     let node_status = Memo::new({
         move |_| {
             let upgradable = max_upgrade_level.get() > node_level.get();
-            // let maxed = node_level.get() >= max_upgrade_level && node_level.get() > 0;
 
             let purchase_status =
-            //  if maxed {
-            //     PurchaseStatus::Inactive
-            // } else 
             if (view_only|| (node_level.get() == max_node_level && !node_specs.socket )) && node_level.get() > 0  {
                 PurchaseStatus::Purchased
             } else if (points_available.get() > 0.0 && upgradable) || (node_specs.socket && (! node_specs.locked || node_level.get() > 0 ))
-                // && (upgradable || (node_specs.locked && node_level.get() == 0))
             {
                 PurchaseStatus::Purchaseable
             } else {
@@ -424,11 +419,6 @@ fn AscendNode(
             };
 
             let meta_status = if node_level.get() > 0 {
-                // if node_specs.locked && node_level.get() == 1 {
-                //     MetaStatus::Normal
-                // } else {
-                //     MetaStatus::Ascended
-                // }
                 MetaStatus::Ascended
             } else if node_specs.locked {
                 MetaStatus::Locked
@@ -492,6 +482,7 @@ fn AscendNode(
                 .aggregate_effects(AffixEffectScope::Global)))
                 .into(); // TODO: Better copy, don't aggregate?
             node_specs.triggers = item_specs.base.triggers.clone();
+            node_specs.initial_node |= item_specs.base.rune_specs.as_ref().map(| rune_specs| rune_specs.root_node).unwrap_or_default();
         }
 
         node_specs

@@ -7,14 +7,14 @@ use shared::messages::client::{GoBackLevelMessage, SetAutoProgressMessage, SetRu
 use crate::assets::img_asset;
 use crate::components::ui::card::Card;
 use crate::components::ui::number::format_duration;
-use crate::components::ui::progress_bars::{VerticalProgressBar, predictive_cooldown};
+use crate::components::ui::progress_bars::{predictive_cooldown, VerticalProgressBar};
 use crate::components::ui::tooltip::{StaticTooltip, StaticTooltipPosition};
 use crate::components::websocket::WebsocketContext;
 
-use super::GameContext;
 use super::loot_queue::LootQueue;
 use super::monsters_grid::MonstersGrid;
 use super::player_card::PlayerCard;
+use super::GameContext;
 
 #[component]
 pub fn BattleScene() -> impl IntoView {
@@ -132,6 +132,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
             <div class="flex-1 text-center relative">
                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
                 <p class="relative z-10 text-shadow/30 text-amber-200 text-lg xl:text-2xl font-bold">
+                    // "📜" TODO: Display edict effects
                     <span class="[font-variant:small-caps]">
                         {move || game_context.area_specs.read().name.clone()}
                     </span>

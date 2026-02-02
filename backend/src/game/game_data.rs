@@ -189,11 +189,15 @@ impl GameInstanceData {
             .cloned()
             .ok_or_else(|| anyhow::anyhow!("couldn't load area: {}", area_id))?;
 
-        let passives_tree_specs: PassivesTreeSpecs = master_store
+        let mut passives_tree_specs = master_store
             .passives_store
             .get(passives_tree_id)
             .cloned()
             .ok_or_else(|| anyhow::anyhow!("couldn't load passives tree: {}", passives_tree_id))?;
+        passives_controller::compute_passives_tree_specs(
+            &mut passives_tree_specs,
+            &passives_tree_state.ascension,
+        );
 
         let player_state = PlayerState::init(&player_specs);
         passives_controller::refund_missing(
