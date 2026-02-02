@@ -4,11 +4,10 @@ use std::sync::Arc;
 
 use shared::{
     data::{
-        item::ItemCategory,
-        passive::{
+        item::ItemCategory, item_affix::AffixEffectScope, passive::{
             PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension,
             PassivesTreeSpecs,
-        },
+        }
     },
     http::client::AscendPassivesRequest,
 };
@@ -259,8 +258,8 @@ fn PassiveSkillTree(
     let selected_socket_node = RwSignal::new(None);
 
     Effect::new(move || {
-        if let Some(passive_node_id) = selected_socket_node.get_untracked()
-            && let Some(item_index) = town_context.selected_item_index.get()
+        if let Some(item_index) = town_context.selected_item_index.get()
+            && let Some(passive_node_id) = selected_socket_node.get_untracked()
                 && let Some(item_specs) = town_context.inventory.read().bag.get(item_index as usize)
                 {
                     selected_socket_node.set(None);
@@ -271,7 +270,7 @@ fn PassiveSkillTree(
                     passives_tree_ascension
                         .write()
                         .socketed_nodes
-                        .insert(passive_node_id, item_specs.modifiers.clone());
+                        .insert(passive_node_id, item_specs.clone());
                 }
     });
 
@@ -454,15 +453,33 @@ fn AscendNode(
         }
     };
 
+    let derived_node_specs = move || {
+        let mut node_specs = node_specs.clone();
+    
+        if let Some(item_specs) = passives_tree_ascension.read().socketed_nodes.get(&node_id) {
+            node_specs.icon = item_specs.base.icon.clone();
+            node_specs.effects = (&(item_specs.modifiers.aggregate_effects(AffixEffectScope::Global))).into(); // TODO: Better copy, don't aggregate?
+            node_specs.triggers = item_specs.base.triggers.clone();
+        }
+
+        node_specs
+    };
+
     view! {
-        <Node
-            node_specs
-            node_status
-            node_level
-            on_click=purchase
-            on_right_click=refund
-            show_upgrade=true
-        />
+        {move || {
+            let purchase = purchase.clone();
+            let refund = refund.clone();
+            view! {
+                <Node
+                    node_specs=derived_node_specs()
+                    node_status
+                    node_level
+                    on_click=purchase
+                    on_right_click=refund
+                    show_upgrade=true
+                />
+            }
+        }}
     }
 }
 

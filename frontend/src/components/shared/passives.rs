@@ -127,8 +127,6 @@ pub fn Node(
         }
     };
 
-    let icon_asset = img_asset(&node_specs.icon);
-
     let stroke = move || {
         let status = node_status();
         status_color(status.purchase_status, status.meta_status)
@@ -168,10 +166,15 @@ pub fn Node(
     let icon_filter = move || {
         let status = node_status();
         match (status.purchase_status, status.meta_status) {
-            (PurchaseStatus::Purchaseable, _) => "invert(1)",
-            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5) invert(1)",
-            _ => "invert(1)",
+            (PurchaseStatus::Purchaseable, _) => "",
+            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5)",
+            _ => "",
         }
+    };
+
+    let invert_filter = match node_specs.socket {
+        true => "",
+        false => "invert(1)",
     };
 
     view! {
@@ -239,28 +242,8 @@ pub fn Node(
                         <circle
                             r=14 + node_specs.size * 5
                             fill="url(#socket-inner-gradient)"
-                            stroke="rgba(50,50,50,0.5)"
-                            stroke-width="2"
+                            stroke="none"
                         />
-                        // <circle
-                        // r=14 + node_specs.size * 5
-                        // fill="none"
-                        // stroke="rgba(0,0,0,0.5)"
-                        // stroke-width="2"
-                        // />
-                        <circle
-                            r=19 + node_specs.size * 5
-                            fill="none"
-                            stroke="rgba(255,255,255,0.15)"
-                            stroke-width="1"
-                        />
-                        // <circle
-                        // r=18 + node_specs.size * 5
-                        // fill="none"
-                        // stroke="rgba(255,200,100,0.6)"
-                        // stroke-width="1"
-                        // class="animate-[pulse_2.5s_ease-in-out_infinite]"
-                        // />
                         <text
                             text-anchor="middle"
                             dominant-baseline="central"
@@ -272,16 +255,39 @@ pub fn Node(
                     }
                 })}
 
-            <image
-                href=icon_asset
-                x=-(24 + node_specs.size as i32 * 10) / 2
-                y=-(24 + node_specs.size as i32 * 10) / 2
-                width=24 + node_specs.size * 10
-                height=24 + node_specs.size * 10
-                class="group-active:scale-90 group-active:brightness-100
-                xl:drop-shadow-[2px_2px_2px_black]"
-                style=move || { format!("pointer-events: none; filter: {}", icon_filter()) }
-            />
+            {(!node_specs.icon.is_empty())
+                .then(|| {
+                    view! {
+                        <image
+                            href=img_asset(&node_specs.icon)
+                            x=-(24 + node_specs.size as i32 * 10) / 2
+                            y=-(24 + node_specs.size as i32 * 10) / 2
+                            width=24 + node_specs.size * 10
+                            height=24 + node_specs.size * 10
+                            class="group-active:scale-90 group-active:brightness-100
+                            xl:drop-shadow-[2px_2px_2px_black]"
+                            style=move || {
+                                format!(
+                                    "pointer-events: none; filter: {} {}",
+                                    icon_filter(),
+                                    invert_filter,
+                                )
+                            }
+                        />
+                    }
+                })}
+
+            {(node_specs.socket)
+                .then(|| {
+                    view! {
+                        <circle
+                            r=14 + node_specs.size * 5
+                            fill="none"
+                            stroke="rgba(112, 112, 112, 0.5)"
+                            stroke-width="2"
+                        />
+                    }
+                })}
         </g>
     }
 }
@@ -434,13 +440,17 @@ pub fn NodeTooltipContent(
     let socket_text = {
         (node_specs.socket).then(|| {
             view! {
-                // <hr class="border-t border-gray-700" />
+                {(node_specs.effects.is_empty() && node_specs.triggers.is_empty())
+                    .then(|| {
+                        view! {
+                            <ul class="list-none space-y-1">
+                                <li class="text-sm text-gray-400 leading-snug italic">"Empty"</li>
+                            </ul>
+                        }
+                    })}
+                <hr class="border-t border-gray-700" />
                 <ul>
-                    <li>
-                        <span class="text-sm text-gray-400 leading-snug">
-                            "Ascend to Socket Rune"
-                        </span>
-                    </li>
+                    <li class="text-sm text-gray-400 leading-snug">"Ascend to Socket Rune"</li>
                 </ul>
             }
             .into_any()
@@ -516,11 +526,15 @@ pub fn NodeTooltipContent(
     };
 
     view! {
-        <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
+        <strong class="text-lg font-bold text-teal-300">
+            <ul class="list-none space-y-1 mb-2">
+                <li class="leading-snug whitespace-pre-line">{node_specs.name.clone()}</li>
+            </ul>
+        </strong>
         <hr class="border-t border-gray-700" />
         {starting_node_text}
-        {socket_text}
         <ul class="list-none space-y-1 text-xs xl:text-sm">{triggers_text}{effects_text}</ul>
+        {socket_text}
         {locked_text}
         {upgrade_text}
     }

@@ -198,7 +198,7 @@ pub fn Pannable(
                     </radialGradient>
 
                     <radialGradient id="socket-outer-gradient" cx="30%" cy="30%">
-                        <stop offset="0%" stop-color="#474747" />
+                        <stop offset="0%" stop-color="#686868" />
                         <stop offset="70%" stop-color="#242424" />
                         <stop offset="100%" stop-color="#141414" />
                     </radialGradient>

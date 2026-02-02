@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::{item::ItemModifiers, stat_effect::EffectsMap, trigger::TriggerSpecs};
+use crate::data::{item::ItemSpecs, stat_effect::EffectsMap, trigger::TriggerSpecs};
 
 pub use super::stat_effect::StatEffect;
 
@@ -37,7 +37,7 @@ pub struct PassivesTreeSpecs {
 pub struct PassivesTreeAscension {
     pub ascended_nodes: HashMap<PassiveNodeId, u8>,
     #[serde(default)]
-    pub socketed_nodes: HashMap<PassiveNodeId, ItemModifiers>,
+    pub socketed_nodes: HashMap<PassiveNodeId, ItemSpecs>, // Or ItemModifiers ?
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]

@@ -112,7 +112,7 @@ pub enum ItemCategory {
     Ring,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemBase {
     pub name: String,
     pub icon: String,
@@ -154,7 +154,7 @@ pub struct ItemModifiers {
     pub quality: f32,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemSpecs {
     pub base: ItemBase,
     pub modifiers: ItemModifiers,
