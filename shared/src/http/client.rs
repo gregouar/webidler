@@ -91,7 +91,7 @@ pub struct AscendPassivesRequest {
 pub struct SocketPassiveRequest {
     pub character_id: UserCharacterId,
     pub passive_node_id: PassiveNodeId,
-    pub item_index: u8,
+    pub item_index: Option<u8>,
 }
 
 // Market

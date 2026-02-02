@@ -163,8 +163,9 @@ pub async fn post_socket_passive(
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
 
-    let item_specs =
-        inventory_controller::remove_item_from_bag(&mut inventory, payload.item_index)?;
+    let item_specs = payload.item_index.and_then(|item_index| {
+        inventory_controller::remove_item_from_bag(&mut inventory, item_index).ok()
+    });
 
     let removed_item = passives_controller::socket_node(
         &master_store,

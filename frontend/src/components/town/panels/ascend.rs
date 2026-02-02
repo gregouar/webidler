@@ -281,7 +281,7 @@ fn PassiveSkillTree(
                             &SocketPassiveRequest {
                                 character_id,
                                 passive_node_id,
-                                item_index,
+                                item_index: Some(item_index),
                             },
                         )
                         .await
@@ -348,6 +348,9 @@ fn AscendNode(
     view_only: bool,
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
+    let backend = expect_context::<BackendClient>();
+    let auth_context = expect_context::<AuthContext>();
+    let toaster = expect_context::<Toasts>();
 
     let node_level = Memo::new({
         let node_id = node_id.clone();
@@ -408,10 +411,13 @@ fn AscendNode(
         move |_| {
             let upgradable = max_upgrade_level.get() > node_level.get();
 
-            let purchase_status =
-            if (view_only|| (node_level.get() == max_node_level && !node_specs.socket )) && node_level.get() > 0  {
+            let purchase_status = if (view_only
+                || (node_level.get() == max_node_level && !node_specs.socket))
+                && node_level.get() > 0
+            {
                 PurchaseStatus::Purchased
-            } else if (points_available.get() > 0.0 && upgradable) || (node_specs.socket && (! node_specs.locked || node_level.get() > 0 ))
+            } else if (points_available.get() > 0.0 && upgradable)
+                || (node_specs.socket && (!node_specs.locked || node_level.get() > 0))
             {
                 PurchaseStatus::Purchaseable
             } else {
@@ -458,17 +464,54 @@ fn AscendNode(
 
     let refund = {
         let node_id = node_id.clone();
+        let character_id = town_context.character.read_untracked().character_id;
         move || {
-            passives_tree_ascension.update(|passives_tree_ascension| {
-                let entry = passives_tree_ascension
-                    .ascended_nodes
-                    .entry(node_id.clone())
-                    .or_default();
-                if *entry > 0 {
-                    *entry = entry.saturating_sub(1);
-                    ascension_cost.update(|ascension_cost| *ascension_cost -= 1.0);
-                }
-            });
+            if passives_tree_ascension
+                .read_untracked()
+                .socketed_nodes
+                .get(&node_id)
+                .is_some()
+            {
+                let passive_node_id = node_id.clone();
+                spawn_local({
+                    async move {
+                        match backend
+                            .post_socket_passive(
+                                &auth_context.token(),
+                                &SocketPassiveRequest {
+                                    character_id,
+                                    passive_node_id,
+                                    item_index: None,
+                                },
+                            )
+                            .await
+                        {
+                            Ok(response) => {
+                                passives_tree_ascension.write().socketed_nodes =
+                                    response.ascension.socketed_nodes.clone();
+                                town_context.passives_tree_ascension.set(response.ascension);
+                                town_context.inventory.set(response.inventory);
+                            }
+                            Err(e) => show_toast(
+                                toaster,
+                                format!("failed to socket: {e}"),
+                                ToastVariant::Error,
+                            ),
+                        }
+                    }
+                });
+            } else {
+                passives_tree_ascension.update(|passives_tree_ascension| {
+                    let entry = passives_tree_ascension
+                        .ascended_nodes
+                        .entry(node_id.clone())
+                        .or_default();
+                    if *entry > 0 {
+                        *entry = entry.saturating_sub(1);
+                        ascension_cost.update(|ascension_cost| *ascension_cost -= 1.0);
+                    }
+                });
+            }
         }
     };
 
@@ -482,7 +525,12 @@ fn AscendNode(
                 .aggregate_effects(AffixEffectScope::Global)))
                 .into(); // TODO: Better copy, don't aggregate?
             node_specs.triggers = item_specs.base.triggers.clone();
-            node_specs.initial_node |= item_specs.base.rune_specs.as_ref().map(| rune_specs| rune_specs.root_node).unwrap_or_default();
+            node_specs.initial_node |= item_specs
+                .base
+                .rune_specs
+                .as_ref()
+                .map(|rune_specs| rune_specs.root_node)
+                .unwrap_or_default();
         }
 
         node_specs

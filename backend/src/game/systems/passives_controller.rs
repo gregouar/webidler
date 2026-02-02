@@ -240,7 +240,7 @@ pub fn socket_node(
     max_item_level: AreaLevel,
     passives_tree_ascension: &mut PassivesTreeAscension,
     passive_node_id: PassiveNodeId,
-    item_specs: ItemSpecs,
+    item_specs: Option<ItemSpecs>,
 ) -> Result<Option<ItemSpecs>, AppError> {
     // TODO: Check it is Rune and level is enough
     let passives_tree_specs = master_store
@@ -248,26 +248,32 @@ pub fn socket_node(
         .get("default")
         .ok_or(anyhow::anyhow!("passives tree not found"))?;
 
-    if item_specs.base.rune_specs.is_none() {
-        return Err(AppError::UserError(
-            "Only Runes can be socketed into Passives Tree".into(),
-        ));
-    }
+    if let Some(item_specs) = item_specs {
+        if item_specs.base.rune_specs.is_none() {
+            return Err(AppError::UserError(
+                "Only Runes can be socketed into Passives Tree".into(),
+            ));
+        }
 
-    if item_specs.required_level > max_item_level {
-        return Err(AppError::UserError("level too low".into()));
-    }
+        if item_specs.required_level > max_item_level {
+            return Err(AppError::UserError("level too low".into()));
+        }
 
-    if !passives_tree_specs
-        .nodes
-        .get(&passive_node_id)
-        .map(|node_specs| node_specs.socket)
-        .unwrap_or_default()
-    {
-        return Err(AppError::UserError("node is not a socket".into()));
-    }
+        if !passives_tree_specs
+            .nodes
+            .get(&passive_node_id)
+            .map(|node_specs| node_specs.socket)
+            .unwrap_or_default()
+        {
+            return Err(AppError::UserError("node is not a socket".into()));
+        }
 
-    Ok(passives_tree_ascension
-        .socketed_nodes
-        .insert(passive_node_id, item_specs))
+        Ok(passives_tree_ascension
+            .socketed_nodes
+            .insert(passive_node_id, item_specs))
+    } else {
+        Ok(passives_tree_ascension
+            .socketed_nodes
+            .remove(&passive_node_id))
+    }
 }
