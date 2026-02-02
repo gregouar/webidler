@@ -255,27 +255,32 @@ pub fn Node(
                     }
                 })}
 
-            {(!node_specs.icon.is_empty())
-                .then(|| {
-                    view! {
-                        <image
-                            href=img_asset(&node_specs.icon)
-                            x=-(24 + node_specs.size as i32 * 10) / 2
-                            y=-(24 + node_specs.size as i32 * 10) / 2
-                            width=24 + node_specs.size * 10
-                            height=24 + node_specs.size * 10
-                            class="group-active:scale-90 group-active:brightness-100
-                            xl:drop-shadow-[2px_2px_2px_black]"
-                            style=move || {
-                                format!(
-                                    "pointer-events: none; filter: {} {}",
-                                    icon_filter(),
-                                    invert_filter,
-                                )
+            {
+                let node_specs = node_specs.clone();
+                move || {
+                    (!node_specs.icon.is_empty())
+                        .then(|| {
+                            view! {
+                                <image
+                                    href=img_asset(&node_specs.icon)
+                                    x=-(24 + node_specs.size as i32 * 10) / 2
+                                    y=-(24 + node_specs.size as i32 * 10) / 2
+                                    width=24 + node_specs.size * 10
+                                    height=24 + node_specs.size * 10
+                                    class="group-active:scale-90 group-active:brightness-100
+                                    xl:drop-shadow-[2px_2px_2px_black]"
+                                    style=move || {
+                                        format!(
+                                            "pointer-events: none; filter: {} {}",
+                                            icon_filter(),
+                                            invert_filter,
+                                        )
+                                    }
+                                />
                             }
-                        />
-                    }
-                })}
+                        })
+                }
+            }
 
             {(node_specs.socket)
                 .then(|| {
@@ -283,8 +288,8 @@ pub fn Node(
                         <circle
                             r=14 + node_specs.size * 5
                             fill="none"
-                            stroke="rgba(112, 112, 112, 0.5)"
-                            stroke-width="2"
+                            stroke="rgb(80, 80, 80)"
+                            stroke-width="1"
                         />
                     }
                 })}

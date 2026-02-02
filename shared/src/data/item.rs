@@ -138,6 +138,11 @@ pub struct ItemBase {
     pub weapon_specs: Option<WeaponSpecs>,
     #[serde(default)]
     pub armor_specs: Option<ArmorSpecs>,
+    #[serde(default)]
+    pub rune_specs: Option<RuneSpecs>,
+
+    #[serde(default)]
+    pub ignore_quality: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -191,6 +196,12 @@ pub struct ArmorSpecs {
     pub armor: f64,
     #[serde(default)]
     pub block: f32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+pub struct RuneSpecs {
+    #[serde(default)]
+    pub root_node: bool,
 }
 
 impl ItemModifiers {
