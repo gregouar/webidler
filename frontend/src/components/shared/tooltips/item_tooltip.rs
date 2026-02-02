@@ -430,7 +430,7 @@ pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 .then(|| {
                     view! {
                         <li class="text-white text-xs xl:text-sm leading-snug">
-                            "Transform Node into Root Node."
+                            "Transform Node into Root Node"
                         </li>
                     }
                 })}

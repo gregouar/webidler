@@ -469,8 +469,7 @@ fn AscendNode(
             if passives_tree_ascension
                 .read_untracked()
                 .socketed_nodes
-                .get(&node_id)
-                .is_some()
+                .contains_key(&node_id)
             {
                 let passive_node_id = node_id.clone();
                 spawn_local({
