@@ -4,12 +4,14 @@ use std::sync::Arc;
 
 use shared::{
     data::{
-        item::ItemCategory, item_affix::AffixEffectScope, passive::{
+        item::ItemCategory,
+        item_affix::AffixEffectScope,
+        passive::{
             PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension,
             PassivesTreeSpecs,
-        }
+        },
     },
-    http::client::AscendPassivesRequest,
+    http::client::{AscendPassivesRequest, SocketPassiveRequest},
 };
 
 use crate::components::{
@@ -145,7 +147,10 @@ fn ConfirmButton(
                             &auth_context.token(),
                             &AscendPassivesRequest {
                                 character_id,
-                                passives_tree_ascension: passives_tree_ascension.get_untracked(),
+                                ascended_nodes: passives_tree_ascension
+                                    .read_untracked()
+                                    .ascended_nodes
+                                    .clone(),
                             },
                         )
                         .await
@@ -204,7 +209,7 @@ fn ResetButton(
                             &auth_context.token(),
                             &AscendPassivesRequest {
                                 character_id,
-                                passives_tree_ascension: PassivesTreeAscension::default(),
+                                ascended_nodes: Default::default(),
                             },
                         )
                         .await
@@ -246,6 +251,11 @@ fn PassiveSkillTree(
     view_only: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
+    let backend = expect_context::<BackendClient>();
+    let auth_context = expect_context::<AuthContext>();
+    let toaster = expect_context::<Toasts>();
+
+    let character_id = town_context.character.read_untracked().character_id;
 
     let points_available = Memo::new(move |_| {
         if view_only {
@@ -260,18 +270,37 @@ fn PassiveSkillTree(
     Effect::new(move || {
         if let Some(item_index) = town_context.selected_item_index.get()
             && let Some(passive_node_id) = selected_socket_node.get_untracked()
-                && let Some(item_specs) = town_context.inventory.read().bag.get(item_index as usize)
-                {
-                    selected_socket_node.set(None);
-                    town_context.selected_item_index.set(None);
-
-                    // TODO: Use backend directly? => but then socket might be not unlocked yet =/
-
-                    passives_tree_ascension
-                        .write()
-                        .socketed_nodes
-                        .insert(passive_node_id, item_specs.clone());
+        {
+            selected_socket_node.set(None);
+            town_context.selected_item_index.set(None);
+            spawn_local({
+                async move {
+                    match backend
+                        .post_socket_passive(
+                            &auth_context.token(),
+                            &SocketPassiveRequest {
+                                character_id,
+                                passive_node_id,
+                                item_index,
+                            },
+                        )
+                        .await
+                    {
+                        Ok(response) => {
+                            passives_tree_ascension.write().socketed_nodes =
+                                response.ascension.socketed_nodes.clone();
+                            town_context.passives_tree_ascension.set(response.ascension);
+                            town_context.inventory.set(response.inventory);
+                        }
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("failed to socket: {e}"),
+                            ToastVariant::Error,
+                        ),
+                    }
                 }
+            });
+        }
     });
 
     view! {
@@ -455,10 +484,13 @@ fn AscendNode(
 
     let derived_node_specs = move || {
         let mut node_specs = node_specs.clone();
-    
+
         if let Some(item_specs) = passives_tree_ascension.read().socketed_nodes.get(&node_id) {
             node_specs.icon = item_specs.base.icon.clone();
-            node_specs.effects = (&(item_specs.modifiers.aggregate_effects(AffixEffectScope::Global))).into(); // TODO: Better copy, don't aggregate?
+            node_specs.effects = (&(item_specs
+                .modifiers
+                .aggregate_effects(AffixEffectScope::Global)))
+                .into(); // TODO: Better copy, don't aggregate?
             node_specs.triggers = item_specs.base.triggers.clone();
         }
 

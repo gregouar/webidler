@@ -120,14 +120,13 @@ pub fn unequip_item(
     }
 }
 
-pub fn delete_item_from_bag(
+pub fn remove_item_from_bag(
     player_inventory: &mut PlayerInventory,
     item_index: u8,
-) -> Result<(), AppError> {
+) -> Result<ItemSpecs, AppError> {
     let item_index = item_index as usize;
     if item_index < player_inventory.bag.len() {
-        player_inventory.bag.remove(item_index);
-        Ok(())
+        Ok(player_inventory.bag.remove(item_index))
     } else {
         Err(AppError::NotFound)
     }

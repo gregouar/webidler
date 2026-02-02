@@ -140,6 +140,7 @@ async fn upsert_character_benedictions_data<'c>(
     Ok(())
 }
 
+// TODO: Split
 pub async fn load_character_data<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,

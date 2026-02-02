@@ -157,8 +157,8 @@ pub fn Node(
             (PurchaseStatus::Purchaseable, _) => {
                 "saturate-50 cursor-pointer group active:brightness-50"
             }
-            (_, MetaStatus::Locked) => "saturate-50 brightness-50",
-            (PurchaseStatus::Inactive, _) => "saturate-50 brightness-50",
+            (_, MetaStatus::Locked) => "saturate-50 brightness-30",
+            (PurchaseStatus::Inactive, _) => "saturate-20 brightness-30",
             _ => "",
         }
     };

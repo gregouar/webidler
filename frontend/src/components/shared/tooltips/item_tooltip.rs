@@ -507,7 +507,7 @@ pub fn CategoryTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             .then(|| {
                 view! {
                     <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                        "Socket in Ascended Passives tree to create a new Node with effects:"
+                        "Socket into an empty Passive Node to give the following effects:"
                     </li>
                 }
             })}
