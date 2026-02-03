@@ -37,7 +37,7 @@ pub struct PassivesTreeSpecs {
 pub struct PassivesTreeAscension {
     pub ascended_nodes: HashMap<PassiveNodeId, u8>,
     #[serde(default)]
-    pub socketed_nodes: HashMap<PassiveNodeId, ItemSpecs>, // Or ItemModifiers ?
+    pub socketed_nodes: HashMap<PassiveNodeId, ItemSpecs>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]

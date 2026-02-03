@@ -23,7 +23,10 @@ use crate::{
     auth::{self, CurrentUser},
     db,
     game::{
-        data::{inventory_data::inventory_data_to_player_inventory, DataInit},
+        data::{
+            inventory_data::inventory_data_to_player_inventory,
+            passives::ascension_data_to_passives_tree_ascension, DataInit,
+        },
         systems::{benedictions_controller, inventory_controller, passives_controller},
     },
     rest::utils::{verify_character_in_town, verify_character_user},
@@ -108,10 +111,13 @@ pub async fn post_ascend_passives(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let (_, mut ascension, _) =
+    let (_, ascension_data, _) =
         db::characters_data::load_character_data(&db_pool, &payload.character_id)
             .await?
             .ok_or(AppError::NotFound)?;
+
+    let mut ascension =
+        ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
 
     ascension.ascended_nodes = payload.ascended_nodes;
 
@@ -132,7 +138,10 @@ pub async fn post_ascend_passives(
     );
 
     let character = character?.ok_or(AppError::NotFound)?.into();
-    let (_, ascension, _) = character_data?.unwrap_or_default();
+    let (_, ascension_data, _) = character_data?.unwrap_or_default();
+
+    let ascension =
+        ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
 
     Ok(Json(AscendPassivesResponse {
         character,
@@ -155,13 +164,15 @@ pub async fn post_socket_passive(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
-    let (inventory_data, mut ascension, _) =
+    let (inventory_data, ascension_data, _) =
         db::characters_data::load_character_data(&db_pool, &payload.character_id)
             .await?
             .ok_or(AppError::NotFound)?;
 
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+    let mut ascension =
+        ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
 
     let item_specs = payload.item_index.and_then(|item_index| {
         inventory_controller::remove_item_from_bag(&mut inventory, item_index).ok()

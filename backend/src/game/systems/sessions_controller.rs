@@ -21,7 +21,8 @@ use crate::{
     db::{self, characters::CharacterEntry},
     game::{
         data::{
-            inventory_data::inventory_data_to_player_inventory, master_store::MasterStore, DataInit,
+            inventory_data::inventory_data_to_player_inventory, master_store::MasterStore,
+            passives::ascension_data_to_passives_tree_ascension, DataInit,
         },
         game_data::GameInstanceData,
         sessions::{Session, SessionsStore},
@@ -154,9 +155,12 @@ async fn new_game_instance(
     .unwrap_or_default();
 
     let (mut player_inventory, passives_tree_state, player_benedictions) = match character_data {
-        Some((inventory_data, ascension, player_benedictions)) => (
+        Some((inventory_data, ascension_data, player_benedictions)) => (
             inventory_data_to_player_inventory(&master_store.items_store, inventory_data),
-            PassivesTreeState::init(ascension),
+            PassivesTreeState::init(ascension_data_to_passives_tree_ascension(
+                &master_store.items_store,
+                ascension_data,
+            )),
             player_benedictions,
         ),
         None => {
