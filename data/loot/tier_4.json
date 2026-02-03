@@ -75,6 +75,24 @@
     {
       "item_id": "gold_pendant",
       "weight": 8000
+    },
+    {
+      "item_id": "edict",
+      "weight": 800,
+      "min_area_level": 150
+    },
+    {
+      "item_id": "rune",
+      "weight": 800,
+      "min_area_level": 150
+    },
+    {
+      "item_id": "rune_root",
+      "weight": 80
+    },
+    {
+      "item_id": "rune_storm_average",
+      "weight": 50
     }
   ]
 }

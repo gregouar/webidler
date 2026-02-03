@@ -1,6 +1,9 @@
 use std::collections::{HashMap, VecDeque};
 
 use shared::data::{
+    area::AreaLevel,
+    item::{ItemRarity, ItemSpecs},
+    item_affix::AffixEffectScope,
     passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
     player::PlayerResources,
     stat_effect::EffectsMap,
@@ -64,6 +67,32 @@ pub fn generate_effects_map_from_passives<'a>(
         })
 }
 
+pub fn compute_passives_tree_specs(
+    passives_tree_specs: &mut PassivesTreeSpecs,
+    passives_tree_ascension: &PassivesTreeAscension,
+) {
+    // TODO: Could compute ascension effects here to have them ready?
+
+    for (passive_node_id, item_specs) in passives_tree_ascension.socketed_nodes.iter() {
+        if let Some(node_specs) = passives_tree_specs.nodes.get_mut(passive_node_id) {
+            node_specs.icon = item_specs.base.icon.clone();
+            node_specs.name = item_specs.modifiers.name.clone();
+
+            node_specs.effects = (&(item_specs
+                .modifiers
+                .aggregate_effects(AffixEffectScope::Global)))
+                .into(); // TODO: Better copy, don't aggregate?
+            node_specs.triggers = item_specs.base.triggers.clone();
+            node_specs.initial_node |= item_specs
+                .base
+                .rune_specs
+                .as_ref()
+                .map(|rune_specs| rune_specs.root_node)
+                .unwrap_or_default();
+        }
+    }
+}
+
 pub fn refund_missing(
     passives_tree_specs: &PassivesTreeSpecs,
     passives_tree_state: &mut PassivesTreeState,
@@ -88,12 +117,12 @@ pub async fn update_ascension(
     let areas_completed =
         db::characters::read_character_areas_completed(&mut **tx, character_id).await?;
 
-    let passive_tree_specs = master_store
+    let passives_tree_specs = master_store
         .passives_store
         .get("default")
         .ok_or(anyhow::anyhow!("passives tree not found"))?;
 
-    let cost = validate_ascension(passive_tree_specs, passives_tree_ascension)?;
+    let cost = validate_ascension(passives_tree_specs, passives_tree_ascension)?;
     let total_shards = compute_total_shards(&areas_completed);
 
     if cost > total_shards {
@@ -206,4 +235,60 @@ fn compute_total_shards(areas_completed: &[CharacterAreaEntry]) -> f64 {
         .iter()
         .map(|area| (area.max_area_level / 10) as f64)
         .sum()
+}
+
+pub fn socket_node(
+    master_store: &MasterStore,
+    max_item_level: AreaLevel,
+    passives_tree_ascension: &mut PassivesTreeAscension,
+    passive_node_id: PassiveNodeId,
+    item_specs: Option<ItemSpecs>,
+) -> Result<Option<ItemSpecs>, AppError> {
+    // TODO: Check it is Rune and level is enough
+    let passives_tree_specs = master_store
+        .passives_store
+        .get("default")
+        .ok_or(anyhow::anyhow!("passives tree not found"))?;
+
+    if let Some(item_specs) = item_specs {
+        if item_specs.base.rune_specs.is_none() {
+            return Err(AppError::UserError(
+                "Only Runes can be socketed into Passives Tree".into(),
+            ));
+        }
+
+        if item_specs.required_level > max_item_level {
+            return Err(AppError::UserError("level too low".into()));
+        }
+
+        if !passives_tree_specs
+            .nodes
+            .get(&passive_node_id)
+            .map(|node_specs| node_specs.socket)
+            .unwrap_or_default()
+        {
+            return Err(AppError::UserError("node is not a socket".into()));
+        }
+
+        if item_specs.modifiers.rarity == ItemRarity::Unique
+            && passives_tree_ascension.socketed_nodes.iter().any(
+                |(socket_node_id, socketed_item_specs)| {
+                    socketed_item_specs.modifiers.base_item_id == item_specs.modifiers.base_item_id
+                        && **socket_node_id != passive_node_id
+                },
+            )
+        {
+            return Err(AppError::UserError(
+                "cannot socket twice the same Unique Rune".into(),
+            ));
+        }
+
+        Ok(passives_tree_ascension
+            .socketed_nodes
+            .insert(passive_node_id, item_specs))
+    } else {
+        Ok(passives_tree_ascension
+            .socketed_nodes
+            .remove(&passive_node_id))
+    }
 }

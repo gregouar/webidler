@@ -70,11 +70,11 @@ pub fn GameInstance() -> impl IntoView {
                 <HeaderMenu />
                 <div class="relative flex-1">
                     <BattleScene />
-                    <EndQuestPanel />
-                    <GameInventoryPanel open=game_context.open_inventory />
                     <PassivesPanel open=game_context.open_passives />
                     <StatisticsPanel open=game_context.open_statistics />
                     <SkillsPanel open=game_context.open_skills />
+                    <GameInventoryPanel open=game_context.open_inventory />
+                    <EndQuestPanel />
                 </div>
             </Show>
         </main>

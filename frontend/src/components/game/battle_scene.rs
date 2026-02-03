@@ -132,6 +132,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
             <div class="flex-1 text-center relative">
                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
                 <p class="relative z-10 text-shadow/30 text-amber-200 text-lg xl:text-2xl font-bold">
+                    // "📜" TODO: Display edict effects
                     <span class="[font-variant:small-caps]">
                         {move || game_context.area_specs.read().name.clone()}
                     </span>

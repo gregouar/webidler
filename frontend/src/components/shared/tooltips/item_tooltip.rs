@@ -195,6 +195,7 @@ pub fn ItemTooltipContent(
                 <QualityTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
+                <RuneTooltip item_specs=item_specs.clone() />
                 <CategoryTooltip item_specs=item_specs.clone() />
             </ul>
             {(has_triggers || has_effects)
@@ -422,6 +423,22 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 }
 
 #[component]
+pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    item_specs.base.rune_specs.as_ref().map(|specs| {
+        view! {
+            {(specs.root_node)
+                .then(|| {
+                    view! {
+                        <li class="text-white text-xs xl:text-sm leading-snug">
+                            "Transform Node into Root Node"
+                        </li>
+                    }
+                })}
+        }
+    })
+}
+
+#[component]
 pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     view! {
         {item_specs
@@ -454,12 +471,17 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 #[component]
 pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     view! {
-        <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-            "Quality: "
-            <span class="text-white font-semibold">
-                {format!("+{:.0}%", item_specs.modifiers.quality)}
-            </span>
-        </li>
+        {(item_specs.modifiers.quality > 0.0)
+            .then(|| {
+                view! {
+                    <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                        "Quality: "
+                        <span class="text-white font-semibold">
+                            {format!("+{:.0}%", item_specs.modifiers.quality)}
+                        </span>
+                    </li>
+                }
+            })}
     }
 }
 
@@ -474,6 +496,18 @@ pub fn CategoryTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 view! {
                     <li class="text-gray-400 text-xs xl:text-sm leading-snug">
                         "Apply to a Grind to give all Enemies the following effects:"
+                    </li>
+                }
+            })}
+
+        {item_specs
+            .base
+            .categories
+            .contains(&ItemCategory::Rune)
+            .then(|| {
+                view! {
+                    <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                        "Socket into an empty Passive Node to give the following effects:"
                     </li>
                 }
             })}

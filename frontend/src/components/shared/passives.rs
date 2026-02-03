@@ -127,8 +127,6 @@ pub fn Node(
         }
     };
 
-    let icon_asset = img_asset(&node_specs.icon);
-
     let stroke = move || {
         let status = node_status();
         status_color(status.purchase_status, status.meta_status)
@@ -157,21 +155,26 @@ pub fn Node(
         let status = node_status();
         match (status.purchase_status, status.meta_status) {
             (PurchaseStatus::Purchaseable, _) => {
-                "saturate-50 cursor-pointer group active:brightness-50"
+                "saturate-50 cursor-pointer group active:brightness-50 pointer-events: none"
             }
-            (_, MetaStatus::Locked) => "saturate-50 brightness-50",
-            (PurchaseStatus::Inactive, _) => "saturate-50 brightness-50",
-            _ => "",
+            (_, MetaStatus::Locked) => "saturate-50 brightness-30 pointer-events: none",
+            (PurchaseStatus::Inactive, _) => "saturate-20 brightness-30 pointer-events: none",
+            _ => "pointer-events: none",
         }
     };
 
     let icon_filter = move || {
         let status = node_status();
         match (status.purchase_status, status.meta_status) {
-            (PurchaseStatus::Purchaseable, _) => "invert(1)",
-            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5) invert(1)",
-            _ => "invert(1)",
+            (PurchaseStatus::Purchaseable, _) => "",
+            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5)",
+            _ => "",
         }
+    };
+
+    let invert_filter = match node_specs.socket {
+        true => "",
+        false => "invert(1)",
     };
 
     view! {
@@ -198,10 +201,9 @@ pub fn Node(
             }
             on:contextmenu=move |ev| {
                 ev.prevent_default();
-                if let Some(accessibility) = accessibility
-                    && !accessibility.is_on_mobile() {
-                        on_right_click();
-                    }
+                if let Some(accessibility) = accessibility && !accessibility.is_on_mobile() {
+                    on_right_click();
+                }
             }
 
             on:mouseenter=move |_| show_tooltip()
@@ -233,16 +235,66 @@ pub fn Node(
 
             <circle r=20 + node_specs.size * 5 fill="url(#node-inner-gradient)" />
 
-            <image
-                href=icon_asset
-                x=-(24 + node_specs.size as i32 * 10) / 2
-                y=-(24 + node_specs.size as i32 * 10) / 2
-                width=24 + node_specs.size * 10
-                height=24 + node_specs.size * 10
-                class="group-active:scale-90 group-active:brightness-100
-                xl:drop-shadow-[2px_2px_2px_black]"
-                style=move || { format!("pointer-events: none; filter: {}", icon_filter()) }
-            />
+            {(node_specs.socket)
+                .then(|| {
+                    view! {
+                        <circle r=20 + node_specs.size * 5 fill="url(#socket-outer-gradient)" />
+                        <circle
+                            r=14 + node_specs.size * 5
+                            fill="url(#socket-inner-gradient)"
+                            stroke="none"
+                        />
+                        <text
+                            text-anchor="middle"
+                            dominant-baseline="central"
+                            fill="rgba(255,255,255,0.4)"
+                            font-size="16"
+                        >
+                            "+"
+                        </text>
+                    }
+                })}
+
+            {
+                let node_specs = node_specs.clone();
+                move || {
+                    (!node_specs.icon.is_empty())
+                        .then(|| {
+                            view! {
+                                <image
+                                    href=img_asset(&node_specs.icon)
+                                    x=-(24 + node_specs.size as i32 * 10) / 2
+                                    y=-(24 + node_specs.size as i32 * 10) / 2
+                                    width=24 + node_specs.size * 10
+                                    height=24 + node_specs.size * 10
+                                    class="group-active:scale-90 group-active:brightness-100
+                                    xl:drop-shadow-[2px_2px_2px_black]"
+                                    style=move || {
+                                        format!(
+                                            "pointer-events: none;
+                                            image-rendering: pixelated; 
+                                            filter: {} {}",
+                                            icon_filter(),
+                                            invert_filter,
+                                        )
+                                    }
+                                />
+                            }
+                        })
+                }
+            }
+
+            {(node_specs.socket)
+                .then(|| {
+                    view! {
+                        <circle
+                            r=14 + node_specs.size * 5
+                            fill="none"
+                            stroke="rgb(80, 80, 80)"
+                            stroke-width="1"
+                        />
+                    }
+                })}
         </g>
     }
 }
@@ -318,6 +370,7 @@ pub fn Connection(
                                     ""
                                 }
                             }
+                            style="pointer-events: none"
                             stroke=format!("url(#{gradient_id})")
                             stroke-dasharray=dasharray
                             stroke-linecap="round"
@@ -392,6 +445,26 @@ pub fn NodeTooltipContent(
         })
     };
 
+    let socket_text = {
+        (node_specs.socket).then(|| {
+            view! {
+                {(node_specs.effects.is_empty() && node_specs.triggers.is_empty())
+                    .then(|| {
+                        view! {
+                            <ul class="list-none space-y-1">
+                                <li class="text-sm text-gray-400 leading-snug italic">"Empty"</li>
+                            </ul>
+                        }
+                    })}
+                <hr class="border-t border-gray-700" />
+                <ul>
+                    <li class="text-sm text-gray-400 leading-snug">"Ascend to Socket Rune"</li>
+                </ul>
+            }
+            .into_any()
+        })
+    };
+
     let upgrade_text = {
         let upgrade_effects = node_specs.upgrade_effects.clone();
         move || {
@@ -461,10 +534,15 @@ pub fn NodeTooltipContent(
     };
 
     view! {
-        <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
+        <strong class="text-lg font-bold text-teal-300">
+            <ul class="list-none space-y-1 mb-2">
+                <li class="leading-snug whitespace-pre-line">{node_specs.name.clone()}</li>
+            </ul>
+        </strong>
         <hr class="border-t border-gray-700" />
         {starting_node_text}
         <ul class="list-none space-y-1 text-xs xl:text-sm">{triggers_text}{effects_text}</ul>
+        {socket_text}
         {locked_text}
         {upgrade_text}
     }

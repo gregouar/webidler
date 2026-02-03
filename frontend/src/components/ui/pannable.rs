@@ -181,7 +181,7 @@ pub fn Pannable(
             on:touchstart=on_touch_start
             on:touchmove=on_touch_move
             on:touchend=on_touch_end
-            class="flex items-center justify-center w-full h-full touch-none overflow-hidden"
+            class="flex items-center justify-center w-full h-full touch-none overflow-hidden xl:drop-shadow-[0_2px_4px_black]"
         >
             <svg
                 node_ref=svg_ref
@@ -195,6 +195,18 @@ pub fn Pannable(
                         <stop offset="20%" stop-color="black" stop-opacity=0 />
                         <stop offset="70%" stop-color="black" stop-opacity=0.5 />
                         <stop offset="100%" stop-color="black" stop-opacity=0.8 />
+                    </radialGradient>
+
+                    <radialGradient id="socket-outer-gradient" cx="30%" cy="30%">
+                        <stop offset="0%" stop-color="#afafaf" />
+                        <stop offset="70%" stop-color="#303030" />
+                        <stop offset="100%" stop-color="#141414" />
+                    </radialGradient>
+
+                    <radialGradient id="socket-inner-gradient" cx="60%" cy="60%">
+                        <stop offset="0%" stop-color="#474747" />
+                        <stop offset="70%" stop-color="#303030" />
+                        <stop offset="100%" stop-color="#141414" />
                     </radialGradient>
 
                     <pattern
@@ -219,7 +231,7 @@ pub fn Pannable(
                         let (x, y) = offset.get();
                         format!("translate({x},{y}) scale({})", zoom.get())
                     }
-                    class="xl:drop-shadow-[0_2px_4px_black] will-change-transform"
+                    class=" will-change-transform"
                 >
                     {children()}
                 </g>

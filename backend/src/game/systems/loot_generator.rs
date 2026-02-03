@@ -104,7 +104,11 @@ pub fn roll_item(
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) -> ItemSpecs {
-    let quality = roll_quality(base.min_area_level, level);
+    let quality = if base.ignore_quality {
+        0.0
+    } else {
+        roll_quality(base.min_area_level, level)
+    };
 
     let mut modifiers = ItemModifiers {
         base_item_id,

@@ -8,7 +8,7 @@ use shared::{
     data::{
         area::AreaLevel,
         game_stats::GrindStats,
-        player::{EquippedSlot, PlayerInventory},
+        player::EquippedSlot,
         skill::SkillSpecs,
         stash::StashType,
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId},
@@ -27,7 +27,13 @@ use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
     db,
-    game::{data::DataInit, systems::items_controller},
+    game::{
+        data::{
+            inventory_data::inventory_data_to_player_inventory,
+            passives::ascension_data_to_passives_tree_ascension, DataInit,
+        },
+        systems::items_controller,
+    },
 };
 
 use super::AppError;
@@ -129,12 +135,12 @@ async fn read_character_details(
 
     let character = character?.ok_or(AppError::NotFound)?.into();
     let areas_completed = areas_completed?;
-    let (inventory_data, ascension, benedictions) = character_data?.unwrap_or_default();
+    let (inventory_data, ascension_data, benedictions) = character_data?.unwrap_or_default();
     let last_grind_data = last_grind_data?;
     let user_stash = user_stash?.map(|x| x.into());
     let market_stash = market_stash?.map(|x| x.into());
 
-    let areas = master_store
+    let areas: Vec<UserGrindArea> = master_store
         .area_blueprints_store
         .iter()
         .map(|(area_id, available_area)| UserGrindArea {
@@ -151,32 +157,36 @@ async fn read_character_details(
         })
         .collect();
 
-    let inventory = PlayerInventory {
-        equipped: inventory_data
-            .equipped
-            .into_iter()
-            .filter_map(|(item_slot, item_modifiers)| {
-                Some((
-                    item_slot,
-                    EquippedSlot::MainSlot(Box::new(items_controller::init_item_specs_from_store(
-                        &master_store.items_store,
-                        item_modifiers,
-                    )?)),
-                ))
-            })
-            .collect(),
-        bag: inventory_data
-            .bag
-            .into_iter()
-            .filter_map(|item_modifiers| {
-                items_controller::init_item_specs_from_store(
-                    &master_store.items_store,
-                    item_modifiers,
-                )
-            })
-            .collect(),
-        max_bag_size: inventory_data.max_bag_size,
-    };
+    // let inventory = PlayerInventory {
+    //     equipped: inventory_data
+    //         .equipped
+    //         .into_iter()
+    //         .filter_map(|(item_slot, item_modifiers)| {
+    //             Some((
+    //                 item_slot,
+    //                 EquippedSlot::MainSlot(Box::new(items_controller::init_item_specs_from_store(
+    //                     &master_store.items_store,
+    //                     item_modifiers,
+    //                 )?)),
+    //             ))
+    //         })
+    //         .collect(),
+    //     bag: inventory_data
+    //         .bag
+    //         .into_iter()
+    //         .filter_map(|item_modifiers| {
+    //             items_controller::init_item_specs_from_store(
+    //                 &master_store.items_store,
+    //                 item_modifiers,
+    //             )
+    //         })
+    //         .collect(),
+    //     max_bag_size: inventory_data.max_bag_size,
+    // };
+
+    let inventory = inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+    let ascension =
+        ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
 
     let last_grind = last_grind_data.map(|last_grind_data| {
         let (items_data, skills_data) = last_grind_data;

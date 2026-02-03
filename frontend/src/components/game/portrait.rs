@@ -313,7 +313,9 @@ pub fn CharacterPortrait(
                                 src=img_asset("effects/block.svg")
                                 class="absolute inset-0 w-object-contain pointer-events-none"
                                 on:animationend=move |_| show_block_effect.set(false)
-                                style="animation: shield_flash 0.5s ease-out"
+                                style="animation: shield_flash 0.5s ease-out;
+                                image-rendering: pixelated; 
+                                "
                             />
                         },
                     )

@@ -100,7 +100,6 @@ pub enum ItemCategory {
     Focus,
     Jewelry,
     Accessory,
-    Map,
     // Minor categories:
     Amulet,
     Body,
@@ -109,9 +108,12 @@ pub enum ItemCategory {
     Gloves,
     Helmet,
     Ring,
+    // Other categories:
+    Map,
+    Rune,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemBase {
     pub name: String,
     pub icon: String,
@@ -137,9 +139,14 @@ pub struct ItemBase {
     pub weapon_specs: Option<WeaponSpecs>,
     #[serde(default)]
     pub armor_specs: Option<ArmorSpecs>,
+    #[serde(default)]
+    pub rune_specs: Option<RuneSpecs>,
+
+    #[serde(default)]
+    pub ignore_quality: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemModifiers {
     pub base_item_id: String,
     pub name: String,
@@ -153,7 +160,7 @@ pub struct ItemModifiers {
     pub quality: f32,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemSpecs {
     pub base: ItemBase,
     pub modifiers: ItemModifiers,
@@ -190,6 +197,12 @@ pub struct ArmorSpecs {
     pub armor: f64,
     #[serde(default)]
     pub block: f32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+pub struct RuneSpecs {
+    #[serde(default)]
+    pub root_node: bool,
 }
 
 impl ItemModifiers {

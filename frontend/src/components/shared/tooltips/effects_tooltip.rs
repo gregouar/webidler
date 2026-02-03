@@ -82,6 +82,12 @@ fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> Stri
         StatConverterSource::Damage { damage_type } => {
             format!("Base {}Damage", damage_type_str(damage_type))
         }
+        StatConverterSource::MinDamage { damage_type } => {
+            format!("Minimum Base {}Damage", damage_type_str(damage_type))
+        }
+        StatConverterSource::MaxDamage { damage_type } => {
+            format!("Maximum Base {}Damage", damage_type_str(damage_type))
+        }
         StatConverterSource::ThreatLevel => "Threat Level".into(),
         StatConverterSource::MaxLife => "Maximum Life".into(),
         StatConverterSource::MaxMana => "Maximum Mana".into(),

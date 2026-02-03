@@ -1,0 +1,182 @@
+[
+  {
+    "name": "Tough",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": null },
+        "modifier": "Multiplier",
+        "value": [5, 10]
+      }
+    ]
+  },
+  {
+    "name": "Sturdy",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": null },
+        "modifier": "Multiplier",
+        "value": [15, 20]
+      }
+    ]
+  },
+  {
+    "name": "Reinforcing",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": null },
+        "modifier": "Multiplier",
+        "value": [25, 30]
+      }
+    ]
+  },
+  {
+    "name": "Bulwarked",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": null },
+        "modifier": "Multiplier",
+        "value": [35, 40]
+      }
+    ]
+  },
+  {
+    "name": "Protective",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": null },
+        "modifier": "Multiplier",
+        "value": [45, 50]
+      }
+    ]
+  },
+  {
+    "name": "Defensive",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Rune"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": null },
+        "modifier": "Multiplier",
+        "value": [55, 60]
+      }
+    ]
+  },
+  {
+    "name": "Guardian",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Rune"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": null },
+        "modifier": "Multiplier",
+        "value": [65, 70]
+      }
+    ]
+  },
+  {
+    "name": "Sentinel",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Rune"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": null },
+        "modifier": "Multiplier",
+        "value": [75, 80]
+      }
+    ]
+  },
+  {
+    "name": "Bastion",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Rune"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": null },
+        "modifier": "Multiplier",
+        "value": [85, 90]
+      }
+    ]
+  },
+  {
+    "name": "Fortress",
+    "family": "inc_armor",
+    "tags": ["Physical", "Armor"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Rune"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": null },
+        "modifier": "Multiplier",
+        "value": [95, 100]
+      }
+    ]
+  }
+]

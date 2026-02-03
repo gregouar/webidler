@@ -69,10 +69,6 @@
       "item_id": "wooden_beads",
       "weight": 1000,
       "min_area_level": 10
-    },
-    {
-      "item_id": "edict",
-      "weight": 100
     }
   ]
 }

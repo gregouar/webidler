@@ -3,11 +3,15 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 use std::sync::Arc;
 
 use shared::{
-    data::passive::{
-        PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension,
-        PassivesTreeSpecs,
+    data::{
+        item::ItemCategory,
+        item_affix::AffixEffectScope,
+        passive::{
+            PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension,
+            PassivesTreeSpecs,
+        },
     },
-    http::client::AscendPassivesRequest,
+    http::client::{AscendPassivesRequest, SocketPassiveRequest},
 };
 
 use crate::components::{
@@ -143,7 +147,10 @@ fn ConfirmButton(
                             &auth_context.token(),
                             &AscendPassivesRequest {
                                 character_id,
-                                passives_tree_ascension: passives_tree_ascension.get_untracked(),
+                                ascended_nodes: passives_tree_ascension
+                                    .read_untracked()
+                                    .ascended_nodes
+                                    .clone(),
                             },
                         )
                         .await
@@ -155,7 +162,7 @@ fn ConfirmButton(
                         }
                         Err(e) => show_toast(
                             toaster,
-                            format!("failed to ascend: {e}"),
+                            format!("Failed to ascend: {e}"),
                             ToastVariant::Error,
                         ),
                     }
@@ -202,7 +209,7 @@ fn ResetButton(
                             &auth_context.token(),
                             &AscendPassivesRequest {
                                 character_id,
-                                passives_tree_ascension: PassivesTreeAscension::default(),
+                                ascended_nodes: Default::default(),
                             },
                         )
                         .await
@@ -215,7 +222,7 @@ fn ResetButton(
                         }
                         Err(e) => show_toast(
                             toaster,
-                            format!("failed to refund: {e}"),
+                            format!("Failed to refund: {e}"),
                             ToastVariant::Error,
                         ),
                     }
@@ -244,12 +251,55 @@ fn PassiveSkillTree(
     view_only: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
+    let backend = expect_context::<BackendClient>();
+    let auth_context = expect_context::<AuthContext>();
+    let toaster = expect_context::<Toasts>();
+
+    let character_id = town_context.character.read_untracked().character_id;
 
     let points_available = Memo::new(move |_| {
         if view_only {
             0.0
         } else {
             (town_context.character.read().resource_shards - ascension_cost.get()).round()
+        }
+    });
+
+    let selected_socket_node = RwSignal::new(None);
+
+    Effect::new(move || {
+        if let Some(item_index) = town_context.selected_item_index.get()
+            && let Some(passive_node_id) = selected_socket_node.get_untracked()
+        {
+            selected_socket_node.set(None);
+            town_context.selected_item_index.set(None);
+            spawn_local({
+                async move {
+                    match backend
+                        .post_socket_passive(
+                            &auth_context.token(),
+                            &SocketPassiveRequest {
+                                character_id,
+                                passive_node_id,
+                                item_index: Some(item_index),
+                            },
+                        )
+                        .await
+                    {
+                        Ok(response) => {
+                            passives_tree_ascension.write().socketed_nodes =
+                                response.ascension.socketed_nodes.clone();
+                            town_context.passives_tree_ascension.set(response.ascension);
+                            town_context.inventory.set(response.inventory);
+                        }
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("Failed to socket: {e}"),
+                            ToastVariant::Error,
+                        ),
+                    }
+                }
+            });
         }
     });
 
@@ -279,6 +329,7 @@ fn PassiveSkillTree(
                     points_available
                     ascension_cost
                     passives_tree_ascension
+                    selected_socket_node
                     view_only
                 />
             </For>
@@ -293,9 +344,13 @@ fn AscendNode(
     points_available: Memo<f64>,
     ascension_cost: RwSignal<f64>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
+    selected_socket_node: RwSignal<Option<PassiveNodeId>>,
     view_only: bool,
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
+    let backend = expect_context::<BackendClient>();
+    let auth_context = expect_context::<AuthContext>();
+    let toaster = expect_context::<Toasts>();
 
     let node_level = Memo::new({
         let node_id = node_id.clone();
@@ -355,16 +410,14 @@ fn AscendNode(
     let node_status = Memo::new({
         move |_| {
             let upgradable = max_upgrade_level.get() > node_level.get();
-            // let maxed = node_level.get() >= max_upgrade_level && node_level.get() > 0;
 
-            let purchase_status =
-            //  if maxed {
-            //     PurchaseStatus::Inactive
-            // } else 
-            if (view_only|| node_level.get() == max_node_level) && node_level.get() > 0  {
+            let purchase_status = if (view_only
+                || (node_level.get() == max_node_level && !node_specs.socket))
+                && node_level.get() > 0
+            {
                 PurchaseStatus::Purchased
-            } else if points_available.get() > 0.0 && upgradable
-                // && (upgradable || (node_specs.locked && node_level.get() == 0))
+            } else if (points_available.get() > 0.0 && upgradable)
+                || (node_specs.socket && (!node_specs.locked || node_level.get() > 0))
             {
                 PurchaseStatus::Purchaseable
             } else {
@@ -372,11 +425,6 @@ fn AscendNode(
             };
 
             let meta_status = if node_level.get() > 0 {
-                // if node_specs.locked && node_level.get() == 1 {
-                //     MetaStatus::Normal
-                // } else {
-                //     MetaStatus::Ascended
-                // }
                 MetaStatus::Ascended
             } else if node_specs.locked {
                 MetaStatus::Locked
@@ -394,42 +442,114 @@ fn AscendNode(
     let purchase = {
         let node_id = node_id.clone();
         move || {
-            passives_tree_ascension.update(|passives_tree_ascension| {
-                let entry = passives_tree_ascension
-                    .ascended_nodes
-                    .entry(node_id.clone())
-                    .or_default();
-                *entry = entry.saturating_add(1);
-            });
-            ascension_cost.update(|ascension_cost| *ascension_cost += 1.0); // TODO: Ascend cost?
+            if node_specs.socket && (!node_specs.locked || node_level.get() > 0) {
+                selected_socket_node.set(Some(node_id.clone()));
+                town_context.selected_item_index.set(None);
+                town_context
+                    .use_item_category_filter
+                    .set(Some(ItemCategory::Rune));
+                town_context.open_inventory.set(true);
+            } else {
+                passives_tree_ascension.update(|passives_tree_ascension| {
+                    let entry = passives_tree_ascension
+                        .ascended_nodes
+                        .entry(node_id.clone())
+                        .or_default();
+                    *entry = entry.saturating_add(1);
+                });
+                ascension_cost.update(|ascension_cost| *ascension_cost += 1.0); // TODO: Ascend cost?
+            }
         }
     };
 
     let refund = {
         let node_id = node_id.clone();
+        let character_id = town_context.character.read_untracked().character_id;
         move || {
-            passives_tree_ascension.update(|passives_tree_ascension| {
-                let entry = passives_tree_ascension
-                    .ascended_nodes
-                    .entry(node_id.clone())
-                    .or_default();
-                if *entry > 0 {
-                    *entry = entry.saturating_sub(1);
-                    ascension_cost.update(|ascension_cost| *ascension_cost -= 1.0);
-                }
-            });
+            if passives_tree_ascension
+                .read_untracked()
+                .socketed_nodes
+                .contains_key(&node_id)
+            {
+                let passive_node_id = node_id.clone();
+                spawn_local({
+                    async move {
+                        match backend
+                            .post_socket_passive(
+                                &auth_context.token(),
+                                &SocketPassiveRequest {
+                                    character_id,
+                                    passive_node_id,
+                                    item_index: None,
+                                },
+                            )
+                            .await
+                        {
+                            Ok(response) => {
+                                passives_tree_ascension.write().socketed_nodes =
+                                    response.ascension.socketed_nodes.clone();
+                                town_context.passives_tree_ascension.set(response.ascension);
+                                town_context.inventory.set(response.inventory);
+                            }
+                            Err(e) => show_toast(
+                                toaster,
+                                format!("Failed to socket: {e}"),
+                                ToastVariant::Error,
+                            ),
+                        }
+                    }
+                });
+            } else {
+                passives_tree_ascension.update(|passives_tree_ascension| {
+                    let entry = passives_tree_ascension
+                        .ascended_nodes
+                        .entry(node_id.clone())
+                        .or_default();
+                    if *entry > 0 {
+                        *entry = entry.saturating_sub(1);
+                        ascension_cost.update(|ascension_cost| *ascension_cost -= 1.0);
+                    }
+                });
+            }
         }
     };
 
+    let derived_node_specs = move || {
+        let mut node_specs = node_specs.clone();
+
+        if let Some(item_specs) = passives_tree_ascension.read().socketed_nodes.get(&node_id) {
+            node_specs.icon = item_specs.base.icon.clone();
+            node_specs.effects = (&(item_specs
+                .modifiers
+                .aggregate_effects(AffixEffectScope::Global)))
+                .into(); // TODO: Better copy, don't aggregate?
+            node_specs.triggers = item_specs.base.triggers.clone();
+            node_specs.initial_node |= item_specs
+                .base
+                .rune_specs
+                .as_ref()
+                .map(|rune_specs| rune_specs.root_node)
+                .unwrap_or_default();
+        }
+
+        node_specs
+    };
+
     view! {
-        <Node
-            node_specs
-            node_status
-            node_level
-            on_click=purchase
-            on_right_click=refund
-            show_upgrade=true
-        />
+        {move || {
+            let purchase = purchase.clone();
+            let refund = refund.clone();
+            view! {
+                <Node
+                    node_specs=derived_node_specs()
+                    node_status
+                    node_level
+                    on_click=purchase
+                    on_right_click=refund
+                    show_upgrade=true
+                />
+            }
+        }}
     }
 }
 
@@ -447,11 +567,15 @@ fn AscendConnection(
             passives_tree_ascension
                 .read()
                 .ascended_nodes
-                .contains_key(&connection_from) as usize
+                .get(&connection_from)
+                .map(|x| (*x > 0) as usize)
+                .unwrap_or_default()
                 + passives_tree_ascension
                     .read()
                     .ascended_nodes
-                    .contains_key(&connection_to) as usize
+                    .get(&connection_to)
+                    .map(|x| (*x > 0) as usize)
+                    .unwrap_or_default()
         }
     });
 

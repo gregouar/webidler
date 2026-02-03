@@ -1,6 +1,21 @@
 {
   "default": {
     "nodes": {
+      "562d4b3f-e1a6-4009-be4b-0ca6a00f9f5a": {
+        "name": "Socket",
+        "icon": "",
+        "x": -30.0,
+        "y": -42.5,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [],
+        "triggers": [],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": true
+      },
       "563e3226-2387-4147-bed3-914575c77d9a": {
         "name": "Max Life Max Damage",
         "icon": "passives/attack.svg",
@@ -31,7 +46,23 @@
         "triggers": [],
         "locked": false,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
+      },
+      "5ddd5ed0-eab3-42a5-a48e-26f3a3626c55": {
+        "name": "Socket",
+        "icon": "",
+        "x": 30.0,
+        "y": -42.5,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [],
+        "triggers": [],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": true
       },
       "8939c1bd-e0aa-4d12-88cd-aa933daba56d": {
         "name": "Test Stun Condition",
@@ -66,7 +97,8 @@
         "triggers": [],
         "locked": false,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "arcane_bastion": {
         "name": "Arcane Bastion",
@@ -91,7 +123,8 @@
         "triggers": [],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "arcane_bastion_block_1": {
         "name": "Block",
@@ -117,7 +150,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "arcane_bastion_block_2": {
         "name": "Block",
@@ -143,7 +177,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "arcane_bastion_block_3": {
         "name": "Block",
@@ -169,7 +204,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "armor_1": {
         "name": "Armor",
@@ -199,7 +235,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "armor_2": {
         "name": "Armor",
@@ -229,7 +266,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "armor_and_block_1": {
         "name": "Myrmidon",
@@ -269,7 +307,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "attack_damage_1": {
         "name": "Attack Damage",
@@ -305,7 +344,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "attack_damage_2": {
         "name": "Attack Damage",
@@ -341,7 +381,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "attack_damage_and_speed_1": {
         "name": "Frenzy",
@@ -391,7 +432,8 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "attack_speed_1": {
         "name": "Attack Speed",
@@ -421,7 +463,8 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "attack_speed_2": {
         "name": "Attack Speed",
@@ -451,7 +494,8 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "block_1": {
         "name": "Block",
@@ -477,7 +521,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "block_2": {
         "name": "Block",
@@ -503,7 +548,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "cfff8b24-fb03-4a7e-a0b1-0c512a2ec7c4": {
         "name": "Grim Pact",
@@ -536,7 +582,8 @@
         "triggers": [],
         "locked": false,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "convert_dot": {
         "name": "Ain't Nobody Got Time for That",
@@ -572,7 +619,8 @@
         "triggers": [],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "convert_dot_damage_1": {
         "name": "Damage",
@@ -608,7 +656,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "convert_dot_damage_2": {
         "name": "Damage",
@@ -644,7 +693,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "convert_dot_damage_3": {
         "name": "Damage",
@@ -680,7 +730,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "crit_chance_1": {
         "name": "Critical Hit Chance",
@@ -710,7 +761,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "crit_chance_2": {
         "name": "Critical Hit Chance",
@@ -740,7 +792,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "crit_damage_1": {
         "name": "Critical Damage",
@@ -770,7 +823,8 @@
             "value": 20.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "crit_damage_2": {
         "name": "Critical Hit Damage",
@@ -800,7 +854,8 @@
             "value": 20.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "crit_damage_and_chance_1": {
         "name": "Sadism",
@@ -844,7 +899,8 @@
             "value": 20.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "damage_over_time_1": {
         "name": "Damage over Time",
@@ -882,7 +938,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "damage_over_time_2": {
         "name": "Damage over Time",
@@ -920,7 +977,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "damage_over_time_3": {
         "name": "Damage over Time",
@@ -958,7 +1016,8 @@
             "value": 20.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "damage_over_time_spread": {
         "name": "Spread Destruction",
@@ -1210,6 +1269,12 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
                     "StatusPower": null
                   },
                   {
@@ -1219,19 +1284,13 @@
                     }
                   },
                   {
-                    "MinDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
                     "StatusDuration": null
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
                   }
                 ],
                 "conditional_modifiers": []
@@ -1281,13 +1340,13 @@
                     }
                   },
                   {
+                    "StatusDuration": null
+                  },
+                  {
                     "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
-                  },
-                  {
-                    "StatusDuration": null
                   }
                 ],
                 "conditional_modifiers": []
@@ -1322,6 +1381,15 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "StatusPower": null
+                  },
+                  {
                     "StatusDuration": null
                   },
                   {
@@ -1332,15 +1400,6 @@
                   },
                   {
                     "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "StatusPower": null
-                  },
-                  {
-                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -1356,7 +1415,8 @@
         ],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "enrage": {
         "name": "Berserker",
@@ -1462,7 +1522,8 @@
         ],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "enrage_armor_1": {
         "name": "Fire Resistance",
@@ -1492,7 +1553,8 @@
             "value": 15.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "enrage_armor_2": {
         "name": "Poison Resistance",
@@ -1522,7 +1584,8 @@
             "value": 15.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "enrage_armor_3": {
         "name": "Storm Resistance",
@@ -1552,7 +1615,8 @@
             "value": 15.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "fire_burn": {
         "name": "Blazing Inferno",
@@ -1625,12 +1689,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": "Fire"
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": "Fire"
@@ -1638,6 +1696,12 @@
                   },
                   {
                     "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": "Fire"
+                    }
+                  },
+                  {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": "Fire"
                     }
@@ -1653,7 +1717,8 @@
         ],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "fire_damage_1": {
         "name": "Fire Damage",
@@ -1689,7 +1754,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "fire_damage_2": {
         "name": "Fire Damage",
@@ -1725,7 +1791,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "fire_damage_3": {
         "name": "Fire Damage",
@@ -1761,7 +1828,8 @@
             "value": 20.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "gold_d_1": {
         "name": "Gold",
@@ -1787,7 +1855,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "gold_d_2": {
         "name": "Gold",
@@ -1813,7 +1882,8 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "gold_dl_1": {
         "name": "Gold",
@@ -1839,7 +1909,8 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "gold_dr_1": {
         "name": "Gold",
@@ -1865,7 +1936,8 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "gold_init": {
         "name": "Lucky Start",
@@ -1891,7 +1963,8 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "gold_init_2": {
         "name": "Impactful Start",
@@ -1927,7 +2000,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 4
+        "max_upgrade_level": 4,
+        "socket": false
       },
       "gold_l_1": {
         "name": "Gold",
@@ -1953,7 +2027,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "gold_r_1": {
         "name": "Gold",
@@ -1979,7 +2054,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "gold_shower_1": {
         "name": "Gold",
@@ -2005,7 +2081,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "gold_shower_2": {
         "name": "Gold",
@@ -2031,7 +2108,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "gold_shower_3": {
         "name": "Gold",
@@ -2057,7 +2135,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "gold_shower_4": {
         "name": "Gold",
@@ -2083,7 +2162,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "gold_shower_5": {
         "name": "Gold",
@@ -2109,7 +2189,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "gold_shower_6": {
         "name": "Golden Shower",
@@ -2135,7 +2216,8 @@
             "value": 50.0
           }
         ],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "gold_shower_init": {
         "name": "Golden Start",
@@ -2161,7 +2243,8 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "gold_u_1": {
         "name": "Gold",
@@ -2187,7 +2270,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "gold_u_2": {
         "name": "Gold",
@@ -2213,7 +2297,8 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "gold_ul_1": {
         "name": "Gold",
@@ -2239,7 +2324,8 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "gold_ur_1": {
         "name": "Gold",
@@ -2265,7 +2351,8 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "healing_aura": {
         "name": "Healing Aura",
@@ -2320,7 +2407,8 @@
         ],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "infinite_curse": {
         "name": "Cursed Mouth",
@@ -2346,7 +2434,8 @@
         "triggers": [],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "life_max_1": {
         "name": "Maximum Life",
@@ -2372,7 +2461,8 @@
             "value": 3.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "life_max_2": {
         "name": "Maximum Life",
@@ -2398,7 +2488,8 @@
             "value": 3.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "life_max_and_regen_1": {
         "name": "Fortitude",
@@ -2434,7 +2525,8 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "life_regen_1": {
         "name": "Life Regeneration",
@@ -2460,7 +2552,8 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "life_regen_2": {
         "name": "Life Regeneration",
@@ -2486,7 +2579,8 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "mana_max_1": {
         "name": "Maximum Mana",
@@ -2512,7 +2606,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "mana_max_2": {
         "name": "Maximum Mana",
@@ -2538,7 +2633,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "mana_max_and_regen_1": {
         "name": "Wisdom",
@@ -2574,7 +2670,8 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "mana_regen_1": {
         "name": "Mana Regeneration",
@@ -2600,7 +2697,8 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "mana_regen_2": {
         "name": "Mana Regeneration",
@@ -2626,7 +2724,8 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "mana_shield": {
         "name": "Mana Shield",
@@ -2652,7 +2751,8 @@
             "value": 50.0
           }
         ],
-        "max_upgrade_level": 2
+        "max_upgrade_level": 2,
+        "socket": false
       },
       "mana_shield_mana_1": {
         "name": "Maximum Mana",
@@ -2678,7 +2778,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 2
+        "max_upgrade_level": 2,
+        "socket": false
       },
       "mana_shield_mana_2": {
         "name": "Maximum Mana",
@@ -2704,7 +2805,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 2
+        "max_upgrade_level": 2,
+        "socket": false
       },
       "mana_shield_mana_3": {
         "name": "Maximum Mana",
@@ -2730,7 +2832,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 2
+        "max_upgrade_level": 2,
+        "socket": false
       },
       "menacing_presence": {
         "name": "Menacing Presence",
@@ -2750,7 +2853,8 @@
         "triggers": [],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "movement_init": {
         "name": "Tactical Start",
@@ -2776,7 +2880,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "overwhelming_force": {
         "name": "Overwhelming Force",
@@ -2816,7 +2921,8 @@
         "triggers": [],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "overwhelming_force_damage_1": {
         "name": "Critical Damage",
@@ -2846,7 +2952,8 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "overwhelming_force_damage_2": {
         "name": "Critical Damage",
@@ -2876,7 +2983,8 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "overwhelming_force_damage_3": {
         "name": "Critical Damage",
@@ -2906,7 +3014,8 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "physical_damage_1": {
         "name": "Physical Damage",
@@ -2942,7 +3051,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "physical_damage_2": {
         "name": "Physical Damage",
@@ -2978,7 +3088,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "physical_damage_3": {
         "name": "Physical Damage",
@@ -3014,7 +3125,8 @@
             "value": 20.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "physical_open_wound": {
         "name": "Savage Attacker",
@@ -3122,6 +3234,12 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": "Physical"
+                    }
+                  },
+                  {
                     "MaxDamage": {
                       "skill_type": null,
                       "damage_type": "Physical"
@@ -3135,12 +3253,6 @@
                   },
                   {
                     "CritChance": null
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": "Physical"
-                    }
                   }
                 ],
                 "conditional_modifiers": []
@@ -3153,7 +3265,8 @@
         ],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "poison_damage_1": {
         "name": "Poison Damage",
@@ -3189,7 +3302,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "poison_damage_2": {
         "name": "Poison Damage",
@@ -3225,7 +3339,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "poison_damage_3": {
         "name": "Poison Damage",
@@ -3261,7 +3376,8 @@
             "value": 20.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "poison_rapid": {
         "name": "Rapid Toxin",
@@ -3319,7 +3435,8 @@
             "value": -100.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "restoration_1": {
         "name": "Restoration",
@@ -3349,7 +3466,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "restoration_2": {
         "name": "Restoration",
@@ -3379,7 +3497,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "restoration_3": {
         "name": "Restoration",
@@ -3409,7 +3528,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "spell_crit": {
         "name": "Unstable Power",
@@ -3438,7 +3558,8 @@
         "triggers": [],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "spell_crit_chance_1": {
         "name": "Critical Hit Chance",
@@ -3468,7 +3589,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "spell_crit_chance_2": {
         "name": "Spell Critical Hit Damage",
@@ -3498,7 +3620,8 @@
             "value": 20.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "spell_crit_chance_3": {
         "name": "Critical Hit Chance",
@@ -3528,7 +3651,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 1
+        "max_upgrade_level": 1,
+        "socket": false
       },
       "spell_damage_1": {
         "name": "Spell Damage",
@@ -3564,7 +3688,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "spell_damage_2": {
         "name": "Spell Damage",
@@ -3600,7 +3725,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "spell_damage_and_speed_1": {
         "name": "Sorcery",
@@ -3650,7 +3776,8 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "spell_speed_1": {
         "name": "Casting Speed",
@@ -3680,7 +3807,8 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "spell_speed_2": {
         "name": "Casting Speed",
@@ -3710,7 +3838,8 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "status_duration_1": {
         "name": "Effects Duration",
@@ -3740,7 +3869,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "status_duration_2": {
         "name": "Effects Duration",
@@ -3770,7 +3900,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "status_duration_3": {
         "name": "Effects Duration",
@@ -3800,7 +3931,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "storm_damage_1": {
         "name": "Storm Damage",
@@ -3836,7 +3968,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "storm_damage_2": {
         "name": "Effects Duration",
@@ -3872,7 +4005,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "storm_damage_3": {
         "name": "Effects Duration",
@@ -3908,7 +4042,8 @@
             "value": 20.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "storm_lucky": {
         "name": "Lightning Always Strike Twice",
@@ -3937,7 +4072,8 @@
         "triggers": [],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "success_chance_1": {
         "name": "Success Chance",
@@ -3973,7 +4109,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "success_chance_2": {
         "name": "Success Chance",
@@ -4009,7 +4146,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "success_chance_3": {
         "name": "Success Chance",
@@ -4045,7 +4183,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "success_chance_lucky": {
         "name": "Loaded Dice",
@@ -4070,7 +4209,8 @@
         "triggers": [],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null
+        "max_upgrade_level": null,
+        "socket": false
       },
       "threat_damage_1": {
         "name": "Threat Damage",
@@ -4122,7 +4262,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "threat_damage_2": {
         "name": "Threat Damage",
@@ -4174,7 +4315,8 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "threat_damage_3": {
         "name": "Threat Damage",
@@ -4226,7 +4368,8 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3
+        "max_upgrade_level": 3,
+        "socket": false
       }
     },
     "connections": [
@@ -4701,6 +4844,14 @@
       {
         "from": "gold_shower_5",
         "to": "gold_shower_6"
+      },
+      {
+        "from": "562d4b3f-e1a6-4009-be4b-0ca6a00f9f5a",
+        "to": "spell_damage_and_speed_1"
+      },
+      {
+        "from": "5ddd5ed0-eab3-42a5-a48e-26f3a3626c55",
+        "to": "mana_max_and_regen_1"
       }
     ]
   }

@@ -117,7 +117,7 @@ fn ConfirmButton(
                         }
                         Err(e) => show_toast(
                             toaster,
-                            format!("failed to buy benedictions: {e}"),
+                            format!("Failed to buy benedictions: {e}"),
                             ToastVariant::Error,
                         ),
                     }

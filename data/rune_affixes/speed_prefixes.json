@@ -1,0 +1,363 @@
+[
+  {
+    "name": "Nimble",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "name": "Quick",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "name": "Swift",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "name": "Brisk",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": 4
+      }
+    ]
+  },
+  {
+    "name": "Sudden",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "name": "Impulsive",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Rune"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": 6
+      }
+    ]
+  },
+  {
+    "name": "Precipitate",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Rune"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": 7
+      }
+    ]
+  },
+  {
+    "name": "Abrupt",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Rune"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": 8
+      }
+    ]
+  },
+  {
+    "name": "Immediate",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Rune"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": 9
+      }
+    ]
+  },
+  {
+    "name": "Unforeseen",
+    "family": "inc_attack_speed",
+    "tags": ["Attack", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Rune"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Attack" },
+        "modifier": "Multiplier",
+        "value": 10
+      }
+    ]
+  },
+
+  {
+    "name": "Spiraling",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "name": "Veering",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "name": "Surging",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "name": "Soaring",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": 4
+      }
+    ]
+  },
+  {
+    "name": "Warping",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "name": "Distorting",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Rune"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": 6
+      }
+    ]
+  },
+  {
+    "name": "Skewed",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Rune"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": 7
+      }
+    ]
+  },
+  {
+    "name": "Displaced",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Rune"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": 8
+      }
+    ]
+  },
+  {
+    "name": "Anomalous",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Rune"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": 9
+      }
+    ]
+  },
+  {
+    "name": "Paradoxical",
+    "family": "inc_spell_speed",
+    "tags": ["Spell", "Speed"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Rune"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Speed": "Spell" },
+        "modifier": "Multiplier",
+        "value": 10
+      }
+    ]
+  }
+]
