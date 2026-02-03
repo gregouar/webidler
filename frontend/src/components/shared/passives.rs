@@ -155,11 +155,11 @@ pub fn Node(
         let status = node_status();
         match (status.purchase_status, status.meta_status) {
             (PurchaseStatus::Purchaseable, _) => {
-                "saturate-50 cursor-pointer group active:brightness-50"
+                "saturate-50 cursor-pointer group active:brightness-50 pointer-events: none"
             }
-            (_, MetaStatus::Locked) => "saturate-50 brightness-30",
-            (PurchaseStatus::Inactive, _) => "saturate-20 brightness-30",
-            _ => "",
+            (_, MetaStatus::Locked) => "saturate-50 brightness-30 pointer-events: none",
+            (PurchaseStatus::Inactive, _) => "saturate-20 brightness-30 pointer-events: none",
+            _ => "pointer-events: none",
         }
     };
 
@@ -273,7 +273,6 @@ pub fn Node(
                                         format!(
                                             "pointer-events: none;
                                             image-rendering: pixelated; 
-                                            content-visibility: auto; 
                                             filter: {} {}",
                                             icon_filter(),
                                             invert_filter,
@@ -371,6 +370,7 @@ pub fn Connection(
                                     ""
                                 }
                             }
+                            style="pointer-events: none"
                             stroke=format!("url(#{gradient_id})")
                             stroke-dasharray=dasharray
                             stroke-linecap="round"

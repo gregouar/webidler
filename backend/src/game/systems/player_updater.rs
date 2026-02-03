@@ -262,7 +262,11 @@ fn compute_player_specs(
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::StatConverter(StatConverterSpecs {
-                source: StatConverterSource::CritDamage | StatConverterSource::Damage { .. },
+                source:
+                    StatConverterSource::CritDamage
+                    | StatConverterSource::Damage { .. }
+                    | StatConverterSource::MinDamage { .. }
+                    | StatConverterSource::MaxDamage { .. },
                 ..
             })
             | StatType::SuccessChance { .. }

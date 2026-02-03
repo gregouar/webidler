@@ -19,5 +19,44 @@
     },
     "affixes": [],
     "min_area_level": 150
+  },
+  "rune_storm_average": {
+    "name": "Flux Stabilizer",
+    "description": "Tames the wildest storms, binding chaos into order.",
+    "icon": "items/rune_flux_stabilizer.webp",
+    "categories": ["Rune"],
+    "ignore_quality": true,
+    "rune_specs": {
+      "root_node": true
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "StatConverter": {
+            "source": { "MaxDamage": { "damage_type": "Storm" } },
+            "target_stat": {
+              "MinDamage": {
+                "skill_type": null,
+                "damage_type": "Storm"
+              }
+            },
+            "target_modifier": "Flat",
+            "is_extra": false,
+            "skill_type": null
+          }
+        },
+        "modifier": "Flat",
+        "value": 50
+      },
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Storm" } },
+        "modifier": "Multiplier",
+        "value": [100, 200]
+      }
+    ],
+    "min_area_level": 150
   }
 }

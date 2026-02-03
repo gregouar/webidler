@@ -246,6 +246,8 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
 
                 StatConverterSource::CritDamage
                 | StatConverterSource::Damage { .. }
+                | StatConverterSource::MinDamage { .. }
+                | StatConverterSource::MaxDamage { .. }
                 | StatConverterSource::ThreatLevel => {
                     continue;
                 }

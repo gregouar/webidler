@@ -397,6 +397,14 @@ pub struct StatConverterSpecs {
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatConverterSource {
     CritDamage,
+    MinDamage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
+    MaxDamage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
     Damage {
         #[serde(default)]
         damage_type: Option<DamageType>,

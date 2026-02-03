@@ -89,6 +89,10 @@
     {
       "item_id": "rune_root",
       "weight": 80
+    },
+    {
+      "item_id": "rune_storm_average",
+      "weight": 50
     }
   ]
 }

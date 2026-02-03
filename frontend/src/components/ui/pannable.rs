@@ -181,7 +181,7 @@ pub fn Pannable(
             on:touchstart=on_touch_start
             on:touchmove=on_touch_move
             on:touchend=on_touch_end
-            class="flex items-center justify-center w-full h-full touch-none overflow-hidden"
+            class="flex items-center justify-center w-full h-full touch-none overflow-hidden xl:drop-shadow-[0_2px_4px_black]"
         >
             <svg
                 node_ref=svg_ref
@@ -231,7 +231,7 @@ pub fn Pannable(
                         let (x, y) = offset.get();
                         format!("translate({x},{y}) scale({})", zoom.get())
                     }
-                    class="xl:drop-shadow-[0_2px_4px_black] will-change-transform"
+                    class=" will-change-transform"
                 >
                     {children()}
                 </g>

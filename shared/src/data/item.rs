@@ -100,8 +100,6 @@ pub enum ItemCategory {
     Focus,
     Jewelry,
     Accessory,
-    Map,
-    Rune,
     // Minor categories:
     Amulet,
     Body,
@@ -110,6 +108,9 @@ pub enum ItemCategory {
     Gloves,
     Helmet,
     Ring,
+    // Other categories:
+    Map,
+    Rune,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
