@@ -1,0 +1,182 @@
+[
+  {
+    "name": "of Greed",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [10, 20]
+      }
+    ]
+  },
+  {
+    "name": "of Cupidity",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [30, 40]
+      }
+    ]
+  },
+  {
+    "name": "of Avarice",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [50, 60]
+      }
+    ]
+  },
+  {
+    "name": "of Covetousness",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [70, 80]
+      }
+    ]
+  },
+  {
+    "name": "of Rapacity",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [90, 100]
+      }
+    ]
+  },
+  {
+    "name": "of Plunder",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Rune"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [110, 120]
+      }
+    ]
+  },
+  {
+    "name": "of Pillage",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Rune"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [130, 140]
+      }
+    ]
+  },
+  {
+    "name": "of Looting",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Rune"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [150, 160]
+      }
+    ]
+  },
+  {
+    "name": "of Hoarding",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Rune"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [170, 180]
+      }
+    ]
+  },
+  {
+    "name": "of Gluttony",
+    "family": "inc_gold",
+    "tags": ["Gold"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Rune"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [190, 200]
+      }
+    ]
+  }
+]

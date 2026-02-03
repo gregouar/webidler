@@ -17,8 +17,6 @@
 
       "boots_prefixes.json",
       "boots_suffixes.json",
-
-      "cloak_prefixes.json",
       
       "crit_prefixes.json",
       "crit_suffixes.json",
@@ -50,6 +48,8 @@
       "shield_suffixes.json",
 
       "skill_damage_suffixes.json",
+
+      "speed_prefixes.json",
 
       "spell_suffixes.json"
     ]
