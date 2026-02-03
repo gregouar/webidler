@@ -7,7 +7,7 @@
     "rune_specs": {},
     "rarity": "Magic",
     "affixes": [],
-    "min_area_level": 1
+    "min_area_level": 50
   },
   "rune_root": {
     "name": "Anchor Rune",

@@ -58,11 +58,8 @@
     },
     {
       "item_id": "rune",
-      "weight": 400
-    },
-    {
-      "item_id": "rune_root",
-      "weight": 40
+      "weight": 400,
+      "min_area_level": 100
     }
   ]
 }

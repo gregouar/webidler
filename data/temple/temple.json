@@ -15,7 +15,7 @@
     "price_increase_factor": 1e6,
     "upgrade_value": 1,
     "upgrade_modifier": "Flat",
-    "max_upgrade_level": 50
+    "max_upgrade_level": 49
   },
   "life_max": {
     "price": 1e6,
