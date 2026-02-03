@@ -271,7 +271,10 @@ pub fn Node(
                                     xl:drop-shadow-[2px_2px_2px_black]"
                                     style=move || {
                                         format!(
-                                            "pointer-events: none; filter: {} {}",
+                                            "pointer-events: none;
+                                            image-rendering: pixelated; 
+                                            content-visibility: auto; 
+                                            filter: {} {}",
                                             icon_filter(),
                                             invert_filter,
                                         )
