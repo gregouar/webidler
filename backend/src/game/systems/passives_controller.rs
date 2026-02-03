@@ -76,6 +76,8 @@ pub fn compute_passives_tree_specs(
     for (passive_node_id, item_specs) in passives_tree_ascension.socketed_nodes.iter() {
         if let Some(node_specs) = passives_tree_specs.nodes.get_mut(passive_node_id) {
             node_specs.icon = item_specs.base.icon.clone();
+            node_specs.name = item_specs.modifiers.name.clone();
+
             node_specs.effects = (&(item_specs
                 .modifiers
                 .aggregate_effects(AffixEffectScope::Global)))
