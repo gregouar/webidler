@@ -2,7 +2,7 @@ use std::collections::{HashMap, VecDeque};
 
 use shared::data::{
     area::AreaLevel,
-    item::ItemSpecs,
+    item::{ItemRarity, ItemSpecs},
     item_affix::AffixEffectScope,
     passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
     player::PlayerResources,
@@ -268,6 +268,22 @@ pub fn socket_node(
             .unwrap_or_default()
         {
             return Err(AppError::UserError("node is not a socket".into()));
+        }
+
+        if item_specs.modifiers.rarity == ItemRarity::Unique {
+            if passives_tree_ascension
+                .socketed_nodes
+                .iter()
+                .find(|(socket_node_id, socketed_item_specs)| {
+                    socketed_item_specs.modifiers.base_item_id == item_specs.modifiers.base_item_id
+                        && **socket_node_id != passive_node_id
+                })
+                .is_some()
+            {
+                return Err(AppError::UserError(
+                    "cannot socket twice the same Unique Rune".into(),
+                ));
+            }
         }
 
         Ok(passives_tree_ascension

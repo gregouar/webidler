@@ -162,7 +162,7 @@ fn ConfirmButton(
                         }
                         Err(e) => show_toast(
                             toaster,
-                            format!("failed to ascend: {e}"),
+                            format!("Failed to ascend: {e}"),
                             ToastVariant::Error,
                         ),
                     }
@@ -222,7 +222,7 @@ fn ResetButton(
                         }
                         Err(e) => show_toast(
                             toaster,
-                            format!("failed to refund: {e}"),
+                            format!("Failed to refund: {e}"),
                             ToastVariant::Error,
                         ),
                     }
@@ -294,7 +294,7 @@ fn PassiveSkillTree(
                         }
                         Err(e) => show_toast(
                             toaster,
-                            format!("failed to socket: {e}"),
+                            format!("Failed to socket: {e}"),
                             ToastVariant::Error,
                         ),
                     }
@@ -493,7 +493,7 @@ fn AscendNode(
                             }
                             Err(e) => show_toast(
                                 toaster,
-                                format!("failed to socket: {e}"),
+                                format!("Failed to socket: {e}"),
                                 ToastVariant::Error,
                             ),
                         }
