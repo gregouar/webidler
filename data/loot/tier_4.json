@@ -75,6 +75,18 @@
     {
       "item_id": "gold_pendant",
       "weight": 8000
+    },
+    {
+      "item_id": "edict",
+      "weight": 800
+    },
+    {
+      "item_id": "rune",
+      "weight": 800
+    },
+    {
+      "item_id": "rune_root",
+      "weight": 80
     }
   ]
 }

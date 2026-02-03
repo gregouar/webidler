@@ -1,5 +1,5 @@
 use shared::data::{
-    item::{ItemRarity, ItemSpecs},
+    item::{ItemCategory, ItemRarity, ItemSpecs},
     loot::{LootState, QueuedLoot},
     player::PlayerInventory,
 };
@@ -155,6 +155,12 @@ fn item_score(player_controller: &PlayerController, item: &ItemSpecs) -> usize {
         ItemRarity::Normal | ItemRarity::Magic | ItemRarity::Rare | ItemRarity::Masterwork => 0,
         ItemRarity::Unique => 1_500_000,
     };
+
+    if item.base.categories.contains(&ItemCategory::Rune)
+        || item.base.categories.contains(&ItemCategory::Map)
+    {
+        score += 500_000
+    }
 
     score += item
         .modifiers

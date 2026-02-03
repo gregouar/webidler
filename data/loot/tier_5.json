@@ -71,6 +71,18 @@
     {
       "item_id": "crest_pendant",
       "weight": 16000
+    },
+    {
+      "item_id": "edict",
+      "weight": 1600
+    },
+    {
+      "item_id": "rune",
+      "weight": 1600
+    },
+    {
+      "item_id": "rune_root",
+      "weight": 160
     }
   ]
 }
