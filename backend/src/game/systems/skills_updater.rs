@@ -483,6 +483,7 @@ pub fn compute_skill_specs_effect<'a>(
                         bypass_ignore: true,
                     })
                 }
+                // TODO: Apply status?
                 (
                     StatConverterSource::Damage { damage_type },
                     SkillEffectType::FlatDamage { damage, .. },

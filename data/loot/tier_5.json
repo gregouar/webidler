@@ -86,6 +86,10 @@
       "item_id": "rune_root",
       "weight": 160,
       "min_area_level": 200
+    },
+    {
+      "item_id": "rune_poison_fire",
+      "weight": 50
     }
   ]
 }
