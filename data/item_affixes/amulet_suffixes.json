@@ -43,7 +43,7 @@
     "tier": 3,
     "weight": 900,
     "restrictions": ["Amulet"],
-    "item_level": 300,
+    "item_level": 340,
     "effects": [
       {
         "scope": "Global",
@@ -61,7 +61,7 @@
     "tier": 4,
     "weight": 800,
     "restrictions": ["Amulet"],
-    "item_level": 400,
+    "item_level": 480,
     "effects": [
       {
         "scope": "Global",
@@ -79,7 +79,7 @@
     "tier": 5,
     "weight": 700,
     "restrictions": ["Amulet"],
-    "item_level": 500,
+    "item_level": 620,
     "effects": [
       {
         "scope": "Global",
@@ -97,7 +97,7 @@
     "tier": 6,
     "weight": 600,
     "restrictions": ["Amulet"],
-    "item_level": 600,
+    "item_level": 760,
     "effects": [
       {
         "scope": "Global",
@@ -115,7 +115,7 @@
     "tier": 7,
     "weight": 500,
     "restrictions": ["Amulet"],
-    "item_level": 700,
+    "item_level": 900,
     "effects": [
       {
         "scope": "Global",

@@ -25,7 +25,7 @@
     "tier": 2,
     "weight": 1000,
     "restrictions": ["Rune"],
-    "item_level": 50,
+    "item_level": 100,
     "effects": [
       {
         "scope": "Global",
@@ -43,7 +43,7 @@
     "tier": 3,
     "weight": 1000,
     "restrictions": ["Rune"],
-    "item_level": 100,
+    "item_level": 200,
     "effects": [
       {
         "scope": "Global",
@@ -61,7 +61,7 @@
     "tier": 4,
     "weight": 1000,
     "restrictions": ["Rune"],
-    "item_level": 150,
+    "item_level": 300,
     "effects": [
       {
         "scope": "Global",
@@ -79,7 +79,7 @@
     "tier": 5,
     "weight": 1000,
     "restrictions": ["Rune"],
-    "item_level": 200,
+    "item_level": 400,
     "effects": [
       {
         "scope": "Global",
@@ -97,7 +97,7 @@
     "tier": 6,
     "weight": 900,
     "restrictions": ["Rune"],
-    "item_level": 260,
+    "item_level": 500,
     "effects": [
       {
         "scope": "Global",
@@ -115,7 +115,7 @@
     "tier": 7,
     "weight": 800,
     "restrictions": ["Rune"],
-    "item_level": 330,
+    "item_level": 600,
     "effects": [
       {
         "scope": "Global",
@@ -133,7 +133,7 @@
     "tier": 8,
     "weight": 700,
     "restrictions": ["Rune"],
-    "item_level": 410,
+    "item_level": 700,
     "effects": [
       {
         "scope": "Global",
@@ -151,7 +151,7 @@
     "tier": 9,
     "weight": 600,
     "restrictions": ["Rune"],
-    "item_level": 500,
+    "item_level": 800,
     "effects": [
       {
         "scope": "Global",
@@ -169,7 +169,7 @@
     "tier": 10,
     "weight": 500,
     "restrictions": ["Rune"],
-    "item_level": 600,
+    "item_level": 900,
     "effects": [
       {
         "scope": "Global",
@@ -206,7 +206,7 @@
     "tier": 2,
     "weight": 1000,
     "restrictions": ["Rune"],
-    "item_level": 50,
+    "item_level": 100,
     "effects": [
       {
         "scope": "Global",
@@ -224,7 +224,7 @@
     "tier": 3,
     "weight": 1000,
     "restrictions": ["Rune"],
-    "item_level": 100,
+    "item_level": 200,
     "effects": [
       {
         "scope": "Global",
@@ -242,7 +242,7 @@
     "tier": 4,
     "weight": 1000,
     "restrictions": ["Rune"],
-    "item_level": 150,
+    "item_level": 300,
     "effects": [
       {
         "scope": "Global",
@@ -260,7 +260,7 @@
     "tier": 5,
     "weight": 1000,
     "restrictions": ["Rune"],
-    "item_level": 200,
+    "item_level": 400,
     "effects": [
       {
         "scope": "Global",
@@ -278,7 +278,7 @@
     "tier": 6,
     "weight": 900,
     "restrictions": ["Rune"],
-    "item_level": 260,
+    "item_level": 500,
     "effects": [
       {
         "scope": "Global",
@@ -296,7 +296,7 @@
     "tier": 7,
     "weight": 800,
     "restrictions": ["Rune"],
-    "item_level": 330,
+    "item_level": 600,
     "effects": [
       {
         "scope": "Global",
@@ -314,7 +314,7 @@
     "tier": 8,
     "weight": 700,
     "restrictions": ["Rune"],
-    "item_level": 410,
+    "item_level": 700,
     "effects": [
       {
         "scope": "Global",
@@ -332,7 +332,7 @@
     "tier": 9,
     "weight": 600,
     "restrictions": ["Rune"],
-    "item_level": 500,
+    "item_level": 800,
     "effects": [
       {
         "scope": "Global",
@@ -350,7 +350,7 @@
     "tier": 10,
     "weight": 500,
     "restrictions": ["Rune"],
-    "item_level": 600,
+    "item_level": 900,
     "effects": [
       {
         "scope": "Global",

@@ -176,9 +176,10 @@ fn item_score(player_controller: &PlayerController, item: &ItemSpecs) -> usize {
         .modifiers
         .affixes
         .iter()
-        .map(|a| a.tier.pow(2) as usize)
-        .sum::<usize>()
-        * 10_000;
+        // .map(|a| a.tier.pow(2) as usize)
+        .map(|a| (100 + a.item_level as usize).pow(2))
+        .sum::<usize>();
+    // * 10_000;
 
     score += item.modifiers.quality as usize * 1_000;
 

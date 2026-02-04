@@ -65,9 +65,7 @@
     "icon": "items/rune_poison_fire.webp",
     "categories": ["Rune"],
     "ignore_quality": true,
-    "rune_specs": {
-      "root_node": true
-    },
+    "rune_specs": {},
     "rarity": "Unique",
     "affixes": [],
     "triggers": [
@@ -97,7 +95,7 @@
           {
             "stat": { "Damage": {} },
             "modifier": "Flat",
-            "factor": 0.2,
+            "factor": 0.5,
             "source": {
               "StatusValue": {
                 "DamageOverTime": {
@@ -119,7 +117,7 @@
             "source": {
               "StatusDuration": {
                 "DamageOverTime": {
-                  "damage_type": "Fire"
+                  "damage_type": "Poison"
                 }
               }
             }

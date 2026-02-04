@@ -14,11 +14,12 @@ use shared::data::{
 use crate::components::shared::tooltips::{
     conditions_tooltip,
     effects_tooltip::{damage_type_str, format_stat, status_type_str},
-    skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
+    skill_tooltip::{self, shape_str, skill_type_str, EffectLi},
 };
 
-pub fn format_trigger_modifier_as(
+pub fn format_trigger_modifier(
     modifier: Option<&TriggerEffectModifier>,
+    suffix: &'static str,
 ) -> Option<impl IntoView + use<>> {
     modifier.map(|modifier| {
         let factor_str = match modifier.modifier {
@@ -29,7 +30,7 @@ pub fn format_trigger_modifier_as(
             <span class="font-semibold">{factor_str}"%"</span>
             " of "
             {trigger_modifier_source_str(modifier.source)}
-            " as"
+            {suffix}
         }
     })
 }
@@ -51,6 +52,7 @@ pub fn format_extra_trigger_modifiers(
         .iter()
         .filter(|modifier| match modifier.stat {
             StatType::Damage { .. } => modifier.modifier == Modifier::Multiplier,
+            StatType::StatusDuration { .. } => modifier.modifier == Modifier::Multiplier,
             StatType::Restore(_) => modifier.modifier == Modifier::Multiplier,
             _ => true,
         })
