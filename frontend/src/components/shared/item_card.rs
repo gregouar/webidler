@@ -169,6 +169,7 @@ pub fn ItemCard(
                 class="object-contain max-w-full max-h-full transition-all duration-50 ease-in-out
                 group-hover:scale-105 group-hover:brightness-110
                 group-active:scale-90 group-active:brightness-90
+                xl:drop-shadow-[0px_6px_6px_black]
                 "
             />
         </div>
