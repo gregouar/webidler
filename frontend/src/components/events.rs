@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
 use leptos::{
-    ev::{keydown, keyup},
+    ev::{keydown, keyup, visibilitychange},
     prelude::*,
-    web_sys::{Element, HtmlInputElement, HtmlTextAreaElement, wasm_bindgen::JsCast},
+    web_sys::{wasm_bindgen::JsCast, Element, HtmlInputElement, HtmlTextAreaElement},
 };
 use leptos_use::{use_document, use_event_listener};
 
@@ -50,6 +50,10 @@ pub fn provide_events_context() {
         pressed_keys
             .write()
             .insert(Key::from(ev.key().as_str()), false);
+    });
+
+    let _ = use_event_listener(use_document(), visibilitychange, move |_| {
+        pressed_keys.update(|keys| keys.clear());
     });
 
     provide_context(EventsContext { pressed_keys });
