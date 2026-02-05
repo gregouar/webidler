@@ -1,6 +1,181 @@
 {
   "default": {
     "nodes": {
+      "04c74f34-8f5b-4243-b209-ecf2eef4af0d": {
+        "name": "Attack Damage",
+        "icon": "passives/attack.svg",
+        "x": -15.0,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "06b782e0-1d97-4fed-8a7e-8bb673add6c2": {
+        "name": "Maximum Mana",
+        "icon": "passives/mana.svg",
+        "x": 0.0,
+        "y": -35.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "284bae26-9348-46f3-b838-9d5f8c8d1ab9": {
+        "name": "Spell Damage",
+        "icon": "passives/spell.svg",
+        "x": 35.0,
+        "y": -0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Spell",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "396454e1-05d3-4506-b932-e946f337b97d": {
+        "name": "Attack Damage",
+        "icon": "passives/attack.svg",
+        "x": -35.0,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "3c67a2cb-a023-4709-a822-7b1373f00b09": {
+        "name": "Spell Damage",
+        "icon": "passives/spell.svg",
+        "x": 25.0,
+        "y": -0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Spell",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "562d4b3f-e1a6-4009-be4b-0ca6a00f9f5a": {
         "name": "Socket",
         "icon": "",
@@ -64,6 +239,60 @@
         "max_upgrade_level": null,
         "socket": true
       },
+      "6477b5d1-88b7-4d6f-bbbf-73fcbb2b6a26": {
+        "name": "Maximum Life",
+        "icon": "passives/life.svg",
+        "x": 0.0,
+        "y": 25.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": 6.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": 3.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "8006a833-21d3-4055-a4c3-ef2126a5aabc": {
+        "name": "Maximum Life",
+        "icon": "passives/life.svg",
+        "x": 0.0,
+        "y": 15.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": 6.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": 3.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "853715cd-ce16-4b22-96cb-ba6d2d83e3e7": {
         "name": "Lucky Start",
         "icon": "passives/gold.svg",
@@ -125,6 +354,33 @@
         "locked": false,
         "upgrade_effects": [],
         "max_upgrade_level": null,
+        "socket": false
+      },
+      "89d940a4-35b2-43bf-bdeb-a173ef5d4fc7": {
+        "name": "Maximum Mana",
+        "icon": "passives/mana.svg",
+        "x": 0.0,
+        "y": -15.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
         "socket": false
       },
       "arcane_bastion": {
@@ -519,6 +775,60 @@
             },
             "modifier": "Multiplier",
             "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "be8c6e3e-bcd2-485f-88ca-a3741196f833": {
+        "name": "Maximum Mana",
+        "icon": "passives/mana.svg",
+        "x": 0.0,
+        "y": -25.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "becea5a4-8944-49db-8665-2cab32ec0711": {
+        "name": "Maximum Life",
+        "icon": "passives/life.svg",
+        "x": 0.0,
+        "y": 35.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": 6.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": 3.0
           }
         ],
         "max_upgrade_level": 3,
@@ -1445,6 +1755,43 @@
         "max_upgrade_level": null,
         "socket": false
       },
+      "e8f42ab4-4664-4eec-940f-7dd030c0c45c": {
+        "name": "Spell Damage",
+        "icon": "passives/spell.svg",
+        "x": 15.0,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Spell",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "enrage": {
         "name": "Berserker",
         "icon": "passives/enrage.svg",
@@ -1643,6 +1990,43 @@
           }
         ],
         "max_upgrade_level": 1,
+        "socket": false
+      },
+      "f0082e61-4cec-4dc1-af24-b1319fe1e4fc": {
+        "name": "Attack Damage",
+        "icon": "passives/attack.svg",
+        "x": -25.0,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
         "socket": false
       },
       "fire_burn": {
@@ -4879,6 +5263,54 @@
       {
         "from": "5ddd5ed0-eab3-42a5-a48e-26f3a3626c55",
         "to": "mana_max_and_regen_1"
+      },
+      {
+        "from": "853715cd-ce16-4b22-96cb-ba6d2d83e3e7",
+        "to": "04c74f34-8f5b-4243-b209-ecf2eef4af0d"
+      },
+      {
+        "from": "853715cd-ce16-4b22-96cb-ba6d2d83e3e7",
+        "to": "e8f42ab4-4664-4eec-940f-7dd030c0c45c"
+      },
+      {
+        "from": "8006a833-21d3-4055-a4c3-ef2126a5aabc",
+        "to": "853715cd-ce16-4b22-96cb-ba6d2d83e3e7"
+      },
+      {
+        "from": "853715cd-ce16-4b22-96cb-ba6d2d83e3e7",
+        "to": "89d940a4-35b2-43bf-bdeb-a173ef5d4fc7"
+      },
+      {
+        "from": "8006a833-21d3-4055-a4c3-ef2126a5aabc",
+        "to": "6477b5d1-88b7-4d6f-bbbf-73fcbb2b6a26"
+      },
+      {
+        "from": "6477b5d1-88b7-4d6f-bbbf-73fcbb2b6a26",
+        "to": "becea5a4-8944-49db-8665-2cab32ec0711"
+      },
+      {
+        "from": "f0082e61-4cec-4dc1-af24-b1319fe1e4fc",
+        "to": "04c74f34-8f5b-4243-b209-ecf2eef4af0d"
+      },
+      {
+        "from": "f0082e61-4cec-4dc1-af24-b1319fe1e4fc",
+        "to": "396454e1-05d3-4506-b932-e946f337b97d"
+      },
+      {
+        "from": "3c67a2cb-a023-4709-a822-7b1373f00b09",
+        "to": "e8f42ab4-4664-4eec-940f-7dd030c0c45c"
+      },
+      {
+        "from": "3c67a2cb-a023-4709-a822-7b1373f00b09",
+        "to": "284bae26-9348-46f3-b838-9d5f8c8d1ab9"
+      },
+      {
+        "from": "be8c6e3e-bcd2-485f-88ca-a3741196f833",
+        "to": "89d940a4-35b2-43bf-bdeb-a173ef5d4fc7"
+      },
+      {
+        "from": "be8c6e3e-bcd2-485f-88ca-a3741196f833",
+        "to": "06b782e0-1d97-4fed-8a7e-8bb673add6c2"
       }
     ]
   }

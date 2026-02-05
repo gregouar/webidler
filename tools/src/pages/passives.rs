@@ -332,18 +332,30 @@ fn PassiveSkillTree(
     view! {
         <Pannable
             mouse_position
-            on:click=move |_| handle_click_outside(
-                mouse_position,
-                passives_tree_specs,
-                passives_history_tracker,
-                selected_node,
-                tool_mode,
-            )
+            on:click=move |ev| {
+                if ev.button() == 0 {
+                    handle_click_outside(
+                        mouse_position,
+                        passives_tree_specs,
+                        passives_history_tracker,
+                        selected_node,
+                        tool_mode,
+                    )
+                }
+            }
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
-            on:mousedown=move |_| handle_mousedown(mouse_position, tool_mode, selection_rectangle)
-            on:mouseup=move |_| handle_mouseup(tool_mode, selection_rectangle)
+            on:mousedown=move |ev| {
+                if ev.button() == 0 {
+                    handle_mousedown(mouse_position, tool_mode, selection_rectangle)
+                }
+            }
+            on:mouseup=move |ev| {
+                if ev.button() == 0 {
+                    handle_mouseup(tool_mode, selection_rectangle)
+                }
+            }
             disable_left_click_panning=Signal::derive(move || tool_mode.get() == ToolMode::Select)
         >
             <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#grid)" />
