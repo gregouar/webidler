@@ -315,7 +315,7 @@
       "crit_chance": 10,
       "crit_damage": 100
     },
-    "min_area_level": 240
+    "min_area_level": 250
   },
   "compound_bow_unique": {
     "name": "Wyrmshot Engine",
@@ -446,6 +446,24 @@
         ]
       }
     ],
-    "min_area_level": 250
+    "min_area_level": 260
+  },
+  "crossbow": {
+    "name": "Crossbow",
+    "icon": "items/crossbow.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "RangedWeapon"],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [27, 31]
+      },
+      "crit_chance": 10,
+      "crit_damage": 100
+    },
+    "min_area_level": 320
   }
 }

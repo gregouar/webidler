@@ -59,7 +59,7 @@
     {
       "item_id": "rune",
       "weight": 400,
-      "min_area_level": 100
+      "min_area_level": 90
     }
   ]
 }

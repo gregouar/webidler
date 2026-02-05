@@ -112,7 +112,7 @@
     "armor_specs": {
       "armor": 60
     },
-    "min_area_level": 240
+    "min_area_level": 250
   },
   "sabatons_unique": {
     "name": "Wings of the Tempest Drake",
@@ -182,6 +182,16 @@
         ]
       }
     ],
-    "min_area_level": 250
+    "min_area_level": 260
+  },
+  "plated_boots": {
+    "name": "Plated Boots",
+    "icon": "items/plated_boots.webp",
+    "slot": "Boots",
+    "categories": ["Armor", "Boots"],
+    "armor_specs": {
+      "armor": 70
+    },
+    "min_area_level": 320
   }
 }

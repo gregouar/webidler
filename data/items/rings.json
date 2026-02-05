@@ -304,6 +304,21 @@
         "value": 120
       }
     ],
-    "min_area_level": 240
+    "min_area_level": 250
+  },
+  "runic_ring": {
+    "name": "Runic Ring",
+    "icon": "items/runic_ring.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 140
+      }
+    ],
+    "min_area_level": 320
   }
 }

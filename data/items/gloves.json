@@ -225,7 +225,7 @@
     "armor_specs": {
       "armor": 60
     },
-    "min_area_level": 240
+    "min_area_level": 250
   },
   "lamellar_gauntlets_unique": {
     "name": "Twinbound Grasp",
@@ -338,6 +338,16 @@
         ]
       }
     ],
-    "min_area_level": 250
+    "min_area_level": 260
+  },
+  "plated_gauntlets": {
+    "name": "Plated Gauntlets",
+    "icon": "items/plated_gauntlets.webp",
+    "slot": "Gloves",
+    "categories": ["Armor", "Gloves"],
+    "armor_specs": {
+      "armor": 70
+    },
+    "min_area_level": 320
   }
 }
