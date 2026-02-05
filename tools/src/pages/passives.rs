@@ -46,6 +46,7 @@ enum ToolMode {
     Add,
     Edit,
     Connect,
+    Select,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -209,6 +210,17 @@ pub fn PassivesPage() -> impl IntoView {
                                     >
                                         "Edit"
                                     </TabButton>
+                                    <TabButton
+                                        is_active=Signal::derive(move || {
+                                            tool_mode.get() == ToolMode::Select
+                                        })
+                                        on:click=move |_| {
+                                            tool_mode.set(ToolMode::Select);
+                                            clicked_tool_mode.set(ToolMode::Select);
+                                        }
+                                    >
+                                        "Select"
+                                    </TabButton>
                                 </div>
 
                                 <div class="flex-1" />
@@ -264,7 +276,7 @@ pub fn PassivesPage() -> impl IntoView {
                                 }
                                     .into_any()
                             }
-                            ToolMode::Connect | ToolMode::Add => ().into_any(),
+                            ToolMode::Connect | ToolMode::Add | ToolMode::Select => ().into_any(),
                         }}
 
                     </Card>
@@ -314,6 +326,8 @@ fn PassiveSkillTree(
 
     let dragging = RwSignal::new(None);
 
+    let selection_rectangle = RwSignal::new(None);
+
     view! {
         <Pannable
             mouse_position
@@ -323,12 +337,33 @@ fn PassiveSkillTree(
                 passives_history_tracker,
                 selected_node,
                 tool_mode,
+                selection_rectangle,
             )
+            // on:mousedown=move |ev| {
+            // if handle_mousedown(
+            // mouse_position,
+            // passives_tree_specs,
+            // selected_node,
+            // tool_mode,
+            // selection_rectangle,
+            // ) {
+            // ev.stop_propagation();
+            // }
+            // }
+            // on:mouseup=move |_| handle_mouseup(tool_mode, selection_rectangle)
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
         >
             <rect x="-5000" y="-5000" width="10000" height="10000" fill="url(#grid)" />
+            // <div
+            // class="absolute inset-0"
+            // on:mousedown=|ev| {
+            // if tool_mode.get_untracked() == ToolMode::Select {
+            // ev.stop_propagation()
+            // }
+            // }
+            // ></div>
             <For
                 each=move || { passives_tree_specs.read().connections.clone().into_iter() }
                 key=|conn| (conn.from.clone(), conn.to.clone())
@@ -357,6 +392,13 @@ fn PassiveSkillTree(
                     }
                 }}
             </For>
+            <SelectionRectangle
+                passives_tree_specs
+                selected_node
+                mouse_position
+                selection_rectangle
+                tool_mode
+            />
         </Pannable>
     }
 }
@@ -371,6 +413,8 @@ fn ToolNode(
     mouse_position: RwSignal<(f64, f64)>,
     dragging: RwSignal<Option<(f64, f64)>>,
 ) -> impl IntoView {
+    let events_context: EventsContext = expect_context();
+
     let node_specs = {
         let node_id = node_id.clone();
         move || {
@@ -399,10 +443,17 @@ fn ToolNode(
         let node_specs = node_specs.clone();
         move |_| {
             let selected = selected_node.read().is_selected(&node_id);
+            let clickable = if events_context.key_pressed(Key::Ctrl)
+                && tool_mode.get_untracked() == ToolMode::Select
+            {
+                true
+            } else {
+                !selected
+            };
             NodeStatus {
-                purchase_status: match selected {
-                    true => PurchaseStatus::Purchased,
-                    false => PurchaseStatus::Purchaseable,
+                purchase_status: match clickable {
+                    true => PurchaseStatus::Purchaseable,
+                    false => PurchaseStatus::Purchased,
                 },
                 meta_status: match (node_specs().locked, selected) {
                     (_, true) => MetaStatus::Ascended,
@@ -420,7 +471,6 @@ fn ToolNode(
 
     let on_click = {
         let node_id = node_id.clone();
-        let events_context: EventsContext = expect_context();
         move || {
             handle_click_node(
                 node_id.clone(),
@@ -428,11 +478,11 @@ fn ToolNode(
                 passives_history_tracker,
                 selected_node,
                 tool_mode,
-                events_context.key_pressed(Key::Ctrl) 
+                events_context.key_pressed(Key::Ctrl),
             )
         }
     };
-    
+
     let dragging_start: RwSignal<Option<(f64, f64)>> = RwSignal::new(None);
 
     Effect::new({
@@ -473,7 +523,7 @@ fn ToolNode(
         let node_id = node_id.clone();
         move |ev: web_sys::MouseEvent| {
             if ev.button() == 0
-                && let ToolMode::Edit = tool_mode.get_untracked()
+                && let ToolMode::Edit | ToolMode::Select = tool_mode.get_untracked()
                 && dragging.get_untracked().is_none()
                 && selected_node.read().is_selected(&node_id)
             {
@@ -486,7 +536,7 @@ fn ToolNode(
         let node_specs_untracked = node_specs_untracked.clone();
         move |ev: web_sys::MouseEvent| {
             if ev.button() == 0
-                && let ToolMode::Edit = tool_mode.get_untracked()
+                && let ToolMode::Edit | ToolMode::Select = tool_mode.get_untracked()
             {
                 if let Some(old_node_pos) = dragging_start.get_untracked() {
                     let node_specs = node_specs_untracked();
@@ -819,6 +869,75 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
     }
 }
 
+#[component]
+fn SelectionRectangle(
+    mouse_position: RwSignal<(f64, f64)>,
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    selected_node: RwSignal<SelectedNode>,
+    selection_rectangle: RwSignal<Option<(f64, f64)>>,
+    tool_mode: RwSignal<ToolMode>,
+) -> impl IntoView {
+    Effect::new(move || {
+        if let ToolMode::Select = tool_mode.get() {
+            match selection_rectangle.get() {
+                Some(start) => {
+                    let start = mouse_position_to_node_position(start);
+                    let end = mouse_position_to_node_position(mouse_position.get());
+                    let min_x = end.0.min(start.0);
+                    let max_x = end.0.max(start.0);
+                    let min_y = end.1.min(start.1);
+                    let max_y = end.1.max(start.1);
+                    selected_node.set(SelectedNode::Multiple(
+                        passives_tree_specs
+                            .read_untracked()
+                            .nodes
+                            .iter()
+                            .filter_map(|(node_id, node_specs)| {
+                                if node_specs.x >= min_x
+                                    && node_specs.x <= max_x
+                                    && node_specs.y >= min_y
+                                    && node_specs.y <= max_y
+                                {
+                                    Some(node_id.clone())
+                                } else {
+                                    None
+                                }
+                            })
+                            .collect(),
+                    ));
+                }
+                None => {}
+            }
+        } else {
+            selection_rectangle.set(None)
+        }
+    });
+
+    view! {
+        {move || {
+            selection_rectangle
+                .get()
+                .map(|selection_rectangle| {
+                    let x = move || selection_rectangle.0.min(mouse_position.get().0);
+                    let y = move || selection_rectangle.1.min(mouse_position.get().1);
+                    let width = move || (mouse_position.get().0 - selection_rectangle.0).abs();
+                    let height = move || (mouse_position.get().1 - selection_rectangle.1).abs();
+                    view! {
+                        <rect
+                            x=x
+                            y=y
+                            width=width
+                            height=height
+                            fill="rgba(0, 165, 215, 0.2)"
+                            stroke="rgb(0, 165, 215)"
+                            stroke-width="1"
+                        />
+                    }
+                })
+        }}
+    }
+}
+
 fn mouse_position_to_node_position(mouse_position: (f64, f64)) -> (f64, f64) {
     let (x, y) = mouse_position;
     (
@@ -833,6 +952,7 @@ fn handle_click_outside(
     passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
     selected_node: RwSignal<SelectedNode>,
     tool_mode: RwSignal<ToolMode>,
+    selection_rectangle: RwSignal<Option<(f64, f64)>>,
 ) {
     match tool_mode.get_untracked() {
         ToolMode::Edit | ToolMode::Connect => selected_node.set(SelectedNode::None),
@@ -844,8 +964,58 @@ fn handle_click_outside(
             )));
             tool_mode.set(ToolMode::Edit);
         }
+        ToolMode::Select => match selection_rectangle.get_untracked() {
+            Some(_) => {
+                selection_rectangle.set(None);
+            }
+            None => selection_rectangle.set(Some(mouse_position.get_untracked())),
+        },
     }
 }
+
+// fn handle_mousedown(
+//     mouse_position: RwSignal<(f64, f64)>,
+//     passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+//     selected_node: RwSignal<SelectedNode>,
+//     tool_mode: RwSignal<ToolMode>,
+//     selection_rectangle: RwSignal<Option<(f64,f64)>>,
+// ) -> bool {
+//     match tool_mode.get_untracked() {
+//         ToolMode::Select => {
+//             match selection_rectangle.get_untracked() {
+//                 Some(start) => {
+//                     let mouse_position = mouse_position.get_untracked();
+//                     let min_x = mouse_position.0.min(start.0);
+//                     let max_x = mouse_position.0.max(start.0);
+//                     let min_y = mouse_position.1.min(start.1);
+//                     let max_y = mouse_position.1.max(start.1);
+//                     selected_node.set(SelectedNode::Multiple(passives_tree_specs.read_untracked().nodes.iter().filter_map(|(node_id, node_specs)| {
+//                         if node_specs.x >= min_x && node_specs.x <= max_x && node_specs.y >= min_y && node_specs.y <= max_y {
+//                             Some(node_id.clone())
+//                         } else {
+//                             None
+//                         }
+//                     }).collect()));
+//                 }
+//                 None => selection_rectangle.set(Some( mouse_position.get_untracked())),
+//             }
+//             true
+//         }
+//         _ => {false}
+//     }
+// }
+
+// fn handle_mouseup(
+//     tool_mode: RwSignal<ToolMode>,
+//     selection_rectangle: RwSignal<Option<(f64,f64)>>,
+// )  {
+//     match tool_mode.get_untracked() {
+//         ToolMode::Select => {
+//             selection_rectangle.set(None);
+//         }
+//         _ => {}
+//     }
+// }
 
 fn handle_click_node(
     node_id: PassiveNodeId,
@@ -856,7 +1026,7 @@ fn handle_click_node(
     is_ctrl: bool,
 ) {
     match tool_mode.get_untracked() {
-        ToolMode::Edit => {
+        ToolMode::Edit | ToolMode::Select => {
             if is_ctrl {
                 selected_node.update(|selected_node| match selected_node {
                     SelectedNode::None => {
