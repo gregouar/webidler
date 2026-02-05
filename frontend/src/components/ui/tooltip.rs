@@ -241,7 +241,7 @@ where
                 absolute
                 px-2 py-1 xl:px-3 xl:py-1 text-xs xl:text-sm text-white font-normal
                 bg-zinc-900 border border-neutral-200
-                rounded shadow-lg whitespace-nowrap z-50 select-none
+                rounded shadow-lg/30 whitespace-nowrap z-50 select-none
                 {} {}
                 ",
                     position_classes,

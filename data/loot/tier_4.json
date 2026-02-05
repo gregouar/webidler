@@ -79,12 +79,12 @@
     {
       "item_id": "edict",
       "weight": 800,
-      "min_area_level": 150
+      "min_area_level": 140
     },
     {
       "item_id": "rune",
       "weight": 800,
-      "min_area_level": 150
+      "min_area_level": 140
     },
     {
       "item_id": "rune_root",

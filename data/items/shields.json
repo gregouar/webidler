@@ -175,7 +175,7 @@
       "armor": 150,
       "block": 25
     },
-    "min_area_level": 240
+    "min_area_level": 250
   },
   "kite_shield_unique": {
     "name": "Oath of the Cursed King",
@@ -292,6 +292,17 @@
         ]
       }
     ],
-    "min_area_level": 250
+    "min_area_level": 260
+  },
+  "pavise": {
+    "name": "Pavise",
+    "icon": "items/pavise.webp",
+    "slot": "Shield",
+    "categories": ["Shield"],
+    "armor_specs": {
+      "armor": 175,
+      "block": 27
+    },
+    "min_area_level": 320
   }
 }

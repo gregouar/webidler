@@ -145,7 +145,7 @@
         "value": 70.0
       }
     ],
-    "min_area_level": 240
+    "min_area_level": 250
   },
   "ritual_orb_unique": {
     "name": "Zael's Eye",
@@ -203,6 +203,21 @@
         "ignore_quality": true
       }
     ],
-    "min_area_level": 250
+    "min_area_level": 260
+  },
+  "grimoire": {
+    "name": "Grimoire",
+    "icon": "items/grimoire.webp",
+    "slot": "Shield",
+    "categories": ["Focus"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": 80.0
+      }
+    ],
+    "min_area_level": 320
   }
 }

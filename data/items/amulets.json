@@ -189,6 +189,21 @@
         "value": 120
       }
     ],
-    "min_area_level": 240
+    "min_area_level": 250
+  },
+  "sacred_talisman": {
+    "name": "Sacred Talisman",
+    "icon": "items/sacred_talisman.webp",
+    "slot": "Amulet",
+    "categories": ["Jewelry", "Amulet"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 140
+      }
+    ],
+    "min_area_level": 320
   }
 }

@@ -303,6 +303,22 @@
       "crit_chance": 5,
       "crit_damage": 100
     },
-    "min_area_level": 240
+    "min_area_level": 250
+  },
+  "battleaxe": {
+    "name": "Battleaxe",
+    "icon": "items/battleaxe.webp",
+    "slot": "Weapon",
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [14, 22]
+      },
+      "crit_chance": 5,
+      "crit_damage": 100
+    },
+    "min_area_level": 320
   }
 }

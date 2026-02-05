@@ -287,6 +287,33 @@
         "value": 125
       }
     ],
-    "min_area_level": 240
+    "min_area_level": 250
+  },
+  "elven_cape": {
+    "name": "Elven Cape",
+    "icon": "items/elven_cape.webp",
+    "slot": "Accessory",
+    "categories": ["Accessory", "Cloak"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": 150
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": 150
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": 150
+      }
+    ],
+    "min_area_level": 320
   }
 }
