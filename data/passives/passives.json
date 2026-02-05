@@ -64,6 +64,33 @@
         "max_upgrade_level": null,
         "socket": true
       },
+      "853715cd-ce16-4b22-96cb-ba6d2d83e3e7": {
+        "name": "Lucky Start",
+        "icon": "passives/gold.svg",
+        "x": 0.0,
+        "y": 0.0,
+        "size": 2,
+        "initial_node": true,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 50.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 25.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "8939c1bd-e0aa-4d12-88cd-aa933daba56d": {
         "name": "Test Stun Condition",
         "icon": "passives/XXX.svg",

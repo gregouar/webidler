@@ -3,11 +3,17 @@ use leptos::{html::*, prelude::*, web_sys};
 #[component]
 pub fn Pannable(
     children: Children,
+    #[prop(optional, into)] disable_left_click_panning: Option<Signal<bool>>,
     #[prop(optional)] mouse_position: Option<RwSignal<(f64, f64)>>,
 ) -> impl IntoView {
     let offset = RwSignal::new((0.0, 0.0));
     let dragging = RwSignal::new(None::<(f64, f64)>);
     let zoom = RwSignal::new(0.5f64);
+    let disable_left_click_panning = move || {
+        disable_left_click_panning
+            .map(|disable_left_click_panning| disable_left_click_panning.get_untracked())
+            .unwrap_or_default()
+    };
 
     let svg_ref = NodeRef::new();
 
@@ -34,22 +40,12 @@ pub fn Pannable(
         });
     }
 
-    // let on_mouse_move = {
-    //     move |ev: web_sys::MouseEvent| {
-    //         let mouse_pos = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
-    //         if let Some(mouse_position) = mouse_position {
-    //             let offset = offset.get_untracked();
-    //             let zoom = zoom.get_untracked();
-    //             mouse_position.set((
-    //                 (mouse_pos.0 - offset.0) / zoom,
-    //                 (mouse_pos.1 - offset.1) / zoom,
-    //             ));
-    //         }
-    //     }
-    // };
-
     let on_mouse_down = {
         move |ev: web_sys::MouseEvent| {
+            if ev.button() == 0 && disable_left_click_panning() {
+                return;
+            }
+
             ev.stop_propagation();
             let mouse_pos = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
             dragging.set(Some(mouse_pos));
