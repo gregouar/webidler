@@ -1,11 +1,11 @@
-use std::{collections::HashSet, iter};
+use std::iter;
 
+use itertools::all;
 use shared::{
     constants::WAVES_PER_AREA_LEVEL,
     data::{
         area::{AreaLevel, ThreatLevel},
         character::CharacterId,
-        character_status::StatusSpecs,
         skill::TargetType,
         trigger::EventTrigger,
     },
@@ -17,7 +17,7 @@ use crate::game::{
         master_store::MasterStore,
     },
     game_data::GameInstanceData,
-    systems::triggers_controller,
+    systems::{stats_updater::check_condition, triggers_controller},
 };
 
 use super::{
@@ -205,24 +205,6 @@ fn handle_kill_event(
                     monster_state.gold_reward = gold_reward;
                     monster_state.gems_reward = gems_reward;
 
-                    let mut is_debuffed = false;
-                    let mut is_stunned = false;
-                    let mut is_damaged_over_time = HashSet::new();
-                    for (status_specs, _) in monster_state.character_state.statuses.iter() {
-                        match status_specs {
-                            StatusSpecs::Stun => {
-                                is_stunned = true;
-                            }
-                            StatusSpecs::DamageOverTime { damage_type, .. } => {
-                                is_damaged_over_time.insert(damage_type);
-                            }
-                            StatusSpecs::StatModifier { debuff: true, .. } => {
-                                is_debuffed = true;
-                            }
-                            _ => {}
-                        }
-                    }
-
                     for triggered_effects in game_data
                         .player_specs
                         .read()
@@ -230,13 +212,14 @@ fn handle_kill_event(
                         .triggers
                         .iter()
                     {
-                        if let EventTrigger::OnKill(kill_trigger) = triggered_effects.trigger {
-                            if kill_trigger.is_stunned.unwrap_or(is_stunned) == is_stunned
-                                && kill_trigger.is_debuffed.unwrap_or(is_debuffed) == is_debuffed
-                                && kill_trigger
-                                    .is_damaged_over_time
-                                    .is_none_or(|dt| is_damaged_over_time.contains(&dt))
-                            {
+                        if let EventTrigger::OnKill(kill_trigger) = &triggered_effects.trigger {
+                            if all(kill_trigger.conditions.iter(), |condition| {
+                                check_condition(
+                                    &monster_specs.character_specs,
+                                    &monster_state.character_state,
+                                    condition,
+                                )
+                            }) {
                                 trigger_contexts.push(TriggerContext {
                                     trigger: triggered_effects.clone(),
                                     source: CharacterId::Player,

@@ -209,9 +209,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -1415,11 +1413,7 @@
           {
             "trigger_id": "dot_spread",
             "description": "Damage over Time effects spread to nearby Enemies, for their remaining Duration.",
-            "OnKill": {
-              "is_stunned": null,
-              "is_debuffed": null,
-              "is_damaged_over_time": null
-            },
+            "OnKill": {},
             "target": "SameTarget",
             "modifiers": [
               {

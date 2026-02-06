@@ -92,7 +92,7 @@
       {
         "trigger_id": "bloodspiller",
         "OnKill": {
-          "is_damaged_over_time": "Physical"
+          "conditions": [{ "HasStatus": { "DamageOverTime": "Physical" } }]
         },
         "target": "Me",
         "effects": [

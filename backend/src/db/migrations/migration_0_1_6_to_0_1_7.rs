@@ -308,7 +308,7 @@ pub enum OldStatType {
         #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
-        effect_type: Option<StatSkillEffectType>,
+        effect_type: Option<OldStatSkillEffectType>,
     },
 }
 
@@ -408,8 +408,35 @@ impl From<OldStatType> for StatType {
                 effect_type,
             } => SuccessChance {
                 skill_type,
-                effect_type,
+                effect_type: effect_type.map(Into::into),
             },
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum OldStatSkillEffectType {
+    FlatDamage {
+        // damage_type: Option<DamageType>,
+    },
+    ApplyStatus {
+        // status_type: Option<StatStatusType>,
+    },
+    Restore {
+        #[serde(default)]
+        restore_type: Option<RestoreType>,
+    },
+    Resurrect,
+}
+
+impl From<OldStatSkillEffectType> for StatSkillEffectType {
+    fn from(value: OldStatSkillEffectType) -> Self {
+        use StatSkillEffectType::*;
+        match value {
+            OldStatSkillEffectType::FlatDamage {} => FlatDamage {},
+            OldStatSkillEffectType::ApplyStatus {} => ApplyStatus { status_type: None },
+            OldStatSkillEffectType::Restore { restore_type } => Restore { restore_type },
+            OldStatSkillEffectType::Resurrect => Resurrect,
         }
     }
 }

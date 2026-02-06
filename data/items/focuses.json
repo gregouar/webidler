@@ -64,7 +64,9 @@
     "triggers": [
       {
         "trigger_id": "vile_codex",
-        "OnKill": { "is_debuffed": true },
+        "OnKill": {
+          "conditions": [{ "HasStatus": { "skill_type": "Curse" } }]
+        },
         "target": "Me",
         "effects": [
           {

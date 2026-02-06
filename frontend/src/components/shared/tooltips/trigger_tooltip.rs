@@ -227,12 +227,7 @@ fn critical_str(value: Option<bool>) -> &'static str {
 }
 
 fn format_kill_trigger(kill_trigger: &KillTrigger) -> String {
-    format!(
-        "{}{}{}",
-        conditions_tooltip::stunned_str(kill_trigger.is_stunned),
-        conditions_tooltip::debuffed_str(kill_trigger.is_debuffed),
-        conditions_tooltip::damaged_over_time_str(kill_trigger.is_damaged_over_time),
-    )
+    conditions_tooltip::format_skill_modifier_conditions(&kill_trigger.conditions)
 }
 
 fn format_target_type(target_type: &TargetType) -> &'static str {
