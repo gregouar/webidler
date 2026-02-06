@@ -874,34 +874,31 @@ fn SelectionRectangle(
 ) -> impl IntoView {
     Effect::new(move || {
         if let ToolMode::Select = tool_mode.get() {
-            match selection_rectangle.get() {
-                Some(start) => {
-                    let start = mouse_position_to_node_position(start);
-                    let end = mouse_position_to_node_position(mouse_position.get());
-                    let min_x = end.0.min(start.0);
-                    let max_x = end.0.max(start.0);
-                    let min_y = end.1.min(start.1);
-                    let max_y = end.1.max(start.1);
-                    selected_node.set(SelectedNode::Multiple(
-                        passives_tree_specs
-                            .read_untracked()
-                            .nodes
-                            .iter()
-                            .filter_map(|(node_id, node_specs)| {
-                                if node_specs.x >= min_x
-                                    && node_specs.x <= max_x
-                                    && node_specs.y >= min_y
-                                    && node_specs.y <= max_y
-                                {
-                                    Some(node_id.clone())
-                                } else {
-                                    None
-                                }
-                            })
-                            .collect(),
-                    ));
-                }
-                None => {}
+            if let Some(start) = selection_rectangle.get() {
+                let start = mouse_position_to_node_position(start);
+                let end = mouse_position_to_node_position(mouse_position.get());
+                let min_x = end.0.min(start.0);
+                let max_x = end.0.max(start.0);
+                let min_y = end.1.min(start.1);
+                let max_y = end.1.max(start.1);
+                selected_node.set(SelectedNode::Multiple(
+                    passives_tree_specs
+                        .read_untracked()
+                        .nodes
+                        .iter()
+                        .filter_map(|(node_id, node_specs)| {
+                            if node_specs.x >= min_x
+                                && node_specs.x <= max_x
+                                && node_specs.y >= min_y
+                                && node_specs.y <= max_y
+                            {
+                                Some(node_id.clone())
+                            } else {
+                                None
+                            }
+                        })
+                        .collect(),
+                ));
             }
         } else {
             selection_rectangle.set(None)
@@ -967,21 +964,15 @@ fn handle_mousedown(
     tool_mode: RwSignal<ToolMode>,
     selection_rectangle: RwSignal<Option<(f64, f64)>>,
 ) {
-    match tool_mode.get_untracked() {
-        ToolMode::Select => selection_rectangle.set(Some(mouse_position.get_untracked())),
-        _ => {}
-    }
+    if tool_mode.get_untracked() == ToolMode::Select { selection_rectangle.set(Some(mouse_position.get_untracked())) }
 }
 
 fn handle_mouseup(
     tool_mode: RwSignal<ToolMode>,
     selection_rectangle: RwSignal<Option<(f64, f64)>>,
 ) {
-    match tool_mode.get_untracked() {
-        ToolMode::Select => {
-            selection_rectangle.set(None);
-        }
-        _ => {}
+    if tool_mode.get_untracked() == ToolMode::Select {
+        selection_rectangle.set(None);
     }
 }
 
