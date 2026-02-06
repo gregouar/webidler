@@ -8,7 +8,6 @@ use crate::data::{
     character_status::StatusSpecs,
     conditional_modifier::Condition,
     skill::{RestoreType, SkillEffectType},
-    trigger::HitTrigger,
 };
 
 use super::skill::SkillType;
@@ -64,8 +63,7 @@ pub enum StatType {
         damage_type: Option<DamageType>,
     },
     TakeFromManaBeforeLife,
-    Block,
-    BlockSpell,
+    Block(#[serde(default)] Option<SkillType>),
     BlockDamageTaken,
     Damage {
         #[serde(default)]
@@ -85,7 +83,6 @@ pub enum StatType {
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
-    // TODO: Collapse to simple Effect, if more involved trigger is needed, we can always add as pure trigger
     LifeOnHit {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -94,7 +91,12 @@ pub enum StatType {
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
-    Restore(#[serde(default)] Option<RestoreType>),
+    Restore {
+        #[serde(default)]
+        restore_type: Option<RestoreType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
     CritChance(#[serde(default)] Option<SkillType>),
     CritDamage(#[serde(default)] Option<SkillType>),
     StatusPower {
@@ -229,10 +231,23 @@ impl StatType {
                     skill_type: skill_type_2,
                 },
             ) => compare_options(skill_type, skill_type_2),
-            (Restore(first), Restore(second)) => compare_options(first, second),
+            (
+                Restore {
+                    restore_type,
+                    skill_type,
+                },
+                Restore {
+                    restore_type: restore_type_2,
+                    skill_type: skill_type_2,
+                },
+            ) => {
+                compare_options(restore_type, restore_type_2)
+                    && compare_options(skill_type, skill_type_2)
+            }
             (CritChance(first), CritChance(second))
             | (CritDamage(first), CritDamage(second))
-            | (Speed(first), Speed(second)) => compare_options(first, second),
+            | (Speed(first), Speed(second))
+            | (Block(first), Block(second)) => compare_options(first, second),
             (
                 StatusPower {
                     status_type,
@@ -451,6 +466,7 @@ pub enum StatConverterSource {
     MaxMana,
     ManaRegen,
     LifeRegen,
+    Block(SkillType),
     // TODO: Add others, like armor, ...
 }
 

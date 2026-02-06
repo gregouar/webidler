@@ -448,10 +448,10 @@ pub fn compute_skill_specs_effect<'a>(
                 value,
                 ..
             } => {
-                if effect
-                    .stat
-                    .is_match(&StatType::Restore(Some(*restore_type)))
-                {
+                if effect.stat.is_match(&StatType::Restore {
+                    restore_type: Some(*restore_type),
+                    skill_type: Some(skill_type),
+                }) {
                     value.min.apply_effect(effect);
                     value.max.apply_effect(effect);
                 };

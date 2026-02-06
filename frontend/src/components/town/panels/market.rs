@@ -8,7 +8,7 @@ use shared::{
         item::{ItemCategory, ItemRarity},
         market::{MarketFilters, MarketItem, MarketOrderBy},
         passive::StatEffect,
-        skill::{DamageType, SkillType},
+        skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
         stat_effect::{Modifier, StatType},
     },
@@ -1333,7 +1333,13 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             },
             Modifier::Multiplier,
         ),
-        (StatType::Restore(None), Modifier::Multiplier),
+        (
+            StatType::Restore {
+                restore_type: Some(RestoreType::Life),
+                skill_type: None,
+            },
+            Modifier::Multiplier,
+        ),
         (StatType::Speed(None), Modifier::Multiplier),
         (
             StatType::Speed(Some(SkillType::Attack)),

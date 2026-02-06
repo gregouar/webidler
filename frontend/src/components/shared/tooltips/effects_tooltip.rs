@@ -93,6 +93,9 @@ fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> Stri
         StatConverterSource::MaxMana => "Maximum Mana".into(),
         StatConverterSource::ManaRegen => "Mana Regeneration".into(),
         StatConverterSource::LifeRegen => "Life Regeneration".into(),
+        StatConverterSource::Block(skill_type) => {
+            format!("{}Block Chance", skill_type_str(Some(skill_type)))
+        }
     }
 }
 
@@ -303,8 +306,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             _ => format!("{}Resistance", damage_type_str(*armor_type)),
         },
         StatType::TakeFromManaBeforeLife => "Damage taken from Mana before Life".to_string(),
-        StatType::Block => "Block Chance".to_string(),
-        StatType::BlockSpell => "Block Chance applied to Spells".to_string(),
+        StatType::Block(skill_type) => format!("{}Block CHance", skill_type_str(*skill_type)),
         StatType::BlockDamageTaken => "Blocked Damage Taken".to_string(),
         StatType::Damage {
             skill_type,
@@ -330,8 +332,15 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             damage_type_str(*damage_type),
             skill_type_str(*skill_type),
         ),
-        StatType::Restore(restore_type) => {
-            format!("Restore{} Effect", restore_type_str(*restore_type))
+        StatType::Restore {
+            restore_type,
+            skill_type,
+        } => {
+            format!(
+                "Restore{} Effect{}",
+                restore_type_str(*restore_type),
+                with_skill_type_str(*skill_type)
+            )
         }
         StatType::CritChance(skill_type) => {
             format!("{}Critical Hit Chance", skill_type_str(*skill_type))
@@ -457,10 +466,10 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 format_adds_removes(value, false, "% of")
             )
         }
-        StatType::Block => format!("{} Block Chance", format_adds_removes(value, false, "%")),
-        StatType::BlockSpell => format!(
-            "{} Block Chance to Spells",
-            format_adds_removes(value, false, "% of")
+        StatType::Block(skill_type) => format!(
+            "{} {}Block Chance",
+            format_adds_removes(value, false, "%"),
+            skill_type_str(*skill_type)
         ),
         StatType::BlockDamageTaken => {
             format!(
@@ -477,11 +486,15 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             damage_type_str(*damage_type),
             to_skill_type_str(*skill_type)
         ),
-        StatType::Restore(restore_type) => {
+        StatType::Restore {
+            restore_type,
+            skill_type,
+        } => {
             format!(
-                "Restore {} more{}",
+                "Restore {} more{}{}",
                 format_flat_number(value, false),
-                restore_type_str(*restore_type)
+                restore_type_str(*restore_type),
+                with_skill_type_str(*skill_type)
             )
         }
         StatType::CritChance(skill_type) => format!(

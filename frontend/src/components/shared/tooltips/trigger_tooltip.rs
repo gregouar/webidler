@@ -53,7 +53,7 @@ pub fn format_extra_trigger_modifiers(
         .filter(|modifier| match modifier.stat {
             StatType::Damage { .. } => modifier.modifier == Modifier::Multiplier,
             StatType::StatusDuration { .. } => modifier.modifier == Modifier::Multiplier,
-            StatType::Restore(_) => modifier.modifier == Modifier::Multiplier,
+            StatType::Restore{..} => modifier.modifier == Modifier::Multiplier,
             _ => true,
         })
         .map(|modifier| {

@@ -222,11 +222,18 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             }
                         />
                         <Stat
-                            label="Block Chance"
+                            label="Attack Block Chance"
                             value=move || {
                                 format!(
                                     "{:.0}%",
-                                    game_context.player_specs.read().character_specs.block.value,
+                                    game_context
+                                        .player_specs
+                                        .read()
+                                        .character_specs
+                                        .block
+                                        .get(&SkillType::Attack)
+                                        .map(|x| x.value)
+                                        .unwrap_or_default(),
                                 )
                             }
                         />
@@ -235,13 +242,15 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .player_specs
                                 .read()
                                 .character_specs
-                                .block_spell
-                                .value as f64;
+                                .block
+                                .get(&SkillType::Spell)
+                                .map(|x| x.value)
+                                .unwrap_or_default();
                             (block_spell != 0.0)
                                 .then(move || {
                                     view! {
                                         <Stat
-                                            label="Block Chance Applied to Spells"
+                                            label="Spell Block Chance"
                                             value=move || format!("{:.0}%", block_spell)
                                         />
                                     }
@@ -389,9 +398,24 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                 })
                         }}
-                        {make_stat(StatType::Restore(None))}
-                        {make_opt_stat(StatType::Restore(Some(RestoreType::Life)), 0.0)}
-                        {make_opt_stat(StatType::Restore(Some(RestoreType::Mana)), 0.0)}
+                        {make_stat(StatType::Restore {
+                            restore_type: None,
+                            skill_type: None,
+                        })}
+                        {make_opt_stat(
+                            StatType::Restore {
+                                restore_type: Some(RestoreType::Life),
+                                skill_type: None,
+                            },
+                            0.0,
+                        )}
+                        {make_opt_stat(
+                            StatType::Restore {
+                                restore_type: Some(RestoreType::Mana),
+                                skill_type: None,
+                            },
+                            0.0,
+                        )}
                         {make_stat(StatType::StatusDuration {
                             status_type: None,
                             skill_type: None,

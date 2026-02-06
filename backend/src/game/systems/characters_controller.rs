@@ -32,12 +32,11 @@ pub fn attack_character(
 ) {
     let (target_id, (target_specs, target_state)) = target;
 
-    let is_blocked = target_specs.block.roll()
-        & match skill_type {
-            SkillType::Attack => true,
-            SkillType::Spell => target_specs.block_spell.roll(),
-            SkillType::Blessing | SkillType::Curse => false,
-        };
+    let is_blocked = target_specs
+        .block
+        .get(&skill_type)
+        .map(|block| block.roll())
+        .unwrap_or_default();
 
     let is_hurt = damage_character(
         target_specs,

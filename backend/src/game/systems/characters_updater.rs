@@ -122,8 +122,24 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             StatType::TakeFromManaBeforeLife => character_specs
                 .take_from_mana_before_life
                 .apply_effect(effect),
-            StatType::Block => character_specs.block.value.apply_effect(effect),
-            StatType::BlockSpell => character_specs.block_spell.value.apply_effect(effect),
+            StatType::Block(skill_type) => match skill_type {
+                Some(skill_type) => character_specs
+                    .block
+                    .entry(skill_type)
+                    .or_default()
+                    .value
+                    .apply_effect(effect),
+                None => {
+                    for skill_type in SkillType::iter() {
+                        character_specs
+                            .block
+                            .entry(skill_type)
+                            .or_default()
+                            .value
+                            .apply_effect(effect)
+                    }
+                }
+            },
             StatType::BlockDamageTaken => character_specs.block_damage.apply_effect(effect),
             StatType::DamageResistance {
                 skill_type,
@@ -152,17 +168,24 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             StatType::Lucky {
                 skill_type,
                 roll_type: LuckyRollType::Block,
-            } => {
-                if skill_type.is_none_or(|s| s == SkillType::Attack) {
-                    character_specs.block.lucky_chance.apply_effect(effect);
+            } => match skill_type {
+                Some(skill_type) => character_specs
+                    .block
+                    .entry(skill_type)
+                    .or_default()
+                    .lucky_chance
+                    .apply_effect(effect),
+                None => {
+                    for skill_type in SkillType::iter() {
+                        character_specs
+                            .block
+                            .entry(skill_type)
+                            .or_default()
+                            .lucky_chance
+                            .apply_effect(effect)
+                    }
                 }
-                if skill_type.is_none_or(|s| s == SkillType::Spell) {
-                    character_specs
-                        .block_spell
-                        .lucky_chance
-                        .apply_effect(effect);
-                }
-            }
+            },
             StatType::StatConverter(ref specs) => {
                 stat_converters.push((specs.clone(), effect.value));
             }
@@ -193,7 +216,7 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             | StatType::Damage { .. }
             | StatType::MinDamage { .. }
             | StatType::MaxDamage { .. }
-            | StatType::Restore(_)
+            | StatType::Restore { .. }
             | StatType::CritChance(_)
             | StatType::CritDamage(_)
             | StatType::StatusDuration { .. }
@@ -243,6 +266,17 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                     }
                     amount
                 }
+                StatConverterSource::Block(skill_type) => {
+                    if let Some(block) = character_specs.block.get_mut(&skill_type) {
+                        let amount = block.value as f64 * factor;
+                        if !specs.is_extra {
+                            block.value -= amount as f32;
+                        }
+                        amount
+                    } else {
+                        0.0
+                    }
+                }
 
                 StatConverterSource::CritDamage
                 | StatConverterSource::Damage { .. }
@@ -266,7 +300,8 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
 
     character_specs.max_life = character_specs.max_life.max(1.0);
     character_specs.max_mana = character_specs.max_mana.max(0.0);
-    character_specs.block.clamp();
-    character_specs.block_spell.clamp();
+    for block in character_specs.block.values_mut() {
+        block.clamp();
+    }
     character_specs.block_damage = character_specs.block_damage.clamp(0.0, 100.0);
 }

@@ -1,6 +1,8 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
+use sqlx::{types::JsonValue, Transaction};
+
 use shared::data::{
     area::AreaLevel,
     conditional_modifier::Condition,
@@ -14,10 +16,9 @@ use shared::data::{
     trigger::HitTrigger,
     user::UserCharacterId,
 };
-use sqlx::Transaction;
 
 use crate::{
-    app_state::MasterStore,
+    constants::DATA_VERSION,
     db::{
         characters_data::{upsert_character_inventory_data, CharacterDataEntry},
         pool::{Database, DbExecutor, DbPool},
@@ -25,13 +26,13 @@ use crate::{
     game::data::inventory_data::InventoryData,
 };
 
-pub async fn migrate(db_pool: &DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
+pub async fn migrate(db_pool: &DbPool) -> anyhow::Result<()> {
     let mut tx = db_pool.begin().await?;
 
     stop_all_grinds(&mut *tx).await?;
 
-    // migrate_market_items(&mut tx).await?;
     migrate_character_items(&mut tx).await?;
+    migrate_stash_items(&mut tx).await?;
 
     tx.commit().await?;
     Ok(())
@@ -43,46 +44,6 @@ async fn stop_all_grinds<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()
         .await?;
     Ok(())
 }
-
-// async fn migrate_market_items(executor: &mut Transaction<'static, Database>) -> anyhow::Result<()> {
-//     let market_entries = sqlx::query!(
-//         r#"
-//         SELECT
-//             market_id,
-//             item_data as "item_data: JsonValue"
-//         FROM market_old
-//         WHERE data_version IS NULL
-//         "#
-//     )
-//     .fetch_all(&mut **executor)
-//     .await?;
-
-//     let new_market_entries = market_entries
-//         .into_iter()
-//         .map(|market_entry| {
-//             let old_item_modifiers: OldItemModifiers =
-//                 serde_json::from_value(market_entry.item_data)?;
-//             let item_modifiers: ItemModifiers = old_item_modifiers.into();
-//             Ok((
-//                 market_entry.market_id,
-//                 serde_json::to_value(&item_modifiers)?,
-//             ))
-//         })
-//         .collect::<anyhow::Result<Vec<_>>>()?;
-
-//     for (market_id, item_data) in new_market_entries {
-//         sqlx::query!(
-//             "UPDATE market_old SET item_data = $1, data_version = $2 WHERE market_id = $3",
-//             item_data,
-//             DATA_VERSION,
-//             market_id,
-//         )
-//         .execute(&mut **executor)
-//         .await?;
-//     }
-
-//     Ok(())
-// }
 
 async fn migrate_character_items(
     executor: &mut Transaction<'static, Database>,
@@ -120,6 +81,44 @@ async fn migrate_character_items(
     Ok(())
 }
 
+async fn migrate_stash_items(executor: &mut Transaction<'static, Database>) -> anyhow::Result<()> {
+    let market_entries = sqlx::query!(
+        r#"
+        SELECT
+            stash_item_id,
+            item_data as "item_data: JsonValue"
+        FROM stash_items
+        WHERE data_version = '0.1.6'
+        "#
+    )
+    .fetch_all(&mut **executor)
+    .await?;
+
+    let new_market_entries = market_entries
+        .into_iter()
+        .map(|market_entry| {
+            let old_item_modifiers: OldItemModifiers =
+                serde_json::from_value(market_entry.item_data)?;
+            let item_modifiers: ItemModifiers = old_item_modifiers.into();
+            Ok((
+                market_entry.stash_item_id,
+                serde_json::to_value(&item_modifiers)?,
+            ))
+        })
+        .collect::<anyhow::Result<Vec<_>>>()?;
+
+    for (stash_item_id, item_data) in new_market_entries {
+        sqlx::query!(
+            "UPDATE stash_items SET item_data = $1, data_version = $2 WHERE stash_item_id = $3",
+            item_data,
+            DATA_VERSION,
+            stash_item_id,
+        )
+        .execute(&mut **executor)
+        .await?;
+    }
+    Ok(())
+}
 // TODO: Migrate items in inventory, stash_items and stash_item_stats
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -331,8 +330,8 @@ impl From<OldStatType> for StatType {
                 damage_type,
             },
             OldStatType::TakeFromManaBeforeLife => TakeFromManaBeforeLife,
-            OldStatType::Block => Block,
-            OldStatType::BlockSpell => BlockSpell,
+            OldStatType::Block => Block(Some(SkillType::Attack)),
+            OldStatType::BlockSpell => Block(Some(SkillType::Spell)),
             OldStatType::BlockDamageTaken => BlockDamageTaken,
             OldStatType::Damage {
                 skill_type,
@@ -361,7 +360,10 @@ impl From<OldStatType> for StatType {
             OldStatType::ManaOnHit(hit_trigger) => ManaOnHit {
                 skill_type: hit_trigger.skill_type,
             },
-            OldStatType::Restore(restore_type) => Restore(restore_type),
+            OldStatType::Restore(restore_type) => Restore {
+                restore_type,
+                skill_type: None,
+            },
             OldStatType::CritChance(skill_type) => CritChance(skill_type),
             OldStatType::CritDamage(skill_type) => CritDamage(skill_type),
             OldStatType::StatusPower(stat_status_type) => StatusPower {

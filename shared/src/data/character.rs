@@ -75,9 +75,7 @@ pub struct CharacterSpecs {
     #[serde(default)]
     pub armor: HashMap<DamageType, f64>,
     #[serde(default)]
-    pub block: Chance,
-    #[serde(default)]
-    pub block_spell: Chance, // chance to block spell are applied on top of block chance
+    pub block: HashMap<SkillType, Chance>,
     #[serde(default)]
     pub block_damage: f32,
 

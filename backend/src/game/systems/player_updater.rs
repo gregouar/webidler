@@ -133,7 +133,12 @@ pub fn update_player_specs(
         .armor
         .entry(DamageType::Physical)
         .or_default()) += total_armor;
-    player_specs.character_specs.block.value += total_block;
+    player_specs
+        .character_specs
+        .block
+        .entry(SkillType::Attack)
+        .or_default()
+        .value += total_block;
 
     player_specs.character_specs.triggers = passives_tree_state
         .purchased_nodes
@@ -208,7 +213,7 @@ fn compute_player_specs(
                         }),
                         target: TriggerTarget::Source,
                         skill_range: SkillRange::Any,
-                        skill_type: SkillType::Attack,
+                        skill_type: skill_type.unwrap_or_default(),
                         skill_shape: SkillShape::Single,
                         modifiers: Vec::new(),
                         effects: vec![SkillEffect {
@@ -244,8 +249,7 @@ fn compute_player_specs(
             | StatType::ManaRegen
             | StatType::Armor(_)
             | StatType::TakeFromManaBeforeLife
-            | StatType::Block
-            | StatType::BlockSpell
+            | StatType::Block(_)
             | StatType::BlockDamageTaken
             | StatType::DamageResistance { .. }
             | StatType::StatConverter(StatConverterSpecs {
@@ -253,7 +257,8 @@ fn compute_player_specs(
                     StatConverterSource::MaxLife
                     | StatConverterSource::LifeRegen
                     | StatConverterSource::MaxMana
-                    | StatConverterSource::ManaRegen,
+                    | StatConverterSource::ManaRegen
+                    | StatConverterSource::Block(_),
                 ..
             })
             | StatType::StatConditionalModifier { .. } => {}
@@ -262,7 +267,7 @@ fn compute_player_specs(
             | StatType::Damage { .. }
             | StatType::MinDamage { .. }
             | StatType::MaxDamage { .. }
-            | StatType::Restore(_)
+            | StatType::Restore { .. }
             | StatType::CritChance(_)
             | StatType::CritDamage(_)
             | StatType::StatusDuration { .. }

@@ -176,8 +176,10 @@ fn compute_armor_specs(
     for effect in effects {
         match effect.stat {
             StatType::Armor(Some(DamageType::Physical)) => armor_specs.armor.apply_effect(effect),
-            StatType::Block => {
-                armor_specs.block.apply_effect(effect);
+            StatType::Block(skill_type) => {
+                if let Some(SkillType::Attack) | None = skill_type {
+                    armor_specs.block.apply_effect(effect);
+                }
             }
             _ => {}
         }
