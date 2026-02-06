@@ -231,7 +231,7 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
         }
     }
 
-    // TODO: How to propagate to player/monster/skills?
+    // TODO: How to propagate to player/monster/skills? Return effects?
     if !stat_converters.is_empty() {
         let mut stats_converted = Vec::with_capacity(stat_converters.len());
 

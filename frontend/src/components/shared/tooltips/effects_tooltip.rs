@@ -141,7 +141,9 @@ fn stat_skill_effect_type_str(effect_type: Option<StatSkillEffectType>) -> Strin
     match effect_type {
         Some(skill_effect_type) => match skill_effect_type {
             StatSkillEffectType::FlatDamage {} => "Hit".into(),
-            StatSkillEffectType::ApplyStatus {} => "Apply Status".into(),
+            StatSkillEffectType::ApplyStatus { status_type } => {
+                format!("Apply {}", status_type_str(status_type))
+            }
             StatSkillEffectType::Restore { restore_type } => {
                 format!("Restore{}", restore_type_str(restore_type))
             }

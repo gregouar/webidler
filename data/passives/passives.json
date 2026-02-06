@@ -2103,6 +2103,40 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "f39c8abe-6388-410c-8b45-416dbfe666ed": {
+        "name": "New Node",
+        "icon": "passives/XXX.svg",
+        "x": -27.5,
+        "y": -90.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Fire",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Fire"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": false
+      },
       "fire_burn": {
         "name": "Blazing Inferno",
         "icon": "passives/blazing_inferno.svg",

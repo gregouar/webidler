@@ -149,10 +149,6 @@ pub fn compare_options<T: PartialEq>(first: &Option<T>, second: &Option<T>) -> b
 
 impl StatType {
     pub fn is_match(&self, stat_type: &StatType) -> bool {
-        if self == stat_type {
-            return true;
-        }
-
         use StatType::*;
         match (self, stat_type) {
             (
@@ -280,7 +276,7 @@ impl StatType {
                     skill_type: second, ..
                 },
             ) => compare_options(first, second),
-            _ => false,
+            _ => self == stat_type,
         }
     }
 
@@ -360,7 +356,7 @@ pub enum StatSkillEffectType {
         // damage_type: Option<DamageType>,
     },
     ApplyStatus {
-        // status_type: Option<StatStatusType>,
+        status_type: Option<StatStatusType>,
     },
     Restore {
         #[serde(default)]
@@ -371,10 +367,6 @@ pub enum StatSkillEffectType {
 
 impl StatSkillEffectType {
     pub fn is_match(&self, skill_effect_type: &StatSkillEffectType) -> bool {
-        if self == skill_effect_type {
-            return true;
-        }
-
         use StatSkillEffectType::*;
         match (self, skill_effect_type) {
             (
@@ -383,7 +375,13 @@ impl StatSkillEffectType {
                     restore_type: restore_type_2,
                 },
             ) => compare_options(restore_type, restore_type_2),
-            _ => false,
+            (
+                ApplyStatus { status_type },
+                ApplyStatus {
+                    status_type: status_type_2,
+                },
+            ) => compare_options(status_type, status_type_2),
+            _ => self == skill_effect_type,
         }
     }
 }
@@ -392,7 +390,11 @@ impl From<&SkillEffectType> for Option<StatSkillEffectType> {
     fn from(value: &SkillEffectType) -> Self {
         match value {
             SkillEffectType::FlatDamage { .. } => Some(StatSkillEffectType::FlatDamage {}),
-            SkillEffectType::ApplyStatus { .. } => Some(StatSkillEffectType::ApplyStatus {}),
+            SkillEffectType::ApplyStatus { statuses, .. } => {
+                Some(StatSkillEffectType::ApplyStatus {
+                    status_type: statuses.first().map(|status| (&status.status_type).into()),
+                })
+            }
             SkillEffectType::Restore { restore_type, .. } => Some(StatSkillEffectType::Restore {
                 restore_type: Some(*restore_type),
             }),
