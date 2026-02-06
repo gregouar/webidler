@@ -363,14 +363,12 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::MovementSpeed => "Movement Speed".to_string(),
         StatType::GoldFind => "Gold Find".to_string(),
         StatType::ItemRarity => "Item Rarity".to_string(),
-        StatType::LifeOnHit(hit_trigger) => format!(
-            "Life gained on {}Hit",
-            skill_type_str(hit_trigger.skill_type)
-        ),
-        StatType::ManaOnHit(hit_trigger) => format!(
-            "Mana gained on {}Hit",
-            skill_type_str(hit_trigger.skill_type)
-        ),
+        StatType::LifeOnHit { skill_type } => {
+            format!("Life gained on {}Hit", skill_type_str(*skill_type))
+        }
+        StatType::ManaOnHit { skill_type } => {
+            format!("Mana gained on {}Hit", skill_type_str(*skill_type))
+        }
         StatType::DamageResistance {
             skill_type,
             damage_type,
@@ -556,15 +554,15 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 )
             }
         }
-        StatType::LifeOnHit(hit_trigger) => format!(
+        StatType::LifeOnHit { skill_type } => format!(
             "Gain {} Life on {}Hit",
             format_flat_number(value, false),
-            skill_type_str(hit_trigger.skill_type)
+            skill_type_str(*skill_type)
         ),
-        StatType::ManaOnHit(hit_trigger) => format!(
+        StatType::ManaOnHit { skill_type } => format!(
             "Gain {} Mana on {}Hit",
             format_flat_number(value, false),
-            skill_type_str(hit_trigger.skill_type)
+            skill_type_str(*skill_type)
         ),
         StatType::DamageResistance {
             skill_type,

@@ -11,7 +11,6 @@ use shared::{
         skill::{DamageType, SkillType},
         stash::Stash,
         stat_effect::{Modifier, StatType},
-        trigger::HitTrigger,
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
@@ -1347,27 +1346,15 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         (StatType::MovementSpeed, Modifier::Multiplier),
         (StatType::GoldFind, Modifier::Multiplier),
         (
-            StatType::LifeOnHit(HitTrigger {
+            StatType::LifeOnHit {
                 skill_type: Some(SkillType::Attack),
-                range: None,
-                is_crit: None,
-                is_blocked: None,
-                is_hurt: Some(true),
-                is_triggered: None,
-                damage_type: None,
-            }),
+            },
             Modifier::Flat,
         ),
         (
-            StatType::ManaOnHit(HitTrigger {
+            StatType::ManaOnHit {
                 skill_type: Some(SkillType::Attack),
-                range: None,
-                is_crit: None,
-                is_blocked: None,
-                is_hurt: Some(true),
-                is_triggered: None,
-                damage_type: None,
-            }),
+            },
             Modifier::Flat,
         ),
         (StatType::SkillLevel(None), Modifier::Flat),

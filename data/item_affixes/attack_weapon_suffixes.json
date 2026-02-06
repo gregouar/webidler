@@ -735,7 +735,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [1, 2]
       }
@@ -753,7 +753,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [3, 4]
       }
@@ -771,7 +771,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [5, 6]
       }
@@ -789,7 +789,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [7, 8]
       }
@@ -807,7 +807,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [9, 10]
       }
@@ -825,7 +825,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [11, 12]
       }
@@ -843,7 +843,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [13, 14]
       }
@@ -861,7 +861,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [15, 16]
       }
@@ -879,7 +879,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [17, 18]
       }
@@ -897,7 +897,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [19, 20]
       }
@@ -916,7 +916,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [1, 2]
       }
@@ -934,7 +934,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [3, 4]
       }
@@ -952,7 +952,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [5, 6]
       }
@@ -970,7 +970,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [7, 8]
       }
@@ -988,7 +988,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [9, 10]
       }
@@ -1006,7 +1006,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [11, 12]
       }
@@ -1024,7 +1024,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [13, 14]
       }
@@ -1042,7 +1042,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [15, 16]
       }
@@ -1060,7 +1060,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [17, 18]
       }
@@ -1078,7 +1078,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" } },
+        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
         "modifier": "Flat",
         "value": [19, 20]
       }

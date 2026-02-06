@@ -16,7 +16,7 @@ use shared::{
             ApplyStatModifier, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs,
             StatType,
         },
-        trigger::{EventTrigger, TriggerTarget, TriggeredEffect},
+        trigger::{EventTrigger, HitTrigger, TriggerTarget, TriggeredEffect},
     },
 };
 
@@ -194,10 +194,18 @@ fn compute_player_specs(
             StatType::GoldFind => player_specs.gold_find.apply_effect(effect),
             StatType::ThreatGain => player_specs.threat_gain.apply_effect(effect),
             // TODO: Move the character specs
-            StatType::LifeOnHit(hit_trigger) | StatType::ManaOnHit(hit_trigger) => {
+            StatType::LifeOnHit { skill_type } | StatType::ManaOnHit { skill_type } => {
                 if let Modifier::Flat = effect.modifier {
                     player_specs.character_specs.triggers.push(TriggeredEffect {
-                        trigger: EventTrigger::OnHit(hit_trigger),
+                        trigger: EventTrigger::OnHit(HitTrigger {
+                            skill_type,
+                            range: None,
+                            is_crit: None,
+                            is_blocked: None,
+                            is_hurt: Some(true),
+                            is_triggered: Some(false),
+                            damage_type: None,
+                        }),
                         target: TriggerTarget::Source,
                         skill_range: SkillRange::Any,
                         skill_type: SkillType::Attack,
@@ -206,7 +214,7 @@ fn compute_player_specs(
                         effects: vec![SkillEffect {
                             success_chance: Chance::new_sure(),
                             effect_type: SkillEffectType::Restore {
-                                restore_type: if let StatType::LifeOnHit(_) = effect.stat {
+                                restore_type: if let StatType::LifeOnHit { .. } = effect.stat {
                                     RestoreType::Life
                                 } else {
                                     RestoreType::Mana

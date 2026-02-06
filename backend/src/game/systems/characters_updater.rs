@@ -185,7 +185,7 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Only for player (for now...)
-            StatType::LifeOnHit(_) | StatType::ManaOnHit(_) => {}
+            StatType::LifeOnHit { .. } | StatType::ManaOnHit { .. } => {}
             // Only for player
             StatType::MovementSpeed | StatType::GoldFind | StatType::ThreatGain => {}
             // Delegate to skills

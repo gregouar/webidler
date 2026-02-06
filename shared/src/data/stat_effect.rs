@@ -86,8 +86,14 @@ pub enum StatType {
         damage_type: Option<DamageType>,
     },
     // TODO: Collapse to simple Effect, if more involved trigger is needed, we can always add as pure trigger
-    LifeOnHit(#[serde(default)] HitTrigger),
-    ManaOnHit(#[serde(default)] HitTrigger),
+    LifeOnHit {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    ManaOnHit {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
     Restore(#[serde(default)] Option<RestoreType>),
     CritChance(#[serde(default)] Option<SkillType>),
     CritDamage(#[serde(default)] Option<SkillType>),

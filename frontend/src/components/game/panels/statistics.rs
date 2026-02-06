@@ -3,7 +3,6 @@ use leptos::{html::*, prelude::*};
 use shared::data::{
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{Modifier, StatConverterSource, StatConverterSpecs, StatStatusType, StatType},
-    trigger::HitTrigger,
 };
 use strum::IntoEnumIterator;
 
@@ -358,15 +357,9 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         />
                         {move || {
                             let life_on_hit = effect(
-                                StatType::LifeOnHit(HitTrigger {
+                                StatType::LifeOnHit {
                                     skill_type: Some(SkillType::Attack),
-                                    range: None,
-                                    is_crit: None,
-                                    is_blocked: None,
-                                    is_hurt: Some(true),
-                                    is_triggered: None,
-                                    damage_type: None,
-                                }),
+                                },
                                 Modifier::Flat,
                             );
                             (life_on_hit > 0.0)
@@ -381,15 +374,9 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         }}
                         {move || {
                             let mana_on_hit = effect(
-                                StatType::ManaOnHit(HitTrigger {
+                                StatType::ManaOnHit {
                                     skill_type: Some(SkillType::Attack),
-                                    range: None,
-                                    is_crit: None,
-                                    is_blocked: None,
-                                    is_hurt: Some(true),
-                                    is_triggered: None,
-                                    damage_type: None,
-                                }),
+                                },
                                 Modifier::Flat,
                             );
                             (mana_on_hit > 0.0)
