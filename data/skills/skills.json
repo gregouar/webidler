@@ -304,7 +304,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -391,7 +391,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -551,7 +551,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -655,7 +655,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -769,7 +769,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 5
       }
@@ -816,7 +816,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": 5
       }
@@ -858,7 +858,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -910,7 +910,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -1331,7 +1331,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": 4
       }

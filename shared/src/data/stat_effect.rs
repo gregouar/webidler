@@ -312,6 +312,7 @@ pub enum StatStatusType {
     StatModifier {
         #[serde(default)]
         debuff: Option<bool>,
+        // TODO: Add stat type?
     },
     Trigger,
 }

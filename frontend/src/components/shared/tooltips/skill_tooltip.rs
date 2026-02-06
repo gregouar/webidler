@@ -32,10 +32,10 @@ use super::effects_tooltip::damage_type_str;
 
 pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
-        Some(SkillType::Attack) => "Attacks ",
-        Some(SkillType::Spell) => "Spells ",
-        Some(SkillType::Curse) => "Curses ",
-        Some(SkillType::Blessing) => "Blessings ",
+        Some(SkillType::Attack) => "Attack ",
+        Some(SkillType::Spell) => "Spell ",
+        Some(SkillType::Curse) => "Curse ",
+        Some(SkillType::Blessing) => "Blessing ",
         None => "",
     }
 }

@@ -133,7 +133,7 @@ pub fn status_type_str(status_type: Option<StatStatusType>) -> String {
             },
             StatStatusType::Trigger => "Triggered Effects".to_string(),
         },
-        None => "".to_string(),
+        None => "Effects".to_string(),
     }
 }
 
@@ -353,7 +353,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_type,
         } => {
             format!(
-                "{}{} Effect",
+                "{}{}",
                 skill_type_str(*skill_type),
                 status_type_str(*status_type)
             )
@@ -530,7 +530,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 )
             } else {
                 format!(
-                    "{}{} seconds duration to {}",
+                    "{} seconds duration to {}{}",
                     format_adds_removes(value, true, ""),
                     skill_type_str(*skill_type),
                     status_type_str(*status_type)
