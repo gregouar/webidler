@@ -40,7 +40,7 @@
       },
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": {"Block": null},
         "modifier": "Multiplier",
         "value": [20, 40]
       },

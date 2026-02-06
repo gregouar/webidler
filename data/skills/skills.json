@@ -1299,7 +1299,9 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "Restore": "Life" },
+        "stat": {
+          "Restore": { "restore_type": "Life" }
+        },
         "modifier": "Multiplier",
         "value": 20
       }
@@ -1369,7 +1371,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "Restore": "Mana" },
+        "stat": { "Restore": { "restore_type": "Mana" } },
         "modifier": "Flat",
         "value": 1
       },
