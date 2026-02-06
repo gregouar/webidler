@@ -112,9 +112,24 @@ pub struct TriggerEffectModifier {
 pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
     AreaLevel,
-    StatusValue(Option<StatStatusType>),
-    StatusDuration(Option<StatStatusType>),
-    StatusStacks(Option<StatStatusType>),
+    StatusValue {
+        #[serde(default)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    StatusDuration {
+        #[serde(default)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    StatusStacks {
+        #[serde(default)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
     // TODO: Move to conditional modifiers?
     HitCrit,
 }

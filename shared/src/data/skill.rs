@@ -75,6 +75,8 @@ pub enum SkillType {
     #[default]
     Attack,
     Spell,
+    Curse,
+    Blessing,
 }
 
 impl SkillType {

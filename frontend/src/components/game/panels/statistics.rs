@@ -405,22 +405,41 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         {make_stat(StatType::Restore(None))}
                         {make_opt_stat(StatType::Restore(Some(RestoreType::Life)), 0.0)}
                         {make_opt_stat(StatType::Restore(Some(RestoreType::Mana)), 0.0)}
-                        {make_stat(StatType::StatusDuration(None))}
-                        {make_stat(StatType::StatusPower(None))}
+                        {make_stat(StatType::StatusDuration {
+                            status_type: None,
+                            skill_type: None,
+                        })}
+                        {make_stat(StatType::StatusPower {
+                            status_type: None,
+                            skill_type: None,
+                        })}
+                        // TODO: More for stun?
                         {make_opt_stat(
-                            StatType::StatusPower(
-                                Some(StatStatusType::StatModifier {
-                                    debuff: Some(false),
-                                }),
-                            ),
+                            StatType::StatusPower {
+                                status_type: None,
+                                skill_type: Some(SkillType::Blessing),
+                            },
                             0.0,
                         )}
                         {make_opt_stat(
-                            StatType::StatusPower(
-                                Some(StatStatusType::StatModifier {
-                                    debuff: Some(true),
-                                }),
-                            ),
+                            StatType::StatusDuration {
+                                status_type: None,
+                                skill_type: Some(SkillType::Blessing),
+                            },
+                            0.0,
+                        )}
+                        {make_opt_stat(
+                            StatType::StatusPower {
+                                status_type: None,
+                                skill_type: Some(SkillType::Curse),
+                            },
+                            0.0,
+                        )}
+                        {make_opt_stat(
+                            StatType::StatusDuration {
+                                status_type: None,
+                                skill_type: Some(SkillType::Curse),
+                            },
                             0.0,
                         )}
                         {make_opt_stat(
@@ -495,13 +514,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 damage_type: Some(DamageType::Storm),
                             },
                             0.0,
-                        )}
+                        )} // TODO: Elemental dot?
                         {make_opt_stat(
-                            StatType::StatusPower(
-                                Some(StatStatusType::DamageOverTime {
+                            StatType::StatusPower {
+                                status_type: Some(StatStatusType::DamageOverTime {
                                     damage_type: None,
                                 }),
-                            ),
+                                skill_type: None,
+                            },
                             0.0,
                         )} {make_opt_stat(StatType::CritDamage(None), 0.0)}
                     </StatCategory>

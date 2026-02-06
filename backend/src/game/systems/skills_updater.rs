@@ -391,18 +391,20 @@ pub fn compute_skill_specs_effect<'a>(
             }
             SkillEffectType::ApplyStatus { statuses, duration } => {
                 if statuses.iter().any(|status_effect| {
-                    effect.stat.is_match(&StatType::StatusDuration(Some(
-                        (&status_effect.status_type).into(),
-                    )))
+                    effect.stat.is_match(&StatType::StatusDuration {
+                        status_type: Some((&status_effect.status_type).into()),
+                        skill_type: Some(skill_type),
+                    })
                 }) {
                     duration.min.apply_effect(effect);
                     duration.max.apply_effect(effect);
                 }
 
                 for status_effect in statuses.iter_mut() {
-                    if effect.stat.is_match(&StatType::StatusPower(Some(
-                        (&status_effect.status_type).into(),
-                    ))) {
+                    if effect.stat.is_match(&StatType::StatusPower {
+                        status_type: Some((&status_effect.status_type).into()),
+                        skill_type: Some(skill_type),
+                    }) {
                         status_effect.value.min.apply_effect(effect);
                         status_effect.value.max.apply_effect(effect);
                     }

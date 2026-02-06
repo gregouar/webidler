@@ -29,8 +29,8 @@ use crate::components::{
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
     town::{
-        TownContext,
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        TownContext,
     },
     ui::{
         buttons::{MenuButton, MenuButtonRed, TabButton},
@@ -1320,8 +1320,20 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             StatType::CritChance(Some(SkillType::Spell)),
             Modifier::Multiplier,
         ),
-        (StatType::StatusPower(None), Modifier::Multiplier),
-        (StatType::StatusDuration(None), Modifier::Multiplier),
+        (
+            StatType::StatusPower {
+                status_type: None,
+                skill_type: None,
+            },
+            Modifier::Multiplier,
+        ),
+        (
+            StatType::StatusDuration {
+                status_type: None,
+                skill_type: None,
+            },
+            Modifier::Multiplier,
+        ),
         (StatType::Restore(None), Modifier::Multiplier),
         (StatType::Speed(None), Modifier::Multiplier),
         (

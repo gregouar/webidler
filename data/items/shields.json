@@ -220,7 +220,7 @@
         "trigger_id": "kite_shield_unique",
         "description": "Stacks 30% More Damage and -0.3% Life Regeneration per second, for the duration of the Curse.",
         "OnApplyStatus": {
-          "status_type": { "StatModifier": { "debuff": true } },
+          "skill_type": "Curse",
           "is_triggered": false
         },
         "target": "Me",
@@ -244,10 +244,10 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": null
+                "StatusDuration": {}
               },
               {
-                "StatusPower": null
+                "StatusPower": {}
               }
             ]
           },
@@ -270,10 +270,10 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": null
+                "StatusDuration": {}
               },
               {
-                "StatusPower": null
+                "StatusPower": {}
               }
             ]
           }
@@ -281,7 +281,7 @@
         "modifiers": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {}
             },
             "modifier": "Flat",
             "factor": 1.0,

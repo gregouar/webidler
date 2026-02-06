@@ -91,8 +91,18 @@ pub enum StatType {
     Restore(#[serde(default)] Option<RestoreType>),
     CritChance(#[serde(default)] Option<SkillType>),
     CritDamage(#[serde(default)] Option<SkillType>),
-    StatusPower(#[serde(default)] Option<StatStatusType>),
-    StatusDuration(#[serde(default)] Option<StatStatusType>),
+    StatusPower {
+        #[serde(default, flatten)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    StatusDuration {
+        #[serde(default, flatten)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
     Speed(#[serde(default)] Option<SkillType>),
     MovementSpeed,
     GoldFind,
@@ -217,11 +227,29 @@ impl StatType {
             (CritChance(first), CritChance(second))
             | (CritDamage(first), CritDamage(second))
             | (Speed(first), Speed(second)) => compare_options(first, second),
-            (StatusPower(first), StatusPower(second))
-            | (StatusDuration(first), StatusDuration(second)) => match (first, second) {
-                (Some(first), Some(second)) => first.is_match(second),
-                _ => true,
-            },
+            (
+                StatusPower {
+                    status_type,
+                    skill_type,
+                },
+                StatusPower {
+                    status_type: status_type_2,
+                    skill_type: skill_type_2,
+                },
+            )
+            | (
+                StatusDuration {
+                    status_type,
+                    skill_type,
+                },
+                StatusDuration {
+                    status_type: status_type_2,
+                    skill_type: skill_type_2,
+                },
+            ) => {
+                compare_options(status_type, status_type_2)
+                    && compare_options(skill_type, skill_type_2)
+            }
             (SkillLevel(first), SkillLevel(second)) => compare_options(first, second),
             (
                 SkillConditionalModifier {
@@ -244,7 +272,10 @@ impl StatType {
                 | MinDamage { .. }
                 | MaxDamage { .. }
                 | CritDamage(_)
-                | StatusPower(Some(StatStatusType::DamageOverTime { .. }))
+                | StatusPower {
+                    status_type: Some(StatStatusType::DamageOverTime { .. }),
+                    ..
+                }
                 | GoldFind
         )
     }

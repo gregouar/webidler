@@ -209,9 +209,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -1550,10 +1548,10 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": null
+                    "StatusDuration": {}
                   },
                   {
-                    "StatusPower": null
+                    "StatusPower": {}
                   },
                   {
                     "MinDamage": {
@@ -1606,7 +1604,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": null
+                    "StatusDuration": {}
                   },
                   {
                     "MaxDamage": {
@@ -1627,7 +1625,7 @@
                     }
                   },
                   {
-                    "StatusPower": null
+                    "StatusPower": {}
                   }
                 ],
                 "conditional_modifiers": []
@@ -1674,10 +1672,10 @@
                     }
                   },
                   {
-                    "StatusPower": null
+                    "StatusPower": {}
                   },
                   {
-                    "StatusDuration": null
+                    "StatusDuration": {}
                   },
                   {
                     "MaxDamage": {
@@ -1718,7 +1716,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": null
+                    "StatusDuration": {}
                   },
                   {
                     "Damage": {
@@ -1739,7 +1737,7 @@
                     }
                   },
                   {
-                    "StatusPower": null
+                    "StatusPower": {}
                   }
                 ],
                 "conditional_modifiers": []
@@ -1848,7 +1846,7 @@
             "target": "SameTarget",
             "modifiers": [],
             "skill_range": "Melee",
-            "skill_type": "Attack",
+            "skill_type": "Blessing",
             "effects": [
               {
                 "success_chance": {
@@ -2833,9 +2831,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "StatModifier": {
-                  "debuff": true
-                }
+                "skill_type": "Curse"
               }
             },
             "modifier": "Flat",
@@ -4263,7 +4259,7 @@
         "effects": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {}
             },
             "modifier": "Multiplier",
             "value": 10.0
@@ -4274,7 +4270,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {}
             },
             "modifier": "Multiplier",
             "value": 5.0
@@ -4294,7 +4290,7 @@
         "effects": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {}
             },
             "modifier": "Multiplier",
             "value": 10.0
@@ -4305,7 +4301,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {}
             },
             "modifier": "Multiplier",
             "value": 5.0
@@ -4325,7 +4321,7 @@
         "effects": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {}
             },
             "modifier": "Multiplier",
             "value": 20.0
@@ -4336,7 +4332,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {}
             },
             "modifier": "Multiplier",
             "value": 10.0

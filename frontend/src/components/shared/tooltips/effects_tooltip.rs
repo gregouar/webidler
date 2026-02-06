@@ -100,6 +100,8 @@ fn to_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
         Some(SkillType::Attack) => " to Attacks",
         Some(SkillType::Spell) => " to Spells",
+        Some(SkillType::Curse) => " to Curses",
+        Some(SkillType::Blessing) => " to Blessings",
         None => "",
     }
 }
@@ -108,6 +110,8 @@ fn with_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
         Some(SkillType::Attack) => " with Attacks",
         Some(SkillType::Spell) => " with Spells",
+        Some(SkillType::Curse) => " with Curses",
+        Some(SkillType::Blessing) => " with Blessings",
         None => "",
     }
 }
@@ -120,13 +124,13 @@ pub fn status_type_str(status_type: Option<StatStatusType>) -> String {
                 format!("{}Damage over Time", damage_type_str(damage_type))
             }
             StatStatusType::StatModifier { debuff } => match debuff {
-                Some(true) => "Curses".to_string(),
-                Some(false) => "Blessings".to_string(),
-                None => "Curses and Blessings".to_string(),
+                Some(true) => "Negative Statuses".to_string(),
+                Some(false) => "Positive Statuses".to_string(),
+                None => "Statuses".to_string(),
             },
             StatStatusType::Trigger => "Triggered Effects".to_string(),
         },
-        None => "Effects over Time".to_string(),
+        None => "".to_string(),
     }
 }
 
@@ -335,11 +339,25 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::CritDamage(skill_type) => {
             format!("{}Critical Hit Damage", skill_type_str(*skill_type))
         }
-        StatType::StatusPower(status_type) => {
-            format!("{} Effect", status_type_str(*status_type))
+        StatType::StatusPower {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{}{} Effect",
+                skill_type_str(*skill_type),
+                status_type_str(*status_type)
+            )
         }
-        StatType::StatusDuration(status_type) => {
-            format!("{} Duration", status_type_str(*status_type))
+        StatType::StatusDuration {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{}{} Duration",
+                skill_type_str(*skill_type),
+                status_type_str(*status_type)
+            )
         }
         StatType::Speed(skill_type) => format!("{}Speed", skill_type_str(*skill_type)),
         StatType::MovementSpeed => "Movement Speed".to_string(),
@@ -478,20 +496,32 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             format_adds_removes(value, false, "%"),
             to_skill_type_str(*skill_type)
         ),
-        StatType::StatusPower(status_type) => {
+        StatType::StatusPower {
+            status_type,
+            skill_type,
+        } => {
             format!(
-                "{} {}",
+                "{} {}{}",
                 format_adds_removes(value, false, " to"),
+                skill_type_str(*skill_type),
                 status_type_str(*status_type)
             )
         }
-        StatType::StatusDuration(status_type) => {
+        StatType::StatusDuration {
+            status_type,
+            skill_type,
+        } => {
             if value.unwrap_or_default() >= 99999.0 {
-                format!("{} never expire", status_type_str(*status_type))
+                format!(
+                    "{}{} never expire",
+                    skill_type_str(*skill_type),
+                    status_type_str(*status_type)
+                )
             } else {
                 format!(
-                    "{} seconds duration to {}",
+                    "{}{} seconds duration to {}",
                     format_adds_removes(value, true, ""),
+                    skill_type_str(*skill_type),
                     status_type_str(*status_type)
                 )
             }

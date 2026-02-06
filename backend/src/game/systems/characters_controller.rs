@@ -36,6 +36,7 @@ pub fn attack_character(
         & match skill_type {
             SkillType::Attack => true,
             SkillType::Spell => target_specs.block_spell.roll(),
+            SkillType::Blessing | SkillType::Curse => false,
         };
 
     let is_hurt = damage_character(

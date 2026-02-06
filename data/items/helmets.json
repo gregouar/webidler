@@ -112,7 +112,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": [20, 30]
       }
@@ -120,7 +120,7 @@
     "triggers": [
       {
         "trigger_id": "witch_hat",
-        "skill_type": "Attack",
+        "skill_type": "Curse",
         "OnTakeHit": {
           "is_hurt": true
         },

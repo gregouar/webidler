@@ -32,8 +32,10 @@ use super::effects_tooltip::damage_type_str;
 
 pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
-        Some(SkillType::Attack) => "Attack ",
-        Some(SkillType::Spell) => "Spell ",
+        Some(SkillType::Attack) => "Attacks ",
+        Some(SkillType::Spell) => "Spells ",
+        Some(SkillType::Curse) => "Curses ",
+        Some(SkillType::Blessing) => "Blessings ",
         None => "",
     }
 }
@@ -296,7 +298,10 @@ pub fn format_effect(
                         let success_chance = success_chance.clone();
                         let trigger_modifier_duration_str = format_trigger_modifier(
                             find_trigger_modifier(
-                                StatType::StatusDuration(Some(StatStatusType::Stun)),
+                                StatType::StatusDuration {
+                                    status_type: Some(StatStatusType::Stun),
+                                    skill_type: None,
+                                },
                                 modifiers,
                             ),
                             "",
@@ -324,9 +329,12 @@ pub fn format_effect(
                         );
                         let trigger_modifier_duration_str = format_trigger_modifier(
                             find_trigger_modifier(
-                                StatType::StatusDuration(Some(StatStatusType::DamageOverTime {
-                                    damage_type: Some(damage_type),
-                                })),
+                                StatType::StatusDuration {
+                                    status_type: Some(StatStatusType::DamageOverTime {
+                                        damage_type: Some(damage_type),
+                                    }),
+                                    skill_type: None,
+                                },
                                 modifiers,
                             ),
                             "",
@@ -530,7 +538,11 @@ where
 }
 
 fn stackable_str(cumulate: bool) -> &'static str {
-    if cumulate { "Stackable " } else { "" }
+    if cumulate {
+        "Stackable "
+    } else {
+        ""
+    }
 }
 
 #[component]
