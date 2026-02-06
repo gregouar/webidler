@@ -35,7 +35,7 @@
   },
   "chain_lightning": {
     "name": "Chain Lightning",
-    "description": "A power spell that hit randomly multiple enemies, with a possibility to stun them.",
+    "description": "A powerful spell that hit randomly multiple enemies, with a possibility to stun them.",
     "icon": "skills/chain_lightning.svg",
     "skill_type": "Spell",
     "cooldown": 4,
@@ -74,6 +74,62 @@
               "statuses": [
                 {
                   "status_type": "Stun"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "blizzard": {
+    "name": "Blizzard",
+    "description": "Summon a mighty storm that repeatedly hit enemies and slow them.",
+    "icon": "skills/blizzard.svg",
+    "skill_type": "Spell",
+    "cooldown": 10,
+    "mana_cost": 25,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "Multiplier",
+        "value": 50
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "Square4",
+        "repeat": {
+          "value": 5,
+          "target": "Any"
+        },
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Storm": [0, 4]
+              }
+            }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 3,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Speed": null
+                      },
+                      "modifier": "Multiplier",
+                      "debuff": true
+                    }
+                  },
+                  "value": 33
                 }
               ]
             }
