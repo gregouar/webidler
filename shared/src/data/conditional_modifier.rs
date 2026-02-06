@@ -12,7 +12,7 @@ pub struct ConditionalModifier {
 pub enum Condition {
     // HitCrit,
     HasStatus {
-        #[serde(default)]
+        #[serde(default, flatten)]
         status_type: Option<StatStatusType>,
         #[serde(default)]
         skill_type: Option<SkillType>,

@@ -1,6 +1,10 @@
 use shared::data::{
-    conditional_modifier::Condition, skill::DamageType, stat_effect::StatStatusType,
+    conditional_modifier::Condition,
+    skill::{DamageType, SkillType},
+    stat_effect::StatStatusType,
 };
+
+use crate::components::shared::tooltips::skill_tooltip::skill_type_str;
 
 pub fn format_skill_modifier_conditions(conditions: &[Condition]) -> String {
     // TODO: sort?
@@ -10,7 +14,7 @@ pub fn format_skill_modifier_conditions(conditions: &[Condition]) -> String {
             Condition::HasStatus {
                 status_type,
                 skill_type,
-            } => format_status_type_condition(*status_type, *skill_type).to_string(),
+            } => format_status_type_condition(*status_type, *skill_type),
             Condition::MaximumLife => "On Maximum Life".into(),
         })
         .collect::<Vec<_>>()
@@ -20,17 +24,22 @@ pub fn format_skill_modifier_conditions(conditions: &[Condition]) -> String {
 pub fn format_status_type_condition(
     status_type: Option<StatStatusType>,
     skill_type: Option<SkillType>,
-) -> &'static str {
-    match status_type {
-        StatStatusType::Stun => stunned_str(Some(true)),
-        StatStatusType::DamageOverTime { damage_type } => damaged_over_time_str(*damage_type),
-        StatStatusType::StatModifier { debuff } => match debuff {
-            Some(true) => debuffed_str(Some(true)),
-            Some(false) => buffed_str(Some(true)),
-            None => "Under Effects",
+) -> String {
+    let status_type_str = match status_type {
+        Some(status_type) => match status_type {
+            StatStatusType::Stun => stunned_str(Some(true)),
+            StatStatusType::DamageOverTime { damage_type } => damaged_over_time_str(damage_type),
+            StatStatusType::StatModifier { debuff } => match debuff {
+                Some(true) => debuffed_str(Some(true)),
+                Some(false) => buffed_str(Some(true)),
+                None => "Under Effects",
+            },
+            StatStatusType::Trigger => "Under Effects",
         },
-        StatStatusType::Trigger => "Under Effects",
-    }
+        None => "",
+    };
+
+    format!("{}{}", skill_type_str(skill_type), status_type_str)
 }
 
 pub fn stunned_str(value: Option<bool>) -> &'static str {

@@ -216,7 +216,6 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                 statuses: vec![ApplyStatusEffect {
                     status_type: StatusSpecs::DamageOverTime {
                         damage_type: DamageType::Poison,
-                        ignore_armor: false,
                     },
                     value,
                     cumulate: false,

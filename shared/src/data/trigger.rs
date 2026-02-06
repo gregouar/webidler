@@ -113,19 +113,19 @@ pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
     AreaLevel,
     StatusValue {
-        #[serde(default)]
+        #[serde(default, flatten)]
         status_type: Option<StatStatusType>,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
     StatusDuration {
-        #[serde(default)]
+        #[serde(default, flatten)]
         status_type: Option<StatStatusType>,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
     StatusStacks {
-        #[serde(default)]
+        #[serde(default, flatten)]
         status_type: Option<StatStatusType>,
         #[serde(default)]
         skill_type: Option<SkillType>,

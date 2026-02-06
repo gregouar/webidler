@@ -78,14 +78,35 @@ pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource)
         }
         TriggerEffectModifierSource::HitCrit => "Critical".to_string(),
         TriggerEffectModifierSource::AreaLevel => "Area Level".to_string(),
-        TriggerEffectModifierSource::StatusValue(stat_status_type) => {
-            format!("{}Effects", status_type_str(stat_status_type))
+        TriggerEffectModifierSource::StatusValue {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{}{}Effects",
+                skill_type_str(skill_type),
+                status_type_str(status_type)
+            )
         }
-        TriggerEffectModifierSource::StatusDuration(stat_status_type) => {
-            format!("{}Duration", status_type_str(stat_status_type))
+        TriggerEffectModifierSource::StatusDuration {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{}{}Duration",
+                skill_type_str(skill_type),
+                status_type_str(status_type)
+            )
         }
-        TriggerEffectModifierSource::StatusStacks(stat_status_type) => {
-            format!("{}Stack", status_type_str(stat_status_type))
+        TriggerEffectModifierSource::StatusStacks {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{}{}Stack",
+                skill_type_str(skill_type),
+                status_type_str(status_type)
+            )
         }
     }
 }

@@ -5,7 +5,8 @@ use shared::data::{
     conditional_modifier::{Condition, ConditionalModifier},
     player::{CharacterSpecs, CharacterState},
     stat_effect::{
-        EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect, StatType,
+        compare_options, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect,
+        StatType,
     },
 };
 
@@ -90,10 +91,16 @@ pub fn check_condition(
     condition: &Condition,
 ) -> bool {
     match condition {
-        Condition::HasStatus(stat_status_type) => character_state
+        Condition::HasStatus {
+            status_type,
+            skill_type,
+        } => character_state
             .statuses
             .iter()
-            .any(|(status_specs, _)| (*stat_status_type).is_match(&status_specs.into())),
+            .any(|(status_specs, status_state)| {
+                compare_options(status_type, &Some(status_specs.into()))
+                    && compare_options(skill_type, &Some(status_state.skill_type))
+            }),
         Condition::MaximumLife => character_state.life >= character_specs.max_life * 0.99,
     }
 }
