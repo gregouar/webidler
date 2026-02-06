@@ -290,7 +290,7 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             stats_converted.push(StatEffect {
                 stat: (*specs.target_stat).clone(),
                 modifier: specs.target_modifier,
-                value: amount * factor,
+                value: amount,
                 bypass_ignore: true,
             });
         }
