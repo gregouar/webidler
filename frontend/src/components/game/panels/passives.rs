@@ -8,7 +8,7 @@ use shared::{
 use crate::components::{
     game::game_context::GameContext,
     shared::passives::{
-        Connection, MetaStatus, Node, NodeStatus, PurchaseStatus, node_meta_status,
+        node_meta_status, Connection, MetaStatus, Node, NodeStatus, PurchaseStatus,
     },
     ui::{
         card::{Card, CardHeader, CardInset},
@@ -85,6 +85,22 @@ fn InGameNode(
         }
     });
 
+    let connected_nodes: Vec<_> = game_context
+        .passives_tree_specs
+        .read_untracked()
+        .connections
+        .iter()
+        .filter_map(|connection| {
+            if connection.from == node_id {
+                Some(connection.to.clone())
+            } else if connection.to == node_id {
+                Some(connection.from.clone())
+            } else {
+                None
+            }
+        })
+        .collect();
+
     let node_status = Memo::new({
         let node_id = node_id.clone();
 
@@ -106,23 +122,12 @@ fn InGameNode(
                 && points_available.get()
                 && (node_specs.initial_node
                     || game_context
-                        .passives_tree_specs
-                        .read()
-                        .connections
-                        .iter()
-                        .filter(|connection| {
-                            game_context
-                                .passives_tree_state
-                                .read()
-                                .purchased_nodes
-                                .contains(&connection.from)
-                                || game_context
-                                    .passives_tree_state
-                                    .read()
-                                    .purchased_nodes
-                                    .contains(&connection.to)
-                        })
-                        .any(|connection| connection.from == node_id || connection.to == node_id))
+                        .passives_tree_state
+                        .with(|passives_tree_state| {
+                            connected_nodes.iter().any(|connected_node| {
+                                passives_tree_state.purchased_nodes.contains(connected_node)
+                            })
+                        }))
             {
                 PurchaseStatus::Purchaseable
             } else {
