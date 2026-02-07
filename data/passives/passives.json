@@ -685,6 +685,43 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "394948cc-bd15-4549-8e26-0e683e8c7b74": {
+        "name": "Storm Damage",
+        "icon": "passives/storm_damage.svg",
+        "x": 10.0,
+        "y": 60.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Storm"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Storm"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "396454e1-05d3-4506-b932-e946f337b97d": {
         "name": "Attack Speed",
         "icon": "passives/attack_speed.svg",
@@ -796,7 +833,7 @@
       "42ebc03a-3e60-470c-b672-d4ca72442c72": {
         "name": "Stun Chance",
         "icon": "passives/star_swirl.svg",
-        "x": 17.5,
+        "x": 20.0,
         "y": 60.0,
         "size": 0,
         "initial_node": false,
@@ -811,6 +848,16 @@
                     "status_type": "Stun"
                   }
                 }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": "Stun",
+                "skill_type": null
               }
             },
             "modifier": "Multiplier",
@@ -836,6 +883,43 @@
           }
         ],
         "max_upgrade_level": null,
+        "socket": false
+      },
+      "44f57197-8ef3-4956-9ed7-eb40ba1b951d": {
+        "name": "Storm Damage",
+        "icon": "passives/storm_damage.svg",
+        "x": -10.0,
+        "y": 60.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Storm"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Storm"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
         "socket": false
       },
       "453ed12d-79ee-421f-aaca-fc21f58dc2d9": {
@@ -1491,6 +1575,43 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "6a439ad3-cf6b-45c5-815c-269e888b88b8": {
+        "name": "Poison Damage",
+        "icon": "passives/poison_damage.svg",
+        "x": -10.0,
+        "y": -60.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "6bcf67ff-ff16-4082-bf14-72f74bd7b9f9": {
         "name": "Storm Damage",
         "icon": "passives/storm_damage.svg",
@@ -1615,6 +1736,43 @@
         "locked": true,
         "upgrade_effects": [],
         "max_upgrade_level": null,
+        "socket": false
+      },
+      "760a6236-6afc-4a42-bf6a-b6f2df3fa74f": {
+        "name": "Fire Damage",
+        "icon": "passives/fire_damage.svg",
+        "x": 60.0,
+        "y": 10.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Fire",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Fire"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Fire"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
         "socket": false
       },
       "777d60db-963c-4822-bd90-ce7019d49a1f": {
@@ -2024,6 +2182,43 @@
             "stat": "ManaRegen",
             "modifier": "Flat",
             "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "8bc8f516-c2c2-4fa0-96da-312cf1f3523d": {
+        "name": "Fire Damage",
+        "icon": "passives/fire_damage.svg",
+        "x": 60.0,
+        "y": -10.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Fire",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Fire"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Fire"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -3932,6 +4127,43 @@
         "max_upgrade_level": 1,
         "socket": false
       },
+      "e4467b34-351f-4fb4-90f1-393664874993": {
+        "name": "Poison Damage",
+        "icon": "passives/poison_damage.svg",
+        "x": 10.0,
+        "y": -60.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "e7588aa0-9a06-40a0-9c24-3fd3198faba1": {
         "name": "Open Wound Chance",
         "icon": "passives/sword_wound.svg",
@@ -4024,6 +4256,65 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "eb8c6b19-ca8a-4791-be2d-bf649098f40c": {
+        "name": "Poison Duration",
+        "icon": "passives/xx.svg",
+        "x": -20.0,
+        "y": -60.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "f0082e61-4cec-4dc1-af24-b1319fe1e4fc": {
         "name": "Attack Speed",
         "icon": "passives/attack_speed.svg",
@@ -4086,7 +4377,7 @@
         "name": "Burn Chance",
         "icon": "passives/flamed_leaf.svg",
         "x": 60.0,
-        "y": 22.5,
+        "y": 20.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Fire",
@@ -4606,36 +4897,12 @@
         "to": "db2e7410-cfce-423c-8564-f06b56f15af9"
       },
       {
-        "from": "db2e7410-cfce-423c-8564-f06b56f15af9",
-        "to": "abd16719-d299-423a-a184-8cd233dfe87e"
-      },
-      {
-        "from": "abd16719-d299-423a-a184-8cd233dfe87e",
-        "to": "8cedf941-92e1-40c8-8370-edf25634573d"
-      },
-      {
         "from": "60c17832-46cd-4d7b-adee-d172788bfef7",
         "to": "2d2394cc-1605-40fe-923b-3e0fd4502fa3"
       },
       {
-        "from": "2d2394cc-1605-40fe-923b-3e0fd4502fa3",
-        "to": "a2beb5ab-9c0c-485f-b5b1-f8aa631c95df"
-      },
-      {
-        "from": "a2beb5ab-9c0c-485f-b5b1-f8aa631c95df",
-        "to": "49e86eef-f9c6-4a3c-b16c-7a9d1eb1bf9b"
-      },
-      {
         "from": "14e61d75-f5ff-43fc-8b03-744c75b821a7",
         "to": "6bcf67ff-ff16-4082-bf14-72f74bd7b9f9"
-      },
-      {
-        "from": "6bcf67ff-ff16-4082-bf14-72f74bd7b9f9",
-        "to": "453ed12d-79ee-421f-aaca-fc21f58dc2d9"
-      },
-      {
-        "from": "453ed12d-79ee-421f-aaca-fc21f58dc2d9",
-        "to": "b6208dda-e38e-4254-afa7-5f1574034c63"
       },
       {
         "from": "ad5542fe-6a7f-4f67-b3ba-307a2f46f066",
@@ -4692,6 +4959,90 @@
       {
         "from": "9dffc8ca-8c3f-436a-a08c-de27e45ed780",
         "to": "456da99e-36b2-4542-8904-2be314830ed7"
+      },
+      {
+        "from": "453ed12d-79ee-421f-aaca-fc21f58dc2d9",
+        "to": "394948cc-bd15-4549-8e26-0e683e8c7b74"
+      },
+      {
+        "from": "453ed12d-79ee-421f-aaca-fc21f58dc2d9",
+        "to": "44f57197-8ef3-4956-9ed7-eb40ba1b951d"
+      },
+      {
+        "from": "44f57197-8ef3-4956-9ed7-eb40ba1b951d",
+        "to": "6bcf67ff-ff16-4082-bf14-72f74bd7b9f9"
+      },
+      {
+        "from": "44f57197-8ef3-4956-9ed7-eb40ba1b951d",
+        "to": "b6208dda-e38e-4254-afa7-5f1574034c63"
+      },
+      {
+        "from": "394948cc-bd15-4549-8e26-0e683e8c7b74",
+        "to": "6bcf67ff-ff16-4082-bf14-72f74bd7b9f9"
+      },
+      {
+        "from": "394948cc-bd15-4549-8e26-0e683e8c7b74",
+        "to": "b6208dda-e38e-4254-afa7-5f1574034c63"
+      },
+      {
+        "from": "42ebc03a-3e60-470c-b672-d4ca72442c72",
+        "to": "394948cc-bd15-4549-8e26-0e683e8c7b74"
+      },
+      {
+        "from": "abd16719-d299-423a-a184-8cd233dfe87e",
+        "to": "760a6236-6afc-4a42-bf6a-b6f2df3fa74f"
+      },
+      {
+        "from": "abd16719-d299-423a-a184-8cd233dfe87e",
+        "to": "8bc8f516-c2c2-4fa0-96da-312cf1f3523d"
+      },
+      {
+        "from": "760a6236-6afc-4a42-bf6a-b6f2df3fa74f",
+        "to": "db2e7410-cfce-423c-8564-f06b56f15af9"
+      },
+      {
+        "from": "760a6236-6afc-4a42-bf6a-b6f2df3fa74f",
+        "to": "8cedf941-92e1-40c8-8370-edf25634573d"
+      },
+      {
+        "from": "8bc8f516-c2c2-4fa0-96da-312cf1f3523d",
+        "to": "db2e7410-cfce-423c-8564-f06b56f15af9"
+      },
+      {
+        "from": "8bc8f516-c2c2-4fa0-96da-312cf1f3523d",
+        "to": "8cedf941-92e1-40c8-8370-edf25634573d"
+      },
+      {
+        "from": "760a6236-6afc-4a42-bf6a-b6f2df3fa74f",
+        "to": "f39c8abe-6388-410c-8b45-416dbfe666ed"
+      },
+      {
+        "from": "a2beb5ab-9c0c-485f-b5b1-f8aa631c95df",
+        "to": "e4467b34-351f-4fb4-90f1-393664874993"
+      },
+      {
+        "from": "a2beb5ab-9c0c-485f-b5b1-f8aa631c95df",
+        "to": "6a439ad3-cf6b-45c5-815c-269e888b88b8"
+      },
+      {
+        "from": "6a439ad3-cf6b-45c5-815c-269e888b88b8",
+        "to": "2d2394cc-1605-40fe-923b-3e0fd4502fa3"
+      },
+      {
+        "from": "6a439ad3-cf6b-45c5-815c-269e888b88b8",
+        "to": "49e86eef-f9c6-4a3c-b16c-7a9d1eb1bf9b"
+      },
+      {
+        "from": "e4467b34-351f-4fb4-90f1-393664874993",
+        "to": "2d2394cc-1605-40fe-923b-3e0fd4502fa3"
+      },
+      {
+        "from": "e4467b34-351f-4fb4-90f1-393664874993",
+        "to": "49e86eef-f9c6-4a3c-b16c-7a9d1eb1bf9b"
+      },
+      {
+        "from": "6a439ad3-cf6b-45c5-815c-269e888b88b8",
+        "to": "eb8c6b19-ca8a-4791-be2d-bf649098f40c"
       }
     ]
   }
