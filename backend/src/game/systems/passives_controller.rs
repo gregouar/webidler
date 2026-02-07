@@ -14,6 +14,7 @@ use sqlx::Transaction;
 use crate::{
     app_state::MasterStore,
     db::{self, characters::CharacterAreaEntry, pool::Database},
+    game::data::master_store::AreaBlueprintStore,
     rest::AppError,
 };
 
@@ -123,7 +124,7 @@ pub async fn update_ascension(
         .ok_or(anyhow::anyhow!("passives tree not found"))?;
 
     let cost = validate_ascension(passives_tree_specs, passives_tree_ascension)?;
-    let total_shards = compute_total_shards(&areas_completed);
+    let total_shards = compute_total_shards(&master_store.area_blueprints_store, &areas_completed);
 
     if cost > total_shards {
         return Err(AppError::UserError("not enough power shards".to_string()));
@@ -230,10 +231,23 @@ fn compute_max_level_ascension_tree(
     propagated_tree
 }
 
-fn compute_total_shards(areas_completed: &[CharacterAreaEntry]) -> f64 {
+fn compute_total_shards(
+    area_blueprints_store: &AreaBlueprintStore,
+    areas_completed: &[CharacterAreaEntry],
+) -> f64 {
     areas_completed
         .iter()
-        .map(|area| (area.max_area_level / 10) as f64)
+        .map(|area| {
+            if area_blueprints_store
+                .get(&area.area_id)
+                .map(|area_blueprint| !area_blueprint.specs.disable_shards)
+                .unwrap_or_default()
+            {
+                (area.max_area_level / 10) as f64
+            } else {
+                0.0
+            }
+        })
         .sum()
 }
 

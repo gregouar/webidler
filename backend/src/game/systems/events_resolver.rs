@@ -283,7 +283,8 @@ fn handle_area_completed_event(
 ) {
     let area_state = game_data.area_state.mutate();
 
-    if (area_state.area_level > area_state.max_area_level_ever)
+    if !game_data.area_blueprint.specs.disable_shards
+        && (area_state.area_level > area_state.max_area_level_ever)
         && (area_state.area_level - game_data.area_blueprint.specs.starting_level + 1)
             .is_multiple_of(10)
     {

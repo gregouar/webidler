@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use leptos::{
     ev::{keydown, keyup, visibilitychange},
     prelude::*,
-    web_sys::{Element, HtmlInputElement, HtmlTextAreaElement, wasm_bindgen::JsCast},
+    web_sys::{wasm_bindgen::JsCast, Element, HtmlInputElement, HtmlTextAreaElement},
 };
 use leptos_use::{use_document, use_event_listener};
 
@@ -67,6 +67,7 @@ pub enum Key {
     Space,
     Enter,
     Escape,
+    Delete,
     ArrowUp,
     ArrowDown,
     ArrowLeft,
@@ -88,6 +89,7 @@ impl From<&str> for Key {
             "ArrowDown" => Key::ArrowDown,
             "ArrowLeft" => Key::ArrowLeft,
             "ArrowRight" => Key::ArrowRight,
+            "Delete" => Key::Delete,
             s if s.len() == 1 => Key::Character(s.chars().next().unwrap()),
             _ => Key::Unknown,
         }

@@ -16,6 +16,8 @@ pub struct AreaSpecs {
     pub footer_background: String,
     #[serde(default)]
     pub coming_soon: bool,
+    #[serde(default)]
+    pub disable_shards: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

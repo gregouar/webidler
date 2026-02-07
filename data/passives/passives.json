@@ -1,10 +1,37 @@
 {
   "default": {
     "nodes": {
+      "03836189-8913-45b5-bd89-e658b31e79bd": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -100.0,
+        "y": -100.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "04c74f34-8f5b-4243-b209-ecf2eef4af0d": {
         "name": "Attack Damage",
         "icon": "passives/attack.svg",
-        "x": -15.0,
+        "x": -10.0,
         "y": 0.0,
         "size": 0,
         "initial_node": false,
@@ -42,15 +69,15 @@
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
         "x": 0.0,
-        "y": -35.0,
+        "y": -25.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Mana",
         "effects": [
           {
             "stat": "Mana",
-            "modifier": "Flat",
-            "value": 20.0
+            "modifier": "Multiplier",
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -58,28 +85,178 @@
         "upgrade_effects": [
           {
             "stat": "Mana",
-            "modifier": "Flat",
+            "modifier": "Multiplier",
+            "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "0909d43b-bd54-4d6d-8e9d-dd41445cd15e": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -150.0,
+        "y": -150.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
             "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
         "socket": false
       },
-      "284bae26-9348-46f3-b838-9d5f8c8d1ab9": {
-        "name": "Spell Damage",
-        "icon": "passives/spell.svg",
-        "x": 35.0,
-        "y": -0.0,
+      "0bf01c1a-5a2e-4d84-919a-7e4d1ca16fc8": {
+        "name": "Overwhelming Force",
+        "icon": "passives/overwhelming_force.svg",
+        "x": 155.0,
+        "y": 155.0,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": {
+              "CritChance": null
+            },
+            "modifier": "Multiplier",
+            "value": -1e300
+          },
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "CritDamage",
+                "target_stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null
+                  }
+                },
+                "target_modifier": "Multiplier",
+                "is_extra": true,
+                "skill_type": null
+              }
+            },
+            "modifier": "Flat",
+            "value": 25.0
+          }
+        ],
+        "triggers": [],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": false
+      },
+      "0ea487a1-1b61-4f57-bc8b-5af626cb4544": {
+        "name": "Casting Speed",
+        "icon": "passives/spell_speed.svg",
+        "x": 17.5,
+        "y": -7.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Spell",
         "effects": [
           {
             "stat": {
-              "Damage": {
-                "skill_type": "Spell",
-                "damage_type": null
-              }
+              "Speed": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Speed": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "140fa424-f0f3-42b3-927e-b13777d1070e": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 100.0,
+        "y": -100.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "14e61d75-f5ff-43fc-8b03-744c75b821a7": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 0.0,
+        "y": 35.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "1cc7cfb0-1ec8-4696-9baa-5a42fac7db31": {
+        "name": "Critical Hit Chance",
+        "icon": "passives/critical_chance.svg",
+        "x": -90.0,
+        "y": 105.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": {
+              "CritChance": null
             },
             "modifier": "Multiplier",
             "value": 20.0
@@ -90,11 +267,174 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Damage": {
-                "skill_type": "Spell",
-                "damage_type": null
-              }
+              "CritChance": null
             },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "284bae26-9348-46f3-b838-9d5f8c8d1ab9": {
+        "name": "Casting Speed",
+        "icon": "passives/spell_speed.svg",
+        "x": 25.0,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Spell",
+        "effects": [
+          {
+            "stat": {
+              "Speed": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Speed": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "29ba21ea-6046-46f2-8b86-29b1580a1710": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -100.0,
+        "y": 100.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "2b156ff8-1cda-4f0d-a1d3-a20c1ed0a589": {
+        "name": "Mana Regeneration",
+        "icon": "passives/mana_regen.svg",
+        "x": 7.5,
+        "y": -17.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "2dbe7ac1-e92e-46b7-a9d9-6e99da8face6": {
+        "name": "Life Regeneration",
+        "icon": "passives/life_regen.svg",
+        "x": 7.5,
+        "y": 17.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "LifeRegen",
+            "modifier": "Flat",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "LifeRegen",
+            "modifier": "Flat",
+            "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "36d711ca-a888-4315-8cdd-ec21cf7651f8": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -50.0,
+        "y": -200.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "3911490e-aaa4-4c67-a2e4-6e50e19cfba1": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -25.0,
+        "y": 25.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
             "modifier": "Multiplier",
             "value": 10.0
           }
@@ -103,9 +443,9 @@
         "socket": false
       },
       "396454e1-05d3-4506-b932-e946f337b97d": {
-        "name": "Attack Damage",
-        "icon": "passives/attack.svg",
-        "x": -35.0,
+        "name": "Attack Speed",
+        "icon": "passives/attack_speed.svg",
+        "x": -25.0,
         "y": 0.0,
         "size": 0,
         "initial_node": false,
@@ -113,13 +453,10 @@
         "effects": [
           {
             "stat": {
-              "Damage": {
-                "skill_type": "Attack",
-                "damage_type": null
-              }
+              "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -127,23 +464,58 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Damage": {
-                "skill_type": "Attack",
-                "damage_type": null
-              }
+              "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3,
         "socket": false
       },
+      "3a4861a5-e8e3-455d-b458-fe23d932b190": {
+        "name": "Ain't Nobody Got Time for That",
+        "icon": "passives/broken_skull.svg",
+        "x": -142.5,
+        "y": 155.0,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "DamageOverTime": {
+                  "damage_type": null
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -1e300
+          },
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 50.0
+          }
+        ],
+        "triggers": [],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": false
+      },
       "3c67a2cb-a023-4709-a822-7b1373f00b09": {
         "name": "Spell Damage",
         "icon": "passives/spell.svg",
-        "x": 25.0,
-        "y": -0.0,
+        "x": 17.5,
+        "y": 7.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Spell",
@@ -169,6 +541,191 @@
                 "damage_type": null
               }
             },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "453ed12d-79ee-421f-aaca-fc21f58dc2d9": {
+        "name": "Lightning Always Strike Twice",
+        "icon": "passives/lightning_double.svg",
+        "x": -5.0,
+        "y": 102.5,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": {
+              "Lucky": {
+                "skill_type": null,
+                "roll_type": {
+                  "Damage": {
+                    "damage_type": "Storm"
+                  }
+                }
+              }
+            },
+            "modifier": "Flat",
+            "value": 100.0
+          }
+        ],
+        "triggers": [],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": false
+      },
+      "456da99e-36b2-4542-8904-2be314830ed7": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 200.0,
+        "y": -62.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "4827bf74-8168-422a-8623-58eec1307b73": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 25.0,
+        "y": -25.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "49e86eef-f9c6-4a3c-b16c-7a9d1eb1bf9b": {
+        "name": "Poison Damage",
+        "icon": "passives/poison_damage.svg",
+        "x": 0.0,
+        "y": -95.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "4c792411-d741-4a1f-817b-9ff41e45b0a4": {
+        "name": "Physical Damage",
+        "icon": "passives/physical_damage.svg",
+        "x": -95.0,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Physical",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Physical"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Physical"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "5505dc30-ed61-47be-8c38-2d34b86631be": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 150.0,
+        "y": -150.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
             "modifier": "Multiplier",
             "value": 10.0
           }
@@ -179,8 +736,8 @@
       "562d4b3f-e1a6-4009-be4b-0ca6a00f9f5a": {
         "name": "Socket",
         "icon": "",
-        "x": -30.0,
-        "y": -185.0,
+        "x": -32.5,
+        "y": -330.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Armor",
@@ -194,8 +751,8 @@
       "563e3226-2387-4147-bed3-914575c77d9a": {
         "name": "Max Life Max Damage",
         "icon": "passives/attack.svg",
-        "x": 12.5,
-        "y": -87.5,
+        "x": -5.0,
+        "y": -222.5,
         "size": 0,
         "initial_node": true,
         "node_type": "Attack",
@@ -209,7 +766,9 @@
                     "damage_type": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -222,11 +781,75 @@
         "max_upgrade_level": null,
         "socket": false
       },
+      "56639962-c2b7-4135-868b-07486cbfc109": {
+        "name": "Mana Shield",
+        "icon": "passives/mana_shield.svg",
+        "x": -142.5,
+        "y": -152.5,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "TakeFromManaBeforeLife",
+            "modifier": "Flat",
+            "value": 50.0
+          }
+        ],
+        "triggers": [],
+        "locked": true,
+        "upgrade_effects": [
+          {
+            "stat": "TakeFromManaBeforeLife",
+            "modifier": "Flat",
+            "value": 50.0
+          }
+        ],
+        "max_upgrade_level": 2,
+        "socket": false
+      },
+      "5c016eeb-2325-41ff-baa0-01f5bcc5e434": {
+        "name": "Attack Damage",
+        "icon": "passives/attack.svg",
+        "x": -17.5,
+        "y": -7.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "5ddd5ed0-eab3-42a5-a48e-26f3a3626c55": {
         "name": "Socket",
         "icon": "",
-        "x": 30.0,
-        "y": -185.0,
+        "x": 27.5,
+        "y": -330.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Armor",
@@ -237,11 +860,38 @@
         "max_upgrade_level": null,
         "socket": true
       },
+      "60c17832-46cd-4d7b-adee-d172788bfef7": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -0.0,
+        "y": -35.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "6477b5d1-88b7-4d6f-bbbf-73fcbb2b6a26": {
         "name": "Maximum Life",
         "icon": "passives/life.svg",
-        "x": 0.0,
-        "y": 25.0,
+        "x": -7.5,
+        "y": 17.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -249,7 +899,7 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 6.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -258,7 +908,129 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 3.0
+            "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "777d60db-963c-4822-bd90-ce7019d49a1f": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -200.0,
+        "y": 47.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "7a7780b2-b680-4925-ac04-7f93e10a8093": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 150.0,
+        "y": 150.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "7e10ea6e-22f5-43f9-8c49-9df5d664e87a": {
+        "name": "Damage over Time",
+        "icon": "passives/damage_over_time.svg",
+        "x": 105.0,
+        "y": -92.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "DamageOverTime": {
+                  "damage_type": null
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "DamageOverTime": {
+                  "damage_type": null
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "7edaa20f-b316-4cd4-ba30-e37c0f5c6fcb": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 35.0,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -268,7 +1040,7 @@
         "name": "Maximum Life",
         "icon": "passives/life.svg",
         "x": 0.0,
-        "y": 15.0,
+        "y": 10.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -276,7 +1048,7 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 6.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -285,7 +1057,34 @@
           {
             "stat": "Life",
             "modifier": "Multiplier",
-            "value": 3.0
+            "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "807a2b14-4ad6-40d3-9480-90618fa5d792": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 0.0,
+        "y": 85.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -318,11 +1117,92 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "85a30382-d493-4bf3-b499-e9bedd9d2b67": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 0.0,
+        "y": -85.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "870fb1bf-f4da-48aa-9f2c-a0e4390ae8af": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -200.0,
+        "y": -50.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "875d806d-10e2-45cd-ac04-5fea19626672": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -150.0,
+        "y": 150.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "8939c1bd-e0aa-4d12-88cd-aa933daba56d": {
         "name": "Test Stun Condition",
         "icon": "passives/XXX.svg",
-        "x": 30.0,
-        "y": -92.5,
+        "x": 7.5,
+        "y": -222.5,
         "size": 1,
         "initial_node": true,
         "node_type": "Utility",
@@ -358,17 +1238,44 @@
         "socket": false
       },
       "89d940a4-35b2-43bf-bdeb-a173ef5d4fc7": {
-        "name": "Maximum Mana",
-        "icon": "passives/mana.svg",
+        "name": "Mana Regeneration",
+        "icon": "passives/mana_regen.svg",
         "x": 0.0,
-        "y": -15.0,
+        "y": -10.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Mana",
         "effects": [
           {
-            "stat": "Mana",
+            "stat": "ManaRegen",
             "modifier": "Flat",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "8c431093-95e6-4dce-b21a-9a07edfd57ea": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 100.0,
+        "y": 100.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
             "value": 20.0
           }
         ],
@@ -376,8 +1283,262 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Mana",
-            "modifier": "Flat",
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "8cedf941-92e1-40c8-8370-edf25634573d": {
+        "name": "Fire Damage",
+        "icon": "passives/fire_damage.svg",
+        "x": 95.0,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Fire",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Fire"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Fire"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "a2beb5ab-9c0c-485f-b5b1-f8aa631c95df": {
+        "name": "Rapid Toxin",
+        "icon": "passives/rapid_toxin.svg",
+        "x": 0.0,
+        "y": -112.5,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 100.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "DamageOverTime": {
+                  "damage_type": "Poison"
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -100.0
+          }
+        ],
+        "triggers": [],
+        "locked": true,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 100.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "DamageOverTime": {
+                  "damage_type": "Poison"
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -100.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "a4e0da35-c78a-46fb-a50e-c88b165b9112": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -25.0,
+        "y": -25.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "abd16719-d299-423a-a184-8cd233dfe87e": {
+        "name": "Blazing Inferno",
+        "icon": "passives/blazing_inferno.svg",
+        "x": 110.0,
+        "y": 0.0,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Fire",
+        "effects": [],
+        "triggers": [
+          {
+            "trigger_id": "blazing_inferno",
+            "description": "",
+            "OnHit": {
+              "skill_type": null,
+              "range": null,
+              "is_crit": null,
+              "is_blocked": null,
+              "is_hurt": null,
+              "is_triggered": null,
+              "damage_type": null
+            },
+            "target": "SameTarget",
+            "modifiers": [
+              {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 0.25,
+                "source": {
+                  "HitDamage": "Fire"
+                }
+              }
+            ],
+            "skill_range": "Melee",
+            "skill_type": "Attack",
+            "effects": [
+              {
+                "success_chance": {
+                  "value": 50.0,
+                  "lucky_chance": 0.0
+                },
+                "ApplyStatus": {
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Fire"
+                        }
+                      },
+                      "value": {
+                        "min": 0.0,
+                        "max": 0.0,
+                        "lucky_chance": 0.0
+                      },
+                      "cumulate": true,
+                      "replace_on_value_only": false
+                    }
+                  ],
+                  "duration": {
+                    "min": 4.0,
+                    "max": 4.0,
+                    "lucky_chance": 0.0
+                  }
+                },
+                "ignore_stat_effects": [
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": "Fire"
+                    }
+                  },
+                  {
+                    "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": "Fire"
+                    }
+                  },
+                  {
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": "Fire"
+                    }
+                  }
+                ],
+                "conditional_modifiers": []
+              }
+            ],
+            "skill_shape": "Single",
+            "owner": null,
+            "inherit_modifiers": false
+          }
+        ],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": false
+      },
+      "ad5542fe-6a7f-4f67-b3ba-307a2f46f066": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -35.0,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
             "value": 10.0
           }
         ],
@@ -387,8 +1548,8 @@
       "arcane_bastion": {
         "name": "Arcane Bastion",
         "icon": "passives/rosa_shield.svg",
-        "x": -40.0,
-        "y": -162.5,
+        "x": -42.5,
+        "y": -307.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Armor",
@@ -425,8 +1586,8 @@
       "arcane_bastion_block_1": {
         "name": "Block",
         "icon": "passives/block.svg",
-        "x": -50.0,
-        "y": -157.5,
+        "x": -52.5,
+        "y": -302.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -456,8 +1617,8 @@
       "arcane_bastion_block_2": {
         "name": "Block",
         "icon": "passives/block.svg",
-        "x": -50.0,
-        "y": -167.5,
+        "x": -52.5,
+        "y": -312.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -487,8 +1648,8 @@
       "arcane_bastion_block_3": {
         "name": "Block",
         "icon": "passives/block.svg",
-        "x": -41.5,
-        "y": -174.0,
+        "x": -44.0,
+        "y": -319.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -518,8 +1679,8 @@
       "armor_1": {
         "name": "Armor",
         "icon": "passives/armor.svg",
-        "x": -20.0,
-        "y": -137.5,
+        "x": -22.5,
+        "y": -282.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -549,8 +1710,8 @@
       "armor_2": {
         "name": "Armor",
         "icon": "passives/armor.svg",
-        "x": -30.0,
-        "y": -137.5,
+        "x": -32.5,
+        "y": -282.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -580,8 +1741,8 @@
       "armor_and_block_1": {
         "name": "Myrmidon",
         "icon": "passives/myrmidon.svg",
-        "x": -40.0,
-        "y": -142.5,
+        "x": -42.5,
+        "y": -287.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Armor",
@@ -625,8 +1786,8 @@
       "attack_damage_1": {
         "name": "Attack Damage",
         "icon": "passives/attack.svg",
-        "x": -10.0,
-        "y": -130.0,
+        "x": -12.5,
+        "y": -275.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -662,8 +1823,8 @@
       "attack_damage_2": {
         "name": "Attack Damage",
         "icon": "passives/attack.svg",
-        "x": -20.0,
-        "y": -122.5,
+        "x": -22.5,
+        "y": -267.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -699,8 +1860,8 @@
       "attack_damage_and_speed_1": {
         "name": "Frenzy",
         "icon": "passives/frenzy.svg",
-        "x": -25.0,
-        "y": -112.5,
+        "x": -27.5,
+        "y": -257.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Attack",
@@ -750,8 +1911,8 @@
       "attack_speed_1": {
         "name": "Attack Speed",
         "icon": "passives/attack_speed.svg",
-        "x": -5.0,
-        "y": -122.5,
+        "x": -7.5,
+        "y": -267.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -781,8 +1942,8 @@
       "attack_speed_2": {
         "name": "Attack Speed",
         "icon": "passives/attack_speed.svg",
-        "x": -15.0,
-        "y": -115.0,
+        "x": -17.5,
+        "y": -260.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -809,18 +1970,23 @@
         "max_upgrade_level": 3,
         "socket": false
       },
-      "be8c6e3e-bcd2-485f-88ca-a3741196f833": {
-        "name": "Maximum Mana",
-        "icon": "passives/mana.svg",
+      "b6208dda-e38e-4254-afa7-5f1574034c63": {
+        "name": "Storm Damage",
+        "icon": "passives/storm_damage.svg",
         "x": 0.0,
-        "y": -25.0,
+        "y": 95.0,
         "size": 0,
         "initial_node": false,
-        "node_type": "Mana",
+        "node_type": "Storm",
         "effects": [
           {
-            "stat": "Mana",
-            "modifier": "Flat",
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Storm"
+              }
+            },
+            "modifier": "Multiplier",
             "value": 20.0
           }
         ],
@@ -828,36 +1994,130 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Mana",
-            "modifier": "Flat",
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Storm"
+              }
+            },
+            "modifier": "Multiplier",
             "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
         "socket": false
       },
-      "becea5a4-8944-49db-8665-2cab32ec0711": {
-        "name": "Maximum Life",
-        "icon": "passives/life.svg",
-        "x": 0.0,
-        "y": 35.0,
+      "b71d21cc-b30f-4f98-9757-f64f3f3f822d": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 25.0,
+        "y": 25.0,
         "size": 0,
         "initial_node": false,
-        "node_type": "Life",
+        "node_type": "Gold",
         "effects": [
           {
-            "stat": "Life",
+            "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 6.0
+            "value": 20.0
           }
         ],
         "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Life",
+            "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 3.0
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "bd9786ee-ff44-40dd-9bdd-591d0903a074": {
+        "name": "Effects Duration",
+        "icon": "passives/duration.svg",
+        "x": 75.0,
+        "y": 55.0,
+        "size": 1,
+        "initial_node": false,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "be8c6e3e-bcd2-485f-88ca-a3741196f833": {
+        "name": "Maximum Mana",
+        "icon": "passives/mana.svg",
+        "x": -7.5,
+        "y": -17.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Multiplier",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Multiplier",
+            "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "becea5a4-8944-49db-8665-2cab32ec0711": {
+        "name": "Life Regeneration",
+        "icon": "passives/life_regen.svg",
+        "x": 0.0,
+        "y": 25.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "LifeRegen",
+            "modifier": "Flat",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "LifeRegen",
+            "modifier": "Flat",
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3,
@@ -866,8 +2126,8 @@
       "block_1": {
         "name": "Block",
         "icon": "passives/block.svg",
-        "x": -20.0,
-        "y": -147.5,
+        "x": -22.5,
+        "y": -292.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -897,8 +2157,8 @@
       "block_2": {
         "name": "Block",
         "icon": "passives/block.svg",
-        "x": -30.0,
-        "y": -147.5,
+        "x": -32.5,
+        "y": -292.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -925,11 +2185,150 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "c03d8e17-a800-4f92-8e1e-240d64036176": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 50.0,
+        "y": -200.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "c3187473-2fe2-4959-b045-4325d79d783e": {
+        "name": "Armor",
+        "icon": "passives/armor.svg",
+        "x": -67.5,
+        "y": -55.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "c57f2319-656a-4d1a-a50e-568eee84084b": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 200.0,
+        "y": 50.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "c685f882-72ed-4b98-b8c9-5ddb7049a386": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 60.0,
+        "y": -60.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "ce177465-cca9-47d0-86ce-0ec245ea8174": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 85.0,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "cfff8b24-fb03-4a7e-a0b1-0c512a2ec7c4": {
         "name": "Grim Pact",
         "icon": "passives/tentacles_skull.svg",
-        "x": 47.5,
-        "y": -95.0,
+        "x": 137.5,
+        "y": -155.0,
         "size": 2,
         "initial_node": true,
         "node_type": "Mana",
@@ -962,8 +2361,8 @@
       "convert_dot": {
         "name": "Ain't Nobody Got Time for That",
         "icon": "passives/broken_skull.svg",
-        "x": 40.0,
-        "y": -122.5,
+        "x": 37.5,
+        "y": -267.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Attack",
@@ -1000,8 +2399,8 @@
       "convert_dot_damage_1": {
         "name": "Damage",
         "icon": "passives/damage.svg",
-        "x": 41.5,
-        "y": -111.0,
+        "x": 39.0,
+        "y": -256.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -1037,8 +2436,8 @@
       "convert_dot_damage_2": {
         "name": "Damage",
         "icon": "passives/damage.svg",
-        "x": 50.0,
-        "y": -117.5,
+        "x": 47.5,
+        "y": -262.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -1074,8 +2473,8 @@
       "convert_dot_damage_3": {
         "name": "Damage",
         "icon": "passives/damage.svg",
-        "x": 50.0,
-        "y": -127.5,
+        "x": 47.5,
+        "y": -272.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -1111,8 +2510,8 @@
       "crit_chance_1": {
         "name": "Critical Hit Chance",
         "icon": "passives/critical_chance.svg",
-        "x": 10.0,
-        "y": -130.0,
+        "x": 7.5,
+        "y": -275.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -1142,8 +2541,8 @@
       "crit_chance_2": {
         "name": "Critical Hit Chance",
         "icon": "passives/critical_chance.svg",
-        "x": 20.0,
-        "y": -122.5,
+        "x": 17.5,
+        "y": -267.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -1173,8 +2572,8 @@
       "crit_damage_1": {
         "name": "Critical Damage",
         "icon": "passives/critical_damage.svg",
-        "x": 5.0,
-        "y": -122.5,
+        "x": 2.5,
+        "y": -267.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -1204,8 +2603,8 @@
       "crit_damage_2": {
         "name": "Critical Hit Damage",
         "icon": "passives/critical_damage.svg",
-        "x": 15.0,
-        "y": -115.0,
+        "x": 12.5,
+        "y": -260.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -1235,8 +2634,8 @@
       "crit_damage_and_chance_1": {
         "name": "Sadism",
         "icon": "passives/critical.svg",
-        "x": 25.0,
-        "y": -112.5,
+        "x": 22.5,
+        "y": -257.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Critical",
@@ -1277,11 +2676,69 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "d50d2ac7-ab10-4d27-a48b-4bb98b745101": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -60.0,
+        "y": 60.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "d5875cc2-1fdf-4b50-95be-7048a03ba1e0": {
+        "name": "Block",
+        "icon": "passives/block.svg",
+        "x": -60.0,
+        "y": 67.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "damage_over_time_1": {
         "name": "Damage over Time",
         "icon": "passives/damage_over_time.svg",
-        "x": 94.0,
-        "y": -150.5,
+        "x": 91.5,
+        "y": -295.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Status",
@@ -1321,8 +2778,8 @@
       "damage_over_time_2": {
         "name": "Damage over Time",
         "icon": "passives/damage_over_time.svg",
-        "x": 85.0,
-        "y": -153.5,
+        "x": 82.5,
+        "y": -298.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Status",
@@ -1362,8 +2819,8 @@
       "damage_over_time_3": {
         "name": "Damage over Time",
         "icon": "passives/damage_over_time.svg",
-        "x": 76.0,
-        "y": -150.5,
+        "x": 73.5,
+        "y": -295.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Status",
@@ -1403,8 +2860,8 @@
       "damage_over_time_spread": {
         "name": "Spread Destruction",
         "icon": "passives/spread.svg",
-        "x": 70.0,
-        "y": -142.5,
+        "x": 67.5,
+        "y": -287.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Status",
@@ -1413,7 +2870,9 @@
           {
             "trigger_id": "dot_spread",
             "description": "Damage over Time effects spread to nearby Enemies, for their remaining Duration.",
-            "OnKill": {},
+            "OnKill": {
+              "conditions": []
+            },
             "target": "SameTarget",
             "modifiers": [
               {
@@ -1823,10 +3282,118 @@
         "max_upgrade_level": null,
         "socket": false
       },
+      "dbac4357-9e3b-4937-bed0-73891dfedd9f": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -85.0,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "dd2f1b2e-8010-4321-8cc8-0ce2a1b61eaf": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 50.0,
+        "y": 200.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "dfcf089f-d02a-4d98-a751-61e7f67da41b": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -60.0,
+        "y": -60.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "e1517847-586f-4547-868f-ef59c08a00c9": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": -50.0,
+        "y": 200.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "e8f42ab4-4664-4eec-940f-7dd030c0c45c": {
         "name": "Spell Damage",
         "icon": "passives/spell.svg",
-        "x": 15.0,
+        "x": 10.0,
         "y": 0.0,
         "size": 0,
         "initial_node": false,
@@ -1863,8 +3430,8 @@
       "enrage": {
         "name": "Berserker",
         "icon": "passives/enrage.svg",
-        "x": -40.0,
-        "y": -122.5,
+        "x": -42.5,
+        "y": -267.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Attack",
@@ -1970,8 +3537,8 @@
       "enrage_armor_1": {
         "name": "Fire Resistance",
         "icon": "passives/armor_fire.svg",
-        "x": -41.5,
-        "y": -111.0,
+        "x": -44.0,
+        "y": -256.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -2001,8 +3568,8 @@
       "enrage_armor_2": {
         "name": "Poison Resistance",
         "icon": "passives/armor_poison.svg",
-        "x": -50.0,
-        "y": -117.5,
+        "x": -52.5,
+        "y": -262.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -2032,8 +3599,8 @@
       "enrage_armor_3": {
         "name": "Storm Resistance",
         "icon": "passives/armor_storm.svg",
-        "x": -50.0,
-        "y": -127.5,
+        "x": -52.5,
+        "y": -272.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -2061,21 +3628,47 @@
         "socket": false
       },
       "f0082e61-4cec-4dc1-af24-b1319fe1e4fc": {
-        "name": "Attack Damage",
-        "icon": "passives/attack.svg",
-        "x": -25.0,
-        "y": 0.0,
+        "name": "Attack Speed",
+        "icon": "passives/attack_speed.svg",
+        "x": -17.5,
+        "y": 7.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
         "effects": [
           {
             "stat": {
-              "Damage": {
-                "skill_type": "Attack",
-                "damage_type": null
-              }
+              "Speed": "Attack"
             },
+            "modifier": "Multiplier",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Speed": "Attack"
+            },
+            "modifier": "Multiplier",
+            "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "f3140e7a-1c89-4e41-ae04-05f02d174183": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 60.0,
+        "y": 60.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
             "modifier": "Multiplier",
             "value": 20.0
           }
@@ -2084,12 +3677,7 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": {
-              "Damage": {
-                "skill_type": "Attack",
-                "damage_type": null
-              }
-            },
+            "stat": "GoldFind",
             "modifier": "Multiplier",
             "value": 10.0
           }
@@ -2100,8 +3688,8 @@
       "f39c8abe-6388-410c-8b45-416dbfe666ed": {
         "name": "New Node",
         "icon": "passives/XXX.svg",
-        "x": -27.5,
-        "y": -90.0,
+        "x": -17.5,
+        "y": -225.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Fire",
@@ -2134,8 +3722,8 @@
       "fire_burn": {
         "name": "Blazing Inferno",
         "icon": "passives/blazing_inferno.svg",
-        "x": 91.0,
-        "y": -113.5,
+        "x": 88.5,
+        "y": -258.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Fire",
@@ -2236,8 +3824,8 @@
       "fire_damage_1": {
         "name": "Fire Damage",
         "icon": "passives/fire_damage.svg",
-        "x": 91.0,
-        "y": -139.5,
+        "x": 88.5,
+        "y": -284.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Fire",
@@ -2273,8 +3861,8 @@
       "fire_damage_2": {
         "name": "Fire Damage",
         "icon": "passives/fire_damage.svg",
-        "x": 85.0,
-        "y": -131.5,
+        "x": 82.5,
+        "y": -276.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Fire",
@@ -2310,8 +3898,8 @@
       "fire_damage_3": {
         "name": "Fire Damage",
         "icon": "passives/fire_damage.svg",
-        "x": 85.0,
-        "y": -121.5,
+        "x": 82.5,
+        "y": -266.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Fire",
@@ -2347,8 +3935,8 @@
       "gold_d_1": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": 0.0,
-        "y": -152.5,
+        "x": -2.5,
+        "y": -297.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2374,8 +3962,8 @@
       "gold_d_2": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": 0.0,
-        "y": -172.5,
+        "x": -2.5,
+        "y": -317.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2401,8 +3989,8 @@
       "gold_dl_1": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -28.5,
-        "y": -157.0,
+        "x": -31.0,
+        "y": -302.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2428,8 +4016,8 @@
       "gold_dr_1": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": 28.5,
-        "y": -157.0,
+        "x": 26.0,
+        "y": -302.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2455,8 +4043,8 @@
       "gold_init": {
         "name": "Lucky Start",
         "icon": "passives/gold.svg",
-        "x": 0.0,
-        "y": -142.5,
+        "x": -2.5,
+        "y": -287.5,
         "size": 1,
         "initial_node": true,
         "node_type": "Gold",
@@ -2482,8 +4070,8 @@
       "gold_init_2": {
         "name": "Impactful Start",
         "icon": "passives/damage.svg",
-        "x": 100.0,
-        "y": -142.5,
+        "x": 97.5,
+        "y": -287.5,
         "size": 1,
         "initial_node": true,
         "node_type": "Attack",
@@ -2519,8 +4107,8 @@
       "gold_l_1": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -10.0,
-        "y": -142.5,
+        "x": -12.5,
+        "y": -287.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2546,8 +4134,8 @@
       "gold_r_1": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": 10.0,
-        "y": -142.5,
+        "x": 7.5,
+        "y": -287.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2573,8 +4161,8 @@
       "gold_shower_1": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -120.0,
-        "y": -122.5,
+        "x": -122.5,
+        "y": -267.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2600,8 +4188,8 @@
       "gold_shower_2": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -110.0,
-        "y": -132.5,
+        "x": -112.5,
+        "y": -277.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2627,8 +4215,8 @@
       "gold_shower_3": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -120.0,
-        "y": -142.5,
+        "x": -122.5,
+        "y": -287.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2654,8 +4242,8 @@
       "gold_shower_4": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -110.0,
-        "y": -152.5,
+        "x": -112.5,
+        "y": -297.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2681,8 +4269,8 @@
       "gold_shower_5": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -120.0,
-        "y": -162.5,
+        "x": -122.5,
+        "y": -307.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2708,8 +4296,8 @@
       "gold_shower_6": {
         "name": "Golden Shower",
         "icon": "passives/gold.svg",
-        "x": -110.0,
-        "y": -172.5,
+        "x": -112.5,
+        "y": -317.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Gold",
@@ -2735,8 +4323,8 @@
       "gold_shower_init": {
         "name": "Golden Start",
         "icon": "passives/gold.svg",
-        "x": -110.0,
-        "y": -112.5,
+        "x": -112.5,
+        "y": -257.5,
         "size": 1,
         "initial_node": true,
         "node_type": "Gold",
@@ -2762,8 +4350,8 @@
       "gold_u_1": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": 0.0,
-        "y": -132.5,
+        "x": -2.5,
+        "y": -277.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2789,8 +4377,8 @@
       "gold_u_2": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": 0.0,
-        "y": -112.5,
+        "x": -2.5,
+        "y": -257.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2816,8 +4404,8 @@
       "gold_ul_1": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": -28.5,
-        "y": -128.0,
+        "x": -31.0,
+        "y": -273.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2843,8 +4431,8 @@
       "gold_ur_1": {
         "name": "Gold",
         "icon": "passives/gold.svg",
-        "x": 28.5,
-        "y": -128.0,
+        "x": 26.0,
+        "y": -273.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Gold",
@@ -2870,8 +4458,8 @@
       "healing_aura": {
         "name": "Healing Aura",
         "icon": "passives/healing_aura.svg",
-        "x": -70.0,
-        "y": -102.5,
+        "x": -72.5,
+        "y": -247.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Spell",
@@ -2929,8 +4517,8 @@
       "infinite_curse": {
         "name": "Cursed Mouth",
         "icon": "passives/infinite_curse.svg",
-        "x": -70.0,
-        "y": -182.5,
+        "x": -72.5,
+        "y": -327.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Status",
@@ -2954,8 +4542,8 @@
       "life_max_1": {
         "name": "Maximum Life",
         "icon": "passives/life.svg",
-        "x": 20.0,
-        "y": -137.5,
+        "x": 17.5,
+        "y": -282.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -2981,8 +4569,8 @@
       "life_max_2": {
         "name": "Maximum Life",
         "icon": "passives/life.svg",
-        "x": 30.0,
-        "y": -137.5,
+        "x": 27.5,
+        "y": -282.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -3008,8 +4596,8 @@
       "life_max_and_regen_1": {
         "name": "Fortitude",
         "icon": "passives/caduceus.svg",
-        "x": 40.0,
-        "y": -142.5,
+        "x": 37.5,
+        "y": -287.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Life",
@@ -3045,8 +4633,8 @@
       "life_regen_1": {
         "name": "Life Regeneration",
         "icon": "passives/life_regen.svg",
-        "x": 20.0,
-        "y": -147.5,
+        "x": 17.5,
+        "y": -292.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -3072,8 +4660,8 @@
       "life_regen_2": {
         "name": "Life Regeneration",
         "icon": "passives/life_regen.svg",
-        "x": 30.0,
-        "y": -147.5,
+        "x": 27.5,
+        "y": -292.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -3099,8 +4687,8 @@
       "mana_max_1": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
-        "x": 10.0,
-        "y": -155.0,
+        "x": 7.5,
+        "y": -300.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Mana",
@@ -3126,8 +4714,8 @@
       "mana_max_2": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
-        "x": 20.0,
-        "y": -162.5,
+        "x": 17.5,
+        "y": -307.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Mana",
@@ -3153,8 +4741,8 @@
       "mana_max_and_regen_1": {
         "name": "Wisdom",
         "icon": "passives/wisdom.svg",
-        "x": 25.0,
-        "y": -172.5,
+        "x": 22.5,
+        "y": -317.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Mana",
@@ -3190,8 +4778,8 @@
       "mana_regen_1": {
         "name": "Mana Regeneration",
         "icon": "passives/mana_regen.svg",
-        "x": 5.0,
-        "y": -162.5,
+        "x": 2.5,
+        "y": -307.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Mana",
@@ -3217,8 +4805,8 @@
       "mana_regen_2": {
         "name": "Mana Regeneration",
         "icon": "passives/mana_regen.svg",
-        "x": 15.0,
-        "y": -170.0,
+        "x": 12.5,
+        "y": -315.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Mana",
@@ -3244,8 +4832,8 @@
       "mana_shield": {
         "name": "Mana Shield",
         "icon": "passives/mana_shield.svg",
-        "x": 40.0,
-        "y": -162.5,
+        "x": 37.5,
+        "y": -307.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Mana",
@@ -3271,8 +4859,8 @@
       "mana_shield_mana_1": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
-        "x": 50.0,
-        "y": -157.5,
+        "x": 47.5,
+        "y": -302.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Mana",
@@ -3298,8 +4886,8 @@
       "mana_shield_mana_2": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
-        "x": 50.0,
-        "y": -167.5,
+        "x": 47.5,
+        "y": -312.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Mana",
@@ -3325,8 +4913,8 @@
       "mana_shield_mana_3": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
-        "x": 41.5,
-        "y": -174.0,
+        "x": 39.0,
+        "y": -319.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Mana",
@@ -3352,8 +4940,8 @@
       "menacing_presence": {
         "name": "Menacing Presence",
         "icon": "passives/menacing_presence.svg",
-        "x": -90.0,
-        "y": -102.5,
+        "x": -92.5,
+        "y": -247.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Attack",
@@ -3373,8 +4961,8 @@
       "movement_init": {
         "name": "Tactical Start",
         "icon": "passives/sprint.svg",
-        "x": -80.0,
-        "y": -142.5,
+        "x": -82.5,
+        "y": -287.5,
         "size": 1,
         "initial_node": true,
         "node_type": "Utility",
@@ -3400,8 +4988,8 @@
       "overwhelming_force": {
         "name": "Overwhelming Force",
         "icon": "passives/overwhelming_force.svg",
-        "x": 0.0,
-        "y": -102.5,
+        "x": -2.5,
+        "y": -247.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Critical",
@@ -3441,8 +5029,8 @@
       "overwhelming_force_damage_1": {
         "name": "Critical Damage",
         "icon": "passives/critical_damage.svg",
-        "x": -10.0,
-        "y": -99.0,
+        "x": -12.5,
+        "y": -244.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -3472,8 +5060,8 @@
       "overwhelming_force_damage_2": {
         "name": "Critical Damage",
         "icon": "passives/critical_damage.svg",
-        "x": 0.0,
-        "y": -92.5,
+        "x": -2.5,
+        "y": -237.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -3503,8 +5091,8 @@
       "overwhelming_force_damage_3": {
         "name": "Critical Damage",
         "icon": "passives/critical_damage.svg",
-        "x": 10.0,
-        "y": -99.0,
+        "x": 7.5,
+        "y": -244.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -3534,8 +5122,8 @@
       "physical_damage_1": {
         "name": "Physical Damage",
         "icon": "passives/physical_damage.svg",
-        "x": 100.0,
-        "y": -132.5,
+        "x": 97.5,
+        "y": -277.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Physical",
@@ -3571,8 +5159,8 @@
       "physical_damage_2": {
         "name": "Physical Damage",
         "icon": "passives/physical_damage.svg",
-        "x": 106.0,
-        "y": -124.5,
+        "x": 103.5,
+        "y": -269.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Physical",
@@ -3608,8 +5196,8 @@
       "physical_damage_3": {
         "name": "Physical Damage",
         "icon": "passives/physical_damage.svg",
-        "x": 115.0,
-        "y": -121.5,
+        "x": 112.5,
+        "y": -266.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Physical",
@@ -3645,8 +5233,8 @@
       "physical_open_wound": {
         "name": "Savage Attacker",
         "icon": "passives/open_wound.svg",
-        "x": 124.0,
-        "y": -124.5,
+        "x": 121.5,
+        "y": -269.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Physical",
@@ -3785,8 +5373,8 @@
       "poison_damage_1": {
         "name": "Poison Damage",
         "icon": "passives/poison_damage.svg",
-        "x": 109.0,
-        "y": -139.5,
+        "x": 106.5,
+        "y": -284.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Poison",
@@ -3822,8 +5410,8 @@
       "poison_damage_2": {
         "name": "Poison Damage",
         "icon": "passives/poison_damage.svg",
-        "x": 118.0,
-        "y": -142.5,
+        "x": 115.5,
+        "y": -287.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Poison",
@@ -3859,8 +5447,8 @@
       "poison_damage_3": {
         "name": "Poison Damage",
         "icon": "passives/poison_damage.svg",
-        "x": 124.0,
-        "y": -150.5,
+        "x": 121.5,
+        "y": -295.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Poison",
@@ -3896,8 +5484,8 @@
       "poison_rapid": {
         "name": "Rapid Toxin",
         "icon": "passives/rapid_toxin.svg",
-        "x": 124.0,
-        "y": -160.5,
+        "x": 121.5,
+        "y": -305.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Poison",
@@ -3957,8 +5545,8 @@
       "restoration_1": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": -75.0,
-        "y": -132.5,
+        "x": -77.5,
+        "y": -277.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Spell",
@@ -3994,8 +5582,8 @@
       "restoration_2": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": -70.0,
-        "y": -122.5,
+        "x": -72.5,
+        "y": -267.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Spell",
@@ -4031,8 +5619,8 @@
       "restoration_3": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": -70.0,
-        "y": -112.5,
+        "x": -72.5,
+        "y": -257.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Spell",
@@ -4068,8 +5656,8 @@
       "spell_crit": {
         "name": "Unstable Power",
         "icon": "passives/burning_book.svg",
-        "x": 0.0,
-        "y": -182.5,
+        "x": -2.5,
+        "y": -327.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Spell",
@@ -4098,8 +5686,8 @@
       "spell_crit_chance_1": {
         "name": "Critical Hit Chance",
         "icon": "passives/critical_chance.svg",
-        "x": -10.0,
-        "y": -185.0,
+        "x": -12.5,
+        "y": -330.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -4129,8 +5717,8 @@
       "spell_crit_chance_2": {
         "name": "Spell Critical Hit Damage",
         "icon": "passives/critical_damage.svg",
-        "x": 0.0,
-        "y": -192.5,
+        "x": -2.5,
+        "y": -337.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -4160,8 +5748,8 @@
       "spell_crit_chance_3": {
         "name": "Critical Hit Chance",
         "icon": "passives/critical_chance.svg",
-        "x": 10.0,
-        "y": -185.0,
+        "x": 7.5,
+        "y": -330.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -4191,8 +5779,8 @@
       "spell_damage_1": {
         "name": "Spell Damage",
         "icon": "passives/spell.svg",
-        "x": -10.0,
-        "y": -155.0,
+        "x": -12.5,
+        "y": -300.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Spell",
@@ -4228,8 +5816,8 @@
       "spell_damage_2": {
         "name": "Spell Damage",
         "icon": "passives/spell.svg",
-        "x": -20.0,
-        "y": -162.5,
+        "x": -22.5,
+        "y": -307.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Spell",
@@ -4265,8 +5853,8 @@
       "spell_damage_and_speed_1": {
         "name": "Sorcery",
         "icon": "passives/sorcery.svg",
-        "x": -25.0,
-        "y": -172.5,
+        "x": -27.5,
+        "y": -317.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Spell",
@@ -4316,8 +5904,8 @@
       "spell_speed_1": {
         "name": "Casting Speed",
         "icon": "passives/spell_speed.svg",
-        "x": -5.0,
-        "y": -162.5,
+        "x": -7.5,
+        "y": -307.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Spell",
@@ -4347,8 +5935,8 @@
       "spell_speed_2": {
         "name": "Casting Speed",
         "icon": "passives/spell_speed.svg",
-        "x": -15.0,
-        "y": -170.0,
+        "x": -17.5,
+        "y": -315.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Spell",
@@ -4378,8 +5966,8 @@
       "status_duration_1": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -75.0,
-        "y": -152.5,
+        "x": -77.5,
+        "y": -297.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Status",
@@ -4413,8 +6001,8 @@
       "status_duration_2": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -70.0,
-        "y": -162.5,
+        "x": -72.5,
+        "y": -307.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Status",
@@ -4448,8 +6036,8 @@
       "status_duration_3": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": -70.0,
-        "y": -172.5,
+        "x": -72.5,
+        "y": -317.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Status",
@@ -4483,8 +6071,8 @@
       "storm_damage_1": {
         "name": "Storm Damage",
         "icon": "passives/storm_damage.svg",
-        "x": 106.0,
-        "y": -150.5,
+        "x": 103.5,
+        "y": -295.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Storm",
@@ -4520,8 +6108,8 @@
       "storm_damage_2": {
         "name": "Effects Duration",
         "icon": "passives/storm_damage.svg",
-        "x": 106.0,
-        "y": -160.5,
+        "x": 103.5,
+        "y": -305.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Storm",
@@ -4557,8 +6145,8 @@
       "storm_damage_3": {
         "name": "Effects Duration",
         "icon": "passives/storm_damage.svg",
-        "x": 100.0,
-        "y": -168.5,
+        "x": 97.5,
+        "y": -313.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Storm",
@@ -4594,8 +6182,8 @@
       "storm_lucky": {
         "name": "Lightning Always Strike Twice",
         "icon": "passives/lightning_double.svg",
-        "x": 91.0,
-        "y": -171.5,
+        "x": 88.5,
+        "y": -316.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Storm",
@@ -4624,8 +6212,8 @@
       "success_chance_1": {
         "name": "Success Chance",
         "icon": "passives/success.svg",
-        "x": -85.0,
-        "y": -152.5,
+        "x": -87.5,
+        "y": -297.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Utility",
@@ -4661,8 +6249,8 @@
       "success_chance_2": {
         "name": "Success Chance",
         "icon": "passives/success.svg",
-        "x": -90.0,
-        "y": -162.5,
+        "x": -92.5,
+        "y": -307.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Utility",
@@ -4698,8 +6286,8 @@
       "success_chance_3": {
         "name": "Success Chance",
         "icon": "passives/success.svg",
-        "x": -90.0,
-        "y": -172.5,
+        "x": -92.5,
+        "y": -317.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Utility",
@@ -4735,8 +6323,8 @@
       "success_chance_lucky": {
         "name": "Loaded Dice",
         "icon": "passives/loaded_dice.svg",
-        "x": -90.0,
-        "y": -182.5,
+        "x": -92.5,
+        "y": -327.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Utility",
@@ -4761,8 +6349,8 @@
       "threat_damage_1": {
         "name": "Threat Damage",
         "icon": "passives/threat_damage.svg",
-        "x": -85.0,
-        "y": -132.5,
+        "x": -87.5,
+        "y": -277.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -4814,8 +6402,8 @@
       "threat_damage_2": {
         "name": "Threat Damage",
         "icon": "passives/threat_damage.svg",
-        "x": -90.0,
-        "y": -122.5,
+        "x": -92.5,
+        "y": -267.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -4867,8 +6455,8 @@
       "threat_damage_3": {
         "name": "Threat Damage",
         "icon": "passives/threat_damage.svg",
-        "x": -90.0,
-        "y": -112.5,
+        "x": -92.5,
+        "y": -257.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Attack",
@@ -5446,6 +7034,262 @@
       {
         "from": "be8c6e3e-bcd2-485f-88ca-a3741196f833",
         "to": "06b782e0-1d97-4fed-8a7e-8bb673add6c2"
+      },
+      {
+        "from": "853715cd-ce16-4b22-96cb-ba6d2d83e3e7",
+        "to": "3911490e-aaa4-4c67-a2e4-6e50e19cfba1"
+      },
+      {
+        "from": "853715cd-ce16-4b22-96cb-ba6d2d83e3e7",
+        "to": "b71d21cc-b30f-4f98-9757-f64f3f3f822d"
+      },
+      {
+        "from": "853715cd-ce16-4b22-96cb-ba6d2d83e3e7",
+        "to": "4827bf74-8168-422a-8623-58eec1307b73"
+      },
+      {
+        "from": "853715cd-ce16-4b22-96cb-ba6d2d83e3e7",
+        "to": "a4e0da35-c78a-46fb-a50e-c88b165b9112"
+      },
+      {
+        "from": "becea5a4-8944-49db-8665-2cab32ec0711",
+        "to": "14e61d75-f5ff-43fc-8b03-744c75b821a7"
+      },
+      {
+        "from": "396454e1-05d3-4506-b932-e946f337b97d",
+        "to": "ad5542fe-6a7f-4f67-b3ba-307a2f46f066"
+      },
+      {
+        "from": "06b782e0-1d97-4fed-8a7e-8bb673add6c2",
+        "to": "60c17832-46cd-4d7b-adee-d172788bfef7"
+      },
+      {
+        "from": "284bae26-9348-46f3-b838-9d5f8c8d1ab9",
+        "to": "7edaa20f-b316-4cd4-ba30-e37c0f5c6fcb"
+      },
+      {
+        "from": "3911490e-aaa4-4c67-a2e4-6e50e19cfba1",
+        "to": "14e61d75-f5ff-43fc-8b03-744c75b821a7"
+      },
+      {
+        "from": "3911490e-aaa4-4c67-a2e4-6e50e19cfba1",
+        "to": "ad5542fe-6a7f-4f67-b3ba-307a2f46f066"
+      },
+      {
+        "from": "a4e0da35-c78a-46fb-a50e-c88b165b9112",
+        "to": "ad5542fe-6a7f-4f67-b3ba-307a2f46f066"
+      },
+      {
+        "from": "a4e0da35-c78a-46fb-a50e-c88b165b9112",
+        "to": "60c17832-46cd-4d7b-adee-d172788bfef7"
+      },
+      {
+        "from": "4827bf74-8168-422a-8623-58eec1307b73",
+        "to": "60c17832-46cd-4d7b-adee-d172788bfef7"
+      },
+      {
+        "from": "4827bf74-8168-422a-8623-58eec1307b73",
+        "to": "7edaa20f-b316-4cd4-ba30-e37c0f5c6fcb"
+      },
+      {
+        "from": "b71d21cc-b30f-4f98-9757-f64f3f3f822d",
+        "to": "14e61d75-f5ff-43fc-8b03-744c75b821a7"
+      },
+      {
+        "from": "b71d21cc-b30f-4f98-9757-f64f3f3f822d",
+        "to": "7edaa20f-b316-4cd4-ba30-e37c0f5c6fcb"
+      },
+      {
+        "from": "0ea487a1-1b61-4f57-bc8b-5af626cb4544",
+        "to": "e8f42ab4-4664-4eec-940f-7dd030c0c45c"
+      },
+      {
+        "from": "284bae26-9348-46f3-b838-9d5f8c8d1ab9",
+        "to": "0ea487a1-1b61-4f57-bc8b-5af626cb4544"
+      },
+      {
+        "from": "5c016eeb-2325-41ff-baa0-01f5bcc5e434",
+        "to": "396454e1-05d3-4506-b932-e946f337b97d"
+      },
+      {
+        "from": "5c016eeb-2325-41ff-baa0-01f5bcc5e434",
+        "to": "04c74f34-8f5b-4243-b209-ecf2eef4af0d"
+      },
+      {
+        "from": "2dbe7ac1-e92e-46b7-a9d9-6e99da8face6",
+        "to": "8006a833-21d3-4055-a4c3-ef2126a5aabc"
+      },
+      {
+        "from": "2dbe7ac1-e92e-46b7-a9d9-6e99da8face6",
+        "to": "becea5a4-8944-49db-8665-2cab32ec0711"
+      },
+      {
+        "from": "2b156ff8-1cda-4f0d-a1d3-a20c1ed0a589",
+        "to": "06b782e0-1d97-4fed-8a7e-8bb673add6c2"
+      },
+      {
+        "from": "2b156ff8-1cda-4f0d-a1d3-a20c1ed0a589",
+        "to": "89d940a4-35b2-43bf-bdeb-a173ef5d4fc7"
+      },
+      {
+        "from": "d50d2ac7-ab10-4d27-a48b-4bb98b745101",
+        "to": "3911490e-aaa4-4c67-a2e4-6e50e19cfba1"
+      },
+      {
+        "from": "f3140e7a-1c89-4e41-ae04-05f02d174183",
+        "to": "b71d21cc-b30f-4f98-9757-f64f3f3f822d"
+      },
+      {
+        "from": "c685f882-72ed-4b98-b8c9-5ddb7049a386",
+        "to": "4827bf74-8168-422a-8623-58eec1307b73"
+      },
+      {
+        "from": "dfcf089f-d02a-4d98-a751-61e7f67da41b",
+        "to": "a4e0da35-c78a-46fb-a50e-c88b165b9112"
+      },
+      {
+        "from": "807a2b14-4ad6-40d3-9480-90618fa5d792",
+        "to": "d50d2ac7-ab10-4d27-a48b-4bb98b745101"
+      },
+      {
+        "from": "807a2b14-4ad6-40d3-9480-90618fa5d792",
+        "to": "f3140e7a-1c89-4e41-ae04-05f02d174183"
+      },
+      {
+        "from": "ce177465-cca9-47d0-86ce-0ec245ea8174",
+        "to": "f3140e7a-1c89-4e41-ae04-05f02d174183"
+      },
+      {
+        "from": "ce177465-cca9-47d0-86ce-0ec245ea8174",
+        "to": "c685f882-72ed-4b98-b8c9-5ddb7049a386"
+      },
+      {
+        "from": "85a30382-d493-4bf3-b499-e9bedd9d2b67",
+        "to": "c685f882-72ed-4b98-b8c9-5ddb7049a386"
+      },
+      {
+        "from": "85a30382-d493-4bf3-b499-e9bedd9d2b67",
+        "to": "dfcf089f-d02a-4d98-a751-61e7f67da41b"
+      },
+      {
+        "from": "dbac4357-9e3b-4937-bed0-73891dfedd9f",
+        "to": "d50d2ac7-ab10-4d27-a48b-4bb98b745101"
+      },
+      {
+        "from": "dbac4357-9e3b-4937-bed0-73891dfedd9f",
+        "to": "dfcf089f-d02a-4d98-a751-61e7f67da41b"
+      },
+      {
+        "from": "dbac4357-9e3b-4937-bed0-73891dfedd9f",
+        "to": "4c792411-d741-4a1f-817b-9ff41e45b0a4"
+      },
+      {
+        "from": "807a2b14-4ad6-40d3-9480-90618fa5d792",
+        "to": "b6208dda-e38e-4254-afa7-5f1574034c63"
+      },
+      {
+        "from": "ce177465-cca9-47d0-86ce-0ec245ea8174",
+        "to": "8cedf941-92e1-40c8-8370-edf25634573d"
+      },
+      {
+        "from": "85a30382-d493-4bf3-b499-e9bedd9d2b67",
+        "to": "49e86eef-f9c6-4a3c-b16c-7a9d1eb1bf9b"
+      },
+      {
+        "from": "f3140e7a-1c89-4e41-ae04-05f02d174183",
+        "to": "8c431093-95e6-4dce-b21a-9a07edfd57ea"
+      },
+      {
+        "from": "8c431093-95e6-4dce-b21a-9a07edfd57ea",
+        "to": "7a7780b2-b680-4925-ac04-7f93e10a8093"
+      },
+      {
+        "from": "c685f882-72ed-4b98-b8c9-5ddb7049a386",
+        "to": "140fa424-f0f3-42b3-927e-b13777d1070e"
+      },
+      {
+        "from": "140fa424-f0f3-42b3-927e-b13777d1070e",
+        "to": "5505dc30-ed61-47be-8c38-2d34b86631be"
+      },
+      {
+        "from": "dfcf089f-d02a-4d98-a751-61e7f67da41b",
+        "to": "03836189-8913-45b5-bd89-e658b31e79bd"
+      },
+      {
+        "from": "03836189-8913-45b5-bd89-e658b31e79bd",
+        "to": "0909d43b-bd54-4d6d-8e9d-dd41445cd15e"
+      },
+      {
+        "from": "d50d2ac7-ab10-4d27-a48b-4bb98b745101",
+        "to": "29ba21ea-6046-46f2-8b86-29b1580a1710"
+      },
+      {
+        "from": "29ba21ea-6046-46f2-8b86-29b1580a1710",
+        "to": "875d806d-10e2-45cd-ac04-5fea19626672"
+      },
+      {
+        "from": "ad5542fe-6a7f-4f67-b3ba-307a2f46f066",
+        "to": "dbac4357-9e3b-4937-bed0-73891dfedd9f"
+      },
+      {
+        "from": "7edaa20f-b316-4cd4-ba30-e37c0f5c6fcb",
+        "to": "ce177465-cca9-47d0-86ce-0ec245ea8174"
+      },
+      {
+        "from": "14e61d75-f5ff-43fc-8b03-744c75b821a7",
+        "to": "807a2b14-4ad6-40d3-9480-90618fa5d792"
+      },
+      {
+        "from": "60c17832-46cd-4d7b-adee-d172788bfef7",
+        "to": "85a30382-d493-4bf3-b499-e9bedd9d2b67"
+      },
+      {
+        "from": "e1517847-586f-4547-868f-ef59c08a00c9",
+        "to": "875d806d-10e2-45cd-ac04-5fea19626672"
+      },
+      {
+        "from": "e1517847-586f-4547-868f-ef59c08a00c9",
+        "to": "dd2f1b2e-8010-4321-8cc8-0ce2a1b61eaf"
+      },
+      {
+        "from": "7a7780b2-b680-4925-ac04-7f93e10a8093",
+        "to": "dd2f1b2e-8010-4321-8cc8-0ce2a1b61eaf"
+      },
+      {
+        "from": "875d806d-10e2-45cd-ac04-5fea19626672",
+        "to": "777d60db-963c-4822-bd90-ce7019d49a1f"
+      },
+      {
+        "from": "870fb1bf-f4da-48aa-9f2c-a0e4390ae8af",
+        "to": "777d60db-963c-4822-bd90-ce7019d49a1f"
+      },
+      {
+        "from": "0909d43b-bd54-4d6d-8e9d-dd41445cd15e",
+        "to": "870fb1bf-f4da-48aa-9f2c-a0e4390ae8af"
+      },
+      {
+        "from": "0909d43b-bd54-4d6d-8e9d-dd41445cd15e",
+        "to": "36d711ca-a888-4315-8cdd-ec21cf7651f8"
+      },
+      {
+        "from": "c03d8e17-a800-4f92-8e1e-240d64036176",
+        "to": "36d711ca-a888-4315-8cdd-ec21cf7651f8"
+      },
+      {
+        "from": "c03d8e17-a800-4f92-8e1e-240d64036176",
+        "to": "5505dc30-ed61-47be-8c38-2d34b86631be"
+      },
+      {
+        "from": "456da99e-36b2-4542-8904-2be314830ed7",
+        "to": "5505dc30-ed61-47be-8c38-2d34b86631be"
+      },
+      {
+        "from": "456da99e-36b2-4542-8904-2be314830ed7",
+        "to": "c57f2319-656a-4d1a-a50e-568eee84084b"
+      },
+      {
+        "from": "c57f2319-656a-4d1a-a50e-568eee84084b",
+        "to": "7a7780b2-b680-4925-ac04-7f93e10a8093"
       }
     ]
   }

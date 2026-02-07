@@ -647,7 +647,7 @@ fn EditNodeMenu(
                     let try_delete_node = {
                         let confirm_context: ConfirmContext = expect_context();
                         let do_delete_node = do_delete_node.clone();
-                        move |_| {
+                        move || {
                             (confirm_context
                                 .confirm)(
                                 "Confirm delete node?".to_string(),
@@ -676,6 +676,14 @@ fn EditNodeMenu(
                         500.0,
                         WatchDebouncedOptions::default().immediate(false),
                     );
+                    Effect::new({
+                        let try_delete_node = try_delete_node.clone();
+                        move || {
+                            if events_context.key_pressed(Key::Delete) {
+                                try_delete_node();
+                            }
+                        }
+                    });
                     Some(
 
                         view! {
@@ -684,7 +692,7 @@ fn EditNodeMenu(
                                 on_close=move || selected_node.set(SelectedNode::None)
                                 class:gap-2
                             >
-                                <MenuButton class:ml-2 on:click=try_delete_node>
+                                <MenuButton class:ml-2 on:click=move |_| try_delete_node()>
                                     "❌"
                                 </MenuButton>
                                 <div class="flex-1" />
