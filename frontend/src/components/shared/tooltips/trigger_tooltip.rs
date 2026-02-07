@@ -83,7 +83,7 @@ pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource)
             skill_type,
         } => {
             format!(
-                "{}{}Effects",
+                "{}{}",
                 skill_type_str(skill_type),
                 status_type_str(status_type)
             )
@@ -93,7 +93,7 @@ pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource)
             skill_type,
         } => {
             format!(
-                "{}{}Duration",
+                "{}{} Duration",
                 skill_type_str(skill_type),
                 status_type_str(status_type)
             )
@@ -103,7 +103,7 @@ pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource)
             skill_type,
         } => {
             format!(
-                "{}{}Stack",
+                "{}{} Stacks",
                 skill_type_str(skill_type),
                 status_type_str(status_type)
             )

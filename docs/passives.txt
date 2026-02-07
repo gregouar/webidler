@@ -31,6 +31,10 @@ Life:
 * Blood Magic
 * Healing Aura
 
+Hybrid Life/Mana:
+-Max
+-Regen
+
 Defense:
 -Armor & Resistances (could split more)
 -Block
