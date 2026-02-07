@@ -60,6 +60,10 @@
       "item_id": "rune",
       "weight": 400,
       "min_area_level": 90
+    },
+    {
+      "item_id": "rune_berserker",
+      "weight": 50
     }
   ]
 }

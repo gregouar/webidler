@@ -61,7 +61,7 @@
   },
   "rune_poison_fire": {
     "name": "Caustic Convergence",
-    "description": "The alchemists learned that decay has a temperature",
+    "description": "The alchemists learned that decay has a temperature.",
     "icon": "items/rune_poison_fire.webp",
     "categories": ["Rune"],
     "ignore_quality": true,
@@ -126,5 +126,90 @@
       }
     ],
     "min_area_level": 200
+  },
+  "rune_berserker": {
+    "name": "Mark of the Berserker",
+    "description": "Each wound feeds the mark. Each scar sharpens the beast within.",
+    "icon": "items/rune_berserker.webp",
+    "categories": ["Rune"],
+    "ignore_quality": true,
+    "rune_specs": {},
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "DamageResistance": {
+            "skill_type": null,
+            "damage_type": null
+          }
+        },
+        "modifier": "Flat",
+        "value": -25.0
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "rune_berserker",
+        "description": "",
+        "OnTakeHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": null
+        },
+        "target": "SameTarget",
+        "modifiers": [],
+        "skill_range": "Melee",
+        "skill_type": "Attack",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "skill_type": null,
+                          "damage_type": null
+                        }
+                      },
+                      "modifier": "Multiplier",
+                      "debuff": false
+                    }
+                  },
+                  "value": {
+                    "min": 25.0,
+                    "max": 25.0,
+                    "lucky_chance": 0.0
+                  },
+                  "cumulate": true,
+                  "replace_on_value_only": false
+                }
+              ],
+              "duration": {
+                "min": 2.0,
+                "max": 2.0,
+                "lucky_chance": 0.0
+              }
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
+          }
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false
+      }
+    ],
+    "min_area_level": 100
   }
 }

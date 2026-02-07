@@ -541,7 +541,7 @@ pub fn NodeTooltipContent(
         </strong>
         <hr class="border-t border-gray-700" />
         {starting_node_text}
-        <ul class="list-none space-y-1 text-xs xl:text-sm">{triggers_text}{effects_text}</ul>
+        <ul class="list-none space-y-1 text-xs xl:text-sm">{effects_text}{triggers_text}</ul>
         {socket_text}
         {locked_text}
         {upgrade_text}
