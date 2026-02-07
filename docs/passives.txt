@@ -108,7 +108,7 @@ Other:
 Runes:
 -----
 -Destroy armor?
--Blazing Inferno? => replaced by burn chance in fire?
--Berserker?
--Massive incrase mana cost, massive increase spell speed? 
+-Berserker
+-Massive incrase mana cost, massive increase spell speed?
+-Massive gold increase (downside?) 
 

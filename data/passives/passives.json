@@ -312,6 +312,33 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "1bd1f5b3-5d20-488b-ba8c-2b8deca2d2cf": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 137.5,
+        "y": 25.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "1cc7cfb0-1ec8-4696-9baa-5a42fac7db31": {
         "name": "Critical Hit Chance",
         "icon": "passives/critical_chance.svg",
@@ -766,6 +793,51 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "42ebc03a-3e60-470c-b672-d4ca72442c72": {
+        "name": "Stun Chance",
+        "icon": "passives/star_swirl.svg",
+        "x": 17.5,
+        "y": 60.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": "Stun"
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": "Stun"
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": null,
+        "socket": false
+      },
       "453ed12d-79ee-421f-aaca-fc21f58dc2d9": {
         "name": "Lightning Always Strike Twice",
         "icon": "passives/lightning_double.svg",
@@ -1038,8 +1110,8 @@
       "563e3226-2387-4147-bed3-914575c77d9a": {
         "name": "Max Life Max Damage",
         "icon": "passives/attack.svg",
-        "x": 5.0,
-        "y": -155.0,
+        "x": 37.5,
+        "y": -132.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -1273,7 +1345,7 @@
         "name": "Bleed",
         "icon": "passives/bloody_sword.svg",
         "x": -60.0,
-        "y": -25.0,
+        "y": -20.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Physical",
@@ -1602,8 +1674,8 @@
       "7e10ea6e-22f5-43f9-8c49-9df5d664e87a": {
         "name": "Damage over Time",
         "icon": "passives/damage_over_time.svg",
-        "x": 105.0,
-        "y": -92.5,
+        "x": 95.0,
+        "y": -77.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Status",
@@ -1866,9 +1938,9 @@
       },
       "8939c1bd-e0aa-4d12-88cd-aa933daba56d": {
         "name": "Test Stun Condition",
-        "icon": "passives/XXX.svg",
-        "x": 10.0,
-        "y": 67.5,
+        "icon": "passives/surprised_skull.svg",
+        "x": 32.5,
+        "y": 85.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Storm",
@@ -2014,6 +2086,33 @@
                 "damage_type": "Fire"
               }
             },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "9dffc8ca-8c3f-436a-a08c-de27e45ed780": {
+        "name": "Gold",
+        "icon": "passives/gold.svg",
+        "x": 137.5,
+        "y": -25.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Gold",
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "GoldFind",
             "modifier": "Multiplier",
             "value": 10.0
           }
@@ -2169,8 +2268,8 @@
       "aa92babf-963d-4bd0-8f7f-e3b44637f289": {
         "name": "Poison Resistance",
         "icon": "passives/armor_poison.svg",
-        "x": -77.5,
-        "y": -52.5,
+        "x": -62.5,
+        "y": 75.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -2521,8 +2620,8 @@
       "bf9f8833-4a43-44c2-a28c-c00d5c39425a": {
         "name": "Storm Resistance",
         "icon": "passives/armor_storm.svg",
-        "x": -77.5,
-        "y": -57.5,
+        "x": -55.0,
+        "y": 70.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -2594,8 +2693,8 @@
       "c3187473-2fe2-4959-b045-4325d79d783e": {
         "name": "Armor",
         "icon": "passives/armor.svg",
-        "x": -67.5,
-        "y": -55.0,
+        "x": -60.0,
+        "y": 70.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -2870,8 +2969,8 @@
       "cd240346-70d1-4e05-8a3b-3ab0179695b9": {
         "name": "Fire Resistance",
         "icon": "passives/armor_fire.svg",
-        "x": -72.5,
-        "y": -47.5,
+        "x": -57.5,
+        "y": 75.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -3549,8 +3648,8 @@
       "d5875cc2-1fdf-4b50-95be-7048a03ba1e0": {
         "name": "Block",
         "icon": "passives/block.svg",
-        "x": -60.0,
-        "y": 67.5,
+        "x": -70.0,
+        "y": -65.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -3837,7 +3936,7 @@
         "name": "Open Wound Chance",
         "icon": "passives/sword_wound.svg",
         "x": -60.0,
-        "y": 25.0,
+        "y": 20.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Physical",
@@ -4088,7 +4187,7 @@
       "ff796aa2-b773-47aa-9745-622c333e424a": {
         "name": "Sorcery",
         "icon": "passives/sorcery.svg",
-        "x": 142.5,
+        "x": 170.0,
         "y": 2.5,
         "size": 1,
         "initial_node": false,
@@ -4573,6 +4672,26 @@
       {
         "from": "66b833a4-e75f-40ec-b393-ffc1f96e0c17",
         "to": "60884ec3-8267-476e-ac1b-8af601649636"
+      },
+      {
+        "from": "9dffc8ca-8c3f-436a-a08c-de27e45ed780",
+        "to": "140fa424-f0f3-42b3-927e-b13777d1070e"
+      },
+      {
+        "from": "1bd1f5b3-5d20-488b-ba8c-2b8deca2d2cf",
+        "to": "8c431093-95e6-4dce-b21a-9a07edfd57ea"
+      },
+      {
+        "from": "1bd1f5b3-5d20-488b-ba8c-2b8deca2d2cf",
+        "to": "9dffc8ca-8c3f-436a-a08c-de27e45ed780"
+      },
+      {
+        "from": "1bd1f5b3-5d20-488b-ba8c-2b8deca2d2cf",
+        "to": "c57f2319-656a-4d1a-a50e-568eee84084b"
+      },
+      {
+        "from": "9dffc8ca-8c3f-436a-a08c-de27e45ed780",
+        "to": "456da99e-36b2-4542-8904-2be314830ed7"
       }
     ]
   }
