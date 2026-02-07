@@ -196,8 +196,8 @@
                 }
               ],
               "duration": {
-                "min": 2.0,
-                "max": 2.0,
+                "min": 5.0,
+                "max": 5.0,
                 "lucky_chance": 0.0
               }
             },
