@@ -4,8 +4,6 @@ use shared::data::{
     stat_effect::StatStatusType,
 };
 
-use crate::components::shared::tooltips::skill_tooltip::skill_type_str;
-
 pub fn format_skill_modifier_conditions(conditions: &[Condition]) -> String {
     // TODO: sort?
     conditions

@@ -43,7 +43,7 @@ Defense:
 
 Fire:
 -Damage
--Burn (damage, duration, chance)
+-Burn (damage, duration, chance) => How to enable burn? Have an easy accessible Blazing Inferno?
 -Penetration
 
 Poison:
