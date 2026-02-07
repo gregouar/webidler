@@ -169,7 +169,7 @@ fn handle_status_event<'a>(
                 && status_trigger
                     .status_type
                     .as_ref()
-                    .map(|status_type| status_event.status_type.is_match(&status_type))
+                    .map(|status_type| status_event.status_type.is_match(status_type))
                     .unwrap_or(true)
             {
                 trigger_contexts.push(TriggerContext {

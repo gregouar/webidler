@@ -159,7 +159,7 @@ pub fn apply_trigger_effects(
                                     trigger_context
                                         .hit_context
                                         .as_ref()
-                                        .and_then(|hit| hit.damage.get(&damage_type))
+                                        .and_then(|hit| hit.damage.get(damage_type))
                                         .copied()
                                         .unwrap_or_default()
                                 }
