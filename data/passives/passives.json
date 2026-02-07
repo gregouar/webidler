@@ -92,6 +92,21 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "080e4acd-ab31-43a3-b81f-44806e7a3fc7": {
+        "name": "Socket",
+        "icon": "",
+        "x": -160.0,
+        "y": -160.0,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [],
+        "triggers": [],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": true
+      },
       "0909d43b-bd54-4d6d-8e9d-dd41445cd15e": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -122,8 +137,8 @@
       "0bf01c1a-5a2e-4d84-919a-7e4d1ca16fc8": {
         "name": "Overwhelming Force",
         "icon": "passives/overwhelming_force.svg",
-        "x": 155.0,
-        "y": 155.0,
+        "x": 55.0,
+        "y": 207.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Critical",
@@ -275,6 +290,21 @@
         ],
         "max_upgrade_level": 3,
         "socket": false
+      },
+      "26651197-4daa-4503-be51-a4e9b14cc89c": {
+        "name": "Socket",
+        "icon": "",
+        "x": 160.0,
+        "y": -160.0,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [],
+        "triggers": [],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": true
       },
       "284bae26-9348-46f3-b838-9d5f8c8d1ab9": {
         "name": "Casting Speed",
@@ -476,8 +506,8 @@
       "3a4861a5-e8e3-455d-b458-fe23d932b190": {
         "name": "Ain't Nobody Got Time for That",
         "icon": "passives/broken_skull.svg",
-        "x": -142.5,
-        "y": 155.0,
+        "x": -207.5,
+        "y": 55.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Attack",
@@ -784,8 +814,8 @@
       "56639962-c2b7-4135-868b-07486cbfc109": {
         "name": "Mana Shield",
         "icon": "passives/mana_shield.svg",
-        "x": -142.5,
-        "y": -152.5,
+        "x": -55.0,
+        "y": -210.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Mana",
@@ -2212,6 +2242,21 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "c2d6548d-a75e-4678-8314-fe30bb08ee77": {
+        "name": "Socket",
+        "icon": "",
+        "x": -160.0,
+        "y": 160.0,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [],
+        "triggers": [],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": true
+      },
       "c3187473-2fe2-4959-b045-4325d79d783e": {
         "name": "Armor",
         "icon": "passives/armor.svg",
@@ -2327,8 +2372,8 @@
       "cfff8b24-fb03-4a7e-a0b1-0c512a2ec7c4": {
         "name": "Grim Pact",
         "icon": "passives/tentacles_skull.svg",
-        "x": 137.5,
-        "y": -155.0,
+        "x": 57.5,
+        "y": -207.5,
         "size": 2,
         "initial_node": true,
         "node_type": "Mana",
@@ -3718,6 +3763,21 @@
         "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
+      },
+      "f7dcbf75-2d58-4b4c-822c-4a11343432d9": {
+        "name": "Socket",
+        "icon": "",
+        "x": 160.0,
+        "y": 160.0,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [],
+        "triggers": [],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": true
       },
       "fire_burn": {
         "name": "Blazing Inferno",
@@ -7228,22 +7288,6 @@
         "to": "875d806d-10e2-45cd-ac04-5fea19626672"
       },
       {
-        "from": "ad5542fe-6a7f-4f67-b3ba-307a2f46f066",
-        "to": "dbac4357-9e3b-4937-bed0-73891dfedd9f"
-      },
-      {
-        "from": "7edaa20f-b316-4cd4-ba30-e37c0f5c6fcb",
-        "to": "ce177465-cca9-47d0-86ce-0ec245ea8174"
-      },
-      {
-        "from": "14e61d75-f5ff-43fc-8b03-744c75b821a7",
-        "to": "807a2b14-4ad6-40d3-9480-90618fa5d792"
-      },
-      {
-        "from": "60c17832-46cd-4d7b-adee-d172788bfef7",
-        "to": "85a30382-d493-4bf3-b499-e9bedd9d2b67"
-      },
-      {
         "from": "e1517847-586f-4547-868f-ef59c08a00c9",
         "to": "875d806d-10e2-45cd-ac04-5fea19626672"
       },
@@ -7290,6 +7334,22 @@
       {
         "from": "c57f2319-656a-4d1a-a50e-568eee84084b",
         "to": "7a7780b2-b680-4925-ac04-7f93e10a8093"
+      },
+      {
+        "from": "875d806d-10e2-45cd-ac04-5fea19626672",
+        "to": "c2d6548d-a75e-4678-8314-fe30bb08ee77"
+      },
+      {
+        "from": "7a7780b2-b680-4925-ac04-7f93e10a8093",
+        "to": "f7dcbf75-2d58-4b4c-822c-4a11343432d9"
+      },
+      {
+        "from": "5505dc30-ed61-47be-8c38-2d34b86631be",
+        "to": "26651197-4daa-4503-be51-a4e9b14cc89c"
+      },
+      {
+        "from": "080e4acd-ab31-43a3-b81f-44806e7a3fc7",
+        "to": "0909d43b-bd54-4d6d-8e9d-dd41445cd15e"
       }
     ]
   }
