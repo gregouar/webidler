@@ -18,6 +18,7 @@ pub enum Condition {
         skill_type: Option<SkillType>,
     },
     MaximumLife,
+    MaximumMana,
     // StatusValue(Option<StatStatusType>),
     // StatusDuration(Option<StatStatusType>),
     // StatusStacks(Option<StatStatusType>),

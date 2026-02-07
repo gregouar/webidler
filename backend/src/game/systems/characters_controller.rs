@@ -360,3 +360,21 @@ fn compute_effect_weight(value: f64, duration: Option<f64>, value_only: bool) ->
         value * duration.unwrap_or(10_000.0)
     }
 }
+
+pub fn mana_available(character_state: &CharacterState) -> f64 {
+    (character_state.life - 1.0).max(0.0) + character_state.mana
+}
+
+pub fn spend_mana(
+    character_specs: &CharacterSpecs,
+    character_state: &mut CharacterState,
+    amount: f64,
+) {
+    let take_from_life = (character_state.life - 1.0)
+        .max(0.0)
+        .min(amount * (character_specs.take_from_life_before_mana as f64 * 0.01).clamp(0.0, 1.0));
+    let take_from_mana = amount - take_from_life;
+
+    character_state.life -= take_from_life;
+    character_state.mana -= take_from_mana;
+}

@@ -122,6 +122,9 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             StatType::TakeFromManaBeforeLife => character_specs
                 .take_from_mana_before_life
                 .apply_effect(effect),
+            StatType::TakeFromLifeBeforeMana => character_specs
+                .take_from_life_before_mana
+                .apply_effect(effect),
             StatType::Block(skill_type) => match skill_type {
                 Some(skill_type) => character_specs
                     .block

@@ -63,6 +63,7 @@ pub enum StatType {
         damage_type: Option<DamageType>,
     },
     TakeFromManaBeforeLife,
+    TakeFromLifeBeforeMana,
     Block(#[serde(default)] Option<SkillType>),
     BlockDamageTaken,
     Damage {

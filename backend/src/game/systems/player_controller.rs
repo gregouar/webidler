@@ -18,7 +18,7 @@ use shared::{
 use crate::{
     game::{
         data::{event::EventsQueue, master_store::SkillsStore, DataInit},
-        systems::inventory_controller,
+        systems::{characters_controller, inventory_controller},
     },
     rest::AppError,
 };
@@ -56,7 +56,8 @@ impl PlayerController {
             return;
         }
 
-        let mut mana_available = player_state.character_state.mana;
+        let mut mana_available =
+            characters_controller::mana_available(&player_state.character_state);
 
         let mut player = (
             CharacterId::Player,
@@ -68,7 +69,9 @@ impl PlayerController {
 
         let mut friends = vec![];
 
-        let min_mana_needed = if player_specs.character_specs.take_from_mana_before_life > 0.0 {
+        let min_mana_needed = if player_specs.character_specs.take_from_mana_before_life > 0.0
+            || player_specs.character_specs.take_from_life_before_mana > 0.0
+        {
             0.0
         } else {
             player_specs

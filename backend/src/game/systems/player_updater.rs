@@ -249,6 +249,7 @@ fn compute_player_specs(
             | StatType::ManaRegen
             | StatType::Armor(_)
             | StatType::TakeFromManaBeforeLife
+            | StatType::TakeFromLifeBeforeMana
             | StatType::Block(_)
             | StatType::BlockDamageTaken
             | StatType::DamageResistance { .. }

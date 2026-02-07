@@ -52,13 +52,13 @@ pub fn use_skill<'a>(
     }
 
     if applied {
-        me.1 .1.mana -= skill_specs.mana_cost;
+        characters_controller::spend_mana(me.1 .0, me.1 .1, skill_specs.mana_cost);
         skill_state.just_triggered = true;
         skill_state.is_ready = false;
         skill_state.elapsed_cooldown = 0.0;
     }
 
-    me.1 .1.mana
+    characters_controller::mana_available(me.1 .1)
 }
 
 fn apply_skill_on_targets<'a>(

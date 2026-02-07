@@ -288,6 +288,22 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                 })
                         }}
+                        {move || {
+                            let take_from_mana_before_life = game_context
+                                .player_specs
+                                .read()
+                                .character_specs
+                                .take_from_mana_before_life as f64;
+                            (take_from_mana_before_life != 0.0)
+                                .then(move || {
+                                    view! {
+                                        <Stat
+                                            label="Life Taken Before Mana"
+                                            value=move || format!("{:.0}%", take_from_mana_before_life)
+                                        />
+                                    }
+                                })
+                        }}
                         // {move || {
                         // game_context
                         // .player_specs

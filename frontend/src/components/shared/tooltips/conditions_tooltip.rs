@@ -14,6 +14,7 @@ pub fn format_skill_modifier_conditions(conditions: &[Condition]) -> String {
                 skill_type,
             } => format_status_type_condition(*status_type, *skill_type),
             Condition::MaximumLife => "On Maximum Life".into(),
+            Condition::MaximumMana => "On Maximum Mana".into(),
         })
         .collect::<Vec<_>>()
         .join(" ")
