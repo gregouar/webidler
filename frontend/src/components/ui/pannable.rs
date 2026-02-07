@@ -177,6 +177,7 @@ pub fn Pannable(
             on:touchstart=on_touch_start
             on:touchmove=on_touch_move
             on:touchend=on_touch_end
+            on:contextmenu=|ev| ev.prevent_default()
             class="flex items-center justify-center w-full h-full touch-none overflow-hidden xl:drop-shadow-[0_2px_4px_black]"
         >
             <svg
