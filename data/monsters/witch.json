@@ -11,7 +11,7 @@
     {
       "name": "Evil Cackling",
       "icon": "skills/curse_weakness.svg",
-      "skill_type": "Spell",
+      "skill_type": "Curse",
       "cooldown": 10.0,
       "targets": [
         {

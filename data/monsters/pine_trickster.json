@@ -34,7 +34,7 @@
     {
       "name": "Dirty Trick",
       "icon": "skills/curse_putridity.svg",
-      "skill_type": "Spell",
+      "skill_type": "Curse",
       "cooldown": 5.0,
       "targets": [
         {

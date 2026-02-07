@@ -1,0 +1,112 @@
+Passives rework:
+
+Big themes:
+----------
+
+Gold:
+-Minor boost
+-Major boost
+
+Attack:
+-Damage
+-Speed
+
+Spell:
+-Damage
+-Speed
+* Spell Critical
+
+Mana:
+-Max (%? & flat)
+-Regen
+-Cost
+-Damage on Max Mana
+* Mana Shield
+* Grim Pact
+
+Life:
+-Max (% & flat?)
+-Regen
+-Restore
+* Blood Magic
+* Healing Aura
+
+Hybrid Life/Mana:
+-Max
+-Regen
+
+Defense:
+-Armor & Resistances (could split more)
+-Block
+* Spell Block
+* DamageResistance
+
+Fire:
+-Damage
+-Burn (damage, duration, chance) => How to enable burn? Have an easy accessible Blazing Inferno?
+-Penetration
+
+Poison:
+-Damage
+-Efficacity
+-Duration
+-Penetration
+
+Storm:
+-Damage
+-Stun (duration, chance)
+-Damage against stunned
+-Penetration
+*Lucky
+
+Physical:
+-Damage
+-Bleed (damage, duration, chance)
+-Penetration
+
+Critical:
+-Chance
+-Damage
+*Against enemies on full life
+
+Threat:
+-Damage
+-Speed
+
+Curses:
+- Duration
+- Effect
+- Speed
+*Curses never expire (or rune?)
+
+Blessings:
+- Duration
+- Effect
+- Speed
+
+Dot:
+- Damage
+- Duration
+*Spread DoT (should split per type? spread other effects?)
+
+Other statuses/effects?
+
+Success chance ?
+
+Other:
+* Remove Dot
+* Convert Crit
+
+
+-Damage when on low life?
+-Max damage?
+
+-Hybrid mana/life
+
+Runes:
+-----
+-Open Wound?
+-Blazing Inferno? => replaced by burn chance in fire?
+-Berserker?
+-Massive incrase mana cost, massive increase spell speed? 
+

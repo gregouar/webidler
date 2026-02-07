@@ -13,8 +13,8 @@ use shared::data::{
 
 use crate::components::shared::tooltips::{
     conditions_tooltip,
-    effects_tooltip::{damage_type_str, format_stat, status_type_str},
-    skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
+    effects_tooltip::{damage_type_str, format_stat, status_type_str, status_type_value_str},
+    skill_tooltip::{self, shape_str, skill_type_str, EffectLi},
 };
 
 pub fn format_trigger_modifier(
@@ -53,7 +53,7 @@ pub fn format_extra_trigger_modifiers(
         .filter(|modifier| match modifier.stat {
             StatType::Damage { .. } => modifier.modifier == Modifier::Multiplier,
             StatType::StatusDuration { .. } => modifier.modifier == Modifier::Multiplier,
-            StatType::Restore(_) => modifier.modifier == Modifier::Multiplier,
+            StatType::Restore{..} => modifier.modifier == Modifier::Multiplier,
             _ => true,
         })
         .map(|modifier| {
@@ -78,14 +78,35 @@ pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource)
         }
         TriggerEffectModifierSource::HitCrit => "Critical".to_string(),
         TriggerEffectModifierSource::AreaLevel => "Area Level".to_string(),
-        TriggerEffectModifierSource::StatusValue(stat_status_type) => {
-            format!("{} Power", status_type_str(stat_status_type))
+        TriggerEffectModifierSource::StatusValue {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{}{}",
+                skill_type_str(skill_type),
+                status_type_value_str(status_type)
+            )
         }
-        TriggerEffectModifierSource::StatusDuration(stat_status_type) => {
-            format!("{} Duration", status_type_str(stat_status_type))
+        TriggerEffectModifierSource::StatusDuration {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{}{} Duration",
+                skill_type_str(skill_type),
+                status_type_str(status_type)
+            )
         }
-        TriggerEffectModifierSource::StatusStacks(stat_status_type) => {
-            format!("{} Stack", status_type_str(stat_status_type))
+        TriggerEffectModifierSource::StatusStacks {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{}{} Stacks",
+                skill_type_str(skill_type),
+                status_type_str(status_type)
+            )
         }
     }
 }
@@ -206,12 +227,7 @@ fn critical_str(value: Option<bool>) -> &'static str {
 }
 
 fn format_kill_trigger(kill_trigger: &KillTrigger) -> String {
-    format!(
-        "{}{}{}",
-        conditions_tooltip::stunned_str(kill_trigger.is_stunned),
-        conditions_tooltip::debuffed_str(kill_trigger.is_debuffed),
-        conditions_tooltip::damaged_over_time_str(kill_trigger.is_damaged_over_time),
-    )
+    conditions_tooltip::format_skill_modifier_conditions(&kill_trigger.conditions)
 }
 
 fn format_target_type(target_type: &TargetType) -> &'static str {

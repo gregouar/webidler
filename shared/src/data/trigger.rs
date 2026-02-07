@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    character::CharacterId, item::SkillShape, skill::TargetType, stat_effect::StatStatusType,
+    character::CharacterId, conditional_modifier::Condition, item::SkillShape, skill::TargetType,
+    stat_effect::StatStatusType,
 };
 
 use super::{
@@ -9,7 +10,7 @@ use super::{
     stat_effect::{Modifier, StatType},
 };
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash)]
 pub enum EventTrigger {
     OnHit(HitTrigger),
     OnTakeHit(HitTrigger),
@@ -54,17 +55,10 @@ pub struct StatusTrigger {
     #[serde(default)]
     pub is_triggered: Option<bool>,
 }
-#[derive(
-    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default, PartialOrd, Ord,
-)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]
 pub struct KillTrigger {
     #[serde(default)]
-    pub is_stunned: Option<bool>,
-    #[serde(default)]
-    pub is_debuffed: Option<bool>,
-    #[serde(default)]
-    pub is_damaged_over_time: Option<DamageType>,
-    // TODO: more?
+    pub conditions: Vec<Condition>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -112,9 +106,24 @@ pub struct TriggerEffectModifier {
 pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
     AreaLevel,
-    StatusValue(Option<StatStatusType>),
-    StatusDuration(Option<StatStatusType>),
-    StatusStacks(Option<StatStatusType>),
+    StatusValue {
+        #[serde(default, flatten)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    StatusDuration {
+        #[serde(default, flatten)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    StatusStacks {
+        #[serde(default, flatten)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
     // TODO: Move to conditional modifiers?
     HitCrit,
 }

@@ -11,7 +11,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": [10, 15]
       }
@@ -29,7 +29,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": [20, 25]
       }
@@ -47,7 +47,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": [30, 35]
       }
@@ -65,7 +65,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": [40, 45]
       }
@@ -83,7 +83,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": [50, 55]
       }
@@ -101,7 +101,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": [60, 65]
       }
@@ -119,7 +119,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": [70, 75]
       }
@@ -137,7 +137,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": [80, 85]
       }
@@ -155,7 +155,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": [90, 95]
       }
@@ -173,7 +173,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": [100, 120]
       }

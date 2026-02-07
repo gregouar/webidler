@@ -29,7 +29,7 @@
       "name": "Spread the Curse",
       "icon": "skills/curse_weakness.svg",
       "cooldown": 5.0,
-      "skill_type": "Spell",
+      "skill_type": "Curse",
       "targets": [
         {
           "effects": [

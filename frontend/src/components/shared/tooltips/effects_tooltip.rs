@@ -93,6 +93,9 @@ fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> Stri
         StatConverterSource::MaxMana => "Maximum Mana".into(),
         StatConverterSource::ManaRegen => "Mana Regeneration".into(),
         StatConverterSource::LifeRegen => "Life Regeneration".into(),
+        StatConverterSource::Block(skill_type) => {
+            format!("{}Block Chance", skill_type_str(Some(skill_type)))
+        }
     }
 }
 
@@ -100,6 +103,8 @@ fn to_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
         Some(SkillType::Attack) => " to Attacks",
         Some(SkillType::Spell) => " to Spells",
+        Some(SkillType::Curse) => " to Curses",
+        Some(SkillType::Blessing) => " to Blessings",
         None => "",
     }
 }
@@ -108,6 +113,8 @@ fn with_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
         Some(SkillType::Attack) => " with Attacks",
         Some(SkillType::Spell) => " with Spells",
+        Some(SkillType::Curse) => " with Curses",
+        Some(SkillType::Blessing) => " with Blessings",
         None => "",
     }
 }
@@ -120,9 +127,9 @@ pub fn status_type_str(status_type: Option<StatStatusType>) -> String {
                 format!("{}Damage over Time", damage_type_str(damage_type))
             }
             StatStatusType::StatModifier { debuff } => match debuff {
-                Some(true) => "Curses".to_string(),
-                Some(false) => "Blessings".to_string(),
-                None => "Curses and Blessings".to_string(),
+                Some(true) => "Negative Statuses".to_string(),
+                Some(false) => "Positive Statuses".to_string(),
+                None => "Statuses".to_string(),
             },
             StatStatusType::Trigger => "Triggered Effects".to_string(),
         },
@@ -130,11 +137,31 @@ pub fn status_type_str(status_type: Option<StatStatusType>) -> String {
     }
 }
 
+pub fn status_type_value_str(status_type: Option<StatStatusType>) -> String {
+    match status_type {
+        Some(status_type) => match status_type {
+            StatStatusType::Stun => "Stun Power".to_string(),
+            StatStatusType::DamageOverTime { damage_type } => {
+                format!("{}Damage per second", damage_type_str(damage_type))
+            }
+            StatStatusType::StatModifier { debuff } => match debuff {
+                Some(true) => "Negative Statuses Power".to_string(),
+                Some(false) => "Positive Statuses Power".to_string(),
+                None => "Statuses Power".to_string(),
+            },
+            StatStatusType::Trigger => "Triggered Effects Power".to_string(),
+        },
+        None => "Effects over Time Power".to_string(),
+    }
+}
+
 fn stat_skill_effect_type_str(effect_type: Option<StatSkillEffectType>) -> String {
     match effect_type {
         Some(skill_effect_type) => match skill_effect_type {
             StatSkillEffectType::FlatDamage {} => "Hit".into(),
-            StatSkillEffectType::ApplyStatus {} => "Apply Status".into(),
+            StatSkillEffectType::ApplyStatus { status_type } => {
+                format!("Apply {}", status_type_str(status_type))
+            }
             StatSkillEffectType::Restore { restore_type } => {
                 format!("Restore{}", restore_type_str(restore_type))
             }
@@ -299,8 +326,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             _ => format!("{}Resistance", damage_type_str(*armor_type)),
         },
         StatType::TakeFromManaBeforeLife => "Damage taken from Mana before Life".to_string(),
-        StatType::Block => "Block Chance".to_string(),
-        StatType::BlockSpell => "Block Chance applied to Spells".to_string(),
+        StatType::Block(skill_type) => format!("{}Block Chance", skill_type_str(*skill_type)),
         StatType::BlockDamageTaken => "Blocked Damage Taken".to_string(),
         StatType::Damage {
             skill_type,
@@ -326,8 +352,15 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             damage_type_str(*damage_type),
             skill_type_str(*skill_type),
         ),
-        StatType::Restore(restore_type) => {
-            format!("Restore{} Effect", restore_type_str(*restore_type))
+        StatType::Restore {
+            restore_type,
+            skill_type,
+        } => {
+            format!(
+                "Restore{} Effect{}",
+                restore_type_str(*restore_type),
+                with_skill_type_str(*skill_type)
+            )
         }
         StatType::CritChance(skill_type) => {
             format!("{}Critical Hit Chance", skill_type_str(*skill_type))
@@ -335,24 +368,36 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::CritDamage(skill_type) => {
             format!("{}Critical Hit Damage", skill_type_str(*skill_type))
         }
-        StatType::StatusPower(status_type) => {
-            format!("{} Effect", status_type_str(*status_type))
+        StatType::StatusPower {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{}{}",
+                skill_type_str(*skill_type),
+                status_type_value_str(*status_type)
+            )
         }
-        StatType::StatusDuration(status_type) => {
-            format!("{} Duration", status_type_str(*status_type))
+        StatType::StatusDuration {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{}{} Duration",
+                skill_type_str(*skill_type),
+                status_type_str(*status_type)
+            )
         }
         StatType::Speed(skill_type) => format!("{}Speed", skill_type_str(*skill_type)),
         StatType::MovementSpeed => "Movement Speed".to_string(),
         StatType::GoldFind => "Gold Find".to_string(),
         StatType::ItemRarity => "Item Rarity".to_string(),
-        StatType::LifeOnHit(hit_trigger) => format!(
-            "Life gained on {}Hit",
-            skill_type_str(hit_trigger.skill_type)
-        ),
-        StatType::ManaOnHit(hit_trigger) => format!(
-            "Mana gained on {}Hit",
-            skill_type_str(hit_trigger.skill_type)
-        ),
+        StatType::LifeOnHit { skill_type } => {
+            format!("Life gained on {}Hit", skill_type_str(*skill_type))
+        }
+        StatType::ManaOnHit { skill_type } => {
+            format!("Mana gained on {}Hit", skill_type_str(*skill_type))
+        }
         StatType::DamageResistance {
             skill_type,
             damage_type,
@@ -441,10 +486,10 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 format_adds_removes(value, false, "% of")
             )
         }
-        StatType::Block => format!("{} Block Chance", format_adds_removes(value, false, "%")),
-        StatType::BlockSpell => format!(
-            "{} Block Chance to Spells",
-            format_adds_removes(value, false, "% of")
+        StatType::Block(skill_type) => format!(
+            "{} {}Block Chance",
+            format_adds_removes(value, false, "%"),
+            skill_type_str(*skill_type)
         ),
         StatType::BlockDamageTaken => {
             format!(
@@ -461,11 +506,15 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             damage_type_str(*damage_type),
             to_skill_type_str(*skill_type)
         ),
-        StatType::Restore(restore_type) => {
+        StatType::Restore {
+            restore_type,
+            skill_type,
+        } => {
             format!(
-                "Restore {} more{}",
+                "Restore {} more{}{}",
                 format_flat_number(value, false),
-                restore_type_str(*restore_type)
+                restore_type_str(*restore_type),
+                with_skill_type_str(*skill_type)
             )
         }
         StatType::CritChance(skill_type) => format!(
@@ -478,20 +527,32 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             format_adds_removes(value, false, "%"),
             to_skill_type_str(*skill_type)
         ),
-        StatType::StatusPower(status_type) => {
+        StatType::StatusPower {
+            status_type,
+            skill_type,
+        } => {
             format!(
-                "{} {}",
+                "{} {}{}",
                 format_adds_removes(value, false, " to"),
-                status_type_str(*status_type)
+                skill_type_str(*skill_type),
+                status_type_value_str(*status_type)
             )
         }
-        StatType::StatusDuration(status_type) => {
+        StatType::StatusDuration {
+            status_type,
+            skill_type,
+        } => {
             if value.unwrap_or_default() >= 99999.0 {
-                format!("{} never expire", status_type_str(*status_type))
+                format!(
+                    "{}{} never expire",
+                    skill_type_str(*skill_type),
+                    status_type_str(*status_type)
+                )
             } else {
                 format!(
-                    "{} seconds duration to {}",
+                    "{} seconds duration to {}{}",
                     format_adds_removes(value, true, ""),
+                    skill_type_str(*skill_type),
                     status_type_str(*status_type)
                 )
             }
@@ -526,15 +587,15 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 )
             }
         }
-        StatType::LifeOnHit(hit_trigger) => format!(
+        StatType::LifeOnHit { skill_type } => format!(
             "Gain {} Life on {}Hit",
             format_flat_number(value, false),
-            skill_type_str(hit_trigger.skill_type)
+            skill_type_str(*skill_type)
         ),
-        StatType::ManaOnHit(hit_trigger) => format!(
+        StatType::ManaOnHit { skill_type } => format!(
             "Gain {} Mana on {}Hit",
             format_flat_number(value, false),
-            skill_type_str(hit_trigger.skill_type)
+            skill_type_str(*skill_type)
         ),
         StatType::DamageResistance {
             skill_type,

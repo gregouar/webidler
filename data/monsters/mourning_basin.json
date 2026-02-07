@@ -28,7 +28,7 @@
     {
       "name": "Lamenting Cry",
       "icon": "skills/curse_frailty.svg",
-      "skill_type": "Spell",
+      "skill_type": "Curse",
       "cooldown": 2.0,
       "targets": [
         {

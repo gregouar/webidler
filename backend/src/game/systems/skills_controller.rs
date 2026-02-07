@@ -389,6 +389,7 @@ fn apply_skill_effect_on_target(
                     characters_controller::should_apply_status(
                         target,
                         &status_effect.status_type,
+                        skill_type,
                         *value,
                         duration,
                         status_effect.cumulate,

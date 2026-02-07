@@ -34,6 +34,8 @@ pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
         Some(SkillType::Attack) => "Attack ",
         Some(SkillType::Spell) => "Spell ",
+        Some(SkillType::Curse) => "Curse ",
+        Some(SkillType::Blessing) => "Blessing ",
         None => "",
     }
 }
@@ -296,7 +298,10 @@ pub fn format_effect(
                         let success_chance = success_chance.clone();
                         let trigger_modifier_duration_str = format_trigger_modifier(
                             find_trigger_modifier(
-                                StatType::StatusDuration(Some(StatStatusType::Stun)),
+                                StatType::StatusDuration {
+                                    status_type: Some(StatStatusType::Stun),
+                                    skill_type: None,
+                                },
                                 modifiers,
                             ),
                             "",
@@ -324,9 +329,12 @@ pub fn format_effect(
                         );
                         let trigger_modifier_duration_str = format_trigger_modifier(
                             find_trigger_modifier(
-                                StatType::StatusDuration(Some(StatStatusType::DamageOverTime {
-                                    damage_type: Some(damage_type),
-                                })),
+                                StatType::StatusDuration {
+                                    status_type: Some(StatStatusType::DamageOverTime {
+                                        damage_type: Some(damage_type),
+                                    }),
+                                    skill_type: None,
+                                },
                                 modifiers,
                             ),
                             "",
@@ -428,8 +436,13 @@ pub fn format_effect(
             value,
             modifier,
         } => {
-            let trigger_modifier =
-                find_trigger_modifier(StatType::Restore(Some(restore_type)), modifiers);
+            let trigger_modifier = find_trigger_modifier(
+                StatType::Restore {
+                    restore_type: Some(restore_type),
+                    skill_type: None,
+                },
+                modifiers,
+            );
             let trigger_modifier_str = format_trigger_modifier_per(trigger_modifier);
             let trigger_modifier_factor_str =
                 trigger_modifier.map(|trigger_modifier| format!("{:.0}", trigger_modifier.factor));
@@ -530,7 +543,11 @@ where
 }
 
 fn stackable_str(cumulate: bool) -> &'static str {
-    if cumulate { "Stackable " } else { "" }
+    if cumulate {
+        "Stackable "
+    } else {
+        ""
+    }
 }
 
 #[component]

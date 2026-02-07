@@ -75,9 +75,7 @@ pub struct CharacterSpecs {
     #[serde(default)]
     pub armor: HashMap<DamageType, f64>,
     #[serde(default)]
-    pub block: Chance,
-    #[serde(default)]
-    pub block_spell: Chance, // chance to block spell are applied on top of block chance
+    pub block: HashMap<SkillType, Chance>,
     #[serde(default)]
     pub block_damage: f32,
 
@@ -116,6 +114,10 @@ pub struct CharacterState {
 
 impl CharacterState {
     pub fn is_stunned(&self) -> bool {
-        self.statuses.unique_statuses.contains_key(&StatusId::Stun)
+        // TODO: Also iter over non unique?
+        self.statuses
+            .unique_statuses
+            .iter()
+            .any(|((status_id, _), _)| *status_id == StatusId::Stun)
     }
 }

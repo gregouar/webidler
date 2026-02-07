@@ -16,7 +16,7 @@ use shared::{
             ApplyStatModifier, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs,
             StatType,
         },
-        trigger::{EventTrigger, TriggerTarget, TriggeredEffect},
+        trigger::{EventTrigger, HitTrigger, TriggerTarget, TriggeredEffect},
     },
 };
 
@@ -133,7 +133,12 @@ pub fn update_player_specs(
         .armor
         .entry(DamageType::Physical)
         .or_default()) += total_armor;
-    player_specs.character_specs.block.value += total_block;
+    player_specs
+        .character_specs
+        .block
+        .entry(SkillType::Attack)
+        .or_default()
+        .value += total_block;
 
     player_specs.character_specs.triggers = passives_tree_state
         .purchased_nodes
@@ -194,19 +199,27 @@ fn compute_player_specs(
             StatType::GoldFind => player_specs.gold_find.apply_effect(effect),
             StatType::ThreatGain => player_specs.threat_gain.apply_effect(effect),
             // TODO: Move the character specs
-            StatType::LifeOnHit(hit_trigger) | StatType::ManaOnHit(hit_trigger) => {
+            StatType::LifeOnHit { skill_type } | StatType::ManaOnHit { skill_type } => {
                 if let Modifier::Flat = effect.modifier {
                     player_specs.character_specs.triggers.push(TriggeredEffect {
-                        trigger: EventTrigger::OnHit(hit_trigger),
+                        trigger: EventTrigger::OnHit(HitTrigger {
+                            skill_type,
+                            range: None,
+                            is_crit: None,
+                            is_blocked: None,
+                            is_hurt: Some(true),
+                            is_triggered: Some(false),
+                            damage_type: None,
+                        }),
                         target: TriggerTarget::Source,
                         skill_range: SkillRange::Any,
-                        skill_type: SkillType::Attack,
+                        skill_type: skill_type.unwrap_or_default(),
                         skill_shape: SkillShape::Single,
                         modifiers: Vec::new(),
                         effects: vec![SkillEffect {
                             success_chance: Chance::new_sure(),
                             effect_type: SkillEffectType::Restore {
-                                restore_type: if let StatType::LifeOnHit(_) = effect.stat {
+                                restore_type: if let StatType::LifeOnHit { .. } = effect.stat {
                                     RestoreType::Life
                                 } else {
                                     RestoreType::Mana
@@ -236,8 +249,7 @@ fn compute_player_specs(
             | StatType::ManaRegen
             | StatType::Armor(_)
             | StatType::TakeFromManaBeforeLife
-            | StatType::Block
-            | StatType::BlockSpell
+            | StatType::Block(_)
             | StatType::BlockDamageTaken
             | StatType::DamageResistance { .. }
             | StatType::StatConverter(StatConverterSpecs {
@@ -245,7 +257,8 @@ fn compute_player_specs(
                     StatConverterSource::MaxLife
                     | StatConverterSource::LifeRegen
                     | StatConverterSource::MaxMana
-                    | StatConverterSource::ManaRegen,
+                    | StatConverterSource::ManaRegen
+                    | StatConverterSource::Block(_),
                 ..
             })
             | StatType::StatConditionalModifier { .. } => {}
@@ -254,7 +267,7 @@ fn compute_player_specs(
             | StatType::Damage { .. }
             | StatType::MinDamage { .. }
             | StatType::MaxDamage { .. }
-            | StatType::Restore(_)
+            | StatType::Restore { .. }
             | StatType::CritChance(_)
             | StatType::CritDamage(_)
             | StatType::StatusDuration { .. }

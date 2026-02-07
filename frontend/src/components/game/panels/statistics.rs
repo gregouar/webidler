@@ -3,7 +3,6 @@ use leptos::{html::*, prelude::*};
 use shared::data::{
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{Modifier, StatConverterSource, StatConverterSpecs, StatStatusType, StatType},
-    trigger::HitTrigger,
 };
 use strum::IntoEnumIterator;
 
@@ -223,11 +222,18 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             }
                         />
                         <Stat
-                            label="Block Chance"
+                            label="Attack Block Chance"
                             value=move || {
                                 format!(
                                     "{:.0}%",
-                                    game_context.player_specs.read().character_specs.block.value,
+                                    game_context
+                                        .player_specs
+                                        .read()
+                                        .character_specs
+                                        .block
+                                        .get(&SkillType::Attack)
+                                        .map(|x| x.value)
+                                        .unwrap_or_default(),
                                 )
                             }
                         />
@@ -236,13 +242,15 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .player_specs
                                 .read()
                                 .character_specs
-                                .block_spell
-                                .value as f64;
+                                .block
+                                .get(&SkillType::Spell)
+                                .map(|x| x.value)
+                                .unwrap_or_default();
                             (block_spell != 0.0)
                                 .then(move || {
                                     view! {
                                         <Stat
-                                            label="Block Chance Applied to Spells"
+                                            label="Spell Block Chance"
                                             value=move || format!("{:.0}%", block_spell)
                                         />
                                     }
@@ -358,15 +366,9 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         />
                         {move || {
                             let life_on_hit = effect(
-                                StatType::LifeOnHit(HitTrigger {
+                                StatType::LifeOnHit {
                                     skill_type: Some(SkillType::Attack),
-                                    range: None,
-                                    is_crit: None,
-                                    is_blocked: None,
-                                    is_hurt: Some(true),
-                                    is_triggered: None,
-                                    damage_type: None,
-                                }),
+                                },
                                 Modifier::Flat,
                             );
                             (life_on_hit > 0.0)
@@ -381,15 +383,9 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         }}
                         {move || {
                             let mana_on_hit = effect(
-                                StatType::ManaOnHit(HitTrigger {
+                                StatType::ManaOnHit {
                                     skill_type: Some(SkillType::Attack),
-                                    range: None,
-                                    is_crit: None,
-                                    is_blocked: None,
-                                    is_hurt: Some(true),
-                                    is_triggered: None,
-                                    damage_type: None,
-                                }),
+                                },
                                 Modifier::Flat,
                             );
                             (mana_on_hit > 0.0)
@@ -402,25 +398,59 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                 })
                         }}
-                        {make_stat(StatType::Restore(None))}
-                        {make_opt_stat(StatType::Restore(Some(RestoreType::Life)), 0.0)}
-                        {make_opt_stat(StatType::Restore(Some(RestoreType::Mana)), 0.0)}
-                        {make_stat(StatType::StatusDuration(None))}
-                        {make_stat(StatType::StatusPower(None))}
+                        {make_stat(StatType::Restore {
+                            restore_type: None,
+                            skill_type: None,
+                        })}
                         {make_opt_stat(
-                            StatType::StatusPower(
-                                Some(StatStatusType::StatModifier {
-                                    debuff: Some(false),
-                                }),
-                            ),
+                            StatType::Restore {
+                                restore_type: Some(RestoreType::Life),
+                                skill_type: None,
+                            },
                             0.0,
                         )}
                         {make_opt_stat(
-                            StatType::StatusPower(
-                                Some(StatStatusType::StatModifier {
-                                    debuff: Some(true),
-                                }),
-                            ),
+                            StatType::Restore {
+                                restore_type: Some(RestoreType::Mana),
+                                skill_type: None,
+                            },
+                            0.0,
+                        )}
+                        {make_stat(StatType::StatusDuration {
+                            status_type: None,
+                            skill_type: None,
+                        })}
+                        {make_stat(StatType::StatusPower {
+                            status_type: None,
+                            skill_type: None,
+                        })}
+                        // TODO: More for stun?
+                        {make_opt_stat(
+                            StatType::StatusPower {
+                                status_type: None,
+                                skill_type: Some(SkillType::Blessing),
+                            },
+                            0.0,
+                        )}
+                        {make_opt_stat(
+                            StatType::StatusDuration {
+                                status_type: None,
+                                skill_type: Some(SkillType::Blessing),
+                            },
+                            0.0,
+                        )}
+                        {make_opt_stat(
+                            StatType::StatusPower {
+                                status_type: None,
+                                skill_type: Some(SkillType::Curse),
+                            },
+                            0.0,
+                        )}
+                        {make_opt_stat(
+                            StatType::StatusDuration {
+                                status_type: None,
+                                skill_type: Some(SkillType::Curse),
+                            },
                             0.0,
                         )}
                         {make_opt_stat(
@@ -495,13 +525,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 damage_type: Some(DamageType::Storm),
                             },
                             0.0,
-                        )}
+                        )} // TODO: Elemental dot?
                         {make_opt_stat(
-                            StatType::StatusPower(
-                                Some(StatStatusType::DamageOverTime {
+                            StatType::StatusPower {
+                                status_type: Some(StatStatusType::DamageOverTime {
                                     damage_type: None,
                                 }),
-                            ),
+                                skill_type: None,
+                            },
                             0.0,
                         )} {make_opt_stat(StatType::CritDamage(None), 0.0)}
                     </StatCategory>

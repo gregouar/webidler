@@ -60,7 +60,7 @@
       {
         "trigger_id": "pathwalker_remains",
         "OnWaveCompleted": {},
-        "target": "Source",
+        "target": "Me",
         "effects": [
           {
             "Restore": {

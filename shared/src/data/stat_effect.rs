@@ -8,7 +8,6 @@ use crate::data::{
     character_status::StatusSpecs,
     conditional_modifier::Condition,
     skill::{RestoreType, SkillEffectType},
-    trigger::HitTrigger,
 };
 
 use super::skill::SkillType;
@@ -64,8 +63,7 @@ pub enum StatType {
         damage_type: Option<DamageType>,
     },
     TakeFromManaBeforeLife,
-    Block,
-    BlockSpell,
+    Block(#[serde(default)] Option<SkillType>),
     BlockDamageTaken,
     Damage {
         #[serde(default)]
@@ -85,14 +83,34 @@ pub enum StatType {
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
-    // TODO: Collapse to simple Effect, if more involved trigger is needed, we can always add as pure trigger
-    LifeOnHit(#[serde(default)] HitTrigger),
-    ManaOnHit(#[serde(default)] HitTrigger),
-    Restore(#[serde(default)] Option<RestoreType>),
+    LifeOnHit {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    ManaOnHit {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    Restore {
+        #[serde(default)]
+        restore_type: Option<RestoreType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
     CritChance(#[serde(default)] Option<SkillType>),
     CritDamage(#[serde(default)] Option<SkillType>),
-    StatusPower(#[serde(default)] Option<StatStatusType>),
-    StatusDuration(#[serde(default)] Option<StatStatusType>),
+    StatusPower {
+        #[serde(default, flatten)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    StatusDuration {
+        #[serde(default, flatten)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
     Speed(#[serde(default)] Option<SkillType>),
     MovementSpeed,
     GoldFind,
@@ -131,10 +149,6 @@ pub fn compare_options<T: PartialEq>(first: &Option<T>, second: &Option<T>) -> b
 
 impl StatType {
     pub fn is_match(&self, stat_type: &StatType) -> bool {
-        if self == stat_type {
-            return true;
-        }
-
         use StatType::*;
         match (self, stat_type) {
             (
@@ -213,15 +227,46 @@ impl StatType {
                     skill_type: skill_type_2,
                 },
             ) => compare_options(skill_type, skill_type_2),
-            (Restore(first), Restore(second)) => compare_options(first, second),
+            (
+                Restore {
+                    restore_type,
+                    skill_type,
+                },
+                Restore {
+                    restore_type: restore_type_2,
+                    skill_type: skill_type_2,
+                },
+            ) => {
+                compare_options(restore_type, restore_type_2)
+                    && compare_options(skill_type, skill_type_2)
+            }
             (CritChance(first), CritChance(second))
             | (CritDamage(first), CritDamage(second))
-            | (Speed(first), Speed(second)) => compare_options(first, second),
-            (StatusPower(first), StatusPower(second))
-            | (StatusDuration(first), StatusDuration(second)) => match (first, second) {
-                (Some(first), Some(second)) => first.is_match(second),
-                _ => true,
-            },
+            | (Speed(first), Speed(second))
+            | (Block(first), Block(second)) => compare_options(first, second),
+            (
+                StatusPower {
+                    status_type,
+                    skill_type,
+                },
+                StatusPower {
+                    status_type: status_type_2,
+                    skill_type: skill_type_2,
+                },
+            )
+            | (
+                StatusDuration {
+                    status_type,
+                    skill_type,
+                },
+                StatusDuration {
+                    status_type: status_type_2,
+                    skill_type: skill_type_2,
+                },
+            ) => {
+                compare_options(status_type, status_type_2)
+                    && compare_options(skill_type, skill_type_2)
+            }
             (SkillLevel(first), SkillLevel(second)) => compare_options(first, second),
             (
                 SkillConditionalModifier {
@@ -231,7 +276,7 @@ impl StatType {
                     skill_type: second, ..
                 },
             ) => compare_options(first, second),
-            _ => false,
+            _ => self == stat_type,
         }
     }
 
@@ -244,7 +289,10 @@ impl StatType {
                 | MinDamage { .. }
                 | MaxDamage { .. }
                 | CritDamage(_)
-                | StatusPower(Some(StatStatusType::DamageOverTime { .. }))
+                | StatusPower {
+                    status_type: Some(StatStatusType::DamageOverTime { .. }),
+                    ..
+                }
                 | GoldFind
         )
     }
@@ -260,6 +308,7 @@ pub enum StatStatusType {
     StatModifier {
         #[serde(default)]
         debuff: Option<bool>,
+        // TODO: Add stat type?
     },
     Trigger,
 }
@@ -307,7 +356,7 @@ pub enum StatSkillEffectType {
         // damage_type: Option<DamageType>,
     },
     ApplyStatus {
-        // status_type: Option<StatStatusType>,
+        status_type: Option<StatStatusType>,
     },
     Restore {
         #[serde(default)]
@@ -318,10 +367,6 @@ pub enum StatSkillEffectType {
 
 impl StatSkillEffectType {
     pub fn is_match(&self, skill_effect_type: &StatSkillEffectType) -> bool {
-        if self == skill_effect_type {
-            return true;
-        }
-
         use StatSkillEffectType::*;
         match (self, skill_effect_type) {
             (
@@ -330,7 +375,13 @@ impl StatSkillEffectType {
                     restore_type: restore_type_2,
                 },
             ) => compare_options(restore_type, restore_type_2),
-            _ => false,
+            (
+                ApplyStatus { status_type },
+                ApplyStatus {
+                    status_type: status_type_2,
+                },
+            ) => compare_options(status_type, status_type_2),
+            _ => self == skill_effect_type,
         }
     }
 }
@@ -339,7 +390,11 @@ impl From<&SkillEffectType> for Option<StatSkillEffectType> {
     fn from(value: &SkillEffectType) -> Self {
         match value {
             SkillEffectType::FlatDamage { .. } => Some(StatSkillEffectType::FlatDamage {}),
-            SkillEffectType::ApplyStatus { .. } => Some(StatSkillEffectType::ApplyStatus {}),
+            SkillEffectType::ApplyStatus { statuses, .. } => {
+                Some(StatSkillEffectType::ApplyStatus {
+                    status_type: statuses.first().map(|status| (&status.status_type).into()),
+                })
+            }
             SkillEffectType::Restore { restore_type, .. } => Some(StatSkillEffectType::Restore {
                 restore_type: Some(*restore_type),
             }),
@@ -414,6 +469,7 @@ pub enum StatConverterSource {
     MaxMana,
     ManaRegen,
     LifeRegen,
+    Block(SkillType),
     // TODO: Add others, like armor, ...
 }
 

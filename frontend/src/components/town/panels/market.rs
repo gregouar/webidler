@@ -8,10 +8,9 @@ use shared::{
         item::{ItemCategory, ItemRarity},
         market::{MarketFilters, MarketItem, MarketOrderBy},
         passive::StatEffect,
-        skill::{DamageType, SkillType},
+        skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
         stat_effect::{Modifier, StatType},
-        trigger::HitTrigger,
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
@@ -29,8 +28,8 @@ use crate::components::{
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
     town::{
-        TownContext,
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        TownContext,
     },
     ui::{
         buttons::{MenuButton, MenuButtonRed, TabButton},
@@ -1320,9 +1319,27 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             StatType::CritChance(Some(SkillType::Spell)),
             Modifier::Multiplier,
         ),
-        (StatType::StatusPower(None), Modifier::Multiplier),
-        (StatType::StatusDuration(None), Modifier::Multiplier),
-        (StatType::Restore(None), Modifier::Multiplier),
+        (
+            StatType::StatusPower {
+                status_type: None,
+                skill_type: None,
+            },
+            Modifier::Multiplier,
+        ),
+        (
+            StatType::StatusDuration {
+                status_type: None,
+                skill_type: None,
+            },
+            Modifier::Multiplier,
+        ),
+        (
+            StatType::Restore {
+                restore_type: Some(RestoreType::Life),
+                skill_type: None,
+            },
+            Modifier::Multiplier,
+        ),
         (StatType::Speed(None), Modifier::Multiplier),
         (
             StatType::Speed(Some(SkillType::Attack)),
@@ -1335,27 +1352,15 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         (StatType::MovementSpeed, Modifier::Multiplier),
         (StatType::GoldFind, Modifier::Multiplier),
         (
-            StatType::LifeOnHit(HitTrigger {
+            StatType::LifeOnHit {
                 skill_type: Some(SkillType::Attack),
-                range: None,
-                is_crit: None,
-                is_blocked: None,
-                is_hurt: Some(true),
-                is_triggered: None,
-                damage_type: None,
-            }),
+            },
             Modifier::Flat,
         ),
         (
-            StatType::ManaOnHit(HitTrigger {
+            StatType::ManaOnHit {
                 skill_type: Some(SkillType::Attack),
-                range: None,
-                is_crit: None,
-                is_blocked: None,
-                is_hurt: Some(true),
-                is_triggered: None,
-                damage_type: None,
-            }),
+            },
             Modifier::Flat,
         ),
         (StatType::SkillLevel(None), Modifier::Flat),

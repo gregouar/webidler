@@ -209,9 +209,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -341,7 +339,10 @@
                 "skill_type": null,
                 "conditions": [
                   {
-                    "HasStatus": "Stun"
+                    "HasStatus": {
+                      "Stun": null,
+                      "skill_type": null
+                    }
                   }
                 ]
               }
@@ -393,12 +394,24 @@
         "node_type": "Armor",
         "effects": [
           {
-            "stat": "BlockSpell",
+            "stat": "BlockDamageTaken",
             "modifier": "Flat",
             "value": 50.0
           },
           {
-            "stat": "BlockDamageTaken",
+            "stat": {
+              "StatConverter": {
+                "source": {
+                  "Block": "Attack"
+                },
+                "target_stat": {
+                  "Block": "Spell"
+                },
+                "target_modifier": "Flat",
+                "is_extra": false,
+                "skill_type": null
+              }
+            },
             "modifier": "Flat",
             "value": 50.0
           }
@@ -419,7 +432,9 @@
         "node_type": "Armor",
         "effects": [
           {
-            "stat": "Block",
+            "stat": {
+              "Block": null
+            },
             "modifier": "Multiplier",
             "value": 10.0
           }
@@ -428,7 +443,9 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Block",
+            "stat": {
+              "Block": null
+            },
             "modifier": "Multiplier",
             "value": 5.0
           }
@@ -446,7 +463,9 @@
         "node_type": "Armor",
         "effects": [
           {
-            "stat": "Block",
+            "stat": {
+              "Block": null
+            },
             "modifier": "Multiplier",
             "value": 10.0
           }
@@ -455,7 +474,9 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Block",
+            "stat": {
+              "Block": null
+            },
             "modifier": "Multiplier",
             "value": 5.0
           }
@@ -473,7 +494,9 @@
         "node_type": "Armor",
         "effects": [
           {
-            "stat": "Block",
+            "stat": {
+              "Block": null
+            },
             "modifier": "Multiplier",
             "value": 10.0
           }
@@ -482,7 +505,9 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Block",
+            "stat": {
+              "Block": null
+            },
             "modifier": "Multiplier",
             "value": 5.0
           }
@@ -562,7 +587,9 @@
         "node_type": "Armor",
         "effects": [
           {
-            "stat": "Block",
+            "stat": {
+              "Block": null
+            },
             "modifier": "Multiplier",
             "value": 10.0
           },
@@ -578,7 +605,9 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Block",
+            "stat": {
+              "Block": null
+            },
             "modifier": "Multiplier",
             "value": 5.0
           },
@@ -844,7 +873,9 @@
         "node_type": "Armor",
         "effects": [
           {
-            "stat": "Block",
+            "stat": {
+              "Block": null
+            },
             "modifier": "Multiplier",
             "value": 10.0
           }
@@ -853,7 +884,9 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Block",
+            "stat": {
+              "Block": null
+            },
             "modifier": "Multiplier",
             "value": 5.0
           }
@@ -871,7 +904,9 @@
         "node_type": "Armor",
         "effects": [
           {
-            "stat": "Block",
+            "stat": {
+              "Block": null
+            },
             "modifier": "Multiplier",
             "value": 10.0
           }
@@ -880,7 +915,9 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Block",
+            "stat": {
+              "Block": null
+            },
             "modifier": "Multiplier",
             "value": 5.0
           }
@@ -936,7 +973,8 @@
               "StatusPower": {
                 "DamageOverTime": {
                   "damage_type": null
-                }
+                },
+                "skill_type": null
               }
             },
             "modifier": "Multiplier",
@@ -1253,7 +1291,8 @@
               "StatusPower": {
                 "DamageOverTime": {
                   "damage_type": null
-                }
+                },
+                "skill_type": null
               }
             },
             "modifier": "Multiplier",
@@ -1268,7 +1307,8 @@
               "StatusPower": {
                 "DamageOverTime": {
                   "damage_type": null
-                }
+                },
+                "skill_type": null
               }
             },
             "modifier": "Multiplier",
@@ -1292,7 +1332,8 @@
               "StatusPower": {
                 "DamageOverTime": {
                   "damage_type": null
-                }
+                },
+                "skill_type": null
               }
             },
             "modifier": "Multiplier",
@@ -1307,7 +1348,8 @@
               "StatusPower": {
                 "DamageOverTime": {
                   "damage_type": null
-                }
+                },
+                "skill_type": null
               }
             },
             "modifier": "Multiplier",
@@ -1331,7 +1373,8 @@
               "StatusPower": {
                 "DamageOverTime": {
                   "damage_type": null
-                }
+                },
+                "skill_type": null
               }
             },
             "modifier": "Multiplier",
@@ -1346,7 +1389,8 @@
               "StatusPower": {
                 "DamageOverTime": {
                   "damage_type": null
-                }
+                },
+                "skill_type": null
               }
             },
             "modifier": "Multiplier",
@@ -1369,11 +1413,7 @@
           {
             "trigger_id": "dot_spread",
             "description": "Damage over Time effects spread to nearby Enemies, for their remaining Duration.",
-            "OnKill": {
-              "is_stunned": null,
-              "is_debuffed": null,
-              "is_damaged_over_time": null
-            },
+            "OnKill": {},
             "target": "SameTarget",
             "modifiers": [
               {
@@ -1389,7 +1429,8 @@
                   "StatusValue": {
                     "DamageOverTime": {
                       "damage_type": "Physical"
-                    }
+                    },
+                    "skill_type": null
                   }
                 }
               },
@@ -1398,7 +1439,8 @@
                   "StatusDuration": {
                     "DamageOverTime": {
                       "damage_type": "Physical"
-                    }
+                    },
+                    "skill_type": null
                   }
                 },
                 "modifier": "Flat",
@@ -1407,7 +1449,8 @@
                   "StatusDuration": {
                     "DamageOverTime": {
                       "damage_type": "Physical"
-                    }
+                    },
+                    "skill_type": null
                   }
                 }
               },
@@ -1424,7 +1467,8 @@
                   "StatusValue": {
                     "DamageOverTime": {
                       "damage_type": "Fire"
-                    }
+                    },
+                    "skill_type": null
                   }
                 }
               },
@@ -1433,7 +1477,8 @@
                   "StatusDuration": {
                     "DamageOverTime": {
                       "damage_type": "Fire"
-                    }
+                    },
+                    "skill_type": null
                   }
                 },
                 "modifier": "Flat",
@@ -1442,7 +1487,8 @@
                   "StatusDuration": {
                     "DamageOverTime": {
                       "damage_type": "Fire"
-                    }
+                    },
+                    "skill_type": null
                   }
                 }
               },
@@ -1459,7 +1505,8 @@
                   "StatusValue": {
                     "DamageOverTime": {
                       "damage_type": "Poison"
-                    }
+                    },
+                    "skill_type": null
                   }
                 }
               },
@@ -1468,7 +1515,8 @@
                   "StatusDuration": {
                     "DamageOverTime": {
                       "damage_type": "Poison"
-                    }
+                    },
+                    "skill_type": null
                   }
                 },
                 "modifier": "Flat",
@@ -1477,7 +1525,8 @@
                   "StatusDuration": {
                     "DamageOverTime": {
                       "damage_type": "Poison"
-                    }
+                    },
+                    "skill_type": null
                   }
                 }
               },
@@ -1494,7 +1543,8 @@
                   "StatusValue": {
                     "DamageOverTime": {
                       "damage_type": "Storm"
-                    }
+                    },
+                    "skill_type": null
                   }
                 }
               },
@@ -1503,7 +1553,8 @@
                   "StatusDuration": {
                     "DamageOverTime": {
                       "damage_type": "Storm"
-                    }
+                    },
+                    "skill_type": null
                   }
                 },
                 "modifier": "Flat",
@@ -1512,7 +1563,8 @@
                   "StatusDuration": {
                     "DamageOverTime": {
                       "damage_type": "Storm"
-                    }
+                    },
+                    "skill_type": null
                   }
                 }
               }
@@ -1550,19 +1602,23 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": null
+                    "StatusPower": {
+                      "skill_type": null
+                    }
                   },
                   {
-                    "StatusPower": null
-                  },
-                  {
-                    "MinDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusDuration": {
+                      "skill_type": null
+                    }
+                  },
+                  {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -1606,7 +1662,20 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": null
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "StatusPower": {
+                      "skill_type": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "skill_type": null
+                    }
                   },
                   {
                     "MaxDamage": {
@@ -1619,15 +1688,6 @@
                       "skill_type": null,
                       "damage_type": null
                     }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "StatusPower": null
                   }
                 ],
                 "conditional_modifiers": []
@@ -1662,7 +1722,18 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusDuration": {
+                      "skill_type": null
+                    }
+                  },
+                  {
                     "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -1674,15 +1745,8 @@
                     }
                   },
                   {
-                    "StatusPower": null
-                  },
-                  {
-                    "StatusDuration": null
-                  },
-                  {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": null
+                    "StatusPower": {
+                      "skill_type": null
                     }
                   }
                 ],
@@ -1718,12 +1782,8 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": null
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null
+                    "StatusPower": {
+                      "skill_type": null
                     }
                   },
                   {
@@ -1739,7 +1799,15 @@
                     }
                   },
                   {
-                    "StatusPower": null
+                    "StatusDuration": {
+                      "skill_type": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
                   }
                 ],
                 "conditional_modifiers": []
@@ -1848,7 +1916,7 @@
             "target": "SameTarget",
             "modifiers": [],
             "skill_range": "Melee",
-            "skill_type": "Attack",
+            "skill_type": "Blessing",
             "effects": [
               {
                 "success_chance": {
@@ -2029,6 +2097,40 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "f39c8abe-6388-410c-8b45-416dbfe666ed": {
+        "name": "New Node",
+        "icon": "passives/XXX.svg",
+        "x": -27.5,
+        "y": -90.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Fire",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Fire"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": false
+      },
       "fire_burn": {
         "name": "Blazing Inferno",
         "icon": "passives/blazing_inferno.svg",
@@ -2106,13 +2208,13 @@
                     }
                   },
                   {
-                    "MaxDamage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": "Fire"
                     }
                   },
                   {
-                    "MinDamage": {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": "Fire"
                     }
@@ -2783,7 +2885,10 @@
             "modifiers": [
               {
                 "stat": {
-                  "Restore": null
+                  "Restore": {
+                    "restore_type": null,
+                    "skill_type": null
+                  }
                 },
                 "modifier": "Flat",
                 "factor": 2.0,
@@ -2833,9 +2938,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "StatModifier": {
-                  "debuff": true
-                }
+                "skill_type": "Curse"
               }
             },
             "modifier": "Flat",
@@ -3814,7 +3917,8 @@
               "StatusDuration": {
                 "DamageOverTime": {
                   "damage_type": "Poison"
-                }
+                },
+                "skill_type": null
               }
             },
             "modifier": "Multiplier",
@@ -3839,7 +3943,8 @@
               "StatusDuration": {
                 "DamageOverTime": {
                   "damage_type": "Poison"
-                }
+                },
+                "skill_type": null
               }
             },
             "modifier": "Multiplier",
@@ -3860,7 +3965,10 @@
         "effects": [
           {
             "stat": {
-              "Restore": "Life"
+              "Restore": {
+                "restore_type": "Life",
+                "skill_type": null
+              }
             },
             "modifier": "Multiplier",
             "value": 10.0
@@ -3871,7 +3979,10 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": "Life"
+              "Restore": {
+                "restore_type": "Life",
+                "skill_type": null
+              }
             },
             "modifier": "Multiplier",
             "value": 5.0
@@ -3891,7 +4002,10 @@
         "effects": [
           {
             "stat": {
-              "Restore": "Life"
+              "Restore": {
+                "restore_type": "Life",
+                "skill_type": null
+              }
             },
             "modifier": "Multiplier",
             "value": 10.0
@@ -3902,7 +4016,10 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": "Life"
+              "Restore": {
+                "restore_type": "Life",
+                "skill_type": null
+              }
             },
             "modifier": "Multiplier",
             "value": 5.0
@@ -3922,7 +4039,10 @@
         "effects": [
           {
             "stat": {
-              "Restore": "Life"
+              "Restore": {
+                "restore_type": "Life",
+                "skill_type": null
+              }
             },
             "modifier": "Multiplier",
             "value": 20.0
@@ -3933,7 +4053,10 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": "Life"
+              "Restore": {
+                "restore_type": "Life",
+                "skill_type": null
+              }
             },
             "modifier": "Multiplier",
             "value": 10.0
@@ -4263,7 +4386,9 @@
         "effects": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {
+                "skill_type": null
+              }
             },
             "modifier": "Multiplier",
             "value": 10.0
@@ -4274,7 +4399,9 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {
+                "skill_type": null
+              }
             },
             "modifier": "Multiplier",
             "value": 5.0
@@ -4294,7 +4421,9 @@
         "effects": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {
+                "skill_type": null
+              }
             },
             "modifier": "Multiplier",
             "value": 10.0
@@ -4305,7 +4434,9 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {
+                "skill_type": null
+              }
             },
             "modifier": "Multiplier",
             "value": 5.0
@@ -4325,7 +4456,9 @@
         "effects": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {
+                "skill_type": null
+              }
             },
             "modifier": "Multiplier",
             "value": 20.0
@@ -4336,7 +4469,9 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {
+                "skill_type": null
+              }
             },
             "modifier": "Multiplier",
             "value": 10.0

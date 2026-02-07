@@ -31,7 +31,9 @@
     "affixes": [
       {
         "scope": "Global",
-        "stat": { "Restore": "Life" },
+        "stat": {
+          "Restore": { "restore_type": "Life" }
+        },
         "modifier": "Multiplier",
         "value": [30, 50]
       },
@@ -104,16 +106,16 @@
       },
       {
         "scope": "Global",
-        "stat": "Block",
+        "stat": {"Block": "Attack"},
         "modifier": "Flat",
-        "value": 20,
+        "value": 10,
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": "BlockSpell",
+        "stat": {"Block": "Spell"},
         "modifier": "Flat",
-        "value": 50,
+        "value": 10,
         "ignore_quality": true
       },
       {

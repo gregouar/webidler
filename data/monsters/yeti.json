@@ -28,7 +28,7 @@
     {
       "name": "Awful Breath",
       "icon": "skills/curse_frailty.svg",
-      "skill_type": "Spell",
+      "skill_type": "Curse",
       "cooldown": 10.0,
       "targets": [
         {

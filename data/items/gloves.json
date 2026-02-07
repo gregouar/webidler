@@ -104,7 +104,6 @@
         "scope": "Global",
         "stat": {
           "LifeOnHit": {
-            "is_hurt": true,
             "skill_type": "Attack"
           }
         },
@@ -178,7 +177,6 @@
         "scope": "Global",
         "stat": {
           "ManaOnHit": {
-            "is_hurt": true
           }
         },
         "modifier": "Flat",

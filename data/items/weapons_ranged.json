@@ -81,7 +81,6 @@
         "scope": "Global",
         "stat": {
           "LifeOnHit": {
-            "is_hurt": true,
             "skill_type": "Attack"
           }
         },
@@ -93,7 +92,7 @@
       {
         "trigger_id": "bloodspiller",
         "OnKill": {
-          "is_damaged_over_time": "Physical"
+          "conditions": [{ "HasStatus": { "DamageOverTime": "Physical" } }]
         },
         "target": "Me",
         "effects": [
@@ -217,7 +216,7 @@
       {
         "scope": "Global",
         "stat": {
-          "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" }
+          "ManaOnHit": { "skill_type": "Attack" }
         },
         "modifier": "Flat",
         "value": [2, 4]
