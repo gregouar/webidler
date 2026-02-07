@@ -140,9 +140,9 @@ pub fn PassivesPage() -> impl IntoView {
                 } else if events_context.key_pressed(Key::Character('o')) {
                     load();
                 }
-            } else if events_context.key_pressed(Key::Alt) {
-                tool_mode.set(ToolMode::Add);
             } else if events_context.key_pressed(Key::Shift) {
+                tool_mode.set(ToolMode::Select);
+            } else if events_context.key_pressed(Key::Alt) {
                 tool_mode.set(ToolMode::Connect);
             } else {
                 tool_mode.set(clicked_tool_mode.get_untracked());
@@ -953,7 +953,7 @@ fn handle_click_outside(
                 passives_history_tracker,
                 mouse_position,
             )));
-            tool_mode.set(ToolMode::Edit);
+            // tool_mode.set(ToolMode::Edit);
         }
         ToolMode::Select => {}
     }

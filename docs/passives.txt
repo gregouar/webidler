@@ -102,10 +102,12 @@ Other:
 -Max damage?
 
 -Hybrid mana/life
+-Damage per max mana
 
 Runes:
 -----
 -Open Wound?
+-Destroy armor?
 -Blazing Inferno? => replaced by burn chance in fire?
 -Berserker?
 -Massive incrase mana cost, massive increase spell speed? 

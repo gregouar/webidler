@@ -20,9 +20,9 @@ use crate::components::{
     backend_client::BackendClient,
     shared::resources::{GemsCounter, GoldIcon},
     town::{
-        TownContext,
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
         panels::market::{MainFilters, StatsFilters},
+        TownContext,
     },
     ui::{
         buttons::{MenuButton, TabButton},
