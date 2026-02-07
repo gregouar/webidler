@@ -535,7 +535,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 "{} {}{}",
                 format_adds_removes(value, false, " to"),
                 skill_type_str(*skill_type),
-                status_type_str(*status_type)
+                status_type_value_str(*status_type)
             )
         }
         StatType::StatusDuration {

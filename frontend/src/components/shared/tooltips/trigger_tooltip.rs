@@ -13,7 +13,7 @@ use shared::data::{
 
 use crate::components::shared::tooltips::{
     conditions_tooltip,
-    effects_tooltip::{damage_type_str, format_stat, status_type_str},
+    effects_tooltip::{damage_type_str, format_stat, status_type_str, status_type_value_str},
     skill_tooltip::{self, shape_str, skill_type_str, EffectLi},
 };
 
@@ -85,7 +85,7 @@ pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource)
             format!(
                 "{}{}",
                 skill_type_str(skill_type),
-                status_type_str(status_type)
+                status_type_value_str(status_type)
             )
         }
         TriggerEffectModifierSource::StatusDuration {
