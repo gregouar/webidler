@@ -213,7 +213,9 @@
       {
         "scope": "Global",
         "stat": {
-          "StatusDuration": { "DamageOverTime": { "damage_type": "Poison" } }
+          "StatusDuration": {
+            "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+          }
         },
         "modifier": "Multiplier",
         "value": [30, 50],

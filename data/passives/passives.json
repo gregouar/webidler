@@ -701,8 +701,10 @@
           {
             "stat": {
               "StatusPower": {
-                "DamageOverTime": {
-                  "damage_type": null
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
                 },
                 "skill_type": null
               }
@@ -1050,9 +1052,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -1071,9 +1071,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -1277,9 +1275,27 @@
         "effects": [
           {
             "stat": {
-              "Damage": {
-                "skill_type": null,
-                "damage_type": "Physical"
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
               }
             },
             "modifier": "Multiplier",
@@ -1586,8 +1602,10 @@
           {
             "stat": {
               "StatusPower": {
-                "DamageOverTime": {
-                  "damage_type": null
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
                 },
                 "skill_type": null
               }
@@ -1602,8 +1620,10 @@
           {
             "stat": {
               "StatusPower": {
-                "DamageOverTime": {
-                  "damage_type": null
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
                 },
                 "skill_type": null
               }
@@ -1857,7 +1877,7 @@
                 "conditions": [
                   {
                     "HasStatus": {
-                      "Stun": null,
+                      "status_type": "Stun",
                       "skill_type": null
                     }
                   }
@@ -2067,8 +2087,10 @@
           {
             "stat": {
               "StatusDuration": {
-                "DamageOverTime": {
-                  "damage_type": "Poison"
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
                 },
                 "skill_type": null
               }
@@ -2093,8 +2115,10 @@
           {
             "stat": {
               "StatusDuration": {
-                "DamageOverTime": {
-                  "damage_type": "Poison"
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
                 },
                 "skill_type": null
               }
@@ -2745,6 +2769,12 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": "Physical"
+                    }
+                  },
+                  {
                     "CritChance": null
                   },
                   {
@@ -2755,12 +2785,6 @@
                   },
                   {
                     "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": "Physical"
-                    }
-                  },
-                  {
-                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": "Physical"
                     }
@@ -2797,9 +2821,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -2818,9 +2840,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -3053,8 +3073,10 @@
               {
                 "stat": {
                   "StatusDuration": {
-                    "DamageOverTime": {
-                      "damage_type": "Physical"
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Physical"
+                      }
                     },
                     "skill_type": null
                   }
@@ -3063,8 +3085,10 @@
                 "factor": 1.0,
                 "source": {
                   "StatusDuration": {
-                    "DamageOverTime": {
-                      "damage_type": "Physical"
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Physical"
+                      }
                     },
                     "skill_type": null
                   }
@@ -3091,8 +3115,10 @@
               {
                 "stat": {
                   "StatusDuration": {
-                    "DamageOverTime": {
-                      "damage_type": "Fire"
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Fire"
+                      }
                     },
                     "skill_type": null
                   }
@@ -3101,8 +3127,10 @@
                 "factor": 1.0,
                 "source": {
                   "StatusDuration": {
-                    "DamageOverTime": {
-                      "damage_type": "Fire"
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Fire"
+                      }
                     },
                     "skill_type": null
                   }
@@ -3129,8 +3157,10 @@
               {
                 "stat": {
                   "StatusDuration": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Poison"
+                      }
                     },
                     "skill_type": null
                   }
@@ -3139,8 +3169,10 @@
                 "factor": 1.0,
                 "source": {
                   "StatusDuration": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Poison"
+                      }
                     },
                     "skill_type": null
                   }
@@ -3167,8 +3199,10 @@
               {
                 "stat": {
                   "StatusDuration": {
-                    "DamageOverTime": {
-                      "damage_type": "Storm"
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Storm"
+                      }
                     },
                     "skill_type": null
                   }
@@ -3177,8 +3211,10 @@
                 "factor": 1.0,
                 "source": {
                   "StatusDuration": {
-                    "DamageOverTime": {
-                      "damage_type": "Storm"
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Storm"
+                      }
                     },
                     "skill_type": null
                   }
@@ -3338,7 +3374,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -3354,13 +3390,13 @@
                     }
                   },
                   {
-                    "MaxDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
-                    "MinDamage": {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -3796,8 +3832,9 @@
                 "effect_type": {
                   "ApplyStatus": {
                     "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
+                      "Trigger": {
+                        "trigger_id": "open_wound",
+                        "trigger_description": "Open Wound"
                       }
                     }
                   }
@@ -4491,6 +4528,14 @@
       {
         "from": "49ad1637-c721-4666-a393-d454bc49bb30",
         "to": "66b833a4-e75f-40ec-b393-ffc1f96e0c17"
+      },
+      {
+        "from": "d77b0bd8-b567-4c32-b771-a200e1f0b30c",
+        "to": "e7588aa0-9a06-40a0-9c24-3fd3198faba1"
+      },
+      {
+        "from": "66b833a4-e75f-40ec-b393-ffc1f96e0c17",
+        "to": "60884ec3-8267-476e-ac1b-8af601649636"
       }
     ]
   }

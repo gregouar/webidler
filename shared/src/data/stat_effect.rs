@@ -101,13 +101,13 @@ pub enum StatType {
     CritChance(#[serde(default)] Option<SkillType>),
     CritDamage(#[serde(default)] Option<SkillType>),
     StatusPower {
-        #[serde(default, flatten)]
+        #[serde(default)]
         status_type: Option<StatStatusType>,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
     StatusDuration {
-        #[serde(default, flatten)]
+        #[serde(default)]
         status_type: Option<StatStatusType>,
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -216,11 +216,9 @@ impl StatType {
                 },
             ) => {
                 compare_options(skill_type, skill_type_2)
-                    && effect_type
-                        .zip(*effect_type_2)
-                        .is_none_or(|(effect_type, effect_type_2)| {
-                            effect_type.is_match(&effect_type_2)
-                        })
+                    && effect_type.as_ref().zip(effect_type_2.as_ref()).is_none_or(
+                        |(effect_type, effect_type_2)| effect_type.is_match(effect_type_2),
+                    )
             }
             (
                 ManaCost { skill_type },
@@ -299,7 +297,7 @@ impl StatType {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatStatusType {
     Stun,
     DamageOverTime {
@@ -311,7 +309,14 @@ pub enum StatStatusType {
         debuff: Option<bool>,
         // TODO: Add stat type?
     },
-    Trigger,
+    Trigger {
+        #[serde(default)]
+        trigger_id: Option<String>,
+
+        // TODO: This is awful....
+        #[serde(default)]
+        trigger_description: Option<String>,
+    },
 }
 
 impl StatStatusType {
@@ -331,6 +336,16 @@ impl StatStatusType {
             (StatModifier { debuff }, StatModifier { debuff: debuff_2 }) => {
                 compare_options(debuff, debuff_2)
             }
+            (
+                Trigger {
+                    trigger_id,
+                    trigger_description: _,
+                },
+                Trigger {
+                    trigger_id: trigger_id_2,
+                    trigger_description: _,
+                },
+            ) => compare_options(trigger_id, trigger_id_2),
             _ => false,
         }
     }
@@ -346,12 +361,15 @@ impl From<&StatusSpecs> for StatStatusType {
             StatusSpecs::StatModifier { debuff, .. } => StatStatusType::StatModifier {
                 debuff: Some(*debuff),
             },
-            StatusSpecs::Trigger(_) => StatStatusType::Trigger,
+            StatusSpecs::Trigger(trigger_specs) => StatStatusType::Trigger {
+                trigger_id: Some(trigger_specs.trigger_id.clone()),
+                trigger_description: None,
+            },
         }
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatSkillEffectType {
     FlatDamage {
         // damage_type: Option<DamageType>,

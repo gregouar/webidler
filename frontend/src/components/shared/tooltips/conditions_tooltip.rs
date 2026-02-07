@@ -12,7 +12,7 @@ pub fn format_skill_modifier_conditions(conditions: &[Condition]) -> String {
             Condition::HasStatus {
                 status_type,
                 skill_type,
-            } => format_status_type_condition(*status_type, *skill_type),
+            } => format_status_type_condition(status_type.as_ref(), *skill_type),
             Condition::MaximumLife => "On Maximum Life".into(),
             Condition::MaximumMana => "On Maximum Mana".into(),
         })
@@ -21,19 +21,29 @@ pub fn format_skill_modifier_conditions(conditions: &[Condition]) -> String {
 }
 
 pub fn format_status_type_condition(
-    status_type: Option<StatStatusType>,
+    status_type: Option<&StatStatusType>,
     skill_type: Option<SkillType>,
 ) -> String {
     let status_type_str = match status_type {
         Some(status_type) => match status_type {
             StatStatusType::Stun => stunned_str(Some(true)),
-            StatStatusType::DamageOverTime { damage_type } => damaged_over_time_str(damage_type),
+            StatStatusType::DamageOverTime { damage_type } => damaged_over_time_str(*damage_type),
             StatStatusType::StatModifier { debuff } => match debuff {
                 Some(true) => debuffed_str(Some(true)),
                 Some(false) => buffed_str(Some(true)),
                 None => "Under Effects",
             },
-            StatStatusType::Trigger => "Under Effects",
+            // StatStatusType::Trigger {
+            //     trigger_id: Some(trigger_id),
+            //     trigger_description,
+            // } => format!(
+            //     "Under Effects of {}",
+            //     trigger_description.clone().unwrap_or(trigger_id.clone())
+            // ),
+            StatStatusType::Trigger {
+                trigger_id: _,
+                trigger_description: _,
+            } => "Under Effects",
         },
         None => "",
     };

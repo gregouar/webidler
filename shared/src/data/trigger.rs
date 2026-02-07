@@ -44,9 +44,7 @@ pub struct HitTrigger {
     // TODO: Track skill id?
 }
 
-#[derive(
-    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default, PartialOrd, Ord,
-)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]
 pub struct StatusTrigger {
     #[serde(default)]
     pub skill_type: Option<SkillType>,
@@ -102,24 +100,24 @@ pub struct TriggerEffectModifier {
     pub source: TriggerEffectModifierSource,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
     AreaLevel,
     StatusValue {
-        #[serde(default, flatten)]
+        #[serde(default)]
         status_type: Option<StatStatusType>,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
     StatusDuration {
-        #[serde(default, flatten)]
+        #[serde(default)]
         status_type: Option<StatStatusType>,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
     StatusStacks {
-        #[serde(default, flatten)]
+        #[serde(default)]
         status_type: Option<StatStatusType>,
         #[serde(default)]
         skill_type: Option<SkillType>,

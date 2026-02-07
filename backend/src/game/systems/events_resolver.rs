@@ -153,7 +153,7 @@ fn handle_status_event<'a>(
                 _ => continue,
             };
 
-            let status_trigger = match triggered_effects.trigger {
+            let status_trigger = match &triggered_effects.trigger {
                 EventTrigger::OnApplyStatus(trigger)
                 // | EventTrigger::OnTakeHit(ht) 
                 => trigger,
@@ -168,6 +168,7 @@ fn handle_status_event<'a>(
                     == status_event.is_triggered
                 && status_trigger
                     .status_type
+                    .as_ref()
                     .map(|status_type| status_event.status_type.is_match(&status_type))
                     .unwrap_or(true)
             {

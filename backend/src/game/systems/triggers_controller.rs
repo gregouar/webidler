@@ -154,7 +154,7 @@ pub fn apply_trigger_effects(
                         stat: modifier.stat.clone(),
                         modifier: modifier.modifier,
                         value: modifier.factor
-                            * match modifier.source {
+                            * match &modifier.source {
                                 TriggerEffectModifierSource::HitDamage(Some(damage_type)) => {
                                     trigger_context
                                         .hit_context
@@ -183,11 +183,11 @@ pub fn apply_trigger_effects(
                                     .iter()
                                     .filter(|status_event| {
                                         compare_options(
-                                            &status_type,
-                                            &Some(status_event.status_type),
+                                            &status_type.as_ref(),
+                                            &Some(&status_event.status_type),
                                         ) && compare_options(
-                                            &skill_type,
-                                            &Some(status_event.skill_type),
+                                            &skill_type.as_ref(),
+                                            &Some(&status_event.skill_type),
                                         )
                                     })
                                     .map(|status_event| status_event.value)
@@ -199,11 +199,11 @@ pub fn apply_trigger_effects(
                                     .iter()
                                     .filter(|status_event| {
                                         compare_options(
-                                            &status_type,
-                                            &Some(status_event.status_type),
+                                            &status_type.as_ref(),
+                                            &Some(&status_event.status_type),
                                         ) && compare_options(
-                                            &skill_type,
-                                            &Some(status_event.skill_type),
+                                            &skill_type.as_ref(),
+                                            &Some(&status_event.skill_type),
                                         )
                                     })
                                     .map(|status_event| status_event.duration.unwrap_or(1e20))
@@ -215,11 +215,11 @@ pub fn apply_trigger_effects(
                                     .iter()
                                     .filter(|status_event| {
                                         compare_options(
-                                            &status_type,
-                                            &Some(status_event.status_type),
+                                            &status_type.as_ref(),
+                                            &Some(&status_event.status_type),
                                         ) && compare_options(
-                                            &skill_type,
-                                            &Some(status_event.skill_type),
+                                            &skill_type.as_ref(),
+                                            &Some(&status_event.skill_type),
                                         )
                                     })
                                     .count() as f64,

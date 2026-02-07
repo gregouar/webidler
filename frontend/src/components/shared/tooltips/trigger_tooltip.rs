@@ -29,7 +29,7 @@ pub fn format_trigger_modifier(
         view! {
             <span class="font-semibold">{factor_str}"%"</span>
             " of "
-            {trigger_modifier_source_str(modifier.source)}
+            {trigger_modifier_source_str(&modifier.source)}
             {suffix}
         }
     })
@@ -40,7 +40,7 @@ pub fn format_trigger_modifier_per(modifier: Option<&TriggerEffectModifier>) -> 
         if let TriggerEffectModifierSource::HitCrit = modifier.source {
             " on Critical Hit".to_string()
         } else {
-            format!(" per {}", trigger_modifier_source_str(modifier.source))
+            format!(" per {}", trigger_modifier_source_str(&modifier.source))
         }
     })
 }
@@ -71,10 +71,10 @@ pub fn format_extra_trigger_modifiers(
     view! { <ul>{modifiers_str}</ul> }
 }
 
-pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource) -> String {
+pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource) -> String {
     match modifier_source {
         TriggerEffectModifierSource::HitDamage(damage_type) => {
-            format!("{}Hit Damage", damage_type_str(damage_type))
+            format!("{}Hit Damage", damage_type_str(*damage_type))
         }
         TriggerEffectModifierSource::HitCrit => "Critical".to_string(),
         TriggerEffectModifierSource::AreaLevel => "Area Level".to_string(),
@@ -84,8 +84,8 @@ pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource)
         } => {
             format!(
                 "{}{}",
-                skill_type_str(skill_type),
-                status_type_value_str(status_type)
+                skill_type_str(*skill_type),
+                status_type_value_str(status_type.as_ref())
             )
         }
         TriggerEffectModifierSource::StatusDuration {
@@ -94,8 +94,8 @@ pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource)
         } => {
             format!(
                 "{}{} Duration",
-                skill_type_str(skill_type),
-                status_type_str(status_type)
+                skill_type_str(*skill_type),
+                status_type_str(status_type.as_ref())
             )
         }
         TriggerEffectModifierSource::StatusStacks {
@@ -104,8 +104,8 @@ pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource)
         } => {
             format!(
                 "{}{} Stacks",
-                skill_type_str(skill_type),
-                status_type_str(status_type)
+                skill_type_str(*skill_type),
+                status_type_str(status_type.as_ref())
             )
         }
     }
@@ -173,7 +173,7 @@ fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
     format!(
         "{}{}",
         skill_type_str(status_trigger.skill_type),
-        status_type_str(status_trigger.status_type),
+        status_type_str(status_trigger.status_type.as_ref()),
     )
 }
 

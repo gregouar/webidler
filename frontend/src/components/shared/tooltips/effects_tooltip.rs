@@ -119,51 +119,68 @@ fn with_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     }
 }
 
-pub fn status_type_str(status_type: Option<StatStatusType>) -> String {
+pub fn status_type_str(status_type: Option<&StatStatusType>) -> String {
     match status_type {
         Some(status_type) => match status_type {
             StatStatusType::Stun => "Stun".to_string(),
             StatStatusType::DamageOverTime { damage_type } => {
-                format!("{}Damage over Time", damage_type_str(damage_type))
+                format!("{}Damage over Time", damage_type_str(*damage_type))
             }
             StatStatusType::StatModifier { debuff } => match debuff {
                 Some(true) => "Negative Statuses".to_string(),
                 Some(false) => "Positive Statuses".to_string(),
                 None => "Statuses".to_string(),
             },
-            StatStatusType::Trigger => "Triggered Effects".to_string(),
+            StatStatusType::Trigger {
+                trigger_id: Some(trigger_id),
+                trigger_description,
+            } => trigger_description.clone().unwrap_or(trigger_id.clone()),
+            StatStatusType::Trigger {
+                trigger_id: _,
+                trigger_description: _,
+            } => "Triggered Effects".to_string(),
         },
         None => "Effects over Time".to_string(),
     }
 }
 
-pub fn status_type_value_str(status_type: Option<StatStatusType>) -> String {
+pub fn status_type_value_str(status_type: Option<&StatStatusType>) -> String {
     match status_type {
         Some(status_type) => match status_type {
             StatStatusType::Stun => "Stun Power".to_string(),
             StatStatusType::DamageOverTime { damage_type } => {
-                format!("{}Damage per second", damage_type_str(damage_type))
+                format!("{}Damage per second", damage_type_str(*damage_type))
             }
             StatStatusType::StatModifier { debuff } => match debuff {
                 Some(true) => "Negative Statuses Power".to_string(),
                 Some(false) => "Positive Statuses Power".to_string(),
                 None => "Statuses Power".to_string(),
             },
-            StatStatusType::Trigger => "Triggered Effects Power".to_string(),
+            StatStatusType::Trigger {
+                trigger_id: Some(trigger_id),
+                trigger_description,
+            } => format!(
+                "{} Power",
+                trigger_description.clone().unwrap_or(trigger_id.clone())
+            ),
+            StatStatusType::Trigger {
+                trigger_id: _,
+                trigger_description: _,
+            } => "Triggered Effects Power".to_string(),
         },
         None => "Effects over Time Power".to_string(),
     }
 }
 
-fn stat_skill_effect_type_str(effect_type: Option<StatSkillEffectType>) -> String {
+fn stat_skill_effect_type_str(effect_type: Option<&StatSkillEffectType>) -> String {
     match effect_type {
         Some(skill_effect_type) => match skill_effect_type {
             StatSkillEffectType::FlatDamage {} => "Hit".into(),
             StatSkillEffectType::ApplyStatus { status_type } => {
-                format!("Apply {}", status_type_str(status_type))
+                format!("Apply {}", status_type_str(status_type.as_ref()))
             }
             StatSkillEffectType::Restore { restore_type } => {
-                format!("Restore{}", restore_type_str(restore_type))
+                format!("Restore{}", restore_type_str(*restore_type))
             }
             StatSkillEffectType::Resurrect => "Resurrect".into(),
         },
@@ -376,7 +393,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             format!(
                 "{}{}",
                 skill_type_str(*skill_type),
-                status_type_value_str(*status_type)
+                status_type_value_str(status_type.as_ref())
             )
         }
         StatType::StatusDuration {
@@ -386,7 +403,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             format!(
                 "{}{} Duration",
                 skill_type_str(*skill_type),
-                status_type_str(*status_type)
+                status_type_str(status_type.as_ref())
             )
         }
         StatType::Speed(skill_type) => format!("{}Speed", skill_type_str(*skill_type)),
@@ -433,7 +450,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         } => format!(
             "Success Chance to {}{}",
             skill_type_str(*skill_type),
-            stat_skill_effect_type_str(*effect_type)
+            stat_skill_effect_type_str(effect_type.as_ref())
         ),
         StatType::SkillLevel(skill_type) => format!("{} Skill Level", skill_type_str(*skill_type)),
         StatType::SkillConditionalModifier {
@@ -542,7 +559,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 "{} {}{}",
                 format_adds_removes(value, false, " to"),
                 skill_type_str(*skill_type),
-                status_type_value_str(*status_type)
+                status_type_value_str(status_type.as_ref())
             )
         }
         StatType::StatusDuration {
@@ -553,14 +570,14 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 format!(
                     "{}{} never expire",
                     skill_type_str(*skill_type),
-                    status_type_str(*status_type)
+                    status_type_str(status_type.as_ref())
                 )
             } else {
                 format!(
                     "{} seconds duration to {}{}",
                     format_adds_removes(value, true, ""),
                     skill_type_str(*skill_type),
-                    status_type_str(*status_type)
+                    status_type_str(status_type.as_ref())
                 )
             }
         }
@@ -681,20 +698,20 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 format!(
                     "Guaranteed to {}{}",
                     skill_type_str(*skill_type),
-                    stat_skill_effect_type_str(*effect_type)
+                    stat_skill_effect_type_str(effect_type.as_ref())
                 )
             } else if unwrap_value <= -100.0 {
                 format!(
                     "Impossible to {}{}",
                     skill_type_str(*skill_type),
-                    stat_skill_effect_type_str(*effect_type)
+                    stat_skill_effect_type_str(effect_type.as_ref())
                 )
             } else {
                 format!(
                     "{} Success Chance to {}{}",
                     format_adds_removes(value, false, "%"),
                     skill_type_str(*skill_type),
-                    stat_skill_effect_type_str(*effect_type)
+                    stat_skill_effect_type_str(effect_type.as_ref())
                 )
             }
         }

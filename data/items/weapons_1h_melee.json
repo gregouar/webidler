@@ -225,7 +225,7 @@
       {
         "scope": "Global",
         "stat": {
-          "ManaOnHit": {  "skill_type": "Attack" }
+          "ManaOnHit": { "skill_type": "Attack" }
         },
         "modifier": "Flat",
         "value": [2, 4]
@@ -233,7 +233,9 @@
       {
         "scope": "Global",
         "stat": {
-          "StatusDuration": { "DamageOverTime": { "damage_type": "Poison" } }
+          "StatusDuration": {
+            "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+          }
         },
         "modifier": "Multiplier",
         "value": [10, 20]
@@ -241,7 +243,7 @@
       {
         "scope": "Global",
         "stat": {
-          "LifeOnHit": {  "skill_type": "Attack" }
+          "LifeOnHit": { "skill_type": "Attack" }
         },
         "modifier": "Flat",
         "value": [4, 6]

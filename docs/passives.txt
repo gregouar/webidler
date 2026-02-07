@@ -63,6 +63,7 @@ Physical:
 -Damage
 -Bleed (damage, duration, chance)
 -Penetration
+*Open Wound
 
 Critical:
 -Chance
@@ -106,7 +107,6 @@ Other:
 
 Runes:
 -----
--Open Wound?
 -Destroy armor?
 -Blazing Inferno? => replaced by burn chance in fire?
 -Berserker?
