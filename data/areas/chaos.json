@@ -4,7 +4,7 @@
     "description": "[Crucible Area] A realm without history, without future, only iteration. Enter to prove your might and climb the leaderboard. No power shards may be earned. Progress resets at every major update.",
     "starting_level": 1,
     "required_level": 300,
-    "item_level_modifier": 240,
+    "item_level_modifier": 0,
     "header_background": "areas/chaos_header.webp",
     "footer_background": "areas/chaos_footer.webp",
     "disable_shards": false
