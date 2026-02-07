@@ -86,7 +86,7 @@ pub fn LeaderboardPanel() -> impl IntoView {
                             .sort_by_key(|(area_id, _)| {
                                 areas
                                     .get(area_id)
-                                    .map(|area_specs| area_specs.starting_level)
+                                    .map(|area_specs| area_specs.required_level)
                                     .unwrap_or_default()
                             });
 

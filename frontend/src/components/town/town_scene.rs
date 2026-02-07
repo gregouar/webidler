@@ -16,7 +16,7 @@ use crate::{
     components::{
         shared::{
             item_card::ItemCard,
-            tooltips::{SkillTooltip, item_tooltip::ItemTooltipContent},
+            tooltips::{item_tooltip::ItemTooltipContent, SkillTooltip},
         },
         town::TownContext,
         ui::{
@@ -73,7 +73,7 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                             <For
                                 each=move || {
                                     let mut areas = town_context.areas.get();
-                                    areas.sort_by_key(|area| area.area_specs.starting_level);
+                                    areas.sort_by_key(|area| area.area_specs.required_level);
                                     areas
                                 }
                                 key=|area| area.area_id.clone()
