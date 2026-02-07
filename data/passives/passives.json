@@ -994,6 +994,7 @@
           {
             "stat": {
               "StatusDuration": {
+                "status_type": null,
                 "skill_type": "Curse"
               }
             },
@@ -1052,7 +1053,9 @@
                     "damage_type": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -1071,7 +1074,9 @@
                     "damage_type": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -1307,9 +1312,13 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Damage": {
-                "skill_type": null,
-                "damage_type": "Physical"
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
               }
             },
             "modifier": "Multiplier",
@@ -2393,6 +2402,7 @@
           {
             "stat": {
               "StatusDuration": {
+                "status_type": null,
                 "skill_type": null
               }
             },
@@ -2406,6 +2416,7 @@
           {
             "stat": {
               "StatusDuration": {
+                "status_type": null,
                 "skill_type": null
               }
             },
@@ -2428,6 +2439,7 @@
           {
             "stat": {
               "StatusDuration": {
+                "status_type": null,
                 "skill_type": null
               }
             },
@@ -2441,6 +2453,7 @@
           {
             "stat": {
               "StatusDuration": {
+                "status_type": null,
                 "skill_type": null
               }
             },
@@ -2821,7 +2834,9 @@
                     "damage_type": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -2840,7 +2855,9 @@
                     "damage_type": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -3063,9 +3080,7 @@
                 "factor": 1.0,
                 "source": {
                   "StatusValue": {
-                    "DamageOverTime": {
-                      "damage_type": "Physical"
-                    },
+                    "status_type": null,
                     "skill_type": null
                   }
                 }
@@ -3105,9 +3120,7 @@
                 "factor": 1.0,
                 "source": {
                   "StatusValue": {
-                    "DamageOverTime": {
-                      "damage_type": "Fire"
-                    },
+                    "status_type": null,
                     "skill_type": null
                   }
                 }
@@ -3147,9 +3160,7 @@
                 "factor": 1.0,
                 "source": {
                   "StatusValue": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    },
+                    "status_type": null,
                     "skill_type": null
                   }
                 }
@@ -3189,9 +3200,7 @@
                 "factor": 1.0,
                 "source": {
                   "StatusValue": {
-                    "DamageOverTime": {
-                      "damage_type": "Storm"
-                    },
+                    "status_type": null,
                     "skill_type": null
                   }
                 }
@@ -3261,11 +3270,13 @@
                   },
                   {
                     "StatusDuration": {
+                      "status_type": null,
                       "skill_type": null
                     }
                   },
                   {
                     "StatusPower": {
+                      "status_type": null,
                       "skill_type": null
                     }
                   },
@@ -3327,6 +3338,7 @@
                   },
                   {
                     "StatusDuration": {
+                      "status_type": null,
                       "skill_type": null
                     }
                   },
@@ -3338,6 +3350,7 @@
                   },
                   {
                     "StatusPower": {
+                      "status_type": null,
                       "skill_type": null
                     }
                   }
@@ -3374,29 +3387,31 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MinDamage": {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
                     "StatusPower": {
+                      "status_type": null,
                       "skill_type": null
                     }
                   },
                   {
                     "StatusDuration": {
+                      "status_type": null,
                       "skill_type": null
                     }
                   },
                   {
-                    "Damage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
-                    "MaxDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -3441,6 +3456,7 @@
                   },
                   {
                     "StatusDuration": {
+                      "status_type": null,
                       "skill_type": null
                     }
                   },
@@ -3458,6 +3474,7 @@
                   },
                   {
                     "StatusPower": {
+                      "status_type": null,
                       "skill_type": null
                     }
                   }
@@ -3847,7 +3864,27 @@
         ],
         "triggers": [],
         "locked": false,
-        "upgrade_effects": [],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "Trigger": {
+                        "trigger_id": "open_wound",
+                        "trigger_description": "Open Wound"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
         "max_upgrade_level": 3,
         "socket": false
       },

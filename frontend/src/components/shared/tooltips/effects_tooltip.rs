@@ -448,7 +448,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_type,
             effect_type,
         } => format!(
-            "Success Chance to {}{}",
+            "Chance to {}{}",
             skill_type_str(*skill_type),
             stat_skill_effect_type_str(effect_type.as_ref())
         ),
@@ -708,7 +708,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 )
             } else {
                 format!(
-                    "{} Success Chance to {}{}",
+                    "{} Chance to {}{}",
                     format_adds_removes(value, false, "%"),
                     skill_type_str(*skill_type),
                     stat_skill_effect_type_str(effect_type.as_ref())
