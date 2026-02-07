@@ -39,7 +39,17 @@ pub fn format_status_type_condition(
         None => "",
     };
 
-    format!("{}{}", skill_type_str(skill_type), status_type_str)
+    format!("{}{}", skilled_type_str(skill_type), status_type_str)
+}
+
+pub fn skilled_type_str(skill_type: Option<SkillType>) -> &'static str {
+    match skill_type {
+        Some(SkillType::Attack) => "Attacked ",
+        Some(SkillType::Spell) => "Spelled ",
+        Some(SkillType::Curse) => "Cursed ",
+        Some(SkillType::Blessing) => "Blessed ",
+        None => "",
+    }
 }
 
 pub fn stunned_str(value: Option<bool>) -> &'static str {

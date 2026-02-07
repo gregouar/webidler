@@ -124,10 +124,7 @@ pub fn status_type_str(status_type: Option<StatStatusType>) -> String {
         Some(status_type) => match status_type {
             StatStatusType::Stun => "Stun".to_string(),
             StatStatusType::DamageOverTime { damage_type } => {
-                format!(
-                    "{}Damage over Time per second",
-                    damage_type_str(damage_type)
-                )
+                format!("{}Damage over Time", damage_type_str(damage_type))
             }
             StatStatusType::StatModifier { debuff } => match debuff {
                 Some(true) => "Negative Statuses".to_string(),
@@ -136,7 +133,25 @@ pub fn status_type_str(status_type: Option<StatStatusType>) -> String {
             },
             StatStatusType::Trigger => "Triggered Effects".to_string(),
         },
-        None => "Effects".to_string(),
+        None => "Effects over Time".to_string(),
+    }
+}
+
+pub fn status_type_value_str(status_type: Option<StatStatusType>) -> String {
+    match status_type {
+        Some(status_type) => match status_type {
+            StatStatusType::Stun => "Stun Power".to_string(),
+            StatStatusType::DamageOverTime { damage_type } => {
+                format!("{}Damage per second", damage_type_str(damage_type))
+            }
+            StatStatusType::StatModifier { debuff } => match debuff {
+                Some(true) => "Negative Statuses Power".to_string(),
+                Some(false) => "Positive Statuses Power".to_string(),
+                None => "Statuses Power".to_string(),
+            },
+            StatStatusType::Trigger => "Triggered Effects Power".to_string(),
+        },
+        None => "Effects over Time Power".to_string(),
     }
 }
 
@@ -360,7 +375,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             format!(
                 "{}{}",
                 skill_type_str(*skill_type),
-                status_type_str(*status_type)
+                status_type_value_str(*status_type)
             )
         }
         StatType::StatusDuration {
