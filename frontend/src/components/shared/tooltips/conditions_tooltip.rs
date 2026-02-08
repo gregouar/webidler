@@ -12,8 +12,10 @@ pub fn format_skill_modifier_conditions_pre(conditions: &[Condition]) -> String 
             Condition::HasStatus {
                 status_type,
                 skill_type,
+                not,
             } => format!(
-                " {}",
+                " {}{}",
+                if *not { "Not " } else { "" },
                 format_status_type_condition(status_type.as_ref(), *skill_type),
             ),
             Condition::MaximumLife => "".into(),

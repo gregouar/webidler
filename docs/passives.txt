@@ -51,6 +51,8 @@ Poison:
 -Efficacity
 -Duration
 -Penetration
+-Poison Damage on non poisoned enemy
+*Sickening Poison (decrease poison resistance when applying poison)
 
 Storm:
 -Damage
@@ -64,6 +66,8 @@ Physical:
 -Bleed (damage, duration, chance)
 -Penetration
 *Open Wound
+*Stunning?
+-Crit chance against bleeding
 
 Critical:
 -Chance
@@ -111,4 +115,4 @@ Runes:
 -Berserker
 -Massive incrase mana cost, massive increase spell speed?
 -Massive gold increase (downside?) 
-
+-When poison expires, get -X resistance to poison

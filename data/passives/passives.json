@@ -1,61 +1,6 @@
 {
   "default": {
     "nodes": {
-      "016c897d-0cf7-4bae-b340-b015b08683ab": {
-        "name": "Stun Chance",
-        "icon": "passives/star_swirl.svg",
-        "x": 25.0,
-        "y": 60.0,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Storm",
-        "effects": [
-          {
-            "stat": {
-              "SuccessChance": {
-                "skill_type": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": "Stun"
-                  }
-                }
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 20.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": "Stun",
-                "skill_type": null
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 20.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "SuccessChance": {
-                "skill_type": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": "Stun"
-                  }
-                }
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
-          }
-        ],
-        "max_upgrade_level": null,
-        "socket": false
-      },
       "03836189-8913-45b5-bd89-e658b31e79bd": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -245,6 +190,37 @@
         "max_upgrade_level": null,
         "socket": false
       },
+      "0dad8094-ca29-43f8-a26a-3cc334041c1f": {
+        "name": "Critical Hit Damage",
+        "icon": "passives/fireflake.svg",
+        "x": -37.5,
+        "y": 60.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": {
+              "CritDamage": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 40.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "CritDamage": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "0ea487a1-1b61-4f57-bc8b-5af626cb4544": {
         "name": "Casting Speed",
         "icon": "passives/spell_speed.svg",
@@ -271,6 +247,77 @@
             },
             "modifier": "Multiplier",
             "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "0f99143b-bf60-4ae8-b92d-deb1a4bb7dc8": {
+        "name": "First Dose",
+        "icon": "passives/wasp.svg",
+        "x": 20.0,
+        "y": -65.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Poison"
+                        }
+                      },
+                      "skill_type": null
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Poison"
+                        }
+                      },
+                      "skill_type": null
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -333,8 +380,8 @@
       "1bcd296a-d021-4892-9c9d-d1bc4fbb1482": {
         "name": "Fortitude",
         "icon": "passives/caduceus.svg",
-        "x": 32.5,
-        "y": 142.5,
+        "x": 37.5,
+        "y": 137.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Life",
@@ -492,11 +539,11 @@
       "1ff5ccd8-cdc9-4c39-8233-221b3c391086": {
         "name": "Critical Hit Damage",
         "icon": "passives/fireflake.svg",
-        "x": -20.0,
-        "y": 60.0,
+        "x": -25.0,
+        "y": 52.5,
         "size": 0,
         "initial_node": false,
-        "node_type": "Critical",
+        "node_type": "Storm",
         "effects": [
           {
             "stat": {
@@ -589,6 +636,51 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "25c4b2a6-e072-4cfd-bb75-402835c60a05": {
+        "name": "Poison Duration",
+        "icon": "passives/ouroboros.svg",
+        "x": -32.5,
+        "y": -45.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "26651197-4daa-4503-be51-a4e9b14cc89c": {
         "name": "Socket",
         "icon": "",
@@ -607,8 +699,8 @@
       "26eca27a-95a6-4949-bef7-25cf3b79c340": {
         "name": "Myrmidon",
         "icon": "passives/myrmidon.svg",
-        "x": -162.5,
-        "y": -60.0,
+        "x": -147.5,
+        "y": 20.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Armor",
@@ -763,7 +855,7 @@
       },
       "2d2394cc-1605-40fe-923b-3e0fd4502fa3": {
         "name": "Poison Damage",
-        "icon": "passives/poison_damage.svg",
+        "icon": "passives/scorpion_tail.svg",
         "x": 0.0,
         "y": -47.5,
         "size": 0,
@@ -1009,8 +1101,8 @@
       "3a4861a5-e8e3-455d-b458-fe23d932b190": {
         "name": "Ain't Nobody Got Time for That",
         "icon": "passives/broken_skull.svg",
-        "x": -10.0,
-        "y": 167.5,
+        "x": -15.0,
+        "y": 145.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Attack",
@@ -1083,6 +1175,51 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "3d3833aa-643d-495b-847f-ebafafe02acb": {
+        "name": "Damage over Time",
+        "icon": "passives/damage_over_time.svg",
+        "x": 127.5,
+        "y": -107.5,
+        "size": 1,
+        "initial_node": false,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 40.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "40cd161b-3258-46a1-9a61-ab1a13361312": {
         "name": "Stun Chance",
         "icon": "passives/star_swirl.svg",
@@ -1135,14 +1272,14 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": null,
+        "max_upgrade_level": 3,
         "socket": false
       },
       "42ebc03a-3e60-470c-b672-d4ca72442c72": {
         "name": "Stun Chance",
         "icon": "passives/star_swirl.svg",
         "x": 25.0,
-        "y": 50.0,
+        "y": 52.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Storm",
@@ -1190,7 +1327,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": null,
+        "max_upgrade_level": 3,
         "socket": false
       },
       "44f57197-8ef3-4956-9ed7-eb40ba1b951d": {
@@ -1287,6 +1424,59 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "46fbba4d-c6fb-4d80-8d20-383b2f9e36b2": {
+        "name": "Burn Chance",
+        "icon": "passives/smoking_finger.svg",
+        "x": 55.0,
+        "y": 37.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Fire",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Fire"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Fire"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": null,
+        "socket": false
+      },
       "4827bf74-8168-422a-8623-58eec1307b73": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -1374,7 +1564,7 @@
       },
       "49e86eef-f9c6-4a3c-b16c-7a9d1eb1bf9b": {
         "name": "Poison Damage",
-        "icon": "passives/poison_damage.svg",
+        "icon": "passives/scorpion_tail.svg",
         "x": 0.0,
         "y": -72.5,
         "size": 0,
@@ -1449,8 +1639,8 @@
       "5223c739-dd9e-413d-804a-6b14ea39c1f7": {
         "name": "Cursed Mouth",
         "icon": "passives/infinite_curse.svg",
-        "x": 140.0,
-        "y": 62.5,
+        "x": 37.5,
+        "y": -137.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Status",
@@ -1557,8 +1747,8 @@
       "563e3226-2387-4147-bed3-914575c77d9a": {
         "name": "Max Life Max Damage",
         "icon": "passives/attack.svg",
-        "x": -5.0,
-        "y": -185.0,
+        "x": -142.5,
+        "y": 32.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -1635,8 +1825,8 @@
       "58a42157-4cc3-45ea-b71c-1395663a9b23": {
         "name": "Damage",
         "icon": "passives/damage.svg",
-        "x": 0.0,
-        "y": 175.0,
+        "x": -5.0,
+        "y": 145.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -1672,8 +1862,8 @@
       "5aa6c4af-db53-4f03-9c7b-ad6888d6545d": {
         "name": "Wisdom",
         "icon": "passives/wisdom.svg",
-        "x": 7.5,
-        "y": -182.5,
+        "x": -22.5,
+        "y": -142.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Mana",
@@ -1940,7 +2130,7 @@
       },
       "6a439ad3-cf6b-45c5-815c-269e888b88b8": {
         "name": "Poison Damage",
-        "icon": "passives/poison_damage.svg",
+        "icon": "passives/scorpion_tail.svg",
         "x": -10.0,
         "y": -60.0,
         "size": 0,
@@ -2141,8 +2331,8 @@
       "76c196cc-e6a2-420a-8497-84099116ed2e": {
         "name": "Stun Chance",
         "icon": "passives/star_swirl.svg",
-        "x": 45.0,
-        "y": 57.5,
+        "x": 37.5,
+        "y": 60.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Storm",
@@ -2190,7 +2380,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": null,
+        "max_upgrade_level": 3,
         "socket": false
       },
       "777d60db-963c-4822-bd90-ce7019d49a1f": {
@@ -2251,7 +2441,7 @@
         "name": "Damage over Time",
         "icon": "passives/damage_over_time.svg",
         "x": 112.5,
-        "y": -100.0,
+        "y": -95.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Status",
@@ -2319,6 +2509,51 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "7eeea0ac-0958-49a6-a8e3-30966cb42764": {
+        "name": "Damage over Time",
+        "icon": "passives/damage_over_time.svg",
+        "x": 125.0,
+        "y": -97.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "8006a833-21d3-4055-a4c3-ef2126a5aabc": {
         "name": "Maximum Life",
         "icon": "passives/life.svg",
@@ -2373,9 +2608,82 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "83f13e93-39b5-400c-9abc-cf1c304f6543": {
+        "name": "Burn Damage and Duration",
+        "icon": "passives/flamed_leaf.svg",
+        "x": 62.5,
+        "y": -25.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Fire",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": null,
+        "socket": false
+      },
       "853715cd-ce16-4b22-96cb-ba6d2d83e3e7": {
         "name": "Lucky Start",
-        "icon": "passives/gold.svg",
+        "icon": "passives/pouch.svg",
         "x": 0.0,
         "y": 0.0,
         "size": 2,
@@ -2707,9 +3015,9 @@
         "socket": false
       },
       "925aa97c-c0fb-4c2b-886e-118e5ebaca55": {
-        "name": "Burn Chance",
+        "name": "Burn Damage and Duration",
         "icon": "passives/flamed_leaf.svg",
-        "x": 60.0,
+        "x": 47.5,
         "y": -20.0,
         "size": 0,
         "initial_node": false,
@@ -3101,18 +3409,12 @@
                     }
                   ],
                   "duration": {
-                    "min": 4.0,
-                    "max": 4.0,
+                    "min": 3.0,
+                    "max": 3.0,
                     "lucky_chance": 0.0
                   }
                 },
                 "ignore_stat_effects": [
-                  {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": "Fire"
-                    }
-                  },
                   {
                     "Damage": {
                       "skill_type": null,
@@ -3121,6 +3423,12 @@
                   },
                   {
                     "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": "Fire"
+                    }
+                  },
+                  {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": "Fire"
                     }
@@ -3161,6 +3469,37 @@
             "stat": "GoldFind",
             "modifier": "Multiplier",
             "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "ada9e80f-4b7b-4ae7-a2a1-d411345a272b": {
+        "name": "Critical Hit Damage",
+        "icon": "passives/fireflake.svg",
+        "x": -25.0,
+        "y": 67.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": {
+              "CritDamage": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 40.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "CritDamage": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 3,
@@ -3260,8 +3599,8 @@
       "bc793f7e-0901-4a14-b0ea-1778ea9afffc": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": 102.5,
-        "y": -112.5,
+        "x": 17.5,
+        "y": -145.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Status",
@@ -3686,8 +4025,8 @@
       "cb014939-4119-4b9c-bcd9-cb484c9fbdcc": {
         "name": "Damage on Maximum Mana",
         "icon": "passives/attack.svg",
-        "x": -5.0,
-        "y": -175.0,
+        "x": 142.5,
+        "y": -32.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -3829,8 +4168,8 @@
       "d103b2b7-0801-4c7d-ad6d-fc735f713026": {
         "name": "Frenzy",
         "icon": "passives/frenzy.svg",
-        "x": -182.5,
-        "y": 2.5,
+        "x": -147.5,
+        "y": -20.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Attack",
@@ -4608,7 +4947,7 @@
         "name": "Damage",
         "icon": "passives/damage.svg",
         "x": -17.5,
-        "y": 175.0,
+        "y": 155.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -4668,6 +5007,79 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "df35bf92-e646-421c-a508-c77eb30f144e": {
+        "name": "Burn Damage and Duration",
+        "icon": "passives/flamed_leaf.svg",
+        "x": 55.0,
+        "y": -37.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Fire",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": null,
+        "socket": false
+      },
       "dfcf089f-d02a-4d98-a751-61e7f67da41b": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -4722,11 +5134,56 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "e169773c-9bf7-479c-9858-79c8ddfe4341": {
+        "name": "Poison Duration",
+        "icon": "passives/ouroboros.svg",
+        "x": -30.0,
+        "y": -57.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "e30f5c37-e25e-4c73-a7ab-6f862398745f": {
         "name": "Damage",
         "icon": "passives/damage.svg",
-        "x": -10.0,
-        "y": 182.5,
+        "x": -7.5,
+        "y": 155.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -4761,7 +5218,7 @@
       },
       "e4467b34-351f-4fb4-90f1-393664874993": {
         "name": "Poison Damage",
-        "icon": "passives/poison_damage.svg",
+        "icon": "passives/scorpion_tail.svg",
         "x": 10.0,
         "y": -60.0,
         "size": 0,
@@ -4890,9 +5347,9 @@
       },
       "eb8c6b19-ca8a-4791-be2d-bf649098f40c": {
         "name": "Poison Duration",
-        "icon": "passives/scorpion_tail.svg",
+        "icon": "passives/ouroboros.svg",
         "x": -20.0,
-        "y": -60.0,
+        "y": -65.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Poison",
@@ -4965,11 +5422,11 @@
         "socket": false
       },
       "f275006b-3e0a-4177-a128-f501b7b91b4e": {
-        "name": "New Node",
+        "name": "Assassin Strike",
         "icon": "passives/ninja_head.svg",
         "x": -30.0,
         "y": 102.5,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Critical",
         "effects": [
@@ -5040,9 +5497,62 @@
       },
       "f39c8abe-6388-410c-8b45-416dbfe666ed": {
         "name": "Burn Chance",
-        "icon": "passives/smoking_finger.svg.svg",
-        "x": 60.0,
+        "icon": "passives/smoking_finger.svg",
+        "x": 47.5,
         "y": 20.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Fire",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Fire"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Fire"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": null,
+        "socket": false
+      },
+      "f48dfcb6-4eef-49bc-ae62-5bf211156525": {
+        "name": "Burn Chance",
+        "icon": "passives/smoking_finger.svg",
+        "x": 62.5,
+        "y": 25.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Fire",
@@ -5189,8 +5699,8 @@
       "ff796aa2-b773-47aa-9745-622c333e424a": {
         "name": "Sorcery",
         "icon": "passives/sorcery.svg",
-        "x": 170.0,
-        "y": 2.5,
+        "x": 147.5,
+        "y": 20.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Spell",
@@ -5844,12 +6354,60 @@
         "to": "40cd161b-3258-46a1-9a61-ab1a13361312"
       },
       {
-        "from": "40cd161b-3258-46a1-9a61-ab1a13361312",
-        "to": "016c897d-0cf7-4bae-b340-b015b08683ab"
-      },
-      {
         "from": "925aa97c-c0fb-4c2b-886e-118e5ebaca55",
         "to": "8bc8f516-c2c2-4fa0-96da-312cf1f3523d"
+      },
+      {
+        "from": "e169773c-9bf7-479c-9858-79c8ddfe4341",
+        "to": "eb8c6b19-ca8a-4791-be2d-bf649098f40c"
+      },
+      {
+        "from": "e169773c-9bf7-479c-9858-79c8ddfe4341",
+        "to": "25c4b2a6-e072-4cfd-bb75-402835c60a05"
+      },
+      {
+        "from": "f48dfcb6-4eef-49bc-ae62-5bf211156525",
+        "to": "f39c8abe-6388-410c-8b45-416dbfe666ed"
+      },
+      {
+        "from": "f48dfcb6-4eef-49bc-ae62-5bf211156525",
+        "to": "46fbba4d-c6fb-4d80-8d20-383b2f9e36b2"
+      },
+      {
+        "from": "83f13e93-39b5-400c-9abc-cf1c304f6543",
+        "to": "df35bf92-e646-421c-a508-c77eb30f144e"
+      },
+      {
+        "from": "83f13e93-39b5-400c-9abc-cf1c304f6543",
+        "to": "925aa97c-c0fb-4c2b-886e-118e5ebaca55"
+      },
+      {
+        "from": "1ff5ccd8-cdc9-4c39-8233-221b3c391086",
+        "to": "0dad8094-ca29-43f8-a26a-3cc334041c1f"
+      },
+      {
+        "from": "0dad8094-ca29-43f8-a26a-3cc334041c1f",
+        "to": "ada9e80f-4b7b-4ae7-a2a1-d411345a272b"
+      },
+      {
+        "from": "7e10ea6e-22f5-43f9-8c49-9df5d664e87a",
+        "to": "140fa424-f0f3-42b3-927e-b13777d1070e"
+      },
+      {
+        "from": "7eeea0ac-0958-49a6-a8e3-30966cb42764",
+        "to": "7e10ea6e-22f5-43f9-8c49-9df5d664e87a"
+      },
+      {
+        "from": "3d3833aa-643d-495b-847f-ebafafe02acb",
+        "to": "7eeea0ac-0958-49a6-a8e3-30966cb42764"
+      },
+      {
+        "from": "2723d25a-6a2a-421d-98c4-d7178da3f870",
+        "to": "3a4861a5-e8e3-455d-b458-fe23d932b190"
+      },
+      {
+        "from": "0f99143b-bf60-4ae8-b92d-deb1a4bb7dc8",
+        "to": "e4467b34-351f-4fb4-90f1-393664874993"
       }
     ]
   }

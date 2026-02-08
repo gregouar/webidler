@@ -16,6 +16,8 @@ pub enum Condition {
         status_type: Option<StatStatusType>,
         #[serde(default)]
         skill_type: Option<SkillType>,
+        #[serde(default)]
+        not: bool,
     },
     MaximumLife,
     MaximumMana,
