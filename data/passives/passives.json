@@ -279,7 +279,8 @@
                           "damage_type": "Poison"
                         }
                       },
-                      "skill_type": null
+                      "skill_type": null,
+                      "not": true
                     }
                   }
                 ]
@@ -310,7 +311,8 @@
                           "damage_type": "Poison"
                         }
                       },
-                      "skill_type": null
+                      "skill_type": null,
+                      "not": true
                     }
                   }
                 ]
@@ -1527,7 +1529,7 @@
       },
       "49ad1637-c721-4666-a393-d454bc49bb30": {
         "name": "Physical Damage",
-        "icon": "passives/physical_damage.svg",
+        "icon": "passives/mace_head.svg",
         "x": -47.5,
         "y": 0.0,
         "size": 0,
@@ -1601,7 +1603,7 @@
       },
       "4c792411-d741-4a1f-817b-9ff41e45b0a4": {
         "name": "Physical Damage",
-        "icon": "passives/physical_damage.svg",
+        "icon": "passives/mace_head.svg",
         "x": -72.5,
         "y": 0.0,
         "size": 0,
@@ -1627,6 +1629,79 @@
               "Damage": {
                 "skill_type": null,
                 "damage_type": "Physical"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "5112a2b7-6b1f-484d-a2d7-d0e0d2501af4": {
+        "name": "First Dose",
+        "icon": "passives/wasp.svg",
+        "x": 32.5,
+        "y": -45.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Poison"
+                        }
+                      },
+                      "skill_type": null,
+                      "not": true
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Poison"
+                        }
+                      },
+                      "skill_type": null,
+                      "not": true
+                    }
+                  }
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -2093,7 +2168,7 @@
       },
       "66b833a4-e75f-40ec-b393-ffc1f96e0c17": {
         "name": "Physical Damage",
-        "icon": "passives/physical_damage.svg",
+        "icon": "passives/mace_head.svg",
         "x": -60.0,
         "y": -10.0,
         "size": 0,
@@ -2843,7 +2918,8 @@
                   {
                     "HasStatus": {
                       "status_type": "Stun",
-                      "skill_type": null
+                      "skill_type": null,
+                      "not": false
                     }
                   }
                 ]
@@ -4593,7 +4669,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MinDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -4611,13 +4687,13 @@
                     }
                   },
                   {
-                    "Damage": {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
-                    "MaxDamage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -4785,7 +4861,7 @@
       },
       "d77b0bd8-b567-4c32-b771-a200e1f0b30c": {
         "name": "Physical Damage",
-        "icon": "passives/physical_damage.svg",
+        "icon": "passives/mace_head.svg",
         "x": -60.0,
         "y": 10.0,
         "size": 0,
@@ -5669,6 +5745,79 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "fd4f4880-52d3-4d41-aaa4-df291390229c": {
+        "name": "First Dose",
+        "icon": "passives/wasp.svg",
+        "x": 30.0,
+        "y": -57.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Poison"
+                        }
+                      },
+                      "skill_type": null,
+                      "not": true
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Poison"
+                        }
+                      },
+                      "skill_type": null,
+                      "not": true
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "ff32f6af-3088-4f9b-963b-d469ea869adb": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -6408,6 +6557,14 @@
       {
         "from": "0f99143b-bf60-4ae8-b92d-deb1a4bb7dc8",
         "to": "e4467b34-351f-4fb4-90f1-393664874993"
+      },
+      {
+        "from": "fd4f4880-52d3-4d41-aaa4-df291390229c",
+        "to": "0f99143b-bf60-4ae8-b92d-deb1a4bb7dc8"
+      },
+      {
+        "from": "5112a2b7-6b1f-484d-a2d7-d0e0d2501af4",
+        "to": "fd4f4880-52d3-4d41-aaa4-df291390229c"
       }
     ]
   }

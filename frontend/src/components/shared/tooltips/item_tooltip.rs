@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, SkillRange, SkillShape},
+    item::{ItemRarity, ItemSlot, ItemSpecs, SkillRange, SkillShape},
     item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix},
     skill::DamageType,
 };
@@ -196,7 +196,7 @@ pub fn ItemTooltipContent(
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
                 <RuneTooltip item_specs=item_specs.clone() />
-                <CategoryTooltip item_specs=item_specs.clone() />
+                <MapTooltip item_specs=item_specs.clone() />
             </ul>
             {(has_triggers || has_effects)
                 .then(|| {
@@ -426,6 +426,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     item_specs.base.rune_specs.as_ref().map(|specs| {
         view! {
+            <li class="text-gray-400 text-xs xl:text-sm leading-snug">"Rune"</li>
             {(specs.root_node)
                 .then(|| {
                     view! {
@@ -434,6 +435,21 @@ pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                         </li>
                     }
                 })}
+            <li class="text-gray-400 text-xs xl:text-sm leading-snug italic">
+                "Socket into an empty Passive Node to give the following effects:"
+            </li>
+        }
+    })
+}
+
+#[component]
+pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    item_specs.base.map_specs.as_ref().map(|_| {
+        view! {
+            <li class="text-gray-400 text-xs xl:text-sm leading-snug">"Edict"</li>
+            <li class="text-gray-400 text-xs xl:text-sm leading-snug italic">
+                "Apply to a Grind to give all Enemies the following effects:"
+            </li>
         }
     })
 }
@@ -479,35 +495,6 @@ pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                         <span class="text-white font-semibold">
                             {format!("+{:.0}%", item_specs.modifiers.quality)}
                         </span>
-                    </li>
-                }
-            })}
-    }
-}
-
-#[component]
-pub fn CategoryTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
-    view! {
-        {item_specs
-            .base
-            .categories
-            .contains(&ItemCategory::Map)
-            .then(|| {
-                view! {
-                    <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                        "Apply to a Grind to give all Enemies the following effects:"
-                    </li>
-                }
-            })}
-
-        {item_specs
-            .base
-            .categories
-            .contains(&ItemCategory::Rune)
-            .then(|| {
-                view! {
-                    <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                        "Socket into an empty Passive Node to give the following effects:"
                     </li>
                 }
             })}

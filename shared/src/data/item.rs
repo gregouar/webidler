@@ -141,6 +141,8 @@ pub struct ItemBase {
     pub armor_specs: Option<ArmorSpecs>,
     #[serde(default)]
     pub rune_specs: Option<RuneSpecs>,
+    #[serde(default)]
+    pub map_specs: Option<MapSpecs>,
 
     #[serde(default)]
     pub ignore_quality: bool,
@@ -203,6 +205,14 @@ pub struct ArmorSpecs {
 pub struct RuneSpecs {
     #[serde(default)]
     pub root_node: bool,
+}
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+pub struct MapSpecs {
+    // TODO
+    // #[serde(default)]
+    // pub extra_reward_picks: bool,
+    // #[serde(default)]
+    // pub extra_reward_slots: bool,
 }
 
 impl ItemModifiers {
