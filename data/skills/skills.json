@@ -62,9 +62,7 @@
             "FlatDamage": {
               "damage": {
                 "Storm": [0, 30]
-              },
-              "crit_chance": 5,
-              "crit_damage": 100
+              }
             }
           },
           {

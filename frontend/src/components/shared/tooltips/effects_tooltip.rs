@@ -458,15 +458,17 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_type,
             conditions,
         } => format!(
-            "{}{} against {} Enemies",
+            "{}{} against {}Enemies{}",
             format_multiplier_stat_name(stat),
             with_skill_type_str(*skill_type),
-            conditions_tooltip::format_skill_modifier_conditions(conditions)
+            conditions_tooltip::format_skill_modifier_conditions_pre(conditions),
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions)
         ),
         StatType::StatConditionalModifier { stat, conditions } => format!(
-            "{} when {}",
+            "{} when {}{}",
             format_multiplier_stat_name(stat),
-            conditions_tooltip::format_skill_modifier_conditions(conditions)
+            conditions_tooltip::format_skill_modifier_conditions_pre(conditions),
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions)
         ),
     }
 }
@@ -727,15 +729,17 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             skill_type,
             conditions,
         } => format!(
-            "{}{} against {} Enemies",
+            "{}{} against {}Enemies{}",
             format_flat_stat(stat, value),
             with_skill_type_str(*skill_type),
-            conditions_tooltip::format_skill_modifier_conditions(conditions)
+            conditions_tooltip::format_skill_modifier_conditions_pre(conditions),
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions)
         ),
         StatType::StatConditionalModifier { stat, conditions } => format!(
-            "{} when {}",
+            "{} when {}{}",
             format_flat_stat(stat, value),
-            conditions_tooltip::format_skill_modifier_conditions(conditions)
+            conditions_tooltip::format_skill_modifier_conditions_pre(conditions),
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions),
         ),
     }
 }

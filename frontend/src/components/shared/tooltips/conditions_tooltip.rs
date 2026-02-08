@@ -4,7 +4,7 @@ use shared::data::{
     stat_effect::StatStatusType,
 };
 
-pub fn format_skill_modifier_conditions(conditions: &[Condition]) -> String {
+pub fn format_skill_modifier_conditions_pre(conditions: &[Condition]) -> String {
     // TODO: sort?
     conditions
         .iter()
@@ -12,12 +12,28 @@ pub fn format_skill_modifier_conditions(conditions: &[Condition]) -> String {
             Condition::HasStatus {
                 status_type,
                 skill_type,
-            } => format_status_type_condition(status_type.as_ref(), *skill_type),
-            Condition::MaximumLife => "On Maximum Life".into(),
-            Condition::MaximumMana => "On Maximum Mana".into(),
+            } => format!(
+                " {}",
+                format_status_type_condition(status_type.as_ref(), *skill_type),
+            ),
+            Condition::MaximumLife => "".into(),
+            Condition::MaximumMana => "".into(),
         })
         .collect::<Vec<_>>()
-        .join(" ")
+        .join("")
+}
+
+pub fn format_skill_modifier_conditions_post(conditions: &[Condition]) -> String {
+    // TODO: sort?
+    conditions
+        .iter()
+        .map(|condition| match condition {
+            Condition::HasStatus { .. } => "",
+            Condition::MaximumLife => " On Maximum Life",
+            Condition::MaximumMana => " On Maximum Mana",
+        })
+        .collect::<Vec<_>>()
+        .join("")
 }
 
 pub fn format_status_type_condition(

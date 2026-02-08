@@ -227,7 +227,11 @@ fn critical_str(value: Option<bool>) -> &'static str {
 }
 
 fn format_kill_trigger(kill_trigger: &KillTrigger) -> String {
-    conditions_tooltip::format_skill_modifier_conditions(&kill_trigger.conditions)
+    format!(
+        "{}{}",
+        conditions_tooltip::format_skill_modifier_conditions_pre(&kill_trigger.conditions),
+        conditions_tooltip::format_skill_modifier_conditions_post(&kill_trigger.conditions),
+    )
 }
 
 fn format_target_type(target_type: &TargetType) -> &'static str {
