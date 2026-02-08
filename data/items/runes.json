@@ -20,6 +20,109 @@
     "affixes": [],
     "min_area_level": 150
   },
+  "rune_gilded": {
+    "name": "Gilded Covenant",
+    "description": "Gold answers every prayer... eventually.",
+    "icon": "items/rune_gilded.webp",
+    "categories": ["Rune"],
+    "ignore_quality": true,
+    "rune_specs": {},
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [500, 1000]
+      }
+    ],
+    "min_area_level": 50
+  },
+  "rune_berserker": {
+    "name": "Mark of the Berserker",
+    "description": "Each wound feeds the mark. Each scar sharpens the beast within.",
+    "icon": "items/rune_berserker.webp",
+    "categories": ["Rune"],
+    "ignore_quality": true,
+    "rune_specs": {},
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "DamageResistance": {
+            "skill_type": null,
+            "damage_type": null
+          }
+        },
+        "modifier": "Flat",
+        "value": -25.0
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "rune_berserker",
+        "description": "",
+        "OnTakeHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": null
+        },
+        "target": "SameTarget",
+        "modifiers": [],
+        "skill_range": "Melee",
+        "skill_type": "Attack",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "skill_type": null,
+                          "damage_type": null
+                        }
+                      },
+                      "modifier": "Multiplier",
+                      "debuff": false
+                    }
+                  },
+                  "value": {
+                    "min": 25.0,
+                    "max": 25.0,
+                    "lucky_chance": 0.0
+                  },
+                  "cumulate": true,
+                  "replace_on_value_only": false
+                }
+              ],
+              "duration": {
+                "min": 5.0,
+                "max": 5.0,
+                "lucky_chance": 0.0
+              }
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
+          }
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false
+      }
+    ],
+    "min_area_level": 100
+  },
   "rune_storm_average": {
     "name": "Flux Stabilizer",
     "description": "Tames the wildest storms, binding chaos into order.",
@@ -126,90 +229,5 @@
       }
     ],
     "min_area_level": 200
-  },
-  "rune_berserker": {
-    "name": "Mark of the Berserker",
-    "description": "Each wound feeds the mark. Each scar sharpens the beast within.",
-    "icon": "items/rune_berserker.webp",
-    "categories": ["Rune"],
-    "ignore_quality": true,
-    "rune_specs": {},
-    "rarity": "Unique",
-    "affixes": [
-      {
-        "scope": "Global",
-        "stat": {
-          "DamageResistance": {
-            "skill_type": null,
-            "damage_type": null
-          }
-        },
-        "modifier": "Flat",
-        "value": -25.0
-      }
-    ],
-    "triggers": [
-      {
-        "trigger_id": "rune_berserker",
-        "description": "",
-        "OnTakeHit": {
-          "skill_type": null,
-          "range": null,
-          "is_crit": null,
-          "is_blocked": null,
-          "is_hurt": true,
-          "is_triggered": null,
-          "damage_type": null
-        },
-        "target": "SameTarget",
-        "modifiers": [],
-        "skill_range": "Melee",
-        "skill_type": "Attack",
-        "effects": [
-          {
-            "success_chance": {
-              "value": 100.0,
-              "lucky_chance": 0.0
-            },
-            "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "damage_type": null
-                        }
-                      },
-                      "modifier": "Multiplier",
-                      "debuff": false
-                    }
-                  },
-                  "value": {
-                    "min": 25.0,
-                    "max": 25.0,
-                    "lucky_chance": 0.0
-                  },
-                  "cumulate": true,
-                  "replace_on_value_only": false
-                }
-              ],
-              "duration": {
-                "min": 5.0,
-                "max": 5.0,
-                "lucky_chance": 0.0
-              }
-            },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
-          }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "inherit_modifiers": false
-      }
-    ],
-    "min_area_level": 100
   }
 }

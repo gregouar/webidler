@@ -514,11 +514,11 @@
             "stat": {
               "Restore": {
                 "restore_type": "Life",
-                "skill_type": null
+                "skill_type": "Spell"
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -528,11 +528,11 @@
             "stat": {
               "Restore": {
                 "restore_type": "Life",
-                "skill_type": null
+                "skill_type": "Spell"
               }
             },
             "modifier": "Multiplier",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -2008,6 +2008,43 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "5f2ac03c-3b5f-4a39-b44e-d9765e81c139": {
+        "name": "Restoration",
+        "icon": "passives/XXX.svg",
+        "x": -72.5,
+        "y": 65.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": {
+              "Restore": {
+                "restore_type": "Life",
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Restore": {
+                "restore_type": "Life",
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "5f96379e-5249-4b0e-8a4d-1e8c0f951f82": {
         "name": "Sadism",
         "icon": "passives/critical.svg",
@@ -2164,6 +2201,31 @@
           }
         ],
         "max_upgrade_level": 3,
+        "socket": false
+      },
+      "665e7afa-d2aa-4075-bd54-278fe4673434": {
+        "name": "ManaLeech",
+        "icon": "passives/XXX.svg",
+        "x": -70.0,
+        "y": -57.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": {
+              "ManaOnHit": {
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
         "socket": false
       },
       "66b833a4-e75f-40ec-b393-ffc1f96e0c17": {
@@ -2362,6 +2424,31 @@
         ],
         "triggers": [],
         "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": false
+      },
+      "73c40387-2ca1-4169-9033-ec6e4c7d709f": {
+        "name": "Life Leech",
+        "icon": "passives/XXX.svg",
+        "x": -70.0,
+        "y": 55.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": {
+              "LifeOnHit": {
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
         "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
@@ -4023,7 +4110,7 @@
                           "target": "SameTarget",
                           "modifiers": [],
                           "skill_range": "Melee",
-                          "skill_type": "Attack",
+                          "skill_type": "Other",
                           "effects": [
                             {
                               "success_chance": {
@@ -4064,13 +4151,16 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MaxDamage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": "Physical"
                     }
                   },
                   {
-                    "CritChance": null
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": "Physical"
+                    }
                   },
                   {
                     "Damage": {
@@ -4079,10 +4169,7 @@
                     }
                   },
                   {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": "Physical"
-                    }
+                    "CritChance": null
                   }
                 ],
                 "conditional_modifiers": []
@@ -4096,6 +4183,43 @@
         "locked": true,
         "upgrade_effects": [],
         "max_upgrade_level": null,
+        "socket": false
+      },
+      "c71a85e5-e297-4d01-bafb-41b60c535d17": {
+        "name": "Maximum Damage",
+        "icon": "passives/XXX.svg",
+        "x": 15.0,
+        "y": 140.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "MaxDamage": {
+                "skill_type": null,
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "MaxDamage": {
+                "skill_type": null,
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
         "socket": false
       },
       "cb014939-4119-4b9c-bcd9-cb484c9fbdcc": {
@@ -4669,7 +4793,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MinDamage": {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -4687,13 +4811,13 @@
                     }
                   },
                   {
-                    "Damage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
-                    "MaxDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -4831,8 +4955,8 @@
       "d5875cc2-1fdf-4b50-95be-7048a03ba1e0": {
         "name": "Block",
         "icon": "passives/block.svg",
-        "x": -67.5,
-        "y": -57.5,
+        "x": -57.5,
+        "y": -67.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",

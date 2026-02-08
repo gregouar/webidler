@@ -105,6 +105,7 @@ fn to_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
         Some(SkillType::Spell) => " to Spells",
         Some(SkillType::Curse) => " to Curses",
         Some(SkillType::Blessing) => " to Blessings",
+        Some(SkillType::Other) => " to ???",
         None => "",
     }
 }
@@ -115,6 +116,7 @@ fn with_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
         Some(SkillType::Spell) => " with Spells",
         Some(SkillType::Curse) => " with Curses",
         Some(SkillType::Blessing) => " with Blessings",
+        Some(SkillType::Other) => " with ???",
         None => "",
     }
 }

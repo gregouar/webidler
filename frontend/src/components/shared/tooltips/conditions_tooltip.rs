@@ -75,6 +75,7 @@ pub fn skilled_type_str(skill_type: Option<SkillType>) -> &'static str {
         Some(SkillType::Spell) => "Spelled ",
         Some(SkillType::Curse) => "Cursed ",
         Some(SkillType::Blessing) => "Blessed ",
+        Some(SkillType::Other) => "??? ",
         None => "",
     }
 }

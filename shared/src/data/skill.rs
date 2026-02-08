@@ -77,6 +77,7 @@ pub enum SkillType {
     Spell,
     Curse,
     Blessing,
+    Other,
 }
 
 impl SkillType {
