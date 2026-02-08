@@ -102,8 +102,7 @@ pub fn check_condition(
                 .any(|(status_specs, status_state)| {
                     compare_options(status_type, &Some(status_specs.into()))
                         && compare_options(skill_type, &Some(status_state.skill_type))
-                })
-                == !not
+                }) != *not
         }
         Condition::MaximumLife => character_state.life >= character_specs.max_life * 0.99,
         Condition::MaximumMana => character_state.mana >= character_specs.max_mana * 0.99,
