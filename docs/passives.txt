@@ -82,7 +82,7 @@ Curses:
 - Duration
 - Effect
 - Speed
-*Curses never expire (or rune?)
+*Curses never expire
 
 Blessings:
 - Duration
@@ -92,7 +92,7 @@ Blessings:
 Dot:
 - Damage
 - Duration
-*Spread DoT (should split per type? spread other effects?)
+*Spread DoT
 
 Other statuses/effects?
 

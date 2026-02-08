@@ -224,7 +224,7 @@
       "0ea487a1-1b61-4f57-bc8b-5af626cb4544": {
         "name": "Casting Speed",
         "icon": "passives/spell_speed.svg",
-        "x": 17.5,
+        "x": 20.0,
         "y": -7.5,
         "size": 0,
         "initial_node": false,
@@ -832,7 +832,7 @@
         "name": "Mana Regeneration",
         "icon": "passives/mana_regen.svg",
         "x": 7.5,
-        "y": -17.5,
+        "y": -20.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Mana",
@@ -896,7 +896,7 @@
         "name": "Life Regeneration",
         "icon": "passives/life_regen.svg",
         "x": 7.5,
-        "y": 17.5,
+        "y": 20.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -1143,7 +1143,7 @@
       "3c67a2cb-a023-4709-a822-7b1373f00b09": {
         "name": "Spell Damage",
         "icon": "passives/spell.svg",
-        "x": 17.5,
+        "x": 20.0,
         "y": 7.5,
         "size": 0,
         "initial_node": false,
@@ -1974,7 +1974,7 @@
       "5c016eeb-2325-41ff-baa0-01f5bcc5e434": {
         "name": "Attack Damage",
         "icon": "passives/attack.svg",
-        "x": -17.5,
+        "x": -20.0,
         "y": -7.5,
         "size": 0,
         "initial_node": false,
@@ -2143,7 +2143,7 @@
         "name": "Maximum Life",
         "icon": "passives/life.svg",
         "x": -7.5,
-        "y": 17.5,
+        "y": 20.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -3093,7 +3093,7 @@
       "925aa97c-c0fb-4c2b-886e-118e5ebaca55": {
         "name": "Burn Damage and Duration",
         "icon": "passives/flamed_leaf.svg",
-        "x": 47.5,
+        "x": 50.0,
         "y": -20.0,
         "size": 0,
         "initial_node": false,
@@ -3750,7 +3750,7 @@
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
         "x": -7.5,
-        "y": -17.5,
+        "y": -20.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Mana",
@@ -4669,7 +4669,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -4687,13 +4687,13 @@
                     }
                   },
                   {
-                    "MaxDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
-                    "MinDamage": {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5469,7 +5469,7 @@
       "f0082e61-4cec-4dc1-af24-b1319fe1e4fc": {
         "name": "Attack Speed",
         "icon": "passives/attack_speed.svg",
-        "x": -17.5,
+        "x": -20.0,
         "y": 7.5,
         "size": 0,
         "initial_node": false,
@@ -5574,7 +5574,7 @@
       "f39c8abe-6388-410c-8b45-416dbfe666ed": {
         "name": "Burn Chance",
         "icon": "passives/smoking_finger.svg",
-        "x": 47.5,
+        "x": 50.0,
         "y": 20.0,
         "size": 0,
         "initial_node": false,
