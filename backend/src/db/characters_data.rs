@@ -6,7 +6,9 @@ use shared::data::{
 };
 
 use crate::{
-    constants::DATA_VERSION, db::pool::DbExecutor, game::data::inventory_data::InventoryData,
+    constants::DATA_VERSION,
+    db::pool::DbExecutor,
+    game::data::{inventory_data::InventoryData, passives::PassivesTreeAscensionData},
 };
 
 use super::utc_datetime::UtcDateTime;
@@ -79,10 +81,12 @@ pub async fn save_character_passives<'c>(
     character_id: &UserCharacterId,
     passives: &PassivesTreeAscension,
 ) -> anyhow::Result<()> {
-    Ok(
-        upsert_character_passives_data(executor, character_id, rmp_serde::to_vec(passives)?)
-            .await?,
+    Ok(upsert_character_passives_data(
+        executor,
+        character_id,
+        rmp_serde::to_vec(&PassivesTreeAscensionData::from(passives))?,
     )
+    .await?)
 }
 
 async fn upsert_character_passives_data<'c>(
@@ -140,10 +144,11 @@ async fn upsert_character_benedictions_data<'c>(
     Ok(())
 }
 
+// TODO: Split
 pub async fn load_character_data<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
-) -> anyhow::Result<Option<(InventoryData, PassivesTreeAscension, PlayerBenedictions)>> {
+) -> anyhow::Result<Option<(InventoryData, PassivesTreeAscensionData, PlayerBenedictions)>> {
     let character_data = read_character_data(executor, character_id).await?;
     if let Some(character_data) = character_data {
         Ok(Some((
@@ -151,7 +156,7 @@ pub async fn load_character_data<'c>(
             character_data
                 .passives_data
                 .and_then(|passives_data| {
-                    rmp_serde::from_slice::<PassivesTreeAscension>(&passives_data).ok()
+                    rmp_serde::from_slice::<PassivesTreeAscensionData>(&passives_data).ok()
                 })
                 .unwrap_or_default(),
             character_data

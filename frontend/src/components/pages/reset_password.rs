@@ -1,4 +1,4 @@
-use leptos::{html::*, prelude::*, task::spawn_local, Params};
+use leptos::{Params, html::*, prelude::*, task::spawn_local};
 use leptos_router::{
     hooks::{use_navigate, use_query},
     params::Params,

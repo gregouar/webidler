@@ -11,7 +11,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Flat",
         "value": 1
       }
@@ -29,7 +29,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Flat",
         "value": 2
       }
@@ -47,7 +47,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Flat",
         "value": 3
       }
@@ -65,7 +65,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Flat",
         "value": 4
       }
@@ -83,7 +83,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Flat",
         "value": 5
       }
@@ -101,7 +101,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Flat",
         "value": 6
       }
@@ -119,7 +119,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Flat",
         "value": 7
       }
@@ -137,7 +137,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Flat",
         "value": 8
       }
@@ -155,7 +155,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Flat",
         "value": 9
       }
@@ -173,7 +173,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Flat",
         "value": 10
       }
@@ -192,9 +192,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Multiplier",
-        "value": [10, 14]
+        "value": [10, 13]
       }
     ]
   },
@@ -210,9 +210,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Multiplier",
-        "value": [15, 19]
+        "value": [16, 18]
       }
     ]
   },
@@ -228,9 +228,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Multiplier",
-        "value": [20, 24]
+        "value": [21, 23]
       }
     ]
   },
@@ -246,9 +246,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Multiplier",
-        "value": [25, 29]
+        "value": [26, 28]
       }
     ]
   },
@@ -264,9 +264,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Multiplier",
-        "value": [30, 34]
+        "value": [31, 33]
       }
     ]
   },
@@ -282,9 +282,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Multiplier",
-        "value": [35, 39]
+        "value": [36, 38]
       }
     ]
   },
@@ -300,9 +300,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Multiplier",
-        "value": [40, 44]
+        "value": [41, 43]
       }
     ]
   },
@@ -318,9 +318,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Multiplier",
-        "value": [45, 49]
+        "value": [46, 48]
       }
     ]
   },
@@ -336,9 +336,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Multiplier",
-        "value": [50, 54]
+        "value": [51, 53]
       }
     ]
   },
@@ -354,9 +354,9 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Multiplier",
-        "value": [55, 59]
+        "value": [56, 60]
       }
     ]
   }

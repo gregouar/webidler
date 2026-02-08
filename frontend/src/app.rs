@@ -14,7 +14,7 @@ use crate::components::{
     events::provide_events_context,
     pages,
     settings::provide_settings_context,
-    ui::confirm::{provide_confirm_context, ConfirmationModal},
+    ui::confirm::{ConfirmationModal, provide_confirm_context},
 };
 
 // TODO: localization https://crates.io/crates/fluent-templates

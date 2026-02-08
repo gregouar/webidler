@@ -1,7 +1,12 @@
+use std::collections::HashMap;
+
 use shared::data::{
     area::AreaThreat,
+    conditional_modifier::{Condition, ConditionalModifier},
+    player::{CharacterSpecs, CharacterState},
     stat_effect::{
-        EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect, StatType,
+        compare_options, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect,
+        StatType,
     },
 };
 
@@ -61,4 +66,64 @@ pub fn sort_stat_effects(effects: &mut [StatEffect]) {
             e.stat.clone(),
         )
     });
+}
+
+pub fn compute_conditional_modifiers<'a>(
+    character_specs: &CharacterSpecs,
+    character_state: &CharacterState,
+    conditional_modifiers: &'a [ConditionalModifier],
+) -> Vec<&'a StatEffect> {
+    conditional_modifiers
+        .iter()
+        .filter(|conditional_modifier| {
+            conditional_modifier
+                .conditions
+                .iter()
+                .all(|condition| check_condition(character_specs, character_state, condition))
+        })
+        .flat_map(|conditional_modifier| conditional_modifier.effects.iter())
+        .collect()
+}
+
+pub fn check_condition(
+    character_specs: &CharacterSpecs,
+    character_state: &CharacterState,
+    condition: &Condition,
+) -> bool {
+    match condition {
+        Condition::HasStatus {
+            status_type,
+            skill_type,
+            not,
+        } => {
+            character_state
+                .statuses
+                .iter()
+                .any(|(status_specs, status_state)| {
+                    compare_options(status_type, &Some(status_specs.into()))
+                        && compare_options(skill_type, &Some(status_state.skill_type))
+                }) != *not
+        }
+        Condition::MaximumLife => character_state.life >= character_specs.max_life * 0.99,
+        Condition::MaximumMana => character_state.mana >= character_specs.max_mana * 0.99,
+    }
+}
+
+pub fn compute_conditions(
+    character_specs: &CharacterSpecs,
+    character_state: &CharacterState,
+    conditional_modifiers: &[ConditionalModifier],
+) -> HashMap<Condition, bool> {
+    conditional_modifiers
+        .iter()
+        .fold(HashMap::new(), |mut acc, value| {
+            for condition in &value.conditions {
+                acc.entry(condition.clone()).or_insert(check_condition(
+                    character_specs,
+                    character_state,
+                    condition,
+                ));
+            }
+            acc
+        })
 }

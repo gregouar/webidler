@@ -7,8 +7,10 @@
     "item_names",
     "items",
     "loot",
+    "map_affixes",
     "monsters",
     "passives",
+    "rune_affixes",
     "skills",
     "areas",
     "temple"

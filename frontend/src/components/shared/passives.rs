@@ -1,9 +1,10 @@
 use leptos::{html::*, prelude::*};
 
-use std::collections::HashMap;
 use std::sync::Arc;
 
-use shared::data::passive::{PassiveConnection, PassiveNodeSpecs, PassiveNodeType};
+use shared::data::passive::{
+    PassiveConnection, PassiveNodeSpecs, PassiveNodeType, PassivesTreeSpecs,
+};
 
 use crate::{
     assets::img_asset,
@@ -17,21 +18,23 @@ use crate::{
     },
 };
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
 pub enum PurchaseStatus {
+    #[default]
     Inactive,
     Purchaseable,
     Purchased,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
 pub enum MetaStatus {
+    #[default]
     Normal,
     Locked,
     Ascended,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
 pub struct NodeStatus {
     pub purchase_status: PurchaseStatus,
     pub meta_status: MetaStatus,
@@ -94,38 +97,43 @@ pub fn Node(
         PassiveNodeType::Status => "#3ea9a4ff",
         PassiveNodeType::Utility => "#973ea9ff",
     };
+    let tooltip_context: Option<DynamicTooltipContext> = use_context();
+    let accessibility: Option<AccessibilityContext> = use_context();
 
-    let node_specs = Arc::new(node_specs);
+    let node_status = move || node_status.try_get().unwrap_or_default();
 
     let show_tooltip = {
-        let tooltip_context = expect_context::<DynamicTooltipContext>();
         let node_specs = node_specs.clone();
         move || {
             let node_specs = node_specs.clone();
-            tooltip_context.set_content(
-                move || {
-                    let node_specs = node_specs.clone();
-                    view! { <NodeTooltip node_specs node_level show_upgrade /> }.into_any()
-                },
-                DynamicTooltipPosition::Auto,
-            );
+            if let Some(tooltip_context) = tooltip_context {
+                tooltip_context.set_content(
+                    move || {
+                        let node_specs = node_specs.clone();
+                        view! { <NodeTooltip node_specs node_level show_upgrade /> }.into_any()
+                    },
+                    DynamicTooltipPosition::Auto,
+                );
+            }
         }
     };
 
+    let node_specs = Arc::new(node_specs);
     let hide_tooltip = {
-        let tooltip_context = expect_context::<DynamicTooltipContext>();
-        move || tooltip_context.hide()
+        move || {
+            if let Some(tooltip_context) = tooltip_context {
+                tooltip_context.hide()
+            }
+        }
     };
 
-    let icon_asset = img_asset(&node_specs.icon);
-
     let stroke = move || {
-        let status = node_status.get();
+        let status = node_status();
         status_color(status.purchase_status, status.meta_status)
     };
 
     let shadow_class = move || {
-        let status = node_status.get();
+        let status = node_status();
         match (status.purchase_status, status.meta_status) {
             (PurchaseStatus::Inactive, MetaStatus::Normal) => "",
             (PurchaseStatus::Purchaseable, MetaStatus::Normal) => {
@@ -144,50 +152,57 @@ pub fn Node(
     };
 
     let class_style = move || {
-        let status = node_status.get();
+        let status = node_status();
         match (status.purchase_status, status.meta_status) {
             (PurchaseStatus::Purchaseable, _) => {
-                "saturate-50 cursor-pointer group active:brightness-50"
+                "saturate-50 cursor-pointer group active:brightness-50 pointer-events: none"
             }
-            (_, MetaStatus::Locked) => "saturate-50 brightness-50",
-            (PurchaseStatus::Inactive, _) => "saturate-50 brightness-50",
-            _ => "",
+            (_, MetaStatus::Locked) => "saturate-50 brightness-30 pointer-events: none",
+            (PurchaseStatus::Inactive, _) => "saturate-20 brightness-30 pointer-events: none",
+            _ => "pointer-events: none",
         }
     };
 
     let icon_filter = move || {
-        let status = node_status.get();
+        let status = node_status();
         match (status.purchase_status, status.meta_status) {
-            (PurchaseStatus::Purchaseable, _) => "invert(1)",
-            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5) invert(1)",
-            _ => "invert(1)",
+            (PurchaseStatus::Purchaseable, _) => "",
+            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5)",
+            _ => "",
         }
+    };
+
+    let invert_filter = match node_specs.socket {
+        true => "",
+        false => "invert(1)",
     };
 
     view! {
         <g
             transform=format!("translate({}, {})", node_specs.x * 10.0, -node_specs.y * 10.0)
 
-            on:click=move |_| {
-                let status = node_status.get();
+            on:click=move |ev| {
+                ev.stop_propagation();
+                let status = node_status();
                 if status.purchase_status == PurchaseStatus::Purchaseable {
                     on_click();
                 }
             }
 
-            on:mousedown=|ev| ev.stop_propagation()
+            on:mousedown=|ev| {
+                if ev.button() == 0 {
+                    ev.stop_propagation()
+                }
+            }
 
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();
                 move |_| { show_tooltip() }
             }
-            on:contextmenu={
-                let accessibility: AccessibilityContext = expect_context();
-                move |ev| {
-                    ev.prevent_default();
-                    if !accessibility.is_on_mobile() {
-                        on_right_click();
-                    }
+            on:contextmenu=move |ev| {
+                ev.prevent_default();
+                if let Some(accessibility) = accessibility && !accessibility.is_on_mobile() {
+                    on_right_click();
                 }
             }
 
@@ -220,16 +235,66 @@ pub fn Node(
 
             <circle r=20 + node_specs.size * 5 fill="url(#node-inner-gradient)" />
 
-            <image
-                href=icon_asset
-                x=-(24 + node_specs.size as i32 * 10) / 2
-                y=-(24 + node_specs.size as i32 * 10) / 2
-                width=24 + node_specs.size * 10
-                height=24 + node_specs.size * 10
-                class="group-active:scale-90 group-active:brightness-100
-                xl:drop-shadow-[2px_2px_2px_black]"
-                style=move || { format!("pointer-events: none; filter: {}", icon_filter()) }
-            />
+            {(node_specs.socket)
+                .then(|| {
+                    view! {
+                        <circle r=20 + node_specs.size * 5 fill="url(#socket-outer-gradient)" />
+                        <circle
+                            r=14 + node_specs.size * 5
+                            fill="url(#socket-inner-gradient)"
+                            stroke="none"
+                        />
+                        <text
+                            text-anchor="middle"
+                            dominant-baseline="central"
+                            fill="rgba(255,255,255,0.4)"
+                            font-size="16"
+                        >
+                            "+"
+                        </text>
+                    }
+                })}
+
+            {
+                let node_specs = node_specs.clone();
+                move || {
+                    (!node_specs.icon.is_empty())
+                        .then(|| {
+                            view! {
+                                <image
+                                    href=img_asset(&node_specs.icon)
+                                    x=-(24 + node_specs.size as i32 * 10) / 2
+                                    y=-(24 + node_specs.size as i32 * 10) / 2
+                                    width=24 + node_specs.size * 10
+                                    height=24 + node_specs.size * 10
+                                    class="group-active:scale-90 group-active:brightness-100
+                                    xl:drop-shadow-[2px_2px_2px_black]"
+                                    style=move || {
+                                        format!(
+                                            "pointer-events: none;
+                                            image-rendering: pixelated; 
+                                            filter: {} {}",
+                                            icon_filter(),
+                                            invert_filter,
+                                        )
+                                    }
+                                />
+                            }
+                        })
+                }
+            }
+
+            {(node_specs.socket)
+                .then(|| {
+                    view! {
+                        <circle
+                            r=14 + node_specs.size * 5
+                            fill="none"
+                            stroke="rgb(80, 80, 80)"
+                            stroke-width="1"
+                        />
+                    }
+                })}
         </g>
     }
 }
@@ -237,88 +302,116 @@ pub fn Node(
 #[component]
 pub fn Connection(
     connection: PassiveConnection,
-    nodes_specs: Arc<HashMap<String, PassiveNodeSpecs>>,
+    // TODO: Could we avoid passing the whole thing?
+    passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     amount_connections: Memo<usize>,
     node_levels: Memo<(u8, u8)>,
 ) -> impl IntoView {
-    let from_node = nodes_specs.get(&connection.from).cloned();
-    let to_node = nodes_specs.get(&connection.to).cloned();
+    let from_node = {
+        let node_id = connection.from.clone();
+        move || passives_tree_specs.read().nodes.get(&node_id).cloned()
+    };
+    let to_node = {
+        let node_id = connection.to.clone();
+        move || passives_tree_specs.read().nodes.get(&node_id).cloned()
+    };
 
     view! {
-        {if let (Some(from), Some(to)) = (from_node, to_node) {
-            let from_status = move || node_meta_status(node_levels.get().0, from.locked);
-            let to_status = move || node_meta_status(node_levels.get().1, to.locked);
-            let purchase_status = move || match amount_connections.get() {
-                2 => PurchaseStatus::Purchased,
-                1 => PurchaseStatus::Purchaseable,
-                _ => PurchaseStatus::Inactive,
-            };
-            let color = move |status| {
-                match purchase_status() {
-                    PurchaseStatus::Inactive => "gray",
-                    x => status_color(x, status),
-                }
-            };
-            let from_color = move || { color(from_status()) };
-            let to_color = move || { color(to_status()) };
-            let dasharray = move || if amount_connections.get() == 2 { "none" } else { "4 3" };
-            let width = move || if amount_connections.get() == 2 { "3" } else { "2" };
-            let gradient_id = format!("{}-{}", connection.from, connection.to);
-            Some(
-                // from.max_upgrade_level,
-                // to.max_upgrade_level,
+        {move || {
+            if let (Some(from), Some(to)) = (from_node(), to_node()) {
+                let from_status = move || node_meta_status(node_levels.get().0, from.locked);
+                let to_status = move || node_meta_status(node_levels.get().1, to.locked);
+                let purchase_status = move || match amount_connections.get() {
+                    2 => PurchaseStatus::Purchased,
+                    1 => PurchaseStatus::Purchaseable,
+                    _ => PurchaseStatus::Inactive,
+                };
+                let color = move |status| {
+                    match purchase_status() {
+                        PurchaseStatus::Inactive => "gray",
+                        x => status_color(x, status),
+                    }
+                };
+                let from_color = move || { color(from_status()) };
+                let to_color = move || { color(to_status()) };
+                let dasharray = move || if amount_connections.get() == 2 { "none" } else { "4 3" };
+                let width = move || if amount_connections.get() == 2 { "3" } else { "2" };
+                let gradient_id = format!("{}-{}", connection.from, connection.to);
+                Some(
+                    // from.max_upgrade_level,
+                    // to.max_upgrade_level,
 
-                view! {
-                    <linearGradient
-                        id=gradient_id.clone()
-                        gradientUnits="userSpaceOnUse"
-                        x1=from.x * 10.0
-                        y1=-from.y * 10.0
-                        x2=to.x * 10.0
-                        y2=-to.y * 10.0
-                    >
-                        <stop offset="0%" stop-color=from_color />
-                        <stop offset="100%" stop-color=to_color />
-                    </linearGradient>
-                    <line
-                        x1=from.x * 10.0
-                        y1=-from.y * 10.0
-                        x2=to.x * 10.0
-                        y2=-to.y * 10.0
-                        class=move || {
-                            if amount_connections.get() == 2 {
-                                match (from_status(), to_status()) {
-                                    (MetaStatus::Ascended, MetaStatus::Ascended) => {
-                                        "xl:drop-shadow-[0_0_2px_cyan]"
+                    view! {
+                        <linearGradient
+                            id=gradient_id.clone()
+                            gradientUnits="userSpaceOnUse"
+                            x1=from.x * 10.0
+                            y1=-from.y * 10.0
+                            x2=to.x * 10.0
+                            y2=-to.y * 10.0
+                        >
+                            <stop offset="0%" stop-color=from_color />
+                            <stop offset="100%" stop-color=to_color />
+                        </linearGradient>
+                        <line
+                            x1=from.x * 10.0
+                            y1=-from.y * 10.0
+                            x2=to.x * 10.0
+                            y2=-to.y * 10.0
+                            class=move || {
+                                if amount_connections.get() == 2 {
+                                    match (from_status(), to_status()) {
+                                        (MetaStatus::Ascended, MetaStatus::Ascended) => {
+                                            "xl:drop-shadow-[0_0_2px_cyan]"
+                                        }
+                                        _ => "xl:drop-shadow-[0_0_2px_gold]",
                                     }
-                                    _ => "xl:drop-shadow-[0_0_2px_gold]",
+                                } else {
+                                    ""
                                 }
-                            } else {
-                                ""
                             }
-                        }
-                        stroke=format!("url(#{gradient_id})")
-                        stroke-dasharray=dasharray
-                        stroke-linecap="round"
-                        stroke-width=width
-                    />
-                },
-            )
-        } else {
-            None
+                            style="pointer-events: none"
+                            stroke=format!("url(#{gradient_id})")
+                            stroke-dasharray=dasharray
+                            stroke-linecap="round"
+                            stroke-width=width
+                        />
+                    },
+                )
+            } else {
+                None
+            }
         }}
     }
 }
 
 #[component]
-fn NodeTooltip(
-    node_specs: Arc<PassiveNodeSpecs>,
+pub fn NodeTooltip(
+    node_specs: PassiveNodeSpecs,
     node_level: Memo<u8>,
     show_upgrade: bool,
 ) -> impl IntoView {
+    view! {
+        <div class="
+        max-w-xs p-4 rounded-xl border border-teal-700 ring-2 ring-teal-500 
+        shadow-md shadow-teal-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
+        ">
+            <NodeTooltipContent node_specs node_level show_upgrade />
+        </div>
+    }
+}
+
+#[component]
+pub fn NodeTooltipContent(
+    node_specs: PassiveNodeSpecs,
+    node_level: Memo<u8>,
+    show_upgrade: bool,
+) -> impl IntoView {
+    let node_level = move || node_level.try_get().unwrap_or_default();
+
     let effects_text = {
         let node_specs = node_specs.clone();
-        move || formatted_effects_list((&node_specs.aggregate_effects(node_level.get())).into())
+        move || formatted_effects_list((&node_specs.aggregate_effects(node_level())).into())
     };
 
     let node_specs_locked = node_specs.locked;
@@ -331,7 +424,7 @@ fn NodeTooltip(
         .map(format_trigger)
         .collect();
 
-    let is_locked = move || node_specs_locked && node_level.get() == 0;
+    let is_locked = move || node_specs_locked && node_level() == 0;
 
     let starting_node_text = (node_specs.initial_node).then(|| {
         view! {
@@ -349,6 +442,26 @@ fn NodeTooltip(
                     <li class="text-red-500 text-sm leading-snug">"Locked"</li>
                 </ul>
             }
+        })
+    };
+
+    let socket_text = {
+        (node_specs.socket).then(|| {
+            view! {
+                {(node_specs.effects.is_empty() && node_specs.triggers.is_empty())
+                    .then(|| {
+                        view! {
+                            <ul class="list-none space-y-1">
+                                <li class="text-sm text-gray-400 leading-snug italic">"Empty"</li>
+                            </ul>
+                        }
+                    })}
+                <hr class="border-t border-gray-700" />
+                <ul>
+                    <li class="text-sm text-gray-400 leading-snug">"Ascend to Socket Rune"</li>
+                </ul>
+            }
+            .into_any()
         })
     };
 
@@ -372,7 +485,7 @@ fn NodeTooltip(
                     .into_any(),
                 )
             } else if !upgrade_effects.is_empty() {
-                let max_level = node_level.get() >= max_upgrade_level.unwrap_or(u8::MAX);
+                let max_level = node_level() >= max_upgrade_level.unwrap_or(u8::MAX);
                 Some(
                     view! {
                         <hr class="border-t border-gray-700" />
@@ -421,16 +534,16 @@ fn NodeTooltip(
     };
 
     view! {
-        <div class="
-        max-w-xs p-4 rounded-xl border border-teal-700 ring-2 ring-teal-500 
-        shadow-md shadow-teal-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
-        ">
-            <strong class="text-lg font-bold text-teal-300">{node_specs.name.clone()}</strong>
-            <hr class="border-t border-gray-700" />
-            {starting_node_text}
-            <ul class="list-none space-y-1 text-xs xl:text-sm">{triggers_text}{effects_text}</ul>
-            {locked_text}
-            {upgrade_text}
-        </div>
+        <strong class="text-lg font-bold text-teal-300">
+            <ul class="list-none space-y-1 mb-2">
+                <li class="leading-snug whitespace-pre-line">{node_specs.name.clone()}</li>
+            </ul>
+        </strong>
+        <hr class="border-t border-gray-700" />
+        {starting_node_text}
+        <ul class="list-none space-y-1 text-xs xl:text-sm">{effects_text}{triggers_text}</ul>
+        {socket_text}
+        {locked_text}
+        {upgrade_text}
     }
 }

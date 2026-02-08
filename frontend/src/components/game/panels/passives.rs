@@ -1,8 +1,5 @@
 use leptos::{html::*, prelude::*};
 
-use std::collections::HashMap;
-use std::sync::Arc;
-
 use shared::{
     data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs},
     messages::client::PurchasePassiveMessage,
@@ -14,8 +11,8 @@ use crate::components::{
         node_meta_status, Connection, MetaStatus, Node, NodeStatus, PurchaseStatus,
     },
     ui::{
-        buttons::CloseButton,
-        menu_panel::{MenuPanel, PanelTitle},
+        card::{Card, CardHeader, CardInset},
+        menu_panel::MenuPanel,
         pannable::Pannable,
     },
     websocket::WebsocketContext,
@@ -26,14 +23,12 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open=open>
             <div class="w-full h-full">
-                <div class="bg-zinc-800 rounded-md p-1 xl:p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-1 xl:gap-2 max-h-full">
-                    <div class="px-2 xl:px-4 flex items-center justify-between">
-                        <PanelTitle>"Passive Skills"</PanelTitle>
-                        <CloseButton on:click=move |_| open.set(false) />
-                    </div>
-
-                    <PassiveSkillTree />
-                </div>
+                <Card>
+                    <CardHeader title="Passive Skills" on_close=move || open.set(false) />
+                    <CardInset pad=false>
+                        <PassiveSkillTree />
+                    </CardInset>
+                </Card>
             </div>
         </MenuPanel>
     }
@@ -46,14 +41,6 @@ fn PassiveSkillTree() -> impl IntoView {
     let points_available =
         Memo::new(move |_| game_context.player_resources.read().passive_points > 0);
 
-    let nodes_specs = Arc::new(
-        game_context
-            .passives_tree_specs
-            .read_untracked()
-            .nodes
-            .clone(),
-    );
-
     view! {
         <Pannable>
             <For
@@ -63,7 +50,7 @@ fn PassiveSkillTree() -> impl IntoView {
                 key=|conn| (conn.from.clone(), conn.to.clone())
                 let(conn)
             >
-                <InGameConnection connection=conn nodes_specs=nodes_specs.clone() />
+                <InGameConnection connection=conn />
             </For>
             <For
                 each=move || { game_context.passives_tree_specs.read().nodes.clone().into_iter() }
@@ -82,8 +69,8 @@ fn InGameNode(
     node_specs: PassiveNodeSpecs,
     points_available: Memo<bool>,
 ) -> impl IntoView {
+    let game_context: GameContext = expect_context();
     let node_level = Memo::new({
-        let game_context = expect_context::<GameContext>();
         let node_id = node_id.clone();
 
         move |_| {
@@ -98,8 +85,23 @@ fn InGameNode(
         }
     });
 
+    let connected_nodes: Vec<_> = game_context
+        .passives_tree_specs
+        .read_untracked()
+        .connections
+        .iter()
+        .filter_map(|connection| {
+            if connection.from == node_id {
+                Some(connection.to.clone())
+            } else if connection.to == node_id {
+                Some(connection.from.clone())
+            } else {
+                None
+            }
+        })
+        .collect();
+
     let node_status = Memo::new({
-        let game_context = expect_context::<GameContext>();
         let node_id = node_id.clone();
 
         move |_| {
@@ -120,23 +122,12 @@ fn InGameNode(
                 && points_available.get()
                 && (node_specs.initial_node
                     || game_context
-                        .passives_tree_specs
-                        .read()
-                        .connections
-                        .iter()
-                        .filter(|connection| {
-                            game_context
-                                .passives_tree_state
-                                .read()
-                                .purchased_nodes
-                                .contains(&connection.from)
-                                || game_context
-                                    .passives_tree_state
-                                    .read()
-                                    .purchased_nodes
-                                    .contains(&connection.to)
-                        })
-                        .any(|connection| connection.from == node_id || connection.to == node_id))
+                        .passives_tree_state
+                        .with(|passives_tree_state| {
+                            connected_nodes.iter().any(|connected_node| {
+                                passives_tree_state.purchased_nodes.contains(connected_node)
+                            })
+                        }))
             {
                 PurchaseStatus::Purchaseable
             } else {
@@ -152,7 +143,7 @@ fn InGameNode(
 
     let purchase = {
         let conn = expect_context::<WebsocketContext>();
-        let game_context = expect_context::<GameContext>();
+
         move || {
             game_context.player_resources.write().passive_points -= 1;
             game_context
@@ -182,12 +173,10 @@ fn InGameNode(
 }
 
 #[component]
-fn InGameConnection(
-    connection: PassiveConnection,
-    nodes_specs: Arc<HashMap<String, PassiveNodeSpecs>>,
-) -> impl IntoView {
+fn InGameConnection(connection: PassiveConnection) -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
     let amount_connections = Memo::new({
-        let game_context = expect_context::<GameContext>();
         let connection_from = connection.from.clone();
         let connection_to = connection.to.clone();
 
@@ -206,7 +195,6 @@ fn InGameConnection(
     });
 
     let node_levels = Memo::new({
-        let game_context = expect_context::<GameContext>();
         let connection_from = connection.from.clone();
         let connection_to = connection.to.clone();
 
@@ -232,5 +220,12 @@ fn InGameConnection(
         }
     });
 
-    view! { <Connection connection nodes_specs amount_connections node_levels /> }
+    view! {
+        <Connection
+            connection
+            passives_tree_specs=game_context.passives_tree_specs
+            amount_connections
+            node_levels
+        />
+    }
 }

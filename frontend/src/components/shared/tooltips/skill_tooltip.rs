@@ -12,7 +12,7 @@ use shared::data::{
         SkillEffect, SkillEffectType, SkillRepeatTarget, SkillSpecs, SkillTargetsGroup, SkillType,
         TargetType,
     },
-    stat_effect::Modifier,
+    stat_effect::{Modifier, StatStatusType},
     temple::StatType,
     trigger::TriggerEffectModifier,
 };
@@ -21,7 +21,7 @@ use crate::components::{
     shared::tooltips::{
         effects_tooltip::{self, formatted_effects_list},
         trigger_tooltip::{
-            format_extra_trigger_modifiers, format_trigger, format_trigger_modifier_as,
+            format_extra_trigger_modifiers, format_trigger, format_trigger_modifier,
             format_trigger_modifier_per,
         },
     },
@@ -34,6 +34,9 @@ pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
         Some(SkillType::Attack) => "Attack ",
         Some(SkillType::Spell) => "Spell ",
+        Some(SkillType::Curse) => "Curse ",
+        Some(SkillType::Blessing) => "Blessing ",
+        Some(SkillType::Other) => "Other ",
         None => "",
     }
 }
@@ -242,7 +245,7 @@ pub fn format_effect(
                 .map(|(damage_type, value)| {
                     let success_chance = success_chance.clone();
                     let damage_color = damage_color(damage_type);
-                    let trigger_modifier_str = format_trigger_modifier_as(
+                    let trigger_modifier_str = format_trigger_modifier(
                         find_trigger_modifier(
                             StatType::Damage {
                                 damage_type: Some(damage_type),
@@ -250,6 +253,7 @@ pub fn format_effect(
                             },
                             modifiers,
                         ),
+                        " as",
                     );
                     view! {
                         <EffectLi>
@@ -293,30 +297,59 @@ pub fn format_effect(
                 .map(|status_effect| match status_effect.status_type {
                     StatusSpecs::Stun => {
                         let success_chance = success_chance.clone();
-                        view! { <EffectLi>{success_chance}"Stun " {format_duration(duration)}</EffectLi> }
+                        let trigger_modifier_duration_str = format_trigger_modifier(
+                            find_trigger_modifier(
+                                StatType::StatusDuration {
+                                    status_type: Some(StatStatusType::Stun),
+                                    skill_type: None,
+                                },
+                                modifiers,
+                            ),
+                            "",
+                        );
+                        view! {
+                            <EffectLi>
+                                {success_chance}"Stun " {format_duration(duration)}
+                                {trigger_modifier_duration_str}
+                            </EffectLi>
+                        }
                         .into_any()
                     }
                     StatusSpecs::DamageOverTime { damage_type, .. } => {
                         let success_chance = success_chance.clone();
                         let damage_color = damage_color(damage_type);
-                        let trigger_modifier_str = format_trigger_modifier_as(
-                                    find_trigger_modifier(
-                                        StatType::Damage {
-                                            damage_type: Some(damage_type),
-                                            skill_type: None,
-                                        },
-                                        modifiers,
-                                    ),
-                                );
+                        let trigger_modifier_damage_str = format_trigger_modifier(
+                            find_trigger_modifier(
+                                StatType::Damage {
+                                    damage_type: Some(damage_type),
+                                    skill_type: None,
+                                },
+                                modifiers,
+                            ),
+                            " as",
+                        );
+                        let trigger_modifier_duration_str = format_trigger_modifier(
+                            find_trigger_modifier(
+                                StatType::StatusDuration {
+                                    status_type: Some(StatStatusType::DamageOverTime {
+                                        damage_type: Some(damage_type),
+                                    }),
+                                    skill_type: None,
+                                },
+                                modifiers,
+                            ),
+                            "",
+                        );
                         view! {
                             <EffectLi>
                                 {success_chance}"Deal "
                                 <span class=format!(
                                     "font-semibold {damage_color}",
                                 )>{format_min_max(status_effect.value)}</span>
-                                {trigger_modifier_str}"  " {stackable_str(status_effect.cumulate)}
+                                {trigger_modifier_damage_str}"  "
+                                {stackable_str(status_effect.cumulate)}
                                 {damage_type_str(Some(damage_type))} "Damage per second "
-                                {format_duration(duration)}
+                                {format_duration(duration)} {trigger_modifier_duration_str}
                             </EffectLi>
                         }
                         .into_any()
@@ -327,7 +360,7 @@ pub fn format_effect(
                         debuff,
                     } => {
                         stat_effects.push(StatEffect {
-                                stat: stat.clone(),
+                            stat: stat.clone(),
                             modifier,
                             value: if debuff {
                                 -status_effect.value.min
@@ -356,6 +389,12 @@ pub fn format_effect(
                     }
                 })
                 .collect();
+
+            // TODO:
+            // let trigger_modifier_duration_str = format_trigger_modifier_as(find_trigger_modifier(
+            //     StatType::StatusDuration(Some(StatStatusType::StatModifier { debuff: () })),
+            //     modifiers,
+            // ));
 
             let formatted_stats_effects = {
                 (!stat_effects.is_empty() || !trigger_effects.is_empty()).then(|| {
@@ -398,8 +437,13 @@ pub fn format_effect(
             value,
             modifier,
         } => {
-            let trigger_modifier =
-                find_trigger_modifier(StatType::Restore(Some(restore_type)), modifiers);
+            let trigger_modifier = find_trigger_modifier(
+                StatType::Restore {
+                    restore_type: Some(restore_type),
+                    skill_type: None,
+                },
+                modifiers,
+            );
             let trigger_modifier_str = format_trigger_modifier_per(trigger_modifier);
             let trigger_modifier_factor_str =
                 trigger_modifier.map(|trigger_modifier| format!("{:.0}", trigger_modifier.factor));
@@ -482,7 +526,7 @@ where
             " minutes"
         }
         .into_any()
-    } else {
+    } else if value.min.into() > 0.0 {
         let value = ChanceRange::<f64> {
             min: value.min.into(),
             max: value.max.into(),
@@ -494,6 +538,8 @@ where
             " seconds"
         }
         .into_any()
+    } else {
+        view! { "for " }.into_any()
     }
 }
 

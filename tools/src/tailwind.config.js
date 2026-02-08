@@ -1,0 +1,37 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ['../frontend/src/**/*.rs'],
+  safelist: [
+    'duration-100',
+    'duration-200',
+    'duration-500',
+    'duration-1000',
+    'col-span-1',
+    'col-span-2',
+    'col-span-3',
+    'row-span-1',
+    'row-span-2',
+    'col-start-1',
+    'col-start-2',
+    'col-start-3',
+    'row-start-1',
+    'row-start-2',
+    'aspect-[4/3]',
+    'aspect-[8/3]',
+    'aspect-[8/6]',
+    'aspect-[12/6]',
+    'grayscale-80',
+    'border-red-500',
+    'focus:ring-red-500',
+    'inset-1',
+    'inset-2',
+    'xl:inset-2',
+    'inset-3',
+    'xl:inset-4',
+    'opacity-0',
+    'opacity-100',
+    'animate-monster-fade-in',
+    'animate-monster-fade-out',
+    'animate-monster-flee'
+  ]
+};

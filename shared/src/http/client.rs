@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -5,7 +7,7 @@ use crate::{
         item::ItemSlot,
         item_affix::AffixType,
         market::MarketFilters,
-        passive::PassivesTreeAscension,
+        passive::PassiveNodeId,
         stash::StashType,
         temple::PlayerBenedictions,
         user::{UserCharacterId, UserId},
@@ -81,7 +83,15 @@ pub struct BuyBenedictionsRequest {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct AscendPassivesRequest {
     pub character_id: UserCharacterId,
-    pub passives_tree_ascension: PassivesTreeAscension,
+    pub ascended_nodes: HashMap<PassiveNodeId, u8>,
+    // pub passives_tree_ascension: PassivesTreeAscension,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SocketPassiveRequest {
+    pub character_id: UserCharacterId,
+    pub passive_node_id: PassiveNodeId,
+    pub item_index: Option<u8>,
 }
 
 // Market

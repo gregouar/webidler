@@ -176,7 +176,7 @@ fn compute_armor_specs(
     for effect in effects {
         match effect.stat {
             StatType::Armor(Some(DamageType::Physical)) => armor_specs.armor.apply_effect(effect),
-            StatType::Block => {
+            StatType::Block(Some(SkillType::Attack) | None) => {
                 armor_specs.block.apply_effect(effect);
             }
             _ => {}
@@ -202,6 +202,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         },
         success_chance: Chance::new_sure(),
         ignore_stat_effects: Default::default(),
+        conditional_modifiers: Vec::new(),
     }];
 
     if let Some(&value) = weapon_specs.damage.get(&DamageType::Poison) {
@@ -215,7 +216,6 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                 statuses: vec![ApplyStatusEffect {
                     status_type: StatusSpecs::DamageOverTime {
                         damage_type: DamageType::Poison,
-                        ignore_armor: false,
                     },
                     value,
                     cumulate: false,
@@ -224,6 +224,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             },
             success_chance: Chance::new_sure(),
             ignore_stat_effects: Default::default(),
+            conditional_modifiers: Vec::new(),
         });
     }
 

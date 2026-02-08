@@ -195,6 +195,8 @@ pub fn ItemTooltipContent(
                 <QualityTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
+                <RuneTooltip item_specs=item_specs.clone() />
+                <MapTooltip item_specs=item_specs.clone() />
             </ul>
             {(has_triggers || has_effects)
                 .then(|| {
@@ -421,37 +423,81 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 }
 
 #[component]
-pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
-    let item_slot = match &item_specs.base.slot {
-        ItemSlot::Amulet => "Amulet",
-        ItemSlot::Body => "Body Armor",
-        ItemSlot::Boots => "Boots",
-        ItemSlot::Gloves => "Gloves",
-        ItemSlot::Helmet => "Helmet",
-        ItemSlot::Ring => "Ring",
-        ItemSlot::Shield => "Shield",
-        ItemSlot::Accessory => "Accessory",
-        ItemSlot::Weapon => {
-            if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
-                "Two-Handed Weapon"
-            } else {
-                "One-Handed Weapon"
-            }
+pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    item_specs.base.rune_specs.as_ref().map(|specs| {
+        view! {
+            <li class="text-gray-400 text-xs xl:text-sm leading-snug">"Rune"</li>
+            {(specs.root_node)
+                .then(|| {
+                    view! {
+                        <li class="text-white text-xs xl:text-sm leading-snug">
+                            "Transform Node into Root Node"
+                        </li>
+                    }
+                })}
+            <li class="text-gray-400 text-xs xl:text-sm leading-snug italic">
+                "Socket into an empty Passive Node to give the following effects:"
+            </li>
         }
-    };
+    })
+}
 
-    view! { <li class="text-gray-400 text-xs xl:text-sm leading-snug">{item_slot}</li> }
+#[component]
+pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    item_specs.base.map_specs.as_ref().map(|_| {
+        view! {
+            <li class="text-gray-400 text-xs xl:text-sm leading-snug">"Edict"</li>
+            <li class="text-gray-400 text-xs xl:text-sm leading-snug italic">
+                "Apply to a Grind to give all Enemies the following effects:"
+            </li>
+        }
+    })
+}
+
+#[component]
+pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    view! {
+        {item_specs
+            .base
+            .slot
+            .map(|slot| {
+                let item_slot = match slot {
+                    ItemSlot::Amulet => "Amulet",
+                    ItemSlot::Body => "Body Armor",
+                    ItemSlot::Boots => "Boots",
+                    ItemSlot::Gloves => "Gloves",
+                    ItemSlot::Helmet => "Helmet",
+                    ItemSlot::Ring => "Ring",
+                    ItemSlot::Shield => "Shield",
+                    ItemSlot::Accessory => "Accessory",
+                    ItemSlot::Weapon => {
+                        if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
+                            "Two-Handed Weapon"
+                        } else {
+                            "One-Handed Weapon"
+                        }
+                    }
+                };
+
+                view! { <li class="text-gray-400 text-xs xl:text-sm leading-snug">{item_slot}</li> }
+            })}
+    }
 }
 
 #[component]
 pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     view! {
-        <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-            "Quality: "
-            <span class="text-white font-semibold">
-                {format!("+{:.0}%", item_specs.modifiers.quality)}
-            </span>
-        </li>
+        {(item_specs.modifiers.quality > 0.0)
+            .then(|| {
+                view! {
+                    <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                        "Quality: "
+                        <span class="text-white font-semibold">
+                            {format!("+{:.0}%", item_specs.modifiers.quality)}
+                        </span>
+                    </li>
+                }
+            })}
     }
 }
 
@@ -464,7 +510,8 @@ pub fn formatted_affixes_list(
         .filter(|affix| affix.affix_type == affix_type)
         .map(|affix| {
             let scope = affix
-                .effects.first()
+                .effects
+                .first()
                 .map(|e| e.scope)
                 .unwrap_or(AffixEffectScope::Global);
             let affix_meta = match affix_type {

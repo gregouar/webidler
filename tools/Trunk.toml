@@ -1,0 +1,16 @@
+[build]
+# Enable a small amount of optimization in debug mode
+rustflags = ["-C", "opt-level=0"]
+# Clean cargo output which can help with rebuilds
+clean-dist = true
+release = false
+
+[watch]
+cooldown_ms = 1000
+ignore = ["dist"]
+
+[tools]
+tailwindcss = "4.1.13"
+
+[serve]
+port = 8042

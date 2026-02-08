@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     chance::Chance,
     character_status::StatusId,
+    conditional_modifier::{Condition, ConditionalModifier},
     skill::{DamageType, SkillType},
     stat_effect::EffectsMap,
     trigger::TriggeredEffect,
@@ -57,6 +58,8 @@ pub struct CharacterSpecs {
     #[serde(default)]
     pub position_y: u8,
 
+    // TODO: All the above: move elsewhere ^^^
+    //
     pub max_life: f64,
     #[serde(default)]
     pub life_regen: f64,
@@ -68,13 +71,13 @@ pub struct CharacterSpecs {
 
     #[serde(default)]
     pub take_from_mana_before_life: f32,
+    #[serde(default)]
+    pub take_from_life_before_mana: f32,
 
     #[serde(default)]
     pub armor: HashMap<DamageType, f64>,
     #[serde(default)]
-    pub block: Chance,
-    #[serde(default)]
-    pub block_spell: Chance, // chance to block spell are applied on top of block chance
+    pub block: HashMap<SkillType, Chance>,
     #[serde(default)]
     pub block_damage: f32,
 
@@ -86,6 +89,9 @@ pub struct CharacterSpecs {
     pub triggers: Vec<TriggeredEffect>,
     #[serde(default)] // for retro compatibility
     pub effects: EffectsMap,
+
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub conditional_modifiers: Vec<ConditionalModifier>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -102,10 +108,18 @@ pub struct CharacterState {
     pub just_hurt: bool,
     pub just_hurt_crit: bool,
     pub just_blocked: bool,
+
+    // This feels dirty
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub monitored_conditions: HashMap<Condition, bool>,
 }
 
 impl CharacterState {
     pub fn is_stunned(&self) -> bool {
-        self.statuses.unique_statuses.contains_key(&StatusId::Stun)
+        // TODO: Also iter over non unique?
+        self.statuses
+            .unique_statuses
+            .iter()
+            .any(|((status_id, _), _)| *status_id == StatusId::Stun)
     }
 }

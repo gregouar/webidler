@@ -11,9 +11,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
-        "value": [10, 19]
+        "value": [10, 15]
       }
     ]
   },
@@ -29,9 +29,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
-        "value": [20, 29]
+        "value": [20, 25]
       }
     ]
   },
@@ -47,9 +47,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
-        "value": [30, 39]
+        "value": [30, 35]
       }
     ]
   },
@@ -65,9 +65,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
-        "value": [40, 49]
+        "value": [40, 45]
       }
     ]
   },
@@ -83,9 +83,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
-        "value": [50, 59]
+        "value": [50, 55]
       }
     ]
   },
@@ -101,9 +101,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
-        "value": [60, 69]
+        "value": [60, 65]
       }
     ]
   },
@@ -119,9 +119,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
-        "value": [70, 79]
+        "value": [70, 75]
       }
     ]
   },
@@ -137,9 +137,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
-        "value": [80, 89]
+        "value": [80, 85]
       }
     ]
   },
@@ -155,9 +155,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
-        "value": [90, 99]
+        "value": [90, 95]
       }
     ]
   },
@@ -173,9 +173,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
-        "value": [100, 109]
+        "value": [100, 120]
       }
     ]
   }

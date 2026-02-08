@@ -1,0 +1,182 @@
+[
+  {
+    "name": "of Regeneration",
+    "family": "add_life_regen",
+    "tags": ["Life"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [1, 2]
+      }
+    ]
+  },
+  {
+    "name": "of Vigor",
+    "family": "add_life_regen",
+    "tags": ["Life"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [3, 4]
+      }
+    ]
+  },
+  {
+    "name": "of Restoration",
+    "family": "add_life_regen",
+    "tags": ["Life"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [5, 6]
+      }
+    ]
+  },
+  {
+    "name": "of Endurance",
+    "family": "add_life_regen",
+    "tags": ["Life"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 300,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [7, 8]
+      }
+    ]
+  },
+  {
+    "name": "of Vitality",
+    "family": "add_life_regen",
+    "tags": ["Life"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 400,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [9, 10]
+      }
+    ]
+  },
+  {
+    "name": "of Renewal",
+    "family": "add_life_regen",
+    "tags": ["Life"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Rune"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [11, 12]
+      }
+    ]
+  },
+  {
+    "name": "of Rejuvenation",
+    "family": "add_life_regen",
+    "tags": ["Life"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Rune"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [13, 14]
+      }
+    ]
+  },
+  {
+    "name": "of Invigoration",
+    "family": "add_life_regen",
+    "tags": ["Life"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 800,
+    "restrictions": ["Rune"],
+    "item_level": 700,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [15, 16]
+      }
+    ]
+  },
+  {
+    "name": "of Perpetuity",
+    "family": "add_life_regen",
+    "tags": ["Life"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 900,
+    "restrictions": ["Rune"],
+    "item_level": 800,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [17, 18]
+      }
+    ]
+  },
+  {
+    "name": "of Immortality",
+    "family": "add_life_regen",
+    "tags": ["Life"],
+    "affix_type": "Suffix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Rune"],
+    "item_level": 900,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "value": [19, 20]
+      }
+    ]
+  }
+]

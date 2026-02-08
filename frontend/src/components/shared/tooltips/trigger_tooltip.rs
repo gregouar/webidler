@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use shared::data::{
     item::{SkillRange, SkillShape},
-    skill::{DamageType, TargetType},
+    skill::TargetType,
     stat_effect::Modifier,
     temple::{StatEffect, StatType},
     trigger::{
@@ -12,12 +12,14 @@ use shared::data::{
 };
 
 use crate::components::shared::tooltips::{
-    effects_tooltip::{damage_type_str, format_stat, status_type_str},
+    conditions_tooltip,
+    effects_tooltip::{damage_type_str, format_stat, status_type_str, status_type_value_str},
     skill_tooltip::{self, shape_str, skill_type_str, EffectLi},
 };
 
-pub fn format_trigger_modifier_as(
+pub fn format_trigger_modifier(
     modifier: Option<&TriggerEffectModifier>,
+    suffix: &'static str,
 ) -> Option<impl IntoView + use<>> {
     modifier.map(|modifier| {
         let factor_str = match modifier.modifier {
@@ -27,8 +29,8 @@ pub fn format_trigger_modifier_as(
         view! {
             <span class="font-semibold">{factor_str}"%"</span>
             " of "
-            {trigger_modifier_source_str(modifier.source)}
-            " as"
+            {trigger_modifier_source_str(&modifier.source)}
+            {suffix}
         }
     })
 }
@@ -38,7 +40,7 @@ pub fn format_trigger_modifier_per(modifier: Option<&TriggerEffectModifier>) -> 
         if let TriggerEffectModifierSource::HitCrit = modifier.source {
             " on Critical Hit".to_string()
         } else {
-            format!(" per {}", trigger_modifier_source_str(modifier.source))
+            format!(" per {}", trigger_modifier_source_str(&modifier.source))
         }
     })
 }
@@ -50,7 +52,8 @@ pub fn format_extra_trigger_modifiers(
         .iter()
         .filter(|modifier| match modifier.stat {
             StatType::Damage { .. } => modifier.modifier == Modifier::Multiplier,
-            StatType::Restore(_) => modifier.modifier == Modifier::Multiplier,
+            StatType::StatusDuration { .. } => modifier.modifier == Modifier::Multiplier,
+            StatType::Restore{..} => modifier.modifier == Modifier::Multiplier,
             _ => true,
         })
         .map(|modifier| {
@@ -68,21 +71,42 @@ pub fn format_extra_trigger_modifiers(
     view! { <ul>{modifiers_str}</ul> }
 }
 
-pub fn trigger_modifier_source_str(modifier_source: TriggerEffectModifierSource) -> String {
+pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource) -> String {
     match modifier_source {
         TriggerEffectModifierSource::HitDamage(damage_type) => {
-            format!("{}Hit Damage", damage_type_str(damage_type))
+            format!("{}Hit Damage", damage_type_str(*damage_type))
         }
         TriggerEffectModifierSource::HitCrit => "Critical".to_string(),
         TriggerEffectModifierSource::AreaLevel => "Area Level".to_string(),
-        TriggerEffectModifierSource::StatusValue(stat_status_type) => {
-            format!("{} Power", status_type_str(stat_status_type))
+        TriggerEffectModifierSource::StatusValue {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{}{}",
+                skill_type_str(*skill_type),
+                status_type_value_str(status_type.as_ref())
+            )
         }
-        TriggerEffectModifierSource::StatusDuration(stat_status_type) => {
-            format!("{} Duration", status_type_str(stat_status_type))
+        TriggerEffectModifierSource::StatusDuration {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{}{} Duration",
+                skill_type_str(*skill_type),
+                status_type_str(status_type.as_ref())
+            )
         }
-        TriggerEffectModifierSource::StatusStacks(stat_status_type) => {
-            format!("{} Stack", status_type_str(stat_status_type))
+        TriggerEffectModifierSource::StatusStacks {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{}{} Stacks",
+                skill_type_str(*skill_type),
+                status_type_str(status_type.as_ref())
+            )
         }
     }
 }
@@ -149,7 +173,7 @@ fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
     format!(
         "{}{}",
         skill_type_str(status_trigger.skill_type),
-        status_type_str(status_trigger.status_type),
+        status_type_str(status_trigger.status_type.as_ref()),
     )
 }
 
@@ -204,42 +228,10 @@ fn critical_str(value: Option<bool>) -> &'static str {
 
 fn format_kill_trigger(kill_trigger: &KillTrigger) -> String {
     format!(
-        "{}{}{}",
-        stunned_str(kill_trigger.is_stunned),
-        debuffed_str(kill_trigger.is_debuffed),
-        damaged_over_time_str(kill_trigger.is_damaged_over_time),
+        "{}{}",
+        conditions_tooltip::format_skill_modifier_conditions_pre(&kill_trigger.conditions),
+        conditions_tooltip::format_skill_modifier_conditions_post(&kill_trigger.conditions),
     )
-}
-
-fn stunned_str(value: Option<bool>) -> &'static str {
-    match value {
-        Some(value) => match value {
-            true => "Stunned ",
-            false => "Non-Stunned ",
-        },
-        None => "",
-    }
-}
-fn debuffed_str(value: Option<bool>) -> &'static str {
-    match value {
-        Some(value) => match value {
-            true => "Cursed ",
-            false => "Non-Cursed ",
-        },
-        None => "",
-    }
-}
-
-fn damaged_over_time_str(value: Option<DamageType>) -> &'static str {
-    match value {
-        Some(value) => match value {
-            DamageType::Physical => "Bleeding ",
-            DamageType::Fire => "Burning ",
-            DamageType::Poison => "Poisoned ",
-            DamageType::Storm => "Chilled ",
-        },
-        None => "",
-    }
 }
 
 fn format_target_type(target_type: &TargetType) -> &'static str {

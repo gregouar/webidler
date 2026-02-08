@@ -20,6 +20,7 @@ pub enum GameEvent {
     WaveCompleted(AreaLevel),
     ThreatIncreased(ThreatLevel),
     StatusApplied(StatusEvent),
+    // MaximumLife(CharacterId),
 }
 
 #[derive(Debug, Clone)]

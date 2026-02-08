@@ -8,12 +8,12 @@ use axum::{
 };
 
 use shared::{
-    data::skill::SkillSpecs,
+    data::{area::AreaLevel, skill::SkillSpecs},
     http::{
-        client::{AscendPassivesRequest, BuyBenedictionsRequest},
+        client::{AscendPassivesRequest, BuyBenedictionsRequest, SocketPassiveRequest},
         server::{
             AscendPassivesResponse, BuyBenedictionsResponse, GetAreasResponse,
-            GetBenedictionsResponse, GetPassivesResponse, GetSkillsResponse,
+            GetBenedictionsResponse, GetPassivesResponse, GetSkillsResponse, SocketPassiveResponse,
         },
     },
 };
@@ -23,8 +23,11 @@ use crate::{
     auth::{self, CurrentUser},
     db,
     game::{
-        data::DataInit,
-        systems::{benedictions_controller, passives_controller},
+        data::{
+            inventory_data::inventory_data_to_player_inventory,
+            passives::ascension_data_to_passives_tree_ascension, DataInit,
+        },
+        systems::{benedictions_controller, inventory_controller, passives_controller},
     },
     rest::utils::{verify_character_in_town, verify_character_user},
 };
@@ -34,6 +37,7 @@ use super::AppError;
 pub fn routes(app_state: AppState) -> Router<AppState> {
     let auth_routes = Router::new()
         .route("/game/passives", post(post_ascend_passives))
+        .route("/game/passives/socket", post(post_socket_passive))
         .route("/game/benedictions", post(post_buy_benedictions))
         .layer(middleware::from_fn_with_state(
             app_state,
@@ -107,12 +111,22 @@ pub async fn post_ascend_passives(
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
+    let (_, ascension_data, _) =
+        db::characters_data::load_character_data(&db_pool, &payload.character_id)
+            .await?
+            .ok_or(AppError::NotFound)?;
+
+    let mut ascension =
+        ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
+
+    ascension.ascended_nodes = payload.ascended_nodes;
+
     passives_controller::update_ascension(
         &mut tx,
         &master_store,
         &payload.character_id,
         character.resource_shards,
-        &payload.passives_tree_ascension,
+        &ascension,
     )
     .await?;
 
@@ -124,11 +138,68 @@ pub async fn post_ascend_passives(
     );
 
     let character = character?.ok_or(AppError::NotFound)?.into();
-    let (_, ascension, _) = character_data?.unwrap_or_default();
+    let (_, ascension_data, _) = character_data?.unwrap_or_default();
+
+    let ascension =
+        ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
 
     Ok(Json(AscendPassivesResponse {
         character,
         ascension,
+    }))
+}
+
+pub async fn post_socket_passive(
+    State(master_store): State<MasterStore>,
+    State(db_pool): State<db::DbPool>,
+    Extension(current_user): Extension<CurrentUser>,
+    Json(payload): Json<SocketPassiveRequest>,
+) -> Result<Json<SocketPassiveResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, &current_user)?;
+    verify_character_in_town(&character)?;
+
+    let (inventory_data, ascension_data, _) =
+        db::characters_data::load_character_data(&db_pool, &payload.character_id)
+            .await?
+            .ok_or(AppError::NotFound)?;
+
+    let mut inventory =
+        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+    let mut ascension =
+        ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
+
+    let item_specs = payload.item_index.and_then(|item_index| {
+        inventory_controller::remove_item_from_bag(&mut inventory, item_index).ok()
+    });
+
+    let removed_item = passives_controller::socket_node(
+        &master_store,
+        character.max_area_level as AreaLevel,
+        &mut ascension,
+        payload.passive_node_id,
+        item_specs,
+    )?;
+
+    if let Some(item_specs) = removed_item {
+        inventory_controller::store_item_to_bag(&mut inventory, item_specs)?;
+    }
+
+    db::characters_data::save_character_passives(&mut *tx, &payload.character_id, &ascension)
+        .await?;
+    db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
+        .await?;
+
+    tx.commit().await?;
+
+    Ok(Json(SocketPassiveResponse {
+        ascension,
+        inventory,
     }))
 }
 

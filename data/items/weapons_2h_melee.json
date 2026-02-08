@@ -344,6 +344,24 @@
       "crit_chance": 5,
       "crit_damage": 200
     },
-    "min_area_level": 240
+    "min_area_level": 250
+  },
+  "warhammer": {
+    "name": "Warhammer",
+    "icon": "items/warhammer.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.5,
+      "damage": {
+        "Physical": [16, 58]
+      },
+      "crit_chance": 5,
+      "crit_damage": 200
+    },
+    "min_area_level": 320
   }
 }

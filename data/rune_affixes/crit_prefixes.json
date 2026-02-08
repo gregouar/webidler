@@ -1,0 +1,182 @@
+[
+  {
+    "name": "Harmful",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [5, 10]
+      }
+    ]
+  },
+  {
+    "name": "Dangerous",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [15, 20]
+      }
+    ]
+  },
+  {
+    "name": "Grievous",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [25, 30]
+      }
+    ]
+  },
+  {
+    "name": "Lethal",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 300,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [35, 40]
+      }
+    ]
+  },
+  {
+    "name": "Mortal",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Rune"],
+    "item_level": 400,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [45, 50]
+      }
+    ]
+  },
+  {
+    "name": "Deadly",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Rune"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [55, 60]
+      }
+    ]
+  },
+  {
+    "name": "Fatal",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Rune"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [65, 70]
+      }
+    ]
+  },
+  {
+    "name": "Grim",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Rune"],
+    "item_level": 700,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [75, 80]
+      }
+    ]
+  },
+  {
+    "name": "Terrible",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Rune"],
+    "item_level": 800,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [85, 90]
+      }
+    ]
+  },
+  {
+    "name": "Terminal",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Rune"],
+    "item_level": 900,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "CritDamage": null },
+        "modifier": "Multiplier",
+        "value": [95, 100]
+      }
+    ]
+  }
+]

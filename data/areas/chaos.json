@@ -1,0 +1,831 @@
+{
+  "specs": {
+    "name": "The Chaos Dimension",
+    "description": "[Crucible Area] A realm without history, without future, only iteration. Enter to prove your might and climb the leaderboard. No power shards may be earned. Progress resets at every major update.",
+    "starting_level": 1,
+    "required_level": 300,
+    "item_level_modifier": 0,
+    "header_background": "areas/chaos_header.webp",
+    "footer_background": "areas/chaos_footer.webp",
+    "disable_shards": false
+  },
+  "loot_tables": [
+    "tier_1.json",
+    "tier_2.json",
+    "tier_3.json",
+    "tier_4.json",
+    "tier_5.json",
+    "tier_6.json",
+    "tier_7.json"
+  ],
+  "bosses": [
+    {
+      "level": 10,
+      "interval": 60,
+      "spawns": [
+        {
+          "monster": "haunted_wine_bottle.json",
+          "quantity": 2
+        },
+        {
+          "monster": "haunted_wine_rack.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "level": 20,
+      "interval": 60,
+      "spawns": [
+        {
+          "monster": "hound_fire.json",
+          "quantity": 1
+        },
+        {
+          "monster": "hound_storm.json",
+          "quantity": 1
+        },
+        {
+          "monster": "hunter.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "level": 30,
+      "interval": 60,
+      "spawns": [
+        {
+          "monster": "witch.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "level": 40,
+      "interval": 60,
+      "spawns": [
+        {
+          "monster": "princess_fire.json",
+          "quantity": 1
+        },
+        {
+          "monster": "princess_poison.json",
+          "quantity": 1
+        },
+        {
+          "monster": "princess_storm.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "level": 50,
+      "interval": 60,
+      "spawns": [
+        {
+          "monster": "treasure_idol.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_cutlass.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_crown.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_chest.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_compass.json",
+          "quantity": 1
+        },
+        {
+          "monster": "treasure_gun.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "level": 60,
+      "interval": 60,
+      "spawns": [
+        {
+          "monster": "dragon_black.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "dragon_red.json",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
+  "waves": [
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "bat.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "centipede.json",
+          "quantity": 1
+        },
+        {
+          "monster": "bat.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "centipede.json",
+          "quantity": 1
+        },
+        {
+          "monster": "bat.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "rat.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "bat.json",
+          "quantity": [3, 4]
+        },
+        {
+          "monster": "rat.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "cat_skeleton.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "soot_imp.json",
+          "quantity": [2, 3]
+        },
+        {
+          "monster": "soot_imp_2.json",
+          "quantity": [2, 3]
+        },
+        {
+          "monster": "cat_skeleton.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "barrel_mimic.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "booze_elemental.json",
+          "quantity": [2, 3]
+        },
+        {
+          "monster": "patron_ghost.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "booze_elemental.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "haunted_pot.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "bat_fire.json",
+          "quantity": [2, 3]
+        },
+        {
+          "monster": "haunted_lantern.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "bat_fire.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "rat.json",
+          "quantity": [0, 2]
+        },
+        {
+          "monster": "snake.json",
+          "quantity": 2
+        },
+        {
+          "monster": "rat.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "thorn_wall.json",
+          "quantity": 1
+        },
+        {
+          "monster": "thorn_sprite.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "rotcap_shambler.json",
+          "quantity": [0, 2]
+        },
+        {
+          "monster": "thorn_sprite_2.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "rotcap_shambler.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "bonebark_wolf.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "gravevine_crawler.json",
+          "quantity": 1
+        },
+        {
+          "monster": "bonebark_wolf.json",
+          "quantity": [1, 3]
+        },
+        {
+          "monster": "gravevine_crawler.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "moth_mourning.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "moth_ember.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "ashroot_sentinel.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cinder_hag.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "ashroot_sentinel.json",
+          "quantity": 1
+        },
+        {
+          "monster": "moth_ember.json",
+          "quantity": [1, 2]
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "thunder_stag.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "stormwraith.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "thunder_stag.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "stormwraith.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "moth_mourning.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "spiderlings.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "spider_phys.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "spider_poison.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "spiderlings.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "spider_phys.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "spider_poison.json",
+          "quantity": [1, 2]
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "spider_fire.json",
+          "quantity": [0, 2]
+        },
+        {
+          "monster": "ghost_child.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "spider_fire.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "witch_spider.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "spider_fire.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "ghost_child.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "witch_spider.json",
+          "quantity": [1, 2]
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "witch_child.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "spider_mother.json",
+          "quantity": 1
+        },
+        {
+          "monster": "witch_child.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "witch_spider.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "mourning_basin.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "briar_ornament.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "topiary_golem.json",
+          "quantity": 1
+        },
+        {
+          "monster": "briar_ornament.json",
+          "quantity": 1
+        },
+        {
+          "monster": "mourning_basin.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "briar_ornament.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "candle_knight.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "smoldering_rug.json",
+          "quantity": 1
+        },
+        {
+          "monster": "candle_knight.json",
+          "quantity": 1
+        },
+        {
+          "monster": "ember_butler.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "candle_knight.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "ember_butler.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "candle_knight.json",
+          "quantity": 1
+        },
+        {
+          "monster": "ember_butler.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "cogspinner_imp.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "time_spirit.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "haunted_clock.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cogspinner_imp.json",
+          "quantity": 1
+        },
+        {
+          "monster": "time_spirit.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "silverware_familiars.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "porcelain_doll.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "teapot_wraith.json",
+          "quantity": [0, 2]
+        },
+        {
+          "monster": "silverware_familiars.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "porcelain_doll.json",
+          "quantity": 1
+        },
+        {
+          "monster": "teapot_wraith.json",
+          "quantity": 1
+        },
+        {
+          "monster": "silverware_familiars.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "royal_guard.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "perfume_siren.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "court_composer.json",
+          "quantity": 1
+        },
+        {
+          "monster": "royal_guard.json",
+          "quantity": 1
+        },
+        {
+          "monster": "perfume_siren.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "pirate_deckhand.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "pirate_pistol.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "pirate_lookout.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_pistol.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_deckhand.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "crab.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "shark.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "jellyfish.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "crab.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "pirate_monkey.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "pirate_skirmisher.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_witch.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "pirate_skirmisher.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_parrot.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "pirate_captain.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_monkey.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_witch.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_pistol.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "drowned.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "harpy.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "mermaid.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "drowned.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "harpy.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "mermaid.json",
+          "quantity": [1, 2]
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "cursed_pirate_digger.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "cursed_pirate_spider.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "cursed_pirate_digger.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cursed_pirate_spider_2.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cursed_pirate_captain.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cursed_pirate_digger.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "cursed_pirate_spider.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cursed_pirate_captain.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "beetle_lava.json",
+          "quantity": [0, 2]
+        },
+        {
+          "monster": "wyrmling.json",
+          "quantity": [0, 2]
+        },
+        {
+          "monster": "lizard_stone.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "wyrmling.json",
+          "quantity": 1
+        },
+        {
+          "monster": "beetle_lava.json",
+          "quantity": 1
+        },
+        {
+          "monster": "wyrmling.json",
+          "quantity": 1
+        },
+        {
+          "monster": "beetle_lava.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "pine_trickster.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "troll.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "wyvern_poison.json",
+          "quantity": [0, 2]
+        },
+        {
+          "monster": "pine_trickster.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "troll.json",
+          "quantity": 1
+        },
+        {
+          "monster": "wyvern_poison.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pine_trickster.json",
+          "quantity": 3
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "cloud.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "yeti.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "wyvern_snow.json",
+          "quantity": 1
+        },
+        {
+          "monster": "cloud.json",
+          "quantity": [0, 1]
+        },
+        {
+          "monster": "wyvern_snow.json",
+          "quantity": 2
+        },
+        {
+          "monster": "cloud.json",
+          "quantity": 2
+        }
+      ]
+    }
+  ]
+}

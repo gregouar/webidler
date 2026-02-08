@@ -31,7 +31,7 @@ impl DataInit<&AreaSpecs> for AreaState {
             auto_progress: true,
             going_back: 0,
             rush_mode: false,
-            end_quest: false,
+            loot_rarity: 100.0,
         }
     }
 }
@@ -49,6 +49,8 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             just_hurt: false,
             just_hurt_crit: false,
             just_blocked: false,
+
+            monitored_conditions: Default::default(),
         }
     }
 }

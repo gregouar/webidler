@@ -1,6 +1,7 @@
 {
   "specs": {
     "name": "Spider Witch Lair",
+    "description": "[Boss Area] This is no mere nest, but a lair woven of silk, curses, and whispered bargains. Every step draws you deeper into the Spider Witch's web.",
     "starting_level": 21,
     "required_level": 100,
     "item_level_modifier": 70,
@@ -14,6 +15,7 @@
     "tier_4.json",
     "tier_5.json",
     "tier_6.json",
+    "tier_7.json",
     "witch.json"
   ],
   "bosses": [

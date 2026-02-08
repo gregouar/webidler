@@ -26,27 +26,36 @@ pub fn TownInventoryPanel(
 
     let on_equip = move |item_index| {
         let character_id = town_context.character.read_untracked().character_id;
-        spawn_local({
-            async move {
-                match backend
-                    .inventory_equip(
-                        &auth_context.token(),
-                        &InventoryEquipRequest {
-                            character_id,
-                            item_index,
-                        },
-                    )
-                    .await
-                {
-                    Ok(response) => town_context.inventory.set(response.inventory),
-                    Err(e) => show_toast(
-                        toaster,
-                        format!("Failed to equip item: {e}"),
-                        ToastVariant::Error,
-                    ),
+        if town_context
+            .use_item_category_filter
+            .read_untracked()
+            .is_some()
+        {
+            town_context.selected_item_index.set(Some(item_index));
+            town_context.open_inventory.set(false);
+        } else {
+            spawn_local({
+                async move {
+                    match backend
+                        .inventory_equip(
+                            &auth_context.token(),
+                            &InventoryEquipRequest {
+                                character_id,
+                                item_index,
+                            },
+                        )
+                        .await
+                    {
+                        Ok(response) => town_context.inventory.set(response.inventory),
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("Failed to equip item: {e}"),
+                            ToastVariant::Error,
+                        ),
+                    }
                 }
-            }
-        })
+            })
+        }
     };
 
     let on_unequip = move |item_slot| {
@@ -113,6 +122,7 @@ pub fn TownInventoryPanel(
             on_sell: Some(Arc::new(on_sell)),
             sell_type: SellType::Discard,
             max_item_level: Signal::derive(move || town_context.character.read().max_area_level),
+            use_item_category_filter: Some(town_context.use_item_category_filter.into()),
         }
     };
 

@@ -1,14 +1,15 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
+use strum_macros::EnumIter;
 
-use crate::data::{stat_effect::EffectsMap, trigger::TriggerSpecs};
+use crate::data::{item::ItemSpecs, stat_effect::EffectsMap, trigger::TriggerSpecs};
 
 pub use super::stat_effect::StatEffect;
 
 pub type PassiveNodeId = String;
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, Default, Hash, PartialEq, Eq, EnumIter)]
 pub enum PassiveNodeType {
     Attack,
     Life,
@@ -22,6 +23,7 @@ pub enum PassiveNodeType {
     Fire,
     Storm,
     Status,
+    #[default]
     Utility,
 }
 
@@ -34,6 +36,8 @@ pub struct PassivesTreeSpecs {
 #[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq)]
 pub struct PassivesTreeAscension {
     pub ascended_nodes: HashMap<PassiveNodeId, u8>,
+    #[serde(default)]
+    pub socketed_nodes: HashMap<PassiveNodeId, ItemSpecs>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
@@ -42,7 +46,7 @@ pub struct PassivesTreeState {
     pub ascension: PassivesTreeAscension,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq)]
 pub struct PassiveNodeSpecs {
     pub name: String,
     pub icon: String,
@@ -70,6 +74,8 @@ pub struct PassiveNodeSpecs {
     #[serde(default)]
     pub max_upgrade_level: Option<u8>,
     // TODO: unlocked & ascend costs?
+    #[serde(default)]
+    pub socket: bool,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]

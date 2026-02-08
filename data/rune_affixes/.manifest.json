@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "enabled": true
+  },
+  "resources": {
+    "item_affixes": [
+      "armor_prefixes.json",
+      "crit_prefixes.json",
+      "crit_suffixes.json",
+      "elemental_damage_prefixes.json",
+      "gold_suffixes.json",
+      "life_prefixes.json",
+      "life_suffixes.json",
+      "mana_prefixes.json",
+      "mana_suffixes.json",
+      "skill_damage_suffixes.json",
+      "speed_prefixes.json"
+    ]
+  }
+}

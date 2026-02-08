@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Spongy",
+    "family": "inc_life",
+    "tags": ["Life"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat":  "Life",
+        "modifier": "Multiplier",
+        "value": 100
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Multiplier",
+        "value": 50
+      }
+    ]
+  },
+  {
+    "name": "Armored",
+    "family": "add_armor",
+    "tags": ["Armor"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat":  {"Armor": null},
+        "modifier": "Flat",
+        "value": 100
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Multiplier",
+        "value": 50
+      }
+    ]
+  }
+]

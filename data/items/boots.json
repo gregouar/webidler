@@ -60,7 +60,7 @@
       {
         "trigger_id": "pathwalker_remains",
         "OnWaveCompleted": {},
-        "target": "Source",
+        "target": "Me",
         "effects": [
           {
             "Restore": {
@@ -112,7 +112,7 @@
     "armor_specs": {
       "armor": 60
     },
-    "min_area_level": 240
+    "min_area_level": 250
   },
   "sabatons_unique": {
     "name": "Wings of the Tempest Drake",
@@ -149,7 +149,9 @@
       {
         "scope": "Global",
         "stat": {
-          "StatusDuration": { "DamageOverTime": { "damage_type": "Poison" } }
+          "StatusDuration": {
+            "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+          }
         },
         "modifier": "Multiplier",
         "value": [30, 50],
@@ -182,6 +184,16 @@
         ]
       }
     ],
-    "min_area_level": 250
+    "min_area_level": 260
+  },
+  "plated_boots": {
+    "name": "Plated Boots",
+    "icon": "items/plated_boots.webp",
+    "slot": "Boots",
+    "categories": ["Armor", "Boots"],
+    "armor_specs": {
+      "armor": 70
+    },
+    "min_area_level": 320
   }
 }

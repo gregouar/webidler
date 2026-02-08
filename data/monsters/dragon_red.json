@@ -64,7 +64,7 @@
     {
       "name": "Enrage",
       "icon": "skills/haste.svg",
-      "skill_type": "Spell",
+      "skill_type": "Blessing",
       "cooldown": 20.0,
       "targets": [
         {

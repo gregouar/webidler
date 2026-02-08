@@ -112,7 +112,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": [20, 30]
       }
@@ -120,7 +120,7 @@
     "triggers": [
       {
         "trigger_id": "witch_hat",
-        "skill_type": "Attack",
+        "skill_type": "Curse",
         "OnTakeHit": {
           "is_hurt": true
         },
@@ -175,6 +175,16 @@
     "armor_specs": {
       "armor": 90
     },
-    "min_area_level": 240
+    "min_area_level": 250
+  },
+  "barbute": {
+    "name": "Barbute",
+    "icon": "items/barbute.webp",
+    "slot": "Helmet",
+    "categories": ["Armor", "Helmet"],
+    "armor_specs": {
+      "armor": 105
+    },
+    "min_area_level": 320
   }
 }

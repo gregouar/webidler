@@ -161,6 +161,12 @@ pub struct AscendPassivesResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SocketPassiveResponse {
+    pub ascension: PassivesTreeAscension,
+    pub inventory: PlayerInventory,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BuyBenedictionsResponse {
     pub character: UserCharacter,
     pub player_benedictions: PlayerBenedictions,

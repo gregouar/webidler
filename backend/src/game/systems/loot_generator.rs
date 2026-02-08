@@ -6,7 +6,7 @@ use shared::{
         area::AreaLevel,
         chance::ChanceRange,
         forge::MAX_AFFIXES,
-        item::{ItemBase, ItemModifiers, ItemRarity, ItemSpecs},
+        item::{ItemBase, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
         item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
         stat_effect::StatEffect,
     },
@@ -38,19 +38,20 @@ impl RandomWeighted for &LootTableEntry {
     }
 }
 
-// TODO: inc magic find (accumulated enemy rarity? player stats? area level?)
 #[allow(clippy::too_many_arguments)]
 pub fn generate_loot(
-    level: AreaLevel,
-    is_boss_level: bool,
     loot_table: &LootTable,
     items_store: &ItemsStore,
     affixes_table: &ItemAffixesTable,
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
+    level: AreaLevel,
+    is_boss_level: bool,
     allow_unique: bool,
+    filter_category: Option<ItemCategory>,
+    loot_rarity: f64,
 ) -> Option<ItemSpecs> {
-    let mut rarity = roll_rarity(&RarityWeights::default());
+    let mut rarity = roll_rarity(&RarityWeights::default(), loot_rarity);
     if !allow_unique {
         rarity = rarity.min(ItemRarity::Rare);
     }
@@ -60,6 +61,7 @@ pub fn generate_loot(
         level,
         is_boss_level,
         rarity == ItemRarity::Unique,
+        filter_category,
     )
     .map(|(base_item_id, base)| {
         if base.rarity != ItemRarity::Unique {
@@ -78,13 +80,17 @@ pub fn generate_loot(
     })
 }
 
-fn roll_rarity(weights: &RarityWeights) -> ItemRarity {
+fn roll_rarity(weights: &RarityWeights, loot_rarity: f64) -> ItemRarity {
     match rng::random_range(0..(weights.normal + weights.magic + weights.rare + weights.unique))
         .unwrap_or(0)
+        * (loot_rarity * 0.01).round() as usize
     {
-        r if r < weights.unique => ItemRarity::Unique,
-        r if r < weights.unique + weights.rare => ItemRarity::Rare,
-        r if r < weights.unique + weights.rare + weights.magic => ItemRarity::Magic,
+        r if r >= weights.normal + weights.magic + weights.rare => ItemRarity::Unique,
+        r if r >= weights.normal + weights.magic => ItemRarity::Rare,
+        r if r >= weights.normal => ItemRarity::Magic,
+        // r if r < weights.unique => ItemRarity::Unique,
+        // r if r < weights.unique + weights.rare => ItemRarity::Rare,
+        // r if r < weights.unique + weights.rare + weights.magic => ItemRarity::Magic,
         _ => ItemRarity::Normal,
     }
 }
@@ -98,7 +104,11 @@ pub fn roll_item(
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) -> ItemSpecs {
-    let quality = roll_quality(base.min_area_level, level);
+    let quality = if base.ignore_quality {
+        0.0
+    } else {
+        roll_quality(base.min_area_level, level)
+    };
 
     let mut modifiers = ItemModifiers {
         base_item_id,
@@ -153,25 +163,28 @@ fn roll_base_item(
     area_level: AreaLevel,
     is_boss_level: bool,
     is_unique: bool,
+    filter_category: Option<ItemCategory>,
 ) -> Option<(String, ItemBase)> {
     let items_available: Vec<_> = loot_table
         .entries
         .iter()
         .filter(|l| {
+            let item_specs = items_store.get(&l.item_id);
             area_level
                 >= l.min_area_level.unwrap_or(
-                    items_store
-                        .get(&l.item_id)
+                    item_specs
                         .map(|i| i.min_area_level)
                         .unwrap_or(AreaLevel::MIN),
                 )
                 && area_level <= l.max_area_level.unwrap_or(AreaLevel::MAX)
                 && (!l.boss_only || is_boss_level)
-            // && (is_unique
-            //     == items_store
-            //         .get(&l.item_id)
-            //         .map(|base| base.rarity == ItemRarity::Unique)
-            //         .unwrap_or_default())
+                && (filter_category
+                    .map(|category| {
+                        item_specs
+                            .map(|base| base.categories.contains(&category))
+                            .unwrap_or_default()
+                    })
+                    .unwrap_or(true))
         })
         .collect();
 

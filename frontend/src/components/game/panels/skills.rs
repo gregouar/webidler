@@ -11,8 +11,9 @@ use crate::{
         game::game_context::GameContext,
         shared::tooltips::SkillTooltip,
         ui::{
-            buttons::{CloseButton, FancyButton},
-            menu_panel::{MenuPanel, PanelTitle},
+            buttons::FancyButton,
+            card::{Card, CardHeader, CardInset},
+            menu_panel::MenuPanel,
             number::format_number,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
         },
@@ -24,15 +25,11 @@ use crate::{
 pub fn SkillsPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open=open>
-            <div class="w-full">
-                <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col gap-2">
-                    <div class="px-4 relative z-10 flex items-center justify-between">
-                        <PanelTitle>"Buy New Skill "</PanelTitle>
-                        <CloseButton on:click=move |_| open.set(false) />
-                    </div>
-                    <SkillShop open=open />
-                </div>
-            </div>
+            <Card>
+                <CardHeader title="Buy New Skill" on_close=move || open.set(false) />
+                // flex-1 overflow-auto max-h-[65vh]
+                <SkillShop open=open />
+            </Card>
         </MenuPanel>
     }
 }
@@ -85,10 +82,9 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
     });
 
     view! {
-        <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4">
+        <CardInset>
             <div class="grid grid-cols-6 xl:grid-cols-10 gap-2 xl:gap-4
-            bg-neutral-900 p-2 xl:p-4 rounded-md shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] flex-1 overflow-auto max-h-[65vh]">
-
+            ">
                 <Suspense fallback=move || {
                     view! { "Loading..." }
                 }>
@@ -106,17 +102,17 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
 
                 </Suspense>
             </div>
+        </CardInset>
 
-            <div class="flex items-center justify-center">
-                <FancyButton disabled=disable_confirm on:click=buy_skill class:py-2 class:px-4>
-                    {move || {
-                        format!(
-                            "Confirm buying selected skill for {} Gold",
-                            format_number(game_context.player_specs.read().buy_skill_cost),
-                        )
-                    }}
-                </FancyButton>
-            </div>
+        <div class="flex items-center justify-center">
+            <FancyButton disabled=disable_confirm on:click=buy_skill class:py-2 class:px-4>
+                {move || {
+                    format!(
+                        "Confirm buying selected skill for {} Gold",
+                        format_number(game_context.player_specs.read().buy_skill_cost),
+                    )
+                }}
+            </FancyButton>
         </div>
     }
 }

@@ -35,7 +35,7 @@
   },
   "chain_lightning": {
     "name": "Chain Lightning",
-    "description": "A power spell that hit randomly multiple enemies, with a possibility to stun them.",
+    "description": "A powerful spell that hit randomly multiple enemies, with a possibility to stun them.",
     "icon": "skills/chain_lightning.svg",
     "skill_type": "Spell",
     "cooldown": 4,
@@ -62,9 +62,7 @@
             "FlatDamage": {
               "damage": {
                 "Storm": [0, 30]
-              },
-              "crit_chance": 5,
-              "crit_damage": 100
+              }
             }
           },
           {
@@ -74,6 +72,62 @@
               "statuses": [
                 {
                   "status_type": "Stun"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "blizzard": {
+    "name": "Blizzard",
+    "description": "Summon a mighty storm that repeatedly hit enemies and slow them.",
+    "icon": "skills/blizzard.svg",
+    "skill_type": "Spell",
+    "cooldown": 10,
+    "mana_cost": 25,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "Multiplier",
+        "value": 50
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "Square4",
+        "repeat": {
+          "value": 5,
+          "target": "Any"
+        },
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Storm": [0, 4]
+              }
+            }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Speed": null
+                      },
+                      "modifier": "Multiplier",
+                      "debuff": true
+                    }
+                  },
+                  "value": 33
                 }
               ]
             }
@@ -242,13 +296,13 @@
     "name": "Curse of Frailty",
     "description": "Curse enemies to weaken their defenses, making them take more damage from physical damage.",
     "icon": "skills/curse_frailty.svg",
-    "skill_type": "Spell",
+    "skill_type": "Curse",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -329,13 +383,13 @@
     "name": "Curse of Conductivity",
     "description": "Curse your foes with the storm's fury, making their bodies living conduits that draw lightning to strike all around them, and trigger a Maelstrom in case of critical hit.",
     "icon": "skills/curse_conductivity.svg",
-    "skill_type": "Spell",
+    "skill_type": "Curse",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -376,7 +430,7 @@
                       "target": "SameTarget",
                       "skill_range": "Any",
                       "skill_shape": "Contact",
-                      "skill_type": "Spell",
+                      "skill_type": "Curse",
                       "effects": [
                         {
                           "FlatDamage": {
@@ -433,7 +487,7 @@
                       "target": "SameTarget",
                       "skill_range": "Any",
                       "skill_shape": "All",
-                      "skill_type": "Spell",
+                      "skill_type": "Curse",
                       "effects": [
                         {
                           "FlatDamage": {
@@ -489,13 +543,13 @@
     "name": "Curse of Putridity",
     "description": "Curse your foes with the rot, making their bodies crumble.",
     "icon": "skills/curse_putridity.svg",
-    "skill_type": "Spell",
+    "skill_type": "Curse",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -593,13 +647,13 @@
     "name": "Curse of Flammability",
     "description": "Unleash infernal flames upon your enemies, intensifying the fire damage they suffer the longer they burn.",
     "icon": "skills/curse_flammability.svg",
-    "skill_type": "Spell",
+    "skill_type": "Curse",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -641,7 +695,7 @@
                       "target": "SameTarget",
                       "skill_range": "Any",
                       "skill_shape": "Single",
-                      "skill_type": "Spell",
+                      "skill_type": "Curse",
                       "effects": [
                         {
                           "FlatDamage": {
@@ -707,13 +761,13 @@
     "name": "Curse of Weakness",
     "description": "A debilitating curse that reduces enemies' damage output and slow them.",
     "icon": "skills/curse_weakness.svg",
-    "skill_type": "Spell",
+    "skill_type": "Curse",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 5
       }
@@ -754,13 +808,13 @@
     "name": "Blessing of Haste",
     "description": "A blessing that increases your speed and movement, allowing quicker actions in battle.",
     "icon": "skills/haste.svg",
-    "skill_type": "Spell",
+    "skill_type": "Blessing",
     "cooldown": 20,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": 5
       }
@@ -796,13 +850,13 @@
     "name": "Blessing of Precision",
     "description": "A blessing that increase your chance of critical strike, and make them stronger.",
     "icon": "skills/blessing_crit.svg",
-    "skill_type": "Spell",
+    "skill_type": "Blessing",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -848,13 +902,13 @@
     "name": "Blessing of Protection",
     "description": "A blessing that massively increase your defense.",
     "icon": "skills/blessing_protection.svg",
-    "skill_type": "Spell",
+    "skill_type": "Blessing",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -883,7 +937,7 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusPower": null
+                "StatusPower": {}
               }
             ]
           },
@@ -925,7 +979,7 @@
         "value": 50
       },
       {
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": 1
       }
@@ -1010,7 +1064,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": null },
+        "stat": { "StatusPower": {} },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -1104,7 +1158,7 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusPower": null
+                "StatusPower": {}
               }
             ]
           }
@@ -1122,7 +1176,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": null },
+        "stat": { "StatusPower": {} },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -1243,7 +1297,9 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "Restore": "Life" },
+        "stat": {
+          "Restore": { "restore_type": "Life" }
+        },
         "modifier": "Multiplier",
         "value": 20
       }
@@ -1267,13 +1323,13 @@
     "name": "Blessing of Renewal",
     "description": "A blessing that increase your life regeneration.",
     "icon": "skills/blessing_renewal.svg",
-    "skill_type": "Spell",
+    "skill_type": "Blessing",
     "cooldown": 20,
     "mana_cost": 25,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": 4
       }
@@ -1313,7 +1369,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "Restore": "Mana" },
+        "stat": { "Restore": { "restore_type": "Mana" } },
         "modifier": "Flat",
         "value": 1
       },

@@ -1,0 +1,71 @@
+{
+  "entries": [
+    {
+      "item_id": "battleaxe",
+      "weight": 64000
+    },
+    {
+      "item_id": "barbute",
+      "weight": 64000
+    },
+    {
+      "item_id": "cavalry_armor",
+      "weight": 64000
+    },
+    {
+      "item_id": "plated_gauntlets",
+      "weight": 64000
+    },
+    {
+      "item_id": "plated_boots",
+      "weight": 64000
+    },
+    {
+      "item_id": "warhammer",
+      "weight": 64000
+    },
+    {
+      "item_id": "crossbow",
+      "weight": 64000
+    },
+    {
+      "item_id": "mage_wand",
+      "weight": 64000
+    },
+    {
+      "item_id": "pavise",
+      "weight": 64000
+    },
+    {
+      "item_id": "grimoire",
+      "weight": 64000
+    },
+    {
+      "item_id": "elven_cape",
+      "weight": 64000
+    },
+    {
+      "item_id": "runic_ring",
+      "weight": 64000
+    },
+    {
+      "item_id": "sacred_talisman",
+      "weight": 64000
+    },
+    {
+      "item_id": "edict",
+      "weight": 6400,
+      "min_area_level": 320
+    },
+    {
+      "item_id": "rune",
+      "weight": 6400,
+      "min_area_level": 320
+    },
+    {
+      "item_id": "rune_root",
+      "weight": 640,
+      "min_area_level": 320
+    }
+  ]
+}

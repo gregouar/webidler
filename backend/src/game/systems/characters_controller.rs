@@ -32,11 +32,11 @@ pub fn attack_character(
 ) {
     let (target_id, (target_specs, target_state)) = target;
 
-    let is_blocked = target_specs.block.roll()
-        & match skill_type {
-            SkillType::Attack => true,
-            SkillType::Spell => target_specs.block_spell.roll(),
-        };
+    let is_blocked = target_specs
+        .block
+        .get(&skill_type)
+        .map(|block| block.roll())
+        .unwrap_or_default();
 
     let is_hurt = damage_character(
         target_specs,
@@ -206,6 +206,7 @@ pub fn resuscitate_character(target: &mut Target) -> bool {
 pub fn should_apply_status(
     target: &Target,
     status_specs: &StatusSpecs,
+    skill_type: SkillType,
     value: f64,
     duration: Option<f64>,
     cumulate: bool,
@@ -233,7 +234,7 @@ pub fn should_apply_status(
     if let Some((_, cur_status_state)) = target_state
         .statuses
         .unique_statuses
-        .get(&status_specs.into())
+        .get(&(status_specs.into(), skill_type))
     {
         return compute_effect_weight(value, duration, replace_on_value_only)
             > compute_effect_weight(
@@ -299,7 +300,7 @@ pub fn apply_status(
         target_state
             .statuses
             .unique_statuses
-            .entry(status_specs.into())
+            .entry((status_specs.into(), skill_type))
             .and_modify(|(cur_status_specs, cur_status_state)| {
                 if compute_effect_weight(value, duration, false)
                     > compute_effect_weight(
@@ -358,4 +359,22 @@ fn compute_effect_weight(value: f64, duration: Option<f64>, value_only: bool) ->
     } else {
         value * duration.unwrap_or(10_000.0)
     }
+}
+
+pub fn mana_available(character_state: &CharacterState) -> f64 {
+    (character_state.life - 1.0).max(0.0) + character_state.mana
+}
+
+pub fn spend_mana(
+    character_specs: &CharacterSpecs,
+    character_state: &mut CharacterState,
+    amount: f64,
+) {
+    let take_from_life = (character_state.life - 1.0)
+        .max(0.0)
+        .min(amount * (character_specs.take_from_life_before_mana as f64 * 0.01).clamp(0.0, 1.0));
+    let take_from_mana = amount - take_from_life;
+
+    character_state.life -= take_from_life;
+    character_state.mana -= take_from_mana;
 }

@@ -34,7 +34,7 @@
     {
       "name": "Burned Witch Revenge",
       "icon": "skills/curse_flammability.svg",
-      "skill_type": "Spell",
+      "skill_type": "Curse",
       "cooldown": 5.0,
       "targets": [
         {
