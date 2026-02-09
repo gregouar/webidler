@@ -1,6 +1,43 @@
 {
   "default": {
     "nodes": {
+      "031e7027-ca37-4d67-8cc3-018658940339": {
+        "name": "Storm Damage",
+        "icon": "passives/storm_damage.svg",
+        "x": 0.0,
+        "y": 170.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Storm"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 15.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Storm"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "03836189-8913-45b5-bd89-e658b31e79bd": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -382,8 +419,8 @@
       "18a233e9-6bf7-4756-8cd9-1714c40f3b09": {
         "name": "Twist the Knife",
         "icon": "passives/bleeding_eye.svg",
-        "x": -127.5,
-        "y": -27.5,
+        "x": -115.0,
+        "y": -97.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Critical",
@@ -474,8 +511,8 @@
       "1bcd296a-d021-4892-9c9d-d1bc4fbb1482": {
         "name": "Fortitude",
         "icon": "passives/caduceus.svg",
-        "x": 47.5,
-        "y": 147.5,
+        "x": 7.5,
+        "y": 122.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Life",
@@ -688,6 +725,37 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "2136383e-ac78-453c-ac64-aabb713cc809": {
+        "name": "Evade",
+        "icon": "passives/curled_leaf.svg",
+        "x": 97.5,
+        "y": -110.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Evade": null
+            },
+            "modifier": "Flat",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Evade": null
+            },
+            "modifier": "Flat",
+            "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "21e6a4bf-a5dc-4463-9055-b8195ac6045b": {
         "name": "Socket",
         "icon": "",
@@ -702,6 +770,43 @@
         "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": true
+      },
+      "23952325-ca42-4ec0-b4c5-d47694f3ae86": {
+        "name": "Physical Damage",
+        "icon": "passives/mace_head.svg",
+        "x": -180.0,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Physical",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Physical"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 15.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Physical"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
       },
       "24ad01fc-d436-4252-877a-f4dc31586f5c": {
         "name": "Gold",
@@ -793,8 +898,8 @@
       "26eca27a-95a6-4949-bef7-25cf3b79c340": {
         "name": "Myrmidon",
         "icon": "passives/myrmidon.svg",
-        "x": -147.5,
-        "y": 20.0,
+        "x": -155.0,
+        "y": 75.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Armor",
@@ -1703,8 +1808,8 @@
       "48348840-47ac-4112-a2a9-699d44fbc8c6": {
         "name": "Menacing Presence",
         "icon": "passives/menacing_presence.svg",
-        "x": -110.0,
-        "y": -100.0,
+        "x": -140.0,
+        "y": -85.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Attack",
@@ -1861,8 +1966,8 @@
       "4cf86e21-1f2c-4e68-9c7c-841de31171e9": {
         "name": "Maximum Life",
         "icon": "passives/life.svg",
-        "x": -132.5,
-        "y": 22.5,
+        "x": -150.0,
+        "y": 20.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -1961,8 +2066,8 @@
       "5223c739-dd9e-413d-804a-6b14ea39c1f7": {
         "name": "Cursed Mouth",
         "icon": "passives/infinite_curse.svg",
-        "x": -25.0,
-        "y": -122.5,
+        "x": -80.0,
+        "y": -147.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Status",
@@ -2069,8 +2174,8 @@
       "563e3226-2387-4147-bed3-914575c77d9a": {
         "name": "Max Life Max Damage",
         "icon": "passives/attack.svg",
-        "x": -142.5,
-        "y": 32.5,
+        "x": -145.0,
+        "y": 37.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -2209,8 +2314,8 @@
       "5aa6c4af-db53-4f03-9c7b-ad6888d6545d": {
         "name": "Wisdom",
         "icon": "passives/wisdom.svg",
-        "x": -20.0,
-        "y": -155.0,
+        "x": 0.0,
+        "y": -122.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Mana",
@@ -2283,8 +2388,8 @@
       "5c94a70e-1b6c-4731-9542-d022dd847a41": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
-        "x": -12.5,
-        "y": -147.5,
+        "x": 7.5,
+        "y": -115.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Mana",
@@ -2347,8 +2452,8 @@
       "5f96379e-5249-4b0e-8a4d-1e8c0f951f82": {
         "name": "Sadism",
         "icon": "passives/critical.svg",
-        "x": -120.0,
-        "y": 105.0,
+        "x": -77.5,
+        "y": 155.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Critical",
@@ -2505,8 +2610,8 @@
       "661de8f7-f445-4444-b219-ec8168b33f15": {
         "name": "Maximum Life",
         "icon": "passives/life.svg",
-        "x": 37.5,
-        "y": 140.0,
+        "x": -2.5,
+        "y": 115.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -3263,6 +3368,43 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "80c3c1c3-633e-44a5-b781-9c8b1dc1a259": {
+        "name": "Spell Damage",
+        "icon": "passives/spell.svg",
+        "x": 120.0,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Spell",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 15.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "8102564d-cf99-4d77-a5a4-ece87d1bc136": {
         "name": "Spell Damage",
         "icon": "passives/spell.svg",
@@ -3566,8 +3708,8 @@
       "89ce0bfc-b301-4325-9d5d-6aad3b11dd4d": {
         "name": "Tactical Start",
         "icon": "passives/sprint.svg",
-        "x": -162.5,
-        "y": 77.5,
+        "x": -150.0,
+        "y": -17.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Utility",
@@ -3777,6 +3919,43 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "9523ea2d-30fe-4abd-830c-259464578963": {
+        "name": "Fire Damage",
+        "icon": "passives/fire_damage.svg",
+        "x": 177.5,
+        "y": -0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Fire",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Fire"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 15.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Fire"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "962af5ca-3403-48ca-ba9a-94121d6deae6": {
         "name": "Open Wound Chance",
         "icon": "passives/sword_wound.svg",
@@ -3827,6 +4006,43 @@
             },
             "modifier": "Multiplier",
             "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "9b258aaf-2dbc-428c-a844-e50a402520e1": {
+        "name": "Poison Damage",
+        "icon": "passives/scorpion_tail.svg",
+        "x": 0.0,
+        "y": -170.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 15.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -3972,6 +4188,43 @@
             },
             "modifier": "Multiplier",
             "value": -100.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "a45aec91-23fa-4c2e-a9b9-e70bc2916a0f": {
+        "name": "Attack Damage",
+        "icon": "passives/attack.svg",
+        "x": -117.5,
+        "y": 0.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 15.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "damage_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -4163,12 +4416,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": "Fire"
-                    }
-                  },
-                  {
                     "MaxDamage": {
                       "skill_type": null,
                       "damage_type": "Fire"
@@ -4176,6 +4423,12 @@
                   },
                   {
                     "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": "Fire"
+                    }
+                  },
+                  {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": "Fire"
                     }
@@ -4437,8 +4690,8 @@
       "beae2ffb-1adc-4d42-bcb1-dff2fdc35977": {
         "name": "Maximum Life",
         "icon": "passives/life.svg",
-        "x": 42.5,
-        "y": 140.0,
+        "x": 2.5,
+        "y": 115.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -4740,6 +4993,37 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "c673deb7-950b-4b12-9c10-888e6cf575c2": {
+        "name": "Evade",
+        "icon": "passives/curled_leaf.svg",
+        "x": 95.0,
+        "y": -120.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Evade": null
+            },
+            "modifier": "Flat",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Evade": null
+            },
+            "modifier": "Flat",
+            "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "c685f882-72ed-4b98-b8c9-5ddb7049a386": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -4876,12 +5160,6 @@
                     "CritChance": null
                   },
                   {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": "Physical"
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": "Physical"
@@ -4889,6 +5167,12 @@
                   },
                   {
                     "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": "Physical"
+                    }
+                  },
+                  {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": "Physical"
                     }
@@ -5090,8 +5374,8 @@
       "d103b2b7-0801-4c7d-ad6d-fc735f713026": {
         "name": "Frenzy",
         "icon": "passives/frenzy.svg",
-        "x": -147.5,
-        "y": -20.0,
+        "x": -115.0,
+        "y": -10.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Attack",
@@ -5391,9 +5675,9 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
                     }
                   },
                   {
@@ -5403,13 +5687,13 @@
                     }
                   },
                   {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": null
                     }
                   },
                   {
-                    "MaxDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5453,12 +5737,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
@@ -5468,6 +5746,12 @@
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null
                     }
                   },
                   {
@@ -5515,7 +5799,19 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MinDamage": {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5527,19 +5823,7 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "MaxDamage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5595,13 +5879,13 @@
                     }
                   },
                   {
-                    "MinDamage": {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
-                    "MaxDamage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -6064,8 +6348,8 @@
       "df82a320-e565-4f56-a224-64f4d960ec6c": {
         "name": "Life & Mana Regeneration",
         "icon": "passives/meditation.svg",
-        "x": 22.5,
-        "y": -125.0,
+        "x": 80.0,
+        "y": -150.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Utility",
@@ -6329,8 +6613,8 @@
       "e805af8c-ef2f-46cf-87bd-933d4e7a706e": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
-        "x": -17.5,
-        "y": -142.5,
+        "x": 2.5,
+        "y": -110.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Mana",
@@ -6522,8 +6806,8 @@
       "f275006b-3e0a-4177-a128-f501b7b91b4e": {
         "name": "Assassin Strike",
         "icon": "passives/ninja_head.svg",
-        "x": -25.0,
-        "y": 127.5,
+        "x": 40.0,
+        "y": 140.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Critical",
@@ -6896,8 +7180,8 @@
       "ff796aa2-b773-47aa-9745-622c333e424a": {
         "name": "Sorcery",
         "icon": "passives/sorcery.svg",
-        "x": 147.5,
-        "y": 20.0,
+        "x": 117.5,
+        "y": 10.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Spell",
@@ -7645,6 +7929,66 @@
       {
         "from": "bb9506c3-bdd1-4755-857a-bc0da32f0ce9",
         "to": "a4e0da35-c78a-46fb-a50e-c88b165b9112"
+      },
+      {
+        "from": "2136383e-ac78-453c-ac64-aabb713cc809",
+        "to": "140fa424-f0f3-42b3-927e-b13777d1070e"
+      },
+      {
+        "from": "c673deb7-950b-4b12-9c10-888e6cf575c2",
+        "to": "2136383e-ac78-453c-ac64-aabb713cc809"
+      },
+      {
+        "from": "23952325-ca42-4ec0-b4c5-d47694f3ae86",
+        "to": "777d60db-963c-4822-bd90-ce7019d49a1f"
+      },
+      {
+        "from": "23952325-ca42-4ec0-b4c5-d47694f3ae86",
+        "to": "870fb1bf-f4da-48aa-9f2c-a0e4390ae8af"
+      },
+      {
+        "from": "201637a1-c430-4dcc-b537-afe68b01a2b6",
+        "to": "563e3226-2387-4147-bed3-914575c77d9a"
+      },
+      {
+        "from": "201637a1-c430-4dcc-b537-afe68b01a2b6",
+        "to": "4cf86e21-1f2c-4e68-9c7c-841de31171e9"
+      },
+      {
+        "from": "29ba21ea-6046-46f2-8b86-29b1580a1710",
+        "to": "1cc7cfb0-1ec8-4696-9baa-5a42fac7db31"
+      },
+      {
+        "from": "29ba21ea-6046-46f2-8b86-29b1580a1710",
+        "to": "8778da9e-df39-4fda-9231-192d587f5e9f"
+      },
+      {
+        "from": "031e7027-ca37-4d67-8cc3-018658940339",
+        "to": "e1517847-586f-4547-868f-ef59c08a00c9"
+      },
+      {
+        "from": "031e7027-ca37-4d67-8cc3-018658940339",
+        "to": "dd2f1b2e-8010-4321-8cc8-0ce2a1b61eaf"
+      },
+      {
+        "from": "9523ea2d-30fe-4abd-830c-259464578963",
+        "to": "c57f2319-656a-4d1a-a50e-568eee84084b"
+      },
+      {
+        "from": "9523ea2d-30fe-4abd-830c-259464578963",
+        "to": "456da99e-36b2-4542-8904-2be314830ed7"
+      },
+      {
+        "from": "9b258aaf-2dbc-428c-a844-e50a402520e1",
+        "to": "36d711ca-a888-4315-8cdd-ec21cf7651f8"
+      },
+      {
+        "from": "9b258aaf-2dbc-428c-a844-e50a402520e1",
+        "to": "c03d8e17-a800-4f92-8e1e-240d64036176"
+      },
+      {
+        "from": "18a233e9-6bf7-4756-8cd9-1714c40f3b09",
+        "to": "03836189-8913-45b5-bd89-e658b31e79bd"
       }
     ]
   }

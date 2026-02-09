@@ -152,9 +152,9 @@ pub fn CharacterPortrait(
             }
             
             @keyframes evade_flash {
-                0% { opacity: 0; transform: scale(0.35) translateY(100%) translateX(-100%); }
-                50% { opacity: 0.8; transform: scale(.55) translateY(60%) translateX(0%); }
-                100% { opacity: 0; transform: scale(.65) translateY(100%) translateX(100%); }
+                0% { opacity: 0; transform: scale(0.65) translateY(-60%) translateX(-50%) rotate(60deg); }
+                50% { opacity: 0.5; transform: scale(.75) translateY(-60%) translateX(0%) rotate(0deg); }
+                100% { opacity: 0; transform: scale(.65) translateY(-60%) translateX(50%)  rotate(-60deg); }
             }
             
             /* --- BLEED OVERLAY --- */
@@ -348,7 +348,7 @@ pub fn CharacterPortrait(
                                 src=img_asset("effects/evade.svg")
                                 class="absolute inset-0 w-object-contain pointer-events-none"
                                 on:animationend=move |_| show_evade_effect.set(false)
-                                style="animation: evade_flash 0.5s ease-out;
+                                style="animation: evade_flash 0.5s ease-linear;
                                 image-rendering: pixelated; 
                                 "
                             />
