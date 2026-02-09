@@ -166,6 +166,7 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                     }
                 }
             },
+            StatType::EvadeDamageTaken => character_specs.evade_damage.apply_effect(effect),
             StatType::DamageResistance {
                 skill_type,
                 damage_type,
@@ -211,6 +212,28 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                     }
                 }
             },
+            StatType::Lucky {
+                skill_type: _,
+                roll_type: LuckyRollType::Evade(damage_type),
+            } => match damage_type {
+                Some(damage_type) => character_specs
+                    .evade
+                    .entry(damage_type)
+                    .or_default()
+                    .lucky_chance
+                    .apply_effect(effect),
+                None => {
+                    for damage_type in DamageType::iter() {
+                        character_specs
+                            .evade
+                            .entry(damage_type)
+                            .or_default()
+                            .lucky_chance
+                            .apply_effect(effect)
+                    }
+                }
+            },
+
             StatType::StatConverter(ref specs) => {
                 stat_converters.push((specs.clone(), effect.value));
             }
@@ -329,9 +352,10 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
         block.clamp();
         block.value = block.value.min(MAX_BLOCK);
     }
+    character_specs.block_damage = character_specs.block_damage.clamp(0.0, 100.0);
     for evade in character_specs.evade.values_mut() {
         evade.clamp();
         evade.value = evade.value.min(MAX_EVADE);
     }
-    character_specs.block_damage = character_specs.block_damage.clamp(0.0, 100.0);
+    character_specs.evade_damage = character_specs.evade_damage.clamp(0.0, 100.0);
 }
