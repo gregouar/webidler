@@ -337,6 +337,7 @@ fn PassiveSkillTree(
     view! {
         <Pannable
             mouse_position
+            max_dezoom=8.0
             on:click=move |ev| {
                 if ev.button() == 0 {
                     handle_click_outside(

@@ -3,6 +3,8 @@ use leptos::{html::*, prelude::*, web_sys};
 #[component]
 pub fn Pannable(
     children: Children,
+    #[prop(default = 2.0)] max_zoom: f64,
+    #[prop(default = 4.0)] max_dezoom: f64,
     #[prop(optional, into)] disable_left_click_panning: Option<Signal<bool>>,
     #[prop(optional)] mouse_position: Option<RwSignal<(f64, f64)>>,
 ) -> impl IntoView {
@@ -77,7 +79,7 @@ pub fn Pannable(
             ev.prevent_default();
             let zoom_factor = if ev.delta_y() < 0.0 { 1.1 } else { 0.9 };
             let old_zoom = zoom.get();
-            let new_zoom = (old_zoom * zoom_factor).clamp(0.25, 2.0);
+            let new_zoom = (old_zoom * zoom_factor).clamp(1.0 / max_dezoom, max_zoom);
 
             let (x, y) = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
             let (ox, oy) = offset.get();
