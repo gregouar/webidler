@@ -71,6 +71,10 @@ pub fn lucky_roll_str(roll_type: LuckyRollType) -> String {
             format!("{}Damage", damage_type_str(damage_type))
         }
         LuckyRollType::Block => "Block Chance".into(),
+        LuckyRollType::Evade(damage_type) => format!(
+            "{}Damage over Time Evade Chance",
+            damage_type_str(damage_type)
+        ),
         LuckyRollType::CritChance => "Critical Hit Chance".into(),
         LuckyRollType::SuccessChance => "Success Chance".into(),
     }
@@ -348,6 +352,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::TakeFromLifeBeforeMana => "Life spent instead of Mana".to_string(),
         StatType::Block(skill_type) => format!("{}Block Chance", skill_type_str(*skill_type)),
         StatType::BlockDamageTaken => "Blocked Damage Taken".to_string(),
+        StatType::EvadeDamageTaken => "Evaded Damage over Time Taken".to_string(),
         StatType::Evade(damage_type) => {
             format!(
                 "Chance to Evade {}Damage over Time",
@@ -536,6 +541,12 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             format_adds_removes(value, false, "%"),
             damage_type_str(*damage_type)
         ),
+        StatType::EvadeDamageTaken => {
+            format!(
+                "Takes {}% of Evaded Damage over Time",
+                format_flat_number(value, false)
+            )
+        }
         StatType::Damage {
             skill_type,
             damage_type,

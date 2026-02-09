@@ -273,6 +273,22 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 })
                         }}
                         {move || {
+                            let evade_damage = game_context
+                                .player_specs
+                                .read()
+                                .character_specs
+                                .evade_damage as f64;
+                            (evade_damage != 0.0)
+                                .then(move || {
+                                    view! {
+                                        <Stat
+                                            label="Evaded Damage over Time Taken"
+                                            value=move || format!("{:.0}%", evade_damage)
+                                        />
+                                    }
+                                })
+                        }}
+                        {move || {
                             let take_from_mana_before_life = game_context
                                 .player_specs
                                 .read()

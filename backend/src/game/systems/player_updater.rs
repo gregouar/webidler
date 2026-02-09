@@ -253,6 +253,7 @@ fn compute_player_specs(
             | StatType::Block(_)
             | StatType::BlockDamageTaken
             | StatType::Evade(_)
+            | StatType::EvadeDamageTaken
             | StatType::DamageResistance { .. }
             | StatType::StatConverter(StatConverterSpecs {
                 source:
