@@ -18,7 +18,7 @@ use crate::{
         ui::{
             buttons::{CloseButton, MenuButton},
             card::{Card, CardInset, CardTitle},
-            dropdown::DropdownMenu,
+            dropdown::SearchableDropdownMenu,
             menu_panel::MenuPanel,
             tooltip::DynamicTooltipPosition,
         },
@@ -715,7 +715,7 @@ pub fn LootFilterDropdown(loot_preference: RwSignal<Option<ItemCategory>>) -> im
         .map(|category| (category, loot_filter_category_to_str(category).into()))
         .collect();
 
-    view! { <DropdownMenu options chosen_option=loot_preference /> }
+    view! { <SearchableDropdownMenu options chosen_option=loot_preference /> }
 }
 
 pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
