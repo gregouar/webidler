@@ -583,6 +583,37 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "0f00327e-e227-46e9-8bce-6dbd9827fe06": {
+        "name": "Increased Armor",
+        "icon": "passives/scale_shield.svg",
+        "x": -90.0,
+        "y": -15.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 1,
+        "socket": false
+      },
       "0f99143b-bf60-4ae8-b92d-deb1a4bb7dc8": {
         "name": "Poison Amplification",
         "icon": "passives/snake_spiral.svg",
@@ -2031,8 +2062,8 @@
       "3a4861a5-e8e3-455d-b458-fe23d932b190": {
         "name": "Ain't Nobody Got Time for That",
         "icon": "passives/broken_skull.svg",
-        "x": -45.0,
-        "y": 140.0,
+        "x": -132.5,
+        "y": 150.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Attack",
@@ -2731,6 +2762,43 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "4f909ed3-70ee-4e31-9f40-4c617358a0ba": {
+        "name": "Stun Duration",
+        "icon": "passives/knockout.svg",
+        "x": -15.0,
+        "y": 125.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": "Stun",
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": "Stun",
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "5112a2b7-6b1f-484d-a2d7-d0e0d2501af4": {
         "name": "Poison Amplification",
         "icon": "passives/snake_spiral.svg",
@@ -3139,8 +3207,8 @@
       "58a42157-4cc3-45ea-b71c-1395663a9b23": {
         "name": "Damage",
         "icon": "passives/damage.svg",
-        "x": -42.5,
-        "y": 147.5,
+        "x": -115.0,
+        "y": 157.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -4902,6 +4970,37 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "85ab0266-027e-4e48-9773-e36362b9fc7b": {
+        "name": "Fire Resistance",
+        "icon": "passives/armor_fire.svg",
+        "x": 90.0,
+        "y": -15.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Fire"
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Armor": "Fire"
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 1,
+        "socket": false
+      },
       "870fb1bf-f4da-48aa-9f2c-a0e4390ae8af": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -5392,6 +5491,105 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "934a4293-ae54-4b9d-a2d2-1e9396f7854a": {
+        "name": "Storm Resistance",
+        "icon": "passives/armor_storm.svg",
+        "x": 15.0,
+        "y": 90.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Storm"
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Armor": "Storm"
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 1,
+        "socket": false
+      },
+      "93d9f067-e298-4271-a8a2-6f332aa115f5": {
+        "name": "Stun Duration",
+        "icon": "passives/knockout.svg",
+        "x": 15.0,
+        "y": 125.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": "Stun",
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": "Stun",
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "93db4a10-c04f-4343-8f5a-1ecec07314d3": {
+        "name": "Poison Resistance",
+        "icon": "passives/armor_poison.svg",
+        "x": -15.0,
+        "y": -90.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Poison"
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Armor": "Poison"
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 1,
+        "socket": false
+      },
       "9523ea2d-30fe-4abd-830c-259464578963": {
         "name": "Fire Damage",
         "icon": "passives/fire_damage.svg",
@@ -5821,8 +6019,8 @@
       "aa92babf-963d-4bd0-8f7f-e3b44637f289": {
         "name": "Poison Resistance",
         "icon": "passives/armor_poison.svg",
-        "x": -137.5,
-        "y": 105.0,
+        "x": 15.0,
+        "y": -90.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -5832,7 +6030,7 @@
               "Armor": "Poison"
             },
             "modifier": "Multiplier",
-            "value": 30.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -5843,7 +6041,7 @@
               "Armor": "Poison"
             },
             "modifier": "Multiplier",
-            "value": 15.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 1,
@@ -6124,6 +6322,37 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "b1f9066f-78df-4ac8-9f8d-010aede4e37a": {
+        "name": "Increased Armor",
+        "icon": "passives/scale_shield.svg",
+        "x": -90.0,
+        "y": 15.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 1,
+        "socket": false
+      },
       "b6208dda-e38e-4254-afa7-5f1574034c63": {
         "name": "Storm Damage",
         "icon": "passives/storm_damage.svg",
@@ -6336,8 +6565,8 @@
       "bf9f8833-4a43-44c2-a28c-c00d5c39425a": {
         "name": "Storm Resistance",
         "icon": "passives/armor_storm.svg",
-        "x": -130.0,
-        "y": 100.0,
+        "x": -15.0,
+        "y": 90.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -6347,7 +6576,7 @@
               "Armor": "Storm"
             },
             "modifier": "Multiplier",
-            "value": 30.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -6358,7 +6587,7 @@
               "Armor": "Storm"
             },
             "modifier": "Multiplier",
-            "value": 15.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 1,
@@ -6593,6 +6822,43 @@
         "locked": true,
         "upgrade_effects": [],
         "max_upgrade_level": null,
+        "socket": false
+      },
+      "c3a9a7d3-942a-4e19-8619-1a52854cfede": {
+        "name": "Stun Duration",
+        "icon": "passives/knockout.svg",
+        "x": 0.0,
+        "y": 120.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Storm",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": "Stun",
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": "Stun",
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
         "socket": false
       },
       "c57f2319-656a-4d1a-a50e-568eee84084b": {
@@ -6942,8 +7208,8 @@
       "cd240346-70d1-4e05-8a3b-3ab0179695b9": {
         "name": "Fire Resistance",
         "icon": "passives/armor_fire.svg",
-        "x": -132.5,
-        "y": 105.0,
+        "x": 90.0,
+        "y": 15.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -6953,7 +7219,7 @@
               "Armor": "Fire"
             },
             "modifier": "Multiplier",
-            "value": 30.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -6964,7 +7230,7 @@
               "Armor": "Fire"
             },
             "modifier": "Multiplier",
-            "value": 15.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 1,
@@ -7504,15 +7770,15 @@
                     }
                   },
                   {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null
+                    }
+                  },
+                  {
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": null
                     }
                   }
                 ],
@@ -7963,8 +8229,8 @@
       "db23ff19-242a-4751-b628-e41b698a0788": {
         "name": "Stunning Blow",
         "icon": "passives/thor_fist.svg",
-        "x": 15.0,
-        "y": 150.0,
+        "x": -17.5,
+        "y": 152.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Storm",
@@ -8092,8 +8358,8 @@
       "dc33a293-4dbf-4ecf-a0b7-b2fca942ca38": {
         "name": "Damage",
         "icon": "passives/damage.svg",
-        "x": -52.5,
-        "y": 132.5,
+        "x": -115.0,
+        "y": 142.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -8582,8 +8848,8 @@
       "e30f5c37-e25e-4c73-a7ab-6f862398745f": {
         "name": "Damage",
         "icon": "passives/damage.svg",
-        "x": -55.0,
-        "y": 145.0,
+        "x": -110.0,
+        "y": 150.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -10291,10 +10557,6 @@
         "to": "7eeea0ac-0958-49a6-a8e3-30966cb42764"
       },
       {
-        "from": "2723d25a-6a2a-421d-98c4-d7178da3f870",
-        "to": "3a4861a5-e8e3-455d-b458-fe23d932b190"
-      },
-      {
         "from": "0f99143b-bf60-4ae8-b92d-deb1a4bb7dc8",
         "to": "e4467b34-351f-4fb4-90f1-393664874993"
       },
@@ -10401,10 +10663,6 @@
       {
         "from": "17ccb40c-fe56-450b-9723-c12510d0c5c6",
         "to": "ff32f6af-3088-4f9b-963b-d469ea869adb"
-      },
-      {
-        "from": "b129b655-c02e-42fd-89bd-d1a18660c489",
-        "to": "db23ff19-242a-4751-b628-e41b698a0788"
       },
       {
         "from": "c673deb7-950b-4b12-9c10-888e6cf575c2",
@@ -10777,6 +11035,62 @@
       {
         "from": "1a450b19-f9c2-404f-a042-f9527f8cbbc7",
         "to": "c57f2319-656a-4d1a-a50e-568eee84084b"
+      },
+      {
+        "from": "93d9f067-e298-4271-a8a2-6f332aa115f5",
+        "to": "b129b655-c02e-42fd-89bd-d1a18660c489"
+      },
+      {
+        "from": "c3a9a7d3-942a-4e19-8619-1a52854cfede",
+        "to": "93d9f067-e298-4271-a8a2-6f332aa115f5"
+      },
+      {
+        "from": "4f909ed3-70ee-4e31-9f40-4c617358a0ba",
+        "to": "c3a9a7d3-942a-4e19-8619-1a52854cfede"
+      },
+      {
+        "from": "85ab0266-027e-4e48-9773-e36362b9fc7b",
+        "to": "ce177465-cca9-47d0-86ce-0ec245ea8174"
+      },
+      {
+        "from": "cd240346-70d1-4e05-8a3b-3ab0179695b9",
+        "to": "ce177465-cca9-47d0-86ce-0ec245ea8174"
+      },
+      {
+        "from": "aa92babf-963d-4bd0-8f7f-e3b44637f289",
+        "to": "85a30382-d493-4bf3-b499-e9bedd9d2b67"
+      },
+      {
+        "from": "93db4a10-c04f-4343-8f5a-1ecec07314d3",
+        "to": "85a30382-d493-4bf3-b499-e9bedd9d2b67"
+      },
+      {
+        "from": "807a2b14-4ad6-40d3-9480-90618fa5d792",
+        "to": "bf9f8833-4a43-44c2-a28c-c00d5c39425a"
+      },
+      {
+        "from": "807a2b14-4ad6-40d3-9480-90618fa5d792",
+        "to": "934a4293-ae54-4b9d-a2d2-1e9396f7854a"
+      },
+      {
+        "from": "dbac4357-9e3b-4937-bed0-73891dfedd9f",
+        "to": "b1f9066f-78df-4ac8-9f8d-010aede4e37a"
+      },
+      {
+        "from": "dbac4357-9e3b-4937-bed0-73891dfedd9f",
+        "to": "0f00327e-e227-46e9-8bce-6dbd9827fe06"
+      },
+      {
+        "from": "4f909ed3-70ee-4e31-9f40-4c617358a0ba",
+        "to": "2723d25a-6a2a-421d-98c4-d7178da3f870"
+      },
+      {
+        "from": "db23ff19-242a-4751-b628-e41b698a0788",
+        "to": "2723d25a-6a2a-421d-98c4-d7178da3f870"
+      },
+      {
+        "from": "3a4861a5-e8e3-455d-b458-fe23d932b190",
+        "to": "875d806d-10e2-45cd-ac04-5fea19626672"
       }
     ]
   }
