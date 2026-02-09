@@ -152,9 +152,18 @@ pub fn CharacterPortrait(
             }
             
             @keyframes evade_flash {
-                0% { opacity: 0; transform: scale(0.65) translateY(-60%) translateX(-50%) rotate(60deg); }
-                50% { opacity: 0.5; transform: scale(.75) translateY(-60%) translateX(0%) rotate(0deg); }
-                100% { opacity: 0; transform: scale(.65) translateY(-60%) translateX(50%)  rotate(-60deg); }
+                0% {
+                    opacity: 0;
+                    transform: translate3d(-30%, -60%, 0) scale(0.75) rotate(-60deg);
+                }
+                50% {
+                    opacity: 0.5;
+                    transform: translate3d(0%, -60%, 0) scale(0.85);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate3d(30%, -60%, 0) scale(0.75) rotate(60deg);
+                }
             }
             
             /* --- BLEED OVERLAY --- */
@@ -329,7 +338,7 @@ pub fn CharacterPortrait(
                                 class="absolute inset-0 w-object-contain pointer-events-none"
                                 on:animationend=move |_| show_block_effect.set(false)
                                 style="animation: shield_flash 0.5s ease-out;
-                                image-rendering: pixelated; 
+                                image-rendering: pixelated; will-change: transform, opacity;
                                 "
                             />
                         },
@@ -348,8 +357,8 @@ pub fn CharacterPortrait(
                                 src=img_asset("effects/evade.svg")
                                 class="absolute inset-0 w-object-contain pointer-events-none"
                                 on:animationend=move |_| show_evade_effect.set(false)
-                                style="animation: evade_flash 0.5s ease-linear;
-                                image-rendering: pixelated; 
+                                style="animation: evade_flash 0.5s;
+                                image-rendering: pixelated; will-change: transform, opacity;
                                 "
                             />
                         },
