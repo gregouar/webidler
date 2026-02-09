@@ -596,8 +596,8 @@
       "1edc1a3f-dc55-41fa-a8ad-fa90466ddd4a": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": 107.5,
-        "y": 100.0,
+        "x": 67.5,
+        "y": 57.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Spell",
@@ -1037,7 +1037,7 @@
       "31456446-3c97-4fb0-9ee8-512a21076f5f": {
         "name": "Bleed",
         "icon": "passives/bloody_sword.svg",
-        "x": -60.0,
+        "x": -57.5,
         "y": -40.0,
         "size": 0,
         "initial_node": false,
@@ -1567,10 +1567,10 @@
         "socket": false
       },
       "45a17638-361c-4927-8c19-7c25b789ec1f": {
-        "name": "Blessing Speed",
+        "name": "Blessing Speed (to remove?)",
         "icon": "passives/XXX.svg",
-        "x": -140.0,
-        "y": -37.5,
+        "x": -150.0,
+        "y": -62.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Utility",
@@ -1670,7 +1670,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": null,
+        "max_upgrade_level": 3,
         "socket": false
       },
       "4827bf74-8168-422a-8623-58eec1307b73": {
@@ -1723,7 +1723,7 @@
       },
       "49a12154-6920-470b-b8ac-7074963cd554": {
         "name": "Curse Effects",
-        "icon": "passives/XXX.svg",
+        "icon": "passives/cursed_star.svg",
         "x": 20.0,
         "y": -152.5,
         "size": 0,
@@ -1961,8 +1961,8 @@
       "5223c739-dd9e-413d-804a-6b14ea39c1f7": {
         "name": "Cursed Mouth",
         "icon": "passives/infinite_curse.svg",
-        "x": 37.5,
-        "y": -137.5,
+        "x": -25.0,
+        "y": -122.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Status",
@@ -2014,7 +2014,7 @@
       "5513a3d8-87cd-4b81-b2b2-08d0275201e6": {
         "name": "Open Wound Chance",
         "icon": "passives/sword_wound.svg",
-        "x": -60.0,
+        "x": -57.5,
         "y": 40.0,
         "size": 0,
         "initial_node": false,
@@ -2308,7 +2308,7 @@
         "socket": false
       },
       "5f2ac03c-3b5f-4a39-b44e-d9765e81c139": {
-        "name": "Restoration",
+        "name": "Life Leech Power",
         "icon": "passives/lamprey_mouth.svg",
         "x": -72.5,
         "y": 65.0,
@@ -2534,7 +2534,7 @@
         "icon": "passives/octopus.svg",
         "x": -70.0,
         "y": -57.5,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Mana",
         "effects": [
@@ -2726,7 +2726,7 @@
       },
       "6f7434a6-2cfe-4325-8231-481f3792a47e": {
         "name": "Unstable Power",
-        "icon": "passives/burning_book.svg",
+        "icon": "passives/unstable_orb.svg",
         "x": 225.0,
         "y": 55.0,
         "size": 2,
@@ -2803,8 +2803,19 @@
         ],
         "triggers": [],
         "locked": false,
-        "upgrade_effects": [],
-        "max_upgrade_level": null,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
         "socket": false
       },
       "73c40387-2ca1-4169-9033-ec6e4c7d709f": {
@@ -2812,7 +2823,7 @@
         "icon": "passives/leeching_worm.svg",
         "x": -70.0,
         "y": 55.0,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Life",
         "effects": [
@@ -2967,7 +2978,7 @@
             "inherit_modifiers": false
           }
         ],
-        "locked": false,
+        "locked": true,
         "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
@@ -3488,7 +3499,7 @@
         "socket": false
       },
       "8939c1bd-e0aa-4d12-88cd-aa933daba56d": {
-        "name": "Test Stun Condition",
+        "name": "Damage against Stunned Enemies",
         "icon": "passives/surprised_skull.svg",
         "x": -32.5,
         "y": 137.5,
@@ -4362,8 +4373,8 @@
       "bd9786ee-ff44-40dd-9bdd-591d0903a074": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": 75.0,
-        "y": 55.0,
+        "x": 110.0,
+        "y": 100.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Status",
@@ -4618,6 +4629,90 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "c351443b-35e6-4860-aa43-86eec4c92e51": {
+        "name": "Bonfire",
+        "icon": "passives/bonfire.svg",
+        "x": 150.0,
+        "y": -17.5,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Fire",
+        "effects": [],
+        "triggers": [
+          {
+            "trigger_id": "bonfire",
+            "description": "",
+            "OnHit": {
+              "skill_type": null,
+              "range": null,
+              "is_crit": true,
+              "is_blocked": null,
+              "is_hurt": null,
+              "is_triggered": null,
+              "damage_type": "Fire"
+            },
+            "target": "Me",
+            "modifiers": [],
+            "skill_range": "Melee",
+            "skill_type": "Other",
+            "effects": [
+              {
+                "success_chance": {
+                  "value": 100.0,
+                  "lucky_chance": 0.0
+                },
+                "ApplyStatus": {
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "StatModifier": {
+                          "stat": {
+                            "SuccessChance": {
+                              "skill_type": null,
+                              "effect_type": {
+                                "ApplyStatus": {
+                                  "status_type": {
+                                    "DamageOverTime": {
+                                      "damage_type": "Fire"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "modifier": "Multiplier",
+                          "debuff": false
+                        }
+                      },
+                      "value": {
+                        "min": 150.0,
+                        "max": 150.0,
+                        "lucky_chance": 0.0
+                      },
+                      "cumulate": false,
+                      "replace_on_value_only": false
+                    }
+                  ],
+                  "duration": {
+                    "min": 5.0,
+                    "max": 5.0,
+                    "lucky_chance": 0.0
+                  }
+                },
+                "ignore_stat_effects": [],
+                "conditional_modifiers": []
+              }
+            ],
+            "skill_shape": "Single",
+            "owner": null,
+            "inherit_modifiers": false
+          }
+        ],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": false
+      },
       "c57f2319-656a-4d1a-a50e-568eee84084b": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -4778,10 +4873,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": "Physical"
-                    }
+                    "CritChance": null
                   },
                   {
                     "MinDamage": {
@@ -4796,7 +4888,10 @@
                     }
                   },
                   {
-                    "CritChance": null
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": "Physical"
+                    }
                   }
                 ],
                 "conditional_modifiers": []
@@ -4814,7 +4909,7 @@
       },
       "c71a85e5-e297-4d01-bafb-41b60c535d17": {
         "name": "Maximum Damage",
-        "icon": "passives/XXX.svg",
+        "icon": "passives/thrust.svg",
         "x": 15.0,
         "y": 140.0,
         "size": 0,
@@ -5296,24 +5391,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
-                    }
-                  },
-                  {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null
@@ -5323,6 +5400,24 @@
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": null
                     }
                   }
                 ],
@@ -5358,15 +5453,9 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MinDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
-                    }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null
                     }
                   },
                   {
@@ -5376,13 +5465,19 @@
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
-                    "MaxDamage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5420,7 +5515,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5438,13 +5533,13 @@
                     }
                   },
                   {
-                    "MaxDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
-                    "MinDamage": {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5482,9 +5577,9 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": null
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null
                     }
                   },
                   {
@@ -5494,13 +5589,13 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null
                     }
                   },
                   {
-                    "Damage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5967,10 +6062,10 @@
         "socket": false
       },
       "df82a320-e565-4f56-a224-64f4d960ec6c": {
-        "name": "Life & Mana Regenration",
+        "name": "Life & Mana Regeneration",
         "icon": "passives/meditation.svg",
-        "x": 55.0,
-        "y": -70.0,
+        "x": 22.5,
+        "y": -125.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Utility",
@@ -6370,8 +6465,8 @@
       "ef65ff62-73ba-4611-9465-7b69c14fc1ef": {
         "name": "Blessing Duration",
         "icon": "passives/XXX.svg",
-        "x": -145.0,
-        "y": -42.5,
+        "x": -142.5,
+        "y": -40.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Utility",
@@ -6427,8 +6522,8 @@
       "f275006b-3e0a-4177-a128-f501b7b91b4e": {
         "name": "Assassin Strike",
         "icon": "passives/ninja_head.svg",
-        "x": -35.0,
-        "y": 107.5,
+        "x": -25.0,
+        "y": 127.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Critical",
@@ -6548,7 +6643,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": null,
+        "max_upgrade_level": 3,
         "socket": false
       },
       "f48dfcb6-4eef-49bc-ae62-5bf211156525": {
@@ -6601,7 +6696,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": null,
+        "max_upgrade_level": 3,
         "socket": false
       },
       "f4985f91-50af-4c38-aaab-53e7a09715fc": {
@@ -6642,7 +6737,7 @@
         "triggers": [],
         "locked": true,
         "upgrade_effects": [],
-        "max_upgrade_level": null,
+        "max_upgrade_level": 2,
         "socket": true
       },
       "fbb650a9-a9a1-4a15-a435-7ffbb4489be5": {
