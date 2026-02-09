@@ -50,7 +50,10 @@ impl BenedictionSpecs {
         }
 
         match self.upgrade_modifier {
-            Modifier::Multiplier => todo!(),
+            Modifier::Multiplier => {
+                let exponent = upgrade_level.saturating_sub(1) as i32;
+                value *= (1.0 + self.upgrade_value * 0.01).powi(exponent);
+            }
             Modifier::Flat => value += upgrade_level.saturating_sub(1) as f64 * self.upgrade_value,
         }
 

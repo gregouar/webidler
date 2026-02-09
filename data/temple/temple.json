@@ -4,18 +4,18 @@
     "value": 100,
     "effect": "StartingGold",
     "price_increase_factor": 1e5,
-    "upgrade_value": 100,
-    "upgrade_modifier": "Flat",
+    "upgrade_value": 50,
+    "upgrade_modifier": "Multiplier",
     "max_upgrade_level": 60
   },
   "starting_level": {
     "price": 1e10,
     "value": 1,
     "effect": "StartingLevel",
-    "price_increase_factor": 1e6,
+    "price_increase_factor": 1e4,
     "upgrade_value": 1,
     "upgrade_modifier": "Flat",
-    "max_upgrade_level": 49
+    "max_upgrade_level": 69
   },
   "life_max": {
     "price": 1e6,

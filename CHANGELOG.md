@@ -14,6 +14,8 @@ Features:
 Balance Changes:
 
 - Complete rework of the Passives Tree.
+- Increased max player level to 70.
+- Decreased cost of Starting Level benediction in Temple.
 
 Fixes:
 

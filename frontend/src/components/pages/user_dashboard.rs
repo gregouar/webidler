@@ -527,6 +527,10 @@ pub fn CreateCharacterPanel(
         "furry_female_1",
         "blue_male_1",
         "blue_female_1",
+        "insect_male_1",
+        "insect_female_1",
+        "undead_male_1",
+        "undead_female_1",
     ];
 
     view! {

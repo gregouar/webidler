@@ -12,7 +12,7 @@ use frontend::components::{
         buttons::{MenuButton, TabButton},
         card::{Card, CardHeader, CardInset, CardTitle},
         confirm::ConfirmContext,
-        dropdown::DropdownMenu,
+        dropdown::{ SearchableDropdownMenu},
         input::ValidatedInput,
         pannable::Pannable,
         tooltip::DynamicTooltip,
@@ -166,7 +166,12 @@ pub fn PassivesPage() -> impl IntoView {
                     <div class="w-full h-full">
                         <Card>
                             <div class="flex justify-between mx-4 items-center">
-                                <CardTitle>"Passives"</CardTitle>
+                                <div class="flex flex-row items-center gap-1 xl:gap-2">
+                                    <CardTitle>"Passives"</CardTitle>
+                                    <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
+                                        "(" {move || { passives_tree_specs.read().nodes.len() }}")"
+                                    </span>
+                                </div>
 
                                 <div class="flex gap-2 ml-4">
                                     <MenuButton on:click=move |_| { load() }>"Load"</MenuButton>
@@ -804,7 +809,7 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
             </div>
             <div class="flex justify-between gap-2 items-end">
                 <ValidatedInput label="Size" id="size" input_type="number" bind=node_size />
-                <DropdownMenu
+                <SearchableDropdownMenu
                     options=PassiveNodeType::iter()
                         .map(|category| (category, serde_plain::to_string(&category).unwrap()))
                         .collect()

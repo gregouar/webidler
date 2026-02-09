@@ -5,7 +5,7 @@ Big themes:
 
 Gold:
 -Minor boost
--Major boost
+-Major boost?
 
 Attack:
 -Damage
@@ -14,7 +14,7 @@ Attack:
 Spell:
 -Damage
 -Speed
-* Spell Critical
+* Unstable Power (Spell Critical) 
 
 Mana:
 -Max (%? & flat)
@@ -85,12 +85,14 @@ Curses:
 - Duration
 - Effect
 - Speed
+- Cost
 *Curses never expire
 
 Blessings:
 - Duration
 - Effect
 - Speed
+- Cost
 
 Dot:
 - Damage
@@ -112,6 +114,8 @@ Other:
 -Hybrid mana/life
 -Damage per max mana
 -Inc Max Damage
+
+-No Hit Damage?
 
 Runes:
 -----
