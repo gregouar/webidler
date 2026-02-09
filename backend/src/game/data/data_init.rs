@@ -49,6 +49,7 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             just_hurt: false,
             just_hurt_crit: false,
             just_blocked: false,
+            just_evaded: false,
 
             monitored_conditions: Default::default(),
         }

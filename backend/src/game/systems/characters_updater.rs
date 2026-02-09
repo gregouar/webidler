@@ -83,6 +83,7 @@ pub fn reset_character(character_state: &mut CharacterState) {
     character_state.just_hurt = false;
     character_state.just_hurt_crit = false;
     character_state.just_blocked = false;
+    character_state.just_evaded = false;
 }
 
 pub fn update_character_specs(
@@ -144,6 +145,24 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                 }
             },
             StatType::BlockDamageTaken => character_specs.block_damage.apply_effect(effect),
+            StatType::Evade(damage_type) => match damage_type {
+                Some(damage_type) => character_specs
+                    .evade
+                    .entry(damage_type)
+                    .or_default()
+                    .value
+                    .apply_effect(effect),
+                None => {
+                    for damage_type in DamageType::iter() {
+                        character_specs
+                            .evade
+                            .entry(damage_type)
+                            .or_default()
+                            .value
+                            .apply_effect(effect)
+                    }
+                }
+            },
             StatType::DamageResistance {
                 skill_type,
                 damage_type,

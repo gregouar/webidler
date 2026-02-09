@@ -18,6 +18,7 @@ pub fn CharacterPortrait(
     #[prop(into)] just_hurt: Signal<bool>,
     #[prop(into)] just_hurt_crit: Signal<bool>,
     #[prop(into)] just_blocked: Signal<bool>,
+    #[prop(into)] just_evaded: Signal<bool>,
     #[prop(into)] is_dead: Signal<bool>,
     #[prop(into)] statuses: Signal<StatusMap>,
 ) -> impl IntoView {
@@ -52,6 +53,14 @@ pub fn CharacterPortrait(
     Effect::new(move |_| {
         if just_blocked.get() {
             show_block_effect.set(true);
+        }
+    });
+
+    let show_evade_effect = RwSignal::new(false);
+
+    Effect::new(move |_| {
+        if just_evaded.get() {
+            show_evade_effect.set(true);
         }
     });
 
@@ -140,6 +149,12 @@ pub fn CharacterPortrait(
                 0% { opacity: 0; transform: scale(0.35) translateY(60%); }
                 50% { opacity: 0.8; transform: scale(.55) translateY(40%); }
                 100% { opacity: 0; transform: scale(.65) translateY(60%); }
+            }
+            
+            @keyframes evade_flash {
+                0% { opacity: 0; transform: scale(0.35) translateY(100%) translateX(-100%); }
+                50% { opacity: 0.8; transform: scale(.55) translateY(60%) translateX(0%); }
+                100% { opacity: 0; transform: scale(.65) translateY(100%) translateX(100%); }
             }
             
             /* --- BLEED OVERLAY --- */
@@ -314,6 +329,26 @@ pub fn CharacterPortrait(
                                 class="absolute inset-0 w-object-contain pointer-events-none"
                                 on:animationend=move |_| show_block_effect.set(false)
                                 style="animation: shield_flash 0.5s ease-out;
+                                image-rendering: pixelated; 
+                                "
+                            />
+                        },
+                    )
+                } else {
+                    None
+                }
+            }}
+
+            {move || {
+                if show_evade_effect.get() {
+                    Some(
+                        view! {
+                            <img
+                                draggable="false"
+                                src=img_asset("effects/evade.svg")
+                                class="absolute inset-0 w-object-contain pointer-events-none"
+                                on:animationend=move |_| show_evade_effect.set(false)
+                                style="animation: evade_flash 0.5s ease-out;
                                 image-rendering: pixelated; 
                                 "
                             />

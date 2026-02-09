@@ -259,7 +259,7 @@ pub fn apply_status(
     cumulate: bool,
     is_triggered: bool,
 ) -> bool {
-    let (target_id, (_, target_state)) = target;
+    let (target_id, (target_specs, target_state)) = target;
 
     if duration.unwrap_or(1.0) <= 0.0 || !target_state.is_alive {
         return false;
@@ -272,6 +272,20 @@ pub fn apply_status(
             }
         }
         StatusSpecs::Trigger(_) | StatusSpecs::Stun => {}
+    }
+
+    if let StatusSpecs::DamageOverTime { damage_type } = status_specs {
+        let evade = target_specs
+            .evade
+            .get(damage_type)
+            .map(|evade| evade.roll())
+            .unwrap_or_default();
+
+        if evade {
+            target_state.just_evaded = true;
+            return false;
+        }
+        // TODO: Register event?
     }
 
     // Long duration are considered as forever
