@@ -5,7 +5,7 @@
     "effect": "StartingGold",
     "price_increase_factor": 1e5,
     "upgrade_value": 100,
-    "upgrade_modifier": "Multiplier",
+    "upgrade_modifier": "Flat",
     "max_upgrade_level": 60
   },
   "starting_level": {
