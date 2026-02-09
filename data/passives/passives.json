@@ -447,7 +447,7 @@
               "Evade": null
             },
             "modifier": "Multiplier",
-            "value": 30.0
+            "value": 50.0
           }
         ],
         "triggers": [],
