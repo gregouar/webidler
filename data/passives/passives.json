@@ -45,7 +45,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -59,7 +59,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -204,7 +204,7 @@
               "CritDamage": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 40.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -215,7 +215,7 @@
               "CritDamage": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -235,7 +235,7 @@
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 4.0
+            "value": 3.0
           }
         ],
         "triggers": [],
@@ -246,7 +246,7 @@
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 3,
@@ -287,7 +287,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -319,7 +319,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -372,6 +372,98 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "18a233e9-6bf7-4756-8cd9-1714c40f3b09": {
+        "name": "Twist the Knife",
+        "icon": "passives/bleeding_eye.svg",
+        "x": -127.5,
+        "y": -27.5,
+        "size": 1,
+        "initial_node": false,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "CritChance": null
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Physical"
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 25.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "CritDamage": null
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Physical"
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "CritDamage": null
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Physical"
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
             "modifier": "Multiplier",
             "value": 10.0
           }
@@ -552,7 +644,7 @@
               "CritDamage": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 40.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -563,7 +655,7 @@
               "CritDamage": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -784,7 +876,7 @@
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 4.0
+            "value": 3.0
           }
         ],
         "triggers": [],
@@ -795,7 +887,7 @@
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 3,
@@ -840,7 +932,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 4.0
+            "value": 3.0
           }
         ],
         "triggers": [],
@@ -849,7 +941,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 3,
@@ -872,7 +964,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -886,7 +978,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -904,7 +996,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 4.0
+            "value": 3.0
           }
         ],
         "triggers": [],
@@ -913,7 +1005,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 3,
@@ -977,7 +1069,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -995,7 +1087,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -1097,7 +1189,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -1111,7 +1203,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -1131,7 +1223,7 @@
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 4.0
+            "value": 3.0
           }
         ],
         "triggers": [],
@@ -1142,7 +1234,7 @@
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 3,
@@ -1205,7 +1297,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -1219,7 +1311,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -1230,7 +1322,7 @@
         "icon": "passives/damage_over_time.svg",
         "x": 127.5,
         "y": -107.5,
-        "size": 1,
+        "size": 0,
         "initial_node": false,
         "node_type": "Status",
         "effects": [
@@ -1246,7 +1338,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 40.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -1264,7 +1356,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -1397,7 +1489,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -1411,7 +1503,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -1615,7 +1707,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -1629,7 +1721,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -1652,7 +1744,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -1666,7 +1758,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -1689,7 +1781,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -1703,7 +1795,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -1771,7 +1863,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -1803,7 +1895,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -2111,7 +2203,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -2125,7 +2217,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -2275,7 +2367,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -2293,7 +2385,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -2382,7 +2474,7 @@
       },
       "665e7afa-d2aa-4075-bd54-278fe4673434": {
         "name": "ManaLeech",
-        "icon": "passives/XXX.svg",
+        "icon": "passives/octopus.svg",
         "x": -70.0,
         "y": -57.5,
         "size": 0,
@@ -2422,7 +2514,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -2436,7 +2528,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -2459,7 +2551,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -2473,7 +2565,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -2496,7 +2588,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -2510,7 +2602,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -2647,7 +2739,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -2661,7 +2753,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -2873,7 +2965,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -2891,7 +2983,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -2945,7 +3037,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -2963,7 +3055,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -3037,21 +3129,21 @@
               "StatusPower": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": "Physical"
+                    "damage_type": "Fire"
                   }
                 },
                 "skill_type": null
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           },
           {
             "stat": {
               "StatusDuration": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": "Physical"
+                    "damage_type": "Fire"
                   }
                 },
                 "skill_type": null
@@ -3069,31 +3161,17 @@
               "StatusPower": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": "Physical"
+                    "damage_type": "Fire"
                   }
                 },
                 "skill_type": null
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
-                "skill_type": null
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
-        "max_upgrade_level": null,
+        "max_upgrade_level": 3,
         "socket": false
       },
       "853715cd-ce16-4b22-96cb-ba6d2d83e3e7": {
@@ -3218,7 +3296,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 40.0
+            "value": 30.0
           }
         ],
         "triggers": [],
@@ -3229,7 +3307,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -3266,13 +3344,38 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 100.0
+            "value": 30.0
           }
         ],
         "triggers": [],
         "locked": false,
-        "upgrade_effects": [],
-        "max_upgrade_level": null,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": "Stun",
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
         "socket": false
       },
       "89ce0bfc-b301-4325-9d5d-6aad3b11dd4d": {
@@ -3314,7 +3417,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 4.0
+            "value": 3.0
           }
         ],
         "triggers": [],
@@ -3323,7 +3426,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 3,
@@ -3346,7 +3449,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -3360,7 +3463,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -3410,7 +3513,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -3424,7 +3527,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -3444,21 +3547,21 @@
               "StatusPower": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": "Physical"
+                    "damage_type": "Fire"
                   }
                 },
                 "skill_type": null
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           },
           {
             "stat": {
               "StatusDuration": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": "Physical"
+                    "damage_type": "Fire"
                   }
                 },
                 "skill_type": null
@@ -3476,31 +3579,17 @@
               "StatusPower": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": "Physical"
+                    "damage_type": "Fire"
                   }
                 },
                 "skill_type": null
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
-                "skill_type": null
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
-        "max_upgrade_level": null,
+        "max_upgrade_level": 3,
         "socket": false
       },
       "962af5ca-3403-48ca-ba9a-94121d6deae6": {
@@ -3838,13 +3927,13 @@
                     }
                   },
                   {
-                    "MaxDamage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": "Fire"
                     }
                   },
                   {
-                    "MinDamage": {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": "Fire"
                     }
@@ -3904,7 +3993,7 @@
               "CritDamage": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 40.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3915,7 +4004,7 @@
               "CritDamage": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -3965,7 +4054,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -3979,7 +4068,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -4115,7 +4204,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 4.0
+            "value": 3.0
           }
         ],
         "triggers": [],
@@ -4124,7 +4213,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 3,
@@ -4445,7 +4534,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -4459,7 +4548,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -4489,7 +4578,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 40.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -4510,7 +4599,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -4625,14 +4714,14 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           },
           {
             "stat": {
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 4.0
+            "value": 3.0
           }
         ],
         "triggers": [],
@@ -4646,14 +4735,14 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           },
           {
             "stat": {
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 3,
@@ -4924,12 +5013,6 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null
-                    }
-                  },
-                  {
                     "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
@@ -4939,6 +5022,12 @@
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null
+                    }
+                  },
+                  {
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null
                     }
                   }
                 ],
@@ -4974,24 +5063,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null
@@ -5001,6 +5072,24 @@
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": null
                     }
                   }
                 ],
@@ -5036,15 +5125,9 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MaxDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
-                    }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null
                     }
                   },
                   {
@@ -5054,13 +5137,19 @@
                     }
                   },
                   {
-                    "MinDamage": {
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
                   },
                   {
-                    "Damage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5098,7 +5187,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5110,21 +5199,21 @@
                     }
                   },
                   {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": null
                     }
                   }
                 ],
@@ -5243,7 +5332,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -5257,7 +5346,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -5298,7 +5387,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -5316,7 +5405,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -5325,8 +5414,8 @@
       "d95d327a-d5ae-4754-be2d-a8afdeb998bc": {
         "name": "First Dose",
         "icon": "passives/wasp.svg",
-        "x": 90.0,
-        "y": -117.5,
+        "x": -32.5,
+        "y": -137.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Poison",
@@ -5412,7 +5501,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -5426,7 +5515,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -5537,21 +5626,21 @@
               "StatusPower": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": "Physical"
+                    "damage_type": "Fire"
                   }
                 },
                 "skill_type": null
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           },
           {
             "stat": {
               "StatusDuration": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": "Physical"
+                    "damage_type": "Fire"
                   }
                 },
                 "skill_type": null
@@ -5569,31 +5658,17 @@
               "StatusPower": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": "Physical"
+                    "damage_type": "Fire"
                   }
                 },
                 "skill_type": null
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
-                "skill_type": null
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
-        "max_upgrade_level": null,
+        "max_upgrade_level": 3,
         "socket": false
       },
       "df82a320-e565-4f56-a224-64f4d960ec6c": {
@@ -5608,12 +5683,12 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 4.0
+            "value": 2.0
           },
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 4.0
+            "value": 2.0
           }
         ],
         "triggers": [],
@@ -5622,12 +5697,12 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 2.0
+            "value": 1.0
           },
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 3,
@@ -5786,7 +5861,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -5800,7 +5875,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -5905,7 +5980,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -5919,7 +5994,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -5984,7 +6059,7 @@
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 4.0
+            "value": 3.0
           }
         ],
         "triggers": [],
@@ -5995,7 +6070,7 @@
               "Speed": "Attack"
             },
             "modifier": "Multiplier",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 3,
@@ -6004,8 +6079,8 @@
       "f275006b-3e0a-4177-a128-f501b7b91b4e": {
         "name": "Assassin Strike",
         "icon": "passives/ninja_head.svg",
-        "x": -30.0,
-        "y": 102.5,
+        "x": -35.0,
+        "y": 107.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Critical",
@@ -6310,7 +6385,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -6342,7 +6417,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -6392,14 +6467,14 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 15.0
           },
           {
             "stat": {
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 4.0
+            "value": 3.0
           }
         ],
         "triggers": [],
@@ -6413,14 +6488,14 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           },
           {
             "stat": {
               "Speed": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 3,
