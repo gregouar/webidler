@@ -252,6 +252,7 @@ fn compute_player_specs(
             | StatType::TakeFromLifeBeforeMana
             | StatType::Block(_)
             | StatType::BlockDamageTaken
+            | StatType::Evade(_)
             | StatType::DamageResistance { .. }
             | StatType::StatConverter(StatConverterSpecs {
                 source:

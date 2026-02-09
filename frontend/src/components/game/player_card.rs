@@ -129,6 +129,8 @@ pub fn PlayerCard() -> impl IntoView {
             .character_state
             .just_blocked
     });
+    let just_evaded =
+        Memo::new(move |_| game_context.player_state.read().character_state.just_evaded);
 
     let statuses = Signal::derive(move || {
         game_context
@@ -270,6 +272,7 @@ pub fn PlayerCard() -> impl IntoView {
                             just_hurt=just_hurt
                             just_hurt_crit=just_hurt_crit
                             just_blocked=just_blocked
+                            just_evaded=just_evaded
                             is_dead=is_dead
                             statuses=statuses
                         />

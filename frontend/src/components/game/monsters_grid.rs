@@ -19,8 +19,8 @@ use crate::components::{
     },
 };
 
-use super::GameContext;
 use super::portrait::CharacterPortrait;
+use super::GameContext;
 
 #[component]
 pub fn MonstersGrid() -> impl IntoView {
@@ -204,6 +204,15 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .read()
             .get(index)
             .map(|x| x.character_state.just_blocked)
+            .unwrap_or_default()
+    });
+
+    let just_evaded = Memo::new(move |_| {
+        game_context
+            .monster_states
+            .read()
+            .get(index)
+            .map(|x| x.character_state.just_evaded)
             .unwrap_or_default()
     });
 
@@ -460,6 +469,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                         just_hurt=just_hurt
                         just_hurt_crit=just_hurt_crit
                         just_blocked=just_blocked
+                        just_evaded=just_evaded
                         is_dead=is_dead
                         statuses=statuses
                     />

@@ -66,6 +66,7 @@ pub enum StatType {
     TakeFromLifeBeforeMana,
     Block(#[serde(default)] Option<SkillType>),
     BlockDamageTaken,
+    Evade(#[serde(default)] Option<DamageType>),
     Damage {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -243,6 +244,7 @@ impl StatType {
             | (CritDamage(first), CritDamage(second))
             | (Speed(first), Speed(second))
             | (Block(first), Block(second)) => compare_options(first, second),
+            (Evade(first), Evade(second)) => compare_options(first, second),
             (
                 StatusPower {
                     status_type,

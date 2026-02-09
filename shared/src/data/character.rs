@@ -80,6 +80,8 @@ pub struct CharacterSpecs {
     pub block: HashMap<SkillType, Chance>,
     #[serde(default)]
     pub block_damage: f32,
+    #[serde(default)]
+    pub evade: HashMap<DamageType, Chance>,
 
     #[serde(default)]
     pub damage_resistance: HashMap<(SkillType, DamageType), f64>,
@@ -108,6 +110,7 @@ pub struct CharacterState {
     pub just_hurt: bool,
     pub just_hurt_crit: bool,
     pub just_blocked: bool,
+    pub just_evaded: bool,
 
     // This feels dirty
     #[serde(default, skip_serializing, skip_deserializing)]

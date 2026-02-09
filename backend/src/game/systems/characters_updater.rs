@@ -1,13 +1,16 @@
 use std::time::Duration;
 use strum::IntoEnumIterator;
 
-use shared::data::{
-    character::{CharacterId, CharacterSpecs, CharacterState},
-    conditional_modifier::ConditionalModifier,
-    passive::StatEffect,
-    skill::{DamageType, RestoreType, SkillType},
-    stat_effect::{ApplyStatModifier, LuckyRollType, StatConverterSource, StatType},
-    temple::Modifier,
+use shared::{
+    constants::{MAX_BLOCK, MAX_EVADE},
+    data::{
+        character::{CharacterId, CharacterSpecs, CharacterState},
+        conditional_modifier::ConditionalModifier,
+        passive::StatEffect,
+        skill::{DamageType, RestoreType, SkillType},
+        stat_effect::{ApplyStatModifier, LuckyRollType, StatConverterSource, StatType},
+        temple::Modifier,
+    },
 };
 
 use crate::game::{
@@ -83,6 +86,7 @@ pub fn reset_character(character_state: &mut CharacterState) {
     character_state.just_hurt = false;
     character_state.just_hurt_crit = false;
     character_state.just_blocked = false;
+    character_state.just_evaded = false;
 }
 
 pub fn update_character_specs(
@@ -144,6 +148,24 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
                 }
             },
             StatType::BlockDamageTaken => character_specs.block_damage.apply_effect(effect),
+            StatType::Evade(damage_type) => match damage_type {
+                Some(damage_type) => character_specs
+                    .evade
+                    .entry(damage_type)
+                    .or_default()
+                    .value
+                    .apply_effect(effect),
+                None => {
+                    for damage_type in DamageType::iter() {
+                        character_specs
+                            .evade
+                            .entry(damage_type)
+                            .or_default()
+                            .value
+                            .apply_effect(effect)
+                    }
+                }
+            },
             StatType::DamageResistance {
                 skill_type,
                 damage_type,
@@ -305,6 +327,11 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
     character_specs.max_mana = character_specs.max_mana.max(0.0);
     for block in character_specs.block.values_mut() {
         block.clamp();
+        block.value = block.value.min(MAX_BLOCK);
+    }
+    for evade in character_specs.evade.values_mut() {
+        evade.clamp();
+        evade.value = evade.value.min(MAX_EVADE);
     }
     character_specs.block_damage = character_specs.block_damage.clamp(0.0, 100.0);
 }

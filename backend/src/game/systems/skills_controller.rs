@@ -415,7 +415,9 @@ fn apply_skill_effect_on_target(
                         status_effect.cumulate,
                         is_triggered,
                     )
-                })
+                });
+
+            true
         }
         SkillEffectType::Restore {
             restore_type,

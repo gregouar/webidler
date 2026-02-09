@@ -348,6 +348,12 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::TakeFromLifeBeforeMana => "Life spent instead of Mana".to_string(),
         StatType::Block(skill_type) => format!("{}Block Chance", skill_type_str(*skill_type)),
         StatType::BlockDamageTaken => "Blocked Damage Taken".to_string(),
+        StatType::Evade(damage_type) => {
+            format!(
+                "Chance to Evade {}Damage over Time",
+                damage_type_str(*damage_type)
+            )
+        }
         StatType::Damage {
             skill_type,
             damage_type,
@@ -525,6 +531,11 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 format_flat_number(value, false)
             )
         }
+        StatType::Evade(damage_type) => format!(
+            "{} Chance to Evade {}Damage over Time",
+            format_adds_removes(value, false, "%"),
+            damage_type_str(*damage_type)
+        ),
         StatType::Damage {
             skill_type,
             damage_type,

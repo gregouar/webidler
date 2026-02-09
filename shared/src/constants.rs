@@ -21,6 +21,8 @@ pub const MONSTER_INCREASE_FACTOR: f64 = 0.12;
 pub const SKILL_COST_INCREASE_FACTOR: f64 = 0.31;
 pub const XP_INCREASE_FACTOR: f64 = 0.39;
 pub const ARMOR_FACTOR: f64 = 100.0;
+pub const MAX_BLOCK: f32 = 80.0;
+pub const MAX_EVADE: f32 = 80.0;
 
 pub const MAX_ITEM_QUALITY_PER_LEVEL: f32 = 0.5;
 pub const MAX_ITEM_QUALITY: f32 = 25.0;

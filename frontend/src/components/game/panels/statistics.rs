@@ -304,6 +304,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                 })
                         }}
+                        // TODO: CHance to EVADE
                         // {move || {
                         // game_context
                         // .player_specs
