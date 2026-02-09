@@ -265,6 +265,28 @@ pub fn apply_status(
         return false;
     }
 
+    let is_evaded = if let StatusSpecs::DamageOverTime { damage_type } = status_specs {
+        target_specs
+            .evade
+            .get(damage_type)
+            .map(|evade| evade.roll())
+            .unwrap_or_default()
+    } else {
+        false
+    };
+
+    if is_evaded {
+        target_state.just_evaded = true;
+    }
+
+    let evade_factor = if is_evaded {
+        target_specs.evade_damage as f64 * 0.01
+    } else {
+        1.0
+    };
+
+    let value = value * evade_factor;
+
     match status_specs {
         StatusSpecs::DamageOverTime { .. } | StatusSpecs::StatModifier { .. } => {
             if value <= 0.0 {
@@ -272,20 +294,6 @@ pub fn apply_status(
             }
         }
         StatusSpecs::Trigger(_) | StatusSpecs::Stun => {}
-    }
-
-    if let StatusSpecs::DamageOverTime { damage_type } = status_specs {
-        let evade = target_specs
-            .evade
-            .get(damage_type)
-            .map(|evade| evade.roll())
-            .unwrap_or_default();
-
-        if evade {
-            target_state.just_evaded = true;
-            return false;
-        }
-        // TODO: Register event?
     }
 
     // Long duration are considered as forever

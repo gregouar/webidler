@@ -67,6 +67,7 @@ pub enum StatType {
     Block(#[serde(default)] Option<SkillType>),
     BlockDamageTaken,
     Evade(#[serde(default)] Option<DamageType>),
+    EvadeDamageTaken,
     Damage {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -431,6 +432,7 @@ pub enum LuckyRollType {
         damage_type: Option<DamageType>,
     },
     Block,
+    Evade(Option<DamageType>),
     CritChance,
     SuccessChance,
     // Restore,

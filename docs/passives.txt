@@ -115,12 +115,14 @@ Other:
 -Damage per max mana
 -Inc Max Damage
 
+-Stun Chance on Attack Storm Hit
+
 -No Hit Damage?
 
 Runes:
 -----
 -Destroy armor?
 -Berserker
--Massive incrase mana cost, massive increase spell speed?
+-Massive incrase mana cost, massive increase spell speed? Even remove cooldown? => might be too strong...
 -Massive gold increase (downside?) 
 -When poison expires, get -X resistance to poison

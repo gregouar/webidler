@@ -82,6 +82,8 @@ pub struct CharacterSpecs {
     pub block_damage: f32,
     #[serde(default)]
     pub evade: HashMap<DamageType, Chance>,
+    #[serde(default)]
+    pub evade_damage: f32,
 
     #[serde(default)]
     pub damage_resistance: HashMap<(SkillType, DamageType), f64>,

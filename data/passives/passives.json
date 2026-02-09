@@ -416,6 +416,46 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "17ccb40c-fe56-450b-9723-c12510d0c5c6": {
+        "name": "Wind Dancer",
+        "icon": "passives/wing_cloak.svg",
+        "x": -152.5,
+        "y": -15.0,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Lucky": {
+                "skill_type": null,
+                "roll_type": {
+                  "Evade": null
+                }
+              }
+            },
+            "modifier": "Flat",
+            "value": 100.0
+          },
+          {
+            "stat": "EvadeDamageTaken",
+            "modifier": "Flat",
+            "value": 30.0
+          },
+          {
+            "stat": {
+              "Evade": null
+            },
+            "modifier": "Multiplier",
+            "value": 30.0
+          }
+        ],
+        "triggers": [],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": false
+      },
       "18a233e9-6bf7-4756-8cd9-1714c40f3b09": {
         "name": "Twist the Knife",
         "icon": "passives/bleeding_eye.svg",
@@ -3708,8 +3748,8 @@
       "89ce0bfc-b301-4325-9d5d-6aad3b11dd4d": {
         "name": "Tactical Start",
         "icon": "passives/sprint.svg",
-        "x": -150.0,
-        "y": -17.5,
+        "x": -122.5,
+        "y": -37.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Utility",
@@ -4416,6 +4456,12 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": "Fire"
+                    }
+                  },
+                  {
                     "MaxDamage": {
                       "skill_type": null,
                       "damage_type": "Fire"
@@ -4423,12 +4469,6 @@
                   },
                   {
                     "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": "Fire"
-                    }
-                  },
-                  {
-                    "Damage": {
                       "skill_type": null,
                       "damage_type": "Fire"
                     }
@@ -5157,13 +5197,13 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "CritChance": null
-                  },
-                  {
-                    "Damage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": "Physical"
                     }
+                  },
+                  {
+                    "CritChance": null
                   },
                   {
                     "MaxDamage": {
@@ -5172,7 +5212,7 @@
                     }
                   },
                   {
-                    "MinDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": "Physical"
                     }
@@ -5687,6 +5727,12 @@
                     }
                   },
                   {
+                    "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
                     "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
@@ -5694,12 +5740,6 @@
                   },
                   {
                     "Damage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5737,9 +5777,9 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
+                    "MaxDamage": {
+                      "skill_type": null,
+                      "damage_type": null
                     }
                   },
                   {
@@ -5749,19 +5789,19 @@
                     }
                   },
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
                     "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5805,13 +5845,7 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null
-                    }
-                  },
-                  {
-                    "MaxDamage": {
+                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5823,7 +5857,13 @@
                     }
                   },
                   {
-                    "MinDamage": {
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
+                    "MaxDamage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -5861,21 +5901,15 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
                     }
                   },
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null
                     }
                   },
                   {
@@ -5886,6 +5920,12 @@
                   },
                   {
                     "MinDamage": {
+                      "skill_type": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -7989,6 +8029,10 @@
       {
         "from": "18a233e9-6bf7-4756-8cd9-1714c40f3b09",
         "to": "03836189-8913-45b5-bd89-e658b31e79bd"
+      },
+      {
+        "from": "17ccb40c-fe56-450b-9723-c12510d0c5c6",
+        "to": "ff32f6af-3088-4f9b-963b-d469ea869adb"
       }
     ]
   }
