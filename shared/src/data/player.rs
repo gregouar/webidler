@@ -1,5 +1,6 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
+use indexmap::IndexSet;
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
@@ -20,7 +21,7 @@ pub struct PlayerSpecs {
 
     pub max_skills: u8,
     pub buy_skill_cost: f64,
-    pub bought_skills: HashSet<String>,
+    pub bought_skills: IndexSet<String>,
 
     pub level: u8,
     pub experience_needed: f64,

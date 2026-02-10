@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use shared::{
     constants::{DEFAULT_MAX_LEVEL, SKILL_BASE_COST},
     data::{
@@ -65,7 +63,7 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             auto_skills: vec![],
             max_skills: 4,
             buy_skill_cost: SKILL_BASE_COST,
-            bought_skills: HashSet::new(),
+            bought_skills: Default::default(),
             level: 1,
             experience_needed: 20.0,
             movement_cooldown: 3.0,

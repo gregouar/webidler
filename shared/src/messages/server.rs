@@ -1,5 +1,6 @@
-use std::{collections::HashSet, time::Duration};
+use std::time::Duration;
 
+use indexmap::IndexSet;
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
@@ -49,7 +50,7 @@ pub struct InitGameMessage {
     pub passives_tree_state: PassivesTreeState,
     pub player_specs: PlayerSpecs,
     pub player_state: PlayerState,
-    pub last_skills_bought: HashSet<String>,
+    pub last_skills_bought: IndexSet<String>,
 }
 
 /// Message to be sent every tick to sync current state of the game with clients

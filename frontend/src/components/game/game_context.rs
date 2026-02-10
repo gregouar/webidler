@@ -1,5 +1,6 @@
-use std::{collections::HashSet, time::Duration};
+use std::time::Duration;
 
+use indexmap::IndexSet;
 use leptos::prelude::{
     guards::{Plain, ReadGuard},
     *,
@@ -54,7 +55,7 @@ pub struct GameContext {
     pub open_end_quest: RwSignal<bool>,
 
     pub loot_preference: RwSignal<Option<ItemCategory>>,
-    pub last_skills_bought: RwSignal<HashSet<String>>,
+    pub last_skills_bought: RwSignal<IndexSet<String>>,
 }
 
 impl Default for GameContext {

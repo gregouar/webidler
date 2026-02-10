@@ -1,5 +1,6 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
+use indexmap::IndexSet;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
@@ -42,7 +43,7 @@ pub struct PassivesTreeAscension {
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct PassivesTreeState {
-    pub purchased_nodes: HashSet<PassiveNodeId>,
+    pub purchased_nodes: IndexSet<PassiveNodeId>,
     pub ascension: PassivesTreeAscension,
 }
 

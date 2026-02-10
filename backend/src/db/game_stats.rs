@@ -1,7 +1,8 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use anyhow;
 
+use indexmap::IndexSet;
 use sqlx::{types::JsonValue, FromRow};
 
 use shared::data::{item::ItemSlot, player::EquippedSlot, user::UserCharacterId};
@@ -90,7 +91,7 @@ pub async fn load_last_game_stats<'c>(
 ) -> anyhow::Result<
     Option<(
         Option<HashMap<ItemSlot, EquippedSlot>>,
-        Option<HashSet<String>>,
+        Option<IndexSet<String>>,
     )>,
 > {
     let game_stats_data = read_last_game_stats(executor, character_id).await?;

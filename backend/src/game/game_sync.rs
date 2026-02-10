@@ -1,7 +1,6 @@
-use std::collections::HashSet;
-
 use anyhow::Result;
 
+use indexmap::IndexSet;
 use shared::messages::server::{InitGameMessage, SyncGameStateMessage};
 
 use super::game_data::GameInstanceData;
@@ -11,7 +10,7 @@ use crate::websocket::WebSocketConnection;
 pub async fn sync_init_game(
     client_conn: &mut WebSocketConnection,
     game_data: &mut GameInstanceData,
-    last_skills_bought: HashSet<String>,
+    last_skills_bought: IndexSet<String>,
 ) -> Result<()> {
     game_data.reset_syncers();
     client_conn
