@@ -13,7 +13,7 @@ use frontend::components::{
         card::{Card, CardHeader, CardInset, CardTitle},
         confirm::ConfirmContext,
         dropdown::SearchableDropdownMenu,
-        input::ValidatedInput,
+        input::{Input,ValidatedInput},
         pannable::Pannable,
         tooltip::DynamicTooltip,
     },
@@ -100,6 +100,7 @@ pub fn PassivesPage() -> impl IntoView {
         });
     });
 
+
     let save = move || {
         save_json(
             &HashMap::from([(
@@ -125,6 +126,8 @@ pub fn PassivesPage() -> impl IntoView {
             input.click();
         }
     };
+
+    let search_node = RwSignal::new(None);
 
     Effect::new({
         move || {
@@ -232,6 +235,17 @@ pub fn PassivesPage() -> impl IntoView {
                                 <div class="flex-1" />
 
                                 <div class="flex gap-2 ">
+                                    <Input
+                                        id="search_node"
+                                        input_type="text"
+                                        placeholder="Search for node..."
+                                        bind=search_node
+                                    />
+                                </div>
+
+                                <div class="flex-1" />
+
+                                <div class="flex gap-2 ">
                                     <MenuButton
                                         on:click=move |_| undo_history(
                                             passives_history_tracker,
@@ -264,6 +278,7 @@ pub fn PassivesPage() -> impl IntoView {
                                     selected_node
                                     clipboard_node
                                     tool_mode
+                                    search_node
                                 />
                             </CardInset>
                         </Card>
@@ -300,6 +315,7 @@ fn PassiveSkillTree(
     selected_node: RwSignal<SelectedNode>,
     clipboard_node: RwSignal<Option<PassiveNodeSpecs>>,
     tool_mode: RwSignal<ToolMode>,
+    search_node: RwSignal<Option<String>>,
 ) -> impl IntoView {
     let events_context: EventsContext = expect_context();
     let mouse_position = RwSignal::new((0.0, 0.0));
@@ -389,6 +405,7 @@ fn PassiveSkillTree(
                             tool_mode
                             mouse_position
                             dragging
+                            search_node
                         />
                     }
                 }}
@@ -413,6 +430,7 @@ fn ToolNode(
     tool_mode: RwSignal<ToolMode>,
     mouse_position: RwSignal<(f64, f64)>,
     dragging: RwSignal<Option<(f64, f64)>>,
+    search_node: RwSignal<Option<String>>,
 ) -> impl IntoView {
     let events_context: EventsContext = expect_context();
 
@@ -451,12 +469,19 @@ fn ToolNode(
             } else {
                 !selected
             };
+
+            let node_specs = node_specs();
+            let searched = match search_node.read().as_ref() {
+                Some(searched_node) => node_specs.name.to_lowercase().contains(&searched_node.to_lowercase()),
+                None => true,
+            };
             NodeStatus {
-                purchase_status: match clickable {
-                    true => PurchaseStatus::Purchaseable,
-                    false => PurchaseStatus::Purchased,
+                purchase_status: match (searched,clickable) {
+                    (false,_) =>PurchaseStatus::Inactive,
+                    (true,true) => PurchaseStatus::Purchaseable,
+                    (true,false) => PurchaseStatus::Purchased,
                 },
-                meta_status: match (node_specs().locked, selected) {
+                meta_status: match (node_specs.locked, selected) {
                     (_, true) => MetaStatus::Ascended,
                     (true, _) => MetaStatus::Locked,
                     _ => MetaStatus::Normal,

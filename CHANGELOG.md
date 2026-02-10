@@ -16,6 +16,7 @@ Content:
 - Added new magic affixes: massive increase in Attack Damage at the cost of Attack Speed (amulets, cloaks & rings).
 - Added tier 7 base items.
 - Added Skill: Blizzard.
+- Added Skill: Double Strike.
 
 Balance Changes:
 
