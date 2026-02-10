@@ -91,6 +91,8 @@ pub struct ModifierEffect {
     pub effects: Vec<StatEffect>,
     pub source: ModifierEffectSource,
     pub factor: f64,
+    #[serde(default)]
+    pub hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]

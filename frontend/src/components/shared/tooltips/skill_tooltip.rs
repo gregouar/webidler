@@ -71,6 +71,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         .modifier_effects
         .clone()
         .into_iter()
+        .filter(|skill_modifier| !skill_modifier.hidden)
         .map(format_skill_modifier)
         .collect();
 

@@ -973,6 +973,7 @@
     ],
     "modifier_effects": [
       {
+        "hidden": true,
         "effects": [
           {
             "stat": {
@@ -996,6 +997,7 @@
         "factor": 1
       },
       {
+        "hidden": true,
         "effects": [
           {
             "stat": {
@@ -1473,6 +1475,7 @@
     ],
     "modifier_effects": [
       {
+        "hidden": true,
         "effects": [
           {
             "stat": { "Speed": "Attack" },
@@ -1489,6 +1492,7 @@
         "factor": -1.1
       },
       {
+        "hidden": true,
         "effects": [
           {
             "stat": { "CritChance": "Attack" },
@@ -1505,6 +1509,7 @@
         "factor": 1
       },
       {
+        "hidden": true,
         "effects": [
           {
             "stat": { "CritDamage": "Attack" },
@@ -1521,6 +1526,7 @@
         "factor": 1
       },
       {
+        "hidden": true,
         "effects": [
           {
             "stat": {
@@ -1544,6 +1550,7 @@
         "factor": 1
       },
       {
+        "hidden": true,
         "effects": [
           {
             "stat": {
@@ -1567,6 +1574,7 @@
         "factor": 1
       },
       {
+        "hidden": true,
         "effects": [
           {
             "stat": {
@@ -1590,6 +1598,7 @@
         "factor": 1
       },
       {
+        "hidden": true,
         "effects": [
           {
             "stat": {
@@ -1613,6 +1622,7 @@
         "factor": 1
       },
       {
+        "hidden": true,
         "effects": [
           {
             "stat": {
@@ -1636,6 +1646,7 @@
         "factor": 1
       },
       {
+        "hidden": true,
         "effects": [
           {
             "stat": {
@@ -1659,6 +1670,7 @@
         "factor": 1
       },
       {
+        "hidden": true,
         "effects": [
           {
             "stat": {
@@ -1686,6 +1698,7 @@
         "factor": 1
       },
       {
+        "hidden": true,
         "effects": [
           {
             "stat": {
