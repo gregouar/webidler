@@ -129,20 +129,28 @@ pub fn PassivesPage() -> impl IntoView {
     };
 
     let search_node = RwSignal::new(None);
+    let search_node_ref = NodeRef::<leptos::html::Input>::new();
 
     Effect::new({
         move || {
             if events_context.key_pressed(Key::Ctrl) {
                 if events_context.key_pressed(Key::Character('z')) {
                     undo_history(passives_history_tracker, passives_tree_specs);
-                }
-                if events_context.key_pressed(Key::Character('y')) {
+                } else if events_context.key_pressed(Key::Character('y')) {
                     redo_history(passives_history_tracker, passives_tree_specs);
                 }
+
                 if events_context.key_pressed(Key::Character('s')) {
                     save();
                 } else if events_context.key_pressed(Key::Character('o')) {
                     load();
+                }
+
+                if events_context.key_pressed(Key::Character('f')) {
+                    if let Some(input) = search_node_ref.get() {
+                        input.focus().unwrap();
+                        input.select();
+                    }
                 }
             } else if events_context.key_pressed(Key::Shift) {
                 tool_mode.set(ToolMode::Select);
@@ -237,6 +245,7 @@ pub fn PassivesPage() -> impl IntoView {
 
                                 <div class="flex gap-2 ">
                                     <Input
+                                        node_ref=search_node_ref
                                         id="search_node"
                                         input_type="text"
                                         placeholder="Search for node..."
@@ -468,13 +477,12 @@ fn ToolNode(
         let node_specs = node_specs.clone();
         move |_| {
             let selected = selected_node.read().is_selected(&node_id);
-            let clickable = if events_context.key_pressed(Key::Ctrl)
-                && tool_mode.get() == ToolMode::Select
-            {
-                true
-            } else {
-                !selected
-            };
+            let clickable =
+                if events_context.key_pressed(Key::Ctrl) && tool_mode.get() == ToolMode::Select {
+                    true
+                } else {
+                    !selected
+                };
 
             let node_specs = node_specs();
             let searched = if let ToolMode::Edit | ToolMode::Select = tool_mode.get() {

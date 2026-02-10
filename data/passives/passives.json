@@ -863,8 +863,8 @@
       "17ccb40c-fe56-450b-9723-c12510d0c5c6": {
         "name": "Wind Dancer",
         "icon": "passives/wing_cloak.svg",
-        "x": -130.0,
-        "y": -27.5,
+        "x": -127.5,
+        "y": -25.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Armor",
@@ -3161,33 +3161,6 @@
         "max_upgrade_level": 3,
         "socket": false
       },
-      "4cf86e21-1f2c-4e68-9c7c-841de31171e9": {
-        "name": "Maximum Life",
-        "icon": "passives/life.svg",
-        "x": -132.5,
-        "y": 27.5,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Life",
-        "effects": [
-          {
-            "stat": "Life",
-            "modifier": "Multiplier",
-            "value": 4.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": "Life",
-            "modifier": "Multiplier",
-            "value": 2.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
       "4efc73a8-7961-4004-b629-cdc02fb81157": {
         "name": "Physical Damage",
         "icon": "passives/mace_head.svg",
@@ -4253,7 +4226,7 @@
       "665e7afa-d2aa-4075-bd54-278fe4673434": {
         "name": "ManaLeech",
         "icon": "passives/octopus.svg",
-        "x": -72.5,
+        "x": 72.5,
         "y": -62.5,
         "size": 2,
         "initial_node": false,
@@ -5031,7 +5004,7 @@
         "name": "Pyromaniac",
         "icon": "passives/pyromaniac.svg",
         "x": 127.5,
-        "y": 30.0,
+        "y": 25.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Fire",
@@ -8083,7 +8056,7 @@
         "name": "Bonfire",
         "icon": "passives/bonfire.svg",
         "x": 127.5,
-        "y": -30.0,
+        "y": -25.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Fire",
@@ -9689,8 +9662,8 @@
       "db23ff19-242a-4751-b628-e41b698a0788": {
         "name": "Stunning Blow",
         "icon": "passives/thor_fist.svg",
-        "x": -37.5,
-        "y": 142.5,
+        "x": -25.0,
+        "y": 120.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Storm",
@@ -12284,10 +12257,6 @@
         "to": "563e3226-2387-4147-bed3-914575c77d9a"
       },
       {
-        "from": "201637a1-c430-4dcc-b537-afe68b01a2b6",
-        "to": "4cf86e21-1f2c-4e68-9c7c-841de31171e9"
-      },
-      {
         "from": "29ba21ea-6046-46f2-8b86-29b1580a1710",
         "to": "1cc7cfb0-1ec8-4696-9baa-5a42fac7db31"
       },
@@ -12366,10 +12335,6 @@
       {
         "from": "69ec7950-0800-400d-9f45-17a1590a3fe7",
         "to": "dfcf089f-d02a-4d98-a751-61e7f67da41b"
-      },
-      {
-        "from": "dfcf089f-d02a-4d98-a751-61e7f67da41b",
-        "to": "665e7afa-d2aa-4075-bd54-278fe4673434"
       },
       {
         "from": "d50d2ac7-ab10-4d27-a48b-4bb98b745101",
@@ -12962,6 +12927,10 @@
       {
         "from": "9addfe39-f177-427a-aefa-4f3ba229c856",
         "to": "8c431093-95e6-4dce-b21a-9a07edfd57ea"
+      },
+      {
+        "from": "c685f882-72ed-4b98-b8c9-5ddb7049a386",
+        "to": "665e7afa-d2aa-4075-bd54-278fe4673434"
       }
     ]
   }

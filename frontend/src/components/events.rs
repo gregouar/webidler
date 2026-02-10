@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use leptos::{
     ev::{keydown, keyup, visibilitychange},
     prelude::*,
-    web_sys::{Element, HtmlInputElement, HtmlTextAreaElement, wasm_bindgen::JsCast},
+    web_sys::{wasm_bindgen::JsCast, Element, HtmlInputElement, HtmlTextAreaElement},
 };
 use leptos_use::{use_document, use_event_listener};
 
@@ -38,11 +38,13 @@ pub fn provide_events_context() {
     });
 
     let _ = use_event_listener(use_document(), keyup, move |ev| {
-        if is_text_input_target(&ev) {
-            return;
-        }
+        // if is_text_input_target(&ev) {
+        //     return;
+        // }
 
-        if ev.alt_key() || ev.code() == "AltLeft" || ev.code() == "AltRight" || ev.ctrl_key() {
+        if !is_text_input_target(&ev)
+            && (ev.alt_key() || ev.code() == "AltLeft" || ev.code() == "AltRight" || ev.ctrl_key())
+        {
             ev.prevent_default();
             ev.stop_propagation();
         }
