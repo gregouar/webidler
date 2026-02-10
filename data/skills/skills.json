@@ -1430,7 +1430,7 @@
   },
   "double_strike": {
     "name": "Double Strike",
-    "description": "A second strike of your weapon against a single target.",
+    "description": "A second strike with your weapon.",
     "icon": "skills/attack.svg",
     "skill_type": "Attack",
     "cooldown": 0,

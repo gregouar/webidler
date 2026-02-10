@@ -81,8 +81,13 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         shadow-md shadow-violet-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
         ">
             <strong class="text-base xl:text-lg font-bold text-violet-300">
-                {skill_specs.base.name.clone()}
+                <ul class="list-none space-y-1 mb-2">
+                    <li class="leading-snug whitespace-pre-line">
+                        {skill_specs.base.name.clone()}
+                    </li>
+                </ul>
             </strong>
+
             <hr class="border-t border-gray-700" />
 
             <p class="text-xs xl:text-sm text-gray-400 leading-snug">
@@ -351,18 +356,26 @@ pub fn format_effect(
                             ),
                             "",
                         );
-                        view! {
-                            <EffectLi>
-                                {success_chance}"Deal "
-                                <span class=format!(
-                                    "font-semibold {damage_color}",
-                                )>{format_min_max(status_effect.value)}</span>
-                                {trigger_modifier_damage_str}"  "
-                                {stackable_str(status_effect.cumulate)}
-                                {damage_type_str(Some(damage_type))} "Damage per second "
-                                {format_duration(duration)} {trigger_modifier_duration_str}
-                            </EffectLi>
-                        }
+
+                        (status_effect.value.min > 0.0
+                            || status_effect.value.max > 0.0
+                            || trigger_modifier_damage_str.is_some())
+                        .then({
+                            || {
+                                view! {
+                                    <EffectLi>
+                                        {success_chance}"Deal "
+                                        <span class=format!(
+                                            "font-semibold {damage_color}",
+                                        )>{format_min_max(status_effect.value)}</span>
+                                        {trigger_modifier_damage_str}"  "
+                                        {stackable_str(status_effect.cumulate)}
+                                        {damage_type_str(Some(damage_type))} "Damage per second "
+                                        {format_duration(duration)} {trigger_modifier_duration_str}
+                                    </EffectLi>
+                                }
+                            }
+                        })
                         .into_any()
                     }
                     StatusSpecs::StatModifier {
