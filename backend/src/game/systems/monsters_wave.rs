@@ -2,7 +2,7 @@ use anyhow::Result;
 
 use shared::{
     computations,
-    constants::{CHAMPION_LEVEL_INC, MONSTERS_DEFAULT_DAMAGE_INCREASE, MONSTER_INCREASE_FACTOR},
+    constants::{CHAMPION_LEVEL_INC, MONSTER_INCREASE_FACTOR, MONSTERS_DEFAULT_DAMAGE_INCREASE},
     data::{
         area::{AreaLevel, AreaState, AreaThreat},
         character::CharacterId,
@@ -16,10 +16,10 @@ use shared::{
 
 use crate::game::{
     data::{
+        DataInit,
         area::{AreaBlueprint, BossBlueprint, MonsterWaveBlueprint, MonsterWaveSpawnBlueprint},
         master_store::MonstersSpecsStore,
         monster::BaseMonsterSpecs,
-        DataInit,
     },
     systems::{characters_updater, stats_updater},
     utils::rng::{self, RandomWeighted, Rollable},

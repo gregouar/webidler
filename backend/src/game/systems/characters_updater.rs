@@ -271,7 +271,8 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             | StatType::Lucky { .. }
             | StatType::SuccessChance { .. }
             | StatType::SkillLevel(_)
-            | StatType::SkillConditionalModifier { .. } => {}
+            | StatType::SkillConditionalModifier { .. }
+            | StatType::SkillTargetModifier { .. } => {}
             // Other
             StatType::ItemRarity => {}
         }

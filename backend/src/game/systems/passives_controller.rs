@@ -40,10 +40,10 @@ pub fn purchase_node(
                         || passives_tree_state.purchased_nodes.contains(&connection.to)
                 })
                 .any(|connection| connection.from == node_id || connection.to == node_id))
-            && passives_tree_state.purchased_nodes.insert(node_id)
-        {
-            player_resources.passive_points -= 1;
-        }
+        && passives_tree_state.purchased_nodes.insert(node_id)
+    {
+        player_resources.passive_points -= 1;
+    }
 }
 
 pub fn generate_effects_map_from_passives<'a>(

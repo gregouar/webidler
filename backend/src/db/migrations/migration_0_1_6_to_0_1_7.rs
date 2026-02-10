@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
-use sqlx::{types::JsonValue, Transaction};
+use sqlx::{Transaction, types::JsonValue};
 
 use shared::data::{
     area::AreaLevel,
@@ -21,7 +21,7 @@ use shared::data::{
 use crate::{
     constants::DATA_VERSION,
     db::{
-        characters_data::{upsert_character_inventory_data, CharacterDataEntry},
+        characters_data::{CharacterDataEntry, upsert_character_inventory_data},
         pool::{Database, DbExecutor, DbPool},
     },
     game::data::inventory_data::InventoryData,

@@ -1,6 +1,6 @@
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 
-use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
+use axum::{Extension, Json, Router, extract::State, middleware, routing::post};
 
 use shared::{
     data::{market::MarketItem, stash::StashType},
@@ -104,9 +104,10 @@ pub async fn post_buy_market_item(
     // Allow seller to remove own listing
     let price = if character.user_id != item_bought.user_id {
         if let Some(recipient_id) = market_buy_entry.recipient_id
-            && recipient_id != current_user.user_details.user.user_id {
-                return Err(AppError::Forbidden);
-            }
+            && recipient_id != current_user.user_details.user.user_id
+        {
+            return Err(AppError::Forbidden);
+        }
 
         market_buy_entry.price
     } else {

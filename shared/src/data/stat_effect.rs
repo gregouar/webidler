@@ -7,6 +7,7 @@ use crate::data::{
     chance::ChanceRange,
     character_status::StatusSpecs,
     conditional_modifier::Condition,
+    item::{SkillRange, SkillShape},
     skill::{RestoreType, SkillEffectType},
 };
 
@@ -128,6 +129,15 @@ pub enum StatType {
         skill_type: Option<SkillType>,
         #[serde(default)]
         conditions: Vec<Condition>,
+    },
+    SkillTargetModifier {
+        // TODO: More control and options?
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        range: Option<SkillRange>,
+        #[serde(default)]
+        shape: Option<SkillShape>,
     },
     SkillLevel(#[serde(default)] Option<SkillType>),
     StatConverter(StatConverterSpecs),

@@ -1,6 +1,6 @@
 use rand::{
-    distr::uniform::{SampleRange, SampleUniform},
     Rng, SeedableRng,
+    distr::uniform::{SampleRange, SampleUniform},
 };
 use rand_chacha::ChaCha8Rng;
 
@@ -107,9 +107,10 @@ where
 
     fn clamp(&mut self) {
         if let Some(ordering) = self.min.partial_cmp(&self.max)
-            && ordering == std::cmp::Ordering::Greater {
-                self.min = self.max;
-            }
+            && ordering == std::cmp::Ordering::Greater
+        {
+            self.min = self.max;
+        }
         self.lucky_chance = self.lucky_chance.clamp(-100.0, 100.0);
     }
 }

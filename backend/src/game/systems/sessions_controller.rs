@@ -1,6 +1,6 @@
 use std::time::{Duration, Instant};
 
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 
 use chrono::Utc;
 use shared::{
@@ -21,8 +21,8 @@ use crate::{
     db::{self, characters::CharacterEntry},
     game::{
         data::{
-            inventory_data::inventory_data_to_player_inventory, master_store::MasterStore,
-            passives::ascension_data_to_passives_tree_ascension, DataInit,
+            DataInit, inventory_data::inventory_data_to_player_inventory,
+            master_store::MasterStore, passives::ascension_data_to_passives_tree_ascension,
         },
         game_data::GameInstanceData,
         sessions::{Session, SessionsStore},
@@ -95,15 +95,7 @@ async fn load_game_instance(
     master_store: &MasterStore,
     character_id: &UserCharacterId,
 ) -> Option<GameInstanceData> {
-    
-
-    match db::game_instances::load_game_instance_data(
-        db_pool,
-        master_store,
-        character_id,
-    )
-    .await
-    {
+    match db::game_instances::load_game_instance_data(db_pool, master_store, character_id).await {
         Ok(Some((mut game_instance, saved_at))) => {
             // Maybe move this somewhere else
             game_instance.player_stamina += Duration::from_secs(

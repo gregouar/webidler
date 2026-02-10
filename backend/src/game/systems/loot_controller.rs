@@ -146,9 +146,10 @@ fn is_better_loot(
 fn item_score(player_controller: &PlayerController, item: &ItemSpecs) -> usize {
     let mut score = 0;
     if let Some(item_category) = player_controller.preferred_loot
-        && item.base.categories.contains(&item_category) {
-            score += 2_000_000;
-        }
+        && item.base.categories.contains(&item_category)
+    {
+        score += 2_000_000;
+    }
 
     score += match item.modifiers.rarity {
         ItemRarity::Normal | ItemRarity::Magic | ItemRarity::Rare | ItemRarity::Masterwork => 0,

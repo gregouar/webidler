@@ -8,7 +8,7 @@ use shared::{
 use crate::components::{
     game::game_context::GameContext,
     shared::passives::{
-        node_meta_status, Connection, MetaStatus, Node, NodeStatus, PurchaseStatus,
+        Connection, MetaStatus, Node, NodeStatus, PurchaseStatus, node_meta_status,
     },
     ui::{
         card::{Card, CardHeader, CardInset},

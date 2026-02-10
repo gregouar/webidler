@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
+use axum::{Extension, Json, Router, extract::State, middleware, routing::post};
 
 use shared::{
     data::area::AreaLevel,

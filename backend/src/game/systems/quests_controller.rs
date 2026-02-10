@@ -35,12 +35,12 @@ pub fn terminate_quest(
     if let Some(quest_rewards) = game_data.quest_rewards.read()
         && let Some(item_specs) =
             item_index.and_then(|item_index| quest_rewards.item_rewards.get(item_index as usize))
-        {
-            inventory_controller::store_item_to_bag(
-                game_data.player_inventory.mutate(),
-                item_specs.clone(),
-            )?;
-        }
+    {
+        inventory_controller::store_item_to_bag(
+            game_data.player_inventory.mutate(),
+            item_specs.clone(),
+        )?;
+    }
 
     game_data.terminate_quest = true;
 

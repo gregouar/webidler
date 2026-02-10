@@ -225,9 +225,9 @@ impl<'a> GameInstance<'a> {
         if self.game_data.area_state.read().max_area_level > 0
             && let Err(e) =
                 db::game_stats::save_game_stats(&mut *tx, self.character_id, self.game_data).await
-            {
-                tracing::error!("failed to save game stats '{}': {}", self.character_id, e)
-            }
+        {
+            tracing::error!("failed to save game stats '{}': {}", self.character_id, e)
+        }
 
         tx.commit().await?;
 

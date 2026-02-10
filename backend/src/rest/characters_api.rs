@@ -1,8 +1,8 @@
 use axum::{
+    Extension, Json, Router,
     extract::{Path, State},
     middleware,
     routing::{delete, get, post},
-    Extension, Json, Router,
 };
 use shared::{
     data::{
@@ -29,8 +29,8 @@ use crate::{
     db,
     game::{
         data::{
-            inventory_data::inventory_data_to_player_inventory,
-            passives::ascension_data_to_passives_tree_ascension, DataInit,
+            DataInit, inventory_data::inventory_data_to_player_inventory,
+            passives::ascension_data_to_passives_tree_ascension,
         },
         systems::items_controller,
     },

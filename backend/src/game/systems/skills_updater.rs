@@ -10,8 +10,8 @@ use shared::data::{
         SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
-        compare_options, ApplyStatModifier, EffectsMap, LuckyRollType, MinMax, Modifier,
-        StatConverterSource, StatEffect, StatType,
+        ApplyStatModifier, EffectsMap, LuckyRollType, MinMax, Modifier, StatConverterSource,
+        StatEffect, StatType, compare_options,
     },
 };
 use strum::IntoEnumIterator;
@@ -85,7 +85,10 @@ pub fn update_skill_specs<'a>(
 
     apply_effects_to_skill_specs(skill_specs, local_effects.iter().filter(is_local_flat));
     apply_effects_to_skill_specs(skill_specs, effects.clone().filter(is_global_flat));
-    apply_effects_to_skill_specs(skill_specs, local_effects.iter().filter(|e| !is_local_flat(e)));
+    apply_effects_to_skill_specs(
+        skill_specs,
+        local_effects.iter().filter(|e| !is_local_flat(e)),
+    );
     apply_effects_to_skill_specs(skill_specs, effects.filter(|e| !is_global_flat(e)));
 }
 
@@ -119,6 +122,25 @@ pub fn apply_effects_to_skill_specs<'a>(
             skill_type: Some(skill_specs.base.skill_type),
         }) {
             skill_specs.mana_cost.apply_effect(effect);
+        }
+
+        if let StatType::SkillTargetModifier {
+            skill_type,
+            range,
+            shape,
+        } = &effect.stat
+            && compare_options(&skill_type, &Some(skill_specs.base.skill_type))
+        {
+            for target in skill_specs.targets.iter_mut() {
+                if let Some(range) = range {
+                    target.range = *range;
+                }
+                if let Some(shape) = shape {
+                    target.shape = *shape;
+                }
+            }
+
+            // TODO: Triggers
         }
     }
 
@@ -162,20 +184,25 @@ fn compute_skill_modifier_effects<'a>(
     skill_specs: &'a SkillSpecs,
     inventory: Option<&'a PlayerInventory>,
 ) -> EffectsMap {
-    let item_sources = skill_specs
+    let item_sources: Vec<_> = skill_specs
         .base
         .modifier_effects
         .iter()
-        .filter_map(|me| match &me.source {
-            ModifierEffectSource::ItemStats { slot, item_stats } => Some((me, *slot, item_stats)),
+        .filter_map(|modifier_effect| match &modifier_effect.source {
+            ModifierEffectSource::ItemStats { slot, item_stats } => {
+                Some((modifier_effect, *slot, item_stats))
+            }
             _ => None,
         })
-        .flat_map(move |(me, slot, item_stats)| {
+        .flat_map(move |(modifier_effect, slot, item_stats)| {
             inventory
                 .into_iter()
                 .flat_map(|inv| inv.equipped_items())
                 .filter_map(move |(item_slot, item_specs)| {
-                    let base = if slot.unwrap_or(item_slot) == item_slot {
+                    let mut modifier_effect = modifier_effect.clone();
+                    let base = if slot.unwrap_or(item_slot) == item_slot
+                        || item_specs.base.extra_slots.contains(&item_slot)
+                    {
                         match (
                             item_stats,
                             &item_specs.weapon_specs,
@@ -189,7 +216,7 @@ fn compute_skill_modifier_effects<'a>(
                                 weapon_specs.crit_chance.value as f64
                             }
                             (ItemStatsSource::CritDamage, Some(weapon_specs), _) => {
-                                weapon_specs.crit_damage 
+                                weapon_specs.crit_damage
                             }
                             (
                                 ItemStatsSource::Damage {
@@ -221,6 +248,26 @@ fn compute_skill_modifier_effects<'a>(
                                         .sum()
                                 }
                             }
+                            (ItemStatsSource::Range, Some(weapon_specs), _) => {
+                                for effect in modifier_effect.effects.iter_mut() {
+                                    if let StatType::SkillTargetModifier { range, .. } =
+                                        &mut effect.stat
+                                    {
+                                        *range = Some(weapon_specs.range);
+                                    }
+                                }
+                                1.0
+                            }
+                            (ItemStatsSource::Shape, Some(weapon_specs), _) => {
+                                for effect in modifier_effect.effects.iter_mut() {
+                                    if let StatType::SkillTargetModifier { shape, .. } =
+                                        &mut effect.stat
+                                    {
+                                        *shape = Some(weapon_specs.shape);
+                                    }
+                                }
+                                1.0
+                            }
                             _ => 0.0,
                         }
                     } else {
@@ -228,25 +275,28 @@ fn compute_skill_modifier_effects<'a>(
                     };
 
                     if base > 0.0 {
-                        Some((me, me.factor * base))
+                        let factor = modifier_effect.factor * base;
+                        Some((modifier_effect, factor))
                     } else {
                         None
                     }
                 })
-        });
+        })
+        .collect();
 
-    let non_item_sources =
-        skill_specs
-            .base
-            .modifier_effects
-            .iter()
-            .filter_map(|me| match &me.source {
-                ModifierEffectSource::ItemStats { .. } => None,
-                ModifierEffectSource::PlaceHolder => todo!(),
-            });
+    let non_item_sources: Vec<_> = skill_specs
+        .base
+        .modifier_effects
+        .iter()
+        .filter_map(|me| match &me.source {
+            ModifierEffectSource::ItemStats { .. } => None,
+            ModifierEffectSource::PlaceHolder => todo!(),
+        })
+        .collect();
 
     item_sources
-        .chain(non_item_sources)
+        .iter()
+        .chain(non_item_sources.iter())
         .flat_map(|(modifier_effect, factor)| {
             modifier_effect.effects.iter().map(move |effect| {
                 (
@@ -269,11 +319,12 @@ pub fn compute_skill_specs_effect<'a>(
     if let SkillEffectType::ApplyStatus { statuses, .. } = &mut skill_effect.effect_type {
         for status_effect in statuses.iter_mut() {
             if let StatusSpecs::Trigger(ref mut trigger_specs) = status_effect.status_type
-                && trigger_specs.triggered_effect.inherit_modifiers {
-                    for triggered_effect in trigger_specs.triggered_effect.effects.iter_mut() {
-                        compute_skill_specs_effect(skill_type, triggered_effect, effects.clone())
-                    }
+                && trigger_specs.triggered_effect.inherit_modifiers
+            {
+                for triggered_effect in trigger_specs.triggered_effect.effects.iter_mut() {
+                    compute_skill_specs_effect(skill_type, triggered_effect, effects.clone())
                 }
+            }
         }
     }
 
@@ -319,20 +370,21 @@ pub fn compute_skill_specs_effect<'a>(
             conditions,
             stat,
         } = &effect.stat
-            && compare_options(modifier_skill_type, &Some(skill_type)) {
-                skill_effect
-                    .conditional_modifiers
-                    .push(ConditionalModifier {
-                        conditions: conditions.clone(),
-                        effects: [StatEffect {
-                            stat: *(stat.clone()),
-                            modifier: effect.modifier,
-                            value: effect.value,
-                            bypass_ignore: effect.bypass_ignore,
-                        }]
-                        .into(),
-                    });
-            }
+            && compare_options(modifier_skill_type, &Some(skill_type))
+        {
+            skill_effect
+                .conditional_modifiers
+                .push(ConditionalModifier {
+                    conditions: conditions.clone(),
+                    effects: [StatEffect {
+                        stat: *(stat.clone()),
+                        modifier: effect.modifier,
+                        value: effect.value,
+                        bypass_ignore: effect.bypass_ignore,
+                    }]
+                    .into(),
+                });
+        }
 
         match &mut skill_effect.effect_type {
             SkillEffectType::FlatDamage {
@@ -535,13 +587,12 @@ pub fn compute_skill_specs_effect<'a>(
                     };
 
                     // Special case, when converting damage we map on min and max respectively
-                    if let None = min_max && let
-                        StatType::Damage {
+                    if let None = min_max
+                        && let StatType::Damage {
                             skill_type,
                             damage_type,
                             min_max: None,
-                        } 
-                     =  *specs.target_stat
+                        } = *specs.target_stat
                     {
                         stats_converted.push(StatEffect {
                             stat: StatType::Damage {

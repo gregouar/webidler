@@ -116,6 +116,8 @@ pub enum ItemStatsSource {
         #[serde(default)]
         min_max: Option<MinMax>,
     },
+    Range,
+    Shape,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -227,7 +229,9 @@ pub enum SkillRange {
     Any,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default, Eq, Hash, PartialOrd, Ord,
+)]
 pub enum SkillShape {
     #[default]
     Single,

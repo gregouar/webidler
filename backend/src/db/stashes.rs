@@ -2,7 +2,7 @@ use shared::data::{
     stash::{StashId, StashType},
     user::{UserCharacterId, UserId},
 };
-use sqlx::{types::Json, FromRow};
+use sqlx::{FromRow, types::Json};
 
 use crate::db::pool::DbExecutor;
 

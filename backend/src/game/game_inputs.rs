@@ -27,9 +27,10 @@ pub async fn handle_client_inputs(
         match client_conn.poll_receive() {
             ControlFlow::Continue(Some(m)) => {
                 if let Some(error_message) = handle_client_message(master_store, game_data, m)
-                    && let Err(e) = client_conn.send(&error_message.into()).await {
-                        tracing::warn!("failed to send error to client: {}", e)
-                    }
+                    && let Err(e) = client_conn.send(&error_message.into()).await
+                {
+                    tracing::warn!("failed to send error to client: {}", e)
+                }
             }
             ControlFlow::Continue(None) => return ControlFlow::Continue(()), // No more messages
             ControlFlow::Break(_) => return ControlFlow::Break(()),          // Connection closed

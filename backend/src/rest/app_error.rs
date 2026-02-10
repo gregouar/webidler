@@ -1,8 +1,8 @@
 use std::error::Error;
 use std::fmt;
 
-use axum::response::{IntoResponse, Response};
 use axum::Json;
+use axum::response::{IntoResponse, Response};
 use http::StatusCode;
 
 use shared::http::server::ErrorResponse;

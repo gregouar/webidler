@@ -3,8 +3,8 @@ use std::env;
 use anyhow::Result;
 
 use lettre::{
-    message::Mailbox, transport::smtp::authentication::Credentials, Address, AsyncSmtpTransport,
-    AsyncTransport, Message, Tokio1Executor,
+    Address, AsyncSmtpTransport, AsyncTransport, Message, Tokio1Executor, message::Mailbox,
+    transport::smtp::authentication::Credentials,
 };
 
 use shared::types::Email;

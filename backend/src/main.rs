@@ -1,12 +1,12 @@
 use std::net::SocketAddr;
 
 use axum::{
-    routing::{any, get},
     Router,
+    routing::{any, get},
 };
 use http::{
-    header::{AUTHORIZATION, CONTENT_TYPE},
     HeaderValue, Method,
+    header::{AUTHORIZATION, CONTENT_TYPE},
 };
 use tokio::signal;
 use tower_http::{

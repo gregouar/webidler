@@ -281,6 +281,7 @@ fn compute_player_specs(
             })
             | StatType::SuccessChance { .. }
             | StatType::SkillLevel(_)
+            | StatType::SkillTargetModifier { .. }
             | StatType::SkillConditionalModifier { .. } => {}
             // Other
             StatType::StatConverter(StatConverterSpecs {

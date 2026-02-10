@@ -568,11 +568,7 @@ where
 }
 
 fn stackable_str(cumulate: bool) -> &'static str {
-    if cumulate {
-        "Stackable "
-    } else {
-        ""
-    }
+    if cumulate { "Stackable " } else { "" }
 }
 
 #[component]
@@ -603,6 +599,8 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                         min_max_str(min_max),
                         damage_type_str(damage_type)
                     ),
+                    ItemStatsSource::Range => "Range".into(),
+                    ItemStatsSource::Shape => "Shape".into(),
                 },
                 match slot {
                     Some(slot) => match slot {

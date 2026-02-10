@@ -1,10 +1,10 @@
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 
 use axum::{
+    Extension, Json, Router,
     extract::{Path, State},
     middleware,
     routing::post,
-    Extension, Json, Router,
 };
 
 use shared::{
