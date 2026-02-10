@@ -483,14 +483,27 @@ pub fn compute_skill_specs_effect<'a>(
                 }
                 // TODO: Apply status?
                 (
-                    StatConverterSource::Damage { damage_type },
+                    StatConverterSource::Damage {
+                        damage_type,
+                        min_max,
+                    },
                     SkillEffectType::FlatDamage { damage, .. },
                 ) => {
+                    let min_factor = if let Some(MinMax::Min) | None = min_max {
+                        factor
+                    } else {
+                        0.0
+                    };
+                    let max_factor = if let Some(MinMax::Min) | None = min_max {
+                        factor
+                    } else {
+                        0.0
+                    };
                     let amount = match damage_type {
                         Some(damage_type) => damage
                             .get_mut(&damage_type)
                             .map(|d| {
-                                let amount = (d.min * factor * 0.01, d.max * factor * 0.01);
+                                let amount = (d.min * min_factor * 0.01, d.max * max_factor * 0.01);
                                 if !specs.is_extra {
                                     d.min -= amount.0;
                                     d.max -= amount.1;
@@ -501,7 +514,7 @@ pub fn compute_skill_specs_effect<'a>(
                         None => damage
                             .values_mut()
                             .fold((0.0, 0.0), |(min_acc, max_acc), d| {
-                                let amount = (d.min * factor * 0.01, d.max * factor * 0.01);
+                                let amount = (d.min * min_factor * 0.01, d.max * max_factor * 0.01);
                                 if !specs.is_extra {
                                     d.min -= amount.0;
                                     d.max -= amount.1;
@@ -509,25 +522,31 @@ pub fn compute_skill_specs_effect<'a>(
                                 (min_acc + amount.0, max_acc + amount.1)
                             }),
                     };
+
                     // Special case, when converting damage we map on min and max respectively
-                    if let StatType::Damage {
-                        skill_type,
-                        damage_type,
-                    } = *specs.target_stat
+                    if let None = min_max && let
+                        StatType::Damage {
+                            skill_type,
+                            damage_type,
+                            min_max: None,
+                        } 
+                     =  *specs.target_stat
                     {
                         stats_converted.push(StatEffect {
-                            stat: StatType::MinDamage {
+                            stat: StatType::Damage {
                                 skill_type,
                                 damage_type,
+                                min_max: Some(MinMax::Min),
                             },
                             modifier: specs.target_modifier,
                             value: amount.0,
                             bypass_ignore: true,
                         });
                         Some(StatEffect {
-                            stat: StatType::MaxDamage {
+                            stat: StatType::Damage {
                                 skill_type,
                                 damage_type,
+                                min_max: Some(MinMax::Max),
                             },
                             modifier: specs.target_modifier,
                             value: amount.1,
@@ -542,66 +561,66 @@ pub fn compute_skill_specs_effect<'a>(
                         })
                     }
                 }
-                (
-                    StatConverterSource::MinDamage { damage_type },
-                    SkillEffectType::FlatDamage { damage, .. },
-                ) => {
-                    let amount = match damage_type {
-                        Some(damage_type) => damage
-                            .get_mut(&damage_type)
-                            .map(|d| {
-                                let amount = d.min * factor * 0.01;
-                                if !specs.is_extra {
-                                    d.min -= amount;
-                                }
-                                amount
-                            })
-                            .unwrap_or_default(),
-                        None => damage.values_mut().fold(0.0, |acc, d| {
-                            let amount = d.min * factor * 0.01;
-                            if !specs.is_extra {
-                                d.min -= amount;
-                            }
-                            acc + amount
-                        }),
-                    };
-                    Some(StatEffect {
-                        stat: (*specs.target_stat).clone(),
-                        modifier: specs.target_modifier,
-                        value: amount,
-                        bypass_ignore: true,
-                    })
-                }
-                (
-                    StatConverterSource::MaxDamage { damage_type },
-                    SkillEffectType::FlatDamage { damage, .. },
-                ) => {
-                    let amount = match damage_type {
-                        Some(damage_type) => damage
-                            .get_mut(&damage_type)
-                            .map(|d| {
-                                let amount = d.max * factor * 0.01;
-                                if !specs.is_extra {
-                                    d.max -= amount;
-                                }
-                                amount
-                            })
-                            .unwrap_or_default(),
-                        None => damage.values_mut().fold(0.0, |acc, d| {
-                            let amount = d.max * factor * 0.01;
-                            if !specs.is_extra {
-                                d.max -= amount;
-                            }
-                            acc + amount
-                        }),
-                    };
-                    Some(StatEffect {
-                        stat: (*specs.target_stat).clone(),
-                        modifier: specs.target_modifier,
-                        value: amount,
-                        bypass_ignore: true,
-                    })
-                }
+                // (
+                //     StatConverterSource::MinDamage { damage_type },
+                //     SkillEffectType::FlatDamage { damage, .. },
+                // ) => {
+                //     let amount = match damage_type {
+                //         Some(damage_type) => damage
+                //             .get_mut(&damage_type)
+                //             .map(|d| {
+                //                 let amount = d.min * factor * 0.01;
+                //                 if !specs.is_extra {
+                //                     d.min -= amount;
+                //                 }
+                //                 amount
+                //             })
+                //             .unwrap_or_default(),
+                //         None => damage.values_mut().fold(0.0, |acc, d| {
+                //             let amount = d.min * factor * 0.01;
+                //             if !specs.is_extra {
+                //                 d.min -= amount;
+                //             }
+                //             acc + amount
+                //         }),
+                //     };
+                //     Some(StatEffect {
+                //         stat: (*specs.target_stat).clone(),
+                //         modifier: specs.target_modifier,
+                //         value: amount,
+                //         bypass_ignore: true,
+                //     })
+                // }
+                // (
+                //     StatConverterSource::MaxDamage { damage_type },
+                //     SkillEffectType::FlatDamage { damage, .. },
+                // ) => {
+                //     let amount = match damage_type {
+                //         Some(damage_type) => damage
+                //             .get_mut(&damage_type)
+                //             .map(|d| {
+                //                 let amount = d.max * factor * 0.01;
+                //                 if !specs.is_extra {
+                //                     d.max -= amount;
+                //                 }
+                //                 amount
+                //             })
+                //             .unwrap_or_default(),
+                //         None => damage.values_mut().fold(0.0, |acc, d| {
+                //             let amount = d.max * factor * 0.01;
+                //             if !specs.is_extra {
+                //                 d.max -= amount;
+                //             }
+                //             acc + amount
+                //         }),
+                //     };
+                //     Some(StatEffect {
+                //         stat: (*specs.target_stat).clone(),
+                //         modifier: specs.target_modifier,
+                //         value: amount,
+                //         bypass_ignore: true,
+                //     })
+                // }
                 _ => None,
             } {
                 stats_converted.push(stat);

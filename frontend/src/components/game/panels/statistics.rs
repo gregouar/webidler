@@ -456,12 +456,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         {make_stat(StatType::StatusPower {
                             status_type: None,
                             skill_type: None,
+                            min_max: None,
                         })}
                         // TODO: More for stun?
                         {make_opt_stat(
                             StatType::StatusPower {
                                 status_type: None,
                                 skill_type: Some(SkillType::Blessing),
+                                min_max: None,
                             },
                             0.0,
                         )}
@@ -476,6 +478,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             StatType::StatusPower {
                                 status_type: None,
                                 skill_type: Some(SkillType::Curse),
+                                min_max: None,
                             },
                             0.0,
                         )}
@@ -507,6 +510,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 target_stat: Box::new(StatType::Damage {
                                     skill_type: None,
                                     damage_type: None,
+                                    min_max: None,
                                 }),
                                 target_modifier: Modifier::Multiplier,
                                 is_extra: false,
@@ -520,21 +524,25 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             StatType::Damage {
                                 skill_type: None,
                                 damage_type: None,
+                                min_max: None,
                             },
                             0.0,
                         )}
                         {make_stat(StatType::Damage {
                             skill_type: Some(SkillType::Attack),
                             damage_type: None,
+                            min_max: None,
                         })}
                         {make_stat(StatType::Damage {
                             skill_type: Some(SkillType::Spell),
                             damage_type: None,
+                            min_max: None,
                         })}
                         {make_opt_stat(
                             StatType::Damage {
                                 skill_type: None,
                                 damage_type: Some(DamageType::Physical),
+                                min_max: None,
                             },
                             0.0,
                         )}
@@ -542,6 +550,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             StatType::Damage {
                                 skill_type: None,
                                 damage_type: Some(DamageType::Fire),
+                                min_max: None,
                             },
                             0.0,
                         )}
@@ -549,6 +558,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             StatType::Damage {
                                 skill_type: None,
                                 damage_type: Some(DamageType::Poison),
+                                min_max: None,
                             },
                             0.0,
                         )}
@@ -556,6 +566,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             StatType::Damage {
                                 skill_type: None,
                                 damage_type: Some(DamageType::Storm),
+                                min_max: None,
                             },
                             0.0,
                         )} // TODO: Elemental dot?
@@ -565,6 +576,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     damage_type: None,
                                 }),
                                 skill_type: None,
+                                min_max: None,
                             },
                             0.0,
                         )} {make_opt_stat(StatType::CritDamage(None), 0.0)}

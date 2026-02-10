@@ -1268,6 +1268,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             StatType::Damage {
                 skill_type: None,
                 damage_type: None,
+                min_max: None,
             },
             Modifier::Multiplier,
         ),
@@ -1275,6 +1276,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             StatType::Damage {
                 skill_type: Some(SkillType::Attack),
                 damage_type: None,
+                min_max: None,
             },
             Modifier::Multiplier,
         ),
@@ -1282,6 +1284,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             StatType::Damage {
                 skill_type: Some(SkillType::Spell),
                 damage_type: None,
+                min_max: None,
             },
             Modifier::Multiplier,
         ),
@@ -1289,6 +1292,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             StatType::Damage {
                 skill_type: None,
                 damage_type: Some(DamageType::Physical),
+                min_max: None,
             },
             Modifier::Multiplier,
         ),
@@ -1296,6 +1300,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             StatType::Damage {
                 skill_type: None,
                 damage_type: Some(DamageType::Fire),
+                min_max: None,
             },
             Modifier::Multiplier,
         ),
@@ -1303,6 +1308,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             StatType::Damage {
                 skill_type: None,
                 damage_type: Some(DamageType::Poison),
+                min_max: None,
             },
             Modifier::Multiplier,
         ),
@@ -1310,6 +1316,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             StatType::Damage {
                 skill_type: None,
                 damage_type: Some(DamageType::Storm),
+                min_max: None,
             },
             Modifier::Multiplier,
         ),
@@ -1323,6 +1330,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             StatType::StatusPower {
                 status_type: None,
                 skill_type: None,
+                min_max: None,
             },
             Modifier::Multiplier,
         ),

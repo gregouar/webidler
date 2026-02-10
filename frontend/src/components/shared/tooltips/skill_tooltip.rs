@@ -19,7 +19,7 @@ use shared::data::{
 
 use crate::components::{
     shared::tooltips::{
-        effects_tooltip::{self, formatted_effects_list},
+        effects_tooltip::{self, formatted_effects_list, min_max_str},
         trigger_tooltip::{
             format_extra_trigger_modifiers, format_trigger, format_trigger_modifier,
             format_trigger_modifier_per,
@@ -250,6 +250,7 @@ pub fn format_effect(
                             StatType::Damage {
                                 damage_type: Some(damage_type),
                                 skill_type: None,
+                                min_max: None,
                             },
                             modifiers,
                         ),
@@ -323,6 +324,7 @@ pub fn format_effect(
                                 StatType::Damage {
                                     damage_type: Some(damage_type),
                                     skill_type: None,
+                                    min_max: None,
                                 },
                                 modifiers,
                             ),
@@ -567,12 +569,14 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                 "Per {} {} on equipped {}:",
                 format_number(1.0 / skill_modifier.factor),
                 match item_stats {
-                    ItemStatsSource::Damage(damage_type) =>
-                        format!("average {}Damage", damage_type_str(damage_type)),
-                    ItemStatsSource::MinDamage(damage_type) =>
-                        format!("Minimum {}Damage", damage_type_str(damage_type)),
-                    ItemStatsSource::MaxDamage(damage_type) =>
-                        format!("Maximum {}Damage", damage_type_str(damage_type)),
+                    ItemStatsSource::Damage {
+                        damage_type,
+                        min_max,
+                    } => format!(
+                        "{}{}Damage",
+                        min_max_str(min_max),
+                        damage_type_str(damage_type)
+                    ),
                     ItemStatsSource::Cooldown => "Cooldown".to_string(),
                     ItemStatsSource::Armor => "Armor".to_string(),
                 },
