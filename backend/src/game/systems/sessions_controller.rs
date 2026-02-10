@@ -95,7 +95,9 @@ async fn load_game_instance(
     master_store: &MasterStore,
     character_id: &UserCharacterId,
 ) -> Option<GameInstanceData> {
-    let saved_game_instance = match db::game_instances::load_game_instance_data(
+    
+
+    match db::game_instances::load_game_instance_data(
         db_pool,
         master_store,
         character_id,
@@ -122,9 +124,7 @@ async fn load_game_instance(
             );
             None
         }
-    };
-
-    saved_game_instance
+    }
 }
 
 async fn new_game_instance(

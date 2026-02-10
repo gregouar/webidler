@@ -495,9 +495,10 @@
         "effects": [
           {
             "stat": {
-              "MaxDamage": {
+              "Damage": {
                 "skill_type": null,
-                "damage_type": null
+                "damage_type": null,
+                "min_max": "Max"
               }
             },
             "modifier": "Multiplier",
@@ -509,9 +510,10 @@
         "upgrade_effects": [
           {
             "stat": {
-              "MaxDamage": {
+              "Damage": {
                 "skill_type": null,
-                "damage_type": null
+                "damage_type": null,
+                "min_max": "Max"
               }
             },
             "modifier": "Multiplier",
@@ -1033,9 +1035,10 @@
         "effects": [
           {
             "stat": {
-              "MaxDamage": {
+              "Damage": {
                 "skill_type": null,
-                "damage_type": null
+                "damage_type": null,
+                "min_max": "Max"
               }
             },
             "modifier": "Multiplier",
@@ -1047,9 +1050,10 @@
         "upgrade_effects": [
           {
             "stat": {
-              "MaxDamage": {
+              "Damage": {
                 "skill_type": null,
-                "damage_type": null
+                "damage_type": null,
+                "min_max": "Max"
               }
             },
             "modifier": "Multiplier",
@@ -1598,9 +1602,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -1619,9 +1621,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -3088,9 +3088,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -3109,9 +3107,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -4018,9 +4014,10 @@
         "effects": [
           {
             "stat": {
-              "MaxDamage": {
+              "Damage": {
                 "skill_type": null,
-                "damage_type": null
+                "damage_type": null,
+                "min_max": "Max"
               }
             },
             "modifier": "Multiplier",
@@ -4032,9 +4029,10 @@
         "upgrade_effects": [
           {
             "stat": {
-              "MaxDamage": {
+              "Damage": {
                 "skill_type": null,
-                "damage_type": null
+                "damage_type": null,
+                "min_max": "Max"
               }
             },
             "modifier": "Multiplier",
@@ -4730,9 +4728,10 @@
         "effects": [
           {
             "stat": {
-              "MaxDamage": {
+              "Damage": {
                 "skill_type": null,
-                "damage_type": null
+                "damage_type": null,
+                "min_max": "Max"
               }
             },
             "modifier": "Multiplier",
@@ -6167,9 +6166,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -6188,9 +6185,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -7141,9 +7136,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -7162,9 +7155,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -7997,9 +7988,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -8018,9 +8007,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -9124,9 +9111,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -9145,9 +9130,7 @@
                     "damage_type": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -9425,9 +9408,7 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -9444,9 +9425,7 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",

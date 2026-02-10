@@ -106,11 +106,10 @@ where
     }
 
     fn clamp(&mut self) {
-        if let Some(ordering) = self.min.partial_cmp(&self.max) {
-            if ordering == std::cmp::Ordering::Greater {
+        if let Some(ordering) = self.min.partial_cmp(&self.max)
+            && ordering == std::cmp::Ordering::Greater {
                 self.min = self.max;
             }
-        }
         self.lucky_chance = self.lucky_chance.clamp(-100.0, 100.0);
     }
 }

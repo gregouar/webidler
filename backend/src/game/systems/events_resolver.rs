@@ -213,8 +213,8 @@ fn handle_kill_event(
                         .triggers
                         .iter()
                     {
-                        if let EventTrigger::OnKill(kill_trigger) = &triggered_effects.trigger {
-                            if all(kill_trigger.conditions.iter(), |condition| {
+                        if let EventTrigger::OnKill(kill_trigger) = &triggered_effects.trigger
+                            && all(kill_trigger.conditions.iter(), |condition| {
                                 check_condition(
                                     &monster_specs.character_specs,
                                     &monster_state.character_state,
@@ -230,7 +230,6 @@ fn handle_kill_event(
                                     level: game_data.area_state.read().area_level as usize,
                                 });
                             }
-                        }
                     }
 
                     for (idx, (monster_specs, monster_state)) in game_data
@@ -250,8 +249,8 @@ fn handle_kill_event(
                             }
                         };
                         for triggered_effects in &monster_specs.character_specs.triggers {
-                            if let EventTrigger::OnDeath(target_type) = triggered_effects.trigger {
-                                if target_type == event_target_type
+                            if let EventTrigger::OnDeath(target_type) = triggered_effects.trigger
+                                && target_type == event_target_type
                                     && (monster_state.character_state.is_alive
                                         || target_type == TargetType::Me)
                                 {
@@ -264,7 +263,6 @@ fn handle_kill_event(
                                         level: game_data.area_state.read().area_level as usize,
                                     });
                                 }
-                            }
                         }
                     }
                 }

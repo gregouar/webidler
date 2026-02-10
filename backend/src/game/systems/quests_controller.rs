@@ -32,8 +32,8 @@ pub fn terminate_quest(
         return Err(AppError::UserError("grind already terminated".into()));
     }
 
-    if let Some(quest_rewards) = game_data.quest_rewards.read() {
-        if let Some(item_specs) =
+    if let Some(quest_rewards) = game_data.quest_rewards.read()
+        && let Some(item_specs) =
             item_index.and_then(|item_index| quest_rewards.item_rewards.get(item_index as usize))
         {
             inventory_controller::store_item_to_bag(
@@ -41,7 +41,6 @@ pub fn terminate_quest(
                 item_specs.clone(),
             )?;
         }
-    }
 
     game_data.terminate_quest = true;
 

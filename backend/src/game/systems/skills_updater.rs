@@ -254,13 +254,12 @@ pub fn compute_skill_specs_effect<'a>(
 ) {
     if let SkillEffectType::ApplyStatus { statuses, .. } = &mut skill_effect.effect_type {
         for status_effect in statuses.iter_mut() {
-            if let StatusSpecs::Trigger(ref mut trigger_specs) = status_effect.status_type {
-                if trigger_specs.triggered_effect.inherit_modifiers {
+            if let StatusSpecs::Trigger(ref mut trigger_specs) = status_effect.status_type
+                && trigger_specs.triggered_effect.inherit_modifiers {
                     for triggered_effect in trigger_specs.triggered_effect.effects.iter_mut() {
                         compute_skill_specs_effect(skill_type, triggered_effect, effects.clone())
                     }
                 }
-            }
         }
     }
 
@@ -306,8 +305,7 @@ pub fn compute_skill_specs_effect<'a>(
             conditions,
             stat,
         } = &effect.stat
-        {
-            if compare_options(modifier_skill_type, &Some(skill_type)) {
+            && compare_options(modifier_skill_type, &Some(skill_type)) {
                 skill_effect
                     .conditional_modifiers
                     .push(ConditionalModifier {
@@ -321,7 +319,6 @@ pub fn compute_skill_specs_effect<'a>(
                         .into(),
                     });
             }
-        }
 
         match &mut skill_effect.effect_type {
             SkillEffectType::FlatDamage {

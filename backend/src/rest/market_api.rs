@@ -103,11 +103,10 @@ pub async fn post_buy_market_item(
 
     // Allow seller to remove own listing
     let price = if character.user_id != item_bought.user_id {
-        if let Some(recipient_id) = market_buy_entry.recipient_id {
-            if recipient_id != current_user.user_details.user.user_id {
+        if let Some(recipient_id) = market_buy_entry.recipient_id
+            && recipient_id != current_user.user_details.user.user_id {
                 return Err(AppError::Forbidden);
             }
-        }
 
         market_buy_entry.price
     } else {
