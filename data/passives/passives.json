@@ -325,8 +325,8 @@
       "0b5ab403-85f5-434a-9a1b-e95ab9c2fb5d": {
         "name": "Block",
         "icon": "passives/block.svg",
-        "x": -62.5,
-        "y": 135.0,
+        "x": -60.0,
+        "y": 137.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -1447,8 +1447,8 @@
       "26eca27a-95a6-4949-bef7-25cf3b79c340": {
         "name": "Myrmidon",
         "icon": "passives/myrmidon.svg",
-        "x": -47.5,
-        "y": 137.5,
+        "x": -45.0,
+        "y": 140.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Armor",
@@ -1577,8 +1577,8 @@
       "285d7497-315b-4795-9142-fb3dba24cfbb": {
         "name": "Poison Damage",
         "icon": "passives/scorpion_tail.svg",
-        "x": -2.5,
-        "y": -172.5,
+        "x": 5.0,
+        "y": -170.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Poison",
@@ -1815,8 +1815,8 @@
       "2dafc839-ce6c-452b-9e48-4c66abe31090": {
         "name": "Block",
         "icon": "passives/block.svg",
-        "x": -50.0,
-        "y": 147.5,
+        "x": -47.5,
+        "y": 150.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -3837,7 +3837,7 @@
       "5ee192ea-49d6-4923-a857-0d5a21498f53": {
         "name": "Armor",
         "icon": "passives/armor.svg",
-        "x": -77.5,
+        "x": -80.0,
         "y": -62.5,
         "size": 0,
         "initial_node": false,
@@ -4024,8 +4024,8 @@
       "6334c8c4-d9a4-4a70-921e-cb755fd034ab": {
         "name": "Poison Damage",
         "icon": "passives/scorpion_tail.svg",
-        "x": 0.0,
-        "y": -160.0,
+        "x": 15.0,
+        "y": -145.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Poison",
@@ -4852,8 +4852,8 @@
       "744ba3d4-2008-44ed-90bc-5e48acde4f9b": {
         "name": "Poison Damage",
         "icon": "passives/scorpion_tail.svg",
-        "x": -15.0,
-        "y": -185.0,
+        "x": -5.0,
+        "y": -190.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Poison",
@@ -5202,8 +5202,8 @@
       "76e306d9-46a5-4817-95d5-d143bc507436": {
         "name": "Poison Damage",
         "icon": "passives/scorpion_tail.svg",
-        "x": -17.5,
-        "y": -157.5,
+        "x": -5.0,
+        "y": -170.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Poison",
@@ -6131,8 +6131,8 @@
       "8962f1e9-2a29-4c8e-8caa-8d6c97433380": {
         "name": "Armor",
         "icon": "passives/armor.svg",
-        "x": -40.0,
-        "y": 140.0,
+        "x": -35.0,
+        "y": 145.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -6795,7 +6795,7 @@
       "9b258aaf-2dbc-428c-a844-e50a402520e1": {
         "name": "Poison Damage",
         "icon": "passives/scorpion_tail.svg",
-        "x": 10.0,
+        "x": 5.0,
         "y": -190.0,
         "size": 0,
         "initial_node": false,
@@ -8229,8 +8229,8 @@
       "c3187473-2fe2-4959-b045-4325d79d783e": {
         "name": "Armor",
         "icon": "passives/armor.svg",
-        "x": -50.0,
-        "y": 130.0,
+        "x": -47.5,
+        "y": 132.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -10786,8 +10786,8 @@
       "ea811764-421a-48f8-a3c7-aa838a77c478": {
         "name": "Poison Damage",
         "icon": "passives/scorpion_tail.svg",
-        "x": 20.0,
-        "y": -170.0,
+        "x": 0.0,
+        "y": -162.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Poison",
@@ -11335,8 +11335,8 @@
       "f48403d7-7425-4bc2-8056-4e9fe824be15": {
         "name": "Poison Damage",
         "icon": "passives/scorpion_tail.svg",
-        "x": 7.5,
-        "y": -147.5,
+        "x": -15.0,
+        "y": -145.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Poison",
@@ -13033,14 +13033,6 @@
         "to": "6334c8c4-d9a4-4a70-921e-cb755fd034ab"
       },
       {
-        "from": "f48403d7-7425-4bc2-8056-4e9fe824be15",
-        "to": "24ad01fc-d436-4252-877a-f4dc31586f5c"
-      },
-      {
-        "from": "f48403d7-7425-4bc2-8056-4e9fe824be15",
-        "to": "1bd221d6-6b67-416c-8269-db62cdbbebab"
-      },
-      {
         "from": "abcc57bb-81b3-4156-aa97-3d023c66eb64",
         "to": "70aefb0e-0cd2-401e-ae76-1dd385ed899b"
       },
@@ -13211,6 +13203,14 @@
       {
         "from": "5f2ac03c-3b5f-4a39-b44e-d9765e81c139",
         "to": "29ba21ea-6046-46f2-8b86-29b1580a1710"
+      },
+      {
+        "from": "f48403d7-7425-4bc2-8056-4e9fe824be15",
+        "to": "24ad01fc-d436-4252-877a-f4dc31586f5c"
+      },
+      {
+        "from": "6334c8c4-d9a4-4a70-921e-cb755fd034ab",
+        "to": "1bd221d6-6b67-416c-8269-db62cdbbebab"
       }
     ]
   }

@@ -146,12 +146,11 @@ pub fn PassivesPage() -> impl IntoView {
                     load();
                 }
 
-                if events_context.key_pressed(Key::Character('f')) {
-                    if let Some(input) = search_node_ref.get() {
+                if events_context.key_pressed(Key::Character('f'))
+                    && let Some(input) = search_node_ref.get() {
                         input.focus().unwrap();
                         input.select();
                     }
-                }
             } else if events_context.key_pressed(Key::Shift) {
                 tool_mode.set(ToolMode::Select);
             } else if events_context.key_pressed(Key::Alt) {
@@ -601,8 +600,8 @@ fn ToolNode(
     };
 
     Effect::new(move || {
-        if selected_node.read().is_selected(&node_id) {
-            if let Some(node) = passives_tree_specs.write().nodes.get_mut(&node_id) {
+        if selected_node.read().is_selected(&node_id)
+            && let Some(node) = passives_tree_specs.write().nodes.get_mut(&node_id) {
                 if events_context.key_pressed(Key::ArrowUp) {
                     node.y += 2.5;
                 }
@@ -616,7 +615,6 @@ fn ToolNode(
                     node.x += 2.5;
                 }
             }
-        }
     });
 
     view! {
@@ -1226,7 +1224,7 @@ fn node_text(node_specs: &PassiveNodeSpecs) -> String {
         node_specs
             .effects
             .iter()
-            .map(|effect| effects_tooltip::format_stat(effect))
+            .map(effects_tooltip::format_stat)
             .join(" ")
     )
 }
