@@ -258,7 +258,7 @@ pub fn format_effect(
                         ),
                         " as",
                     );
-                    if value.min > 0.0 || value.max > 0.0 {
+                    if value.min > 0.0 || value.max > 0.0 || trigger_modifier_str.is_some() {
                         damage_lines
                             .push(
                                 view! {

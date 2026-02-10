@@ -83,9 +83,17 @@ pub fn update_skill_specs<'a>(
         area_threat,
     );
 
+    apply_effects_to_skill_specs(skill_specs, local_effects.iter().filter(is_local_flat));
     apply_effects_to_skill_specs(skill_specs, effects.clone().filter(is_global_flat));
-    apply_effects_to_skill_specs(skill_specs, local_effects.iter());
+    apply_effects_to_skill_specs(skill_specs, local_effects.iter().filter(|e| !is_local_flat(e)));
     apply_effects_to_skill_specs(skill_specs, effects.filter(|e| !is_global_flat(e)));
+}
+
+fn is_local_flat(stat_effect: &&StatEffect) -> bool {
+    match &stat_effect.stat {
+        StatType::StatConverter(specs) => specs.target_modifier == Modifier::Flat,
+        _ => stat_effect.modifier == Modifier::Flat,
+    }
 }
 
 fn is_global_flat(stat_effect: &&StatEffect) -> bool {

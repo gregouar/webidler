@@ -258,31 +258,12 @@
         "effects": [
           {
             "FlatDamage": {
-              "damage": {
-                "Storm": 0.0
-              }
+              "damage": {}
             },
             "ignore_stat_effects": [
               {
                 "Damage": {
                   "damage_type": "Fire"
-                }
-              },
-              {
-                "CritChance": null
-              }
-            ]
-          },
-          {
-            "FlatDamage": {
-              "damage": {
-                "Fire": 0.0
-              }
-            },
-            "ignore_stat_effects": [
-              {
-                "Damage": {
-                  "damage_type": "Storm"
                 }
               },
               {
