@@ -8466,23 +8466,23 @@
         "icon": "passives/gold.svg",
         "x": 60.0,
         "y": -60.0,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Gold",
         "effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
-        "locked": false,
+        "locked": true,
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 3,
@@ -9548,23 +9548,23 @@
         "icon": "passives/gold.svg",
         "x": -60.0,
         "y": 60.0,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Gold",
         "effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
-        "locked": false,
+        "locked": true,
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 3,
@@ -10330,23 +10330,23 @@
         "icon": "passives/gold.svg",
         "x": -60.0,
         "y": -60.0,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Gold",
         "effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
-        "locked": false,
+        "locked": true,
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 3,
@@ -11190,23 +11190,23 @@
         "icon": "passives/gold.svg",
         "x": 60.0,
         "y": 60.0,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Gold",
         "effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
-        "locked": false,
+        "locked": true,
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 3,
