@@ -181,6 +181,16 @@ fn compute_skill_modifier_effects<'a>(
                             &item_specs.weapon_specs,
                             &item_specs.armor_specs,
                         ) {
+                            (ItemStatsSource::Armor, _, Some(armor_specs)) => armor_specs.armor,
+                            (ItemStatsSource::Cooldown, Some(weapon_specs), _) => {
+                                weapon_specs.cooldown as f64
+                            }
+                            (ItemStatsSource::CritChance, Some(weapon_specs), _) => {
+                                weapon_specs.crit_chance.value as f64
+                            }
+                            (ItemStatsSource::CritDamage, Some(weapon_specs), _) => {
+                                weapon_specs.crit_damage 
+                            }
                             (
                                 ItemStatsSource::Damage {
                                     damage_type,
@@ -211,10 +221,6 @@ fn compute_skill_modifier_effects<'a>(
                                         .sum()
                                 }
                             }
-                            (ItemStatsSource::Cooldown, Some(weapon_specs), _) => {
-                                weapon_specs.cooldown as f64
-                            }
-                            (ItemStatsSource::Armor, _, Some(armor_specs)) => armor_specs.armor,
                             _ => 0.0,
                         }
                     } else {

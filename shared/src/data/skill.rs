@@ -104,14 +104,16 @@ pub enum ModifierEffectSource {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub enum ItemStatsSource {
+    Armor,
+    Cooldown,
+    CritChance,
+    CritDamage,
     Damage {
         #[serde(default)]
         damage_type: Option<DamageType>,
         #[serde(default)]
         min_max: Option<MinMax>,
     },
-    Armor,
-    Cooldown,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

@@ -577,6 +577,10 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                 "Per {} {} on equipped {}:",
                 format_number(1.0 / skill_modifier.factor),
                 match item_stats {
+                    ItemStatsSource::Armor => "Armor".to_string(),
+                    ItemStatsSource::Cooldown => "Cooldown".to_string(),
+                    ItemStatsSource::CritChance => "Critical Hit Chance".to_string(),
+                    ItemStatsSource::CritDamage => "Critical Hit Damage".to_string(),
                     ItemStatsSource::Damage {
                         damage_type,
                         min_max,
@@ -585,8 +589,6 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                         min_max_str(min_max),
                         damage_type_str(damage_type)
                     ),
-                    ItemStatsSource::Cooldown => "Cooldown".to_string(),
-                    ItemStatsSource::Armor => "Armor".to_string(),
                 },
                 match slot {
                     Some(slot) => match slot {

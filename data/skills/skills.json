@@ -1491,6 +1491,38 @@
       {
         "effects": [
           {
+            "stat": { "CritChance": "Attack" },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": "CritChance"
+          }
+        },
+        "factor": 1
+      },
+      {
+        "effects": [
+          {
+            "stat": { "CritDamage": "Attack" },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": "CritDamage"
+          }
+        },
+        "factor": 1
+      },
+      {
+        "effects": [
+          {
             "stat": {
               "Damage": {
                 "damage_type": "Physical",
