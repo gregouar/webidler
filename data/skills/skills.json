@@ -1466,5 +1466,211 @@
         ]
       }
     ]
+  },
+  "double_strike": {
+    "name": "Double Strike",
+    "description": "A second strike of your weapon against a single target.",
+    "icon": "skills/attack.svg",
+    "skill_type": "Attack",
+    "cooldown": 0,
+    "mana_cost": 2,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "Multiplier",
+        "value": 50
+      }
+    ],
+    "targets": [
+      {
+        "range": "Melee",
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {}
+            }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 2,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "value": 0,
+                  "cumulate": false
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "modifier_effects": [
+      {
+        "effects": [
+          {
+            "stat": { "Speed": "Attack" },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": "Cooldown"
+          }
+        },
+        "factor": -1.1
+      },
+      {
+        "effects": [
+          {
+            "stat": {
+              "MinDamage": {
+                "damage_type": "Physical"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": { "MinDamage": "Physical" }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "effects": [
+          {
+            "stat": {
+              "MaxDamage": {
+                "damage_type": "Physical"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": { "MaxDamage": "Physical" }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "effects": [
+          {
+            "stat": {
+              "MinDamage": {
+                "damage_type": "Fire"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": { "MinDamage": "Fire" }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "effects": [
+          {
+            "stat": {
+              "MaxDamage": {
+                "damage_type": "Fire"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": { "MaxDamage": "Fire" }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "effects": [
+          {
+            "stat": {
+              "MinDamage": {
+                "damage_type": "Storm"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": { "MinDamage": "Storm" }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "effects": [
+          {
+            "stat": {
+              "MaxDamage": {
+                "damage_type": "Storm"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": { "MaxDamage": "Storm" }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Poison" }
+                }
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": { "MinDamage": "Poison" }
+          }
+        },
+        "factor": 1
+      }
+    ]
   }
 }

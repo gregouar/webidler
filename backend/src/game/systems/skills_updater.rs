@@ -10,7 +10,7 @@ use shared::data::{
         SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
-        compare_options, ApplyStatModifier, EffectsMap, LuckyRollType, Modifier,
+        compare_options, ApplyStatModifier, EffectsMap, LuckyRollType, MinMax, Modifier,
         StatConverterSource, StatEffect, StatType,
     },
 };
@@ -173,42 +173,38 @@ fn compute_skill_modifier_effects<'a>(
                             &item_specs.weapon_specs,
                             &item_specs.armor_specs,
                         ) {
-                            (ItemStatsSource::Damage(damage_type), Some(weapon_specs), _) => {
+                            (
+                                ItemStatsSource::Damage {
+                                    damage_type,
+                                    min_max,
+                                },
+                                Some(weapon_specs),
+                                _,
+                            ) => {
                                 if let Some(dmg_type) = damage_type {
                                     weapon_specs
                                         .damage
                                         .get(dmg_type)
-                                        .map(|d| (d.min + d.max) * 0.5)
+                                        .map(|d| match min_max {
+                                            Some(MinMax::Min) => d.min,
+                                            Some(MinMax::Max) => d.max,
+                                            None => (d.min + d.max) * 0.5,
+                                        })
                                         .unwrap_or_default()
                                 } else {
                                     weapon_specs
                                         .damage
                                         .values()
-                                        .map(|d| (d.min + d.max) * 0.5)
+                                        .map(|d| match min_max {
+                                            Some(MinMax::Min) => d.min,
+                                            Some(MinMax::Max) => d.max,
+                                            None => (d.min + d.max) * 0.5,
+                                        })
                                         .sum()
                                 }
                             }
-                            (ItemStatsSource::MinDamage(damage_type), Some(weapon_specs), _) => {
-                                if let Some(dmg_type) = damage_type {
-                                    weapon_specs
-                                        .damage
-                                        .get(dmg_type)
-                                        .map(|d| d.min)
-                                        .unwrap_or_default()
-                                } else {
-                                    weapon_specs.damage.values().map(|d| d.min).sum()
-                                }
-                            }
-                            (ItemStatsSource::MaxDamage(damage_type), Some(weapon_specs), _) => {
-                                if let Some(dmg_type) = damage_type {
-                                    weapon_specs
-                                        .damage
-                                        .get(dmg_type)
-                                        .map(|d| d.max)
-                                        .unwrap_or_default()
-                                } else {
-                                    weapon_specs.damage.values().map(|d| d.max).sum()
-                                }
+                            (ItemStatsSource::Cooldown, Some(weapon_specs), _) => {
+                                weapon_specs.cooldown as f64
                             }
                             (ItemStatsSource::Armor, _, Some(armor_specs)) => armor_specs.armor,
                             _ => 0.0,
@@ -336,22 +332,19 @@ pub fn compute_skill_specs_effect<'a>(
             } => {
                 for damage_type in DamageType::iter() {
                     let value = damage.entry(damage_type).or_default();
-                    if effect.stat.is_match(&StatType::MinDamage {
+
+                    if effect.stat.is_match(&StatType::Damage {
                         skill_type: Some(skill_type),
                         damage_type: Some(damage_type),
-                    }) || effect.stat.is_match(&StatType::Damage {
-                        skill_type: Some(skill_type),
-                        damage_type: Some(damage_type),
+                        min_max: Some(MinMax::Min),
                     }) {
                         value.min.apply_effect(effect);
                     }
 
-                    if effect.stat.is_match(&StatType::MaxDamage {
+                    if effect.stat.is_match(&StatType::Damage {
                         skill_type: Some(skill_type),
                         damage_type: Some(damage_type),
-                    }) || effect.stat.is_match(&StatType::Damage {
-                        skill_type: Some(skill_type),
-                        damage_type: Some(damage_type),
+                        min_max: Some(MinMax::Max),
                     }) {
                         value.max.apply_effect(effect);
                     }
@@ -404,30 +397,33 @@ pub fn compute_skill_specs_effect<'a>(
                     if effect.stat.is_match(&StatType::StatusPower {
                         status_type: Some((&status_effect.status_type).into()),
                         skill_type: Some(skill_type),
+                        min_max: Some(MinMax::Min),
                     }) {
                         status_effect.value.min.apply_effect(effect);
+                    }
+                    if effect.stat.is_match(&StatType::StatusPower {
+                        status_type: Some((&status_effect.status_type).into()),
+                        skill_type: Some(skill_type),
+                        min_max: Some(MinMax::Max),
+                    }) {
                         status_effect.value.max.apply_effect(effect);
                     }
 
                     if let StatusSpecs::DamageOverTime { damage_type, .. } =
                         status_effect.status_type
                     {
-                        if effect.stat.is_match(&StatType::MinDamage {
+                        if effect.stat.is_match(&StatType::Damage {
                             skill_type: Some(skill_type),
                             damage_type: Some(damage_type),
-                        }) || effect.stat.is_match(&StatType::Damage {
-                            skill_type: Some(skill_type),
-                            damage_type: Some(damage_type),
+                            min_max: Some(MinMax::Min),
                         }) {
                             status_effect.value.min.apply_effect(effect);
                         }
 
-                        if effect.stat.is_match(&StatType::MaxDamage {
+                        if effect.stat.is_match(&StatType::Damage {
                             skill_type: Some(skill_type),
                             damage_type: Some(damage_type),
-                        }) || effect.stat.is_match(&StatType::Damage {
-                            skill_type: Some(skill_type),
-                            damage_type: Some(damage_type),
+                            min_max: Some(MinMax::Max),
                         }) {
                             status_effect.value.max.apply_effect(effect);
                         }

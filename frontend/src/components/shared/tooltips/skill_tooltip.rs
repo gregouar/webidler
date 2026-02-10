@@ -573,6 +573,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                         format!("Minimum {}Damage", damage_type_str(damage_type)),
                     ItemStatsSource::MaxDamage(damage_type) =>
                         format!("Maximum {}Damage", damage_type_str(damage_type)),
+                    ItemStatsSource::Cooldown => "Cooldown".to_string(),
                     ItemStatsSource::Armor => "Armor".to_string(),
                 },
                 match slot {

@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     chance::{Chance, ChanceRange},
     conditional_modifier::ConditionalModifier,
-    stat_effect::{Modifier, StatType},
+    stat_effect::{MinMax, Modifier, StatType},
     trigger::TriggerSpecs,
 };
 
@@ -104,10 +104,14 @@ pub enum ModifierEffectSource {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub enum ItemStatsSource {
-    Damage(Option<DamageType>), // TODO: split in min and max
+    Damage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+        #[serde(default)]
+        min_max: Option<MinMax>,
+    },
     Armor,
-    MinDamage(Option<DamageType>),
-    MaxDamage(Option<DamageType>),
+    Cooldown,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

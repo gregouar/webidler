@@ -45,6 +45,12 @@ pub enum Modifier {
     Flat,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum MinMax {
+    Min,
+    Max,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatType {
     Life,
@@ -73,18 +79,8 @@ pub enum StatType {
         skill_type: Option<SkillType>,
         #[serde(default)]
         damage_type: Option<DamageType>,
-    },
-    MinDamage {
         #[serde(default)]
-        skill_type: Option<SkillType>,
-        #[serde(default)]
-        damage_type: Option<DamageType>,
-    },
-    MaxDamage {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
-        #[serde(default)]
-        damage_type: Option<DamageType>,
+        min_max: Option<MinMax>,
     },
     LifeOnHit {
         #[serde(default)]
@@ -107,6 +103,8 @@ pub enum StatType {
         status_type: Option<StatStatusType>,
         #[serde(default)]
         skill_type: Option<SkillType>,
+        #[serde(default)]
+        min_max: Option<MinMax>,
     },
     StatusDuration {
         #[serde(default)]
@@ -155,41 +153,27 @@ impl StatType {
         use StatType::*;
         match (self, stat_type) {
             (
+                Damage {
+                    skill_type,
+                    damage_type,
+                    min_max,
+                },
+                Damage {
+                    skill_type: skill_type_2,
+                    damage_type: damage_type_2,
+                    min_max: min_max_2,
+                },
+            ) => {
+                compare_options(skill_type, skill_type_2)
+                    && compare_options(damage_type, damage_type_2)
+                    && compare_options(min_max, min_max_2)
+            }
+            (
                 DamageResistance {
                     skill_type,
                     damage_type,
                 },
                 DamageResistance {
-                    skill_type: skill_type_2,
-                    damage_type: damage_type_2,
-                },
-            )
-            | (
-                Damage {
-                    skill_type,
-                    damage_type,
-                },
-                Damage {
-                    skill_type: skill_type_2,
-                    damage_type: damage_type_2,
-                },
-            )
-            | (
-                MinDamage {
-                    skill_type,
-                    damage_type,
-                },
-                MinDamage {
-                    skill_type: skill_type_2,
-                    damage_type: damage_type_2,
-                },
-            )
-            | (
-                MaxDamage {
-                    skill_type,
-                    damage_type,
-                },
-                MaxDamage {
                     skill_type: skill_type_2,
                     damage_type: damage_type_2,
                 },
@@ -250,13 +234,19 @@ impl StatType {
                 StatusPower {
                     status_type,
                     skill_type,
+                    min_max,
                 },
                 StatusPower {
                     status_type: status_type_2,
                     skill_type: skill_type_2,
+                    min_max: min_max_2,
                 },
-            )
-            | (
+            ) => {
+                compare_options(status_type, status_type_2)
+                    && compare_options(skill_type, skill_type_2)
+                    && compare_options(min_max, min_max_2)
+            }
+            (
                 StatusDuration {
                     status_type,
                     skill_type,
@@ -288,8 +278,6 @@ impl StatType {
         matches!(
             self,
             Damage { .. }
-                | MinDamage { .. }
-                | MaxDamage { .. }
                 | CritDamage(_)
                 | StatusPower {
                     status_type: Some(StatStatusType::DamageOverTime { .. }),
@@ -475,17 +463,11 @@ pub struct StatConverterSpecs {
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatConverterSource {
     CritDamage,
-    MinDamage {
-        #[serde(default)]
-        damage_type: Option<DamageType>,
-    },
-    MaxDamage {
-        #[serde(default)]
-        damage_type: Option<DamageType>,
-    },
     Damage {
         #[serde(default)]
         damage_type: Option<DamageType>,
+        #[serde(default)]
+        min_max: Option<MinMax>,
     },
     ThreatLevel,
     MaxLife,
