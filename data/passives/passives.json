@@ -990,7 +990,7 @@
         "icon": "passives/caduceus.svg",
         "x": 55.0,
         "y": 95.0,
-        "size": 1,
+        "size": 2,
         "initial_node": false,
         "node_type": "Life",
         "effects": [
@@ -1449,7 +1449,7 @@
         "icon": "passives/myrmidon.svg",
         "x": -45.0,
         "y": 140.0,
-        "size": 1,
+        "size": 2,
         "initial_node": false,
         "node_type": "Armor",
         "effects": [
@@ -1942,7 +1942,7 @@
       },
       "30c0d9b9-1137-4f95-8c38-6d33efc98822": {
         "name": "Curse Speed",
-        "icon": "passives/XXX.svg",
+        "icon": "passives/trap_mask.svg",
         "x": 42.5,
         "y": -137.5,
         "size": 0,
@@ -2045,7 +2045,7 @@
         "y": -50.0,
         "size": 0,
         "initial_node": false,
-        "node_type": "Utility",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
@@ -2831,7 +2831,7 @@
         "y": -62.5,
         "size": 0,
         "initial_node": false,
-        "node_type": "Utility",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
@@ -3654,7 +3654,7 @@
         "icon": "passives/wisdom.svg",
         "x": -35.0,
         "y": -87.5,
-        "size": 1,
+        "size": 2,
         "initial_node": false,
         "node_type": "Mana",
         "effects": [
@@ -6498,7 +6498,7 @@
         "icon": "passives/critical_damage.svg",
         "x": 185.0,
         "y": 65.0,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Critical",
         "effects": [
@@ -6507,7 +6507,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 30.0
+            "value": 45.0
           }
         ],
         "triggers": [],
@@ -6518,7 +6518,7 @@
               "CritDamage": null
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 3,
@@ -7178,7 +7178,7 @@
       },
       "a7e783fa-fc8a-4554-8aad-d5f4055c3b5d": {
         "name": "Curse Duration",
-        "icon": "passives/XXX.svg",
+        "icon": "passives/dripping_star.svg",
         "x": 37.5,
         "y": -145.0,
         "size": 0,
@@ -8477,10 +8477,10 @@
       },
       "c685f882-72ed-4b98-b8c9-5ddb7049a386": {
         "name": "Gold",
-        "icon": "passives/gold.svg",
+        "icon": "passives/coins.svg",
         "x": 60.0,
         "y": -60.0,
-        "size": 1,
+        "size": 2,
         "initial_node": false,
         "node_type": "Gold",
         "effects": [
@@ -8708,11 +8708,11 @@
         "socket": false
       },
       "c9382d85-ae3d-4efd-9352-79f820fbf726": {
-        "name": "Block",
-        "icon": "passives/block.svg",
+        "name": "Crustacean Life",
+        "icon": "passives/crab.svg",
         "x": -95.0,
         "y": -67.5,
-        "size": 0,
+        "size": 2,
         "initial_node": false,
         "node_type": "Armor",
         "effects": [
@@ -8720,6 +8720,11 @@
             "stat": {
               "Block": null
             },
+            "modifier": "Multiplier",
+            "value": 10.0
+          },
+          {
+            "stat": "LifeRegen",
             "modifier": "Multiplier",
             "value": 10.0
           }
@@ -8731,6 +8736,11 @@
             "stat": {
               "Block": null
             },
+            "modifier": "Multiplier",
+            "value": 5.0
+          },
+          {
+            "stat": "LifeRegen",
             "modifier": "Multiplier",
             "value": 5.0
           }
@@ -9559,10 +9569,10 @@
       },
       "d50d2ac7-ab10-4d27-a48b-4bb98b745101": {
         "name": "Gold",
-        "icon": "passives/gold.svg",
+        "icon": "passives/coins.svg",
         "x": -60.0,
         "y": 60.0,
-        "size": 1,
+        "size": 2,
         "initial_node": false,
         "node_type": "Gold",
         "effects": [
@@ -10307,7 +10317,7 @@
         "icon": "passives/meditation.svg",
         "x": 35.0,
         "y": -87.5,
-        "size": 1,
+        "size": 2,
         "initial_node": false,
         "node_type": "Mana",
         "effects": [
@@ -10341,10 +10351,10 @@
       },
       "dfcf089f-d02a-4d98-a751-61e7f67da41b": {
         "name": "Gold",
-        "icon": "passives/gold.svg",
+        "icon": "passives/coins.svg",
         "x": -60.0,
         "y": -60.0,
-        "size": 1,
+        "size": 2,
         "initial_node": false,
         "node_type": "Gold",
         "effects": [
@@ -11071,7 +11081,7 @@
         "y": -40.0,
         "size": 0,
         "initial_node": false,
-        "node_type": "Utility",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
@@ -11201,10 +11211,10 @@
       },
       "f3140e7a-1c89-4e41-ae04-05f02d174183": {
         "name": "Gold",
-        "icon": "passives/gold.svg",
+        "icon": "passives/coins.svg",
         "x": 60.0,
         "y": 60.0,
-        "size": 1,
+        "size": 2,
         "initial_node": false,
         "node_type": "Gold",
         "effects": [
@@ -11431,7 +11441,7 @@
         "y": -60.0,
         "size": 0,
         "initial_node": false,
-        "node_type": "Utility",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {

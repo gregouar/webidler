@@ -78,12 +78,12 @@ pub fn lucky_roll_str(roll_type: LuckyRollType) -> String {
         LuckyRollType::Damage { damage_type } => {
             format!("{}Damage", damage_type_str(damage_type))
         }
-        LuckyRollType::Block => "Block Chance".into(),
+        LuckyRollType::Block => "Chance to Block".into(),
         LuckyRollType::Evade(damage_type) => format!(
-            "{}Damage over Time Evade Chance",
+            "Chance to Evade {}Damage over Time",
             damage_type_str(damage_type)
         ),
-        LuckyRollType::CritChance => "Critical Hit Chance".into(),
+        LuckyRollType::CritChance => "Chance to Critical Hit".into(),
         LuckyRollType::SuccessChance => "Success Chance".into(),
     }
 }

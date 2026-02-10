@@ -18,7 +18,7 @@
     ]
   },
   "wand": {
-    "name": "Wand",
+    "name": "Magic Wand",
     "icon": "items/wand.webp",
     "slot": "Weapon",
     "categories": ["SpellWeapon"],

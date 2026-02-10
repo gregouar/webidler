@@ -14,7 +14,7 @@
     ]
   },
   "medallion": {
-    "name": "Medallion",
+    "name": "Brass Medallion",
     "icon": "items/medallion.webp",
     "slot": "Amulet",
     "categories": ["Jewelry", "Amulet"],
