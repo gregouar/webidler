@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use leptos::{
     ev::{keydown, keyup, visibilitychange},
     prelude::*,
-    web_sys::{wasm_bindgen::JsCast, Element, HtmlInputElement, HtmlTextAreaElement},
+    web_sys::{Element, HtmlInputElement, HtmlTextAreaElement, wasm_bindgen::JsCast},
 };
 use leptos_use::{use_document, use_event_listener};
 

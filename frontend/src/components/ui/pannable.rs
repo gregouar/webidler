@@ -20,7 +20,7 @@ pub fn Pannable(
     let svg_ref = NodeRef::new();
 
     let screen_to_svg = move |x: f64, y: f64| -> (f64, f64) {
-        let svg: web_sys::SvgElement = svg_ref.get().expect("SVG node should exist");
+        let svg: web_sys::SvgElement = svg_ref.get_untracked().expect("SVG node should exist");
 
         let rect = svg.get_bounding_client_rect();
         let x = (x - rect.left()) * 1000.0 / rect.width() - 500.0;

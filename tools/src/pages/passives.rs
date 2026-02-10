@@ -295,20 +295,27 @@ pub fn PassivesPage() -> impl IntoView {
                     </div>
 
                     <Card class="h-full w-2xl">
-                        {move || match tool_mode.get() {
-                            ToolMode::Edit => {
-                                view! {
-                                    <EditNodeMenu
-                                        passives_tree_specs
-                                        passives_history_tracker
-                                        selected_node
-                                        clipboard_node
-                                    />
-                                }
-                                    .into_any()
-                            }
-                            ToolMode::Connect | ToolMode::Add | ToolMode::Select => ().into_any(),
-                        }}
+                        // {move || match tool_mode.get() {
+                        // ToolMode::Edit => {
+                        // view! {
+                        // <EditNodeMenu
+                        // passives_tree_specs
+                        // passives_history_tracker
+                        // selected_node
+                        // clipboard_node
+                        // />
+                        // }
+                        // .into_any()
+                        // }
+                        // ToolMode::Connect | ToolMode::Add | ToolMode::Select => ().into_any(),
+                        // }}
+
+                        <EditNodeMenu
+                            passives_tree_specs
+                            passives_history_tracker
+                            selected_node
+                            clipboard_node
+                        />
 
                     </Card>
 
@@ -484,7 +491,6 @@ fn ToolNode(
                     !selected
                 };
 
-            let node_specs = node_specs();
             let searched = if let ToolMode::Edit | ToolMode::Select = tool_mode.get() {
                 match search_node.read().as_ref() {
                     Some(searched_node) => node_text.get().contains(&searched_node.to_lowercase()),
@@ -500,7 +506,7 @@ fn ToolNode(
                     (true, true) => PurchaseStatus::Purchaseable,
                     (true, false) => PurchaseStatus::Purchased,
                 },
-                meta_status: match (node_specs.locked, selected) {
+                meta_status: match (node_specs().locked, selected) {
                     (_, true) => MetaStatus::Ascended,
                     (true, _) => MetaStatus::Locked,
                     _ => MetaStatus::Normal,
@@ -687,24 +693,35 @@ fn EditNodeMenu(
         }
     });
 
+    let try_delete_node = {
+        let confirm_context: ConfirmContext = expect_context();
+        let do_delete_node = do_delete_node.clone();
+        move || {
+            (confirm_context.confirm)("Confirm delete node?".to_string(), do_delete_node.clone());
+        }
+    };
+    Effect::new({
+        let try_delete_node = try_delete_node.clone();
+        move || {
+            if events_context.key_pressed(Key::Delete) {
+                try_delete_node();
+            }
+        }
+    });
+
     view! {
         {move || {
+            let try_delete_node = try_delete_node.clone();
             match selected_node.get() {
                 SelectedNode::Single(node_id) => {
                     let node_specs = RwSignal::new(
-                        passives_tree_specs.read().nodes.get(&node_id).cloned().unwrap_or_default(),
+                        passives_tree_specs
+                            .read_untracked()
+                            .nodes
+                            .get(&node_id)
+                            .cloned()
+                            .unwrap_or_default(),
                     );
-                    let try_delete_node = {
-                        let confirm_context: ConfirmContext = expect_context();
-                        let do_delete_node = do_delete_node.clone();
-                        move || {
-                            (confirm_context
-                                .confirm)(
-                                "Confirm delete node?".to_string(),
-                                do_delete_node.clone(),
-                            );
-                        }
-                    };
                     let _ = watch_debounced_with_options(
                         move || node_specs.get(),
                         move |value, _, _| {
@@ -726,16 +743,7 @@ fn EditNodeMenu(
                         500.0,
                         WatchDebouncedOptions::default().immediate(false),
                     );
-                    Effect::new({
-                        let try_delete_node = try_delete_node.clone();
-                        move || {
-                            if events_context.key_pressed(Key::Delete) {
-                                try_delete_node();
-                            }
-                        }
-                    });
                     Some(
-
                         view! {
                             <CardHeader
                                 title="Edit Node"
@@ -1045,7 +1053,7 @@ fn handle_click_node(
     is_ctrl: bool,
 ) {
     match tool_mode.get_untracked() {
-        ToolMode::Edit | ToolMode::Select => {
+        ToolMode::Edit | ToolMode::Select | ToolMode::Add => {
             if is_ctrl {
                 selected_node.update(|selected_node| match selected_node {
                     SelectedNode::None => {
@@ -1079,7 +1087,6 @@ fn handle_click_node(
             }
             _ => selected_node.set(SelectedNode::Single(node_id)),
         },
-        ToolMode::Add => {}
     }
 }
 
