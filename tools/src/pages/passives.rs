@@ -5,19 +5,21 @@ use std::{
 
 use frontend::components::{
     events::{EventsContext, Key},
-    shared::passives::{
-        Connection, MetaStatus, Node, NodeStatus, NodeTooltipContent, PurchaseStatus,
+    shared::{
+        passives::{Connection, MetaStatus, Node, NodeStatus, NodeTooltipContent, PurchaseStatus},
+        tooltips::effects_tooltip,
     },
     ui::{
         buttons::{MenuButton, TabButton},
         card::{Card, CardHeader, CardInset, CardTitle},
         confirm::ConfirmContext,
         dropdown::SearchableDropdownMenu,
-        input::{Input,ValidatedInput},
+        input::{Input, ValidatedInput},
         pannable::Pannable,
         tooltip::DynamicTooltip,
     },
 };
+use itertools::Itertools;
 use leptos::{html::*, prelude::*};
 use leptos_use::{WatchDebouncedOptions, watch_debounced_with_options};
 use serde::Serialize;
@@ -99,7 +101,6 @@ pub fn PassivesPage() -> impl IntoView {
             }
         });
     });
-
 
     let save = move || {
         save_json(
@@ -457,13 +458,18 @@ fn ToolNode(
         }
     };
 
+    let node_text = Memo::new({
+        let node_specs = node_specs.clone();
+        move |_| node_text(&node_specs()).to_lowercase()
+    });
+
     let node_status = Memo::new({
         let node_id = node_id.clone();
         let node_specs = node_specs.clone();
         move |_| {
             let selected = selected_node.read().is_selected(&node_id);
             let clickable = if events_context.key_pressed(Key::Ctrl)
-                && tool_mode.get_untracked() == ToolMode::Select
+                && tool_mode.get() == ToolMode::Select
             {
                 true
             } else {
@@ -471,15 +477,20 @@ fn ToolNode(
             };
 
             let node_specs = node_specs();
-            let searched = match search_node.read().as_ref() {
-                Some(searched_node) => node_specs.name.to_lowercase().contains(&searched_node.to_lowercase()),
-                None => true,
+            let searched = if let ToolMode::Edit | ToolMode::Select = tool_mode.get() {
+                match search_node.read().as_ref() {
+                    Some(searched_node) => node_text.get().contains(&searched_node.to_lowercase()),
+                    None => true,
+                }
+            } else {
+                true
             };
+
             NodeStatus {
-                purchase_status: match (searched,clickable) {
-                    (false,_) =>PurchaseStatus::Inactive,
-                    (true,true) => PurchaseStatus::Purchaseable,
-                    (true,false) => PurchaseStatus::Purchased,
+                purchase_status: match (searched, clickable) {
+                    (false, _) => PurchaseStatus::Inactive,
+                    (true, true) => PurchaseStatus::Purchaseable,
+                    (true, false) => PurchaseStatus::Purchased,
                 },
                 meta_status: match (node_specs.locked, selected) {
                     (_, true) => MetaStatus::Ascended,
@@ -1172,4 +1183,16 @@ fn redo_history(
     if let Some(specs) = passives_history_tracker.write().redo() {
         passives_tree_specs.set(specs.clone());
     }
+}
+
+fn node_text(node_specs: &PassiveNodeSpecs) -> String {
+    format!(
+        "{} {}",
+        node_specs.name,
+        node_specs
+            .effects
+            .iter()
+            .map(|effect| effects_tooltip::format_stat(effect))
+            .join(" ")
+    )
 }
