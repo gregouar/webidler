@@ -1149,8 +1149,8 @@
       "1edc1a3f-dc55-41fa-a8ad-fa90466ddd4a": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": 87.5,
-        "y": 97.5,
+        "x": 82.5,
+        "y": 100.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Spell",
@@ -7512,11 +7512,11 @@
         "socket": false
       },
       "ada9e80f-4b7b-4ae7-a2a1-d411345a272b": {
-        "name": "Spell Critical Hit Damage",
+        "name": "Spell Critical Hit Chance and Damage",
         "icon": "passives/fireflake.svg",
         "x": -27.5,
         "y": 65.0,
-        "size": 1,
+        "size": 2,
         "initial_node": false,
         "node_type": "Storm",
         "effects": [
@@ -7525,7 +7525,14 @@
               "CritDamage": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 30.0
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "CritChance": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -7536,7 +7543,14 @@
               "CritDamage": "Spell"
             },
             "modifier": "Multiplier",
-            "value": 15.0
+            "value": 10.0
+          },
+          {
+            "stat": {
+              "CritChance": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -9482,8 +9496,8 @@
       "d4732e9c-3efb-4604-8b67-24a0587166b6": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": 72.5,
-        "y": 92.5,
+        "x": 70.0,
+        "y": 105.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Spell",
@@ -10179,9 +10193,9 @@
       "de4fefa1-145a-4825-8de9-ad5c52140395": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
-        "x": 67.5,
-        "y": 100.0,
-        "size": 0,
+        "x": 57.5,
+        "y": 110.0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Spell",
         "effects": [
@@ -10193,7 +10207,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -10207,7 +10221,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,

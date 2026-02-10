@@ -600,6 +600,25 @@ fn ToolNode(
         }
     };
 
+    Effect::new(move || {
+        if selected_node.read().is_selected(&node_id) {
+            if let Some(node) = passives_tree_specs.write().nodes.get_mut(&node_id) {
+                if events_context.key_pressed(Key::ArrowUp) {
+                    node.y += 2.5;
+                }
+                if events_context.key_pressed(Key::ArrowDown) {
+                    node.y -= 2.5;
+                }
+                if events_context.key_pressed(Key::ArrowLeft) {
+                    node.x -= 2.5;
+                }
+                if events_context.key_pressed(Key::ArrowRight) {
+                    node.x += 2.5;
+                }
+            }
+        }
+    });
+
     view! {
         {move || {
             view! {
