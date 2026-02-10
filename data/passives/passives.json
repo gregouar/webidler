@@ -4743,9 +4743,10 @@
         "upgrade_effects": [
           {
             "stat": {
-              "MaxDamage": {
+              "Damage": {
                 "skill_type": null,
-                "damage_type": null
+                "damage_type": null,
+                "min_max": "Max"
               }
             },
             "modifier": "Multiplier",
@@ -6117,19 +6118,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": "Fire"
-                    }
-                  },
-                  {
                     "Damage": {
-                      "skill_type": null,
-                      "damage_type": "Fire"
-                    }
-                  },
-                  {
-                    "MinDamage": {
                       "skill_type": null,
                       "damage_type": "Fire"
                     }
@@ -7047,21 +7036,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": "Physical"
-                    }
-                  },
-                  {
-                    "CritChance": null
-                  },
-                  {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": "Physical"
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": "Physical"
@@ -7092,9 +7066,10 @@
         "effects": [
           {
             "stat": {
-              "MaxDamage": {
+              "Damage": {
                 "skill_type": null,
-                "damage_type": null
+                "damage_type": null,
+                "min_max": "Max"
               }
             },
             "modifier": "Multiplier",
@@ -7106,9 +7081,10 @@
         "upgrade_effects": [
           {
             "stat": {
-              "MaxDamage": {
+              "Damage": {
                 "skill_type": null,
-                "damage_type": null
+                "damage_type": null,
+                "min_max": "Max"
               }
             },
             "modifier": "Multiplier",
@@ -7631,18 +7607,6 @@
                     }
                   },
                   {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null
@@ -7681,7 +7645,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "MaxDamage": {
+                    "Damage": {
                       "skill_type": null,
                       "damage_type": null
                     }
@@ -7693,21 +7657,9 @@
                     }
                   },
                   {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null
                     }
                   }
                 ],
@@ -7749,12 +7701,6 @@
                     }
                   },
                   {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
@@ -7764,12 +7710,6 @@
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null
-                    }
-                  },
-                  {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": null
                     }
                   }
                 ],
@@ -7814,18 +7754,6 @@
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null
-                    }
-                  },
-                  {
-                    "MaxDamage": {
-                      "skill_type": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "MinDamage": {
-                      "skill_type": null,
-                      "damage_type": null
                     }
                   },
                   {
@@ -8999,9 +8927,10 @@
         "effects": [
           {
             "stat": {
-              "MaxDamage": {
+              "Damage": {
                 "skill_type": null,
-                "damage_type": null
+                "damage_type": null,
+                "min_max": "Max"
               }
             },
             "modifier": "Multiplier",
@@ -9013,9 +8942,10 @@
         "upgrade_effects": [
           {
             "stat": {
-              "MaxDamage": {
+              "Damage": {
                 "skill_type": null,
-                "damage_type": null
+                "damage_type": null,
+                "min_max": "Max"
               }
             },
             "modifier": "Multiplier",

@@ -558,66 +558,6 @@ pub fn compute_skill_specs_effect<'a>(
                         })
                     }
                 }
-                // (
-                //     StatConverterSource::MinDamage { damage_type },
-                //     SkillEffectType::FlatDamage { damage, .. },
-                // ) => {
-                //     let amount = match damage_type {
-                //         Some(damage_type) => damage
-                //             .get_mut(&damage_type)
-                //             .map(|d| {
-                //                 let amount = d.min * factor * 0.01;
-                //                 if !specs.is_extra {
-                //                     d.min -= amount;
-                //                 }
-                //                 amount
-                //             })
-                //             .unwrap_or_default(),
-                //         None => damage.values_mut().fold(0.0, |acc, d| {
-                //             let amount = d.min * factor * 0.01;
-                //             if !specs.is_extra {
-                //                 d.min -= amount;
-                //             }
-                //             acc + amount
-                //         }),
-                //     };
-                //     Some(StatEffect {
-                //         stat: (*specs.target_stat).clone(),
-                //         modifier: specs.target_modifier,
-                //         value: amount,
-                //         bypass_ignore: true,
-                //     })
-                // }
-                // (
-                //     StatConverterSource::MaxDamage { damage_type },
-                //     SkillEffectType::FlatDamage { damage, .. },
-                // ) => {
-                //     let amount = match damage_type {
-                //         Some(damage_type) => damage
-                //             .get_mut(&damage_type)
-                //             .map(|d| {
-                //                 let amount = d.max * factor * 0.01;
-                //                 if !specs.is_extra {
-                //                     d.max -= amount;
-                //                 }
-                //                 amount
-                //             })
-                //             .unwrap_or_default(),
-                //         None => damage.values_mut().fold(0.0, |acc, d| {
-                //             let amount = d.max * factor * 0.01;
-                //             if !specs.is_extra {
-                //                 d.max -= amount;
-                //             }
-                //             acc + amount
-                //         }),
-                //     };
-                //     Some(StatEffect {
-                //         stat: (*specs.target_stat).clone(),
-                //         modifier: specs.target_modifier,
-                //         value: amount,
-                //         bypass_ignore: true,
-                //     })
-                // }
                 _ => None,
             } {
                 stats_converted.push(stat);

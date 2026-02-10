@@ -445,16 +445,6 @@
                               }
                             },
                             {
-                              "MinDamage": {
-                                "damage_type": "Storm"
-                              }
-                            },
-                            {
-                              "MaxDamage": {
-                                "damage_type": "Storm"
-                              }
-                            },
-                            {
                               "CritChance": null
                             }
                           ]
@@ -498,16 +488,6 @@
                           "ignore_stat_effects": [
                             {
                               "Damage": {
-                                "damage_type": "Storm"
-                              }
-                            },
-                            {
-                              "MinDamage": {
-                                "damage_type": "Storm"
-                              }
-                            },
-                            {
-                              "MaxDamage": {
                                 "damage_type": "Storm"
                               }
                             },
@@ -604,16 +584,6 @@
                               }
                             },
                             {
-                              "MinDamage": {
-                                "damage_type": "Poison"
-                              }
-                            },
-                            {
-                              "MaxDamage": {
-                                "damage_type": "Poison"
-                              }
-                            },
-                            {
                               "CritChance": null
                             }
                           ]
@@ -704,16 +674,6 @@
                           "ignore_stat_effects": [
                             {
                               "Damage": {
-                                "damage_type": "Fire"
-                              }
-                            },
-                            {
-                              "MinDamage": {
-                                "damage_type": "Fire"
-                              }
-                            },
-                            {
-                              "MaxDamage": {
                                 "damage_type": "Fire"
                               }
                             },
@@ -1016,8 +976,9 @@
         "effects": [
           {
             "stat": {
-              "MinDamage": {
-                "damage_type": "Poison"
+              "Damage": {
+                "damage_type": "Poison",
+                "min_max": "Min"
               }
             },
             "modifier": "Flat",
@@ -1027,7 +988,7 @@
         "source": {
           "ItemStats": {
             "slot": "Weapon",
-            "item_stats": { "MinDamage": "Poison" }
+            "item_stats": { "Damage": "Poison", "min_max": "Min" }
           }
         },
         "factor": 1
@@ -1036,8 +997,9 @@
         "effects": [
           {
             "stat": {
-              "MaxDamage": {
-                "damage_type": "Poison"
+              "Damage": {
+                "damage_type": "Poison",
+                "min_max": "Max"
               }
             },
             "modifier": "Flat",
@@ -1047,7 +1009,9 @@
         "source": {
           "ItemStats": {
             "slot": "Weapon",
-            "item_stats": { "MaxDamage": "Poison" }
+            "item_stats": {
+              "Damage": { "damage_type": "Poison", "min_max": "Max" }
+            }
           }
         },
         "factor": 1
@@ -1144,7 +1108,12 @@
                             "Damage": { "damage_type": "Physical" }
                           },
                           "target_stat": {
-                            "MaxDamage": { "damage_type": "Storm" }
+                            "Damage": {
+                              "damage_type": {
+                                "damage_type": "Storm",
+                                "min_max": "Max"
+                              }
+                            }
                           },
                           "target_modifier": "Flat"
                         }
@@ -1234,18 +1203,6 @@
                           "ignore_stat_effects": [
                             {
                               "Damage": {
-                                "skill_type": "Attack",
-                                "damage_type": "Physical"
-                              }
-                            },
-                            {
-                              "MinDamage": {
-                                "skill_type": "Attack",
-                                "damage_type": "Physical"
-                              }
-                            },
-                            {
-                              "MaxDamage": {
                                 "skill_type": "Attack",
                                 "damage_type": "Physical"
                               }
@@ -1418,8 +1375,9 @@
         "effects": [
           {
             "stat": {
-              "MinDamage": {
-                "damage_type": "Physical"
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Min"
               }
             },
             "modifier": "Flat",
@@ -1427,8 +1385,9 @@
           },
           {
             "stat": {
-              "MaxDamage": {
-                "damage_type": "Physical"
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Max"
               }
             },
             "modifier": "Flat",
@@ -1533,8 +1492,9 @@
         "effects": [
           {
             "stat": {
-              "MinDamage": {
-                "damage_type": "Physical"
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Min"
               }
             },
             "modifier": "Flat",
@@ -1544,7 +1504,9 @@
         "source": {
           "ItemStats": {
             "slot": "Weapon",
-            "item_stats": { "MinDamage": "Physical" }
+            "item_stats": {
+              "Damage": { "damage_type": "Physical", "min_max": "Min" }
+            }
           }
         },
         "factor": 1
@@ -1553,8 +1515,9 @@
         "effects": [
           {
             "stat": {
-              "MaxDamage": {
-                "damage_type": "Physical"
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Max"
               }
             },
             "modifier": "Flat",
@@ -1564,7 +1527,9 @@
         "source": {
           "ItemStats": {
             "slot": "Weapon",
-            "item_stats": { "MaxDamage": "Physical" }
+            "item_stats": {
+              "Damage": { "damage_type": "Physical", "min_max": "Max" }
+            }
           }
         },
         "factor": 1
@@ -1573,8 +1538,9 @@
         "effects": [
           {
             "stat": {
-              "MinDamage": {
-                "damage_type": "Fire"
+              "Damage": {
+                "damage_type": "Fire",
+                "min_max": "Min"
               }
             },
             "modifier": "Flat",
@@ -1584,7 +1550,9 @@
         "source": {
           "ItemStats": {
             "slot": "Weapon",
-            "item_stats": { "MinDamage": "Fire" }
+            "item_stats": {
+              "Damage": { "damage_type": "Fire", "min_max": "Min" }
+            }
           }
         },
         "factor": 1
@@ -1593,8 +1561,9 @@
         "effects": [
           {
             "stat": {
-              "MaxDamage": {
-                "damage_type": "Fire"
+              "Damage": {
+                "damage_type": "Fire",
+                "min_max": "Max"
               }
             },
             "modifier": "Flat",
@@ -1604,7 +1573,9 @@
         "source": {
           "ItemStats": {
             "slot": "Weapon",
-            "item_stats": { "MaxDamage": "Fire" }
+            "item_stats": {
+              "Damage": { "damage_type": "Fire", "min_max": "Max" }
+            }
           }
         },
         "factor": 1
@@ -1613,8 +1584,9 @@
         "effects": [
           {
             "stat": {
-              "MinDamage": {
-                "damage_type": "Storm"
+              "Damage": {
+                "damage_type": "Storm",
+                "min_max": "Min"
               }
             },
             "modifier": "Flat",
@@ -1624,7 +1596,9 @@
         "source": {
           "ItemStats": {
             "slot": "Weapon",
-            "item_stats": { "MinDamage": "Storm" }
+            "item_stats": {
+              "Damage": { "damage_type": "Storm", "min_max": "Min" }
+            }
           }
         },
         "factor": 1
@@ -1633,8 +1607,9 @@
         "effects": [
           {
             "stat": {
-              "MaxDamage": {
-                "damage_type": "Storm"
+              "Damage": {
+                "damage_type": "Storm",
+                "min_max": "Max"
               }
             },
             "modifier": "Flat",
@@ -1644,7 +1619,9 @@
         "source": {
           "ItemStats": {
             "slot": "Weapon",
-            "item_stats": { "MaxDamage": "Storm" }
+            "item_stats": {
+              "Damage": { "damage_type": "Storm", "min_max": "Max" }
+            }
           }
         },
         "factor": 1
@@ -1655,7 +1632,10 @@
             "stat": {
               "StatusPower": {
                 "status_type": {
-                  "DamageOverTime": { "damage_type": "Poison" }
+                  "DamageOverTime": {
+                    "damage_type": "Poison",
+                    "min_max": "Min"
+                  }
                 }
               }
             },
@@ -1666,7 +1646,36 @@
         "source": {
           "ItemStats": {
             "slot": "Weapon",
-            "item_stats": { "MinDamage": "Poison" }
+            "item_stats": {
+              "Damage": { "damage_type": "Poison", "min_max": "Min" }
+            }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison",
+                    "min_max": "Max"
+                  }
+                }
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": {
+              "Damage": { "damage_type": "Poison", "min_max": "Max" }
+            }
           }
         },
         "factor": 1
