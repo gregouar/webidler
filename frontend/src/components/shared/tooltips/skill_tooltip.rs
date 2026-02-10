@@ -16,6 +16,7 @@ use shared::data::{
     temple::StatType,
     trigger::TriggerEffectModifier,
 };
+use strum::IntoEnumIterator;
 
 use crate::components::{
     shared::tooltips::{
@@ -240,9 +241,10 @@ pub fn format_effect(
             crit_damage,
             ..
         } => view! {
-            {damage
-                .into_iter()
-                .map(|(damage_type, value)| {
+            {
+                let mut damage_lines = Vec::new();
+                for damage_type in DamageType::iter() {
+                    let value = damage.get(&damage_type).copied().unwrap_or_default();
                     let success_chance = success_chance.clone();
                     let damage_color = damage_color(damage_type);
                     let trigger_modifier_str = format_trigger_modifier(
@@ -256,17 +258,23 @@ pub fn format_effect(
                         ),
                         " as",
                     );
-                    view! {
-                        <EffectLi>
-                            {success_chance}"Deal "
-                            <span class=format!(
-                                "font-semibold {damage_color}",
-                            )>{format_min_max(value)}</span>{trigger_modifier_str} " "
-                            {damage_type_str(Some(damage_type))} "Damage"
-                        </EffectLi>
+                    if value.min > 0.0 || value.max > 0.0 {
+                        damage_lines
+                            .push(
+                                view! {
+                                    <EffectLi>
+                                        {success_chance}"Deal "
+                                        <span class=format!(
+                                            "font-semibold {damage_color}",
+                                        )>{format_min_max(value)}</span>{trigger_modifier_str} " "
+                                        {damage_type_str(Some(damage_type))} "Damage"
+                                    </EffectLi>
+                                },
+                            );
                     }
-                })
-                .collect::<Vec<_>>()}
+                }
+                damage_lines
+            }
             {if crit_chance.value > 0.0 {
                 Some(
                     view! {

@@ -988,7 +988,9 @@
         "source": {
           "ItemStats": {
             "slot": "Weapon",
-            "item_stats": { "Damage": "Poison", "min_max": "Min" }
+            "item_stats": {
+              "Damage": { "damage_type": "Poison", "min_max": "Min" }
+            }
           }
         },
         "factor": 1
@@ -1109,10 +1111,8 @@
                           },
                           "target_stat": {
                             "Damage": {
-                              "damage_type": {
-                                "damage_type": "Storm",
-                                "min_max": "Max"
-                              }
+                              "damage_type": "Storm",
+                              "min_max": "Max"
                             }
                           },
                           "target_modifier": "Flat"
@@ -1633,10 +1633,10 @@
               "StatusPower": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": "Poison",
-                    "min_max": "Min"
+                    "damage_type": "Poison"
                   }
-                }
+                },
+                "min_max": "Min"
               }
             },
             "modifier": "Flat",
@@ -1660,10 +1660,10 @@
               "StatusPower": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": "Poison",
-                    "min_max": "Max"
+                    "damage_type": "Poison"
                   }
-                }
+                },
+                "min_max": "Max"
               }
             },
             "modifier": "Flat",
