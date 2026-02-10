@@ -35,8 +35,8 @@
       "01412aff-c3a8-4c91-a390-03a2ba0cb0f0": {
         "name": "Critical Hit Chance",
         "icon": "passives/critical_chance.svg",
-        "x": -95.0,
-        "y": 82.5,
+        "x": -122.5,
+        "y": 80.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -207,37 +207,6 @@
         "max_upgrade_level": 3,
         "socket": false
       },
-      "068fc2e5-4b5a-42ac-9cbd-fa59f41b3584": {
-        "name": "Critical Hit Damage",
-        "icon": "passives/critical_damage.svg",
-        "x": -115.0,
-        "y": 92.5,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Critical",
-        "effects": [
-          {
-            "stat": {
-              "CritDamage": null
-            },
-            "modifier": "Multiplier",
-            "value": 30.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "CritDamage": null
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
       "06b782e0-1d97-4fed-8a7e-8bb673add6c2": {
         "name": "Maximum Mana",
         "icon": "passives/mana.svg",
@@ -353,6 +322,37 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "0b5ab403-85f5-434a-9a1b-e95ab9c2fb5d": {
+        "name": "Block",
+        "icon": "passives/block.svg",
+        "x": -62.5,
+        "y": 135.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "0bf01c1a-5a2e-4d84-919a-7e4d1ca16fc8": {
         "name": "Overwhelming Force",
         "icon": "passives/overwhelming_force.svg",
@@ -429,8 +429,8 @@
       "0c4ea6ed-c18a-4a43-808b-8f02aa49bedb": {
         "name": "Damage against Stunned Enemies",
         "icon": "passives/surprised_skull.svg",
-        "x": -90.0,
-        "y": 125.0,
+        "x": -105.0,
+        "y": 122.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Storm",
@@ -490,6 +490,33 @@
             "value": 10.0
           }
         ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "0d3e0bf2-3d3a-4444-9765-4fe6955ad0ea": {
+        "name": "Curse Effects",
+        "icon": "passives/cursed_star.svg",
+        "x": 92.5,
+        "y": -70.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": null,
+                "skill_type": "Curse",
+                "min_max": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
         "max_upgrade_level": 3,
         "socket": false
       },
@@ -730,8 +757,8 @@
       "146b8b55-3b98-455b-ad05-f53b6e7c65ef": {
         "name": "Damage against Stunned Enemies",
         "icon": "passives/surprised_skull.svg",
-        "x": 92.5,
-        "y": 117.5,
+        "x": 105.0,
+        "y": 122.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Storm",
@@ -898,98 +925,6 @@
         "locked": true,
         "upgrade_effects": [],
         "max_upgrade_level": null,
-        "socket": false
-      },
-      "18a233e9-6bf7-4756-8cd9-1714c40f3b09": {
-        "name": "Twist the Knife",
-        "icon": "passives/bleeding_eye.svg",
-        "x": -115.0,
-        "y": -97.5,
-        "size": 1,
-        "initial_node": false,
-        "node_type": "Critical",
-        "effects": [
-          {
-            "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "CritChance": null
-                },
-                "skill_type": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Physical"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 25.0
-          },
-          {
-            "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "CritDamage": null
-                },
-                "skill_type": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Physical"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 20.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "CritDamage": null
-                },
-                "skill_type": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Physical"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
-          }
-        ],
-        "max_upgrade_level": 3,
         "socket": false
       },
       "1a450b19-f9c2-404f-a042-f9527f8cbbc7": {
@@ -1183,8 +1118,8 @@
       "1cc7cfb0-1ec8-4696-9baa-5a42fac7db31": {
         "name": "Critical Hit Chance",
         "icon": "passives/critical_chance.svg",
-        "x": -97.5,
-        "y": 87.5,
+        "x": -115.0,
+        "y": 92.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -1512,8 +1447,8 @@
       "26eca27a-95a6-4949-bef7-25cf3b79c340": {
         "name": "Myrmidon",
         "icon": "passives/myrmidon.svg",
-        "x": -155.0,
-        "y": 75.0,
+        "x": -47.5,
+        "y": 137.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Armor",
@@ -1578,6 +1513,33 @@
             "value": 10.0
           }
         ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "27516530-2e79-4c79-a6a8-dfdf1f05d7ba": {
+        "name": "Curse Effects",
+        "icon": "passives/cursed_star.svg",
+        "x": 102.5,
+        "y": -77.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": null,
+                "skill_type": "Curse",
+                "min_max": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
         "max_upgrade_level": 3,
         "socket": false
       },
@@ -1802,7 +1764,7 @@
         "icon": "passives/muscle_up.svg",
         "x": -145.0,
         "y": 52.5,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Life",
         "effects": [
@@ -1822,7 +1784,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 30.0
+            "value": 45.0
           }
         ],
         "triggers": [],
@@ -1844,7 +1806,38 @@
               }
             },
             "modifier": "Multiplier",
+            "value": 15.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "2dafc839-ce6c-452b-9e48-4c66abe31090": {
+        "name": "Block",
+        "icon": "passives/block.svg",
+        "x": -50.0,
+        "y": 147.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Multiplier",
             "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -1911,37 +1904,6 @@
             },
             "modifier": "Multiplier",
             "value": 5.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
-      "2efee8cf-d44a-44a1-8c60-885242f14fc9": {
-        "name": "Critical Hit Chance",
-        "icon": "passives/critical_chance.svg",
-        "x": -100.0,
-        "y": 77.5,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Critical",
-        "effects": [
-          {
-            "stat": {
-              "CritChance": null
-            },
-            "modifier": "Multiplier",
-            "value": 20.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "CritChance": null
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -2395,8 +2357,8 @@
       "3a4861a5-e8e3-455d-b458-fe23d932b190": {
         "name": "Ain't Nobody Got Time for That",
         "icon": "passives/broken_skull.svg",
-        "x": -132.5,
-        "y": 150.0,
+        "x": -147.5,
+        "y": 130.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Attack",
@@ -3020,8 +2982,8 @@
       "49a12154-6920-470b-b8ac-7074963cd554": {
         "name": "Curse Effects",
         "icon": "passives/cursed_star.svg",
-        "x": 32.5,
-        "y": -140.0,
+        "x": 97.5,
+        "y": -87.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Utility",
@@ -3315,8 +3277,8 @@
       "5223c739-dd9e-413d-804a-6b14ea39c1f7": {
         "name": "Cursed Mouth",
         "icon": "passives/infinite_curse.svg",
-        "x": -80.0,
-        "y": -147.5,
+        "x": -35.0,
+        "y": -120.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Status",
@@ -3595,8 +3557,8 @@
       "5671cdb1-7b99-4fca-bc40-5df8636d44b1": {
         "name": "Critical Hit Damage",
         "icon": "passives/critical_damage.svg",
-        "x": -117.5,
-        "y": 100.0,
+        "x": -127.5,
+        "y": 112.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -3651,8 +3613,8 @@
       "58a42157-4cc3-45ea-b71c-1395663a9b23": {
         "name": "Damage",
         "icon": "passives/damage.svg",
-        "x": -115.0,
-        "y": 157.5,
+        "x": -135.0,
+        "y": 112.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -3872,11 +3834,42 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "5ee192ea-49d6-4923-a857-0d5a21498f53": {
+        "name": "Armor",
+        "icon": "passives/armor.svg",
+        "x": -77.5,
+        "y": -62.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "5f2ac03c-3b5f-4a39-b44e-d9765e81c139": {
         "name": "Life Leech Power",
         "icon": "passives/lamprey_mouth.svg",
-        "x": -147.5,
-        "y": 137.5,
+        "x": -82.5,
+        "y": 100.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -3912,9 +3905,9 @@
       "5f96379e-5249-4b0e-8a4d-1e8c0f951f82": {
         "name": "Sadism",
         "icon": "passives/critical.svg",
-        "x": -77.5,
-        "y": 155.0,
-        "size": 1,
+        "x": -132.5,
+        "y": 95.0,
+        "size": 2,
         "initial_node": false,
         "node_type": "Critical",
         "effects": [
@@ -4191,6 +4184,37 @@
             "stat": "Life",
             "modifier": "Multiplier",
             "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "65390d39-8d88-4b4e-b88b-afbfeab3d4e9": {
+        "name": "Block",
+        "icon": "passives/block.svg",
+        "x": -90.0,
+        "y": -80.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -5246,7 +5270,7 @@
         "icon": "passives/brainstorm.svg",
         "x": -57.5,
         "y": 170.0,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Mana",
         "effects": [
@@ -5266,7 +5290,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 30.0
+            "value": 45.0
           }
         ],
         "triggers": [],
@@ -5288,7 +5312,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 3,
@@ -5299,7 +5323,7 @@
         "icon": "passives/threat_damage.svg",
         "x": 55.0,
         "y": 175.0,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Attack",
         "effects": [
@@ -5320,7 +5344,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -5343,6 +5367,43 @@
               }
             },
             "modifier": "Flat",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "7a5f9ace-f039-44f2-a78b-87f66a938652": {
+        "name": "Life Leech Power",
+        "icon": "passives/lamprey_mouth.svg",
+        "x": -70.0,
+        "y": 105.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": {
+              "Restore": {
+                "restore_type": "Life",
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Restore": {
+                "restore_type": "Life",
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Multiplier",
             "value": 5.0
           }
         ],
@@ -5972,8 +6033,8 @@
       "8778da9e-df39-4fda-9231-192d587f5e9f": {
         "name": "Critical Hit Damage",
         "icon": "passives/critical_damage.svg",
-        "x": -110.0,
-        "y": 100.0,
+        "x": -117.5,
+        "y": 102.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -6003,8 +6064,8 @@
       "8939c1bd-e0aa-4d12-88cd-aa933daba56d": {
         "name": "Damage against Stunned Enemies",
         "icon": "passives/surprised_skull.svg",
-        "x": -97.5,
-        "y": 122.5,
+        "x": -82.5,
+        "y": 117.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Storm",
@@ -6067,11 +6128,42 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "8962f1e9-2a29-4c8e-8caa-8d6c97433380": {
+        "name": "Armor",
+        "icon": "passives/armor.svg",
+        "x": -40.0,
+        "y": 140.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "89ce0bfc-b301-4325-9d5d-6aad3b11dd4d": {
         "name": "I'm Speed",
         "icon": "passives/sprint.svg",
-        "x": -135.0,
-        "y": -67.5,
+        "x": -157.5,
+        "y": -95.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Utility",
@@ -6636,8 +6728,8 @@
       "9addfe39-f177-427a-aefa-4f3ba229c856": {
         "name": "Damage against Stunned Enemies",
         "icon": "passives/surprised_skull.svg",
-        "x": 100.0,
-        "y": 107.5,
+        "x": 97.5,
+        "y": 112.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Storm",
@@ -6761,6 +6853,37 @@
             "stat": "GoldFind",
             "modifier": "Multiplier",
             "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "9e32669b-6e90-4021-8c9a-a5d1d2a03387": {
+        "name": "Armor",
+        "icon": "passives/armor.svg",
+        "x": -70.0,
+        "y": -62.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -7082,7 +7205,7 @@
       "a8c6e35c-bd30-4211-9e6d-65d59ad7e375": {
         "name": "Damage against Stunned Enemies",
         "icon": "passives/surprised_skull.svg",
-        "x": 97.5,
+        "x": 82.5,
         "y": 117.5,
         "size": 0,
         "initial_node": false,
@@ -7512,6 +7635,74 @@
           }
         ],
         "max_upgrade_level": 1,
+        "socket": false
+      },
+      "b59ab706-e788-4501-8bc8-e55157d0edc5": {
+        "name": "Armor",
+        "icon": "passives/armor.svg",
+        "x": -87.5,
+        "y": -57.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "b5fce054-f56b-47de-9e4f-d565c54f830c": {
+        "name": "Life Leech Power",
+        "icon": "passives/lamprey_mouth.svg",
+        "x": -57.5,
+        "y": 110.0,
+        "size": 1,
+        "initial_node": false,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": {
+              "Restore": {
+                "restore_type": "Life",
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Restore": {
+                "restore_type": "Life",
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
         "socket": false
       },
       "b6208dda-e38e-4254-afa7-5f1574034c63": {
@@ -8024,8 +8215,8 @@
       "c3187473-2fe2-4959-b045-4325d79d783e": {
         "name": "Armor",
         "icon": "passives/armor.svg",
-        "x": -85.0,
-        "y": 97.5,
+        "x": -50.0,
+        "y": 130.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -8035,7 +8226,7 @@
               "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -8046,7 +8237,7 @@
               "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -8494,6 +8685,37 @@
                 "damage_type": "Storm",
                 "min_max": null
               }
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "c9382d85-ae3d-4efd-9352-79f820fbf726": {
+        "name": "Block",
+        "icon": "passives/block.svg",
+        "x": -95.0,
+        "y": -67.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Block": null
             },
             "modifier": "Multiplier",
             "value": 5.0
@@ -9351,8 +9573,8 @@
       "d5875cc2-1fdf-4b50-95be-7048a03ba1e0": {
         "name": "Block",
         "icon": "passives/block.svg",
-        "x": -97.5,
-        "y": -87.5,
+        "x": -100.0,
+        "y": -90.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -9659,6 +9881,37 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "d98142f0-e404-498a-8167-c33790be738e": {
+        "name": "Block",
+        "icon": "passives/block.svg",
+        "x": -105.0,
+        "y": -77.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Armor",
+        "effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "db23ff19-242a-4751-b628-e41b698a0788": {
         "name": "Stunning Blow",
         "icon": "passives/thor_fist.svg",
@@ -9793,8 +10046,8 @@
       "dc33a293-4dbf-4ecf-a0b7-b2fca942ca38": {
         "name": "Damage",
         "icon": "passives/damage.svg",
-        "x": -115.0,
-        "y": 142.5,
+        "x": -155.0,
+        "y": 110.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -9859,8 +10112,8 @@
       "dd6a11a9-aa80-40ed-8421-47eb388a3c3a": {
         "name": "Damage against Stunned Enemies",
         "icon": "passives/surprised_skull.svg",
-        "x": -95.0,
-        "y": 115.0,
+        "x": -97.5,
+        "y": 112.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Storm",
@@ -10026,98 +10279,6 @@
                   }
                 },
                 "skill_type": null
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
-      "df7644d9-5c6d-47ac-be07-7cd2eefa7b49": {
-        "name": "Twist the Knife",
-        "icon": "passives/bleeding_eye.svg",
-        "x": -125.0,
-        "y": -90.0,
-        "size": 1,
-        "initial_node": false,
-        "node_type": "Critical",
-        "effects": [
-          {
-            "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "CritChance": null
-                },
-                "skill_type": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Physical"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 25.0
-          },
-          {
-            "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "CritDamage": null
-                },
-                "skill_type": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Physical"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 20.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "CritDamage": null
-                },
-                "skill_type": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Physical"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
               }
             },
             "modifier": "Multiplier",
@@ -10303,8 +10464,8 @@
       "e30f5c37-e25e-4c73-a7ab-6f862398745f": {
         "name": "Damage",
         "icon": "passives/damage.svg",
-        "x": -110.0,
-        "y": 150.0,
+        "x": -145.0,
+        "y": 107.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -10652,7 +10813,7 @@
         "icon": "passives/brainstorm.svg",
         "x": 145.0,
         "y": -52.5,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Mana",
         "effects": [
@@ -10672,7 +10833,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 30.0
+            "value": 45.0
           }
         ],
         "triggers": [],
@@ -10694,7 +10855,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 3,
@@ -10703,9 +10864,9 @@
       "eb5d66c8-17cc-4812-bcda-c425f0941aea": {
         "name": "Twist the Knife",
         "icon": "passives/bleeding_eye.svg",
-        "x": -140.0,
-        "y": -95.0,
-        "size": 1,
+        "x": -127.5,
+        "y": 25.0,
+        "size": 2,
         "initial_node": false,
         "node_type": "Critical",
         "effects": [
@@ -10732,7 +10893,61 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 25.0
+            "value": 40.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "CritDamage": null
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Physical"
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 40.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "CritChance": null
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "DamageOverTime": {
+                          "damage_type": "Physical"
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
           },
           {
             "stat": {
@@ -10758,35 +10973,6 @@
             },
             "modifier": "Multiplier",
             "value": 20.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "CritDamage": null
-                },
-                "skill_type": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Physical"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -10955,8 +11141,8 @@
       "f275006b-3e0a-4177-a128-f501b7b91b4e": {
         "name": "Assassin Strike",
         "icon": "passives/ninja_head.svg",
-        "x": 82.5,
-        "y": 145.0,
+        "x": 25.0,
+        "y": 120.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Critical",
@@ -10974,11 +11160,11 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 60.0
+            "value": 80.0
           }
         ],
         "triggers": [],
-        "locked": true,
+        "locked": false,
         "upgrade_effects": [
           {
             "stat": {
@@ -10993,7 +11179,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 30.0
+            "value": 40.0
           }
         ],
         "max_upgrade_level": 3,
@@ -12265,10 +12451,6 @@
         "to": "8778da9e-df39-4fda-9231-192d587f5e9f"
       },
       {
-        "from": "18a233e9-6bf7-4756-8cd9-1714c40f3b09",
-        "to": "03836189-8913-45b5-bd89-e658b31e79bd"
-      },
-      {
         "from": "17ccb40c-fe56-450b-9723-c12510d0c5c6",
         "to": "ff32f6af-3088-4f9b-963b-d469ea869adb"
       },
@@ -12381,16 +12563,8 @@
         "to": "2d8c330c-e177-428e-8dae-f139ad3a7a66"
       },
       {
-        "from": "5671cdb1-7b99-4fca-bc40-5df8636d44b1",
-        "to": "068fc2e5-4b5a-42ac-9cbd-fa59f41b3584"
-      },
-      {
         "from": "8778da9e-df39-4fda-9231-192d587f5e9f",
         "to": "5671cdb1-7b99-4fca-bc40-5df8636d44b1"
-      },
-      {
-        "from": "01412aff-c3a8-4c91-a390-03a2ba0cb0f0",
-        "to": "2efee8cf-d44a-44a1-8c60-885242f14fc9"
       },
       {
         "from": "01412aff-c3a8-4c91-a390-03a2ba0cb0f0",
@@ -12467,14 +12641,6 @@
       {
         "from": "fc091b7a-1f70-45ce-90c1-244b02ce23c5",
         "to": "f104716b-c9b7-4200-aeb5-35de355dcfb9"
-      },
-      {
-        "from": "18a233e9-6bf7-4756-8cd9-1714c40f3b09",
-        "to": "df7644d9-5c6d-47ac-be07-7cd2eefa7b49"
-      },
-      {
-        "from": "df7644d9-5c6d-47ac-be07-7cd2eefa7b49",
-        "to": "eb5d66c8-17cc-4812-bcda-c425f0941aea"
       },
       {
         "from": "dfcf089f-d02a-4d98-a751-61e7f67da41b",
@@ -12922,15 +13088,115 @@
       },
       {
         "from": "9addfe39-f177-427a-aefa-4f3ba229c856",
-        "to": "a8c6e35c-bd30-4211-9e6d-65d59ad7e375"
-      },
-      {
-        "from": "9addfe39-f177-427a-aefa-4f3ba229c856",
         "to": "8c431093-95e6-4dce-b21a-9a07edfd57ea"
       },
       {
         "from": "c685f882-72ed-4b98-b8c9-5ddb7049a386",
         "to": "665e7afa-d2aa-4075-bd54-278fe4673434"
+      },
+      {
+        "from": "f275006b-3e0a-4177-a128-f501b7b91b4e",
+        "to": "b129b655-c02e-42fd-89bd-d1a18660c489"
+      },
+      {
+        "from": "9addfe39-f177-427a-aefa-4f3ba229c856",
+        "to": "146b8b55-3b98-455b-ad05-f53b6e7c65ef"
+      },
+      {
+        "from": "5f2ac03c-3b5f-4a39-b44e-d9765e81c139",
+        "to": "7a5f9ace-f039-44f2-a78b-87f66a938652"
+      },
+      {
+        "from": "7a5f9ace-f039-44f2-a78b-87f66a938652",
+        "to": "b5fce054-f56b-47de-9e4f-d565c54f830c"
+      },
+      {
+        "from": "03836189-8913-45b5-bd89-e658b31e79bd",
+        "to": "d5875cc2-1fdf-4b50-95be-7048a03ba1e0"
+      },
+      {
+        "from": "d5875cc2-1fdf-4b50-95be-7048a03ba1e0",
+        "to": "d98142f0-e404-498a-8167-c33790be738e"
+      },
+      {
+        "from": "d5875cc2-1fdf-4b50-95be-7048a03ba1e0",
+        "to": "65390d39-8d88-4b4e-b88b-afbfeab3d4e9"
+      },
+      {
+        "from": "65390d39-8d88-4b4e-b88b-afbfeab3d4e9",
+        "to": "c9382d85-ae3d-4efd-9352-79f820fbf726"
+      },
+      {
+        "from": "d98142f0-e404-498a-8167-c33790be738e",
+        "to": "c9382d85-ae3d-4efd-9352-79f820fbf726"
+      },
+      {
+        "from": "dfcf089f-d02a-4d98-a751-61e7f67da41b",
+        "to": "9e32669b-6e90-4021-8c9a-a5d1d2a03387"
+      },
+      {
+        "from": "9e32669b-6e90-4021-8c9a-a5d1d2a03387",
+        "to": "5ee192ea-49d6-4923-a857-0d5a21498f53"
+      },
+      {
+        "from": "5ee192ea-49d6-4923-a857-0d5a21498f53",
+        "to": "b59ab706-e788-4501-8bc8-e55157d0edc5"
+      },
+      {
+        "from": "eb5d66c8-17cc-4812-bcda-c425f0941aea",
+        "to": "201637a1-c430-4dcc-b537-afe68b01a2b6"
+      },
+      {
+        "from": "5f96379e-5249-4b0e-8a4d-1e8c0f951f82",
+        "to": "5671cdb1-7b99-4fca-bc40-5df8636d44b1"
+      },
+      {
+        "from": "5f96379e-5249-4b0e-8a4d-1e8c0f951f82",
+        "to": "01412aff-c3a8-4c91-a390-03a2ba0cb0f0"
+      },
+      {
+        "from": "5223c739-dd9e-413d-804a-6b14ea39c1f7",
+        "to": "24ad01fc-d436-4252-877a-f4dc31586f5c"
+      },
+      {
+        "from": "140fa424-f0f3-42b3-927e-b13777d1070e",
+        "to": "49a12154-6920-470b-b8ac-7074963cd554"
+      },
+      {
+        "from": "27516530-2e79-4c79-a6a8-dfdf1f05d7ba",
+        "to": "49a12154-6920-470b-b8ac-7074963cd554"
+      },
+      {
+        "from": "27516530-2e79-4c79-a6a8-dfdf1f05d7ba",
+        "to": "0d3e0bf2-3d3a-4444-9765-4fe6955ad0ea"
+      },
+      {
+        "from": "2723d25a-6a2a-421d-98c4-d7178da3f870",
+        "to": "c3187473-2fe2-4959-b045-4325d79d783e"
+      },
+      {
+        "from": "2723d25a-6a2a-421d-98c4-d7178da3f870",
+        "to": "8962f1e9-2a29-4c8e-8caa-8d6c97433380"
+      },
+      {
+        "from": "8962f1e9-2a29-4c8e-8caa-8d6c97433380",
+        "to": "2dafc839-ce6c-452b-9e48-4c66abe31090"
+      },
+      {
+        "from": "c3187473-2fe2-4959-b045-4325d79d783e",
+        "to": "0b5ab403-85f5-434a-9a1b-e95ab9c2fb5d"
+      },
+      {
+        "from": "26eca27a-95a6-4949-bef7-25cf3b79c340",
+        "to": "2dafc839-ce6c-452b-9e48-4c66abe31090"
+      },
+      {
+        "from": "26eca27a-95a6-4949-bef7-25cf3b79c340",
+        "to": "0b5ab403-85f5-434a-9a1b-e95ab9c2fb5d"
+      },
+      {
+        "from": "5f2ac03c-3b5f-4a39-b44e-d9765e81c139",
+        "to": "29ba21ea-6046-46f2-8b86-29b1580a1710"
       }
     ]
   }

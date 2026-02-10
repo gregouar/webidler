@@ -740,7 +740,7 @@ fn EditNodeMenu(
                                 record_history(passives_history_tracker, passives_tree_specs);
                             }
                         },
-                        500.0,
+                        250.0,
                         WatchDebouncedOptions::default().immediate(false),
                     );
                     Some(
