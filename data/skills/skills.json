@@ -1430,7 +1430,7 @@
   },
   "double_strike": {
     "name": "Double Strike",
-    "description": "A second strike with your weapon.",
+    "description": "A second, slightly slower strike with your weapon.",
     "icon": "skills/attack.svg",
     "skill_type": "Attack",
     "cooldown": 0,
@@ -1488,6 +1488,23 @@
           "ItemStats": {
             "slot": "Weapon",
             "item_stats": "Range"
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": { "SkillTargetModifier": {} },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": "Shape"
           }
         },
         "factor": 1

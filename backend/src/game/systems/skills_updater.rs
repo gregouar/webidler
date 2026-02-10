@@ -129,7 +129,7 @@ pub fn apply_effects_to_skill_specs<'a>(
             range,
             shape,
         } = &effect.stat
-            && compare_options(&skill_type, &Some(skill_specs.base.skill_type))
+            && compare_options(skill_type, &Some(skill_specs.base.skill_type))
         {
             for target in skill_specs.targets.iter_mut() {
                 if let Some(range) = range {
