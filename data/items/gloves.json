@@ -176,8 +176,7 @@
       {
         "scope": "Global",
         "stat": {
-          "ManaOnHit": {
-          }
+          "ManaOnHit": {}
         },
         "modifier": "Flat",
         "value": 2,
@@ -259,51 +258,12 @@
         "effects": [
           {
             "FlatDamage": {
-              "damage": {
-                "Storm": 0.0
-              }
+              "damage": {}
             },
             "ignore_stat_effects": [
               {
                 "Damage": {
                   "damage_type": "Fire"
-                }
-              },
-              {
-                "MinDamage": {
-                  "damage_type": "Fire"
-                }
-              },
-              {
-                "MaxDamage": {
-                  "damage_type": "Fire"
-                }
-              },
-              {
-                "CritChance": null
-              }
-            ]
-          },
-          {
-            "FlatDamage": {
-              "damage": {
-                "Fire": 0.0
-              }
-            },
-            "ignore_stat_effects": [
-              {
-                "Damage": {
-                  "damage_type": "Storm"
-                }
-              },
-              {
-                "MinDamage": {
-                  "damage_type": "Storm"
-                }
-              },
-              {
-                "MaxDamage": {
-                  "damage_type": "Storm"
                 }
               },
               {

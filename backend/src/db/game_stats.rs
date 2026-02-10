@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use anyhow;
 
 use indexmap::IndexSet;
-use sqlx::{types::JsonValue, FromRow};
+use sqlx::{FromRow, types::JsonValue};
 
 use shared::data::{item::ItemSlot, player::EquippedSlot, user::UserCharacterId};
 

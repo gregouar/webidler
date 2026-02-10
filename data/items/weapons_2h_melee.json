@@ -56,8 +56,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MinDamage": {
-            "damage_type": "Physical"
+          "Damage": {
+            "damage_type": "Physical",
+            "min_max": "Min"
           }
         },
         "modifier": "Flat",
@@ -66,8 +67,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MinDamage": {
-            "damage_type": "Fire"
+          "Damage": {
+            "damage_type": "Fire",
+            "min_max": "Min"
           }
         },
         "modifier": "Flat",
@@ -76,8 +78,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MaxDamage": {
-            "damage_type": "Physical"
+          "Damage": {
+            "damage_type": "Physical",
+            "min_max": "Max"
           }
         },
         "modifier": "Flat",
@@ -86,8 +89,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MaxDamage": {
-            "damage_type": "Fire"
+          "Damage": {
+            "damage_type": "Fire",
+            "min_max": "Max"
           }
         },
         "modifier": "Flat",
@@ -130,18 +134,6 @@
             "ignore_stat_effects": [
               {
                 "Damage": {
-                  "skill_type": "Attack",
-                  "damage_type": "Fire"
-                }
-              },
-              {
-                "MinDamage": {
-                  "skill_type": "Attack",
-                  "damage_type": "Fire"
-                }
-              },
-              {
-                "MaxDamage": {
                   "skill_type": "Attack",
                   "damage_type": "Fire"
                 }
@@ -258,13 +250,13 @@
       },
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [4, 8]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [15, 20]
       }
@@ -290,18 +282,6 @@
             "ignore_stat_effects": [
               {
                 "Damage": {
-                  "skill_type": "Attack",
-                  "damage_type": "Physical"
-                }
-              },
-              {
-                "MinDamage": {
-                  "skill_type": "Attack",
-                  "damage_type": "Physical"
-                }
-              },
-              {
-                "MaxDamage": {
                   "skill_type": "Attack",
                   "damage_type": "Physical"
                 }

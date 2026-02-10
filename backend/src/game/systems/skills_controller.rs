@@ -166,7 +166,9 @@ fn find_main_target<'a, 'b>(
     // Filter by alive status & already hit targets depending on repeat type
     let target_specs = pre_targets
         .iter()
-        .filter(|(_, (_, state))| targets_group.target_dead != state.is_alive)
+        .filter(|(_, (_, state))| {
+            targets_group.target_dead != (state.is_alive & (state.life > 0.0))
+        })
         .filter(|(id, _)| match targets_group.repeat.target {
             SkillRepeatTarget::Any => true,
             SkillRepeatTarget::Same => already_hit.is_empty() || already_hit.contains(id),

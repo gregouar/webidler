@@ -268,8 +268,6 @@ fn compute_player_specs(
             // Delegate to skills
             StatType::ManaCost { .. }
             | StatType::Damage { .. }
-            | StatType::MinDamage { .. }
-            | StatType::MaxDamage { .. }
             | StatType::Restore { .. }
             | StatType::CritChance(_)
             | StatType::CritDamage(_)
@@ -278,15 +276,12 @@ fn compute_player_specs(
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::StatConverter(StatConverterSpecs {
-                source:
-                    StatConverterSource::CritDamage
-                    | StatConverterSource::Damage { .. }
-                    | StatConverterSource::MinDamage { .. }
-                    | StatConverterSource::MaxDamage { .. },
+                source: StatConverterSource::CritDamage | StatConverterSource::Damage { .. },
                 ..
             })
             | StatType::SuccessChance { .. }
             | StatType::SkillLevel(_)
+            | StatType::SkillTargetModifier { .. }
             | StatType::SkillConditionalModifier { .. } => {}
             // Other
             StatType::StatConverter(StatConverterSpecs {

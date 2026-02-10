@@ -12,7 +12,7 @@ use frontend::components::{
         buttons::{MenuButton, TabButton},
         card::{Card, CardHeader, CardInset, CardTitle},
         confirm::ConfirmContext,
-        dropdown::{ SearchableDropdownMenu},
+        dropdown::SearchableDropdownMenu,
         input::ValidatedInput,
         pannable::Pannable,
         tooltip::DynamicTooltip,
@@ -978,7 +978,9 @@ fn handle_mousedown(
     tool_mode: RwSignal<ToolMode>,
     selection_rectangle: RwSignal<Option<(f64, f64)>>,
 ) {
-    if tool_mode.get_untracked() == ToolMode::Select { selection_rectangle.set(Some(mouse_position.get_untracked())) }
+    if tool_mode.get_untracked() == ToolMode::Select {
+        selection_rectangle.set(Some(mouse_position.get_untracked()))
+    }
 }
 
 fn handle_mouseup(

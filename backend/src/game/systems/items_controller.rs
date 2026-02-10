@@ -9,7 +9,7 @@ use shared::data::{
         ApplyStatusEffect, BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{ApplyStatModifier, LuckyRollType, Modifier, StatEffect, StatType},
+    stat_effect::{ApplyStatModifier, LuckyRollType, MinMax, Modifier, StatEffect, StatType},
 };
 
 use crate::game::{data::items_store::ItemsStore, utils::rng::Rollable};
@@ -78,51 +78,28 @@ fn compute_weapon_specs(
             StatType::Damage {
                 skill_type: Some(SkillType::Attack) | None,
                 damage_type,
+                min_max,
             } => match damage_type {
                 Some(damage_type) => {
                     let value = weapon_specs.damage.entry(damage_type).or_default();
-                    value.min.apply_effect(effect);
-                    value.max.apply_effect(effect);
+                    if let Some(MinMax::Min) | None = min_max {
+                        value.min.apply_effect(effect);
+                    }
+                    if let Some(MinMax::Max) | None = min_max {
+                        value.max.apply_effect(effect);
+                    }
                 }
                 None => {
                     for value in weapon_specs.damage.values_mut() {
-                        value.min.apply_effect(effect);
-                        value.max.apply_effect(effect);
-                    }
-                }
-            },
-            StatType::MinDamage {
-                skill_type: Some(SkillType::Attack) | None,
-                damage_type,
-            } => {
-                match damage_type {
-                    Some(damage_type) => {
-                        let value = weapon_specs.damage.entry(damage_type).or_default();
-                        value.min.apply_effect(effect);
-                    }
-                    None => {
-                        for value in weapon_specs.damage.values_mut() {
+                        if let Some(MinMax::Min) | None = min_max {
                             value.min.apply_effect(effect);
                         }
-                    }
-                };
-            }
-            StatType::MaxDamage {
-                skill_type: Some(SkillType::Attack) | None,
-                damage_type,
-            } => {
-                match damage_type {
-                    Some(damage_type) => {
-                        let value = weapon_specs.damage.entry(damage_type).or_default();
-                        value.max.apply_effect(effect);
-                    }
-                    None => {
-                        for value in weapon_specs.damage.values_mut() {
+                        if let Some(MinMax::Max) | None = min_max {
                             value.max.apply_effect(effect);
                         }
                     }
-                };
-            }
+                }
+            },
             StatType::CritChance(Some(SkillType::Attack) | None) => {
                 weapon_specs.crit_chance.value.apply_effect(effect)
             }
@@ -240,6 +217,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             stat: StatType::Damage {
                 skill_type: None,
                 damage_type: None,
+                min_max: None,
             },
             modifier: Modifier::Multiplier,
             value: 50.0,

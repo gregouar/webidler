@@ -7,7 +7,7 @@ use shared::data::{
     item_affix::AffixEffectScope,
     skill::{DamageType, SkillType},
     stat_effect::{
-        LuckyRollType, Modifier, StatConverterSource, StatEffect, StatSkillEffectType,
+        LuckyRollType, MinMax, Modifier, StatConverterSource, StatEffect, StatSkillEffectType,
         StatStatusType, StatType,
     },
 };
@@ -53,6 +53,14 @@ pub fn format_effect_value(effect: &StatEffect) -> String {
     }
 }
 
+pub fn min_max_str(min_max: Option<MinMax>) -> &'static str {
+    match min_max {
+        Some(MinMax::Min) => "Minimum ",
+        Some(MinMax::Max) => "Maximum ",
+        None => "",
+    }
+}
+
 pub fn damage_type_str(damage_type: Option<DamageType>) -> &'static str {
     match damage_type {
         Some(damage_type) => match damage_type {
@@ -83,14 +91,15 @@ pub fn lucky_roll_str(roll_type: LuckyRollType) -> String {
 fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> String {
     match stat_converter_source {
         StatConverterSource::CritDamage => "Critical Hit Damage".into(),
-        StatConverterSource::Damage { damage_type } => {
-            format!("Base {}Damage", damage_type_str(damage_type))
-        }
-        StatConverterSource::MinDamage { damage_type } => {
-            format!("Minimum Base {}Damage", damage_type_str(damage_type))
-        }
-        StatConverterSource::MaxDamage { damage_type } => {
-            format!("Maximum Base {}Damage", damage_type_str(damage_type))
+        StatConverterSource::Damage {
+            damage_type,
+            min_max,
+        } => {
+            format!(
+                "{}Base {}Damage",
+                min_max_str(min_max),
+                damage_type_str(damage_type)
+            )
         }
         StatConverterSource::ThreatLevel => "Threat Level".into(),
         StatConverterSource::MaxLife => "Maximum Life".into(),
@@ -228,9 +237,10 @@ pub fn formatted_effects_list(
         match (effect.modifier, &effect.stat) {
             (
                 Flat,
-                MinDamage {
+                Damage {
                     skill_type,
                     damage_type,
+                    min_max: Some(MinMax::Min),
                 },
             ) => {
                 min_damage.insert(
@@ -240,9 +250,10 @@ pub fn formatted_effects_list(
             }
             (
                 Flat,
-                MaxDamage {
+                Damage {
                     skill_type,
                     damage_type,
+                    min_max: Some(MinMax::Max),
                 },
             ) => {
                 max_damage.insert(
@@ -362,24 +373,10 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::Damage {
             skill_type,
             damage_type,
+            min_max,
         } => format!(
-            "{}{}Damage",
-            damage_type_str(*damage_type),
-            skill_type_str(*skill_type),
-        ),
-        StatType::MinDamage {
-            skill_type,
-            damage_type,
-        } => format!(
-            "Minimum {}{}Damage",
-            damage_type_str(*damage_type),
-            skill_type_str(*skill_type),
-        ),
-        StatType::MaxDamage {
-            skill_type,
-            damage_type,
-        } => format!(
-            "Maximum {}{}Damage",
+            "{}{}{}Damage",
+            min_max_str(*min_max),
             damage_type_str(*damage_type),
             skill_type_str(*skill_type),
         ),
@@ -402,9 +399,11 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::StatusPower {
             status_type,
             skill_type,
+            min_max,
         } => {
             format!(
-                "{}{}",
+                "{}{}{}",
+                min_max_str(*min_max),
                 skill_type_str(*skill_type),
                 status_type_value_str(status_type.as_ref())
             )
@@ -477,6 +476,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             conditions_tooltip::format_skill_modifier_conditions_pre(conditions),
             conditions_tooltip::format_skill_modifier_conditions_post(conditions)
         ),
+        StatType::SkillTargetModifier { .. } => "TODO?".into(),
         StatType::StatConditionalModifier { stat, conditions } => format!(
             "{} when {}{}",
             format_multiplier_stat_name(stat),
@@ -488,7 +488,6 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
 
 pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
     match stat {
-        StatType::MinDamage { .. } | StatType::MaxDamage { .. } => "".to_string(),
         StatType::Life => format!("{} Maximum Life", format_adds_removes(value, false, "")),
         StatType::LifeRegen => format!(
             "{} Life Regeneration per second",
@@ -548,8 +547,12 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             )
         }
         StatType::Damage {
+            min_max: Some(_), ..
+        } => "".to_string(),
+        StatType::Damage {
             skill_type,
             damage_type,
+            min_max: None,
         } => format!(
             "{} {}Damage{}",
             format_adds_removes(value, false, ""),
@@ -580,10 +583,12 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         StatType::StatusPower {
             status_type,
             skill_type,
+            min_max,
         } => {
             format!(
-                "{} {}{}",
+                "{} {}{}{}",
                 format_adds_removes(value, false, " to"),
+                min_max_str(*min_max),
                 skill_type_str(*skill_type),
                 status_type_value_str(status_type.as_ref())
             )
@@ -748,6 +753,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 skill_type_str(*skill_type),
             )
         }
+        StatType::SkillTargetModifier { .. } => "TODO?".into(),
         StatType::SkillConditionalModifier {
             stat,
             skill_type,

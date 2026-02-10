@@ -40,7 +40,7 @@
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [8, 10]
       }
@@ -81,13 +81,13 @@
     "affixes": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [2, 4]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [5, 7]
       },
@@ -182,8 +182,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MinDamage": {
-            "damage_type": "Poison"
+          "Damage": {
+            "damage_type": "Poison",
+            "min_max": "Min"
           }
         },
         "modifier": "Flat",
@@ -193,8 +194,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MaxDamage": {
-            "damage_type": "Poison"
+          "Damage": {
+            "damage_type": "Poison",
+            "min_max": "Max"
           }
         },
         "modifier": "Flat",

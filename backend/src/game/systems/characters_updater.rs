@@ -262,8 +262,6 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             // Delegate to skills
             StatType::ManaCost { .. }
             | StatType::Damage { .. }
-            | StatType::MinDamage { .. }
-            | StatType::MaxDamage { .. }
             | StatType::Restore { .. }
             | StatType::CritChance(_)
             | StatType::CritDamage(_)
@@ -273,7 +271,8 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
             | StatType::Lucky { .. }
             | StatType::SuccessChance { .. }
             | StatType::SkillLevel(_)
-            | StatType::SkillConditionalModifier { .. } => {}
+            | StatType::SkillConditionalModifier { .. }
+            | StatType::SkillTargetModifier { .. } => {}
             // Other
             StatType::ItemRarity => {}
         }
@@ -328,8 +327,6 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
 
                 StatConverterSource::CritDamage
                 | StatConverterSource::Damage { .. }
-                | StatConverterSource::MinDamage { .. }
-                | StatConverterSource::MaxDamage { .. }
                 | StatConverterSource::ThreatLevel => {
                     continue;
                 }

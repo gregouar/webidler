@@ -10,9 +10,9 @@ use crate::game::systems::benedictions_controller;
 
 use super::{
     data::{
+        DataInit,
         event::{EventsQueue, GameEvent},
         master_store::MasterStore,
-        DataInit,
     },
     game_data::GameInstanceData,
     systems::{

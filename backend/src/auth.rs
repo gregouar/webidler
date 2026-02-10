@@ -1,9 +1,9 @@
-use aes_gcm::aead::Aead;
 use aes_gcm::Nonce;
+use aes_gcm::aead::Aead;
 use anyhow::anyhow;
 use argon2::{
-    password_hash::{rand_core::OsRng, PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
     Argon2,
+    password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString, rand_core::OsRng},
 };
 use axum::{
     body::Body,
@@ -13,13 +13,12 @@ use axum::{
 };
 use axum_extra::TypedHeader;
 use base64::{
-    alphabet,
+    Engine as _, alphabet,
     engine::{self, general_purpose},
-    Engine as _,
 };
 use chrono::{Duration, Utc};
-use headers::{authorization::Bearer, Authorization};
-use jsonwebtoken::{decode, encode, Header, TokenData, Validation};
+use headers::{Authorization, authorization::Bearer};
+use jsonwebtoken::{Header, TokenData, Validation, decode, encode};
 use rand::RngCore;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};

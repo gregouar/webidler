@@ -1,10 +1,10 @@
 use anyhow::Result;
 
 use axum::{
+    Extension, Json, Router,
     extract::State,
     middleware,
     routing::{get, post},
-    Extension, Json, Router,
 };
 
 use shared::{
@@ -24,8 +24,8 @@ use crate::{
     db,
     game::{
         data::{
-            inventory_data::inventory_data_to_player_inventory,
-            passives::ascension_data_to_passives_tree_ascension, DataInit,
+            DataInit, inventory_data::inventory_data_to_player_inventory,
+            passives::ascension_data_to_passives_tree_ascension,
         },
         systems::{benedictions_controller, inventory_controller, passives_controller},
     },

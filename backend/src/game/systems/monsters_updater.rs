@@ -91,6 +91,7 @@ pub fn update_monster_specs(
                 StatType::Damage {
                     skill_type: None,
                     damage_type: None,
+                    min_max: None,
                 },
                 Modifier::Multiplier,
             ),

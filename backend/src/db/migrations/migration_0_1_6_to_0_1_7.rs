@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
-use sqlx::{types::JsonValue, Transaction};
+use sqlx::{Transaction, types::JsonValue};
 
 use shared::data::{
     area::AreaLevel,
@@ -10,7 +10,8 @@ use shared::data::{
     item_affix::{AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix},
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{
-        LuckyRollType, StatConverterSource, StatConverterSpecs, StatSkillEffectType, StatStatusType,
+        LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatSkillEffectType,
+        StatStatusType,
     },
     temple::{Modifier, StatEffect, StatType},
     trigger::HitTrigger,
@@ -20,7 +21,7 @@ use shared::data::{
 use crate::{
     constants::DATA_VERSION,
     db::{
-        characters_data::{upsert_character_inventory_data, CharacterDataEntry},
+        characters_data::{CharacterDataEntry, upsert_character_inventory_data},
         pool::{Database, DbExecutor, DbPool},
     },
     game::data::inventory_data::InventoryData,
@@ -339,20 +340,23 @@ impl From<OldStatType> for StatType {
             } => Damage {
                 skill_type,
                 damage_type,
+                min_max: None,
             },
             OldStatType::MinDamage {
                 skill_type,
                 damage_type,
-            } => MinDamage {
+            } => Damage {
                 skill_type,
                 damage_type,
+                min_max: Some(MinMax::Min),
             },
             OldStatType::MaxDamage {
                 skill_type,
                 damage_type,
-            } => MaxDamage {
+            } => Damage {
                 skill_type,
                 damage_type,
+                min_max: Some(MinMax::Max),
             },
             OldStatType::LifeOnHit(hit_trigger) => LifeOnHit {
                 skill_type: hit_trigger.skill_type,
@@ -369,6 +373,7 @@ impl From<OldStatType> for StatType {
             OldStatType::StatusPower(stat_status_type) => StatusPower {
                 status_type: stat_status_type,
                 skill_type: None,
+                min_max: None,
             },
             OldStatType::StatusDuration(stat_status_type) => StatusDuration {
                 status_type: stat_status_type,
@@ -443,7 +448,7 @@ impl From<OldStatSkillEffectType> for StatSkillEffectType {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct OldStatConverterSpecs {
-    pub source: StatConverterSource,
+    pub source: OldStatConverterSource,
     pub target_stat: Box<OldStatType>,
     pub target_modifier: Modifier,
 
@@ -456,11 +461,62 @@ pub struct OldStatConverterSpecs {
 impl From<OldStatConverterSpecs> for StatConverterSpecs {
     fn from(value: OldStatConverterSpecs) -> Self {
         Self {
-            source: value.source,
+            source: value.source.into(),
             target_stat: Box::new((*value.target_stat).into()),
             target_modifier: value.target_modifier,
             is_extra: value.is_extra,
             skill_type: value.skill_type,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum OldStatConverterSource {
+    CritDamage,
+    MinDamage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
+    MaxDamage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
+    Damage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
+    ThreatLevel,
+    MaxLife,
+    MaxMana,
+    ManaRegen,
+    LifeRegen,
+    Block(SkillType),
+    // TODO: Add others, like armor, ...
+}
+
+impl From<OldStatConverterSource> for StatConverterSource {
+    fn from(value: OldStatConverterSource) -> Self {
+        use StatConverterSource::*;
+        match value {
+            OldStatConverterSource::CritDamage => CritDamage,
+            OldStatConverterSource::MinDamage { damage_type } => Damage {
+                damage_type,
+                min_max: Some(MinMax::Min),
+            },
+            OldStatConverterSource::MaxDamage { damage_type } => Damage {
+                damage_type,
+                min_max: Some(MinMax::Max),
+            },
+            OldStatConverterSource::Damage { damage_type } => Damage {
+                damage_type,
+                min_max: None,
+            },
+            OldStatConverterSource::ThreatLevel => ThreatLevel,
+            OldStatConverterSource::MaxLife => MaxLife,
+            OldStatConverterSource::MaxMana => MaxMana,
+            OldStatConverterSource::ManaRegen => ManaRegen,
+            OldStatConverterSource::LifeRegen => LifeRegen,
+            OldStatConverterSource::Block(skill_type) => Block(skill_type),
         }
     }
 }
