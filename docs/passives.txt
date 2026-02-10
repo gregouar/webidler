@@ -5,7 +5,7 @@ Big themes:
 
 Gold:
 -Minor boost
--Major boost?
+-Major boost
 
 Attack:
 -Damage

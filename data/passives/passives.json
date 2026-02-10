@@ -295,6 +295,51 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "08853117-9798-462c-801b-5ae67f80736e": {
+        "name": "Damage over Time Efficacity",
+        "icon": "passives/chemical_bolt.svg",
+        "x": 120.0,
+        "y": -145.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -25.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "0909d43b-bd54-4d6d-8e9d-dd41445cd15e": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -1241,6 +1286,41 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "20f3d71f-8dc3-4c93-83b3-41ec348096fd": {
+        "name": "Blessing Mana Cost",
+        "icon": "passives/prayer_beads.svg",
+        "x": 132.5,
+        "y": 95.0,
+        "size": 1,
+        "initial_node": false,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "ManaCost": {
+                "skill_type": "Blessing"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "ManaCost": {
+                "skill_type": "Blessing"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "2136383e-ac78-453c-ac64-aabb713cc809": {
         "name": "Evade Chance",
         "icon": "passives/curled_leaf.svg",
@@ -2040,7 +2120,7 @@
       },
       "32a5ed58-306d-4ba0-8390-7440261dbd9b": {
         "name": "Blessing Mana Cost",
-        "icon": "passives/XXX.svg",
+        "icon": "passives/prayer_beads.svg",
         "x": -145.0,
         "y": -50.0,
         "size": 0,
@@ -2824,29 +2904,6 @@
         "max_upgrade_level": 3,
         "socket": false
       },
-      "45a17638-361c-4927-8c19-7c25b789ec1f": {
-        "name": "Blessing Speed (to remove?)",
-        "icon": "passives/XXX.svg",
-        "x": -150.0,
-        "y": -62.5,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Status",
-        "effects": [
-          {
-            "stat": {
-              "Speed": "Blessing"
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
       "45cc1696-8e53-464a-adea-8856c9052c3d": {
         "name": "Attack Speed",
         "icon": "passives/attack_speed.svg",
@@ -3292,6 +3349,17 @@
             },
             "modifier": "Flat",
             "value": 100000.0
+          },
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": null,
+                "skill_type": "Curse",
+                "min_max": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -33.0
           }
         ],
         "triggers": [],
@@ -3587,7 +3655,7 @@
       },
       "58538882-d58c-4956-bdb3-c8e9d6d0ed89": {
         "name": "Curse Mana Cost",
-        "icon": "passives/XXX.svg",
+        "icon": "passives/death_note.svg",
         "x": 50.0,
         "y": -142.5,
         "size": 0,
@@ -3647,6 +3715,51 @@
           }
         ],
         "max_upgrade_level": 1,
+        "socket": false
+      },
+      "595ac586-9537-46f5-a4b5-b621cee6d5aa": {
+        "name": "Damage over Time Efficacity",
+        "icon": "passives/chemical_bolt.svg",
+        "x": 132.5,
+        "y": -147.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -25.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
+        "max_upgrade_level": 3,
         "socket": false
       },
       "5aa6c4af-db53-4f03-9c7b-ad6888d6545d": {
@@ -4452,6 +4565,51 @@
             },
             "modifier": "Multiplier",
             "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "6afbaa18-6923-4d9f-af6e-d0edf482b786": {
+        "name": "Poison Duration",
+        "icon": "passives/ouroboros.svg",
+        "x": -70.0,
+        "y": -145.0,
+        "size": 1,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -5318,6 +5476,51 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "77d9af74-3e5d-4263-b3e0-1134c10fda2e": {
+        "name": "Poison Duration",
+        "icon": "passives/ouroboros.svg",
+        "x": -40.0,
+        "y": -140.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 15.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "78708628-ec55-4977-809e-c97806ab760b": {
         "name": "Threat Damage",
         "icon": "passives/threat_damage.svg",
@@ -5370,6 +5573,51 @@
             "value": 10.0
           }
         ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "7a24a6c4-5cbf-4923-a083-d323cac68612": {
+        "name": "Damage over Time Efficacity",
+        "icon": "passives/chemical_bolt.svg",
+        "x": 125.0,
+        "y": -150.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -25.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
         "max_upgrade_level": 3,
         "socket": false
       },
@@ -5472,6 +5720,43 @@
           }
         ],
         "max_upgrade_level": 3,
+        "socket": false
+      },
+      "7d81dac1-de3c-4a4d-8e96-7f31ff042e5e": {
+        "name": "Devotion",
+        "icon": "passives/kneeling.svg",
+        "x": -160.0,
+        "y": -57.5,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": null,
+                "skill_type": "Blessing",
+                "min_max": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": null,
+                "skill_type": "Blessing"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
         "socket": false
       },
       "7e10ea6e-22f5-43f9-8c49-9df5d664e87a": {
@@ -6454,6 +6739,51 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "907e3dc9-8052-4120-ab01-0abf0ee825c0": {
+        "name": "Poison Duration",
+        "icon": "passives/ouroboros.svg",
+        "x": -50.0,
+        "y": -152.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 15.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "90e4f19c-7733-4aef-8a0f-430c6a514681": {
         "name": "Fire Damage",
         "icon": "passives/fire_damage.svg",
@@ -6831,6 +7161,117 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "9d418005-cc92-4524-8b96-ad8a7b7ede57": {
+        "name": "Sickening Concoction",
+        "icon": "passives/cauldron.svg",
+        "x": 35.0,
+        "y": -120.0,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Poison",
+        "effects": [],
+        "triggers": [
+          {
+            "trigger_id": "sickening_concoction",
+            "description": "",
+            "OnApplyStatus": {
+              "skill_type": null,
+              "status_type": {
+                "DamageOverTime": {
+                  "damage_type": "Poison"
+                }
+              },
+              "is_triggered": null
+            },
+            "target": "SameTarget",
+            "modifiers": [
+              {
+                "stat": {
+                  "StatusDuration": {
+                    "status_type": null,
+                    "skill_type": null
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 2.0,
+                "source": {
+                  "StatusDuration": {
+                    "status_type": null,
+                    "skill_type": null
+                  }
+                }
+              }
+            ],
+            "skill_range": "Any",
+            "skill_type": "Other",
+            "effects": [
+              {
+                "success_chance": {
+                  "value": 100.0,
+                  "lucky_chance": 0.0
+                },
+                "ApplyStatus": {
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "StatModifier": {
+                          "stat": {
+                            "Armor": "Poison"
+                          },
+                          "modifier": "Multiplier",
+                          "debuff": true
+                        }
+                      },
+                      "value": {
+                        "min": 25.0,
+                        "max": 25.0,
+                        "lucky_chance": 0.0
+                      },
+                      "cumulate": true,
+                      "replace_on_value_only": false
+                    },
+                    {
+                      "status_type": {
+                        "StatModifier": {
+                          "stat": {
+                            "DamageResistance": {
+                              "skill_type": null,
+                              "damage_type": "Poison"
+                            }
+                          },
+                          "modifier": "Flat",
+                          "debuff": true
+                        }
+                      },
+                      "value": {
+                        "min": 10.0,
+                        "max": 10.0,
+                        "lucky_chance": 0.0
+                      },
+                      "cumulate": true,
+                      "replace_on_value_only": false
+                    }
+                  ],
+                  "duration": {
+                    "min": 0.0,
+                    "max": 0.0,
+                    "lucky_chance": 0.0
+                  }
+                },
+                "ignore_stat_effects": [],
+                "conditional_modifiers": []
+              }
+            ],
+            "skill_shape": "Single",
+            "owner": null,
+            "inherit_modifiers": false
+          }
+        ],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": false
+      },
       "9dffc8ca-8c3f-436a-a08c-de27e45ed780": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -7079,6 +7520,41 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "a3bf2fb3-cef7-4716-8d3b-cab13a2a0a92": {
+        "name": "Blessing Mana Cost",
+        "icon": "passives/prayer_beads.svg",
+        "x": 127.5,
+        "y": 105.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "ManaCost": {
+                "skill_type": "Blessing"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "ManaCost": {
+                "skill_type": "Blessing"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "a45aec91-23fa-4c2e-a9b9-e70bc2916a0f": {
         "name": "Attack Damage",
         "icon": "passives/attack.svg",
@@ -7171,6 +7647,41 @@
             },
             "modifier": "Multiplier",
             "value": 1.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "a576f1a0-aa3c-4778-ad09-008212a1460a": {
+        "name": "Blessing Mana Cost",
+        "icon": "passives/prayer_beads.svg",
+        "x": 112.5,
+        "y": 100.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "ManaCost": {
+                "skill_type": "Blessing"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "ManaCost": {
+                "skill_type": "Blessing"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -9268,16 +9779,16 @@
                     }
                   },
                   {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
                     }
                   }
                 ],
@@ -9313,16 +9824,16 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   },
@@ -9365,16 +9876,16 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   },
@@ -9423,16 +9934,16 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   }
@@ -11076,7 +11587,7 @@
       },
       "ef65ff62-73ba-4611-9465-7b69c14fc1ef": {
         "name": "Blessing Duration",
-        "icon": "passives/XXX.svg",
+        "icon": "passives/unlit_candelabra.svg",
         "x": -142.5,
         "y": -40.0,
         "size": 0,
@@ -11436,7 +11947,7 @@
       },
       "f4985f91-50af-4c38-aaab-53e7a09715fc": {
         "name": "Blessings Power",
-        "icon": "passives/XXX.svg",
+        "icon": "passives/holy_grail.svg",
         "x": -140.0,
         "y": -60.0,
         "size": 0,
@@ -13221,6 +13732,46 @@
       {
         "from": "6334c8c4-d9a4-4a70-921e-cb755fd034ab",
         "to": "1bd221d6-6b67-416c-8269-db62cdbbebab"
+      },
+      {
+        "from": "5505dc30-ed61-47be-8c38-2d34b86631be",
+        "to": "595ac586-9537-46f5-a4b5-b621cee6d5aa"
+      },
+      {
+        "from": "595ac586-9537-46f5-a4b5-b621cee6d5aa",
+        "to": "7a24a6c4-5cbf-4923-a083-d323cac68612"
+      },
+      {
+        "from": "7a24a6c4-5cbf-4923-a083-d323cac68612",
+        "to": "08853117-9798-462c-801b-5ae67f80736e"
+      },
+      {
+        "from": "24ad01fc-d436-4252-877a-f4dc31586f5c",
+        "to": "77d9af74-3e5d-4263-b3e0-1134c10fda2e"
+      },
+      {
+        "from": "77d9af74-3e5d-4263-b3e0-1134c10fda2e",
+        "to": "907e3dc9-8052-4120-ab01-0abf0ee825c0"
+      },
+      {
+        "from": "907e3dc9-8052-4120-ab01-0abf0ee825c0",
+        "to": "6afbaa18-6923-4d9f-af6e-d0edf482b786"
+      },
+      {
+        "from": "1bd221d6-6b67-416c-8269-db62cdbbebab",
+        "to": "9d418005-cc92-4524-8b96-ad8a7b7ede57"
+      },
+      {
+        "from": "20f3d71f-8dc3-4c93-83b3-41ec348096fd",
+        "to": "a3bf2fb3-cef7-4716-8d3b-cab13a2a0a92"
+      },
+      {
+        "from": "a3bf2fb3-cef7-4716-8d3b-cab13a2a0a92",
+        "to": "a576f1a0-aa3c-4778-ad09-008212a1460a"
+      },
+      {
+        "from": "8c431093-95e6-4dce-b21a-9a07edfd57ea",
+        "to": "a576f1a0-aa3c-4778-ad09-008212a1460a"
       }
     ]
   }

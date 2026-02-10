@@ -422,10 +422,20 @@ pub fn format_effect(
 
             let formatted_stats_effects = {
                 (!stat_effects.is_empty() || !trigger_effects.is_empty()).then(|| {
+                        let trigger_modifier_duration_str = format_trigger_modifier(
+                            find_trigger_modifier(
+                                StatType::StatusDuration {
+                                    status_type: Some(StatStatusType::StatModifier { debuff: None }) ,
+                                    skill_type: None,
+                                },
+                                modifiers,
+                            ),
+                            "",
+                        );
                     view! {
                         <EffectLi>
                             {success_chance}"Apply the following status "
-                            {format_duration(duration)} ":"
+                            {format_duration(duration)}{trigger_modifier_duration_str} ":"
                             {(!stat_effects.is_empty())
                                 .then(|| {
                                     view! {
@@ -568,7 +578,11 @@ where
 }
 
 fn stackable_str(cumulate: bool) -> &'static str {
-    if cumulate { "Stackable " } else { "" }
+    if cumulate {
+        "Stackable "
+    } else {
+        ""
+    }
 }
 
 #[component]
