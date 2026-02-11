@@ -102,6 +102,7 @@ pub fn Node(
 
     let node_status = move || node_status.try_get().unwrap_or_default();
 
+    let node_specs = Arc::new(node_specs);
     let show_tooltip = {
         let node_specs = node_specs.clone();
         move || {
@@ -118,7 +119,6 @@ pub fn Node(
         }
     };
 
-    let node_specs = Arc::new(node_specs);
     let hide_tooltip = {
         move || {
             if let Some(tooltip_context) = tooltip_context {
@@ -387,7 +387,7 @@ pub fn Connection(
 
 #[component]
 pub fn NodeTooltip(
-    node_specs: PassiveNodeSpecs,
+    node_specs: Arc<PassiveNodeSpecs>,
     node_level: Memo<u8>,
     show_upgrade: bool,
 ) -> impl IntoView {
@@ -403,7 +403,7 @@ pub fn NodeTooltip(
 
 #[component]
 pub fn NodeTooltipContent(
-    node_specs: PassiveNodeSpecs,
+    node_specs: Arc<PassiveNodeSpecs>,
     node_level: Memo<u8>,
     show_upgrade: bool,
 ) -> impl IntoView {
