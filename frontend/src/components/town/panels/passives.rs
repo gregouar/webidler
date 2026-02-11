@@ -610,13 +610,20 @@ fn AscendNode(
     let node_level = Memo::new({
         let node_id = node_id.clone();
 
-        move |_| {
-            passives_tree_ascension
+        move |_| match active_tab.get() {
+            PassivesTab::Ascend => passives_tree_ascension
                 .read()
                 .ascended_nodes
                 .get(&node_id)
                 .copied()
-                .unwrap_or_default()
+                .unwrap_or_default(),
+            PassivesTab::Build => town_context
+                .passives_tree_ascension
+                .read()
+                .ascended_nodes
+                .get(&node_id)
+                .copied()
+                .unwrap_or_default(),
         }
     });
 
@@ -858,6 +865,8 @@ fn AscendConnection(
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     passives_tree_build: RwSignal<PurchasedNodes>,
 ) -> impl IntoView {
+    let town_context: TownContext = expect_context();
+
     let amount_connections = Memo::new({
         let connection_from = connection.from.clone();
         let connection_to = connection.to.clone();
@@ -888,8 +897,8 @@ fn AscendConnection(
         let connection_from = connection.from.clone();
         let connection_to = connection.to.clone();
 
-        move |_| {
-            (
+        move |_| match active_tab.get() {
+            PassivesTab::Ascend => (
                 passives_tree_ascension
                     .read()
                     .ascended_nodes
@@ -902,7 +911,23 @@ fn AscendConnection(
                     .get(&connection_to)
                     .cloned()
                     .unwrap_or_default(),
-            )
+            ),
+            PassivesTab::Build => (
+                town_context
+                    .passives_tree_ascension
+                    .read()
+                    .ascended_nodes
+                    .get(&connection_from)
+                    .cloned()
+                    .unwrap_or_default(),
+                town_context
+                    .passives_tree_ascension
+                    .read()
+                    .ascended_nodes
+                    .get(&connection_to)
+                    .cloned()
+                    .unwrap_or_default(),
+            ),
         }
     });
 
