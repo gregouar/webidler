@@ -647,7 +647,7 @@ fn AscendNode(
             let max_connection_level = if node_specs.initial_node {
                 match active_tab.get() {
                     PassivesTab::Ascend => u8::MAX,
-                    PassivesTab::Build => 1,
+                    PassivesTab::Build => (!node_specs.locked || node_level.get() > 0) as u8,
                 }
             } else {
                 match active_tab.get() {
@@ -663,9 +663,12 @@ fn AscendNode(
                         })
                         .max()
                         .unwrap_or_default(),
-                    PassivesTab::Build => connected_nodes.iter().any(|connected_node_id| {
-                        passives_tree_build.read().contains(connected_node_id)
-                    }) as u8,
+                    PassivesTab::Build => {
+                        (connected_nodes.iter().any(|connected_node_id| {
+                            passives_tree_build.read().contains(connected_node_id)
+                        }) && (!node_specs.locked || node_level.get() > 0))
+                            as u8
+                    }
                 }
             };
 

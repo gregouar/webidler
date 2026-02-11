@@ -23,14 +23,14 @@ pub fn purchase_node(
     passives_tree_specs: &PassivesTreeSpecs,
     passives_tree_state: &mut PassivesTreeState,
     node_id: PassiveNodeId,
-) {
+) -> Result<(), AppError> {
     if player_resources.passive_points == 0 {
-        return;
+        return Err(AppError::UserError("Not enough points!".into()));
     }
 
-    if let Some(node_specs) = passives_tree_specs.nodes.get(&node_id)
-        && (node_specs.initial_node
-            || passives_tree_specs
+    if let Some(node_specs) = passives_tree_specs.nodes.get(&node_id) {
+        if !node_specs.initial_node
+            && !(passives_tree_specs
                 .connections
                 .iter()
                 .filter(|connection| {
@@ -40,9 +40,32 @@ pub fn purchase_node(
                         || passives_tree_state.purchased_nodes.contains(&connection.to)
                 })
                 .any(|connection| connection.from == node_id || connection.to == node_id))
-        && passives_tree_state.purchased_nodes.insert(node_id)
-    {
+        {
+            return Err(AppError::UserError("Missing connection to node!".into()));
+        }
+
+        if node_specs.locked
+            && passives_tree_state
+                .ascension
+                .ascended_nodes
+                .get(&node_id)
+                .copied()
+                .unwrap_or_default()
+                == 0
+        {
+            return Err(AppError::UserError("Passive node is locked!".into()));
+        }
+
+        if !passives_tree_state.purchased_nodes.insert(node_id) {
+            return Err(AppError::UserError(
+                "Passive node was already purchased!".into(),
+            ));
+        }
+
         player_resources.passive_points -= 1;
+        Ok(())
+    } else {
+        return Err(AppError::UserError("Unknown passive node...".into()));
     }
 }
 

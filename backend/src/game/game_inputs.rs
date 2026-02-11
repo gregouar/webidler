@@ -184,12 +184,20 @@ fn handle_client_message(
             area_state.auto_progress = false;
         }
         ClientMessage::SetRushMode(m) => game_data.area_state.mutate().rush_mode = m.value,
-        ClientMessage::PurchasePassive(m) => passives_controller::purchase_node(
-            game_data.player_resources.mutate(),
-            &game_data.passives_tree_specs,
-            game_data.passives_tree_state.mutate(),
-            m.node_id,
-        ),
+        ClientMessage::PurchasePassive(m) => {
+            if let Err(e) = passives_controller::purchase_node(
+                game_data.player_resources.mutate(),
+                &game_data.passives_tree_specs,
+                game_data.passives_tree_state.mutate(),
+                m.node_id,
+            ) {
+                return Some(ErrorMessage {
+                    error_type: ErrorType::Game,
+                    message: e.to_string(),
+                    must_disconnect: false,
+                });
+            }
+        }
         ClientMessage::Connect(_) => {
             tracing::warn!("received unexpected message: {:?}", msg);
             return Some(ErrorMessage {
