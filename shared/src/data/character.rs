@@ -116,7 +116,7 @@ pub struct CharacterState {
 
     // This feels dirty
     #[serde(default, skip_serializing, skip_deserializing)]
-    pub monitored_conditions: HashMap<Condition, bool>,
+    pub monitored_conditions: HashMap<Condition, f64>,
 }
 
 impl CharacterState {

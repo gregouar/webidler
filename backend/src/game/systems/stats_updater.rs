@@ -5,8 +5,8 @@ use shared::data::{
     conditional_modifier::{Condition, ConditionalModifier},
     player::{CharacterSpecs, CharacterState},
     stat_effect::{
-        EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect, StatType,
-        compare_options,
+        compare_options, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect,
+        StatType,
     },
 };
 
@@ -68,20 +68,28 @@ pub fn sort_stat_effects(effects: &mut [StatEffect]) {
     });
 }
 
-pub fn compute_conditional_modifiers<'a>(
+pub fn compute_conditional_modifiers(
     character_specs: &CharacterSpecs,
     character_state: &CharacterState,
-    conditional_modifiers: &'a [ConditionalModifier],
-) -> Vec<&'a StatEffect> {
+    conditional_modifiers: &[ConditionalModifier],
+) -> Vec<StatEffect> {
     conditional_modifiers
         .iter()
-        .filter(|conditional_modifier| {
-            conditional_modifier
+        .flat_map(|conditional_modifier| {
+            let factor: f64 = conditional_modifier
                 .conditions
                 .iter()
-                .all(|condition| check_condition(character_specs, character_state, condition))
+                .map(|condition| check_condition(character_specs, character_state, condition))
+                .product();
+            conditional_modifier
+                .effects
+                .iter()
+                .cloned()
+                .map(move |effect| StatEffect {
+                    value: effect.value * factor,
+                    ..effect
+                })
         })
-        .flat_map(|conditional_modifier| conditional_modifier.effects.iter())
         .collect()
 }
 
@@ -89,24 +97,28 @@ pub fn check_condition(
     character_specs: &CharacterSpecs,
     character_state: &CharacterState,
     condition: &Condition,
-) -> bool {
+) -> f64 {
     match condition {
         Condition::HasStatus {
             status_type,
             skill_type,
             not,
         } => {
-            character_state
+            (character_state
                 .statuses
                 .iter()
                 .any(|(status_specs, status_state)| {
                     compare_options(status_type, &Some(status_specs.into()))
                         && compare_options(skill_type, &Some(status_state.skill_type))
                 })
-                != *not
+                != *not) as usize as f64
         }
-        Condition::MaximumLife => character_state.life >= character_specs.max_life * 0.99,
-        Condition::MaximumMana => character_state.mana >= character_specs.max_mana * 0.99,
+        Condition::MaximumLife => {
+            (character_state.life >= character_specs.max_life * 0.99) as usize as f64
+        }
+        Condition::MaximumMana => {
+            (character_state.mana >= character_specs.max_mana * 0.99) as usize as f64
+        }
     }
 }
 
@@ -114,7 +126,7 @@ pub fn compute_conditions(
     character_specs: &CharacterSpecs,
     character_state: &CharacterState,
     conditional_modifiers: &[ConditionalModifier],
-) -> HashMap<Condition, bool> {
+) -> HashMap<Condition, f64> {
     conditional_modifiers
         .iter()
         .fold(HashMap::new(), |mut acc, value| {

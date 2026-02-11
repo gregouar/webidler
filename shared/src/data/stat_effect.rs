@@ -519,6 +519,16 @@ impl From<&EffectsMap> for Vec<StatEffect> {
     }
 }
 
+impl From<Vec<StatEffect>> for EffectsMap {
+    fn from(value: Vec<StatEffect>) -> Self {
+        EffectsMap::combine_all(
+            value
+                .into_iter()
+                .map(|x| EffectsMap(HashMap::from([((x.stat, x.modifier), x.value)]))),
+        )
+    }
+}
+
 impl From<Vec<&StatEffect>> for EffectsMap {
     fn from(value: Vec<&StatEffect>) -> Self {
         EffectsMap::combine_all(

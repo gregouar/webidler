@@ -219,7 +219,7 @@ fn handle_kill_event(
                                     &monster_specs.character_specs,
                                     &monster_state.character_state,
                                     condition,
-                                )
+                                ) > 0.0
                             })
                         {
                             trigger_contexts.push(TriggerContext {
