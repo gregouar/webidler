@@ -125,8 +125,7 @@ Other:
 
 Runes:
 -----
--Destroy armor?
 -Berserker
 -Massive incrase mana cost, massive increase spell speed? Even remove cooldown? => might be too strong...
 -Massive gold increase (downside?) 
--When poison expires, get -X resistance to poison
+-Hourglass: way more duration, way less effects

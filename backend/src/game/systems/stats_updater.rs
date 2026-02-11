@@ -5,8 +5,8 @@ use shared::data::{
     conditional_modifier::{Condition, ConditionalModifier},
     player::{CharacterSpecs, CharacterState},
     stat_effect::{
-        EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect, StatType,
-        compare_options,
+        compare_options, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect,
+        StatType,
     },
 };
 
@@ -113,6 +113,17 @@ pub fn check_condition(
                 })
                 != *not) as usize as f64
         }
+        Condition::StatusStacks {
+            status_type,
+            skill_type,
+        } => character_state
+            .statuses
+            .iter()
+            .filter(|(status_specs, status_state)| {
+                compare_options(status_type, &Some(status_specs.into()))
+                    && compare_options(skill_type, &Some(status_state.skill_type))
+            })
+            .count() as f64,
         Condition::MaximumLife => {
             (character_state.life >= character_specs.max_life * 0.99) as usize as f64
         }

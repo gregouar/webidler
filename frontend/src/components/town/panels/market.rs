@@ -28,8 +28,8 @@ use crate::components::{
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
     town::{
-        TownContext,
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        TownContext,
     },
     ui::{
         buttons::{MenuButton, MenuButtonRed, TabButton},
@@ -1106,28 +1106,28 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         id="item_damage_physical"
                         label="Min Physical Damage:"
                         input_type="number"
-                        placeholder="Minimum Physical Damage per second"
+                        placeholder="Minimum Bleed Damage"
                         bind=item_damage_physical
                     />
                     <ValidatedInput
                         id="item_damage_fire"
                         label="Min Fire Damage:"
                         input_type="number"
-                        placeholder="Minimum Fire Damage per second"
+                        placeholder="Minimum Burn Damage"
                         bind=item_damage_fire
                     />
                     <ValidatedInput
                         id="item_damage_poison"
                         label="Min Poison Damage:"
                         input_type="number"
-                        placeholder="Minimum Poison Damage per second"
+                        placeholder="Minimum Poison Damage"
                         bind=item_damage_poison
                     />
                     <ValidatedInput
                         id="item_damage_storm"
                         label="Min Storm Damage:"
                         input_type="number"
-                        placeholder="Minimum Storm Damage per second"
+                        placeholder="Minimum Weather Damage"
                         bind=item_damage_storm
                     />
                 </div>

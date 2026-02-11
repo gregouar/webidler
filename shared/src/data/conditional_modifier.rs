@@ -19,9 +19,14 @@ pub enum Condition {
         #[serde(default)]
         not: bool,
     },
+    StatusStacks {
+        #[serde(default)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
     MaximumLife,
     MaximumMana,
     // StatusValue(Option<StatStatusType>),
     // StatusDuration(Option<StatStatusType>),
-    // StatusStacks(Option<StatStatusType>),
 }

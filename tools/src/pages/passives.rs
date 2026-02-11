@@ -457,7 +457,7 @@ fn ToolNode(
     };
 
     let node_text =
-        Memo::new({ move |_| node_specs.with(|node_specs| node_text(node_specs).to_lowercase()) });
+        Memo::new( move |_| node_specs.with(|node_specs| node_text(node_specs).to_lowercase()) );
 
     let node_status = Memo::new({
         let node_id = node_id.clone();
@@ -495,7 +495,7 @@ fn ToolNode(
     });
 
     let node_level =
-        Memo::new({ move |_| node_specs.read().max_upgrade_level.unwrap_or_default() });
+        Memo::new( move |_| node_specs.read().max_upgrade_level.unwrap_or_default() );
 
     let on_click = {
         let node_id = node_id.clone();

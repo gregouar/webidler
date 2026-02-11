@@ -40,7 +40,7 @@
       },
       {
         "scope": "Local",
-        "stat": {"Block": null},
+        "stat": { "Block": null },
         "modifier": "Multiplier",
         "value": [20, 40]
       },
@@ -218,7 +218,6 @@
     "triggers": [
       {
         "trigger_id": "kite_shield_unique",
-        "description": "Stacks 30% More Damage and -0.3% Life Regeneration per second, for the duration of the Curse.",
         "OnApplyStatus": {
           "skill_type": "Curse",
           "is_triggered": false

@@ -7139,22 +7139,21 @@
                 "skill_type": null,
                 "conditions": [
                   {
-                    "HasStatus": {
+                    "StatusStacks": {
                       "status_type": {
                         "Trigger": {
                           "trigger_id": "open_wound",
                           "trigger_description": "Open Wounded"
                         }
                       },
-                      "skill_type": null,
-                      "not": false
+                      "skill_type": null
                     }
                   }
                 ]
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 30.0
           }
         ],
         "triggers": [],

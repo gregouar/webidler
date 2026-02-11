@@ -73,6 +73,18 @@ pub fn damage_type_str(damage_type: Option<DamageType>) -> &'static str {
     }
 }
 
+pub fn damage_over_time_type_str(damage_type: Option<DamageType>) -> &'static str {
+    match damage_type {
+        Some(damage_type) => match damage_type {
+            DamageType::Physical => "Bleed Damage ",
+            DamageType::Fire => "Burn Damage ",
+            DamageType::Poison => "Poison Damage ",
+            DamageType::Storm => "Weather Damage ",
+        },
+        None => "Damage over Time",
+    }
+}
+
 pub fn lucky_roll_str(roll_type: LuckyRollType) -> String {
     match roll_type {
         LuckyRollType::Damage { damage_type } => {
@@ -164,7 +176,8 @@ pub fn status_type_value_str(status_type: Option<&StatStatusType>) -> String {
         Some(status_type) => match status_type {
             StatStatusType::Stun => "Stun Power".to_string(),
             StatStatusType::DamageOverTime { damage_type } => {
-                format!("{}Damage per second", damage_type_str(*damage_type))
+                // format!("{}Damage per second", damage_type_str(*damage_type))
+                damage_over_time_type_str(*damage_type).into()
             }
             StatStatusType::StatModifier { debuff } => match debuff {
                 Some(true) => "Negative Statuses Power".to_string(),
@@ -366,8 +379,8 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::EvadeDamageTaken => "Evaded Damage over Time Taken".to_string(),
         StatType::Evade(damage_type) => {
             format!(
-                "Chance to Evade {}Damage over Time",
-                damage_type_str(*damage_type)
+                "Chance to Evade {}",
+                damage_over_time_type_str(*damage_type)
             )
         }
         StatType::Damage {
@@ -536,9 +549,9 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             )
         }
         StatType::Evade(damage_type) => format!(
-            "{} Chance to Evade {}Damage over Time",
+            "{} Chance to Evade {}",
             format_adds_removes(value, false, "%"),
-            damage_type_str(*damage_type)
+            damage_over_time_type_str(*damage_type)
         ),
         StatType::EvadeDamageTaken => {
             format!(

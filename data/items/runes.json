@@ -204,9 +204,7 @@
             "factor": 0.5,
             "source": {
               "StatusValue": {
-                "DamageOverTime": {
-                  "damage_type": "Poison"
-                }
+                "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
               }
             }
           },
@@ -222,9 +220,7 @@
             "factor": 1.0,
             "source": {
               "StatusDuration": {
-                "DamageOverTime": {
-                  "damage_type": "Poison"
-                }
+                "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
               }
             }
           }

@@ -569,7 +569,7 @@
                       },
                       "target": "SameTarget",
                       "skill_range": "Any",
-                      "skill_type": "Spell",
+                      "skill_type": "Other",
                       "effects": [
                         {
                           "FlatDamage": {
@@ -592,13 +592,15 @@
                       "modifiers": [
                         {
                           "stat": {
-                            "Damage": { "damage_type": "Poison" }
+                            "Damage": { "damage_type": "Physical" }
                           },
                           "modifier": "Flat",
-                          "factor": 0.5,
+                          "factor": 0.3,
                           "source": {
                             "StatusValue": {
-                              "DamageOverTime": { "damage_type": "Poison" }
+                              "status_type": {
+                                "DamageOverTime": { "damage_type": "Poison" }
+                              }
                             }
                           }
                         }
@@ -658,7 +660,7 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "skills/curse_flammability.svg",
-                      "description": "Trigger an Intense Fire that deals additional Fire Damage equal to 30% of the Hit's Fire Damage for each stack of Fire Damage over Time present on the target.",
+                      "description": "Trigger an Intense Fire that deals additional Fire Damage equal to 30% of the Hit's Fire Damage for each Stack of Burn present on the target.",
                       "OnTakeHit": {
                         "is_triggered": false
                       },

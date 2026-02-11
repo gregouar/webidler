@@ -20,7 +20,7 @@ use strum::IntoEnumIterator;
 
 use crate::components::{
     shared::tooltips::{
-        effects_tooltip::{self, formatted_effects_list, min_max_str},
+        effects_tooltip::{self, damage_over_time_type_str, formatted_effects_list, min_max_str},
         trigger_tooltip::{
             format_extra_trigger_modifiers, format_trigger, format_trigger_modifier,
             format_trigger_modifier_per,
@@ -302,6 +302,7 @@ pub fn format_effect(
         }
         .into_any(),
         SkillEffectType::ApplyStatus { statuses, duration } => {
+            let mut stackable_stat_effects = false;
             let mut stat_effects = Vec::new();
             let mut trigger_effects = Vec::new();
             let mut max_stat_effects = Vec::new();
@@ -362,16 +363,21 @@ pub fn format_effect(
                             || trigger_modifier_damage_str.is_some())
                         .then({
                             || {
+                                let deal_str = match status_effect.cumulate {
+                                    true => "Stack",
+                                    false => "Deal",
+                                };
                                 view! {
                                     <EffectLi>
-                                        {success_chance}"Deal "
+                                        {success_chance}{deal_str}" "
                                         <span class=format!(
                                             "font-semibold {damage_color}",
                                         )>{format_min_max(status_effect.value)}</span>
                                         {trigger_modifier_damage_str}"  "
-                                        {stackable_str(status_effect.cumulate)}
-                                        {damage_type_str(Some(damage_type))} "Damage per second "
-                                        {format_duration(duration)} {trigger_modifier_duration_str}
+                                        // {damage_type_str(Some(damage_type))} "Damage per second "
+                                        {damage_over_time_type_str(Some(damage_type))}
+                                        " per second " {format_duration(duration)}
+                                        {trigger_modifier_duration_str}
                                     </EffectLi>
                                 }
                             }
@@ -383,6 +389,7 @@ pub fn format_effect(
                         modifier,
                         debuff,
                     } => {
+                        stackable_stat_effects |= status_effect.cumulate;
                         stat_effects.push(StatEffect {
                             stat: stat.clone(),
                             modifier,
@@ -414,12 +421,6 @@ pub fn format_effect(
                 })
                 .collect();
 
-            // TODO:
-            // let trigger_modifier_duration_str = format_trigger_modifier_as(find_trigger_modifier(
-            //     StatType::StatusDuration(Some(StatStatusType::StatModifier { debuff: () })),
-            //     modifiers,
-            // ));
-
             let formatted_stats_effects = {
                 (!stat_effects.is_empty() || !trigger_effects.is_empty()).then(|| {
                         let trigger_modifier_duration_str = format_trigger_modifier(
@@ -432,10 +433,14 @@ pub fn format_effect(
                             ),
                             "",
                         );
+                        let apply_str = match stackable_stat_effects {
+                            true => "Stack",
+                            false => "Apply",
+                        };
                     view! {
                         <EffectLi>
-                            {success_chance}"Apply the following status "
-                            {format_duration(duration)}{trigger_modifier_duration_str} ":"
+                            {success_chance}{apply_str}" the following Status "
+                            {format_duration(duration)} {trigger_modifier_duration_str} ":"
                             {(!stat_effects.is_empty())
                                 .then(|| {
                                     view! {
@@ -575,10 +580,6 @@ where
     } else {
         view! { "for " }.into_any()
     }
-}
-
-fn stackable_str(cumulate: bool) -> &'static str {
-    if cumulate { "Stackable " } else { "" }
 }
 
 #[component]

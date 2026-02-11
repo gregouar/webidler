@@ -18,6 +18,7 @@ pub fn format_skill_modifier_conditions_pre(conditions: &[Condition]) -> String 
                 if *not { "Non-" } else { "" },
                 format_status_type_condition(status_type.as_ref(), *skill_type),
             ),
+            Condition::StatusStacks { .. } => "".into(),
             Condition::MaximumLife => "".into(),
             Condition::MaximumMana => "".into(),
         })
@@ -30,9 +31,16 @@ pub fn format_skill_modifier_conditions_post(conditions: &[Condition]) -> String
     conditions
         .iter()
         .map(|condition| match condition {
-            Condition::HasStatus { .. } => "",
-            Condition::MaximumLife => " On Maximum Life",
-            Condition::MaximumMana => " On Maximum Mana",
+            Condition::HasStatus { .. } => "".into(),
+            Condition::StatusStacks {
+                status_type,
+                skill_type,
+            } => format!(
+                " per {} stack",
+                format_status_type_condition(status_type.as_ref(), *skill_type),
+            ),
+            Condition::MaximumLife => " On Maximum Life".into(),
+            Condition::MaximumMana => " On Maximum Mana".into(),
         })
         .collect::<Vec<_>>()
         .join("")
