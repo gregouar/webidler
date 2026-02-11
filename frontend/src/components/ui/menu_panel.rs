@@ -60,39 +60,39 @@ pub fn MenuPanel(
             }"
         </style>
 
-        <Show when=move || is_visible.get()>
+        // <Show when=move || is_visible.get()>
+        <div
+            class="absolute inset-0 bg-black/70 z-40 flex flex-col p-1 xl:p-4 items-center will-change-opacity"
+            style=move || {
+                if open.get() {
+                    "animation: fadeIn 0.3s ease-out forwards;"
+                } else {
+                    "animation: fadeOut 0.3s ease-out forwards;"
+                }
+            }
+            on:click=move |_| {
+                open.try_set(false);
+            }
+            on:keydown=handle_key
+            tabindex="0"
+            class:hidden=move || !is_visible.get()
+        >
             <div
-                class="absolute inset-0 bg-black/70 z-40 flex flex-col p-1 xl:p-4 items-center will-change-opacity"
+                class="z-41 w-fit mx-auto max-h-full flex flex-col will-change-transform"
+                class:w-full=w_full
+                class:h-full=h_full
+                class:my-auto=center
                 style=move || {
                     if open.get() {
-                        "animation: fadeIn 0.3s ease-out forwards;"
+                        "animation: dropDown 0.3s ease-out forwards;"
                     } else {
-                        "animation: fadeOut 0.3s ease-out forwards;"
+                        "animation: pullUp 0.3s ease-out forwards;"
                     }
                 }
-                on:click=move |_| {
-                    open.try_set(false);
-                }
-                on:keydown=handle_key
-                tabindex="0"
+                on:click=|e| e.stop_propagation()
             >
-                <div
-                    class="z-41 w-fit mx-auto max-h-full flex flex-col will-change-transform"
-                    class:w-full=w_full
-                    class:h-full=h_full
-                    class:my-auto=center
-                    style=move || {
-                        if open.get() {
-                            "animation: dropDown 0.3s ease-out forwards;"
-                        } else {
-                            "animation: pullUp 0.3s ease-out forwards;"
-                        }
-                    }
-                    on:click=|e| e.stop_propagation()
-                >
-                    {children.read_value()()}
-                </div>
+                {children.read_value()()}
             </div>
-        </Show>
+        </div>
     }
 }

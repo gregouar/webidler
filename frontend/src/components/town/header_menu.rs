@@ -153,7 +153,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     "Forge"
                 </MenuButton>
                 <MenuButton on:click=move |_| open_ascend() disabled=disable_panels>
-                    "Ascend"
+                    "Passives"
                 </MenuButton>
                 <MenuButton on:click=move |_| open_temple() disabled=disable_panels>
                     "Temple"

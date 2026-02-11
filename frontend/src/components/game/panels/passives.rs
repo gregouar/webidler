@@ -9,9 +9,14 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext, backend_client::BackendClient, events::{EventsContext, Key}, game::game_context::GameContext, shared::passives::{
+    auth::AuthContext,
+    backend_client::BackendClient,
+    events::{EventsContext, Key},
+    game::game_context::GameContext,
+    shared::passives::{
         Connection, MetaStatus, Node, NodeStatus, PurchaseStatus, node_meta_status,
-    }, ui::{
+    },
+    ui::{
         buttons::MenuButton,
         card::{Card, CardHeader, CardInset},
         confirm::ConfirmContext,
@@ -19,7 +24,8 @@ use crate::components::{
         pannable::Pannable,
         toast::*,
         tooltip::{StaticTooltip, StaticTooltipPosition},
-    }, websocket::WebsocketContext
+    },
+    websocket::WebsocketContext,
 };
 
 #[component]
