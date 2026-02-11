@@ -9,13 +9,9 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext,
-    backend_client::BackendClient,
-    game::game_context::GameContext,
-    shared::passives::{
-        node_meta_status, Connection, MetaStatus, Node, NodeStatus, PurchaseStatus,
-    },
-    ui::{
+    auth::AuthContext, backend_client::BackendClient, events::{EventsContext, Key}, game::game_context::GameContext, shared::passives::{
+        Connection, MetaStatus, Node, NodeStatus, PurchaseStatus, node_meta_status,
+    }, ui::{
         buttons::MenuButton,
         card::{Card, CardHeader, CardInset},
         confirm::ConfirmContext,
@@ -23,8 +19,7 @@ use crate::components::{
         pannable::Pannable,
         toast::*,
         tooltip::{StaticTooltip, StaticTooltipPosition},
-    },
-    websocket::WebsocketContext,
+    }, websocket::WebsocketContext
 };
 
 #[component]
@@ -46,7 +41,7 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
 
                         <span class="text-sm xl:text-base text-gray-400">
                             "Remaining Points: "
-                            <span class="bold">
+                            <span class="font-semibold text-white">
                                 {move || { game_context.player_resources.read().passive_points }}
                             </span>
                         </span>
@@ -94,18 +89,35 @@ fn AutoButton() -> impl IntoView {
     let tooltip = move || {
         view! {
             <div class="flex flex-col space-y-1 text-sm max-w-xs">
-                <span class="font-semibold text-white">
-                    "Assign points following previously saved build."
-                </span>
+                <span class="text-white">"Assign points following previously saved build."</span>
                 <span class="text-xs italic text-gray-400">"Hold CTRL: +10"</span>
             </div>
         }
     };
 
+    let auto_assign = {
+        let conn: WebsocketContext = expect_context();
+        let events_context: EventsContext = expect_context();
+        move |_| {
+            let mut amount = if events_context.key_pressed(Key::Ctrl) {
+                10
+            } else {
+                1
+            };
+
+            while let Some(node_id) = next_node.get_untracked()
+                && amount > 0
+            {
+                purchase_node(game_context, conn.clone(), node_id);
+                amount -= 1;
+            }
+        }
+    };
+
     view! {
-        <StaticTooltip tooltip position=StaticTooltipPosition::Left>
-            <MenuButton on:click=move |_| {} disabled>
-                "Auto"
+        <StaticTooltip tooltip position=StaticTooltipPosition::Bottom>
+            <MenuButton on:click=auto_assign disabled>
+                "Auto Assign"
             </MenuButton>
         </StaticTooltip>
     }
@@ -284,21 +296,7 @@ fn InGameNode(
 
     let purchase = {
         let conn = expect_context::<WebsocketContext>();
-
-        move || {
-            game_context.player_resources.write().passive_points -= 1;
-            game_context
-                .passives_tree_state
-                .write()
-                .purchased_nodes
-                .insert(node_id.clone());
-            conn.send(
-                &PurchasePassiveMessage {
-                    node_id: node_id.clone(),
-                }
-                .into(),
-            );
-        }
+        move || purchase_node(game_context, conn.clone(), node_id.clone())
     };
 
     view! {
@@ -369,4 +367,14 @@ fn InGameConnection(connection: PassiveConnection) -> impl IntoView {
             node_levels
         />
     }
+}
+
+fn purchase_node(game_context: GameContext, conn: WebsocketContext, node_id: PassiveNodeId) {
+    game_context.player_resources.write().passive_points -= 1;
+    game_context
+        .passives_tree_state
+        .write()
+        .purchased_nodes
+        .insert(node_id.clone());
+    conn.send(&PurchasePassiveMessage { node_id }.into());
 }
