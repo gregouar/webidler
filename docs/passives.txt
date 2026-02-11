@@ -48,6 +48,9 @@ Fire:
 -Damage
 -Burn (damage, duration, chance) => How to enable burn? Have an easy accessible Blazing Inferno?
 -Penetration
+* Blazing Infero
+* Pyromaniac
+* Bonfire
 
 Poison:
 -Damage
@@ -63,13 +66,13 @@ Storm:
 -Damage against stunned
 -Penetration
 *Lucky
+*Stunning Attack
 
 Physical:
 -Damage
 -Bleed (damage, duration, chance)
 -Penetration
 *Open Wound
-*Stunning?
 -Crit chance against bleeding
 
 Critical:
