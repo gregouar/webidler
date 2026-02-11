@@ -107,7 +107,6 @@ pub fn PassivesPanel(
                             PassivesTab::Ascend => {
                                 view! {
                                     <AscendPanelHeader
-                                        open
                                         passives_tree_ascension
                                         ascension_cost
                                         view_only
@@ -142,7 +141,6 @@ pub fn PassivesPanel(
 
 #[component]
 pub fn AscendPanelHeader(
-    open: RwSignal<bool>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     ascension_cost: RwSignal<f64>,
     #[prop(default = false)] view_only: bool,
@@ -203,12 +201,7 @@ pub fn AscendPanelHeader(
                         >
                             "Cancel"
                         </MenuButton>
-                        <ConfirmAscendButton
-                            passives_tree_ascension
-                            ascension_cost
-                            has_changed
-                            open
-                        />
+                        <ConfirmAscendButton passives_tree_ascension ascension_cost has_changed />
                     </div>
                 }
             })}
@@ -220,7 +213,6 @@ fn ConfirmAscendButton(
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     ascension_cost: RwSignal<f64>,
     has_changed: Memo<bool>,
-    open: RwSignal<bool>,
 ) -> impl IntoView {
     let do_ascend = Arc::new({
         let backend = expect_context::<BackendClient>();
@@ -248,7 +240,11 @@ fn ConfirmAscendButton(
                         Ok(response) => {
                             town_context.character.set(response.character);
                             town_context.passives_tree_ascension.set(response.ascension);
-                            open.set(false);
+                            show_toast(
+                            toaster,
+                            "Ascension successful!",
+                            ToastVariant::Success,
+                        )
                         }
                         Err(e) => show_toast(
                             toaster,

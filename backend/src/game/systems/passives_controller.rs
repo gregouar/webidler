@@ -65,7 +65,7 @@ pub fn purchase_node(
         player_resources.passive_points -= 1;
         Ok(())
     } else {
-        return Err(AppError::UserError("Unknown passive node...".into()));
+        Err(AppError::UserError("Unknown passive node...".into()))
     }
 }
 
