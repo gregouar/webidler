@@ -96,6 +96,7 @@ Blessings:
 - Effect
 - Speed
 - Cost
+* Free Blessings
 
 Dot:
 - Damage

@@ -14,7 +14,7 @@ pub fn format_skill_modifier_conditions_pre(conditions: &[Condition]) -> String 
                 skill_type,
                 not,
             } => format!(
-                " {}{}",
+                " {}{} ",
                 if *not { "Non-" } else { "" },
                 format_status_type_condition(status_type.as_ref(), *skill_type),
             ),
@@ -44,26 +44,25 @@ pub fn format_status_type_condition(
 ) -> String {
     let status_type_str = match status_type {
         Some(status_type) => match status_type {
-            StatStatusType::Stun => stunned_str(Some(true)),
-            StatStatusType::DamageOverTime { damage_type } => damaged_over_time_str(*damage_type),
+            StatStatusType::Stun => stunned_str(Some(true)).to_string(),
+            StatStatusType::DamageOverTime { damage_type } => {
+                damaged_over_time_str(*damage_type).to_string()
+            }
             StatStatusType::StatModifier { debuff } => match debuff {
-                Some(true) => debuffed_str(Some(true)),
-                Some(false) => buffed_str(Some(true)),
-                None => "Under Effects",
+                Some(true) => debuffed_str(Some(true)).to_string(),
+                Some(false) => buffed_str(Some(true)).to_string(),
+                None => "Under Effects".to_string(),
             },
-            // StatStatusType::Trigger {
-            //     trigger_id: Some(trigger_id),
-            //     trigger_description,
-            // } => format!(
-            //     "Under Effects of {}",
-            //     trigger_description.clone().unwrap_or(trigger_id.clone())
-            // ),
+            StatStatusType::Trigger {
+                trigger_id: Some(trigger_id),
+                trigger_description,
+            } => trigger_description.clone().unwrap_or(trigger_id.clone()),
             StatStatusType::Trigger {
                 trigger_id: _,
                 trigger_description: _,
-            } => "Under Effects",
+            } => "Under Effects".to_string(),
         },
-        None => "",
+        None => "".to_string(),
     };
 
     format!("{}{}", skilled_type_str(skill_type), status_type_str)

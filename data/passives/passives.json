@@ -3158,6 +3158,100 @@
         "max_upgrade_level": null,
         "socket": false
       },
+      "4993a125-fdbd-4ee2-a85e-d44f2c00e489": {
+        "name": "Crushing Blow",
+        "icon": "passives/shield_impact.svg",
+        "x": -127.5,
+        "y": 25.0,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Physical",
+        "effects": [],
+        "triggers": [
+          {
+            "trigger_id": "crushing_blow",
+            "description": "",
+            "OnHit": {
+              "skill_type": null,
+              "range": null,
+              "is_crit": true,
+              "is_blocked": null,
+              "is_hurt": null,
+              "is_triggered": null,
+              "damage_type": "Physical"
+            },
+            "target": "SameTarget",
+            "modifiers": [],
+            "skill_range": "Any",
+            "skill_type": "Attack",
+            "effects": [
+              {
+                "success_chance": {
+                  "value": 100.0,
+                  "lucky_chance": 0.0
+                },
+                "ApplyStatus": {
+                  "statuses": [
+                    {
+                      "status_type": {
+                        "StatModifier": {
+                          "stat": {
+                            "Armor": null
+                          },
+                          "modifier": "Multiplier",
+                          "debuff": true
+                        }
+                      },
+                      "value": {
+                        "min": 25.0,
+                        "max": 25.0,
+                        "lucky_chance": 0.0
+                      },
+                      "cumulate": true,
+                      "replace_on_value_only": false
+                    },
+                    {
+                      "status_type": {
+                        "StatModifier": {
+                          "stat": {
+                            "DamageResistance": {
+                              "skill_type": null,
+                              "damage_type": null
+                            }
+                          },
+                          "modifier": "Flat",
+                          "debuff": true
+                        }
+                      },
+                      "value": {
+                        "min": 10.0,
+                        "max": 10.0,
+                        "lucky_chance": 0.0
+                      },
+                      "cumulate": true,
+                      "replace_on_value_only": false
+                    }
+                  ],
+                  "duration": {
+                    "min": 10.0,
+                    "max": 10.0,
+                    "lucky_chance": 0.0
+                  }
+                },
+                "ignore_stat_effects": [],
+                "conditional_modifiers": []
+              }
+            ],
+            "skill_shape": "Single",
+            "owner": null,
+            "inherit_modifiers": false
+          }
+        ],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": false
+      },
       "49a12154-6920-470b-b8ac-7074963cd554": {
         "name": "Curse Effects",
         "icon": "passives/cursed_star.svg",
@@ -3487,7 +3581,7 @@
         "y": -120.0,
         "size": 2,
         "initial_node": false,
-        "node_type": "Status",
+        "node_type": "Utility",
         "effects": [
           {
             "stat": {
@@ -7019,6 +7113,56 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "91c8b2cf-977c-48ef-9bae-ffb5b20569a7": {
+        "name": "Deepening Wound",
+        "icon": "passives/ragged_wound.svg",
+        "x": -127.5,
+        "y": -25.0,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Physical",
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "StatusPower": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Physical"
+                      }
+                    },
+                    "skill_type": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "Trigger": {
+                          "trigger_id": "open_wound",
+                          "trigger_description": "Open Wounded"
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
+        "socket": false
+      },
       "92324580-1289-4322-8169-0c5548abf7cc": {
         "name": "Critical Hit Damage",
         "icon": "passives/critical_damage.svg",
@@ -10062,16 +10206,16 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   },
@@ -10114,16 +10258,16 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   },
@@ -10166,6 +10310,12 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null,
@@ -10177,12 +10327,6 @@
                       "status_type": null,
                       "skill_type": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
                     }
                   }
                 ],
@@ -10224,16 +10368,16 @@
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   }
@@ -14081,6 +14225,14 @@
       {
         "from": "1ade2f7a-1c36-413a-82e4-06438b79e1a0",
         "to": "36aafa33-ac3d-401d-b4d5-2dbe9a82926d"
+      },
+      {
+        "from": "201637a1-c430-4dcc-b537-afe68b01a2b6",
+        "to": "4993a125-fdbd-4ee2-a85e-d44f2c00e489"
+      },
+      {
+        "from": "ff32f6af-3088-4f9b-963b-d469ea869adb",
+        "to": "91c8b2cf-977c-48ef-9bae-ffb5b20569a7"
       }
     ]
   }
