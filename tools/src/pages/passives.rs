@@ -147,10 +147,11 @@ pub fn PassivesPage() -> impl IntoView {
                 }
 
                 if events_context.key_pressed(Key::Character('f'))
-                    && let Some(input) = search_node_ref.get() {
-                        input.focus().unwrap();
-                        input.select();
-                    }
+                    && let Some(input) = search_node_ref.get()
+                {
+                    input.focus().unwrap();
+                    input.select();
+                }
             } else if events_context.key_pressed(Key::Shift) {
                 tool_mode.set(ToolMode::Select);
             } else if events_context.key_pressed(Key::Alt) {
@@ -432,7 +433,7 @@ fn ToolNode(
 ) -> impl IntoView {
     let events_context: EventsContext = expect_context();
 
-    let node_specs = Memo::new( {
+    let node_specs = Memo::new({
         let node_id = node_id.clone();
         move |_| {
             passives_tree_specs
@@ -455,14 +456,11 @@ fn ToolNode(
         }
     };
 
-    let node_text = Memo::new({
-        let node_specs = node_specs.clone();
-        move |_| node_specs.with(|node_specs| node_text(node_specs).to_lowercase())
-    });
+    let node_text =
+        Memo::new({ move |_| node_specs.with(|node_specs| node_text(node_specs).to_lowercase()) });
 
     let node_status = Memo::new({
         let node_id = node_id.clone();
-        let node_specs = node_specs.clone();
         move |_| {
             let selected = selected_node.read().is_selected(&node_id);
             let clickable =
@@ -496,10 +494,8 @@ fn ToolNode(
         }
     });
 
-    let node_level = Memo::new({
-        let node_specs = node_specs.clone();
-        move |_| node_specs.read().max_upgrade_level.unwrap_or_default()
-    });
+    let node_level =
+        Memo::new({ move |_| node_specs.read().max_upgrade_level.unwrap_or_default() });
 
     let on_click = {
         let node_id = node_id.clone();
@@ -583,20 +579,21 @@ fn ToolNode(
 
     Effect::new(move || {
         if selected_node.read().is_selected(&node_id)
-            && let Some(node) = passives_tree_specs.write().nodes.get_mut(&node_id) {
-                if events_context.key_pressed(Key::ArrowUp) {
-                    node.y += 2.5;
-                }
-                if events_context.key_pressed(Key::ArrowDown) {
-                    node.y -= 2.5;
-                }
-                if events_context.key_pressed(Key::ArrowLeft) {
-                    node.x -= 2.5;
-                }
-                if events_context.key_pressed(Key::ArrowRight) {
-                    node.x += 2.5;
-                }
+            && let Some(node) = passives_tree_specs.write().nodes.get_mut(&node_id)
+        {
+            if events_context.key_pressed(Key::ArrowUp) {
+                node.y += 2.5;
             }
+            if events_context.key_pressed(Key::ArrowDown) {
+                node.y -= 2.5;
+            }
+            if events_context.key_pressed(Key::ArrowLeft) {
+                node.x -= 2.5;
+            }
+            if events_context.key_pressed(Key::ArrowRight) {
+                node.x += 2.5;
+            }
+        }
     });
 
     view! {

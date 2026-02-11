@@ -5,8 +5,8 @@ use shared::data::{
     conditional_modifier::{Condition, ConditionalModifier},
     player::{CharacterSpecs, CharacterState},
     stat_effect::{
-        compare_options, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect,
-        StatType,
+        EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect, StatType,
+        compare_options,
     },
 };
 
