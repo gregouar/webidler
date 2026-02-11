@@ -11,6 +11,7 @@ use crate::data::{
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
+    user::UserCharacterId,
 };
 
 use super::macros::impl_into_message;
@@ -44,6 +45,7 @@ pub enum ErrorType {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InitGameMessage {
+    pub character_id: UserCharacterId,
     pub area_specs: AreaSpecs,
     pub area_state: AreaState,
     pub passives_tree_specs: PassivesTreeSpecs,

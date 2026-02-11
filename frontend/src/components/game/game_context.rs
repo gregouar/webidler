@@ -15,6 +15,7 @@ use shared::data::{
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
+    user::UserCharacterId,
 };
 
 use crate::{components::game::local_stats::GameLocalStats, utils};
@@ -22,6 +23,8 @@ use crate::{components::game::local_stats::GameLocalStats, utils};
 #[derive(Clone, Copy)]
 pub struct GameContext {
     pub started: RwSignal<bool>,
+
+    pub character_id: RwSignal<UserCharacterId>,
 
     pub area_specs: RwSignal<AreaSpecs>,
     pub area_state: Syncable<AreaState>,
@@ -69,6 +72,7 @@ impl GameContext {
     pub fn new() -> Self {
         GameContext {
             started: RwSignal::new(false),
+            character_id: Default::default(),
 
             area_specs: RwSignal::new(Default::default()),
             area_state: Default::default(),

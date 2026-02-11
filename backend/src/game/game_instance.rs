@@ -68,6 +68,7 @@ impl<'a> GameInstance<'a> {
 
         game_sync::sync_init_game(
             self.client_conn,
+            self.character_id,
             self.game_data,
             passives_tree_build,
             last_skills_bought,

@@ -2,7 +2,7 @@ use anyhow::Result;
 
 use indexmap::IndexSet;
 use shared::{
-    data::passive::PurchasedNodes,
+    data::{passive::PurchasedNodes, user::UserCharacterId},
     messages::server::{InitGameMessage, SyncGameStateMessage},
 };
 
@@ -12,6 +12,7 @@ use crate::websocket::WebSocketConnection;
 
 pub async fn sync_init_game(
     client_conn: &mut WebSocketConnection,
+    character_id: &UserCharacterId,
     game_data: &mut GameInstanceData,
     passives_tree_build: PurchasedNodes,
     last_skills_bought: IndexSet<String>,
@@ -20,6 +21,7 @@ pub async fn sync_init_game(
     client_conn
         .send(
             &InitGameMessage {
+                character_id: character_id.clone(),
                 area_specs: game_data.area_blueprint.specs.clone(),
                 area_state: game_data.area_state.read().clone(),
                 passives_tree_specs: game_data.passives_tree_specs.clone(),

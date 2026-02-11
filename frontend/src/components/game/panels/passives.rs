@@ -1,11 +1,16 @@
-use leptos::{html::*, prelude::*};
+use std::sync::Arc;
+
+use leptos::{html::*, prelude::*, task::spawn_local};
 
 use shared::{
     data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs},
+    http::client::SavePassivesRequest,
     messages::client::PurchasePassiveMessage,
 };
 
 use crate::components::{
+    auth::AuthContext,
+    backend_client::BackendClient,
     game::game_context::GameContext,
     shared::passives::{
         node_meta_status, Connection, MetaStatus, Node, NodeStatus, PurchaseStatus,
@@ -13,32 +18,47 @@ use crate::components::{
     ui::{
         buttons::MenuButton,
         card::{Card, CardHeader, CardInset},
+        confirm::ConfirmContext,
         menu_panel::MenuPanel,
         pannable::Pannable,
+        toast::*,
+        tooltip::{StaticTooltip, StaticTooltipPosition},
     },
     websocket::WebsocketContext,
 };
 
 #[component]
 pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
     view! {
         <MenuPanel open=open>
             <div class="w-full h-full">
                 <Card>
                     <CardHeader title="Passive Skills" on_close=move || open.set(false)>
-                        <div class="flex items-center gap-2">
-                            <MenuButton on:click=move |_| {} disabled=Signal::derive(move || false)>
-                                "Auto"
-                            </MenuButton>
+
+                        <div class="flex-1" />
+
+                        <div class="flex items-center gap-2 mx-2">
+                            <ExportButton />
                         </div>
 
                         <div class="flex-1" />
 
-                        <div class="flex items-center gap-2">
-                            <MenuButton on:click=move |_| {} disabled=Signal::derive(move || false)>
-                                "Export Build"
-                            </MenuButton>
+                        <span class="text-sm xl:text-base text-gray-400">
+                            "Remaining Points: "
+                            <span class="bold">
+                                {move || { game_context.player_resources.read().passive_points }}
+                            </span>
+                        </span>
+
+                        <div class="flex-1" />
+
+                        <div class="flex items-center gap-2 mx-2">
+                            <AutoButton />
                         </div>
+
+                        <div class="flex-1" />
+
                     </CardHeader>
                     <CardInset pad=false>
                         <PassiveSkillTree />
@@ -46,6 +66,112 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
                 </Card>
             </div>
         </MenuPanel>
+    }
+}
+
+#[component]
+fn AutoButton() -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
+    let points_available =
+        Memo::new(move |_| game_context.player_resources.read().passive_points > 0);
+
+    let next_node = Memo::new(move |_| {
+        game_context
+            .passives_tree_state
+            .with(|passives_tree_state| {
+                game_context
+                    .passives_tree_build
+                    .read()
+                    .iter()
+                    .find(|node_id| !passives_tree_state.purchased_nodes.contains(*node_id))
+                    .cloned()
+            })
+    });
+
+    let disabled = Signal::derive(move || !points_available.get() || next_node.read().is_none());
+
+    let tooltip = move || {
+        view! {
+            <div class="flex flex-col space-y-1 text-sm max-w-xs">
+                <span class="font-semibold text-white">
+                    "Assign points following previously saved build."
+                </span>
+                <span class="text-xs italic text-gray-400">"Hold CTRL: +10"</span>
+            </div>
+        }
+    };
+
+    view! {
+        <StaticTooltip tooltip position=StaticTooltipPosition::Left>
+            <MenuButton on:click=move |_| {} disabled>
+                "Auto"
+            </MenuButton>
+        </StaticTooltip>
+    }
+}
+
+#[component]
+fn ExportButton() -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
+    let do_export = Arc::new({
+        let backend = expect_context::<BackendClient>();
+        let auth_context = expect_context::<AuthContext>();
+        let toaster = expect_context::<Toasts>();
+
+        let character_id = game_context.character_id.get_untracked();
+        move || {
+            spawn_local({
+                async move {
+                    match backend
+                        .post_save_passives(
+                            &auth_context.token(),
+                            &SavePassivesRequest {
+                                character_id,
+                                purchased_nodes: game_context
+                                    .passives_tree_state
+                                    .read()
+                                    .purchased_nodes
+                                    .clone(),
+                            },
+                        )
+                        .await
+                    {
+                        Ok(_) => show_toast(toaster, "Export Succeeded!", ToastVariant::Success),
+                        Err(e) => show_toast(
+                            toaster,
+                            format!("Failed to export: {e}"),
+                            ToastVariant::Error,
+                        ),
+                    }
+                }
+            });
+        }
+    });
+
+    let try_export = {
+        let confirm_context = expect_context::<ConfirmContext>();
+        move |_| {
+            (confirm_context.confirm)(
+                "Exporting your build will erase the last version saved, are you sure?".into(),
+                do_export.clone(),
+            );
+        }
+    };
+
+    let disabled = Signal::derive(move || {
+        game_context
+            .passives_tree_state
+            .read()
+            .purchased_nodes
+            .is_empty()
+    });
+
+    view! {
+        <MenuButton on:click=try_export disabled>
+            "Export Build"
+        </MenuButton>
     }
 }
 
