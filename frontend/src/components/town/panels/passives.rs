@@ -17,7 +17,7 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
-    shared::{passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus}, resources::ShardsIcon},
+    shared::{passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus}, resources::{ShardsCounter}},
     town::TownContext,
     ui::{
         buttons::{MenuButton, TabButton},
@@ -179,10 +179,8 @@ pub fn AscendPanelHeader(
                 view! {
                     <div class="flex-1" />
 
-                    <span class="text-sm xl:text-base text-gray-400">
-                        "Ascension Cost: "
-                        <span class="text-cyan-300 font-semibold">{ascension_cost}</span>
-                        <ShardsIcon />
+                    <span class="text-sm xl:text-base text-gray-400 flex items-center">
+                        "Ascension Cost:" <ShardsCounter value=ascension_cost.into() />
                     </span>
 
                     <div class="flex-1" />
@@ -359,8 +357,8 @@ pub fn BuildPanelHeader(
                     <div class="flex-1" />
 
                     <span class="text-sm xl:text-base text-gray-400">
-                        "Required Player Level: "
-                        <span class="text-white font-semibold">
+                        "Required Player Level:"
+                        <span class="text-white font-semibold ml-2">
                             {move || passives_tree_build.read().len()}
                         </span>
                     </span>
