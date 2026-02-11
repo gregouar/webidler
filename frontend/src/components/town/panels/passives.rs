@@ -17,7 +17,10 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
-    shared::{passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus}, resources::{ShardsCounter}},
+    shared::{
+        passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
+        resources::ShardsCounter,
+    },
     town::TownContext,
     ui::{
         buttons::{MenuButton, TabButton},
@@ -240,11 +243,7 @@ fn ConfirmAscendButton(
                             town_context.character.set(response.character);
                             town_context.passives_tree_ascension.set(response.ascension);
                             ascension_cost.set(0.0);
-                            show_toast(
-                            toaster,
-                            "Ascension successful!",
-                            ToastVariant::Success,
-                        )
+                            show_toast(toaster, "Ascension successful!", ToastVariant::Success)
                         }
                         Err(e) => show_toast(
                             toaster,
