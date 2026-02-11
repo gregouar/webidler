@@ -293,29 +293,15 @@ pub fn PassivesPage() -> impl IntoView {
                         </Card>
                     </div>
 
+                    // {move || match tool_mode.get() {
+                    // ToolMode::Edit => {
                     <Card class="h-full w-2xl">
-                        // {move || match tool_mode.get() {
-                        // ToolMode::Edit => {
-                        // view! {
-                        // <EditNodeMenu
-                        // passives_tree_specs
-                        // passives_history_tracker
-                        // selected_node
-                        // clipboard_node
-                        // />
-                        // }
-                        // .into_any()
-                        // }
-                        // ToolMode::Connect | ToolMode::Add | ToolMode::Select => ().into_any(),
-                        // }}
-
                         <EditNodeMenu
                             passives_tree_specs
                             passives_history_tracker
                             selected_node
                             clipboard_node
                         />
-
                     </Card>
 
                 </div>
@@ -411,20 +397,16 @@ fn PassiveSkillTree(
                 key=|id| id.clone()
                 let(id)
             >
-                {move || {
-                    view! {
-                        <ToolNode
-                            node_id=id.clone()
-                            passives_tree_specs
-                            passives_history_tracker
-                            selected_node
-                            tool_mode
-                            mouse_position
-                            dragging
-                            search_node
-                        />
-                    }
-                }}
+                <ToolNode
+                    node_id=id.clone()
+                    passives_tree_specs
+                    passives_history_tracker
+                    selected_node
+                    tool_mode
+                    mouse_position
+                    dragging
+                    search_node
+                />
             </For>
             <SelectionRectangle
                 passives_tree_specs
@@ -450,9 +432,9 @@ fn ToolNode(
 ) -> impl IntoView {
     let events_context: EventsContext = expect_context();
 
-    let node_specs = {
+    let node_specs = Memo::new( {
         let node_id = node_id.clone();
-        move || {
+        move |_| {
             passives_tree_specs
                 .read()
                 .nodes
@@ -460,7 +442,7 @@ fn ToolNode(
                 .cloned()
                 .unwrap_or_default()
         }
-    };
+    });
     let node_specs_untracked = {
         let node_id = node_id.clone();
         move || {
@@ -475,7 +457,7 @@ fn ToolNode(
 
     let node_text = Memo::new({
         let node_specs = node_specs.clone();
-        move |_| node_text(&node_specs()).to_lowercase()
+        move |_| node_specs.with(|node_specs| node_text(node_specs).to_lowercase())
     });
 
     let node_status = Memo::new({
@@ -505,7 +487,7 @@ fn ToolNode(
                     (true, true) => PurchaseStatus::Purchaseable,
                     (true, false) => PurchaseStatus::Purchased,
                 },
-                meta_status: match (node_specs().locked, selected) {
+                meta_status: match (node_specs.read().locked, selected) {
                     (_, true) => MetaStatus::Ascended,
                     (true, _) => MetaStatus::Locked,
                     _ => MetaStatus::Normal,
@@ -516,7 +498,7 @@ fn ToolNode(
 
     let node_level = Memo::new({
         let node_specs = node_specs.clone();
-        move |_| node_specs().max_upgrade_level.unwrap_or_default()
+        move |_| node_specs.read().max_upgrade_level.unwrap_or_default()
     });
 
     let on_click = {
@@ -621,7 +603,7 @@ fn ToolNode(
         {move || {
             view! {
                 <Node
-                    node_specs=node_specs()
+                    node_specs=node_specs.get()
                     node_status
                     node_level
                     on_click=on_click.clone()
