@@ -240,6 +240,7 @@ fn ConfirmAscendButton(
                         Ok(response) => {
                             town_context.character.set(response.character);
                             town_context.passives_tree_ascension.set(response.ascension);
+                            ascension_cost.set(0.0);
                             show_toast(
                             toaster,
                             "Ascension successful!",
