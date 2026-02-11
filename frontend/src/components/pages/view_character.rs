@@ -14,7 +14,7 @@ use crate::components::{
     },
     town::{
         TownContext,
-        panels::{ascend::AscendPanel, inventory::TownInventoryPanel, temple::TemplePanel},
+        panels::{inventory::TownInventoryPanel, passives::PassivesPanel, temple::TemplePanel},
         town_scene::TownScene,
     },
     ui::{buttons::MenuButton, fullscreen::FullscreenButton, tooltip::DynamicTooltip},
@@ -109,7 +109,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         <div class="relative flex-1">
                             <TownScene view_only=true />
                             <TemplePanel open=town_context.open_temple view_only=true />
-                            <AscendPanel open=town_context.open_ascend view_only=true />
+                            <PassivesPanel open=town_context.open_ascend view_only=true />
                             <TownInventoryPanel open=town_context.open_inventory view_only=true />
                         </div>
                     }

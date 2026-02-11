@@ -12,9 +12,10 @@ use shared::data::{
     item::ItemCategory,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
-    passive::{PassivesTreeSpecs, PassivesTreeState},
+    passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
+    user::UserCharacterId,
 };
 
 use crate::{components::game::local_stats::GameLocalStats, utils};
@@ -23,12 +24,15 @@ use crate::{components::game::local_stats::GameLocalStats, utils};
 pub struct GameContext {
     pub started: RwSignal<bool>,
 
+    pub character_id: RwSignal<UserCharacterId>,
+
     pub area_specs: RwSignal<AreaSpecs>,
     pub area_state: Syncable<AreaState>,
     pub area_threat: RwSignal<AreaThreat>,
 
     pub passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     pub passives_tree_state: Syncable<PassivesTreeState>,
+    pub passives_tree_build: Syncable<PurchasedNodes>,
 
     pub player_specs: Syncable<PlayerSpecs>,
     pub player_inventory: RwSignal<PlayerInventory>,
@@ -68,6 +72,7 @@ impl GameContext {
     pub fn new() -> Self {
         GameContext {
             started: RwSignal::new(false),
+            character_id: Default::default(),
 
             area_specs: RwSignal::new(Default::default()),
             area_state: Default::default(),
@@ -75,6 +80,7 @@ impl GameContext {
 
             passives_tree_specs: RwSignal::new(Default::default()),
             passives_tree_state: Default::default(),
+            passives_tree_build: Default::default(),
 
             player_specs: Default::default(),
             player_inventory: RwSignal::new(Default::default()),

@@ -16,8 +16,8 @@ use crate::components::{
         TownContext,
         header_menu::HeaderMenu,
         panels::{
-            ascend::AscendPanel, forge::ForgePanel, inventory::TownInventoryPanel,
-            market::MarketPanel, stash::StashPanel, temple::TemplePanel,
+            forge::ForgePanel, inventory::TownInventoryPanel, market::MarketPanel,
+            passives::PassivesPanel, stash::StashPanel, temple::TemplePanel,
         },
         town_scene::TownScene,
     },
@@ -68,6 +68,7 @@ pub fn TownPage() -> impl IntoView {
                     areas,
                     inventory,
                     ascension,
+                    passives_build,
                     benedictions,
                     last_grind,
                     user_stash,
@@ -80,6 +81,7 @@ pub fn TownPage() -> impl IntoView {
                     town_context.areas.set(areas);
                     town_context.inventory.set(inventory);
                     town_context.passives_tree_ascension.set(ascension);
+                    town_context.passives_tree_build.set(passives_build);
                     town_context.player_benedictions.set(benedictions);
                     town_context.last_grind.set(last_grind);
                     if let Some(user_stash) = user_stash {
@@ -116,7 +118,7 @@ pub fn TownPage() -> impl IntoView {
                             <TemplePanel open=town_context.open_temple />
                             <MarketPanel open=town_context.open_market />
                             <StashPanel open=town_context.open_stash />
-                            <AscendPanel open=town_context.open_ascend />
+                            <PassivesPanel open=town_context.open_ascend />
                             <ForgePanel open=town_context.open_forge />
                             <TownInventoryPanel open=town_context.open_inventory />
                         </div>

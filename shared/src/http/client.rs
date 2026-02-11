@@ -7,7 +7,7 @@ use crate::{
         item::ItemSlot,
         item_affix::AffixType,
         market::MarketFilters,
-        passive::PassiveNodeId,
+        passive::{PassiveNodeId, PurchasedNodes},
         stash::StashType,
         temple::PlayerBenedictions,
         user::{UserCharacterId, UserId},
@@ -92,6 +92,12 @@ pub struct SocketPassiveRequest {
     pub character_id: UserCharacterId,
     pub passive_node_id: PassiveNodeId,
     pub item_index: Option<u8>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SavePassivesRequest {
+    pub character_id: UserCharacterId,
+    pub purchased_nodes: PurchasedNodes,
 }
 
 // Market

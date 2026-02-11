@@ -115,20 +115,24 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
 
 fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     let InitGameMessage {
+        character_id,
         area_specs,
         area_state,
         passives_tree_specs,
         passives_tree_state,
+        passives_tree_build,
         player_specs,
         player_state,
         last_skills_bought,
     } = init_message;
 
     game_context.started.set(true);
+    game_context.character_id.set(character_id);
     game_context.area_specs.set(area_specs);
     game_context.area_state.set(area_state);
     game_context.passives_tree_specs.set(passives_tree_specs);
     game_context.passives_tree_state.set(passives_tree_state);
+    game_context.passives_tree_build.set(passives_tree_build);
     game_context.player_specs.set(player_specs);
     game_context.player_state.set(player_state);
     game_context.last_skills_bought.set(last_skills_bought);
