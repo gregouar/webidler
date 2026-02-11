@@ -41,9 +41,11 @@ pub struct PassivesTreeAscension {
     pub socketed_nodes: HashMap<PassiveNodeId, ItemSpecs>,
 }
 
+pub type PurchasedNodes = IndexSet<PassiveNodeId>;
+
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct PassivesTreeState {
-    pub purchased_nodes: IndexSet<PassiveNodeId>,
+    pub purchased_nodes: PurchasedNodes,
     pub ascension: PassivesTreeAscension,
 }
 

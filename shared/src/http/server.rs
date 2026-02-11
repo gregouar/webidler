@@ -167,6 +167,9 @@ pub struct SocketPassiveResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SavePassivesResponse {}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BuyBenedictionsResponse {
     pub character: UserCharacter,
     pub player_benedictions: PlayerBenedictions,

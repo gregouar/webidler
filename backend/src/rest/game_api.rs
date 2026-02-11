@@ -1,19 +1,23 @@
 use anyhow::Result;
 
 use axum::{
-    Extension, Json, Router,
     extract::State,
     middleware,
     routing::{get, post},
+    Extension, Json, Router,
 };
 
 use shared::{
     data::{area::AreaLevel, skill::SkillSpecs},
     http::{
-        client::{AscendPassivesRequest, BuyBenedictionsRequest, SocketPassiveRequest},
+        client::{
+            AscendPassivesRequest, BuyBenedictionsRequest, SavePassivesRequest,
+            SocketPassiveRequest,
+        },
         server::{
             AscendPassivesResponse, BuyBenedictionsResponse, GetAreasResponse,
-            GetBenedictionsResponse, GetPassivesResponse, GetSkillsResponse, SocketPassiveResponse,
+            GetBenedictionsResponse, GetPassivesResponse, GetSkillsResponse, SavePassivesResponse,
+            SocketPassiveResponse,
         },
     },
 };
@@ -24,8 +28,8 @@ use crate::{
     db,
     game::{
         data::{
-            DataInit, inventory_data::inventory_data_to_player_inventory,
-            passives::ascension_data_to_passives_tree_ascension,
+            inventory_data::inventory_data_to_player_inventory,
+            passives::ascension_data_to_passives_tree_ascension, DataInit,
         },
         systems::{benedictions_controller, inventory_controller, passives_controller},
     },
@@ -38,6 +42,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
     let auth_routes = Router::new()
         .route("/game/passives", post(post_ascend_passives))
         .route("/game/passives/socket", post(post_socket_passive))
+        .route("/game/passives/build", post(post_save_passives_build))
         .route("/game/benedictions", post(post_buy_benedictions))
         .layer(middleware::from_fn_with_state(
             app_state,
@@ -201,6 +206,31 @@ pub async fn post_socket_passive(
         ascension,
         inventory,
     }))
+}
+
+pub async fn post_save_passives_build(
+    State(db_pool): State<db::DbPool>,
+    Extension(current_user): Extension<CurrentUser>,
+    Json(payload): Json<SavePassivesRequest>,
+) -> Result<Json<SavePassivesResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, &current_user)?;
+
+    db::characters_builds::save_character_passives_build(
+        &mut *tx,
+        &payload.character_id,
+        &payload.purchased_nodes,
+    )
+    .await?;
+
+    tx.commit().await?;
+
+    Ok(Json(SavePassivesResponse {}))
 }
 
 pub async fn post_buy_benedictions(
