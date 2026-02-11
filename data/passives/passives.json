@@ -935,8 +935,8 @@
       "17ccb40c-fe56-450b-9723-c12510d0c5c6": {
         "name": "Wind Dancer",
         "icon": "passives/wing_cloak.svg",
-        "x": -127.5,
-        "y": -25.0,
+        "x": -72.5,
+        "y": -62.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Armor",
@@ -2225,6 +2225,47 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "36aafa33-ac3d-401d-b4d5-2dbe9a82926d": {
+        "name": "Heartful",
+        "icon": "passives/centaur_heart.svg",
+        "x": -55.0,
+        "y": 95.0,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Flat",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "Life",
+            "modifier": "Flat",
+            "value": 10.0
+          },
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "36d711ca-a888-4315-8cdd-ec21cf7651f8": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -2247,6 +2288,33 @@
             "stat": "GoldFind",
             "modifier": "Multiplier",
             "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "37d4347b-1464-47ce-96e0-16b69bde8967": {
+        "name": "Maximum Life",
+        "icon": "passives/life.svg",
+        "x": -112.5,
+        "y": -105.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3,
@@ -2419,6 +2487,33 @@
             },
             "modifier": "Multiplier",
             "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "39dbf52f-d341-4fc4-bc32-bdb0459d1184": {
+        "name": "Maximum Mana",
+        "icon": "passives/mana.svg",
+        "x": 125.0,
+        "y": 100.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Multiplier",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Multiplier",
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3,
@@ -2802,21 +2897,6 @@
           }
         ],
         "max_upgrade_level": 3,
-        "socket": false
-      },
-      "431f6e42-fa05-45ff-9868-f89271ed71c6": {
-        "name": "New Node",
-        "icon": "passives/XXX.svg",
-        "x": 102.5,
-        "y": 90.0,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Utility",
-        "effects": [],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [],
-        "max_upgrade_level": null,
         "socket": false
       },
       "44824924-a10a-4a0d-98f5-5b1414d1381b": {
@@ -4046,8 +4126,8 @@
       "5ee192ea-49d6-4923-a857-0d5a21498f53": {
         "name": "Armor",
         "icon": "passives/armor.svg",
-        "x": -80.0,
-        "y": -62.5,
+        "x": -145.0,
+        "y": -122.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -4477,8 +4557,18 @@
         ],
         "triggers": [],
         "locked": true,
-        "upgrade_effects": [],
-        "max_upgrade_level": null,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "ManaOnHit": {
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1.0
+          }
+        ],
+        "max_upgrade_level": 2,
         "socket": false
       },
       "66b833a4-e75f-40ec-b393-ffc1f96e0c17": {
@@ -4557,21 +4647,6 @@
           }
         ],
         "max_upgrade_level": 3,
-        "socket": false
-      },
-      "676981e7-a550-41bd-b20b-266f999cf9ea": {
-        "name": "New Node",
-        "icon": "passives/XXX.svg",
-        "x": 107.5,
-        "y": 65.0,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Utility",
-        "effects": [],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [],
-        "max_upgrade_level": null,
         "socket": false
       },
       "696014a5-7dd4-45bf-b810-56eed1368bfc": {
@@ -4768,8 +4843,8 @@
       "6c91ed30-7f6b-4748-beab-6a64fc58be18": {
         "name": "Healing Aura",
         "icon": "passives/healing_aura.svg",
-        "x": -55.0,
-        "y": 95.0,
+        "x": 72.5,
+        "y": 62.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Life",
@@ -5114,8 +5189,18 @@
         ],
         "triggers": [],
         "locked": true,
-        "upgrade_effects": [],
-        "max_upgrade_level": null,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "LifeOnHit": {
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1.0
+          }
+        ],
+        "max_upgrade_level": 2,
         "socket": false
       },
       "744ba3d4-2008-44ed-90bc-5e48acde4f9b": {
@@ -6558,8 +6643,8 @@
       "89ce0bfc-b301-4325-9d5d-6aad3b11dd4d": {
         "name": "I'm Speed",
         "icon": "passives/sprint.svg",
-        "x": -157.5,
-        "y": -95.0,
+        "x": 147.5,
+        "y": 82.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Utility",
@@ -7417,8 +7502,8 @@
       "9e32669b-6e90-4021-8c9a-a5d1d2a03387": {
         "name": "Armor",
         "icon": "passives/armor.svg",
-        "x": -70.0,
-        "y": -62.5,
+        "x": -135.0,
+        "y": -122.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -8219,6 +8304,33 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "aecd2245-12bd-4bc3-9d60-192a511b1a30": {
+        "name": "Mana Regeneration",
+        "icon": "passives/mana_regen.svg",
+        "x": 117.5,
+        "y": 97.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Mana",
+        "effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "value": 3.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "value": 1.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "b129b655-c02e-42fd-89bd-d1a18660c489": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -8280,8 +8392,8 @@
       "b59ab706-e788-4501-8bc8-e55157d0edc5": {
         "name": "Armor",
         "icon": "passives/armor.svg",
-        "x": -87.5,
-        "y": -57.5,
+        "x": -152.5,
+        "y": -117.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -8703,6 +8815,33 @@
             "stat": "GoldFind",
             "modifier": "Multiplier",
             "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "c0e8367f-3162-4c78-9f77-d87690a2dd34": {
+        "name": "Maximum Life",
+        "icon": "passives/life.svg",
+        "x": -107.5,
+        "y": -102.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3,
@@ -10165,6 +10304,33 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "d3df415a-a012-493a-b741-e14a7c56c67a": {
+        "name": "Maximum Life",
+        "icon": "passives/life.svg",
+        "x": -120.0,
+        "y": -102.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Life",
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": "Life",
+            "modifier": "Multiplier",
+            "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "d4732e9c-3efb-4604-8b67-24a0587166b6": {
         "name": "Restoration",
         "icon": "passives/regeneration.svg",
@@ -10975,7 +11141,7 @@
         "socket": false
       },
       "df82a320-e565-4f56-a224-64f4d960ec6c": {
-        "name": "Life & Mana Regeneration",
+        "name": "Nirvana",
         "icon": "passives/meditation.svg",
         "x": 35.0,
         "y": -87.5,
@@ -10986,12 +11152,12 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 2.0
+            "value": 4.0
           },
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 2.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -11000,12 +11166,12 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           },
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 3,
@@ -11550,8 +11716,8 @@
       "eb5d66c8-17cc-4812-bcda-c425f0941aea": {
         "name": "Twist the Knife",
         "icon": "passives/bleeding_eye.svg",
-        "x": -127.5,
-        "y": 25.0,
+        "x": -162.5,
+        "y": -77.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Critical",
@@ -11827,8 +11993,8 @@
       "f275006b-3e0a-4177-a128-f501b7b91b4e": {
         "name": "Assassin Strike",
         "icon": "passives/ninja_head.svg",
-        "x": 95.0,
-        "y": 145.0,
+        "x": 85.0,
+        "y": 152.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Critical",
@@ -13137,10 +13303,6 @@
         "to": "8778da9e-df39-4fda-9231-192d587f5e9f"
       },
       {
-        "from": "17ccb40c-fe56-450b-9723-c12510d0c5c6",
-        "to": "ff32f6af-3088-4f9b-963b-d469ea869adb"
-      },
-      {
         "from": "c673deb7-950b-4b12-9c10-888e6cf575c2",
         "to": "0088c436-0b23-4993-a966-b57d2444e996"
       },
@@ -13395,10 +13557,6 @@
       {
         "from": "cfad8424-cb66-4aeb-85e7-1186558d4136",
         "to": "2723d25a-6a2a-421d-98c4-d7178da3f870"
-      },
-      {
-        "from": "1ade2f7a-1c36-413a-82e4-06438b79e1a0",
-        "to": "6c91ed30-7f6b-4748-beab-6a64fc58be18"
       },
       {
         "from": "de4fefa1-145a-4825-8de9-ad5c52140395",
@@ -13805,20 +13963,12 @@
         "to": "c9382d85-ae3d-4efd-9352-79f820fbf726"
       },
       {
-        "from": "dfcf089f-d02a-4d98-a751-61e7f67da41b",
-        "to": "9e32669b-6e90-4021-8c9a-a5d1d2a03387"
-      },
-      {
         "from": "9e32669b-6e90-4021-8c9a-a5d1d2a03387",
         "to": "5ee192ea-49d6-4923-a857-0d5a21498f53"
       },
       {
         "from": "5ee192ea-49d6-4923-a857-0d5a21498f53",
         "to": "b59ab706-e788-4501-8bc8-e55157d0edc5"
-      },
-      {
-        "from": "eb5d66c8-17cc-4812-bcda-c425f0941aea",
-        "to": "201637a1-c430-4dcc-b537-afe68b01a2b6"
       },
       {
         "from": "5f96379e-5249-4b0e-8a4d-1e8c0f951f82",
@@ -13919,6 +14069,18 @@
       {
         "from": "c85b224f-526d-4a9f-a2e4-63fd36cba963",
         "to": "b129b655-c02e-42fd-89bd-d1a18660c489"
+      },
+      {
+        "from": "6c91ed30-7f6b-4748-beab-6a64fc58be18",
+        "to": "f3140e7a-1c89-4e41-ae04-05f02d174183"
+      },
+      {
+        "from": "17ccb40c-fe56-450b-9723-c12510d0c5c6",
+        "to": "dfcf089f-d02a-4d98-a751-61e7f67da41b"
+      },
+      {
+        "from": "1ade2f7a-1c36-413a-82e4-06438b79e1a0",
+        "to": "36aafa33-ac3d-401d-b4d5-2dbe9a82926d"
       }
     ]
   }
