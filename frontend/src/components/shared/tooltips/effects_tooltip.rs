@@ -151,7 +151,7 @@ pub fn status_type_str(status_type: Option<&StatStatusType>) -> String {
         Some(status_type) => match status_type {
             StatStatusType::Stun => "Stun".to_string(),
             StatStatusType::DamageOverTime { damage_type } => {
-                format!("{}Damage over Time", damage_type_str(*damage_type))
+                damage_over_time_type_str(*damage_type).into()
             }
             StatStatusType::StatModifier { debuff } => match debuff {
                 Some(true) => "Negative Statuses".to_string(),
