@@ -7,7 +7,7 @@ use crate::data::{
     area::{AreaLevel, AreaSpecs},
     game_stats::GrindStats,
     market::MarketItem,
-    passive::{PassivesTreeAscension, PassivesTreeSpecs},
+    passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
     skill::SkillSpecs,
     stash::{Stash, StashItem},
@@ -118,6 +118,7 @@ pub struct GetCharacterDetailsResponse {
     pub areas: Vec<UserGrindArea>,
     pub inventory: PlayerInventory,
     pub ascension: PassivesTreeAscension,
+    pub passives_build: PurchasedNodes,
     pub benedictions: PlayerBenedictions,
 
     pub user_stash: Option<Stash>,

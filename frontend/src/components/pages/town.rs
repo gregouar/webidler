@@ -68,6 +68,7 @@ pub fn TownPage() -> impl IntoView {
                     areas,
                     inventory,
                     ascension,
+                    passives_build,
                     benedictions,
                     last_grind,
                     user_stash,
@@ -80,6 +81,7 @@ pub fn TownPage() -> impl IntoView {
                     town_context.areas.set(areas);
                     town_context.inventory.set(inventory);
                     town_context.passives_tree_ascension.set(ascension);
+                    town_context.passives_tree_build.set(passives_build);
                     town_context.player_benedictions.set(benedictions);
                     town_context.last_grind.set(last_grind);
                     if let Some(user_stash) = user_stash {

@@ -6,6 +6,8 @@ use crate::{constants::DATA_VERSION, db::pool::DbExecutor};
 
 use super::utc_datetime::UtcDateTime;
 
+// TODO: Save last skill used here instead?
+
 #[derive(Debug, FromRow)]
 #[allow(dead_code)]
 pub struct CharacterBuildEntry {

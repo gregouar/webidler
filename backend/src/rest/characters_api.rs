@@ -124,10 +124,19 @@ async fn read_character_details(
     master_store: MasterStore,
     character_id: UserCharacterId,
 ) -> Result<Json<GetCharacterDetailsResponse>, AppError> {
-    let (character, areas_completed, character_data, last_grind_data, user_stash, market_stash) = tokio::join!(
+    let (
+        character,
+        areas_completed,
+        character_data,
+        passives_build,
+        last_grind_data,
+        user_stash,
+        market_stash,
+    ) = tokio::join!(
         db::characters::read_character(&db_pool, &character_id),
         db::characters::read_character_areas_completed(&db_pool, &character_id),
         db::characters_data::load_character_data(&db_pool, &character_id),
+        db::characters_builds::load_character_build(&db_pool, &character_id),
         db::game_stats::load_last_game_stats(&db_pool, &character_id),
         db::stashes::get_character_stash_by_type(&db_pool, &character_id, StashType::User),
         db::stashes::get_character_stash_by_type(&db_pool, &character_id, StashType::Market),
@@ -157,36 +166,10 @@ async fn read_character_details(
         })
         .collect();
 
-    // let inventory = PlayerInventory {
-    //     equipped: inventory_data
-    //         .equipped
-    //         .into_iter()
-    //         .filter_map(|(item_slot, item_modifiers)| {
-    //             Some((
-    //                 item_slot,
-    //                 EquippedSlot::MainSlot(Box::new(items_controller::init_item_specs_from_store(
-    //                     &master_store.items_store,
-    //                     item_modifiers,
-    //                 )?)),
-    //             ))
-    //         })
-    //         .collect(),
-    //     bag: inventory_data
-    //         .bag
-    //         .into_iter()
-    //         .filter_map(|item_modifiers| {
-    //             items_controller::init_item_specs_from_store(
-    //                 &master_store.items_store,
-    //                 item_modifiers,
-    //             )
-    //         })
-    //         .collect(),
-    //     max_bag_size: inventory_data.max_bag_size,
-    // };
-
     let inventory = inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
     let ascension =
         ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
+    let passives_build = passives_build?.unwrap_or_default();
 
     let last_grind = last_grind_data.map(|last_grind_data| {
         let (items_data, skills_data) = last_grind_data;
@@ -226,6 +209,7 @@ async fn read_character_details(
         areas,
         inventory,
         ascension,
+        passives_build,
         benedictions,
         last_grind,
         user_stash,

@@ -8,7 +8,7 @@ use crate::data::{
     game_stats::GameStats,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
-    passive::{PassivesTreeSpecs, PassivesTreeState},
+    passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
 };
@@ -48,6 +48,7 @@ pub struct InitGameMessage {
     pub area_state: AreaState,
     pub passives_tree_specs: PassivesTreeSpecs,
     pub passives_tree_state: PassivesTreeState,
+    pub passives_tree_build: PurchasedNodes,
     pub player_specs: PlayerSpecs,
     pub player_state: PlayerState,
     pub last_skills_bought: IndexSet<String>,

@@ -8,9 +8,10 @@ use shared::{
 use crate::components::{
     game::game_context::GameContext,
     shared::passives::{
-        Connection, MetaStatus, Node, NodeStatus, PurchaseStatus, node_meta_status,
+        node_meta_status, Connection, MetaStatus, Node, NodeStatus, PurchaseStatus,
     },
     ui::{
+        buttons::MenuButton,
         card::{Card, CardHeader, CardInset},
         menu_panel::MenuPanel,
         pannable::Pannable,
@@ -24,7 +25,21 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
         <MenuPanel open=open>
             <div class="w-full h-full">
                 <Card>
-                    <CardHeader title="Passive Skills" on_close=move || open.set(false) />
+                    <CardHeader title="Passive Skills" on_close=move || open.set(false)>
+                        <div class="flex items-center gap-2">
+                            <MenuButton on:click=move |_| {} disabled=Signal::derive(move || false)>
+                                "Auto"
+                            </MenuButton>
+                        </div>
+
+                        <div class="flex-1" />
+
+                        <div class="flex items-center gap-2">
+                            <MenuButton on:click=move |_| {} disabled=Signal::derive(move || false)>
+                                "Export Build"
+                            </MenuButton>
+                        </div>
+                    </CardHeader>
                     <CardInset pad=false>
                         <PassiveSkillTree />
                     </CardInset>

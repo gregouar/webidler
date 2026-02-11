@@ -13,10 +13,10 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     game::{
-        GameContext,
         battle_scene::BattleScene,
         header_menu::HeaderMenu,
         panels::{EndQuestPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
+        GameContext,
     },
     ui::{toast::*, tooltip::DynamicTooltip},
     websocket::WebsocketContext,
@@ -119,6 +119,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
         area_state,
         passives_tree_specs,
         passives_tree_state,
+        passives_tree_build,
         player_specs,
         player_state,
         last_skills_bought,
@@ -129,6 +130,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     game_context.area_state.set(area_state);
     game_context.passives_tree_specs.set(passives_tree_specs);
     game_context.passives_tree_state.set(passives_tree_state);
+    game_context.passives_tree_build.set(passives_tree_build);
     game_context.player_specs.set(player_specs);
     game_context.player_state.set(player_state);
     game_context.last_skills_bought.set(last_skills_bought);
