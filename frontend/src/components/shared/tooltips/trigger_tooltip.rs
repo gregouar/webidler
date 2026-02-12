@@ -1,3 +1,4 @@
+use itertools::Itertools;
 use leptos::prelude::*;
 
 use shared::data::{
@@ -14,8 +15,34 @@ use shared::data::{
 use crate::components::shared::tooltips::{
     conditions_tooltip,
     effects_tooltip::{damage_type_str, format_stat, status_type_str, status_type_value_str},
-    skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
+    skill_tooltip::{self, shape_str, skill_type_str, EffectLi},
 };
+
+pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
+    let effects = trigger
+        .triggered_effect
+        .effects
+        .into_iter()
+        .map(|x| skill_tooltip::format_skill_effect(x, Some(&trigger.triggered_effect.modifiers)))
+        .collect::<Vec<_>>();
+
+    let target_infos = (trigger.triggered_effect.target != TriggerTarget::SameTarget)
+        .then(|| format!(", {}", trigger_target_str(trigger.triggered_effect.target)));
+
+    let shape_infos = (trigger.triggered_effect.skill_shape != SkillShape::Single)
+        .then(|| format!(", {}", shape_str(trigger.triggered_effect.skill_shape)));
+
+    view! {
+        <EffectLi class:mt-2>
+            {format_trigger_event(&trigger.triggered_effect.trigger)}{target_infos}{shape_infos}":"
+        </EffectLi>
+        {if trigger.description.is_empty() {
+            view! { {effects} }.into_any()
+        } else {
+            view! { <EffectLi>{trigger.description}</EffectLi> }.into_any()
+        }}
+    }
+}
 
 pub fn format_trigger_modifier(
     modifier: Option<&TriggerEffectModifier>,
@@ -108,32 +135,6 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
                 status_type_str(status_type.as_ref())
             )
         }
-    }
-}
-
-pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
-    let effects = trigger
-        .triggered_effect
-        .effects
-        .into_iter()
-        .map(|x| skill_tooltip::format_effect(x, Some(&trigger.triggered_effect.modifiers)))
-        .collect::<Vec<_>>();
-
-    let target_infos = (trigger.triggered_effect.target != TriggerTarget::SameTarget)
-        .then(|| format!(", {}", trigger_target_str(trigger.triggered_effect.target)));
-
-    let shape_infos = (trigger.triggered_effect.skill_shape != SkillShape::Single)
-        .then(|| format!(", {}", shape_str(trigger.triggered_effect.skill_shape)));
-
-    view! {
-        <EffectLi class:mt-2>
-            {format_trigger_event(&trigger.triggered_effect.trigger)}{target_infos}{shape_infos}":"
-        </EffectLi>
-        {if trigger.description.is_empty() {
-            view! { {effects} }.into_any()
-        } else {
-            view! { <EffectLi>{trigger.description}</EffectLi> }.into_any()
-        }}
     }
 }
 
@@ -240,4 +241,18 @@ fn format_target_type(target_type: &TargetType) -> &'static str {
         TargetType::Friend => "Friend ",
         TargetType::Me => "",
     }
+}
+
+pub fn trigger_text(trigger: TriggerSpecs) -> String {
+    format!(
+        "{} {} {}",
+        format_trigger_event(&trigger.triggered_effect.trigger),
+        trigger.description,
+        trigger
+            .triggered_effect
+            .effects
+            .into_iter()
+            .map(|x| skill_tooltip::skill_effect_text(x, Some(&trigger.triggered_effect.modifiers)))
+            .join(" ")
+    )
 }

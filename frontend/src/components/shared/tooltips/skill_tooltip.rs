@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use itertools::Itertools;
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
@@ -12,7 +13,7 @@ use shared::data::{
         SkillEffect, SkillEffectType, SkillRepeatTarget, SkillSpecs, SkillTargetsGroup, SkillType,
         TargetType,
     },
-    stat_effect::{Modifier, StatStatusType},
+    stat_effect::{Modifier, StatSkillEffectType, StatStatusType},
     temple::StatType,
     trigger::TriggerEffectModifier,
 };
@@ -20,10 +21,13 @@ use strum::IntoEnumIterator;
 
 use crate::components::{
     shared::tooltips::{
-        effects_tooltip::{self, damage_over_time_type_str, formatted_effects_list, min_max_str},
+        effects_tooltip::{
+            self, damage_over_time_type_str, formatted_effects_list, min_max_str,
+            stat_skill_effect_type_str, status_type_str,
+        },
         trigger_tooltip::{
             format_extra_trigger_modifiers, format_trigger, format_trigger_modifier,
-            format_trigger_modifier_per,
+            format_trigger_modifier_per, trigger_text,
         },
     },
     ui::number::format_number,
@@ -195,7 +199,7 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
     let effects = targets_group
         .effects
         .into_iter()
-        .map(|x| format_effect(x, None))
+        .map(|x| format_skill_effect(x, None))
         .collect::<Vec<_>>();
 
     view! {
@@ -227,7 +231,7 @@ fn find_trigger_modifier(
         .find(|modifier| modifier.stat.is_match(&stat) && modifier.modifier == Modifier::Flat)
 }
 
-pub fn format_effect(
+pub fn format_skill_effect(
     effect: SkillEffect,
     modifiers: Option<&[TriggerEffectModifier]>,
 ) -> impl IntoView + use<> {
@@ -636,5 +640,62 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
     view! {
         <EffectLi>{source_description}</EffectLi>
         {effects}
+    }
+}
+
+pub fn skill_effect_text(
+    effect: SkillEffect,
+    modifiers: Option<&[TriggerEffectModifier]>,
+) -> String {
+    let _ = modifiers;
+    let stat_skill_effect: Option<StatSkillEffectType> = (&effect.effect_type).into();
+    match effect.effect_type {
+        SkillEffectType::FlatDamage { damage, .. } => {
+            format!(
+                "Deal {}Damage",
+                damage
+                    .keys()
+                    .map(|damage_type| damage_type_str(Some(*damage_type)))
+                    .join(" ")
+            )
+        }
+        SkillEffectType::ApplyStatus { statuses, .. } => statuses
+            .into_iter()
+            .map(|status| {
+                let stat_status_type: StatStatusType = (&status.status_type).into();
+                let status_text = match status.status_type {
+                    StatusSpecs::StatModifier {
+                        stat,
+                        modifier,
+                        debuff: _,
+                    } => {
+                        format!(
+                            "Status {}",
+                            effects_tooltip::format_stat(&StatEffect {
+                                stat,
+                                modifier,
+                                value: 1.0,
+                                bypass_ignore: false
+                            })
+                        )
+                    }
+                    StatusSpecs::Trigger(trigger_specs) => trigger_text(*trigger_specs),
+                    StatusSpecs::Stun | StatusSpecs::DamageOverTime { .. } => {
+                        status_type_str(Some(&stat_status_type))
+                    }
+                };
+                format!(
+                    "{} {}",
+                    match status.cumulate {
+                        true => "Stack",
+                        false => "Apply",
+                    },
+                    status_text
+                )
+            })
+            .join(" "),
+        SkillEffectType::Resurrect | SkillEffectType::Restore { .. } => {
+            stat_skill_effect_type_str(stat_skill_effect.as_ref())
+        }
     }
 }

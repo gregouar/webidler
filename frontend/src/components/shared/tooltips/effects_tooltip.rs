@@ -205,7 +205,7 @@ pub fn status_type_value_str(status_type: Option<&StatStatusType>) -> String {
     }
 }
 
-fn stat_skill_effect_type_str(effect_type: Option<&StatSkillEffectType>) -> String {
+pub fn stat_skill_effect_type_str(effect_type: Option<&StatSkillEffectType>) -> String {
     match effect_type {
         Some(skill_effect_type) => match skill_effect_type {
             StatSkillEffectType::FlatDamage {} => "Hit".into(),

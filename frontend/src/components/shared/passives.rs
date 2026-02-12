@@ -13,7 +13,7 @@ use crate::{
         accessibility::AccessibilityContext,
         shared::tooltips::{
             effects_tooltip::{self, formatted_effects_list},
-            trigger_tooltip::format_trigger,
+            trigger_tooltip::{self, format_trigger},
         },
         ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
     },
@@ -584,12 +584,18 @@ pub fn NodeTooltipContent(
 
 pub fn node_text(node_specs: &PassiveNodeSpecs) -> String {
     format!(
-        "{} {}",
+        "{} {} {}",
         node_specs.name,
         node_specs
             .effects
             .iter()
             .map(effects_tooltip::format_stat)
+            .join(" "),
+        node_specs
+            .triggers
+            .iter()
+            .cloned()
+            .map(trigger_tooltip::trigger_text)
             .join(" ")
     )
 }
