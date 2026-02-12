@@ -73,6 +73,10 @@ fn status_color(purchase_status: PurchaseStatus, meta_status: MetaStatus) -> &'s
     }
 }
 
+fn node_size(node_specs: &PassiveNodeSpecs) -> i32 {
+    node_specs.size as i32 * 7
+}
+
 #[component]
 pub fn Node(
     node_specs: PassiveNodeSpecs,
@@ -216,31 +220,31 @@ pub fn Node(
                 .then(|| {
                     view! {
                         <circle
-                            r=20 + node_specs.size * 5 + 4
+                            r=20 + node_size(&node_specs) + 5
                             fill="black"
                             stroke=stroke
-                            stroke-width="1"
+                            stroke-width="2"
                             class=shadow_class
                         />
                     }
                 })}
 
             <circle
-                r=20 + node_specs.size * 5
+                r=20 + node_size(&node_specs)
                 fill=fill
                 stroke=stroke
                 stroke-width="3"
                 class=shadow_class
             />
 
-            <circle r=20 + node_specs.size * 5 fill="url(#node-inner-gradient)" />
+            <circle r=20 + node_size(&node_specs) fill="url(#node-inner-gradient)" />
 
             {(node_specs.socket)
                 .then(|| {
                     view! {
-                        <circle r=20 + node_specs.size * 5 fill="url(#socket-outer-gradient)" />
+                        <circle r=20 + node_size(&node_specs) fill="url(#socket-outer-gradient)" />
                         <circle
-                            r=14 + node_specs.size * 5
+                            r=14 + node_size(&node_specs)
                             fill="url(#socket-inner-gradient)"
                             stroke="none"
                         />
@@ -263,16 +267,15 @@ pub fn Node(
                             view! {
                                 <image
                                     href=img_asset(&node_specs.icon)
-                                    x=-(24 + node_specs.size as i32 * 10) / 2
-                                    y=-(24 + node_specs.size as i32 * 10) / 2
-                                    width=24 + node_specs.size * 10
-                                    height=24 + node_specs.size * 10
+                                    x=-12 - node_size(&node_specs)
+                                    y=-12 - node_size(&node_specs)
+                                    width=24 + node_size(&node_specs) * 2
+                                    height=24 + node_size(&node_specs) * 2
                                     class="group-active:scale-90 group-active:brightness-100
                                     xl:drop-shadow-[2px_2px_2px_black]"
                                     style=move || {
                                         format!(
                                             "pointer-events: none;
-                                            image-rendering: pixelated; 
                                             filter: {} {}",
                                             icon_filter(),
                                             invert_filter,
@@ -288,7 +291,7 @@ pub fn Node(
                 .then(|| {
                     view! {
                         <circle
-                            r=14 + node_specs.size * 5
+                            r=14 + node_size(&node_specs)
                             fill="none"
                             stroke="rgb(80, 80, 80)"
                             stroke-width="1"
