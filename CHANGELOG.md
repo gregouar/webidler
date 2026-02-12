@@ -13,6 +13,7 @@ Features:
 Content:
 
 - Added new magic affixes: added evade chance (boots & cloaks).
+- Added new magic affixes: increased chance to apply status effects (gloves).
 - Added new magic affixes: massive increase in Spell Damage at the cost of more Mana (amulets, cloaks & rings).
 - Added new magic affixes: massive increase in Attack Damage at the cost of Attack Speed (amulets, cloaks & rings).
 - Added tier 7 base items.

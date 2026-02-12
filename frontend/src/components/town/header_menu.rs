@@ -86,7 +86,7 @@ pub fn HeaderMenu() -> impl IntoView {
     };
 
     Effect::new(move || {
-        if events_context.key_pressed(Key::Character('f')) {
+        if events_context.key_pressed(Key::Character('r')) {
             open_forge()
         }
     });
@@ -103,7 +103,7 @@ pub fn HeaderMenu() -> impl IntoView {
     };
 
     Effect::new(move || {
-        if events_context.key_pressed(Key::Character('a')) {
+        if events_context.key_pressed(Key::Character('p')) {
             open_ascend()
         }
     });
