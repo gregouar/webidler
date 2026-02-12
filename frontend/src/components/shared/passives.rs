@@ -1,3 +1,4 @@
+use itertools::Itertools;
 use leptos::{html::*, prelude::*};
 
 use std::sync::Arc;
@@ -85,6 +86,7 @@ pub fn Node(
     show_upgrade: bool,
     on_click: impl Fn() + Send + Sync + 'static,
     on_right_click: impl Fn() + Send + Sync + 'static,
+    #[prop(optional, into)] search_node: Option<Signal<Option<String>>>,
 ) -> impl IntoView {
     let fill = match node_specs.node_type {
         PassiveNodeType::Attack => "#8b1e1e",
@@ -103,6 +105,17 @@ pub fn Node(
     };
     let tooltip_context: Option<DynamicTooltipContext> = use_context();
     let accessibility: Option<AccessibilityContext> = use_context();
+
+    let node_text = node_text(&node_specs).to_lowercase();
+
+    let highlight = Memo::new(move |_| {
+        search_node
+            .map(|search_node| match search_node.read().as_ref() {
+                Some(searched_node) => node_text.contains(&searched_node.to_lowercase()),
+                None => false,
+            })
+            .unwrap_or_default()
+    });
 
     let node_status = move || node_status.try_get().unwrap_or_default();
 
@@ -181,6 +194,8 @@ pub fn Node(
         false => "invert(1)",
     };
 
+    let node_size = node_size(&node_specs);
+
     view! {
         <g
             transform=format!("translate({}, {})", node_specs.x * 10.0, -node_specs.y * 10.0)
@@ -220,7 +235,7 @@ pub fn Node(
                 .then(|| {
                     view! {
                         <circle
-                            r=20 + node_size(&node_specs) + 5
+                            r=20 + node_size + 5
                             fill="black"
                             stroke=stroke
                             stroke-width="2"
@@ -229,25 +244,15 @@ pub fn Node(
                     }
                 })}
 
-            <circle
-                r=20 + node_size(&node_specs)
-                fill=fill
-                stroke=stroke
-                stroke-width="3"
-                class=shadow_class
-            />
+            <circle r=20 + node_size fill=fill stroke=stroke stroke-width="3" class=shadow_class />
 
-            <circle r=20 + node_size(&node_specs) fill="url(#node-inner-gradient)" />
+            <circle r=20 + node_size fill="url(#node-inner-gradient)" />
 
             {(node_specs.socket)
                 .then(|| {
                     view! {
-                        <circle r=20 + node_size(&node_specs) fill="url(#socket-outer-gradient)" />
-                        <circle
-                            r=14 + node_size(&node_specs)
-                            fill="url(#socket-inner-gradient)"
-                            stroke="none"
-                        />
+                        <circle r=20 + node_size fill="url(#socket-outer-gradient)" />
+                        <circle r=14 + node_size fill="url(#socket-inner-gradient)" stroke="none" />
                         <text
                             text-anchor="middle"
                             dominant-baseline="central"
@@ -267,10 +272,10 @@ pub fn Node(
                             view! {
                                 <image
                                     href=img_asset(&node_specs.icon)
-                                    x=-12 - node_size(&node_specs)
-                                    y=-12 - node_size(&node_specs)
-                                    width=24 + node_size(&node_specs) * 2
-                                    height=24 + node_size(&node_specs) * 2
+                                    x=-12 - node_size
+                                    y=-12 - node_size
+                                    width=24 + node_size * 2
+                                    height=24 + node_size * 2
                                     class="group-active:scale-90 group-active:brightness-100
                                     xl:drop-shadow-[2px_2px_2px_black]"
                                     style=move || {
@@ -291,13 +296,33 @@ pub fn Node(
                 .then(|| {
                     view! {
                         <circle
-                            r=14 + node_size(&node_specs)
+                            r=14 + node_size
                             fill="none"
                             stroke="rgb(80, 80, 80)"
                             stroke-width="1"
                         />
                     }
                 })}
+
+            {move || {
+                highlight
+                    .get()
+                    .then(|| {
+                        view! {
+                            <circle
+                                r=26 + node_size
+                                class="
+                                animate-pulse
+                                fill-fuchsia-300/40
+                                stroke-fuchsia-400
+                                stroke-[3]
+                                pointer-events-none
+                                "
+                                style="filter: none;"
+                            />
+                        }
+                    })
+            }}
         </g>
     }
 }
@@ -549,4 +574,16 @@ pub fn NodeTooltipContent(
         {locked_text}
         {upgrade_text}
     }
+}
+
+pub fn node_text(node_specs: &PassiveNodeSpecs) -> String {
+    format!(
+        "{} {}",
+        node_specs.name,
+        node_specs
+            .effects
+            .iter()
+            .map(effects_tooltip::format_stat)
+            .join(" ")
+    )
 }

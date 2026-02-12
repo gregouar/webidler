@@ -15,21 +15,18 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext,
-    backend_client::BackendClient,
-    shared::{
+    auth::AuthContext, backend_client::BackendClient, events::{Key,EventsContext}, shared::{
         passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
         resources::ShardsCounter,
-    },
-    town::TownContext,
-    ui::{
+    }, town::TownContext, ui::{
         buttons::{MenuButton, TabButton},
         card::{Card, CardHeader, CardInset},
         confirm::ConfirmContext,
         menu_panel::MenuPanel,
+        input::Input,
         pannable::Pannable,
         toast::*,
-    },
+    }
 };
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -79,6 +76,24 @@ pub fn PassivesPanel(
     });
 
     let active_tab = RwSignal::new(PassivesTab::Ascend);
+    
+    let search_node = RwSignal::new(None);
+    let search_node_ref = NodeRef::<leptos::html::Input>::new();
+
+    
+    Effect::new({
+        let events_context: EventsContext = expect_context();
+        move || {
+            if events_context.key_pressed(Key::Ctrl)  && events_context.key_pressed(Key::Character('f'))
+                    && let Some(input) = search_node_ref.get()
+                {
+                    input.focus().unwrap();
+                    input.select();
+                }
+            
+        }
+    });
+
 
     view! {
         <MenuPanel open=open>
@@ -106,6 +121,18 @@ pub fn PassivesPanel(
 
                         <div class="flex-1"></div>
 
+                        <div class="flex gap-2 ">
+                            <Input
+                                node_ref=search_node_ref
+                                id="search_node"
+                                input_type="text"
+                                placeholder="Search for node..."
+                                bind=search_node
+                            />
+                        </div>
+
+                        <div class="flex-1"></div>
+
                         {move || match active_tab.get() {
                             PassivesTab::Ascend => {
                                 view! {
@@ -129,6 +156,7 @@ pub fn PassivesPanel(
                             active_tab
                             passives_tree_ascension
                             passives_tree_build
+                            search_node
                             ascension_cost
                             view_only
                         />
@@ -491,6 +519,7 @@ fn ResetBuildButton(passives_tree_build: RwSignal<PurchasedNodes>) -> impl IntoV
 #[component]
 fn PassiveSkillTree(
     active_tab: RwSignal<PassivesTab>,
+    search_node: RwSignal<Option<String>>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     passives_tree_build: RwSignal<PurchasedNodes>,
     ascension_cost: RwSignal<f64>,
@@ -580,6 +609,7 @@ fn PassiveSkillTree(
                     passives_tree_build
                     selected_socket_node
                     active_tab
+                    search_node
                     view_only
                 />
             </For>
@@ -594,9 +624,10 @@ fn AscendNode(
     points_available: Memo<f64>,
     ascension_cost: RwSignal<f64>,
     active_tab: RwSignal<PassivesTab>,
+    selected_socket_node: RwSignal<Option<PassiveNodeId>>,
+    search_node: RwSignal<Option<String>>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     passives_tree_build: RwSignal<PurchasedNodes>,
-    selected_socket_node: RwSignal<Option<PassiveNodeId>>,
     view_only: bool,
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
@@ -848,6 +879,7 @@ fn AscendNode(
                     on_click=purchase
                     on_right_click=refund
                     show_upgrade=true
+                    search_node
                 />
             }
         }}

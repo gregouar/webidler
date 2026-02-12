@@ -453,7 +453,7 @@
         "icon": "passives/surprised_skull.svg",
         "x": -105.0,
         "y": 122.5,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Storm",
         "effects": [
@@ -480,7 +480,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 30.0
+            "value": 45.0
           }
         ],
         "triggers": [],
@@ -509,7 +509,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 3,
@@ -858,8 +858,8 @@
       "12a04baf-3e4e-49ee-8f9e-746eb6602673": {
         "name": "Damage over Time",
         "icon": "passives/damage_over_time.svg",
-        "x": 135.0,
-        "y": -65.0,
+        "x": 132.5,
+        "y": -70.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Status",
@@ -2464,33 +2464,6 @@
         "max_upgrade_level": 3,
         "socket": false
       },
-      "37d4347b-1464-47ce-96e0-16b69bde8967": {
-        "name": "Maximum Life",
-        "icon": "passives/life.svg",
-        "x": 212.5,
-        "y": -120.0,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Life",
-        "effects": [
-          {
-            "stat": "Life",
-            "modifier": "Multiplier",
-            "value": 4.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": "Life",
-            "modifier": "Multiplier",
-            "value": 2.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
       "3911490e-aaa4-4c67-a2e4-6e50e19cfba1": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -2658,33 +2631,6 @@
             },
             "modifier": "Multiplier",
             "value": 10.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
-      "39dbf52f-d341-4fc4-bc32-bdb0459d1184": {
-        "name": "Maximum Mana",
-        "icon": "passives/mana.svg",
-        "x": 190.0,
-        "y": -130.0,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Mana",
-        "effects": [
-          {
-            "stat": "Mana",
-            "modifier": "Multiplier",
-            "value": 4.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": "Mana",
-            "modifier": "Multiplier",
-            "value": 2.0
           }
         ],
         "max_upgrade_level": 3,
@@ -5196,7 +5142,7 @@
         "socket": false
       },
       "6afbaa18-6923-4d9f-af6e-d0edf482b786": {
-        "name": "Poison Duration",
+        "name": "Debilitating Poison?",
         "icon": "passives/xxxx.svg",
         "x": 80.0,
         "y": -142.5,
@@ -6413,7 +6359,7 @@
         "socket": false
       },
       "7e10ea6e-22f5-43f9-8c49-9df5d664e87a": {
-        "name": "Damage over Time",
+        "name": "Corrosive Poison?",
         "icon": "passives/xxx.svg",
         "x": -80.0,
         "y": -142.5,
@@ -8517,38 +8463,12 @@
         "max_upgrade_level": 3,
         "socket": false
       },
-      "a7e783fa-fc8a-4554-8aad-d5f4055c3b5d": {
-        "name": "Curse Duration",
-        "icon": "passives/dripping_star.svg",
-        "x": 187.5,
-        "y": -140.0,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Utility",
-        "effects": [
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": null,
-                "skill_type": "Curse"
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
       "a8c6e35c-bd30-4211-9e6d-65d59ad7e375": {
         "name": "Damage against Stunned Enemies",
         "icon": "passives/surprised_skull.svg",
         "x": 82.5,
         "y": 117.5,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Storm",
         "effects": [
@@ -8575,7 +8495,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 30.0
+            "value": 45.0
           }
         ],
         "triggers": [],
@@ -8604,7 +8524,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 3,
@@ -8929,33 +8849,6 @@
             },
             "modifier": "Multiplier",
             "value": 5.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
-      "aecd2245-12bd-4bc3-9d60-192a511b1a30": {
-        "name": "Mana Regeneration",
-        "icon": "passives/mana_regen.svg",
-        "x": 197.5,
-        "y": -135.0,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Mana",
-        "effects": [
-          {
-            "stat": "ManaRegen",
-            "modifier": "Flat",
-            "value": 3.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": "ManaRegen",
-            "modifier": "Flat",
-            "value": 1.0
           }
         ],
         "max_upgrade_level": 3,
@@ -9445,33 +9338,6 @@
             "stat": "GoldFind",
             "modifier": "Multiplier",
             "value": 10.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
-      "c0e8367f-3162-4c78-9f77-d87690a2dd34": {
-        "name": "Maximum Life",
-        "icon": "passives/life.svg",
-        "x": 217.5,
-        "y": -110.0,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Life",
-        "effects": [
-          {
-            "stat": "Life",
-            "modifier": "Multiplier",
-            "value": 4.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": "Life",
-            "modifier": "Multiplier",
-            "value": 2.0
           }
         ],
         "max_upgrade_level": 3,
@@ -10968,33 +10834,6 @@
             },
             "modifier": "Multiplier",
             "value": 10.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
-      "d3df415a-a012-493a-b741-e14a7c56c67a": {
-        "name": "Maximum Life",
-        "icon": "passives/life.svg",
-        "x": 210.0,
-        "y": -102.5,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Life",
-        "effects": [
-          {
-            "stat": "Life",
-            "modifier": "Multiplier",
-            "value": 4.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": "Life",
-            "modifier": "Multiplier",
-            "value": 2.0
           }
         ],
         "max_upgrade_level": 3,
@@ -13311,8 +13150,8 @@
       "fda3dba6-13f7-4db4-9178-a4aedd10969b": {
         "name": "Damage over Time",
         "icon": "passives/damage_over_time.svg",
-        "x": 137.5,
-        "y": -82.5,
+        "x": 140.0,
+        "y": -95.0,
         "size": 1,
         "initial_node": false,
         "node_type": "Status",
@@ -14887,14 +14726,6 @@
       {
         "from": "77d9af74-3e5d-4263-b3e0-1134c10fda2e",
         "to": "1bd221d6-6b67-416c-8269-db62cdbbebab"
-      },
-      {
-        "from": "37d4347b-1464-47ce-96e0-16b69bde8967",
-        "to": "c0e8367f-3162-4c78-9f77-d87690a2dd34"
-      },
-      {
-        "from": "c0e8367f-3162-4c78-9f77-d87690a2dd34",
-        "to": "d3df415a-a012-493a-b741-e14a7c56c67a"
       },
       {
         "from": "3d3833aa-643d-495b-847f-ebafafe02acb",

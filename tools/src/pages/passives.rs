@@ -6,8 +6,7 @@ use std::{
 use frontend::components::{
     events::{EventsContext, Key},
     shared::{
-        passives::{Connection, MetaStatus, Node, NodeStatus, NodeTooltipContent, PurchaseStatus},
-        tooltips::effects_tooltip,
+        passives::{Connection, MetaStatus, Node, NodeStatus, NodeTooltipContent, PurchaseStatus, node_text},
     },
     ui::{
         buttons::{MenuButton, TabButton},
@@ -19,7 +18,6 @@ use frontend::components::{
         tooltip::DynamicTooltip,
     },
 };
-use itertools::Itertools;
 use leptos::{html::*, prelude::*};
 use leptos_use::{WatchDebouncedOptions, watch_debounced_with_options};
 use serde::Serialize;
@@ -607,10 +605,12 @@ fn ToolNode(
                     show_upgrade=true
                     on:mousedown=on_mousedown.clone()
                     on:mouseup=on_mouseup.clone()
+                    search_node
                 />
             }
         }}
     }
+
 }
 
 #[component]
@@ -1193,16 +1193,4 @@ fn redo_history(
     if let Some(specs) = passives_history_tracker.write().redo() {
         passives_tree_specs.set(specs.clone());
     }
-}
-
-fn node_text(node_specs: &PassiveNodeSpecs) -> String {
-    format!(
-        "{} {}",
-        node_specs.name,
-        node_specs
-            .effects
-            .iter()
-            .map(effects_tooltip::format_stat)
-            .join(" ")
-    )
 }
