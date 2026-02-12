@@ -423,7 +423,7 @@ impl From<&SkillEffectType> for Option<StatSkillEffectType> {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum LuckyRollType {
     Damage {
         #[serde(default)]
@@ -432,7 +432,10 @@ pub enum LuckyRollType {
     Block,
     Evade(Option<DamageType>),
     CritChance,
-    SuccessChance,
+    SuccessChance {
+        #[serde(default)]
+        effect_type: Option<StatSkillEffectType>,
+    },
     // Restore,
     // StatusDuration,
     // StatusValue,

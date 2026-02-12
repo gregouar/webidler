@@ -85,18 +85,23 @@ pub fn damage_over_time_type_str(damage_type: Option<DamageType>) -> &'static st
     }
 }
 
-pub fn lucky_roll_str(roll_type: LuckyRollType) -> String {
+pub fn lucky_roll_str(roll_type: &LuckyRollType) -> String {
     match roll_type {
         LuckyRollType::Damage { damage_type } => {
-            format!("{}Damage", damage_type_str(damage_type))
+            format!("{}Damage", damage_type_str(*damage_type))
         }
         LuckyRollType::Block => "Chance to Block".into(),
         LuckyRollType::Evade(damage_type) => format!(
-            "Chance to Evade {}Damage over Time",
-            damage_type_str(damage_type)
+            "Chance to Evade {}",
+            damage_over_time_type_str(*damage_type)
         ),
         LuckyRollType::CritChance => "Chance to Critical Hit".into(),
-        LuckyRollType::SuccessChance => "Success Chance".into(),
+        LuckyRollType::SuccessChance { effect_type } => {
+            format!(
+                "Success Chance to {}",
+                stat_skill_effect_type_str(effect_type.as_ref())
+            )
+        }
     }
 }
 
@@ -453,7 +458,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::Lucky {
             skill_type,
             roll_type,
-        } => skill_type_str(*skill_type).to_string() + &lucky_roll_str(*roll_type),
+        } => skill_type_str(*skill_type).to_string() + &lucky_roll_str(roll_type),
         StatType::StatConverter(stat_converter_specs) => {
             if stat_converter_specs.is_extra {
                 format!(
@@ -699,7 +704,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             skill_type,
             roll_type,
         } => {
-            let luck_type = skill_type_str(*skill_type).to_string() + &lucky_roll_str(*roll_type);
+            let luck_type = skill_type_str(*skill_type).to_string() + &lucky_roll_str(roll_type);
             let unwrap_value = value.unwrap_or_default();
             if unwrap_value >= 100.0 {
                 format!("{luck_type} is Lucky",)

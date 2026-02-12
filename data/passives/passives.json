@@ -130,27 +130,24 @@
         "socket": false
       },
       "0443aea6-75f8-4e67-b4fd-32f82621a7ed": {
-        "name": "Stun Chance",
-        "icon": "passives/star_swirl.svg",
+        "name": "Blessings Power",
+        "icon": "passives/holy_grail.svg",
         "x": -62.5,
         "y": 152.5,
         "size": 0,
         "initial_node": false,
-        "node_type": "Storm",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "SuccessChance": {
-                "skill_type": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": "Stun"
-                  }
-                }
+              "StatusPower": {
+                "status_type": null,
+                "skill_type": "Blessing",
+                "min_max": null
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -158,17 +155,14 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SuccessChance": {
-                "skill_type": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": "Stun"
-                  }
-                }
+              "StatusPower": {
+                "status_type": null,
+                "skill_type": "Blessing",
+                "min_max": null
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -308,37 +302,6 @@
         "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": true
-      },
-      "086c62f5-c0b3-4782-80f9-16a2635b54fe": {
-        "name": "Critical Hit Damage",
-        "icon": "passives/critical_damage.svg",
-        "x": 190.0,
-        "y": 55.0,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Critical",
-        "effects": [
-          {
-            "stat": {
-              "CritDamage": null
-            },
-            "modifier": "Multiplier",
-            "value": 30.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "CritDamage": null
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
       },
       "08853117-9798-462c-801b-5ae67f80736e": {
         "name": "Damage over Time Efficacity",
@@ -555,9 +518,9 @@
       "0d3e0bf2-3d3a-4444-9765-4fe6955ad0ea": {
         "name": "Curse Effects",
         "icon": "passives/cursed_star.svg",
-        "x": 92.5,
-        "y": -70.0,
-        "size": 0,
+        "x": 140.0,
+        "y": -77.5,
+        "size": 1,
         "initial_node": false,
         "node_type": "Utility",
         "effects": [
@@ -570,7 +533,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -585,7 +548,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -625,6 +588,61 @@
             },
             "modifier": "Multiplier",
             "value": 5.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "0d8871b2-5eba-4bf5-8a71-e246fad4ffa8": {
+        "name": "Open Wound Chance",
+        "icon": "passives/sword_wound.svg",
+        "x": -135.0,
+        "y": -112.5,
+        "size": 1,
+        "initial_node": false,
+        "node_type": "Physical",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "Trigger": {
+                        "trigger_id": "open_wound",
+                        "trigger_description": "Open Wound"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 30.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "Trigger": {
+                        "trigger_id": "open_wound",
+                        "trigger_description": "Open Wound"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 3,
@@ -799,27 +817,24 @@
         "socket": false
       },
       "11879773-4e2a-49b8-8413-fd50a0ca3e0f": {
-        "name": "Stun Chance",
-        "icon": "passives/star_swirl.svg",
+        "name": "Blessings Power",
+        "icon": "passives/holy_grail.svg",
         "x": -47.5,
         "y": 137.5,
         "size": 0,
         "initial_node": false,
-        "node_type": "Storm",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "SuccessChance": {
-                "skill_type": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": "Stun"
-                  }
-                }
+              "StatusPower": {
+                "status_type": null,
+                "skill_type": "Blessing",
+                "min_max": null
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -827,17 +842,14 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SuccessChance": {
-                "skill_type": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": "Stun"
-                  }
-                }
+              "StatusPower": {
+                "status_type": null,
+                "skill_type": "Blessing",
+                "min_max": null
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -1093,8 +1105,8 @@
       "1a450b19-f9c2-404f-a042-f9527f8cbbc7": {
         "name": "Critical Hit Damage",
         "icon": "passives/critical_damage.svg",
-        "x": 200.0,
-        "y": 55.0,
+        "x": 145.0,
+        "y": 35.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -1310,27 +1322,24 @@
         "socket": false
       },
       "1e6a007d-2c82-4837-9247-d5996411ea62": {
-        "name": "Stun Chance",
-        "icon": "passives/star_swirl.svg",
+        "name": "Blessings Power",
+        "icon": "passives/holy_grail.svg",
         "x": -72.5,
         "y": 130.0,
         "size": 0,
         "initial_node": false,
-        "node_type": "Storm",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "SuccessChance": {
-                "skill_type": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": "Stun"
-                  }
-                }
+              "StatusPower": {
+                "status_type": null,
+                "skill_type": "Blessing",
+                "min_max": null
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -1338,17 +1347,14 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SuccessChance": {
-                "skill_type": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": "Stun"
-                  }
-                }
+              "StatusPower": {
+                "status_type": null,
+                "skill_type": "Blessing",
+                "min_max": null
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -1539,45 +1545,6 @@
         "max_upgrade_level": null,
         "socket": true
       },
-      "23444746-57f6-45c8-a72f-cd8eaa3bd3e0": {
-        "name": "Blessings Power",
-        "icon": "passives/holy_grail.svg",
-        "x": -135.0,
-        "y": 147.5,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Status",
-        "effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "status_type": null,
-                "skill_type": "Blessing",
-                "min_max": null
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "status_type": null,
-                "skill_type": "Blessing",
-                "min_max": null
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 5.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
       "23952325-ca42-4ec0-b4c5-d47694f3ae86": {
         "name": "Physical Damage",
         "icon": "passives/mace_head.svg",
@@ -1620,8 +1587,8 @@
       "23a447a9-d6ec-4334-87c0-490fddfb39e5": {
         "name": "Blessing Duration",
         "icon": "passives/unlit_candelabra.svg",
-        "x": -155.0,
-        "y": -52.5,
+        "x": -165.0,
+        "y": -57.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Status",
@@ -1847,8 +1814,8 @@
       "27516530-2e79-4c79-a6a8-dfdf1f05d7ba": {
         "name": "Curse Effects",
         "icon": "passives/cursed_star.svg",
-        "x": 102.5,
-        "y": -77.5,
+        "x": 135.0,
+        "y": -87.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Utility",
@@ -1972,9 +1939,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -1994,9 +1959,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -2145,9 +2108,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -2167,9 +2128,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -2279,8 +2238,8 @@
       "30c0d9b9-1137-4f95-8c38-6d33efc98822": {
         "name": "Curse Speed",
         "icon": "passives/trap_mask.svg",
-        "x": 102.5,
-        "y": -155.0,
+        "x": 175.0,
+        "y": 70.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Utility",
@@ -3106,8 +3065,8 @@
       "44824924-a10a-4a0d-98f5-5b1414d1381b": {
         "name": "Critical Hit Damage",
         "icon": "passives/critical_damage.svg",
-        "x": 190.0,
-        "y": 55.0,
+        "x": 145.0,
+        "y": 52.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Critical",
@@ -3314,6 +3273,61 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "47fae422-2a59-43d7-88bd-93f91ddcb01f": {
+        "name": "Open Wound Chance",
+        "icon": "passives/sword_wound.svg",
+        "x": -120.0,
+        "y": -107.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Physical",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "Trigger": {
+                        "trigger_id": "open_wound",
+                        "trigger_description": "Open Wound"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "Trigger": {
+                        "trigger_id": "open_wound",
+                        "trigger_description": "Open Wound"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "4827bf74-8168-422a-8623-58eec1307b73": {
         "name": "Gold",
         "icon": "passives/gold.svg",
@@ -3465,8 +3479,8 @@
       "49a12154-6920-470b-b8ac-7074963cd554": {
         "name": "Curse Effects",
         "icon": "passives/cursed_star.svg",
-        "x": 97.5,
-        "y": -87.5,
+        "x": 115.0,
+        "y": -95.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Utility",
@@ -3619,24 +3633,27 @@
         "socket": false
       },
       "4cc48af3-1288-4ba2-8aff-e82fd623e6cf": {
-        "name": "Blessings Power",
-        "icon": "passives/holy_grail.svg",
+        "name": "Stun Chance",
+        "icon": "passives/star_swirl.svg",
         "x": -115.0,
         "y": 137.5,
         "size": 0,
         "initial_node": false,
-        "node_type": "Status",
+        "node_type": "Storm",
         "effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": null,
-                "skill_type": "Blessing",
-                "min_max": null
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": "Stun"
+                  }
+                }
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3644,14 +3661,17 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": null,
-                "skill_type": "Blessing",
-                "min_max": null
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": "Stun"
+                  }
+                }
               }
             },
             "modifier": "Multiplier",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -3848,8 +3868,8 @@
       "52f99688-5acc-486c-95e5-e595a61e0755": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": 90.0,
-        "y": 67.5,
+        "x": 95.0,
+        "y": 62.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Status",
@@ -3887,7 +3907,7 @@
         "icon": "passives/threat_damage.svg",
         "x": -105.0,
         "y": -127.5,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Attack",
         "effects": [
@@ -3908,7 +3928,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3931,7 +3951,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -4038,9 +4058,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -4060,9 +4078,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -4133,8 +4149,8 @@
       "58538882-d58c-4956-bdb3-c8e9d6d0ed89": {
         "name": "Curse Mana Cost",
         "icon": "passives/death_note.svg",
-        "x": 110.0,
-        "y": -140.0,
+        "x": 175.0,
+        "y": 50.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Utility",
@@ -4400,24 +4416,27 @@
         "socket": false
       },
       "5d4d334b-962b-49ea-8968-c289ad08bffd": {
-        "name": "Blessings Power",
-        "icon": "passives/holy_grail.svg",
+        "name": "Stun Chance",
+        "icon": "passives/star_swirl.svg",
         "x": -97.5,
         "y": 160.0,
         "size": 0,
         "initial_node": false,
-        "node_type": "Status",
+        "node_type": "Storm",
         "effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": null,
-                "skill_type": "Blessing",
-                "min_max": null
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": "Stun"
+                  }
+                }
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -4425,14 +4444,17 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": null,
-                "skill_type": "Blessing",
-                "min_max": null
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": "Stun"
+                  }
+                }
               }
             },
             "modifier": "Multiplier",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -4496,8 +4518,8 @@
       "5ee192ea-49d6-4923-a857-0d5a21498f53": {
         "name": "Armor",
         "icon": "passives/armor.svg",
-        "x": -120.0,
-        "y": -97.5,
+        "x": -75.0,
+        "y": -177.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -4609,8 +4631,8 @@
       "602058b2-ffaf-499a-aa41-02fd8e54da75": {
         "name": "Blessing Mana Cost",
         "icon": "passives/prayer_beads.svg",
-        "x": -137.5,
-        "y": -55.0,
+        "x": -170.0,
+        "y": -47.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Status",
@@ -5094,8 +5116,8 @@
       "69ec7950-0800-400d-9f45-17a1590a3fe7": {
         "name": "Attack Speed",
         "icon": "passives/attack_speed.svg",
-        "x": -117.5,
-        "y": -35.0,
+        "x": -115.0,
+        "y": -40.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -5304,45 +5326,6 @@
         "max_upgrade_level": null,
         "socket": false
       },
-      "6e379cdf-0c6b-4c24-a669-1864686ac069": {
-        "name": "Maximum Damage",
-        "icon": "passives/thrust.svg",
-        "x": -137.5,
-        "y": -125.0,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Attack",
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "damage_type": null,
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 15.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "damage_type": null,
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 5.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
       "6f7434a6-2cfe-4325-8231-481f3792a47e": {
         "name": "Unstable Power",
         "icon": "passives/unstable_orb.svg",
@@ -5442,8 +5425,8 @@
       "711a2d12-e8db-4e02-b8fe-8b531a981d37": {
         "name": "Blessing Mana Cost",
         "icon": "passives/prayer_beads.svg",
-        "x": -135.0,
-        "y": -45.0,
+        "x": -182.5,
+        "y": -52.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Status",
@@ -5914,9 +5897,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -5936,9 +5917,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -6078,9 +6057,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -6100,9 +6077,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -6361,8 +6336,8 @@
       "7d81dac1-de3c-4a4d-8e96-7f31ff042e5e": {
         "name": "Devotion",
         "icon": "passives/kneeling.svg",
-        "x": -142.5,
-        "y": -65.0,
+        "x": -157.5,
+        "y": -47.5,
         "size": 2,
         "initial_node": false,
         "node_type": "Status",
@@ -6422,7 +6397,7 @@
         "icon": "passives/damage_over_time.svg",
         "x": -75.0,
         "y": -137.5,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Status",
         "effects": [
@@ -6439,7 +6414,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -6458,7 +6433,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -6577,6 +6552,61 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "8006615c-85c9-4d08-8330-13138fd6e918": {
+        "name": "Open Wound Chance",
+        "icon": "passives/sword_wound.svg",
+        "x": -117.5,
+        "y": -92.5,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Physical",
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "Trigger": {
+                        "trigger_id": "open_wound",
+                        "trigger_description": "Open Wound"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_type": {
+                      "Trigger": {
+                        "trigger_id": "open_wound",
+                        "trigger_description": "Open Wound"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "8006a833-21d3-4055-a4c3-ef2126a5aabc": {
         "name": "Maximum Life",
         "icon": "passives/life.svg",
@@ -6607,8 +6637,8 @@
       "8040b78c-e0fd-4476-97b7-945ed6937913": {
         "name": "Maximum Damage",
         "icon": "passives/thrust.svg",
-        "x": -155.0,
-        "y": -107.5,
+        "x": -130.0,
+        "y": -80.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -6834,6 +6864,31 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "84764c3f-3ec6-4c8a-821b-b56850cbc188": {
+        "name": "Curse Mana Cost",
+        "icon": "passives/death_note.svg",
+        "x": 190.0,
+        "y": 50.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "ManaCost": {
+                "skill_type": "Curse"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -11.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "853715cd-ce16-4b22-96cb-ba6d2d83e3e7": {
         "name": "Lucky Start",
         "icon": "passives/pouch.svg",
@@ -7054,8 +7109,8 @@
       "87a9b174-7941-457f-9d24-08212127d7cc": {
         "name": "Bleed Damage",
         "icon": "passives/bloody_sword.svg",
-        "x": -182.5,
-        "y": -65.0,
+        "x": -160.0,
+        "y": -80.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Physical",
@@ -7600,8 +7655,8 @@
       "92324580-1289-4322-8169-0c5548abf7cc": {
         "name": "Critical Hit Damage",
         "icon": "passives/critical_damage.svg",
-        "x": 185.0,
-        "y": 65.0,
+        "x": 147.5,
+        "y": 67.5,
         "size": 1,
         "initial_node": false,
         "node_type": "Critical",
@@ -8080,8 +8135,8 @@
       "9e32669b-6e90-4021-8c9a-a5d1d2a03387": {
         "name": "Armor",
         "icon": "passives/armor.svg",
-        "x": -110.0,
-        "y": -97.5,
+        "x": -50.0,
+        "y": -167.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Armor",
@@ -8301,8 +8356,8 @@
       "a45aec91-23fa-4c2e-a9b9-e70bc2916a0f": {
         "name": "Attack Damage",
         "icon": "passives/attack.svg",
-        "x": -117.5,
-        "y": 35.0,
+        "x": -115.0,
+        "y": 40.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -8340,8 +8395,8 @@
       "a49e2af1-c0e1-417b-912c-0bf8aae48042": {
         "name": "Bleed Damage",
         "icon": "passives/bloody_sword.svg",
-        "x": -190.0,
-        "y": -55.0,
+        "x": -140.0,
+        "y": -50.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Physical",
@@ -8445,8 +8500,8 @@
       "a7e783fa-fc8a-4554-8aad-d5f4055c3b5d": {
         "name": "Curse Duration",
         "icon": "passives/dripping_star.svg",
-        "x": 112.5,
-        "y": -152.5,
+        "x": 187.5,
+        "y": -140.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Utility",
@@ -8716,9 +8771,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -8738,9 +8791,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -8825,8 +8876,8 @@
       "ae845698-b47f-47ca-bd07-8504a5eecf16": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": 102.5,
-        "y": 70.0,
+        "x": 105.0,
+        "y": 75.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Status",
@@ -8947,9 +8998,9 @@
       "b59ab706-e788-4501-8bc8-e55157d0edc5": {
         "name": "Armor",
         "icon": "passives/armor.svg",
-        "x": -127.5,
-        "y": -92.5,
-        "size": 0,
+        "x": -60.0,
+        "y": -185.0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Armor",
         "effects": [
@@ -8958,7 +9009,7 @@
               "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -8969,7 +9020,7 @@
               "Armor": null
             },
             "modifier": "Multiplier",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -9160,57 +9211,10 @@
         "max_upgrade_level": 3,
         "socket": false
       },
-      "bcbff801-5bc5-44af-a0f4-1e55461dbfc9": {
-        "name": "Bleed Damage",
-        "icon": "passives/bloody_sword.svg",
-        "x": -172.5,
-        "y": -77.5,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Physical",
-        "effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
-                "skill_type": null,
-                "min_max": null
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 15.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
-                "skill_type": null,
-                "min_max": null
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 5.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
       "bd9786ee-ff44-40dd-9bdd-591d0903a074": {
         "name": "Effects Duration",
         "icon": "passives/duration.svg",
-        "x": 100.0,
+        "x": 95.0,
         "y": 85.0,
         "size": 0,
         "initial_node": false,
@@ -9524,9 +9528,9 @@
       "c28cd9d9-b681-4d72-9803-b3785c9e9dc5": {
         "name": "Damage on Maximum Life",
         "icon": "passives/muscle_up.svg",
-        "x": 62.5,
-        "y": -180.0,
-        "size": 0,
+        "x": 55.0,
+        "y": -182.5,
+        "size": 1,
         "initial_node": false,
         "node_type": "Life",
         "effects": [
@@ -9540,13 +9544,11 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
-            "value": 30.0
+            "value": 45.0
           }
         ],
         "triggers": [],
@@ -9562,13 +9564,11 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 3,
@@ -10205,9 +10205,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -10227,9 +10225,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -10455,7 +10451,7 @@
             "stat": {
               "Lucky": {
                 "skill_type": null,
-                "roll_type": "SuccessChance"
+                "roll_type": { "SuccessChance": {} }
               }
             },
             "modifier": "Flat",
@@ -10891,8 +10887,8 @@
       "d2f2c4e1-0a2e-4f62-bba3-a00fbe8374cb": {
         "name": "Damage on Maximum Life",
         "icon": "passives/muscle_up.svg",
-        "x": 55.0,
-        "y": -185.0,
+        "x": 60.0,
+        "y": -170.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -10907,9 +10903,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -10929,9 +10923,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -11148,9 +11140,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -11170,13 +11160,70 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
             "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
+      "d6af89ce-d578-44ac-9f1e-acb3df84117b": {
+        "name": "Heretism",
+        "icon": "passives/candle_skull.svg",
+        "x": 185.0,
+        "y": 60.0,
+        "size": 2,
+        "initial_node": false,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": null,
+                "skill_type": "Curse"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          },
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": null,
+                "skill_type": "Curse",
+                "min_max": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": null,
+                "skill_type": "Curse"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          },
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": null,
+                "skill_type": "Curse",
+                "min_max": null
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 3,
@@ -12179,8 +12226,8 @@
       "e8459dcb-3136-4d37-94dd-5a1ccc1a10d4": {
         "name": "Maximum Damage",
         "icon": "passives/thrust.svg",
-        "x": -152.5,
-        "y": -125.0,
+        "x": -150.0,
+        "y": -112.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Attack",
@@ -12382,9 +12429,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -12404,9 +12449,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -12419,8 +12462,8 @@
       "eb5d66c8-17cc-4812-bcda-c425f0941aea": {
         "name": "Twist the Knife",
         "icon": "passives/bleeding_eye.svg",
-        "x": -150.0,
-        "y": -90.0,
+        "x": -145.0,
+        "y": -80.0,
         "size": 2,
         "initial_node": false,
         "node_type": "Critical",
@@ -12608,8 +12651,8 @@
       "ef65ff62-73ba-4611-9465-7b69c14fc1ef": {
         "name": "Blessing Duration",
         "icon": "passives/unlit_candelabra.svg",
-        "x": -147.5,
-        "y": -35.0,
+        "x": -177.5,
+        "y": -62.5,
         "size": 0,
         "initial_node": false,
         "node_type": "Status",
@@ -12720,13 +12763,28 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
             "value": 80.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": "Max"
+                  }
+                },
+                "skill_type": null,
+                "conditions": ["MaximumLife"]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 40.0
           }
         ],
         "triggers": [],
@@ -12739,13 +12797,28 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
             "value": 40.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": "Max"
+                  }
+                },
+                "skill_type": null,
+                "conditions": ["MaximumLife"]
+              }
+            },
+            "modifier": "Multiplier",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 3,
@@ -12813,6 +12886,29 @@
         "max_upgrade_level": 3,
         "socket": false
       },
+      "f38a9d8c-d649-46e2-bcf5-e5285cc27c96": {
+        "name": "Curse Speed",
+        "icon": "passives/trap_mask.svg",
+        "x": 190.0,
+        "y": 70.0,
+        "size": 0,
+        "initial_node": false,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "Speed": "Curse"
+            },
+            "modifier": "Multiplier",
+            "value": 10.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [],
+        "max_upgrade_level": 3,
+        "socket": false
+      },
       "f39c8abe-6388-410c-8b45-416dbfe666ed": {
         "name": "Burn Chance",
         "icon": "passives/smoking_finger.svg",
@@ -12869,8 +12965,8 @@
       "f4702777-9239-47f1-9f71-f5fa7b10646b": {
         "name": "Damage on Maximum Life",
         "icon": "passives/muscle_up.svg",
-        "x": 52.5,
-        "y": -192.5,
+        "x": 67.5,
+        "y": -180.0,
         "size": 0,
         "initial_node": false,
         "node_type": "Life",
@@ -12885,9 +12981,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -12907,9 +13001,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -13081,37 +13173,6 @@
         "max_upgrade_level": 3,
         "socket": false
       },
-      "fc091b7a-1f70-45ce-90c1-244b02ce23c5": {
-        "name": "Critical Hit Chance",
-        "icon": "passives/critical_chance.svg",
-        "x": 135.0,
-        "y": 147.5,
-        "size": 0,
-        "initial_node": false,
-        "node_type": "Critical",
-        "effects": [
-          {
-            "stat": {
-              "CritChance": null
-            },
-            "modifier": "Multiplier",
-            "value": 20.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "CritChance": null
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
-          }
-        ],
-        "max_upgrade_level": 3,
-        "socket": false
-      },
       "fd4f4880-52d3-4d41-aaa4-df291390229c": {
         "name": "Poison Amplification",
         "icon": "passives/snake_spiral.svg",
@@ -13192,7 +13253,7 @@
         "icon": "passives/damage_over_time.svg",
         "x": 167.5,
         "y": -67.5,
-        "size": 0,
+        "size": 1,
         "initial_node": false,
         "node_type": "Status",
         "effects": [
@@ -13209,7 +13270,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -13228,7 +13289,7 @@
               }
             },
             "modifier": "Multiplier",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -14228,18 +14289,6 @@
         "to": "8040b78c-e0fd-4476-97b7-945ed6937913"
       },
       {
-        "from": "8040b78c-e0fd-4476-97b7-945ed6937913",
-        "to": "6e379cdf-0c6b-4c24-a669-1864686ac069"
-      },
-      {
-        "from": "7a7780b2-b680-4925-ac04-7f93e10a8093",
-        "to": "fc091b7a-1f70-45ce-90c1-244b02ce23c5"
-      },
-      {
-        "from": "fc091b7a-1f70-45ce-90c1-244b02ce23c5",
-        "to": "f104716b-c9b7-4200-aeb5-35de355dcfb9"
-      },
-      {
         "from": "dfcf089f-d02a-4d98-a751-61e7f67da41b",
         "to": "e805af8c-ef2f-46cf-87bd-933d4e7a706e"
       },
@@ -14394,10 +14443,6 @@
       {
         "from": "44824924-a10a-4a0d-98f5-5b1414d1381b",
         "to": "1a450b19-f9c2-404f-a042-f9527f8cbbc7"
-      },
-      {
-        "from": "1a450b19-f9c2-404f-a042-f9527f8cbbc7",
-        "to": "c57f2319-656a-4d1a-a50e-568eee84084b"
       },
       {
         "from": "93d9f067-e298-4271-a8a2-6f332aa115f5",
@@ -14832,14 +14877,6 @@
         "to": "fda3dba6-13f7-4db4-9178-a4aedd10969b"
       },
       {
-        "from": "875d806d-10e2-45cd-ac04-5fea19626672",
-        "to": "23444746-57f6-45c8-a72f-cd8eaa3bd3e0"
-      },
-      {
-        "from": "23444746-57f6-45c8-a72f-cd8eaa3bd3e0",
-        "to": "4cc48af3-1288-4ba2-8aff-e82fd623e6cf"
-      },
-      {
         "from": "4cc48af3-1288-4ba2-8aff-e82fd623e6cf",
         "to": "5d4d334b-962b-49ea-8968-c289ad08bffd"
       },
@@ -14952,20 +14989,84 @@
         "to": "29ba21ea-6046-46f2-8b86-29b1580a1710"
       },
       {
-        "from": "bcbff801-5bc5-44af-a0f4-1e55461dbfc9",
-        "to": "87a9b174-7941-457f-9d24-08212127d7cc"
-      },
-      {
-        "from": "eb5d66c8-17cc-4812-bcda-c425f0941aea",
-        "to": "bcbff801-5bc5-44af-a0f4-1e55461dbfc9"
-      },
-      {
         "from": "a49e2af1-c0e1-417b-912c-0bf8aae48042",
         "to": "ff32f6af-3088-4f9b-963b-d469ea869adb"
       },
       {
-        "from": "eb5d66c8-17cc-4812-bcda-c425f0941aea",
-        "to": "6e379cdf-0c6b-4c24-a669-1864686ac069"
+        "from": "8040b78c-e0fd-4476-97b7-945ed6937913",
+        "to": "eb5d66c8-17cc-4812-bcda-c425f0941aea"
+      },
+      {
+        "from": "8040b78c-e0fd-4476-97b7-945ed6937913",
+        "to": "a49e2af1-c0e1-417b-912c-0bf8aae48042"
+      },
+      {
+        "from": "87a9b174-7941-457f-9d24-08212127d7cc",
+        "to": "eb5d66c8-17cc-4812-bcda-c425f0941aea"
+      },
+      {
+        "from": "87a9b174-7941-457f-9d24-08212127d7cc",
+        "to": "e8459dcb-3136-4d37-94dd-5a1ccc1a10d4"
+      },
+      {
+        "from": "ef65ff62-73ba-4611-9465-7b69c14fc1ef",
+        "to": "870fb1bf-f4da-48aa-9f2c-a0e4390ae8af"
+      },
+      {
+        "from": "711a2d12-e8db-4e02-b8fe-8b531a981d37",
+        "to": "870fb1bf-f4da-48aa-9f2c-a0e4390ae8af"
+      },
+      {
+        "from": "1bd1f5b3-5d20-488b-ba8c-2b8deca2d2cf",
+        "to": "1a450b19-f9c2-404f-a042-f9527f8cbbc7"
+      },
+      {
+        "from": "c57f2319-656a-4d1a-a50e-568eee84084b",
+        "to": "84764c3f-3ec6-4c8a-821b-b56850cbc188"
+      },
+      {
+        "from": "c57f2319-656a-4d1a-a50e-568eee84084b",
+        "to": "f38a9d8c-d649-46e2-bcf5-e5285cc27c96"
+      },
+      {
+        "from": "f38a9d8c-d649-46e2-bcf5-e5285cc27c96",
+        "to": "30c0d9b9-1137-4f95-8c38-6d33efc98822"
+      },
+      {
+        "from": "84764c3f-3ec6-4c8a-821b-b56850cbc188",
+        "to": "58538882-d58c-4956-bdb3-c8e9d6d0ed89"
+      },
+      {
+        "from": "d6af89ce-d578-44ac-9f1e-acb3df84117b",
+        "to": "58538882-d58c-4956-bdb3-c8e9d6d0ed89"
+      },
+      {
+        "from": "d6af89ce-d578-44ac-9f1e-acb3df84117b",
+        "to": "30c0d9b9-1137-4f95-8c38-6d33efc98822"
+      },
+      {
+        "from": "03836189-8913-45b5-bd89-e658b31e79bd",
+        "to": "8006615c-85c9-4d08-8330-13138fd6e918"
+      },
+      {
+        "from": "8006615c-85c9-4d08-8330-13138fd6e918",
+        "to": "47fae422-2a59-43d7-88bd-93f91ddcb01f"
+      },
+      {
+        "from": "47fae422-2a59-43d7-88bd-93f91ddcb01f",
+        "to": "0d8871b2-5eba-4bf5-8a71-e246fad4ffa8"
+      },
+      {
+        "from": "9e32669b-6e90-4021-8c9a-a5d1d2a03387",
+        "to": "36d711ca-a888-4315-8cdd-ec21cf7651f8"
+      },
+      {
+        "from": "4cc48af3-1288-4ba2-8aff-e82fd623e6cf",
+        "to": "875d806d-10e2-45cd-ac04-5fea19626672"
+      },
+      {
+        "from": "f104716b-c9b7-4200-aeb5-35de355dcfb9",
+        "to": "7a7780b2-b680-4925-ac04-7f93e10a8093"
       }
     ]
   }

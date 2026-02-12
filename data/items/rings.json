@@ -88,7 +88,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Lucky": { "roll_type": "SuccessChance" } },
+        "stat": { "Lucky": { "roll_type": { "SuccessChance": {} } } },
         "modifier": "Flat",
         "value": [-40, 40]
       }

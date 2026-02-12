@@ -345,7 +345,9 @@ pub fn compute_skill_specs_effect<'a>(
 
         if effect.stat.is_match(&StatType::Lucky {
             skill_type: Some(skill_type),
-            roll_type: LuckyRollType::SuccessChance,
+            roll_type: LuckyRollType::SuccessChance {
+                effect_type: (&skill_effect.effect_type).into(),
+            },
         }) {
             skill_effect
                 .success_chance

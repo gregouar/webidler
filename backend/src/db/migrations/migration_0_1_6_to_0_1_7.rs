@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
-use sqlx::{Transaction, types::JsonValue};
+use sqlx::{types::JsonValue, Transaction};
 
 use shared::data::{
     area::AreaLevel,
@@ -21,7 +21,7 @@ use shared::data::{
 use crate::{
     constants::DATA_VERSION,
     db::{
-        characters_data::{CharacterDataEntry, upsert_character_inventory_data},
+        characters_data::{upsert_character_inventory_data, CharacterDataEntry},
         pool::{Database, DbExecutor, DbPool},
     },
     game::data::inventory_data::InventoryData,
@@ -289,7 +289,7 @@ pub enum OldStatType {
     Lucky {
         #[serde(default)]
         skill_type: Option<SkillType>,
-        roll_type: LuckyRollType,
+        roll_type: OldLuckyRollType,
     },
     SkillConditionalModifier {
         stat: Box<OldStatType>,
@@ -389,7 +389,7 @@ impl From<OldStatType> for StatType {
                 roll_type,
             } => Lucky {
                 skill_type,
-                roll_type,
+                roll_type: roll_type.into(),
             },
             OldStatType::SkillConditionalModifier {
                 stat,
@@ -517,6 +517,31 @@ impl From<OldStatConverterSource> for StatConverterSource {
             OldStatConverterSource::ManaRegen => ManaRegen,
             OldStatConverterSource::LifeRegen => LifeRegen,
             OldStatConverterSource::Block(skill_type) => Block(skill_type),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum OldLuckyRollType {
+    Damage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
+    Block,
+    Evade(Option<DamageType>),
+    CritChance,
+    SuccessChance,
+}
+
+impl From<OldLuckyRollType> for LuckyRollType {
+    fn from(value: OldLuckyRollType) -> Self {
+        use LuckyRollType::*;
+        match value {
+            OldLuckyRollType::Damage { damage_type } => Damage { damage_type },
+            OldLuckyRollType::Block => Block,
+            OldLuckyRollType::Evade(damage_type) => Evade(damage_type),
+            OldLuckyRollType::CritChance => CritChance,
+            OldLuckyRollType::SuccessChance => SuccessChance { effect_type: None },
         }
     }
 }
