@@ -111,8 +111,10 @@ pub fn Node(
     let highlight = Memo::new(move |_| {
         search_node
             .map(|search_node| match search_node.read().as_ref() {
-                Some(searched_node) => node_text.contains(&searched_node.to_lowercase()),
-                None => false,
+                Some(searched_node) if !searched_node.is_empty() => {
+                    node_text.contains(&searched_node.to_lowercase())
+                }
+                _ => false,
             })
             .unwrap_or_default()
     });
@@ -227,82 +229,87 @@ pub fn Node(
 
             on:mouseenter=move |_| show_tooltip()
             on:mouseleave=move |_| hide_tooltip()
-
-            class=class_style
         >
-            {node_specs
-                .initial_node
-                .then(|| {
-                    view! {
-                        <circle
-                            r=20 + node_size + 5
-                            fill="black"
-                            stroke=stroke
-                            stroke-width="2"
-                            class=shadow_class
-                        />
-                    }
-                })}
-
-            <circle r=20 + node_size fill=fill stroke=stroke stroke-width="3" class=shadow_class />
-
-            <circle r=20 + node_size fill="url(#node-inner-gradient)" />
-
-            {(node_specs.socket)
-                .then(|| {
-                    view! {
-                        <circle r=20 + node_size fill="url(#socket-outer-gradient)" />
-                        <circle r=14 + node_size fill="url(#socket-inner-gradient)" stroke="none" />
-                        <text
-                            text-anchor="middle"
-                            dominant-baseline="central"
-                            fill="rgba(255,255,255,0.4)"
-                            font-size="16"
-                        >
-                            "+"
-                        </text>
-                    }
-                })}
-
-            {
-                let node_specs = node_specs.clone();
-                move || {
-                    (!node_specs.icon.is_empty())
-                        .then(|| {
-                            view! {
-                                <image
-                                    href=img_asset(&node_specs.icon)
-                                    x=-12 - node_size
-                                    y=-12 - node_size
-                                    width=24 + node_size * 2
-                                    height=24 + node_size * 2
-                                    class="group-active:scale-90 group-active:brightness-100
-                                    xl:drop-shadow-[2px_2px_2px_black]"
-                                    style=move || {
-                                        format!(
-                                            "pointer-events: none;
+            <g class=class_style>
+                {node_specs
+                    .initial_node
+                    .then(|| {
+                        view! {
+                            <circle
+                                r=20 + node_size + 5
+                                fill="black"
+                                stroke=stroke
+                                stroke-width="2"
+                                class=shadow_class
+                            />
+                        }
+                    })}
+                <circle
+                    r=20 + node_size
+                    fill=fill
+                    stroke=stroke
+                    stroke-width="3"
+                    class=shadow_class
+                /> <circle r=20 + node_size fill="url(#node-inner-gradient)" />
+                {(node_specs.socket)
+                    .then(|| {
+                        view! {
+                            <circle r=20 + node_size fill="url(#socket-outer-gradient)" />
+                            <circle
+                                r=14 + node_size
+                                fill="url(#socket-inner-gradient)"
+                                stroke="none"
+                            />
+                            <text
+                                text-anchor="middle"
+                                dominant-baseline="central"
+                                fill="rgba(255,255,255,0.4)"
+                                font-size="16"
+                            >
+                                "+"
+                            </text>
+                        }
+                    })}
+                {
+                    let node_specs = node_specs.clone();
+                    move || {
+                        (!node_specs.icon.is_empty())
+                            .then(|| {
+                                view! {
+                                    <image
+                                        href=img_asset(&node_specs.icon)
+                                        x=-12 - node_size
+                                        y=-12 - node_size
+                                        width=24 + node_size * 2
+                                        height=24 + node_size * 2
+                                        class="group-active:scale-90 group-active:brightness-100
+                                        xl:drop-shadow-[2px_2px_2px_black]"
+                                        style=move || {
+                                            format!(
+                                                "pointer-events: none;
                                             filter: {} {}",
-                                            icon_filter(),
-                                            invert_filter,
-                                        )
-                                    }
-                                />
-                            }
-                        })
-                }
-            }
-
-            {(node_specs.socket)
-                .then(|| {
-                    view! {
-                        <circle
-                            r=14 + node_size
-                            fill="none"
-                            stroke="rgb(80, 80, 80)"
-                            stroke-width="1"
-                        />
+                                                icon_filter(),
+                                                invert_filter,
+                                            )
+                                        }
+                                    />
+                                }
+                            })
                     }
-                })}
+                }
+                {(node_specs.socket)
+                    .then(|| {
+                        view! {
+                            <circle
+                                r=14 + node_size
+                                fill="none"
+                                stroke="rgb(80, 80, 80)"
+                                stroke-width="1"
+                            />
+                        }
+                    })}
+
+            </g>
 
             {move || {
                 highlight
@@ -310,15 +317,14 @@ pub fn Node(
                     .then(|| {
                         view! {
                             <circle
-                                r=26 + node_size
+                                r=22 + node_size
                                 class="
                                 animate-pulse
-                                fill-fuchsia-300/40
-                                stroke-fuchsia-400
-                                stroke-[3]
+                                fill-fuchsia-400/40
+                                stroke-fuchsia-500
+                                stroke-[2]
                                 pointer-events-none
                                 "
-                                style="filter: none;"
                             />
                         }
                     })

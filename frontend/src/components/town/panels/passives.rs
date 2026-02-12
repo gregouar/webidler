@@ -208,18 +208,14 @@ pub fn AscendPanelHeader(
         {(!view_only)
             .then(|| {
                 view! {
-                    <div class="flex-1" />
-
-                    <span class="text-sm xl:text-base text-gray-400 flex items-center">
+                    <div class="text-sm xl:text-base text-gray-400 flex items-center">
                         "Ascension Cost:" <ShardsCounter value=ascension_cost.into() />
-                    </span>
+                    </div>
 
                     <div class="flex-1" />
 
-                    <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <RefundAscendButton passives_tree_ascension ascension_cost />
-                        </div>
+                    <div class="px-2 xl:px-4 relative z-10 flex items-center gap-2">
+                        <RefundAscendButton passives_tree_ascension ascension_cost />
                     </div>
 
                     <div class="flex-1" />
@@ -381,20 +377,17 @@ pub fn BuildPanelHeader(
         {(!view_only)
             .then(|| {
                 view! {
-                    <div class="flex-1" />
-
-                    <span class="text-sm xl:text-base text-gray-400">
+                    <div class="text-sm xl:text-base text-gray-400">
                         "Required Player Level:"
                         <span class="text-white font-semibold ml-2">
                             {move || passives_tree_build.read().len()}
                         </span>
-                    </span>
+                    </div>
 
                     <div class="flex-1" />
 
-                    <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between">
+                    <div class="px-2 xl:px-4 relative z-10 flex items-center gap-2">
                         <ResetBuildButton passives_tree_build />
-                        <div class="flex items-center gap-2"></div>
                     </div>
 
                     <div class="flex-1" />
@@ -501,15 +494,13 @@ fn ResetBuildButton(passives_tree_build: RwSignal<PurchasedNodes>) -> impl IntoV
     };
 
     view! {
-        <div class="flex gap-2">
-            <MenuButton on:click=undo disabled=disable_undo>
-                "Undo"
-            </MenuButton>
-            <MenuButton on:click=redo disabled=disable_redo>
-                "Redo"
-            </MenuButton>
-            <MenuButton on:click=reset>"Reset"</MenuButton>
-        </div>
+        <MenuButton on:click=undo disabled=disable_undo>
+            "Undo"
+        </MenuButton>
+        <MenuButton on:click=redo disabled=disable_redo>
+            "Redo"
+        </MenuButton>
+        <MenuButton on:click=reset>"Reset"</MenuButton>
     }
 }
 
