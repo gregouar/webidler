@@ -361,18 +361,18 @@ pub fn Connection(
                             y1=-from.y * 10.0
                             x2=to.x * 10.0
                             y2=-to.y * 10.0
-                            class=move || {
-                                if amount_connections.get() == 2 {
-                                    match (from_status(), to_status()) {
-                                        (MetaStatus::Ascended, MetaStatus::Ascended) => {
-                                            "xl:drop-shadow-[0_0_2px_cyan]"
-                                        }
-                                        _ => "xl:drop-shadow-[0_0_2px_gold]",
-                                    }
-                                } else {
-                                    ""
-                                }
-                            }
+                            // class=move || {
+                            // if amount_connections.get() == 2 {
+                            // match (from_status(), to_status()) {
+                            // (MetaStatus::Ascended, MetaStatus::Ascended) => {
+                            // "xl:drop-shadow-[0_0_2px_cyan]"
+                            // }
+                            // _ => "xl:drop-shadow-[0_0_2px_gold]",
+                            // }
+                            // } else {
+                            // ""
+                            // }
+                            // }
                             style="pointer-events: none"
                             stroke=format!("url(#{gradient_id})")
                             stroke-dasharray=dasharray

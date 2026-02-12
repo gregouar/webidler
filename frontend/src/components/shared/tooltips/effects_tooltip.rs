@@ -583,11 +583,21 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 with_skill_type_str(*skill_type)
             )
         }
-        StatType::CritChance(skill_type) => format!(
-            "{} Critical Hit Chance{}",
-            format_adds_removes(value, false, "%"),
-            to_skill_type_str(*skill_type)
-        ),
+        StatType::CritChance(skill_type) => {
+            let unwrap_value = value.unwrap_or_default();
+            if unwrap_value >= 100.0 {
+                format!(
+                    "Guaranteed Critical Hit Chance{}",
+                    with_skill_type_str(*skill_type)
+                )
+            } else {
+                format!(
+                    "{} Critical Hit Chance{}",
+                    format_adds_removes(value, false, "%"),
+                    to_skill_type_str(*skill_type)
+                )
+            }
+        }
         StatType::CritDamage(skill_type) => format!(
             "{} Critical Hit Damage{}",
             format_adds_removes(value, false, "%"),
