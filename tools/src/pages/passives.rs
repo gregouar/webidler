@@ -652,7 +652,7 @@ fn EditNodeMenu(
                 passives_tree_specs,
                 passives_history_tracker,
                 clipboard_node,
-            )
+            );
         }
     };
     let do_delete_node = Arc::new({

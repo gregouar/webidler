@@ -217,7 +217,7 @@ pub fn stat_skill_effect_type_str(effect_type: Option<&StatSkillEffectType>) -> 
             }
             StatSkillEffectType::Resurrect => "Resurrect".into(),
         },
-        None => "All Effects".into(),
+        None => "All Skill Effects".into(),
     }
 }
 

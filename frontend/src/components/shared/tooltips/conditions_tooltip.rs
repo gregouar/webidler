@@ -63,7 +63,7 @@ pub fn format_status_type_condition(
             StatStatusType::StatModifier { debuff } => match debuff {
                 Some(true) => debuffed_str(Some(true)).to_string(),
                 Some(false) => buffed_str(Some(true)).to_string(),
-                None => "Under Effects".to_string(),
+                None => "Under Stats Effects".to_string(),
             },
             StatStatusType::Trigger {
                 trigger_id: Some(trigger_id),
@@ -72,9 +72,9 @@ pub fn format_status_type_condition(
             StatStatusType::Trigger {
                 trigger_id: _,
                 trigger_description: _,
-            } => "Under Effects".to_string(),
+            } => "Under Trigger Effects".to_string(),
         },
-        None => "".to_string(),
+        None => "Effects".to_string(),
     };
 
     format!("{}{}", skilled_type_str(skill_type), status_type_str)
