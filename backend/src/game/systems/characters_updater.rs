@@ -89,16 +89,16 @@ pub fn reset_character(character_state: &mut CharacterState) {
     character_state.just_evaded = false;
 }
 
+/// Return converted stats for propagation
 pub fn update_character_specs(
     base_specs: &CharacterSpecs,
     effects: &[StatEffect],
-) -> CharacterSpecs {
+) -> (CharacterSpecs, Vec<StatEffect>) {
     let mut character_specs = base_specs.clone();
-    compute_character_specs(&mut character_specs, effects);
-    character_specs
+    let converted_effects = compute_character_specs(&mut character_specs, effects);
+    (character_specs, converted_effects)
 }
 
-/// Return converted stats for propagation
 fn compute_character_specs(
     character_specs: &mut CharacterSpecs,
     effects: &[StatEffect],

@@ -106,10 +106,13 @@ pub fn update_monster_specs(
             .into(),
         )),
     );
-    let effects = stats_updater::stats_map_to_vec(&effects_map, area_threat);
+    let mut effects = stats_updater::stats_map_to_vec(&effects_map, area_threat);
 
-    monster_specs.character_specs =
+    let (character_specs, converted_effects) =
         characters_updater::update_character_specs(&base_specs.character_specs, &effects);
+    monster_specs.character_specs = character_specs;
+    effects.extend(converted_effects);
+
     monster_specs.character_specs.effects = effects_map;
     monster_specs.skill_specs = base_specs.skill_specs.clone();
 

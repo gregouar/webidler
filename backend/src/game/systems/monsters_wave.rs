@@ -2,7 +2,7 @@ use anyhow::Result;
 
 use shared::{
     computations,
-    constants::{CHAMPION_LEVEL_INC, MONSTER_INCREASE_FACTOR, MONSTERS_DEFAULT_DAMAGE_INCREASE},
+    constants::{CHAMPION_LEVEL_INC, MONSTERS_DEFAULT_DAMAGE_INCREASE, MONSTER_INCREASE_FACTOR},
     data::{
         area::{AreaLevel, AreaState, AreaThreat},
         character::CharacterId,
@@ -16,10 +16,10 @@ use shared::{
 
 use crate::game::{
     data::{
-        DataInit,
         area::{AreaBlueprint, BossBlueprint, MonsterWaveBlueprint, MonsterWaveSpawnBlueprint},
         master_store::MonstersSpecsStore,
         monster::BaseMonsterSpecs,
+        DataInit,
     },
     systems::{characters_updater, stats_updater},
     utils::rng::{self, RandomWeighted, Rollable},
@@ -275,9 +275,11 @@ fn generate_monster_specs(
     }
 
     // Apply area effects
-    let area_effects = stats_updater::stats_map_to_vec(area_effects, area_threat);
-    monster_specs.character_specs =
+    let mut area_effects = stats_updater::stats_map_to_vec(area_effects, area_threat);
+    let (character_specs, converted_effects) =
         characters_updater::update_character_specs(&monster_specs.character_specs, &area_effects);
+    monster_specs.character_specs = character_specs;
+    area_effects.extend(converted_effects);
     // monster_specs.character_specs.effects = effects_map;
     for skill_specs in monster_specs.skill_specs.iter_mut() {
         skills_updater::apply_effects_to_skill_specs(skill_specs, area_effects.iter());

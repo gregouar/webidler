@@ -70,6 +70,10 @@
       "item_id": "rune_root",
       "weight": 320,
       "min_area_level": 250
+    },
+    {
+      "item_id": "rune_mana_damage",
+      "weight": 50
     }
   ]
 }

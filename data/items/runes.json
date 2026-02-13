@@ -228,5 +228,44 @@
       }
     ],
     "min_area_level": 200
+  },
+  "rune_mana_damage": {
+    "name": "Mnemonic Singularity",
+    "description": "A mind dense enough bends reality.",
+    "icon": "items/rune_mana_damage.webp",
+    "categories": ["Rune"],
+    "ignore_quality": true,
+    "rune_specs": {},
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "StatConverter": {
+            "source": "MaxMana",
+            "target_stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": null,
+                "min_max": null
+              }
+            },
+            "target_modifier": "Multiplier",
+            "is_extra": true,
+            "skill_type": null
+          }
+        },
+        "modifier": "Flat",
+        "value": 100
+      },
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [-20, -10]
+      }
+    ],
+    "triggers": [],
+    "min_area_level": 250
   }
 }

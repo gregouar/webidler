@@ -150,7 +150,7 @@ pub fn restore_character(
 ) -> bool {
     let (_, (target_specs, target_state)) = target;
 
-    if amount <= 0.0 || !target_state.is_alive {
+    if !target_state.is_alive {
         return false;
     }
 
@@ -164,7 +164,7 @@ pub fn restore_character(
 
     match restore_type {
         RestoreType::Life => {
-            if target_state.life < target_specs.max_life {
+            if target_state.life < target_specs.max_life || amount < 0.0 {
                 target_state.life += amount * factor;
                 true
             } else {
@@ -172,7 +172,7 @@ pub fn restore_character(
             }
         }
         RestoreType::Mana => {
-            if target_state.mana < target_specs.max_mana {
+            if target_state.mana < target_specs.max_mana || amount < 0.0 {
                 target_state.mana += amount * factor;
                 true
             } else {

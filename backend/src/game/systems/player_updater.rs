@@ -85,7 +85,7 @@ pub fn update_player_specs(
     benedictions_effects: &EffectsMap,
     area_threat: &AreaThreat,
 ) {
-    let effects = EffectsMap::combine_all(
+    let effects_map = EffectsMap::combine_all(
         player_inventory
             .equipped_items()
             .map(|(_, i)| i.modifiers.aggregate_effects(AffixEffectScope::Global))
@@ -118,7 +118,6 @@ pub fn update_player_specs(
     player_specs.gold_find = 100.0;
     player_specs.threat_gain = 100.0;
     player_specs.movement_cooldown = 3.0;
-    player_specs.character_specs.effects = effects;
 
     // TODO: Could we figure out a way to keep the block luck somehow?
     let (total_armor, total_block) = player_inventory
@@ -170,7 +169,7 @@ pub fn update_player_specs(
         )
         .collect();
 
-    compute_player_specs(player_specs, player_inventory, area_threat);
+    compute_player_specs(player_specs, player_inventory, area_threat, effects_map);
 
     // We only add skills trigger after because they were already increased by skill update
     // player_specs.character_specs.triggers.extend(
@@ -186,12 +185,17 @@ fn compute_player_specs(
     player_specs: &mut PlayerSpecs,
     player_inventory: &PlayerInventory,
     area_threat: &AreaThreat,
+    effects_map: EffectsMap,
 ) {
-    let effects =
-        stats_updater::stats_map_to_vec(&player_specs.character_specs.effects, area_threat);
+    let mut effects = stats_updater::stats_map_to_vec(&effects_map, area_threat);
 
-    player_specs.character_specs =
+    let (character_specs, converted_effects) =
         characters_updater::update_character_specs(&player_specs.character_specs, &effects);
+    player_specs.character_specs = character_specs;
+    player_specs.character_specs.effects = EffectsMap::combine_all(
+        iter::once(effects_map).chain(iter::once(converted_effects.clone().into())),
+    );
+    effects.extend(converted_effects);
 
     for effect in effects.iter() {
         match effect.stat {
