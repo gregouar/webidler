@@ -2568,7 +2568,7 @@
         "socket": false
       },
       "39b2026c-9b8d-4133-8fd9-1342e2dcd513": {
-        "name": "First Dose",
+        "name": "Initial Poison Damage",
         "icon": "passives/wasp.svg",
         "x": 10.0,
         "y": -120.0,
@@ -4778,7 +4778,7 @@
         "socket": false
       },
       "641ea2e9-be62-40ad-b81a-e2502dbee41d": {
-        "name": "First Dose",
+        "name": "Initial Poison Damage",
         "icon": "passives/wasp.svg",
         "x": 0.0,
         "y": -127.5,
@@ -10932,16 +10932,16 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   },
@@ -10984,6 +10984,12 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null,
@@ -10995,12 +11001,6 @@
                       "status_type": null,
                       "skill_type": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
                     }
                   }
                 ],
@@ -11042,16 +11042,16 @@
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   }
@@ -11088,12 +11088,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
@@ -11105,6 +11099,12 @@
                       "skill_type": null,
                       "damage_type": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
                     }
                   }
                 ],
@@ -11627,7 +11627,7 @@
         "socket": false
       },
       "d95d327a-d5ae-4754-be2d-a8afdeb998bc": {
-        "name": "First Dose",
+        "name": "Initial Poison Damage",
         "icon": "passives/wasp.svg",
         "x": -10.0,
         "y": -120.0,
