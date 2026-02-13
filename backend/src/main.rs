@@ -46,7 +46,7 @@ async fn main() {
         .await
         .expect("failed to migrate database");
 
-    migrate_data(&db_pool)
+    migrate_data(&db_pool, &master_store)
         .await
         .expect("failed to migrate data");
 
@@ -129,8 +129,8 @@ async fn main() {
     tracing::debug!("server has been shut down");
 }
 
-async fn migrate_data(db_pool: &db::DbPool) -> anyhow::Result<()> {
-    db::migrations::migration_0_1_6_to_0_1_7::migrate(db_pool).await?;
+async fn migrate_data(db_pool: &db::DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
+    db::migrations::migration_0_1_6_to_0_1_7::migrate(db_pool, master_store).await?;
     Ok(())
 }
 

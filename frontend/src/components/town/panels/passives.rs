@@ -15,18 +15,23 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext, backend_client::BackendClient, events::{Key,EventsContext}, shared::{
+    auth::AuthContext,
+    backend_client::BackendClient,
+    events::{EventsContext, Key},
+    shared::{
         passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
         resources::ShardsCounter,
-    }, town::TownContext, ui::{
+    },
+    town::TownContext,
+    ui::{
         buttons::{MenuButton, TabButton},
         card::{Card, CardHeader, CardInset},
         confirm::ConfirmContext,
-        menu_panel::MenuPanel,
         input::Input,
+        menu_panel::MenuPanel,
         pannable::Pannable,
         toast::*,
-    }
+    },
 };
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -76,24 +81,22 @@ pub fn PassivesPanel(
     });
 
     let active_tab = RwSignal::new(PassivesTab::Ascend);
-    
+
     let search_node = RwSignal::new(None);
     let search_node_ref = NodeRef::<leptos::html::Input>::new();
 
-    
     Effect::new({
         let events_context: EventsContext = expect_context();
         move || {
-            if events_context.key_pressed(Key::Ctrl)  && events_context.key_pressed(Key::Character('f'))
-                    && let Some(input) = search_node_ref.get()
-                {
-                    input.focus().unwrap();
-                    input.select();
-                }
-            
+            if events_context.key_pressed(Key::Ctrl)
+                && events_context.key_pressed(Key::Character('f'))
+                && let Some(input) = search_node_ref.get()
+            {
+                input.focus().unwrap();
+                input.select();
+            }
         }
     });
-
 
     view! {
         <MenuPanel open=open>
@@ -626,6 +629,41 @@ fn AscendNode(
     let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
+    let socket = Memo::new({
+        let node_id = node_id.clone();
+        move |_| {
+            passives_tree_ascension
+                .read()
+                .socketed_nodes
+                .get(&node_id)
+                .cloned()
+        }
+    });
+
+    let derived_node_specs = Memo::new({
+        let node_specs = node_specs.clone();
+        move |_| {
+            if let Some(item_specs) = socket.get() {
+                let mut node_specs = node_specs.clone();
+                node_specs.icon = item_specs.base.icon.clone();
+                node_specs.effects = (&(item_specs
+                    .modifiers
+                    .aggregate_effects(AffixEffectScope::Global)))
+                    .into(); // TODO: Better copy, don't aggregate?
+                node_specs.triggers = item_specs.base.triggers.clone();
+                node_specs.initial_node |= item_specs
+                    .base
+                    .rune_specs
+                    .as_ref()
+                    .map(|rune_specs| rune_specs.root_node)
+                    .unwrap_or_default();
+                node_specs
+            } else {
+                node_specs.clone()
+            }
+        }
+    });
+
     let node_level = Memo::new({
         let node_id = node_id.clone();
 
@@ -670,7 +708,10 @@ fn AscendNode(
 
     let max_upgrade_level = Memo::new({
         move |_| {
-            let max_connection_level = if node_specs.initial_node {
+            let max_connection_level = if node_specs.initial_node
+                || (active_tab.get() == PassivesTab::Build
+                    && derived_node_specs.read().initial_node)
+            {
                 match active_tab.get() {
                     PassivesTab::Ascend => u8::MAX,
                     PassivesTab::Build => (!node_specs.locked || node_level.get() > 0) as u8,
@@ -829,42 +870,13 @@ fn AscendNode(
         }
     };
 
-    let socket = Memo::new(move |_| {
-        passives_tree_ascension
-            .read()
-            .socketed_nodes
-            .get(&node_id)
-            .cloned()
-    });
-
-    let derived_node_specs = move || {
-        if let Some(item_specs) = socket.get() {
-            let mut node_specs = node_specs.clone();
-            node_specs.icon = item_specs.base.icon.clone();
-            node_specs.effects = (&(item_specs
-                .modifiers
-                .aggregate_effects(AffixEffectScope::Global)))
-                .into(); // TODO: Better copy, don't aggregate?
-            node_specs.triggers = item_specs.base.triggers.clone();
-            node_specs.initial_node |= item_specs
-                .base
-                .rune_specs
-                .as_ref()
-                .map(|rune_specs| rune_specs.root_node)
-                .unwrap_or_default();
-            node_specs
-        } else {
-            node_specs.clone()
-        }
-    };
-
     view! {
         {move || {
             let purchase = purchase.clone();
             let refund = refund.clone();
             view! {
                 <Node
-                    node_specs=derived_node_specs()
+                    node_specs=derived_node_specs.get()
                     node_status
                     node_level
                     on_click=purchase

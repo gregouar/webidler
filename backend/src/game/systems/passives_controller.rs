@@ -310,7 +310,7 @@ pub fn socket_node(
             && passives_tree_ascension.socketed_nodes.iter().any(
                 |(socket_node_id, socketed_item_specs)| {
                     socketed_item_specs.modifiers.base_item_id == item_specs.modifiers.base_item_id
-                        && **socket_node_id != passive_node_id
+                        && *socket_node_id != passive_node_id
                 },
             )
         {

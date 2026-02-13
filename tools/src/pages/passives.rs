@@ -5,8 +5,8 @@ use std::{
 
 use frontend::components::{
     events::{EventsContext, Key},
-    shared::{
-        passives::{Connection, MetaStatus, Node, NodeStatus, NodeTooltipContent, PurchaseStatus, node_text},
+    shared::passives::{
+        Connection, MetaStatus, Node, NodeStatus, NodeTooltipContent, PurchaseStatus, node_text,
     },
     ui::{
         buttons::{MenuButton, TabButton},
@@ -610,7 +610,6 @@ fn ToolNode(
             }
         }}
     }
-
 }
 
 #[component]
@@ -848,7 +847,7 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
 
     view! {
         <CardInset class="flex-1">
-            <div class="text-amber-300">{node_id}</div>
+            <div class="text-amber-300">{node_id.to_string()}</div>
             <ValidatedInput label="Name" id="node_name" input_type="text" bind=node_name />
             <ValidatedInput label="Icon" id="node_icon" input_type="text" bind=node_icon />
             <div class="flex justify-between gap-2">
@@ -1117,7 +1116,7 @@ fn add_node(
     passives_history_tracker: RwSignal<HistoryTracker<PassivesTreeSpecs>>,
     mouse_position: RwSignal<(f64, f64)>,
 ) -> PassiveNodeId {
-    let node_id: String = uuid::Uuid::new_v4().into();
+    let node_id = uuid::Uuid::new_v4();
     passives_tree_specs.update(|passives_tree_specs| {
         let (x, y) = mouse_position_to_node_position(mouse_position.get_untracked());
 

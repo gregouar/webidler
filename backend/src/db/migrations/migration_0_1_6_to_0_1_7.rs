@@ -1,13 +1,14 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
-use sqlx::{types::JsonValue, Transaction};
+use sqlx::{Transaction, types::JsonValue};
 
 use shared::data::{
     area::AreaLevel,
     conditional_modifier::Condition,
     item::{ItemModifiers, ItemRarity, ItemSlot},
     item_affix::{AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix},
+    passive::PassivesTreeAscension,
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{
         LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatSkillEffectType,
@@ -19,20 +20,22 @@ use shared::data::{
 };
 
 use crate::{
+    app_state::MasterStore,
     constants::DATA_VERSION,
     db::{
-        characters_data::{upsert_character_inventory_data, CharacterDataEntry},
+        self,
+        characters_data::{CharacterDataEntry, upsert_character_inventory_data},
         pool::{Database, DbExecutor, DbPool},
     },
-    game::data::inventory_data::InventoryData,
+    game::{data::inventory_data::InventoryData, systems::passives_controller},
 };
 
-pub async fn migrate(db_pool: &DbPool) -> anyhow::Result<()> {
+pub async fn migrate(db_pool: &DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
     let mut tx = db_pool.begin().await?;
 
     stop_all_grinds(&mut *tx).await?;
 
-    migrate_character_items(&mut tx).await?;
+    migrate_character_data(&mut tx, master_store).await?;
     migrate_stash_items(&mut tx).await?;
 
     tx.commit().await?;
@@ -46,8 +49,9 @@ async fn stop_all_grinds<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()
     Ok(())
 }
 
-async fn migrate_character_items(
+async fn migrate_character_data(
     executor: &mut Transaction<'static, Database>,
+    master_store: &MasterStore,
 ) -> anyhow::Result<()> {
     let characters_data = sqlx::query_as!(
         CharacterDataEntry,
@@ -75,6 +79,20 @@ async fn migrate_character_items(
             &mut **executor,
             &character_data.character_id,
             rmp_serde::to_vec(&inventory_data)?,
+        )
+        .await?;
+
+        let character =
+            db::characters::read_character(&mut **executor, &character_data.character_id)
+                .await?
+                .ok_or(anyhow::anyhow!("character not found"))?;
+
+        passives_controller::update_ascension(
+            executor,
+            master_store,
+            &character_data.character_id,
+            character.resource_shards,
+            &PassivesTreeAscension::default(),
         )
         .await?;
     }

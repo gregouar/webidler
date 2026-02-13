@@ -8,7 +8,7 @@ use crate::data::{item::ItemSpecs, stat_effect::EffectsMap, trigger::TriggerSpec
 
 pub use super::stat_effect::StatEffect;
 
-pub type PassiveNodeId = String;
+pub type PassiveNodeId = uuid::Uuid;
 
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, Default, Hash, PartialEq, Eq, EnumIter)]
 pub enum PassiveNodeType {
