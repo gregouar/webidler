@@ -2262,7 +2262,15 @@
         ],
         "triggers": [],
         "locked": false,
-        "upgrade_effects": [],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Speed": "Curse"
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
         "max_upgrade_level": 3,
         "socket": false
       },
@@ -4120,12 +4128,22 @@
               }
             },
             "modifier": "Multiplier",
-            "value": -11.0
+            "value": -10.0
           }
         ],
         "triggers": [],
         "locked": false,
-        "upgrade_effects": [],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "ManaCost": {
+                "skill_type": "Curse"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -5.0
+          }
+        ],
         "max_upgrade_level": 3,
         "socket": false
       },
@@ -5142,48 +5160,35 @@
         "socket": false
       },
       "6afbaa18-6923-4d9f-af6e-d0edf482b786": {
-        "name": "Debilitating Poison?",
-        "icon": "passives/xxxx.svg",
+        "name": "Forbidden Cadence",
+        "icon": "passives/evil_comet.svg",
         "x": 80.0,
         "y": -142.5,
         "size": 2,
         "initial_node": false,
-        "node_type": "Poison",
+        "node_type": "Mana",
         "effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
-                "skill_type": null
+              "Speed": "Spell"
+            },
+            "modifier": "Multiplier",
+            "value": 70.0
+          },
+          {
+            "stat": {
+              "ManaCost": {
+                "skill_type": "Spell"
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 300.0
           }
         ],
         "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
-                "skill_type": null
-              }
-            },
-            "modifier": "Multiplier",
-            "value": 10.0
-          }
-        ],
-        "max_upgrade_level": 3,
+        "locked": true,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
         "socket": false
       },
       "6bcf67ff-ff16-4082-bf14-72f74bd7b9f9": {
@@ -6359,8 +6364,8 @@
         "socket": false
       },
       "7e10ea6e-22f5-43f9-8c49-9df5d664e87a": {
-        "name": "Corrosive Poison?",
-        "icon": "passives/xxx.svg",
+        "name": "Terminal Illness",
+        "icon": "passives/tumor.svg",
         "x": -80.0,
         "y": -142.5,
         "size": 2,
@@ -6369,18 +6374,26 @@
         "effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
+              "SkillConditionalModifier": {
+                "stat": {
+                  "StatusPower": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": null
+                      }
+                    },
+                    "skill_type": null,
+                    "min_max": null
                   }
                 },
                 "skill_type": null,
-                "min_max": null
+                "conditions": [
+                  "LowLife"
+                ]
               }
             },
             "modifier": "Multiplier",
-            "value": 20.0
+            "value": 75.0
           }
         ],
         "triggers": [],
@@ -6388,18 +6401,26 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
+              "SkillConditionalModifier": {
+                "stat": {
+                  "StatusPower": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": null
+                      }
+                    },
+                    "skill_type": null,
+                    "min_max": null
                   }
                 },
                 "skill_type": null,
-                "min_max": null
+                "conditions": [
+                  "LowLife"
+                ]
               }
             },
             "modifier": "Multiplier",
-            "value": 10.0
+            "value": 25.0
           }
         ],
         "max_upgrade_level": 3,
@@ -6846,12 +6867,22 @@
               }
             },
             "modifier": "Multiplier",
-            "value": -11.0
+            "value": -10.0
           }
         ],
         "triggers": [],
         "locked": false,
-        "upgrade_effects": [],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "ManaCost": {
+                "skill_type": "Curse"
+              }
+            },
+            "modifier": "Multiplier",
+            "value": -5.0
+          }
+        ],
         "max_upgrade_level": 3,
         "socket": false
       },
@@ -12800,7 +12831,15 @@
         ],
         "triggers": [],
         "locked": false,
-        "upgrade_effects": [],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Speed": "Curse"
+            },
+            "modifier": "Multiplier",
+            "value": 5.0
+          }
+        ],
         "max_upgrade_level": 3,
         "socket": false
       },

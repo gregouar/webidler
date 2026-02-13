@@ -28,8 +28,8 @@ use crate::components::{
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
     town::{
-        TownContext,
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        TownContext,
     },
     ui::{
         buttons::{MenuButton, MenuButtonRed, TabButton},
@@ -77,7 +77,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
         <MenuPanel open=open>
             <Card class="h-full" gap=false>
                 <CardHeader title="Market" on_close=move || open.set(false)>
-                    <div class="flex-1 flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto">
+                    <div class="flex-1 flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto overflow-hidden">
                         <TabButton
                             is_active=Signal::derive(move || {
                                 active_tab.get() == MarketTab::Filters

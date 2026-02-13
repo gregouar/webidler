@@ -21,6 +21,8 @@ pub fn format_skill_modifier_conditions_pre(conditions: &[Condition]) -> String 
             Condition::StatusStacks { .. } => "".into(),
             Condition::MaximumLife => "".into(),
             Condition::MaximumMana => "".into(),
+            Condition::LowLife => "".into(),
+            Condition::LowMana => "".into(),
         })
         .collect::<Vec<_>>()
         .join("")
@@ -41,6 +43,8 @@ pub fn format_skill_modifier_conditions_post(conditions: &[Condition]) -> String
             ),
             Condition::MaximumLife => " On Maximum Life".into(),
             Condition::MaximumMana => " On Maximum Mana".into(),
+            Condition::LowLife => " On Low Life".into(),
+            Condition::LowMana => " On Low Mana".into(),
         })
         .collect::<Vec<_>>()
         .join("")

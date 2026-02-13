@@ -5,8 +5,8 @@ use shared::data::{
     conditional_modifier::{Condition, ConditionalModifier},
     player::{CharacterSpecs, CharacterState},
     stat_effect::{
-        EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect, StatType,
-        compare_options,
+        compare_options, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect,
+        StatType,
     },
 };
 
@@ -129,6 +129,12 @@ pub fn check_condition(
         }
         Condition::MaximumMana => {
             (character_state.mana >= character_specs.max_mana * 0.99) as usize as f64
+        }
+        Condition::LowLife => {
+            (character_state.life <= character_specs.max_life * 0.5) as usize as f64
+        }
+        Condition::LowMana => {
+            (character_state.mana <= character_specs.max_mana * 0.5) as usize as f64
         }
     }
 }

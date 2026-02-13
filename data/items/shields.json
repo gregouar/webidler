@@ -238,22 +238,7 @@
                   },
                   "value": 30,
                   "cumulate": true
-                }
-              ]
-            },
-            "ignore_stat_effects": [
-              {
-                "StatusDuration": {}
-              },
-              {
-                "StatusPower": {}
-              }
-            ]
-          },
-          {
-            "ApplyStatus": {
-              "duration": 0,
-              "statuses": [
+                },
                 {
                   "status_type": {
                     "StatModifier": {

@@ -98,7 +98,11 @@ pub fn update_character_specs(
     character_specs
 }
 
-fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[StatEffect]) {
+/// Return converted stats for propagation
+fn compute_character_specs(
+    character_specs: &mut CharacterSpecs,
+    effects: &[StatEffect],
+) -> Vec<StatEffect> {
     let mut stat_converters = Vec::new();
 
     for effect in effects.iter() {
@@ -279,9 +283,8 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
     }
 
     // TODO: How to propagate to player/monster/skills? Return effects?
+    let mut stats_converted = Vec::with_capacity(stat_converters.len());
     if !stat_converters.is_empty() {
-        let mut stats_converted = Vec::with_capacity(stat_converters.len());
-
         for (specs, factor) in stat_converters {
             let factor = factor * 0.01;
             let amount = match specs.source {
@@ -355,4 +358,6 @@ fn compute_character_specs(character_specs: &mut CharacterSpecs, effects: &[Stat
         evade.value = evade.value.min(MAX_EVADE);
     }
     character_specs.evade_damage = character_specs.evade_damage.clamp(0.0, 100.0);
+
+    stats_converted
 }

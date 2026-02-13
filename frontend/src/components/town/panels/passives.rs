@@ -100,7 +100,7 @@ pub fn PassivesPanel(
             <div class="w-full h-full">
                 <Card>
                     <CardHeader title="Passive Skills" on_close=move || open.set(false)>
-                        <div class="flex-1 flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 -mb-2 w-xl">
+                        <div class="flex-1 flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 -mb-2 w-xl overflow-hidden">
                             <TabButton
                                 is_active=Signal::derive(move || {
                                     active_tab.get() == PassivesTab::Ascend
