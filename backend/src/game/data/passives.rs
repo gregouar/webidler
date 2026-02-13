@@ -22,7 +22,7 @@ impl From<&PassivesTreeAscension> for PassivesTreeAscensionData {
             socketed_nodes: value
                 .socketed_nodes
                 .iter()
-                .map(|(node_id, item_specs)| (node_id.clone(), item_specs.modifiers.clone()))
+                .map(|(node_id, item_specs)| (*node_id, item_specs.modifiers.clone()))
                 .collect(),
         }
     }

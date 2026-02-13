@@ -342,11 +342,11 @@ pub fn Connection(
     node_levels: Memo<(u8, u8)>,
 ) -> impl IntoView {
     let from_node = {
-        let node_id = connection.from.clone();
+        let node_id = connection.from;
         move || passives_tree_specs.read().nodes.get(&node_id).cloned()
     };
     let to_node = {
-        let node_id = connection.to.clone();
+        let node_id = connection.to;
         move || passives_tree_specs.read().nodes.get(&node_id).cloned()
     };
 

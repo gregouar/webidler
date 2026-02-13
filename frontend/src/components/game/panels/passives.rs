@@ -206,14 +206,14 @@ fn PassiveSkillTree() -> impl IntoView {
                 each=move || {
                     game_context.passives_tree_specs.read().connections.clone().into_iter()
                 }
-                key=|conn| (conn.from.clone(), conn.to.clone())
+                key=|conn| (conn.from, conn.to)
                 let(conn)
             >
                 <InGameConnection connection=conn />
             </For>
             <For
                 each=move || { game_context.passives_tree_specs.read().nodes.clone().into_iter() }
-                key=|(id, _)| id.clone()
+                key=|(id, _)| *id
                 let((id, node))
             >
                 <InGameNode node_id=id node_specs=node points_available=points_available />
@@ -229,19 +229,15 @@ fn InGameNode(
     points_available: Memo<bool>,
 ) -> impl IntoView {
     let game_context: GameContext = expect_context();
-    let node_level = Memo::new({
-        let node_id = node_id.clone();
-
-        move |_| {
-            game_context
-                .passives_tree_state
-                .read()
-                .ascension
-                .ascended_nodes
-                .get(&node_id)
-                .copied()
-                .unwrap_or_default()
-        }
+    let node_level = Memo::new(move |_| {
+        game_context
+            .passives_tree_state
+            .read()
+            .ascension
+            .ascended_nodes
+            .get(&node_id)
+            .copied()
+            .unwrap_or_default()
     });
 
     let connected_nodes: Vec<_> = game_context
@@ -251,58 +247,54 @@ fn InGameNode(
         .iter()
         .filter_map(|connection| {
             if connection.from == node_id {
-                Some(connection.to.clone())
+                Some(connection.to)
             } else if connection.to == node_id {
-                Some(connection.from.clone())
+                Some(connection.from)
             } else {
                 None
             }
         })
         .collect();
 
-    let node_status = Memo::new({
-        let node_id = node_id.clone();
+    let node_status = Memo::new(move |_| {
+        let meta_status = node_meta_status(
+            node_level.get(),
+            node_specs.locked,
+            // node_specs.max_upgrade_level,
+        );
 
-        move |_| {
-            let meta_status = node_meta_status(
-                node_level.get(),
-                node_specs.locked,
-                // node_specs.max_upgrade_level,
-            );
+        let purchase_status = if game_context
+            .passives_tree_state
+            .read()
+            .purchased_nodes
+            .contains(&node_id)
+        {
+            PurchaseStatus::Purchased
+        } else if meta_status != MetaStatus::Locked
+            && points_available.get()
+            && (node_specs.initial_node
+                || game_context
+                    .passives_tree_state
+                    .with(|passives_tree_state| {
+                        connected_nodes.iter().any(|connected_node| {
+                            passives_tree_state.purchased_nodes.contains(connected_node)
+                        })
+                    }))
+        {
+            PurchaseStatus::Purchaseable
+        } else {
+            PurchaseStatus::Inactive
+        };
 
-            let purchase_status = if game_context
-                .passives_tree_state
-                .read()
-                .purchased_nodes
-                .contains(&node_id)
-            {
-                PurchaseStatus::Purchased
-            } else if meta_status != MetaStatus::Locked
-                && points_available.get()
-                && (node_specs.initial_node
-                    || game_context
-                        .passives_tree_state
-                        .with(|passives_tree_state| {
-                            connected_nodes.iter().any(|connected_node| {
-                                passives_tree_state.purchased_nodes.contains(connected_node)
-                            })
-                        }))
-            {
-                PurchaseStatus::Purchaseable
-            } else {
-                PurchaseStatus::Inactive
-            };
-
-            NodeStatus {
-                purchase_status,
-                meta_status,
-            }
+        NodeStatus {
+            purchase_status,
+            meta_status,
         }
     });
 
     let purchase = {
         let conn = expect_context::<WebsocketContext>();
-        move || purchase_node(game_context, conn.clone(), node_id.clone())
+        move || purchase_node(game_context, conn.clone(), node_id)
     };
 
     view! {
@@ -321,48 +313,38 @@ fn InGameNode(
 fn InGameConnection(connection: PassiveConnection) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let amount_connections = Memo::new({
-        let connection_from = connection.from.clone();
-        let connection_to = connection.to.clone();
-
-        move |_| {
-            game_context
+    let amount_connections = Memo::new(move |_| {
+        game_context
+            .passives_tree_state
+            .read()
+            .purchased_nodes
+            .contains(&connection.from) as usize
+            + game_context
                 .passives_tree_state
                 .read()
                 .purchased_nodes
-                .contains(&connection_from) as usize
-                + game_context
-                    .passives_tree_state
-                    .read()
-                    .purchased_nodes
-                    .contains(&connection_to) as usize
-        }
+                .contains(&connection.to) as usize
     });
 
-    let node_levels = Memo::new({
-        let connection_from = connection.from.clone();
-        let connection_to = connection.to.clone();
-
-        move |_| {
-            (
-                game_context
-                    .passives_tree_state
-                    .read()
-                    .ascension
-                    .ascended_nodes
-                    .get(&connection_from)
-                    .cloned()
-                    .unwrap_or_default(),
-                game_context
-                    .passives_tree_state
-                    .read()
-                    .ascension
-                    .ascended_nodes
-                    .get(&connection_to)
-                    .cloned()
-                    .unwrap_or_default(),
-            )
-        }
+    let node_levels = Memo::new(move |_| {
+        (
+            game_context
+                .passives_tree_state
+                .read()
+                .ascension
+                .ascended_nodes
+                .get(&connection.from)
+                .cloned()
+                .unwrap_or_default(),
+            game_context
+                .passives_tree_state
+                .read()
+                .ascension
+                .ascended_nodes
+                .get(&connection.to)
+                .cloned()
+                .unwrap_or_default(),
+        )
     });
 
     view! {
@@ -381,6 +363,6 @@ fn purchase_node(game_context: GameContext, conn: WebsocketContext, node_id: Pas
         .passives_tree_state
         .write()
         .purchased_nodes
-        .insert(node_id.clone());
+        .insert(node_id);
     conn.send(&PurchasePassiveMessage { node_id }.into());
 }

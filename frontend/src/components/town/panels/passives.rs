@@ -578,7 +578,7 @@ fn PassiveSkillTree(
                 each=move || {
                     town_context.passives_tree_specs.read().connections.clone().into_iter()
                 }
-                key=|conn| (conn.from.clone(), conn.to.clone())
+                key=|conn| (conn.from, conn.to)
                 let(conn)
             >
                 <AscendConnection
@@ -591,7 +591,7 @@ fn PassiveSkillTree(
             </For>
             <For
                 each=move || { town_context.passives_tree_specs.read().nodes.clone().into_iter() }
-                key=|(id, _)| id.clone()
+                key=|(id, _)| *id
                 let((id, node))
             >
                 <AscendNode
@@ -629,15 +629,12 @@ fn AscendNode(
     let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
-    let socket = Memo::new({
-        let node_id = node_id.clone();
-        move |_| {
-            passives_tree_ascension
-                .read()
-                .socketed_nodes
-                .get(&node_id)
-                .cloned()
-        }
+    let socket = Memo::new(move |_| {
+        passives_tree_ascension
+            .read()
+            .socketed_nodes
+            .get(&node_id)
+            .cloned()
     });
 
     let derived_node_specs = Memo::new({
@@ -664,24 +661,20 @@ fn AscendNode(
         }
     });
 
-    let node_level = Memo::new({
-        let node_id = node_id.clone();
-
-        move |_| match active_tab.get() {
-            PassivesTab::Ascend => passives_tree_ascension
-                .read()
-                .ascended_nodes
-                .get(&node_id)
-                .copied()
-                .unwrap_or_default(),
-            PassivesTab::Build => town_context
-                .passives_tree_ascension
-                .read()
-                .ascended_nodes
-                .get(&node_id)
-                .copied()
-                .unwrap_or_default(),
-        }
+    let node_level = Memo::new(move |_| match active_tab.get() {
+        PassivesTab::Ascend => passives_tree_ascension
+            .read()
+            .ascended_nodes
+            .get(&node_id)
+            .copied()
+            .unwrap_or_default(),
+        PassivesTab::Build => town_context
+            .passives_tree_ascension
+            .read()
+            .ascended_nodes
+            .get(&node_id)
+            .copied()
+            .unwrap_or_default(),
     });
 
     let max_node_level = if node_specs.upgrade_effects.is_empty() {
@@ -697,9 +690,9 @@ fn AscendNode(
         .iter()
         .filter_map(|connection| {
             if connection.from == node_id {
-                Some(connection.to.clone())
+                Some(connection.to)
             } else if connection.to == node_id {
-                Some(connection.from.clone())
+                Some(connection.from)
             } else {
                 None
             }
@@ -743,82 +736,75 @@ fn AscendNode(
         }
     });
 
-    let node_status = Memo::new({
-        let node_id = node_id.clone();
-        move |_| {
-            let meta_status = if node_level.get() > 0 {
-                MetaStatus::Ascended
-            } else if node_specs.locked {
-                MetaStatus::Locked
-            } else {
-                MetaStatus::Normal
-            };
+    let node_status = Memo::new(move |_| {
+        let meta_status = if node_level.get() > 0 {
+            MetaStatus::Ascended
+        } else if node_specs.locked {
+            MetaStatus::Locked
+        } else {
+            MetaStatus::Normal
+        };
 
-            let purchase_status = match active_tab.get() {
-                PassivesTab::Ascend => {
-                    let upgradable = max_upgrade_level.get() > node_level.get();
+        let purchase_status = match active_tab.get() {
+            PassivesTab::Ascend => {
+                let upgradable = max_upgrade_level.get() > node_level.get();
 
-                    if (view_only || (node_level.get() == max_node_level && !node_specs.socket))
-                        && node_level.get() > 0
-                    {
-                        PurchaseStatus::Purchased
-                    } else if (points_available.get() > 0.0 && upgradable)
-                        || (node_specs.socket && (!node_specs.locked || node_level.get() > 0))
-                    {
-                        PurchaseStatus::Purchaseable
-                    } else {
-                        PurchaseStatus::Inactive
-                    }
+                if (view_only || (node_level.get() == max_node_level && !node_specs.socket))
+                    && node_level.get() > 0
+                {
+                    PurchaseStatus::Purchased
+                } else if (points_available.get() > 0.0 && upgradable)
+                    || (node_specs.socket && (!node_specs.locked || node_level.get() > 0))
+                {
+                    PurchaseStatus::Purchaseable
+                } else {
+                    PurchaseStatus::Inactive
                 }
-                PassivesTab::Build => {
-                    if passives_tree_build.read().contains(&node_id) {
-                        PurchaseStatus::Purchased
-                    } else if !view_only && max_upgrade_level.get() > 0 {
-                        PurchaseStatus::Purchaseable
-                    } else {
-                        PurchaseStatus::Inactive
-                    }
-                }
-            };
-            NodeStatus {
-                purchase_status,
-                meta_status,
             }
+            PassivesTab::Build => {
+                if passives_tree_build.read().contains(&node_id) {
+                    PurchaseStatus::Purchased
+                } else if !view_only && max_upgrade_level.get() > 0 {
+                    PurchaseStatus::Purchaseable
+                } else {
+                    PurchaseStatus::Inactive
+                }
+            }
+        };
+        NodeStatus {
+            purchase_status,
+            meta_status,
         }
     });
 
-    let purchase = {
-        let node_id = node_id.clone();
-        move || {
-            match active_tab.get() {
-                PassivesTab::Ascend => {
-                    if node_specs.socket && (!node_specs.locked || node_level.get() > 0) {
-                        selected_socket_node.set(Some(node_id.clone()));
-                        town_context.selected_item_index.set(None);
-                        town_context
-                            .use_item_category_filter
-                            .set(Some(ItemCategory::Rune));
-                        town_context.open_inventory.set(true);
-                    } else {
-                        passives_tree_ascension.update(|passives_tree_ascension| {
-                            let entry = passives_tree_ascension
-                                .ascended_nodes
-                                .entry(node_id.clone())
-                                .or_default();
-                            *entry = entry.saturating_add(1);
-                        });
-                        ascension_cost.update(|ascension_cost| *ascension_cost += 1.0); // TODO: Ascend cost?
-                    }
+    let purchase = move || {
+        match active_tab.get() {
+            PassivesTab::Ascend => {
+                if node_specs.socket && (!node_specs.locked || node_level.get() > 0) {
+                    selected_socket_node.set(Some(node_id));
+                    town_context.selected_item_index.set(None);
+                    town_context
+                        .use_item_category_filter
+                        .set(Some(ItemCategory::Rune));
+                    town_context.open_inventory.set(true);
+                } else {
+                    passives_tree_ascension.update(|passives_tree_ascension| {
+                        let entry = passives_tree_ascension
+                            .ascended_nodes
+                            .entry(node_id)
+                            .or_default();
+                        *entry = entry.saturating_add(1);
+                    });
+                    ascension_cost.update(|ascension_cost| *ascension_cost += 1.0); // TODO: Ascend cost?
                 }
-                PassivesTab::Build => {
-                    passives_tree_build.write().insert(node_id.clone());
-                }
+            }
+            PassivesTab::Build => {
+                passives_tree_build.write().insert(node_id);
             }
         }
     };
 
     let refund = {
-        let node_id = node_id.clone();
         let character_id = town_context.character.read_untracked().character_id;
         move || {
             if let PassivesTab::Build = active_tab.get() {
@@ -827,7 +813,6 @@ fn AscendNode(
                 .socketed_nodes
                 .contains_key(&node_id)
             {
-                let passive_node_id = node_id.clone();
                 spawn_local({
                     async move {
                         match backend
@@ -835,7 +820,7 @@ fn AscendNode(
                                 &auth_context.token(),
                                 &SocketPassiveRequest {
                                     character_id,
-                                    passive_node_id,
+                                    passive_node_id: node_id,
                                     item_index: None,
                                 },
                             )
@@ -859,7 +844,7 @@ fn AscendNode(
                 passives_tree_ascension.update(|passives_tree_ascension| {
                     let entry = passives_tree_ascension
                         .ascended_nodes
-                        .entry(node_id.clone())
+                        .entry(node_id)
                         .or_default();
                     if *entry > 0 {
                         *entry = entry.saturating_sub(1);
@@ -872,8 +857,6 @@ fn AscendNode(
 
     view! {
         {move || {
-            let purchase = purchase.clone();
-            let refund = refund.clone();
             view! {
                 <Node
                     node_specs=derived_node_specs.get()
@@ -899,68 +882,58 @@ fn AscendConnection(
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
 
-    let amount_connections = Memo::new({
-        let connection_from = connection.from.clone();
-        let connection_to = connection.to.clone();
-
-        move |_| match active_tab.get() {
-            PassivesTab::Ascend => {
-                passives_tree_ascension
+    let amount_connections = Memo::new(move |_| match active_tab.get() {
+        PassivesTab::Ascend => {
+            passives_tree_ascension
+                .read()
+                .ascended_nodes
+                .get(&connection.from)
+                .map(|x| (*x > 0) as usize)
+                .unwrap_or_default()
+                + passives_tree_ascension
                     .read()
                     .ascended_nodes
-                    .get(&connection_from)
+                    .get(&connection.to)
                     .map(|x| (*x > 0) as usize)
                     .unwrap_or_default()
-                    + passives_tree_ascension
-                        .read()
-                        .ascended_nodes
-                        .get(&connection_to)
-                        .map(|x| (*x > 0) as usize)
-                        .unwrap_or_default()
-            }
-            PassivesTab::Build => {
-                passives_tree_build.read().contains(&connection_from) as usize
-                    + passives_tree_build.read().contains(&connection_to) as usize
-            }
+        }
+        PassivesTab::Build => {
+            passives_tree_build.read().contains(&connection.from) as usize
+                + passives_tree_build.read().contains(&connection.to) as usize
         }
     });
 
-    let node_levels = Memo::new({
-        let connection_from = connection.from.clone();
-        let connection_to = connection.to.clone();
-
-        move |_| match active_tab.get() {
-            PassivesTab::Ascend => (
-                passives_tree_ascension
-                    .read()
-                    .ascended_nodes
-                    .get(&connection_from)
-                    .cloned()
-                    .unwrap_or_default(),
-                passives_tree_ascension
-                    .read()
-                    .ascended_nodes
-                    .get(&connection_to)
-                    .cloned()
-                    .unwrap_or_default(),
-            ),
-            PassivesTab::Build => (
-                town_context
-                    .passives_tree_ascension
-                    .read()
-                    .ascended_nodes
-                    .get(&connection_from)
-                    .cloned()
-                    .unwrap_or_default(),
-                town_context
-                    .passives_tree_ascension
-                    .read()
-                    .ascended_nodes
-                    .get(&connection_to)
-                    .cloned()
-                    .unwrap_or_default(),
-            ),
-        }
+    let node_levels = Memo::new(move |_| match active_tab.get() {
+        PassivesTab::Ascend => (
+            passives_tree_ascension
+                .read()
+                .ascended_nodes
+                .get(&connection.from)
+                .cloned()
+                .unwrap_or_default(),
+            passives_tree_ascension
+                .read()
+                .ascended_nodes
+                .get(&connection.to)
+                .cloned()
+                .unwrap_or_default(),
+        ),
+        PassivesTab::Build => (
+            town_context
+                .passives_tree_ascension
+                .read()
+                .ascended_nodes
+                .get(&connection.from)
+                .cloned()
+                .unwrap_or_default(),
+            town_context
+                .passives_tree_ascension
+                .read()
+                .ascended_nodes
+                .get(&connection.to)
+                .cloned()
+                .unwrap_or_default(),
+        ),
     });
 
     view! { <Connection connection passives_tree_specs amount_connections node_levels /> }

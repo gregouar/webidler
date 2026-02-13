@@ -216,7 +216,7 @@ fn compute_max_level_ascension_tree(
         .filter(|(_, node_specs)| node_specs.initial_node)
         .map(|(node_id, _)| {
             (
-                node_id.clone(),
+                *node_id,
                 passive_tree_ascension
                     .ascended_nodes
                     .get(node_id)
@@ -234,7 +234,7 @@ fn compute_max_level_ascension_tree(
             .unwrap_or_default()
             .min(level);
 
-        let entry = propagated_tree.entry(node_id.clone()).or_default();
+        let entry = propagated_tree.entry(node_id).or_default();
         if level <= *entry {
             continue;
         }
@@ -243,9 +243,9 @@ fn compute_max_level_ascension_tree(
         // TODO: Could split connections in 2 hashmap or something
         for connection in &passives_tree_specs.connections {
             if connection.from == node_id {
-                queue.push_back((connection.to.clone(), level));
+                queue.push_back((connection.to, level));
             } else if connection.to == node_id {
-                queue.push_back((connection.from.clone(), level));
+                queue.push_back((connection.from, level));
             }
         }
     }
