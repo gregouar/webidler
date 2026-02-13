@@ -5600,7 +5600,7 @@
         "socket": false
       },
       "73809ca0-cd1d-4d0c-ba3d-1455acc68b02": {
-        "name": "Life Leech Power",
+        "name": "Mana Leech Power",
         "icon": "passives/eel.svg",
         "x": 125.0,
         "y": -100.0,
@@ -11733,7 +11733,7 @@
         "socket": false
       },
       "da2b4bd7-a844-4270-8c7c-67bc62673e61": {
-        "name": "Life Leech Power",
+        "name": "Mana Leech Power",
         "icon": "passives/eel.svg",
         "x": 127.5,
         "y": -112.5,
@@ -12034,7 +12034,7 @@
         "socket": false
       },
       "ddb42629-34b3-4202-bc1b-569b3858020b": {
-        "name": "Life Leech Power",
+        "name": "Mana Leech Power",
         "icon": "passives/eel.svg",
         "x": 112.5,
         "y": -97.5,
