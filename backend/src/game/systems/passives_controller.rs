@@ -178,7 +178,7 @@ pub fn compute_ascension_cost(passive_tree_ascension: &PassivesTreeAscension) ->
 pub fn validate_ascension(
     passives_tree_specs: &PassivesTreeSpecs,
     passive_tree_ascension: &PassivesTreeAscension,
-) -> anyhow::Result<f64> {
+) -> Result<f64, AppError> {
     let mut cost = 0.0;
 
     let max_level_tree =
@@ -188,14 +188,20 @@ pub fn validate_ascension(
         let node_specs = passives_tree_specs
             .nodes
             .get(node_id)
-            .ok_or(anyhow::anyhow!("invalid ascension: missing node"))?;
+            .ok_or(AppError::UserError(
+                "invalid ascension: missing node".into(),
+            ))?;
 
         if *level > node_specs.max_upgrade_level.unwrap_or(u8::MAX) {
-            return Err(anyhow::anyhow!("invalid ascension: level too high"));
+            return Err(AppError::UserError(
+                "invalid ascension: level too high".into(),
+            ));
         }
 
         if *level > max_level_tree.get(node_id).copied().unwrap_or_default() {
-            return Err(anyhow::anyhow!("invalid ascension: missing connection"));
+            return Err(AppError::UserError(
+                "invalid ascension: missing connection".into(),
+            ));
         }
 
         cost += (*level) as f64;

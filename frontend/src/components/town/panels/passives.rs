@@ -1,6 +1,9 @@
-use leptos::{html::*, prelude::*, task::spawn_local};
+use leptos::{html::*, leptos_dom::logging::console_log, prelude::*, task::spawn_local};
 
-use std::sync::Arc;
+use std::{
+    collections::{HashMap, HashSet, VecDeque},
+    sync::Arc,
+};
 
 use shared::{
     data::{
@@ -50,6 +53,21 @@ pub fn PassivesPanel(
     let ascension_cost = RwSignal::new(0.0);
     let passives_tree_ascension = RwSignal::new(PassivesTreeAscension::default());
     let passives_tree_build = RwSignal::new(PurchasedNodes::default());
+
+    let invalid_nodes = RwSignal::new(HashSet::new());
+    let invalid_tree = Signal::derive(move || !invalid_nodes.read().is_empty());
+
+    let node_distances = Memo::new(move |_| {
+        town_context
+            .passives_tree_specs
+            .with(|passives_tree_specs| {
+                town_context
+                    .passives_tree_ascension
+                    .with(|passives_tree_ascension| {
+                        compute_node_distances(passives_tree_specs, passives_tree_ascension)
+                    })
+            })
+    });
 
     let reset = move || {
         let mut initial_cost = 0.0;
@@ -142,13 +160,16 @@ pub fn PassivesPanel(
                                     <AscendPanelHeader
                                         passives_tree_ascension
                                         ascension_cost
+                                        invalid_tree
                                         view_only
                                     />
                                 }
                                     .into_any()
                             }
                             PassivesTab::Build => {
-                                view! { <BuildPanelHeader passives_tree_build view_only /> }
+                                view! {
+                                    <BuildPanelHeader passives_tree_build invalid_tree view_only />
+                                }
                                     .into_any()
                             }
                         }}
@@ -159,6 +180,8 @@ pub fn PassivesPanel(
                             active_tab
                             passives_tree_ascension
                             passives_tree_build
+                            node_distances
+                            invalid_nodes
                             search_node
                             ascension_cost
                             view_only
@@ -176,6 +199,7 @@ pub fn PassivesPanel(
 #[component]
 pub fn AscendPanelHeader(
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
+    invalid_tree: Signal<bool>,
     ascension_cost: RwSignal<f64>,
     #[prop(default = false)] view_only: bool,
 ) -> impl IntoView {
@@ -212,7 +236,18 @@ pub fn AscendPanelHeader(
             .then(|| {
                 view! {
                     <div class="text-sm xl:text-base text-gray-400 flex items-center">
-                        "Ascension Cost:" <ShardsCounter value=ascension_cost.into() />
+
+                        {move || match invalid_tree.get() {
+                            true => {
+                                view! {
+                                    <span class="text-red-500 font-semibold ml-2">
+                                        "Invalid Tree"
+                                    </span>
+                                }
+                                    .into_any()
+                            }
+                            false => view! { "Ascension Cost:" }.into_any(),
+                        }} <ShardsCounter value=ascension_cost.into() />
                     </div>
 
                     <div class="flex-1" />
@@ -230,7 +265,12 @@ pub fn AscendPanelHeader(
                         >
                             "Cancel"
                         </MenuButton>
-                        <ConfirmAscendButton passives_tree_ascension ascension_cost has_changed />
+                        <ConfirmAscendButton
+                            passives_tree_ascension
+                            invalid_tree
+                            ascension_cost
+                            has_changed
+                        />
                     </div>
                 }
             })}
@@ -240,6 +280,7 @@ pub fn AscendPanelHeader(
 #[component]
 fn ConfirmAscendButton(
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
+    invalid_tree: Signal<bool>,
     ascension_cost: RwSignal<f64>,
     has_changed: Memo<bool>,
 ) -> impl IntoView {
@@ -293,7 +334,7 @@ fn ConfirmAscendButton(
         }
     };
 
-    let disabled = Signal::derive(move || !has_changed.get());
+    let disabled = Signal::derive(move || !has_changed.get() || invalid_tree.get());
 
     view! {
         <MenuButton on:click=try_ascend disabled=disabled>
@@ -362,6 +403,7 @@ fn RefundAscendButton(
 #[component]
 pub fn BuildPanelHeader(
     passives_tree_build: RwSignal<PurchasedNodes>,
+    invalid_tree: Signal<bool>,
     #[prop(default = false)] view_only: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
@@ -381,10 +423,25 @@ pub fn BuildPanelHeader(
             .then(|| {
                 view! {
                     <div class="text-sm xl:text-base text-gray-400">
-                        "Required Player Level:"
-                        <span class="text-white font-semibold ml-2">
-                            {move || passives_tree_build.read().len()}
-                        </span>
+                        {move || match invalid_tree.get() {
+                            true => {
+                                view! {
+                                    <span class="text-red-500 font-semibold ml-2">
+                                        "Invalid Tree"
+                                    </span>
+                                }
+                                    .into_any()
+                            }
+                            false => {
+                                view! {
+                                    "Required Player Level:"
+                                    <span class="text-white font-semibold ml-2">
+                                        {move || passives_tree_build.read().len()}
+                                    </span>
+                                }
+                                    .into_any()
+                            }
+                        }}
                     </div>
 
                     <div class="flex-1" />
@@ -402,7 +459,7 @@ pub fn BuildPanelHeader(
                         >
                             "Cancel"
                         </MenuButton>
-                        <ConfirmBuildButton passives_tree_build has_changed />
+                        <ConfirmBuildButton passives_tree_build invalid_tree has_changed />
                     </div>
                 }
             })}
@@ -412,6 +469,7 @@ pub fn BuildPanelHeader(
 #[component]
 fn ConfirmBuildButton(
     passives_tree_build: RwSignal<PurchasedNodes>,
+    invalid_tree: Signal<bool>,
     has_changed: Memo<bool>,
 ) -> impl IntoView {
     let do_save = Arc::new({
@@ -462,7 +520,7 @@ fn ConfirmBuildButton(
         }
     };
 
-    let disabled = Signal::derive(move || !has_changed.get());
+    let disabled = Signal::derive(move || !has_changed.get() || invalid_tree.get());
 
     view! {
         <MenuButton on:click=try_save disabled=disabled>
@@ -516,6 +574,8 @@ fn PassiveSkillTree(
     search_node: RwSignal<Option<String>>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     passives_tree_build: RwSignal<PurchasedNodes>,
+    node_distances: Memo<HashMap<PassiveNodeId, (i32, i32)>>,
+    invalid_nodes: RwSignal<HashSet<PassiveNodeId>>,
     ascension_cost: RwSignal<f64>,
     view_only: bool,
 ) -> impl IntoView {
@@ -601,6 +661,8 @@ fn PassiveSkillTree(
                     ascension_cost
                     passives_tree_ascension
                     passives_tree_build
+                    node_distances
+                    invalid_nodes
                     selected_socket_node
                     active_tab
                     search_node
@@ -622,6 +684,8 @@ fn AscendNode(
     search_node: RwSignal<Option<String>>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     passives_tree_build: RwSignal<PurchasedNodes>,
+    node_distances: Memo<HashMap<PassiveNodeId, (i32, i32)>>,
+    invalid_nodes: RwSignal<HashSet<PassiveNodeId>>,
     view_only: bool,
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
@@ -699,20 +763,21 @@ fn AscendNode(
         })
         .collect();
 
-    let max_upgrade_level = Memo::new({
-        move |_| {
-            let max_connection_level = if node_specs.initial_node
-                || (active_tab.get() == PassivesTab::Build
-                    && derived_node_specs.read().initial_node)
-            {
-                match active_tab.get() {
-                    PassivesTab::Ascend => u8::MAX,
-                    PassivesTab::Build => (!node_specs.locked || node_level.get() > 0) as u8,
-                }
-            } else {
-                match active_tab.get() {
-                    PassivesTab::Ascend => connected_nodes
+    let max_upgrade_level = Memo::new(move |_| {
+        let max_connection_level = node_distances.with(|node_distances| match active_tab.get() {
+            PassivesTab::Ascend => {
+                let node_distance = node_distances.get(&node_id).copied().unwrap_or_default().1;
+                if node_distance == 0 {
+                    u8::MAX
+                } else {
+                    connected_nodes
                         .iter()
+                        .filter(|connected_node_id| {
+                            node_distances
+                                .get(connected_node_id)
+                                .map(|(_, distance)| *distance < node_distance)
+                                .unwrap_or_default()
+                        })
                         .map(|connected_node_id| {
                             passives_tree_ascension
                                 .read()
@@ -722,17 +787,39 @@ fn AscendNode(
                                 .unwrap_or_default()
                         })
                         .max()
-                        .unwrap_or_default(),
-                    PassivesTab::Build => {
-                        (connected_nodes.iter().any(|connected_node_id| {
-                            passives_tree_build.read().contains(connected_node_id)
-                        }) && (!node_specs.locked || node_level.get() > 0))
-                            as u8
-                    }
+                        .unwrap_or_default()
                 }
-            };
+            }
+            PassivesTab::Build => {
+                let node_distance = node_distances.get(&node_id).copied().unwrap_or_default().0;
+                if node_specs.locked && node_level.get() == 0 {
+                    0
+                } else if node_distance == 0 {
+                    1
+                } else {
+                    connected_nodes
+                        .iter()
+                        .filter(|connected_node_id| {
+                            node_distances
+                                .get(connected_node_id)
+                                .map(|(distance, _)| *distance < node_distance)
+                                .unwrap_or_default()
+                        })
+                        .any(|connected_node_id| {
+                            passives_tree_build.read().contains(connected_node_id)
+                        }) as u8
+                }
+            }
+        });
 
-            max_node_level.min(max_connection_level)
+        max_node_level.min(max_connection_level)
+    });
+
+    Effect::new(move || {
+        if node_level.get() > max_upgrade_level.get() {
+            invalid_nodes.write().insert(node_id);
+        } else {
+            invalid_nodes.write().remove(&node_id);
         }
     });
 
@@ -937,4 +1024,53 @@ fn AscendConnection(
     });
 
     view! { <Connection connection passives_tree_specs amount_connections node_levels /> }
+}
+
+fn compute_node_distances(
+    passives_tree_specs: &PassivesTreeSpecs,
+    passives_tree_ascension: &PassivesTreeAscension,
+) -> HashMap<PassiveNodeId, (i32, i32)> {
+    let mut propagated_tree = HashMap::new();
+
+    let mut queue: VecDeque<_> = passives_tree_specs
+        .nodes
+        .iter()
+        .filter_map(move |(node_id, node_specs)| {
+            let initial_socket = passives_tree_ascension
+                .socketed_nodes
+                .get(node_id)
+                .and_then(|item_specs| item_specs.base.rune_specs.as_ref())
+                .map(|rune_specs| rune_specs.root_node)
+                .unwrap_or_default();
+
+            (node_specs.initial_node || initial_socket).then(|| {
+                (
+                    *node_id,
+                    (0, if node_specs.initial_node { 0 } else { 9999 }),
+                )
+            })
+        })
+        .collect();
+
+    while let Some((node_id, distance)) = queue.pop_front() {
+        let entry: &mut (i32, i32) = propagated_tree.entry(node_id).or_insert((9999, 9999));
+        if distance.0 > entry.0 && distance.1 > entry.1 {
+            continue;
+        }
+        entry.0 = entry.0.min(distance.0);
+        entry.1 = entry.1.min(distance.1);
+
+        // TODO: Could split connections in 2 hashmap or something
+        for connection in &passives_tree_specs.connections {
+            if connection.from == node_id {
+                queue.push_back((connection.to, (distance.0 + 1, distance.1 + 1)));
+            } else if connection.to == node_id {
+                queue.push_back((connection.from, (distance.0 + 1, distance.1 + 1)));
+            }
+        }
+    }
+
+    console_log(&format!("{:?}", propagated_tree));
+
+    propagated_tree
 }
