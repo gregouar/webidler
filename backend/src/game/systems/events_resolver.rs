@@ -316,7 +316,7 @@ fn handle_area_completed_event(
         is_boss_level,
         new_max, // Only drop unique when new area completed
         None,
-        area_state.loot_rarity,
+        area_state.loot_rarity.evaluate(),
     ) {
         Some(item_specs) => {
             for item_specs in loot_controller::drop_loot(

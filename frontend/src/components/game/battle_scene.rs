@@ -309,7 +309,7 @@ pub fn ThreatMeter() -> impl IntoView {
             {
                 (1.0 - game_context.area_threat.read().elapsed_cooldown)
                     * (game_context.area_threat.read().cooldown
-                        / (game_context.player_specs.read().threat_gain * 0.01))
+                        / (game_context.player_specs.read().threat_gain.evaluate() * 0.01))
             }
         } else {
             Default::default()

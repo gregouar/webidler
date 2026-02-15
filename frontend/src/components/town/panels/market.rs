@@ -7,10 +7,11 @@ use shared::{
     data::{
         item::{ItemCategory, ItemRarity},
         market::{MarketFilters, MarketItem, MarketOrderBy},
+        modifier::Modifier,
         passive::StatEffect,
         skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
-        stat_effect::{Modifier, StatType},
+        stat_effect::StatType,
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
@@ -1397,6 +1398,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
 fn format_stat_filter(stat_type: &StatType, modifier: Modifier) -> String {
     match modifier {
         Modifier::Multiplier => format!("#% Increased {}", format_multiplier_stat_name(stat_type)),
+        Modifier::More => format!("#% More {}", format_multiplier_stat_name(stat_type)),
         Modifier::Flat => format_flat_stat(stat_type, None),
     }
 }

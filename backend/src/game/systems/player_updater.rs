@@ -9,13 +9,11 @@ use shared::{
         character_status::StatusSpecs,
         item::{SkillRange, SkillShape},
         item_affix::AffixEffectScope,
+        modifier::Modifier,
         passive::{PassivesTreeSpecs, PassivesTreeState},
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
         skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
-        stat_effect::{
-            ApplyStatModifier, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs,
-            StatType,
-        },
+        stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatType},
         trigger::{EventTrigger, HitTrigger, TriggerTarget, TriggeredEffect},
     },
 };
@@ -34,10 +32,10 @@ pub fn base_player_character_specs(name: String, portrait: String, level: u8) ->
         size: CharacterSize::Small,
         position_x: 0,
         position_y: 0,
-        max_life: 100.0 + PLAYER_LIFE_PER_LEVEL * (level.saturating_sub(1)) as f64,
-        life_regen: 10.0,
-        max_mana: 100.0,
-        mana_regen: 10.0,
+        max_life: (100.0 + PLAYER_LIFE_PER_LEVEL * (level.saturating_sub(1)) as f64).into(),
+        life_regen: 10.0.into(),
+        max_mana: 100.0.into(),
+        mana_regen: 10.0.into(),
         ..Default::default()
     }
 }
@@ -115,9 +113,9 @@ pub fn update_player_specs(
         player_specs.level,
     );
 
-    player_specs.gold_find = 100.0;
-    player_specs.threat_gain = 100.0;
-    player_specs.movement_cooldown = 3.0;
+    player_specs.gold_find = 100.0.into();
+    player_specs.threat_gain = 100.0.into();
+    player_specs.movement_cooldown = 3.0.into();
 
     // TODO: Could we figure out a way to keep the block luck somehow?
     let (total_armor, total_block) = player_inventory
@@ -125,19 +123,23 @@ pub fn update_player_specs(
         .map(|(_, item)| item)
         .filter_map(|item| item.armor_specs.as_ref())
         .map(|spec| (spec.armor, spec.block))
-        .fold((0.0, 0.0), |(a_sum, b_sum), (a, b)| (a_sum + a, b_sum + b));
+        .fold((0.0, 0.0), |(a_sum, b_sum), (a, b)| {
+            (a_sum + a.evaluate(), b_sum + b.evaluate())
+        });
 
-    (*player_specs
+    player_specs
         .character_specs
         .armor
         .entry(DamageType::Physical)
-        .or_default()) += total_armor;
+        .or_default()
+        .base += total_armor;
     player_specs
         .character_specs
         .block
         .entry(SkillType::Attack)
         .or_default()
-        .value += total_block;
+        .value
+        .base += total_block;
 
     player_specs.character_specs.triggers = passives_tree_state
         .purchased_nodes
@@ -170,15 +172,6 @@ pub fn update_player_specs(
         .collect();
 
     compute_player_specs(player_specs, player_inventory, area_threat, effects_map);
-
-    // We only add skills trigger after because they were already increased by skill update
-    // player_specs.character_specs.triggers.extend(
-    //     player_specs
-    //         .skills_specs
-    //         .iter()
-    //         .flat_map(|skill_specs| skill_specs.triggers.iter())
-    //         .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
-    // );
 }
 
 fn compute_player_specs(
@@ -229,9 +222,9 @@ fn compute_player_specs(
                                     RestoreType::Mana
                                 },
                                 value: ChanceRange {
-                                    min: effect.value,
-                                    max: effect.value,
-                                    lucky_chance: 0.0,
+                                    min: effect.value.into(),
+                                    max: effect.value.into(),
+                                    lucky_chance: 0.0.into(),
                                 },
                                 modifier: Modifier::Flat,
                             },

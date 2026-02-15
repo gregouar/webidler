@@ -1,12 +1,9 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::data::{skill::SkillType, trigger::TriggerSpecs};
+use crate::data::{modifier::Modifier, skill::SkillType, trigger::TriggerSpecs};
 
-use super::{
-    skill::DamageType,
-    stat_effect::{Modifier, StatType},
-};
+use super::{skill::DamageType, stat_effect::StatType};
 
 // pub type StatusMap = HashMap<StatusSpecs, Vec<StatusState>>;
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

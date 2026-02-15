@@ -2,7 +2,9 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-pub use super::stat_effect::{Modifier, StatEffect, StatType};
+use crate::data::modifier::Modifier;
+
+pub use super::stat_effect::{StatEffect, StatType};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct BenedictionSpecs {
@@ -50,7 +52,8 @@ impl BenedictionSpecs {
         }
 
         match self.upgrade_modifier {
-            Modifier::Multiplier => {
+            // TODO
+            Modifier::Multiplier | Modifier::More => {
                 let exponent = upgrade_level.saturating_sub(1) as i32;
                 value *= (1.0 + self.upgrade_value * 0.01).powi(exponent);
             }

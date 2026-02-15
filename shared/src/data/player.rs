@@ -4,7 +4,10 @@ use indexmap::IndexSet;
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
-use crate::{constants::DEFAULT_MAX_LEVEL, data::area::AreaLevel};
+use crate::{
+    constants::DEFAULT_MAX_LEVEL,
+    data::{area::AreaLevel, modifier::ModifiableValue},
+};
 
 pub use super::character::{CharacterSpecs, CharacterState};
 use super::{
@@ -27,9 +30,9 @@ pub struct PlayerSpecs {
     pub experience_needed: f64,
 
     // Should move to a DerivedPlayerSpecs
-    pub movement_cooldown: f32,
-    pub gold_find: f64,
-    pub threat_gain: f32,
+    pub movement_cooldown: ModifiableValue<f32>,
+    pub gold_find: ModifiableValue<f64>,
+    pub threat_gain: ModifiableValue<f32>,
 
     #[serde(default)] // for retro compatibility
     pub effects: EffectsMap, //TODO: REMOVE

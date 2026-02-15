@@ -220,7 +220,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     let damage_ticks = ArcRwSignal::new(Vec::new());
     let dot_tick = ArcRwSignal::new(None);
 
-    let mut old_life = specs.character_specs.max_life;
+    let mut old_life = specs.character_specs.max_life.evaluate();
     let life = RwSignal::new(old_life);
 
     Effect::new({
@@ -317,14 +317,14 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             "Life: "
             {format_number(life.get())}
             "/"
-            {format_number(specs.character_specs.max_life)}
+            {format_number(specs.character_specs.max_life.evaluate())}
         }
     };
 
     let life_percent = Memo::new(move |_| {
-        let max_life = specs.character_specs.max_life;
+        let max_life = specs.character_specs.max_life.evaluate();
         if max_life > 0.0 {
-            (life.get() / specs.character_specs.max_life * 100.0) as f32
+            (life.get() / specs.character_specs.max_life.evaluate() * 100.0) as f32
         } else {
             0.0
         }
@@ -567,7 +567,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                     .read()
                     .get(monster_index)
                     .and_then(|m| m.skill_specs.get(index))
-                    .map(|s| s.cooldown)
+                    .map(|s| s.cooldown.evaluate())
                     .unwrap_or(0.0) as f32
         }
     });

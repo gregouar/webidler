@@ -6,10 +6,10 @@ use shared::{
     data::{
         character::{CharacterId, CharacterSpecs, CharacterState},
         conditional_modifier::ConditionalModifier,
+        modifier::Modifier,
         passive::StatEffect,
         skill::{DamageType, RestoreType, SkillType},
-        stat_effect::{ApplyStatModifier, LuckyRollType, StatConverterSource, StatType},
-        temple::Modifier,
+        stat_effect::{LuckyRollType, StatConverterSource, StatType},
     },
 };
 
@@ -49,19 +49,23 @@ pub fn update_character_state(
     restore_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Life,
-        elapsed_time_f64 * character_specs.life_regen * 0.1,
+        elapsed_time_f64 * character_specs.life_regen.evaluate() * 0.1,
         Modifier::Multiplier,
     );
 
     restore_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Mana,
-        elapsed_time_f64 * character_specs.mana_regen * 0.1,
+        elapsed_time_f64 * character_specs.mana_regen.evaluate() * 0.1,
         Modifier::Multiplier,
     );
 
-    character_state.life = character_state.life.min(character_specs.max_life);
-    character_state.mana = character_state.mana.min(character_specs.max_mana);
+    character_state.life = character_state
+        .life
+        .min(character_specs.max_life.evaluate());
+    character_state.mana = character_state
+        .mana
+        .min(character_specs.max_mana.evaluate());
 
     if character_state.life < 0.5 {
         character_state.life = character_state.life.min(0.0);
@@ -190,7 +194,7 @@ fn compute_character_specs(
                         character_specs
                             .damage_resistance
                             .entry((skill, damage))
-                            .or_insert(0.0)
+                            .or_default()
                             .apply_effect(effect);
                     }
                 }
@@ -303,38 +307,38 @@ fn compute_character_specs(
             let factor = factor * 0.01;
             let amount = match specs.source {
                 StatConverterSource::MaxLife => {
-                    let amount = character_specs.max_life * factor;
+                    let amount = character_specs.max_life.compute() * factor;
                     if !specs.is_extra {
-                        character_specs.max_life -= amount;
+                        character_specs.max_life.base -= amount;
                     }
                     amount
                 }
                 StatConverterSource::MaxMana => {
-                    let amount = character_specs.max_mana * factor;
+                    let amount = character_specs.max_mana.compute() * factor;
                     if !specs.is_extra {
-                        character_specs.max_mana -= amount;
+                        character_specs.max_mana.base -= amount;
                     }
                     amount
                 }
                 StatConverterSource::ManaRegen => {
-                    let amount = character_specs.mana_regen * factor;
+                    let amount = character_specs.mana_regen.compute() * factor;
                     if !specs.is_extra {
-                        character_specs.mana_regen -= amount;
+                        character_specs.mana_regen.base -= amount;
                     }
                     amount
                 }
                 StatConverterSource::LifeRegen => {
-                    let amount = character_specs.life_regen * factor;
+                    let amount = character_specs.life_regen.compute() * factor;
                     if !specs.is_extra {
-                        character_specs.life_regen -= amount;
+                        character_specs.life_regen.base -= amount;
                     }
                     amount
                 }
                 StatConverterSource::Block(skill_type) => {
                     if let Some(block) = character_specs.block.get_mut(&skill_type) {
-                        let amount = block.value as f64 * factor;
+                        let amount = block.value.compute() as f64 * factor;
                         if !specs.is_extra {
-                            block.value -= amount as f32;
+                            block.value.base -= amount as f32
                         }
                         amount
                     } else {
@@ -360,18 +364,26 @@ fn compute_character_specs(
         compute_character_specs(character_specs, &stats_converted);
     }
 
-    character_specs.max_life = character_specs.max_life.max(1.0);
-    character_specs.max_mana = character_specs.max_mana.max(0.0);
+    character_specs.max_life = character_specs.max_life.evaluate().max(1.0).into();
+    character_specs.max_mana = character_specs.max_mana.evaluate().max(0.0).into();
     for block in character_specs.block.values_mut() {
         block.clamp();
-        block.value = block.value.min(MAX_BLOCK);
+        block.value = block.value.evaluate().min(MAX_BLOCK).into();
     }
-    character_specs.block_damage = character_specs.block_damage.clamp(0.0, 100.0);
+    character_specs.block_damage = character_specs
+        .block_damage
+        .evaluate()
+        .clamp(0.0, 100.0)
+        .into();
     for evade in character_specs.evade.values_mut() {
         evade.clamp();
-        evade.value = evade.value.min(MAX_EVADE);
+        evade.value = evade.value.evaluate().min(MAX_EVADE).into();
     }
-    character_specs.evade_damage = character_specs.evade_damage.clamp(0.0, 100.0);
+    character_specs.evade_damage = character_specs
+        .evade_damage
+        .evaluate()
+        .clamp(0.0, 100.0)
+        .into();
 
     stats_converted
 }

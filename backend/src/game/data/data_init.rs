@@ -29,7 +29,7 @@ impl DataInit<&AreaSpecs> for AreaState {
             auto_progress: true,
             going_back: 0,
             rush_mode: false,
-            loot_rarity: 100.0,
+            loot_rarity: 100.0.into(),
         }
     }
 }
@@ -37,8 +37,8 @@ impl DataInit<&AreaSpecs> for AreaState {
 impl DataInit<&CharacterSpecs> for CharacterState {
     fn init(specs: &CharacterSpecs) -> Self {
         CharacterState {
-            life: specs.max_life,
-            mana: specs.max_mana,
+            life: specs.max_life.evaluate(),
+            mana: specs.max_mana.evaluate(),
 
             statuses: StatusMap::default(),
             dirty_specs: true,
@@ -66,9 +66,9 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             bought_skills: Default::default(),
             level: 1,
             experience_needed: 20.0,
-            movement_cooldown: 3.0,
-            gold_find: 100.0,
-            threat_gain: 100.0,
+            movement_cooldown: 3.0.into(),
+            gold_find: 100.0.into(),
+            threat_gain: 100.0.into(),
             effects: EffectsMap::default(),
             max_level: DEFAULT_MAX_LEVEL,
         }
@@ -99,8 +99,8 @@ impl DataInit<&MonsterSpecs> for MonsterState {
 impl DataInit<BaseSkillSpecs> for SkillSpecs {
     fn init(specs: BaseSkillSpecs) -> Self {
         Self {
-            cooldown: specs.cooldown,
-            mana_cost: specs.mana_cost,
+            cooldown: specs.cooldown.into(),
+            mana_cost: specs.mana_cost.into(),
             upgrade_level: 1,
             next_upgrade_cost: specs.upgrade_cost,
             targets: specs.targets.clone(),

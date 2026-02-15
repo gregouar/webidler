@@ -8,13 +8,14 @@ use shared::data::{
     conditional_modifier::Condition,
     item::{ItemModifiers, ItemRarity, ItemSlot},
     item_affix::{AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix},
+    modifier::Modifier,
     passive::PassivesTreeAscension,
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{
         LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatSkillEffectType,
         StatStatusType,
     },
-    temple::{Modifier, StatEffect, StatType},
+    temple::{StatEffect, StatType},
     trigger::HitTrigger,
     user::UserCharacterId,
 };

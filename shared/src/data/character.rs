@@ -6,6 +6,7 @@ use crate::data::{
     chance::Chance,
     character_status::StatusId,
     conditional_modifier::{Condition, ConditionalModifier},
+    modifier::ModifiableValue,
     skill::{DamageType, SkillType},
     stat_effect::{EffectsMap, StatStatusType},
     trigger::TriggeredEffect,
@@ -60,40 +61,40 @@ pub struct CharacterSpecs {
 
     // TODO: All the above: move elsewhere ^^^
     //
-    pub max_life: f64,
+    pub max_life: ModifiableValue<f64>,
     #[serde(default)]
-    pub life_regen: f64,
+    pub life_regen: ModifiableValue<f64>,
 
     #[serde(default)]
-    pub max_mana: f64,
+    pub max_mana: ModifiableValue<f64>,
     #[serde(default)]
-    pub mana_regen: f64,
+    pub mana_regen: ModifiableValue<f64>,
 
     #[serde(default)]
-    pub take_from_mana_before_life: f32,
+    pub take_from_mana_before_life: ModifiableValue<f32>,
     #[serde(default)]
-    pub take_from_life_before_mana: f32,
+    pub take_from_life_before_mana: ModifiableValue<f32>,
 
     #[serde(default)]
-    pub armor: HashMap<DamageType, f64>,
+    pub armor: HashMap<DamageType, ModifiableValue<f64>>,
 
     #[serde(default)]
     pub block: HashMap<SkillType, Chance>,
     #[serde(default)]
-    pub block_damage: f32,
+    pub block_damage: ModifiableValue<f32>,
 
     #[serde(default)]
     pub evade: HashMap<DamageType, Chance>,
     #[serde(default)]
-    pub evade_damage: f32,
+    pub evade_damage: ModifiableValue<f32>,
 
     #[serde(default)]
-    pub status_resistances: HashMap<(SkillType, Option<StatStatusType>), f64>,
+    pub status_resistances: HashMap<(SkillType, Option<StatStatusType>), ModifiableValue<f64>>,
     #[serde(default)]
-    pub stun_lockout: f64,
+    pub stun_lockout: ModifiableValue<f64>,
 
     #[serde(default)]
-    pub damage_resistance: HashMap<(SkillType, DamageType), f64>,
+    pub damage_resistance: HashMap<(SkillType, DamageType), ModifiableValue<f64>>,
 
     // TODO: Should have CharacterComputed
     #[serde(default)]

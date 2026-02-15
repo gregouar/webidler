@@ -7,13 +7,14 @@ use shared::data::{
     chance::ChanceRange,
     character_status::StatusSpecs,
     item::{ItemSlot, SkillRange, SkillShape},
+    modifier::{BaseModifiableValue, ModifiableValue, Modifier},
     passive::StatEffect,
     skill::{
         DamageType, ItemStatsSource, ModifierEffect, ModifierEffectSource, RestoreType,
         SkillEffect, SkillEffectType, SkillRepeatTarget, SkillSpecs, SkillTargetsGroup, SkillType,
         TargetType,
     },
-    stat_effect::{Modifier, StatSkillEffectType, StatStatusType},
+    stat_effect::{StatSkillEffectType, StatStatusType},
     temple::StatType,
     trigger::TriggerEffectModifier,
 };
@@ -96,20 +97,22 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
             <p class="text-xs xl:text-sm text-gray-400 leading-snug">
                 {skill_type_str(Some(skill_specs.base.skill_type))} "| "
-                {if skill_specs.cooldown > 0.0 {
+                {if skill_specs.cooldown.evaluate() > 0.0 {
                     view! {
                         "Cooldown: "
-                        <span class="text-white">{format!("{:.1}s", skill_specs.cooldown)}</span>
+                        <span class="text-white">
+                            {format!("{:.1}s", skill_specs.cooldown.evaluate())}
+                        </span>
                     }
                         .into_any()
                 } else {
                     view! { "Permanent" }.into_any()
                 }}
-                {(skill_specs.mana_cost > 0.0)
+                {(skill_specs.mana_cost.evaluate() > 0.0)
                     .then(|| {
                         view! {
                             " | Mana Cost: "
-                            <span class="text-white">{skill_specs.mana_cost}</span>
+                            <span class="text-white">{skill_specs.mana_cost.evaluate()}</span>
                         }
                     })}
             </p>
@@ -190,7 +193,10 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
                 SkillRepeatTarget::Same => "Multi-Hit",
                 SkillRepeatTarget::Different => "Chain",
             },
-            format_min_max(targets_group.repeat.value),
+            format_min_max_f64(
+                targets_group.repeat.value.min,
+                targets_group.repeat.value.max
+            ),
         )
     } else {
         "".into()
@@ -235,9 +241,11 @@ pub fn format_skill_effect(
     effect: SkillEffect,
     modifiers: Option<&[TriggerEffectModifier]>,
 ) -> impl IntoView + use<> {
-    let success_chance = if effect.success_chance.value < 100.0 {
+    let success_chance = if effect.success_chance.value.evaluate() < 100.0 {
         Some(view! {
-            <span class="font-semibold">{format!("{:.0}%", effect.success_chance.value)}</span>
+            <span class="font-semibold">
+                {format!("{:.0}%", effect.success_chance.value.evaluate())}
+            </span>
             " chance to "
         })
     } else {
@@ -268,7 +276,9 @@ pub fn format_skill_effect(
                         ),
                         " as",
                     );
-                    if value.min > 0.0 || value.max > 0.0 || trigger_modifier_str.is_some() {
+                    if value.min.evaluate() > 0.0 || value.max.evaluate() > 0.0
+                        || trigger_modifier_str.is_some()
+                    {
                         damage_lines
                             .push(
                                 view! {
@@ -276,7 +286,7 @@ pub fn format_skill_effect(
                                         {success_chance}"Deal "
                                         <span class=format!(
                                             "font-semibold {damage_color}",
-                                        )>{format_min_max(value)}</span>{trigger_modifier_str} " "
+                                        )>{format_min_max(value)}</span> {trigger_modifier_str} " "
                                         {damage_type_str(Some(damage_type))} "Damage"
                                     </EffectLi>
                                 },
@@ -285,18 +295,20 @@ pub fn format_skill_effect(
                 }
                 damage_lines
             }
-            {if crit_chance.value > 0.0 {
+            {if crit_chance.value.evaluate() > 0.0 {
                 Some(
                     view! {
                         <EffectLi>
                             "Critical hit chance: "
                             <span class="font-semibold">
-                                {format!("{:.2}%", crit_chance.value)}
+                                {format!("{:.2}%", crit_chance.value.evaluate())}
                             </span>
                         </EffectLi>
                         <EffectLi>
                             "Critical hit damage: "
-                            <span class="font-semibold">{format!("+{:.0}%", crit_damage)}</span>
+                            <span class="font-semibold">
+                                {format!("+{:.0}%", crit_damage.evaluate())}
+                            </span>
                         </EffectLi>
                     },
                 )
@@ -362,8 +374,8 @@ pub fn format_skill_effect(
                             "",
                         );
 
-                        (status_effect.value.min > 0.0
-                            || status_effect.value.max > 0.0
+                        (status_effect.value.min.evaluate() > 0.0
+                            || status_effect.value.max.evaluate() > 0.0
                             || trigger_modifier_damage_str.is_some())
                         .then({
                             || {
@@ -398,9 +410,9 @@ pub fn format_skill_effect(
                             stat: stat.clone(),
                             modifier,
                             value: if debuff {
-                                -status_effect.value.min
+                                -status_effect.value.min.evaluate()
                             } else {
-                                status_effect.value.min
+                                status_effect.value.min.evaluate()
                             },
                             bypass_ignore: false,
                         });
@@ -409,9 +421,9 @@ pub fn format_skill_effect(
                                 stat: stat.clone(),
                                 modifier,
                                 value: if debuff {
-                                    -status_effect.value.max
+                                    -status_effect.value.max.evaluate()
                                 } else {
-                                    status_effect.value.max
+                                    status_effect.value.max.evaluate()
                                 },
                                 bypass_ignore: false,
                             });
@@ -496,7 +508,7 @@ pub fn format_skill_effect(
                     <span class="font-semibold">
                         {format_min_max(value)} {trigger_modifier_factor_str}
                         {match modifier {
-                            Modifier::Multiplier => "%",
+                            Modifier::Multiplier | Modifier::More => "%",
                             Modifier::Flat => "",
                         }}
                     </span> {restore_type_str(Some(restore_type))}{trigger_modifier_str}
@@ -526,58 +538,58 @@ fn damage_color(damage_type: DamageType) -> &'static str {
     }
 }
 
-fn format_min_max<T>(value: ChanceRange<T>) -> String
+fn format_min_max_f64<T>(min: T, max: T) -> String
 where
     T: Into<f64> + PartialEq + Copy,
 {
-    if value.min != value.max {
-        format!(
-            "{} - {}",
-            format_number(value.min.into()),
-            format_number(value.max.into())
-        )
-    } else if value.min.into() != 0.0 {
-        format_number(value.min.into()).to_string()
+    let min = min.into();
+    let max = max.into();
+    if min != max {
+        format!("{} - {}", format_number(min), format_number(max))
+    } else if min != 0.0 {
+        format_number(min).to_string()
     } else {
         "".to_string()
     }
 }
 
-fn format_duration<T>(value: ChanceRange<T>) -> impl IntoView
+fn format_min_max<T>(value: ChanceRange<ModifiableValue<T>>) -> String
 where
+    T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
     T: Into<f64> + PartialEq + Copy,
 {
-    let format_min_max = |value: ChanceRange<f64>| {
-        if value.min != value.max {
-            format!("{:.1} - {:.1}", value.min, value.max,)
+    format_min_max_f64(value.min.evaluate(), value.max.evaluate())
+}
+
+fn format_duration<T>(value: ChanceRange<ModifiableValue<T>>) -> impl IntoView
+where
+    T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
+    T: Into<f64> + PartialEq,
+{
+    let min = value.min.evaluate().into();
+    let max = value.max.evaluate().into();
+
+    let format_min_max = |min, max| {
+        if min != max {
+            format!("{:.1} - {:.1}", min, max,)
         } else {
-            format!("{:.1}", value.min)
+            format!("{:.1}", min)
         }
     };
 
-    if value.min.into() > 9999.0f64 {
+    if min > 9999.0f64 {
         view! { "forever" }.into_any()
-    } else if value.min.into() >= 60.0f64 {
-        let value = ChanceRange::<f64> {
-            min: value.min.into() / 60.0,
-            max: value.max.into() / 60.0,
-            lucky_chance: value.lucky_chance,
-        };
+    } else if min >= 60.0f64 {
         view! {
             "for "
-            <span class="font-semibold">{format_min_max(value)}</span>
+            <span class="font-semibold">{format_min_max(min / 60.0, max / 60.0)}</span>
             " minutes"
         }
         .into_any()
-    } else if value.min.into() > 0.0 {
-        let value = ChanceRange::<f64> {
-            min: value.min.into(),
-            max: value.max.into(),
-            lucky_chance: value.lucky_chance,
-        };
+    } else if min > 0.0 {
         view! {
             "for "
-            <span class="font-semibold">{format_min_max(value)}</span>
+            <span class="font-semibold">{format_min_max(min, max)}</span>
             " seconds"
         }
         .into_any()

@@ -115,7 +115,7 @@ async fn control_entities(
     if !game_data.player_state.character_state.is_alive {
         game_data.area_threat.cooldown = 0.0;
         game_data.monster_wave_delay =
-            Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown);
+            Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown.evaluate());
 
         if game_data.player_respawn_delay.is_zero() {
             respawn_player(master_store, game_data);
@@ -199,7 +199,7 @@ async fn control_entities(
         }
     } else {
         game_data.monster_wave_delay =
-            Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown);
+            Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown.evaluate());
         monsters_controller::control_monsters(
             events_queue,
             &game_data.monster_specs,
@@ -219,9 +219,10 @@ pub fn update_threat(
 ) {
     game_data.area_threat.just_increased = false;
     if game_data.area_threat.cooldown > 0.0 {
-        game_data.area_threat.elapsed_cooldown +=
-            elapsed_time.as_secs_f32() * game_data.player_specs.read().threat_gain * 0.01
-                / game_data.area_threat.cooldown;
+        game_data.area_threat.elapsed_cooldown += elapsed_time.as_secs_f32()
+            * game_data.player_specs.read().threat_gain.evaluate()
+            * 0.01
+            / game_data.area_threat.cooldown;
         if game_data.area_threat.elapsed_cooldown >= 1.0 {
             game_data.area_threat.elapsed_cooldown -= 1.0;
             game_data.area_threat.threat_level =
