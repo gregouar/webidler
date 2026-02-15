@@ -29,7 +29,7 @@ pub fn purchase_node(
     }
 
     if let Some(node_specs) = passives_tree_specs.nodes.get(&node_id) {
-        if !node_specs.initial_node
+        if !node_specs.root_node
             && !(passives_tree_specs
                 .connections
                 .iter()
@@ -106,7 +106,7 @@ pub fn compute_passives_tree_specs(
                 .aggregate_effects(AffixEffectScope::Global)))
                 .into(); // TODO: Better copy, don't aggregate?
             node_specs.triggers = item_specs.base.triggers.clone();
-            node_specs.initial_node |= item_specs
+            node_specs.root_node |= item_specs
                 .base
                 .rune_specs
                 .as_ref()
@@ -167,8 +167,8 @@ pub async fn update_ascension(
     Ok(())
 }
 
-pub fn compute_ascension_cost(passive_tree_ascension: &PassivesTreeAscension) -> f64 {
-    passive_tree_ascension
+pub fn compute_ascension_cost(passives_tree_ascension: &PassivesTreeAscension) -> f64 {
+    passives_tree_ascension
         .ascended_nodes
         .values()
         .map(|v| *v as f64)
@@ -177,14 +177,14 @@ pub fn compute_ascension_cost(passive_tree_ascension: &PassivesTreeAscension) ->
 
 pub fn validate_ascension(
     passives_tree_specs: &PassivesTreeSpecs,
-    passive_tree_ascension: &PassivesTreeAscension,
+    passives_tree_ascension: &PassivesTreeAscension,
 ) -> Result<f64, AppError> {
     let mut cost = 0.0;
 
     let max_level_tree =
-        compute_max_level_ascension_tree(passives_tree_specs, passive_tree_ascension);
+        compute_max_level_ascension_tree(passives_tree_specs, passives_tree_ascension);
 
-    for (node_id, level) in passive_tree_ascension.ascended_nodes.iter() {
+    for (node_id, level) in passives_tree_ascension.ascended_nodes.iter() {
         let node_specs = passives_tree_specs
             .nodes
             .get(node_id)
@@ -212,18 +212,18 @@ pub fn validate_ascension(
 
 fn compute_max_level_ascension_tree(
     passives_tree_specs: &PassivesTreeSpecs,
-    passive_tree_ascension: &PassivesTreeAscension,
+    passives_tree_ascension: &PassivesTreeAscension,
 ) -> HashMap<PassiveNodeId, u8> {
     let mut propagated_tree = HashMap::new();
 
     let mut queue: VecDeque<(PassiveNodeId, u8)> = passives_tree_specs
         .nodes
         .iter()
-        .filter(|(_, node_specs)| node_specs.initial_node)
+        .filter(|(_, node_specs)| node_specs.root_node)
         .map(|(node_id, _)| {
             (
                 *node_id,
-                passive_tree_ascension
+                passives_tree_ascension
                     .ascended_nodes
                     .get(node_id)
                     .copied()
@@ -233,7 +233,7 @@ fn compute_max_level_ascension_tree(
         .collect();
 
     while let Some((node_id, level)) = queue.pop_front() {
-        let level = passive_tree_ascension
+        let level = passives_tree_ascension
             .ascended_nodes
             .get(&node_id)
             .copied()

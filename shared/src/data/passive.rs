@@ -60,7 +60,7 @@ pub struct PassiveNodeSpecs {
     pub size: u8,
 
     #[serde(default)]
-    pub initial_node: bool,
+    pub root_node: bool,
 
     // TODO: Replace by Asset uri?
     pub node_type: PassiveNodeType,

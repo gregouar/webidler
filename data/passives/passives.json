@@ -7,7 +7,7 @@
         "x": 87.5,
         "y": -127.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -38,7 +38,7 @@
         "x": -130.0,
         "y": 80.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Critical",
         "effects": [
           {
@@ -69,7 +69,7 @@
         "x": -22.5,
         "y": 190.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -108,7 +108,7 @@
         "x": -100.0,
         "y": -100.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -135,7 +135,7 @@
         "x": -62.5,
         "y": 152.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -174,7 +174,7 @@
         "x": -12.5,
         "y": 0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -213,7 +213,7 @@
         "x": -102.5,
         "y": 20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -252,7 +252,7 @@
         "x": 0.0,
         "y": -27.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -279,7 +279,7 @@
         "x": -100.0,
         "y": 0.0,
         "size": 4,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [],
         "triggers": [],
@@ -294,7 +294,7 @@
         "x": -160.0,
         "y": -160.0,
         "size": 4,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [],
         "triggers": [],
@@ -309,7 +309,7 @@
         "x": -100.0,
         "y": -162.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -354,7 +354,7 @@
         "x": -150.0,
         "y": -150.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -381,7 +381,7 @@
         "x": -215.0,
         "y": 55.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Critical",
         "effects": [
           {
@@ -423,7 +423,7 @@
         "x": 90.0,
         "y": -50.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -454,7 +454,7 @@
         "x": -105.0,
         "y": 122.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -521,7 +521,7 @@
         "x": 100.0,
         "y": -162.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -560,7 +560,7 @@
         "x": 72.5,
         "y": 130.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -599,7 +599,7 @@
         "x": -135.0,
         "y": -112.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -654,7 +654,7 @@
         "x": -35.0,
         "y": 47.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -685,7 +685,7 @@
         "x": 22.5,
         "y": -7.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -716,7 +716,7 @@
         "x": -90.0,
         "y": -15.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -747,7 +747,7 @@
         "x": 20.0,
         "y": -65.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -822,7 +822,7 @@
         "x": -47.5,
         "y": 137.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -861,7 +861,7 @@
         "x": 132.5,
         "y": -70.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -906,7 +906,7 @@
         "x": 100.0,
         "y": -100.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -933,7 +933,7 @@
         "x": 105.0,
         "y": 122.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -1000,7 +1000,7 @@
         "x": 0.0,
         "y": 37.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -1027,7 +1027,7 @@
         "x": 155.0,
         "y": -5.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -1066,7 +1066,7 @@
         "x": -77.5,
         "y": -62.5,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -1106,7 +1106,7 @@
         "x": 150.0,
         "y": 120.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Critical",
         "effects": [
           {
@@ -1137,7 +1137,7 @@
         "x": -42.5,
         "y": 95.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -1164,7 +1164,7 @@
         "x": 52.5,
         "y": 95.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -1201,7 +1201,7 @@
         "x": 140.0,
         "y": 25.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -1228,7 +1228,7 @@
         "x": 25.0,
         "y": -135.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -1255,7 +1255,7 @@
         "x": 62.5,
         "y": 152.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -1294,7 +1294,7 @@
         "x": -150.0,
         "y": 112.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Critical",
         "effects": [
           {
@@ -1325,7 +1325,7 @@
         "x": -72.5,
         "y": 130.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -1364,7 +1364,7 @@
         "x": 82.5,
         "y": 100.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -1401,7 +1401,7 @@
         "x": -22.5,
         "y": 57.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -1432,7 +1432,7 @@
         "x": -140.0,
         "y": 25.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -1459,7 +1459,7 @@
         "x": 97.5,
         "y": -110.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -1490,7 +1490,7 @@
         "x": -85.0,
         "y": 145.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -1534,7 +1534,7 @@
         "x": -0.0,
         "y": -100.0,
         "size": 4,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [],
         "triggers": [],
@@ -1549,7 +1549,7 @@
         "x": -182.5,
         "y": 20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -1588,7 +1588,7 @@
         "x": -165.0,
         "y": -57.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -1625,7 +1625,7 @@
         "x": -25.0,
         "y": -135.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -1652,7 +1652,7 @@
         "x": -32.5,
         "y": -45.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -1697,7 +1697,7 @@
         "x": 160.0,
         "y": -160.0,
         "size": 4,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [],
         "triggers": [],
@@ -1712,7 +1712,7 @@
         "x": 105.0,
         "y": -35.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -1743,7 +1743,7 @@
         "x": -95.0,
         "y": 62.5,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -1788,7 +1788,7 @@
         "x": -25.0,
         "y": 135.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -1815,7 +1815,7 @@
         "x": 117.5,
         "y": -145.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -1854,7 +1854,7 @@
         "x": 27.5,
         "y": 0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -1885,7 +1885,7 @@
         "x": 5.0,
         "y": -170.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -1924,7 +1924,7 @@
         "x": -55.0,
         "y": 187.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -1937,9 +1937,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -1959,9 +1957,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -1977,7 +1973,7 @@
         "x": -100.0,
         "y": 100.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -2004,7 +2000,7 @@
         "x": 7.5,
         "y": -22.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -2031,7 +2027,7 @@
         "x": 60.0,
         "y": 75.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -2058,7 +2054,7 @@
         "x": 0.0,
         "y": -47.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -2097,7 +2093,7 @@
         "x": -115.0,
         "y": 102.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -2110,9 +2106,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -2132,9 +2126,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -2150,7 +2142,7 @@
         "x": 7.5,
         "y": 22.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -2177,7 +2169,7 @@
         "x": 187.5,
         "y": -20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -2216,7 +2208,7 @@
         "x": -107.5,
         "y": -30.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -2247,7 +2239,7 @@
         "x": 172.5,
         "y": 72.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -2278,7 +2270,7 @@
         "x": -55.0,
         "y": -42.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -2353,7 +2345,7 @@
         "x": 132.5,
         "y": 70.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -2408,7 +2400,7 @@
         "x": -52.5,
         "y": 95.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -2449,7 +2441,7 @@
         "x": -50.0,
         "y": -200.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -2476,7 +2468,7 @@
         "x": -25.0,
         "y": 25.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -2503,7 +2495,7 @@
         "x": 10.0,
         "y": 60.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -2542,7 +2534,7 @@
         "x": -27.5,
         "y": 0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -2573,7 +2565,7 @@
         "x": 10.0,
         "y": -120.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -2648,7 +2640,7 @@
         "x": 57.5,
         "y": -110.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -2685,7 +2677,7 @@
         "x": 55.0,
         "y": 185.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -2727,7 +2719,7 @@
         "x": -42.5,
         "y": 80.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -2754,7 +2746,7 @@
         "x": 22.5,
         "y": 7.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -2793,7 +2785,7 @@
         "x": -62.5,
         "y": -152.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -2840,7 +2832,7 @@
         "x": -172.5,
         "y": -0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -2879,7 +2871,7 @@
         "x": 30.0,
         "y": 65.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -2944,7 +2936,7 @@
         "x": -162.5,
         "y": 20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -2983,7 +2975,7 @@
         "x": 25.0,
         "y": 57.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -3028,7 +3020,7 @@
         "x": 160.0,
         "y": 90.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Critical",
         "effects": [
           {
@@ -3059,7 +3051,7 @@
         "x": -10.0,
         "y": 60.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -3098,7 +3090,7 @@
         "x": 0.0,
         "y": 60.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -3128,7 +3120,7 @@
         "x": 210.0,
         "y": -50.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -3155,7 +3147,7 @@
         "x": -37.5,
         "y": 20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -3186,7 +3178,7 @@
         "x": 65.0,
         "y": 22.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -3239,7 +3231,7 @@
         "x": -120.0,
         "y": -107.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -3294,7 +3286,7 @@
         "x": 25.0,
         "y": -25.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -3321,7 +3313,7 @@
         "x": -60.0,
         "y": 75.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -3348,7 +3340,7 @@
         "x": -127.5,
         "y": 25.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [],
         "triggers": [
@@ -3442,7 +3434,7 @@
         "x": 97.5,
         "y": -147.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -3481,7 +3473,7 @@
         "x": -47.5,
         "y": 0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -3520,7 +3512,7 @@
         "x": 0.0,
         "y": -72.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -3559,7 +3551,7 @@
         "x": -72.5,
         "y": 0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -3598,7 +3590,7 @@
         "x": -115.0,
         "y": 137.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -3643,7 +3635,7 @@
         "x": -157.5,
         "y": 0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -3682,7 +3674,7 @@
         "x": -15.0,
         "y": 127.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -3719,7 +3711,7 @@
         "x": 32.5,
         "y": -45.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -3794,7 +3786,7 @@
         "x": 35.0,
         "y": -120.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -3831,7 +3823,7 @@
         "x": 95.0,
         "y": 62.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -3868,7 +3860,7 @@
         "x": -105.0,
         "y": -127.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -3923,7 +3915,7 @@
         "x": 150.0,
         "y": -150.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -3950,7 +3942,7 @@
         "x": -55.0,
         "y": 42.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -4005,7 +3997,7 @@
         "x": -122.5,
         "y": 92.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -4018,9 +4010,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -4040,9 +4030,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -4058,7 +4046,7 @@
         "x": -55.0,
         "y": -215.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -4085,7 +4073,7 @@
         "x": -160.0,
         "y": 80.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Critical",
         "effects": [
           {
@@ -4116,7 +4104,7 @@
         "x": 172.5,
         "y": 52.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -4151,7 +4139,7 @@
         "x": 70.0,
         "y": 172.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -4190,7 +4178,7 @@
         "x": -97.5,
         "y": -147.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -4265,7 +4253,7 @@
         "x": -35.0,
         "y": -87.5,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -4302,7 +4290,7 @@
         "x": -22.5,
         "y": -7.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -4341,7 +4329,7 @@
         "x": -25.0,
         "y": -110.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -4368,7 +4356,7 @@
         "x": 42.5,
         "y": 95.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -4395,7 +4383,7 @@
         "x": -97.5,
         "y": 160.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -4440,7 +4428,7 @@
         "x": -97.5,
         "y": -120.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -4495,7 +4483,7 @@
         "x": -75.0,
         "y": -177.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -4526,7 +4514,7 @@
         "x": -82.5,
         "y": 100.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -4563,7 +4551,7 @@
         "x": -145.0,
         "y": 80.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Critical",
         "effects": [
           {
@@ -4608,7 +4596,7 @@
         "x": -170.0,
         "y": -47.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -4643,7 +4631,7 @@
         "x": -55.0,
         "y": -20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -4690,7 +4678,7 @@
         "x": -0.0,
         "y": -37.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -4717,7 +4705,7 @@
         "x": 15.0,
         "y": -145.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -4756,7 +4744,7 @@
         "x": 42.5,
         "y": -97.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -4783,7 +4771,7 @@
         "x": 0.0,
         "y": -127.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -4858,7 +4846,7 @@
         "x": -7.5,
         "y": 22.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -4885,7 +4873,7 @@
         "x": -90.0,
         "y": -75.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -4916,7 +4904,7 @@
         "x": 42.5,
         "y": 110.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -4943,7 +4931,7 @@
         "x": 77.5,
         "y": -65.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -4978,7 +4966,7 @@
         "x": -60.0,
         "y": -10.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -5017,7 +5005,7 @@
         "x": 17.5,
         "y": 165.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -5056,7 +5044,7 @@
         "x": -57.5,
         "y": -110.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -5093,7 +5081,7 @@
         "x": -115.0,
         "y": -40.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -5124,7 +5112,7 @@
         "x": -10.0,
         "y": -60.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -5163,7 +5151,7 @@
         "x": 187.5,
         "y": -55.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -5210,7 +5198,7 @@
         "x": 80.0,
         "y": -142.5,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -5242,7 +5230,7 @@
         "x": 0.0,
         "y": 47.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -5281,7 +5269,7 @@
         "x": 77.5,
         "y": 62.5,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [],
         "triggers": [
@@ -5340,7 +5328,7 @@
         "x": 225.0,
         "y": 55.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -5370,7 +5358,7 @@
         "x": -20.0,
         "y": 37.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -5397,7 +5385,7 @@
         "x": 167.5,
         "y": -20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -5436,7 +5424,7 @@
         "x": -182.5,
         "y": -52.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -5471,7 +5459,7 @@
         "x": -175.0,
         "y": 52.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -5502,7 +5490,7 @@
         "x": 82.5,
         "y": -100.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -5539,7 +5527,7 @@
         "x": 25.0,
         "y": -110.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -5566,7 +5554,7 @@
         "x": 197.5,
         "y": 15.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -5605,7 +5593,7 @@
         "x": 125.0,
         "y": -100.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -5642,7 +5630,7 @@
         "x": -75.0,
         "y": 62.5,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -5677,7 +5665,7 @@
         "x": -5.0,
         "y": -190.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -5716,7 +5704,7 @@
         "x": 97.5,
         "y": 160.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Critical",
         "effects": [
           {
@@ -5747,7 +5735,7 @@
         "x": 150.0,
         "y": -120.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -5812,7 +5800,7 @@
         "x": 170.0,
         "y": -55.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -5859,7 +5847,7 @@
         "x": 20.0,
         "y": -37.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -5886,7 +5874,7 @@
         "x": 60.0,
         "y": 10.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -5925,7 +5913,7 @@
         "x": 105.0,
         "y": 35.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -5964,7 +5952,7 @@
         "x": 127.5,
         "y": 27.5,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [],
         "triggers": [
@@ -6041,7 +6029,7 @@
         "x": -67.5,
         "y": 180.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -6054,9 +6042,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -6076,9 +6062,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -6094,7 +6078,7 @@
         "x": 37.5,
         "y": 47.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -6139,7 +6123,7 @@
         "x": -5.0,
         "y": -170.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -6178,7 +6162,7 @@
         "x": -200.0,
         "y": 50.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -6205,7 +6189,7 @@
         "x": -57.5,
         "y": 170.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -6218,9 +6202,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -6240,9 +6222,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -6258,7 +6238,7 @@
         "x": 62.5,
         "y": -152.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -6303,7 +6283,7 @@
         "x": 140.0,
         "y": 95.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -6358,7 +6338,7 @@
         "x": -117.5,
         "y": -145.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -6403,7 +6383,7 @@
         "x": -70.0,
         "y": 105.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -6440,7 +6420,7 @@
         "x": 150.0,
         "y": 150.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -6467,7 +6447,7 @@
         "x": -82.5,
         "y": -100.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -6504,7 +6484,7 @@
         "x": -157.5,
         "y": -47.5,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -6563,7 +6543,7 @@
         "x": -80.0,
         "y": -142.5,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -6581,9 +6561,7 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [
-                  "LowLife"
-                ]
+                "conditions": ["LowLife"]
               }
             },
             "modifier": "Multiplier",
@@ -6608,9 +6586,7 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [
-                  "LowLife"
-                ]
+                "conditions": ["LowLife"]
               }
             },
             "modifier": "Multiplier",
@@ -6626,7 +6602,7 @@
         "x": -5.0,
         "y": 172.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -6665,7 +6641,7 @@
         "x": 37.5,
         "y": 0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -6692,7 +6668,7 @@
         "x": -62.5,
         "y": -130.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -6739,7 +6715,7 @@
         "x": -117.5,
         "y": -92.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -6794,7 +6770,7 @@
         "x": 0.0,
         "y": 12.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -6821,7 +6797,7 @@
         "x": -130.0,
         "y": -80.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -6860,7 +6836,7 @@
         "x": 0.0,
         "y": 85.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -6887,7 +6863,7 @@
         "x": 115.0,
         "y": 17.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -6926,7 +6902,7 @@
         "x": 37.5,
         "y": 20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -6965,7 +6941,7 @@
         "x": -2.5,
         "y": 190.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -7004,7 +6980,7 @@
         "x": 60.0,
         "y": -40.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -7051,7 +7027,7 @@
         "x": 187.5,
         "y": 52.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -7086,7 +7062,7 @@
         "x": 0.0,
         "y": 0.0,
         "size": 2,
-        "initial_node": true,
+        "root_node": true,
         "node_type": "Gold",
         "effects": [
           {
@@ -7113,7 +7089,7 @@
         "x": 0.0,
         "y": -85.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -7140,7 +7116,7 @@
         "x": 90.0,
         "y": -15.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -7171,7 +7147,7 @@
         "x": 140.0,
         "y": -50.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -7216,7 +7192,7 @@
         "x": -200.0,
         "y": -50.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -7243,7 +7219,7 @@
         "x": -150.0,
         "y": 150.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -7270,7 +7246,7 @@
         "x": -140.0,
         "y": 50.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Critical",
         "effects": [
           {
@@ -7301,7 +7277,7 @@
         "x": -160.0,
         "y": -80.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -7348,7 +7324,7 @@
         "x": -82.5,
         "y": 117.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -7415,7 +7391,7 @@
         "x": -90.0,
         "y": 75.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -7446,7 +7422,7 @@
         "x": 0.0,
         "y": -12.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -7473,7 +7449,7 @@
         "x": 200.0,
         "y": -5.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -7512,7 +7488,7 @@
         "x": 60.0,
         "y": -85.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -7539,7 +7515,7 @@
         "x": -107.5,
         "y": 30.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -7578,7 +7554,7 @@
         "x": 60.0,
         "y": -10.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -7617,7 +7593,7 @@
         "x": 100.0,
         "y": 100.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -7644,7 +7620,7 @@
         "x": 72.5,
         "y": 0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -7683,7 +7659,7 @@
         "x": -187.5,
         "y": 55.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -7714,7 +7690,7 @@
         "x": 62.5,
         "y": -130.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -7759,7 +7735,7 @@
         "x": 157.5,
         "y": 15.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -7798,7 +7774,7 @@
         "x": -127.5,
         "y": -25.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -7847,7 +7823,7 @@
         "x": 152.5,
         "y": 65.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Critical",
         "effects": [
           {
@@ -7878,7 +7854,7 @@
         "x": 50.0,
         "y": -20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -7925,7 +7901,7 @@
         "x": 15.0,
         "y": 90.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -7956,7 +7932,7 @@
         "x": 15.0,
         "y": 127.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -7993,7 +7969,7 @@
         "x": -15.0,
         "y": -90.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -8024,7 +8000,7 @@
         "x": -60.0,
         "y": 30.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -8079,7 +8055,7 @@
         "x": 97.5,
         "y": 112.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -8146,7 +8122,7 @@
         "x": 5.0,
         "y": -190.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -8185,7 +8161,7 @@
         "x": -35.0,
         "y": -120.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [],
         "triggers": [
@@ -8300,7 +8276,7 @@
         "x": 140.0,
         "y": -25.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -8327,7 +8303,7 @@
         "x": -50.0,
         "y": -167.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -8358,7 +8334,7 @@
         "x": 100.0,
         "y": 0.0,
         "size": 4,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [],
         "triggers": [],
@@ -8373,7 +8349,7 @@
         "x": 115.0,
         "y": -17.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -8404,7 +8380,7 @@
         "x": -215.0,
         "y": -55.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -8442,7 +8418,7 @@
         "x": -22.5,
         "y": 172.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -8481,7 +8457,7 @@
         "x": 0.0,
         "y": -60.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -8548,7 +8524,7 @@
         "x": -115.0,
         "y": 40.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -8587,7 +8563,7 @@
         "x": -140.0,
         "y": -50.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -8634,7 +8610,7 @@
         "x": -25.0,
         "y": -25.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -8661,7 +8637,7 @@
         "x": 37.5,
         "y": -20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -8692,7 +8668,7 @@
         "x": 82.5,
         "y": 117.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -8759,7 +8735,7 @@
         "x": 15.0,
         "y": -90.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -8790,7 +8766,7 @@
         "x": 180.0,
         "y": -67.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -8837,7 +8813,7 @@
         "x": 177.5,
         "y": 22.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -8876,7 +8852,7 @@
         "x": 60.0,
         "y": 0.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [],
         "triggers": [
@@ -8968,7 +8944,7 @@
         "x": 105.0,
         "y": -77.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -8981,9 +8957,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -9003,9 +8977,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -9021,7 +8993,7 @@
         "x": -37.5,
         "y": 0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -9048,7 +9020,7 @@
         "x": -27.5,
         "y": 65.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -9093,7 +9065,7 @@
         "x": 105.0,
         "y": 75.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -9130,7 +9102,7 @@
         "x": 25.0,
         "y": 135.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -9157,7 +9129,7 @@
         "x": -90.0,
         "y": 15.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -9188,7 +9160,7 @@
         "x": -60.0,
         "y": -185.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -9219,7 +9191,7 @@
         "x": -57.5,
         "y": 110.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -9256,7 +9228,7 @@
         "x": 0.0,
         "y": 72.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -9295,7 +9267,7 @@
         "x": 25.0,
         "y": 25.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -9322,7 +9294,7 @@
         "x": -20.0,
         "y": -37.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -9349,7 +9321,7 @@
         "x": 140.0,
         "y": 50.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -9404,7 +9376,7 @@
         "x": 95.0,
         "y": 85.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -9441,7 +9413,7 @@
         "x": -182.5,
         "y": -20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -9480,7 +9452,7 @@
         "x": -7.5,
         "y": -22.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -9507,7 +9479,7 @@
         "x": 42.5,
         "y": 80.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -9534,7 +9506,7 @@
         "x": 0.0,
         "y": 27.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -9561,7 +9533,7 @@
         "x": -15.0,
         "y": 90.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -9592,7 +9564,7 @@
         "x": 50.0,
         "y": -200.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -9619,7 +9591,7 @@
         "x": 120.0,
         "y": 107.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -9654,7 +9626,7 @@
         "x": 70.0,
         "y": -105.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -9691,7 +9663,7 @@
         "x": 55.0,
         "y": -182.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -9704,9 +9676,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -9726,9 +9696,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -9744,7 +9712,7 @@
         "x": -160.0,
         "y": 160.0,
         "size": 4,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [],
         "triggers": [],
@@ -9759,7 +9727,7 @@
         "x": -37.5,
         "y": -20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -9798,7 +9766,7 @@
         "x": -105.0,
         "y": 72.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -9829,7 +9797,7 @@
         "x": 127.5,
         "y": -27.5,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [],
         "triggers": [
@@ -9913,7 +9881,7 @@
         "x": 0.0,
         "y": 122.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -9950,7 +9918,7 @@
         "x": 12.5,
         "y": 142.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -9989,7 +9957,7 @@
         "x": 210.0,
         "y": 50.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -10016,7 +9984,7 @@
         "x": 100.0,
         "y": -122.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -10047,7 +10015,7 @@
         "x": 60.0,
         "y": -60.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -10074,7 +10042,7 @@
         "x": -60.0,
         "y": 0.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [],
         "triggers": [
@@ -10201,7 +10169,7 @@
         "x": 47.5,
         "y": 137.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -10240,7 +10208,7 @@
         "x": 25.0,
         "y": 120.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -10276,7 +10244,7 @@
         "x": 2.5,
         "y": 165.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -10315,7 +10283,7 @@
         "x": -95.0,
         "y": -62.5,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -10356,7 +10324,7 @@
         "x": 92.5,
         "y": -72.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -10369,9 +10337,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -10391,9 +10357,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -10409,7 +10373,7 @@
         "x": -170.0,
         "y": 65.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -10440,7 +10404,7 @@
         "x": 90.0,
         "y": 15.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -10471,7 +10435,7 @@
         "x": 160.0,
         "y": -90.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -10536,7 +10500,7 @@
         "x": 85.0,
         "y": 0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -10563,7 +10527,7 @@
         "x": -42.5,
         "y": 110.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -10590,7 +10554,7 @@
         "x": 55.0,
         "y": -215.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -10624,7 +10588,7 @@
         "x": -120.0,
         "y": 0.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -10677,7 +10641,7 @@
         "x": -55.0,
         "y": 215.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -10707,7 +10671,7 @@
         "x": -0.0,
         "y": 100.0,
         "size": 4,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [],
         "triggers": [],
@@ -10722,7 +10686,7 @@
         "x": 225.0,
         "y": -55.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [],
         "triggers": [
@@ -11127,7 +11091,7 @@
         "x": 60.0,
         "y": -170.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -11140,9 +11104,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -11162,9 +11124,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -11180,7 +11140,7 @@
         "x": 70.0,
         "y": 105.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -11217,7 +11177,7 @@
         "x": 55.0,
         "y": 215.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -11244,7 +11204,7 @@
         "x": -60.0,
         "y": 60.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -11271,7 +11231,7 @@
         "x": -100.0,
         "y": -85.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -11302,7 +11262,7 @@
         "x": -162.5,
         "y": -20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -11341,7 +11301,7 @@
         "x": -127.5,
         "y": 102.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -11354,9 +11314,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -11376,9 +11334,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -11394,7 +11350,7 @@
         "x": 182.5,
         "y": 62.5,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -11453,7 +11409,7 @@
         "x": -60.0,
         "y": 10.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -11492,7 +11448,7 @@
         "x": -100.0,
         "y": 85.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -11523,7 +11479,7 @@
         "x": -42.5,
         "y": -97.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -11550,7 +11506,7 @@
         "x": 110.0,
         "y": 100.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -11585,7 +11541,7 @@
         "x": -60.0,
         "y": -30.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -11632,7 +11588,7 @@
         "x": -10.0,
         "y": -120.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -11707,7 +11663,7 @@
         "x": -105.0,
         "y": -72.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [
           {
@@ -11738,7 +11694,7 @@
         "x": 127.5,
         "y": -112.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -11775,7 +11731,7 @@
         "x": -25.0,
         "y": 120.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [],
         "triggers": [
@@ -11840,7 +11796,7 @@
         "x": 47.5,
         "y": -0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -11879,7 +11835,7 @@
         "x": -85.0,
         "y": 0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -11906,7 +11862,7 @@
         "x": 52.5,
         "y": 167.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -11945,7 +11901,7 @@
         "x": 50.0,
         "y": 200.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -11972,7 +11928,7 @@
         "x": -97.5,
         "y": 112.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
@@ -12039,7 +11995,7 @@
         "x": 112.5,
         "y": -97.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -12076,7 +12032,7 @@
         "x": 57.5,
         "y": 110.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -12113,7 +12069,7 @@
         "x": 65.0,
         "y": -22.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -12188,7 +12144,7 @@
         "x": 35.0,
         "y": -87.5,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -12225,7 +12181,7 @@
         "x": -60.0,
         "y": -60.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -12252,7 +12208,7 @@
         "x": -50.0,
         "y": 200.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -12279,7 +12235,7 @@
         "x": -30.0,
         "y": -57.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -12324,7 +12280,7 @@
         "x": -70.0,
         "y": -105.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -12361,7 +12317,7 @@
         "x": 62.5,
         "y": 165.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -12400,7 +12356,7 @@
         "x": 10.0,
         "y": -60.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -12439,7 +12395,7 @@
         "x": -55.0,
         "y": 20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -12494,7 +12450,7 @@
         "x": -60.0,
         "y": -85.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -12521,7 +12477,7 @@
         "x": -150.0,
         "y": -112.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -12560,7 +12516,7 @@
         "x": -102.5,
         "y": -20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -12591,7 +12547,7 @@
         "x": 12.5,
         "y": 0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -12630,7 +12586,7 @@
         "x": -187.5,
         "y": -0.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
@@ -12669,7 +12625,7 @@
         "x": 0.0,
         "y": -162.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -12708,7 +12664,7 @@
         "x": 97.5,
         "y": -87.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -12721,9 +12677,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -12743,9 +12697,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "Multiplier",
@@ -12761,7 +12713,7 @@
         "x": -145.0,
         "y": -80.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Critical",
         "effects": [
           {
@@ -12878,7 +12830,7 @@
         "x": -20.0,
         "y": -65.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -12923,7 +12875,7 @@
         "x": 152.5,
         "y": -65.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -12988,7 +12940,7 @@
         "x": 20.0,
         "y": 37.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -13015,7 +12967,7 @@
         "x": -177.5,
         "y": -62.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Status",
         "effects": [
           {
@@ -13052,7 +13004,7 @@
         "x": -22.5,
         "y": 7.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -13083,7 +13035,7 @@
         "x": 115.0,
         "y": 137.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Critical",
         "effects": [
           {
@@ -13114,7 +13066,7 @@
         "x": 85.0,
         "y": 145.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Critical",
         "effects": [
           {
@@ -13124,9 +13076,7 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -13143,9 +13093,7 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -13162,9 +13110,7 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -13181,9 +13127,7 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -13199,7 +13143,7 @@
         "x": 132.5,
         "y": 107.5,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
@@ -13234,7 +13178,7 @@
         "x": 60.0,
         "y": 60.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -13261,7 +13205,7 @@
         "x": 187.5,
         "y": 72.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Utility",
         "effects": [
           {
@@ -13292,7 +13236,7 @@
         "x": 50.0,
         "y": 20.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -13345,7 +13289,7 @@
         "x": 67.5,
         "y": -180.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Life",
         "effects": [
           {
@@ -13358,9 +13302,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -13380,9 +13322,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Multiplier",
@@ -13398,7 +13338,7 @@
         "x": -15.0,
         "y": -145.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -13437,7 +13377,7 @@
         "x": 57.5,
         "y": 40.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -13490,7 +13430,7 @@
         "x": 160.0,
         "y": 160.0,
         "size": 4,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Armor",
         "effects": [],
         "triggers": [],
@@ -13505,7 +13445,7 @@
         "x": -100.0,
         "y": -110.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Attack",
         "effects": [
           {
@@ -13560,7 +13500,7 @@
         "x": 30.0,
         "y": -57.5,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
@@ -13635,7 +13575,7 @@
         "x": 140.0,
         "y": -95.0,
         "size": 1,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
@@ -13680,7 +13620,7 @@
         "x": 90.0,
         "y": 50.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {
@@ -13719,7 +13659,7 @@
         "x": -140.0,
         "y": -25.0,
         "size": 0,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Gold",
         "effects": [
           {
@@ -13746,7 +13686,7 @@
         "x": 120.0,
         "y": 0.0,
         "size": 2,
-        "initial_node": false,
+        "root_node": false,
         "node_type": "Spell",
         "effects": [
           {

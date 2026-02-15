@@ -37,6 +37,8 @@ use crate::components::{
     },
 };
 
+type TreeConnections = HashMap<PassiveNodeId, HashSet<PassiveNodeId>>;
+
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum PassivesTab {
     Ascend,
@@ -54,19 +56,10 @@ pub fn PassivesPanel(
     let passives_tree_ascension = RwSignal::new(PassivesTreeAscension::default());
     let passives_tree_build = RwSignal::new(PurchasedNodes::default());
 
-    let invalid_nodes = RwSignal::new(HashSet::new());
-    let invalid_tree = Signal::derive(move || !invalid_nodes.read().is_empty());
-
-    let node_distances = Memo::new(move |_| {
+    let tree_connections = Memo::new(move |_| {
         town_context
             .passives_tree_specs
-            .with(|passives_tree_specs| {
-                town_context
-                    .passives_tree_ascension
-                    .with(|passives_tree_ascension| {
-                        compute_node_distances(passives_tree_specs, passives_tree_ascension)
-                    })
-            })
+            .with(compute_connections)
     });
 
     let reset = move || {
@@ -102,6 +95,49 @@ pub fn PassivesPanel(
 
     let search_node = RwSignal::new(None);
     let search_node_ref = NodeRef::<leptos::html::Input>::new();
+
+    let validated_ascension = Memo::new(move |_| {
+        passives_tree_ascension.with(|passives_tree_ascension| {
+            town_context
+                .passives_tree_specs
+                .with(|passives_tree_specs| {
+                    tree_connections.with(|tree_connections| {
+                        validate_ascension(
+                            passives_tree_specs,
+                            passives_tree_ascension,
+                            tree_connections,
+                        )
+                    })
+                })
+        })
+    });
+
+    let validated_build = Memo::new(move |_| {
+        town_context
+            .passives_tree_specs
+            .with(|passives_tree_specs| {
+                town_context
+                    .passives_tree_ascension
+                    .with(|passives_tree_ascension| {
+                        passives_tree_build.with(|passives_tree_build| {
+                            tree_connections.with(|tree_connections| {
+                                validate_build(
+                                    passives_tree_specs,
+                                    passives_tree_ascension,
+                                    tree_connections,
+                                    passives_tree_build,
+                                )
+                            })
+                        })
+                    })
+            })
+    });
+
+    let invalid_nodes = Signal::derive(move || match active_tab.get() {
+        PassivesTab::Ascend => validated_ascension.get(),
+        PassivesTab::Build => validated_build.get(),
+    });
+    let invalid_tree = Signal::derive(move || !invalid_nodes.read().is_empty());
 
     Effect::new({
         let events_context: EventsContext = expect_context();
@@ -180,7 +216,7 @@ pub fn PassivesPanel(
                             active_tab
                             passives_tree_ascension
                             passives_tree_build
-                            node_distances
+                            tree_connections
                             invalid_nodes
                             search_node
                             ascension_cost
@@ -436,7 +472,7 @@ pub fn BuildPanelHeader(
                                 view! {
                                     "Required Player Level:"
                                     <span class="text-white font-semibold ml-2">
-                                        {move || passives_tree_build.read().len()}
+                                        {move || passives_tree_build.read().len() + 1}
                                     </span>
                                 }
                                     .into_any()
@@ -574,8 +610,8 @@ fn PassiveSkillTree(
     search_node: RwSignal<Option<String>>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     passives_tree_build: RwSignal<PurchasedNodes>,
-    node_distances: Memo<HashMap<PassiveNodeId, (i32, i32)>>,
-    invalid_nodes: RwSignal<HashSet<PassiveNodeId>>,
+    tree_connections: Memo<TreeConnections>,
+    invalid_nodes: Signal<HashSet<PassiveNodeId>>,
     ascension_cost: RwSignal<f64>,
     view_only: bool,
 ) -> impl IntoView {
@@ -661,7 +697,7 @@ fn PassiveSkillTree(
                     ascension_cost
                     passives_tree_ascension
                     passives_tree_build
-                    node_distances
+                    tree_connections
                     invalid_nodes
                     selected_socket_node
                     active_tab
@@ -684,8 +720,8 @@ fn AscendNode(
     search_node: RwSignal<Option<String>>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     passives_tree_build: RwSignal<PurchasedNodes>,
-    node_distances: Memo<HashMap<PassiveNodeId, (i32, i32)>>,
-    invalid_nodes: RwSignal<HashSet<PassiveNodeId>>,
+    tree_connections: Memo<TreeConnections>,
+    invalid_nodes: Signal<HashSet<PassiveNodeId>>,
     view_only: bool,
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
@@ -712,7 +748,7 @@ fn AscendNode(
                     .aggregate_effects(AffixEffectScope::Global)))
                     .into(); // TODO: Better copy, don't aggregate?
                 node_specs.triggers = item_specs.base.triggers.clone();
-                node_specs.initial_node |= item_specs
+                node_specs.root_node |= item_specs
                     .base
                     .rune_specs
                     .as_ref()
@@ -747,88 +783,54 @@ fn AscendNode(
         node_specs.max_upgrade_level.unwrap_or(u8::MAX)
     };
 
-    let connected_nodes: Vec<_> = town_context
-        .passives_tree_specs
-        .read_untracked()
-        .connections
-        .iter()
-        .filter_map(|connection| {
-            if connection.from == node_id {
-                Some(connection.to)
-            } else if connection.to == node_id {
-                Some(connection.from)
-            } else {
-                None
-            }
-        })
-        .collect();
-
     let max_upgrade_level = Memo::new(move |_| {
-        let max_connection_level = node_distances.with(|node_distances| match active_tab.get() {
+        let max_connection_level = match active_tab.get() {
             PassivesTab::Ascend => {
-                let node_distance = node_distances.get(&node_id).copied().unwrap_or_default().1;
-                if node_distance == 0 {
+                if node_specs.root_node {
                     u8::MAX
                 } else {
-                    connected_nodes
-                        .iter()
-                        .filter(|connected_node_id| {
-                            node_distances
-                                .get(connected_node_id)
-                                .map(|(_, distance)| *distance < node_distance)
-                                .unwrap_or_default()
+                    tree_connections
+                        .read()
+                        .get(&node_id)
+                        .and_then(|tree_connections| {
+                            tree_connections
+                                .iter()
+                                .map(|connected_node_id| {
+                                    passives_tree_ascension
+                                        .read()
+                                        .ascended_nodes
+                                        .get(connected_node_id)
+                                        .copied()
+                                        .unwrap_or_default()
+                                })
+                                .max()
                         })
-                        .map(|connected_node_id| {
-                            passives_tree_ascension
-                                .read()
-                                .ascended_nodes
-                                .get(connected_node_id)
-                                .copied()
-                                .unwrap_or_default()
-                        })
-                        .max()
                         .unwrap_or_default()
                 }
             }
             PassivesTab::Build => {
-                let node_distance = node_distances.get(&node_id).copied().unwrap_or_default().0;
-                if node_specs.locked && node_level.get() == 0 {
+                if derived_node_specs.read().locked && node_level.get() == 0 {
                     0
-                } else if node_distance == 0 {
+                } else if derived_node_specs.read().root_node {
                     1
                 } else {
-                    connected_nodes
-                        .iter()
-                        .filter(|connected_node_id| {
-                            node_distances
-                                .get(connected_node_id)
-                                .map(|(distance, _)| *distance < node_distance)
-                                .unwrap_or_default()
+                    tree_connections
+                        .read()
+                        .get(&node_id)
+                        .map(|tree_connections| {
+                            tree_connections.iter().any(|connected_node_id| {
+                                passives_tree_build.read().contains(connected_node_id)
+                            }) as u8
                         })
-                        .any(|connected_node_id| {
-                            passives_tree_build.read().contains(connected_node_id)
-                        }) as u8
+                        .unwrap_or_default()
                 }
             }
-        });
+        };
 
         max_node_level.min(max_connection_level)
     });
 
-    let is_invalid = Memo::new(move |_|
-        match active_tab.get() {
-            PassivesTab::Ascend => node_level.get() > max_upgrade_level.get(),
-            PassivesTab::Build => passives_tree_build.read().contains(&node_id) as u8 > max_upgrade_level.get(),
-        }
-    );
-
-    Effect::new(move || {
-        if is_invalid.get() {
-            invalid_nodes.write().insert(node_id);
-        } else {
-            invalid_nodes.write().remove(&node_id);
-        }
-    });
+    let is_invalid = Memo::new(move |_| invalid_nodes.read().contains(&node_id));
 
     let node_status = Memo::new(move |_| {
         if is_invalid.get() {
@@ -1040,57 +1042,121 @@ fn AscendConnection(
     view! { <Connection connection passives_tree_specs amount_connections node_levels /> }
 }
 
-fn compute_node_distances(
+fn compute_connections(passives_tree_specs: &PassivesTreeSpecs) -> TreeConnections {
+    passives_tree_specs
+        .connections
+        .iter()
+        .fold(HashMap::new(), |mut acc, connection| {
+            acc.entry(connection.from)
+                .or_default()
+                .insert(connection.to);
+            acc.entry(connection.to)
+                .or_default()
+                .insert(connection.from);
+            acc
+        })
+}
+
+fn validate_ascension(
     passives_tree_specs: &PassivesTreeSpecs,
     passives_tree_ascension: &PassivesTreeAscension,
-) -> HashMap<PassiveNodeId, (i32, i32)> {
+    tree_connections: &TreeConnections,
+) -> HashSet<PassiveNodeId> {
     let mut propagated_tree = HashMap::new();
 
-    let mut queue: VecDeque<_> = passives_tree_specs
+    let mut queue: VecDeque<(PassiveNodeId, u8)> = passives_tree_specs
         .nodes
         .iter()
-        .filter_map(move |(node_id, node_specs)| {
-            let initial_socket = passives_tree_ascension
-                .socketed_nodes
-                .get(node_id)
-                .and_then(|item_specs| item_specs.base.rune_specs.as_ref())
-                .map(|rune_specs| rune_specs.root_node)
-                .unwrap_or_default();
-
-            (node_specs.initial_node || initial_socket).then_some({
-                (
-                    *node_id,
-                    (0, if node_specs.initial_node { 0 } else { 9999 }),
-                )
-            })
+        .filter(|(_, node_specs)| node_specs.root_node)
+        .map(|(node_id, _)| {
+            (
+                *node_id,
+                passives_tree_ascension
+                    .ascended_nodes
+                    .get(node_id)
+                    .copied()
+                    .unwrap_or_default(),
+            )
         })
         .collect();
 
-    while let Some((node_id, distance)) = queue.pop_front() {
-        let entry: &mut (i32, i32) = propagated_tree.entry(node_id).or_insert((9999, 9999));
-        if distance.0 > entry.0 && distance.1 > entry.1 {
+    while let Some((node_id, level)) = queue.pop_front() {
+        let level = passives_tree_ascension
+            .ascended_nodes
+            .get(&node_id)
+            .copied()
+            .unwrap_or_default()
+            .min(level);
+
+        let entry = propagated_tree.entry(node_id).or_default();
+        if level <= *entry {
             continue;
         }
-        entry.0 = entry.0.min(distance.0);
-        entry.1 = entry.1.min(distance.1);
+        *entry = level;
 
-        // TODO: Could split connections in 2 hashmap or something
-        for connection in &passives_tree_specs.connections {
-            if connection.from == node_id {
-                queue.push_back((connection.to, (distance.0 + 1, distance.1 + 1)));
-            } else if connection.to == node_id {
-                queue.push_back((connection.from, (distance.0 + 1, distance.1 + 1)));
+        if let Some(connections) = tree_connections.get(&node_id) {
+            for connection in connections.iter() {
+                queue.push_back((*connection, level));
             }
         }
     }
 
-    propagated_tree
+    passives_tree_ascension.ascended_nodes.iter().fold(
+        HashSet::new(),
+        |mut acc, (node_id, node_level)| {
+            if propagated_tree
+                .get(node_id)
+                .map(|max_node_level| node_level > max_node_level)
+                .unwrap_or(true)
+            {
+                acc.insert(*node_id);
+            }
+            acc
+        },
+    )
 }
 
 fn validate_build(
     passives_tree_specs: &PassivesTreeSpecs,
     passives_tree_ascension: &PassivesTreeAscension,
-    passives_tree_build: RwSignal<PurchasedNodes>,
+    tree_connections: &TreeConnections,
+    passives_tree_build: &PurchasedNodes,
 ) -> HashSet<PassiveNodeId> {
-    HashSet::new()
+    let mut invalid_nodes = HashSet::new();
+    let mut allocated_nodes = HashSet::new();
+
+    for node_step in passives_tree_build.iter() {
+        let invalid = if passives_tree_specs
+            .nodes
+            .get(node_step)
+            .map(|node_specs| node_specs.root_node)
+            .unwrap_or_default()
+            || passives_tree_ascension
+                .socketed_nodes
+                .get(node_step)
+                .and_then(|item_specs| {
+                    item_specs
+                        .base
+                        .rune_specs
+                        .as_ref()
+                        .map(|rune_specs| rune_specs.root_node)
+                })
+                .unwrap_or_default()
+        {
+            false
+        } else {
+            tree_connections
+                .get(node_step)
+                .map(|connections| connections.is_disjoint(&allocated_nodes))
+                .unwrap_or_default()
+        };
+
+        if invalid {
+            invalid_nodes.insert(*node_step);
+        }
+
+        allocated_nodes.insert(*node_step);
+    }
+
+    invalid_nodes
 }

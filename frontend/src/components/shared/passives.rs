@@ -235,7 +235,7 @@ pub fn Node(
         >
             <g class=class_style>
                 {node_specs
-                    .initial_node
+                    .root_node
                     .then(|| {
                         view! {
                             <circle
@@ -463,7 +463,7 @@ pub fn NodeTooltipContent(
 
     let is_locked = move || node_specs_locked && node_level() == 0;
 
-    let starting_node_text = (node_specs.initial_node).then(|| {
+    let starting_node_text = (node_specs.root_node).then(|| {
         view! {
             <ul class="list-none space-y-1">
                 <li class="text-gray-400 text-sm leading-snug">"Root Node"</li>

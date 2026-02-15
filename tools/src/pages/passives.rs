@@ -782,9 +782,9 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
         node_specs.write().node_type = node_type.get();
     });
 
-    let initial_node = RwSignal::new(node_specs.read_untracked().initial_node);
+    let initial_node = RwSignal::new(node_specs.read_untracked().root_node);
     Effect::new(move || {
-        node_specs.write().initial_node = initial_node.get();
+        node_specs.write().root_node = initial_node.get();
     });
 
     let node_locked = RwSignal::new(node_specs.read_untracked().locked);

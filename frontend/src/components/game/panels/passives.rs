@@ -272,7 +272,7 @@ fn InGameNode(
             PurchaseStatus::Purchased
         } else if meta_status != MetaStatus::Locked
             && points_available.get()
-            && (node_specs.initial_node
+            && (node_specs.root_node
                 || game_context
                     .passives_tree_state
                     .with(|passives_tree_state| {
