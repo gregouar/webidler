@@ -88,7 +88,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Lucky": { "roll_type": "SuccessChance" } },
+        "stat": { "Lucky": { "roll_type": { "SuccessChance": {} } } },
         "modifier": "Flat",
         "value": [-40, 40]
       }
@@ -219,21 +219,21 @@
       },
       {
         "scope": "Global",
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": 100,
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": -1e300,
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": { "StatusDuration": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusDuration": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": [20, 40],
         "ignore_quality": true
@@ -263,21 +263,21 @@
       },
       {
         "scope": "Global",
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 100,
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": -1e300,
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": { "StatusDuration": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusDuration": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": [20, 40],
         "ignore_quality": true
@@ -304,6 +304,21 @@
         "value": 120
       }
     ],
-    "min_area_level": 240
+    "min_area_level": 250
+  },
+  "runic_ring": {
+    "name": "Runic Ring",
+    "icon": "items/runic_ring.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 140
+      }
+    ],
+    "min_area_level": 320
   }
 }

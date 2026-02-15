@@ -95,6 +95,16 @@ pub fn GemsCounter(value: Signal<f64>) -> impl IntoView {
 }
 
 #[component]
+pub fn ShardsIcon() -> impl IntoView {
+    view! {
+        <ResourceIcon
+            icon="ui/power_shard.webp"
+            name="Power Shards"
+            description="To permanently increase power of Passive Skills by Ascending them, in Town between Grinds. Obtained for every 10 new Area Level completed."
+        />
+    }
+}
+#[component]
 pub fn ShardsCounter(value: Signal<f64>) -> impl IntoView {
     view! {
         <ResourceCounter

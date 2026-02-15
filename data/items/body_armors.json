@@ -31,7 +31,9 @@
     "affixes": [
       {
         "scope": "Global",
-        "stat": { "Restore": "Life" },
+        "stat": {
+          "Restore": { "restore_type": "Life" }
+        },
         "modifier": "Multiplier",
         "value": [30, 50]
       },
@@ -104,16 +106,16 @@
       },
       {
         "scope": "Global",
-        "stat": "Block",
+        "stat": {"Block": "Attack"},
         "modifier": "Flat",
-        "value": 20,
+        "value": 10,
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": "BlockSpell",
+        "stat": {"Block": "Spell"},
         "modifier": "Flat",
-        "value": 50,
+        "value": 10,
         "ignore_quality": true
       },
       {
@@ -202,7 +204,7 @@
     "armor_specs": {
       "armor": 120
     },
-    "min_area_level": 240
+    "min_area_level": 250
   },
   "breastplate_unique": {
     "name": "Heart of the Wyrm",
@@ -278,6 +280,16 @@
         ]
       }
     ],
-    "min_area_level": 250
+    "min_area_level": 260
+  },
+  "cavalry_armor": {
+    "name": "Cavalry Armor",
+    "icon": "items/cavalry_armor.webp",
+    "slot": "Body",
+    "categories": ["Armor", "Body"],
+    "armor_specs": {
+      "armor": 120
+    },
+    "min_area_level": 320
   }
 }

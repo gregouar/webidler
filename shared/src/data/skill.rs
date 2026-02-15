@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     chance::{Chance, ChanceRange},
-    stat_effect::{Modifier, StatType},
+    conditional_modifier::ConditionalModifier,
+    stat_effect::{MinMax, Modifier, StatType},
     trigger::TriggerSpecs,
 };
 
@@ -38,7 +39,6 @@ pub struct BaseSkillSpecs {
     pub targets: Vec<SkillTargetsGroup>,
     #[serde(default)]
     pub triggers: Vec<TriggerSpecs>,
-    // TODO: special upgrades at some levels?
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -75,6 +75,9 @@ pub enum SkillType {
     #[default]
     Attack,
     Spell,
+    Curse,
+    Blessing,
+    Other,
 }
 
 impl SkillType {
@@ -88,6 +91,8 @@ pub struct ModifierEffect {
     pub effects: Vec<StatEffect>,
     pub source: ModifierEffectSource,
     pub factor: f64,
+    #[serde(default)]
+    pub hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
@@ -101,10 +106,18 @@ pub enum ModifierEffectSource {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub enum ItemStatsSource {
-    Damage(Option<DamageType>), // TODO: split in min and max
     Armor,
-    MinDamage(Option<DamageType>),
-    MaxDamage(Option<DamageType>),
+    Cooldown,
+    CritChance,
+    CritDamage,
+    Damage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+        #[serde(default)]
+        min_max: Option<MinMax>,
+    },
+    Range,
+    Shape,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -159,6 +172,9 @@ pub struct SkillEffect {
 
     #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
+
+    #[serde(default)]
+    pub conditional_modifiers: Vec<ConditionalModifier>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -213,7 +229,9 @@ pub enum SkillRange {
     Any,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default, Eq, Hash, PartialOrd, Ord,
+)]
 pub enum SkillShape {
     #[default]
     Single,

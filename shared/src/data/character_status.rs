@@ -13,7 +13,7 @@ use super::{
 pub struct StatusMap {
     // TODO: Do we want to replace this by a map to indexes ?
     // pub unique_statuses: HashMap<StatusId, usize>, // Points to statuses vec
-    pub unique_statuses: HashMap<StatusId, (StatusSpecs, StatusState)>,
+    pub unique_statuses: HashMap<(StatusId, SkillType), (StatusSpecs, StatusState)>,
     pub cumulative_statuses: Vec<(StatusSpecs, StatusState)>,
 }
 
@@ -44,9 +44,6 @@ pub enum StatusSpecs {
     Stun,
     DamageOverTime {
         damage_type: DamageType,
-
-        #[serde(default, skip_serializing)]
-        ignore_armor: bool, // TODO: Remove
     },
     StatModifier {
         stat: StatType,

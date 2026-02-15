@@ -6,7 +6,10 @@ use shared::messages::{
     server::{ErrorMessage, ErrorType},
 };
 
-use crate::{game::data::master_store::MasterStore, websocket::WebSocketConnection};
+use crate::{
+    game::{data::master_store::MasterStore, systems::quests_controller},
+    websocket::WebSocketConnection,
+};
 
 use super::{
     game_data::GameInstanceData,
@@ -23,10 +26,10 @@ pub async fn handle_client_inputs(
     for _ in 1..100 {
         match client_conn.poll_receive() {
             ControlFlow::Continue(Some(m)) => {
-                if let Some(error_message) = handle_client_message(master_store, game_data, m) {
-                    if let Err(e) = client_conn.send(&error_message.into()).await {
-                        tracing::warn!("failed to send error to client: {}", e)
-                    }
+                if let Some(error_message) = handle_client_message(master_store, game_data, m)
+                    && let Err(e) = client_conn.send(&error_message.into()).await
+                {
+                    tracing::warn!("failed to send error to client: {}", e)
                 }
             }
             ControlFlow::Continue(None) => return ControlFlow::Continue(()), // No more messages
@@ -45,7 +48,16 @@ fn handle_client_message(
     match msg {
         ClientMessage::Heartbeat => {}
         ClientMessage::EndQuest => {
-            game_data.area_state.mutate().end_quest = true;
+            quests_controller::end_quest(master_store, game_data);
+        }
+        ClientMessage::TerminateQuest(m) => {
+            if let Err(err) = quests_controller::terminate_quest(game_data, m.item_index) {
+                return Some(ErrorMessage {
+                    error_type: ErrorType::Game,
+                    message: err.to_string(),
+                    must_disconnect: false,
+                });
+            }
         }
         ClientMessage::UseSkill(m) => {
             game_data
@@ -172,12 +184,20 @@ fn handle_client_message(
             area_state.auto_progress = false;
         }
         ClientMessage::SetRushMode(m) => game_data.area_state.mutate().rush_mode = m.value,
-        ClientMessage::PurchasePassive(m) => passives_controller::purchase_node(
-            game_data.player_resources.mutate(),
-            &game_data.passives_tree_specs,
-            game_data.passives_tree_state.mutate(),
-            m.node_id,
-        ),
+        ClientMessage::PurchasePassive(m) => {
+            if let Err(e) = passives_controller::purchase_node(
+                game_data.player_resources.mutate(),
+                &game_data.passives_tree_specs,
+                game_data.passives_tree_state.mutate(),
+                m.node_id,
+            ) {
+                return Some(ErrorMessage {
+                    error_type: ErrorType::Game,
+                    message: e.to_string(),
+                    must_disconnect: false,
+                });
+            }
+        }
         ClientMessage::Connect(_) => {
             tracing::warn!("received unexpected message: {:?}", msg);
             return Some(ErrorMessage {

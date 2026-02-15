@@ -115,11 +115,7 @@ pub fn VerticalProgressBar(
     #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     let set_value = move || {
-        if reset.get() {
-            0.0
-        } else {
-            value.get()
-        }
+        if reset.get() { 0.0 } else { value.get() }
     };
 
     // Trick to reset animation by removing it when ended

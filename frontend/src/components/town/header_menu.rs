@@ -31,6 +31,7 @@ pub fn HeaderMenu() -> impl IntoView {
             .set(!town_context.open_inventory.get_untracked());
         town_context.open_ascend.set(false);
         town_context.open_temple.set(false);
+        town_context.use_item_category_filter.set(None);
     };
 
     Effect::new(move || {
@@ -85,7 +86,7 @@ pub fn HeaderMenu() -> impl IntoView {
     };
 
     Effect::new(move || {
-        if events_context.key_pressed(Key::Character('f')) {
+        if events_context.key_pressed(Key::Character('r')) {
             open_forge()
         }
     });
@@ -102,7 +103,7 @@ pub fn HeaderMenu() -> impl IntoView {
     };
 
     Effect::new(move || {
-        if events_context.key_pressed(Key::Character('a')) {
+        if events_context.key_pressed(Key::Character('p')) {
             open_ascend()
         }
     });
@@ -125,7 +126,8 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     view! {
-        <div class="relative z-50 w-full flex justify-between items-center p-1 xl:p-2 bg-zinc-800 shadow-md h-auto">
+        <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
+        bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
             <div class="flex justify-around w-full items-center">
                 <GoldCounter value=gold />
                 <GemsCounter value=gems />
@@ -151,7 +153,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     "Forge"
                 </MenuButton>
                 <MenuButton on:click=move |_| open_ascend() disabled=disable_panels>
-                    "Ascend"
+                    "Passives"
                 </MenuButton>
                 <MenuButton on:click=move |_| open_temple() disabled=disable_panels>
                     "Temple"

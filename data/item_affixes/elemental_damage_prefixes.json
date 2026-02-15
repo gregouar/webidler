@@ -1,0 +1,745 @@
+[
+  {
+    "name": "Striking",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Physical"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [25, 45]
+      }
+    ]
+  },
+  {
+    "name": "Lashing",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Physical"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [55, 70]
+      }
+    ]
+  },
+  {
+    "name": "Pummeling",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Physical"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [80, 95]
+      }
+    ]
+  },
+  {
+    "name": "Breaking",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Physical"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [105, 120]
+      }
+    ]
+  },
+  {
+    "name": "Crushing",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Physical"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": [130, 145]
+      }
+    ]
+  },
+  {
+    "name": "Smashing",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Physical" } },
+        "modifier": "Multiplier",
+        "value": [155, 170]
+      }
+    ]
+  },
+  {
+    "name": "Fracturing",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Physical" } },
+        "modifier": "Multiplier",
+        "value": [180, 195]
+      }
+    ]
+  },
+  {
+    "name": "Shattering",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Physical" } },
+        "modifier": "Multiplier",
+        "value": [205, 220]
+      }
+    ]
+  },
+  {
+    "name": "Destroying",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Physical" } },
+        "modifier": "Multiplier",
+        "value": [230, 250]
+      }
+    ]
+  },
+  {
+    "name": "Ravaging",
+    "family": "inc_phys_damage",
+    "tags": ["Attack", "Physical"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Jewelry", "Accessory"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Physical" } },
+        "modifier": "Multiplier",
+        "value": [260, 300]
+      }
+    ]
+  },
+
+  {
+    "name": "Tepid",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Fire" } },
+        "modifier": "Multiplier",
+        "value": [25, 45]
+      }
+    ]
+  },
+  {
+    "name": "Warm",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Fire" } },
+        "modifier": "Multiplier",
+        "value": [55, 70]
+      }
+    ]
+  },
+  {
+    "name": "Heated",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Fire" } },
+        "modifier": "Multiplier",
+        "value": [80, 95]
+      }
+    ]
+  },
+  {
+    "name": "Hot",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Fire" } },
+        "modifier": "Multiplier",
+        "value": [105, 120]
+      }
+    ]
+  },
+  {
+    "name": "Torrid",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Fire" } },
+        "modifier": "Multiplier",
+        "value": [130, 145]
+      }
+    ]
+  },
+  {
+    "name": "Fiery",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Fire" } },
+        "modifier": "Multiplier",
+        "value": [155, 170]
+      }
+    ]
+  },
+  {
+    "name": "Molten",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Fire" } },
+        "modifier": "Multiplier",
+        "value": [180, 195]
+      }
+    ]
+  },
+  {
+    "name": "Igneous",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Fire" } },
+        "modifier": "Multiplier",
+        "value": [205, 220]
+      }
+    ]
+  },
+  {
+    "name": "Sulfurous",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Fire" } },
+        "modifier": "Multiplier",
+        "value": [230, 250]
+      }
+    ]
+  },
+  {
+    "name": "Infernal",
+    "family": "inc_fire_damage",
+    "tags": ["Spell", "Fire"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Fire" } },
+        "modifier": "Multiplier",
+        "value": [260, 300]
+      }
+    ]
+  },
+
+  {
+    "name": "Sick",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Poison" } },
+        "modifier": "Multiplier",
+        "value": [25, 45]
+      }
+    ]
+  },
+  {
+    "name": "Ill",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Poison" } },
+        "modifier": "Multiplier",
+        "value": [55, 70]
+      }
+    ]
+  },
+  {
+    "name": "Diseased",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Poison" } },
+        "modifier": "Multiplier",
+        "value": [80, 95]
+      }
+    ]
+  },
+  {
+    "name": "Plagued",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Poison" } },
+        "modifier": "Multiplier",
+        "value": [105, 120]
+      }
+    ]
+  },
+  {
+    "name": "Pestiferous",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Poison" } },
+        "modifier": "Multiplier",
+        "value": [130, 145]
+      }
+    ]
+  },
+  {
+    "name": "Septic",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Poison" } },
+        "modifier": "Multiplier",
+        "value": [155, 170]
+      }
+    ]
+  },
+  {
+    "name": "Cancerous",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Poison" } },
+        "modifier": "Multiplier",
+        "value": [180, 195]
+      }
+    ]
+  },
+  {
+    "name": "Putrid",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Poison" } },
+        "modifier": "Multiplier",
+        "value": [205, 220]
+      }
+    ]
+  },
+  {
+    "name": "Necrotic",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Poison" } },
+        "modifier": "Multiplier",
+        "value": [230, 250]
+      }
+    ]
+  },
+  {
+    "name": "Pandemic",
+    "family": "inc_poison_damage",
+    "tags": ["Spell", "Poison"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Poison" } },
+        "modifier": "Multiplier",
+        "value": [260, 300]
+      }
+    ]
+  },
+
+  {
+    "name": "Charged",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Storm" } },
+        "modifier": "Multiplier",
+        "value": [25, 45]
+      }
+    ]
+  },
+  {
+    "name": "Foaming",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Storm" } },
+        "modifier": "Multiplier",
+        "value": [55, 70]
+      }
+    ]
+  },
+  {
+    "name": "Conductive",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Storm" } },
+        "modifier": "Multiplier",
+        "value": [80, 95]
+      }
+    ]
+  },
+  {
+    "name": "Swirling",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Storm" } },
+        "modifier": "Multiplier",
+        "value": [105, 120]
+      }
+    ]
+  },
+  {
+    "name": "Voltaic",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Storm" } },
+        "modifier": "Multiplier",
+        "value": [130, 145]
+      }
+    ]
+  },
+  {
+    "name": "Turbulent",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Storm" } },
+        "modifier": "Multiplier",
+        "value": [155, 170]
+      }
+    ]
+  },
+  {
+    "name": "Uproaring",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Storm" } },
+        "modifier": "Multiplier",
+        "value": [180, 195]
+      }
+    ]
+  },
+  {
+    "name": "Fulminating",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Storm" } },
+        "modifier": "Multiplier",
+        "value": [205, 220]
+      }
+    ]
+  },
+  {
+    "name": "Hazardous",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Storm" } },
+        "modifier": "Multiplier",
+        "value": [230, 250]
+      }
+    ]
+  },
+  {
+    "name": "Maelstromic",
+    "family": "inc_storm_damage",
+    "tags": ["Spell", "Storm"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["SpellWeapon", "Focus", "Jewelry", "Accessory"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Storm" } },
+        "modifier": "Multiplier",
+        "value": [260, 300]
+      }
+    ]
+  }
+]

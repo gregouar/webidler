@@ -11,6 +11,12 @@ use crate::game::utils::json::LoadJsonFromFile;
 
 use super::DataInit;
 
+// struct StatusResistanceBlueprint {
+//     skill_type: Option<SkillType>,
+//     status_type: Option<StatStatusType>,
+//     value: f64,
+// }
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BaseMonsterSpecs {
     #[serde(flatten)]
@@ -22,6 +28,8 @@ pub struct BaseMonsterSpecs {
 
     pub initiative: ChanceRange<f32>,
     pub power_factor: f64,
+    // TODO:
+    // pub status_resistances: Vec<StatusResistanceBlueprint>,
 }
 
 impl DataInit<BaseMonsterSpecs> for MonsterSpecs {

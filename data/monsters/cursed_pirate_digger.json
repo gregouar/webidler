@@ -29,7 +29,7 @@
       "name": "Gold Plunder",
       "icon": "passives/gold_negative.svg",
       "cooldown": 10.0,
-      "skill_type": "Spell",
+      "skill_type": "Curse",
       "targets": [
         {
           "effects": [

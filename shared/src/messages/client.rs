@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    area::AreaLevel,
+    area::{AreaLevel, StartAreaConfig},
     item::{ItemCategory, ItemSlot},
     passive::PassiveNodeId,
     user::UserCharacterId,
@@ -17,6 +17,7 @@ impl_into_message! {
         Connect(ClientConnectMessage),
 
         EndQuest,
+        TerminateQuest(TerminateQuestMessage),
 
         UseSkill(UseSkillMessage),
         SetAutoSkill(SetAutoSkillMessage),
@@ -51,7 +52,12 @@ impl Default for ClientMessage {
 pub struct ClientConnectMessage {
     pub jwt: String,
     pub character_id: UserCharacterId,
-    pub area_id: Option<String>,
+    pub area_config: Option<StartAreaConfig>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct TerminateQuestMessage {
+    pub item_index: Option<u8>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

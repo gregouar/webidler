@@ -86,7 +86,7 @@ pub fn LeaderboardPanel() -> impl IntoView {
                             .sort_by_key(|(area_id, _)| {
                                 areas
                                     .get(area_id)
-                                    .map(|area_specs| area_specs.starting_level)
+                                    .map(|area_specs| area_specs.required_level)
                                     .unwrap_or_default()
                             });
 
@@ -94,6 +94,7 @@ pub fn LeaderboardPanel() -> impl IntoView {
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                                 {leaderboard_per_area
                                     .into_iter()
+                                    .rev()
                                     .map(|(area_id, leaderboard)| {
                                         let area_name = {
                                             areas

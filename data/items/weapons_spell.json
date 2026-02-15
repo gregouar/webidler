@@ -18,7 +18,7 @@
     ]
   },
   "wand": {
-    "name": "Wand",
+    "name": "Magic Wand",
     "icon": "items/wand.webp",
     "slot": "Weapon",
     "categories": ["SpellWeapon"],
@@ -281,6 +281,25 @@
         "value": 120
       }
     ],
-    "min_area_level": 240
+    "min_area_level": 250
+  },
+  "mage_wand": {
+    "name": "Mage Wand",
+    "icon": "items/mage_wand.webp",
+    "slot": "Weapon",
+    "categories": ["SpellWeapon"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
+        "modifier": "Multiplier",
+        "value": 140
+      }
+    ],
+    "min_area_level": 320
   }
 }

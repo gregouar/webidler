@@ -35,7 +35,7 @@
   },
   "chain_lightning": {
     "name": "Chain Lightning",
-    "description": "A power spell that hit randomly multiple enemies, with a possibility to stun them.",
+    "description": "A powerful spell that hit randomly multiple enemies, with a possibility to stun them.",
     "icon": "skills/chain_lightning.svg",
     "skill_type": "Spell",
     "cooldown": 4,
@@ -62,9 +62,7 @@
             "FlatDamage": {
               "damage": {
                 "Storm": [0, 30]
-              },
-              "crit_chance": 5,
-              "crit_damage": 100
+              }
             }
           },
           {
@@ -74,6 +72,62 @@
               "statuses": [
                 {
                   "status_type": "Stun"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "blizzard": {
+    "name": "Blizzard",
+    "description": "Summon a mighty storm that repeatedly hit enemies and slow them.",
+    "icon": "skills/blizzard.svg",
+    "skill_type": "Spell",
+    "cooldown": 10,
+    "mana_cost": 25,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "Multiplier",
+        "value": 50
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "Square4",
+        "repeat": {
+          "value": 5,
+          "target": "Any"
+        },
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Storm": [0, 4]
+              }
+            }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Speed": null
+                      },
+                      "modifier": "Multiplier",
+                      "debuff": true
+                    }
+                  },
+                  "value": 33
                 }
               ]
             }
@@ -242,13 +296,13 @@
     "name": "Curse of Frailty",
     "description": "Curse enemies to weaken their defenses, making them take more damage from physical damage.",
     "icon": "skills/curse_frailty.svg",
-    "skill_type": "Spell",
+    "skill_type": "Curse",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -329,13 +383,13 @@
     "name": "Curse of Conductivity",
     "description": "Curse your foes with the storm's fury, making their bodies living conduits that draw lightning to strike all around them, and trigger a Maelstrom in case of critical hit.",
     "icon": "skills/curse_conductivity.svg",
-    "skill_type": "Spell",
+    "skill_type": "Curse",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -376,7 +430,7 @@
                       "target": "SameTarget",
                       "skill_range": "Any",
                       "skill_shape": "Contact",
-                      "skill_type": "Spell",
+                      "skill_type": "Curse",
                       "effects": [
                         {
                           "FlatDamage": {
@@ -387,16 +441,6 @@
                           "ignore_stat_effects": [
                             {
                               "Damage": {
-                                "damage_type": "Storm"
-                              }
-                            },
-                            {
-                              "MinDamage": {
-                                "damage_type": "Storm"
-                              }
-                            },
-                            {
-                              "MaxDamage": {
                                 "damage_type": "Storm"
                               }
                             },
@@ -433,7 +477,7 @@
                       "target": "SameTarget",
                       "skill_range": "Any",
                       "skill_shape": "All",
-                      "skill_type": "Spell",
+                      "skill_type": "Curse",
                       "effects": [
                         {
                           "FlatDamage": {
@@ -444,16 +488,6 @@
                           "ignore_stat_effects": [
                             {
                               "Damage": {
-                                "damage_type": "Storm"
-                              }
-                            },
-                            {
-                              "MinDamage": {
-                                "damage_type": "Storm"
-                              }
-                            },
-                            {
-                              "MaxDamage": {
                                 "damage_type": "Storm"
                               }
                             },
@@ -489,13 +523,13 @@
     "name": "Curse of Putridity",
     "description": "Curse your foes with the rot, making their bodies crumble.",
     "icon": "skills/curse_putridity.svg",
-    "skill_type": "Spell",
+    "skill_type": "Curse",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -535,7 +569,7 @@
                       },
                       "target": "SameTarget",
                       "skill_range": "Any",
-                      "skill_type": "Spell",
+                      "skill_type": "Other",
                       "effects": [
                         {
                           "FlatDamage": {
@@ -550,16 +584,6 @@
                               }
                             },
                             {
-                              "MinDamage": {
-                                "damage_type": "Poison"
-                              }
-                            },
-                            {
-                              "MaxDamage": {
-                                "damage_type": "Poison"
-                              }
-                            },
-                            {
                               "CritChance": null
                             }
                           ]
@@ -568,13 +592,15 @@
                       "modifiers": [
                         {
                           "stat": {
-                            "Damage": { "damage_type": "Poison" }
+                            "Damage": { "damage_type": "Physical" }
                           },
                           "modifier": "Flat",
-                          "factor": 0.5,
+                          "factor": 0.3,
                           "source": {
                             "StatusValue": {
-                              "DamageOverTime": { "damage_type": "Poison" }
+                              "status_type": {
+                                "DamageOverTime": { "damage_type": "Poison" }
+                              }
                             }
                           }
                         }
@@ -593,13 +619,13 @@
     "name": "Curse of Flammability",
     "description": "Unleash infernal flames upon your enemies, intensifying the fire damage they suffer the longer they burn.",
     "icon": "skills/curse_flammability.svg",
-    "skill_type": "Spell",
+    "skill_type": "Curse",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -634,14 +660,14 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "skills/curse_flammability.svg",
-                      "description": "Trigger an Intense Fire that deals additional Fire Damage equal to 30% of the Hit's Fire Damage for each stack of Fire Damage over Time present on the target.",
+                      "description": "Trigger an Intense Fire that deals additional Fire Damage equal to 30% of the Hit's Fire Damage for each Stack of Burn present on the target.",
                       "OnTakeHit": {
                         "is_triggered": false
                       },
                       "target": "SameTarget",
                       "skill_range": "Any",
                       "skill_shape": "Single",
-                      "skill_type": "Spell",
+                      "skill_type": "Curse",
                       "effects": [
                         {
                           "FlatDamage": {
@@ -650,16 +676,6 @@
                           "ignore_stat_effects": [
                             {
                               "Damage": {
-                                "damage_type": "Fire"
-                              }
-                            },
-                            {
-                              "MinDamage": {
-                                "damage_type": "Fire"
-                              }
-                            },
-                            {
-                              "MaxDamage": {
                                 "damage_type": "Fire"
                               }
                             },
@@ -707,13 +723,13 @@
     "name": "Curse of Weakness",
     "description": "A debilitating curse that reduces enemies' damage output and slow them.",
     "icon": "skills/curse_weakness.svg",
-    "skill_type": "Spell",
+    "skill_type": "Curse",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Multiplier",
         "value": 5
       }
@@ -754,13 +770,13 @@
     "name": "Blessing of Haste",
     "description": "A blessing that increases your speed and movement, allowing quicker actions in battle.",
     "icon": "skills/haste.svg",
-    "skill_type": "Spell",
+    "skill_type": "Blessing",
     "cooldown": 20,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": 5
       }
@@ -796,13 +812,13 @@
     "name": "Blessing of Precision",
     "description": "A blessing that increase your chance of critical strike, and make them stronger.",
     "icon": "skills/blessing_crit.svg",
-    "skill_type": "Spell",
+    "skill_type": "Blessing",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -848,13 +864,13 @@
     "name": "Blessing of Protection",
     "description": "A blessing that massively increase your defense.",
     "icon": "skills/blessing_protection.svg",
-    "skill_type": "Spell",
+    "skill_type": "Blessing",
     "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -883,7 +899,7 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusPower": null
+                "StatusPower": {}
               }
             ]
           },
@@ -925,7 +941,7 @@
         "value": 50
       },
       {
-        "stat": { "StatusDuration": null },
+        "stat": { "StatusDuration": {} },
         "modifier": "Multiplier",
         "value": 1
       }
@@ -959,11 +975,13 @@
     ],
     "modifier_effects": [
       {
+        "hidden": true,
         "effects": [
           {
             "stat": {
-              "MinDamage": {
-                "damage_type": "Poison"
+              "Damage": {
+                "damage_type": "Poison",
+                "min_max": "Min"
               }
             },
             "modifier": "Flat",
@@ -973,17 +991,21 @@
         "source": {
           "ItemStats": {
             "slot": "Weapon",
-            "item_stats": { "MinDamage": "Poison" }
+            "item_stats": {
+              "Damage": { "damage_type": "Poison", "min_max": "Min" }
+            }
           }
         },
         "factor": 1
       },
       {
+        "hidden": true,
         "effects": [
           {
             "stat": {
-              "MaxDamage": {
-                "damage_type": "Poison"
+              "Damage": {
+                "damage_type": "Poison",
+                "min_max": "Max"
               }
             },
             "modifier": "Flat",
@@ -993,7 +1015,9 @@
         "source": {
           "ItemStats": {
             "slot": "Weapon",
-            "item_stats": { "MaxDamage": "Poison" }
+            "item_stats": {
+              "Damage": { "damage_type": "Poison", "min_max": "Max" }
+            }
           }
         },
         "factor": 1
@@ -1010,7 +1034,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": null },
+        "stat": { "StatusPower": {} },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -1090,7 +1114,10 @@
                             "Damage": { "damage_type": "Physical" }
                           },
                           "target_stat": {
-                            "MaxDamage": { "damage_type": "Storm" }
+                            "Damage": {
+                              "damage_type": "Storm",
+                              "min_max": "Max"
+                            }
                           },
                           "target_modifier": "Flat"
                         }
@@ -1104,7 +1131,7 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusPower": null
+                "StatusPower": {}
               }
             ]
           }
@@ -1122,7 +1149,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": null },
+        "stat": { "StatusPower": {} },
         "modifier": "Multiplier",
         "value": 10
       }
@@ -1183,18 +1210,6 @@
                                 "skill_type": "Attack",
                                 "damage_type": "Physical"
                               }
-                            },
-                            {
-                              "MinDamage": {
-                                "skill_type": "Attack",
-                                "damage_type": "Physical"
-                              }
-                            },
-                            {
-                              "MaxDamage": {
-                                "skill_type": "Attack",
-                                "damage_type": "Physical"
-                              }
                             }
                           ]
                         }
@@ -1213,7 +1228,15 @@
                         {
                           "stat": {
                             "SuccessChance": {
-                              "effect_type": { "ApplyStatus": {} }
+                              "effect_type": {
+                                "ApplyStatus": {
+                                  "status_type": {
+                                    "DamageOverTime": {
+                                      "damage_type": "Physical"
+                                    }
+                                  }
+                                }
+                              }
                             }
                           },
                           "modifier": "Flat",
@@ -1243,7 +1266,9 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "Restore": "Life" },
+        "stat": {
+          "Restore": { "restore_type": "Life" }
+        },
         "modifier": "Multiplier",
         "value": 20
       }
@@ -1267,13 +1292,13 @@
     "name": "Blessing of Renewal",
     "description": "A blessing that increase your life regeneration.",
     "icon": "skills/blessing_renewal.svg",
-    "skill_type": "Spell",
+    "skill_type": "Blessing",
     "cooldown": 20,
     "mana_cost": 25,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
         "modifier": "Multiplier",
         "value": 4
       }
@@ -1313,7 +1338,7 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "Restore": "Mana" },
+        "stat": { "Restore": { "restore_type": "Mana" } },
         "modifier": "Flat",
         "value": 1
       },
@@ -1362,8 +1387,9 @@
         "effects": [
           {
             "stat": {
-              "MinDamage": {
-                "damage_type": "Physical"
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Min"
               }
             },
             "modifier": "Flat",
@@ -1371,8 +1397,9 @@
           },
           {
             "stat": {
-              "MaxDamage": {
-                "damage_type": "Physical"
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Max"
               }
             },
             "modifier": "Flat",
@@ -1408,6 +1435,340 @@
             }
           }
         ]
+      }
+    ]
+  },
+  "double_strike": {
+    "name": "Double Strike",
+    "description": "A second, slightly slower strike with your weapon.",
+    "icon": "skills/attack.svg",
+    "skill_type": "Attack",
+    "cooldown": 0,
+    "mana_cost": 2,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "Multiplier",
+        "value": 50
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "All",
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {}
+            }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 2,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "value": 0,
+                  "cumulate": false
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "modifier_effects": [
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": { "SkillTargetModifier": {} },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": "Range"
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": { "SkillTargetModifier": {} },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": "Shape"
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": { "Speed": "Attack" },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": "Cooldown"
+          }
+        },
+        "factor": -1.1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": { "CritChance": "Attack" },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": "CritChance"
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": { "CritDamage": "Attack" },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": "CritDamage"
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Min"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": {
+              "Damage": { "damage_type": "Physical", "min_max": "Min" }
+            }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Max"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": {
+              "Damage": { "damage_type": "Physical", "min_max": "Max" }
+            }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Fire",
+                "min_max": "Min"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": {
+              "Damage": { "damage_type": "Fire", "min_max": "Min" }
+            }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Fire",
+                "min_max": "Max"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": {
+              "Damage": { "damage_type": "Fire", "min_max": "Max" }
+            }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Storm",
+                "min_max": "Min"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": {
+              "Damage": { "damage_type": "Storm", "min_max": "Min" }
+            }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Storm",
+                "min_max": "Max"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": {
+              "Damage": { "damage_type": "Storm", "min_max": "Max" }
+            }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "min_max": "Min"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": {
+              "Damage": { "damage_type": "Poison", "min_max": "Min" }
+            }
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "min_max": "Max"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": {
+              "Damage": { "damage_type": "Poison", "min_max": "Max" }
+            }
+          }
+        },
+        "factor": 1
       }
     ]
   }

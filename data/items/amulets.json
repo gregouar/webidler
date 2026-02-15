@@ -14,7 +14,7 @@
     ]
   },
   "medallion": {
-    "name": "Medallion",
+    "name": "Brass Medallion",
     "icon": "items/medallion.webp",
     "slot": "Amulet",
     "categories": ["Jewelry", "Amulet"],
@@ -50,7 +50,9 @@
       {
         "scope": "Global",
         "stat": {
-          "StatusPower": { "DamageOverTime": { "damage_type": "Fire" } }
+          "StatusPower": {
+            "status_type": { "DamageOverTime": { "damage_type": "Fire" } }
+          }
         },
         "modifier": "Multiplier",
         "value": [50, 100],
@@ -59,7 +61,9 @@
       {
         "scope": "Global",
         "stat": {
-          "StatusDuration": { "DamageOverTime": { "damage_type": "Fire" } }
+          "StatusDuration": {
+            "status_type": { "DamageOverTime": { "damage_type": "Fire" } }
+          }
         },
         "modifier": "Multiplier",
         "value": [20, 40],
@@ -189,6 +193,21 @@
         "value": 120
       }
     ],
-    "min_area_level": 240
+    "min_area_level": 250
+  },
+  "sacred_talisman": {
+    "name": "Sacred Talisman",
+    "icon": "items/sacred_talisman.webp",
+    "slot": "Amulet",
+    "categories": ["Jewelry", "Amulet"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": 140
+      }
+    ],
+    "min_area_level": 320
   }
 }

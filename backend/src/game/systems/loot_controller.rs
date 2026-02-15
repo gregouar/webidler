@@ -1,5 +1,5 @@
 use shared::data::{
-    item::{ItemRarity, ItemSpecs},
+    item::{ItemCategory, ItemRarity, ItemSpecs},
     loot::{LootState, QueuedLoot},
     player::PlayerInventory,
 };
@@ -145,28 +145,43 @@ fn is_better_loot(
 
 fn item_score(player_controller: &PlayerController, item: &ItemSpecs) -> usize {
     let mut score = 0;
-    if let Some(item_category) = player_controller.preferred_loot {
-        if item.base.categories.contains(&item_category) {
-            score += 1_000_000;
-        }
+    if let Some(item_category) = player_controller.preferred_loot
+        && item.base.categories.contains(&item_category)
+    {
+        score += 2_000_000;
     }
 
     score += match item.modifiers.rarity {
         ItemRarity::Normal | ItemRarity::Magic | ItemRarity::Rare | ItemRarity::Masterwork => 0,
-        ItemRarity::Unique => 1_500_000,
+        ItemRarity::Unique => 2_000_000,
     };
+
+    if item.base.categories.contains(&ItemCategory::Rune)
+        || item.base.categories.contains(&ItemCategory::Map)
+    {
+        score += 500_000
+    }
+
+    if item
+        .base
+        .rune_specs
+        .as_ref()
+        .map(|rune_specs| rune_specs.root_node)
+        .unwrap_or_default()
+    {
+        score += 1_000_000;
+    }
 
     score += item
         .modifiers
         .affixes
         .iter()
-        .map(|a| a.tier as usize)
-        .sum::<usize>()
-        * 10_000;
+        // .map(|a| a.tier.pow(2) as usize)
+        .map(|a| (100 + a.item_level as usize).pow(2))
+        .sum::<usize>();
+    // * 10_000;
 
     score += item.modifiers.quality as usize * 1_000;
-
-    // score += item.base.min_area_level as usize * 1_000;
 
     score
 }

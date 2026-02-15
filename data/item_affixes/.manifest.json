@@ -17,13 +17,13 @@
 
       "boots_prefixes.json",
       "boots_suffixes.json",
-
-      "cloak_prefixes.json",
       
       "crit_prefixes.json",
       "crit_suffixes.json",
 
-      "elemental_damage_prefix.json",
+      "elemental_damage_prefixes.json",
+
+      "evade_suffixes.json",
 
       "focus_prefixes.json",
       "focus_suffixes.json",
@@ -50,6 +50,8 @@
       "shield_suffixes.json",
 
       "skill_damage_suffixes.json",
+
+      "speed_prefixes.json",
 
       "spell_suffixes.json"
     ]

@@ -1,6 +1,7 @@
 {
   "specs": {
     "name": "Wyrm's Peaks",
+    "description": "[Boss Area] The peaks do not weather storms. They are shaped by the wings and wrath of their masters.",
     "starting_level": 51,
     "required_level": 250,
     "item_level_modifier": 190,
@@ -14,6 +15,7 @@
     "tier_4.json",
     "tier_5.json",
     "tier_6.json",
+    "tier_7.json",
     "wyrm.json"
   ],
   "bosses": [

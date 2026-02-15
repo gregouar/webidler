@@ -6,6 +6,7 @@
   "power_factor": 8,
   "initiative": [1.0, 1.5],
   "armor": { "Physical": 100 },
+  "stun_lockout": 5.0,
   "skills": [
     {
       "name": "Explosive Round",
@@ -31,7 +32,7 @@
                         "damage_type": "Fire"
                       }
                     },
-                    "value": [2,5]
+                    "value": [2, 5]
                   }
                 ]
               }

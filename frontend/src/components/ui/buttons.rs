@@ -2,7 +2,7 @@ use leptos::{html::*, prelude::*};
 
 #[component]
 pub fn MenuButton(
-    #[prop(optional)] disabled: Option<Signal<bool>>,
+    #[prop(optional, into)] disabled: Option<Signal<bool>>,
     #[prop(optional)] button_type: Option<&'static str>,
     children: Children,
 ) -> impl IntoView {
@@ -17,6 +17,7 @@ pub fn MenuButton(
             overflow-hidden
             hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
             active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
+            active:translate-y-[1px]
             w-auto
             disabled:from-zinc-700 disabled:to-zinc-600
             disabled:text-zinc-400
@@ -46,6 +47,7 @@ pub fn MenuButtonRed(
             overflow-hidden
             hover:bg-gradient-to-tr hover:from-red-800 hover:to-red-700
             active:bg-gradient-to-t active:from-red-900 active:to-red-950
+            active:translate-y-[1px]
             disabled:from-zinc-700 disabled:to-zinc-600
             disabled:text-zinc-400
             disabled:opacity-60 disabled:shadow-none
@@ -73,6 +75,7 @@ pub fn FancyButton(
             overflow-hidden
             hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
             active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
+            active:translate-y-[1px]
             disabled:from-zinc-700 disabled:to-zinc-600
             disabled:text-zinc-400
             disabled:opacity-60 disabled:shadow-none
@@ -121,6 +124,7 @@ pub fn Toggle(
                     bg-gradient-to-t from-zinc-900 to-zinc-800 
                     hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
                     active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950
+                    active:translate-y-[1px]
                     disabled:from-zinc-700 disabled:to-zinc-600
                     disabled:text-zinc-400
                     disabled:opacity-60 disabled:shadow-none
@@ -147,7 +151,10 @@ pub fn TabButton(
 ) -> impl IntoView {
     let active_class = |active| {
         if active {
-            "bg-gradient-to-t from-zinc-900 to-zinc-950"
+            "
+            bg-gradient-to-t from-zinc-900 to-zinc-950
+            translate-y-[3px]
+            "
         } else {
             "
             cursor-pointer
@@ -171,7 +178,7 @@ pub fn TabButton(
                 format!(
                     "btn
                     flex-1
-                    px-1 xl:px-3 py-1 xl:py-2 
+                    px-2 xl:px-3 py-1 xl:py-2 
                     text-sm xl:text-base 
                     font-bold text-shadow
                     border-t border-l border-r border-neutral-950 rounded-t-md 

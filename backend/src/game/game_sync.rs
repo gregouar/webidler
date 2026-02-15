@@ -1,8 +1,10 @@
-use std::collections::HashSet;
-
 use anyhow::Result;
 
-use shared::messages::server::{InitGameMessage, SyncGameStateMessage};
+use indexmap::IndexSet;
+use shared::{
+    data::{passive::PurchasedNodes, user::UserCharacterId},
+    messages::server::{InitGameMessage, SyncGameStateMessage},
+};
 
 use super::game_data::GameInstanceData;
 
@@ -10,17 +12,21 @@ use crate::websocket::WebSocketConnection;
 
 pub async fn sync_init_game(
     client_conn: &mut WebSocketConnection,
+    character_id: &UserCharacterId,
     game_data: &mut GameInstanceData,
-    last_skills_bought: HashSet<String>,
+    passives_tree_build: PurchasedNodes,
+    last_skills_bought: IndexSet<String>,
 ) -> Result<()> {
     game_data.reset_syncers();
     client_conn
         .send(
             &InitGameMessage {
+                character_id: *character_id,
                 area_specs: game_data.area_blueprint.specs.clone(),
                 area_state: game_data.area_state.read().clone(),
                 passives_tree_specs: game_data.passives_tree_specs.clone(),
                 passives_tree_state: game_data.passives_tree_state.read().clone(),
+                passives_tree_build,
                 player_specs: game_data.player_specs.read().clone(),
                 player_state: game_data.player_state.clone(),
                 last_skills_bought,
@@ -50,6 +56,7 @@ pub async fn sync_update_game(
                 monster_states: game_data.monster_states.clone(),
                 queued_loot: game_data.queued_loot.sync(),
                 game_stats: game_data.game_stats.clone(),
+                quest_rewards: game_data.quest_rewards.sync(),
             }
             .into(),
         )

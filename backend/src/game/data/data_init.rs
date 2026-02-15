@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use shared::{
     constants::{DEFAULT_MAX_LEVEL, SKILL_BASE_COST},
     data::{
@@ -31,7 +29,7 @@ impl DataInit<&AreaSpecs> for AreaState {
             auto_progress: true,
             going_back: 0,
             rush_mode: false,
-            end_quest: false,
+            loot_rarity: 100.0,
         }
     }
 }
@@ -49,6 +47,9 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             just_hurt: false,
             just_hurt_crit: false,
             just_blocked: false,
+            just_evaded: false,
+
+            monitored_conditions: Default::default(),
         }
     }
 }
@@ -62,7 +63,7 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             auto_skills: vec![],
             max_skills: 4,
             buy_skill_cost: SKILL_BASE_COST,
-            bought_skills: HashSet::new(),
+            bought_skills: Default::default(),
             level: 1,
             experience_needed: 20.0,
             movement_cooldown: 3.0,

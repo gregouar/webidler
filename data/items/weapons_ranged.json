@@ -81,7 +81,6 @@
         "scope": "Global",
         "stat": {
           "LifeOnHit": {
-            "is_hurt": true,
             "skill_type": "Attack"
           }
         },
@@ -93,7 +92,7 @@
       {
         "trigger_id": "bloodspiller",
         "OnKill": {
-          "is_damaged_over_time": "Physical"
+          "conditions": [{ "HasStatus": { "DamageOverTime": "Physical" } }]
         },
         "target": "Me",
         "effects": [
@@ -167,8 +166,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MinDamage": {
-            "damage_type": "Physical"
+          "Damage": {
+            "damage_type": "Physical",
+            "min_max": "Min"
           }
         },
         "modifier": "Flat",
@@ -177,8 +177,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MaxDamage": {
-            "damage_type": "Physical"
+          "Damage": {
+            "damage_type": "Physical",
+            "min_max": "Max"
           }
         },
         "modifier": "Flat",
@@ -187,8 +188,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MaxDamage": {
-            "damage_type": "Storm"
+          "Damage": {
+            "damage_type": "Storm",
+            "min_max": "Max"
           }
         },
         "modifier": "Flat",
@@ -217,7 +219,7 @@
       {
         "scope": "Global",
         "stat": {
-          "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" }
+          "ManaOnHit": { "skill_type": "Attack" }
         },
         "modifier": "Flat",
         "value": [2, 4]
@@ -246,18 +248,6 @@
             "ignore_stat_effects": [
               {
                 "Damage": {
-                  "skill_type": null,
-                  "damage_type": "Storm"
-                }
-              },
-              {
-                "MinDamage": {
-                  "skill_type": null,
-                  "damage_type": "Storm"
-                }
-              },
-              {
-                "MaxDamage": {
                   "skill_type": null,
                   "damage_type": "Storm"
                 }
@@ -315,7 +305,7 @@
       "crit_chance": 10,
       "crit_damage": 100
     },
-    "min_area_level": 240
+    "min_area_level": 250
   },
   "compound_bow_unique": {
     "name": "Wyrmshot Engine",
@@ -339,8 +329,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MinDamage": {
-            "damage_type": "Fire"
+          "Damage": {
+            "damage_type": "Fire",
+            "min_max": "Min"
           }
         },
         "modifier": "Flat",
@@ -350,8 +341,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MaxDamage": {
-            "damage_type": "Fire"
+          "Damage": {
+            "damage_type": "Fire",
+            "min_max": "Max"
           }
         },
         "modifier": "Flat",
@@ -416,18 +408,6 @@
                   "skill_type": "Attack",
                   "damage_type": "Fire"
                 }
-              },
-              {
-                "MinDamage": {
-                  "skill_type": "Attack",
-                  "damage_type": "Fire"
-                }
-              },
-              {
-                "MaxDamage": {
-                  "skill_type": "Attack",
-                  "damage_type": "Fire"
-                }
               }
             ]
           }
@@ -446,6 +426,24 @@
         ]
       }
     ],
-    "min_area_level": 250
+    "min_area_level": 260
+  },
+  "crossbow": {
+    "name": "Crossbow",
+    "icon": "items/crossbow.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "RangedWeapon"],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [27, 31]
+      },
+      "crit_chance": 10,
+      "crit_damage": 100
+    },
+    "min_area_level": 320
   }
 }

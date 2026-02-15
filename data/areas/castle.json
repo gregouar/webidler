@@ -1,6 +1,7 @@
 {
   "specs": {
     "name": "Enchanted Castle",
+    "description": "Once a place of splendor, the castle still stands, its halls alive with magic, servants, and a court that never learned to die.",
     "starting_level": 31,
     "required_level": 150,
     "item_level_modifier": 110,
@@ -13,7 +14,8 @@
     "tier_3.json",
     "tier_4.json",
     "tier_5.json",
-    "tier_6.json"
+    "tier_6.json",
+    "tier_7.json"
   ],
   "bosses": [
     {

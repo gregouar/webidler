@@ -8,7 +8,8 @@ use shared::{
         character_status::{StatusSpecs, StatusState},
         item::SkillRange,
         skill::{DamageType, RestoreType, SkillType},
-        stat_effect::Modifier,
+        stat_effect::{Modifier, StatStatusType, compare_options},
+        temple::StatType,
     },
 };
 
@@ -32,11 +33,11 @@ pub fn attack_character(
 ) {
     let (target_id, (target_specs, target_state)) = target;
 
-    let is_blocked = target_specs.block.roll()
-        & match skill_type {
-            SkillType::Attack => true,
-            SkillType::Spell => target_specs.block_spell.roll(),
-        };
+    let is_blocked = target_specs
+        .block
+        .get(&skill_type)
+        .map(|block| block.roll())
+        .unwrap_or_default();
 
     let is_hurt = damage_character(
         target_specs,
@@ -150,7 +151,7 @@ pub fn restore_character(
 ) -> bool {
     let (_, (target_specs, target_state)) = target;
 
-    if amount <= 0.0 || !target_state.is_alive {
+    if !target_state.is_alive {
         return false;
     }
 
@@ -164,7 +165,7 @@ pub fn restore_character(
 
     match restore_type {
         RestoreType::Life => {
-            if target_state.life < target_specs.max_life {
+            if target_state.life < target_specs.max_life || amount < 0.0 {
                 target_state.life += amount * factor;
                 true
             } else {
@@ -172,7 +173,7 @@ pub fn restore_character(
             }
         }
         RestoreType::Mana => {
-            if target_state.mana < target_specs.max_mana {
+            if target_state.mana < target_specs.max_mana || amount < 0.0 {
                 target_state.mana += amount * factor;
                 true
             } else {
@@ -206,6 +207,7 @@ pub fn resuscitate_character(target: &mut Target) -> bool {
 pub fn should_apply_status(
     target: &Target,
     status_specs: &StatusSpecs,
+    skill_type: SkillType,
     value: f64,
     duration: Option<f64>,
     cumulate: bool,
@@ -233,7 +235,7 @@ pub fn should_apply_status(
     if let Some((_, cur_status_state)) = target_state
         .statuses
         .unique_statuses
-        .get(&status_specs.into())
+        .get(&(status_specs.into(), skill_type))
     {
         return compute_effect_weight(value, duration, replace_on_value_only)
             > compute_effect_weight(
@@ -258,11 +260,54 @@ pub fn apply_status(
     cumulate: bool,
     is_triggered: bool,
 ) -> bool {
-    let (target_id, (_, target_state)) = target;
+    let (target_id, (target_specs, target_state)) = target;
+
+    let status_resistance: f64 = target_specs
+        .status_resistances
+        .iter()
+        .filter_map(|((res_skill_type, res_status_type), resistance)| {
+            ((*res_skill_type == skill_type)
+                && compare_options(res_status_type, &Some(status_specs.into())))
+            .then_some(resistance)
+        })
+        .sum();
+
+    let (duration, value) = if status_resistance > 0.0 {
+        let factor = (1.0 - status_resistance * 0.01).clamp(0.0, 1.0);
+        if let Some(duration) = duration {
+            (Some(duration * factor), value)
+        } else {
+            (None, value * factor)
+        }
+    } else {
+        (duration, value)
+    };
 
     if duration.unwrap_or(1.0) <= 0.0 || !target_state.is_alive {
         return false;
     }
+
+    let is_evaded = if let StatusSpecs::DamageOverTime { damage_type } = status_specs {
+        target_specs
+            .evade
+            .get(damage_type)
+            .map(|evade| evade.roll())
+            .unwrap_or_default()
+    } else {
+        false
+    };
+
+    if is_evaded {
+        target_state.just_evaded = true;
+    }
+
+    let evade_factor = if is_evaded {
+        target_specs.evade_damage as f64 * 0.01
+    } else {
+        1.0
+    };
+
+    let value = value * evade_factor;
 
     match status_specs {
         StatusSpecs::DamageOverTime { .. } | StatusSpecs::StatModifier { .. } => {
@@ -299,7 +344,7 @@ pub fn apply_status(
         target_state
             .statuses
             .unique_statuses
-            .entry(status_specs.into())
+            .entry((status_specs.into(), skill_type))
             .and_modify(|(cur_status_specs, cur_status_state)| {
                 if compute_effect_weight(value, duration, false)
                     > compute_effect_weight(
@@ -344,6 +389,30 @@ pub fn apply_status(
         target_state.dirty_specs = true;
     }
 
+    let stun_lockout = target_specs.stun_lockout;
+    if let StatusSpecs::Stun = status_specs
+        && stun_lockout > 0.0
+    {
+        apply_status(
+            events_queue,
+            target,
+            attacker,
+            &StatusSpecs::StatModifier {
+                stat: StatType::StatusResistance {
+                    skill_type: None,
+                    status_type: Some(StatStatusType::Stun),
+                },
+                modifier: Modifier::Flat,
+                debuff: false,
+            },
+            SkillType::Other,
+            100.0,
+            duration.map(|d| d + stun_lockout),
+            false,
+            true,
+        );
+    }
+
     true
 }
 
@@ -358,4 +427,22 @@ fn compute_effect_weight(value: f64, duration: Option<f64>, value_only: bool) ->
     } else {
         value * duration.unwrap_or(10_000.0)
     }
+}
+
+pub fn mana_available(character_state: &CharacterState) -> f64 {
+    (character_state.life - 1.0).max(0.0) + character_state.mana
+}
+
+pub fn spend_mana(
+    character_specs: &CharacterSpecs,
+    character_state: &mut CharacterState,
+    amount: f64,
+) {
+    let take_from_life = (character_state.life - 1.0)
+        .max(0.0)
+        .min(amount * (character_specs.take_from_life_before_mana as f64 * 0.01).clamp(0.0, 1.0));
+    let take_from_mana = amount - take_from_life;
+
+    character_state.life -= take_from_life;
+    character_state.mana -= take_from_mana;
 }

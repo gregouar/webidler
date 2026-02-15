@@ -1,6 +1,7 @@
 {
   "specs": {
     "name": "Dark Forest",
+    "description": "The forest grows thick and restless, its roots tangled with rot, embers, and old bones. Few paths remain, and fewer are safe.",
     "starting_level": 11,
     "required_level": 50,
     "item_level_modifier": 30,
@@ -13,7 +14,8 @@
     "tier_3.json",
     "tier_4.json",
     "tier_5.json",
-    "tier_6.json"
+    "tier_6.json",
+    "tier_7.json"
   ],
   "bosses": [
     {

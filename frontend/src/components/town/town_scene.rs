@@ -5,14 +5,24 @@ use leptos::prelude::*;
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
 
-use shared::data::user::UserGrindArea;
+use shared::data::{
+    area::StartAreaConfig,
+    item::{ItemCategory, ItemSpecs},
+    user::UserGrindArea,
+};
 
 use crate::{
     assets::img_asset,
     components::{
-        shared::tooltips::SkillTooltip,
+        shared::{
+            item_card::ItemCard,
+            tooltips::{SkillTooltip, item_tooltip::ItemTooltipContent},
+        },
         town::TownContext,
         ui::{
+            buttons::{CloseButton, MenuButton},
+            card::{Card, CardInset, CardTitle},
+            menu_panel::MenuPanel,
             progress_bars::CircularProgressBar,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
         },
@@ -25,21 +35,26 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
 
     let max_area_level = move || town_context.character.read().max_area_level;
 
+    let open_grind_panel = RwSignal::new(false);
+    let selected_area = RwSignal::new(None);
+
+    Effect::new(move || {
+        if selected_area.read().is_some() {
+            open_grind_panel.set(true)
+        }
+    });
+
     view! {
-        <div class="w-full grid grid-cols-3 gap-2 xl:gap-4 p-2 xl:p-4 ">
-            <PlayerCard class:col-span-1 class:justify-self-end />
+        <StartGrindPanel open=open_grind_panel selected_area />
 
-            <div class="w-full col-span-2 justify-self-start">
+        <div class="absolute inset-0 p-1 xl:p-4">
+            <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
+                <PlayerCard />
 
-                <div class="rounded-md shadow-md  bg-zinc-800 ring-1 ring-zinc-950 h-full w-full
-                gap-1 xl:gap-2 p-1 xl:p-2 
-                shadow-lg relative flex flex-col">
-
+                <Card class="w-2/3 aspect-[12/8]">
                     <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between gap-1 xl:gap-2 flex-wrap
-                    justify-between">
-                        <span class="text-shadow-md shadow-gray-950 text-amber-200 text-lg xl:text-xl font-semibold">
-                            {if view_only { "Unlocked Grinds" } else { "Choose your Grind" }}
-                        </span>
+                    flex justify-between">
+                        <CardTitle>"Grinds"</CardTitle>
                         {move || {
                             (max_area_level() > 0)
                                 .then(|| {
@@ -53,24 +68,31 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                         }}
                     </div>
 
-                    <div class="grid grid-cols-3 xl:grid-cols-5 gap-1 xl:gap-2 p-2 xl:p-4
-                    overflow-y-auto h-full place-content-start 
-                    bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                        <For
-                            each=move || {
-                                let mut areas = town_context.areas.get();
-                                areas.sort_by_key(|area| area.area_specs.starting_level);
-                                areas
-                            }
-                            key=|area| area.area_id.clone()
-                            children=move |area| {
-                                view! { <GrindingAreaCard area=area.clone() view_only /> }
-                            }
-                        />
-                    </div>
-                </div>
-            </div>
+                    <CardInset class="min-h-0 flex-1">
+                        <div class="grid grid-cols-3 xl:grid-cols-5 gap-1 xl:gap-2 place-content-start">
+                            <For
+                                each=move || {
+                                    let mut areas = town_context.areas.get();
+                                    areas.sort_by_key(|area| area.area_specs.required_level);
+                                    areas
+                                }
+                                key=|area| area.area_id.clone()
+                                children=move |area| {
+                                    view! {
+                                        <GrindingAreaCard
+                                            area=area.clone()
+                                            view_only
+                                            selected_area
+                                        />
+                                    }
+                                }
+                            />
+                        </div>
+                        <div class="flex-1"></div>
+                    </CardInset>
+                </Card>
 
+            </div>
         </div>
     }
 }
@@ -80,40 +102,36 @@ fn PlayerCard() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     view! {
-        <div class="
-        w-full h-full flex flex-col 
-        gap-1 xl:gap-2 p-1 xl:p-2 
-        bg-zinc-800 ring-1 ring-zinc-950 rounded-md shadow-md 
-        ">
-            <div>
-                <PlayerName />
-            </div>
+        <Card class="w-1/3">
+            <PlayerName />
 
-            <div class="flex flex-col gap-1 xl:gap-2">
-                <div class="flex gap-1 xl:gap-2">
-                    <CharacterPortrait />
-                </div>
-
-                <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2">
-                    <For
-                        each=move || {
-                            0..town_context
-                                .last_grind
-                                .with(|last_grind| {
-                                    last_grind
-                                        .as_ref()
-                                        .map(|last_grind| last_grind.skills_specs.len().min(4))
-                                        .unwrap_or_default()
-                                })
-                        }
-                        key=|i| *i
-                        let(i)
-                    >
-                        <PlayerSkill index=i />
-                    </For>
+            <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
+                <div class="flex flex-col gap-1 xl:gap-2">
+                    <div class="flex-1 min-h-0">
+                        <CharacterPortrait />
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2">
+                <For
+                    each=move || {
+                        0..town_context
+                            .last_grind
+                            .with(|last_grind| {
+                                last_grind
+                                    .as_ref()
+                                    .map(|last_grind| last_grind.skills_specs.len().min(4))
+                                    .unwrap_or_default()
+                            })
+                    }
+                    key=|i| *i
+                    let(i)
+                >
+                    <PlayerSkill index=i />
+                </For>
+            </div>
+        </Card>
     }
 }
 
@@ -125,7 +143,6 @@ pub fn CharacterPortrait() -> impl IntoView {
 
     view! {
         <div class="flex items-center justify-center h-full w-full relative overflow-hidden">
-
             <div class="border-6 xl:border-8 border-double border-stone-500 h-full w-full">
                 <div
                     class="h-full w-full"
@@ -241,7 +258,11 @@ fn PlayerSkill(index: usize) -> impl IntoView {
 }
 
 #[component]
-fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
+fn GrindingAreaCard(
+    area: UserGrindArea,
+    view_only: bool,
+    selected_area: RwSignal<Option<UserGrindArea>>,
+) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     let locked = move || {
@@ -249,15 +270,11 @@ fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
             || area.area_specs.coming_soon
     };
 
-    let play_area = {
-        let navigate = use_navigate();
-        let (_, set_area_id_storage, _) =
-            storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
-
+    let select_area = {
+        let area = area.clone();
         move |_| {
             if !locked() && !view_only {
-                set_area_id_storage.set(Some(area.area_id.clone()));
-                navigate("/game", Default::default());
+                selected_area.set(Some(area.clone()));
             }
         }
     };
@@ -266,7 +283,7 @@ fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
         <div
             class=move || {
                 format!(
-                    "relative flex flex-col rounded-xl border overflow-hidden aspect-square shadow-md transition {}",
+                    "relative flex flex-col rounded-xl border overflow-hidden shadow-md transition {}",
                     if locked() {
                         "bg-zinc-900 border-zinc-800 opacity-60"
                     } else if view_only {
@@ -276,7 +293,7 @@ fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
                     },
                 )
             }
-            on:click=play_area
+            on:click=select_area
         >
             <div class="h-10 xl:h-16 w-full relative">
                 <img
@@ -284,7 +301,6 @@ fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
                     src=img_asset(&area.area_specs.header_background)
                     class="object-cover w-full h-full"
                 />
-                <div class="absolute inset-0 bg-black/30"></div>
             </div>
 
             <div class="p-2 xl:p-4 space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
@@ -313,7 +329,6 @@ fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
                     src=img_asset(&area.area_specs.footer_background)
                     class="object-cover w-full h-full"
                 />
-                <div class="absolute inset-0 bg-black/20"></div>
             </div>
 
             <Show when=move || locked()>
@@ -335,5 +350,225 @@ fn GrindingAreaCard(area: UserGrindArea, view_only: bool) -> impl IntoView {
                 </div>
             </Show>
         </div>
+    }
+}
+
+#[component]
+pub fn StartGrindPanel(
+    open: RwSignal<bool>,
+    selected_area: RwSignal<Option<UserGrindArea>>,
+) -> impl IntoView {
+    let town_context: TownContext = expect_context();
+    let max_item_level = Signal::derive(move || town_context.character.read().max_area_level);
+
+    let selected_map = Signal::derive(move || {
+        town_context
+            .selected_item_index
+            .get()
+            .and_then(|item_index: u8| {
+                town_context
+                    .inventory
+                    .read()
+                    .bag
+                    .get(item_index as usize)
+                    .cloned()
+                    .and_then(|item_specs: ItemSpecs| {
+                        item_specs
+                            .base
+                            .categories
+                            .contains(&ItemCategory::Map)
+                            .then(|| Arc::new(item_specs))
+                    })
+            })
+    });
+
+    let map_details = move || {
+        match selected_map.get() {
+            Some(selected_map) => {
+                view! {
+                    <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
+                        <ItemCard
+                            item_specs=selected_map.clone()
+                            class:pointer-events-none
+                            max_item_level
+                        />
+                    </div>
+
+                    <div class="flex-1 w-full max-h-full overflow-y-auto">
+                        <ItemTooltipContent
+                            item_specs=selected_map.clone()
+                            class:select-text
+                            max_item_level
+                        />
+                    </div>
+                }
+                .into_any()
+            }
+           None => {
+                view! {
+                    <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
+                        <div class="
+                        relative group flex items-center justify-center w-full h-full
+                        rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70
+                        "></div>
+                    </div>
+
+                    <div class="flex-1 text-gray-400">"Proclaim Edict"</div>
+                }.into_any()
+            }
+        }
+    };
+
+    let choose_map = move |_| {
+        town_context.selected_item_index.set(None);
+        town_context
+            .use_item_category_filter
+            .set(Some(ItemCategory::Map));
+        town_context.open_inventory.set(true);
+    };
+
+    // let play_area =;
+
+    let disable_confirm = Signal::derive(move || {
+        selected_map
+            .read()
+            .as_ref()
+            .map(|map| map.required_level > town_context.character.read().max_area_level)
+            .unwrap_or_default()
+    });
+
+    let (_, set_area_config_storage, _) =
+        storage::use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
+
+    view! {
+        <MenuPanel open=open w_full=false h_full=false class:items-center>
+            <Card class="max-w-4xl mx-auto overflow-hidden" pad=false gap=false>
+                <div class="h-10 xl:h-16 w-full relative">
+                    <img
+                        draggable="false"
+                        src=move || {
+                            selected_area
+                                .read()
+                                .as_ref()
+                                .map(|area| img_asset(&area.area_specs.header_background))
+                                .unwrap_or_default()
+                        }
+                        class="object-cover w-full h-full"
+                    />
+                    <div class="absolute inset-0">
+                        <div class="w-full h-full flex justify-end items-center px-4">
+                            <CloseButton on:click=move |_| open.set(false) />
+                        </div>
+                    </div>
+                </div>
+
+                <CardInset class="xl:space-y-4">
+                    <span class="text-lg xl:text-2xl font-bold text-amber-300 text-center">
+                        {move || {
+                            selected_area
+                                .read()
+                                .as_ref()
+                                .map(|area| area.area_specs.name.clone())
+                                .unwrap_or_default()
+                        }}
+                    </span>
+
+                    <span class="block text-xs xl:text-sm font-medium text-gray-400 italic
+                    xl:mb-4 max-w-xl mx-auto">
+                        {move || {
+                            selected_area
+                                .read()
+                                .as_ref()
+                                .map(|area| area.area_specs.description.clone())
+                                .unwrap_or_default()
+                        }}
+                    </span>
+
+                    <div class="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
+
+                    <ul class="text-xs xl:text-sm text-gray-400 list-none space-y-1">
+                        <li class="leading-snug ">
+                            "Starting Level: "
+                            <span class="font-semibold text-white">
+                                {move || {
+                                    selected_area
+                                        .read()
+                                        .as_ref()
+                                        .map(|area| area.area_specs.starting_level)
+                                        .unwrap_or_default()
+                                }}
+                            </span>
+                        </li>
+                        <li class="leading-snug ">
+                            "Item Level Modifier: "
+                            <span class="font-semibold text-white">
+                                "+"
+                                {move || {
+                                    selected_area
+                                        .read()
+                                        .as_ref()
+                                        .map(|area| area.area_specs.item_level_modifier)
+                                        .unwrap_or_default()
+                                }}
+                            </span>
+                        </li>
+                    </ul>
+
+                    <div class="w-full h-full px-4 flex items-center justify-center">
+                        <div
+                            class="flex flex-row gap-6 items-center
+                            w-full h-auto aspect-5/2 overflow-y-auto
+                            bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2
+                            hover:ring-amber-400 hover:shadow-lg active:scale-95 
+                            active:ring-amber-500 cursor-pointer transition"
+                            on:click=choose_map
+                        >
+                            {map_details}
+                        </div>
+                    </div>
+
+                </CardInset>
+
+                <div class="h-10 xl:h-16 w-full relative">
+                    <img
+                        draggable="false"
+                        src=move || {
+                            selected_area
+                                .read()
+                                .as_ref()
+                                .map(|area| img_asset(&area.area_specs.footer_background))
+                                .unwrap_or_default()
+                        }
+                        class="object-cover w-full h-full"
+                    />
+                    <div class="absolute inset-0">
+                        <div class="w-full h-full flex justify-around px-4 py-1 xl:py-2">
+                            <MenuButton
+                                on:click={
+                                    let navigate = use_navigate();
+                                    move |_| {
+                                        if let Some(selected_area) = selected_area.get_untracked() {
+                                            set_area_config_storage
+                                                .set(
+                                                    Some(StartAreaConfig {
+                                                        area_id: selected_area.area_id,
+                                                        map_item_index: town_context
+                                                            .selected_item_index
+                                                            .get_untracked(),
+                                                    }),
+                                                );
+                                            navigate("/game", Default::default());
+                                        }
+                                    }
+                                }
+                                disabled=disable_confirm
+                            >
+                                "Confirm & Start Grind"
+                            </MenuButton>
+                        </div>
+                    </div>
+                </div>
+            </Card>
+        </MenuPanel>
     }
 }

@@ -76,10 +76,10 @@ fn update_status(
 
     let remove_status = status_state.duration.unwrap_or(1.0) <= 0.0;
 
-    if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger(_) = status_specs {
-        if remove_status {
-            *character_buff_status_change = true;
-        }
+    if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger(_) = status_specs
+        && remove_status
+    {
+        *character_buff_status_change = true;
     }
     !remove_status
 }

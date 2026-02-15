@@ -194,7 +194,7 @@
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
-        "value": [20, 29]
+        "value": [20, 25]
       }
     ]
   },
@@ -212,7 +212,7 @@
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
-        "value": [30, 39]
+        "value": [30, 35]
       }
     ]
   },
@@ -230,7 +230,7 @@
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
-        "value": [40, 49]
+        "value": [40, 45]
       }
     ]
   },
@@ -248,7 +248,7 @@
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
-        "value": [50, 59]
+        "value": [50, 55]
       }
     ]
   },
@@ -266,7 +266,7 @@
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
-        "value": [60, 69]
+        "value": [60, 65]
       }
     ]
   },
@@ -284,7 +284,7 @@
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
-        "value": [70, 79]
+        "value": [70, 75]
       }
     ]
   },
@@ -302,7 +302,7 @@
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
-        "value": [80, 89]
+        "value": [80, 85]
       }
     ]
   },
@@ -320,7 +320,7 @@
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
-        "value": [90, 99]
+        "value": [90, 95]
       }
     ]
   },
@@ -338,7 +338,7 @@
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
-        "value": [100, 109]
+        "value": [100, 105]
       }
     ]
   },
@@ -356,7 +356,7 @@
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
         "modifier": "Multiplier",
-        "value": [110, 119]
+        "value": [110, 120]
       }
     ]
   }

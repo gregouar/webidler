@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
 use leptos::{
-    ev::{keydown, keyup},
+    ev::{keydown, keyup, visibilitychange},
     prelude::*,
-    web_sys::{wasm_bindgen::JsCast, Element, HtmlInputElement, HtmlTextAreaElement},
+    web_sys::{Element, HtmlInputElement, HtmlTextAreaElement, wasm_bindgen::JsCast},
 };
 use leptos_use::{use_document, use_event_listener};
 
@@ -27,19 +27,35 @@ pub fn provide_events_context() {
             return;
         }
 
+        if ev.alt_key() || ev.code() == "AltLeft" || ev.code() == "AltRight" || ev.ctrl_key() {
+            ev.prevent_default();
+            ev.stop_propagation();
+        }
+
         pressed_keys.update(|pressed_keys| {
             pressed_keys.insert(Key::from(ev.key().as_str()), true);
         });
     });
 
     let _ = use_event_listener(use_document(), keyup, move |ev| {
-        if is_text_input_target(&ev) {
-            return;
+        // if is_text_input_target(&ev) {
+        //     return;
+        // }
+
+        if !is_text_input_target(&ev)
+            && (ev.alt_key() || ev.code() == "AltLeft" || ev.code() == "AltRight" || ev.ctrl_key())
+        {
+            ev.prevent_default();
+            ev.stop_propagation();
         }
 
         pressed_keys
             .write()
             .insert(Key::from(ev.key().as_str()), false);
+    });
+
+    let _ = use_event_listener(use_document(), visibilitychange, move |_| {
+        pressed_keys.update(|keys| keys.clear());
     });
 
     provide_context(EventsContext { pressed_keys });
@@ -53,6 +69,7 @@ pub enum Key {
     Space,
     Enter,
     Escape,
+    Delete,
     ArrowUp,
     ArrowDown,
     ArrowLeft,
@@ -74,6 +91,7 @@ impl From<&str> for Key {
             "ArrowDown" => Key::ArrowDown,
             "ArrowLeft" => Key::ArrowLeft,
             "ArrowRight" => Key::ArrowRight,
+            "Delete" => Key::Delete,
             s if s.len() == 1 => Key::Character(s.chars().next().unwrap()),
             _ => Key::Unknown,
         }

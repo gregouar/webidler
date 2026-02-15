@@ -3,14 +3,15 @@ use std::{collections::HashMap, time::Duration};
 use shared::data::{
     area::AreaThreat,
     character_status::StatusSpecs,
+    conditional_modifier::ConditionalModifier,
     player::PlayerInventory,
     skill::{
         DamageType, ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType,
         SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
-        ApplyStatModifier, EffectsMap, LuckyRollType, Modifier, StatConverterSource, StatEffect,
-        StatType,
+        ApplyStatModifier, EffectsMap, LuckyRollType, MinMax, Modifier, StatConverterSource,
+        StatEffect, StatType, compare_options,
     },
 };
 use strum::IntoEnumIterator;
@@ -82,9 +83,20 @@ pub fn update_skill_specs<'a>(
         area_threat,
     );
 
+    apply_effects_to_skill_specs(skill_specs, local_effects.iter().filter(is_local_flat));
     apply_effects_to_skill_specs(skill_specs, effects.clone().filter(is_global_flat));
-    apply_effects_to_skill_specs(skill_specs, local_effects.iter());
+    apply_effects_to_skill_specs(
+        skill_specs,
+        local_effects.iter().filter(|e| !is_local_flat(e)),
+    );
     apply_effects_to_skill_specs(skill_specs, effects.filter(|e| !is_global_flat(e)));
+}
+
+fn is_local_flat(stat_effect: &&StatEffect) -> bool {
+    match &stat_effect.stat {
+        StatType::StatConverter(specs) => specs.target_modifier == Modifier::Flat,
+        _ => stat_effect.modifier == Modifier::Flat,
+    }
 }
 
 fn is_global_flat(stat_effect: &&StatEffect) -> bool {
@@ -104,6 +116,31 @@ pub fn apply_effects_to_skill_specs<'a>(
             .is_match(&StatType::Speed(Some(skill_specs.base.skill_type)))
         {
             skill_specs.cooldown.apply_negative_effect(effect);
+        }
+
+        if effect.stat.is_match(&StatType::ManaCost {
+            skill_type: Some(skill_specs.base.skill_type),
+        }) {
+            skill_specs.mana_cost.apply_effect(effect);
+        }
+
+        if let StatType::SkillTargetModifier {
+            skill_type,
+            range,
+            shape,
+        } = &effect.stat
+            && compare_options(skill_type, &Some(skill_specs.base.skill_type))
+        {
+            for target in skill_specs.targets.iter_mut() {
+                if let Some(range) = range {
+                    target.range = *range;
+                }
+                if let Some(shape) = shape {
+                    target.shape = *shape;
+                }
+            }
+
+            // TODO: Triggers
         }
     }
 
@@ -147,63 +184,90 @@ fn compute_skill_modifier_effects<'a>(
     skill_specs: &'a SkillSpecs,
     inventory: Option<&'a PlayerInventory>,
 ) -> EffectsMap {
-    let item_sources = skill_specs
+    let item_sources: Vec<_> = skill_specs
         .base
         .modifier_effects
         .iter()
-        .filter_map(|me| match &me.source {
-            ModifierEffectSource::ItemStats { slot, item_stats } => Some((me, *slot, item_stats)),
+        .filter_map(|modifier_effect| match &modifier_effect.source {
+            ModifierEffectSource::ItemStats { slot, item_stats } => {
+                Some((modifier_effect, *slot, item_stats))
+            }
             _ => None,
         })
-        .flat_map(move |(me, slot, item_stats)| {
+        .flat_map(move |(modifier_effect, slot, item_stats)| {
             inventory
                 .into_iter()
                 .flat_map(|inv| inv.equipped_items())
                 .filter_map(move |(item_slot, item_specs)| {
-                    let base = if slot.unwrap_or(item_slot) == item_slot {
+                    let mut modifier_effect = modifier_effect.clone();
+                    let base = if slot.unwrap_or(item_slot) == item_slot
+                        || item_specs.base.extra_slots.contains(&item_slot)
+                    {
                         match (
                             item_stats,
                             &item_specs.weapon_specs,
                             &item_specs.armor_specs,
                         ) {
-                            (ItemStatsSource::Damage(damage_type), Some(weapon_specs), _) => {
+                            (ItemStatsSource::Armor, _, Some(armor_specs)) => armor_specs.armor,
+                            (ItemStatsSource::Cooldown, Some(weapon_specs), _) => {
+                                weapon_specs.cooldown as f64
+                            }
+                            (ItemStatsSource::CritChance, Some(weapon_specs), _) => {
+                                weapon_specs.crit_chance.value as f64
+                            }
+                            (ItemStatsSource::CritDamage, Some(weapon_specs), _) => {
+                                weapon_specs.crit_damage
+                            }
+                            (
+                                ItemStatsSource::Damage {
+                                    damage_type,
+                                    min_max,
+                                },
+                                Some(weapon_specs),
+                                _,
+                            ) => {
                                 if let Some(dmg_type) = damage_type {
                                     weapon_specs
                                         .damage
                                         .get(dmg_type)
-                                        .map(|d| (d.min + d.max) * 0.5)
+                                        .map(|d| match min_max {
+                                            Some(MinMax::Min) => d.min,
+                                            Some(MinMax::Max) => d.max,
+                                            None => (d.min + d.max) * 0.5,
+                                        })
                                         .unwrap_or_default()
                                 } else {
                                     weapon_specs
                                         .damage
                                         .values()
-                                        .map(|d| (d.min + d.max) * 0.5)
+                                        .map(|d| match min_max {
+                                            Some(MinMax::Min) => d.min,
+                                            Some(MinMax::Max) => d.max,
+                                            None => (d.min + d.max) * 0.5,
+                                        })
                                         .sum()
                                 }
                             }
-                            (ItemStatsSource::MinDamage(damage_type), Some(weapon_specs), _) => {
-                                if let Some(dmg_type) = damage_type {
-                                    weapon_specs
-                                        .damage
-                                        .get(dmg_type)
-                                        .map(|d| d.min)
-                                        .unwrap_or_default()
-                                } else {
-                                    weapon_specs.damage.values().map(|d| d.min).sum()
+                            (ItemStatsSource::Range, Some(weapon_specs), _) => {
+                                for effect in modifier_effect.effects.iter_mut() {
+                                    if let StatType::SkillTargetModifier { range, .. } =
+                                        &mut effect.stat
+                                    {
+                                        *range = Some(weapon_specs.range);
+                                    }
                                 }
+                                1.0
                             }
-                            (ItemStatsSource::MaxDamage(damage_type), Some(weapon_specs), _) => {
-                                if let Some(dmg_type) = damage_type {
-                                    weapon_specs
-                                        .damage
-                                        .get(dmg_type)
-                                        .map(|d| d.max)
-                                        .unwrap_or_default()
-                                } else {
-                                    weapon_specs.damage.values().map(|d| d.max).sum()
+                            (ItemStatsSource::Shape, Some(weapon_specs), _) => {
+                                for effect in modifier_effect.effects.iter_mut() {
+                                    if let StatType::SkillTargetModifier { shape, .. } =
+                                        &mut effect.stat
+                                    {
+                                        *shape = Some(weapon_specs.shape);
+                                    }
                                 }
+                                1.0
                             }
-                            (ItemStatsSource::Armor, _, Some(armor_specs)) => armor_specs.armor,
                             _ => 0.0,
                         }
                     } else {
@@ -211,25 +275,28 @@ fn compute_skill_modifier_effects<'a>(
                     };
 
                     if base > 0.0 {
-                        Some((me, me.factor * base))
+                        let factor = modifier_effect.factor * base;
+                        Some((modifier_effect, factor))
                     } else {
                         None
                     }
                 })
-        });
+        })
+        .collect();
 
-    let non_item_sources =
-        skill_specs
-            .base
-            .modifier_effects
-            .iter()
-            .filter_map(|me| match &me.source {
-                ModifierEffectSource::ItemStats { .. } => None,
-                ModifierEffectSource::PlaceHolder => todo!(),
-            });
+    let non_item_sources: Vec<_> = skill_specs
+        .base
+        .modifier_effects
+        .iter()
+        .filter_map(|me| match &me.source {
+            ModifierEffectSource::ItemStats { .. } => None,
+            ModifierEffectSource::PlaceHolder => todo!(),
+        })
+        .collect();
 
     item_sources
-        .chain(non_item_sources)
+        .iter()
+        .chain(non_item_sources.iter())
         .flat_map(|(modifier_effect, factor)| {
             modifier_effect.effects.iter().map(move |effect| {
                 (
@@ -251,11 +318,11 @@ pub fn compute_skill_specs_effect<'a>(
 ) {
     if let SkillEffectType::ApplyStatus { statuses, .. } = &mut skill_effect.effect_type {
         for status_effect in statuses.iter_mut() {
-            if let StatusSpecs::Trigger(ref mut trigger_specs) = status_effect.status_type {
-                if trigger_specs.triggered_effect.inherit_modifiers {
-                    for triggered_effect in trigger_specs.triggered_effect.effects.iter_mut() {
-                        compute_skill_specs_effect(skill_type, triggered_effect, effects.clone())
-                    }
+            if let StatusSpecs::Trigger(ref mut trigger_specs) = status_effect.status_type
+                && trigger_specs.triggered_effect.inherit_modifiers
+            {
+                for triggered_effect in trigger_specs.triggered_effect.effects.iter_mut() {
+                    compute_skill_specs_effect(skill_type, triggered_effect, effects.clone())
                 }
             }
         }
@@ -278,7 +345,9 @@ pub fn compute_skill_specs_effect<'a>(
 
         if effect.stat.is_match(&StatType::Lucky {
             skill_type: Some(skill_type),
-            roll_type: LuckyRollType::SuccessChance,
+            roll_type: LuckyRollType::SuccessChance {
+                effect_type: (&skill_effect.effect_type).into(),
+            },
         }) {
             skill_effect
                 .success_chance
@@ -298,6 +367,27 @@ pub fn compute_skill_specs_effect<'a>(
             continue;
         }
 
+        if let StatType::SkillConditionalModifier {
+            skill_type: modifier_skill_type,
+            conditions,
+            stat,
+        } = &effect.stat
+            && compare_options(modifier_skill_type, &Some(skill_type))
+        {
+            skill_effect
+                .conditional_modifiers
+                .push(ConditionalModifier {
+                    conditions: conditions.clone(),
+                    effects: [StatEffect {
+                        stat: *(stat.clone()),
+                        modifier: effect.modifier,
+                        value: effect.value,
+                        bypass_ignore: effect.bypass_ignore,
+                    }]
+                    .into(),
+                });
+        }
+
         match &mut skill_effect.effect_type {
             SkillEffectType::FlatDamage {
                 damage,
@@ -307,22 +397,19 @@ pub fn compute_skill_specs_effect<'a>(
             } => {
                 for damage_type in DamageType::iter() {
                     let value = damage.entry(damage_type).or_default();
-                    if effect.stat.is_match(&StatType::MinDamage {
+
+                    if effect.stat.is_match(&StatType::Damage {
                         skill_type: Some(skill_type),
                         damage_type: Some(damage_type),
-                    }) || effect.stat.is_match(&StatType::Damage {
-                        skill_type: Some(skill_type),
-                        damage_type: Some(damage_type),
+                        min_max: Some(MinMax::Min),
                     }) {
                         value.min.apply_effect(effect);
                     }
 
-                    if effect.stat.is_match(&StatType::MaxDamage {
+                    if effect.stat.is_match(&StatType::Damage {
                         skill_type: Some(skill_type),
                         damage_type: Some(damage_type),
-                    }) || effect.stat.is_match(&StatType::Damage {
-                        skill_type: Some(skill_type),
-                        damage_type: Some(damage_type),
+                        min_max: Some(MinMax::Max),
                     }) {
                         value.max.apply_effect(effect);
                     }
@@ -362,41 +449,46 @@ pub fn compute_skill_specs_effect<'a>(
             }
             SkillEffectType::ApplyStatus { statuses, duration } => {
                 if statuses.iter().any(|status_effect| {
-                    effect.stat.is_match(&StatType::StatusDuration(Some(
-                        (&status_effect.status_type).into(),
-                    )))
+                    effect.stat.is_match(&StatType::StatusDuration {
+                        status_type: Some((&status_effect.status_type).into()),
+                        skill_type: Some(skill_type),
+                    })
                 }) {
                     duration.min.apply_effect(effect);
                     duration.max.apply_effect(effect);
                 }
 
                 for status_effect in statuses.iter_mut() {
-                    if effect.stat.is_match(&StatType::StatusPower(Some(
-                        (&status_effect.status_type).into(),
-                    ))) {
+                    if effect.stat.is_match(&StatType::StatusPower {
+                        status_type: Some((&status_effect.status_type).into()),
+                        skill_type: Some(skill_type),
+                        min_max: Some(MinMax::Min),
+                    }) {
                         status_effect.value.min.apply_effect(effect);
+                    }
+                    if effect.stat.is_match(&StatType::StatusPower {
+                        status_type: Some((&status_effect.status_type).into()),
+                        skill_type: Some(skill_type),
+                        min_max: Some(MinMax::Max),
+                    }) {
                         status_effect.value.max.apply_effect(effect);
                     }
 
                     if let StatusSpecs::DamageOverTime { damage_type, .. } =
                         status_effect.status_type
                     {
-                        if effect.stat.is_match(&StatType::MinDamage {
+                        if effect.stat.is_match(&StatType::Damage {
                             skill_type: Some(skill_type),
                             damage_type: Some(damage_type),
-                        }) || effect.stat.is_match(&StatType::Damage {
-                            skill_type: Some(skill_type),
-                            damage_type: Some(damage_type),
+                            min_max: Some(MinMax::Min),
                         }) {
                             status_effect.value.min.apply_effect(effect);
                         }
 
-                        if effect.stat.is_match(&StatType::MaxDamage {
+                        if effect.stat.is_match(&StatType::Damage {
                             skill_type: Some(skill_type),
                             damage_type: Some(damage_type),
-                        }) || effect.stat.is_match(&StatType::Damage {
-                            skill_type: Some(skill_type),
-                            damage_type: Some(damage_type),
+                            min_max: Some(MinMax::Max),
                         }) {
                             status_effect.value.max.apply_effect(effect);
                         }
@@ -417,10 +509,10 @@ pub fn compute_skill_specs_effect<'a>(
                 value,
                 ..
             } => {
-                if effect
-                    .stat
-                    .is_match(&StatType::Restore(Some(*restore_type)))
-                {
+                if effect.stat.is_match(&StatType::Restore {
+                    restore_type: Some(*restore_type),
+                    skill_type: Some(skill_type),
+                }) {
                     value.min.apply_effect(effect);
                     value.max.apply_effect(effect);
                 };
@@ -454,15 +546,29 @@ pub fn compute_skill_specs_effect<'a>(
                         bypass_ignore: true,
                     })
                 }
+                // TODO: Apply status?
                 (
-                    StatConverterSource::Damage { damage_type },
+                    StatConverterSource::Damage {
+                        damage_type,
+                        min_max,
+                    },
                     SkillEffectType::FlatDamage { damage, .. },
                 ) => {
+                    let min_factor = if let Some(MinMax::Min) | None = min_max {
+                        factor
+                    } else {
+                        0.0
+                    };
+                    let max_factor = if let Some(MinMax::Min) | None = min_max {
+                        factor
+                    } else {
+                        0.0
+                    };
                     let amount = match damage_type {
                         Some(damage_type) => damage
                             .get_mut(&damage_type)
                             .map(|d| {
-                                let amount = (d.min * factor * 0.01, d.max * factor * 0.01);
+                                let amount = (d.min * min_factor * 0.01, d.max * max_factor * 0.01);
                                 if !specs.is_extra {
                                     d.min -= amount.0;
                                     d.max -= amount.1;
@@ -473,7 +579,7 @@ pub fn compute_skill_specs_effect<'a>(
                         None => damage
                             .values_mut()
                             .fold((0.0, 0.0), |(min_acc, max_acc), d| {
-                                let amount = (d.min * factor * 0.01, d.max * factor * 0.01);
+                                let amount = (d.min * min_factor * 0.01, d.max * max_factor * 0.01);
                                 if !specs.is_extra {
                                     d.min -= amount.0;
                                     d.max -= amount.1;
@@ -481,25 +587,30 @@ pub fn compute_skill_specs_effect<'a>(
                                 (min_acc + amount.0, max_acc + amount.1)
                             }),
                     };
+
                     // Special case, when converting damage we map on min and max respectively
-                    if let StatType::Damage {
-                        skill_type,
-                        damage_type,
-                    } = *specs.target_stat
+                    if let None = min_max
+                        && let StatType::Damage {
+                            skill_type,
+                            damage_type,
+                            min_max: None,
+                        } = *specs.target_stat
                     {
                         stats_converted.push(StatEffect {
-                            stat: StatType::MinDamage {
+                            stat: StatType::Damage {
                                 skill_type,
                                 damage_type,
+                                min_max: Some(MinMax::Min),
                             },
                             modifier: specs.target_modifier,
                             value: amount.0,
                             bypass_ignore: true,
                         });
                         Some(StatEffect {
-                            stat: StatType::MaxDamage {
+                            stat: StatType::Damage {
                                 skill_type,
                                 damage_type,
+                                min_max: Some(MinMax::Max),
                             },
                             modifier: specs.target_modifier,
                             value: amount.1,

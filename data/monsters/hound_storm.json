@@ -7,6 +7,7 @@
   "power_factor": 10,
   "initiative": [1, 2],
   "armor": { "Physical": 50, "Storm": 100 },
+  "stun_lockout": 5.0,
   "skills": [
     {
       "name": "Thunder Tear",

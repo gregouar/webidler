@@ -17,8 +17,8 @@ use shared::{
 
 use crate::{
     game::{
-        data::{event::EventsQueue, master_store::SkillsStore, DataInit},
-        systems::inventory_controller,
+        data::{DataInit, event::EventsQueue, master_store::SkillsStore},
+        systems::{characters_controller, inventory_controller},
     },
     rest::AppError,
 };
@@ -56,7 +56,8 @@ impl PlayerController {
             return;
         }
 
-        let mut mana_available = player_state.character_state.mana;
+        let mut mana_available =
+            characters_controller::mana_available(&player_state.character_state);
 
         let mut player = (
             CharacterId::Player,
@@ -68,7 +69,9 @@ impl PlayerController {
 
         let mut friends = vec![];
 
-        let min_mana_needed = if player_specs.character_specs.take_from_mana_before_life > 0.0 {
+        let min_mana_needed = if player_specs.character_specs.take_from_mana_before_life > 0.0
+            || player_specs.character_specs.take_from_life_before_mana > 0.0
+        {
             0.0
         } else {
             player_specs
@@ -173,15 +176,19 @@ pub fn equip_item_from_bag(
         item_index,
     )?;
 
-    if let Some(old_item) = old_item {
-        unequip_weapon(player_specs, player_state, old_item.base.slot);
+    if let Some(old_item) = old_item
+        && let Some(slot) = old_item.base.slot
+    {
+        unequip_weapon(player_specs, player_state, slot);
     }
 
-    if let Some(ref weapon_specs) = new_item.weapon_specs {
+    if let Some(ref weapon_specs) = new_item.weapon_specs
+        && let Some(slot) = new_item.base.slot
+    {
         equip_weapon(
             player_specs,
             player_state,
-            new_item.base.slot,
+            slot,
             new_item.modifiers.level,
             weapon_specs,
         );

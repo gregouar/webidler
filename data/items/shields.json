@@ -40,7 +40,7 @@
       },
       {
         "scope": "Local",
-        "stat": "Block",
+        "stat": { "Block": null },
         "modifier": "Multiplier",
         "value": [20, 40]
       },
@@ -175,7 +175,7 @@
       "armor": 150,
       "block": 25
     },
-    "min_area_level": 240
+    "min_area_level": 250
   },
   "kite_shield_unique": {
     "name": "Oath of the Cursed King",
@@ -218,9 +218,8 @@
     "triggers": [
       {
         "trigger_id": "kite_shield_unique",
-        "description": "Stacks 30% More Damage and -0.3% Life Regeneration per second, for the duration of the Curse.",
         "OnApplyStatus": {
-          "status_type": { "StatModifier": { "debuff": true } },
+          "skill_type": "Curse",
           "is_triggered": false
         },
         "target": "Me",
@@ -239,22 +238,7 @@
                   },
                   "value": 30,
                   "cumulate": true
-                }
-              ]
-            },
-            "ignore_stat_effects": [
-              {
-                "StatusDuration": null
-              },
-              {
-                "StatusPower": null
-              }
-            ]
-          },
-          {
-            "ApplyStatus": {
-              "duration": 0,
-              "statuses": [
+                },
                 {
                   "status_type": {
                     "StatModifier": {
@@ -270,10 +254,10 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": null
+                "StatusDuration": {}
               },
               {
-                "StatusPower": null
+                "StatusPower": {}
               }
             ]
           }
@@ -281,7 +265,7 @@
         "modifiers": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {}
             },
             "modifier": "Flat",
             "factor": 1.0,
@@ -292,6 +276,17 @@
         ]
       }
     ],
-    "min_area_level": 250
+    "min_area_level": 260
+  },
+  "pavise": {
+    "name": "Pavise",
+    "icon": "items/pavise.webp",
+    "slot": "Shield",
+    "categories": ["Shield"],
+    "armor_specs": {
+      "armor": 175,
+      "block": 27
+    },
+    "min_area_level": 320
   }
 }

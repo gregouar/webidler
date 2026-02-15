@@ -20,14 +20,15 @@ use crate::components::{
     backend_client::BackendClient,
     shared::resources::{GemsCounter, GoldIcon},
     town::{
+        TownContext,
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
         panels::market::{MainFilters, StatsFilters},
-        TownContext,
     },
     ui::{
-        buttons::{CloseButton, MenuButton, TabButton},
+        buttons::{MenuButton, TabButton},
+        card::{Card, CardHeader, CardInset, CardTitle},
         input::ValidatedInput,
-        menu_panel::{MenuPanel, PanelTitle},
+        menu_panel::MenuPanel,
         number::{format_datetime, format_number},
         toast::*,
     },
@@ -69,112 +70,92 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <div class="w-full">
-                <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col">
-                    <div class="px-4 relative z-10 flex items-center justify-between">
-                        <PanelTitle>"User Stash"</PanelTitle>
-
-                        <div class="flex-1 flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto">
-                            <TabButton
-                                is_active=Signal::derive(move || {
-                                    active_tab.get() == StashTab::Filters
-                                })
-                                on:click=move |_| { switch_tab(StashTab::Filters) }
-                            >
-                                "Filters"
-                            </TabButton>
-                            <TabButton
-                                is_active=Signal::derive(move || {
-                                    active_tab.get() == StashTab::Store
-                                })
-                                on:click=move |_| { switch_tab(StashTab::Store) }
-                                disabled=disable_stash
-                            >
-                                "Store"
-                            </TabButton>
-                            <TabButton
-                                is_active=Signal::derive(move || {
-                                    active_tab.get() == StashTab::Take
-                                })
-                                on:click=move |_| { switch_tab(StashTab::Take) }
-                                disabled=disable_stash
-                            >
-                                "Take"
-                            </TabButton>
-                            <TabButton
-                                is_active=Signal::derive(move || {
-                                    active_tab.get() == StashTab::BuyStash
-                                })
-                                on:click=move |_| { switch_tab(StashTab::BuyStash) }
-                            >
-                                "Upgrade"
-                            </TabButton>
-                        </div>
-
-                        <div class="flex-1"></div>
-                        <div class="flex items-center gap-2 mb-2">
-                            <Gems stash />
-                        </div>
-                        <div class="flex-1"></div>
-
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
-                                {move || {
-                                    format!(
-                                        "({} / {})",
-                                        stash.read().items_amount,
-                                        stash.read().max_items,
-                                    )
-                                }}
-                            </span>
-                            <CloseButton on:click=move |_| open.set(false) />
-                        </div>
+            <Card class="h-full" gap=false>
+                <CardHeader title="Stash" on_close=move || open.set(false)>
+                    <div class="flex-1 flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto overflow-hidden">
+                        <TabButton
+                            is_active=Signal::derive(move || {
+                                active_tab.get() == StashTab::Filters
+                            })
+                            on:click=move |_| { switch_tab(StashTab::Filters) }
+                        >
+                            "Filters"
+                        </TabButton>
+                        <TabButton
+                            is_active=Signal::derive(move || {
+                                active_tab.get() == StashTab::Store
+                            })
+                            on:click=move |_| { switch_tab(StashTab::Store) }
+                            disabled=disable_stash
+                        >
+                            "Store"
+                        </TabButton>
+                        <TabButton
+                            is_active=Signal::derive(move || { active_tab.get() == StashTab::Take })
+                            on:click=move |_| { switch_tab(StashTab::Take) }
+                            disabled=disable_stash
+                        >
+                            "Take"
+                        </TabButton>
+                        <TabButton
+                            is_active=Signal::derive(move || {
+                                active_tab.get() == StashTab::BuyStash
+                            })
+                            on:click=move |_| { switch_tab(StashTab::BuyStash) }
+                        >
+                            "Upgrade"
+                        </TabButton>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="w-full aspect-[4/3] bg-neutral-900 overflow-y-auto ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                            {move || {
-                                match active_tab.get() {
-                                    StashTab::Filters => {
-                                        view! { <MainFilters filters /> }.into_any()
-                                    }
-                                    StashTab::Take => {
-                                        view! { <StashBrowser stash selected_item filters /> }
-                                            .into_any()
-                                    }
-                                    StashTab::Store => {
-                                        view! { <InventoryBrowser selected_item /> }.into_any()
-                                    }
-                                    StashTab::BuyStash => {
-                                        view! { <SelectBuyStash selected_stash /> }.into_any()
-                                    }
-                                }
-                            }}
-                        </div>
-
-                        <div class="w-full aspect-[4/3] bg-neutral-900 overflow-y-auto shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                            {move || {
-                                match active_tab.get() {
-                                    StashTab::Filters => {
-                                        view! { <StatsFilters filters /> }.into_any()
-                                    }
-                                    StashTab::Take => {
-                                        view! { <TakeDetails stash selected_item /> }.into_any()
-                                    }
-                                    StashTab::Store => {
-                                        view! { <StoreDetails stash selected_item /> }.into_any()
-                                    }
-                                    StashTab::BuyStash => {
-                                        view! { <UpgradeStashDetails selected_stash /> }.into_any()
-                                    }
-                                }
-                            }}
-                        </div>
+                    <div class="flex-1"></div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <Gems stash />
                     </div>
+                    <div class="flex-1"></div>
+                    <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
+                        {move || {
+                            format!("({} / {})", stash.read().items_amount, stash.read().max_items)
+                        }}
+                    </span>
+                </CardHeader>
 
-                    <div class="px-4 relative z-10 flex items-center justify-between"></div>
+                <div class="grid grid-cols-2 gap-2 min-h-0 flex-1">
+                    <CardInset class="w-full" pad=false>
+                        {move || {
+                            match active_tab.get() {
+                                StashTab::Filters => view! { <MainFilters filters /> }.into_any(),
+                                StashTab::Take => {
+                                    view! { <StashBrowser stash selected_item filters /> }
+                                        .into_any()
+                                }
+                                StashTab::Store => {
+                                    view! { <InventoryBrowser selected_item /> }.into_any()
+                                }
+                                StashTab::BuyStash => {
+                                    view! { <SelectBuyStash selected_stash /> }.into_any()
+                                }
+                            }
+                        }}
+                    </CardInset>
+
+                    <CardInset class="w-full">
+                        {move || {
+                            match active_tab.get() {
+                                StashTab::Filters => view! { <StatsFilters filters /> }.into_any(),
+                                StashTab::Take => {
+                                    view! { <TakeDetails stash selected_item /> }.into_any()
+                                }
+                                StashTab::Store => {
+                                    view! { <StoreDetails stash selected_item /> }.into_any()
+                                }
+                                StashTab::BuyStash => {
+                                    view! { <UpgradeStashDetails selected_stash /> }.into_any()
+                                }
+                            }
+                        }}
+                    </CardInset>
                 </div>
-            </div>
+            </Card>
         </MenuPanel>
     }
 }
@@ -330,11 +311,8 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
     };
 
     view! {
-        <div class="w-full h-full flex flex-col justify-between p-4 relative">
-
-            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
-                "Upgrade Stashes"
-            </span>
+        <div class="w-full h-full flex flex-col justify-between relative">
+            <CardTitle>"Upgrade Stashes"</CardTitle>
 
             <div class="flex flex-col gap-2">
                 <div class="text-lg font-semibold text-white capitalize">
@@ -571,10 +549,8 @@ pub fn TakeDetails(stash: RwSignal<Stash>, selected_item: RwSignal<SelectedItem>
     };
 
     view! {
-        <div class="w-full h-full flex flex-col justify-between p-4 relative">
-            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center mb-2">
-                "Take from Stash"
-            </span>
+        <div class="w-full h-full flex flex-col justify-between relative">
+            <CardTitle>"Take from Stash"</CardTitle>
 
             <div class="flex flex-col">
                 <ItemDetails selected_item show_affixes=true />
@@ -641,10 +617,8 @@ pub fn StoreDetails(
     };
 
     view! {
-        <div class="w-full h-full flex flex-col justify-between p-4 relative">
-            <span class="text-xl font-semibold text-amber-200 text-shadow-md text-center">
-                "Store from Inventory"
-            </span>
+        <div class="w-full h-full flex flex-col justify-between relative">
+            <CardTitle>"Store from Inventory"</CardTitle>
 
             <ItemDetails selected_item show_affixes=true />
 

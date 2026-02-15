@@ -1,3 +1,4 @@
+pub mod conditions_tooltip;
 pub mod effects_tooltip;
 pub mod item_tooltip;
 mod skill_tooltip;

@@ -1,5 +1,6 @@
-use std::{collections::HashSet, time::Duration};
+use std::time::Duration;
 
+use indexmap::IndexSet;
 use leptos::prelude::{
     guards::{Plain, ReadGuard},
     *,
@@ -11,8 +12,10 @@ use shared::data::{
     item::ItemCategory,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
-    passive::{PassivesTreeSpecs, PassivesTreeState},
+    passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    quest::QuestRewards,
+    user::UserCharacterId,
 };
 
 use crate::{components::game::local_stats::GameLocalStats, utils};
@@ -21,12 +24,15 @@ use crate::{components::game::local_stats::GameLocalStats, utils};
 pub struct GameContext {
     pub started: RwSignal<bool>,
 
+    pub character_id: RwSignal<UserCharacterId>,
+
     pub area_specs: RwSignal<AreaSpecs>,
     pub area_state: Syncable<AreaState>,
     pub area_threat: RwSignal<AreaThreat>,
 
     pub passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     pub passives_tree_state: Syncable<PassivesTreeState>,
+    pub passives_tree_build: Syncable<PurchasedNodes>,
 
     pub player_specs: Syncable<PlayerSpecs>,
     pub player_inventory: RwSignal<PlayerInventory>,
@@ -39,6 +45,7 @@ pub struct GameContext {
     pub monster_states: RwSignal<Vec<MonsterState>>,
 
     pub queued_loot: Syncable<Vec<QueuedLoot>>,
+    pub quest_rewards: RwSignal<Option<QuestRewards>>,
 
     pub game_stats: RwSignal<GameStats>,
     pub game_local_stats: GameLocalStats,
@@ -49,9 +56,10 @@ pub struct GameContext {
     pub open_passives: RwSignal<bool>,
     pub open_statistics: RwSignal<bool>,
     pub open_skills: RwSignal<bool>,
+    pub open_end_quest: RwSignal<bool>,
 
     pub loot_preference: RwSignal<Option<ItemCategory>>,
-    pub last_skills_bought: RwSignal<HashSet<String>>,
+    pub last_skills_bought: RwSignal<IndexSet<String>>,
 }
 
 impl Default for GameContext {
@@ -64,6 +72,7 @@ impl GameContext {
     pub fn new() -> Self {
         GameContext {
             started: RwSignal::new(false),
+            character_id: Default::default(),
 
             area_specs: RwSignal::new(Default::default()),
             area_state: Default::default(),
@@ -71,6 +80,7 @@ impl GameContext {
 
             passives_tree_specs: RwSignal::new(Default::default()),
             passives_tree_state: Default::default(),
+            passives_tree_build: Default::default(),
 
             player_specs: Default::default(),
             player_inventory: RwSignal::new(Default::default()),
@@ -83,6 +93,7 @@ impl GameContext {
             monster_states: RwSignal::new(Vec::new()),
 
             queued_loot: Default::default(),
+            quest_rewards: RwSignal::new(None),
 
             game_stats: RwSignal::new(Default::default()),
             game_local_stats: Default::default(),
@@ -91,6 +102,8 @@ impl GameContext {
             open_passives: RwSignal::new(false),
             open_statistics: RwSignal::new(false),
             open_skills: RwSignal::new(false),
+            open_end_quest: RwSignal::new(false),
+
             loot_preference: RwSignal::new(None),
             last_skills_bought: RwSignal::new(Default::default()),
         }

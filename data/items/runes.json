@@ -1,0 +1,271 @@
+{
+  "rune": {
+    "name": "Rune",
+    "icon": "items/rune.webp",
+    "categories": ["Rune"],
+    "ignore_quality": true,
+    "rune_specs": {},
+    "rarity": "Magic",
+    "affixes": [],
+    "min_area_level": 50
+  },
+  "rune_root": {
+    "name": "Anchor Rune",
+    "icon": "items/rune_root.webp",
+    "categories": ["Rune"],
+    "ignore_quality": true,
+    "rune_specs": {
+      "root_node": true
+    },
+    "affixes": [],
+    "min_area_level": 150
+  },
+  "rune_gilded": {
+    "name": "Gilded Covenant",
+    "description": "Gold answers every prayer... eventually.",
+    "icon": "items/rune_gilded.webp",
+    "categories": ["Rune"],
+    "ignore_quality": true,
+    "rune_specs": {},
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "Multiplier",
+        "value": [500, 1000]
+      }
+    ],
+    "min_area_level": 50
+  },
+  "rune_berserker": {
+    "name": "Mark of the Berserker",
+    "description": "Each wound feeds the mark. Each scar sharpens the beast within.",
+    "icon": "items/rune_berserker.webp",
+    "categories": ["Rune"],
+    "ignore_quality": true,
+    "rune_specs": {},
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "DamageResistance": {
+            "skill_type": null,
+            "damage_type": null
+          }
+        },
+        "modifier": "Flat",
+        "value": -25.0
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "rune_berserker",
+        "description": "",
+        "OnTakeHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": null
+        },
+        "target": "SameTarget",
+        "modifiers": [],
+        "skill_range": "Melee",
+        "skill_type": "Attack",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "skill_type": null,
+                          "damage_type": null
+                        }
+                      },
+                      "modifier": "Multiplier",
+                      "debuff": false
+                    }
+                  },
+                  "value": {
+                    "min": 25.0,
+                    "max": 25.0,
+                    "lucky_chance": 0.0
+                  },
+                  "cumulate": true,
+                  "replace_on_value_only": false
+                }
+              ],
+              "duration": {
+                "min": 5.0,
+                "max": 5.0,
+                "lucky_chance": 0.0
+              }
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
+          }
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false
+      }
+    ],
+    "min_area_level": 100
+  },
+  "rune_storm_average": {
+    "name": "Flux Stabilizer",
+    "description": "Tames the wildest storms, binding chaos into order.",
+    "icon": "items/rune_flux_stabilizer.webp",
+    "categories": ["Rune"],
+    "ignore_quality": true,
+    "rune_specs": {
+      "root_node": true
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "StatConverter": {
+            "source": {
+              "Damage": { "damage_type": "Storm", "min_max": "Max" }
+            },
+            "target_stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Storm",
+                "min_max": "Min"
+              }
+            },
+            "target_modifier": "Flat",
+            "is_extra": false,
+            "skill_type": null
+          }
+        },
+        "modifier": "Flat",
+        "value": 50
+      },
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "damage_type": "Storm" } },
+        "modifier": "Multiplier",
+        "value": [100, 200]
+      }
+    ],
+    "min_area_level": 150
+  },
+  "rune_poison_fire": {
+    "name": "Caustic Convergence",
+    "description": "The alchemists learned that decay has a temperature.",
+    "icon": "items/rune_poison_fire.webp",
+    "categories": ["Rune"],
+    "ignore_quality": true,
+    "rune_specs": {},
+    "rarity": "Unique",
+    "affixes": [],
+    "triggers": [
+      {
+        "trigger_id": "rune_poison_fire",
+        "OnApplyStatus": {
+          "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+        },
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 0,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Fire"
+                    }
+                  },
+                  "value": 0
+                }
+              ]
+            }
+          }
+        ],
+        "modifiers": [
+          {
+            "stat": { "Damage": {} },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "StatusValue": {
+                "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+              }
+            }
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "DamageOverTime": {
+                  "damage_type": "Fire"
+                }
+              }
+            },
+            "modifier": "Flat",
+            "factor": 1.0,
+            "source": {
+              "StatusDuration": {
+                "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 200
+  },
+  "rune_mana_damage": {
+    "name": "Mnemonic Singularity",
+    "description": "A mind dense enough bends reality.",
+    "icon": "items/rune_mana_damage.webp",
+    "categories": ["Rune"],
+    "ignore_quality": true,
+    "rune_specs": {},
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "StatConverter": {
+            "source": "MaxMana",
+            "target_stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": null,
+                "min_max": null
+              }
+            },
+            "target_modifier": "Multiplier",
+            "is_extra": true,
+            "skill_type": null
+          }
+        },
+        "modifier": "Flat",
+        "value": 100
+      },
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [-20, -10]
+      }
+    ],
+    "triggers": [],
+    "min_area_level": 250
+  }
+}

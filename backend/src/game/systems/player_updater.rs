@@ -5,18 +5,18 @@ use shared::{
     data::{
         area::AreaThreat,
         chance::{Chance, ChanceRange},
-        character::CharacterId,
+        character::{CharacterId, CharacterSize},
         character_status::StatusSpecs,
         item::{SkillRange, SkillShape},
         item_affix::AffixEffectScope,
         passive::{PassivesTreeSpecs, PassivesTreeState},
-        player::{PlayerInventory, PlayerSpecs, PlayerState},
+        player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
         skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
         stat_effect::{
             ApplyStatModifier, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs,
             StatType,
         },
-        trigger::{EventTrigger, TriggerTarget, TriggeredEffect},
+        trigger::{EventTrigger, HitTrigger, TriggerTarget, TriggeredEffect},
     },
 };
 
@@ -26,6 +26,21 @@ use crate::game::{
 };
 
 use super::{characters_updater, passives_controller, skills_updater};
+
+pub fn base_player_character_specs(name: String, portrait: String, level: u8) -> CharacterSpecs {
+    CharacterSpecs {
+        name,
+        portrait,
+        size: CharacterSize::Small,
+        position_x: 0,
+        position_y: 0,
+        max_life: 100.0 + PLAYER_LIFE_PER_LEVEL * (level.saturating_sub(1)) as f64,
+        life_regen: 10.0,
+        max_mana: 100.0,
+        mana_regen: 10.0,
+        ..Default::default()
+    }
+}
 
 pub fn update_player_state(
     events_queue: &mut EventsQueue,
@@ -70,18 +85,36 @@ pub fn update_player_specs(
     benedictions_effects: &EffectsMap,
     area_threat: &AreaThreat,
 ) {
-    // TODO: Reset player_specs function
-    player_specs.character_specs.armor.clear();
-    player_specs.character_specs.block = Default::default();
-    player_specs.character_specs.block_spell = Default::default();
-    player_specs.character_specs.block_damage = 0.0;
-    player_specs.character_specs.max_life =
-        100.0 + PLAYER_LIFE_PER_LEVEL * (player_specs.level.saturating_sub(1)) as f64;
-    player_specs.character_specs.life_regen = 10.0;
-    player_specs.character_specs.max_mana = 100.0;
-    player_specs.character_specs.mana_regen = 10.0;
-    player_specs.character_specs.damage_resistance.clear();
-    player_specs.character_specs.triggers.clear();
+    let effects_map = EffectsMap::combine_all(
+        player_inventory
+            .equipped_items()
+            .map(|(_, i)| i.modifiers.aggregate_effects(AffixEffectScope::Global))
+            .chain(iter::once(benedictions_effects.clone()))
+            .chain(passives_controller::generate_effects_map_from_passives(
+                passives_tree_specs,
+                passives_tree_state,
+            ))
+            .chain(iter::once(
+                statuses_controller::generate_effects_map_from_statuses(
+                    &player_state.character_state.statuses,
+                ),
+            ))
+            .chain(iter::once(
+                stats_updater::compute_conditional_modifiers(
+                    &player_specs.character_specs,
+                    &player_state.character_state,
+                    &player_specs.character_specs.conditional_modifiers,
+                )
+                .into(),
+            )),
+    );
+
+    player_specs.character_specs = base_player_character_specs(
+        player_specs.character_specs.name.clone(),
+        player_specs.character_specs.portrait.clone(),
+        player_specs.level,
+    );
+
     player_specs.gold_find = 100.0;
     player_specs.threat_gain = 100.0;
     player_specs.movement_cooldown = 3.0;
@@ -99,23 +132,12 @@ pub fn update_player_specs(
         .armor
         .entry(DamageType::Physical)
         .or_default()) += total_armor;
-    player_specs.character_specs.block.value += total_block;
-
-    player_specs.character_specs.effects = EffectsMap::combine_all(
-        player_inventory
-            .equipped_items()
-            .map(|(_, i)| i.modifiers.aggregate_effects(AffixEffectScope::Global))
-            .chain(iter::once(benedictions_effects.clone()))
-            .chain(passives_controller::generate_effects_map_from_passives(
-                passives_tree_specs,
-                passives_tree_state,
-            ))
-            .chain(iter::once(
-                statuses_controller::generate_effects_map_from_statuses(
-                    &player_state.character_state.statuses,
-                ),
-            )),
-    );
+    player_specs
+        .character_specs
+        .block
+        .entry(SkillType::Attack)
+        .or_default()
+        .value += total_block;
 
     player_specs.character_specs.triggers = passives_tree_state
         .purchased_nodes
@@ -147,7 +169,7 @@ pub fn update_player_specs(
         )
         .collect();
 
-    compute_player_specs(player_specs, player_inventory, area_threat);
+    compute_player_specs(player_specs, player_inventory, area_threat, effects_map);
 
     // We only add skills trigger after because they were already increased by skill update
     // player_specs.character_specs.triggers.extend(
@@ -163,12 +185,17 @@ fn compute_player_specs(
     player_specs: &mut PlayerSpecs,
     player_inventory: &PlayerInventory,
     area_threat: &AreaThreat,
+    effects_map: EffectsMap,
 ) {
-    let effects =
-        stats_updater::stats_map_to_vec(&player_specs.character_specs.effects, area_threat);
+    let mut effects = stats_updater::stats_map_to_vec(&effects_map, area_threat);
 
-    player_specs.character_specs =
+    let (character_specs, converted_effects) =
         characters_updater::update_character_specs(&player_specs.character_specs, &effects);
+    player_specs.character_specs = character_specs;
+    player_specs.character_specs.effects = EffectsMap::combine_all(
+        iter::once(effects_map).chain(iter::once(converted_effects.clone().into())),
+    );
+    effects.extend(converted_effects);
 
     for effect in effects.iter() {
         match effect.stat {
@@ -176,19 +203,27 @@ fn compute_player_specs(
             StatType::GoldFind => player_specs.gold_find.apply_effect(effect),
             StatType::ThreatGain => player_specs.threat_gain.apply_effect(effect),
             // TODO: Move the character specs
-            StatType::LifeOnHit(hit_trigger) | StatType::ManaOnHit(hit_trigger) => {
+            StatType::LifeOnHit { skill_type } | StatType::ManaOnHit { skill_type } => {
                 if let Modifier::Flat = effect.modifier {
                     player_specs.character_specs.triggers.push(TriggeredEffect {
-                        trigger: EventTrigger::OnHit(hit_trigger),
+                        trigger: EventTrigger::OnHit(HitTrigger {
+                            skill_type,
+                            range: None,
+                            is_crit: None,
+                            is_blocked: None,
+                            is_hurt: Some(true),
+                            is_triggered: Some(false),
+                            damage_type: None,
+                        }),
                         target: TriggerTarget::Source,
                         skill_range: SkillRange::Any,
-                        skill_type: SkillType::Attack,
+                        skill_type: skill_type.unwrap_or_default(),
                         skill_shape: SkillShape::Single,
                         modifiers: Vec::new(),
                         effects: vec![SkillEffect {
                             success_chance: Chance::new_sure(),
                             effect_type: SkillEffectType::Restore {
-                                restore_type: if let StatType::LifeOnHit(_) = effect.stat {
+                                restore_type: if let StatType::LifeOnHit { .. } = effect.stat {
                                     RestoreType::Life
                                 } else {
                                     RestoreType::Mana
@@ -201,6 +236,7 @@ fn compute_player_specs(
                                 modifier: Modifier::Flat,
                             },
                             ignore_stat_effects: Default::default(),
+                            conditional_modifiers: Default::default(),
                         }],
                         owner: Some(CharacterId::Player),
                         inherit_modifiers: false,
@@ -217,15 +253,27 @@ fn compute_player_specs(
             | StatType::ManaRegen
             | StatType::Armor(_)
             | StatType::TakeFromManaBeforeLife
-            | StatType::Block
-            | StatType::BlockSpell
+            | StatType::TakeFromLifeBeforeMana
+            | StatType::Block(_)
             | StatType::BlockDamageTaken
-            | StatType::DamageResistance { .. } => {}
+            | StatType::Evade(_)
+            | StatType::EvadeDamageTaken
+            | StatType::DamageResistance { .. }
+            | StatType::StatusResistance { .. }
+            | StatType::StatConverter(StatConverterSpecs {
+                source:
+                    StatConverterSource::MaxLife
+                    | StatConverterSource::LifeRegen
+                    | StatConverterSource::MaxMana
+                    | StatConverterSource::ManaRegen
+                    | StatConverterSource::Block(_),
+                ..
+            })
+            | StatType::StatConditionalModifier { .. } => {}
             // Delegate to skills
-            StatType::Damage { .. }
-            | StatType::MinDamage { .. }
-            | StatType::MaxDamage { .. }
-            | StatType::Restore(_)
+            StatType::ManaCost { .. }
+            | StatType::Damage { .. }
+            | StatType::Restore { .. }
             | StatType::CritChance(_)
             | StatType::CritDamage(_)
             | StatType::StatusDuration { .. }
@@ -237,12 +285,15 @@ fn compute_player_specs(
                 ..
             })
             | StatType::SuccessChance { .. }
-            | StatType::SkillLevel(_) => {}
+            | StatType::SkillLevel(_)
+            | StatType::SkillTargetModifier { .. }
+            | StatType::SkillConditionalModifier { .. } => {}
             // Other
             StatType::StatConverter(StatConverterSpecs {
                 source: StatConverterSource::ThreatLevel,
                 ..
-            }) => {}
+            })
+            | StatType::ItemRarity => {}
         }
     }
 

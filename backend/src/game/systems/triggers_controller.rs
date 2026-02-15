@@ -1,6 +1,7 @@
 use shared::data::{
     character::CharacterId,
     passive::StatEffect,
+    stat_effect::compare_options,
     trigger::{TriggerEffectModifierSource, TriggerTarget, TriggeredEffect},
 };
 
@@ -153,12 +154,12 @@ pub fn apply_trigger_effects(
                         stat: modifier.stat.clone(),
                         modifier: modifier.modifier,
                         value: modifier.factor
-                            * match modifier.source {
+                            * match &modifier.source {
                                 TriggerEffectModifierSource::HitDamage(Some(damage_type)) => {
                                     trigger_context
                                         .hit_context
                                         .as_ref()
-                                        .and_then(|hit| hit.damage.get(&damage_type))
+                                        .and_then(|hit| hit.damage.get(damage_type))
                                         .copied()
                                         .unwrap_or_default()
                                 }
@@ -175,41 +176,53 @@ pub fn apply_trigger_effects(
                                 TriggerEffectModifierSource::AreaLevel => {
                                     trigger_context.level as f64
                                 }
-                                TriggerEffectModifierSource::StatusValue(stat_status_type) => {
-                                    statuses_context
-                                        .iter()
-                                        .filter(|status_event| match stat_status_type {
-                                            Some(stat_status_type) => {
-                                                stat_status_type.is_match(&status_event.status_type)
-                                            }
-                                            None => true,
-                                        })
-                                        .map(|status_event| status_event.value)
-                                        .sum()
-                                }
-                                TriggerEffectModifierSource::StatusDuration(stat_status_type) => {
-                                    statuses_context
-                                        .iter()
-                                        .filter(|status_event| match stat_status_type {
-                                            Some(stat_status_type) => {
-                                                stat_status_type.is_match(&status_event.status_type)
-                                            }
-                                            None => true,
-                                        })
-                                        .map(|status_event| status_event.duration.unwrap_or(1e20))
-                                        .sum()
-                                }
-                                TriggerEffectModifierSource::StatusStacks(stat_status_type) => {
-                                    statuses_context
-                                        .iter()
-                                        .filter(|status_event| match stat_status_type {
-                                            Some(stat_status_type) => {
-                                                stat_status_type.is_match(&status_event.status_type)
-                                            }
-                                            None => true,
-                                        })
-                                        .count() as f64
-                                }
+                                TriggerEffectModifierSource::StatusValue {
+                                    status_type,
+                                    skill_type,
+                                } => statuses_context
+                                    .iter()
+                                    .filter(|status_event| {
+                                        compare_options(
+                                            &status_type.as_ref(),
+                                            &Some(&status_event.status_type),
+                                        ) && compare_options(
+                                            &skill_type.as_ref(),
+                                            &Some(&status_event.skill_type),
+                                        )
+                                    })
+                                    .map(|status_event| status_event.value)
+                                    .sum(),
+                                TriggerEffectModifierSource::StatusDuration {
+                                    status_type,
+                                    skill_type,
+                                } => statuses_context
+                                    .iter()
+                                    .filter(|status_event| {
+                                        compare_options(
+                                            &status_type.as_ref(),
+                                            &Some(&status_event.status_type),
+                                        ) && compare_options(
+                                            &skill_type.as_ref(),
+                                            &Some(&status_event.skill_type),
+                                        )
+                                    })
+                                    .map(|status_event| status_event.duration.unwrap_or(1e20))
+                                    .sum(),
+                                TriggerEffectModifierSource::StatusStacks {
+                                    status_type,
+                                    skill_type,
+                                } => statuses_context
+                                    .iter()
+                                    .filter(|status_event| {
+                                        compare_options(
+                                            &status_type.as_ref(),
+                                            &Some(&status_event.status_type),
+                                        ) && compare_options(
+                                            &skill_type.as_ref(),
+                                            &Some(&status_event.skill_type),
+                                        )
+                                    })
+                                    .count() as f64,
                             },
                         bypass_ignore: true,
                     }),

@@ -4,7 +4,8 @@ use leptos::prelude::*;
 
 use shared::data::{
     game_stats::GrindStats,
-    passive::{PassivesTreeAscension, PassivesTreeSpecs},
+    item::ItemCategory,
+    passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
     stash::{Stash, StashType},
     temple::{BenedictionSpecs, PlayerBenedictions},
@@ -22,11 +23,15 @@ pub struct TownContext {
 
     pub passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     pub passives_tree_ascension: RwSignal<PassivesTreeAscension>,
+    pub passives_tree_build: RwSignal<PurchasedNodes>,
 
     pub benedictions_specs: RwSignal<HashMap<String, BenedictionSpecs>>,
     pub player_benedictions: RwSignal<PlayerBenedictions>,
 
     pub last_grind: RwSignal<Option<GrindStats>>,
+
+    pub selected_item_index: RwSignal<Option<u8>>,
+    pub use_item_category_filter: RwSignal<Option<ItemCategory>>,
 
     // TODO: Is this really the correct place? Should we have a UI context?
     // TODO: enum ?
@@ -54,9 +59,12 @@ impl Default for TownContext {
             }),
             passives_tree_specs: Default::default(),
             passives_tree_ascension: Default::default(),
+            passives_tree_build: Default::default(),
             benedictions_specs: Default::default(),
             player_benedictions: Default::default(),
             last_grind: Default::default(),
+            selected_item_index: Default::default(),
+            use_item_category_filter: Default::default(),
             open_inventory: Default::default(),
             open_stash: Default::default(),
             open_ascend: Default::default(),

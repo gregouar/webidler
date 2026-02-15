@@ -11,12 +11,13 @@ use crate::components::{
     backend_client::BackendClient,
     shared::resources::GemsIcon,
     town::{
-        items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
         TownContext,
+        items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
     },
     ui::{
-        buttons::{CloseButton, MenuButton},
-        menu_panel::{MenuPanel, PanelTitle},
+        buttons::MenuButton,
+        card::{Card, CardHeader, CardInset, CardTitle},
+        menu_panel::MenuPanel,
         toast::*,
     },
 };
@@ -27,31 +28,19 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <div class="w-full">
-                <div class="bg-zinc-800 rounded-md p-2 shadow-xl ring-1 ring-zinc-950 flex flex-col">
-                    <div class="px-4 relative z-10 flex items-center justify-between">
-                        <PanelTitle class:mb-2>"Forge"</PanelTitle>
+            <Card class="h-full">
+                <CardHeader title="Forge" on_close=move || open.set(false) />
 
-                        <div class="flex-1"></div>
+                <div class="grid grid-cols-2 gap-2 min-h-0 flex-1">
+                    <CardInset class="w-full" pad=false>
+                        <InventoryBrowser selected_item />
+                    </CardInset>
 
-                        <div class="flex items-center gap-2 mb-2">
-                            <CloseButton on:click=move |_| open.set(false) />
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="w-full aspect-[4/3] bg-neutral-900 overflow-y-auto ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                            <InventoryBrowser selected_item />
-                        </div>
-
-                        <div class="w-full aspect-[4/3] bg-neutral-900 overflow-y-auto shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                            <ForgeDetails selected_item />
-                        </div>
-                    </div>
-
-                    <div class="px-4 relative z-10 flex items-center justify-between"></div>
+                    <CardInset class="w-full">
+                        <ForgeDetails selected_item />
+                    </CardInset>
                 </div>
-            </div>
+            </Card>
         </MenuPanel>
     }
 }
@@ -238,10 +227,8 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     };
 
     view! {
-        <div class="w-full h-full flex flex-col justify-between p-1 xl:p-4 gap-1 xl:gap-2 relative">
-            <span class="text-base xl:text-xl font-semibold text-amber-200 text-shadow-md text-center">
-                "Forge Item"
-            </span>
+        <div class="w-full h-full flex flex-col justify-between relative">
+            <CardTitle>"Forge Item"</CardTitle>
 
             <div class="flex flex-col">
                 <span class="text-pink-400 font-bold text-sm xl:text-base">

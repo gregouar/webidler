@@ -16,10 +16,11 @@ use crate::{
         shared::tooltips::SkillTooltip,
         ui::{
             buttons::{FancyButton, Toggle},
+            card::Card,
             number::format_number,
             progress_bars::{
-                predictive_cooldown, CircularProgressBar, HorizontalProgressBar,
-                VerticalProgressBar,
+                CircularProgressBar, HorizontalProgressBar, VerticalProgressBar,
+                predictive_cooldown,
             },
             toast::*,
             tooltip::{
@@ -30,7 +31,7 @@ use crate::{
     },
 };
 
-use super::{portrait::CharacterPortrait, GameContext};
+use super::{GameContext, portrait::CharacterPortrait};
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {
@@ -65,6 +66,12 @@ pub fn PlayerCard() -> impl IntoView {
             .character_specs
             .take_from_mana_before_life
             > 0.0
+            || game_context
+                .player_specs
+                .read()
+                .character_specs
+                .take_from_life_before_mana
+                > 0.0
         {
             0.0
         } else {
@@ -122,6 +129,8 @@ pub fn PlayerCard() -> impl IntoView {
             .character_state
             .just_blocked
     });
+    let just_evaded =
+        Memo::new(move |_| game_context.player_state.read().character_state.just_evaded);
 
     let statuses = Signal::derive(move || {
         game_context
@@ -233,11 +242,11 @@ pub fn PlayerCard() -> impl IntoView {
             }
             "
         </style>
-        <div class="max-h-full w-1/3
-        flex flex-col gap-1 xl:gap-2 p-1 xl:p-2
-        bg-zinc-800 ring-1 ring-zinc-950
-        rounded-md shadow-xl/30
-        ">
+        <Card class="w-1/3">
+            // <div class="max-h-full w-1/3
+            // flex flex-col gap-1 xl:gap-2 p-1 xl:p-2
+            // bg-zinc-800 ring-1 ring-zinc-950
+            // rounded-md shadow-xl/30">
 
             <PlayerName />
 
@@ -263,6 +272,7 @@ pub fn PlayerCard() -> impl IntoView {
                             just_hurt=just_hurt
                             just_hurt_crit=just_hurt_crit
                             just_blocked=just_blocked
+                            just_evaded=just_evaded
                             is_dead=is_dead
                             statuses=statuses
                         />
@@ -350,7 +360,7 @@ pub fn PlayerCard() -> impl IntoView {
                     </div>
                 </Show>
             </div>
-        </div>
+        </Card>
     }
 }
 

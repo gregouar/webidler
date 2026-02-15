@@ -103,6 +103,14 @@
     {
       "item_id": "medallion_unique",
       "weight": 50
+    },
+    {
+      "item_id": "rune",
+      "weight": 200
+    },
+    {
+      "item_id": "rune_gilded",
+      "weight": 50
     }
   ]
 }

@@ -13,7 +13,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [20, 39]
+        "value": [20, 35]
       }
     ]
   },
@@ -31,7 +31,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [40, 59]
+        "value": [45, 55]
       }
     ]
   },
@@ -49,7 +49,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [60, 79]
+        "value": [65, 75]
       }
     ]
   },
@@ -67,7 +67,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [80, 99]
+        "value": [85, 95]
       }
     ]
   },
@@ -85,7 +85,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [100, 119]
+        "value": [105, 115]
       }
     ]
   },
@@ -103,7 +103,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [120, 139]
+        "value": [125, 135]
       }
     ]
   },
@@ -121,7 +121,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [140, 159]
+        "value": [145, 155]
       }
     ]
   },
@@ -139,7 +139,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [160, 179]
+        "value": [165, 175]
       }
     ]
   },
@@ -157,7 +157,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [180, 199]
+        "value": [185, 200]
       }
     ]
   },
@@ -175,7 +175,7 @@
         "scope": "Local",
         "stat": { "Damage": {} },
         "modifier": "Multiplier",
-        "value": [200, 219]
+        "value": [210, 250]
       }
     ]
   },
@@ -192,13 +192,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [1, 2]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [2, 3]
       }
@@ -216,13 +216,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [2, 4]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [4, 6]
       }
@@ -240,13 +240,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [4, 6]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [7, 9]
       }
@@ -264,13 +264,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [7, 9]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [10, 12]
       }
@@ -288,13 +288,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [10, 12]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [13, 15]
       }
@@ -312,13 +312,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [13, 15]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [16, 18]
       }
@@ -336,13 +336,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [16, 18]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [19, 21]
       }
@@ -360,13 +360,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [19, 21]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [22, 24]
       }
@@ -384,13 +384,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [22, 24]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [25, 27]
       }
@@ -408,13 +408,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [25, 27]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [28, 30]
       }
@@ -433,13 +433,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [1, 2]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [3, 5]
       }
@@ -457,13 +457,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [2, 5]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [6, 8]
       }
@@ -481,13 +481,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [5, 7]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [9, 11]
       }
@@ -505,13 +505,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [8, 10]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [11, 13]
       }
@@ -529,13 +529,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [10, 13]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [14, 16]
       }
@@ -553,13 +553,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [14, 16]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [18, 21]
       }
@@ -577,13 +577,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [17, 19]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [21, 23]
       }
@@ -601,13 +601,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [19, 22]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [24, 26]
       }
@@ -625,13 +625,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [23, 25]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [26, 28]
       }
@@ -649,13 +649,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [25, 27]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Fire" } },
+        "stat": { "Damage": { "damage_type": "Fire", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [29, 31]
       }
@@ -674,13 +674,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [1, 1]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [2, 3]
       }
@@ -698,13 +698,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [2, 2]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [3, 4]
       }
@@ -722,13 +722,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [3, 3]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [4, 5]
       }
@@ -746,13 +746,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [4, 4]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [5, 6]
       }
@@ -770,13 +770,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [5, 5]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [6, 7]
       }
@@ -794,13 +794,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [6, 6]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [7, 8]
       }
@@ -818,13 +818,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [7, 7]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [8, 9]
       }
@@ -842,13 +842,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [8, 8]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [9, 10]
       }
@@ -866,13 +866,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [9, 9]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [10, 11]
       }
@@ -890,13 +890,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [10, 10]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Poison" } },
+        "stat": { "Damage": { "damage_type": "Poison", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [11, 12]
       }
@@ -915,7 +915,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "stat": { "Damage": { "damage_type": "Storm", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [4, 7]
       }
@@ -933,7 +933,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "stat": { "Damage": { "damage_type": "Storm", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [8, 12]
       }
@@ -951,7 +951,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "stat": { "Damage": { "damage_type": "Storm", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [13, 18]
       }
@@ -969,7 +969,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "stat": { "Damage": { "damage_type": "Storm", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [19, 24]
       }
@@ -987,7 +987,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "stat": { "Damage": { "damage_type": "Storm", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [25, 30]
       }
@@ -1005,7 +1005,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "stat": { "Damage": { "damage_type": "Storm", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [31, 36]
       }
@@ -1023,7 +1023,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "stat": { "Damage": { "damage_type": "Storm", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [37, 42]
       }
@@ -1041,7 +1041,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "stat": { "Damage": { "damage_type": "Storm", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [43, 48]
       }
@@ -1059,7 +1059,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "stat": { "Damage": { "damage_type": "Storm", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [49, 54]
       }
@@ -1077,7 +1077,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Storm" } },
+        "stat": { "Damage": { "damage_type": "Storm", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [55, 60]
       }

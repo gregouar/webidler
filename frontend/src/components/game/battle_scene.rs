@@ -5,15 +5,16 @@ use shared::constants::{THREAT_EFFECT, WAVES_PER_AREA_LEVEL};
 use shared::messages::client::{GoBackLevelMessage, SetAutoProgressMessage, SetRushModeMessage};
 
 use crate::assets::img_asset;
+use crate::components::ui::card::Card;
 use crate::components::ui::number::format_duration;
-use crate::components::ui::progress_bars::{predictive_cooldown, VerticalProgressBar};
+use crate::components::ui::progress_bars::{VerticalProgressBar, predictive_cooldown};
 use crate::components::ui::tooltip::{StaticTooltip, StaticTooltipPosition};
 use crate::components::websocket::WebsocketContext;
 
+use super::GameContext;
 use super::loot_queue::LootQueue;
 use super::monsters_grid::MonstersGrid;
 use super::player_card::PlayerCard;
-use super::GameContext;
 
 #[component]
 pub fn BattleScene() -> impl IntoView {
@@ -22,7 +23,8 @@ pub fn BattleScene() -> impl IntoView {
         <div class="absolute inset-0 p-1 xl:p-4">
             <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
                 <PlayerCard />
-                <div class="w-2/3 aspect-[12/8] flex flex-col shadow-xl/30 rounded-md overflow-hidden">
+                <Card class="w-2/3 aspect-[12/8] overflow-hidden" pad=false gap=false>
+                    // <div class="w-2/3 aspect-[12/8] flex flex-col shadow-xl/30 rounded-md overflow-hidden">
                     <BattleSceneHeader />
                     <div class="flex relative w-full flex-1 min-h-0
                     bg-stone-800 overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
@@ -42,7 +44,7 @@ pub fn BattleScene() -> impl IntoView {
                     </div>
                     <LootQueue />
                     <BattleSceneFooter />
-                </div>
+                </Card>
             </div>
         </div>
     }
@@ -130,6 +132,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
             <div class="flex-1 text-center relative">
                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
                 <p class="relative z-10 text-shadow/30 text-amber-200 text-lg xl:text-2xl font-bold">
+                    // "📜" TODO: Display edict effects
                     <span class="[font-variant:small-caps]">
                         {move || game_context.area_specs.read().name.clone()}
                     </span>
@@ -235,7 +238,7 @@ pub fn BattleSceneFooter() -> impl IntoView {
             style=footer_background
         >
             <div class="flex items-center justify-start h-full w-full">
-                <div class="relative px-4 py-2">
+                <div class="relative px-4 py-1 xl:py-2">
                     <div class="absolute inset-0 blur-lg
                     bg-gradient-to-r from-transparent via-zinc-950 via-[percentage:10%_90%] to-transparent"></div>
                     <p class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold leading-none">
@@ -249,7 +252,7 @@ pub fn BattleSceneFooter() -> impl IntoView {
             </div>
 
             <div class="flex items-center justify-end h-full w-full">
-                <div class="relative px-1 py-2">
+                <div class="relative px-1 py-1 xl:py-2">
                     <div class="absolute inset-0 blur-lg
                     bg-gradient-to-r from-transparent via-zinc-950 via-[percentage:10%_90%] to-transparent"></div>
                     <div class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold

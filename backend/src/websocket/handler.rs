@@ -2,9 +2,9 @@ use anyhow::Result;
 
 use axum::{
     extract::{
+        State,
         connect_info::ConnectInfo,
         ws::{WebSocket, WebSocketUpgrade},
-        State,
     },
     response::IntoResponse,
 };
@@ -27,9 +27,9 @@ use crate::{
     auth,
     db::{self},
     game::{
+        GameInstance,
         sessions::{Session, SessionsStore},
         systems::sessions_controller,
-        GameInstance,
     },
     rest::AppError,
     websocket::WebSocketConnection,
@@ -154,7 +154,7 @@ async fn handle_connect(
         &app_state.sessions_store,
         &app_state.master_store,
         user_character,
-        &msg.area_id,
+        msg.area_config,
     )
     .await?;
 
@@ -162,11 +162,9 @@ async fn handle_connect(
 }
 
 async fn handle_disconnect(sessions_store: &SessionsStore, mut session: Session) -> Result<()> {
-    let end_quest = session.game_data.area_state.read().end_quest;
-
     session.last_active = Instant::now();
 
-    if !end_quest {
+    if !session.game_data.terminate_quest {
         sessions_store
             .sessions
             .lock()

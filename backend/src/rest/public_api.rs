@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use anyhow::Result;
 
-use axum::{extract::State, routing::get, Json, Router};
+use axum::{Json, Router, extract::State, routing::get};
 
 use shared::{
     data::area::AreaLevel,

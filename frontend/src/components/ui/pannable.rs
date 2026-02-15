@@ -1,15 +1,26 @@
 use leptos::{html::*, prelude::*, web_sys};
 
 #[component]
-pub fn Pannable(children: Children) -> impl IntoView {
+pub fn Pannable(
+    children: Children,
+    #[prop(default = 1.0)] max_zoom: f64,
+    #[prop(default = 4.0)] max_dezoom: f64,
+    #[prop(optional, into)] disable_left_click_panning: Option<Signal<bool>>,
+    #[prop(optional)] mouse_position: Option<RwSignal<(f64, f64)>>,
+) -> impl IntoView {
     let offset = RwSignal::new((0.0, 0.0));
     let dragging = RwSignal::new(None::<(f64, f64)>);
     let zoom = RwSignal::new(0.5f64);
+    let disable_left_click_panning = move || {
+        disable_left_click_panning
+            .map(|disable_left_click_panning| disable_left_click_panning.get_untracked())
+            .unwrap_or_default()
+    };
 
     let svg_ref = NodeRef::new();
 
     let screen_to_svg = move |x: f64, y: f64| -> (f64, f64) {
-        let svg: web_sys::SvgElement = svg_ref.get().expect("SVG node should exist");
+        let svg: web_sys::SvgElement = svg_ref.get_untracked().expect("SVG node should exist");
 
         let rect = svg.get_bounding_client_rect();
         let x = (x - rect.left()) * 1000.0 / rect.width() - 500.0;
@@ -18,13 +29,28 @@ pub fn Pannable(children: Children) -> impl IntoView {
     };
 
     // --- Mouse handling ---
+    if let Some(mouse_position) = mouse_position {
+        let _ = window_event_listener(leptos::ev::mousemove, move |ev| {
+            let mouse_pos = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
+            let offset = offset.get_untracked();
+            let zoom = zoom.get_untracked();
+
+            mouse_position.set((
+                (mouse_pos.0 - offset.0) / zoom,
+                (mouse_pos.1 - offset.1) / zoom,
+            ));
+        });
+    }
+
     let on_mouse_down = {
         move |ev: web_sys::MouseEvent| {
+            if ev.button() == 0 && disable_left_click_panning() {
+                return;
+            }
+
             ev.stop_propagation();
-            dragging.set(Some(screen_to_svg(
-                ev.client_x() as f64,
-                ev.client_y() as f64,
-            )));
+            let mouse_pos = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
+            dragging.set(Some(mouse_pos));
         }
     };
 
@@ -53,7 +79,7 @@ pub fn Pannable(children: Children) -> impl IntoView {
             ev.prevent_default();
             let zoom_factor = if ev.delta_y() < 0.0 { 1.1 } else { 0.9 };
             let old_zoom = zoom.get();
-            let new_zoom = (old_zoom * zoom_factor).clamp(0.25, 2.0);
+            let new_zoom = (old_zoom * zoom_factor).clamp(1.0 / max_dezoom, max_zoom);
 
             let (x, y) = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
             let (ox, oy) = offset.get();
@@ -135,6 +161,17 @@ pub fn Pannable(children: Children) -> impl IntoView {
         last_pinch_distance.set(None);
     };
 
+    let grid_size = Memo::new(move |_| {
+        let z = zoom.get();
+        if z < 0.5 {
+            100
+        } else if z < 1.0 {
+            50
+        } else {
+            25
+        }
+    });
+
     view! {
         <div
             on:wheel=on_wheel
@@ -142,8 +179,10 @@ pub fn Pannable(children: Children) -> impl IntoView {
             on:touchstart=on_touch_start
             on:touchmove=on_touch_move
             on:touchend=on_touch_end
-            class="flex items-center justify-center w-full h-full touch-none overflow-hidden bg-neutral-900"
+            on:contextmenu=|ev| ev.prevent_default()
+            class="flex items-center justify-center w-full h-full touch-none overflow-hidden "
         >
+            // xl:drop-shadow-[0_2px_4px_black]"
             <svg
                 node_ref=svg_ref
                 width="100%"
@@ -157,15 +196,43 @@ pub fn Pannable(children: Children) -> impl IntoView {
                         <stop offset="70%" stop-color="black" stop-opacity=0.5 />
                         <stop offset="100%" stop-color="black" stop-opacity=0.8 />
                     </radialGradient>
+
+                    <radialGradient id="socket-outer-gradient" cx="30%" cy="30%">
+                        <stop offset="0%" stop-color="#afafaf" />
+                        <stop offset="70%" stop-color="#303030" />
+                        <stop offset="100%" stop-color="#141414" />
+                    </radialGradient>
+
+                    <radialGradient id="socket-inner-gradient" cx="60%" cy="60%">
+                        <stop offset="0%" stop-color="#474747" />
+                        <stop offset="70%" stop-color="#303030" />
+                        <stop offset="100%" stop-color="#141414" />
+                    </radialGradient>
+
+                    <pattern
+                        id="grid"
+                        width=move || grid_size.get()
+                        height=move || grid_size.get()
+                        patternUnits="userSpaceOnUse"
+                    >
+                        <path
+                            d=move || {
+                                let s = grid_size.get();
+                                format!("M {s} 0 L 0 0 0 {s}")
+                            }
+                            fill="none"
+                            stroke="#555"
+                            stroke-width="1"
+                        />
+                    </pattern>
                 </defs>
                 <g
                     transform=move || {
                         let (x, y) = offset.get();
                         format!("translate({x},{y}) scale({})", zoom.get())
                     }
-                    class="xl:drop-shadow-[0_2px_4px_black] will-change-transform"
+                    class=" will-change-transform"
                 >
-
                     {children()}
                 </g>
             </svg>

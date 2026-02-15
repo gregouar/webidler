@@ -1,4 +1,4 @@
-use leptos::{prelude::*, Params};
+use leptos::{Params, prelude::*};
 use leptos_router::{
     hooks::{use_navigate, use_params},
     params::Params,
@@ -13,9 +13,9 @@ use crate::components::{
         resources::{GemsCounter, ShardsCounter},
     },
     town::{
-        panels::{ascend::AscendPanel, inventory::TownInventoryPanel, temple::TemplePanel},
-        town_scene::TownScene,
         TownContext,
+        panels::{inventory::TownInventoryPanel, passives::PassivesPanel, temple::TemplePanel},
+        town_scene::TownScene,
     },
     ui::{buttons::MenuButton, fullscreen::FullscreenButton, tooltip::DynamicTooltip},
 };
@@ -109,7 +109,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         <div class="relative flex-1">
                             <TownScene view_only=true />
                             <TemplePanel open=town_context.open_temple view_only=true />
-                            <AscendPanel open=town_context.open_ascend view_only=true />
+                            <PassivesPanel open=town_context.open_ascend view_only=true />
                             <TownInventoryPanel open=town_context.open_inventory view_only=true />
                         </div>
                     }
@@ -146,7 +146,7 @@ pub fn HeaderMenu() -> impl IntoView {
         Signal::derive(move || town_context.character.read().max_area_level == 0);
 
     view! {
-        <div class="relative z-50 w-full flex justify-between items-center p-1 xl:p-2 bg-zinc-800 shadow-md h-auto">
+        <div class="relative z-50 w-full flex justify-between items-center p-1 xl:p-2 bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
             <div class="flex justify-around w-full items-center">
                 <GemsCounter value=gems />
                 <ShardsCounter value=shards />

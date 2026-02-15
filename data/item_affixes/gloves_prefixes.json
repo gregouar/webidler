@@ -1,1 +1,182 @@
-[]
+[
+  {
+    "name": "Tactile",
+    "family": "inc_status_success_chance",
+    "tags": ["Status"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Gloves"],
+    "item_level": 1,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": {} } } },
+        "modifier": "Multiplier",
+        "value": [5, 10]
+      }
+    ]
+  },
+  {
+    "name": "Grasping",
+    "family": "inc_status_success_chance",
+    "tags": ["Status"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Gloves"],
+    "item_level": 50,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": {} } } },
+        "modifier": "Multiplier",
+        "value": [15, 20]
+      }
+    ]
+  },
+  {
+    "name": "Clutching",
+    "family": "inc_status_success_chance",
+    "tags": ["Status"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Gloves"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": {} } } },
+        "modifier": "Multiplier",
+        "value": [25, 30]
+      }
+    ]
+  },
+  {
+    "name": "Stamping",
+    "family": "inc_status_success_chance",
+    "tags": ["Status"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Gloves"],
+    "item_level": 150,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": {} } } },
+        "modifier": "Multiplier",
+        "value": [35, 40]
+      }
+    ]
+  },
+  {
+    "name": "Marking",
+    "family": "inc_status_success_chance",
+    "tags": ["Status"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Gloves"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": {} } } },
+        "modifier": "Multiplier",
+        "value": [45, 50]
+      }
+    ]
+  },
+  {
+    "name": "Etching",
+    "family": "inc_status_success_chance",
+    "tags": ["Status"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Gloves"],
+    "item_level": 260,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": {} } } },
+        "modifier": "Multiplier",
+        "value": [55, 60]
+      }
+    ]
+  },
+  {
+    "name": "Engraving",
+    "family": "inc_status_success_chance",
+    "tags": ["Status"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Gloves"],
+    "item_level": 330,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": {} } } },
+        "modifier": "Multiplier",
+        "value": [65, 70]
+      }
+    ]
+  },
+  {
+    "name": "Branding",
+    "family": "inc_status_success_chance",
+    "tags": ["Status"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Gloves"],
+    "item_level": 410,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": {} } } },
+        "modifier": "Multiplier",
+        "value": [75, 80]
+      }
+    ]
+  },
+  {
+    "name": "Constraining",
+    "family": "inc_status_success_chance",
+    "tags": ["Status"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 600,
+    "restrictions": ["Gloves"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": {} } } },
+        "modifier": "Multiplier",
+        "value": [85, 90]
+      }
+    ]
+  },
+  {
+    "name": "Imbuing",
+    "family": "inc_status_success_chance",
+    "tags": ["Status"],
+    "affix_type": "Prefix",
+    "tier": 10,
+    "weight": 500,
+    "restrictions": ["Gloves"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Global",
+        "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": {} } } },
+        "modifier": "Multiplier",
+        "value": [95, 100]
+      }
+    ]
+  }
+]

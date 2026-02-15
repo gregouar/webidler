@@ -6,12 +6,13 @@
   "power_factor": 8,
   "initiative": [1.0, 1.5],
   "armor": { "Fire": 50, "Storm": 50 },
+  "stun_lockout": 5.0,
   "skills": [
     {
       "name": "Spread the Curse",
       "icon": "skills/curse_weakness.svg",
       "cooldown": 5.0,
-      "skill_type": "Spell",
+      "skill_type": "Curse",
       "targets": [
         {
           "effects": [

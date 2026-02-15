@@ -13,9 +13,9 @@ use shared::{
             EditMarketItemRequest, ExchangeGemsStashRequest, ForgeAddAffixRequest,
             ForgotPasswordRequest, InventoryDeleteRequest, InventoryEquipRequest,
             InventoryUnequipRequest, RejectMarketItemRequest, ResetPasswordRequest,
-            SellMarketItemRequest, SignInRequest, SignUpRequest, StoreStashItemRequest,
-            TakeStashItemRequest, UpdateAccountRequest, UpdateCharacterRequest,
-            UpgradeStashRequest,
+            SavePassivesRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
+            SocketPassiveRequest, StoreStashItemRequest, TakeStashItemRequest,
+            UpdateAccountRequest, UpdateCharacterRequest, UpgradeStashRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BrowseStashItemsResponse,
@@ -27,8 +27,9 @@ use shared::{
             GetUserCharactersResponse, GetUserDetailsResponse, InventoryDeleteResponse,
             InventoryEquipResponse, InventoryUnequipResponse, LeaderboardResponse, NewsResponse,
             PlayersCountResponse, RejectMarketItemResponse, ResetPasswordResponse,
-            SellMarketItemResponse, SignInResponse, SignUpResponse, StoreStashItemResponse,
-            TakeStashItemResponse, UpdateAccountResponse, UpgradeStashResponse,
+            SavePassivesResponse, SellMarketItemResponse, SignInResponse, SignUpResponse,
+            SocketPassiveResponse, StoreStashItemResponse, TakeStashItemResponse,
+            UpdateAccountResponse, UpgradeStashResponse,
         },
     },
 };
@@ -108,6 +109,22 @@ impl BackendClient {
         request: &AscendPassivesRequest,
     ) -> Result<AscendPassivesResponse, BackendError> {
         self.post_auth("game/passives", token, request).await
+    }
+
+    pub async fn post_socket_passive(
+        &self,
+        token: &str,
+        request: &SocketPassiveRequest,
+    ) -> Result<SocketPassiveResponse, BackendError> {
+        self.post_auth("game/passives/socket", token, request).await
+    }
+
+    pub async fn post_save_passives(
+        &self,
+        token: &str,
+        request: &SavePassivesRequest,
+    ) -> Result<SavePassivesResponse, BackendError> {
+        self.post_auth("game/passives/build", token, request).await
     }
 
     pub async fn get_benedictions(&self) -> Result<GetBenedictionsResponse, BackendError> {
