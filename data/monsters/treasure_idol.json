@@ -6,6 +6,7 @@
   "power_factor": 8,
   "initiative": [2.5, 3.5],
   "armor": { "Poison": 100 },
+  "stun_lockout": 5.0,
   "skills": [
     {
       "name": "Dangerous Incantation",

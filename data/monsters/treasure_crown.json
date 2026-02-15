@@ -6,6 +6,7 @@
   "power_factor": 8,
   "initiative": [2.0, 4.5],
   "armor": { "Storm": 100 },
+  "stun_lockout": 5.0,
   "skills": [
     {
       "name": "Dagon's Revenge",
