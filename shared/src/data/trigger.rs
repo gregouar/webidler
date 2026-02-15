@@ -1,13 +1,13 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    character::CharacterId, conditional_modifier::Condition, item::SkillShape, skill::TargetType,
-    stat_effect::StatStatusType,
+    character::CharacterId, conditional_modifier::Condition, item::SkillShape, modifier::Modifier,
+    skill::TargetType, stat_effect::StatStatusType,
 };
 
 use super::{
     skill::{DamageType, SkillEffect, SkillRange, SkillType},
-    stat_effect::{Modifier, StatType},
+    stat_effect::StatType,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash)]

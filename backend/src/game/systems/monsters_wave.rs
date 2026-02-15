@@ -7,10 +7,11 @@ use shared::{
         area::{AreaLevel, AreaState, AreaThreat},
         character::CharacterId,
         character_status::StatusSpecs,
+        modifier::Modifier,
         monster::{MonsterRarity, MonsterSpecs, MonsterState},
         passive::StatEffect,
         skill::SkillEffectType,
-        stat_effect::{EffectsMap, Modifier, StatType},
+        stat_effect::{EffectsMap, StatType},
     },
 };
 
@@ -224,7 +225,7 @@ fn generate_monster_specs(
 
     monster_specs.power_factor *= exp_factor;
     monster_specs.reward_factor *= reward_factor;
-    monster_specs.character_specs.max_life *= exp_factor;
+    monster_specs.character_specs.max_life.base *= exp_factor;
 
     // Apply upgrade effects
     let upgrade_effects = [StatEffect {

@@ -8,6 +8,7 @@ use crate::data::{
     character_status::StatusSpecs,
     conditional_modifier::Condition,
     item::{SkillRange, SkillShape},
+    modifier::{ModifiableValue, Modifier, compute_more_factor},
     skill::{RestoreType, SkillEffectType},
 };
 
@@ -35,16 +36,7 @@ pub enum DamageType {
     Storm,
 }
 
-pub type DamageMap = HashMap<DamageType, ChanceRange<f64>>;
-
-#[derive(
-    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,
-)]
-pub enum Modifier {
-    #[default]
-    Multiplier,
-    Flat,
-}
+pub type DamageMap = HashMap<DamageType, ChanceRange<ModifiableValue<f64>>>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum MinMax {
@@ -565,95 +557,32 @@ impl EffectsMap {
             |mut result, ((target, modifier), value)| {
                 result
                     .entry((target.clone(), modifier))
-                    .and_modify(|entry| match modifier {
-                        Modifier::Multiplier if target.is_multiplicative() => {
-                            if *entry == 0.0 {
-                                *entry = value;
-                                return;
+                    .and_modify(|entry| {
+                        let modifier = match modifier {
+                            Modifier::Multiplier if target.is_multiplicative() => Modifier::More,
+                            modifier => modifier,
+                        };
+                        match modifier {
+                            Modifier::More => {
+                                if *entry == 0.0 {
+                                    *entry = value;
+                                    return;
+                                }
+
+                                let sign = if *entry < 0.0 { -1.0 } else { 1.0 };
+
+                                let factor = compute_more_factor(sign * value);
+                                *entry = sign
+                                    * compute_more_factor(
+                                        entry.abs() + factor + entry.abs() * factor * 0.01,
+                                    );
                             }
-
-                            let sign = if *entry < 0.0 { -1.0 } else { 1.0 };
-                            let mut new_entry = entry.abs() + 100.0;
-
-                            new_entry.apply_effect(&StatEffect {
-                                stat: target,
-                                modifier,
-                                value: sign * value,
-                                bypass_ignore: false,
-                            });
-
-                            *entry = sign
-                                * if new_entry >= 100.0 {
-                                    new_entry - 100.0
-                                } else {
-                                    -100.0 / (new_entry * 0.01) + 100.0
-                                };
+                            _ => *entry += value,
                         }
-                        _ => *entry += value,
                     })
                     .or_insert(value);
                 result
             },
         ))
-    }
-}
-
-pub trait ApplyStatModifier {
-    fn apply_modifier(&mut self, modifier: Modifier, value: f64);
-    fn apply_effect(&mut self, effect: &StatEffect) {
-        // We want that negative effect are diminishingly interesting
-        let value = match effect.modifier {
-            Modifier::Flat => effect.value,
-            Modifier::Multiplier => {
-                if effect.value >= 0.0 {
-                    effect.value
-                } else {
-                    let div = (1.0 - effect.value * 0.01).max(0.0);
-
-                    if effect.value <= -1e300 {
-                        -100.0
-                    } else if div != 0.0 {
-                        effect.value / div
-                    } else {
-                        0.0
-                    }
-                }
-            }
-        };
-        self.apply_modifier(effect.modifier, value);
-    }
-
-    fn apply_negative_effect(&mut self, effect: &StatEffect) {
-        self.apply_effect(&StatEffect {
-            value: -effect.value,
-            ..effect.clone()
-        })
-    }
-}
-
-impl ApplyStatModifier for f32 {
-    fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
-        match modifier {
-            Modifier::Flat => *self += value as f32,
-            Modifier::Multiplier => {
-                //TODO: Check if this is OK, the idea was that inc restore shouldn't apply if already negative
-                if *self > 0.0 {
-                    *self *= (100.0 + value as f32).max(0.0) * 0.01
-                }
-            }
-        }
-    }
-}
-
-impl ApplyStatModifier for f64 {
-    fn apply_modifier(&mut self, modifier: Modifier, value: f64) {
-        match modifier {
-            Modifier::Flat => *self += value,
-            Modifier::Multiplier => {
-                if *self > 0.0 {
-                    *self *= (100.0 + value).max(0.0) * 0.01
-                }
-            }
-        }
     }
 }

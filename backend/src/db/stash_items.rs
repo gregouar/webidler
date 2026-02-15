@@ -86,11 +86,11 @@ impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
             item_armor: value
                 .armor_specs
                 .as_ref()
-                .map(|armor_specs| armor_specs.armor),
+                .map(|armor_specs| armor_specs.armor.evaluate()),
             item_block: value
                 .armor_specs
                 .as_ref()
-                .map(|armor_specs| armor_specs.block as f64),
+                .map(|armor_specs| armor_specs.block.evaluate() as f64),
             item_damages,
             item_damage_physical,
             item_damage_fire,
@@ -99,11 +99,11 @@ impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
             item_crit_chance: value
                 .weapon_specs
                 .as_ref()
-                .map(|weapon_specs| weapon_specs.crit_chance.value as f64),
+                .map(|weapon_specs| weapon_specs.crit_chance.value.evaluate() as f64),
             item_crit_damage: value
                 .weapon_specs
                 .as_ref()
-                .map(|weapon_specs| weapon_specs.crit_damage),
+                .map(|weapon_specs| weapon_specs.crit_damage.evaluate()),
         })
     }
 }
@@ -111,9 +111,9 @@ impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
 fn average_weapon_damage(weapon_specs: &WeaponSpecs, damage_type: DamageType) -> Option<f64> {
     weapon_specs
                 .damage.get(&damage_type)
-                .map(|value| 1.0 / (weapon_specs.cooldown as f64)
+                .map(|value| 1.0 / (weapon_specs.cooldown.evaluate() as f64)
             // TODO: Lucky?
-            * (1.0 + weapon_specs.crit_damage * weapon_specs.crit_chance.value as f64 * 0.0001)*(value.min + value.max) * 0.5)
+            * (1.0 + weapon_specs.crit_damage.evaluate() * weapon_specs.crit_chance.value.evaluate() as f64 * 0.0001)*(value.min.evaluate() + value.max.evaluate()) * 0.5)
 }
 
 pub async fn store_item<'c>(

@@ -3,10 +3,10 @@ use std::collections::HashMap;
 use shared::data::{
     area::AreaThreat,
     conditional_modifier::{Condition, ConditionalModifier},
+    modifier::Modifier,
     player::{CharacterSpecs, CharacterState},
     stat_effect::{
-        EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect, StatType,
-        compare_options,
+        EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType, compare_options,
     },
 };
 
@@ -56,11 +56,11 @@ pub fn sort_stat_effects(effects: &mut [StatEffect]) {
             match e.stat {
                 StatType::StatConverter(ref specs) => match specs.target_modifier {
                     Modifier::Flat => 1,
-                    Modifier::Multiplier => 3,
+                    Modifier::Multiplier | Modifier::More => 3,
                 },
                 _ => match e.modifier {
                     Modifier::Flat => 0,
-                    Modifier::Multiplier => 2,
+                    Modifier::Multiplier | Modifier::More => 2,
                 },
             },
             e.stat.clone(),
@@ -125,16 +125,16 @@ pub fn check_condition(
             })
             .count() as f64,
         Condition::MaximumLife => {
-            (character_state.life >= character_specs.max_life * 0.99) as usize as f64
+            (character_state.life >= character_specs.max_life.evaluate() * 0.99) as usize as f64
         }
         Condition::MaximumMana => {
-            (character_state.mana >= character_specs.max_mana * 0.99) as usize as f64
+            (character_state.mana >= character_specs.max_mana.evaluate() * 0.99) as usize as f64
         }
         Condition::LowLife => {
-            (character_state.life <= character_specs.max_life * 0.5) as usize as f64
+            (character_state.life <= character_specs.max_life.evaluate() * 0.5) as usize as f64
         }
         Condition::LowMana => {
-            (character_state.mana <= character_specs.max_mana * 0.5) as usize as f64
+            (character_state.mana <= character_specs.max_mana.evaluate() * 0.5) as usize as f64
         }
     }
 }

@@ -3,8 +3,8 @@ use leptos::prelude::*;
 
 use shared::data::{
     item::{SkillRange, SkillShape},
+    modifier::Modifier,
     skill::TargetType,
-    stat_effect::Modifier,
     temple::{StatEffect, StatType},
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, StatusTrigger, TriggerEffectModifier,
@@ -50,7 +50,7 @@ pub fn format_trigger_modifier(
 ) -> Option<impl IntoView + use<>> {
     modifier.map(|modifier| {
         let factor_str = match modifier.modifier {
-            Modifier::Multiplier => format!("{:0}", modifier.factor),
+            Modifier::Multiplier | Modifier::More => format!("{:0}", modifier.factor),
             Modifier::Flat => format!("{:0}", 100.0 * modifier.factor),
         };
         view! {

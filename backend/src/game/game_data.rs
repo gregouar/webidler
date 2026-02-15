@@ -1,7 +1,8 @@
 use anyhow::Result;
+use shared::data::modifier::Modifier;
 use shared::data::quest::QuestRewards;
-use shared::data::stat_effect::{ApplyStatModifier, EffectsMap};
-use shared::data::temple::{Modifier, PlayerBenedictions, StatEffect, StatType};
+use shared::data::stat_effect::EffectsMap;
+use shared::data::temple::{PlayerBenedictions, StatEffect, StatType};
 use std::time::Duration;
 
 use crate::game::data::master_store;

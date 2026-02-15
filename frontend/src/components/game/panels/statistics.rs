@@ -1,8 +1,9 @@
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
+    modifier::Modifier,
     skill::{DamageType, RestoreType, SkillType},
-    stat_effect::{Modifier, StatConverterSource, StatConverterSpecs, StatStatusType, StatType},
+    stat_effect::{StatConverterSource, StatConverterSpecs, StatStatusType, StatType},
 };
 use strum::IntoEnumIterator;
 
@@ -104,7 +105,12 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             label="Maximum Life"
                             value=move || {
                                 format_number(
-                                    game_context.player_specs.read().character_specs.max_life,
+                                    game_context
+                                        .player_specs
+                                        .read()
+                                        .character_specs
+                                        .max_life
+                                        .evaluate(),
                                 )
                             }
                         />
@@ -113,8 +119,12 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             value=move || {
                                 format!(
                                     "{:.1}%",
-                                    game_context.player_specs.read().character_specs.life_regen
-                                        * 0.1,
+                                    game_context
+                                        .player_specs
+                                        .read()
+                                        .character_specs
+                                        .life_regen
+                                        .evaluate() * 0.1,
                                 )
                             }
                         />
@@ -122,7 +132,12 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             label="Maximum Mana"
                             value=move || {
                                 format_number(
-                                    game_context.player_specs.read().character_specs.max_mana,
+                                    game_context
+                                        .player_specs
+                                        .read()
+                                        .character_specs
+                                        .max_mana
+                                        .evaluate(),
                                 )
                             }
                         />
@@ -131,8 +146,12 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             value=move || {
                                 format!(
                                     "{:.1}%",
-                                    game_context.player_specs.read().character_specs.mana_regen
-                                        * 0.1,
+                                    game_context
+                                        .player_specs
+                                        .read()
+                                        .character_specs
+                                        .mana_regen
+                                        .evaluate() * 0.1,
                                 )
                             }
                         />
@@ -141,7 +160,9 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             value=move || {
                                 format!(
                                     "{}%",
-                                    format_number(game_context.player_specs.read().gold_find),
+                                    format_number(
+                                        game_context.player_specs.read().gold_find.evaluate(),
+                                    ),
                                 )
                             }
                         />
@@ -150,7 +171,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             value=move || {
                                 format!(
                                     "{:.2}s",
-                                    game_context.player_specs.read().movement_cooldown,
+                                    game_context.player_specs.read().movement_cooldown.evaluate(),
                                 )
                             }
                         />
@@ -169,7 +190,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         .armor
                                         .get(&DamageType::Physical)
                                         .cloned()
-                                        .unwrap_or_default(),
+                                        .unwrap_or_default()
+                                        .evaluate(),
                                 )
                             }
                         />
@@ -185,7 +207,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         .armor
                                         .get(&DamageType::Fire)
                                         .cloned()
-                                        .unwrap_or_default(),
+                                        .unwrap_or_default()
+                                        .evaluate(),
                                 )
                             }
                         />
@@ -201,7 +224,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         .armor
                                         .get(&DamageType::Poison)
                                         .cloned()
-                                        .unwrap_or_default(),
+                                        .unwrap_or_default()
+                                        .evaluate(),
                                 )
                             }
                         />
@@ -217,7 +241,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         .armor
                                         .get(&DamageType::Storm)
                                         .cloned()
-                                        .unwrap_or_default(),
+                                        .unwrap_or_default()
+                                        .evaluate(),
                                 )
                             }
                         />
@@ -232,7 +257,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         .character_specs
                                         .block
                                         .get(&SkillType::Attack)
-                                        .map(|x| x.value)
+                                        .map(|x| x.value.evaluate())
                                         .unwrap_or_default(),
                                 )
                             }
@@ -244,7 +269,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .character_specs
                                 .block
                                 .get(&SkillType::Spell)
-                                .map(|x| x.value)
+                                .map(|x| x.value.evaluate())
                                 .unwrap_or_default();
                             (block_spell != 0.0)
                                 .then(move || {
@@ -261,7 +286,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .player_specs
                                 .read()
                                 .character_specs
-                                .block_damage as f64;
+                                .block_damage
+                                .evaluate() as f64;
                             (block_damage != 0.0)
                                 .then(move || {
                                     view! {
@@ -277,7 +303,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .player_specs
                                 .read()
                                 .character_specs
-                                .evade_damage as f64;
+                                .evade_damage
+                                .evaluate() as f64;
                             (evade_damage != 0.0)
                                 .then(move || {
                                     view! {
@@ -293,7 +320,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .player_specs
                                 .read()
                                 .character_specs
-                                .take_from_mana_before_life as f64;
+                                .take_from_mana_before_life
+                                .evaluate() as f64;
                             (take_from_mana_before_life != 0.0)
                                 .then(move || {
                                     view! {
@@ -309,7 +337,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .player_specs
                                 .read()
                                 .character_specs
-                                .take_from_mana_before_life as f64;
+                                .take_from_mana_before_life
+                                .evaluate() as f64;
                             (take_from_mana_before_life != 0.0)
                                 .then(move || {
                                     view! {
@@ -394,7 +423,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         <Stat
                             label="Threat Gain"
                             value=move || {
-                                format!("{:.0}%", game_context.player_specs.read().threat_gain)
+                                format!(
+                                    "{:.0}%",
+                                    game_context.player_specs.read().threat_gain.evaluate(),
+                                )
                             }
                         />
                         {move || {

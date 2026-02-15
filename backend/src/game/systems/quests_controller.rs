@@ -76,7 +76,7 @@ fn generate_end_quest_rewards(
                 false,
                 true,
                 Some(ItemCategory::Map),
-                game_data.area_state.read().loot_rarity,
+                game_data.area_state.read().loot_rarity.evaluate(),
             )
         }));
     // Otherwise fill with normal items
@@ -96,7 +96,7 @@ fn generate_end_quest_rewards(
                 false,
                 true,
                 None,
-                game_data.area_state.read().loot_rarity,
+                game_data.area_state.read().loot_rarity.evaluate(),
             )
         }));
     }
@@ -118,7 +118,7 @@ fn generate_end_quest_rewards(
                 true,
                 true,
                 None,
-                game_data.area_state.read().loot_rarity * 5.0,
+                game_data.area_state.read().loot_rarity.evaluate() * 5.0,
             )
         }))
     }

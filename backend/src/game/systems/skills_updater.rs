@@ -4,14 +4,15 @@ use shared::data::{
     area::AreaThreat,
     character_status::StatusSpecs,
     conditional_modifier::ConditionalModifier,
+    modifier::Modifier,
     player::PlayerInventory,
     skill::{
         DamageType, ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType,
         SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
-        ApplyStatModifier, EffectsMap, LuckyRollType, MinMax, Modifier, StatConverterSource,
-        StatEffect, StatType, compare_options,
+        EffectsMap, LuckyRollType, MinMax, StatConverterSource, StatEffect, StatType,
+        compare_options,
     },
 };
 use strum::IntoEnumIterator;
@@ -24,8 +25,9 @@ pub fn update_skills_states(
     skill_states: &mut [SkillState],
 ) {
     for (skill_specs, skill_state) in skill_specs.iter().zip(skill_states.iter_mut()) {
-        if skill_specs.cooldown > 0.0 {
-            skill_state.elapsed_cooldown += elapsed_time.as_secs_f32() / skill_specs.cooldown;
+        if skill_specs.cooldown.evaluate() > 0.0 {
+            skill_state.elapsed_cooldown +=
+                elapsed_time.as_secs_f32() / skill_specs.cooldown.evaluate();
         }
         if skill_state.elapsed_cooldown >= 1.0 {
             skill_state.elapsed_cooldown = 1.0;
@@ -50,8 +52,8 @@ pub fn update_skill_specs<'a>(
 ) {
     skill_specs.targets = skill_specs.base.targets.clone();
     skill_specs.triggers = skill_specs.base.triggers.clone();
-    skill_specs.cooldown = skill_specs.base.cooldown;
-    skill_specs.mana_cost = skill_specs.base.mana_cost;
+    skill_specs.cooldown = skill_specs.base.cooldown.into();
+    skill_specs.mana_cost = skill_specs.base.mana_cost.into();
 
     skill_specs.level_modifier = effects
         .clone()
@@ -208,15 +210,17 @@ fn compute_skill_modifier_effects<'a>(
                             &item_specs.weapon_specs,
                             &item_specs.armor_specs,
                         ) {
-                            (ItemStatsSource::Armor, _, Some(armor_specs)) => armor_specs.armor,
+                            (ItemStatsSource::Armor, _, Some(armor_specs)) => {
+                                armor_specs.armor.evaluate()
+                            }
                             (ItemStatsSource::Cooldown, Some(weapon_specs), _) => {
-                                weapon_specs.cooldown as f64
+                                weapon_specs.cooldown.evaluate() as f64
                             }
                             (ItemStatsSource::CritChance, Some(weapon_specs), _) => {
-                                weapon_specs.crit_chance.value as f64
+                                weapon_specs.crit_chance.value.evaluate() as f64
                             }
                             (ItemStatsSource::CritDamage, Some(weapon_specs), _) => {
-                                weapon_specs.crit_damage
+                                weapon_specs.crit_damage.evaluate()
                             }
                             (
                                 ItemStatsSource::Damage {
@@ -231,9 +235,9 @@ fn compute_skill_modifier_effects<'a>(
                                         .damage
                                         .get(dmg_type)
                                         .map(|d| match min_max {
-                                            Some(MinMax::Min) => d.min,
-                                            Some(MinMax::Max) => d.max,
-                                            None => (d.min + d.max) * 0.5,
+                                            Some(MinMax::Min) => d.min.evaluate(),
+                                            Some(MinMax::Max) => d.max.evaluate(),
+                                            None => (d.min.evaluate() + d.max.evaluate()) * 0.5,
                                         })
                                         .unwrap_or_default()
                                 } else {
@@ -241,9 +245,9 @@ fn compute_skill_modifier_effects<'a>(
                                         .damage
                                         .values()
                                         .map(|d| match min_max {
-                                            Some(MinMax::Min) => d.min,
-                                            Some(MinMax::Max) => d.max,
-                                            None => (d.min + d.max) * 0.5,
+                                            Some(MinMax::Min) => d.min.evaluate(),
+                                            Some(MinMax::Max) => d.max.evaluate(),
+                                            None => (d.min.evaluate() + d.max.evaluate()) * 0.5,
                                         })
                                         .sum()
                                 }
@@ -534,9 +538,9 @@ pub fn compute_skill_specs_effect<'a>(
                     StatConverterSource::CritDamage,
                     SkillEffectType::FlatDamage { crit_damage, .. },
                 ) => {
-                    let amount = *crit_damage * factor * 0.01;
+                    let amount = crit_damage.compute() * factor * 0.01;
                     if !specs.is_extra {
-                        *crit_damage -= amount;
+                        crit_damage.base -= amount;
                     }
 
                     (amount > 0.0).then(|| StatEffect {
@@ -568,10 +572,13 @@ pub fn compute_skill_specs_effect<'a>(
                         Some(damage_type) => damage
                             .get_mut(&damage_type)
                             .map(|d| {
-                                let amount = (d.min * min_factor * 0.01, d.max * max_factor * 0.01);
+                                let amount = (
+                                    d.min.compute() * min_factor * 0.01,
+                                    d.max.compute() * max_factor * 0.01,
+                                );
                                 if !specs.is_extra {
-                                    d.min -= amount.0;
-                                    d.max -= amount.1;
+                                    d.min.base -= amount.0;
+                                    d.max.base -= amount.1;
                                 }
                                 amount
                             })
@@ -579,10 +586,13 @@ pub fn compute_skill_specs_effect<'a>(
                         None => damage
                             .values_mut()
                             .fold((0.0, 0.0), |(min_acc, max_acc), d| {
-                                let amount = (d.min * min_factor * 0.01, d.max * max_factor * 0.01);
+                                let amount = (
+                                    d.min.compute() * min_factor * 0.01,
+                                    d.max.compute() * max_factor * 0.01,
+                                );
                                 if !specs.is_extra {
-                                    d.min -= amount.0;
-                                    d.max -= amount.1;
+                                    d.min.base -= amount.0;
+                                    d.max.base -= amount.1;
                                 }
                                 (min_acc + amount.0, max_acc + amount.1)
                             }),
@@ -636,11 +646,11 @@ pub fn compute_skill_specs_effect<'a>(
 
     if let SkillEffectType::FlatDamage { damage, .. } = &mut skill_effect.effect_type {
         damage.retain(|_, value| {
-            value.min = value.min.max(0.0);
-            value.max = value.max.max(0.0);
+            value.min = value.min.evaluate().max(0.0).into();
+            value.max = value.max.evaluate().max(0.0).into();
             value.clamp();
 
-            value.max > 0.0
+            value.max.evaluate() > 0.0
         });
     }
 }
