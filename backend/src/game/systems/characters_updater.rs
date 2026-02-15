@@ -106,7 +106,7 @@ fn compute_character_specs(
     let mut stat_converters = Vec::new();
 
     for effect in effects.iter() {
-        match effect.stat {
+        match &effect.stat {
             StatType::Life => character_specs.max_life.apply_effect(effect),
             StatType::LifeRegen => character_specs.life_regen.apply_effect(effect),
             StatType::Mana => character_specs.max_mana.apply_effect(effect),
@@ -114,7 +114,7 @@ fn compute_character_specs(
             StatType::Armor(damage_type) => match damage_type {
                 Some(damage_type) => character_specs
                     .armor
-                    .entry(damage_type)
+                    .entry(*damage_type)
                     .or_default()
                     .apply_effect(effect),
                 None => {
@@ -136,7 +136,7 @@ fn compute_character_specs(
             StatType::Block(skill_type) => match skill_type {
                 Some(skill_type) => character_specs
                     .block
-                    .entry(skill_type)
+                    .entry(*skill_type)
                     .or_default()
                     .value
                     .apply_effect(effect),
@@ -155,7 +155,7 @@ fn compute_character_specs(
             StatType::Evade(damage_type) => match damage_type {
                 Some(damage_type) => character_specs
                     .evade
-                    .entry(damage_type)
+                    .entry(*damage_type)
                     .or_default()
                     .value
                     .apply_effect(effect),
@@ -176,12 +176,12 @@ fn compute_character_specs(
                 damage_type,
             } => {
                 let skill_types = match skill_type {
-                    Some(skill_type) => vec![skill_type],
+                    Some(skill_type) => vec![*skill_type],
                     None => SkillType::iter().collect(),
                 };
 
                 let damage_types = match damage_type {
-                    Some(damage_type) => vec![damage_type],
+                    Some(damage_type) => vec![*damage_type],
                     None => DamageType::iter().collect(),
                 };
 
@@ -195,13 +195,30 @@ fn compute_character_specs(
                     }
                 }
             }
+            StatType::StatusResistance {
+                skill_type,
+                status_type,
+            } => {
+                let skill_types = match skill_type {
+                    Some(skill_type) => vec![*skill_type],
+                    None => SkillType::iter().collect(),
+                };
+
+                for &skill in &skill_types {
+                    character_specs
+                        .status_resistances
+                        .entry((skill, status_type.clone()))
+                        .or_default()
+                        .apply_effect(effect);
+                }
+            }
             StatType::Lucky {
                 skill_type,
                 roll_type: LuckyRollType::Block,
             } => match skill_type {
                 Some(skill_type) => character_specs
                     .block
-                    .entry(skill_type)
+                    .entry(*skill_type)
                     .or_default()
                     .lucky_chance
                     .apply_effect(effect),
@@ -222,7 +239,7 @@ fn compute_character_specs(
             } => match damage_type {
                 Some(damage_type) => character_specs
                     .evade
-                    .entry(damage_type)
+                    .entry(*damage_type)
                     .or_default()
                     .lucky_chance
                     .apply_effect(effect),
@@ -238,13 +255,10 @@ fn compute_character_specs(
                 }
             },
 
-            StatType::StatConverter(ref specs) => {
+            StatType::StatConverter(specs) => {
                 stat_converters.push((specs.clone(), effect.value));
             }
-            StatType::StatConditionalModifier {
-                ref stat,
-                ref conditions,
-            } => {
+            StatType::StatConditionalModifier { stat, conditions } => {
                 character_specs
                     .conditional_modifiers
                     .push(ConditionalModifier {

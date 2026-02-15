@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, hash::Hash};
 
 use serde::{Deserialize, Serialize};
 
@@ -7,7 +7,7 @@ use crate::data::{
     character_status::StatusId,
     conditional_modifier::{Condition, ConditionalModifier},
     skill::{DamageType, SkillType},
-    stat_effect::EffectsMap,
+    stat_effect::{EffectsMap, StatStatusType},
     trigger::TriggeredEffect,
 };
 
@@ -76,14 +76,21 @@ pub struct CharacterSpecs {
 
     #[serde(default)]
     pub armor: HashMap<DamageType, f64>,
+
     #[serde(default)]
     pub block: HashMap<SkillType, Chance>,
     #[serde(default)]
     pub block_damage: f32,
+
     #[serde(default)]
     pub evade: HashMap<DamageType, Chance>,
     #[serde(default)]
     pub evade_damage: f32,
+
+    #[serde(default)]
+    pub status_resistances: HashMap<(SkillType, Option<StatStatusType>), f64>,
+    #[serde(default)]
+    pub stun_lockout: f64,
 
     #[serde(default)]
     pub damage_resistance: HashMap<(SkillType, DamageType), f64>,
@@ -91,7 +98,7 @@ pub struct CharacterSpecs {
     // TODO: Should have CharacterComputed
     #[serde(default)]
     pub triggers: Vec<TriggeredEffect>,
-    #[serde(default)] // for retro compatibility
+    #[serde(default)]
     pub effects: EffectsMap,
 
     #[serde(default, skip_serializing, skip_deserializing)]

@@ -8,7 +8,8 @@ use shared::{
         character_status::{StatusSpecs, StatusState},
         item::SkillRange,
         skill::{DamageType, RestoreType, SkillType},
-        stat_effect::Modifier,
+        stat_effect::{Modifier, StatStatusType, compare_options},
+        temple::StatType,
     },
 };
 
@@ -261,6 +262,27 @@ pub fn apply_status(
 ) -> bool {
     let (target_id, (target_specs, target_state)) = target;
 
+    let status_resistance: f64 = target_specs
+        .status_resistances
+        .iter()
+        .filter_map(|((res_skill_type, res_status_type), resistance)| {
+            ((*res_skill_type == skill_type)
+                && compare_options(res_status_type, &Some(status_specs.into())))
+            .then_some(resistance)
+        })
+        .sum();
+
+    let (duration, value) = if status_resistance > 0.0 {
+        let factor = (1.0 - status_resistance * 0.01).clamp(0.0, 1.0);
+        if let Some(duration) = duration {
+            (Some(duration * factor), value)
+        } else {
+            (None, value * factor)
+        }
+    } else {
+        (duration, value)
+    };
+
     if duration.unwrap_or(1.0) <= 0.0 || !target_state.is_alive {
         return false;
     }
@@ -365,6 +387,30 @@ pub fn apply_status(
 
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger { .. } = status_specs {
         target_state.dirty_specs = true;
+    }
+
+    let stun_lockout = target_specs.stun_lockout;
+    if let StatusSpecs::Stun = status_specs
+        && stun_lockout > 0.0
+    {
+        apply_status(
+            events_queue,
+            target,
+            attacker,
+            &StatusSpecs::StatModifier {
+                stat: StatType::StatusResistance {
+                    skill_type: None,
+                    status_type: Some(StatStatusType::Stun),
+                },
+                modifier: Modifier::Flat,
+                debuff: false,
+            },
+            SkillType::Other,
+            100.0,
+            duration.map(|d| d + stun_lockout),
+            false,
+            true,
+        );
     }
 
     true

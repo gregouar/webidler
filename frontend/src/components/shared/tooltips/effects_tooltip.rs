@@ -436,6 +436,16 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 status_type_str(status_type.as_ref())
             )
         }
+        StatType::StatusResistance {
+            skill_type,
+            status_type,
+        } => {
+            format!(
+                "{}{} Resistance",
+                skill_type_str(*skill_type),
+                status_type_str(status_type.as_ref())
+            )
+        }
         StatType::Speed(skill_type) => format!("{}Speed", skill_type_str(*skill_type)),
         StatType::MovementSpeed => "Movement Speed".to_string(),
         StatType::GoldFind => "Gold Find".to_string(),
@@ -639,6 +649,17 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                     status_type_str(status_type.as_ref())
                 )
             }
+        }
+        StatType::StatusResistance {
+            status_type,
+            skill_type,
+        } => {
+            format!(
+                "{} Resistance to {}{}",
+                format_adds_removes(value, false, ""),
+                skill_type_str(*skill_type),
+                status_type_value_str(status_type.as_ref())
+            )
         }
         StatType::Speed(skill_type) => {
             if value.unwrap_or_default() >= 0.0 {

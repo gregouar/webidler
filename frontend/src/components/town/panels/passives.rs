@@ -56,11 +56,8 @@ pub fn PassivesPanel(
     let passives_tree_ascension = RwSignal::new(PassivesTreeAscension::default());
     let passives_tree_build = RwSignal::new(PurchasedNodes::default());
 
-    let tree_connections = Memo::new(move |_| {
-        town_context
-            .passives_tree_specs
-            .with(compute_connections)
-    });
+    let tree_connections =
+        Memo::new(move |_| town_context.passives_tree_specs.with(compute_connections));
 
     let reset = move || {
         let mut initial_cost = 0.0;

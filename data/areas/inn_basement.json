@@ -17,8 +17,8 @@
   ],
   "bosses": [
     {
-      "level": 50,
-      "interval": 50,
+      "level": 1,
+      "interval": 1,
       "spawns": [
         {
           "monster": "haunted_wine_bottle.json",

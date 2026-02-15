@@ -259,6 +259,7 @@ fn compute_player_specs(
             | StatType::Evade(_)
             | StatType::EvadeDamageTaken
             | StatType::DamageResistance { .. }
+            | StatType::StatusResistance { .. }
             | StatType::StatConverter(StatConverterSpecs {
                 source:
                     StatConverterSource::MaxLife

@@ -5,7 +5,7 @@ use shared::data::{
     character_status::{StatusId, StatusMap},
     monster::MonsterRarity,
     skill::{DamageType, SkillType},
-    stat_effect::StatType,
+    stat_effect::{StatStatusType, StatType},
 };
 
 use crate::assets::img_asset;
@@ -394,6 +394,10 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
                 "statuses/buff_attack_damage.svg".to_string(),
                 "Increased Attack Damage",
             ),
+            StatType::StatusResistance {
+                status_type: Some(StatStatusType::Stun),
+                ..
+            } => ("statuses/stun_immune.svg".into(), "Stun Resistant"),
             _ => ("statuses/buff.svg".to_string(), "Buffed"),
         },
         StatusId::StatModifier {

@@ -75,6 +75,12 @@ pub enum StatType {
     BlockDamageTaken,
     Evade(#[serde(default)] Option<DamageType>),
     EvadeDamageTaken,
+    StatusResistance {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        status_type: Option<StatStatusType>,
+    },
     Damage {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -262,6 +268,16 @@ impl StatType {
                     skill_type,
                 },
                 StatusDuration {
+                    status_type: status_type_2,
+                    skill_type: skill_type_2,
+                },
+            )
+            | (
+                StatusResistance {
+                    status_type,
+                    skill_type,
+                },
+                StatusResistance {
                     status_type: status_type_2,
                     skill_type: skill_type_2,
                 },
