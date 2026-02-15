@@ -166,6 +166,7 @@ pub fn Node(
             }
             (PurchaseStatus::Purchased, MetaStatus::Ascended) => "xl:drop-shadow-[0_0_6px_cyan]",
 
+            (PurchaseStatus::Purchased, MetaStatus::Locked) => "xl:drop-shadow-[0_0_6px_red]",
             (_, MetaStatus::Locked) => "xl:drop-shadow-[0_0_2px_red]",
         }
     };
@@ -176,7 +177,9 @@ pub fn Node(
             (PurchaseStatus::Purchaseable, _) => {
                 "saturate-50 cursor-pointer group active:brightness-50 pointer-events: none"
             }
-            (_, MetaStatus::Locked) => "saturate-50 brightness-30 pointer-events: none",
+            (PurchaseStatus::Inactive, MetaStatus::Locked) => {
+                "saturate-50 brightness-30 pointer-events: none"
+            }
             (PurchaseStatus::Inactive, _) => "saturate-20 brightness-30 pointer-events: none",
             _ => "pointer-events: none",
         }
@@ -186,7 +189,7 @@ pub fn Node(
         let status = node_status();
         match (status.purchase_status, status.meta_status) {
             (PurchaseStatus::Purchaseable, _) => "",
-            (_, MetaStatus::Locked) => "brightness(0.3) saturate(0.5)",
+            (PurchaseStatus::Inactive, MetaStatus::Locked) => "brightness(0.3) saturate(0.5)",
             _ => "",
         }
     };

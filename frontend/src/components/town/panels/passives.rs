@@ -1,4 +1,4 @@
-use leptos::{html::*, leptos_dom::logging::console_log, prelude::*, task::spawn_local};
+use leptos::{html::*, prelude::*, task::spawn_local};
 
 use std::{
     collections::{HashMap, HashSet, VecDeque},
@@ -815,8 +815,15 @@ fn AscendNode(
         max_node_level.min(max_connection_level)
     });
 
+    let is_invalid = Memo::new(move |_|
+        match active_tab.get() {
+            PassivesTab::Ascend => node_level.get() > max_upgrade_level.get(),
+            PassivesTab::Build => passives_tree_build.read().contains(&node_id) as u8 > max_upgrade_level.get(),
+        }
+    );
+
     Effect::new(move || {
-        if node_level.get() > max_upgrade_level.get() {
+        if is_invalid.get() {
             invalid_nodes.write().insert(node_id);
         } else {
             invalid_nodes.write().remove(&node_id);
@@ -824,6 +831,13 @@ fn AscendNode(
     });
 
     let node_status = Memo::new(move |_| {
+        if is_invalid.get() {
+            return NodeStatus {
+                purchase_status: PurchaseStatus::Purchased,
+                meta_status: MetaStatus::Locked,
+            };
+        }
+
         let meta_status = if node_level.get() > 0 {
             MetaStatus::Ascended
         } else if node_specs.locked {
@@ -1043,7 +1057,7 @@ fn compute_node_distances(
                 .map(|rune_specs| rune_specs.root_node)
                 .unwrap_or_default();
 
-            (node_specs.initial_node || initial_socket).then(|| {
+            (node_specs.initial_node || initial_socket).then_some({
                 (
                     *node_id,
                     (0, if node_specs.initial_node { 0 } else { 9999 }),
@@ -1070,7 +1084,13 @@ fn compute_node_distances(
         }
     }
 
-    console_log(&format!("{:?}", propagated_tree));
-
     propagated_tree
+}
+
+fn validate_build(
+    passives_tree_specs: &PassivesTreeSpecs,
+    passives_tree_ascension: &PassivesTreeAscension,
+    passives_tree_build: RwSignal<PurchasedNodes>,
+) -> HashSet<PassiveNodeId> {
+    HashSet::new()
 }
