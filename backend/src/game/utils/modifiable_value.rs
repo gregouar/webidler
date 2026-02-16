@@ -201,6 +201,15 @@ impl ModifiableChance {
     }
 }
 
+impl From<&Chance> for ModifiableChance {
+    fn from(value: &Chance) -> Self {
+        ModifiableChance {
+            value: value.value.into(),
+            lucky_chance: value.lucky_chance.into(),
+        }
+    }
+}
+
 impl From<Chance> for ModifiableChance {
     fn from(value: Chance) -> Self {
         ModifiableChance {

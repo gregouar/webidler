@@ -8,11 +8,12 @@ use shared::data::{
     conditional_modifier::ConditionalModifier,
     player::PlayerInventory,
     skill::{
-        ApplyStatusEffect, DamageType, ItemStatsSource, ModifierEffectSource, RestoreType, SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType
+        ApplyStatusEffect, DamageType, ItemStatsSource, ModifierEffectSource, RestoreType,
+        SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
-        EffectsMap, LuckyRollType, MinMax, Modifier, StatConverterSource, StatEffect, StatType,
-        compare_options,
+        EffectsMap, LuckyRollType, MinMax, Modifier, StatConverterSource, StatEffect,
+        StatSkillEffectType, StatType, compare_options,
     },
 };
 use strum::IntoEnumIterator;
@@ -631,20 +632,31 @@ pub fn compute_skill_specs_effect<'a>(
     //     compute_skill_specs_effect(skill_type, skill_effect, stats_converted.iter());
     // }
 
-    let ModifiableSkillEffect {
-        success_chance,
-        effect_type,
-        ignore_stat_effects,
-        conditional_modifiers,
-    } = modify_skill_specs_effect(skill_type, skill_effect.into(), effects);
+    // let mut modifiable_skill_effect = skill_effect.into();
 
-    if let SkillEffectType::FlatDamage { damage, .. } = &mut skill_effect.effect_type {
+    // let ModifiableSkillEffect {
+    //     success_chance,
+    //     effect_type,
+    //     ignore_stat_effects,
+    //     conditional_modifiers,
+    // } = modify_skill_specs_effect(skill_type, modifiable_skill_effect, effects);
+
+    (*skill_effect) =
+        modify_skill_specs_effect(skill_type, skill_effect.into(), effects).evaluate();
+
+    if let SkillEffectType::FlatDamage {
+        damage,
+        crit_chance,
+        ..
+    } = &mut skill_effect.effect_type
+    {
+        crit_chance.clamp();
         damage.retain(|_, value| {
-            value.min = value.min.evaluate().max(0.0).into();
-            value.max = value.max.evaluate().max(0.0).into();
+            value.min = value.min.max(0.0).into();
+            value.max = value.max.max(0.0).into();
             value.clamp();
 
-            value.max.evaluate() > 0.0
+            value.max > 0.0
         });
     }
 }
@@ -654,7 +666,7 @@ fn modify_skill_specs_effect<'a>(
     mut skill_effect: ModifiableSkillEffect,
     effects: impl Iterator<Item = &'a StatEffect> + Clone,
 ) -> ModifiableSkillEffect {
-    use SkillEffectType::*;
+    use ModifiableSkillEffectType::*;
 
     let mut stat_converters = Vec::new();
 
@@ -671,7 +683,7 @@ fn modify_skill_specs_effect<'a>(
         if effect.stat.is_match(&StatType::Lucky {
             skill_type: Some(skill_type),
             roll_type: LuckyRollType::SuccessChance {
-                effect_type: (&skill_effect.effect_type).into(),
+                effect_type: Some((&skill_effect.effect_type).into()),
             },
         }) {
             skill_effect
@@ -682,7 +694,7 @@ fn modify_skill_specs_effect<'a>(
 
         if effect.stat.is_match(&StatType::SuccessChance {
             skill_type: Some(skill_type),
-            effect_type: (&skill_effect.effect_type).into(),
+            effect_type: Some((&skill_effect.effect_type).into()),
         }) {
             skill_effect.success_chance.value.apply_effect(effect);
         }
@@ -769,8 +781,6 @@ fn modify_skill_specs_effect<'a>(
                 {
                     crit_damage.apply_effect(effect);
                 }
-
-                crit_chance.clamp();
             }
             ApplyStatus { statuses, duration } => {
                 if statuses.iter().any(|status_effect| {
@@ -954,7 +964,7 @@ fn modify_skill_specs_effect<'a>(
             }
         }
 
-        modify_skill_specs_effect(skill_type, skill_effect, stats_converted.iter());
+        skill_effect = modify_skill_specs_effect(skill_type, skill_effect, stats_converted.iter());
     }
 
     skill_effect
@@ -977,13 +987,23 @@ pub struct ModifiableSkillEffect {
     pub conditional_modifiers: Vec<ConditionalModifier>,
 }
 
-impl From<&SkillEffect> for ModifiableSkillEffect {
-    fn from(value: &SkillEffect) -> Self {
+impl From<&mut SkillEffect> for ModifiableSkillEffect {
+    fn from(value: &mut SkillEffect) -> Self {
         Self {
             success_chance: value.success_chance.into(),
-            effect_type: value.effect_type.into(),
+            effect_type: (&value.effect_type).into(),
             ignore_stat_effects: value.ignore_stat_effects.clone(), // TODO: don't clone?
             conditional_modifiers: value.conditional_modifiers.clone(),
+        }
+    }
+}
+impl ModifiableSkillEffect {
+    fn evaluate(self) -> SkillEffect {
+        SkillEffect {
+            success_chance: self.success_chance.evaluate(),
+            effect_type: self.effect_type.evaluate(),
+            ignore_stat_effects: self.ignore_stat_effects,
+            conditional_modifiers: self.conditional_modifiers,
         }
     }
 }
@@ -1007,6 +1027,37 @@ enum ModifiableSkillEffectType {
     Resurrect,
 }
 
+impl ModifiableSkillEffectType {
+    fn evaluate(self) -> SkillEffectType {
+        use SkillEffectType::*;
+        match self {
+            ModifiableSkillEffectType::FlatDamage {
+                damage,
+                crit_chance,
+                crit_damage,
+            } => FlatDamage {
+                // damage: todo!(),
+                crit_chance: todo!(),
+                crit_damage: todo!(),
+            },
+            ModifiableSkillEffectType::ApplyStatus { statuses, duration } => ApplyStatus {
+                statuses: todo!(),
+                duration: todo!(),
+            },
+            ModifiableSkillEffectType::Restore {
+                restore_type,
+                value,
+                modifier,
+            } => Restore {
+                restore_type,
+                value: todo!(),
+                modifier,
+            },
+            ModifiableSkillEffectType::Resurrect => Resurrect,
+        }
+    }
+}
+
 impl From<&SkillEffectType> for ModifiableSkillEffectType {
     fn from(value: &SkillEffectType) -> Self {
         use ModifiableSkillEffectType::*;
@@ -1016,24 +1067,40 @@ impl From<&SkillEffectType> for ModifiableSkillEffectType {
                 crit_chance,
                 crit_damage,
             } => FlatDamage {
-                damage: to_modifiable_damage_map(damage_map),
+                damage: to_modifiable_damage_map(damage),
                 crit_chance: crit_chance.into(),
-                crit_damage: crit_damage.into(),
+                crit_damage: (*crit_damage).into(),
             },
             SkillEffectType::ApplyStatus { statuses, duration } => ApplyStatus {
                 statuses: statuses.iter().map(|s| s.into()).collect(),
-                duration: duration.into(),
+                duration: (*duration).into(),
             },
             SkillEffectType::Restore {
                 restore_type,
                 value,
                 modifier,
             } => Restore {
-                restore_type,
-                value: value.into(),
-                modifier,
+                restore_type: *restore_type,
+                value: (*value).into(),
+                modifier: *modifier,
             },
             SkillEffectType::Resurrect => Resurrect,
+        }
+    }
+}
+
+impl From<&ModifiableSkillEffectType> for StatSkillEffectType {
+    fn from(value: &ModifiableSkillEffectType) -> Self {
+        use StatSkillEffectType::*;
+        match value {
+            ModifiableSkillEffectType::FlatDamage { .. } => FlatDamage {},
+            ModifiableSkillEffectType::ApplyStatus { statuses, .. } => ApplyStatus {
+                status_type: statuses.first().map(|status| (&status.status_type).into()),
+            },
+            ModifiableSkillEffectType::Restore { restore_type, .. } => Restore {
+                restore_type: Some(*restore_type),
+            },
+            ModifiableSkillEffectType::Resurrect => Resurrect,
         }
     }
 }
