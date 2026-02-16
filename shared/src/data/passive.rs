@@ -6,7 +6,7 @@ use strum_macros::EnumIter;
 
 use crate::data::{item::ItemSpecs, stat_effect::EffectsMap, trigger::TriggerSpecs};
 
-pub use super::stat_effect::StatEffect;
+use super::stat_effect::StatEffect;
 
 pub type PassiveNodeId = uuid::Uuid;
 

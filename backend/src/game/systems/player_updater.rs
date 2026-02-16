@@ -9,12 +9,12 @@ use shared::{
         character_status::StatusSpecs,
         item::{SkillRange, SkillShape},
         item_affix::AffixEffectScope,
-        modifier::{ModifiableValue, Modifier},
         passive::{PassivesTreeSpecs, PassivesTreeState},
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
         skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
-        stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatType},
-        temple::StatEffect,
+        stat_effect::{
+            EffectsMap, Modifier, StatConverterSource, StatConverterSpecs, StatEffect, StatType,
+        },
         trigger::{EventTrigger, HitTrigger, TriggerTarget, TriggeredEffect},
     },
 };
@@ -22,6 +22,7 @@ use shared::{
 use crate::game::{
     data::event::EventsQueue,
     systems::{stats_updater, statuses_controller},
+    utils::modifiable_value::ModifiableValue,
 };
 
 use super::{characters_updater, passives_controller, skills_updater};
@@ -136,23 +137,19 @@ pub fn update_player_specs(
         .map(|(_, item)| item)
         .filter_map(|item| item.armor_specs.as_ref())
         .map(|spec| (spec.armor, spec.block))
-        .fold((0.0, 0.0), |(a_sum, b_sum), (a, b)| {
-            (a_sum + a.evaluate(), b_sum + b.evaluate())
-        });
+        .fold((0.0, 0.0), |(a_sum, b_sum), (a, b)| (a_sum + a, b_sum + b));
 
-    player_specs
+    (*player_specs
         .character_specs
         .armor
         .entry(DamageType::Physical)
-        .or_default()
-        .apply_modifier(total_armor, Modifier::Flat);
+        .or_default()) += total_armor;
     player_specs
         .character_specs
         .block
         .entry(SkillType::Attack)
         .or_default()
-        .value
-        .apply_modifier(total_block as f64, Modifier::Flat);
+        .value += total_block;
 
     player_specs.character_specs.triggers = passives_tree_state
         .purchased_nodes
@@ -242,9 +239,9 @@ fn compute_player_specs(
                 effect_type: SkillEffectType::Restore {
                     restore_type,
                     value: ChanceRange {
-                        min: value.clone(),
-                        max: value.clone(),
-                        lucky_chance: 0.0.into(),
+                        min: value.evaluate(),
+                        max: value.evaluate(),
+                        lucky_chance: 0.0,
                     },
                     modifier: Modifier::Flat,
                 },

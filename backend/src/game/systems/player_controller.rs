@@ -71,16 +71,8 @@ impl PlayerController {
 
         let mut friends = vec![];
 
-        let min_mana_needed = if player_specs
-            .character_specs
-            .take_from_mana_before_life
-            .evaluate()
-            > 0.0
-            || player_specs
-                .character_specs
-                .take_from_life_before_mana
-                .evaluate()
-                > 0.0
+        let min_mana_needed = if player_specs.character_specs.take_from_mana_before_life > 0.0
+            || player_specs.character_specs.take_from_life_before_mana > 0.0
         {
             0.0
         } else {
@@ -88,7 +80,7 @@ impl PlayerController {
                 .skills_specs
                 .iter()
                 .take(player_specs.max_skills as usize)
-                .map(|s| s.mana_cost.evaluate())
+                .map(|s| s.mana_cost)
                 .max_by(|a, b| a.total_cmp(b))
                 .unwrap_or_default()
         };
@@ -102,8 +94,8 @@ impl PlayerController {
         {
             // Always keep enough mana for a manual trigger, could be optional
             if (!player_specs.auto_skills.get(i).unwrap_or(&false)
-                || (skill_specs.mana_cost.evaluate() > 0.0
-                    && mana_available < min_mana_needed + skill_specs.mana_cost.evaluate()))
+                || (skill_specs.mana_cost > 0.0
+                    && mana_available < min_mana_needed + skill_specs.mana_cost))
                 && !self.use_skills.contains(&i)
             {
                 continue;

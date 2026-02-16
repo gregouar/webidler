@@ -5,15 +5,22 @@ use shared::data::{
     character_status::StatusSpecs,
     item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSpecs, WeaponSpecs},
     item_affix::AffixEffectScope,
-    modifier::Modifier,
     skill::{
         ApplyStatusEffect, BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{LuckyRollType, MinMax, StatEffect, StatType},
+    stat_effect::{LuckyRollType, MinMax, Modifier, StatEffect, StatType},
 };
 
-use crate::game::{data::items_store::ItemsStore, utils::rng::Rollable};
+use crate::game::{
+    data::items_store::ItemsStore,
+    utils::{
+        modifiable_value::{
+            ModifiableChance, ModifiableDamageMap, ModifiableValue, to_modifiable_damage_map,
+        },
+        rng::Rollable,
+    },
+};
 
 const WEAPON_POISON_DAMAGE_DURATION: f64 = 2.0;
 
@@ -65,11 +72,67 @@ fn compute_weapon_specs(
     quality: f32,
     effects: &[StatEffect],
 ) -> WeaponSpecs {
-    weapon_specs.damage.values_mut().for_each(|value| {
-        value.min.apply_modifier(quality as f64, Modifier::More);
-        value.max.apply_modifier(quality as f64, Modifier::More);
-    });
+    let mut modifiable_weapon_specs = ModifiableWeaponSpecs {
+        cooldown: weapon_specs.cooldown.into(),
+        damage: to_modifiable_damage_map(&weapon_specs.damage),
+        crit_chance: weapon_specs.crit_chance.into(),
+        crit_damage: weapon_specs.crit_damage.into(),
+    };
 
+    modifiable_weapon_specs
+        .damage
+        .values_mut()
+        .for_each(|value| {
+            value.min.apply_modifier(quality as f64, Modifier::More);
+            value.max.apply_modifier(quality as f64, Modifier::More);
+        });
+
+    let ModifiableWeaponSpecs {
+        cooldown,
+        damage,
+        crit_chance,
+        crit_damage,
+    } = modify_weapon_specs(modifiable_weapon_specs, effects);
+
+    weapon_specs.cooldown = cooldown.evaluate().max(0.0).into();
+    weapon_specs.crit_chance = crit_chance.evaluate();
+    weapon_specs.crit_chance.clamp();
+    weapon_specs.crit_damage = crit_damage.evaluate();
+
+    weapon_specs.damage = damage
+        .iter()
+        .filter_map(|(key, value)| {
+            let value = ChanceRange {
+                min: value.min.evaluate(),
+                max: value.max.evaluate(),
+                lucky_chance: value.lucky_chance.evaluate(),
+            };
+            (value.max > 0.0).then_some((*key, value))
+        })
+        .collect();
+
+    // .retain(|_, value| {
+    //     value.max = value.max.evaluate().max(0.0).into();
+    //     value.min = value.min.evaluate().max(0.0).into();
+    //     value.clamp();
+
+    //     value.max.evaluate() > 0.0
+    // });
+
+    weapon_specs
+}
+
+struct ModifiableWeaponSpecs {
+    cooldown: ModifiableValue<f32>,
+    damage: ModifiableDamageMap,
+    crit_chance: ModifiableChance,
+    crit_damage: ModifiableValue<f64>,
+}
+
+fn modify_weapon_specs(
+    mut weapon_specs: ModifiableWeaponSpecs,
+    effects: &[StatEffect],
+) -> ModifiableWeaponSpecs {
     for effect in effects {
         match effect.stat {
             StatType::Speed(Some(SkillType::Attack) | None) => {
@@ -130,17 +193,6 @@ fn compute_weapon_specs(
             _ => {}
         }
     }
-
-    weapon_specs.cooldown = weapon_specs.cooldown.evaluate().max(0.0).into();
-    weapon_specs.crit_chance.clamp();
-    weapon_specs.damage.retain(|_, value| {
-        value.max = value.max.evaluate().max(0.0).into();
-        value.min = value.min.evaluate().max(0.0).into();
-        value.clamp();
-
-        value.max.evaluate() > 0.0
-    });
-
     weapon_specs
 }
 
@@ -149,9 +201,33 @@ fn compute_armor_specs(
     quality: f32,
     effects: &[StatEffect],
 ) -> ArmorSpecs {
-    armor_specs
+    let mut modifiable_armor_specs = ModifiableArmorSpecs {
+        armor: armor_specs.armor.into(),
+        block: armor_specs.block.into(),
+    };
+
+    modifiable_armor_specs
         .armor
         .apply_modifier(quality as f64, Modifier::More);
+
+    let ModifiableArmorSpecs { armor, block } = modify_armor_specs(modifiable_armor_specs, effects);
+
+    armor_specs.armor = armor.evaluate();
+    armor_specs.block = block.evaluate().clamp(0.0, 100.0);
+
+    armor_specs
+}
+
+#[derive(Debug, Clone)]
+struct ModifiableArmorSpecs {
+    pub armor: ModifiableValue<f64>,
+    pub block: ModifiableValue<f32>,
+}
+
+fn modify_armor_specs(
+    mut armor_specs: ModifiableArmorSpecs,
+    effects: &[StatEffect],
+) -> ModifiableArmorSpecs {
     for effect in effects {
         match effect.stat {
             StatType::Armor(Some(DamageType::Physical)) => armor_specs.armor.apply_effect(effect),
@@ -161,8 +237,6 @@ fn compute_armor_specs(
             _ => {}
         }
     }
-    armor_specs.block = armor_specs.block.evaluate().clamp(0.0, 100.0).into();
-
     armor_specs
 }
 
@@ -177,7 +251,6 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                 .collect(),
             crit_chance: weapon_specs.crit_chance,
             crit_damage: weapon_specs.crit_damage,
-            ignore_armor: false,
         },
         success_chance: Chance::new_sure(),
         ignore_stat_effects: Default::default(),
@@ -212,7 +285,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         icon: "skills/attack.svg".to_string(),
         description: "A simple attack with your weapon.".to_string(),
         skill_type: SkillType::Attack,
-        cooldown: weapon_specs.cooldown.evaluate(),
+        cooldown: weapon_specs.cooldown,
         mana_cost: 0.0,
         upgrade_cost: 10.0 + 0.5 * item_level as f64,
         upgrade_effects: vec![StatEffect {

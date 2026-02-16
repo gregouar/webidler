@@ -11,6 +11,23 @@ use crate::{
     },
 };
 
+pub fn compute_more_factor(value: f64) -> f64 {
+    if value >= 0.0 {
+        value
+    } else {
+        // We want that negative effect are diminishingly interesting
+        let div = (1.0 - value * 0.01).max(0.0);
+
+        if value <= -1e300 {
+            -100.0
+        } else if div != 0.0 {
+            value / div
+        } else {
+            0.0
+        }
+    }
+}
+
 pub fn exponential(level: AreaLevel, factor: f64) -> f64 {
     10f64.powf(level.saturating_sub(1) as f64 * factor)
 }

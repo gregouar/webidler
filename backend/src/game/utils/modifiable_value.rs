@@ -1,17 +1,14 @@
+use std::{cmp::Ordering, collections::HashMap};
+
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use std::cmp::Ordering;
-
-use crate::data::temple::StatEffect;
-
-#[derive(
-    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,
-)]
-pub enum Modifier {
-    #[default]
-    Multiplier, // Would love to rename to Increased
-    Flat,
-    More,
-}
+use shared::{
+    computations::compute_more_factor,
+    data::{
+        chance::{Chance, ChanceRange},
+        skill::DamageType,
+        stat_effect::{DamageMap, Modifier, StatEffect},
+    },
+};
 
 #[derive(Debug, Clone, Copy, Default)]
 pub struct ModifiableValue<T> {
@@ -189,19 +186,83 @@ impl BaseModifiableValue for f32 {
     }
 }
 
-pub fn compute_more_factor(value: f64) -> f64 {
-    if value >= 0.0 {
-        value
-    } else {
-        // We want that negative effect are diminishingly interesting
-        let div = (1.0 - value * 0.01).max(0.0);
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
+pub struct ModifiableChance {
+    pub value: ModifiableValue<f32>,
+    pub lucky_chance: ModifiableValue<f32>,
+}
 
-        if value <= -1e300 {
-            -100.0
-        } else if div != 0.0 {
-            value / div
-        } else {
-            0.0
+impl ModifiableChance {
+    pub fn evaluate(self) -> Chance {
+        Chance {
+            value: self.value.evaluate(),
+            lucky_chance: self.lucky_chance.evaluate(),
         }
     }
+}
+
+impl From<Chance> for ModifiableChance {
+    fn from(value: Chance) -> Self {
+        ModifiableChance {
+            value: value.value.into(),
+            lucky_chance: value.lucky_chance.into(),
+        }
+    }
+}
+
+// impl From<ModifiableChance> for Chance {
+//     fn from(value: ModifiableChance) -> Self {
+//         Self {
+//             value: value.value.evaluate(),
+//             lucky_chance: value.lucky_chance.evaluate(),
+//         }
+//     }
+// }
+
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
+pub struct ModifiableChanceRange<T> {
+    pub min: T,
+    pub max: T,
+    pub lucky_chance: ModifiableValue<f32>,
+}
+
+impl<T> ModifiableChanceRange<T> {
+    pub fn evaluate(self) -> ChanceRange<T> {
+        ChanceRange {
+            min: self.min,
+            max: self.max,
+            lucky_chance: self.lucky_chance.evaluate(),
+        }
+    }
+}
+
+impl<T> From<ChanceRange<T>> for ModifiableChanceRange<ModifiableValue<T>>
+where
+    T: Default,
+{
+    fn from(value: ChanceRange<T>) -> Self {
+        ModifiableChanceRange {
+            min: value.min.into(),
+            max: value.max.into(),
+            lucky_chance: value.lucky_chance.into(),
+        }
+    }
+}
+
+pub type ModifiableDamageMap = HashMap<DamageType, ModifiableChanceRange<ModifiableValue<f64>>>;
+
+pub fn to_modifiable_damage_map(damage_map: &DamageMap) -> ModifiableDamageMap {
+    damage_map
+        .iter()
+        .map(|(d, c)| {
+            (
+                *d,
+                ModifiableChanceRange {
+                    min: c.min.into(),
+                    max: c.max.into(),
+                    lucky_chance: c.lucky_chance.into(),
+                },
+            )
+        })
+        .collect()
 }

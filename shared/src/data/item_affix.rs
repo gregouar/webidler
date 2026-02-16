@@ -1,12 +1,11 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 
-use crate::data::{chance::ChanceRange, modifier::Modifier};
-
-use super::{
+use crate::data::{
     area::AreaLevel,
+    chance::ChanceRange,
     item::ItemCategory,
-    stat_effect::{StatEffect, StatType},
+    stat_effect::{Modifier, StatEffect, StatType},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]

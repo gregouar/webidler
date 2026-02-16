@@ -1,18 +1,16 @@
 use serde::{Deserialize, Deserializer, Serialize};
 
-use crate::data::modifier::ModifiableValue;
-
 #[derive(Serialize, Debug, Clone, Copy, PartialEq, Default)]
 pub struct Chance {
-    pub value: ModifiableValue<f32>,
-    pub lucky_chance: ModifiableValue<f32>,
+    pub value: f32,
+    pub lucky_chance: f32,
 }
 
 #[derive(Serialize, Debug, Clone, Copy, PartialEq, Default)]
 pub struct ChanceRange<T> {
     pub min: T,
     pub max: T,
-    pub lucky_chance: ModifiableValue<f32>,
+    pub lucky_chance: f32,
 }
 
 impl Chance {

@@ -8,14 +8,12 @@ use shared::data::{
     conditional_modifier::Condition,
     item::{ItemModifiers, ItemRarity, ItemSlot},
     item_affix::{AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix},
-    modifier::Modifier,
     passive::PassivesTreeAscension,
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{
-        LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatSkillEffectType,
-        StatStatusType,
+        LuckyRollType, MinMax, Modifier, StatConverterSource, StatConverterSpecs, StatEffect,
+        StatSkillEffectType, StatStatusType, StatType,
     },
-    temple::{StatEffect, StatType},
     trigger::HitTrigger,
     user::UserCharacterId,
 };
@@ -488,8 +486,7 @@ impl From<OldStatConverterSpecs> for StatConverterSpecs {
     fn from(value: OldStatConverterSpecs) -> Self {
         Self {
             source: value.source.into(),
-            target_stat: Box::new((*value.target_stat).into()),
-            target_modifier: value.target_modifier,
+            stat: Box::new((*value.target_stat).into()),
             is_extra: value.is_extra,
             skill_type: value.skill_type,
         }

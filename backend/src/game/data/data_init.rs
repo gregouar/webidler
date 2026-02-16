@@ -36,8 +36,8 @@ impl DataInit<&AreaSpecs> for AreaState {
 impl DataInit<&CharacterSpecs> for CharacterState {
     fn init(specs: &CharacterSpecs) -> Self {
         CharacterState {
-            life: specs.max_life.evaluate(),
-            mana: specs.max_mana.evaluate(),
+            life: specs.max_life,
+            mana: specs.max_mana,
 
             statuses: StatusMap::default(),
             dirty_specs: true,

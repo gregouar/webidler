@@ -1,6 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::{skill::SkillType, stat_effect::StatStatusType, temple::StatEffect};
+use crate::data::{
+    skill::SkillType,
+    stat_effect::{StatEffect, StatStatusType},
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ConditionalModifier {

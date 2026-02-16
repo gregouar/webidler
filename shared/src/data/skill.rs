@@ -5,15 +5,12 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     chance::{Chance, ChanceRange},
     conditional_modifier::ConditionalModifier,
-    modifier::{ModifiableValue, Modifier},
-    stat_effect::{MinMax, StatType},
+    stat_effect::{MinMax, Modifier, StatEffect, StatType},
     trigger::TriggerSpecs,
 };
 
 pub use super::stat_effect::DamageType;
-use super::{
-    character_status::StatusSpecs, item::ItemSlot, passive::StatEffect, stat_effect::DamageMap,
-};
+use super::{character_status::StatusSpecs, item::ItemSlot, stat_effect::DamageMap};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BaseSkillSpecs {
@@ -46,8 +43,8 @@ pub struct BaseSkillSpecs {
 pub struct SkillSpecs {
     pub base: BaseSkillSpecs,
 
-    pub cooldown: ModifiableValue<f32>,
-    pub mana_cost: ModifiableValue<f64>,
+    pub cooldown: f32,
+    pub mana_cost: f64,
 
     pub upgrade_level: u16,
     pub next_upgrade_cost: f64,
@@ -185,17 +182,15 @@ pub enum SkillEffectType {
         #[serde(default)]
         crit_chance: Chance,
         #[serde(default)]
-        crit_damage: ModifiableValue<f64>,
-        #[serde(default, skip_serializing)]
-        ignore_armor: bool, // TODO: Remove
+        crit_damage: f64,
     },
     ApplyStatus {
         statuses: Vec<ApplyStatusEffect>,
-        duration: ChanceRange<ModifiableValue<f64>>,
+        duration: ChanceRange<f64>,
     },
     Restore {
         restore_type: RestoreType,
-        value: ChanceRange<ModifiableValue<f64>>,
+        value: ChanceRange<f64>,
         modifier: Modifier,
     },
     Resurrect,
@@ -205,7 +200,7 @@ pub enum SkillEffectType {
 pub struct ApplyStatusEffect {
     pub status_type: StatusSpecs,
     #[serde(default)]
-    pub value: ChanceRange<ModifiableValue<f64>>,
+    pub value: ChanceRange<f64>,
     #[serde(default)]
     pub cumulate: bool,
     #[serde(default)]

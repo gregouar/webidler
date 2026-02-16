@@ -106,14 +106,14 @@
       },
       {
         "scope": "Global",
-        "stat": {"Block": "Attack"},
+        "stat": { "Block": "Attack" },
         "modifier": "Flat",
         "value": 10,
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": {"Block": "Spell"},
+        "stat": { "Block": "Spell" },
         "modifier": "Flat",
         "value": 10,
         "ignore_quality": true
@@ -250,10 +250,9 @@
             "source": {
               "Damage": { "damage_type": "Physical" }
             },
-            "target_stat": {
+            "stat": {
               "Damage": { "damage_type": "Fire" }
             },
-            "target_modifier": "Flat",
             "is_extra": true
           }
         },

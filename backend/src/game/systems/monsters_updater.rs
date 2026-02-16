@@ -6,10 +6,8 @@ use shared::{
         area::AreaThreat,
         character::CharacterId,
         character_status::StatusSpecs,
-        modifier::Modifier,
         monster::{MonsterSpecs, MonsterState},
-        stat_effect::StatType,
-        temple::StatEffect,
+        stat_effect::{Modifier, StatEffect, StatType},
     },
 };
 

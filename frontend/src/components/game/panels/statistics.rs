@@ -446,7 +446,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         {move || {
                             let mana_on_hit = effect(
                                 StatType::RestoreOnHit {
-                                    restore_type: RestoreType::Life,
+                                    restore_type: RestoreType::Mana,
                                     skill_type: Some(SkillType::Attack),
                                 },
                                 Modifier::Flat,

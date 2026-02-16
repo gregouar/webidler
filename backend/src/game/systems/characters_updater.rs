@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 use strum::IntoEnumIterator;
 
 use shared::{
@@ -7,17 +7,20 @@ use shared::{
         area::AreaThreat,
         character::{CharacterId, CharacterSpecs, CharacterState},
         conditional_modifier::ConditionalModifier,
-        modifier::Modifier,
-        passive::StatEffect,
         skill::{DamageType, RestoreType, SkillType},
-        stat_effect::{LuckyRollType, StatConverterSource, StatType},
+        stat_effect::{
+            LuckyRollType, Modifier, StatConverterSource, StatEffect, StatStatusType, StatType,
+        },
     },
 };
 
 use crate::game::{
     data::event::{EventsQueue, GameEvent},
     systems::{characters_controller::restore_character, stats_updater},
-    utils::rng::Rollable,
+    utils::{
+        modifiable_value::{ModifiableChance, ModifiableValue},
+        rng::Rollable,
+    },
 };
 
 use super::statuses_controller;
@@ -51,23 +54,19 @@ pub fn update_character_state(
     restore_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Life,
-        elapsed_time_f64 * character_specs.life_regen.evaluate() * 0.1,
+        elapsed_time_f64 * character_specs.life_regen * 0.1,
         Modifier::Multiplier,
     );
 
     restore_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Mana,
-        elapsed_time_f64 * character_specs.mana_regen.evaluate() * 0.1,
+        elapsed_time_f64 * character_specs.mana_regen * 0.1,
         Modifier::Multiplier,
     );
 
-    character_state.life = character_state
-        .life
-        .min(character_specs.max_life.evaluate());
-    character_state.mana = character_state
-        .mana
-        .min(character_specs.max_mana.evaluate());
+    character_state.life = character_state.life.min(character_specs.max_life);
+    character_state.mana = character_state.mana.min(character_specs.max_mana);
 
     if character_state.life < 0.5 {
         character_state.life = character_state.life.min(0.0);
@@ -110,6 +109,130 @@ fn compute_character_specs(
     character_specs: &mut CharacterSpecs,
     effects: &[StatEffect],
 ) -> Vec<StatEffect> {
+    let (
+        ModifiableCharacterSpecs {
+            max_life,
+            life_regen,
+            max_mana,
+            mana_regen,
+            take_from_mana_before_life,
+            take_from_life_before_mana,
+            armor,
+            block,
+            block_damage,
+            evade,
+            evade_damage,
+            status_resistances,
+            stun_lockout,
+            damage_resistance,
+            conditional_modifiers,
+        },
+        stats_converted,
+    ) = modify_character_specs(
+        ModifiableCharacterSpecs {
+            max_life: character_specs.max_life.into(),
+            life_regen: character_specs.life_regen.into(),
+            max_mana: character_specs.max_mana.into(),
+            mana_regen: character_specs.mana_regen.into(),
+            take_from_mana_before_life: character_specs.take_from_mana_before_life.into(),
+            take_from_life_before_mana: character_specs.take_from_life_before_mana.into(),
+            armor: character_specs
+                .armor
+                .iter()
+                .map(|(x, y)| (*x, (*y).into()))
+                .collect(),
+            block: character_specs
+                .block
+                .iter()
+                .map(|(x, y)| (*x, (*y).into()))
+                .collect(),
+            block_damage: character_specs.block_damage.into(),
+            evade: character_specs
+                .evade
+                .iter()
+                .map(|(x, y)| (*x, (*y).into()))
+                .collect(),
+            evade_damage: character_specs.evade_damage.into(),
+            status_resistances: character_specs
+                .status_resistances
+                .iter()
+                .map(|(x, y)| (x.clone(), (*y).into()))
+                .collect(),
+            stun_lockout: character_specs.stun_lockout.into(),
+            damage_resistance: character_specs
+                .damage_resistance
+                .iter()
+                .map(|(x, y)| (*x, (*y).into()))
+                .collect(),
+            conditional_modifiers: Default::default(),
+        },
+        effects,
+    );
+
+    character_specs.max_life = max_life.evaluate().max(1.0).into();
+    character_specs.life_regen = life_regen.evaluate();
+    character_specs.max_mana = max_mana.evaluate().max(0.0).into();
+    character_specs.mana_regen = mana_regen.evaluate();
+
+    character_specs.take_from_mana_before_life = take_from_mana_before_life.evaluate();
+    character_specs.take_from_life_before_mana = take_from_life_before_mana.evaluate();
+
+    character_specs.armor = armor.into_iter().map(|(x, y)| (x, y.evaluate())).collect();
+
+    character_specs.block = block.into_iter().map(|(x, y)| (x, y.evaluate())).collect();
+    for block in character_specs.block.values_mut() {
+        block.clamp();
+        block.value = block.value.min(MAX_BLOCK).into();
+    }
+    character_specs.block_damage = block_damage.evaluate().clamp(0.0, 100.0).into();
+
+    character_specs.evade = evade.into_iter().map(|(x, y)| (x, y.evaluate())).collect();
+    for evade in character_specs.evade.values_mut() {
+        evade.clamp();
+        evade.value = evade.value.min(MAX_EVADE).into();
+    }
+    character_specs.evade_damage = evade_damage.evaluate().clamp(0.0, 100.0).into();
+
+    character_specs.status_resistances = status_resistances
+        .into_iter()
+        .map(|(x, y)| (x, y.evaluate()))
+        .collect();
+    character_specs.stun_lockout = stun_lockout.evaluate();
+    character_specs.damage_resistance = damage_resistance
+        .into_iter()
+        .map(|(x, y)| (x, y.evaluate()))
+        .collect();
+
+    character_specs
+        .conditional_modifiers
+        .extend(conditional_modifiers);
+
+    stats_converted
+}
+
+#[derive(Clone, Default)]
+struct ModifiableCharacterSpecs {
+    max_life: ModifiableValue<f64>,
+    life_regen: ModifiableValue<f64>,
+    max_mana: ModifiableValue<f64>,
+    mana_regen: ModifiableValue<f64>,
+    take_from_mana_before_life: ModifiableValue<f32>,
+    take_from_life_before_mana: ModifiableValue<f32>,
+    armor: HashMap<DamageType, ModifiableValue<f64>>,
+    block: HashMap<SkillType, ModifiableChance>,
+    block_damage: ModifiableValue<f32>,
+    evade: HashMap<DamageType, ModifiableChance>,
+    evade_damage: ModifiableValue<f32>,
+    status_resistances: HashMap<(SkillType, Option<StatStatusType>), ModifiableValue<f64>>,
+    stun_lockout: ModifiableValue<f64>,
+    damage_resistance: HashMap<(SkillType, DamageType), ModifiableValue<f64>>,
+    conditional_modifiers: Vec<ConditionalModifier>,
+}
+
+fn modify_character_specs(
+    mut character_specs: ModifiableCharacterSpecs,
+    effects: &[StatEffect],
+) -> (ModifiableCharacterSpecs, Vec<StatEffect>) {
     let mut stat_converters = Vec::new();
 
     for effect in effects.iter() {
@@ -263,7 +386,7 @@ fn compute_character_specs(
             },
 
             StatType::StatConverter(specs) => {
-                stat_converters.push((specs.clone(), effect.value));
+                stat_converters.push((specs.clone(), effect.value, effect.modifier));
             }
             StatType::StatConditionalModifier { stat, conditions } => {
                 character_specs
@@ -305,10 +428,15 @@ fn compute_character_specs(
 
     let mut stats_converted = Vec::with_capacity(stat_converters.len());
     if !stat_converters.is_empty() {
-        stat_converters
-            .sort_by_key(|(stat_converter, _)| (stat_converter.is_extra, stat_converter.source));
+        stat_converters.sort_by_key(|(stat_converter, _, modifier)| {
+            (
+                stat_converter.source,
+                stat_converter.stat.clone(),
+                *modifier,
+            )
+        });
 
-        for (specs, factor) in stat_converters {
+        for (specs, factor, modifier) in stat_converters {
             // let factor = factor * 0.01;
             let amount = match specs.source {
                 StatConverterSource::MaxLife => {
@@ -345,36 +473,15 @@ fn compute_character_specs(
             };
 
             stats_converted.push(StatEffect {
-                stat: (*specs.target_stat).clone(),
-                modifier: specs.target_modifier,
+                stat: (*specs.stat).clone(),
+                modifier,
                 value: amount,
                 bypass_ignore: true,
             });
         }
 
-        compute_character_specs(character_specs, &stats_converted);
+        (character_specs, _) = modify_character_specs(character_specs, &stats_converted);
     }
 
-    character_specs.max_life = character_specs.max_life.evaluate().max(1.0).into();
-    character_specs.max_mana = character_specs.max_mana.evaluate().max(0.0).into();
-    for block in character_specs.block.values_mut() {
-        block.clamp();
-        block.value = block.value.evaluate().min(MAX_BLOCK).into();
-    }
-    character_specs.block_damage = character_specs
-        .block_damage
-        .evaluate()
-        .clamp(0.0, 100.0)
-        .into();
-    for evade in character_specs.evade.values_mut() {
-        evade.clamp();
-        evade.value = evade.value.evaluate().min(MAX_EVADE).into();
-    }
-    character_specs.evade_damage = character_specs
-        .evade_damage
-        .evaluate()
-        .clamp(0.0, 100.0)
-        .into();
-
-    stats_converted
+    (character_specs, stats_converted)
 }

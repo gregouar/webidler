@@ -3,16 +3,28 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::{
-    chance::ChanceRange,
-    character_status::StatusSpecs,
-    conditional_modifier::Condition,
-    item::{SkillRange, SkillShape},
-    modifier::{ModifiableValue, Modifier, compute_more_factor},
-    skill::{RestoreType, SkillEffectType},
+use crate::{
+    computations::compute_more_factor,
+    data::{
+        chance::ChanceRange,
+        character_status::StatusSpecs,
+        conditional_modifier::Condition,
+        item::{SkillRange, SkillShape},
+        skill::{RestoreType, SkillEffectType},
+    },
 };
 
 use super::skill::SkillType;
+
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,
+)]
+pub enum Modifier {
+    #[default]
+    Multiplier, // Would love to rename to Increased
+    Flat,
+    More,
+}
 
 #[derive(
     Serialize,
@@ -36,7 +48,7 @@ pub enum DamageType {
     Storm,
 }
 
-pub type DamageMap = HashMap<DamageType, ChanceRange<ModifiableValue<f64>>>;
+pub type DamageMap = HashMap<DamageType, ChanceRange<f64>>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum MinMax {
@@ -469,9 +481,8 @@ impl LuckyRollType {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct StatConverterSpecs {
     pub source: StatConverterSource,
-    pub target_stat: Box<StatType>,
-    pub target_modifier: Modifier,
-
+    pub stat: Box<StatType>,
+    // pub target_modifier: Modifier,
     #[serde(default)]
     pub is_extra: bool,
     #[serde(default)]

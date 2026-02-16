@@ -3,9 +3,7 @@ use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::{
-    chance::Chance, item_affix::AffixType, modifier::ModifiableValue, trigger::TriggerSpecs,
-};
+use crate::data::{chance::Chance, item_affix::AffixType, trigger::TriggerSpecs};
 
 pub use super::skill::{SkillRange, SkillShape};
 use super::{
@@ -186,21 +184,21 @@ pub struct WeaponSpecs {
     #[serde(default)]
     pub shape: SkillShape,
 
-    pub cooldown: ModifiableValue<f32>,
+    pub cooldown: f32,
 
     // #[serde(rename_all = "snake_case")]
     pub damage: DamageMap,
 
     pub crit_chance: Chance,
-    pub crit_damage: ModifiableValue<f64>,
+    pub crit_damage: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct ArmorSpecs {
     #[serde(default)]
-    pub armor: ModifiableValue<f64>,
+    pub armor: f64,
     #[serde(default)]
-    pub block: ModifiableValue<f32>,
+    pub block: f32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]

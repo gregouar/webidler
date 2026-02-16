@@ -177,6 +177,8 @@ Foci (Magical Offhand)
 
     Plate Cuirass
 
+    Mithril Hauberk
+
 🧤 Gloves
 
     Cloth Wraps
@@ -287,6 +289,10 @@ Cloaks
     Scout’s Drape
 
     Greatcloak
+
+    Runed Mantle
+
+    Dragonscale Cape
 
 Relics (Sacred/Folk Items)
 

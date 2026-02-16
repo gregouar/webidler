@@ -395,19 +395,18 @@
             "stat": {
               "StatConverter": {
                 "source": "CritDamage",
-                "target_stat": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
                 "is_extra": true,
                 "skill_type": null
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 25.0
           }
         ],
@@ -1937,7 +1936,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -1957,7 +1958,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -2106,7 +2109,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -2126,7 +2131,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -2351,8 +2358,16 @@
           {
             "stat": {
               "StatConditionalModifier": {
-                "conditions": ["ThreatLevel"],
-                "stat": { "Damage": {} }
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -2365,8 +2380,16 @@
           {
             "stat": {
               "StatConditionalModifier": {
-                "conditions": ["ThreatLevel"],
-                "stat": { "Damage": {} }
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -3848,8 +3871,16 @@
           {
             "stat": {
               "StatConditionalModifier": {
-                "conditions": ["ThreatLevel"],
-                "stat": { "Damage": {} }
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -3862,8 +3893,16 @@
           {
             "stat": {
               "StatConditionalModifier": {
-                "conditions": ["ThreatLevel"],
-                "stat": { "Damage": {} }
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -3974,7 +4013,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -3994,7 +4035,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -4398,8 +4441,16 @@
           {
             "stat": {
               "StatConditionalModifier": {
-                "conditions": ["ThreatLevel"],
-                "stat": { "Damage": {} }
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -4412,8 +4463,16 @@
           {
             "stat": {
               "StatConditionalModifier": {
-                "conditions": ["ThreatLevel"],
-                "stat": { "Damage": {} }
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -4465,7 +4524,7 @@
         "effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
@@ -4479,7 +4538,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
@@ -4882,7 +4941,10 @@
         "effects": [
           {
             "stat": {
-              "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+              "RestoreOnHit": {
+                "restore_type": "Mana",
+                "skill_type": "Attack"
+              }
             },
             "modifier": "Flat",
             "value": 1.0
@@ -4893,7 +4955,10 @@
         "upgrade_effects": [
           {
             "stat": {
-              "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+              "RestoreOnHit": {
+                "restore_type": "Mana",
+                "skill_type": "Attack"
+              }
             },
             "modifier": "Flat",
             "value": 1.0
@@ -5577,7 +5642,10 @@
         "effects": [
           {
             "stat": {
-              "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+              "RestoreOnHit": {
+                "restore_type": "Life",
+                "skill_type": "Attack"
+              }
             },
             "modifier": "Flat",
             "value": 1.0
@@ -5588,7 +5656,10 @@
         "upgrade_effects": [
           {
             "stat": {
-              "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+              "RestoreOnHit": {
+                "restore_type": "Life",
+                "skill_type": "Attack"
+              }
             },
             "modifier": "Flat",
             "value": 1.0
@@ -5980,7 +6051,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -6000,7 +6073,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -6140,7 +6215,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -6160,7 +6237,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -6227,8 +6306,16 @@
           {
             "stat": {
               "StatConditionalModifier": {
-                "conditions": ["ThreatLevel"],
-                "stat": { "Damage": {} }
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -6241,8 +6328,16 @@
           {
             "stat": {
               "StatConditionalModifier": {
-                "conditions": ["ThreatLevel"],
-                "stat": { "Damage": {} }
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -6308,7 +6403,7 @@
         "effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
@@ -6322,7 +6417,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
@@ -6481,7 +6576,9 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["LowLife"]
+                "conditions": [
+                  "LowLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -6506,7 +6603,9 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["LowLife"]
+                "conditions": [
+                  "LowLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -8314,10 +8413,9 @@
                 "source": {
                   "Block": "Attack"
                 },
-                "target_stat": {
+                "stat": {
                   "Block": "Spell"
                 },
-                "target_modifier": "Flat",
                 "is_extra": false,
                 "skill_type": null
               }
@@ -8877,7 +8975,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -8897,7 +8997,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -9116,7 +9218,7 @@
         "effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
@@ -9130,7 +9232,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
@@ -9247,8 +9349,16 @@
           {
             "stat": {
               "StatConditionalModifier": {
-                "conditions": ["ThreatLevel"],
-                "stat": { "Damage": {} }
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -9261,8 +9371,16 @@
           {
             "stat": {
               "StatConditionalModifier": {
-                "conditions": ["ThreatLevel"],
-                "stat": { "Damage": {} }
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -9578,7 +9696,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -9598,7 +9718,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -10239,7 +10361,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -10259,7 +10383,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -10468,8 +10594,7 @@
             "stat": {
               "StatConverter": {
                 "source": "LifeRegen",
-                "target_stat": "ManaRegen",
-                "target_modifier": "Flat",
+                "stat": "ManaRegen",
                 "is_extra": false,
                 "skill_type": null
               }
@@ -10798,13 +10923,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null,
-                      "min_max": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
@@ -10815,6 +10933,13 @@
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null,
+                      "min_max": null
                     }
                   }
                 ],
@@ -10856,16 +10981,16 @@
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   }
@@ -10908,16 +11033,16 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   }
@@ -10961,16 +11086,16 @@
                     }
                   },
                   {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
                     }
                   }
                 ],
@@ -11006,7 +11131,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -11026,7 +11153,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -11216,7 +11345,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -11236,7 +11367,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -12579,7 +12712,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -12599,7 +12734,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -12978,7 +13115,9 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -12995,7 +13134,9 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -13012,7 +13153,9 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -13029,7 +13172,9 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -13204,7 +13349,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -13224,7 +13371,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -13353,8 +13502,16 @@
           {
             "stat": {
               "StatConditionalModifier": {
-                "conditions": ["ThreatLevel"],
-                "stat": { "Damage": {} }
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "Multiplier",
@@ -13367,8 +13524,16 @@
           {
             "stat": {
               "StatConditionalModifier": {
-                "conditions": ["ThreatLevel"],
-                "stat": { "Damage": {} }
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "Multiplier",

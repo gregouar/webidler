@@ -141,14 +141,13 @@
             "source": {
               "Damage": { "damage_type": "Storm", "min_max": "Max" }
             },
-            "target_stat": {
+            "stat": {
               "Damage": {
                 "skill_type": null,
                 "damage_type": "Storm",
                 "min_max": "Min"
               }
             },
-            "target_modifier": "Flat",
             "is_extra": false,
             "skill_type": null
           }
@@ -243,19 +242,18 @@
         "stat": {
           "StatConverter": {
             "source": "MaxMana",
-            "target_stat": {
+            "stat": {
               "Damage": {
                 "skill_type": null,
                 "damage_type": null,
                 "min_max": null
               }
             },
-            "target_modifier": "Multiplier",
             "is_extra": true,
             "skill_type": null
           }
         },
-        "modifier": "Flat",
+        "modifier": "Multiplier",
         "value": 100
       },
       {

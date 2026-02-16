@@ -35,7 +35,7 @@ pub fn use_skill<'a>(
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
 ) -> f64 {
-    if !skill_state.is_ready || me.1.1.mana < skill_specs.mana_cost.evaluate() {
+    if !skill_state.is_ready || me.1.1.mana < skill_specs.mana_cost {
         return me.1.1.mana;
     }
 
@@ -52,7 +52,7 @@ pub fn use_skill<'a>(
     }
 
     if applied {
-        characters_controller::spend_mana(me.1.0, me.1.1, skill_specs.mana_cost.evaluate());
+        characters_controller::spend_mana(me.1.0, me.1.1, skill_specs.mana_cost);
         skill_state.just_triggered = true;
         skill_state.is_ready = false;
         skill_state.elapsed_cooldown = 0.0;
@@ -345,7 +345,6 @@ fn apply_skill_effect_on_target(
             damage,
             crit_chance,
             crit_damage,
-            ignore_armor: _,
         } => {
             let is_crit = crit_chance.roll_with_seed(seed);
 
@@ -356,7 +355,7 @@ fn apply_skill_effect_on_target(
                         *damage_type,
                         value.roll_with_seed(seed)
                             * (if is_crit {
-                                1.0 + crit_damage.evaluate() * 0.01
+                                1.0 + crit_damage * 0.01
                             } else {
                                 1.0
                             }),
