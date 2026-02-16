@@ -2350,21 +2350,12 @@
         "effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+              "StatConditionalModifier": {
+                "conditions": ["ThreatLevel"],
+                "stat": { "Damage": {} }
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 10.0
           }
         ],
@@ -2373,21 +2364,12 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+              "StatConditionalModifier": {
+                "conditions": ["ThreatLevel"],
+                "stat": { "Damage": {} }
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 5.0
           }
         ],
@@ -3865,21 +3847,12 @@
         "effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+              "StatConditionalModifier": {
+                "conditions": ["ThreatLevel"],
+                "stat": { "Damage": {} }
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 20.0
           }
         ],
@@ -3888,21 +3861,12 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+              "StatConditionalModifier": {
+                "conditions": ["ThreatLevel"],
+                "stat": { "Damage": {} }
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 10.0
           }
         ],
@@ -4433,21 +4397,12 @@
         "effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+              "StatConditionalModifier": {
+                "conditions": ["ThreatLevel"],
+                "stat": { "Damage": {} }
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 10.0
           }
         ],
@@ -4456,21 +4411,12 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+              "StatConditionalModifier": {
+                "conditions": ["ThreatLevel"],
+                "stat": { "Damage": {} }
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 5.0
           }
         ],
@@ -6288,21 +6234,12 @@
         "effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+              "StatConditionalModifier": {
+                "conditions": ["ThreatLevel"],
+                "stat": { "Damage": {} }
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 20.0
           }
         ],
@@ -6311,21 +6248,12 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+              "StatConditionalModifier": {
+                "conditions": ["ThreatLevel"],
+                "stat": { "Damage": {} }
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 10.0
           }
         ],
@@ -9326,21 +9254,12 @@
         "effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+              "StatConditionalModifier": {
+                "conditions": ["ThreatLevel"],
+                "stat": { "Damage": {} }
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 10.0
           }
         ],
@@ -9349,21 +9268,12 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+              "StatConditionalModifier": {
+                "conditions": ["ThreatLevel"],
+                "stat": { "Damage": {} }
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 5.0
           }
         ],
@@ -13450,21 +13360,12 @@
         "effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+              "StatConditionalModifier": {
+                "conditions": ["ThreatLevel"],
+                "stat": { "Damage": {} }
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 10.0
           }
         ],
@@ -13473,21 +13374,12 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+              "StatConditionalModifier": {
+                "conditions": ["ThreatLevel"],
+                "stat": { "Damage": {} }
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 5.0
           }
         ],

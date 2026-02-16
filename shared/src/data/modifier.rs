@@ -17,7 +17,6 @@ pub enum Modifier {
 pub struct ModifiableValue<T> {
     pub base: T,
 
-    pub flat: T,
     pub more: f64,
     pub increased: f64,
     pub decreased: f64,
@@ -30,16 +29,15 @@ where
     pub fn evaluate(&self) -> T {
         let div = (1.0 - self.decreased * 0.01).max(0.0);
 
-        let base = self.base + self.flat;
-        if base.is_negative() {
-            return base;
+        if self.base.is_negative() {
+            return self.base;
         }
 
         let factor = (1.0 + self.more * 0.01)
             * (1.0 + self.increased * 0.01)
             * (if div > 0.0 { 1.0 / div } else { 1.0 });
 
-        base.multiply_value(factor)
+        self.base.multiply_value(factor)
     }
 
     pub fn compute(&mut self) -> T {
@@ -62,7 +60,7 @@ where
                     self.decreased += effect.value
                 }
             }
-            Modifier::Flat => self.flat = self.flat.add_value(effect.value),
+            Modifier::Flat => self.base = self.base.add_value(effect.value),
             Modifier::More => {
                 let value = compute_more_factor(effect.value);
                 self.more = self.more + value + self.more * value * 0.01;

@@ -216,6 +216,7 @@ fn handle_kill_event(
                         if let EventTrigger::OnKill(kill_trigger) = &triggered_effects.trigger
                             && all(kill_trigger.conditions.iter(), |condition| {
                                 check_condition(
+                                    &game_data.area_threat,
                                     &monster_specs.character_specs,
                                     &monster_state.character_state,
                                     condition,
@@ -391,7 +392,7 @@ fn handle_threat_increased_event(
     for monster_state in game_data.monster_states.iter_mut() {
         monster_state.character_state.dirty_specs = true;
     }
-    game_data.player_state.character_state.dirty_specs = true;
+    // game_data.player_state.character_state.dirty_specs = true;
 
     for triggered_effects in game_data
         .player_specs

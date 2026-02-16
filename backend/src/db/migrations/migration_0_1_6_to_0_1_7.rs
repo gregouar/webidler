@@ -421,7 +421,14 @@ impl From<OldStatType> for StatType {
             },
             OldStatType::SkillLevel(skill_type) => SkillLevel(skill_type),
             OldStatType::StatConverter(stat_converter_specs) => {
-                StatConverter(stat_converter_specs.into())
+                if let OldStatConverterSource::ThreatLevel = stat_converter_specs.source {
+                    StatConditionalModifier {
+                        stat: Box::new((*stat_converter_specs.target_stat).into()),
+                        conditions: vec![Condition::ThreatLevel],
+                    }
+                } else {
+                    StatConverter(stat_converter_specs.into())
+                }
             }
             OldStatType::StatConditionalModifier { stat, conditions } => StatConditionalModifier {
                 stat: Box::new((*stat).into()),
@@ -530,7 +537,7 @@ impl From<OldStatConverterSource> for StatConverterSource {
                 damage_type,
                 min_max: None,
             },
-            OldStatConverterSource::ThreatLevel => ThreatLevel,
+            OldStatConverterSource::ThreatLevel => todo!(),
             OldStatConverterSource::MaxLife => MaxLife,
             OldStatConverterSource::MaxMana => MaxMana,
             OldStatConverterSource::ManaRegen => ManaRegen,

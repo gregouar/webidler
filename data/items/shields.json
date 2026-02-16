@@ -113,13 +113,12 @@
       {
         "scope": "Global",
         "stat": {
-          "StatConverter": {
-            "source": "ThreatLevel",
-            "target_stat": { "Damage": {} },
-            "target_modifier": "Multiplier"
+          "StatConditionalModifier": {
+            "conditions": ["ThreatLevel"],
+            "stat": { "Damage": {} }
           }
         },
-        "modifier": "Flat",
+        "modifier": "Multiplier",
         "value": 100,
         "ignore_quality": true
       },

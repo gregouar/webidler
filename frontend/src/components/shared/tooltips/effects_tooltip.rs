@@ -126,7 +126,6 @@ fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> Stri
                 damage_type_str(damage_type)
             )
         }
-        StatConverterSource::ThreatLevel => "Threat Level".into(),
         StatConverterSource::MaxLife => "Maximum Life".into(),
         StatConverterSource::MaxMana => "Maximum Mana".into(),
         StatConverterSource::ManaRegen => "Mana Regeneration".into(),
@@ -745,38 +744,23 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 )
             }
         }
-        StatType::StatConverter(stat_converter_specs) => match stat_converter_specs.source {
-            StatConverterSource::ThreatLevel => {
-                let target_stat_effect = StatEffect {
-                    stat: (*stat_converter_specs.target_stat).clone(),
-                    modifier: stat_converter_specs.target_modifier,
-                    value: value.unwrap_or_default(),
-                    bypass_ignore: false,
-                };
-                format!(
-                    "{} {} per Threat Level",
-                    format_effect_value(&target_stat_effect),
-                    format_multiplier_stat_name(&target_stat_effect.stat),
-                )
-            }
-            _ => {
-                let extra_str = match stat_converter_specs.is_extra {
-                    true => "gained as",
-                    false => "converted to",
-                };
-                format!(
-                    "{}% of {} {extra_str} {}{}",
-                    format_flat_number(value, false),
-                    stat_converter_source_str(stat_converter_specs.source),
-                    match stat_converter_specs.target_modifier {
-                        Modifier::Multiplier => "Increased ",
-                        Modifier::More => "More ",
-                        Modifier::Flat => "",
-                    },
-                    format_multiplier_stat_name(&stat_converter_specs.target_stat)
-                )
-            }
-        },
+        StatType::StatConverter(stat_converter_specs) => {
+            let extra_str = match stat_converter_specs.is_extra {
+                true => "gained as",
+                false => "converted to",
+            };
+            format!(
+                "{}% of {} {extra_str} {}{}",
+                format_flat_number(value, false),
+                stat_converter_source_str(stat_converter_specs.source),
+                match stat_converter_specs.target_modifier {
+                    Modifier::Multiplier => "Increased ",
+                    Modifier::More => "More ",
+                    Modifier::Flat => "",
+                },
+                format_multiplier_stat_name(&stat_converter_specs.target_stat)
+            )
+        }
         StatType::SuccessChance {
             skill_type,
             effect_type,

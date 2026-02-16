@@ -45,6 +45,7 @@ pub fn update_player_state(
     elapsed_time: Duration,
     player_specs: &PlayerSpecs,
     player_state: &mut PlayerState,
+    area_threat: &AreaThreat,
 ) {
     if !player_state.character_state.is_alive {
         return;
@@ -56,6 +57,7 @@ pub fn update_player_state(
         CharacterId::Player,
         &player_specs.character_specs,
         &mut player_state.character_state,
+        area_threat,
     );
 
     if !player_state.character_state.is_stunned() {
@@ -99,6 +101,7 @@ pub fn update_player_specs(
             ))
             .chain(iter::once(
                 stats_updater::compute_conditional_modifiers(
+                    area_threat,
                     &player_specs.character_specs,
                     &player_state.character_state,
                     &player_specs.character_specs.conditional_modifiers,
@@ -171,16 +174,15 @@ pub fn update_player_specs(
         )
         .collect();
 
-    compute_player_specs(player_specs, player_inventory, area_threat, effects_map);
+    compute_player_specs(player_specs, player_inventory, effects_map);
 }
 
 fn compute_player_specs(
     player_specs: &mut PlayerSpecs,
     player_inventory: &PlayerInventory,
-    area_threat: &AreaThreat,
     effects_map: EffectsMap,
 ) {
-    let mut effects = stats_updater::stats_map_to_vec(&effects_map, area_threat);
+    let mut effects: Vec<_> = (&effects_map).into();
 
     let (character_specs, converted_effects) =
         characters_updater::update_character_specs(&player_specs.character_specs, &effects);
@@ -282,30 +284,11 @@ fn compute_player_specs(
             | StatType::SkillTargetModifier { .. }
             | StatType::SkillConditionalModifier { .. } => {}
             // Other
-            StatType::StatConverter(StatConverterSpecs {
-                source: StatConverterSource::ThreatLevel,
-                ..
-            })
-            | StatType::ItemRarity => {}
+            StatType::ItemRarity => {}
         }
     }
 
     for skill_specs in player_specs.skills_specs.iter_mut() {
-        skills_updater::update_skill_specs(
-            skill_specs,
-            effects.iter(),
-            Some(player_inventory),
-            area_threat,
-        );
+        skills_updater::update_skill_specs(skill_specs, &effects, Some(player_inventory));
     }
-
-    // for trigger_effect in player_specs.character_specs.triggers.iter_mut() {
-    //     for effect in trigger_effect.effects.iter_mut() {
-    //         skills_updater::compute_skill_specs_effect(
-    //             trigger_effect.skill_type,
-    //             effect,
-    //             effects.iter(),
-    //         )
-    //     }
-    // }
 }

@@ -56,8 +56,10 @@ impl PlayerController {
             return;
         }
 
-        let mut mana_available =
-            characters_controller::mana_available(&player_specs.character_specs,&player_state.character_state);
+        let mut mana_available = characters_controller::mana_available(
+            &player_specs.character_specs,
+            &player_state.character_state,
+        );
 
         let mut player = (
             CharacterId::Player,

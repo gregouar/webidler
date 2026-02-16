@@ -31,4 +31,5 @@ pub enum Condition {
     MaximumMana,
     LowLife,
     LowMana,
+    ThreatLevel,
 }

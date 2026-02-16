@@ -1,7 +1,6 @@
 use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
-    area::AreaThreat,
     character_status::StatusSpecs,
     conditional_modifier::ConditionalModifier,
     modifier::Modifier,
@@ -17,7 +16,7 @@ use shared::data::{
 };
 use strum::IntoEnumIterator;
 
-use crate::game::{systems::stats_updater, utils::rng::Rollable};
+use crate::game::utils::rng::Rollable;
 
 pub fn update_skills_states(
     elapsed_time: Duration,
@@ -44,11 +43,11 @@ pub fn reset_skills(skill_states: &mut [SkillState]) {
     }
 }
 
-pub fn update_skill_specs<'a>(
+pub fn update_skill_specs(
     skill_specs: &mut SkillSpecs,
-    effects: impl Iterator<Item = &'a StatEffect> + Clone,
+    // effects: impl Iterator<Item = &'a StatEffect> + Clone,
+    effects: &[StatEffect],
     inventory: Option<&PlayerInventory>,
-    area_threat: &AreaThreat,
 ) {
     skill_specs.targets = skill_specs.base.targets.clone();
     skill_specs.triggers = skill_specs.base.triggers.clone();
@@ -56,7 +55,7 @@ pub fn update_skill_specs<'a>(
     skill_specs.mana_cost = skill_specs.base.mana_cost.into();
 
     skill_specs.level_modifier = effects
-        .clone()
+        .iter()
         .map(|e| {
             if e.modifier == Modifier::Flat
                 && e.stat
@@ -69,44 +68,44 @@ pub fn update_skill_specs<'a>(
         })
         .sum();
 
-    let local_effects = stats_updater::stats_map_to_vec(
-        &EffectsMap::combine_all(
-            std::iter::once(compute_skill_upgrade_effects(
-                skill_specs,
-                skill_specs
-                    .upgrade_level
-                    .saturating_add(skill_specs.level_modifier),
-            ))
-            .chain(std::iter::once(compute_skill_modifier_effects(
-                skill_specs,
-                inventory,
-            ))),
-        ),
-        area_threat,
-    );
+    let local_effects: Vec<_> = (&EffectsMap::combine_all(
+        std::iter::once(compute_skill_upgrade_effects(
+            skill_specs,
+            skill_specs
+                .upgrade_level
+                .saturating_add(skill_specs.level_modifier),
+        ))
+        .chain(std::iter::once(compute_skill_modifier_effects(
+            skill_specs,
+            inventory,
+        ))),
+    ))
+        .into();
 
-    apply_effects_to_skill_specs(skill_specs, local_effects.iter().filter(is_local_flat));
-    apply_effects_to_skill_specs(skill_specs, effects.clone().filter(is_global_flat));
-    apply_effects_to_skill_specs(
-        skill_specs,
-        local_effects.iter().filter(|e| !is_local_flat(e)),
-    );
-    apply_effects_to_skill_specs(skill_specs, effects.filter(|e| !is_global_flat(e)));
+    apply_effects_to_skill_specs(skill_specs, local_effects.iter().chain(effects));
+
+    // apply_effects_to_skill_specs(skill_specs, local_effects.iter().filter(is_local_flat));
+    // apply_effects_to_skill_specs(skill_specs, effects.clone().filter(is_global_flat));
+    // apply_effects_to_skill_specs(
+    //     skill_specs,
+    //     local_effects.iter().filter(|e| !is_local_flat(e)),
+    // );
+    // apply_effects_to_skill_specs(skill_specs, effects.filter(|e| !is_global_flat(e)));
 }
 
-fn is_local_flat(stat_effect: &&StatEffect) -> bool {
-    match &stat_effect.stat {
-        StatType::StatConverter(specs) => specs.target_modifier == Modifier::Flat,
-        _ => stat_effect.modifier == Modifier::Flat,
-    }
-}
+// fn is_local_flat(stat_effect: &&StatEffect) -> bool {
+//     match &stat_effect.stat {
+//         StatType::StatConverter(specs) => specs.target_modifier == Modifier::Flat,
+//         _ => stat_effect.modifier == Modifier::Flat,
+//     }
+// }
 
-fn is_global_flat(stat_effect: &&StatEffect) -> bool {
-    match &stat_effect.stat {
-        StatType::StatConverter(specs) => specs.target_modifier == Modifier::Flat,
-        _ => stat_effect.modifier == Modifier::Flat,
-    }
-}
+// fn is_global_flat(stat_effect: &&StatEffect) -> bool {
+//     match &stat_effect.stat {
+//         StatType::StatConverter(specs) => specs.target_modifier == Modifier::Flat,
+//         _ => stat_effect.modifier == Modifier::Flat,
+//     }
+// }
 
 pub fn apply_effects_to_skill_specs<'a>(
     skill_specs: &mut SkillSpecs,
@@ -573,8 +572,8 @@ pub fn compute_skill_specs_effect<'a>(
                             .get_mut(&damage_type)
                             .map(|d| {
                                 let amount = (
-                                    d.min.compute() * min_factor * 0.01,
-                                    d.max.compute() * max_factor * 0.01,
+                                    d.min.base * min_factor * 0.01,
+                                    d.max.base * max_factor * 0.01,
                                 );
                                 if !specs.is_extra {
                                     d.min.base -= amount.0;
@@ -587,8 +586,8 @@ pub fn compute_skill_specs_effect<'a>(
                             .values_mut()
                             .fold((0.0, 0.0), |(min_acc, max_acc), d| {
                                 let amount = (
-                                    d.min.compute() * min_factor * 0.01,
-                                    d.max.compute() * max_factor * 0.01,
+                                    d.min.base * min_factor * 0.01,
+                                    d.max.base * max_factor * 0.01,
                                 );
                                 if !specs.is_extra {
                                     d.min.base -= amount.0;

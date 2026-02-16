@@ -4,6 +4,7 @@ use strum::IntoEnumIterator;
 use shared::{
     constants::{MAX_BLOCK, MAX_EVADE},
     data::{
+        area::AreaThreat,
         character::{CharacterId, CharacterSpecs, CharacterState},
         conditional_modifier::ConditionalModifier,
         modifier::Modifier,
@@ -27,6 +28,7 @@ pub fn update_character_state(
     character_id: CharacterId,
     character_specs: &CharacterSpecs,
     character_state: &mut CharacterState,
+    area_threat: &AreaThreat,
 ) {
     if !character_state.is_alive {
         return;
@@ -76,6 +78,7 @@ pub fn update_character_state(
     }
 
     let new_conditions = stats_updater::compute_conditions(
+        area_threat,
         character_specs,
         character_state,
         &character_specs.conditional_modifiers,
@@ -346,9 +349,7 @@ fn compute_character_specs(
                     }
                 }
 
-                StatConverterSource::CritDamage
-                | StatConverterSource::Damage { .. }
-                | StatConverterSource::ThreatLevel => {
+                StatConverterSource::CritDamage | StatConverterSource::Damage { .. } => {
                     continue;
                 }
             };

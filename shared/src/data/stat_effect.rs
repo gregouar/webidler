@@ -490,7 +490,7 @@ pub enum StatConverterSource {
         #[serde(default)]
         min_max: Option<MinMax>,
     },
-    ThreatLevel,
+    // ThreatLevel,
     MaxLife,
     MaxMana,
     ManaRegen,

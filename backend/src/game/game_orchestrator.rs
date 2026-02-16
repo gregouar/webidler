@@ -176,7 +176,6 @@ async fn control_entities(
             let (monster_specs, monster_states) = monsters_wave::generate_monsters_wave(
                 &game_data.area_blueprint,
                 game_data.area_state.mutate(),
-                &game_data.area_threat,
                 &game_data.area_effects,
                 &master_store.monster_specs_store,
             )?;
@@ -254,12 +253,14 @@ async fn update_entities(
         elapsed_time,
         game_data.player_specs.read(),
         &mut game_data.player_state,
+        &game_data.area_threat,
     );
     monsters_updater::update_monster_states(
         events_queue,
         elapsed_time,
         &game_data.monster_specs,
         &mut game_data.monster_states,
+        &game_data.area_threat,
     );
 }
 

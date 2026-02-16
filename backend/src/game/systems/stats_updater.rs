@@ -3,72 +3,39 @@ use std::collections::HashMap;
 use shared::data::{
     area::AreaThreat,
     conditional_modifier::{Condition, ConditionalModifier},
-    modifier::Modifier,
     player::{CharacterSpecs, CharacterState},
-    stat_effect::{
-        EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType, compare_options,
-    },
+    stat_effect::{StatEffect, compare_options},
 };
 
-// maybe AreaThreat should be some kind of more generic "Context"
-pub fn stats_map_to_vec(effects: &EffectsMap, area_threat: &AreaThreat) -> Vec<StatEffect> {
-    combine_effects(effects.into(), area_threat)
-}
+// pub fn stats_map_to_vec(effects: &EffectsMap) -> Vec<StatEffect> {
+//     combine_effects(effects.into())
+// }
 
-// maybe AreaThreat should be some kind of more generic "Context"
-pub fn combine_effects(mut effects: Vec<StatEffect>, area_threat: &AreaThreat) -> Vec<StatEffect> {
-    let to_add: Vec<_> = effects
-        .iter()
-        .flat_map(|effect| {
-            if let StatType::StatConverter(StatConverterSpecs {
-                source: StatConverterSource::ThreatLevel,
-                target_stat,
-                target_modifier,
-                ..
-            }) = &effect.stat
-            {
-                Some(StatEffect {
-                    stat: *target_stat.clone(),
-                    modifier: *target_modifier,
-                    value: if target_stat.is_multiplicative() {
-                        ((1.0 + effect.value * 0.01).powf(area_threat.threat_level as f64) - 1.0)
-                            * 100.0
-                    } else {
-                        effect.value * area_threat.threat_level as f64
-                    },
-                    bypass_ignore: false,
-                })
-            } else {
-                None
-            }
-        })
-        .collect();
+// pub fn combine_effects(mut effects: Vec<StatEffect>) -> Vec<StatEffect> {
+//     sort_stat_effects(&mut effects);
+//     effects
+// }
 
-    effects.extend(to_add);
-    sort_stat_effects(&mut effects);
-
-    effects
-}
-
-pub fn sort_stat_effects(effects: &mut [StatEffect]) {
-    effects.sort_by_key(|e| {
-        (
-            match e.stat {
-                StatType::StatConverter(ref specs) => match specs.target_modifier {
-                    Modifier::Flat => 1,
-                    Modifier::Multiplier | Modifier::More => 3,
-                },
-                _ => match e.modifier {
-                    Modifier::Flat => 0,
-                    Modifier::Multiplier | Modifier::More => 2,
-                },
-            },
-            e.stat.clone(),
-        )
-    });
-}
+// pub fn sort_stat_effects(effects: &mut [StatEffect]) {
+//     effects.sort_by_key(|e| {
+//         (
+//             match e.stat {
+//                 StatType::StatConverter(ref specs) => match specs.target_modifier {
+//                     Modifier::Flat => 1,
+//                     Modifier::Multiplier | Modifier::More => 3,
+//                 },
+//                 _ => match e.modifier {
+//                     Modifier::Flat => 0,
+//                     Modifier::Multiplier | Modifier::More => 2,
+//                 },
+//             },
+//             e.stat.clone(),
+//         )
+//     });
+// }
 
 pub fn compute_conditional_modifiers(
+    area_threat: &AreaThreat,
     character_specs: &CharacterSpecs,
     character_state: &CharacterState,
     conditional_modifiers: &[ConditionalModifier],
@@ -79,7 +46,9 @@ pub fn compute_conditional_modifiers(
             let factor: f64 = conditional_modifier
                 .conditions
                 .iter()
-                .map(|condition| check_condition(character_specs, character_state, condition))
+                .map(|condition| {
+                    check_condition(area_threat, character_specs, character_state, condition)
+                })
                 .product();
             conditional_modifier
                 .effects
@@ -94,6 +63,7 @@ pub fn compute_conditional_modifiers(
 }
 
 pub fn check_condition(
+    area_threat: &AreaThreat,
     character_specs: &CharacterSpecs,
     character_state: &CharacterState,
     condition: &Condition,
@@ -136,10 +106,12 @@ pub fn check_condition(
         Condition::LowMana => {
             (character_state.mana <= character_specs.max_mana.evaluate() * 0.5) as usize as f64
         }
+        Condition::ThreatLevel => area_threat.threat_level as f64,
     }
 }
 
 pub fn compute_conditions(
+    area_threat: &AreaThreat,
     character_specs: &CharacterSpecs,
     character_state: &CharacterState,
     conditional_modifiers: &[ConditionalModifier],
@@ -149,6 +121,7 @@ pub fn compute_conditions(
         .fold(HashMap::new(), |mut acc, value| {
             for condition in &value.conditions {
                 acc.entry(condition.clone()).or_insert(check_condition(
+                    area_threat,
                     character_specs,
                     character_state,
                     condition,

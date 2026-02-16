@@ -1,4 +1,4 @@
-use std::{collections::HashMap, iter, time::Duration};
+use std::time::Duration;
 
 use shared::{
     constants::THREAT_EFFECT,
@@ -8,7 +8,8 @@ use shared::{
         character_status::StatusSpecs,
         modifier::Modifier,
         monster::{MonsterSpecs, MonsterState},
-        stat_effect::{EffectsMap, StatType},
+        stat_effect::StatType,
+        temple::StatEffect,
     },
 };
 
@@ -24,6 +25,7 @@ pub fn update_monster_states(
     elapsed_time: Duration,
     monster_specs: &[MonsterSpecs],
     monster_states: &mut [MonsterState],
+    area_threat: &AreaThreat,
 ) {
     for (monster_id, (monster_state, monster_specs)) in monster_states
         .iter_mut()
@@ -39,6 +41,7 @@ pub fn update_monster_states(
             CharacterId::Monster(monster_id),
             &monster_specs.character_specs,
             &mut monster_state.character_state,
+            area_threat,
         );
 
         if monster_state.initiative > 0.0 || monster_state.character_state.is_stunned() {
@@ -66,55 +69,61 @@ pub fn update_monster_specs(
     monster_state: &MonsterState,
     area_threat: &AreaThreat,
 ) {
-    // let mut effects = stats_updater::stats_map_to_vec(
-    //     &statuses_controller::generate_effects_map_from_statuses(
+    // let effects_map = EffectsMap::combine_all(
+    //     std::iter::once(statuses_controller::generate_effects_map_from_statuses(
     //         &monster_state.character_state.statuses,
-    //     ),
-    //     area_threat,
+    //     ))
+    //     .chain(std::iter::once(EffectsMap(HashMap::from([(
+    //         (
+    //             StatType::Damage {
+    //                 skill_type: None,
+    //                 damage_type: None,
+    //                 min_max: None,
+    //             },
+    //             Modifier::Multiplier,
+    //         ),
+    //         ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
+    //     )])))) // .chain(std::iter::once(base_specs.character_specs.effects.clone())),
+    //     .chain(iter::once(
+    //         stats_updater::compute_conditional_modifiers(
+    //             area_threat,
+    //             &monster_specs.character_specs,
+    //             &monster_state.character_state,
+    //             &monster_specs.character_specs.conditional_modifiers,
+    //         )
+    //         .into(),
+    //     )),
     // );
+    // let mut effects = (&effects_map).into();
 
-    // effects.push(StatEffect {
-    //     stat: StatType::Damage {
-    //         skill_type: None,
-    //         damage_type: None,
-    //     },
-    //     value: ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
-    //     modifier: Modifier::Multiplier,
-    //     bypass_ignore: true,
-    // });
+    let mut effects: Vec<_> = (&statuses_controller::generate_effects_map_from_statuses(
+        &monster_state.character_state.statuses,
+    ))
+        .into();
+    effects.push(StatEffect {
+        stat: StatType::Damage {
+            skill_type: None,
+            damage_type: None,
+            min_max: None,
+        },
+        modifier: Modifier::Multiplier,
+        value: ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
+        bypass_ignore: false,
+    });
+    effects.extend(stats_updater::compute_conditional_modifiers(
+        area_threat,
+        &monster_specs.character_specs,
+        &monster_state.character_state,
+        &monster_specs.character_specs.conditional_modifiers,
+    ));
 
-    let effects_map = EffectsMap::combine_all(
-        std::iter::once(statuses_controller::generate_effects_map_from_statuses(
-            &monster_state.character_state.statuses,
-        ))
-        .chain(std::iter::once(EffectsMap(HashMap::from([(
-            (
-                StatType::Damage {
-                    skill_type: None,
-                    damage_type: None,
-                    min_max: None,
-                },
-                Modifier::Multiplier,
-            ),
-            ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
-        )])))) // .chain(std::iter::once(base_specs.character_specs.effects.clone())),
-        .chain(iter::once(
-            stats_updater::compute_conditional_modifiers(
-                &monster_specs.character_specs,
-                &monster_state.character_state,
-                &monster_specs.character_specs.conditional_modifiers,
-            )
-            .into(),
-        )),
-    );
-    let mut effects = stats_updater::stats_map_to_vec(&effects_map, area_threat);
-
+    // Compute character specs & get converted stats resulting
     let (character_specs, converted_effects) =
         characters_updater::update_character_specs(&base_specs.character_specs, &effects);
     monster_specs.character_specs = character_specs;
     effects.extend(converted_effects);
 
-    monster_specs.character_specs.effects = effects_map;
+    // monster_specs.character_specs.effects = effects_map;
     monster_specs.skill_specs = base_specs.skill_specs.clone();
 
     for skill_specs in monster_specs.skill_specs.iter_mut() {

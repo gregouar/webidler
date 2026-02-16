@@ -1,9 +1,10 @@
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
+    conditional_modifier::Condition,
     modifier::Modifier,
     skill::{DamageType, RestoreType, SkillType},
-    stat_effect::{StatConverterSource, StatConverterSpecs, StatStatusType, StatType},
+    stat_effect::{StatStatusType, StatType},
 };
 use strum::IntoEnumIterator;
 
@@ -537,17 +538,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         {make_stat(StatType::CritChance(None))}
                         {make_opt_stat(StatType::CritChance(Some(SkillType::Spell)), 0.0)}
                         {make_opt_stat(
-                            StatType::StatConverter(StatConverterSpecs {
-                                source: StatConverterSource::ThreatLevel,
-                                target_stat: Box::new(StatType::Damage {
+                            StatType::StatConditionalModifier {
+                                stat: Box::new(StatType::Damage {
                                     skill_type: None,
                                     damage_type: None,
                                     min_max: None,
                                 }),
-                                target_modifier: Modifier::Multiplier,
-                                is_extra: false,
-                                skill_type: None,
-                            }),
+                                conditions: vec![Condition::ThreatLevel],
+                            },
                             0.0,
                         )}
                     </StatCategory>
