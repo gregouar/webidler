@@ -10,6 +10,7 @@
     "Physical": 50,
     "Poison": 100
   },
+  "stun_lockout": 5.0,
   "skills": [
     {
       "name": "Envious Stare",
