@@ -306,6 +306,9 @@ fn compute_character_specs(
     // TODO: How to propagate to player/monster/skills? Return effects?
     let mut stats_converted = Vec::with_capacity(stat_converters.len());
     if !stat_converters.is_empty() {
+        stat_converters
+            .sort_by_key(|(stat_converter, _)| (stat_converter.is_extra, stat_converter.source));
+
         for (specs, factor) in stat_converters {
             let factor = factor * 0.01;
             let amount = match specs.source {

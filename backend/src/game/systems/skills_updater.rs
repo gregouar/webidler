@@ -524,7 +524,10 @@ pub fn compute_skill_specs_effect<'a>(
         }
     }
 
+
     if !stat_converters.is_empty() {
+        stat_converters.sort_by_key(|(stat_converter,_)| (stat_converter.is_extra, stat_converter.source));
+
         let mut stats_converted = Vec::with_capacity(stat_converters.len());
 
         for (specs, factor) in stat_converters {
