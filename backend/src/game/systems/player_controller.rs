@@ -131,7 +131,7 @@ pub fn reward_player(
     area_state: &mut AreaState,
 ) -> (f64, f64) {
     let gold_reward =
-        (monster_specs.reward_factor * player_specs.gold_find.evaluate() * 0.01).round();
+        (monster_specs.reward_factor * player_specs.gold_find * 0.01).round();
     let gems_reward = if let MonsterRarity::Champion = monster_specs.rarity {
         area_state.last_champion_spawn = area_state.area_level;
         ((area_state.area_level + area_specs.item_level_modifier) as f64 / 5.0).floor()
@@ -254,7 +254,7 @@ pub fn sell_item(
             ItemRarity::Rare => 4.0,
             ItemRarity::Unique => 8.0,
             ItemRarity::Masterwork => 8.0,
-        } * player_specs.gold_find.evaluate()
+        } * player_specs.gold_find
             * 0.01
             * computations::exponential(
                 item_specs

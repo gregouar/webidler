@@ -4,16 +4,12 @@ use indexmap::IndexSet;
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
-use crate::{
-    constants::DEFAULT_MAX_LEVEL,
-    data::{area::AreaLevel, modifier::ModifiableValue},
-};
+use crate::{constants::DEFAULT_MAX_LEVEL, data::area::AreaLevel};
 
 pub use super::character::{CharacterSpecs, CharacterState};
 use super::{
     item::{ItemSlot, ItemSpecs},
     skill::{SkillSpecs, SkillState},
-    stat_effect::EffectsMap,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -30,12 +26,9 @@ pub struct PlayerSpecs {
     pub experience_needed: f64,
 
     // Should move to a DerivedPlayerSpecs
-    pub movement_cooldown: ModifiableValue<f32>,
-    pub gold_find: ModifiableValue<f64>,
-    pub threat_gain: ModifiableValue<f32>,
-
-    #[serde(default)] // for retro compatibility
-    pub effects: EffectsMap, //TODO: REMOVE
+    pub movement_cooldown: f32,
+    pub gold_find: f64,
+    pub threat_gain: f32,
 
     #[serde(default)] // for retro compatibility
     pub max_area_level: AreaLevel,

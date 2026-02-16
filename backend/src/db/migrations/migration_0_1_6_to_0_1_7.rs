@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
-use sqlx::{Transaction, types::JsonValue};
+use sqlx::{types::JsonValue, Transaction};
 
 use shared::data::{
     area::AreaLevel,
@@ -25,7 +25,7 @@ use crate::{
     constants::DATA_VERSION,
     db::{
         self,
-        characters_data::{CharacterDataEntry, upsert_character_inventory_data},
+        characters_data::{upsert_character_inventory_data, CharacterDataEntry},
         pool::{Database, DbExecutor, DbPool},
     },
     game::{data::inventory_data::InventoryData, systems::passives_controller},
@@ -139,7 +139,6 @@ async fn migrate_stash_items(executor: &mut Transaction<'static, Database>) -> a
     }
     Ok(())
 }
-// TODO: Migrate items in inventory, stash_items and stash_item_stats
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct OldInventoryData {
@@ -292,7 +291,6 @@ pub enum OldStatType {
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
-    // TODO: Collapse to simple Effect, if more involved trigger is needed, we can always add as pure trigger
     LifeOnHit(#[serde(default)] HitTrigger),
     ManaOnHit(#[serde(default)] HitTrigger),
     Restore(#[serde(default)] Option<RestoreType>),
@@ -517,7 +515,6 @@ pub enum OldStatConverterSource {
     ManaRegen,
     LifeRegen,
     Block(SkillType),
-    // TODO: Add others, like armor, ...
 }
 
 impl From<OldStatConverterSource> for StatConverterSource {

@@ -60,6 +60,7 @@ pub struct CharacterSpecs {
     pub position_y: u8,
 
     // TODO: All the above: move elsewhere ^^^
+    // TODO: Remove ModifiableValue and have a separate backend only struct to handle those
     //
     pub max_life: ModifiableValue<f64>,
     #[serde(default)]

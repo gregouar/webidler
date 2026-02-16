@@ -9,7 +9,7 @@ use shared::{
         character_status::StatusSpecs,
         item::{SkillRange, SkillShape},
         item_affix::AffixEffectScope,
-        modifier::Modifier,
+        modifier::{ModifiableValue, Modifier},
         passive::{PassivesTreeSpecs, PassivesTreeState},
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
         skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
@@ -24,6 +24,13 @@ use crate::game::{
 };
 
 use super::{characters_updater, passives_controller, skills_updater};
+
+#[derive(Clone, Default)]
+pub struct ModifiablePlayerSpecs {
+    pub movement_cooldown: ModifiableValue<f32>,
+    pub gold_find: ModifiableValue<f64>,
+    pub threat_gain: ModifiableValue<f32>,
+}
 
 pub fn base_player_character_specs(name: String, portrait: String, level: u8) -> CharacterSpecs {
     CharacterSpecs {
@@ -192,12 +199,20 @@ fn compute_player_specs(
     );
     effects.extend(converted_effects);
 
+    let mut modifiable_player_specs = ModifiablePlayerSpecs {
+        movement_cooldown: player_specs.movement_cooldown.into(),
+        gold_find: player_specs.gold_find.into(),
+        threat_gain: player_specs.threat_gain.into(),
+    };
+
     for effect in effects.iter() {
         match effect.stat {
-            StatType::MovementSpeed => player_specs.movement_cooldown.apply_negative_effect(effect),
-            StatType::GoldFind => player_specs.gold_find.apply_effect(effect),
-            StatType::ThreatGain => player_specs.threat_gain.apply_effect(effect),
-            // TODO: Move the character specs
+            StatType::MovementSpeed => modifiable_player_specs
+                .movement_cooldown
+                .apply_negative_effect(effect),
+            StatType::GoldFind => modifiable_player_specs.gold_find.apply_effect(effect),
+            StatType::ThreatGain => modifiable_player_specs.threat_gain.apply_effect(effect),
+            // TODO: Move to character specs
             StatType::LifeOnHit { skill_type } | StatType::ManaOnHit { skill_type } => {
                 if let Modifier::Flat = effect.modifier {
                     player_specs.character_specs.triggers.push(TriggeredEffect {
@@ -237,8 +252,6 @@ fn compute_player_specs(
                         inherit_modifiers: false,
                     });
                 }
-                // TODO: Find way to do increase?
-                // TODO: For multiplier, should iterate and apply to all trigger matching?
             }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Handled by character
@@ -287,6 +300,10 @@ fn compute_player_specs(
             StatType::ItemRarity => {}
         }
     }
+
+    player_specs.movement_cooldown = modifiable_player_specs.movement_cooldown.evaluate();
+    player_specs.gold_find = modifiable_player_specs.gold_find.evaluate();
+    player_specs.threat_gain = modifiable_player_specs.threat_gain.evaluate();
 
     for skill_specs in player_specs.skills_specs.iter_mut() {
         skills_updater::update_skill_specs(skill_specs, &effects, Some(player_inventory));

@@ -246,7 +246,7 @@ fn compute_max_level_ascension_tree(
         }
         *entry = level;
 
-        // TODO: Could split connections in 2 hashmap or something
+        // TODO: Could precompute once the connections instead
         for connection in &passives_tree_specs.connections {
             if connection.from == node_id {
                 queue.push_back((connection.to, level));
@@ -286,7 +286,6 @@ pub fn socket_node(
     passive_node_id: PassiveNodeId,
     item_specs: Option<ItemSpecs>,
 ) -> Result<Option<ItemSpecs>, AppError> {
-    // TODO: Check it is Rune and level is enough
     let passives_tree_specs = master_store
         .passives_store
         .get("default")

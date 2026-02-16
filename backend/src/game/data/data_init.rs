@@ -8,7 +8,6 @@ use shared::{
         passive::{PassivesTreeAscension, PassivesTreeState},
         player::{PlayerSpecs, PlayerState},
         skill::{BaseSkillSpecs, SkillSpecs, SkillState},
-        stat_effect::EffectsMap,
     },
 };
 
@@ -69,7 +68,6 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             movement_cooldown: 3.0.into(),
             gold_find: 100.0.into(),
             threat_gain: 100.0.into(),
-            effects: EffectsMap::default(),
             max_level: DEFAULT_MAX_LEVEL,
         }
     }

@@ -161,9 +161,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             value=move || {
                                 format!(
                                     "{}%",
-                                    format_number(
-                                        game_context.player_specs.read().gold_find.evaluate(),
-                                    ),
+                                    format_number(game_context.player_specs.read().gold_find),
                                 )
                             }
                         />
@@ -172,7 +170,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             value=move || {
                                 format!(
                                     "{:.2}s",
-                                    game_context.player_specs.read().movement_cooldown.evaluate(),
+                                    game_context.player_specs.read().movement_cooldown,
                                 )
                             }
                         />
@@ -424,10 +422,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         <Stat
                             label="Threat Gain"
                             value=move || {
-                                format!(
-                                    "{:.0}%",
-                                    game_context.player_specs.read().threat_gain.evaluate(),
-                                )
+                                format!("{:.0}%", game_context.player_specs.read().threat_gain)
                             }
                         />
                         {move || {
