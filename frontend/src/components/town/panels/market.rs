@@ -1361,13 +1361,15 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         (StatType::MovementSpeed, Modifier::Multiplier),
         (StatType::GoldFind, Modifier::Multiplier),
         (
-            StatType::LifeOnHit {
+            StatType::RestoreOnHit {
+                restore_type: RestoreType::Life,
                 skill_type: Some(SkillType::Attack),
             },
             Modifier::Flat,
         ),
         (
-            StatType::ManaOnHit {
+            StatType::RestoreOnHit {
+                restore_type: RestoreType::Mana,
                 skill_type: Some(SkillType::Attack),
             },
             Modifier::Flat,

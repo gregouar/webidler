@@ -281,7 +281,7 @@ fn compute_character_specs(
             }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Only for player (for now...)
-            StatType::LifeOnHit { .. } | StatType::ManaOnHit { .. } => {}
+            StatType::RestoreOnHit { .. } => {}
             // Only for player
             StatType::MovementSpeed | StatType::GoldFind | StatType::ThreatGain => {}
             // Delegate to skills
@@ -309,43 +309,31 @@ fn compute_character_specs(
             .sort_by_key(|(stat_converter, _)| (stat_converter.is_extra, stat_converter.source));
 
         for (specs, factor) in stat_converters {
-            let factor = factor * 0.01;
+            // let factor = factor * 0.01;
             let amount = match specs.source {
                 StatConverterSource::MaxLife => {
-                    let amount = character_specs.max_life.compute() * factor;
-                    if !specs.is_extra {
-                        character_specs.max_life.base -= amount;
-                    }
-                    amount
+                    character_specs
+                        .max_life
+                        .convert_value(factor, specs.is_extra, false)
                 }
                 StatConverterSource::MaxMana => {
-                    let amount = character_specs.max_mana.compute() * factor;
-                    if !specs.is_extra {
-                        character_specs.max_mana.base -= amount;
-                    }
-                    amount
+                    character_specs
+                        .max_mana
+                        .convert_value(factor, specs.is_extra, false)
                 }
                 StatConverterSource::ManaRegen => {
-                    let amount = character_specs.mana_regen.compute() * factor;
-                    if !specs.is_extra {
-                        character_specs.mana_regen.base -= amount;
-                    }
-                    amount
+                    character_specs
+                        .mana_regen
+                        .convert_value(factor, specs.is_extra, false)
                 }
                 StatConverterSource::LifeRegen => {
-                    let amount = character_specs.life_regen.compute() * factor;
-                    if !specs.is_extra {
-                        character_specs.life_regen.base -= amount;
-                    }
-                    amount
+                    character_specs
+                        .life_regen
+                        .convert_value(factor, specs.is_extra, false)
                 }
                 StatConverterSource::Block(skill_type) => {
                     if let Some(block) = character_specs.block.get_mut(&skill_type) {
-                        let amount = block.value.compute() as f64 * factor;
-                        if !specs.is_extra {
-                            block.value.base -= amount as f32
-                        }
-                        amount
+                        block.value.convert_value(factor, specs.is_extra, false) as f64
                     } else {
                         0.0
                     }

@@ -4882,9 +4882,7 @@
         "effects": [
           {
             "stat": {
-              "ManaOnHit": {
-                "skill_type": "Attack"
-              }
+              "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
             },
             "modifier": "Flat",
             "value": 1.0
@@ -4895,9 +4893,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "ManaOnHit": {
-                "skill_type": "Attack"
-              }
+              "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
             },
             "modifier": "Flat",
             "value": 1.0
@@ -5581,9 +5577,7 @@
         "effects": [
           {
             "stat": {
-              "LifeOnHit": {
-                "skill_type": "Attack"
-              }
+              "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
             },
             "modifier": "Flat",
             "value": 1.0
@@ -5594,9 +5588,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "LifeOnHit": {
-                "skill_type": "Attack"
-              }
+              "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
             },
             "modifier": "Flat",
             "value": 1.0

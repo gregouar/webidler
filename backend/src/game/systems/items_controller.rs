@@ -66,8 +66,8 @@ fn compute_weapon_specs(
     effects: &[StatEffect],
 ) -> WeaponSpecs {
     weapon_specs.damage.values_mut().for_each(|value| {
-        value.min.base *= 1.0 + quality as f64 * 0.01;
-        value.max.base *= 1.0 + quality as f64 * 0.01;
+        value.min.apply_modifier(quality as f64, Modifier::More);
+        value.max.apply_modifier(quality as f64, Modifier::More);
     });
 
     for effect in effects {
@@ -149,7 +149,9 @@ fn compute_armor_specs(
     quality: f32,
     effects: &[StatEffect],
 ) -> ArmorSpecs {
-    armor_specs.armor.base *= 1.0 + quality as f64 * 0.01;
+    armor_specs
+        .armor
+        .apply_modifier(quality as f64, Modifier::More);
     for effect in effects {
         match effect.stat {
             StatType::Armor(Some(DamageType::Physical)) => armor_specs.armor.apply_effect(effect),

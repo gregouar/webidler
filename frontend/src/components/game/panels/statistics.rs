@@ -427,7 +427,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         />
                         {move || {
                             let life_on_hit = effect(
-                                StatType::LifeOnHit {
+                                StatType::RestoreOnHit {
+                                    restore_type: RestoreType::Life,
                                     skill_type: Some(SkillType::Attack),
                                 },
                                 Modifier::Flat,
@@ -436,7 +437,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .then(move || {
                                     view! {
                                         <Stat
-                                            label="Life on Hit"
+                                            label="Life on Attack Hit"
                                             value=move || { format!("{:.0}", life_on_hit) }
                                         />
                                     }
@@ -444,7 +445,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         }}
                         {move || {
                             let mana_on_hit = effect(
-                                StatType::ManaOnHit {
+                                StatType::RestoreOnHit {
+                                    restore_type: RestoreType::Life,
                                     skill_type: Some(SkillType::Attack),
                                 },
                                 Modifier::Flat,
@@ -453,7 +455,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .then(move || {
                                     view! {
                                         <Stat
-                                            label="Mana on Hit"
+                                            label="Mana on Attack Hit"
                                             value=move || { format!("{:.0}", mana_on_hit) }
                                         />
                                     }

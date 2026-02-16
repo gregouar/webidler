@@ -25,6 +25,7 @@ Balance Changes:
 - Increased max player level to 70.
 - Decreased cost of Starting Level benediction in Temple.
 - Curses & Blessings are now a specific Skill Type instead of being Spells.
+- Rework of how stats modifiers are applied, resulting in more consistent and predictable outcomes.
 
 Fixes:
 

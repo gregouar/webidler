@@ -217,7 +217,10 @@ fn generate_monster_specs(
 
     monster_specs.power_factor *= exp_factor;
     monster_specs.reward_factor *= reward_factor;
-    monster_specs.character_specs.max_life.base *= exp_factor;
+    monster_specs
+        .character_specs
+        .max_life
+        .apply_modifier(exp_factor - 1.0, Modifier::More);
 
     // Apply upgrade effects
     let upgrade_effects = [StatEffect {

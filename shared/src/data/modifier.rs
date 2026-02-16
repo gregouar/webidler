@@ -15,11 +15,13 @@ pub enum Modifier {
 
 #[derive(Debug, Clone, Copy, Default)]
 pub struct ModifiableValue<T> {
-    pub base: T,
+    base: T,
 
-    pub more: f64,
-    pub increased: f64,
-    pub decreased: f64,
+    more: f64,
+    increased: f64,
+    decreased: f64,
+
+    converted: f64,
 }
 
 impl<T> ModifiableValue<T>
@@ -28,21 +30,39 @@ where
 {
     pub fn evaluate(&self) -> T {
         let div = (1.0 - self.decreased * 0.01).max(0.0);
+        let base = self.base.multiply_value(1.0 - self.converted * 0.01);
 
-        if self.base.is_negative() {
-            return self.base;
+        if base.is_negative() {
+            return base;
         }
 
         let factor = (1.0 + self.more * 0.01)
             * (1.0 + self.increased * 0.01)
             * (if div > 0.0 { 1.0 / div } else { 1.0 });
 
-        self.base.multiply_value(factor)
+        base.multiply_value(factor)
     }
 
-    pub fn compute(&mut self) -> T {
-        *self = self.evaluate().into();
-        self.base
+    // pub fn compute(&mut self) -> T {
+    //     *self = self.evaluate().into();
+    //     self.base
+    // }
+
+    pub fn apply_modifier(&mut self, value: f64, modifier: Modifier) {
+        match modifier {
+            Modifier::Multiplier => {
+                if value >= 0.0 {
+                    self.increased += value
+                } else {
+                    self.decreased += value
+                }
+            }
+            Modifier::Flat => self.base = self.base.add_value(value),
+            Modifier::More => {
+                let value = compute_more_factor(value);
+                self.more = self.more + value + self.more * value * 0.01;
+            }
+        }
     }
 
     pub fn apply_effect(&mut self, effect: &StatEffect) {
@@ -52,20 +72,7 @@ where
             modifier => modifier,
         };
 
-        match modifier {
-            Modifier::Multiplier => {
-                if effect.value >= 0.0 {
-                    self.increased += effect.value
-                } else {
-                    self.decreased += effect.value
-                }
-            }
-            Modifier::Flat => self.base = self.base.add_value(effect.value),
-            Modifier::More => {
-                let value = compute_more_factor(effect.value);
-                self.more = self.more + value + self.more * value * 0.01;
-            }
-        }
+        self.apply_modifier(effect.value, modifier);
     }
 
     pub fn apply_negative_effect(&mut self, effect: &StatEffect) {
@@ -73,6 +80,21 @@ where
             value: -effect.value,
             ..effect.clone()
         })
+    }
+
+    pub fn convert_value(&mut self, percent: f64, is_extra: bool, only_base: bool) -> T {
+        let mut percent = percent;
+        if !is_extra {
+            percent = percent.max(100.0 - self.converted);
+            self.converted += percent;
+        }
+
+        (if only_base {
+            self.base
+        } else {
+            self.evaluate()
+        })
+        .multiply_value(percent * 0.01)
     }
 }
 

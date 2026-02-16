@@ -524,9 +524,9 @@ pub fn compute_skill_specs_effect<'a>(
         }
     }
 
-
     if !stat_converters.is_empty() {
-        stat_converters.sort_by_key(|(stat_converter,_)| (stat_converter.is_extra, stat_converter.source));
+        stat_converters
+            .sort_by_key(|(stat_converter, _)| (stat_converter.is_extra, stat_converter.source));
 
         let mut stats_converted = Vec::with_capacity(stat_converters.len());
 
@@ -540,10 +540,7 @@ pub fn compute_skill_specs_effect<'a>(
                     StatConverterSource::CritDamage,
                     SkillEffectType::FlatDamage { crit_damage, .. },
                 ) => {
-                    let amount = crit_damage.compute() * factor * 0.01;
-                    if !specs.is_extra {
-                        crit_damage.base -= amount;
-                    }
+                    let amount = crit_damage.convert_value(factor, specs.is_extra, false);
 
                     (amount > 0.0).then(|| StatEffect {
                         stat: (*specs.target_stat).clone(),
@@ -574,29 +571,19 @@ pub fn compute_skill_specs_effect<'a>(
                         Some(damage_type) => damage
                             .get_mut(&damage_type)
                             .map(|d| {
-                                let amount = (
-                                    d.min.base * min_factor * 0.01,
-                                    d.max.base * max_factor * 0.01,
-                                );
-                                if !specs.is_extra {
-                                    d.min.base -= amount.0;
-                                    d.max.base -= amount.1;
-                                }
-                                amount
+                                (
+                                    d.min.convert_value(min_factor, specs.is_extra, true),
+                                    d.max.convert_value(max_factor, specs.is_extra, true),
+                                )
                             })
                             .unwrap_or_default(),
                         None => damage
                             .values_mut()
                             .fold((0.0, 0.0), |(min_acc, max_acc), d| {
-                                let amount = (
-                                    d.min.base * min_factor * 0.01,
-                                    d.max.base * max_factor * 0.01,
-                                );
-                                if !specs.is_extra {
-                                    d.min.base -= amount.0;
-                                    d.max.base -= amount.1;
-                                }
-                                (min_acc + amount.0, max_acc + amount.1)
+                                (
+                                    min_acc + d.min.convert_value(min_factor, specs.is_extra, true),
+                                    max_acc + d.max.convert_value(max_factor, specs.is_extra, true),
+                                )
                             }),
                     };
 

@@ -227,7 +227,7 @@
       {
         "scope": "Global",
         "stat": {
-          "ManaOnHit": { "skill_type": "Attack" }
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
         },
         "modifier": "Flat",
         "value": [2, 4]
@@ -245,7 +245,7 @@
       {
         "scope": "Global",
         "stat": {
-          "LifeOnHit": { "skill_type": "Attack" }
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
         },
         "modifier": "Flat",
         "value": [4, 6]

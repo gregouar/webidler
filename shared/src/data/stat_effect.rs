@@ -81,11 +81,8 @@ pub enum StatType {
         #[serde(default)]
         min_max: Option<MinMax>,
     },
-    LifeOnHit {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
-    },
-    ManaOnHit {
+    RestoreOnHit {
+        restore_type: RestoreType,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },

@@ -47,8 +47,8 @@ pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     }
 }
 
-pub fn restore_type_str(restore_tyoe: Option<RestoreType>) -> &'static str {
-    match restore_tyoe {
+pub fn restore_type_str(restore_type: Option<RestoreType>) -> &'static str {
+    match restore_type {
         Some(RestoreType::Life) => " Life",
         Some(RestoreType::Mana) => " Mana",
         None => "",

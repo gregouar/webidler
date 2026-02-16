@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
-use sqlx::{types::JsonValue, Transaction};
+use sqlx::{Transaction, types::JsonValue};
 
 use shared::data::{
     area::AreaLevel,
@@ -25,7 +25,7 @@ use crate::{
     constants::DATA_VERSION,
     db::{
         self,
-        characters_data::{upsert_character_inventory_data, CharacterDataEntry},
+        characters_data::{CharacterDataEntry, upsert_character_inventory_data},
         pool::{Database, DbExecutor, DbPool},
     },
     game::{data::inventory_data::InventoryData, systems::passives_controller},
@@ -375,10 +375,12 @@ impl From<OldStatType> for StatType {
                 damage_type,
                 min_max: Some(MinMax::Max),
             },
-            OldStatType::LifeOnHit(hit_trigger) => LifeOnHit {
+            OldStatType::LifeOnHit(hit_trigger) => RestoreOnHit {
+                restore_type: RestoreType::Life,
                 skill_type: hit_trigger.skill_type,
             },
-            OldStatType::ManaOnHit(hit_trigger) => ManaOnHit {
+            OldStatType::ManaOnHit(hit_trigger) => RestoreOnHit {
+                restore_type: RestoreType::Mana,
                 skill_type: hit_trigger.skill_type,
             },
             OldStatType::Restore(restore_type) => Restore {
