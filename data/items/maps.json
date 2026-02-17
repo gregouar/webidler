@@ -15,5 +15,22 @@
       }
     ],
     "min_area_level": 100
+  },
+  "edict_2": {
+    "name": "Grand Edict",
+    "icon": "items/edict_grand.webp",
+    "categories": ["Map"],
+    "ignore_quality": true,
+    "rarity": "Magic",
+    "map_specs": {},
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 50.0
+      }
+    ],
+    "min_area_level": 250
   }
 }
