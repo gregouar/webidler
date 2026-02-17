@@ -10,7 +10,7 @@ use shared::{
         modifier::Modifier,
         skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
-        stat_effect::{StatEffect, StatType},
+        stat_effect::{StatEffect, StatSkillEffectType, StatType},
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
@@ -28,8 +28,8 @@ use crate::components::{
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
     town::{
-        TownContext,
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        TownContext,
     },
     ui::{
         buttons::{MenuButton, MenuButtonRed, TabButton},
@@ -1270,7 +1270,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: None,
                 min_max: None,
             },
-            Modifier::Increased,
+            Modifier::More,
         ),
         (
             StatType::Damage {
@@ -1278,7 +1278,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: None,
                 min_max: None,
             },
-            Modifier::Increased,
+            Modifier::More,
         ),
         (
             StatType::Damage {
@@ -1286,7 +1286,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: None,
                 min_max: None,
             },
-            Modifier::Increased,
+            Modifier::More,
         ),
         (
             StatType::Damage {
@@ -1294,7 +1294,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: Some(DamageType::Physical),
                 min_max: None,
             },
-            Modifier::Increased,
+            Modifier::More,
         ),
         (
             StatType::Damage {
@@ -1302,7 +1302,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: Some(DamageType::Fire),
                 min_max: None,
             },
-            Modifier::Increased,
+            Modifier::More,
         ),
         (
             StatType::Damage {
@@ -1310,7 +1310,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: Some(DamageType::Poison),
                 min_max: None,
             },
-            Modifier::Increased,
+            Modifier::More,
         ),
         (
             StatType::Damage {
@@ -1318,9 +1318,9 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: Some(DamageType::Storm),
                 min_max: None,
             },
-            Modifier::Increased,
+            Modifier::More,
         ),
-        (StatType::CritDamage(None), Modifier::Increased),
+        (StatType::CritDamage(None), Modifier::More),
         (StatType::CritChance(None), Modifier::Increased),
         (
             StatType::CritChance(Some(SkillType::Spell)),
@@ -1338,6 +1338,13 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             StatType::StatusDuration {
                 status_type: None,
                 skill_type: None,
+            },
+            Modifier::Increased,
+        ),
+        (
+            StatType::SuccessChance {
+                skill_type: None,
+                effect_type: Some(StatSkillEffectType::ApplyStatus { status_type: None }),
             },
             Modifier::Increased,
         ),
