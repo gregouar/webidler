@@ -19,8 +19,15 @@ pub enum Modifier {
 }
 
 #[cfg(not(feature = "modifiable"))]
-#[derive(Debug, Clone, Copy, PartialEq, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
 pub struct ModifiableValue<T>(T);
+
+#[cfg(not(feature = "modifiable"))]
+impl<T> From<T> for ModifiableValue<T> {
+    fn from(value: T) -> Self {
+        Self(value)
+    }
+}
 
 #[cfg(not(feature = "modifiable"))]
 impl<T> Deref for ModifiableValue<T> {
