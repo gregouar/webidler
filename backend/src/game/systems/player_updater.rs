@@ -125,9 +125,9 @@ pub fn update_player_specs(
         player_specs.level,
     );
 
-    player_specs.gold_find = 100.0.into();
-    player_specs.threat_gain = 100.0.into();
-    player_specs.movement_cooldown = 3.0.into();
+    player_specs.gold_find = 100.0;
+    player_specs.threat_gain = 100.0;
+    player_specs.movement_cooldown = 3.0;
 
     // TODO: Could we figure out a way to keep the block luck somehow?
     let (total_armor, total_block) = player_inventory
@@ -233,7 +233,7 @@ fn compute_player_specs(
             }),
             target: TriggerTarget::Source,
             skill_range: SkillRange::Any,
-            skill_type: skill_type,
+            skill_type,
             skill_shape: SkillShape::Single,
             modifiers: Vec::new(),
             effects: vec![SkillEffect {
@@ -241,8 +241,8 @@ fn compute_player_specs(
                 effect_type: SkillEffectType::Restore {
                     restore_type,
                     value: ChanceRange {
-                        min: value.clone(),
-                        max: value.clone(),
+                        min: value,
+                        max: value,
                         lucky_chance: 0.0.into(),
                     },
                     modifier: Modifier::Flat,

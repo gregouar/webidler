@@ -65,9 +65,9 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             bought_skills: Default::default(),
             level: 1,
             experience_needed: 20.0,
-            movement_cooldown: 3.0.into(),
-            gold_find: 100.0.into(),
-            threat_gain: 100.0.into(),
+            movement_cooldown: 3.0,
+            gold_find: 100.0,
+            threat_gain: 100.0,
             max_level: DEFAULT_MAX_LEVEL,
         }
     }

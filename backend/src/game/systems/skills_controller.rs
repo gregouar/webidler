@@ -289,13 +289,17 @@ pub fn apply_skill_effect(
     let seed = rng::roll_seed();
 
     targets.iter_mut().any_all(|target| {
+        let skill_effect = if skill_effect.conditional_modifiers.is_empty() {
+            skill_effect
+        } else {
+            &apply_conditional_modifiers(target, skill_effect, skill_type)
+        };
         apply_skill_effect_on_target(
             events_queue,
             attacker,
             skill_type,
             range,
-            // TODO: Could branch to only clone when needed
-            &apply_conditional_modifiers(target, skill_effect, skill_type),
+            skill_effect,
             target,
             is_triggered,
             &mut seed.clone(),
