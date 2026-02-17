@@ -542,7 +542,7 @@ pub fn compute_skill_specs_effect<'a>(
                     } else {
                         0.0
                     };
-                    let max_factor = if let Some(MinMax::Min) | None = min_max {
+                    let max_factor = if let Some(MinMax::Max) | None = min_max {
                         factor
                     } else {
                         0.0
