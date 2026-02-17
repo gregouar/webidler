@@ -27,15 +27,6 @@ use crate::game::{
 
 use super::{characters_updater, passives_controller, skills_updater};
 
-#[derive(Clone, Default)]
-pub struct ModifiablePlayerSpecs {
-    pub movement_cooldown: ModifiableValue<f32>,
-    pub gold_find: ModifiableValue<f64>,
-    pub threat_gain: ModifiableValue<f32>,
-
-    pub restore_on_hit: HashMap<(RestoreType, SkillType), ModifiableValue<f64>>,
-}
-
 pub fn base_player_character_specs(name: String, portrait: String, level: u8) -> CharacterSpecs {
     CharacterSpecs {
         name,
@@ -260,6 +251,15 @@ fn compute_player_specs(
     for skill_specs in player_specs.skills_specs.iter_mut() {
         skills_updater::update_skill_specs(skill_specs, &effects, Some(player_inventory));
     }
+}
+
+#[derive(Clone, Default)]
+pub struct ModifiablePlayerSpecs {
+    pub movement_cooldown: ModifiableValue<f32>,
+    pub gold_find: ModifiableValue<f64>,
+    pub threat_gain: ModifiableValue<f32>,
+
+    pub restore_on_hit: HashMap<(RestoreType, SkillType), ModifiableValue<f64>>,
 }
 
 fn modify_player_specs(
