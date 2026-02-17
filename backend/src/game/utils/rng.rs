@@ -115,7 +115,7 @@ where
         {
             self.min = self.max;
         }
-        self.lucky_chance = self.lucky_chance.evaluate().clamp(-100.0, 100.0).into();
+        // self.lucky_chance = self.lucky_chance.evaluate().clamp(-100.0, 100.0).into();
     }
 }
 
@@ -139,7 +139,7 @@ where
         {
             self.min = self.max;
         }
-        self.lucky_chance = self.lucky_chance.evaluate().clamp(-100.0, 100.0).into();
+        // self.lucky_chance = self.lucky_chance.evaluate().clamp(-100.0, 100.0).into();
     }
 }
 

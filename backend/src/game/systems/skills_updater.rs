@@ -421,7 +421,7 @@ pub fn compute_skill_specs_effect<'a>(
                     crit_damage.apply_effect(effect);
                 }
 
-                crit_chance.clamp();
+                // crit_chance.clamp();
             }
             SkillEffectType::ApplyStatus { statuses, duration } => {
                 if statuses.iter().any(|status_effect| {
@@ -613,8 +613,11 @@ pub fn compute_skill_specs_effect<'a>(
 
     if let SkillEffectType::FlatDamage { damage, .. } = &mut skill_effect.effect_type {
         damage.retain(|_, value| {
-            value.min = value.min.evaluate().max(0.0).into();
-            value.max = value.max.evaluate().max(0.0).into();
+            // value.min = value.min.evaluate().max(0.0).into();
+            // value.max = value.max.evaluate().max(0.0).into();
+            if value.min.evaluate() < 0.0 {
+                value.min = 0.0.into();
+            }
             value.clamp();
 
             value.max.evaluate() > 0.0
