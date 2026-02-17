@@ -21,6 +21,7 @@ macro_rules! bounded_value {
             pub fn get(&self) -> $inner {
                 let mut val = self.0;
 
+                #[allow(clippy::manual_clamp)]
                 $( if val < $min { val = $min; } )?
                 $( if val > $max { val = $max; } )?
 
@@ -155,16 +156,16 @@ where
     pub fn get(&self) -> T {
         let mut v = self.value;
 
-        if let Some(m) = self.min {
-            if v < m {
-                v = m;
-            }
+        if let Some(m) = self.min
+            && v < m
+        {
+            v = m;
         }
 
-        if let Some(m) = self.max {
-            if v > m {
-                v = m;
-            }
+        if let Some(m) = self.max
+            && v > m
+        {
+            v = m;
         }
 
         v
