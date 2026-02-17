@@ -324,6 +324,7 @@ pub fn compute_skill_specs_effect<'a>(
                 .success_chance
                 .lucky_chance
                 .apply_effect(effect);
+            continue;
         }
 
         if effect.stat.is_match(&StatType::SuccessChance {
@@ -331,6 +332,7 @@ pub fn compute_skill_specs_effect<'a>(
             effect_type: (&skill_effect.effect_type).into(),
         }) {
             skill_effect.success_chance.value.apply_effect(effect);
+            continue;
         }
 
         if let StatType::StatConverter(specs) = &effect.stat {
@@ -357,6 +359,7 @@ pub fn compute_skill_specs_effect<'a>(
                     }]
                     .into(),
                 });
+            continue;
         }
 
         match &mut skill_effect.effect_type {

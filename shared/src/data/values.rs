@@ -186,13 +186,13 @@ where
 
 impl<T> Serialize for BoundedValue<T>
 where
-    T: Serialize + Copy,
+    T: Serialize + PartialOrd + Copy,
 {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
-        self.value.serialize(serializer)
+        self.get().serialize(serializer)
     }
 }
 
