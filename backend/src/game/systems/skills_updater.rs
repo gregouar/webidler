@@ -57,8 +57,8 @@ pub fn update_skill_specs(
 ) {
     skill_specs.targets = skill_specs.base.targets.clone();
     skill_specs.triggers = skill_specs.base.triggers.clone();
-    skill_specs.cooldown = skill_specs.base.cooldown.into();
-    skill_specs.mana_cost = skill_specs.base.mana_cost.into();
+    skill_specs.cooldown = skill_specs.base.cooldown;
+    skill_specs.mana_cost = skill_specs.base.mana_cost;
 
     skill_specs.level_modifier = effects
         .iter()
@@ -339,8 +339,8 @@ pub fn compute_skill_specs_effect<'a>(
     {
         crit_chance.clamp();
         damage.retain(|_, value| {
-            value.min = value.min.max(0.0).into();
-            value.max = value.max.max(0.0).into();
+            value.min = value.min.max(0.0);
+            value.max = value.max.max(0.0);
             value.clamp();
 
             value.max > 0.0

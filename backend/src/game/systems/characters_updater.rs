@@ -169,9 +169,9 @@ fn compute_character_specs(
         effects,
     );
 
-    character_specs.max_life = max_life.evaluate().max(1.0).into();
+    character_specs.max_life = max_life.evaluate().max(1.0);
     character_specs.life_regen = life_regen.evaluate();
-    character_specs.max_mana = max_mana.evaluate().max(0.0).into();
+    character_specs.max_mana = max_mana.evaluate().max(0.0);
     character_specs.mana_regen = mana_regen.evaluate();
 
     character_specs.take_from_mana_before_life = take_from_mana_before_life.evaluate();
@@ -182,16 +182,16 @@ fn compute_character_specs(
     character_specs.block = block.into_iter().map(|(x, y)| (x, y.evaluate())).collect();
     for block in character_specs.block.values_mut() {
         block.clamp();
-        block.value = block.value.min(MAX_BLOCK).into();
+        block.value = block.value.min(MAX_BLOCK);
     }
-    character_specs.block_damage = block_damage.evaluate().clamp(0.0, 100.0).into();
+    character_specs.block_damage = block_damage.evaluate().clamp(0.0, 100.0);
 
     character_specs.evade = evade.into_iter().map(|(x, y)| (x, y.evaluate())).collect();
     for evade in character_specs.evade.values_mut() {
         evade.clamp();
-        evade.value = evade.value.min(MAX_EVADE).into();
+        evade.value = evade.value.min(MAX_EVADE);
     }
-    character_specs.evade_damage = evade_damage.evaluate().clamp(0.0, 100.0).into();
+    character_specs.evade_damage = evade_damage.evaluate().clamp(0.0, 100.0);
 
     character_specs.status_resistances = status_resistances
         .into_iter()

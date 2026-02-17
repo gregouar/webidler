@@ -16,8 +16,8 @@ pub struct ChanceRange<T> {
 impl Chance {
     pub fn new_sure() -> Self {
         Self {
-            value: 100.0.into(),
-            lucky_chance: 0.0.into(),
+            value: 100.0,
+            lucky_chance: 0.0,
         }
     }
 }
@@ -55,8 +55,8 @@ impl<'de> Deserialize<'de> for Chance {
         };
 
         Ok(Self {
-            value: full_def.value.into(),
-            lucky_chance: full_def.lucky_chance.into(),
+            value: full_def.value,
+            lucky_chance: full_def.lucky_chance,
         })
     }
 }
@@ -103,7 +103,7 @@ impl<'de, T: Deserialize<'de> + Copy> Deserialize<'de> for ChanceRange<T> {
         Ok(Self {
             min: full_def.min,
             max: full_def.max,
-            lucky_chance: full_def.lucky_chance.into(),
+            lucky_chance: full_def.lucky_chance,
         })
     }
 }

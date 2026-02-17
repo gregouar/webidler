@@ -79,8 +79,8 @@ impl Rollable<bool> for Chance {
     }
 
     fn clamp(&mut self) {
-        self.value = self.value.clamp(0.0, 100.0).into();
-        self.lucky_chance = self.lucky_chance.clamp(-100.0, 100.0).into();
+        self.value = self.value.clamp(0.0, 100.0);
+        self.lucky_chance = self.lucky_chance.clamp(-100.0, 100.0);
     }
 }
 

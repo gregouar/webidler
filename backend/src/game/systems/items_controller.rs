@@ -94,7 +94,7 @@ fn compute_weapon_specs(
         crit_damage,
     } = modify_weapon_specs(modifiable_weapon_specs, effects);
 
-    weapon_specs.cooldown = cooldown.evaluate().max(0.0).into();
+    weapon_specs.cooldown = cooldown.evaluate().max(0.0);
     weapon_specs.crit_chance = crit_chance.evaluate();
     weapon_specs.crit_chance.clamp();
     weapon_specs.crit_damage = crit_damage.evaluate();
@@ -261,9 +261,9 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         effects.push(SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
                 duration: ChanceRange {
-                    min: WEAPON_POISON_DAMAGE_DURATION.into(),
-                    max: WEAPON_POISON_DAMAGE_DURATION.into(),
-                    lucky_chance: 0.0.into(),
+                    min: WEAPON_POISON_DAMAGE_DURATION,
+                    max: WEAPON_POISON_DAMAGE_DURATION,
+                    lucky_chance: 0.0,
                 },
                 statuses: vec![ApplyStatusEffect {
                     status_type: StatusSpecs::DamageOverTime {

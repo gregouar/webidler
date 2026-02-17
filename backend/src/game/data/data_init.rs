@@ -28,7 +28,7 @@ impl DataInit<&AreaSpecs> for AreaState {
             auto_progress: true,
             going_back: 0,
             rush_mode: false,
-            loot_rarity: 100.0.into(),
+            loot_rarity: 100.0,
         }
     }
 }
@@ -65,9 +65,9 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             bought_skills: Default::default(),
             level: 1,
             experience_needed: 20.0,
-            movement_cooldown: 3.0.into(),
-            gold_find: 100.0.into(),
-            threat_gain: 100.0.into(),
+            movement_cooldown: 3.0,
+            gold_find: 100.0,
+            threat_gain: 100.0,
             max_level: DEFAULT_MAX_LEVEL,
         }
     }
@@ -97,8 +97,8 @@ impl DataInit<&MonsterSpecs> for MonsterState {
 impl DataInit<BaseSkillSpecs> for SkillSpecs {
     fn init(specs: BaseSkillSpecs) -> Self {
         Self {
-            cooldown: specs.cooldown.into(),
-            mana_cost: specs.mana_cost.into(),
+            cooldown: specs.cooldown,
+            mana_cost: specs.mana_cost,
             upgrade_level: 1,
             next_upgrade_cost: specs.upgrade_cost,
             targets: specs.targets.clone(),

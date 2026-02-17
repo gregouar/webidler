@@ -18,10 +18,7 @@ pub fn compute_area_state(area_state: &mut AreaState, effects: &[StatEffect]) {
     let mut loot_rarity: ModifiableValue<_> = area_state.loot_rarity.into();
 
     for effect in effects.iter() {
-        match effect.stat {
-            StatType::ItemRarity => loot_rarity.apply_effect(&effect),
-            _ => {}
-        }
+        if effect.stat == StatType::ItemRarity { loot_rarity.apply_effect(effect) }
     }
 
     area_state.loot_rarity = loot_rarity.evaluate();

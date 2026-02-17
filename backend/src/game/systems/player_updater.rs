@@ -43,10 +43,10 @@ pub fn base_player_character_specs(name: String, portrait: String, level: u8) ->
         size: CharacterSize::Small,
         position_x: 0,
         position_y: 0,
-        max_life: (100.0 + PLAYER_LIFE_PER_LEVEL * (level.saturating_sub(1)) as f64).into(),
-        life_regen: 10.0.into(),
-        max_mana: 100.0.into(),
-        mana_regen: 10.0.into(),
+        max_life: (100.0 + PLAYER_LIFE_PER_LEVEL * (level.saturating_sub(1)) as f64),
+        life_regen: 10.0,
+        max_mana: 100.0,
+        mana_regen: 10.0,
         ..Default::default()
     }
 }
@@ -127,9 +127,9 @@ pub fn update_player_specs(
         player_specs.level,
     );
 
-    player_specs.gold_find = 100.0.into();
-    player_specs.threat_gain = 100.0.into();
-    player_specs.movement_cooldown = 3.0.into();
+    player_specs.gold_find = 100.0;
+    player_specs.threat_gain = 100.0;
+    player_specs.movement_cooldown = 3.0;
 
     // TODO: Could we figure out a way to keep the block luck somehow?
     let (total_armor, total_block) = player_inventory
@@ -231,7 +231,7 @@ fn compute_player_specs(
             }),
             target: TriggerTarget::Source,
             skill_range: SkillRange::Any,
-            skill_type: skill_type,
+            skill_type,
             skill_shape: SkillShape::Single,
             modifiers: Vec::new(),
             effects: vec![SkillEffect {

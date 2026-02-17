@@ -146,7 +146,7 @@ impl Default for SkillRepeat {
             value: ChanceRange {
                 min: 1,
                 max: 1,
-                lucky_chance: 0.0.into(),
+                lucky_chance: 0.0,
             },
             target: SkillRepeatTarget::Any,
         }
