@@ -49,6 +49,23 @@ pub enum MinMax {
 pub enum StatType {
     ItemRarity,
     SkillLevel(#[serde(default)] Option<SkillType>),
+    Armor(Option<DamageType>),
+    DamageResistance {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
+    Block(#[serde(default)] Option<SkillType>),
+    BlockDamageTaken,
+    Evade(#[serde(default)] Option<DamageType>),
+    EvadeDamageTaken,
+    StatusResistance {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        status_type: Option<StatStatusType>,
+    },
     Damage {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -74,23 +91,6 @@ pub enum StatType {
         skill_type: Option<SkillType>,
     },
     Speed(#[serde(default)] Option<SkillType>),
-    Armor(Option<DamageType>),
-    DamageResistance {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
-        #[serde(default)]
-        damage_type: Option<DamageType>,
-    },
-    Block(#[serde(default)] Option<SkillType>),
-    BlockDamageTaken,
-    Evade(#[serde(default)] Option<DamageType>),
-    EvadeDamageTaken,
-    StatusResistance {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
-        #[serde(default)]
-        status_type: Option<StatStatusType>,
-    },
     RestoreOnHit {
         restore_type: RestoreType,
         #[serde(default)]
