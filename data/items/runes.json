@@ -32,7 +32,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [500, 1000]
       }
     ],
@@ -93,7 +93,7 @@
                           "damage_type": null
                         }
                       },
-                      "modifier": "Multiplier",
+                      "modifier": "Increased",
                       "debuff": false
                     }
                   },
@@ -158,7 +158,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Storm" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [100, 200]
       }
     ],
@@ -253,7 +253,7 @@
             "skill_type": null
           }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 100
       },
       {

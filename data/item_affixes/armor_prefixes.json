@@ -193,7 +193,7 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [20, 35]
       }
     ]
@@ -211,7 +211,7 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [45, 55]
       }
     ]
@@ -229,7 +229,7 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [65, 75]
       }
     ]
@@ -247,7 +247,7 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [85, 95]
       }
     ]
@@ -265,7 +265,7 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [105, 115]
       }
     ]
@@ -283,7 +283,7 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [125, 135]
       }
     ]
@@ -301,7 +301,7 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [145, 155]
       }
     ]
@@ -319,7 +319,7 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [165, 175]
       }
     ]
@@ -337,7 +337,7 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [185, 195]
       }
     ]
@@ -355,7 +355,7 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [205, 220]
       }
     ]

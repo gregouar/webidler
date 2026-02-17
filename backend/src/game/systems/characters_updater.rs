@@ -7,8 +7,7 @@ use shared::{
         area::AreaThreat,
         character::{CharacterId, CharacterSpecs, CharacterState},
         conditional_modifier::ConditionalModifier,
-        modifier::Modifier,
-        skill::{DamageType, RestoreType, SkillType},
+        skill::{DamageType, RestoreModifier, RestoreType, SkillType},
         stat_effect::{LuckyRollType, StatConverterSource, StatEffect, StatType},
     },
 };
@@ -51,14 +50,14 @@ pub fn update_character_state(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Life,
         elapsed_time_f64 * character_specs.life_regen.evaluate() * 0.1,
-        Modifier::Multiplier,
+        RestoreModifier::Percent,
     );
 
     restore_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Mana,
         elapsed_time_f64 * character_specs.mana_regen.evaluate() * 0.1,
-        Modifier::Multiplier,
+        RestoreModifier::Percent,
     );
 
     character_state.life = character_state

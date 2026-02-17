@@ -34,20 +34,20 @@
         "stat": {
           "Armor": "Physical"
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 60]
       },
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [50, 50],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [40, 60]
       },
       {
@@ -101,7 +101,7 @@
       {
         "scope": "Global",
         "stat": "Mana",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [20, 40]
       },
       {
@@ -113,7 +113,7 @@
       {
         "scope": "Global",
         "stat": { "StatusDuration": {} },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [20, 30]
       }
     ],
@@ -177,7 +177,7 @@
     },
     "min_area_level": 250
   },
-  "barbute": {
+  "helmet_7": {
     "name": "Barbute",
     "icon": "items/barbute.webp",
     "slot": "Helmet",

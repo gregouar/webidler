@@ -12,7 +12,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [5, 7]
       }
     ]
@@ -30,7 +30,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [8, 10]
       }
     ]
@@ -48,7 +48,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [11, 13]
       }
     ]
@@ -66,7 +66,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [14, 16]
       }
     ]
@@ -84,7 +84,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [17, 19]
       }
     ]
@@ -102,7 +102,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [20, 22]
       }
     ]
@@ -120,7 +120,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [23, 25]
       }
     ]
@@ -138,7 +138,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [26, 28]
       }
     ]
@@ -156,7 +156,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [29, 31]
       }
     ]
@@ -174,7 +174,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [32, 34]
       }
     ]
@@ -374,7 +374,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [10, 15]
       }
     ]
@@ -392,7 +392,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [20, 25]
       }
     ]
@@ -410,7 +410,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [30, 35]
       }
     ]
@@ -428,7 +428,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 45]
       }
     ]
@@ -446,7 +446,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [50, 55]
       }
     ]
@@ -464,7 +464,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [60, 65]
       }
     ]
@@ -482,7 +482,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [70, 75]
       }
     ]
@@ -500,7 +500,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [80, 85]
       }
     ]
@@ -518,7 +518,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [90, 95]
       }
     ]
@@ -536,7 +536,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [100, 120]
       }
     ]
@@ -555,7 +555,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [25, 45]
       }
     ]
@@ -573,7 +573,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [55, 70]
       }
     ]
@@ -591,7 +591,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [80, 95]
       }
     ]
@@ -609,7 +609,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [105, 120]
       }
     ]
@@ -627,7 +627,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [130, 145]
       }
     ]
@@ -645,7 +645,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [155, 170]
       }
     ]
@@ -663,7 +663,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [180, 195]
       }
     ]
@@ -681,7 +681,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [205, 220]
       }
     ]
@@ -699,7 +699,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [230, 245]
       }
     ]
@@ -717,7 +717,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [255, 270]
       }
     ]

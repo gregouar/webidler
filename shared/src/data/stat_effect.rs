@@ -8,7 +8,7 @@ use crate::data::{
     character_status::StatusSpecs,
     conditional_modifier::Condition,
     item::{SkillRange, SkillShape},
-    modifier::{ModifiableValue, Modifier, compute_more_factor},
+    modifier::{compute_more_factor, ModifiableValue, Modifier},
     skill::{RestoreType, SkillEffectType},
 };
 
@@ -287,20 +287,20 @@ impl StatType {
         }
     }
 
-    pub fn is_multiplicative(&self) -> bool {
-        use StatType::*;
+    // pub fn is_multiplicative(&self) -> bool {
+    //     use StatType::*;
 
-        matches!(
-            self,
-            Damage { .. }
-                | CritDamage(_)
-                | StatusPower {
-                    status_type: Some(StatStatusType::DamageOverTime { .. }),
-                    ..
-                }
-                | GoldFind
-        )
-    }
+    //     matches!(
+    //         self,
+    //         Damage { .. }
+    //             | CritDamage(_)
+    //             | StatusPower {
+    //                 status_type: Some(StatStatusType::DamageOverTime { .. }),
+    //                 ..
+    //             }
+    //             | GoldFind
+    //     )
+    // }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -553,28 +553,22 @@ impl EffectsMap {
             |mut result, ((target, modifier), value)| {
                 result
                     .entry((target.clone(), modifier))
-                    .and_modify(|entry| {
-                        let modifier = match modifier {
-                            Modifier::Multiplier if target.is_multiplicative() => Modifier::More,
-                            modifier => modifier,
-                        };
-                        match modifier {
-                            Modifier::More => {
-                                if *entry == 0.0 {
-                                    *entry = value;
-                                    return;
-                                }
-
-                                let sign = if *entry < 0.0 { -1.0 } else { 1.0 };
-
-                                let factor = compute_more_factor(sign * value);
-                                *entry = sign
-                                    * compute_more_factor(
-                                        entry.abs() + factor + entry.abs() * factor * 0.01,
-                                    );
+                    .and_modify(|entry| match modifier {
+                        Modifier::More => {
+                            if *entry == 0.0 {
+                                *entry = value;
+                                return;
                             }
-                            _ => *entry += value,
+
+                            let sign = if *entry < 0.0 { -1.0 } else { 1.0 };
+
+                            let factor = compute_more_factor(sign * value);
+                            *entry = sign
+                                * compute_more_factor(
+                                    entry.abs() + factor + entry.abs() * factor * 0.01,
+                                );
                         }
+                        _ => *entry += value,
                     })
                     .or_insert(value);
                 result

@@ -1255,10 +1255,10 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 #[component]
 fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl IntoView {
     let available_stats = vec![
-        (StatType::Life, Modifier::Multiplier),
+        (StatType::Life, Modifier::Increased),
         (StatType::Life, Modifier::Flat),
         (StatType::LifeRegen, Modifier::Flat),
-        (StatType::Mana, Modifier::Multiplier),
+        (StatType::Mana, Modifier::Increased),
         (StatType::Mana, Modifier::Flat),
         (StatType::ManaRegen, Modifier::Flat),
         (StatType::Armor(Some(DamageType::Fire)), Modifier::Flat),
@@ -1270,7 +1270,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: None,
                 min_max: None,
             },
-            Modifier::Multiplier,
+            Modifier::Increased,
         ),
         (
             StatType::Damage {
@@ -1278,7 +1278,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: None,
                 min_max: None,
             },
-            Modifier::Multiplier,
+            Modifier::Increased,
         ),
         (
             StatType::Damage {
@@ -1286,7 +1286,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: None,
                 min_max: None,
             },
-            Modifier::Multiplier,
+            Modifier::Increased,
         ),
         (
             StatType::Damage {
@@ -1294,7 +1294,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: Some(DamageType::Physical),
                 min_max: None,
             },
-            Modifier::Multiplier,
+            Modifier::Increased,
         ),
         (
             StatType::Damage {
@@ -1302,7 +1302,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: Some(DamageType::Fire),
                 min_max: None,
             },
-            Modifier::Multiplier,
+            Modifier::Increased,
         ),
         (
             StatType::Damage {
@@ -1310,7 +1310,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: Some(DamageType::Poison),
                 min_max: None,
             },
-            Modifier::Multiplier,
+            Modifier::Increased,
         ),
         (
             StatType::Damage {
@@ -1318,13 +1318,13 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 damage_type: Some(DamageType::Storm),
                 min_max: None,
             },
-            Modifier::Multiplier,
+            Modifier::Increased,
         ),
-        (StatType::CritDamage(None), Modifier::Multiplier),
-        (StatType::CritChance(None), Modifier::Multiplier),
+        (StatType::CritDamage(None), Modifier::Increased),
+        (StatType::CritChance(None), Modifier::Increased),
         (
             StatType::CritChance(Some(SkillType::Spell)),
-            Modifier::Multiplier,
+            Modifier::Increased,
         ),
         (
             StatType::StatusPower {
@@ -1332,33 +1332,33 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
                 skill_type: None,
                 min_max: None,
             },
-            Modifier::Multiplier,
+            Modifier::Increased,
         ),
         (
             StatType::StatusDuration {
                 status_type: None,
                 skill_type: None,
             },
-            Modifier::Multiplier,
+            Modifier::Increased,
         ),
         (
             StatType::Restore {
                 restore_type: Some(RestoreType::Life),
                 skill_type: None,
             },
-            Modifier::Multiplier,
+            Modifier::Increased,
         ),
-        (StatType::Speed(None), Modifier::Multiplier),
+        (StatType::Speed(None), Modifier::Increased),
         (
             StatType::Speed(Some(SkillType::Attack)),
-            Modifier::Multiplier,
+            Modifier::Increased,
         ),
         (
             StatType::Speed(Some(SkillType::Spell)),
-            Modifier::Multiplier,
+            Modifier::Increased,
         ),
-        (StatType::MovementSpeed, Modifier::Multiplier),
-        (StatType::GoldFind, Modifier::Multiplier),
+        (StatType::MovementSpeed, Modifier::Increased),
+        (StatType::GoldFind, Modifier::Increased),
         (
             StatType::RestoreOnHit {
                 restore_type: RestoreType::Life,
@@ -1398,7 +1398,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
 
 fn format_stat_filter(stat_type: &StatType, modifier: Modifier) -> String {
     match modifier {
-        Modifier::Multiplier => format!("#% Increased {}", format_multiplier_stat_name(stat_type)),
+        Modifier::Increased => format!("#% Increased {}", format_multiplier_stat_name(stat_type)),
         Modifier::More => format!("#% More {}", format_multiplier_stat_name(stat_type)),
         Modifier::Flat => format_flat_stat(stat_type, None),
     }

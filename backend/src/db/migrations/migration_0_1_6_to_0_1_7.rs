@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
-use sqlx::{Transaction, types::JsonValue};
+use sqlx::{types::JsonValue, Transaction};
 
 use shared::data::{
     area::AreaLevel,
@@ -24,7 +24,7 @@ use crate::{
     constants::DATA_VERSION,
     db::{
         self,
-        characters_data::{CharacterDataEntry, upsert_character_inventory_data},
+        characters_data::{upsert_character_inventory_data, CharacterDataEntry},
         pool::{Database, DbExecutor, DbPool},
     },
     game::{data::inventory_data::InventoryData, systems::passives_controller},
@@ -233,7 +233,7 @@ impl From<OldAffixEffect> for AffixEffect {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct OldStatEffect {
     pub stat: OldStatType,
-    pub modifier: Modifier,
+    pub modifier: OldModifier,
     pub value: f64,
 
     #[serde(default)]
@@ -242,9 +242,15 @@ pub struct OldStatEffect {
 
 impl From<OldStatEffect> for StatEffect {
     fn from(value: OldStatEffect) -> Self {
+        let modifier = match value.modifier {
+            OldModifier::Multiplier if value.stat.is_multiplicative() => Modifier::More,
+            OldModifier::Multiplier => Modifier::Increased,
+            OldModifier::Flat => Modifier::Flat,
+            OldModifier::More => Modifier::More,
+        };
         Self {
             stat: value.stat.into(),
-            modifier: value.modifier,
+            modifier,
             value: value.value,
             bypass_ignore: value.bypass_ignore,
         }
@@ -566,5 +572,29 @@ impl From<OldLuckyRollType> for LuckyRollType {
             OldLuckyRollType::CritChance => CritChance,
             OldLuckyRollType::SuccessChance => SuccessChance { effect_type: None },
         }
+    }
+}
+
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,
+)]
+pub enum OldModifier {
+    #[default]
+    Multiplier,
+    Flat,
+    More,
+}
+
+impl OldStatType {
+    pub fn is_multiplicative(&self) -> bool {
+        use OldStatType::*;
+
+        matches!(
+            self,
+            Damage { .. }
+                | CritDamage(_)
+                | StatusPower(Some(StatStatusType::DamageOverTime { .. }))
+                | GoldFind
+        )
     }
 }

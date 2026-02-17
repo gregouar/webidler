@@ -15,7 +15,7 @@ use shared::data::{
 use crate::components::shared::tooltips::{
     conditions_tooltip,
     effects_tooltip::{damage_type_str, format_stat, status_type_str, status_type_value_str},
-    skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
+    skill_tooltip::{self, shape_str, skill_type_str, EffectLi},
 };
 
 pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
@@ -50,7 +50,7 @@ pub fn format_trigger_modifier(
 ) -> Option<impl IntoView + use<>> {
     modifier.map(|modifier| {
         let factor_str = match modifier.modifier {
-            Modifier::Multiplier | Modifier::More => format!("{:0}", modifier.factor),
+            Modifier::Increased | Modifier::More => format!("{:0}", modifier.factor),
             Modifier::Flat => format!("{:0}", 100.0 * modifier.factor),
         };
         view! {
@@ -78,9 +78,9 @@ pub fn format_extra_trigger_modifiers(
     let modifiers_str: Vec<_> = modifiers
         .iter()
         .filter(|modifier| match modifier.stat {
-            StatType::Damage { .. } => modifier.modifier == Modifier::Multiplier,
-            StatType::StatusDuration { .. } => modifier.modifier == Modifier::Multiplier,
-            StatType::Restore{..} => modifier.modifier == Modifier::Multiplier,
+            StatType::Damage { .. } => modifier.modifier == Modifier::Increased,
+            StatType::StatusDuration { .. } => modifier.modifier == Modifier::Increased,
+            StatType::Restore{..} => modifier.modifier == Modifier::Increased,
             _ => true,
         })
         .map(|modifier| {

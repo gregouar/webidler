@@ -9,9 +9,9 @@ use shared::data::{
     item::{ItemSlot, SkillRange, SkillShape},
     modifier::{BaseModifiableValue, ModifiableValue, Modifier},
     skill::{
-        DamageType, ItemStatsSource, ModifierEffect, ModifierEffectSource, RestoreType,
-        SkillEffect, SkillEffectType, SkillRepeatTarget, SkillSpecs, SkillTargetsGroup, SkillType,
-        TargetType,
+        DamageType, ItemStatsSource, ModifierEffect, ModifierEffectSource, RestoreModifier,
+        RestoreType, SkillEffect, SkillEffectType, SkillRepeatTarget, SkillSpecs,
+        SkillTargetsGroup, SkillType, TargetType,
     },
     stat_effect::{StatEffect, StatSkillEffectType, StatStatusType, StatType},
     trigger::TriggerEffectModifier,
@@ -95,22 +95,20 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
             <p class="text-xs xl:text-sm text-gray-400 leading-snug">
                 {skill_type_str(Some(skill_specs.base.skill_type))} "| "
-                {if skill_specs.cooldown.evaluate() > 0.0 {
+                {if *skill_specs.cooldown > 0.0 {
                     view! {
                         "Cooldown: "
-                        <span class="text-white">
-                            {format!("{:.1}s", skill_specs.cooldown.evaluate())}
-                        </span>
+                        <span class="text-white">{format!("{:.1}s", *skill_specs.cooldown)}</span>
                     }
                         .into_any()
                 } else {
                     view! { "Permanent" }.into_any()
                 }}
-                {(skill_specs.mana_cost.evaluate() > 0.0)
+                {(*skill_specs.mana_cost > 0.0)
                     .then(|| {
                         view! {
                             " | Mana Cost: "
-                            <span class="text-white">{skill_specs.mana_cost.evaluate()}</span>
+                            <span class="text-white">{*skill_specs.mana_cost}</span>
                         }
                     })}
             </p>
@@ -239,11 +237,9 @@ pub fn format_skill_effect(
     effect: SkillEffect,
     modifiers: Option<&[TriggerEffectModifier]>,
 ) -> impl IntoView + use<> {
-    let success_chance = if effect.success_chance.value.evaluate() < 100.0 {
+    let success_chance = if *effect.success_chance.value < 100.0 {
         Some(view! {
-            <span class="font-semibold">
-                {format!("{:.0}%", effect.success_chance.value.evaluate())}
-            </span>
+            <span class="font-semibold">{format!("{:.0}%", *effect.success_chance.value)}</span>
             " chance to "
         })
     } else {
@@ -274,9 +270,7 @@ pub fn format_skill_effect(
                         ),
                         " as",
                     );
-                    if value.min.evaluate() > 0.0 || value.max.evaluate() > 0.0
-                        || trigger_modifier_str.is_some()
-                    {
+                    if *value.min > 0.0 || *value.max > 0.0 || trigger_modifier_str.is_some() {
                         damage_lines
                             .push(
                                 view! {
@@ -293,20 +287,18 @@ pub fn format_skill_effect(
                 }
                 damage_lines
             }
-            {if crit_chance.value.evaluate() > 0.0 {
+            {if *crit_chance.value > 0.0 {
                 Some(
                     view! {
                         <EffectLi>
                             "Critical hit chance: "
                             <span class="font-semibold">
-                                {format!("{:.2}%", crit_chance.value.evaluate())}
+                                {format!("{:.2}%", *crit_chance.value)}
                             </span>
                         </EffectLi>
                         <EffectLi>
                             "Critical hit damage: "
-                            <span class="font-semibold">
-                                {format!("+{:.0}%", crit_damage.evaluate())}
-                            </span>
+                            <span class="font-semibold">{format!("+{:.0}%", *crit_damage)}</span>
                         </EffectLi>
                     },
                 )
@@ -372,8 +364,8 @@ pub fn format_skill_effect(
                             "",
                         );
 
-                        (status_effect.value.min.evaluate() > 0.0
-                            || status_effect.value.max.evaluate() > 0.0
+                        (*status_effect.value.min > 0.0
+                            || *status_effect.value.max > 0.0
                             || trigger_modifier_damage_str.is_some())
                         .then({
                             || {
@@ -408,9 +400,9 @@ pub fn format_skill_effect(
                             stat: stat.clone(),
                             modifier,
                             value: if debuff {
-                                -status_effect.value.min.evaluate()
+                                -*status_effect.value.min
                             } else {
-                                status_effect.value.min.evaluate()
+                                *status_effect.value.min
                             },
                             bypass_ignore: false,
                         });
@@ -419,9 +411,9 @@ pub fn format_skill_effect(
                                 stat: stat.clone(),
                                 modifier,
                                 value: if debuff {
-                                    -status_effect.value.max.evaluate()
+                                    -*status_effect.value.max
                                 } else {
-                                    status_effect.value.max.evaluate()
+                                    *status_effect.value.max
                                 },
                                 bypass_ignore: false,
                             });
@@ -506,8 +498,8 @@ pub fn format_skill_effect(
                     <span class="font-semibold">
                         {format_min_max(value)} {trigger_modifier_factor_str}
                         {match modifier {
-                            Modifier::Multiplier | Modifier::More => "%",
-                            Modifier::Flat => "",
+                            RestoreModifier::Percent => "%",
+                            RestoreModifier::Flat => "",
                         }}
                     </span> {restore_type_str(Some(restore_type))}{trigger_modifier_str}
                 </EffectLi>
@@ -554,9 +546,9 @@ where
 fn format_min_max<T>(value: ChanceRange<ModifiableValue<T>>) -> String
 where
     T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
-    T: Into<f64> + PartialEq + Copy,
+    T: Into<f64> + PartialEq,
 {
-    format_min_max_f64(value.min.evaluate(), value.max.evaluate())
+    format_min_max_f64(*value.min, *value.max)
 }
 
 fn format_duration<T>(value: ChanceRange<ModifiableValue<T>>) -> impl IntoView
@@ -564,8 +556,8 @@ where
     T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
     T: Into<f64> + PartialEq,
 {
-    let min = value.min.evaluate().into();
-    let max = value.max.evaluate().into();
+    let min = (*value.min).into();
+    let max = (*value.max).into();
 
     let format_min_max = |min, max| {
         if min != max {

@@ -54,7 +54,7 @@
               "Restore": {
                 "restore_type": "Life",
                 "value": 20,
-                "modifier": "Multiplier"
+                "modifier": "Percent"
               }
             }
           ]

@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     chance::{Chance, ChanceRange},
     conditional_modifier::ConditionalModifier,
-    modifier::{ModifiableValue, Modifier},
+    modifier::ModifiableValue,
     stat_effect::{MinMax, StatEffect, StatType},
     trigger::TriggerSpecs,
 };
@@ -192,9 +192,15 @@ pub enum SkillEffectType {
     Restore {
         restore_type: RestoreType,
         value: ChanceRange<ModifiableValue<f64>>,
-        modifier: Modifier,
+        modifier: RestoreModifier,
     },
     Resurrect,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RestoreModifier {
+    Flat,
+    Percent,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

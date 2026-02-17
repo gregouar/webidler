@@ -12,7 +12,7 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [3, 5]
       }
     ]
@@ -30,7 +30,7 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [7, 10]
       }
     ]
@@ -48,7 +48,7 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [13, 15]
       }
     ]
@@ -66,7 +66,7 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [17, 20]
       }
     ]
@@ -84,7 +84,7 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [23, 25]
       }
     ]
@@ -102,7 +102,7 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [27, 30]
       }
     ]
@@ -120,7 +120,7 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [33, 35]
       }
     ]
@@ -138,7 +138,7 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [37, 40]
       }
     ]
@@ -156,7 +156,7 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [43, 45]
       }
     ]
@@ -174,7 +174,7 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [47, 50]
       }
     ]

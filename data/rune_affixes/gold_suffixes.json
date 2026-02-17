@@ -12,7 +12,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [10, 20]
       }
     ]
@@ -30,7 +30,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [30, 40]
       }
     ]
@@ -48,7 +48,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [50, 60]
       }
     ]
@@ -66,7 +66,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [70, 80]
       }
     ]
@@ -84,7 +84,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [90, 100]
       }
     ]
@@ -102,7 +102,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [110, 120]
       }
     ]
@@ -120,7 +120,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [130, 140]
       }
     ]
@@ -138,7 +138,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [150, 160]
       }
     ]
@@ -156,7 +156,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [170, 180]
       }
     ]
@@ -174,7 +174,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [190, 200]
       }
     ]

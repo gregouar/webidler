@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-shared = { path = "../shared" }
+shared = { path = "../shared", features=["modifiable"] }
 
 anyhow = "1.0.97"
 dotenvy = "0.15.7"
@@ -58,7 +58,6 @@ uuid = { version = "1.17.0", features = ["v4"] }
 
 itertools = "0.14.0"
 indexmap = { version = "2.11.0", features = ["serde"] }
-
 
 [features]
 default = ["sqlite"]

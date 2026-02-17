@@ -149,7 +149,7 @@ pub fn compute_skill_upgrade_effects(skill_specs: &SkillSpecs, level: u16) -> Ef
                 .0
                 .entry((effect.stat.clone(), effect.modifier))
                 .or_default() += match effect.modifier {
-                Modifier::Multiplier if effect.stat.is_multiplicative() => {
+                Modifier::More => {
                     ((1.0 + effect.value * 0.01).powf(level) - 1.0) * 100.0
                 }
                 _ => effect.value * level,

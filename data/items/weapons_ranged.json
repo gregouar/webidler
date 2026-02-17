@@ -58,7 +58,7 @@
         "stat": {
           "CritDamage": null
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 60]
       },
       {
@@ -66,7 +66,7 @@
         "stat": {
           "CritChance": null
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [15, 30]
       },
       {
@@ -74,7 +74,7 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 60]
       },
       {
@@ -201,7 +201,7 @@
             "damage_type": "Storm"
           }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [50, 100]
       },
       {
@@ -211,7 +211,7 @@
             "skill_type": "Spell"
           }
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [180, 240]
       },
       {
@@ -353,7 +353,7 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [150, 200],
         "ignore_quality": true
       },
@@ -426,7 +426,7 @@
     ],
     "min_area_level": 260
   },
-  "crossbow": {
+  "weapon_ranged_7": {
     "name": "Crossbow",
     "icon": "items/crossbow.webp",
     "slot": "Weapon",

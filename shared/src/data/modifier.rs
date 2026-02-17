@@ -1,36 +1,72 @@
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use std::cmp::Ordering;
+use serde::{Deserialize, Serialize};
+use std::ops::Deref;
 
-use crate::data::stat_effect::StatEffect;
+#[cfg(feature = "modifiable")]
+use {
+    crate::data::stat_effect::StatEffect,
+    serde::{Deserializer, Serializer},
+    std::cmp::Ordering,
+};
 
 #[derive(
     Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,
 )]
 pub enum Modifier {
     #[default]
-    Multiplier, // Would love to rename to Increased
+    Increased,
     Flat,
     More,
 }
 
+#[cfg(not(feature = "modifiable"))]
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
+pub struct ModifiableValue<T>(T);
+
+#[cfg(not(feature = "modifiable"))]
+impl<T> Deref for ModifiableValue<T> {
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+#[cfg(not(feature = "modifiable"))]
+impl<T> AsRef<T> for ModifiableValue<T> {
+    fn as_ref(&self) -> &T {
+        &self.0
+    }
+}
+
+#[cfg(feature = "modifiable")]
 #[derive(Debug, Clone, Copy, Default)]
 pub struct ModifiableValue<T> {
-    base: T,
-
     more: f64,
     increased: f64,
     decreased: f64,
 
     converted: f64,
+
+    base: T,
+    evaluated: T,
 }
 
+#[cfg(feature = "modifiable")]
 impl<T> ModifiableValue<T>
 where
     T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
 {
     pub fn evaluate(&self) -> T {
+        self.evaluated
+    }
+
+    fn evaluate_impl(&self, convert: bool) -> T {
         let div = (1.0 - self.decreased * 0.01).max(0.0);
-        let base = self.base.multiply_value(1.0 - self.converted * 0.01);
+        let base = if convert {
+            self.base.multiply_value(1.0 - self.converted * 0.01)
+        } else {
+            self.base
+        };
 
         if base.is_negative() {
             return base;
@@ -43,14 +79,13 @@ where
         base.multiply_value(factor)
     }
 
-    // pub fn compute(&mut self) -> T {
-    //     *self = self.evaluate().into();
-    //     self.base
-    // }
+    fn compute(&mut self) {
+        self.evaluated = self.evaluate_impl(true);
+    }
 
     pub fn apply_modifier(&mut self, value: f64, modifier: Modifier) {
         match modifier {
-            Modifier::Multiplier => {
+            Modifier::Increased => {
                 if value >= 0.0 {
                     self.increased += value
                 } else {
@@ -63,23 +98,15 @@ where
                 self.more = self.more + value + self.more * value * 0.01;
             }
         }
+        self.compute();
     }
 
     pub fn apply_effect(&mut self, effect: &StatEffect) {
-        // For retro compatibility
-        let modifier = match effect.modifier {
-            Modifier::Multiplier if effect.stat.is_multiplicative() => Modifier::More,
-            modifier => modifier,
-        };
-
-        self.apply_modifier(effect.value, modifier);
+        self.apply_modifier(effect.value, effect.modifier);
     }
 
     pub fn apply_negative_effect(&mut self, effect: &StatEffect) {
-        self.apply_effect(&StatEffect {
-            value: -effect.value,
-            ..effect.clone()
-        })
+        self.apply_modifier(-effect.value, effect.modifier);
     }
 
     pub fn convert_value(&mut self, percent: f64, is_extra: bool, only_base: bool) -> T {
@@ -89,15 +116,40 @@ where
             self.converted += percent;
         }
 
+        self.compute();
+
         (if only_base {
             self.base
         } else {
-            self.evaluate()
+            self.evaluate_impl(false)
         })
         .multiply_value(percent * 0.01)
     }
 }
 
+#[cfg(feature = "modifiable")]
+impl<T> Deref for ModifiableValue<T>
+where
+    T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
+{
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        &self.evaluated
+    }
+}
+
+#[cfg(feature = "modifiable")]
+impl<T> AsRef<T> for ModifiableValue<T>
+where
+    T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
+{
+    fn as_ref(&self) -> &T {
+        &self.evaluated
+    }
+}
+
+#[cfg(feature = "modifiable")]
 impl<T> Serialize for ModifiableValue<T>
 where
     T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
@@ -111,6 +163,7 @@ where
     }
 }
 
+#[cfg(feature = "modifiable")]
 impl<'de, T> Deserialize<'de> for ModifiableValue<T>
 where
     T: Deserialize<'de> + Default + Copy,
@@ -123,18 +176,21 @@ where
     }
 }
 
+#[cfg(feature = "modifiable")]
 impl<T> From<T> for ModifiableValue<T>
 where
-    T: Default,
+    T: Default + Copy,
 {
     fn from(value: T) -> Self {
         Self {
             base: value,
+            evaluated: value,
             ..Default::default()
         }
     }
 }
 
+#[cfg(feature = "modifiable")]
 impl<T> PartialOrd for ModifiableValue<T>
 where
     T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
@@ -145,6 +201,7 @@ where
     }
 }
 
+#[cfg(feature = "modifiable")]
 impl<T> PartialEq for ModifiableValue<T>
 where
     T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,

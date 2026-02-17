@@ -8,7 +8,7 @@ use shared::{
         character_status::{StatusSpecs, StatusState},
         item::SkillRange,
         modifier::Modifier,
-        skill::{DamageType, RestoreType, SkillType},
+        skill::{DamageType, RestoreModifier, RestoreType, SkillType},
         stat_effect::{StatStatusType, StatType, compare_options},
     },
 };
@@ -151,7 +151,7 @@ pub fn restore_character(
     target: &mut Target,
     restore_type: RestoreType,
     amount: f64,
-    modifier: Modifier,
+    modifier: RestoreModifier,
 ) -> bool {
     let (_, (target_specs, target_state)) = target;
 
@@ -160,11 +160,11 @@ pub fn restore_character(
     }
 
     let factor = match modifier {
-        Modifier::Multiplier | Modifier::More => match restore_type {
+        RestoreModifier::Percent => match restore_type {
             RestoreType::Life => target_specs.max_life.evaluate() * 0.01,
             RestoreType::Mana => target_specs.max_mana.evaluate() * 0.01,
         },
-        Modifier::Flat => 1.0,
+        RestoreModifier::Flat => 1.0,
     };
 
     match restore_type {

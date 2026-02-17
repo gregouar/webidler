@@ -22,14 +22,9 @@ use crate::components::{
 };
 
 pub fn format_effect_value(effect: &StatEffect) -> String {
-    let modifier = match effect.modifier {
-        Modifier::Multiplier if effect.stat.is_multiplicative() => Modifier::More,
-        modifier => modifier,
-    };
-
-    match modifier {
+    match effect.modifier {
         Modifier::Flat => format_number(effect.value),
-        Modifier::Multiplier => {
+        Modifier::Increased => {
             let (number_value, word) = if effect.value >= 0.0 {
                 (effect.value, "Increased")
             } else {
@@ -361,18 +356,22 @@ pub fn format_stat(effect: &StatEffect) -> String {
             "{}% of {} {extra_str} {}{}",
             format_flat_number(Some(effect.value), false),
             stat_converter_source_str(stat_converter_specs.source),
-            match effect.modifier {
-                Modifier::Multiplier => "Increased ",
-                Modifier::More => "More ",
-                Modifier::Flat => "",
-            },
+            modifier_str(effect.modifier),
             format_multiplier_stat_name(&stat_converter_specs.stat)
         )
     } else {
         match effect.modifier {
-            Modifier::Multiplier | Modifier::More => format_multiplier_stat(effect),
+            Modifier::Increased | Modifier::More => format_multiplier_stat(effect),
             Modifier::Flat => format_flat_stat(&effect.stat, Some(effect.value)),
         }
+    }
+}
+
+pub fn modifier_str(modifier: Modifier) -> &'static str {
+    match modifier {
+        Modifier::Increased => "Increased ",
+        Modifier::More => "More ",
+        Modifier::Flat => "",
     }
 }
 

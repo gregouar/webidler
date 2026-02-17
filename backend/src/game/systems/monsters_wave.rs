@@ -228,7 +228,7 @@ fn generate_monster_specs(
             damage_type: None,
             min_max: None,
         },
-        modifier: Modifier::Multiplier,
+        modifier: Modifier::Increased,
         value: (monster_level as f64 - 1.0) * MONSTERS_DEFAULT_DAMAGE_INCREASE,
         bypass_ignore: true,
     }];

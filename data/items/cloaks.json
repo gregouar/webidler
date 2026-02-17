@@ -97,7 +97,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Fire" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [50, 100]
       },
       {
@@ -115,7 +115,7 @@
       {
         "scope": "Global",
         "stat": { "Speed": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [8, 12],
         "ignore_quality": true
       }
@@ -205,7 +205,7 @@
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 50,
         "ignore_quality": true
       },
@@ -216,20 +216,20 @@
             "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
           }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [30, 50],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Poison" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [80, 120]
       },
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 60],
         "ignore_quality": true
       }
@@ -290,7 +290,7 @@
     ],
     "min_area_level": 250
   },
-  "elven_cape": {
+  "cloak_7": {
     "name": "Elven Cape",
     "icon": "items/elven_cape.webp",
     "slot": "Accessory",
